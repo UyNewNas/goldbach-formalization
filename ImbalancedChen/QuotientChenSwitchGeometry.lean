@@ -390,8 +390,8 @@ theorem chenY7_eq_indicator_zero {n : ℕ} {N D : ℝ}
   classical
   obtain ⟨q₁, q₂, hsmall⟩ := chen_exists_smallestTwo (by omega : 2 ≤ n.primeFactors.card)
   unfold chenY7
-  rw [chenY7Tuples_eq_singleton_or_empty hn hsmall hcard hnN,
-    hsmall.below_card_eq_zero_iff hn.ne_zero]
+  rw [chenY7Tuples_eq_singleton_or_empty hn hsmall hcard hnN]
+  simp only [hsmall.below_card_eq_zero_iff hn.ne_zero]
   by_cases hD : D ≤ (q₁ : ℝ) <;> simp [hD]
 
 /-- Actual `Y8 = 1_{t=1}` on the rough squarefree source with at least three
@@ -404,8 +404,8 @@ theorem chenY8_eq_indicator_one {n : ℕ} {N A C : ℝ}
   obtain ⟨q₁, q₂, hsmall⟩ := chen_exists_smallestTwo (by omega : 2 ≤ n.primeFactors.card)
   have hA := hrough q₁ hsmall.first_prime hsmall.first_dvd
   unfold chenY8
-  rw [chenY8Tuples_eq_singleton_or_empty hn hsmall hcard hnN,
-    hsmall.below_card_eq_one_iff hn.ne_zero]
+  rw [chenY8Tuples_eq_singleton_or_empty hn hsmall hcard hnN]
+  simp only [hsmall.below_card_eq_one_iff hn.ne_zero]
   by_cases hcut : (q₁ : ℝ) < C ∧ C ≤ (q₂ : ℝ) <;> simp [hA, hcut]
 
 end
