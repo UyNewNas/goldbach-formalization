@@ -56,3 +56,7 @@ Commit `0ae2058371ec1b96da233fef42f882003e6d63a1` passed the twenty-module build
 ## Verified center-tail and normalization checkpoint
 
 Commit `a83fbaa87dc9adf211f844dccec4530642e8eb44` passed the twenty-two-module build, full project-module replay, and 511-declaration transitive axiom audit. [PR run 37764236666](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37764236666). At the actual fifth-root cap, the omitted center-prime correction differs from one by at most `62 / N^(1/5)` for `N ≥ 1024`. Strict-cap Euler-product exhaustion and this bound prove the actual density normalization tends to one along positive even centers. The ordinary prime Euler product is left explicit; no Mertens estimate or analytic sieve bound is inferred. The added finite dimension-comparison module is awaiting CI.
+
+## Verified finite dimension comparison
+
+Commit `b71e40a9b865d094e8a065273f8eb3261d5e3e62` passed the twenty-three-module build, full project-module replay, and 551-declaration transitive axiom audit. [PR run 37765367998](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37765367998). Exact density quotients retain half-open prime intervals and center-divisor exclusions. Removing center primes decreases the quotient uniformly, including the zero-center case. The logarithmic dimension estimate still requires an analytic supplier. The added curved-boundary discrepancy module is awaiting CI; it retains the full upper-envelope carrier and leaves all analytic rectangle and boundary-mass estimates open.
