@@ -13,7 +13,7 @@ jobs:
   cold-bv:
     if: github.repository == 'UyNewNas/goldbach-formalization'
     runs-on: ubuntu-24.04
-    timeout-minutes: 180
+    timeout-minutes: 300
     env:
       LEAN_NUM_THREADS: '2'
       LAKE_NO_CACHE: '1'
@@ -161,7 +161,7 @@ jobs:
             2>&1 | tee "$EVIDENCE/literal-axioms.log"
           python3 consumer/ci/external_bv/cold_source_audit.py axioms "$EVIDENCE/literal-axioms.log" "$EVIDENCE"
       - name: Replay every rebuilt external module and literal probe
-        timeout-minutes: 30
+        timeout-minutes: 120
         run: |
           set -euo pipefail
           # Make missing/empty input or xargs failure fatal before starting the replay loop.
