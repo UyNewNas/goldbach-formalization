@@ -44,6 +44,7 @@ At commit `94ac28d470dd911057aad75aa94be3f30eecebe8`, the thirty-eight-module ch
 - `ImbalancedChen/CurvedDiscrepancyReduction.lean`: full actual curved discrepancy reduces to literal rectangle discrepancies plus an arbitrarily small normalized boundary remainder.
 - `ImbalancedChen/PrimeRectanglePrefixes.lean`: exact full rectangle prefix subtraction, prime-indicator form and literal coprime recentering identities.
 - `ImbalancedChen/ResidueSelectorBudget.lean`: finite maximizing residue selectors and factor-two recentering of a selector-uniform sum budget, with no modulus-count loss.
+- `ImbalancedChen/RectanglePrefixBudget.lean`: actual full-rectangle discrepancy budget from two explicit selector-uniform prefix budgets, with cost 2Bhi + 2Blo and no modulus-count loss; awaiting CI.
 - `docs/PROOF_STATUS.md`: outstanding analytic dependencies and the frontier comparison.
 
 Build: `lake exe cache get && lake build`. The workflow also runs `leanchecker` and a transitive axiom audit allowing only `propext`, `Classical.choice`, and `Quot.sound`.

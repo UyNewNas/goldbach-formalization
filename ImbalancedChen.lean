@@ -37,3 +37,4 @@ import ImbalancedChen.SelectedGridRanges
 import ImbalancedChen.CurvedDiscrepancyReduction
 import ImbalancedChen.PrimeRectanglePrefixes
 import ImbalancedChen.ResidueSelectorBudget
+import ImbalancedChen.RectanglePrefixBudget
