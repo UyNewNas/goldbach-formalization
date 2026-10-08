@@ -65,9 +65,9 @@ The correction intervals `(31/200,4/25)` and `(29/200,3/20)` are disjoint. The n
 
 These interfaces should become separate propositions with all ranges and uniformity quantified, and proofs or explicit unresolved status. A structure field that simply assumes the desired bound is a useful contract, but is not an instance or a proof of the manuscript.
 
-## 4. Missing computational evidence
+## 4. Received certificates and remaining formal interpretation
 
-The TeX states final fractions but does not include the certificate implementations, full box streams or interval traces. At minimum recover:
+The companion archive has been received and preserved. All 249 payload hashes were verified, and nine numerical replays, including the full two-million-subdivision run, reproduced the stored results. No retransmission is needed. These replays do not supply a Lean proof of the analytic interpretation or selected-box gains. The remaining certificate formalization covers:
 
 - `certify_extended_prefix.py` plus its exact enclosure and sieve-function table data; the cited calculation uses two million subdivisions and the full small-third-prime tail;
 - `certify_fourth_prefix_K_refinement.py` and companion data: 483,089 retained boxes out of 9,381,251;
