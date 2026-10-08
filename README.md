@@ -83,6 +83,8 @@ No custom analytic axioms or proof placeholders belong in the verified core. A g
 - `ImbalancedChen/QuotientChenSummedBridge.lean`: original prime-indexed weight sum, once-only exceptional union, literal ceiling and square-divisor error, and explicit 984 N^(1-a) loss.
 - `ImbalancedChen/QuotientChenElevenSum.lean`: exact eleven actual Upsilon sums, full Y11, manuscript endpoint equivalence, and explicit receiver-one correction. These three additions await their own CI result.
 
+- `ImbalancedChen/ChenWeightErrorBudget.lean`: proved eventual size gate and absorption of the exact 984 N^(1-a)+4 loss in the actual singular normalization, followed by a conditional transfer retaining the lower mean estimate on all eleven literal Upsilon terms. Awaiting CI.
+
 ## Reproducibility
 
 Lean and mathlib revisions are pinned in `lean-toolchain` and `lakefile.toml`. The attachment reviewed has SHA-256 `e89d35f219acfbc6018db56b99d7a5c6c70eeeba0a98723fbe1046041ca90fbe`. The companion certificate archive and all 249 payload hashes were preserved and verified. Nine numerical replays, including the full 2,000,000-split extended run, reproduce the stored mathematical results. This confirms numerical reproducibility, not the analytic interpretation or a Lean proof of the certificates. The extended run establishes an upper endpoint below 6.81, not below 6.809; the final 6.786 recombination additionally uses all three disjoint quoted gains.

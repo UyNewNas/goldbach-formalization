@@ -35,7 +35,10 @@ theorem chen_pow_primeFactors_card_le {n : ℕ} {A : ℝ}
       · intro p hp
         obtain ⟨hprime, hdvd, _⟩ := Nat.mem_primeFactors.mp hp
         exact hrough p hprime hdvd
-    _ ≤ (n : ℝ) := by exact_mod_cast hprod
+    _ ≤ (n : ℝ) := by
+      have hcast : ((∏ p ∈ n.primeFactors, p : ℕ) : ℝ) ≤ (n : ℝ) := by
+        exact_mod_cast hprod
+      simpa only [Nat.cast_prod] using hcast
 
 /-- The fixed roughness cutoff bounds the number of distinct prime factors
 by eleven on the whole positive range, including `N = n = 1`. -/
