@@ -62,3 +62,4 @@ import ImbalancedChen.RoughSquareException
 import ImbalancedChen.QuotientChenInitialCounts
 import ImbalancedChen.QuotientChenSwitchGeometry
 import ImbalancedChen.QuotientChenNinthSwitch
+import ImbalancedChen.QuotientChenWeightCases

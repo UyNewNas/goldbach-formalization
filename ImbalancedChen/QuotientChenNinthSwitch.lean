@@ -252,7 +252,7 @@ theorem chen_ninth_fixed_cutoffs_product_gt {N : ℝ} (hN : 1 < N) :
     ← Real.rpow_add hNpos, ← Real.rpow_add hNpos]
   have he : (1 : ℝ) < (50 / 309 : ℝ) + ((1 / 2 : ℝ) - 3 * (100 / 1149 : ℝ)) +
       (1 / 3 : ℝ) * 2 := by norm_num
-  simpa only [Real.rpow_one] using Real.rpow_lt_rpow_of_exponent_lt hN he
+  simpa only [Real.rpow_one, Nat.cast_ofNat] using Real.rpow_lt_rpow_of_exponent_lt hN he
 
 /-- The actual lower size band yields precisely the product needed for the
 ninth quotient cutoff; no stronger receiver-size hypothesis is inserted. -/
