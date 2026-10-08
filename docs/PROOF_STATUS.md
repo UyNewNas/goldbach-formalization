@@ -106,3 +106,7 @@ The new SelectedGridRanges candidate proves exact ceiling-minus-one endpoints, f
 ## Selected ranges verified; assembled reduction pending
 
 Commit `65123d7dd1a36024bd5f4666e00041f031e67bbc` passed build, full kernel replay and the 855-declaration axiom audit in [run 37786702405](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37786702405). SelectedGridRanges is now verified. CurvedDiscrepancyReduction is the next independently reviewed candidate: it combines the actual rectangle sum and the proved negligible boundary at the literal logarithmic cutoff, with no analytic rectangle estimate as a premise. It awaits CI.
+
+## Assembled curved reduction verified
+
+Commit `ff9af51a937c6980e66d61ba2140a83adb561a82` passed all three checks in [run 37787861592](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37787861592), with 36 modules and 858 audited declarations. The remaining curved error is explicitly bounded by the sum of literal full-rectangle errors plus a proved epsilon-normalization boundary cost. PrimeRectanglePrefixes is the next independently reviewed finite candidate, providing exact upper-minus-lower prime-prefix identities and matching actual coprime mass. It awaits CI; the analytic distribution estimate remains separate.
