@@ -4,7 +4,7 @@ Work toward a Lean formalization of *Transferring quantitative Chen bounds to im
 
 ## Verification status
 
-At commit `8244391cfeacc0cbb389ba24260cfe34c39935eb`, the seventy-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1695 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37840265664). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
+At commit `6d1a5b7513317e52a74b44236405b46063237763`, the seventy-two-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1741 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37846923822). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
 
 - `ImbalancedChen/Counting.lean`: prime-indexed finite representation sets, exact good/bad partition, subtraction and a conditional finite transfer lemma. The initial count excludes receiver 1; the separate Multiplicity module supplies the receiver-one correction.
 - `ImbalancedChen/Constants.lean`: exact rational endpoint arithmetic and logarithmic inequalities, reusing mathlib's proved logarithm bound. This does not certify the integrals from which the quoted numbers originate.
@@ -89,10 +89,14 @@ No custom analytic axioms or proof placeholders belong in the verified core. A g
 
 - `ImbalancedChen/ChenInitialCorrectionBudget.lean`: explicit logarithmic prime-divisor bounds and complete centre/modulus-prime correction payment below the square-root level, at arbitrary fixed logarithmic accuracy; the literal ordinary prime-AP budget remains an explicit input.
 
-- `ImbalancedChen/ChenLogLevelGeometry.lean`: literal floor-valued logarithmic distribution cap, strict Rosser level Q+1, limiting logarithmic ratios, and one common threshold for the numerical lower-sieve gates. Core-only mathematical candidate awaiting its own CI.
+- `ImbalancedChen/ChenLogLevelGeometry.lean`: literal floor-valued logarithmic distribution cap, strict Rosser level Q+1, limiting logarithmic ratios, and one common threshold for the numerical lower-sieve gates. Verified in the seventy-two-module checkpoint.
 
 ## Reproducibility
 
 Lean and mathlib revisions are pinned in `lean-toolchain` and `lakefile.toml`. The attachment reviewed has SHA-256 `e89d35f219acfbc6018db56b99d7a5c6c70eeeba0a98723fbe1046041ca90fbe`. The companion certificate archive and all 249 payload hashes were preserved and verified. Nine numerical replays, including the full 2,000,000-split extended run, reproduce the stored mathematical results. This confirms numerical reproducibility, not the analytic interpretation or a Lean proof of the certificates. The extended run establishes an upper endpoint below 6.81, not below 6.809; the final 6.786 recombination additionally uses all three disjoint quoted gains.
 
-- `ImbalancedChen/CenterEulerTail.lean`: strict real-cutoff centre Euler correction, explicit uniform exponential tail bound, and tail/relative-normalization convergence at every fixed positive real-power cutoff. Candidate awaiting its own CI; no Mertens estimate is assumed.
+- `ImbalancedChen/CenterEulerTail.lean`: strict real-cutoff centre Euler correction, explicit uniform exponential tail bound, and tail/relative-normalization convergence at every fixed positive real-power cutoff. Verified in the seventy-two-module checkpoint; no Mertens estimate is assumed.
+
+## Quotient-source extension awaiting CI
+
+`ChenQuotientPrimeSource.lean` identifies the actual quotient receivers for selected multipliers with prime AP fibres at modulus `b*d`, retaining the centre-prime correction, repeated factors, quotient one, and strict cutoff endpoints. It reindexes the literal Upsilon 3–6 sums without losing selected-factor multiplicity. This is finite source preparation, not a distribution or sieve estimate. The extension has independent source review and finite regression checks; its compilation, kernel replay and axiom audit are pending the new commit. The verified checkpoint above remains the 72-module checkpoint.

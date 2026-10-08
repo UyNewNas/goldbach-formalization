@@ -195,3 +195,12 @@ The next core-only candidate ChenLogLevelGeometry defines Q = floor(sqrt N / (lo
 CenterEulerTail reuses the existing exact finite split at ceil(z). For N > 0 and z >= 4 it proves 1 <= tail(N,z) <= exp(2 log N / (z log 2)), and hence tail(N,N^a) and the strict-small/full correction ratio tend to one for every fixed a > 0 as the centre itself varies. The all-centre threshold is explicit in its quantifier order. This does not substitute a fixed-centre limit for the required uniform conclusion and does not assert the full sieve-density asymptotic.
 
 Run 37845167459 caught one addition-orientation elaboration error in ChenLogLevelGeometry. Its repair replaces only that proof application with an explicitly oriented add_le_add; statements and gates are unchanged. Both new candidates await a successful complete CI run.
+
+
+## Logarithmic level geometry and uniform centre tail verified
+
+Commit `6d1a5b7513317e52a74b44236405b46063237763` passed all three unchanged stages in [run 37846923822](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37846923822): 72 modules and 1741 declarations, using only propext, Classical.choice and Quot.sound. Both candidates above are now verified. The two CenterEulerTail repairs made addition orientation and function composition explicit without changing any statement or definition. Initial analytic distribution and normalization consumers are being tested separately; the full eleven-term mean lower bound remains open.
+
+## Actual quotient-prime source extension (verification pending)
+
+The new `ChenQuotientPrimeSource` keeps original additive-prime labels and constructs their exact quotient receivers after selecting a divisor `b`. Every quotient divisibility fibre has product modulus `b*d`, not `lcm(b,d)`, and subtracts the genuine centre-prime contribution in that AP. The formulas include zero and unit moduli and do not require squarefree receivers. Exact finite Fubini identities give the original Upsilon 3–6 sums with the original prime bands and pair multiplicities. No generic `1/phi(d)` density is asserted for shared primes of `b` and `d`. This addition supplies no analytic upper/lower bound. Its new CI verification is pending.
