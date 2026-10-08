@@ -10,3 +10,4 @@ import ImbalancedChen.NormalizationGrowth
 import ImbalancedChen.SingularSeries
 import ImbalancedChen.ManuscriptTransfer
 import ImbalancedChen.HalfProductGeometry
+import ImbalancedChen.BadSourceLocalization

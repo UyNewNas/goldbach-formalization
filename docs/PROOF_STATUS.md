@@ -12,12 +12,12 @@ The endpoint comparisons take the displayed rational numbers as numbers; they do
 
 ## Concrete normalization
 
-The new source proves convergence and strict positivity of the actual odd-prime Euler product and bounds the finite correction below by one. It derives growth of `C(N) N / (log N)^2`, then discharges the unit-absorption premise of the numerical transfer. These additions still require compilation and the full CI audits. The resulting concrete transfer retains the actual Chen count lower estimate and bad-count upper estimate as explicit, unproved analytic inputs.
+The new source proves convergence and strict positivity of the actual odd-prime Euler product and bounds the finite correction below by one. It derives growth of `C(N) N / (log N)^2`, then discharges the unit-absorption premise of the numerical transfer. These additions passed compilation, module replay, and the 177-declaration transitive axiom audit at commit `a6f206076b77e42a2bcd4d656031ea0751dd7c8a`. The resulting concrete transfer retains the actual Chen count lower estimate and bad-count upper estimate as explicit, unproved analytic inputs.
 
 ## Outstanding mathematical work
 
-- Complete kernel recheck and transitive axiom audit of the seven compiled initial core modules. The first full build succeeded, but the subsequent leanchecker stage exceeded the 45-minute job budget and the axiom stage was skipped.
-- Compile and audit the new normalization, concrete transfer and half-product geometry modules.
+- Extend the verified eleven-module foundation into the actual localized bad source.
+- Keep compilation, module replay, and transitive axiom audits passing for each new analytic module.
 - Prove the asymptotic bad-semiprime removal bound.
 - Formalize the actual distribution and strengthened sieve interfaces, with all uniformity and order-of-limits hypotheses.
 - Formalize the geometric and analytic meaning of the numerical certificates. Nine required author/independent/final-transfer replays have completed with matching mathematical fields, including the full extended run. This does not establish every analytic/table dependency in the package.
@@ -32,3 +32,7 @@ The proposed separate exponent 0.76407 improves the directly stated Li-Liu 0.9 t
 ## CI contract
 
 A green build means only the committed core compiled. CI also rechecks with leanchecker and audits transitive axioms under ImbalancedChen, allowing only propext, Classical.choice and Quot.sound. No custom analytic axioms, sorryAx or native_decide trust extensions are accepted.
+
+## Verified checkpoint
+
+Commit `a6f206076b77e42a2bcd4d656031ea0751dd7c8a` passed both push and PR checks. [PR run 37752040466](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37752040466) records build success, verbose replay of all eleven modules and the root, and 177 audited declarations within the standard three-axiom allowlist. The earlier full-Mathlib import run exceeded its kernel-replay time budget; focused imports resolved the observed bottleneck without removing a proof check. Lean/mathlib dependency artifacts remain explicitly pinned and trusted, rather than independently rebuilt from first principles.
