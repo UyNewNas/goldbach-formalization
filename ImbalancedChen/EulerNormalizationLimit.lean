@@ -71,7 +71,11 @@ def oddPrimeIndicesBelowCap (z : ℕ) : Finset OddPrime :=
 
 @[simp] theorem mem_oddPrimeIndicesBelowCap {z : ℕ} {p : OddPrime} :
     p ∈ oddPrimeIndicesBelowCap z ↔ p.val < z := by
-  simp only [oddPrimeIndicesBelowCap, Finset.mem_preimage, Finset.mem_range]
+  change p ∈ (Finset.range z).preimage (Subtype.val : OddPrime → ℕ)
+    Subtype.val_injective.injOn ↔ p.val < z
+  exact (Finset.mem_preimage (f := (Subtype.val : OddPrime → ℕ))
+    (s := Finset.range z) (hf := Subtype.val_injective.injOn) (x := p)).trans
+      Finset.mem_range
 
 /-- The finite product over natural primes is exactly the corresponding
 finite product in the index type of `hasProd_oddPrimeFactor`. -/
@@ -105,7 +109,8 @@ theorem tendsto_oddEulerProduct :
   have hprod : Tendsto (fun s : Finset OddPrime => ∏ p ∈ s, oddPrimeFactor p)
       atTop (𝓝 twinPrimeConstant) := hasProd_oddPrimeFactor
   have h := hprod.comp tendsto_oddPrimeIndicesBelowCap_atTop
-  simpa only [Function.comp_apply, ← oddEulerProduct_eq_index_product] using h
+  apply h.congr'
+  exact Filter.Eventually.of_forall fun z => (oddEulerProduct_eq_index_product z).symm
 
 theorem primeEulerProduct_pos (z : ℕ) : 0 < primeEulerProduct z := by
   apply Finset.prod_pos
@@ -259,8 +264,13 @@ theorem tendsto_oddEulerProduct_div_constant_tail_actual_cap :
       atTop (𝓝 twinPrimeConstant) := by
     simpa only [mul_one] using
       tendsto_centerPrimeTailCorrection_actual_cap.const_mul twinPrimeConstant
-  simpa only [div_self twinPrimeConstant_pos.ne'] using
+  have h :=
     tendsto_oddEulerProduct_actual_cap.div hden twinPrimeConstant_pos.ne'
+  change Tendsto (fun N : ℕ => oddEulerProduct (fifthRootSieveCap N) /
+    (twinPrimeConstant * centerPrimeTailCorrection N (fifthRootSieveCap N)))
+    atTop (𝓝 (twinPrimeConstant / twinPrimeConstant)) at h
+  rw [div_self twinPrimeConstant_pos.ne'] at h
+  exact h
 
 /-- The epsilon statement of the normalized finite sieve limit, with
 evenness as an implication and positivity of centers made eventual. -/
