@@ -188,3 +188,10 @@ Commit `14e30da801c06756503f98df6f319e333e3df1d6` passed all three unchanged ver
 Commit `8244391cfeacc0cbb389ba24260cfe34c39935eb` passed compilation, bundled kernel replay and the unchanged transitive axiom audit in [run 37840265664](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37840265664): 70 modules and 1695 declarations. ChenInitialCorrectionBudget proves a logarithmic bound for actual prime-divisor counts, retains the signed modulus-prime atom and all centre-prime corrections, and pays their complete selected-modulus sum at arbitrary fixed logarithmic accuracy for D <= sqrt N. The three CI corrections only parenthesized the complete additive summands. Ordinary prime-AP distribution remains an explicit input in the core transfer; an actual supplier consumer is being checked separately on the unchanged approved external BV closure.
 
 The next core-only candidate ChenLogLevelGeometry defines Q = floor(sqrt N / (log N)^B), D = Q+1 and proves the logarithmic limits and all numerical lower-Rosser gates at one common eventual threshold for fixed real B >= 0 and 0 < a < 1/4. It retains D-1 = Q and bounds Q, not D, by sqrt N. No sieve estimate or distribution conclusion is assumed or obtained in that numerical-geometry module.
+
+
+## General real-power centre correction candidate
+
+CenterEulerTail reuses the existing exact finite split at ceil(z). For N > 0 and z >= 4 it proves 1 <= tail(N,z) <= exp(2 log N / (z log 2)), and hence tail(N,N^a) and the strict-small/full correction ratio tend to one for every fixed a > 0 as the centre itself varies. The all-centre threshold is explicit in its quantifier order. This does not substitute a fixed-centre limit for the required uniform conclusion and does not assert the full sieve-density asymptotic.
+
+Run 37845167459 caught one addition-orientation elaboration error in ChenLogLevelGeometry. Its repair replaces only that proof application with an explicitly oriented add_le_add; statements and gates are unchanged. Both new candidates await a successful complete CI run.

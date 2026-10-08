@@ -110,7 +110,7 @@ private theorem eventually_chenInitialRosserD_sandwich (B : ℝ) :
   calc
     (chenInitialRosserD B N : ℝ) = (chenInitialLevelCap B N : ℝ) + 1 := by
       simp only [chenInitialRosserD, Nat.cast_add, Nat.cast_one]
-    _ ≤ chenLogLevelUnrounded B N + 1 := add_le_add_right hfloor 1
+    _ ≤ chenLogLevelUnrounded B N + 1 := add_le_add hfloor (le_refl (1 : ℝ))
     _ ≤ 2 * chenLogLevelUnrounded B N := by linarith
 
 /-- Rounding up by `floor + 1` preserves the limiting logarithmic level.
