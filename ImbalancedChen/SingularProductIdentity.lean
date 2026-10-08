@@ -48,9 +48,12 @@ theorem hasProd_oddPrimeBaseNat :
       intro h
       exact hp ⟨⟨p, h⟩, rfl⟩
     simp [oddPrimeBaseNat, hnot]
-  apply (Subtype.val_injective.hasProd_iff hoff).mp
-  exact hasProd_oddPrimeFactor.congr_fun fun p => by
-    simpa only [Function.comp_apply] using oddPrimeBaseNat_coe p
+  have hinj : Function.Injective (fun p : OddPrime => p.val) :=
+    Subtype.val_injective
+  have hcomp : HasProd (fun p : OddPrime => oddPrimeBaseNat p.val)
+      twinPrimeConstant :=
+    hasProd_oddPrimeFactor.congr_fun (fun p : OddPrime => oddPrimeBaseNat_coe p)
+  exact (hinj.hasProd_iff hoff).mp hcomp
 
 theorem multipliable_oddPrimeBaseNat : Multipliable oddPrimeBaseNat :=
   hasProd_oddPrimeBaseNat.multipliable
