@@ -68,3 +68,7 @@ Commit `c51f61079a16959ffa488070996105147d9dd292` passed the twenty-four-module 
 ## Verified reciprocal-totient boundary cost
 
 Commit `9d3965f8bfa82012172deb837ac09f7d04e8ec3a` passed the twenty-five-module build, full project-module replay, and 608-declaration transitive axiom audit. [PR run 37772490738](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37772490738). The reciprocal-totient logarithmic bound is unconditional for every natural cap, and now supplies the actual boundary transfer's modulus cost. The new BoundaryGridBudget module proves the four integer-pair collar counts with separate endpoint costs, and preserves repeated products through exact fibre-cardinality mass on a full carrier. This new module awaits CI. Constructing the multiplicative grid, proving its collar containment and obtaining the actual rectangle distribution remain separate tasks.
+
+## Crossing-cell containment candidate
+
+BoundaryCellContainment proves local containment from genuine inside/outside witnesses in one positive multiplicative rectangle, uniformly for `0 ≤ b ≤ 1` and `0 ≤ δ ≤ 1`, with common collar width `3δ`. It also derives the smaller diagonal cap, handles exact natural restrictions of half-open cells using ceiling endpoints, and identifies the actual prime-pair predicate with the real curved region. Source review is complete; CI is pending. Global grid construction and actual cap selection are not assumed completed.

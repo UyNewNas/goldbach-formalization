@@ -172,9 +172,17 @@ def halfProductBoundaryCollar (R Q S : ℕ) (η T N b : ℝ) : Finset (ℕ × �
         |(p.1 : ℝ) * (p.2 : ℝ) - N| ≤ η * N ∨
         (p.2 ≤ S ∧ |(p.1 : ℝ) - (p.2 : ℝ)| ≤ η * (p.2 : ℝ)) ∨
         |(p.1 : ℝ) - (p.2 : ℝ) ^ b| ≤ η * (p.2 : ℝ) ^ b) := by
-  rcases p with ⟨r, q⟩
-  simp only [halfProductBoundaryCollar, Finset.mem_filter, Finset.mem_product,
-    Finset.mem_Icc]
+  unfold halfProductBoundaryCollar
+  constructor
+  · intro h
+    obtain ⟨hbox, hcollar⟩ := Finset.mem_filter.mp h
+    have hcoords : p.1 ∈ Finset.Icc 1 R ∧ p.2 ∈ Finset.Icc 1 Q :=
+      Finset.mem_product.mp hbox
+    exact ⟨⟨Finset.mem_Icc.mp hcoords.1, Finset.mem_Icc.mp hcoords.2⟩, hcollar⟩
+  · rintro ⟨⟨hr, hq⟩, hcollar⟩
+    apply Finset.mem_filter.mpr
+    refine ⟨?_, hcollar⟩
+    exact Finset.mem_product.mpr ⟨Finset.mem_Icc.mpr hr, Finset.mem_Icc.mpr hq⟩
 
 /-- The finite version of the manuscript's four-boundary estimate. -/
 def boundaryGridBudget (R Q S : ℕ) (η T N b : ℝ) : ℝ :=
