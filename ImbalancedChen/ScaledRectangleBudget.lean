@@ -85,7 +85,8 @@ theorem eventually_scaled_modulus_cap_le (B : ℝ) :
       div_le_div_of_nonneg_left (Real.sqrt_nonneg _) hscaledpos hden
     _ ≤ Real.sqrt (4 * (N : ℝ)) / (Real.log (4 * (N : ℝ))) ^ B :=
       div_le_div_of_nonneg_right
-        (Real.sqrt_le_sqrt (by nlinarith [Nat.cast_nonneg N])) hscaledpos.le
+        (Real.sqrt_le_sqrt (by
+          nlinarith [show (0 : ℝ) ≤ (N : ℝ) from Nat.cast_nonneg N])) hscaledpos.le
 
 /-- A real-exponent application interface: the stronger exponent is fixed
 before the threshold, and the threshold is uniform over all natural moduli. -/
