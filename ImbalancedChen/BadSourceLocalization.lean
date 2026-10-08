@@ -211,7 +211,7 @@ source. No sign assumption on `T` is required for this equivalence. -/
 the manuscript's real cutoff inequality. -/
 theorem retainedBadReceiversReal_eq_filter (num den N : ℕ) (T : ℝ) :
     retainedBadReceiversReal num den N T =
-      (badReceivers num den N).filter (fun m => T ≤ (m : ℝ)) := by
+      (badReceivers num den N).filter (fun m : ℕ => T ≤ (m : ℝ)) := by
   classical
   ext m
   simp only [mem_retainedBadReceiversReal, Finset.mem_filter]
@@ -242,7 +242,7 @@ theorem B_cast_le_retainedBadReceiversReal_card_add_cutoff
         (Nat.ceil T : ℝ) :=
       B_cast_le_retainedBadReceivers_card_add_cutoff num den N (Nat.ceil T)
     _ ≤ (retainedBadReceiversReal num den N T).card + (T + 1) :=
-      add_le_add_left (Nat.ceil_lt_add_one hT).le _
+      add_le_add le_rfl (Nat.ceil_lt_add_one hT).le
 
 /-- Real-cutoff roughness is stated at the original real `T`, while preserving
 the prime partner and the exact finite retained source. -/
