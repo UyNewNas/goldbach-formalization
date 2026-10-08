@@ -102,3 +102,7 @@ Commit `55f0454f4660a15783b824a42b5f350e6e5cc21e` passed the thirty-one-module b
 Commit `dd71a02a2a63c79535d109d50d15fe6f1a502310` passes all three checks in run [37785412931](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37785412931): 34 modules and 824 audited declarations. BoundaryLogMesh, RectangleDiscrepancyAssembly, CoprimeRecentering and LogMeshGridCount now have actual CI verification. The full boundary cost tends to zero at the genuine normalization; rectangle discrepancies retain all exterior points and multiplicities.
 
 The new SelectedGridRanges candidate proves exact ceiling-minus-one endpoints, full product cap `4N`, and eventual lower gates for every fixed real logarithmic exponent, uniformly over selected cells and grid ratios. It awaits CI. No rectangle distribution theorem is assumed or proved by this geometric module.
+
+## Selected ranges verified; assembled reduction pending
+
+Commit `65123d7dd1a36024bd5f4666e00041f031e67bbc` passed build, full kernel replay and the 855-declaration axiom audit in [run 37786702405](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37786702405). SelectedGridRanges is now verified. CurvedDiscrepancyReduction is the next independently reviewed candidate: it combines the actual rectangle sum and the proved negligible boundary at the literal logarithmic cutoff, with no analytic rectangle estimate as a premise. It awaits CI.

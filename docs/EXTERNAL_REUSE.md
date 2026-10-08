@@ -246,3 +246,9 @@ Therefore **do not copy its original source until licensing is clarified**, and 
 
 This external-first audit found substantial reusable formal infrastructure and a CI-backed, semantically faithful existing weaker Goldbach application. It does not establish the new manuscript, its claimed novelty, the generalized-distribution adapter, or the improved numerical coefficients. Those remain distinct proof obligations.
 
+
+## Independent ordinary BV verification completed (8 October 2026)
+
+[Run 37778759271](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37778759271), audit branch head `ff248610d4b945116f448e9085628ee267363760`, rebuilt the 279-module source closure of `subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`. The literal ordinary BV consumer compiled, and both named supplier and consumer axiom reports contain exactly `propext`, `Classical.choice`, and `Quot.sound`. All 280 expected modules including the probe passed bundled Lean kernel replay, with no missing or unexpected module.
+
+[Evidence artifact 11554018342](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37778759271/artifacts/11554018342), archive SHA-256 `8940ef374ec6d87434cb94df8759f006c3d963aa344ba97c24b10fa589551f26`. The replay uses the same Lean kernel; official Lean and cached Mathlib dependencies remain trusted. This verifies ordinary BV, not yet the separate prime-convolution supplier or the manuscript. Mertens modules were included in replay, but specific Mertens named-axiom audits were not part of the probe.
