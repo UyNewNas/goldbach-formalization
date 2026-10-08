@@ -59,3 +59,5 @@ import ImbalancedChen.EnlargedSelbergAsymptotic
 import ImbalancedChen.QuotientChenFourPrime
 import ImbalancedChen.QuotientChenFourCounts
 import ImbalancedChen.RoughSquareException
+import ImbalancedChen.QuotientChenInitialCounts
+import ImbalancedChen.QuotientChenSwitchGeometry

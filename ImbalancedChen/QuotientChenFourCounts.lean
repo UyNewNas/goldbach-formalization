@@ -189,7 +189,6 @@ theorem chenTailBelow_card {n q₁ q₂ : ℕ} {H : ℝ}
     · exact (not_lt_of_ge (le_of_lt hsmall.increasing)) ((mem_chenTailBelow hn).mp ht).2.2.1
   have hcard : (chenPrimesBelow n H).card = (chenTailBelow n q₂ H).card + 2 := by
     rw [hset, Finset.card_insert_of_notMem hnot₁, Finset.card_insert_of_notMem hnot₂]
-    omega
   omega
 
 /-- Exact finite interval subtraction, retaining the lower endpoint `H`. -/
