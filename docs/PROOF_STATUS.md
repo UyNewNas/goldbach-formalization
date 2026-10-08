@@ -52,3 +52,7 @@ Commit `631466a7e36dc1c381813349a75decc345d8a24d` passed the eighteen-module bui
 ## Verified finite-level and Euler checkpoint
 
 Commit `0ae2058371ec1b96da233fef42f882003e6d63a1` passed the twenty-module build, module replay, and 415-declaration transitive axiom audit. [PR run 37760141802](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37760141802). Input support at `L` yields exact lambda-square support at `L * L` and exact restrictions of the actual main/error sums. The finite Euler identity proves the prime-two normalization and the center-divisor correction, including its zero-center edge case. Allowed squarefree Selberg terms are explicitly products of `1 / (p - 2)`. No asymptotic approximation, optimized analytic coefficient, or distribution estimate follows merely from these finite identities.
+
+## Verified center-tail and normalization checkpoint
+
+Commit `a83fbaa87dc9adf211f844dccec4530642e8eb44` passed the twenty-two-module build, full project-module replay, and 511-declaration transitive axiom audit. [PR run 37764236666](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37764236666). At the actual fifth-root cap, the omitted center-prime correction differs from one by at most `62 / N^(1/5)` for `N ≥ 1024`. Strict-cap Euler-product exhaustion and this bound prove the actual density normalization tends to one along positive even centers. The ordinary prime Euler product is left explicit; no Mertens estimate or analytic sieve bound is inferred. The added finite dimension-comparison module is awaiting CI.
