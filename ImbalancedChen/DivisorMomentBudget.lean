@@ -95,7 +95,7 @@ theorem halfProductDensity_pow_apply_prime (k : ℕ) {p : ℕ} (hp : Nat.Prime p
         Nat.sum_divisorsAntidiagonal
           (fun i j => (halfProductDensity ^ k) i * halfProductDensity j), hp.divisors]
       simp only [Finset.sum_insert hnot, Finset.sum_singleton,
-        Nat.div_one, Nat.div_self hp.ne_zero, hunit, halfProductDensity_one, one_mul,
+        Nat.div_one, Nat.div_self hp.pos, hunit, halfProductDensity_one, one_mul,
         mul_one, ih, Nat.cast_succ]
       ring
 
