@@ -1,0 +1,212 @@
+# External proof sources are rebuilt cold; Lean/Mathlib artifacts remain explicitly trusted.
+name: Actual initial Chen normalization cold-consumer verification
+on:
+  push:
+    branches: ['audit/chen-initial-normalization']
+permissions:
+  contents: read
+concurrency:
+  group: chen-initial-normalization-cold-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  cold-normalization:
+    if: github.repository == 'UyNewNas/goldbach-formalization' && github.ref == 'refs/heads/audit/chen-initial-normalization'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    env:
+      LEAN_NUM_THREADS: '2'
+      LAKE_NO_CACHE: '1'
+      LAKE_ARTIFACT_CACHE: 'false'
+      MATHLIB_NO_CACHE_ON_UPDATE: '1'
+      LEAN_PATH: ''
+      LEAN_SRC_PATH: ''
+      COLD_ROOT: ${{ github.workspace }}/external-source
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Initialize runner-local paths
+        run: |
+          set -euo pipefail
+          {
+            printf 'LAKE_CACHE_DIR=%s/cold-lake-cache\n' "$RUNNER_TEMP"
+            printf 'MATHLIB_CACHE_DIR=%s/explicit-mathlib-cache\n' "$RUNNER_TEMP"
+            printf 'COLD_HOME=%s/cold-home\n' "$RUNNER_TEMP"
+            printf 'COLD_TOOLCHAIN=%s/lean-4.33.0-rc1\n' "$RUNNER_TEMP"
+            printf 'EVIDENCE=%s/chen-initial-normalization-evidence\n' "$RUNNER_TEMP"
+          } >> "$GITHUB_ENV"
+      - name: Check out consumer-owned audit tools
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          path: consumer
+          persist-credentials: false
+      - name: Check out exact external sources
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: subfish-zhou/goldbach-lean
+          ref: 09b97db5764ade1246bfb77206baa1b124760958
+          path: external-source
+          persist-credentials: false
+          submodules: false
+          lfs: false
+      - name: Record source identity and source-only acceptance gate
+        run: |
+          set -euo pipefail
+          mkdir -p "$EVIDENCE" "$COLD_HOME/tmp" "$LAKE_CACHE_DIR" "$MATHLIB_CACHE_DIR"
+          test "$(git -C external-source rev-parse HEAD)" = 09b97db5764ade1246bfb77206baa1b124760958
+          test "$(cat external-source/lean-toolchain)" = leanprover/lean4:v4.33.0-rc1
+          test -z "$(git -C external-source status --porcelain)"
+          test ! -d external-source/.lake
+          {
+            printf 'consumer='; git -C consumer rev-parse HEAD
+            printf 'supplier='; git -C external-source rev-parse HEAD
+            printf 'run=%s attempt=%s\n' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT"
+            printf 'external-source-cold; Mathlib dependency cache explicitly permitted\n'
+            lscpu; free -h; df -h .
+          } | tee "$EVIDENCE/runner-context.log"
+          python3 consumer/ci/external_bv/cold_source_audit.py roots "$COLD_ROOT" "$EVIDENCE"
+          cp consumer/ci/external_bv/closure.json "$EVIDENCE/approved-ordinary270-closure.json"
+          cp external-source/lake-manifest.json "$EVIDENCE/pinned-manifest.json"
+          cp external-source/LICENSE "$EVIDENCE/SUBFISH-LICENSE"
+          cp external-source/docs/PROVENANCE.md "$EVIDENCE/SUBFISH-PROVENANCE.md"
+      - name: Install checksum-pinned official Lean distribution
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/lean-4.33.0-rc1-linux.tar.zst"
+          curl --fail --location --proto '=https' --tlsv1.2 --retry 3 \
+            https://github.com/leanprover/lean4/releases/download/v4.33.0-rc1/lean-4.33.0-rc1-linux.tar.zst \
+            --output "$archive"
+          printf '25e7b3e18ec75a4e2529fc23194be8e3cc3183df99b553f870d8a111c7488210  %s\n' "$archive" | sha256sum --check
+          mkdir "$RUNNER_TEMP/lean-4.33.0-rc1"
+          tar --zstd --extract --file "$archive" --directory "$RUNNER_TEMP/lean-4.33.0-rc1" --strip-components=1
+          printf '%s\n' "$RUNNER_TEMP/lean-4.33.0-rc1/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/lean-4.33.0-rc1/bin/lean" --version | tee "$EVIDENCE/toolchain.log"
+          "$RUNNER_TEMP/lean-4.33.0-rc1/bin/lake" --version | tee -a "$EVIDENCE/toolchain.log"
+          test -x "$RUNNER_TEMP/lean-4.33.0-rc1/bin/leanchecker"
+      - name: Check isolation prerequisites without third-party Lean code
+        run: |
+          set -euo pipefail
+          test -x "$COLD_TOOLCHAIN/bin/leantar"
+          bash consumer/ci/external_bv/offline.sh /usr/bin/python3 -c '
+          import os, pathlib, socket, sys
+          status = dict(line.split(":", 1) for line in pathlib.Path("/proc/self/status").read_text().splitlines() if ":" in line)
+          assert os.getuid() != 0 and not os.getgroups()
+          assert status["NoNewPrivs"].strip() == "1"
+          assert all(int(status[k].strip(), 16) == 0 for k in ("CapInh", "CapPrm", "CapEff", "CapBnd", "CapAmb"))
+          assert os.readlink("/proc/self/ns/net") != sys.argv[1]
+          assert os.readlink("/proc/self/ns/pid") != sys.argv[2]
+          assert all(name == "lo" for _, name in socket.if_nameindex())
+          assert not any(k.startswith(("GITHUB_", "ACTIONS_", "RUNNER_")) for k in os.environ)
+          print("PASS: non-root, empty supplementary groups/capabilities, no-new-privileges, separate PID/network namespaces, clean environment")
+          ' "$(readlink /proc/self/ns/net)" "$(readlink /proc/self/ns/pid)" \
+            | tee "$EVIDENCE/isolation-preflight.log"
+      - name: Fetch and verify exact dependencies before loading their Lake code
+        run: |
+          set -euo pipefail
+          bash consumer/ci/external_bv/setup.sh /usr/bin/python3 \
+            "$GITHUB_WORKSPACE/consumer/ci/external_bv/fetch_dependencies.py" "$COLD_ROOT" \
+            2>&1 | tee "$EVIDENCE/dependency-fetch.log"
+          python3 consumer/ci/external_bv/cold_source_audit.py dependencies "$COLD_ROOT" "$EVIDENCE"
+      - name: Verify the exact normalization source subset before dependency execution
+        run: |
+          set -euo pipefail
+          python3 consumer/ci/chen_initial_normalization/consumer_audit.py sources \
+            "$GITHUB_WORKSPACE/consumer" "$COLD_ROOT" "$EVIDENCE"
+      - name: Resolve only verified local dependencies offline
+        run: |
+          set -euo pipefail
+          bash consumer/ci/external_bv/offline.sh /usr/bin/time -v lake --offline --no-cache resolve-deps \
+            2>&1 | tee "$EVIDENCE/resolve.log"
+          python3 consumer/ci/external_bv/cold_source_audit.py dependencies "$COLD_ROOT" "$EVIDENCE"
+      - name: Explicitly fetch only Mathlib dependency artifacts
+        run: |
+          set -euo pipefail
+          bash consumer/ci/external_bv/setup.sh /usr/bin/time -v lake --no-cache exe cache --repo=leanprover-community/mathlib4 --cache-from=master get Mathlib \
+            2>&1 | tee "$EVIDENCE/mathlib-cache.log"
+          python3 consumer/ci/external_bv/cold_source_audit.py dependencies "$COLD_ROOT" "$EVIDENCE"
+          cd "$COLD_ROOT"
+          mkdir -p "$EVIDENCE/dependency-licenses"
+          for pkg in .lake/packages/*; do
+            name="$(basename "$pkg")"
+            mkdir -p "$EVIDENCE/dependency-licenses/$name"
+            find "$pkg" -maxdepth 1 -type f \( -iname 'LICENSE*' -o -iname 'NOTICE*' -o -iname 'COPYING*' \) \
+              -exec cp {} "$EVIDENCE/dependency-licenses/$name/" \;
+          done
+          du -sh .lake/packages/*/.lake/build 2>/dev/null | tee "$EVIDENCE/dependency-cache-sizes.log" || true
+      - name: Stage only the pinned 42-module core closure and reviewed normalization consumer
+        run: |
+          set -euo pipefail
+          python3 consumer/ci/chen_initial_normalization/consumer_audit.py stage \
+            "$GITHUB_WORKSPACE/consumer" "$COLD_ROOT" "$EVIDENCE"
+          cp consumer/ci/chen_initial_normalization/ChenInitialNormalizationAdapter.lean "$EVIDENCE/ChenInitialNormalizationAdapter.lean"
+          cp consumer/ci/chen_initial_normalization/ChenInitialNormalizationProbe.lean "$EVIDENCE/ChenInitialNormalizationProbe.lean"
+      - name: Establish zero external-artifact gate and offline execution
+        run: |
+          set -euo pipefail
+          # Fail instead of deleting evidence of an unexpected foreign artifact restore.
+          python3 consumer/ci/external_bv/cold_source_audit.py prebuild "$COLD_ROOT" "$EVIDENCE"
+          bash consumer/ci/external_bv/offline.sh /usr/bin/bash -euo pipefail -c \
+            'test "$(id -u)" != 0; test -z "${GITHUB_TOKEN:-}"; lake env printenv LEAN_PATH' \
+            | tee "$EVIDENCE/lean-path.log"
+      - name: Cold-build exactly the PNT and Mertens supplier roots
+        timeout-minutes: 120
+        run: |
+          set -euo pipefail
+          bash consumer/ci/external_bv/offline.sh /usr/bin/time -v lake --no-cache --wfail build \
+            +AnalyticNumberTheory.PrimeDistribution.PrimeNumberTheorem:olean \
+            +AnalyticNumberTheory.Mertens.Theorems:olean \
+            2>&1 | tee "$EVIDENCE/cold-build.log"
+      - name: Verify exact 32 supplier plus 9 Architect fresh compiled coverage
+        run: |
+          set -euo pipefail
+          python3 consumer/ci/chen_initial_normalization/consumer_audit.py after-supplier \
+            "$GITHUB_WORKSPACE/consumer" "$COLD_ROOT" "$EVIDENCE"
+          python3 consumer/ci/external_bv/cold_source_audit.py dependencies "$COLD_ROOT" "$EVIDENCE"
+      - name: Cold-compile all 42 core modules plus normalization consumer and axiom probe
+        timeout-minutes: 60
+        run: |
+          set -euo pipefail
+          test "$(wc -l < "$EVIDENCE/owned-build-modules.txt")" -eq 44
+          while IFS= read -r module; do
+            relative="${module//.//}"
+            mkdir -p "$COLD_ROOT/.lake/build/lib/lean/$(dirname "$relative")"
+            printf 'COMPILE OWNED %s\n' "$module"
+            lean_options=()
+            case "$module" in
+              ChenInitialNormalizationAdapter|ChenInitialNormalizationProbe) lean_options=(-DwarningAsError=true) ;;
+            esac
+            bash consumer/ci/external_bv/offline.sh /usr/bin/time -v lake env lean \
+              "${lean_options[@]}" -o ".lake/build/lib/lean/$relative.olean" "$relative.lean"
+          done < "$EVIDENCE/owned-build-modules.txt" 2>&1 | tee "$EVIDENCE/chen-initial-normalization-build.log"
+      - name: Gate exact loaded closure and complete module-origin axiom coverage
+        run: |
+          set -euo pipefail
+          python3 consumer/ci/chen_initial_normalization/consumer_audit.py after \
+            "$GITHUB_WORKSPACE/consumer" "$COLD_ROOT" "$EVIDENCE"
+          python3 consumer/ci/external_bv/cold_source_audit.py dependencies "$COLD_ROOT" "$EVIDENCE"
+      - name: Replay all 85 selected custom modules including the audit probe
+        timeout-minutes: 120
+        run: |
+          set -euo pipefail
+          test "$(wc -l < "$EVIDENCE/replay-modules.txt")" -eq 85
+          xargs -r -n 12 < "$EVIDENCE/replay-modules.txt" > "$EVIDENCE/replay-batches.txt"
+          test -s "$EVIDENCE/replay-batches.txt"
+          while read -r modules; do
+            read -r -a batch <<< "$modules"
+            printf 'REPLAY BATCH %s\n' "$modules"
+            bash consumer/ci/external_bv/offline.sh /usr/bin/time -v lake env leanchecker --verbose "${batch[@]}"
+          done < "$EVIDENCE/replay-batches.txt" 2>&1 | tee "$EVIDENCE/kernel-replay.log"
+          python3 consumer/ci/chen_initial_normalization/consumer_audit.py after \
+            "$GITHUB_WORKSPACE/consumer" "$COLD_ROOT" "$EVIDENCE"
+          python3 consumer/ci/external_bv/cold_source_audit.py dependencies "$COLD_ROOT" "$EVIDENCE"
+          printf 'PASS: 32 ordinary270 supplier + 9 Architect + 42 pinned core + actual normalization consumer source-cold; all 84 custom-module origins axiom-audited; all 85 custom modules including probe replayed. Trusted official Lean and pinned Mathlib dependency cache boundary unchanged.\n' \
+            | tee "$EVIDENCE/acceptance.txt"
+      - name: Preserve evidence even when a stage fails
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: chen-initial-normalization-cold-${{ github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/chen-initial-normalization-evidence
+          retention-days: 30
+          if-no-files-found: error
