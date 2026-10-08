@@ -184,6 +184,7 @@ theorem sum_abs_finitePrimitiveDiscrepancy_le_two_mul_of_uniform_selector
         S (fun d b => finiteCommonMainError T w (M d) b d) B hS hE
         (fun d => a d % d) hmod
 
+set_option maxHeartbeats 800000 in
 /-- The actual ordered-prime prefix discrepancy satisfies the loss-free
 selector transfer. The sole estimate is the explicit hypothesis on the
 literal prefix AP count, uniformly over canonical primitive selectors. -/
@@ -194,17 +195,36 @@ theorem sum_abs_primeRectanglePrefixDiscrepancy_le_two_mul_of_uniform_selector
       (∑ d ∈ S, |primeRectanglePrefixAPCount L U V (b d) d - M d|) ≤ B)
     (a : ℕ → ℕ) (ha : ∀ d ∈ S, Nat.Coprime (a d) d) :
     (∑ d ∈ S, |primeRectanglePrefixDiscrepancy L U V (a d) d|) ≤ 2 * B := by
+  let T : Finset ℕ :=
+    (primeRectanglePrefixPairs L U V).image (fun p => p.1 * p.2)
+  let w : ℕ → ℝ := pairProductWeight (primeRectanglePrefixPairs L U V)
+  have hAP (b d : ℕ) : finiteCongruenceMass T w b d =
+      primeRectanglePrefixAPCount L U V b d :=
+    finiteCongruenceMass_primeRectanglePrefixPairs L U V b d
+  have hdisc (b d : ℕ) : finitePrimitiveDiscrepancy T w b d =
+      primeRectanglePrefixDiscrepancy L U V b d :=
+    finitePrimitiveDiscrepancy_primeRectanglePrefixPairs L U V b d
   have hraw : ∀ b : ℕ → ℕ, (∀ d ∈ S, b d ∈ finiteReducedResidues d) →
-      (∑ d ∈ S, |finiteCongruenceMass
-        ((primeRectanglePrefixPairs L U V).image (fun p => p.1 * p.2))
-        (pairProductWeight (primeRectanglePrefixPairs L U V)) (b d) d - M d|) ≤ B := by
+      (∑ d ∈ S, |finiteCongruenceMass T w (b d) d - M d|) ≤ B := by
     intro b hb
-    simpa only [finiteCongruenceMass_primeRectanglePrefixPairs] using
-      hE b (fun d hd => (mem_finiteReducedResidues (b d) d).mp (hb d hd))
-  simpa only [finitePrimitiveDiscrepancy_primeRectanglePrefixPairs] using
-    sum_abs_finitePrimitiveDiscrepancy_le_two_mul_of_uniform_selector S
-      ((primeRectanglePrefixPairs L U V).image (fun p => p.1 * p.2))
-      (pairProductWeight (primeRectanglePrefixPairs L U V)) M B hS hraw a ha
+    calc
+      (∑ d ∈ S, |finiteCongruenceMass T w (b d) d - M d|) =
+          ∑ d ∈ S, |primeRectanglePrefixAPCount L U V (b d) d - M d| := by
+        apply Finset.sum_congr rfl
+        intro d _
+        rw [hAP (b d) d]
+      _ ≤ B := hE b
+        (fun d hd => (mem_finiteReducedResidues (b d) d).mp (hb d hd))
+  have hbound : (∑ d ∈ S, |finitePrimitiveDiscrepancy T w (a d) d|) ≤ 2 * B :=
+    sum_abs_finitePrimitiveDiscrepancy_le_two_mul_of_uniform_selector
+      S T w M B hS hraw a ha
+  calc
+    (∑ d ∈ S, |primeRectanglePrefixDiscrepancy L U V (a d) d|) =
+        ∑ d ∈ S, |finitePrimitiveDiscrepancy T w (a d) d| := by
+      apply Finset.sum_congr rfl
+      intro d _
+      rw [hdisc (a d) d]
+    _ ≤ 2 * B := hbound
 
 /-- The complete inclusive positive-modulus interval is allowed, including
 `D = 0`. The budget is still `2 * B`, independent of its length. -/
