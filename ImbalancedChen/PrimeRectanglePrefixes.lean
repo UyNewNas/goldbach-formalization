@@ -47,8 +47,9 @@ def primeRectanglePrefixPairs (L U V : ℕ) : Finset (ℕ × ℕ) :=
     p ∈ primeRectanglePrefixPairs L U V ↔
       L < p.1 ∧ p.1 ≤ U ∧ Nat.Prime p.1 ∧ p.2 ≤ V ∧ Nat.Prime p.2 := by
   simp only [primeRectanglePrefixPairs, Finset.product_eq_sprod,
-    Finset.mem_product, Finset.mem_filter, Finset.mem_Ioc, Finset.mem_range]
-  omega
+    Finset.mem_product, Finset.mem_filter, Finset.mem_Ioc, Finset.mem_range,
+    Nat.lt_succ_iff]
+  tauto
 
 /-- The prefix includes every ordered pair of the stated primes, even
 when the coordinates are equal or the product exceeds a separate cutoff. -/
@@ -68,7 +69,15 @@ theorem primeIntervalRectangle_eq_prefix_sdiff (L U Vlo Vhi : ℕ) :
   ext p
   simp only [mem_primeIntervalRectangle, Finset.mem_sdiff,
     mem_primeRectanglePrefixPairs]
-  omega
+  constructor
+  · rintro ⟨hL, hU, hr, hlo, hhi, hq⟩
+    refine ⟨⟨hL, hU, hr, hhi, hq⟩, ?_⟩
+    rintro ⟨_, _, _, hle, _⟩
+    exact (not_le_of_gt hlo) hle
+  · rintro ⟨⟨hL, hU, hr, hhi, hq⟩, hn⟩
+    have hlo : Vlo < p.2 :=
+      lt_of_not_ge (fun hle => hn ⟨hL, hU, hr, hle, hq⟩)
+    exact ⟨hL, hU, hr, hlo, hhi, hq⟩
 
 /-- A predicate count respects subtraction of nested finite pair sets.
 The subtraction is in `ℝ`, with no truncated natural-number subtraction. -/
@@ -162,7 +171,7 @@ theorem card_filter_product_cast_eq_sum
       ∑ r ∈ A, ((B.filter (fun q => P (r, q))).card : ℝ) := by
   classical
   simp only [Finset.card_eq_sum_ones, Nat.cast_sum, Nat.cast_one,
-    Finset.sum_filter, Finset.sum_product]
+    Finset.sum_filter, Finset.product_eq_sprod, Finset.sum_product]
 
 /-- Supplier-facing form: sum over first-coordinate primes, with a literal
 prime AP prefix `q ≤ V` in the second coordinate. -/
