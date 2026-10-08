@@ -46,7 +46,7 @@ theorem halfProductSource_card_le (num den N : ℕ) (T : ℝ) :
       · intro m hm
         have hm0 := halfProductSource_pos hm
         have hmN := (mem_halfProductSource.mp hm).1
-        exact Finset.mem_range.mpr (by omega)
+        exact Finset.mem_range.mpr (by change m - 1 < N; omega)
       · intro m hm n hn hmn
         have hm0 := halfProductSource_pos hm
         have hn0 := halfProductSource_pos hn
