@@ -109,8 +109,10 @@ theorem inHalfProductCrossingCell_nat_mem_global_collar
   have ha0 := multiplicativeBoundaryCell_pos hR hQ ha
   have hN : 0 ≤ N := (mul_pos ha0.1 ha0.2).le.trans hA.2.1
   have hcaps := multiplicativeBoundaryCell_coordinate_caps hR hQ hδ hb ha hA hp
-  have hrpos : 0 < p.1 := by exact_mod_cast hp0.1
-  have hqpos : 0 < p.2 := by exact_mod_cast hp0.2
+  have hrposR : (0 : ℝ) < (p.1 : ℝ) := hp0.1
+  have hqposR : (0 : ℝ) < (p.2 : ℝ) := hp0.2
+  have hrpos : 0 < p.1 := by exact_mod_cast hrposR
+  have hqpos : 0 < p.2 := by exact_mod_cast hqposR
   have hr : (p.1 : ℝ) ≤ (boundaryGlobalR δ N : ℝ) := hcaps.1.trans (Nat.le_ceil _)
   have hq : (p.2 : ℝ) ≤ (boundaryGlobalQ δ N b : ℝ) := hcaps.2.trans (Nat.le_ceil _)
   exact multiplicativeBoundaryCell_nat_mem_collar hR hQ hδ hδ1 hb hb1
@@ -144,7 +146,8 @@ theorem crossingCells_card_le_global_log_power
         2 * (boundaryGlobalR δ N : ℝ) + boundaryGlobalS δ N + boundaryGlobalQ δ N b := by
   have h := (crossingCells_card_le_global_budget B hδ hδ1 hb hb1 hT hN hB).trans
     (boundaryGridBudget_le_log_power _ _ _ (3 * δ) T N b (by linarith) hT hN hb)
-  convert h using 1 <;> ring
+  have h6 : (2 : ℝ) * (3 * δ) = 6 * δ := by ring
+  simpa only [h6] using h
 
 /-- The true product convolution mass, including repeated and exterior
 products, obeys the same global bound on every full-support carrier. -/
