@@ -4,7 +4,7 @@ Work toward a Lean formalization of *Transferring quantitative Chen bounds to im
 
 ## Verification status
 
-At commit `d8f564f5987170343f44971f8570018a624b380f`, the forty-nine-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1081 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37817371436). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
+At commit `dd5a7e95a2e1d37d8d1b03f378d09bcb84b8d7e0`, the fifty-two-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1151 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37821907221). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
 
 - `ImbalancedChen/Counting.lean`: prime-indexed finite representation sets, exact good/bad partition, subtraction and a conditional finite transfer lemma. The initial count excludes receiver 1; the separate Multiplicity module supplies the receiver-one correction.
 - `ImbalancedChen/Constants.lean`: exact rational endpoint arithmetic and logarithmic inequalities, reusing mathlib's proved logarithm bound. This does not certify the integrals from which the quoted numbers originate.
@@ -50,6 +50,9 @@ At commit `d8f564f5987170343f44971f8570018a624b380f`, the forty-nine-module chec
 - `ImbalancedChen/DivisorMomentBudget.lean`: unconditional squarefree fourth-divisor moment bounded by an explicit sixteenth logarithmic power, via finite Dirichlet convolution.
 - `ImbalancedChen/BoundaryArbitraryLog.lean`: arbitrary fixed logarithmic accuracy for the actual geometric boundary cost, uniform in cutoff and selected moduli.
 - `ImbalancedChen/WeightedSieveLogBudget.lean`: explicit logarithmic precision loss when transferring an unweighted primitive discrepancy estimate to the actual weighted sieve error.
+- `ImbalancedChen/SingularProductIdentity.lean`: genuinely convergent natural-index Euler products, exact centre correction and the prime-two factor.
+- `ImbalancedChen/HalfProductMassFibres.lean`: exact prime-counting fibres of the original half-product source, preserving strict power boundaries, squares and the real cutoff.
+- `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
 - `docs/PROOF_STATUS.md`: outstanding analytic dependencies and the frontier comparison.
 
 Build: `lake exe cache get && lake build`. The workflow also runs `leanchecker` and a transitive axiom audit allowing only `propext`, `Classical.choice`, and `Quot.sound`.

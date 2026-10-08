@@ -40,6 +40,8 @@ variable (hPNT : ∃ c : ℝ → ℝ, c =o[atTop] (fun _ => (1 : ℝ)) ∧
   ∀ x : ℝ, (Nat.primeCounting (Nat.floor x) : ℝ) =
     (1 + c x) * x / Real.log x)
 
+include hPNT
+
 /-- One real threshold works for the entire tail, with positive logarithms.
 The threshold depends only on the supplied PNT witness and `epsilon`. -/
 theorem exists_primeCounting_real_relative_error_threshold_of_real_pnt
