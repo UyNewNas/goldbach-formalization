@@ -27,7 +27,7 @@ after multiplication by an arbitrary fixed positive epsilon. -/
 theorem eventually_unit_absorption_of_tendsto
     {H : ℕ → ℝ} (hH : Tendsto H atTop atTop) :
     ∀ epsilon : ℝ, 0 < epsilon →
-      ∀ᶠ N in atTop, 1 ≤ epsilon * H N := by
+      ∀ᶠ N : ℕ in atTop, 1 ≤ epsilon * H N := by
   intro epsilon hepsilon
   exact (hH.const_mul_atTop hepsilon).eventually (eventually_ge_atTop 1)
 
@@ -36,7 +36,7 @@ absorption hypothesis used by the corrected asymptotic transfer. -/
 theorem eventuallyEven_unit_absorption_of_tendsto
     {H : ℕ → ℝ} (hH : Tendsto H atTop atTop) :
     ∀ epsilon : ℝ, 0 < epsilon →
-      ∀ᶠ N in atTop, Even N → 1 ≤ epsilon * H N := by
+      ∀ᶠ N : ℕ in atTop, Even N → 1 ≤ epsilon * H N := by
   intro epsilon hepsilon
   exact (eventually_unit_absorption_of_tendsto hH epsilon hepsilon).mono
     (fun _ hN _ => hN)
@@ -45,9 +45,9 @@ theorem eventuallyEven_unit_absorption_of_tendsto
 no assertion about its values on odd integers is needed. -/
 theorem eventuallyEven_unit_absorption_of_eventually_le
     {G H : ℕ → ℝ} (hG : Tendsto G atTop atTop)
-    (hLower : ∀ᶠ N in atTop, Even N → G N ≤ H N) :
+    (hLower : ∀ᶠ N : ℕ in atTop, Even N → G N ≤ H N) :
     ∀ epsilon : ℝ, 0 < epsilon →
-      ∀ᶠ N in atTop, Even N → 1 ≤ epsilon * H N := by
+      ∀ᶠ N : ℕ in atTop, Even N → 1 ≤ epsilon * H N := by
   intro epsilon hepsilon
   refine ((eventually_unit_absorption_of_tendsto hG epsilon hepsilon).and hLower).mono ?_
   rintro N ⟨hAbsorbN, hLowerN⟩ hEven
@@ -83,10 +83,10 @@ receiver-one correction. The lower factor is a hypothesis, not an unproved
 claim about a singular series. -/
 theorem eventuallyEven_unit_absorption_of_log_sq_lower
     {H : ℕ → ℝ} {c0 : ℝ} (hc0 : 0 < c0)
-    (hLower : ∀ᶠ N in atTop, Even N →
+    (hLower : ∀ᶠ N : ℕ in atTop, Even N →
       c0 * (N : ℝ) / (Real.log (N : ℝ)) ^ 2 ≤ H N) :
     ∀ epsilon : ℝ, 0 < epsilon →
-      ∀ᶠ N in atTop, Even N → 1 ≤ epsilon * H N := by
+      ∀ᶠ N : ℕ in atTop, Even N → 1 ≤ epsilon * H N := by
   exact eventuallyEven_unit_absorption_of_eventually_le
     (tendsto_pos_mul_nat_div_log_sq_atTop hc0) hLower
 

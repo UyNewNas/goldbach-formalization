@@ -125,7 +125,10 @@ theorem halfProduct_integral {b : ℝ} (hb : 0 < b) (hb1 : b < 1) :
     have hx1 : 1 - x ≠ 0 := ne_of_gt (sub_pos.mpr (hmem x hx).2)
     have h := (Real.hasDerivAt_log hx0).sub
       (((hasDerivAt_const x (1 : ℝ)).sub (hasDerivAt_id x)).log hx1)
-    convert h using 1 <;> field_simp [hx0, hx1] <;> ring
+    have hscalar : x⁻¹ - (0 - 1) / (1 - x) = 1 / (x * (1 - x)) := by
+      field_simp [hx0, hx1] <;> ring
+    rw [← hscalar]
+    exact h
   have hint : IntervalIntegrable (fun u : ℝ => 1 / (u * (1 - u)))
       MeasureTheory.volume a (1 / 2 : ℝ) := by
     apply ContinuousOn.intervalIntegrable
