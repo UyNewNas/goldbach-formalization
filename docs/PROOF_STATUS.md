@@ -60,3 +60,7 @@ Commit `a83fbaa87dc9adf211f844dccec4530642e8eb44` passed the twenty-two-module b
 ## Verified finite dimension comparison
 
 Commit `b71e40a9b865d094e8a065273f8eb3261d5e3e62` passed the twenty-three-module build, full project-module replay, and 551-declaration transitive axiom audit. [PR run 37765367998](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37765367998). Exact density quotients retain half-open prime intervals and center-divisor exclusions. Removing center primes decreases the quotient uniformly, including the zero-center case. The logarithmic dimension estimate still requires an analytic supplier. The added curved-boundary discrepancy module is awaiting CI; it retains the full upper-envelope carrier and leaves all analytic rectangle and boundary-mass estimates open.
+
+## Verified finite curved-boundary transfer
+
+Commit `c51f61079a16959ffa488070996105147d9dd292` passed the twenty-four-module build, full project-module replay, and 583-declaration transitive axiom audit. [PR run 37767807142](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37767807142). The finite curved-boundary inequality retains the full envelope carrier, the actual coprime normalization, and the reciprocal-totient modulus sum. The new reciprocal-totient module proves an unconditional finite bound by `4 * (1 + log(max(1,D)))`, including the empty cap, and composes it with this source inequality. That module is awaiting CI. Rectangle distribution and quantitative boundary lattice-point estimates remain open.
