@@ -77,7 +77,8 @@ theorem totientBudget_squarefree_expansion {n : ℕ} (hn : n ≠ 0) :
   have hfac : (UniqueFactorizationMonoid.normalizedFactors n).toFinset =
       n.primeFactors := by
     ext p
-    simp [Nat.factors_eq, Nat.primeFactors]
+    simp only [Multiset.mem_toFinset, Nat.factors_eq, Multiset.mem_coe,
+      Nat.mem_primeFactors_iff_mem_primeFactorsList]
   rw [Finset.prod_one_add, Nat.sum_divisors_filter_squarefree hn, hfac]
   apply Finset.sum_congr rfl
   intro s hs
@@ -144,7 +145,8 @@ theorem totientBudget_inverse_square_sum (D : ℕ) :
         have hcomp : 1 / ((k : ℝ) + 1) ^ 2 ≤
             2 / (((k : ℝ) + 1) * ((k : ℝ) + 1 + 1)) := by
           apply (div_le_div_iff₀ (pow_pos hk 2) (mul_pos hk hk')).mpr
-          nlinarith [Nat.cast_nonneg (R := ℝ) k]
+          have hk0 : (0 : ℝ) ≤ (k : ℝ) := Nat.cast_nonneg k
+          nlinarith
         have htel : 2 / (((k : ℝ) + 1) * ((k : ℝ) + 1 + 1)) =
             2 / ((k : ℝ) + 1) - 2 / ((k : ℝ) + 1 + 1) := by
           field_simp [hk.ne', hk'.ne']
@@ -162,7 +164,9 @@ private def totientBudget_invSq : ArithmeticFunction ℝ :=
 private theorem totientBudget_convolution (n : ℕ) :
     (totientBudget_invSq * totientBudget_inv) n =
       (1 / (n : ℝ)) * ∑ d ∈ n.divisors, 1 / (d : ℝ) := by
-  rw [ArithmeticFunction.mul_apply, Nat.sum_divisorsAntidiagonal, Finset.mul_sum]
+  rw [ArithmeticFunction.mul_apply,
+    Nat.sum_divisorsAntidiagonal
+      (fun i j => totientBudget_invSq i * totientBudget_inv j), Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro d hd
   change (1 / (d : ℝ) ^ 2) * (1 / ((n / d : ℕ) : ℝ)) =
