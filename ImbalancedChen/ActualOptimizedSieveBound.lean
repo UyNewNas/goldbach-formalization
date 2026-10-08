@@ -111,7 +111,7 @@ theorem siftedHalfProductSource_card_le_optimized_of_unweighted_logBound
     num den N T z hN hnum hden hT hcap L A hL hlevel hN1 hlog C hC hdistribution
   have hcount := siftedSum_le_finiteSelbergNormalizer_add_errSum
     (halfProductBoundingSieve num den N T z hN) hL
-  have h := hcount.trans (add_le_add_left (Real.le_sqrt_of_sq_le herr) _)
+  have h := hcount.trans (add_le_add le_rfl (Real.le_sqrt_of_sq_le herr))
   simpa only [halfProductBoundingSieve_siftedSum, halfProductBoundingSieve_totalMass,
     halfProduct_finiteSelbergNormalizer] using h
 
