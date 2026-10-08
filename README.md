@@ -4,7 +4,7 @@ Work toward a Lean formalization of *Transferring quantitative Chen bounds to im
 
 ## Verification status
 
-At commit `f13355fc612ab45524017a6a9f72efeb0010e710`, the fifty-seven-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1247 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37825263274). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
+At commit `8d29cfb52fdf3b9bece7eb4dff7494c3f59f138a`, the sixty-four-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1504 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37831691122). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
 
 - `ImbalancedChen/Counting.lean`: prime-indexed finite representation sets, exact good/bad partition, subtraction and a conditional finite transfer lemma. The initial count excludes receiver 1; the separate Multiplicity module supplies the receiver-one correction.
 - `ImbalancedChen/Constants.lean`: exact rational endpoint arithmetic and logarithmic inequalities, reusing mathlib's proved logarithm bound. This does not certify the integrals from which the quoted numbers originate.
@@ -78,6 +78,10 @@ No custom analytic axioms or proof placeholders belong in the verified core. A g
 - `ImbalancedChen/QuotientChenNinthSwitch.lean`: literal Y9 support and its required lower bound from original squarefree source conditions and actual factor counts; four-factor exclusion and triple reconstruction are proved.
 
 - `ImbalancedChen/QuotientChenWeightCases.lean`: complete actual repaired eleven-term pointwise weight inequality on the original squarefree size band, with exact fixed exponents, full Y11, multiplicity-count convention, and receiver one. This finite inequality supplies no analytic mean estimate.
+
+- `ImbalancedChen/QuotientChenPositiveBound.lean`: uniform upper bound 246 for the actual weight on all positive receivers at most N, including nonsquarefree receivers.
+- `ImbalancedChen/QuotientChenSummedBridge.lean`: original prime-indexed weight sum, once-only exceptional union, literal ceiling and square-divisor error, and explicit 984 N^(1-a) loss.
+- `ImbalancedChen/QuotientChenElevenSum.lean`: exact eleven actual Upsilon sums, full Y11, manuscript endpoint equivalence, and explicit receiver-one correction. These three additions await their own CI result.
 
 ## Reproducibility
 

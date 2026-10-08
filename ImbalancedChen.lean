@@ -63,3 +63,6 @@ import ImbalancedChen.QuotientChenInitialCounts
 import ImbalancedChen.QuotientChenSwitchGeometry
 import ImbalancedChen.QuotientChenNinthSwitch
 import ImbalancedChen.QuotientChenWeightCases
+import ImbalancedChen.QuotientChenPositiveBound
+import ImbalancedChen.QuotientChenSummedBridge
+import ImbalancedChen.QuotientChenElevenSum
