@@ -114,9 +114,10 @@ theorem chen_exists_smallestTwo_below {n : ℕ} {H : ℝ} (hn : n ≠ 0)
 /-- The exact two-step binomial difference, before any casts or subtraction. -/
 theorem chen_choose_two_step (m : ℕ) :
     (m + 2).choose 2 = m.choose 2 + 2 * m + 1 := by
-  have h₁ := Nat.choose_succ_succ m 1
-  have h₂ := Nat.choose_succ_succ (m + 1) 1
-  simp only [Nat.choose_one_right] at h₁ h₂
+  have h₁ : (m + 1).choose 2 = m + m.choose 2 := by
+    simpa only [Nat.choose_one_right] using (Nat.choose_succ_succ m 1)
+  have h₂ : (m + 2).choose 2 = (m + 1) + (m + 1).choose 2 := by
+    simpa only [Nat.choose_one_right] using (Nat.choose_succ_succ (m + 1) 1)
   omega
 
 /-- The large-low-count branch follows from the actual first-six and
@@ -153,7 +154,7 @@ theorem chenElevenWeight_nonpos_of_two_le_below {n : ℕ} {N A H D C : ℝ}
     chenY3_eq_card hn.ne_zero hrough, chenY4_eq_card hn.ne_zero hrough,
     chenY5_eq_choose hn.ne_zero hrough, chenY6_eq_mul_sub hn.ne_zero hrough hHD,
     chenY10_eq_choose_sub_two hn hsmall hA hq₂H,
-    chenY11Full_eq_sub_two_mul_sub hn hsmall hA hq₂H hHD]
+    chenY11Full_eq_sub_two_mul_sub hn hsmall hA hq₂H hHD, Nat.cast_one]
   change 3 * (1 : ℝ) + ((if r = 0 then 1 else 0 : ℕ) : ℝ) - (t : ℝ) -
     (s : ℝ) + (r.choose 2 : ℝ) + ((r * (s - r) : ℕ) : ℝ) -
     2 * (chenY7 n N D : ℝ) - (chenY8 n N A C : ℝ) -
@@ -263,7 +264,7 @@ theorem chenPrimesBelow_card_pos_of_three {n : ℕ} {N C : ℝ}
 theorem chen_two_sub_count_sub_indicator_nonpos (t : ℕ) (ht : 1 ≤ t) :
     (2 : ℝ) - (t : ℝ) - ((if t = 1 then 1 else 0 : ℕ) : ℝ) ≤ 0 := by
   by_cases ht₁ : t = 1
-  · simp [ht₁]
+  · norm_num [ht₁]
   · have ht₂ : 2 ≤ t := by omega
     have ht₂R : (2 : ℝ) ≤ (t : ℝ) := by exact_mod_cast ht₂
     simp only [if_neg ht₁, Nat.cast_zero, sub_zero]
@@ -303,8 +304,7 @@ theorem chenElevenWeight_nonpos_of_three_factors {n : ℕ} {N A H D C : ℝ}
     2 * (chenY7 n N D : ℝ) - (chenY8 n N A C : ℝ) - (chenY9 n N H D : ℝ) at hW
   have hr01 : r = 0 ∨ r = 1 := by dsimp [r]; omega
   rcases hr01 with hr | hr
-  · simp only [hr, if_pos rfl, Nat.choose_zero_succ, Nat.zero_mul,
-      Nat.cast_one, Nat.cast_zero, add_zero] at hW
+  · simp [hr] at hW
     by_cases hs₀ : s = 0
     · have h₇one : chenY7 n N D = 1 := by simpa [hs₀] using h₇id
       rw [hs₀, h₇one] at hW
@@ -339,7 +339,7 @@ All actual prime tuple carriers are empty, while both `Q_1` indicators are one. 
 @[simp] theorem chenElevenWeight_one (N A H D C : ℝ) :
     chenElevenWeight 1 N A H D C = 4 := by
   classical
-  simp [chenElevenWeight, chenY1, chenY2, chenY3, chenY4, chenY5, chenY6,
+  norm_num [chenElevenWeight, chenY1, chenY2, chenY3, chenY4, chenY5, chenY6,
     chenY7, chenY8, chenY9, chenY10, chenY11Full,
     chenSinglePrimeTuples, chenY5Tuples, chenY6Tuples, chenInitialPairCarrier,
     chenY7Tuples, chenY8Tuples, chenY9Tuples,
