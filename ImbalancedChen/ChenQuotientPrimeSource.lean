@@ -66,9 +66,9 @@ theorem chenQuotientPrimeSource_data {N b q : ℕ}
   obtain ⟨hPc, hPb⟩ := mem_chenQuotientPrimeCarrier.mp hP
   obtain ⟨hPN, _, hcop⟩ := mem_chenAdditivePrimeCarrier.mp hPc
   have hmul : b * ((N - P) / b) = N - P := Nat.mul_div_cancel' hPb
-  have hpos : 0 < (N - P) / b := by
-    by_contra hnot
-    have hz : (N - P) / b = 0 := by omega
+  have hpos : (0 : ℕ) < (N - P) / b := by
+    apply Nat.pos_of_ne_zero
+    intro hz
     rw [hz, mul_zero] at hmul
     omega
   have hdiv : (N - P) / b ∣ N - P := by
@@ -203,7 +203,8 @@ theorem chenSiftedQuotientPrimeSource_card (N b : ℕ) (z : ℝ) :
       ((chenAdditivePrimeCarrier N).filter
         (fun P => ChenQuotient b z (N - P))).card := by
   classical
-  exact chenQuotientPrimeSource_filter_card N b (ChenPrimeRough z)
+  simpa only [chenSiftedQuotientPrimeSource, ChenQuotient] using
+    chenQuotientPrimeSource_filter_card N b (ChenPrimeRough z)
 
 /-- Finite Fubini for selected multipliers. The outer tuple label is never
 erased, so equal quotient values in different fibres keep multiplicity. -/
@@ -214,7 +215,7 @@ theorem chen_sum_quotient_tuple_card {α : Type*} [DecidableEq α]
       ∑ t ∈ T, ((chenSiftedQuotientPrimeSource N (b t) z).card : ℝ) := by
   classical
   simp_rw [chenSiftedQuotientPrimeSource_card]
-  simp only [Finset.card_eq_sum_ones, Nat.cast_sum, Nat.cast_one, Finset.sum_filter]
+  simp only [Finset.card_eq_sum_ones, Nat.cast_sum, Finset.sum_filter]
   exact Finset.sum_comm
 
 /-- A prime dividing an actual receiver is itself a primitive additive
