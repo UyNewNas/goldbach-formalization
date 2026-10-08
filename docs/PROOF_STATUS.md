@@ -16,7 +16,7 @@ The new source proves convergence and strict positivity of the actual odd-prime 
 
 ## Outstanding mathematical work
 
-- Apply mathlib’s finite sieve to the verified actual half-product source, then prove the analytic distribution and main-term estimates.
+- Prove the analytic distribution and main-term estimates for the now-instantiated actual finite sieve.
 - Keep compilation, module replay, and transitive axiom audits passing for each new analytic module.
 - Prove the asymptotic bad-semiprime removal bound.
 - Formalize the actual distribution and strengthened sieve interfaces, with all uniformity and order-of-limits hypotheses.
@@ -44,3 +44,7 @@ Commit `26c128d85f45fd0ddd7719459d56fcb112fc582c` passed the full thirteen-modul
 ## Verified sieve-source checkpoint
 
 Commit `cf59a1fe88d8caf85b0a0a32549ec73b5e2c0078` passed the seventeen-module build, module replay, and 328-declaration axiom audit. [PR run 37756197691](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37756197691). The inclusive half-product source, unique ordered-pair count including squares, actual sieve product, source/modulus coprimality, and primitive shifted congruence are proved. The original logarithmic cutoff eventually clears the fifth-root cap, and fixed sublinear power-logarithm costs (including rounding) are negligible in the genuine normalization. These preparation theorems do not prove a level-sensitive upper sieve or the 6.786 analytic coefficient.
+
+## Verified finite-sieve checkpoint
+
+Commit `631466a7e36dc1c381813349a75decc345d8a24d` passed the eighteen-module build, module replay, and 369-declaration transitive axiom audit. [PR run 37758586617](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37758586617). The actual shifted source now instantiates mathlib’s `BoundingSieve`, retaining its inclusive endpoint, literal total mass, reciprocal-totient density, and exact congruence remainder. Upper-Möbius and lambda-square inequalities follow from proved mathlib theorems. The added level-truncation module is awaiting CI; neither its finite identities nor the model supply the outstanding analytic main-term/distribution estimates.
