@@ -224,9 +224,10 @@ theorem halfProductBoundingSieve_rem
     (halfProductBoundingSieve num den N T z hN).rem d =
       halfProductCongruenceMass num den N T d -
         ((halfProductSource num den N T).card : ℝ) / (Nat.totient d : ℝ) := by
-  rw [BoundingSieve.rem, halfProductBoundingSieve_multSum]
+  rw [BoundingSieve.rem, halfProductBoundingSieve_multSum,
+    halfProductBoundingSieve_totalMass]
   change _ - (1 / (Nat.totient d : ℝ)) * _ = _
-  simp only [div_eq_mul_inv, one_mul, mul_comm]
+  ring
 
 /-- The main sum uses the actual reciprocal-totient density. -/
 theorem halfProductBoundingSieve_mainSum
