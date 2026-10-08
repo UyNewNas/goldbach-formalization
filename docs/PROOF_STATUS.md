@@ -76,3 +76,7 @@ BoundaryCellContainment proves local containment from genuine inside/outside wit
 ## Global boundary-mass candidate
 
 BoundaryGlobalCaps derives the actual square-root and power coordinate caps from the inside witnesses, even when the crossing cells vary pointwise. With exact outward ceilings and `0 ≤ δ ≤ 1`, `0 ≤ T ≤ N`, `N ≥ 1`, `0 ≤ b ≤ 1`, it proves the finite pair count and full-support convolution mass are at most `12δN log(3N) + 216δN + 14N^(1/(1+b))`. This is a proved estimate under a genuine crossing-cell cover, not an assumed cardinality bound. Source review is complete; CI is pending. Construction/enumeration of the actual grid and the analytic rectangle-distribution supplier remain open.
+
+## Verified global boundary geometry
+
+Commit `1da81e3eb3f4ccb520b324e494a60ada53f0943b` passed the twenty-eight-module build, full project-module replay, and 670-declaration transitive axiom audit. [PR run 37776793972](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37776793972). The four-collar count, genuine cell-crossing containment and explicit global boundary mass bound above are now verified. The new MultiplicativeGridPartition module constructs exact ceiling-restricted half-open sides, proves unique ownership and full exterior coverage, and counts indexed rectangles as `(floor(log N / log κ) + 1)^2`. This new grid module awaits CI. The actual inside/intersecting prime-pair convolution envelopes and analytic rectangle distribution remain to be connected.

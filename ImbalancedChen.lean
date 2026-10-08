@@ -27,3 +27,4 @@ import ImbalancedChen.TotientReciprocalBudget
 import ImbalancedChen.BoundaryGridBudget
 import ImbalancedChen.BoundaryCellContainment
 import ImbalancedChen.BoundaryGlobalCaps
+import ImbalancedChen.MultiplicativeGridPartition
