@@ -121,7 +121,7 @@ def unitReceiverPrimes (N : ℕ) : Finset ℕ :=
     · rintro ⟨hpN, _, hunit⟩
       omega
   · rw [unitReceiverPrimes, if_neg hprime]
-    simp only [Finset.not_mem_empty, false_iff]
+    simp only [Finset.notMem_empty, false_iff]
     rintro ⟨hpN, hp, hunit⟩
     have heq : p = N - 1 := by omega
     exact hprime (heq ▸ hp)
