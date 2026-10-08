@@ -172,6 +172,7 @@ def halfProductBoundaryCollar (R Q S : ℕ) (η T N b : ℝ) : Finset (ℕ × �
         |(p.1 : ℝ) * (p.2 : ℝ) - N| ≤ η * N ∨
         (p.2 ≤ S ∧ |(p.1 : ℝ) - (p.2 : ℝ)| ≤ η * (p.2 : ℝ)) ∨
         |(p.1 : ℝ) - (p.2 : ℝ) ^ b| ≤ η * (p.2 : ℝ) ^ b) := by
+  rcases p with ⟨r, q⟩
   simp only [halfProductBoundaryCollar, Finset.mem_filter, Finset.mem_product,
     Finset.mem_Icc]
 
