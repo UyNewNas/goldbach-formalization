@@ -192,7 +192,7 @@ theorem centerPrimeTailCorrection_le_one_add_sixtyTwo_div {N z : ℕ}
     _ ≤ 1 + 31 * (1 / ((z : ℝ) - 2)) := by
       have hlinear := one_add_pow_le_linear hx0 hx1 5
       norm_num at hlinear
-      exact hlinear
+      simpa only [one_div] using hlinear
     _ ≤ 1 + 31 * (2 / (z : ℝ)) := by linarith
     _ = 1 + 62 / (z : ℝ) := by ring
 
@@ -217,9 +217,9 @@ theorem lt_ceil_fifthRoot_pow_six {N : ℕ} (hN : 1 < N) :
   have hz : 1 < z := by
     by_contra h
     have hzle : z ≤ 1 := by omega
-    have hp := pow_le_pow_left' hzle 5
-    norm_num at hp
-    omega
+    have hp : z ^ 5 ≤ 1 := by
+      simpa only [one_pow] using pow_le_pow_left' hzle 5
+    exact (Nat.not_le_of_lt hN) (hle.trans hp)
   have hp : 0 < z ^ 5 := pow_pos (by omega) 5
   have hstrict : z ^ 5 < z ^ 6 := by
     calc
