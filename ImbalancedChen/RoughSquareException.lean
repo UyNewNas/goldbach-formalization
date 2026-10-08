@@ -80,7 +80,8 @@ theorem reciprocalSquare_shifted_tail_le (m k : ℕ) (hm : 0 < m) :
   induction k with
   | zero => simp
   | succ k ih =>
-      rw [Nat.add_succ, Finset.sum_Icc_succ_top (by omega)]
+      rw [show m + (k + 1) = (m + k) + 1 by omega,
+        Finset.sum_Icc_succ_top (show m + 1 ≤ (m + k) + 1 by omega)]
       simp only [Nat.cast_add, Nat.cast_one, Nat.cast_succ] at ih ⊢
       have hmR : (0 : ℝ) < (m : ℝ) := Nat.cast_pos.mpr hm
       have hx : (0 : ℝ) < (m : ℝ) + (k : ℝ) := by positivity

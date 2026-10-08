@@ -164,8 +164,19 @@ theorem mem_chenFourPrimeCarrier {n p₁ p₂ p₃ p₄ : ℕ} (hn : n ≠ 0) :
     ((p₁, p₂), (p₃, p₄)) ∈ chenFourPrimeCarrier n ↔
       (Nat.Prime p₁ ∧ p₁ ∣ n) ∧ (Nat.Prime p₂ ∧ p₂ ∣ n) ∧
       (Nat.Prime p₃ ∧ p₃ ∣ n) ∧ (Nat.Prime p₄ ∧ p₄ ∣ n) := by
-  simp only [chenFourPrimeCarrier, Finset.mem_product, Nat.mem_primeFactors,
-    hn, not_false_eq_true, and_true, and_assoc]
+  simp only [chenFourPrimeCarrier, Finset.mem_product]
+  constructor
+  · rintro ⟨⟨h₁, h₂⟩, h₃, h₄⟩
+    obtain ⟨hp₁, hd₁, _⟩ := Nat.mem_primeFactors.mp h₁
+    obtain ⟨hp₂, hd₂, _⟩ := Nat.mem_primeFactors.mp h₂
+    obtain ⟨hp₃, hd₃, _⟩ := Nat.mem_primeFactors.mp h₃
+    obtain ⟨hp₄, hd₄, _⟩ := Nat.mem_primeFactors.mp h₄
+    exact ⟨⟨hp₁, hd₁⟩, ⟨hp₂, hd₂⟩, ⟨hp₃, hd₃⟩, ⟨hp₄, hd₄⟩⟩
+  · rintro ⟨⟨hp₁, hd₁⟩, ⟨hp₂, hd₂⟩, ⟨hp₃, hd₃⟩, ⟨hp₄, hd₄⟩⟩
+    exact ⟨⟨Nat.mem_primeFactors.mpr ⟨hp₁, hd₁, hn⟩,
+      Nat.mem_primeFactors.mpr ⟨hp₂, hd₂, hn⟩⟩,
+      Nat.mem_primeFactors.mpr ⟨hp₃, hd₃, hn⟩,
+      Nat.mem_primeFactors.mpr ⟨hp₄, hd₄, hn⟩⟩
 
 /-- Exact bridge to the manuscript's `Y10` summand: no ambient carrier
 restriction remains on the right-hand side. -/

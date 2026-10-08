@@ -44,22 +44,37 @@ def chenY11Full (n : ℕ) (A H D : ℝ) : ℕ := (chenY11FullTuples n A H D).car
 theorem mem_chenPrimesBelow {n p : ℕ} {H : ℝ} (hn : n ≠ 0) :
     p ∈ chenPrimesBelow n H ↔ Nat.Prime p ∧ p ∣ n ∧ (p : ℝ) < H := by
   classical
-  simp only [chenPrimesBelow, Finset.mem_filter, Nat.mem_primeFactors,
-    hn, not_false_eq_true, and_true, and_assoc]
+  rw [chenPrimesBelow, Finset.mem_filter]
+  constructor
+  · rintro ⟨hp, hH⟩
+    obtain ⟨hprime, hdvd, _⟩ := Nat.mem_primeFactors.mp hp
+    exact ⟨hprime, hdvd, hH⟩
+  · rintro ⟨hprime, hdvd, hH⟩
+    exact ⟨Nat.mem_primeFactors.mpr ⟨hprime, hdvd, hn⟩, hH⟩
 
 theorem mem_chenPrimeBand {n p : ℕ} {H D : ℝ} (hn : n ≠ 0) :
     p ∈ chenPrimeBand n H D ↔
       Nat.Prime p ∧ p ∣ n ∧ H ≤ (p : ℝ) ∧ (p : ℝ) < D := by
   classical
-  simp only [chenPrimeBand, Finset.mem_filter, Nat.mem_primeFactors,
-    hn, not_false_eq_true, and_true, and_assoc]
+  rw [chenPrimeBand, Finset.mem_filter]
+  constructor
+  · rintro ⟨hp, hH, hD⟩
+    obtain ⟨hprime, hdvd, _⟩ := Nat.mem_primeFactors.mp hp
+    exact ⟨hprime, hdvd, hH, hD⟩
+  · rintro ⟨hprime, hdvd, hH, hD⟩
+    exact ⟨Nat.mem_primeFactors.mpr ⟨hprime, hdvd, hn⟩, hH, hD⟩
 
 theorem mem_chenTailBelow {n q₂ p : ℕ} {H : ℝ} (hn : n ≠ 0) :
     p ∈ chenTailBelow n q₂ H ↔
       Nat.Prime p ∧ p ∣ n ∧ q₂ < p ∧ (p : ℝ) < H := by
   classical
-  simp only [chenTailBelow, Finset.mem_filter, Nat.mem_primeFactors,
-    hn, not_false_eq_true, and_true, and_assoc]
+  rw [chenTailBelow, Finset.mem_filter]
+  constructor
+  · rintro ⟨hp, hq₂, hH⟩
+    obtain ⟨hprime, hdvd, _⟩ := Nat.mem_primeFactors.mp hp
+    exact ⟨hprime, hdvd, hq₂, hH⟩
+  · rintro ⟨hprime, hdvd, hq₂, hH⟩
+    exact ⟨Nat.mem_primeFactors.mpr ⟨hprime, hdvd, hn⟩, hq₂, hH⟩
 
 /-- Every actual `Y10` tuple has the same first two coordinates, and its
 last two coordinates can be chosen freely subject to their strict order. -/
