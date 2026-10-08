@@ -16,7 +16,7 @@ The new source proves convergence and strict positivity of the actual odd-prime 
 
 ## Outstanding mathematical work
 
-- Extend the verified thirteen-module foundation from the exact localized bad source into the actual half-product sieve.
+- Apply mathlib’s finite sieve to the verified actual half-product source, then prove the analytic distribution and main-term estimates.
 - Keep compilation, module replay, and transitive axiom audits passing for each new analytic module.
 - Prove the asymptotic bad-semiprime removal bound.
 - Formalize the actual distribution and strengthened sieve interfaces, with all uniformity and order-of-limits hypotheses.
@@ -40,3 +40,7 @@ Commit `a6f206076b77e42a2bcd4d656031ea0751dd7c8a` passed both push and PR checks
 ## Verified localization checkpoint
 
 Commit `26c128d85f45fd0ddd7719459d56fcb112fc582c` passed the full thirteen-module build, module replay, and 238-declaration axiom audit. [PR run 37754452855](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37754452855). The actual bad source is reindexed exactly, cut off using the literal real threshold and its natural ceiling, and its discarded contribution is proved negligible relative to the actual normalization. This pays only the small-receiver localization cost, not the retained-source sieve estimate.
+
+## Verified sieve-source checkpoint
+
+Commit `cf59a1fe88d8caf85b0a0a32549ec73b5e2c0078` passed the seventeen-module build, module replay, and 328-declaration axiom audit. [PR run 37756197691](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37756197691). The inclusive half-product source, unique ordered-pair count including squares, actual sieve product, source/modulus coprimality, and primitive shifted congruence are proved. The original logarithmic cutoff eventually clears the fifth-root cap, and fixed sublinear power-logarithm costs (including rounding) are negligible in the genuine normalization. These preparation theorems do not prove a level-sensitive upper sieve or the 6.786 analytic coefficient.

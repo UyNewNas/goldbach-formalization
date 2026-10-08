@@ -186,4 +186,31 @@ theorem eventually_actual_sieve_modulus_data (num den : ℕ)
   intro d hd
   exact halfProductSource_sieve_modulus_data hnum hden hgate.1 hgate.2 hd
 
+/-- The natural ceiling represents the literal strict real sieve cap exactly,
+including the case when the real fifth root is itself an integer. -/
+theorem mem_sievePrimes_actual_cap_iff (N ell : ℕ) :
+    ell ∈ sievePrimes N (Nat.ceil ((N : ℝ) ^ (1 / 5 : ℝ))) ↔
+      (ell : ℝ) < (N : ℝ) ^ (1 / 5 : ℝ) ∧ Nat.Prime ell ∧ ¬ell ∣ N := by
+  rw [mem_sievePrimes, Nat.lt_ceil]
+
+/-- The original bad count is bounded by the actual sifted source and an
+arbitrarily small normalized error. Both the discarded-receiver cost and
+the small-prime-partner cost are absorbed, each using half the error budget. -/
+theorem eventually_B_cast_le_actual_sifted_add_error (num den : ℕ) :
+    ∀ epsilon : ℝ, 0 < epsilon →
+      ∀ᶠ N : ℕ in atTop,
+        (B num den N : ℝ) ≤
+          (siftedHalfProductSource num den N (logCutoff N)
+            (Nat.ceil ((N : ℝ) ^ (1 / 5 : ℝ)))).card +
+          epsilon * singularNormalization N := by
+  intro epsilon hepsilon
+  filter_upwards
+    [eventually_ceil_fifthRoot_le_singularNormalization
+      (epsilon / 2) (half_pos hepsilon),
+      eventually_logCutoff_add_one_le_singularNormalization
+        (epsilon / 2) (half_pos hepsilon)] with N hcap hcutoff
+  have hfinite := B_cast_le_siftedHalfProductSource_card_add_cap_cutoff
+    num den N (Nat.ceil ((N : ℝ) ^ (1 / 5 : ℝ))) (logCutoff_nonneg N)
+  linarith
+
 end ImbalancedChen
