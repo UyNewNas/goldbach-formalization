@@ -155,8 +155,8 @@ theorem chenInitialPrimitiveCorrection_prime_modulus {N p : ℕ}
 
 /-- A positive majorant paying both literal exceptional prime sets. -/
 def chenInitialCorrectionCost (N : ℕ) (S : Finset ℕ) : ℝ :=
-  ∑ d ∈ S, (chenPrimeDivisorCount N N + chenPrimeDivisorCount N d) /
-    (Nat.totient d : ℝ) + chenCentrePrimeAPCount N N d
+  ∑ d ∈ S, ((chenPrimeDivisorCount N N + chenPrimeDivisorCount N d) /
+    (Nat.totient d : ℝ) + chenCentrePrimeAPCount N N d)
 
 theorem chenInitialCorrectionCost_nonneg (N : ℕ) (S : Finset ℕ) :
     0 ≤ chenInitialCorrectionCost N S := by
@@ -270,7 +270,7 @@ theorem chenInitialCorrectionCost_le_log {N D : ℕ} (hN : 0 < N)
   have hrec := sum_reciprocal_totient_subset_le_log S D hS
   calc
     chenInitialCorrectionCost N S ≤
-        ∑ d ∈ S, (2 * B) * (1 / (Nat.totient d : ℝ)) + B :=
+        ∑ d ∈ S, ((2 * B) * (1 / (Nat.totient d : ℝ)) + B) :=
       Finset.sum_le_sum hpoint
     _ = (2 * B) * (∑ d ∈ S, 1 / (Nat.totient d : ℝ)) + (S.card : ℝ) * B := by
       rw [Finset.sum_add_distrib, ← Finset.mul_sum, Finset.sum_const, nsmul_eq_mul]
@@ -400,8 +400,8 @@ theorem sum_abs_chenInitial_rem_le_primitive_add_cost
         chenInitialCorrectionCost N S := by
   calc
     _ ≤ ∑ d ∈ S,
-        |finitePrimitiveDiscrepancy (chenPrimePrefix N) (fun _ => 1) N d| +
-          |chenInitialPrimitiveCorrection N d| := by
+        (|finitePrimitiveDiscrepancy (chenPrimePrefix N) (fun _ => 1) N d| +
+          |chenInitialPrimitiveCorrection N d|) := by
       apply Finset.sum_le_sum
       intro d _
       have heq : (chenInitialBoundingSieve N z hN).rem d =
