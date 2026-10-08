@@ -50,6 +50,7 @@ theorem summable_oddPrime_reciprocal_sq :
     Summable (fun p : OddPrime => 1 / ((p.val : ℝ) - 1) ^ 2) := by
   have hInjective : Function.Injective (fun p : OddPrime => p.val - 1) := by
     intro p q hpq
+    change p.val - 1 = q.val - 1 at hpq
     apply Subtype.ext
     have hp := p.property.2
     have hq := q.property.2
