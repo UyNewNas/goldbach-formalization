@@ -203,8 +203,19 @@ theorem chenSiftedQuotientPrimeSource_card (N b : ℕ) (z : ℝ) :
       ((chenAdditivePrimeCarrier N).filter
         (fun P => ChenQuotient b z (N - P))).card := by
   classical
-  simpa only [chenSiftedQuotientPrimeSource, ChenQuotient] using
-    chenQuotientPrimeSource_filter_card N b (ChenPrimeRough z)
+  calc
+    (chenSiftedQuotientPrimeSource N b z).card =
+        ((chenQuotientPrimeSource N b).filter (ChenPrimeRough z)).card := by
+      apply congrArg Finset.card
+      ext q
+      simp only [chenSiftedQuotientPrimeSource, Finset.mem_filter]
+    _ = ((chenAdditivePrimeCarrier N).filter
+        (fun P => b ∣ N - P ∧ ChenPrimeRough z ((N - P) / b))).card :=
+      chenQuotientPrimeSource_filter_card N b (ChenPrimeRough z)
+    _ = _ := by
+      apply congrArg Finset.card
+      ext P
+      simp only [Finset.mem_filter, ChenQuotient]
 
 /-- Finite Fubini for selected multipliers. The outer tuple label is never
 erased, so equal quotient values in different fibres keep multiplicity. -/
