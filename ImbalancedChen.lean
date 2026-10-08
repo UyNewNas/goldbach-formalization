@@ -51,3 +51,5 @@ import ImbalancedChen.EnlargedSelbergCap
 import ImbalancedChen.SingularProductIdentity
 import ImbalancedChen.HalfProductMassFibres
 import ImbalancedChen.MassLogIntegral
+import ImbalancedChen.HalfProductMassSplit
+import ImbalancedChen.UniformPrimeTail
