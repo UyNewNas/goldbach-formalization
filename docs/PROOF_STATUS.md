@@ -16,7 +16,7 @@ The new source proves convergence and strict positivity of the actual odd-prime 
 
 ## Outstanding mathematical work
 
-- Extend the verified eleven-module foundation into the actual localized bad source.
+- Extend the verified thirteen-module foundation from the exact localized bad source into the actual half-product sieve.
 - Keep compilation, module replay, and transitive axiom audits passing for each new analytic module.
 - Prove the asymptotic bad-semiprime removal bound.
 - Formalize the actual distribution and strengthened sieve interfaces, with all uniformity and order-of-limits hypotheses.
@@ -36,3 +36,7 @@ A green build means only the committed core compiled. CI also rechecks with lean
 ## Verified checkpoint
 
 Commit `a6f206076b77e42a2bcd4d656031ea0751dd7c8a` passed both push and PR checks. [PR run 37752040466](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37752040466) records build success, verbose replay of all eleven modules and the root, and 177 audited declarations within the standard three-axiom allowlist. The earlier full-Mathlib import run exceeded its kernel-replay time budget; focused imports resolved the observed bottleneck without removing a proof check. Lean/mathlib dependency artifacts remain explicitly pinned and trusted, rather than independently rebuilt from first principles.
+
+## Verified localization checkpoint
+
+Commit `26c128d85f45fd0ddd7719459d56fcb112fc582c` passed the full thirteen-module build, module replay, and 238-declaration axiom audit. [PR run 37754452855](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37754452855). The actual bad source is reindexed exactly, cut off using the literal real threshold and its natural ceiling, and its discarded contribution is proved negligible relative to the actual normalization. This pays only the small-receiver localization cost, not the retained-source sieve estimate.

@@ -107,8 +107,8 @@ def halfProductPairs (num den N : ℕ) (T : ℝ) : Finset (ℕ × ℕ) := by
       Nat.Prime r ∧ Nat.Prime q ∧ r ≤ q ∧ q ^ num < r ^ den ∧
         T ≤ (r * q : ℕ) ∧ r * q ≤ N := by
   classical
-  simp only [halfProductPairs, Finset.mem_filter, Finset.mem_product,
-    Finset.mem_range, Nat.lt_succ_iff]
+  unfold halfProductPairs
+  rw [Finset.mem_filter]
   constructor
   · exact fun h => h.2
   · intro h
@@ -124,7 +124,10 @@ def halfProductPairs (num den N : ℕ) (T : ℝ) : Finset (ℕ × ℕ) := by
         q = 1 * q := (Nat.one_mul q).symm
         _ ≤ r * q := Nat.mul_le_mul_right q hr1
         _ ≤ N := h.2.2.2.2.2
-    exact ⟨⟨hrN, hqN⟩, h⟩
+    refine ⟨?_, h⟩
+    exact Finset.mem_product.mpr
+      ⟨Finset.mem_range.mpr (Nat.lt_succ_iff.mpr hrN),
+        Finset.mem_range.mpr (Nat.lt_succ_iff.mpr hqN)⟩
 
 /-- Multiplication sends every ordered factor pair into the half-product source. -/
 theorem mul_mem_halfProductSource {num den N : ℕ} {T : ℝ} {a : ℕ × ℕ}
