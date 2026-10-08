@@ -122,3 +122,7 @@ RectanglePrefixBudget is the next independently reviewed finite composition: its
 ## Enlarged-ambient quantitative budget candidate
 
 ScaledRectangleBudget independently proves that a fixed stronger logarithmic modulus exponent pays the change from N to 4N, including the exact natural floor. Its literal selected-cell count bound absorbs the factor four from two-prefix recentering and the enlarged numerator at cost 144 C N/log(N)^A. Choosing fixed input accuracy 2(k+1)+3 makes this numerical budget negligible in the genuine singular normalization. This is unconditional quantitative bookkeeping; it neither assumes nor proves the analytic prefix distribution theorem. Both this module and RectanglePrefixBudget await actual CI acceptance.
+
+## Verified enlarged-ambient budget checkpoint
+
+Commit `46cc4fe9ef9d6bd37e3472c1132673ceb97884c9` passed all three verification stages in [run 37799094466](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37799094466): 40 modules and 948 audited declarations. Both RectanglePrefixBudget and ScaledRectangleBudget are now verified. The only new build correction was an explicit real type on a natural-number nonnegativity fact; all statements and checking stages were preserved. The composed rectangle estimate still has explicit raw-prefix inputs, and the enlarged-ambient module supplies unconditional parameter/error bookkeeping. The separate prime-convolution analytic supplier and its literal consumer remain outside this verified core.
