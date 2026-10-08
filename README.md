@@ -4,7 +4,7 @@ Work toward a Lean formalization of *Transferring quantitative Chen bounds to im
 
 ## Verification status
 
-At commit `6958f5007d1ce8bd1617979cf6d43294b218d727`, the fifty-six-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1212 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37823648102). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
+At commit `f13355fc612ab45524017a6a9f72efeb0010e710`, the fifty-seven-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1247 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37825263274). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
 
 - `ImbalancedChen/Counting.lean`: prime-indexed finite representation sets, exact good/bad partition, subtraction and a conditional finite transfer lemma. The initial count excludes receiver 1; the separate Multiplicity module supplies the receiver-one correction.
 - `ImbalancedChen/Constants.lean`: exact rational endpoint arithmetic and logarithmic inequalities, reusing mathlib's proved logarithm bound. This does not certify the integrals from which the quoted numbers originate.
@@ -67,6 +67,10 @@ At commit `6958f5007d1ce8bd1617979cf6d43294b218d727`, the fifty-six-module check
 Build: `lake exe cache get && lake build`. The workflow also runs `leanchecker` and a transitive axiom audit allowing only `propext`, `Classical.choice`, and `Quot.sound`.
 
 No custom analytic axioms or proof placeholders belong in the verified core. A green core build is not a complete proof of the manuscript or a claim of a new frontier record.
+
+- `ImbalancedChen/QuotientChenFourPrime.lean`: actual squarefree four-prime quotient roughness is equivalent to selecting the smallest two prime factors; literal Y10 and full Y11 support retain all strict endpoints.
+- `ImbalancedChen/QuotientChenFourCounts.lean`: exact tuple-image bijections prove Y10 = choose(r−2,2) and full Y11 = (r−2)(s−r), with r,s the actual prime-divisor counts.
+- `ImbalancedChen/RoughSquareException.lean`: actual positive integers at most N with a prime square divisor p², p≥z, have cardinality at most N/(z−1) for z>1, with no per-prime floor loss.
 
 ## Reproducibility
 
