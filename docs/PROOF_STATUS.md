@@ -96,3 +96,9 @@ BoundaryLogMesh proves the full actual boundary mass times the reciprocal-totien
 ## Verified negligible boundary cost
 
 Commit `55f0454f4660a15783b824a42b5f350e6e5cc21e` passed the thirty-one-module build, full replay and 772-declaration axiom audit. [PR run 37783303734](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37783303734). The actual logarithmic-mesh boundary cost is now verified negligible. Three additional finite adapters await CI: exact assembly into literal full-rectangle discrepancies; reduced-residue recentering around an arbitrary common main; and explicit polylogarithmic grid count. No analytic rectangle distribution is assumed proved.
+
+## Verified finite adapters (8 October 2026)
+
+Commit `dd71a02a2a63c79535d109d50d15fe6f1a502310` passes all three checks in run [37785412931](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37785412931): 34 modules and 824 audited declarations. BoundaryLogMesh, RectangleDiscrepancyAssembly, CoprimeRecentering and LogMeshGridCount now have actual CI verification. The full boundary cost tends to zero at the genuine normalization; rectangle discrepancies retain all exterior points and multiplicities.
+
+The new SelectedGridRanges candidate proves exact ceiling-minus-one endpoints, full product cap `4N`, and eventual lower gates for every fixed real logarithmic exponent, uniformly over selected cells and grid ratios. It awaits CI. No rectangle distribution theorem is assumed or proved by this geometric module.
