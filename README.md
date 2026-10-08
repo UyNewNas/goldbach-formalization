@@ -4,7 +4,7 @@ Work toward a Lean formalization of *Transferring quantitative Chen bounds to im
 
 ## Verification status
 
-At commit `14e30da801c06756503f98df6f319e333e3df1d6`, the sixty-nine-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1652 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37837185549). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
+At commit `8244391cfeacc0cbb389ba24260cfe34c39935eb`, the seventy-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1695 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37840265664). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
 
 - `ImbalancedChen/Counting.lean`: prime-indexed finite representation sets, exact good/bad partition, subtraction and a conditional finite transfer lemma. The initial count excludes receiver 1; the separate Multiplicity module supplies the receiver-one correction.
 - `ImbalancedChen/Constants.lean`: exact rational endpoint arithmetic and logarithmic inequalities, reusing mathlib's proved logarithm bound. This does not certify the integrals from which the quoted numbers originate.
@@ -87,7 +87,9 @@ No custom analytic axioms or proof placeholders belong in the verified core. A g
 
 - `ImbalancedChen/ChenInitialPrimeSource.lean`: actual initial additive-prime BoundingSieve, exact Upsilon1/2 sifted counts with strict real caps, literal prime AP fibres and both centre-prime/modulus-prime remainder corrections. No analytic lower sieve is assumed or proved.
 
-- `ImbalancedChen/ChenInitialCorrectionBudget.lean`: explicit logarithmic prime-divisor bounds and complete centre/modulus-prime correction payment below the square-root level, at arbitrary fixed logarithmic accuracy; the literal ordinary prime-AP budget remains an explicit input. Awaiting CI.
+- `ImbalancedChen/ChenInitialCorrectionBudget.lean`: explicit logarithmic prime-divisor bounds and complete centre/modulus-prime correction payment below the square-root level, at arbitrary fixed logarithmic accuracy; the literal ordinary prime-AP budget remains an explicit input.
+
+- `ImbalancedChen/ChenLogLevelGeometry.lean`: literal floor-valued logarithmic distribution cap, strict Rosser level Q+1, limiting logarithmic ratios, and one common threshold for the numerical lower-sieve gates. Core-only mathematical candidate awaiting its own CI.
 
 ## Reproducibility
 
