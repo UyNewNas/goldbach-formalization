@@ -93,7 +93,19 @@ def fullSelbergNormalizer (N L : ℕ) : ℝ :=
 
 @[simp] theorem fullSelbergNormalizer_one_level (N : ℕ) :
     fullSelbergNormalizer N 1 = 1 := by
-  simp [fullSelbergNormalizer]
+  classical
+  have hcarrier : (Finset.Icc 1 1).filter
+      (fun d : ℕ => Squarefree d ∧ Nat.Coprime d N) = {1} := by
+    ext d
+    simp only [Finset.mem_filter, Finset.mem_Icc, Finset.mem_singleton]
+    constructor
+    · rintro ⟨⟨hdlo, hdhi⟩, _hd⟩
+      exact le_antisymm hdhi hdlo
+    · rintro rfl
+      exact ⟨⟨le_rfl, le_rfl⟩, squarefree_one, Nat.coprime_one_left N⟩
+  unfold fullSelbergNormalizer
+  rw [hcarrier]
+  simp
 
 /-- At center zero, coprimality leaves precisely the unit contribution. -/
 theorem fullSelbergNormalizer_zero_center {L : ℕ} (hL : 1 ≤ L) :

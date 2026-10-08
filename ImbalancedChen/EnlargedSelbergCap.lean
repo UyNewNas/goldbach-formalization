@@ -97,7 +97,7 @@ theorem eventually_floor_rpow_add_one_le_rpow {alpha beta : ℝ}
     Real.rpow_nonneg (Nat.cast_nonneg N) alpha
   calc
     (Nat.floor ((N : ℝ) ^ alpha) : ℝ) + 1 ≤ (N : ℝ) ^ alpha + 1 :=
-      add_le_add_right (Nat.floor_le hnonneg) 1
+      add_le_add (Nat.floor_le hnonneg) le_rfl
     _ ≤ (N : ℝ) ^ alpha * 2 := by linarith
     _ ≤ (N : ℝ) ^ alpha * (N : ℝ) ^ (beta - alpha) :=
       mul_le_mul_of_nonneg_left htwo hnonneg
