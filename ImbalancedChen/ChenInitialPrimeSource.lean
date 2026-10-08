@@ -106,7 +106,14 @@ theorem chenCentrePrimeAPCount_prime_center {N : ℕ} (hN : Nat.Prime N) (d : �
     tauto
   unfold chenCentrePrimeAPCount
   rw [hf, chenPrimePrefix_filter_dvd_prime_center hN]
-  simp [Nat.ModEq]
+  have hfilter : ({N} : Finset ℕ).filter (fun P => Nat.ModEq d P N) = {N} := by
+    apply Finset.filter_eq_self.mpr
+    intro P hP
+    have hPN : P = N := Finset.mem_singleton.mp hP
+    subst P
+    exact Nat.ModEq.refl N
+  rw [hfilter]
+  norm_num
 
 /-- The actual source in receiver coordinates. -/
 def chenPrimeReceiverSource (N : ℕ) : Finset ℕ :=
@@ -202,6 +209,7 @@ def chenSiftedPrimeSource (N : ℕ) (z : ℝ) : Finset ℕ := by
   exact (chenPrimeReceiverSource N).filter
     (fun n => Nat.Coprime n (sieveProduct N (Nat.ceil z)))
 
+open Classical in
 theorem chenSiftedPrimeSource_eq_rough_filter (N : ℕ) (z : ℝ) :
     chenSiftedPrimeSource N z =
       (chenPrimeReceiverSource N).filter (ChenPrimeRough z) := by
@@ -220,8 +228,12 @@ theorem chenSiftedPrimeSource_eq_rough_filter (N : ℕ) (z : ℝ) :
 theorem one_mem_chenSiftedPrimeSource_iff (N : ℕ) (z : ℝ) :
     1 ∈ chenSiftedPrimeSource N z ↔ 1 < N ∧ Nat.Prime (N - 1) := by
   classical
-  simp only [chenSiftedPrimeSource, Finset.mem_filter, Nat.coprime_one_left,
-    and_true, one_mem_chenPrimeReceiverSource_iff]
+  rw [chenSiftedPrimeSource, Finset.mem_filter]
+  constructor
+  · intro h
+    exact (one_mem_chenPrimeReceiverSource_iff N).mp h.1
+  · intro h
+    exact ⟨(one_mem_chenPrimeReceiverSource_iff N).mpr h, Nat.coprime_one_left _⟩
 
 /-- A genuine mathlib sieve of the actual additive-prime source. -/
 def chenInitialBoundingSieve (N : ℕ) (z : ℝ) (hN : Even N) : BoundingSieve where
@@ -395,7 +407,8 @@ theorem chenInitialBoundingSieve_rem (N : ℕ) (z : ℝ) (hN : Even N) (d : ℕ)
       chenPrimeAPCount N N d - chenCentrePrimeAPCount N N d -
         ((chenAdditivePrimeCarrier N).card : ℝ) / (Nat.totient d : ℝ) := by
   rw [BoundingSieve.rem, chenInitialBoundingSieve_multSum]
-  change _ - (1 / (Nat.totient d : ℝ)) * _ = _
+  change chenPrimeAPCount N N d - chenCentrePrimeAPCount N N d -
+    (1 / (Nat.totient d : ℝ)) * ((chenAdditivePrimeCarrier N).card : ℝ) = _
   ring
 
 /-- Supplier-facing error relative to the complete prime prefix. Both
@@ -478,6 +491,7 @@ theorem chenAdditivePrimeCarrier_coprime_mass {N d : ℕ}
   have hR : (((chenAdditivePrimeCarrier N).filter
       (fun P => Nat.Coprime P d)).card : ℝ) + chenPrimeDivisorCount N d =
       ((chenAdditivePrimeCarrier N).card : ℝ) := by
+    unfold chenPrimeDivisorCount
     exact_mod_cast h
   unfold finiteCoprimeMass
   simp only [Finset.sum_const, nsmul_eq_mul, mul_one]
