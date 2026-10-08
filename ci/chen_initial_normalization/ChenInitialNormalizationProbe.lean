@@ -128,7 +128,7 @@ run_cmd do
   let allowed : List Name := [`propext, `Classical.choice, `Quot.sound]
   let env ← getEnv
   let mut counts : Std.HashMap Name Nat := {}
-  let mut declarations := 0
+  let mut declarations : Nat := 0
   for moduleName in env.header.moduleNames do
     logInfo m!"NORMALIZATION_IMPORTED_MODULE {moduleName}"
   for (name, _) in env.constants.toList do

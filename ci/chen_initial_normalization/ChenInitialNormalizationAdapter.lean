@@ -78,7 +78,7 @@ theorem tendsto_primeCounting_div_main :
   have hN0 : (N : ℝ) ≠ 0 := ne_of_gt (lt_trans zero_lt_one hNr)
   have hlog : Real.log (N : ℝ) ≠ 0 := (Real.log_pos hNr).ne'
   rw [hcount]
-  field_simp [hN0, hlog] <;> ring
+  field_simp [hN0, hlog]
 
 /-- The actual full prefix-centre correction costs o(N/log N). -/
 theorem tendsto_centre_prime_correction_div_main :
@@ -108,7 +108,7 @@ theorem tendsto_centre_prime_correction_div_main :
           (div_pos hNpos hlog).le
       _ = (Real.log (N : ℝ)) ^ 2 / (N : ℝ) / Real.log 2 := by
         field_simp [hNpos.ne', hlog.ne',
-          (Real.log_pos (by norm_num : (1 : ℝ) < 2)).ne'] <;> ring
+          (Real.log_pos (by norm_num : (1 : ℝ) < 2)).ne']
 
 /-- Actual X_N ~ N/log N, on all natural centres before any parity gate. -/
 theorem tendsto_actual_initial_mass_div_main :
@@ -244,7 +244,8 @@ theorem tendsto_log_powerMertensEndpoint_div_log {a : ℝ} (ha : 0 < a) :
   have hNr : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)
   have hNpos : (0 : ℝ) < N := lt_trans zero_lt_one hNr
   rw [Real.log_rpow hNpos]
-  field_simp [(Real.log_pos hNr).ne'] <;> ring
+  field_simp [(Real.log_pos hNr).ne']
+  ring
 
 /-- The named genuine Mertens theorem gives the exact Euler constant. -/
 theorem tendsto_supplier_primeProduct_mul_log :
@@ -273,11 +274,11 @@ theorem tendsto_supplier_primeProduct_mul_log :
               Real.exp (-Real.eulerMascheroniConstant) / Real.log (n : ℝ)) *
                 Real.log (n : ℝ)| := by
           congr 1
-          field_simp [hlog.ne'] <;> ring
+          field_simp [hlog.ne']
         _ = _ := by rw [abs_mul, abs_of_pos hlog]
     _ ≤ (C / (Real.log (n : ℝ)) ^ 2) * Real.log (n : ℝ) :=
       mul_le_mul_of_nonneg_right (hbound n hn) hlog.le
-    _ = C / Real.log (n : ℝ) := by field_simp [hlog.ne'] <;> ring
+    _ = C / Real.log (n : ℝ) := by field_simp [hlog.ne']
     _ < epsilon := hsmalln
 
 /-- Ordinary strict real-cutoff prime product, with no centre correction. -/
@@ -301,8 +302,10 @@ theorem tendsto_primeEulerProduct_power_mul_log {a : ℝ} (ha : 0 < a) :
   change
     (AnalyticNumberTheory.Mertens.primeProduct (powerMertensEndpoint a N) *
       Real.log (powerMertensEndpoint a N : ℝ)) /
-        (Real.log (powerMertensEndpoint a N : ℝ) / Real.log (N : ℝ)) = _
-  field_simp [(Real.log_pos hy1).ne', (Real.log_pos hN1).ne'] <;> ring
+        (Real.log (powerMertensEndpoint a N : ℝ) / Real.log (N : ℝ)) =
+      AnalyticNumberTheory.Mertens.primeProduct (powerMertensEndpoint a N) *
+        Real.log (N : ℝ)
+  field_simp [(Real.log_pos hy1).ne', (Real.log_pos hN1).ne']
 
 /-- The genuine odd Euler product and the uniform varying-centre tail
 supply the remaining factor. Fixed-centre convergence is not used. -/
@@ -313,7 +316,11 @@ theorem tendsto_oddEulerProduct_div_full_tail_power {a : ℝ} (ha : 0 < a) :
   have htail := (tendsto_centerEulerTail_power ha).const_mul twinPrimeConstant
   simp only [mul_one] at htail
   have h := hodd.div htail twinPrimeConstant_pos.ne'
-  simpa only [div_self twinPrimeConstant_pos.ne'] using h
+  change Tendsto (fun N : ℕ => oddEulerProduct (powerSieveCap a N) /
+    (twinPrimeConstant * centerEulerTail N ((N : ℝ) ^ a)))
+    atTop (𝓝 (twinPrimeConstant / twinPrimeConstant)) at h
+  rw [div_self twinPrimeConstant_pos.ne'] at h
+  exact h
 
 /-- Algebraic use of the owned exact Euler identity. The full series stays
 at the full centre N and the leading factor two remains explicit. -/
@@ -332,7 +339,7 @@ theorem actual_density_log_normalization_eq {a : ℝ} {N : ℕ}
     (powerSieveCap a N)).ne').mp h]
   have htail : centerEulerTail N ((N : ℝ) ^ a) ≠ 0 :=
     (lt_of_lt_of_le zero_lt_one (one_le_centerEulerTail N ((N : ℝ) ^ a))).ne'
-  field_simp [(singularSeries_pos N).ne', twinPrimeConstant_pos.ne', htail] <;> ring
+  field_simp [(singularSeries_pos N).ne', twinPrimeConstant_pos.ne', htail]
 
 /-- Actual V_N(N^a) * log N / S(N) -> 2 exp(-EulerGamma)/a along the
 positive even centres. This is for every fixed real exponent a>0. -/
@@ -372,12 +379,18 @@ theorem tendsto_actual_density_div_mertens_main {a : ℝ} (ha : 0 < a) :
     (2 * Real.exp (-Real.eulerMascheroniConstant) / a)
   rw [div_self hC] at h
   apply h.congr'
+  change ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},
+    (finiteSieveDensity N (powerSieveCap a N) * Real.log (N : ℝ) / singularSeries N) /
+      (2 * Real.exp (-Real.eulerMascheroniConstant) / a) =
+      finiteSieveDensity N (powerSieveCap a N) /
+        (singularSeries N *
+          (2 * Real.exp (-Real.eulerMascheroniConstant) / (a * Real.log (N : ℝ))))
   rw [Filter.eventually_inf_principal]
   filter_upwards [eventually_ge_atTop (2 : ℕ)] with N hN
   intro _hEven
   have hN1 : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)
   field_simp [(singularSeries_pos N).ne', ha.ne', (Real.log_pos hN1).ne',
-    (Real.exp_pos (-Real.eulerMascheroniConstant)).ne'] <;> ring
+    (Real.exp_pos (-Real.eulerMascheroniConstant)).ne']
 
 /-- This finite product is literally the density of the actual initial
 BoundingSieve, not an unrelated or logarithmic-integral model. -/
