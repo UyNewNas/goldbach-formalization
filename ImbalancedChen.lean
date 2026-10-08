@@ -12,3 +12,4 @@ import ImbalancedChen.ManuscriptTransfer
 import ImbalancedChen.HalfProductGeometry
 import ImbalancedChen.BadSourceLocalization
 import ImbalancedChen.LogCutoffError
+import ImbalancedChen.HalfProductSource
