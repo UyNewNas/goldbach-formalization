@@ -222,7 +222,7 @@ theorem halfProductSource_cast_card_eq_sum_primeCounting {num den N : ℕ}
 /-- The original real-cutoff source is a filter of the uncut source. -/
 theorem halfProductSource_eq_zero_filter (num den N : ℕ) (T : ℝ) :
     halfProductSource num den N T =
-      (halfProductSource num den N 0).filter (fun m => T ≤ (m : ℝ)) := by
+      (halfProductSource num den N 0).filter (fun m : ℕ => T ≤ (m : ℝ)) := by
   classical
   ext m
   simp only [mem_halfProductSource, Finset.mem_filter]
@@ -235,7 +235,7 @@ theorem halfProductSource_eq_zero_filter (num den N : ℕ) (T : ℝ) :
 /-- Exactly the integers removed from the original source by the real cutoff. -/
 def smallHalfProductSource (num den N : ℕ) (T : ℝ) : Finset ℕ := by
   classical
-  exact (halfProductSource num den N 0).filter (fun m => (m : ℝ) < T)
+  exact (halfProductSource num den N 0).filter (fun m : ℕ => (m : ℝ) < T)
 
 /-- Exact cutoff partition of the original half-product mass. -/
 theorem halfProductSource_zero_card_eq_cutoff_add_small
@@ -245,7 +245,7 @@ theorem halfProductSource_zero_card_eq_cutoff_add_small
   classical
   rw [halfProductSource_eq_zero_filter num den N T]
   have h := Finset.card_filter_add_card_filter_not
-    (s := halfProductSource num den N 0) (fun m => T ≤ (m : ℝ))
+    (s := halfProductSource num den N 0) (fun m : ℕ => T ≤ (m : ℝ))
   simpa only [smallHalfProductSource, not_le] using h.symm
 
 /-- The cutoff loses at most its natural ceiling, by an actual injection

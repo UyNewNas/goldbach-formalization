@@ -27,6 +27,7 @@ theorem continuousOn_massLogTest (alpha : ℝ) :
     ContinuousOn (fun u : ℝ => 1 / (1 - u)) (Icc alpha (1 / 2 : ℝ)) := by
   apply continuousOn_const.div (continuousOn_const.sub continuousOn_id)
   intro u hu
+  change (1 - u : ℝ) ≠ 0
   exact ne_of_gt (by linarith [hu.2])
 
 /-- The factor `1 / u` is also harmless on the positive closed interval. -/
