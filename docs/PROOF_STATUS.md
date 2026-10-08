@@ -84,3 +84,11 @@ Commit `1da81e3eb3f4ccb520b324e494a60ada53f0943b` passed the twenty-eight-module
 ## Verified grid and actual envelope candidate
 
 Commit `d0df6440e198d6d808e43b04927af4964ae69a7e` passed the twenty-nine-module build, full module replay and 710-declaration transitive axiom audit. [CI run 37777875119](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37777875119). The exact finite multiplicative partition and rectangle count are verified. ActualGridEnvelopes now constructs full prime rectangles, lower and upper convolution envelopes, the exact boundary difference, and its full-carrier mass bound using the verified crossing geometry. It retains exterior products and repeated-product multiplicity. This candidate awaits CI; the analytic rectangle-distribution theorem remains open.
+
+## Verified actual prime-rectangle envelopes
+
+Commit `8472a8eb910230e5c1f34fd756b01f33dbc6ec20` passed the thirty-module build, full project replay and 747-declaration transitive axiom audit. [PR run 37778918460](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37778918460). The actual inside/intersecting prime rectangles, their pointwise sandwich and boundary-fibre mass estimate are now verified. The analytic distribution of rectangle convolutions and its weighted sieve use remain outstanding.
+
+## Logarithmic-mesh boundary candidate
+
+BoundaryLogMesh proves the full actual boundary mass times the reciprocal-totient cost is eventually at most any positive epsilon times the genuine singular normalization, uniformly in `0 <= T <= N` and `D <= N`, for every fixed rational `0 < b < 1` and natural mesh exponent `k > 4`. It retains all exterior products and the complete sublinear rounding term. Source and independent review passed; CI is pending. This does not estimate rectangle discrepancies.
