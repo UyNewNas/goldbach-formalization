@@ -33,6 +33,7 @@ At commit `9d3965f8bfa82012172deb837ac09f7d04e8ec3a`, the twenty-five-module che
 - `ImbalancedChen/TotientReciprocalBudget.lean`: unconditional finite reciprocal-totient sum bound with explicit constant four, applied to the actual curved-boundary logarithmic mass cost.
 - `ImbalancedChen/BoundaryGridBudget.lean`: four actual integer-pair collar bounds with explicit rounding and product-fibre multiplicities on a full carrier; awaiting CI. Grid containment and rectangle distribution remain open.
 - `ImbalancedChen/BoundaryCellContainment.lean`: genuine inside/outside cell witnesses imply all four collars with width `3δ`; includes exact ceiling endpoints and the derived smaller diagonal cap. Awaiting CI.
+- `ImbalancedChen/BoundaryGlobalCaps.lean`: derives actual global ceiling caps from crossing cells and an explicit full-support boundary mass bound with all rounding terms; awaiting CI.
 - `docs/PROOF_STATUS.md`: outstanding analytic dependencies and the frontier comparison.
 
 Build: `lake exe cache get && lake build`. The workflow also runs `leanchecker` and a transitive axiom audit allowing only `propext`, `Classical.choice`, and `Quot.sound`.

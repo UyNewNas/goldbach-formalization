@@ -72,3 +72,7 @@ Commit `9d3965f8bfa82012172deb837ac09f7d04e8ec3a` passed the twenty-five-module 
 ## Crossing-cell containment candidate
 
 BoundaryCellContainment proves local containment from genuine inside/outside witnesses in one positive multiplicative rectangle, uniformly for `0 ≤ b ≤ 1` and `0 ≤ δ ≤ 1`, with common collar width `3δ`. It also derives the smaller diagonal cap, handles exact natural restrictions of half-open cells using ceiling endpoints, and identifies the actual prime-pair predicate with the real curved region. Source review is complete; CI is pending. Global grid construction and actual cap selection are not assumed completed.
+
+## Global boundary-mass candidate
+
+BoundaryGlobalCaps derives the actual square-root and power coordinate caps from the inside witnesses, even when the crossing cells vary pointwise. With exact outward ceilings and `0 ≤ δ ≤ 1`, `0 ≤ T ≤ N`, `N ≥ 1`, `0 ≤ b ≤ 1`, it proves the finite pair count and full-support convolution mass are at most `12δN log(3N) + 216δN + 14N^(1/(1+b))`. This is a proved estimate under a genuine crossing-cell cover, not an assumed cardinality bound. Source review is complete; CI is pending. Construction/enumeration of the actual grid and the analytic rectangle-distribution supplier remain open.

@@ -26,3 +26,4 @@ import ImbalancedChen.CurvedRegionDiscrepancy
 import ImbalancedChen.TotientReciprocalBudget
 import ImbalancedChen.BoundaryGridBudget
 import ImbalancedChen.BoundaryCellContainment
+import ImbalancedChen.BoundaryGlobalCaps

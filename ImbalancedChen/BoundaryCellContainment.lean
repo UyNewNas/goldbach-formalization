@@ -244,11 +244,14 @@ theorem mem_halfProductPairs_iff_prime_realRegion
   · rintro ⟨hr, hq, hrq, hpow, hT, hN⟩
     refine ⟨hr, hq, ?_, ?_, Nat.cast_le.mpr hrq, (nat_pow_lt_iff_rpow_lt hden).mp hpow⟩
     · simpa only [Nat.cast_mul] using hT
-    · exact_mod_cast hN
+    · change (r : ℝ) * (q : ℝ) ≤ (N : ℝ)
+      exact_mod_cast hN
   · rintro ⟨hr, hq, hT, hN, hrq, hpow⟩
     refine ⟨hr, hq, Nat.cast_le.mp hrq, (nat_pow_lt_iff_rpow_lt hden).mpr hpow, ?_, ?_⟩
     · simpa only [Nat.cast_mul] using hT
-    · exact_mod_cast hN
+    · change (r : ℝ) * (q : ℝ) ≤ (N : ℝ) at hN
+      change r * q ≤ N
+      exact_mod_cast hN
 
 /-- Natural points of a crossing cell lie in the finite four-collar union.
 The ambient caps are explicit; the diagonal cap follows from its own
@@ -272,7 +275,9 @@ theorem multiplicativeBoundaryCell_nat_mem_collar
   · exact Or.inl h
   · exact Or.inr (Or.inl h)
   · have hle : (p.2 : ℝ) ≤ (S : ℝ) := by
-      nlinarith [Nat.cast_nonneg p.2, Nat.cast_nonneg S]
+      have hp0 : (0 : ℝ) ≤ (p.2 : ℝ) := Nat.cast_nonneg p.2
+      have hS0 : (0 : ℝ) ≤ (S : ℝ) := Nat.cast_nonneg S
+      nlinarith only [hdiag, hS, hp0, hS0]
     have hleNat : p.2 ≤ S := by exact_mod_cast hle
     exact Or.inr (Or.inr (Or.inl ⟨hleNat, h⟩))
   · exact Or.inr (Or.inr (Or.inr h))
