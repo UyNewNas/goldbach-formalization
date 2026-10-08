@@ -68,8 +68,9 @@ private theorem sum_eq_sum_filter_of_zero_above
   apply Finset.sum_congr rfl
   intro d _hd
   by_cases hdB : d ≤ B
-  · simp only [hdB, if_pos]
-  · simp only [hdB, if_neg, hf d (Nat.lt_of_not_ge hdB)]
+  · rw [if_pos hdB]
+  · rw [if_neg hdB]
+    exact hf d (Nat.lt_of_not_ge hdB)
 
 /-- The actual mathlib main sum, with its level restriction proved from the
 support of the weights. -/
