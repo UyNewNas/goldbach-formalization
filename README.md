@@ -1,11 +1,19 @@
 # Imbalanced Chen formalization
 
-Lean formalization work for the research manuscript *Transferring quantitative Chen bounds to imbalanced semiprime representations* (8 October 2026).
+Work toward a Lean formalization of *Transferring quantitative Chen bounds to imbalanced semiprime representations* (8 October 2026).
 
-## Status
+## Verification status
 
-This repository is being initialized. The manuscript's main analytic theorem is **not yet formally verified**. Successful builds of elementary lemmas or rational certificates must not be represented as verification of the full theorem.
+The initial source files are awaiting their first GitHub CI run. The manuscript's main analytic theorem is **not formally verified** by this repository.
 
-Initial scope: exact counting definitions, finite good/bad decomposition, and exact final coefficient arithmetic. Analytic sieve/distribution inputs and multidimensional integral certificates remain explicit outstanding obligations. No custom axioms or `sorry` are accepted in the verified core.
+- `ImbalancedChen/Counting.lean`: prime-indexed finite representation sets, exact good/bad partition, subtraction and a conditional finite transfer lemma. The initial count excludes receiver 1; equivalence to the manuscript's Omega convention remains explicit work.
+- `ImbalancedChen/Constants.lean`: exact rational endpoint arithmetic and logarithmic inequalities, reusing mathlib's proved logarithm bound. This does not certify the integrals from which the quoted numbers originate.
+- `docs/PROOF_STATUS.md`: outstanding analytic dependencies and the frontier comparison.
 
-The proposed separate exponent is 0.76407; the 0.74774 branch additionally uses an external Chen counting input. Neither is currently claimed here as a verified frontier record.
+Build: `lake exe cache get && lake build`. The workflow also runs `leanchecker` and a transitive axiom audit allowing only `propext`, `Classical.choice`, and `Quot.sound`.
+
+No custom analytic axioms or proof placeholders belong in the verified core. A green core build is not a complete proof of the manuscript or a claim of a new frontier record.
+
+## Reproducibility
+
+Lean and mathlib revisions are pinned in `lean-toolchain` and `lakefile.toml`. The attachment reviewed has SHA-256 `e89d35f219acfbc6018db56b99d7a5c6c70eeeba0a98723fbe1046041ca90fbe`. A companion certificate archive has been supplied; its inventory, compatibility and replay are under review.
