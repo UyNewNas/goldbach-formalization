@@ -1,8 +1,5 @@
 import MathlibNt.AnalyticNumberTheory.BombieriVinogradov.Bombieri1965Richert418Unconditional
 
--- Preserve implicit-instance details in any future elaboration diagnostic.
-set_option pp.all true
-
 /- Independent consumer-side literal specification. No mathematical premise. -/
 open Filter Finset
 open scoped Classical BigOperators
