@@ -156,7 +156,7 @@ theorem eventually_two_mul_supplier_bound_le_half_accuracy (C : ℝ) (A : ℕ)
         (2 * C / Real.log (N : ℝ)) *
           ((N : ℝ) / (Real.log (N : ℝ)) ^ A) := by
       rw [pow_succ]
-      field_simp [hlogpos.ne'] <;> ring
+      field_simp [hlogpos.ne']
     _ ≤ (epsilon / 2) * ((N : ℝ) / (Real.log (N : ℝ)) ^ A) :=
       mul_le_mul_of_nonneg_right hscalar hbase
     _ = (epsilon / 2) * (N : ℝ) / (Real.log (N : ℝ)) ^ A := by ring
