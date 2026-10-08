@@ -105,7 +105,7 @@ theorem centerEulerTail_bounds {N : ℕ} {z : ℝ}
           linarith
         calc
           ((p : ℝ) - 1) / ((p : ℝ) - 2) = 1 + 1 / ((p : ℝ) - 2) := hfactor
-          _ ≤ 1 + 2 / z := add_le_add_left hrecip 1
+          _ ≤ 1 + 2 / z := add_le_add (le_refl (1 : ℝ)) hrecip
           _ ≤ Real.exp (2 / z) := by
             simpa only [add_comm] using Real.add_one_le_exp (2 / z)
     _ = Real.exp ((S.card : ℝ) * (2 / z)) := by
@@ -137,7 +137,8 @@ theorem tendsto_centerEulerTail_power {a : ℝ} (ha : 0 < a) :
   have hupper : Tendsto (fun N : ℕ =>
       Real.exp (2 * Real.log (N : ℝ) / ((N : ℝ) ^ a * Real.log 2)))
       atTop (𝓝 1) := by
-    simpa only [Real.exp_zero] using (Real.continuous_exp.tendsto 0).comp hdecay
+    simpa only [Real.exp_zero, Function.comp_def] using
+      (Real.continuous_exp.tendsto 0).comp hdecay
   have hpower : Tendsto (fun N : ℕ => (N : ℝ) ^ a) atTop atTop :=
     (tendsto_rpow_atTop ha).comp tendsto_natCast_atTop_atTop
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hupper ?_ ?_
