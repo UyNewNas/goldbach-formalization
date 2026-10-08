@@ -4,7 +4,7 @@ Work toward a Lean formalization of *Transferring quantitative Chen bounds to im
 
 ## Verification status
 
-At commit `935f380696fed24dfa12d44c8e465f1a401b43e6`, the forty-six-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1035 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37811236920). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
+At commit `d8f564f5987170343f44971f8570018a624b380f`, the forty-nine-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1081 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37817371436). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
 
 - `ImbalancedChen/Counting.lean`: prime-indexed finite representation sets, exact good/bad partition, subtraction and a conditional finite transfer lemma. The initial count excludes receiver 1; the separate Multiplicity module supplies the receiver-one correction.
 - `ImbalancedChen/Constants.lean`: exact rational endpoint arithmetic and logarithmic inequalities, reusing mathlib's proved logarithm bound. This does not certify the integrals from which the quoted numbers originate.
