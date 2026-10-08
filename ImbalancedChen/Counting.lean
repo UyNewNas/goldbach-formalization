@@ -111,7 +111,9 @@ def B (num den N : ℕ) : ℕ := (badPrimes num den N).card
       p < N ∧ Nat.Prime p ∧ PrimeOrSemiprime (N - p) ∧
         ¬ ImbalancedReceiver num den (N - p) := by
   classical
-  simp only [badPrimes, Finset.mem_filter, Finset.mem_range, BadReceiver]
+  unfold badPrimes
+  rw [Finset.mem_filter, Finset.mem_range]
+  rfl
 
 theorem imbalancedPrimes_subset_chenPrimes (num den N : ℕ) :
     imbalancedPrimes num den N ⊆ chenPrimes N := by

@@ -40,6 +40,25 @@ def RealImbalancedReceiver (b : ℝ) (m : ℕ) : Prop :=
   Nat.Prime m ∨
     ∃ r q : ℕ, Nat.Prime r ∧ Nat.Prime q ∧ m = r * q ∧ (r : ℝ) ≤ (q : ℝ) ^ b
 
+/-- Literal factor-witness form of the receiver condition for a nonnegative
+exponent. The prime-receiver case is represented by `r = 1`; the other case
+uses two prime factors. The nonnegativity assumption ensures `1 ≤ q ^ b`. -/
+theorem realImbalancedReceiver_iff_exists_factors {b : ℝ} {m : ℕ}
+    (hb : 0 ≤ b) :
+    RealImbalancedReceiver b m ↔
+      ∃ r q : ℕ, (r = 1 ∨ Nat.Prime r) ∧ Nat.Prime q ∧
+        m = r * q ∧ (r : ℝ) ≤ (q : ℝ) ^ b := by
+  constructor
+  · rintro (hm | ⟨r, q, hr, hq, hm, hpow⟩)
+    · refine ⟨1, m, Or.inl rfl, hm, by simp, ?_⟩
+      have hmR : (1 : ℝ) ≤ (m : ℝ) := by exact_mod_cast hm.one_lt.le
+      simpa using Real.one_le_rpow hmR hb
+    · exact ⟨r, q, Or.inr hr, hq, hm, hpow⟩
+  · rintro ⟨r, q, hr, hq, hm, hpow⟩
+    rcases hr with rfl | hr
+    · exact Or.inl (by simpa only [hm, one_mul] using hq)
+    · exact Or.inr ⟨r, q, hr, hq, hm, hpow⟩
+
 /-- The integer-power receiver definition is exactly the real-exponent
 definition at a rational exponent with positive denominator. -/
 theorem imbalancedReceiver_iff_realImbalancedReceiver {num den m : ℕ}
@@ -83,6 +102,19 @@ def RealDb (b : ℝ) (N : ℕ) : ℕ := (realImbalancedPrimes b N).card
   classical
   simp [realImbalancedPrimes]
 
+/-- Membership supplies the manuscript's literal additive representation.
+The bound `p < N` in the finite set justifies eliminating natural subtraction,
+so the conclusion is the actual equality `N = p + r * q`. -/
+theorem exists_representation_of_mem_realImbalancedPrimes {b : ℝ} {N p : ℕ}
+    (hb : 0 ≤ b) (hp : p ∈ realImbalancedPrimes b N) :
+    ∃ r q : ℕ, Nat.Prime p ∧ (r = 1 ∨ Nat.Prime r) ∧ Nat.Prime q ∧
+      N = p + r * q ∧ (r : ℝ) ≤ (q : ℝ) ^ b := by
+  rcases mem_realImbalancedPrimes.mp hp with ⟨hpN, hpprime, hreceiver⟩
+  obtain ⟨r, q, hr, hq, hm, hpow⟩ :=
+    (realImbalancedReceiver_iff_exists_factors hb).mp hreceiver
+  refine ⟨r, q, hpprime, hr, hq, ?_, hpow⟩
+  omega
+
 theorem imbalancedPrimes_eq_realImbalancedPrimes {num den N : ℕ}
     (hden : 0 < den) :
     imbalancedPrimes num den N = realImbalancedPrimes ((num : ℝ) / (den : ℝ)) N := by
@@ -90,6 +122,18 @@ theorem imbalancedPrimes_eq_realImbalancedPrimes {num den N : ℕ}
   ext p
   rw [mem_imbalancedPrimes, mem_realImbalancedPrimes,
     imbalancedReceiver_iff_realImbalancedReceiver hden]
+
+/-- The decidable integer-power finite set gives exactly the required
+real-exponent additive representation, including the `r = 1` prime case. -/
+theorem exists_representation_of_mem_imbalancedPrimes {num den N p : ℕ}
+    (hden : 0 < den) (hp : p ∈ imbalancedPrimes num den N) :
+    ∃ r q : ℕ, Nat.Prime p ∧ (r = 1 ∨ Nat.Prime r) ∧ Nat.Prime q ∧
+      N = p + r * q ∧ (r : ℝ) ≤ (q : ℝ) ^ ((num : ℝ) / (den : ℝ)) := by
+  have hb : (0 : ℝ) ≤ (num : ℝ) / (den : ℝ) :=
+    div_nonneg (Nat.cast_nonneg num) (Nat.cast_nonneg den)
+  apply exists_representation_of_mem_realImbalancedPrimes hb
+  rw [← imbalancedPrimes_eq_realImbalancedPrimes hden]
+  exact hp
 
 /-- Consequently all bounds for the integer-power count transfer without
 loss to the literal real-exponent count. -/

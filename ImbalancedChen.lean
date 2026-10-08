@@ -4,3 +4,5 @@ import ImbalancedChen.Multiplicity
 
 import ImbalancedChen.AsymptoticTransfer
 import ImbalancedChen.RationalPowers
+import ImbalancedChen.OrderedBad
+import ImbalancedChen.NumericalTransfer
