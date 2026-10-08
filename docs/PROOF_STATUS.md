@@ -10,13 +10,17 @@ This project is not a proof of Goldbach's conjecture or of the attached manuscri
 
 The endpoint comparisons take the displayed rational numbers as numbers; they do not prove that those numbers bound the analytic integrals.
 
+## Concrete normalization
+
+The new source proves convergence and strict positivity of the actual odd-prime Euler product and bounds the finite correction below by one. It derives growth of `C(N) N / (log N)^2`, then discharges the unit-absorption premise of the numerical transfer. These additions still require compilation and the full CI audits. The resulting concrete transfer retains the actual Chen count lower estimate and bad-count upper estimate as explicit, unproved analytic inputs.
+
 ## Outstanding mathematical work
 
-- Match the finite receiver predicate to the manuscript's multiplicity-counting Omega formulation, including receiver 1.
-- Match rational-power bounds to real-power exponents.
+- Complete kernel recheck and transitive axiom audit of the seven compiled initial core modules. The first full build succeeded, but the subsequent leanchecker stage exceeded the 45-minute job budget and the axiom stage was skipped.
+- Compile and audit the new normalization, concrete transfer and half-product geometry modules.
 - Prove the asymptotic bad-semiprime removal bound.
 - Formalize the actual distribution and strengthened sieve interfaces, with all uniformity and order-of-limits hypotheses.
-- Inventory and replay the supplied extended, fourth-prefix, corrected fourth-tail, fifth-prefix, eleven-term-table and second-seed certificates and verify their geometric and analytic meaning.
+- Formalize the geometric and analytic meaning of the numerical certificates. Nine required author/independent/final-transfer replays have completed with matching mathematical fields, including the full extended run. This does not establish every analytic/table dependency in the package.
 - Prove the separate Chen lower count and then deduce the final every-sufficiently-large-even-N conclusion.
 
 The external-input exponent 0.74774 additionally requires the published 1.9728 Chen count; it is not an axiom in the verified core.

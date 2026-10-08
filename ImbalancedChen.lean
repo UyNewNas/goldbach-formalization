@@ -6,3 +6,7 @@ import ImbalancedChen.AsymptoticTransfer
 import ImbalancedChen.RationalPowers
 import ImbalancedChen.OrderedBad
 import ImbalancedChen.NumericalTransfer
+import ImbalancedChen.NormalizationGrowth
+import ImbalancedChen.SingularSeries
+import ImbalancedChen.ManuscriptTransfer
+import ImbalancedChen.HalfProductGeometry

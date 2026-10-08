@@ -1,4 +1,5 @@
 import ImbalancedChen.Counting
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
 
 /-!
 # Exact rational exponents and the real-power receiver condition
