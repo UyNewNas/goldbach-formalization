@@ -139,6 +139,7 @@ theorem finitePrimitiveDiscrepancy_actualGridLowerWeight
         (actualGridLowerWeight num den N T κ) a d =
       ∑ ij ∈ actualGridInsideIndices num den N T κ,
         actualGridRectangleDiscrepancy κ ij a d := by
+  classical
   apply finitePrimitiveDiscrepancy_actualGridPrimePairs hκ
   exact actualGridPrimePairs_image_subset_carrier (Finset.filter_subset _ _)
 
@@ -149,6 +150,7 @@ theorem finitePrimitiveDiscrepancy_actualGridUpperWeight
         (actualGridUpperWeight num den N T κ) a d =
       ∑ ij ∈ actualGridIntersectingIndices num den N T κ,
         actualGridRectangleDiscrepancy κ ij a d := by
+  classical
   apply finitePrimitiveDiscrepancy_actualGridPrimePairs hκ
   exact actualGridPrimePairs_image_subset_carrier (fun _ h => h)
 
@@ -179,6 +181,7 @@ theorem abs_halfProductPrimitiveDiscrepancy_le_actualGridRectangles
       finiteSourceMass (actualGridProductCarrier num den N T κ)
         (fun m => actualGridUpperWeight num den N T κ m -
           actualGridLowerWeight num den N T κ m) / (Nat.totient d : ℝ) := by
+  classical
   have h := abs_halfProductPrimitiveDiscrepancy_le_actualGridEnvelopes
     (num := num) (N := N) (T := T) hden hκ d
   rw [finitePrimitiveDiscrepancy_actualGridLowerWeight hκ,

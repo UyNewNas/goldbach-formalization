@@ -46,7 +46,7 @@ theorem multiplicativeGridIndices_card_le_small_mesh
           (half_mesh_le_log_one_add hdelta.le hdelta1)
       _ = 2 * Real.log N / delta := by ring
   rw [multiplicativeGridIndices_card, Nat.cast_pow, Nat.cast_add, Nat.cast_one]
-  exact pow_le_pow_left₀ (by positivity) (add_le_add_right (hfloor.trans hratio) 1) 2
+  exact pow_le_pow_left₀ (by positivity) (add_le_add (hfloor.trans hratio) le_rfl) 2
 
 /-- The full grid for the literal logarithmic mesh has only polylogarithmically
 many cells, without removing empty rectangles or changing grid endpoints. -/

@@ -175,7 +175,11 @@ theorem abs_finitePrimitiveDiscrepancy_le_two_mul_of_uniform_commonMainError
           (Nat.totient d : ℝ)| ≤
         |finiteCommonMainError S w M a d| +
           |(∑ b ∈ finiteReducedResidues d, finiteCommonMainError S w M b d) /
-            (Nat.totient d : ℝ)| := abs_sub_le _ _
+            (Nat.totient d : ℝ)| := by
+      simpa only [sub_zero, zero_sub, abs_neg] using
+        (abs_sub_le (finiteCommonMainError S w M a d) 0
+          ((∑ b ∈ finiteReducedResidues d, finiteCommonMainError S w M b d) /
+            (Nat.totient d : ℝ)))
     _ ≤ ε + ε := add_le_add (hE a ha)
       (abs_average_finiteCommonMainError_le S w M ε d hd hE)
     _ = 2 * ε := by ring
@@ -201,6 +205,7 @@ theorem abs_finitePrimitiveDiscrepancy_le_two_mul_of_uniform
       finitePrimitiveDiscrepancy S w a d := by
   simp only [finitePrimitiveDiscrepancy, finiteCongruenceMass, Nat.ModEq,
     Nat.mod_mod]
+  rfl
 
 /-- The canonical uniform bound also controls any primitive residue,
 such as the original center `N`, without assuming that it is less than `d`. -/
@@ -223,6 +228,7 @@ integer is coprime to one, so its actual discrepancy vanishes. -/
     finitePrimitiveDiscrepancy S w a 1 = 0 := by
   simp [finitePrimitiveDiscrepancy, finiteCongruenceMass, finiteCoprimeMass,
     Nat.ModEq]
+  simp only [Nat.mod_one, eq_self_iff_true, Finset.filter_true, sub_self]
 
 end
 
