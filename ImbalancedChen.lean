@@ -30,3 +30,6 @@ import ImbalancedChen.BoundaryGlobalCaps
 import ImbalancedChen.MultiplicativeGridPartition
 import ImbalancedChen.ActualGridEnvelopes
 import ImbalancedChen.BoundaryLogMesh
+import ImbalancedChen.RectangleDiscrepancyAssembly
+import ImbalancedChen.CoprimeRecentering
+import ImbalancedChen.LogMeshGridCount

@@ -92,3 +92,7 @@ Commit `8472a8eb910230e5c1f34fd756b01f33dbc6ec20` passed the thirty-module build
 ## Logarithmic-mesh boundary candidate
 
 BoundaryLogMesh proves the full actual boundary mass times the reciprocal-totient cost is eventually at most any positive epsilon times the genuine singular normalization, uniformly in `0 <= T <= N` and `D <= N`, for every fixed rational `0 < b < 1` and natural mesh exponent `k > 4`. It retains all exterior products and the complete sublinear rounding term. Source and independent review passed; CI is pending. This does not estimate rectangle discrepancies.
+
+## Verified negligible boundary cost
+
+Commit `55f0454f4660a15783b824a42b5f350e6e5cc21e` passed the thirty-one-module build, full replay and 772-declaration axiom audit. [PR run 37783303734](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37783303734). The actual logarithmic-mesh boundary cost is now verified negligible. Three additional finite adapters await CI: exact assembly into literal full-rectangle discrepancies; reduced-residue recentering around an arbitrary common main; and explicit polylogarithmic grid count. No analytic rectangle distribution is assumed proved.
