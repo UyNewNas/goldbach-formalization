@@ -120,7 +120,7 @@ theorem chenExceptionalAdditivePrimes_card_cast_le (N : ℕ)
       (Nat.ceil ((N : ℝ) ^ (1 - (100 / 1149 : ℝ))) : ℝ) +
         ((roughSquareExceptions N ((N : ℝ) ^ (100 / 1149 : ℝ))).card : ℝ) := by
     exact_mod_cast hcard
-  exact hcardR.trans (add_le_add_left (roughSquareExceptions_card_le N hA) _)
+  exact hcardR.trans (add_le_add le_rfl (roughSquareExceptions_card_le N hA))
 
 /-- Finite summation of a constant indicator, with real cardinality. -/
 theorem chen_sum_indicator_card (S : Finset ℕ) (q : ℕ → Prop) (c : ℝ)
