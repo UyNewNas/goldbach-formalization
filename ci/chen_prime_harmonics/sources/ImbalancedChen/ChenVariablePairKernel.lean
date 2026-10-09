@@ -63,6 +63,7 @@ theorem d_eq_half_sub_three_a : d = 1 / 2 - 3 * a := by norm_num [a, d]
 This proof uses the literal minimum and does not split off a prime region. -/
 theorem vLevel_sub_antitone : Antitone (fun t : ℝ => vLevel t - t) := by
   intro x y hxy
+  change vLevel y - y ≤ vLevel x - x
   unfold vLevel
   rcases le_total ((1 + x) / 2) (57 / 64 - 3 * x / 2) with hx | hx
   · rw [min_eq_left hx]
