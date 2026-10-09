@@ -82,3 +82,4 @@ import ImbalancedChen.ChenQuotientMassFinite
 import ImbalancedChen.ChenPrimeHarmonicFinite
 import ImbalancedChen.MovingWeightTransport
 import ImbalancedChen.ChenQuotientMovingWeight
+import ImbalancedChen.ChenPairHarmonicFinite
