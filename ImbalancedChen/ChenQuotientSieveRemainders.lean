@@ -214,7 +214,8 @@ theorem chenQuotientBoundingSieve_rem (N b : ℕ) (A : ℝ)
 @[simp] theorem chenQuotientBoundingSieve_rem_one (N b : ℕ) (A : ℝ)
     (hN : Even N) (hb : Nat.Coprime b (sieveProduct N (Nat.ceil A))) :
     (chenQuotientBoundingSieve N b A hN hb).rem 1 = 0 := by
-  simp [chenQuotientBoundingSieve_rem]
+  rw [chenQuotientBoundingSieve_rem]
+  simp
 
 /-- An empty source is a genuine zero-mass sieve at every modulus. -/
 theorem chenQuotientBoundingSieve_rem_of_source_empty (N b : ℕ) (A : ℝ)
@@ -302,7 +303,9 @@ theorem abs_chenQuotientBoundingSieve_rem_le_primeAP_errors
             chenQuotientCentreCost N b d :=
       add_le_add (chenQuotient_abs_sub_le_add _ _)
         (abs_chenQuotientCentreCorrection_le N b d)
-    _ = _ := by rw [abs_div, abs_of_nonneg (Nat.cast_nonneg (Nat.totient d))]
+    _ = _ := by
+      rw [abs_div, abs_of_nonneg
+        (show (0 : ℝ) ≤ (Nat.totient d : ℝ) from Nat.cast_nonneg _)]
 
 /-- The finite summed interface needed by an actual distribution
 supplier. Repeated outer multipliers are not collapsed here or later. -/
@@ -336,7 +339,7 @@ theorem chenUpsilon3_eq_quotientBoundingSieve (N : ℕ) (hN : Even N) :
           (chenSinglePrimeSelector_sieve_data p.property).2.2).siftedSum := by
   rw [chenUpsilon3_eq_siftedQuotientPrimeSource]
   simp_rw [chenQuotientBoundingSieve_siftedSum]
-  simp only [Finset.sum_attach]
+  exact (Finset.sum_attach _ _).symm
 
 /-- The distinct strict upper cap of Upsilon 4 is unchanged. -/
 theorem chenUpsilon4_eq_quotientBoundingSieve (N : ℕ) (hN : Even N) :
@@ -347,7 +350,7 @@ theorem chenUpsilon4_eq_quotientBoundingSieve (N : ℕ) (hN : Even N) :
           (chenSinglePrimeSelector_sieve_data p.property).2.2).siftedSum := by
   rw [chenUpsilon4_eq_siftedQuotientPrimeSource]
   simp_rw [chenQuotientBoundingSieve_siftedSum]
-  simp only [Finset.sum_attach]
+  exact (Finset.sum_attach _ _).symm
 
 /-- Upsilon 5 keeps the actual ordered pairs as outer labels. -/
 theorem chenUpsilon5_eq_quotientBoundingSieve (N : ℕ) (hN : Even N) :
@@ -359,7 +362,7 @@ theorem chenUpsilon5_eq_quotientBoundingSieve (N : ℕ) (hN : Even N) :
           (chenY5PrimeSelector_sieve_data t.property).2.2).siftedSum := by
   rw [chenUpsilon5_eq_siftedQuotientPrimeSource]
   simp_rw [chenQuotientBoundingSieve_siftedSum]
-  simp only [Finset.sum_attach]
+  exact (Finset.sum_attach _ _).symm
 
 /-- Upsilon 6 keeps the full half-open second-prime band. -/
 theorem chenUpsilon6_eq_quotientBoundingSieve (N : ℕ) (hN : Even N) :
@@ -372,7 +375,7 @@ theorem chenUpsilon6_eq_quotientBoundingSieve (N : ℕ) (hN : Even N) :
           (chenY6PrimeSelector_sieve_data t.property).2.2).siftedSum := by
   rw [chenUpsilon6_eq_siftedQuotientPrimeSource]
   simp_rw [chenQuotientBoundingSieve_siftedSum]
-  simp only [Finset.sum_attach]
+  exact (Finset.sum_attach _ _).symm
 
 end
 
