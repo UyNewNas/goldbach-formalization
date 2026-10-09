@@ -4,7 +4,7 @@ Work toward a Lean formalization of *Transferring quantitative Chen bounds to im
 
 ## Verification status
 
-At commit `ea684bbe754d4cd19b08bdf3040d5cb9ede3aadf`, the seventy-seven-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1915 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37869414153). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
+At commit `beb8a4d03e5fb0148b17907b298c4f60d59895a9`, the eighty-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1992 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37872524090). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
 
 - `ImbalancedChen/Counting.lean`: prime-indexed finite representation sets, exact good/bad partition, subtraction and a conditional finite transfer lemma. The initial count excludes receiver 1; the separate Multiplicity module supplies the receiver-one correction.
 - `ImbalancedChen/Constants.lean`: exact rational endpoint arithmetic and logarithmic inequalities, reusing mathlib's proved logarithm bound. This does not certify the integrals from which the quoted numbers originate.
@@ -116,12 +116,23 @@ The new `ChenQuotientSieveRemainders.lean` constructs the genuine quotient `Boun
 `ChenQuotientBVFinite.lean` additionally pools the secondary base-modulus errors only over nonempty rows. This retains arbitrary unused rows, while the actual product cap forces each active multiplier below Q. All four original absolute remainder sums are bounded by 4[1+4(1+log(max(1,Q)))] times the primitive AP-error pool, plus the complete paid centre cost. No analytic error bound is assumed. This finite module passed the 77-module checkpoint above. Supplier-backed ordinary-BV consumers remain outside the owned core and have separate runtime verification.
 
 
-## Quotient geometry, density transport and weighted mass candidates
+## Verified quotient geometry, density transport and finite weighted mass
 
-The following three owned-only additions target the next 80-module core checkpoint. Their compilation, kernel replay and transitive axiom audit are pending; the verified checkpoint remains 77 modules and 1915 declarations.
+The following three owned-only modules passed the 80-module checkpoint above. The single geometry repair made natural successor positivity explicit; their mathematical statements and the verification gates were unchanged.
 
 - `ImbalancedChen/ChenQuotientLevelGeometry.lean`: literal natural row level D_b = Q / b + 1, with d < D_b equivalent to b*d <= Q for b > 0; uniform moving-multiplier logarithmic profiles and eventual inclusion of every original Upsilon 3–6 multiplier in the global logarithmic square-root cap. The eventual threshold precedes the multiplier choice. Lower-parameter gates require an explicit fixed gap; no s >= 2 gate is asserted for the full sixth band.
 - `ImbalancedChen/ChenQuotientDensityTransport.lean`: exact equality of the quotient and initial sieve prime products, reciprocal-totient densities, Euler products and local dimension products at the same strict real cutoff, retaining the constructor's coprimality gate. Support, total mass and remainders are not identified, and no new analytic normalization or dimension estimate is supplied.
 - `ImbalancedChen/ChenQuotientMassFinite.lean`: finite bounded-weight replacement of the actual quotient masses AP(N,N,b) minus the centre-prime count, for arbitrary signed label-dependent coefficients bounded by a fixed C >= 0. Exact injective pooling gives C(4 E_Q + C_36), with E_Q the primitive AP-error pool and C_36 the full centre mass, without an outer-cardinality factor; the centre cost receives an unconditional polylogarithmic budget and eventual fixed-logarithmic-accuracy payment. The AP-error estimate remains explicit.
 
 These are inputs to later sieve assembly with moving row levels and genuine weighted masses. They preserve all original bands and multiplicities. No foreign consumer enters the core root; no lower-sieve mean, evaluated weighted prime/pair main term, coefficient 1.8271, or complete Chen theorem is established by these additions.
+
+
+## Prime-window corrections and moving-weight transport candidates
+
+The following three owned-only additions target an 83-module checkpoint. Their compilation, kernel replay and transitive axiom audit remain pending; the verified checkpoint is still 80 modules and 1992 declarations.
+
+- `ImbalancedChen/ChenPrimeHarmonicFinite.lean`: exact finite correction from the original centre-masked prime window [A,U) with 1/(p-1) to the opposite half-open window (A,U] with 1/p. The centre-divisor mask, reciprocal shift and both possible endpoint atoms are paid explicitly; for N > 0, 2 <= A < U and |f| <= M with M >= 0, the total error is at most (2M log(N)/log(2) + 6M)/A. It supplies no analytic prime-sum limit.
+- `ImbalancedChen/MovingWeightTransport.lean`: finite perturbation costs and transport under uniformly close coordinates on one fixed compact set, for a fixed continuous test and eventually bounded nonnegative carrier weights. The test may have either sign. Uniformity, compact membership and bounded total weight remain explicit; a fixed-profile limit is a separate premise when used to derive a moving-profile limit.
+- `ImbalancedChen/ChenQuotientMovingWeight.lean`: a positively padded fixed interval contains both the actual quotient row parameter and its logarithmic profile uniformly over a fixed multiplier power range. The generic transport then applies without dropping prime or ordered-pair labels, with the nonnegative weighted-mass bound and any fixed-profile limit still explicit. No full-sixth-band s >= 2 gate is asserted.
+
+Supplier-backed prime harmonic and moving-prime adapters remain outside the core root. These elementary interfaces do not evaluate an actual prime/pair main term, supply an upper/lower sieve, establish coefficient 1.8271, or complete the Chen theorem.

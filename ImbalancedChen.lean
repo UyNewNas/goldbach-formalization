@@ -79,3 +79,6 @@ import ImbalancedChen.ChenQuotientBVFinite
 import ImbalancedChen.ChenQuotientLevelGeometry
 import ImbalancedChen.ChenQuotientDensityTransport
 import ImbalancedChen.ChenQuotientMassFinite
+import ImbalancedChen.ChenPrimeHarmonicFinite
+import ImbalancedChen.MovingWeightTransport
+import ImbalancedChen.ChenQuotientMovingWeight
