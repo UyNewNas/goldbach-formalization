@@ -36,7 +36,7 @@ uniformly quantified after N and may vary arbitrarily with the labels. -/
 theorem exists_logLevel_chenUpsilon36_weightedMassError_logAccuracy (K : ℕ) :
     ∃ B : ℝ, 0 ≤ B ∧
       ∀ C : ℝ, 0 ≤ C → ∀ epsilon : ℝ, 0 < epsilon →
-        ∀ᶠ N : ℕ in atTop, ∀ hN : Even N, ∀ Q : ℕ,
+        ∀ᶠ N : ℕ in atTop, ∀ _hN : Even N, ∀ Q : ℕ,
           ∀ w₃ w₄ : ℕ → ℝ, ∀ w₅ w₆ : (ℕ × ℕ) → ℝ,
           Q ≤ Nat.floor (Real.sqrt (N : ℝ) / (Real.log (N : ℝ)) ^ B) →
           ChenUpsilon36MultiplierCap N Q →
