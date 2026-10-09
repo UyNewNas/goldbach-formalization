@@ -76,3 +76,6 @@ import ImbalancedChen.ChenQuotientSieveRemainders
 import ImbalancedChen.ChenQuotientCentreBudget
 import ImbalancedChen.ChenPooledQuotientAP
 import ImbalancedChen.ChenQuotientBVFinite
+import ImbalancedChen.ChenQuotientLevelGeometry
+import ImbalancedChen.ChenQuotientDensityTransport
+import ImbalancedChen.ChenQuotientMassFinite

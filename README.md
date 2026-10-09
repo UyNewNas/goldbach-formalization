@@ -4,7 +4,7 @@ Work toward a Lean formalization of *Transferring quantitative Chen bounds to im
 
 ## Verification status
 
-At commit `bfd027e1b07e66b83c805712fba4bcf006ad04f6`, the seventy-six-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1895 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37867935386). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
+At commit `ea684bbe754d4cd19b08bdf3040d5cb9ede3aadf`, the seventy-seven-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1915 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37869414153). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
 
 - `ImbalancedChen/Counting.lean`: prime-indexed finite representation sets, exact good/bad partition, subtraction and a conditional finite transfer lemma. The initial count excludes receiver 1; the separate Multiplicity module supplies the receiver-one correction.
 - `ImbalancedChen/Constants.lean`: exact rational endpoint arithmetic and logarithmic inequalities, reusing mathlib's proved logarithm bound. This does not certify the integrals from which the quoted numbers originate.
@@ -111,6 +111,17 @@ The new `ChenQuotientSieveRemainders.lean` constructs the genuine quotient `Boun
 
 `ChenPooledQuotientAP.lean` proves that the full product modulus b*d recovers its allowed sieve divisor as gcd(b*d,P). With actual ordered-prime label uniqueness this gives exact multiplicity-one pooling within each original Upsilon 3–6 term, for arbitrary row-dependent divisor sets satisfying b*d <= Q. The secondary base-modulus error and both centre costs are retained separately; the existing fourth-divisor moment is also transferred to the proved squarefree pooled support. The four terms are not claimed jointly disjoint. The candidate passed the 76-module checkpoint above; no analytic AP bound is assumed or supplied.
 
-## Active-row four-term assembly awaiting CI
+## Verified active-row four-term assembly
 
-`ChenQuotientBVFinite.lean` additionally pools the secondary base-modulus errors only over nonempty rows. This retains arbitrary unused rows, while the actual product cap forces each active multiplier below Q. All four original absolute remainder sums are bounded by 4[1+4(1+log(max(1,Q)))] times the primitive AP-error pool, plus the complete paid centre cost. No analytic error bound is assumed. This finite module awaits CI; a separate held consumer of genuine ordinary BV has not yet been runtime-verified.
+`ChenQuotientBVFinite.lean` additionally pools the secondary base-modulus errors only over nonempty rows. This retains arbitrary unused rows, while the actual product cap forces each active multiplier below Q. All four original absolute remainder sums are bounded by 4[1+4(1+log(max(1,Q)))] times the primitive AP-error pool, plus the complete paid centre cost. No analytic error bound is assumed. This finite module passed the 77-module checkpoint above. Supplier-backed ordinary-BV consumers remain outside the owned core and have separate runtime verification.
+
+
+## Quotient geometry, density transport and weighted mass candidates
+
+The following three owned-only additions target the next 80-module core checkpoint. Their compilation, kernel replay and transitive axiom audit are pending; the verified checkpoint remains 77 modules and 1915 declarations.
+
+- `ImbalancedChen/ChenQuotientLevelGeometry.lean`: literal natural row level D_b = Q / b + 1, with d < D_b equivalent to b*d <= Q for b > 0; uniform moving-multiplier logarithmic profiles and eventual inclusion of every original Upsilon 3–6 multiplier in the global logarithmic square-root cap. The eventual threshold precedes the multiplier choice. Lower-parameter gates require an explicit fixed gap; no s >= 2 gate is asserted for the full sixth band.
+- `ImbalancedChen/ChenQuotientDensityTransport.lean`: exact equality of the quotient and initial sieve prime products, reciprocal-totient densities, Euler products and local dimension products at the same strict real cutoff, retaining the constructor's coprimality gate. Support, total mass and remainders are not identified, and no new analytic normalization or dimension estimate is supplied.
+- `ImbalancedChen/ChenQuotientMassFinite.lean`: finite bounded-weight replacement of the actual quotient masses AP(N,N,b) minus the centre-prime count, for arbitrary signed label-dependent coefficients bounded by a fixed C >= 0. Exact injective pooling gives C(4 E_Q + C_36), with E_Q the primitive AP-error pool and C_36 the full centre mass, without an outer-cardinality factor; the centre cost receives an unconditional polylogarithmic budget and eventual fixed-logarithmic-accuracy payment. The AP-error estimate remains explicit.
+
+These are inputs to later sieve assembly with moving row levels and genuine weighted masses. They preserve all original bands and multiplicities. No foreign consumer enters the core root; no lower-sieve mean, evaluated weighted prime/pair main term, coefficient 1.8271, or complete Chen theorem is established by these additions.
