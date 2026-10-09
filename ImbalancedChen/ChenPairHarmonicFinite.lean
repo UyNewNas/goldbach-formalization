@@ -97,7 +97,8 @@ theorem chen_ordered_half_square (S : Finset ℕ) (K : ℕ → ℕ → ℝ)
     intro p hp
     calc
       _ = if p = p then K p p else 0 :=
-        Finset.sum_eq_single_of_mem p hp
+        Finset.sum_eq_single_of_mem
+          (f := fun q : ℕ => if p = q then K p p else 0) p hp
           (fun q (_hq : q ∈ S) (hqp : q ≠ p) => if_neg (Ne.symm hqp))
       _ = K p p := if_pos rfl
   have hsplit : (∑ p ∈ S, ∑ q ∈ S, K p q) =
@@ -297,7 +298,8 @@ theorem chenY6_log_totient_sum_eq_tensor (N : ℕ) (A H D : ℝ) (F : ℝ → �
         F (Real.log (p : ℝ) / Real.log (N : ℝ) +
           Real.log (q : ℝ) / Real.log (N : ℝ)) /
             (((p : ℝ) - 1) * ((q : ℝ) - 1)) := by
-  rw [chenY6_totient_sum_eq_tensor]
+  rw [chenY6_totient_sum_eq_tensor N A H D
+    (fun n : ℕ => F (Real.log (n : ℝ) / Real.log (N : ℝ)))]
   apply Finset.sum_congr rfl
   intro p hp
   apply Finset.sum_congr rfl
@@ -320,7 +322,8 @@ theorem chenY5_log_totient_sum_eq_half_square_sub_diagonal
               (((p : ℝ) - 1) * ((q : ℝ) - 1))) -
           ∑ p ∈ chenSinglePrimeSelector N A H,
             F (2 * (Real.log (p : ℝ) / Real.log (N : ℝ))) / ((p : ℝ) - 1) ^ 2) := by
-  rw [chenY5_totient_sum_eq_half_square_sub_diagonal]
+  rw [chenY5_totient_sum_eq_half_square_sub_diagonal N A H
+    (fun n : ℕ => F (Real.log (n : ℝ) / Real.log (N : ℝ)))]
   congr 1
   congr 1
   · apply Finset.sum_congr rfl
