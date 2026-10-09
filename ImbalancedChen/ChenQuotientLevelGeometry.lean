@@ -85,8 +85,8 @@ theorem chenQuotientRowLevel_log_bounds {Q b : ℕ}
         Real.log 2 + Real.log ((Q + 1 : ℕ) : ℝ) := by
   have hbR : (0 : ℝ) < b := by exact_mod_cast hb
   have hD : 0 < chenQuotientRowLevel Q b := by
-    unfold chenQuotientRowLevel
-    omega
+    change 0 < Nat.succ (Q / b)
+    exact Nat.succ_pos (Q / b)
   have hDR : (0 : ℝ) < chenQuotientRowLevel Q b := by exact_mod_cast hD
   have hQR : (0 : ℝ) < ((Q + 1 : ℕ) : ℝ) := by positivity
   obtain ⟨hlo, hhi⟩ := chenQuotientRowLevel_mul_bounds hb hbQ
