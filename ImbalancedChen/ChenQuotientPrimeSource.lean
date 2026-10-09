@@ -215,7 +215,13 @@ theorem chenSiftedQuotientPrimeSource_card (N b : ℕ) (z : ℝ) :
     _ = _ := by
       apply congrArg Finset.card
       ext P
-      simp only [Finset.mem_filter, ChenQuotient]
+      constructor
+      · intro hP
+        obtain ⟨hPc, hd, hr⟩ := Finset.mem_filter.mp hP
+        exact Finset.mem_filter.mpr ⟨hPc, hd, hr⟩
+      · intro hP
+        obtain ⟨hPc, hQ⟩ := Finset.mem_filter.mp hP
+        exact Finset.mem_filter.mpr ⟨hPc, hQ.1, hQ.2⟩
 
 /-- Finite Fubini for selected multipliers. The outer tuple label is never
 erased, so equal quotient values in different fibres keep multiplicity. -/
