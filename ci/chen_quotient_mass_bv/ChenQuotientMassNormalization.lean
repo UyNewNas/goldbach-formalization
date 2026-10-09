@@ -30,7 +30,7 @@ open scoped BigOperators
 selectors. C is fixed before N; the four signed weights are chosen after N. -/
 theorem eventually_chenUpsilon36WeightedMassError_le_logAccuracy
     (K : ℕ) (C : ℝ) (hC : 0 ≤ C) (epsilon : ℝ) (hepsilon : 0 < epsilon) :
-    ∀ᶠ N : ℕ in atTop, ∀ hN : Even N,
+    ∀ᶠ N : ℕ in atTop, ∀ _hN : Even N,
       ∀ w₃ w₄ : ℕ → ℝ, ∀ w₅ w₆ : (ℕ × ℕ) → ℝ,
       ChenUpsilon36MassWeightsBound N C w₃ w₄ w₅ w₆ →
       chenUpsilon36WeightedMassError N (trueLogarithmicIntegral N) w₃ w₄ w₅ w₆ ≤
@@ -46,7 +46,7 @@ theorem eventually_chenUpsilon36WeightedMassError_le_logAccuracy
 literal reciprocal-totient coefficient, at every fixed logarithmic accuracy. -/
 theorem eventually_abs_chenUpsilon36WeightedMass_sub_LiMain_le_logAccuracy
     (K : ℕ) (C : ℝ) (hC : 0 ≤ C) (epsilon : ℝ) (hepsilon : 0 < epsilon) :
-    ∀ᶠ N : ℕ in atTop, ∀ hN : Even N,
+    ∀ᶠ N : ℕ in atTop, ∀ _hN : Even N,
       ∀ w₃ w₄ : ℕ → ℝ, ∀ w₅ w₆ : (ℕ × ℕ) → ℝ,
       ChenUpsilon36MassWeightsBound N C w₃ w₄ w₅ w₆ →
       |chenUpsilon36WeightedMass N w₃ w₄ w₅ w₆ -
