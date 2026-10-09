@@ -4,7 +4,7 @@ Work toward a Lean formalization of *Transferring quantitative Chen bounds to im
 
 ## Verification status
 
-At commit `99b55944dd9cc35011c50265dbfd2a35b0f12f19`, the seventy-three-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1795 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37863090429). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
+At commit `655510e9f75b6f4a876b9c5c3fc6afc1b0cf9736`, the seventy-four-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1829 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37864869571). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
 
 - `ImbalancedChen/Counting.lean`: prime-indexed finite representation sets, exact good/bad partition, subtraction and a conditional finite transfer lemma. The initial count excludes receiver 1; the separate Multiplicity module supplies the receiver-one correction.
 - `ImbalancedChen/Constants.lean`: exact rational endpoint arithmetic and logarithmic inequalities, reusing mathlib's proved logarithm bound. This does not certify the integrals from which the quoted numbers originate.
@@ -97,8 +97,12 @@ Lean and mathlib revisions are pinned in `lean-toolchain` and `lakefile.toml`. T
 
 - `ImbalancedChen/CenterEulerTail.lean`: strict real-cutoff centre Euler correction, explicit uniform exponential tail bound, and tail/relative-normalization convergence at every fixed positive real-power cutoff. Verified in the seventy-two-module checkpoint; no Mertens estimate is assumed.
 
-## Verified quotient source and pending finite sieve remainder extension
+## Verified quotient source and finite sieve remainders
 
 `ChenQuotientPrimeSource.lean` passed the 73-module checkpoint above. It identifies the actual quotient receivers for selected multipliers with prime AP fibres at modulus `b*d`, retaining centre-prime corrections, repeated factors, quotient one, strict endpoints and the original Upsilon 3–6 outer multiplicities.
 
-The new `ChenQuotientSieveRemainders.lean` constructs the genuine quotient `BoundingSieve`, proves the selected multiplier is coprime to the strict sieve product, and transfers its exact remainder to ordinary prime-AP errors plus both explicit centre correction costs. The reciprocal-totient density is justified only on proved allowed divisors. Compilation, kernel replay and axiom audit of this extension are pending. No analytic bound for the selected-multiplier error sums or the full eleven-term mean is supplied.
+The new `ChenQuotientSieveRemainders.lean` constructs the genuine quotient `BoundingSieve`, proves the selected multiplier is coprime to the strict sieve product, and transfers its exact remainder to ordinary prime-AP errors plus both explicit centre correction costs. The reciprocal-totient density is justified only on proved allowed divisors. This extension passed the 74-module checkpoint above. No analytic bound for the selected-multiplier error sums or the full eleven-term mean is supplied.
+
+## Pooled centre correction budget awaiting CI
+
+`ChenQuotientCentreBudget.lean` pools the actual selected-multiplier centre-prime incidences before bounding them. For all four literal Upsilon 3–6 selectors and arbitrary row-dependent positive divisor sets capped by sqrt(N), the complete positive correction cost is at most 8/(log 2)^3 times sqrt(N) log(N)^3 for sufficiently large even N. The candidate derives arbitrary fixed logarithmic accuracy without a prime-distribution premise. It retains both centre counts, all outer labels and strict bands; only this correction cost is estimated. Its compilation, kernel replay and axiom audit are pending.
