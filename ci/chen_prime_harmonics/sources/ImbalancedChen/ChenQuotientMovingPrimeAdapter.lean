@@ -68,6 +68,8 @@ theorem tendsto_chenSinglePrime_moving_sieveFactor
       div_le_div_of_nonneg_right (by linarith [hu.2]) ha.le
     have hhi : ((1 / 2 : ℝ) - u) / a ≤ (1 / 2 : ℝ) / a :=
       div_le_div_of_nonneg_right (by linarith) ha.le
+    change ((1 / 2 : ℝ) - u) / a ∈
+      Set.Icc (((1 / 2 : ℝ) - c) / a - rho) ((1 / 2 : ℝ) / a + rho)
     exact ⟨by linarith, by linarith⟩
   obtain ⟨M, hM, hmass⟩ :=
     exists_eventually_bounded_chenSinglePrimeTotientMass hl hlc hc1
