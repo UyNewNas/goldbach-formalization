@@ -4,7 +4,7 @@ Work toward a Lean formalization of *Transferring quantitative Chen bounds to im
 
 ## Verification status
 
-At commit `655510e9f75b6f4a876b9c5c3fc6afc1b0cf9736`, the seventy-four-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1829 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37864869571). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
+At commit `af4eb77d48f9a13df138e566f5718a262face9ab`, the seventy-five-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 1869 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37866504321). This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
 
 - `ImbalancedChen/Counting.lean`: prime-indexed finite representation sets, exact good/bad partition, subtraction and a conditional finite transfer lemma. The initial count excludes receiver 1; the separate Multiplicity module supplies the receiver-one correction.
 - `ImbalancedChen/Constants.lean`: exact rational endpoint arithmetic and logarithmic inequalities, reusing mathlib's proved logarithm bound. This does not certify the integrals from which the quoted numbers originate.
@@ -103,6 +103,10 @@ Lean and mathlib revisions are pinned in `lean-toolchain` and `lakefile.toml`. T
 
 The new `ChenQuotientSieveRemainders.lean` constructs the genuine quotient `BoundingSieve`, proves the selected multiplier is coprime to the strict sieve product, and transfers its exact remainder to ordinary prime-AP errors plus both explicit centre correction costs. The reciprocal-totient density is justified only on proved allowed divisors. This extension passed the 74-module checkpoint above. No analytic bound for the selected-multiplier error sums or the full eleven-term mean is supplied.
 
-## Pooled centre correction budget awaiting CI
+## Verified pooled centre correction budget
 
-`ChenQuotientCentreBudget.lean` pools the actual selected-multiplier centre-prime incidences before bounding them. For all four literal Upsilon 3–6 selectors and arbitrary row-dependent positive divisor sets capped by sqrt(N), the complete positive correction cost is at most 8/(log 2)^3 times sqrt(N) log(N)^3 for sufficiently large even N. The candidate derives arbitrary fixed logarithmic accuracy without a prime-distribution premise. It retains both centre counts, all outer labels and strict bands; only this correction cost is estimated. Its compilation, kernel replay and axiom audit are pending.
+`ChenQuotientCentreBudget.lean` pools the actual selected-multiplier centre-prime incidences before bounding them. For all four literal Upsilon 3–6 selectors and arbitrary row-dependent positive divisor sets capped by sqrt(N), the complete positive correction cost is at most 8/(log 2)^3 times sqrt(N) log(N)^3 for sufficiently large even N. The candidate derives arbitrary fixed logarithmic accuracy without a prime-distribution premise. It retains both centre counts, all outer labels and strict bands; only this correction cost is estimated. This extension passed the 75-module checkpoint above.
+
+## Product-modulus pooling awaiting CI
+
+`ChenPooledQuotientAP.lean` proves that the full product modulus b*d recovers its allowed sieve divisor as gcd(b*d,P). With actual ordered-prime label uniqueness this gives exact multiplicity-one pooling within each original Upsilon 3–6 term, for arbitrary row-dependent divisor sets satisfying b*d <= Q. The secondary base-modulus error and both centre costs are retained separately; the existing fourth-divisor moment is also transferred to the proved squarefree pooled support. The four terms are not claimed jointly disjoint. Compilation, kernel replay and axiom audit of this candidate are pending, and no analytic AP bound is assumed or supplied.
