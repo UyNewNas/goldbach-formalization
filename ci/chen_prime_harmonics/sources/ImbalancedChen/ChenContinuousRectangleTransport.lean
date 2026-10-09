@@ -313,7 +313,9 @@ theorem exists_separated_near_continuousOn {a b c d : ℝ} {K : ℝ → ℝ → 
           (continuous_subtype_val.comp continuous_snd))
         (fun z => ⟨(e.symm z.1).property, z.2.property⟩)⟩
   let G : C(I, C(Set.Icc c d, ℝ)) := H.curry
-  obtain ⟨n, hn⟩ := (Metric.tendsto_nhds.mp
+  obtain ⟨n, hn⟩ := ((Metric.tendsto_nhds
+    (α := C(I, C(Set.Icc c d, ℝ)))
+    (u := fun n : ℕ => bernsteinApproximation n G) (f := atTop) (a := G)).mp
     (bernsteinApproximation_uniform G) δ hδ).exists
   have hnorm : ‖bernsteinApproximation n G - G‖ < δ := by
     simpa only [dist_eq_norm] using hn
