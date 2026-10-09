@@ -58,7 +58,15 @@ theorem abs_chenQuotientPrimeAPError_le_supplier (N k : ℕ)
     unfold chenPrimeAPCount
     apply congrArg (fun S : Finset ℕ => (S.card : ℝ))
     ext P
-    simp only [Finset.mem_filter, Nat.ModEq, Nat.mod_mod]
+    constructor
+    · intro hP
+      obtain ⟨hPc, hmod⟩ := Finset.mem_filter.mp hP
+      exact Finset.mem_filter.mpr ⟨hPc, by
+        simpa only [Nat.ModEq, Nat.mod_mod] using hmod⟩
+    · intro hP
+      obtain ⟨hPc, hmod⟩ := Finset.mem_filter.mp hP
+      exact Finset.mem_filter.mpr ⟨hPc, by
+        simpa only [Nat.ModEq, Nat.mod_mod] using hmod⟩
   have hres := (mem_finiteReducedResidues (N % k) k).mp
     ((mod_mem_finiteReducedResidues_iff N k hk).mpr hcop.symm)
   rw [chenQuotientPrimeAPError, hcount]
@@ -157,7 +165,7 @@ theorem exists_logLevel_chenUpsilon36_remainder_logAccuracy (K : ℕ) :
       _ = 2 * ((18 * C) * (N : ℝ) / (Real.log (N : ℝ)) ^ (K + 1)) := by
         rw [show K + 2 = (K + 1) + 1 by omega, pow_succ]
         field_simp [hlogpos.ne']
-        <;> ring
+        ring
       _ ≤ _ := hconstant
   calc
     _ ≤ (4 * (1 + 4 * (1 + Real.log (max 1 (Q : ℝ))))) *
