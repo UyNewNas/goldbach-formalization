@@ -77,12 +77,12 @@ def validate_graph():
     need(len(FOREIGN["modules"]) == 270 and len(FOREIGN["architectModules"]) == 9,
          "Wrong immutable ordinary270 baseline")
     need(sha256(BASE_PATH / "closure.json") == PLAN["foreignClosureSha256"], "Ordinary270 manifest changed")
-    need(PLAN["counts"] == {"owned-proof": 49, "supplier": 66, "architect": 9, "audit-tool": 1},
+    need(PLAN["counts"] == {"owned-proof": 54, "supplier": 66, "architect": 9, "audit-tool": 1},
          "Wrong exact harmonic source counts")
     for kind, count in PLAN["counts"].items():
         need(len(module_set(kind)) == count, "Wrong selected count: " + kind)
     known = {r["module"]: r for r in PLAN["sources"]}
-    need(len(known) == len(PLAN["sources"]) == 125, "Duplicate/wrong full source count")
+    need(len(known) == len(PLAN["sources"]) == 130, "Duplicate/wrong full source count")
     arch = {r["module"]: r["sha"] for r in FOREIGN["architectModules"]}
     for row in PLAN["sources"]:
         safe_relative(row["destination"])
@@ -113,18 +113,20 @@ def validate_graph():
     visit("ChenPrimeHarmonicsProbe")
     need(seen == set(known) and topo == PLAN["topologicalOrder"], "Extra/missing/reordered selected closure")
     need(sorted(boundary) == PLAN["boundaryImports"], "Changed trusted import boundary")
-    need(PLAN["auditedModules"] == topo[:-1] and len(topo[:-1]) == PLAN["proofModuleCount"] == 124,
+    need(PLAN["auditedModules"] == topo[:-1] and len(topo[:-1]) == PLAN["proofModuleCount"] == 129,
          "Incomplete exact proof-origin scope")
     need(PLAN["allowEmptyDeclarationModules"] == list(EMPTY_ORIGIN_PINS), "Changed exact import-only origins")
     for m, expected in EMPTY_ORIGIN_PINS.items():
         need(known[m]["sha256"] == expected, "Changed import-only barrel source pin: " + m)
     need(PLAN["ownedBuildOrder"] == [m for m in topo if known[m]["kind"] in {"owned-proof", "audit-tool"}]
-         and len(PLAN["ownedBuildOrder"]) == PLAN["ownedBuildModuleCount"] == 50,
+         and len(PLAN["ownedBuildOrder"]) == PLAN["ownedBuildModuleCount"] == 55,
          "Wrong exact owned compile order")
     need(PLAN["supplierRoots"] == ["MathlibNt.SieveTheory.Arithmetic.MertensTheorem"],
          "Wrong harmonic supplier root")
     need(PLAN["requiredActualRoots"] == ["ImbalancedChen.ChenPrimeHarmonicAdapter",
-         "ImbalancedChen.ChenQuotientMovingPrimeAdapter", "ImbalancedChen.ChenPairHarmonicLimit"],
+         "ImbalancedChen.ChenQuotientMovingPrimeAdapter", "ImbalancedChen.ChenPairHarmonicLimit",
+         "ImbalancedChen.ChenVariablePairHarmonicLimit",
+         "ImbalancedChen.ChenVariableTriangleLimits"],
          "Changed actual consumer roots")
     need(known["ChenPrimeHarmonicsProbe"]["imports"] == PLAN["requiredActualRoots"] + ["Lean.Util.CollectAxioms"],
          "Changed audit probe imports")
@@ -133,8 +135,20 @@ def validate_graph():
     need(known["ImbalancedChen.ChenPrimeHarmonicFinite"]["sha256"] ==
          "8b7b1d6d7b7b9847ade96917beac79be4d695c2444a27c38b3f9e1b878174f38",
          "Superseded finite one-prime source selected")
-    need(len(topo) == len(set(topo)) == PLAN["replayModuleCount"] == 125, "Wrong replay scope")
+    need(len(topo) == len(set(topo)) == PLAN["replayModuleCount"] == 130, "Wrong replay scope")
     need(PLAN["batchSize"] == 12 and PLAN["replayBatchCount"] == 11, "Wrong replay batching")
+
+    need(PLAN["newOwnedModules"] == ["ImbalancedChen.ChenContinuousRectangleTransport",
+         "ImbalancedChen.ChenVariablePairKernel", "ImbalancedChen.ChenVariablePairHarmonicLimit",
+         "ImbalancedChen.SymmetricTriangleIntegral", "ImbalancedChen.ChenVariableTriangleLimits"],
+         "Changed exact new owned origin set")
+    need(len(PLAN["newPublicDeclarations"]) == 73 and
+         len({r["name"] for r in PLAN["newPublicDeclarations"]}) == 73,
+         "Changed new public declaration report set")
+    need(len(PLAN["namedAxiomReports"]) == 84 and
+         len(set(PLAN["namedAxiomReports"])) == 84 and
+         {r["name"] for r in PLAN["newPublicDeclarations"]} <= set(PLAN["namedAxiomReports"]),
+         "Incomplete named new declaration reports")
 
 
 def validate_owned(consumer):
@@ -178,11 +192,11 @@ def source_gate(consumer, root, out):
     need(set(empty_origins) == set(EMPTY_ORIGIN_PINS), "Missing exact import-only source evidence")
     need(runtime == PLAN["runtimeEntries"], "Changed reviewed runtime entry points")
     need(arch_tokens == PLAN["architectReviewedTokens"], "Changed reviewed Architect tooling tokens")
-    write(out, "harmonic-source-audit.json", {"supplier": 66, "architect": 9, "ownedProof": 49,
+    write(out, "harmonic-source-audit.json", {"supplier": 66, "architect": 9, "ownedProof": 54,
          "auditProbe": 1, "ordinary270Subset": True, "gitBlobs": hashes,
          "runtimeEntries": runtime, "architectReviewedTokens": arch_tokens,
          "emptyOriginImportOnlySources": empty_origins, "issues": []})
-    print("PASS: exact 66 ordinary270 + 9 Architect + 49 owned proof + 1 probe source pins")
+    print("PASS: exact 66 ordinary270 + 9 Architect + 54 owned proof + 1 probe source pins")
 
 
 def stage(consumer, root, out):
@@ -198,7 +212,7 @@ def stage(consumer, root, out):
         shutil.copyfile(consumer / row["source"], p)
     shutil.copyfile(HERE / "closure.json", out / "harmonic-closure.json")
     (out / "owned-build-modules.txt").write_text("\n".join(PLAN["ownedBuildOrder"]) + "\n")
-    print("STAGED: 49 exact owned proof sources + 1 audit probe; no Lake configuration changes")
+    print("STAGED: 54 exact owned proof sources + 1 audit probe; no Lake configuration changes")
 
 
 def compiled_set(directory):
@@ -246,7 +260,7 @@ def axiom_gate(out):
     need(len(loaded) == len(set(loaded)), "Duplicate loaded-module report")
     audited = set(PLAN["auditedModules"])
     custom = {m for m in loaded if m.split(".")[0] not in TRUSTED_PREFIXES}
-    need(custom == audited, "Loaded custom graph differs from exact 49+66+9 origins")
+    need(custom == audited, "Loaded custom graph differs from exact 54+66+9 origins")
     need(set(PLAN["requiredActualRoots"]) <= set(loaded), "Missing actual arithmetic consumer root")
     rows = re.findall(r"\bHARMONIC_MODULE_AUDIT (\S+) declarations=([0-9]+)$", text, re.M)
     need(len(rows) == len({m for m, _ in rows}) == len(audited) and {m for m, _ in rows} == audited,
@@ -257,7 +271,7 @@ def axiom_gate(out):
             need(n == 0, "Unexpected declaration in pinned import-only origin: " + m)
         else:
             need(n > 0, "Missing origin declarations: " + m)
-    passes = re.findall(r"\bHARMONIC_AXIOM_AUDIT_PASS declarations=([1-9][0-9]*) modules=124$", text, re.M)
+    passes = re.findall(r"\bHARMONIC_AXIOM_AUDIT_PASS declarations=([1-9][0-9]*) modules=129$", text, re.M)
     need(len(passes) == 1 and int(passes[0]) == sum(counts.values()), "Missing/inconsistent full axiom audit")
     named = {}
     for name in PLAN["namedAxiomReports"]:
@@ -267,6 +281,23 @@ def axiom_gate(out):
         axioms = {x.strip() for x in hits[0].split(",") if x.strip()} if hits else set()
         need(axioms <= ALLOWED_AXIOMS, "Forbidden named axiom: " + name)
         named[name] = sorted(axioms)
+    new_modules = set(PLAN["newOwnedModules"])
+    reports = re.findall(r"\bHARMONIC_NEW_DECL_AUDIT (\S+) module=(\S+) axioms=\[([^\]]*)\]$", text, re.M)
+    need(len(reports) == sum(counts[m] for m in new_modules), "Incomplete new declaration axiom reports")
+    need(len(reports) == len({name for name, _, _ in reports}), "Duplicate new declaration report")
+    new_counts = {m: 0 for m in new_modules}
+    new_reports = {}
+    for name, module, axiom_text in reports:
+        need(module in new_modules, "Unexpected new declaration origin")
+        axioms = {s.strip() for s in axiom_text.split(",") if s.strip()}
+        need(axioms <= ALLOWED_AXIOMS, "Forbidden new declaration axiom: " + name)
+        new_counts[module] += 1
+        new_reports[name] = {"module": module, "axioms": sorted(axioms)}
+    need(new_counts == {m: counts[m] for m in new_modules}, "New declaration origin coverage mismatch")
+    for row in PLAN["newPublicDeclarations"]:
+        need(row["name"] in new_reports and new_reports[row["name"]]["module"] == row["module"],
+             "Missing new public declaration in full-origin reports: " + row["name"])
+    write(out, "harmonic-new-declaration-axiom-reports.json", new_reports)
     write(out, "harmonic-loaded-imports.json", sorted(loaded))
     write(out, "harmonic-module-origin-axiom-audit.json", {"declarationsByModule": counts,
         "totalDeclarations": sum(counts.values()), "namedReports": named, "allowedAxioms": sorted(ALLOWED_AXIOMS)})
@@ -280,7 +311,7 @@ def after(consumer, root, out):
     artifact_gate(root, out, True)
     axiom_gate(out)
     (out / "replay-modules.txt").write_text("\n".join(PLAN["topologicalOrder"]) + "\n")
-    print("PASS: all 124 exact custom origins axiom-audited; all 125 fresh explicit replay targets")
+    print("PASS: all 129 exact custom origins axiom-audited; all 130 fresh explicit replay targets")
 
 
 def replay_gate(out):
@@ -315,10 +346,10 @@ def replay_gate(out):
     need(not re.search(r"^replaying |Command being timed:|Exit status:|HARMONIC_REPLAY_", outside, re.M),
          "Unframed replay evidence")
     write(out, "harmonic-verified-replay-batches.json", records)
-    write(out, "harmonic-replay-verification.json", {"targets": 125, "batches": 11,
+    write(out, "harmonic-replay-verification.json", {"targets": 130, "batches": 11,
         "everyBatchExit0": True, "everyBatchCommandMatches": True, "allTargetsExplicitlyReplayed": True,
         "requiredActualRoots": PLAN["requiredActualRoots"], "fullLogSha256": sha256(out / "kernel-replay.log")})
-    print("PASS: all 125 exact ordered targets explicitly kernel-replayed in 11 complete successful batches")
+    print("PASS: all 130 exact ordered targets explicitly kernel-replayed in 11 complete successful batches")
 
 
 if __name__ == "__main__":

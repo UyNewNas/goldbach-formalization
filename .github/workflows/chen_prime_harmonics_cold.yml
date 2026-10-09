@@ -1,5 +1,5 @@
 # External proof sources are rebuilt cold; Lean/Mathlib artifacts remain explicitly trusted.
-name: Actual single-prime and pair harmonic cold-consumer verification
+name: Actual variable-pair and prime harmonic cold-consumer verification
 on:
   push:
     branches: ['audit/chen-prime-harmonics']
@@ -136,7 +136,7 @@ jobs:
               -exec cp {} "$EVIDENCE/dependency-licenses/$name/" \;
           done
           du -sh .lake/packages/*/.lake/build 2>/dev/null | tee "$EVIDENCE/dependency-cache-sizes.log" || true
-      - name: Stage all 49 exact owned harmonic proof sources and the audit probe
+      - name: Stage all 54 exact owned harmonic proof sources and the audit probe
         run: |
           set -euo pipefail
           python3 consumer/ci/chen_prime_harmonics/consumer_audit.py stage \
@@ -164,18 +164,18 @@ jobs:
           python3 consumer/ci/chen_prime_harmonics/consumer_audit.py after-supplier \
             "$GITHUB_WORKSPACE/consumer" "$COLD_ROOT" "$EVIDENCE"
           python3 consumer/ci/external_bv/cold_source_audit.py dependencies "$COLD_ROOT" "$EVIDENCE"
-      - name: Cold-compile all 49 exact owned harmonic sources plus the axiom probe
+      - name: Cold-compile all 54 exact owned harmonic sources plus the axiom probe
         timeout-minutes: 60
         run: |
           set -euo pipefail
-          test "$(wc -l < "$EVIDENCE/owned-build-modules.txt")" -eq 50
+          test "$(wc -l < "$EVIDENCE/owned-build-modules.txt")" -eq 55
           while IFS= read -r module; do
             relative="${module//.//}"
             mkdir -p "$COLD_ROOT/.lake/build/lib/lean/$(dirname "$relative")"
             printf 'COMPILE OWNED %s\n' "$module"
             lean_options=()
             case "$module" in
-              ImbalancedChen.ChenPrimeHarmonicAdapter|ImbalancedChen.ChenQuotientMovingPrimeAdapter|ImbalancedChen.ChenPairHarmonicLimit|ChenPrimeHarmonicsProbe) lean_options=(-DwarningAsError=true) ;;
+              ImbalancedChen.ChenPrimeHarmonicAdapter|ImbalancedChen.ChenQuotientMovingPrimeAdapter|ImbalancedChen.ChenPairHarmonicLimit|ImbalancedChen.ChenContinuousRectangleTransport|ImbalancedChen.ChenVariablePairKernel|ImbalancedChen.ChenVariablePairHarmonicLimit|ImbalancedChen.SymmetricTriangleIntegral|ImbalancedChen.ChenVariableTriangleLimits|ChenPrimeHarmonicsProbe) lean_options=(-DwarningAsError=true) ;;
             esac
             bash consumer/ci/external_bv/offline.sh /usr/bin/time -v lake env lean \
               "${lean_options[@]}" -o ".lake/build/lib/lean/$relative.olean" "$relative.lean"
@@ -186,11 +186,11 @@ jobs:
           python3 consumer/ci/chen_prime_harmonics/consumer_audit.py after \
             "$GITHUB_WORKSPACE/consumer" "$COLD_ROOT" "$EVIDENCE"
           python3 consumer/ci/external_bv/cold_source_audit.py dependencies "$COLD_ROOT" "$EVIDENCE"
-      - name: Replay all 125 exact custom targets including all actual roots and the probe
+      - name: Replay all 130 exact custom targets including all actual roots and the probe
         timeout-minutes: 120
         run: |
           set -euo pipefail
-          test "$(wc -l < "$EVIDENCE/replay-modules.txt")" -eq 125
+          test "$(wc -l < "$EVIDENCE/replay-modules.txt")" -eq 130
           xargs -r -n 12 < "$EVIDENCE/replay-modules.txt" > "$EVIDENCE/replay-batches.txt"
           test -s "$EVIDENCE/replay-batches.txt"
           index=0
@@ -208,7 +208,7 @@ jobs:
           python3 consumer/ci/chen_prime_harmonics/consumer_audit.py after \
             "$GITHUB_WORKSPACE/consumer" "$COLD_ROOT" "$EVIDENCE"
           python3 consumer/ci/external_bv/cold_source_audit.py dependencies "$COLD_ROOT" "$EVIDENCE"
-          printf 'PASS: unchanged 66 ordinary270 supplier + 9 Architect source-cold modules; all 49 exact owned harmonic proof origins and all 75 foreign origins axiom-audited; all 125 exact ordered custom targets including the three actual arithmetic roots and audit probe explicitly replayed in 11 successful batches. Trusted official Lean and pinned Mathlib dependency cache boundary unchanged.\n' \
+          printf 'PASS: unchanged 66 ordinary270 supplier + 9 Architect source-cold modules; all 54 exact owned harmonic proof origins and all 75 foreign origins axiom-audited; all 130 exact ordered custom targets including the five required actual roots and audit probe explicitly replayed in 11 successful batches. Trusted official Lean and pinned Mathlib dependency cache boundary unchanged.\n' \
             | tee "$EVIDENCE/acceptance.txt"
       - name: Preserve evidence even when a stage fails
         if: always()

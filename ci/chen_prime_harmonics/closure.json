@@ -1,17 +1,17 @@
 {
-  "status": "local-only source/CI proposal; no execution, publication, or successful run claimed",
+  "status": "HELD LOCAL incremental variable-pair CI proposal; no execution or publication",
   "supplierCommit": "09b97db5764ade1246bfb77206baa1b124760958",
   "mathlibCommit": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
   "leanToolchain": "leanprover/lean4:v4.33.0-rc1",
   "counts": {
-    "owned-proof": 49,
+    "owned-proof": 54,
     "supplier": 66,
     "architect": 9,
     "audit-tool": 1
   },
-  "proofModuleCount": 124,
-  "replayModuleCount": 125,
-  "ownedBuildModuleCount": 50,
+  "proofModuleCount": 129,
+  "replayModuleCount": 130,
+  "ownedBuildModuleCount": 55,
   "batchSize": 12,
   "replayBatchCount": 11,
   "baseAuditFileSha256": {
@@ -31,7 +31,12 @@
     "ImbalancedChen.ChenPairHarmonicLimit": "c79d315f72867980d1e636077e58c1a83c525bfd54acc2703493cf2f3a24af57",
     "ImbalancedChen.MovingWeightTransport": "a5a94e24b6aae995d069c025a4f901e0ef4d440d3dde37a117c8cf2b15d142a6",
     "ImbalancedChen.ChenQuotientMovingWeight": "98524bed4d030e775e4773325a768381798e8d545bc2a7cd3ac72726c8396eab",
-    "ImbalancedChen.ChenQuotientMovingPrimeAdapter": "03ded9f6238e4daf53728139bbbf626a56ab2595b30974bca94380105f5c172f"
+    "ImbalancedChen.ChenQuotientMovingPrimeAdapter": "03ded9f6238e4daf53728139bbbf626a56ab2595b30974bca94380105f5c172f",
+    "ImbalancedChen.ChenContinuousRectangleTransport": "3536d045d359a5816bdfb02b6ee9edce40002e1543cfd47fcf580059b1abb728",
+    "ImbalancedChen.ChenVariablePairKernel": "707baa9f1587e4b8644ed49637c1335fa27e6db1b443fd6e5a5ce12598d9f139",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit": "6f0e28a10137f2a2673214c2eebc040d9f3b3001695129382754b2692299200a",
+    "ImbalancedChen.SymmetricTriangleIntegral": "bf4c1d2f183aba37a69ebf8e4d536c8a889ce295ccb1f1899c00997a194da1e8",
+    "ImbalancedChen.ChenVariableTriangleLimits": "84939361f58f6958ef759094fd7dbb6cc692cf427080042b75e74c583a10329c"
   },
   "consumerConfigSnapshots": [
     {
@@ -61,7 +66,9 @@
   "requiredActualRoots": [
     "ImbalancedChen.ChenPrimeHarmonicAdapter",
     "ImbalancedChen.ChenQuotientMovingPrimeAdapter",
-    "ImbalancedChen.ChenPairHarmonicLimit"
+    "ImbalancedChen.ChenPairHarmonicLimit",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit",
+    "ImbalancedChen.ChenVariableTriangleLimits"
   ],
   "probeModule": "ChenPrimeHarmonicsProbe",
   "sources": [
@@ -2114,20 +2121,104 @@
       "reviewedInput": true
     },
     {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "owned-proof",
+      "destination": "ImbalancedChen/ChenVariablePairKernel.lean",
+      "sha256": "707baa9f1587e4b8644ed49637c1335fa27e6db1b443fd6e5a5ce12598d9f139",
+      "gitBlob": "43560b8a392d716197087dbee9d9569e6f351315",
+      "bytes": 8398,
+      "imports": [
+        "Mathlib.Topology.Algebra.Order.Field",
+        "Mathlib.Topology.Instances.Real.Lemmas",
+        "Mathlib.Tactic.Linarith",
+        "Mathlib.Tactic.NormNum",
+        "Mathlib.Tactic.Ring"
+      ],
+      "provenance": "/workspace/shared/goldbach_formalization_review/pending_variable_pair_kernel/ChenVariablePairKernel.lean",
+      "source": "ci/chen_prime_harmonics/sources/ImbalancedChen/ChenVariablePairKernel.lean",
+      "reviewedInput": true
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "owned-proof",
+      "destination": "ImbalancedChen/ChenContinuousRectangleTransport.lean",
+      "sha256": "3536d045d359a5816bdfb02b6ee9edce40002e1543cfd47fcf580059b1abb728",
+      "gitBlob": "4bb62e5c101414ecec3a23e80501e917d97ab8c6",
+      "bytes": 29097,
+      "imports": [
+        "ImbalancedChen.ChenPairHarmonicLimit",
+        "Mathlib.Analysis.SpecialFunctions.Bernstein",
+        "Mathlib.Topology.ContinuousMap.Compact",
+        "Mathlib.Topology.ContinuousMap.LocallyConvex"
+      ],
+      "provenance": "/workspace/shared/goldbach_formalization_review/pending_continuous_rectangle_transport/ChenContinuousRectangleTransport.lean",
+      "source": "ci/chen_prime_harmonics/sources/ImbalancedChen/ChenContinuousRectangleTransport.lean",
+      "reviewedInput": true
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairHarmonicLimit",
+      "kind": "owned-proof",
+      "destination": "ImbalancedChen/ChenVariablePairHarmonicLimit.lean",
+      "sha256": "6f0e28a10137f2a2673214c2eebc040d9f3b3001695129382754b2692299200a",
+      "gitBlob": "e0f8de7b986de474f46049cec317efa7b435a060",
+      "bytes": 5367,
+      "imports": [
+        "ImbalancedChen.ChenVariablePairKernel",
+        "ImbalancedChen.ChenContinuousRectangleTransport"
+      ],
+      "provenance": "/workspace/shared/goldbach_formalization_review/pending_variable_pair_kernel/ChenVariablePairHarmonicLimit.lean",
+      "source": "ci/chen_prime_harmonics/sources/ImbalancedChen/ChenVariablePairHarmonicLimit.lean",
+      "reviewedInput": true
+    },
+    {
+      "module": "ImbalancedChen.SymmetricTriangleIntegral",
+      "kind": "owned-proof",
+      "destination": "ImbalancedChen/SymmetricTriangleIntegral.lean",
+      "sha256": "bf4c1d2f183aba37a69ebf8e4d536c8a889ce295ccb1f1899c00997a194da1e8",
+      "gitBlob": "baf06ed3adbfc3001f5ad53985b13446ff0099df",
+      "bytes": 5432,
+      "imports": [
+        "Mathlib.MeasureTheory.Integral.Prod",
+        "Mathlib.MeasureTheory.Function.LocallyIntegrable",
+        "Mathlib.MeasureTheory.Measure.Typeclasses.NullSingletonClass",
+        "Mathlib.Tactic.Ring"
+      ],
+      "provenance": "/workspace/shared/goldbach_ci_bootstrap/ImbalancedChen/SymmetricTriangleIntegral.lean",
+      "source": "ci/chen_prime_harmonics/sources/ImbalancedChen/SymmetricTriangleIntegral.lean",
+      "reviewedInput": true
+    },
+    {
+      "module": "ImbalancedChen.ChenVariableTriangleLimits",
+      "kind": "owned-proof",
+      "destination": "ImbalancedChen/ChenVariableTriangleLimits.lean",
+      "sha256": "84939361f58f6958ef759094fd7dbb6cc692cf427080042b75e74c583a10329c",
+      "gitBlob": "e6b016cd25458d493bbbb4fe5913459b3e0edef5",
+      "bytes": 6487,
+      "imports": [
+        "ImbalancedChen.ChenVariablePairHarmonicLimit",
+        "ImbalancedChen.SymmetricTriangleIntegral"
+      ],
+      "provenance": "/workspace/shared/goldbach_formalization_review/pending_variable_triangle_limits/ChenVariableTriangleLimits.lean",
+      "source": "ci/chen_prime_harmonics/sources/ImbalancedChen/ChenVariableTriangleLimits.lean",
+      "reviewedInput": true
+    },
+    {
       "module": "ChenPrimeHarmonicsProbe",
       "kind": "audit-tool",
       "source": "ci/chen_prime_harmonics/ChenPrimeHarmonicsProbe.lean",
       "destination": "ChenPrimeHarmonicsProbe.lean",
-      "sha256": "00f09207ec20e390772306d2a66c70b1b4fbb8b4358bcc2b1f41ec3b988ea21d",
-      "gitBlob": "bf7a19fff7d219dda5e6606e51005a96223b79a5",
-      "bytes": 9749,
+      "sha256": "f19bd77b26562a5747b0a3e252ff98755781056d2a652b077ffa9eab7cff1f36",
+      "gitBlob": "02e45579ef62e217169f7cc4e639697ee0498a8e",
+      "bytes": 23484,
       "imports": [
         "ImbalancedChen.ChenPrimeHarmonicAdapter",
         "ImbalancedChen.ChenQuotientMovingPrimeAdapter",
         "ImbalancedChen.ChenPairHarmonicLimit",
+        "ImbalancedChen.ChenVariablePairHarmonicLimit",
+        "ImbalancedChen.ChenVariableTriangleLimits",
         "Lean.Util.CollectAxioms"
       ],
-      "provenance": "owned generated audit instrumentation"
+      "provenance": "owned generated incremental audit instrumentation"
     }
   ],
   "topologicalOrder": [
@@ -2255,6 +2346,11 @@
     "ImbalancedChen.ChenQuotientMovingPrimeAdapter",
     "ImbalancedChen.ChenPairHarmonicFinite",
     "ImbalancedChen.ChenPairHarmonicLimit",
+    "ImbalancedChen.ChenVariablePairKernel",
+    "ImbalancedChen.ChenContinuousRectangleTransport",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit",
+    "ImbalancedChen.SymmetricTriangleIntegral",
+    "ImbalancedChen.ChenVariableTriangleLimits",
     "ChenPrimeHarmonicsProbe"
   ],
   "ownedBuildOrder": [
@@ -2307,6 +2403,11 @@
     "ImbalancedChen.ChenQuotientMovingPrimeAdapter",
     "ImbalancedChen.ChenPairHarmonicFinite",
     "ImbalancedChen.ChenPairHarmonicLimit",
+    "ImbalancedChen.ChenVariablePairKernel",
+    "ImbalancedChen.ChenContinuousRectangleTransport",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit",
+    "ImbalancedChen.SymmetricTriangleIntegral",
+    "ImbalancedChen.ChenVariableTriangleLimits",
     "ChenPrimeHarmonicsProbe"
   ],
   "auditedModules": [
@@ -2433,7 +2534,12 @@
     "ImbalancedChen.ChenQuotientMovingWeight",
     "ImbalancedChen.ChenQuotientMovingPrimeAdapter",
     "ImbalancedChen.ChenPairHarmonicFinite",
-    "ImbalancedChen.ChenPairHarmonicLimit"
+    "ImbalancedChen.ChenPairHarmonicLimit",
+    "ImbalancedChen.ChenVariablePairKernel",
+    "ImbalancedChen.ChenContinuousRectangleTransport",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit",
+    "ImbalancedChen.SymmetricTriangleIntegral",
+    "ImbalancedChen.ChenVariableTriangleLimits"
   ],
   "allowEmptyDeclarationModules": [
     "Architect",
@@ -2487,6 +2593,7 @@
     "Mathlib.Analysis.PSeries",
     "Mathlib.Analysis.Real.Pi.Bounds",
     "Mathlib.Analysis.Real.Sqrt",
+    "Mathlib.Analysis.SpecialFunctions.Bernstein",
     "Mathlib.Analysis.SpecialFunctions.Complex.Arg",
     "Mathlib.Analysis.SpecialFunctions.Complex.Circle",
     "Mathlib.Analysis.SpecialFunctions.Complex.CircleAddChar",
@@ -2525,11 +2632,14 @@
     "Mathlib.Geometry.Manifold.PartitionOfUnity",
     "Mathlib.GroupTheory.Exponent",
     "Mathlib.MeasureTheory.Function.Floor",
+    "Mathlib.MeasureTheory.Function.LocallyIntegrable",
     "Mathlib.MeasureTheory.Integral.Asymptotics",
     "Mathlib.MeasureTheory.Integral.DominatedConvergence",
     "Mathlib.MeasureTheory.Integral.IntegrableOn",
     "Mathlib.MeasureTheory.Integral.IntegralEqImproper",
     "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+    "Mathlib.MeasureTheory.Integral.Prod",
+    "Mathlib.MeasureTheory.Measure.Typeclasses.NullSingletonClass",
     "Mathlib.MeasureTheory.Order.Group.Lattice",
     "Mathlib.NumberTheory.AbelSummation",
     "Mathlib.NumberTheory.AlmostPrime",
@@ -2574,6 +2684,8 @@
     "Mathlib.Tactic.SplitIfs",
     "Mathlib.Topology.Algebra.Order.Field",
     "Mathlib.Topology.ContinuousMap.Bounded.Basic",
+    "Mathlib.Topology.ContinuousMap.Compact",
+    "Mathlib.Topology.ContinuousMap.LocallyConvex",
     "Mathlib.Topology.ContinuousMap.Weierstrass",
     "Mathlib.Topology.EMetricSpace.BoundedVariation",
     "Mathlib.Topology.Instances.AddCircle.Real",
@@ -2593,7 +2705,80 @@
     "ImbalancedChen.ChenPairHarmonicLimit.tendsto_chenY6_log_totient_sum",
     "ImbalancedChen.ChenPairHarmonicLimit.tendsto_chenY5_log_totient_sum",
     "ImbalancedChen.ChenPairHarmonicLimit.tendsto_chenY6_manuscript_log_totient_sum",
-    "ImbalancedChen.ChenPairHarmonicLimit.tendsto_chenY5_manuscript_log_totient_sum"
+    "ImbalancedChen.ChenPairHarmonicLimit.tendsto_chenY5_manuscript_log_totient_sum",
+    "ImbalancedChen.ChenContinuousRectangleTransport.exists_separated_near_continuousOn",
+    "ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenPrimeTensor_continuous",
+    "ImbalancedChen.ChenContinuousRectangleTransport.chenY6_kernel_totient_sum_eq_tensor",
+    "ImbalancedChen.ChenContinuousRectangleTransport.chenY5_kernel_totient_sum_eq_half_square_sub_diagonal",
+    "ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenPrimeTensor_continuous_diagonal",
+    "ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY6_kernel_totient_sum",
+    "ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY5_kernel_totient_sum",
+    "ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY6_manuscript_kernel_totient_sum",
+    "ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY5_manuscript_kernel_totient_sum",
+    "ImbalancedChen.ChenVariablePairKernel.a",
+    "ImbalancedChen.ChenVariablePairKernel.h",
+    "ImbalancedChen.ChenVariablePairKernel.d",
+    "ImbalancedChen.ChenVariablePairKernel.vLevel",
+    "ImbalancedChen.ChenVariablePairKernel.argument",
+    "ImbalancedChen.ChenVariablePairKernel.kernel",
+    "ImbalancedChen.ChenVariablePairKernel.weightedKernel",
+    "ImbalancedChen.ChenVariablePairKernel.R5",
+    "ImbalancedChen.ChenVariablePairKernel.R6",
+    "ImbalancedChen.ChenVariablePairKernel.a_pos",
+    "ImbalancedChen.ChenVariablePairKernel.a_lt_h",
+    "ImbalancedChen.ChenVariablePairKernel.h_pos",
+    "ImbalancedChen.ChenVariablePairKernel.h_lt_d",
+    "ImbalancedChen.ChenVariablePairKernel.d_le_one",
+    "ImbalancedChen.ChenVariablePairKernel.h_le_one",
+    "ImbalancedChen.ChenVariablePairKernel.d_eq_half_sub_three_a",
+    "ImbalancedChen.ChenVariablePairKernel.vLevel_sub_antitone",
+    "ImbalancedChen.ChenVariablePairKernel.argument_eq_max_min",
+    "ImbalancedChen.ChenVariablePairKernel.argument_antitone",
+    "ImbalancedChen.ChenVariablePairKernel.argument_symm",
+    "ImbalancedChen.ChenVariablePairKernel.kernel_symm",
+    "ImbalancedChen.ChenVariablePairKernel.weightedKernel_symm",
+    "ImbalancedChen.ChenVariablePairKernel.argument_of_le",
+    "ImbalancedChen.ChenVariablePairKernel.kernel_of_le",
+    "ImbalancedChen.ChenVariablePairKernel.argument_h_h",
+    "ImbalancedChen.ChenVariablePairKernel.argument_a_a",
+    "ImbalancedChen.ChenVariablePairKernel.argument_h_d",
+    "ImbalancedChen.ChenVariablePairKernel.argument_a_h",
+    "ImbalancedChen.ChenVariablePairKernel.argument_mem_R5_range",
+    "ImbalancedChen.ChenVariablePairKernel.argument_mem_R6_range",
+    "ImbalancedChen.ChenVariablePairKernel.R5_argument_range_subset",
+    "ImbalancedChen.ChenVariablePairKernel.R6_argument_range_subset",
+    "ImbalancedChen.ChenVariablePairKernel.argument_h_d_lt_two",
+    "ImbalancedChen.ChenVariablePairKernel.continuous_vLevel",
+    "ImbalancedChen.ChenVariablePairKernel.continuous_argument",
+    "ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R5_of_range",
+    "ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R6_of_range",
+    "ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R5",
+    "ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R6",
+    "ImbalancedChen.ChenVariablePairKernel.continuousOn_weightedKernel_R5",
+    "ImbalancedChen.ChenVariablePairKernel.continuousOn_weightedKernel_R6",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit.logCoordinate",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit.y5HarmonicSum",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit.y6HarmonicSum",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit.orderedY5HarmonicSum",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit.orderedY6HarmonicSum",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit.y5HarmonicSum_eq_ordered",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit.y6HarmonicSum_eq_ordered",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_y5HarmonicSum",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_y6HarmonicSum",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_orderedY5HarmonicSum",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_orderedY6HarmonicSum",
+    "ImbalancedChen.SymmetricTriangleIntegral.rectangle_integral_swap",
+    "ImbalancedChen.SymmetricTriangleIntegral.half_square_eq_triangle_of_integrable",
+    "ImbalancedChen.SymmetricTriangleIntegral.half_square_eq_triangle",
+    "ImbalancedChen.ChenVariableTriangleLimits.weightedKernel_ordered",
+    "ImbalancedChen.ChenVariableTriangleLimits.half_square_eq_y5_triangle",
+    "ImbalancedChen.ChenVariableTriangleLimits.rectangle_eq_y6_manuscript",
+    "ImbalancedChen.ChenVariableTriangleLimits.tendsto_y5HarmonicSum_triangle",
+    "ImbalancedChen.ChenVariableTriangleLimits.tendsto_y6HarmonicSum_manuscript",
+    "ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY5HarmonicSum_triangle",
+    "ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY6HarmonicSum_manuscript",
+    "ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY5HarmonicSum_explicit",
+    "ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY6HarmonicSum_explicit"
   ],
   "runtimeEntries": [
     {
@@ -2653,5 +2838,481 @@
       "token": "debug.skipKernelTC",
       "line": 28
     }
-  ]
+  ],
+  "newOwnedModules": [
+    "ImbalancedChen.ChenContinuousRectangleTransport",
+    "ImbalancedChen.ChenVariablePairKernel",
+    "ImbalancedChen.ChenVariablePairHarmonicLimit",
+    "ImbalancedChen.SymmetricTriangleIntegral",
+    "ImbalancedChen.ChenVariableTriangleLimits"
+  ],
+  "newPublicDeclarations": [
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.exists_separated_near_continuousOn"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenPrimeTensor_continuous"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.chenY6_kernel_totient_sum_eq_tensor"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.chenY5_kernel_totient_sum_eq_half_square_sub_diagonal"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenPrimeTensor_continuous_diagonal"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY6_kernel_totient_sum"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY5_kernel_totient_sum"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY6_manuscript_kernel_totient_sum"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY5_manuscript_kernel_totient_sum"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "def",
+      "name": "ImbalancedChen.ChenVariablePairKernel.a"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "def",
+      "name": "ImbalancedChen.ChenVariablePairKernel.h"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "def",
+      "name": "ImbalancedChen.ChenVariablePairKernel.d"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "def",
+      "name": "ImbalancedChen.ChenVariablePairKernel.vLevel"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "def",
+      "name": "ImbalancedChen.ChenVariablePairKernel.argument"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "def",
+      "name": "ImbalancedChen.ChenVariablePairKernel.kernel"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "def",
+      "name": "ImbalancedChen.ChenVariablePairKernel.weightedKernel"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "def",
+      "name": "ImbalancedChen.ChenVariablePairKernel.R5"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "def",
+      "name": "ImbalancedChen.ChenVariablePairKernel.R6"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.a_pos"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.a_lt_h"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.h_pos"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.h_lt_d"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.d_le_one"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.h_le_one"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.d_eq_half_sub_three_a"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.vLevel_sub_antitone"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.argument_eq_max_min"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.argument_antitone"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.argument_symm"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.kernel_symm"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.weightedKernel_symm"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.argument_of_le"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.kernel_of_le"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.argument_h_h"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.argument_a_a"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.argument_h_d"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.argument_a_h"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.argument_mem_R5_range"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.argument_mem_R6_range"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.R5_argument_range_subset"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.R6_argument_range_subset"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.argument_h_d_lt_two"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.continuous_vLevel"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.continuous_argument"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R5_of_range"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R6_of_range"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R5"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R6"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.continuousOn_weightedKernel_R5"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairKernel",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairKernel.continuousOn_weightedKernel_R6"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairHarmonicLimit",
+      "kind": "def",
+      "name": "ImbalancedChen.ChenVariablePairHarmonicLimit.logCoordinate"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairHarmonicLimit",
+      "kind": "def",
+      "name": "ImbalancedChen.ChenVariablePairHarmonicLimit.y5HarmonicSum"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairHarmonicLimit",
+      "kind": "def",
+      "name": "ImbalancedChen.ChenVariablePairHarmonicLimit.y6HarmonicSum"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairHarmonicLimit",
+      "kind": "def",
+      "name": "ImbalancedChen.ChenVariablePairHarmonicLimit.orderedY5HarmonicSum"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairHarmonicLimit",
+      "kind": "def",
+      "name": "ImbalancedChen.ChenVariablePairHarmonicLimit.orderedY6HarmonicSum"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairHarmonicLimit",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairHarmonicLimit.y5HarmonicSum_eq_ordered"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairHarmonicLimit",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairHarmonicLimit.y6HarmonicSum_eq_ordered"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairHarmonicLimit",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_y5HarmonicSum"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairHarmonicLimit",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_y6HarmonicSum"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairHarmonicLimit",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_orderedY5HarmonicSum"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairHarmonicLimit",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_orderedY6HarmonicSum"
+    },
+    {
+      "module": "ImbalancedChen.SymmetricTriangleIntegral",
+      "kind": "theorem",
+      "name": "ImbalancedChen.SymmetricTriangleIntegral.rectangle_integral_swap"
+    },
+    {
+      "module": "ImbalancedChen.SymmetricTriangleIntegral",
+      "kind": "theorem",
+      "name": "ImbalancedChen.SymmetricTriangleIntegral.half_square_eq_triangle_of_integrable"
+    },
+    {
+      "module": "ImbalancedChen.SymmetricTriangleIntegral",
+      "kind": "theorem",
+      "name": "ImbalancedChen.SymmetricTriangleIntegral.half_square_eq_triangle"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariableTriangleLimits",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariableTriangleLimits.weightedKernel_ordered"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariableTriangleLimits",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariableTriangleLimits.half_square_eq_y5_triangle"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariableTriangleLimits",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariableTriangleLimits.rectangle_eq_y6_manuscript"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariableTriangleLimits",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariableTriangleLimits.tendsto_y5HarmonicSum_triangle"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariableTriangleLimits",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariableTriangleLimits.tendsto_y6HarmonicSum_manuscript"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariableTriangleLimits",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY5HarmonicSum_triangle"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariableTriangleLimits",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY6HarmonicSum_manuscript"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariableTriangleLimits",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY5HarmonicSum_explicit"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariableTriangleLimits",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY6HarmonicSum_explicit"
+    }
+  ],
+  "newPrivateSourceDeclarations": [
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "def",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.clip"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.continuous_clip"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.clip_mem"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.clip_eq"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.rectangle_slice_continuous"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.rectangle_inner_continuous"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.rectangleIntegral_add"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.rectangleIntegral_sub"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.rectangleIntegral_sub_le"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.rectangleIntegral_separated"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.primeTensor_add"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.primeTensor_separated"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.tendsto_primeTensor_separated"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.tendsto_primeTensor_add"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.tendsto_primeTensor_finsetSum"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.selected_log_coordinate"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.selected_denominator_pos"
+    },
+    {
+      "module": "ImbalancedChen.ChenContinuousRectangleTransport",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenContinuousRectangleTransport.primeTensor_sub_le"
+    },
+    {
+      "module": "ImbalancedChen.ChenVariablePairHarmonicLimit",
+      "kind": "theorem",
+      "name": "ImbalancedChen.ChenVariablePairHarmonicLimit.logCoordinate_mono"
+    }
+  ],
+  "incrementalBase": {
+    "head": "98041a536d7158c45dcc18dd132b751ad59b0d3a",
+    "tree": "73a5d0c42896de4756b1715ae07b712f5605f404",
+    "manifestSha256": "75a203fcec704b10c2dac8369cef7881bd28c1afdf535365e82dce05edffcbc9"
+  }
 }

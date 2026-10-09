@@ -1,11 +1,13 @@
 import ImbalancedChen.ChenPrimeHarmonicAdapter
 import ImbalancedChen.ChenQuotientMovingPrimeAdapter
 import ImbalancedChen.ChenPairHarmonicLimit
+import ImbalancedChen.ChenVariablePairHarmonicLimit
+import ImbalancedChen.ChenVariableTriangleLimits
 import Lean.Util.CollectAxioms
 
-/- Owned audit instrumentation. No mathematical declaration is added here.
-All exact owned, supplier, and Architect origins are audited, including
-private/internal declarations. This probe is also a kernel replay target. -/
+/- Owned audit instrumentation. No mathematical declaration is added.
+Every exact proof origin, including private/generated declarations, is audited.
+The five added origins also emit one axiom report per actual declaration. -/
 
 #print axioms MathlibNt.SieveTheory.MertensTheorem.tendsto_weightedPrimeReciprocalLogSum
 #print axioms ImbalancedChen.ChenPrimeHarmonicAdapter.tendsto_chenSinglePrimeHarmonicSum
@@ -18,6 +20,79 @@ private/internal declarations. This probe is also a kernel replay target. -/
 #print axioms ImbalancedChen.ChenPairHarmonicLimit.tendsto_chenY5_log_totient_sum
 #print axioms ImbalancedChen.ChenPairHarmonicLimit.tendsto_chenY6_manuscript_log_totient_sum
 #print axioms ImbalancedChen.ChenPairHarmonicLimit.tendsto_chenY5_manuscript_log_totient_sum
+#print axioms ImbalancedChen.ChenContinuousRectangleTransport.exists_separated_near_continuousOn
+#print axioms ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenPrimeTensor_continuous
+#print axioms ImbalancedChen.ChenContinuousRectangleTransport.chenY6_kernel_totient_sum_eq_tensor
+#print axioms ImbalancedChen.ChenContinuousRectangleTransport.chenY5_kernel_totient_sum_eq_half_square_sub_diagonal
+#print axioms ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenPrimeTensor_continuous_diagonal
+#print axioms ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY6_kernel_totient_sum
+#print axioms ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY5_kernel_totient_sum
+#print axioms ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY6_manuscript_kernel_totient_sum
+#print axioms ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY5_manuscript_kernel_totient_sum
+#print axioms ImbalancedChen.ChenVariablePairKernel.a
+#print axioms ImbalancedChen.ChenVariablePairKernel.h
+#print axioms ImbalancedChen.ChenVariablePairKernel.d
+#print axioms ImbalancedChen.ChenVariablePairKernel.vLevel
+#print axioms ImbalancedChen.ChenVariablePairKernel.argument
+#print axioms ImbalancedChen.ChenVariablePairKernel.kernel
+#print axioms ImbalancedChen.ChenVariablePairKernel.weightedKernel
+#print axioms ImbalancedChen.ChenVariablePairKernel.R5
+#print axioms ImbalancedChen.ChenVariablePairKernel.R6
+#print axioms ImbalancedChen.ChenVariablePairKernel.a_pos
+#print axioms ImbalancedChen.ChenVariablePairKernel.a_lt_h
+#print axioms ImbalancedChen.ChenVariablePairKernel.h_pos
+#print axioms ImbalancedChen.ChenVariablePairKernel.h_lt_d
+#print axioms ImbalancedChen.ChenVariablePairKernel.d_le_one
+#print axioms ImbalancedChen.ChenVariablePairKernel.h_le_one
+#print axioms ImbalancedChen.ChenVariablePairKernel.d_eq_half_sub_three_a
+#print axioms ImbalancedChen.ChenVariablePairKernel.vLevel_sub_antitone
+#print axioms ImbalancedChen.ChenVariablePairKernel.argument_eq_max_min
+#print axioms ImbalancedChen.ChenVariablePairKernel.argument_antitone
+#print axioms ImbalancedChen.ChenVariablePairKernel.argument_symm
+#print axioms ImbalancedChen.ChenVariablePairKernel.kernel_symm
+#print axioms ImbalancedChen.ChenVariablePairKernel.weightedKernel_symm
+#print axioms ImbalancedChen.ChenVariablePairKernel.argument_of_le
+#print axioms ImbalancedChen.ChenVariablePairKernel.kernel_of_le
+#print axioms ImbalancedChen.ChenVariablePairKernel.argument_h_h
+#print axioms ImbalancedChen.ChenVariablePairKernel.argument_a_a
+#print axioms ImbalancedChen.ChenVariablePairKernel.argument_h_d
+#print axioms ImbalancedChen.ChenVariablePairKernel.argument_a_h
+#print axioms ImbalancedChen.ChenVariablePairKernel.argument_mem_R5_range
+#print axioms ImbalancedChen.ChenVariablePairKernel.argument_mem_R6_range
+#print axioms ImbalancedChen.ChenVariablePairKernel.R5_argument_range_subset
+#print axioms ImbalancedChen.ChenVariablePairKernel.R6_argument_range_subset
+#print axioms ImbalancedChen.ChenVariablePairKernel.argument_h_d_lt_two
+#print axioms ImbalancedChen.ChenVariablePairKernel.continuous_vLevel
+#print axioms ImbalancedChen.ChenVariablePairKernel.continuous_argument
+#print axioms ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R5_of_range
+#print axioms ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R6_of_range
+#print axioms ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R5
+#print axioms ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R6
+#print axioms ImbalancedChen.ChenVariablePairKernel.continuousOn_weightedKernel_R5
+#print axioms ImbalancedChen.ChenVariablePairKernel.continuousOn_weightedKernel_R6
+#print axioms ImbalancedChen.ChenVariablePairHarmonicLimit.logCoordinate
+#print axioms ImbalancedChen.ChenVariablePairHarmonicLimit.y5HarmonicSum
+#print axioms ImbalancedChen.ChenVariablePairHarmonicLimit.y6HarmonicSum
+#print axioms ImbalancedChen.ChenVariablePairHarmonicLimit.orderedY5HarmonicSum
+#print axioms ImbalancedChen.ChenVariablePairHarmonicLimit.orderedY6HarmonicSum
+#print axioms ImbalancedChen.ChenVariablePairHarmonicLimit.y5HarmonicSum_eq_ordered
+#print axioms ImbalancedChen.ChenVariablePairHarmonicLimit.y6HarmonicSum_eq_ordered
+#print axioms ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_y5HarmonicSum
+#print axioms ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_y6HarmonicSum
+#print axioms ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_orderedY5HarmonicSum
+#print axioms ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_orderedY6HarmonicSum
+#print axioms ImbalancedChen.SymmetricTriangleIntegral.rectangle_integral_swap
+#print axioms ImbalancedChen.SymmetricTriangleIntegral.half_square_eq_triangle_of_integrable
+#print axioms ImbalancedChen.SymmetricTriangleIntegral.half_square_eq_triangle
+#print axioms ImbalancedChen.ChenVariableTriangleLimits.weightedKernel_ordered
+#print axioms ImbalancedChen.ChenVariableTriangleLimits.half_square_eq_y5_triangle
+#print axioms ImbalancedChen.ChenVariableTriangleLimits.rectangle_eq_y6_manuscript
+#print axioms ImbalancedChen.ChenVariableTriangleLimits.tendsto_y5HarmonicSum_triangle
+#print axioms ImbalancedChen.ChenVariableTriangleLimits.tendsto_y6HarmonicSum_manuscript
+#print axioms ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY5HarmonicSum_triangle
+#print axioms ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY6HarmonicSum_manuscript
+#print axioms ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY5HarmonicSum_explicit
+#print axioms ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY6HarmonicSum_explicit
 
 set_option pp.all true in
 #check @ImbalancedChen.ChenPrimeHarmonicAdapter.tendsto_chenSinglePrimeHarmonicSum
@@ -48,6 +123,225 @@ set_option pp.all true in
 
 set_option pp.all true in
 #check @ImbalancedChen.ChenPairHarmonicLimit.tendsto_chenY5_manuscript_log_totient_sum
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenContinuousRectangleTransport.exists_separated_near_continuousOn
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenPrimeTensor_continuous
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenContinuousRectangleTransport.chenY6_kernel_totient_sum_eq_tensor
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenContinuousRectangleTransport.chenY5_kernel_totient_sum_eq_half_square_sub_diagonal
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenPrimeTensor_continuous_diagonal
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY6_kernel_totient_sum
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY5_kernel_totient_sum
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY6_manuscript_kernel_totient_sum
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenContinuousRectangleTransport.tendsto_chenY5_manuscript_kernel_totient_sum
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.a
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.h
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.d
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.vLevel
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.argument
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.kernel
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.weightedKernel
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.R5
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.R6
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.a_pos
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.a_lt_h
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.h_pos
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.h_lt_d
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.d_le_one
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.h_le_one
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.d_eq_half_sub_three_a
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.vLevel_sub_antitone
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.argument_eq_max_min
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.argument_antitone
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.argument_symm
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.kernel_symm
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.weightedKernel_symm
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.argument_of_le
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.kernel_of_le
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.argument_h_h
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.argument_a_a
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.argument_h_d
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.argument_a_h
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.argument_mem_R5_range
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.argument_mem_R6_range
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.R5_argument_range_subset
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.R6_argument_range_subset
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.argument_h_d_lt_two
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.continuous_vLevel
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.continuous_argument
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R5_of_range
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R6_of_range
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R5
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.continuousOn_kernel_R6
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.continuousOn_weightedKernel_R5
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairKernel.continuousOn_weightedKernel_R6
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairHarmonicLimit.logCoordinate
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairHarmonicLimit.y5HarmonicSum
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairHarmonicLimit.y6HarmonicSum
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairHarmonicLimit.orderedY5HarmonicSum
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairHarmonicLimit.orderedY6HarmonicSum
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairHarmonicLimit.y5HarmonicSum_eq_ordered
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairHarmonicLimit.y6HarmonicSum_eq_ordered
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_y5HarmonicSum
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_y6HarmonicSum
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_orderedY5HarmonicSum
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariablePairHarmonicLimit.tendsto_orderedY6HarmonicSum
+
+set_option pp.all true in
+#check @ImbalancedChen.SymmetricTriangleIntegral.rectangle_integral_swap
+
+set_option pp.all true in
+#check @ImbalancedChen.SymmetricTriangleIntegral.half_square_eq_triangle_of_integrable
+
+set_option pp.all true in
+#check @ImbalancedChen.SymmetricTriangleIntegral.half_square_eq_triangle
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariableTriangleLimits.weightedKernel_ordered
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariableTriangleLimits.half_square_eq_y5_triangle
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariableTriangleLimits.rectangle_eq_y6_manuscript
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariableTriangleLimits.tendsto_y5HarmonicSum_triangle
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariableTriangleLimits.tendsto_y6HarmonicSum_manuscript
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY5HarmonicSum_triangle
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY6HarmonicSum_manuscript
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY5HarmonicSum_explicit
+
+set_option pp.all true in
+#check @ImbalancedChen.ChenVariableTriangleLimits.tendsto_orderedY6HarmonicSum_explicit
 
 open Lean in
 set_option maxHeartbeats 0 in
@@ -176,7 +470,18 @@ run_cmd do
     `ImbalancedChen.ChenQuotientMovingWeight,
     `ImbalancedChen.ChenQuotientMovingPrimeAdapter,
     `ImbalancedChen.ChenPairHarmonicFinite,
-    `ImbalancedChen.ChenPairHarmonicLimit ]
+    `ImbalancedChen.ChenPairHarmonicLimit,
+    `ImbalancedChen.ChenVariablePairKernel,
+    `ImbalancedChen.ChenContinuousRectangleTransport,
+    `ImbalancedChen.ChenVariablePairHarmonicLimit,
+    `ImbalancedChen.SymmetricTriangleIntegral,
+    `ImbalancedChen.ChenVariableTriangleLimits ]
+  let newModules : List Name := [
+    `ImbalancedChen.ChenContinuousRectangleTransport,
+    `ImbalancedChen.ChenVariablePairKernel,
+    `ImbalancedChen.ChenVariablePairHarmonicLimit,
+    `ImbalancedChen.SymmetricTriangleIntegral,
+    `ImbalancedChen.ChenVariableTriangleLimits ]
   let emptyModules : List Name := [`Architect, `AnalyticNumberTheory]
   let allowed : List Name := [`propext, `Classical.choice, `Quot.sound]
   let env ← getEnv
@@ -192,6 +497,12 @@ run_cmd do
         for axiomName in axioms do
           unless allowed.contains axiomName do
             throwError "Forbidden transitive axiom {axiomName} for {name} in {moduleName}"
+        if newModules.contains moduleName then
+          let mut axiomNames : List String := []
+          for axiomName in axioms do
+            axiomNames := axiomNames ++ [toString axiomName]
+          let axiomReport := String.intercalate "," axiomNames
+          logInfo m!"HARMONIC_NEW_DECL_AUDIT {name} module={moduleName} axioms=[{axiomReport}]"
         counts := counts.insert moduleName (counts.getD moduleName 0 + 1)
         declarations := declarations + 1
   for moduleName in auditedModules do
