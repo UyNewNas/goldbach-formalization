@@ -68,7 +68,8 @@ theorem chenPooledQuotientModuli_injOn {α : Type*}
   obtain ⟨hu, he⟩ := Finset.mem_sigma.mp hue
   obtain ⟨hbu, hde⟩ := chenQuotient_product_factors_unique
     (hb t ht) (hb u hu) (hS t ht hd) (hS u hu he) hprod
-  have htu := hbinj ht hu hbu
+  have htu : t = u := hbinj ht hu hbu
+  change d = e at hde
   subst u
   subst e
   rfl
@@ -117,7 +118,8 @@ theorem sum_chenQuotientPrimeAPError_product_le_primitive
     (hcap : ∀ t ∈ T, ∀ d ∈ S t, b t * d ≤ Q) :
     (∑ t ∈ T, ∑ d ∈ S t, |chenQuotientPrimeAPError N M (b t * d)|) ≤
       ∑ k ∈ Finset.Icc 1 Q with Nat.Coprime k N, |chenQuotientPrimeAPError N M k| := by
-  rw [sum_chenPooledQuotientModuli T b S _ hb hbinj hS]
+  rw [sum_chenPooledQuotientModuli T b S _ hb hbinj hS
+    (fun k : ℕ => |chenQuotientPrimeAPError N M k|)]
   exact Finset.sum_le_sum_of_subset_of_nonneg
     (chenPooledQuotientModuli_subset_primitive T b S N A Q hbpos hbN hS hcap)
     (fun _ _ _ => abs_nonneg _)
@@ -150,9 +152,9 @@ theorem sum_abs_chenQuotient_rem_le_pooled_primeAP
       ∑ d ∈ S t, 1 / (Nat.totient d : ℝ)),
     Finset.sum_attach T (fun t =>
       ∑ d ∈ S t, chenQuotientCentreCost N (b t) d)] at hsum
-  exact hsum.trans (add_le_add_right (add_le_add_right
+  exact hsum.trans (add_le_add (add_le_add
     (sum_chenQuotientPrimeAPError_product_le_primitive T b S N A M Q
-      hbpos hbN hb hbinj hS hcap) _) _)
+      hbpos hbN hb hbinj hS hcap) le_rfl) le_rfl)
 
 /-- The secondary term has an elementary uniform reciprocal-totient
 cost. It is not discarded or disguised as the pooled product-modulus term. -/
@@ -203,7 +205,8 @@ theorem sum_chenQuotient_product_divisor_fourth_moment_le_log
     (∑ t ∈ T, ∑ d ∈ S t,
       ((b t * d).divisors.card : ℝ) ^ 4 / (Nat.totient (b t * d) : ℝ)) ≤
       (4 * (1 + Real.log (max 1 (Q : ℝ)))) ^ 16 := by
-  rw [sum_chenPooledQuotientModuli T b S _ hb hbinj hS]
+  rw [sum_chenPooledQuotientModuli T b S _ hb hbinj hS
+    (fun k : ℕ => (k.divisors.card : ℝ) ^ 4 / (Nat.totient k : ℝ))]
   apply sum_divisor_fourth_moment_le_log _ Q
   · exact (chenPooledQuotientModuli_subset_primitive T b S N A Q hbpos hbN hS hcap).trans
       (Finset.filter_subset _ _)
