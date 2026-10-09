@@ -226,8 +226,7 @@ private theorem tendsto_primeTensor_finsetSum {ι : Type*} (s : Finset ι)
         funext N
         simp [primeTensor]
       simp only [Finset.sum_empty, hzero]
-      simpa [rectangleIntegral] using
-        (tendsto_const_nhds : Tendsto (fun _ : ℕ => (0 : ℝ)) atTop (𝓝 0))
+      simp [rectangleIntegral]
   | @insert i s hi ih =>
       intro hK hlim
       simp only [Finset.sum_insert hi]
