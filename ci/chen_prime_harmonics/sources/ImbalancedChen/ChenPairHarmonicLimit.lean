@@ -151,6 +151,8 @@ private theorem rectangleIntegral_sub_le {a b c d δ : ℝ} {K L : ℝ → ℝ �
       ‖∫ v in c..d, (K u v - L u v) / (u * v)‖ ≤ δ / (a * c) * (d - c) := by
     simpa only [abs_of_nonneg (sub_nonneg.mpr hcd)] using
       (intervalIntegral.norm_integral_le_of_norm_le_const
+        (a := c) (b := d) (C := δ / (a * c))
+        (f := fun v => (K u v - L u v) / (u * v))
         (fun v hv => hpoint u hu v (by
           rw [Set.uIoc_of_le hcd] at hv
           exact ⟨hv.1.le, hv.2⟩)))
@@ -191,9 +193,10 @@ private theorem tendsto_primeTensor_separated {a b c d : ℝ}
     {f g : ℝ → ℝ} (hf : Continuous f) (hg : Continuous g) :
     Tendsto (primeTensor (fun u v => f u * g v) a b c d) atTop
       (𝓝 (rectangleIntegral (fun u v => f u * g v) a b c d)) := by
-  simpa only [primeTensor_separated, rectangleIntegral_separated] using
-    (tendsto_chenSinglePrimeHarmonicSum ha hab hb hf.continuousOn).mul
-      (tendsto_chenSinglePrimeHarmonicSum hc hcd hd hg.continuousOn)
+  rw [rectangleIntegral_separated]
+  apply ((tendsto_chenSinglePrimeHarmonicSum ha hab hb hf.continuousOn).mul
+    (tendsto_chenSinglePrimeHarmonicSum hc hcd hd hg.continuousOn)).congr'
+  exact Filter.Eventually.of_forall (fun N => (primeTensor_separated a b c d N f g).symm)
 
 private theorem tendsto_primeTensor_add {a b c d : ℝ}
     (ha : 0 < a) (hab : a < b) (hc : 0 < c) (hcd : c < d)
@@ -204,7 +207,8 @@ private theorem tendsto_primeTensor_add {a b c d : ℝ}
     Tendsto (primeTensor (fun u v => K u v + L u v) a b c d) atTop
       (𝓝 (rectangleIntegral (fun u v => K u v + L u v) a b c d)) := by
   rw [rectangleIntegral_add ha hab.le hc hcd.le hK.continuousOn hL.continuousOn]
-  simpa only [primeTensor_add] using hKL.add hLL
+  apply (hKL.add hLL).congr'
+  exact Filter.Eventually.of_forall (fun N => (primeTensor_add K L a b c d N).symm)
 
 private theorem tendsto_primeTensor_finsetSum {ι : Type*} (s : Finset ι)
     {a b c d : ℝ} (ha : 0 < a) (hab : a < b) (hc : 0 < c) (hcd : c < d)
@@ -218,7 +222,11 @@ private theorem tendsto_primeTensor_finsetSum {ι : Type*} (s : Finset ι)
   induction s using Finset.induction_on with
   | empty =>
       intro _ _
-      simpa [primeTensor, rectangleIntegral] using
+      have hzero : primeTensor (fun _ _ => 0) a b c d = (fun _ : ℕ => 0) := by
+        funext N
+        simp [primeTensor]
+      simp only [Finset.sum_empty, hzero]
+      simpa [rectangleIntegral] using
         (tendsto_const_nhds : Tendsto (fun _ : ℕ => (0 : ℝ)) atTop (𝓝 0))
   | @insert i s hi ih =>
       intro hK hlim
@@ -377,7 +385,9 @@ theorem tendsto_chenPrimeTensor_sumTest {a b c d : ℝ}
   have hint : |rectangleIntegral (fun u v => F (u + v)) a b c d -
       rectangleIntegral (fun u v => P.eval (u + v)) a b c d| ≤ ε / 3 := by
     calc
-      _ ≤ δ * J := rectangleIntegral_sub_le ha hab.le hc hcd.le hδ.le
+      _ ≤ δ * J := rectangleIntegral_sub_le
+        (K := fun u v => F (u + v)) (L := fun u v => P.eval (u + v))
+        ha hab.le hc hcd.le hδ.le
         hFK hPK.continuousOn hclose
       _ ≤ δ * R := mul_le_mul_of_nonneg_left (le_max_right _ _) hδ.le
       _ = ε / 3 := hδR
@@ -457,9 +467,9 @@ theorem tendsto_chenY6_log_totient_sum {a h d : ℝ}
       (𝓝 (∫ u in a..h, ∫ v in h..d, F (u + v) / (u * v))) := by
   apply (tendsto_chenPrimeTensor_sumTest ha hah (hhd.le.trans hd)
     (ha.trans hah) hhd hd hF).congr'
-  exact Filter.Eventually.of_forall (fun N => by
-    rw [chenY6_log_totient_sum_eq_tensor]
-    rfl)
+  exact Filter.Eventually.of_forall (fun N =>
+    (chenY6_log_totient_sum_eq_tensor N ((N : ℝ) ^ a) ((N : ℝ) ^ h)
+      ((N : ℝ) ^ d) F).symm)
 
 /-- The actual fifth main sum is one half of the square integral. The
 strict-order symmetry and the vanishing diagonal are both discharged. -/
@@ -477,9 +487,9 @@ theorem tendsto_chenY5_log_totient_sum {a h : ℝ}
     (tendsto_chenPrimeTensor_diagonal ha hF)).const_mul (1 / 2 : ℝ)
   simp only [sub_zero] at hlim
   apply hlim.congr'
-  exact Filter.Eventually.of_forall (fun N => by
-    rw [chenY5_log_totient_sum_eq_half_square_sub_diagonal]
-    rfl)
+  exact Filter.Eventually.of_forall (fun N =>
+    (chenY5_log_totient_sum_eq_half_square_sub_diagonal N ((N : ℝ) ^ a)
+      ((N : ℝ) ^ h) F).symm)
 
 /-- Upsilon 6's manuscript exponents, with no analytic premise besides
 continuity of the fixed coefficient on its actual compact sum interval. -/
