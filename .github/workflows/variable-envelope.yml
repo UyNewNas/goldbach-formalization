@@ -1,0 +1,101 @@
+name: Variable envelope verification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: variable-envelope-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  variable-envelope:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      LEAN_NUM_THREADS: 2
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out the exact PR head or pushed commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Check out the existing pinned lean-action scripts
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Prepare logs and record exact source provenance
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          logdir="$GITHUB_WORKSPACE/.lake/variable-envelope-boxes-verification"
+          mkdir -p "$logdir"
+          LEAN_ACTION_DIR="$RUNNER_TEMP/lean-action-f061402b"
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          test ! -e "$LEAN_ACTION_DIR"
+          mv .ci-lean-action "$LEAN_ACTION_DIR"
+          printf 'LEAN_ACTION_DIR=%s\n' "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          {
+            printf 'head_commit='; git rev-parse HEAD
+            printf 'expected_head=%s\n' "$EXPECTED_HEAD"
+            printf 'event_commit=%s\n' "$GITHUB_SHA"
+            printf 'lean_action_commit='; git -C "$LEAN_ACTION_DIR" rev-parse HEAD
+            printf 'toolchain='; cat lean-toolchain
+            printf 'run=%s attempt=%s event=%s\n' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$GITHUB_EVENT_NAME"
+          } | tee "$logdir/provenance.log"
+      - name: Install Elan and the pinned project toolchain
+        run: |
+          set -euo pipefail
+          "$LEAN_ACTION_DIR/scripts/install_elan.sh" 2>&1 | tee .lake/variable-envelope-boxes-verification/install.log
+      - name: Fetch only the Mathlib cache needed by the isolated VE modules
+        run: |
+          set -euo pipefail
+          test "$(cat lean-toolchain)" = leanprover/lean4:v4.33.0-rc1
+          python3 verification/verify_variable_envelope_boxes.py --cache-imports > .lake/variable-envelope-boxes-verification/cache-imports.log
+          mapfile -t imports < .lake/variable-envelope-boxes-verification/cache-imports.log
+          test "${#imports[@]}" -gt 0
+          lake exe cache get "${imports[@]}" 2>&1 | tee .lake/variable-envelope-boxes-verification/cache.log
+      - name: Explicit builds, exact regressions, bundled kernel replays and every-declaration axiom audit
+        id: verification
+        run: |
+          set -euo pipefail
+          checker="$(elan which leanchecker)"
+          test -x "$checker"
+          printf 'bundled_leanchecker=%s\n' "$checker" | tee .lake/variable-envelope-boxes-verification/checker.log
+          python3 verification/verify_variable_envelope_boxes.py 2>&1 | tee .lake/variable-envelope-boxes-verification/runner.log
+      - name: Record required outcome
+        if: ${{ always() }}
+        env:
+          VERIFICATION_OUTCOME: ${{ steps.verification.outcome }}
+        run: |
+          mkdir -p .lake/variable-envelope-boxes-verification
+          printf 'verification=%s\n' "$VERIFICATION_OUTCOME" | tee .lake/variable-envelope-boxes-verification/outcome.log
+          {
+            printf '### Independent variable envelope verification\n\n'
+            printf -- '- Checked-out head: `%s`\n' "$(git rev-parse HEAD)"
+            printf -- '- Explicit VE builds, regression checks, bundled kernel replays and complete transitive axiom audit: **%s**\n' "$VERIFICATION_OUTCOME"
+            printf -- '- Allowed axioms: `propext`, `Classical.choice`, `Quot.sound`.\n'
+            printf -- '- The audit inventories private and generated declarations by defining module.\n'
+            printf -- '- A failed, cancelled or skipped stage is not a successful verification.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+          test "$VERIFICATION_OUTCOME" = success
+      - name: Retain actual verification logs and declaration inventory, including failures
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: variable-envelope-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .lake/variable-envelope-boxes-verification/
+          if-no-files-found: warn
+          retention-days: 30
