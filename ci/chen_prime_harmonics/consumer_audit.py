@@ -24,6 +24,13 @@ spec.loader.exec_module(BASE)
 FOREIGN = BASE.REVIEW
 need, blob, scrub, imports, write = BASE.need, BASE.blob, BASE.scrub, BASE.imports, BASE.write
 ALLOWED_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
+# Exact import-only barrels still require source, loaded-module, audit-row,
+# fresh-artifact, and explicit kernel-replay membership. Only their own
+# declaration count must be zero; every other selected origin must be nonempty.
+EMPTY_ORIGIN_PINS = {
+    "Architect": "68748939e82259728644095b343599593f38abe65c971c14f910445a44f4ecf6",
+    "AnalyticNumberTheory": "ce62576c179932c0f05c21ad446f90bb99093a6da633441c89602c8c5184bbb5",
+}
 TRUSTED_PREFIXES = {"Mathlib", "Lean", "Init", "Std", "Batteries", "Aesop", "Qq",
                     "Plausible", "ProofWidgets", "LeanSearchClient", "ImportGraph", "Cli", "Lake"}
 RUNTIME = re.compile(r"#eval|\brun_cmd\b|\brun_elab\b|\binitialize\b|\bbuiltin_initialize\b|IO\.(?:Process|FS)")
@@ -56,6 +63,14 @@ def check_file(path, row, root):
     need(sha256(path) == row["sha256"] and blob(path) == row["gitBlob"], "Pinned source changed: " + str(path))
     need(path.stat().st_size == row["bytes"], "Source byte count changed: " + str(path))
     need(imports(path.read_text()) == row["imports"], "Source import edges changed: " + str(path))
+
+
+def import_only_source(code):
+    lines = [line.strip() for line in code.splitlines() if line.strip()]
+    if lines and lines[0] == "module":
+        lines = lines[1:]
+    return bool(lines) and all(re.fullmatch(
+        r"(?:public[ \t]+)?import[ \t]+[A-Za-z_][A-Za-z0-9_.']*", line) for line in lines)
 
 
 def validate_graph():
@@ -100,7 +115,9 @@ def validate_graph():
     need(sorted(boundary) == PLAN["boundaryImports"], "Changed trusted import boundary")
     need(PLAN["auditedModules"] == topo[:-1] and len(topo[:-1]) == PLAN["proofModuleCount"] == 124,
          "Incomplete exact proof-origin scope")
-    need(PLAN["allowEmptyDeclarationModules"] == ["Architect"], "Changed empty-module exception")
+    need(PLAN["allowEmptyDeclarationModules"] == list(EMPTY_ORIGIN_PINS), "Changed exact import-only origins")
+    for m, expected in EMPTY_ORIGIN_PINS.items():
+        need(known[m]["sha256"] == expected, "Changed import-only barrel source pin: " + m)
     need(PLAN["ownedBuildOrder"] == [m for m in topo if known[m]["kind"] in {"owned-proof", "audit-tool"}]
          and len(PLAN["ownedBuildOrder"]) == PLAN["ownedBuildModuleCount"] == 50,
          "Wrong exact owned compile order")
@@ -138,7 +155,7 @@ def validate_owned(consumer):
 
 def source_gate(consumer, root, out):
     validate_owned(consumer)
-    runtime, arch_tokens, hashes = [], [], {}
+    runtime, arch_tokens, hashes, empty_origins = [], [], {}, {}
     for row in PLAN["sources"]:
         if row["kind"] not in {"supplier", "architect"}:
             continue
@@ -146,6 +163,10 @@ def source_gate(consumer, root, out):
         check_file(path, row, root)
         hashes[row["module"]] = row["gitBlob"]
         code = scrub(path.read_text())
+        if row["module"] in EMPTY_ORIGIN_PINS:
+            need(import_only_source(code), "Empty-origin exception contains non-import commands: " + row["module"])
+            empty_origins[row["module"]] = {"sha256": row["sha256"], "gitBlob": row["gitBlob"],
+                                            "imports": len(row["imports"])}
         matches = [{"module": row["module"], "token": m.group(), "line": code[:m.start()].count("\n") + 1}
                    for m in ESCAPES.finditer(code)]
         if row["kind"] == "supplier":
@@ -154,11 +175,13 @@ def source_gate(consumer, root, out):
             arch_tokens.extend(matches)
         runtime.extend({"module": row["module"], "token": m.group(), "line": code[:m.start()].count("\n") + 1}
                        for m in RUNTIME.finditer(code))
+    need(set(empty_origins) == set(EMPTY_ORIGIN_PINS), "Missing exact import-only source evidence")
     need(runtime == PLAN["runtimeEntries"], "Changed reviewed runtime entry points")
     need(arch_tokens == PLAN["architectReviewedTokens"], "Changed reviewed Architect tooling tokens")
     write(out, "harmonic-source-audit.json", {"supplier": 66, "architect": 9, "ownedProof": 49,
          "auditProbe": 1, "ordinary270Subset": True, "gitBlobs": hashes,
-         "runtimeEntries": runtime, "architectReviewedTokens": arch_tokens, "issues": []})
+         "runtimeEntries": runtime, "architectReviewedTokens": arch_tokens,
+         "emptyOriginImportOnlySources": empty_origins, "issues": []})
     print("PASS: exact 66 ordinary270 + 9 Architect + 49 owned proof + 1 probe source pins")
 
 
@@ -230,7 +253,10 @@ def axiom_gate(out):
          "Incomplete/duplicate exact module-origin audit coverage")
     counts = {m: int(n) for m, n in rows}
     for m, n in counts.items():
-        need(n > 0 or m in PLAN["allowEmptyDeclarationModules"], "Missing origin declarations: " + m)
+        if m in PLAN["allowEmptyDeclarationModules"]:
+            need(n == 0, "Unexpected declaration in pinned import-only origin: " + m)
+        else:
+            need(n > 0, "Missing origin declarations: " + m)
     passes = re.findall(r"\bHARMONIC_AXIOM_AUDIT_PASS declarations=([1-9][0-9]*) modules=124$", text, re.M)
     need(len(passes) == 1 and int(passes[0]) == sum(counts.values()), "Missing/inconsistent full axiom audit")
     named = {}

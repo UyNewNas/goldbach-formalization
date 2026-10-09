@@ -177,6 +177,7 @@ run_cmd do
     `ImbalancedChen.ChenQuotientMovingPrimeAdapter,
     `ImbalancedChen.ChenPairHarmonicFinite,
     `ImbalancedChen.ChenPairHarmonicLimit ]
+  let emptyModules : List Name := [`Architect, `AnalyticNumberTheory]
   let allowed : List Name := [`propext, `Classical.choice, `Quot.sound]
   let env ← getEnv
   let mut counts : Std.HashMap Name Nat := {}
@@ -196,8 +197,12 @@ run_cmd do
   for moduleName in auditedModules do
     unless env.header.moduleNames.contains moduleName do
       throwError "Audited module missing from environment: {moduleName}"
-    unless moduleName == `Architect || counts.getD moduleName 0 > 0 do
-      throwError "Missing declaration coverage for custom module {moduleName}"
+    if emptyModules.contains moduleName then
+      unless counts.getD moduleName 0 == 0 do
+        throwError "Unexpected declaration in pinned import-only module {moduleName}"
+    else
+      unless counts.getD moduleName 0 > 0 do
+        throwError "Missing declaration coverage for custom module {moduleName}"
     logInfo m!"HARMONIC_MODULE_AUDIT {moduleName} declarations={counts.getD moduleName 0}"
   unless declarations > 0 do
     throwError "Empty custom declaration audit"
