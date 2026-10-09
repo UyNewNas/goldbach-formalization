@@ -317,8 +317,6 @@ theorem exists_separated_near_continuousOn {a b c d : ℝ} {K : ℝ → ℝ → 
     (α := C(I, C(Set.Icc c d, ℝ)))
     (u := fun n : ℕ => bernsteinApproximation n G) (f := atTop) (a := G)).mp
     (bernsteinApproximation_uniform G) δ hδ).exists
-  have hnorm : ‖bernsteinApproximation n G - G‖ < δ := by
-    simpa only [dist_eq_norm] using hn
   let f : Fin (n + 1) → ℝ → ℝ := fun i u => bernstein n i (e (A u))
   let g : Fin (n + 1) → ℝ → ℝ := fun i v => G (bernstein.z i) (B v)
   refine ⟨n, f, g, ?_, ?_, ?_⟩
@@ -332,16 +330,16 @@ theorem exists_separated_near_continuousOn {a b c d : ℝ} {K : ℝ → ℝ → 
       rw [e.symm_apply_apply]
       change K (clip a b u) (clip c d v) = K u v
       rw [clip_eq hu, clip_eq hv]
-    have hp : ‖((bernsteinApproximation n G - G) (e (A u))) (B v)‖ < δ :=
-      (ContinuousMap.norm_coe_le_norm
-        ((bernsteinApproximation n G - G) (e (A u))) (B v)).trans_lt
-        ((ContinuousMap.norm_coe_le_norm
-          (bernsteinApproximation n G - G) (e (A u))).trans_lt hnorm)
-    change ‖(bernsteinApproximation n G (e (A u))) (B v) -
-      G (e (A u)) (B v)‖ < δ at hp
-    rw [bernsteinApproximation.apply] at hp
+    have hp : dist ((bernsteinApproximation n G (e (A u))) (B v))
+        (G (e (A u)) (B v)) < δ :=
+      (ContinuousMap.dist_apply_le_dist
+        (f := bernsteinApproximation n G (e (A u)))
+        (g := G (e (A u))) (B v)).trans_lt
+        ((ContinuousMap.dist_apply_le_dist
+          (f := bernsteinApproximation n G) (g := G) (e (A u))).trans_lt hn)
+    rw [Real.dist_eq, bernsteinApproximation.apply] at hp
     simp only [ContinuousMap.sum_apply, ContinuousMap.smul_apply,
-      smul_eq_mul, hG, Real.norm_eq_abs] at hp
+      smul_eq_mul, hG] at hp
     rw [abs_sub_comm] at hp
     exact hp
 
