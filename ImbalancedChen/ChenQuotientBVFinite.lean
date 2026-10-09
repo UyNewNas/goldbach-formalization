@@ -119,8 +119,9 @@ theorem ChenQuotientRows.subset_Icc {α : Type*} {N Q : ℕ} {A : ℝ}
     ∀ t ∈ T, S t ⊆ Finset.Icc 1 Q := by
   intro t ht d hd
   obtain ⟨hdP, hcap⟩ := Finset.mem_filter.mp (h t ht hd)
+  have hbt : 1 ≤ b t := hbpos t ht
   have hle : d ≤ b t * d := by
-    simpa only [one_mul] using Nat.mul_le_mul_right d (hbpos t ht)
+    simpa only [one_mul] using Nat.mul_le_mul_right d hbt
   exact Finset.mem_Icc.mpr ⟨Nat.pos_of_mem_divisors hdP, hle.trans hcap⟩
 
 /-- Exactly the original four selector bands, sharing only a full
@@ -233,7 +234,8 @@ private theorem chenSelectedCentreCost_inter_rows {α : Type*}
     · exact And.left
     · intro hd
       exact ⟨hd, hS t ht hd⟩
-  rw [heq]
+  exact congrArg (fun U : Finset ℕ =>
+    ∑ d ∈ U, chenQuotientCentreCost N (b t) d) heq
 
 /-- The proved arbitrary-logarithmic centre budget applies under the
 literal product-row assumptions, uniformly over all four families. -/
