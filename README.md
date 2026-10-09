@@ -4,7 +4,7 @@ Work toward a Lean formalization of *Transferring quantitative Chen bounds to im
 
 ## Verification status
 
-At commit `10431e573fa740649d0e213b760ded652456631a`, the eighty-three-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root, and the transitive axiom audit passed for 2024 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful PR CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37876028643); [same-head push attempt 2](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37876023661) also passed after an initial cache-archiving disk failure. This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
+At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root (85 targets), and the transitive axiom audit passed for 2043 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful PR CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37880137858) and [same-head push CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37880133970) passed all three proof gates before optional cache handling. This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
 
 - `ImbalancedChen/Counting.lean`: prime-indexed finite representation sets, exact good/bad partition, subtraction and a conditional finite transfer lemma. The initial count excludes receiver 1; the separate Multiplicity module supplies the receiver-one correction.
 - `ImbalancedChen/Constants.lean`: exact rational endpoint arithmetic and logarithmic inequalities, reusing mathlib's proved logarithm bound. This does not certify the integrals from which the quoted numbers originate.
@@ -138,10 +138,19 @@ The following three owned-only modules passed the 83-module checkpoint above. Th
 Supplier-backed prime harmonic and moving-prime adapters remain outside the core root. These elementary interfaces do not evaluate an actual prime/pair main term, supply an upper/lower sieve, establish coefficient 1.8271, or complete the Chen theorem.
 
 
-## Finite pair-harmonic geometry candidate
+## Verified finite pair-harmonic geometry
 
-`ImbalancedChen/ChenPairHarmonicFinite.lean` is the next owned-only addition, targeting an 84-module checkpoint. Compilation, kernel replay and the transitive axiom audit are pending; the verified checkpoint remains 83 modules and 2024 declarations.
+`ImbalancedChen/ChenPairHarmonicFinite.lean` passed the 84-module checkpoint above. Its finite identities and bounds are covered by the complete root/module replay and 2043-declaration transitive axiom audit.
 
 It identifies the literal sixth selector with its disjoint-band rectangle and the fifth selector with the strictly ordered part of the masked square. The fifth harmonic sum is exactly one half of the tensor square minus one half of its diagonal. Totient multiplicativity is used only for distinct prime labels; the artificial diagonal has denominator (p-1)^2. Separated-test factorization and exact logarithmic coordinates retain all centre masks and endpoints. For A >= 2 and a nonnegative diagonal test bound M, the full diagonal costs at most 8M/A and the half-square replacement error at most 4M/A.
 
 These are finite identities for the harmonic main sums. They do not replace the original sifted Upsilon counts or prove a continuous-test prime-pair limit, an upper/lower sieve, coefficient 1.8271, or the full Chen theorem. Supplier-backed pair consumers remain separate from the owned root.
+
+
+## Symmetric square-to-triangle integral candidate
+
+`ImbalancedChen/SymmetricTriangleIntegral.lean` is the next owned-only addition, targeting an 85-module checkpoint and 86 root/module replay targets. Compilation, kernel replay and the transitive axiom audit are pending; the verified checkpoint remains 84 modules and 2043 declarations.
+
+The candidate proves rectangular integration-order exchange for a continuous real kernel on a closed rectangle. For a continuous symmetric real kernel on a closed square, it proves that one half of the square integral equals the iterated lower-triangle integral. A more general version assumes integrability on the genuine square. All statements allow weak endpoint inequalities, signed kernels and nonzero diagonal values. The diagonal is null for Lebesgue product measure by the null-singleton property and Fubini; an integral identity is not assumed.
+
+These analytic identities are separate from the finite prime-pair diagonal estimate. A manuscript application must supply continuity and symmetry of its full weighted integrand on the actual square, or continuity on the actual rectangle. This module does not supply a prime-pair limit, moving-kernel approximation, upper/lower sieve, coefficient 1.8271, or the full Chen theorem. No foreign consumer, existing proof body, dependency configuration or verification workflow changes in this addition.
