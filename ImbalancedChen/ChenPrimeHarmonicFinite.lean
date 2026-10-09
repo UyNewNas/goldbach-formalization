@@ -39,11 +39,11 @@ theorem chenSinglePrimeSelector_eq_harmonic_filter (N : ℕ) (A U : ℝ) :
 theorem chen_prime_window_endpoint_bound (P : Finset ℕ) (g : ℕ → ℝ)
     {A U E : ℝ} (hAU : A < U) (hE : 0 ≤ E)
     (hg : ∀ p ∈ P, (p : ℝ) = A ∨ (p : ℝ) = U → |g p| ≤ E) :
-    |(∑ p ∈ P.filter (fun p => A ≤ (p : ℝ) ∧ (p : ℝ) < U), g p) -
-      ∑ p ∈ P.filter (fun p => A < (p : ℝ) ∧ (p : ℝ) ≤ U), g p| ≤ 2 * E := by
-  let B := P.filter (fun p => (p : ℝ) = A ∨ (p : ℝ) = U)
-  have hsingle (x : ℝ) : ((P.filter (fun p => (p : ℝ) = x)).card : ℝ) ≤ 1 := by
-    have hn : (P.filter (fun p => (p : ℝ) = x)).card ≤ 1 := by
+    |(∑ p ∈ P.filter (fun p : ℕ => A ≤ (p : ℝ) ∧ (p : ℝ) < U), g p) -
+      ∑ p ∈ P.filter (fun p : ℕ => A < (p : ℝ) ∧ (p : ℝ) ≤ U), g p| ≤ 2 * E := by
+  let B := P.filter (fun p : ℕ => (p : ℝ) = A ∨ (p : ℝ) = U)
+  have hsingle (x : ℝ) : ((P.filter (fun p : ℕ => (p : ℝ) = x)).card : ℝ) ≤ 1 := by
+    have hn : (P.filter (fun p : ℕ => (p : ℝ) = x)).card ≤ 1 := by
       apply Finset.card_le_one.mpr
       intro p hp q hq
       have heq : (p : ℝ) = (q : ℝ) :=
@@ -51,18 +51,18 @@ theorem chen_prime_window_endpoint_bound (P : Finset ℕ) (g : ℕ → ℝ)
       exact_mod_cast heq
     exact_mod_cast hn
   have hB : (B.card : ℝ) ≤ 2 := by
-    have heq : B = (P.filter (fun p => (p : ℝ) = A)) ∪
-        (P.filter (fun p => (p : ℝ) = U)) := by
+    have heq : B = (P.filter (fun p : ℕ => (p : ℝ) = A)) ∪
+        (P.filter (fun p : ℕ => (p : ℝ) = U)) := by
       ext p
       simp only [B, Finset.mem_filter, Finset.mem_union]
       tauto
     rw [heq]
-    have hc : (((P.filter (fun p => (p : ℝ) = A)) ∪
-        (P.filter (fun p => (p : ℝ) = U))).card : ℝ) ≤
-        ((P.filter (fun p => (p : ℝ) = A)).card : ℝ) +
-          ((P.filter (fun p => (p : ℝ) = U)).card : ℝ) := by
+    have hc : (((P.filter (fun p : ℕ => (p : ℝ) = A)) ∪
+        (P.filter (fun p : ℕ => (p : ℝ) = U))).card : ℝ) ≤
+        ((P.filter (fun p : ℕ => (p : ℝ) = A)).card : ℝ) +
+          ((P.filter (fun p : ℕ => (p : ℝ) = U)).card : ℝ) := by
       exact_mod_cast Finset.card_union_le
-        (P.filter (fun p => (p : ℝ) = A)) (P.filter (fun p => (p : ℝ) = U))
+        (P.filter (fun p : ℕ => (p : ℝ) = A)) (P.filter (fun p : ℕ => (p : ℝ) = U))
     linarith [hsingle A, hsingle U]
   have hterm : ∀ p ∈ P,
       |(if A ≤ (p : ℝ) ∧ (p : ℝ) < U then g p else 0) -
@@ -84,11 +84,11 @@ theorem chen_prime_window_endpoint_bound (P : Finset ℕ) (g : ℕ → ℝ)
             (A < (p : ℝ) ∧ (p : ℝ) ≤ U) := by
           constructor
           · intro h
-            exact ⟨lt_of_le_of_ne h.1 hpA.symm, h.2.le⟩
+            exact ⟨lt_of_le_of_ne h.1 (Ne.symm hpA), h.2.le⟩
           · intro h
             exact ⟨h.1.le, lt_of_le_of_ne h.2 hpU⟩
         rw [if_neg hnone]
-        simp only [heq, sub_self, abs_zero]
+        simp only [heq, sub_self, abs_zero, le_refl]
   rw [Finset.sum_filter, Finset.sum_filter, ← Finset.sum_sub_distrib]
   calc
     _ ≤ ∑ p ∈ P,
