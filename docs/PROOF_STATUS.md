@@ -480,19 +480,66 @@ indicator sum of fibre errors and the strip error is exactly the difference
 of its two prefix errors. Thus the triangle cost is exactly two prefix errors,
 with no hidden endpoint or normalization correction.
 
-The module source SHA-256 is
-`94a00af92118a864fc931e1543efe540f9e582a3263bc8e93e8f59ca30eb3c3e`.
-Local verification with the pinned Lean/Mathlib revisions passed direct
-compilation, the complete 2,868-job `lake build`, bundled module
-`leanchecker`, a 47-declaration module audit, a 2,297-declaration imported-root
-audit, and the independent 358-declaration VariableEnvelope workflow. Both
-transitive audits allowed only `propext`, `Classical.choice` and `Quot.sound`.
-The complete-root bundled `leanchecker` was attempted and was killed by the
-local memory limit (exit 137), so root replay success is not claimed; remote
-workflows remain required for the submitted commit.
+After correcting the analytic main term to the supplier's real scale
+`(Y : ℝ) / r`, the module source SHA-256 is
+`eb97d23050e3ec624cde24ef779acc67d7ded44283dc60097edc2d715429863b`.
 
 This module is a finite adapter only. It does not prove the Pan distribution
-theorem, nor that the 17,572 same-mask-v2 cells satisfy its scale gates. The
-next step is the exact cell-to-strip containment and the four per-prefix
-inequalities at both `Y₀` and `Y₁`, followed by import and transitive audit of
-the upstream bounded aggregate.
+theorem or the geometric scale gates for the moving product cells.  The
+17,572 same-mask-v2 cells are not Pan product cells: they are the separate
+fixed `(t,u)` cells for the eleven-term lower-weight certificate and its
+`7/3` refinement.  The correct next geometry is a dynamic `(r,m=r*q)` grid,
+not a signed-discrepancy containment from the existing `(r,q)` rectangles.
+
+## Pinned Liu--Pan primitive-residue bridge candidate
+
+The project now pins
+`subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`,
+whose Mathlib revision is identical to the project pin.  The imported
+supplier theorem is
+`liuMainPanCoprimeIntervalMaxL_boundedAggregate_log_saving`; its coefficient
+bound, two-thirds upper gate, logarithmic lower gate, modulus cutoff and
+endpoint-dependent right side remain explicit.
+
+`ImbalancedChen/PanProductResidueBudget.lean` proves that reducing the fixed
+target to `N mod d` leaves every prefix and strip AP count unchanged.  It
+transports selector-uniform prefix budgets to the physical target and combines
+two independent endpoint budgets with no residue-class or modulus-cardinality
+factor.
+
+`ImbalancedChen/PanProductLiuBridge.lean` then identifies the local fibre with
+the supplier's `primesInAPBelow`, identifies the two canonical reduced-residue
+families, and proves the full prefix error equal to
+`liuMainPanCoprimeIntervalSum` with the modulus-independent prime indicator.
+The target residue belongs to `unitResidues d` from `1 ≤ d` and
+`Coprime d N`; no coprimality with `Y₀` or `Y₁` is used.  Consequently the
+physical prefix error is bounded by the supplier's literal finite `MaxL`, and
+one product strip is bounded by the sum of its upper- and lower-endpoint
+`MaxL` values.
+
+The exported theorem
+`panProductPrimeIndicatorMaxL_boundedAggregate_log_saving` specializes the
+pinned unconditional aggregate to this exact prime-indicator coefficient and
+thereby discharges the global bound `|f| ≤ 1`. It deliberately preserves the
+supplier's endpoint, two-thirds, logarithmic-lower and modulus-cutoff gates.
+
+This is a genuine imported-theorem interface, not yet the aggregate
+application.  A separate `(r,r*q)` product-strip grid must still supply, at
+both endpoints, `N₀ ≤ Y`, `A₂ ≤ Y^(2/3)`,
+`log(Y)^(2B) ≤ A₁`, and `D ≤ panModulusCutoff Y B`; the physical
+coprime-modulus subset must then be enlarged to the full nonnegative `Icc`
+aggregate.  The coprime gate's main-term loss also remains to be reconciled
+with the ungated physical mass.
+
+The residue-budget and pinned-bridge source SHA-256 values are respectively
+`4b5dcf30d8aebee0779f6dc3e4f1188a6797f9cd5215f71737b8369a79a9fbaf`
+and
+`dd239cb5a36898abe49cdb23d60cc1e3e86dede36bd849c41013f18a99ee2d61`.
+Local verification with Lean `v4.33.0-rc1`, Mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and goldbach-lean
+`09b97db5764ade1246bfb77206baa1b124760958` passed direct bridge compilation,
+the complete 4,426-job `lake build`, bundled `leanchecker` replays of all three
+product-strip modules and the imported root, a 2,314-declaration audit of every
+project module, and the independent 358-declaration VariableEnvelope workflow.
+Both transitive audits allowed only `propext`, `Classical.choice` and
+`Quot.sound`. Remote workflows remain required for the submitted commit.

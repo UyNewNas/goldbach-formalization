@@ -327,19 +327,21 @@ theorem panProductStripAPCount_eq_coprime_indicator_sum_sub
     ring
   · simp [hrd]
 
-/-- Abstract main term attached to the same closed moving prefixes.  Taking
-`mainTerm t` to be the logarithmic integral at `t` gives the algebraic shape
-of the imported Liu--Pan error, without asserting that analytic estimate. -/
-def panProductPrefixAnalyticMain (mainTerm : ℕ → ℝ)
+/-- Abstract real main term attached to the same closed moving prefixes.
+Taking `mainTerm` to be the logarithmic integral gives the exact real-division
+shape of the imported Liu--Pan error, without asserting that estimate.  The
+finite prime prefix remains `q ≤ Y / r`; only the analytic main term is
+evaluated at the real scale `(Y : ℝ) / r`. -/
+def panProductPrefixAnalyticMain (mainTerm : ℝ → ℝ)
     (A₁ A₂ Y d : ℕ) : ℝ :=
   ∑ r ∈ Finset.Ioc A₁ A₂,
     if Nat.Coprime r d then
       (if Nat.Prime r then (1 : ℝ) else 0) *
-        (mainTerm (Y / r) / (Nat.totient d : ℝ))
+        (mainTerm ((Y : ℝ) / (r : ℝ)) / (Nat.totient d : ℝ))
     else 0
 
 /-- Prefix error relative to an abstract prime-counting main term. -/
-def panProductPrefixAnalyticError (mainTerm : ℕ → ℝ)
+def panProductPrefixAnalyticError (mainTerm : ℝ → ℝ)
     (A₁ A₂ Y a d : ℕ) : ℝ :=
   panProductPrefixAPCount A₁ A₂ Y a d -
     panProductPrefixAnalyticMain mainTerm A₁ A₂ Y d
@@ -347,14 +349,14 @@ def panProductPrefixAnalyticError (mainTerm : ℕ → ℝ)
 /-- On a primitive residue, the prefix error is literally the bounded
 prime-indicator sum of the individual moving-prefix errors. -/
 theorem panProductPrefixAnalyticError_eq_sum
-    (mainTerm : ℕ → ℝ) (A₁ A₂ Y a d : ℕ)
+    (mainTerm : ℝ → ℝ) (A₁ A₂ Y a d : ℕ)
     (ha : Nat.Coprime a d) :
     panProductPrefixAnalyticError mainTerm A₁ A₂ Y a d =
       ∑ r ∈ Finset.Ioc A₁ A₂,
         if Nat.Coprime r d then
           (if Nat.Prime r then (1 : ℝ) else 0) *
             (panProductPrefixFibreAPCount Y r a d -
-              mainTerm (Y / r) / (Nat.totient d : ℝ))
+              mainTerm ((Y : ℝ) / (r : ℝ)) / (Nat.totient d : ℝ))
         else 0 := by
   unfold panProductPrefixAnalyticError panProductPrefixAnalyticMain
   rw [panProductPrefixAPCount_eq_coprime_indicator_sum A₁ A₂ Y a d ha,
@@ -368,13 +370,13 @@ theorem panProductPrefixAnalyticError_eq_sum
 
 /-- The analytic main term assigned to a product strip is the difference of
 the two closed-prefix main terms. -/
-def panProductStripAnalyticMain (mainTerm : ℕ → ℝ)
+def panProductStripAnalyticMain (mainTerm : ℝ → ℝ)
     (A₁ A₂ Y₀ Y₁ d : ℕ) : ℝ :=
   panProductPrefixAnalyticMain mainTerm A₁ A₂ Y₁ d -
     panProductPrefixAnalyticMain mainTerm A₁ A₂ Y₀ d
 
 /-- Error of the literal strip count relative to that difference main term. -/
-def panProductStripAnalyticError (mainTerm : ℕ → ℝ)
+def panProductStripAnalyticError (mainTerm : ℝ → ℝ)
     (A₁ A₂ Y₀ Y₁ a d : ℕ) : ℝ :=
   panProductStripAPCount A₁ A₂ Y₀ Y₁ a d -
     panProductStripAnalyticMain mainTerm A₁ A₂ Y₀ Y₁ d
@@ -382,7 +384,7 @@ def panProductStripAnalyticError (mainTerm : ℕ → ℝ)
 /-- The strip error is exactly upper-prefix error minus lower-prefix error.
 This is the two-prefix reduction to which bounded Pan is applied. -/
 theorem panProductStripAnalyticError_eq_prefix_sub
-    (mainTerm : ℕ → ℝ) (A₁ A₂ Y₀ Y₁ a d : ℕ)
+    (mainTerm : ℝ → ℝ) (A₁ A₂ Y₀ Y₁ a d : ℕ)
     (hY : Y₀ ≤ Y₁) :
     panProductStripAnalyticError mainTerm A₁ A₂ Y₀ Y₁ a d =
       panProductPrefixAnalyticError mainTerm A₁ A₂ Y₁ a d -
@@ -395,7 +397,7 @@ theorem panProductStripAnalyticError_eq_prefix_sub
 /-- Consequently, controlling the two prefix errors controls the strip error
 with no hidden endpoint or normalization term. -/
 theorem abs_panProductStripAnalyticError_le
-    (mainTerm : ℕ → ℝ) (A₁ A₂ Y₀ Y₁ a d : ℕ)
+    (mainTerm : ℝ → ℝ) (A₁ A₂ Y₀ Y₁ a d : ℕ)
     (hY : Y₀ ≤ Y₁) :
     |panProductStripAnalyticError mainTerm A₁ A₂ Y₀ Y₁ a d| ≤
       |panProductPrefixAnalyticError mainTerm A₁ A₂ Y₁ a d| +

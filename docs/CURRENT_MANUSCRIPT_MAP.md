@@ -246,16 +246,37 @@ main term, the strip error is proved equal to upper-prefix error minus
 lower-prefix error, hence bounded by the sum of their absolute errors. These
 are finite identities; they do not assert a Pan estimate.
 
-The remaining geometric adapter must map the current same-mask-v2 cells into
-these literal strips and prove, separately for both prefix scales, all
-upstream hypotheses `N₀ ≤ Y`, `A₂ ≤ Y^(2/3)`,
-`log(Y)^(2B) ≤ A₁`, and `D ≤ panModulusCutoff Y B`. The residue `N mod d`
-also has to be transported to the upstream maximizing-residue family using
-the actual assumption `Coprime d N`. Gate loss must be accounted for when
-the analytic main term is compared with any ungated physical mass.
+`ImbalancedChen/PanProductResidueBudget.lean` and
+`ImbalancedChen/PanProductLiuBridge.lean` now close the residue/interface part
+of this adapter.  The physical target is reduced to `N mod d`, membership in
+the supplier's canonical primitive family follows from the actual hypothesis
+`Coprime d N`, and the literal prefix error is identified with the pinned
+`liuMainPanCoprimeIntervalSum`.  Thus one strip is bounded pointwise by the
+sum of the two endpoint `liuMainPanCoprimeIntervalMaxL` values.  No
+coprimality with either moving product scale is assumed.
 
-Dependency audit: the upstream package uses the identical Lean and Mathlib
-pins and can be the sole analytic-number-theory dependency. It must not be
-required together with the separate `analytic-number-theory-lean` package,
-because both export the `AnalyticNumberTheory` and `PrimeNumberTheoremAnd`
-module roots. No dependency change is made in this checkpoint.
+The exact prime-indicator specialization
+`panProductPrimeIndicatorMaxL_boundedAggregate_log_saving` also imports the
+unconditional logarithmic-saving aggregate and discharges its global
+coefficient bound. Its scale hypotheses remain visible and must be supplied
+twice, once at each product endpoint.
+
+The 17,572 same-mask-v2 cells are **not** this half-product Pan grid.  They are
+the separate fixed `(t,u)` cells in the eleven-term lower-weight numerical
+certificate, where the `7/3` refinement improves the lower mean.  The Pan
+geometry instead needs a dynamic `(r,m=r*q)` product-strip grid.  The next
+geometric adapter must define that grid and prove, separately at `Y₀` and
+`Y₁`, all upstream hypotheses `N₀ ≤ Y`, `A₂ ≤ Y^(2/3)`,
+`log(Y)^(2B) ≤ A₁`, and `D ≤ panModulusCutoff Y B`.  The existing
+`(r,q)` rectangle grid gives useful global `4N` bounds, but mere containment
+of a signed rectangle discrepancy in a larger product strip would not be a
+valid transfer.  Gate loss must also be accounted for when the analytic main
+term is compared with any ungated physical mass.
+
+Dependency audit: `goldbach-lean` is pinned at
+`09b97db5764ade1246bfb77206baa1b124760958`; it uses the identical Lean and
+Mathlib pins and is the sole analytic-number-theory dependency.  Its inherited
+`LeanArchitect` dependency is pinned at
+`78dd66840d3efe8c824c699fc03381cec817c271`.  The separate
+`analytic-number-theory-lean` package must not be added because both projects
+export the `AnalyticNumberTheory` and `PrimeNumberTheoremAnd` module roots.
