@@ -576,3 +576,11 @@ The exported `tendsto_realHalfProductSource_manuscriptCutoff_mass_of_suppliers` 
 
 The new module source SHA-256 is `fd088cd1597ba6d2a47175c6bcb358387d5e1c5eebca116bcfdd53ea400884ad`. The manuscript remains `master@ba6ec11d800eccc54406490631895e174de85766`; constants and dependency pins are unchanged. The runner has no Lean executable, so this code is submitted for CI but compilation, kernel replay and transitive axiom audit are not claimed until an actual runner executes them.
 
+## Dynamic Pan selected-cell budget candidate
+
+Code commit [`921924ab1859dd227a3028c5c76d42aca351efde`](https://github.com/UyNewNas/goldbach-formalization/commit/921924ab1859dd227a3028c5c76d42aca351efde) strengthens `ImbalancedChen/PanProductGrid.lean` with the public interfaces required to sum cellwise Pan errors. `mem_actualPanProductGridIndices` records both ambient-grid membership and a literal half-product source-pair witness; `actualPanProductGridIndices_subset` proves no selected index escapes the finite grid; and `actualPanProductGridIndices_card_le` bounds the selected family by `(floor (log N / log κ) + 1)^2`.
+
+This is a purely finite combinatorial reduction. It does not identify the dynamic family with the separate 17,572 same-mask-v2 cells, prove any endpoint gate, or apply the Liu--Pan distribution theorem. In particular, the two endpoint-dependent modulus-cutoff obligations remain explicit and cannot be obtained by downward monotonicity from a cutoff at the global scale `N`.
+
+The updated module SHA-256 is `e37bb4d2aa855c86e1601566e9ea6649092ac625c434d8a30476208057fab743`. Static checks pass (`git diff --check` and no `sorry`, `admit`, custom `axiom`, `native_decide` or `unsafe` in the module). This runner has no Lean or Lake executable, so no local elaboration, build, kernel replay or transitive axiom audit is claimed. The manuscript remains `master@ba6ec11d800eccc54406490631895e174de85766` and the pinned versions are unchanged.
+

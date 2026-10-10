@@ -282,6 +282,14 @@ an upper cover, not an equality with the curved source, because complete
 strips also contain exterior points.  Projection to products must therefore
 continue through `pairProductWeight` rather than erase pair multiplicity.
 
+The same module now gives the simplification theorem
+`mem_actualPanProductGridIndices`, the ambient-subset theorem
+`actualPanProductGridIndices_subset`, and the finite summation budget
+`actualPanProductGridIndices_card_le`.  Hence every selected index carries an
+actual source-pair witness and the selected family has at most
+`(floor (log N / log κ) + 1)^2` cells.  This is the dynamic Pan-grid budget;
+it is not the separate 17,572-cell same-mask-v2 numerical certificate.
+
 The 17,572 same-mask-v2 cells are **not** this half-product Pan grid.  They are
 the separate fixed `(t,u)` cells in the eleven-term lower-weight numerical
 certificate, where the `7/3` refinement improves the lower mean.  The Pan
