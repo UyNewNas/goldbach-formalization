@@ -233,10 +233,26 @@ The checked upstream theorem
 accepts one coefficient function `f` with `|f| ≤ 1` and sums its coprime
 moving-residue interval errors over `d`. Its scale, interval endpoints and
 logarithmic lower gate are explicit. The new prime-indicator theorem proves
-the required coefficient bound at the finite-source level, but the curved
-fibre is not one Pan prefix. A correct next bridge must use the same-mask-v2
-product cells and write each strip as an upper prefix minus a lower prefix;
-both prefixes must satisfy the Pan gates at their own product scale.
+the required coefficient bound at the finite-source level.
+
+`ImbalancedChen/PanProductStrips.lean` now supplies the next exact adapter.
+For `A₁ < r ≤ A₂` it identifies the literal strict-lower/closed-upper region
+`Y₀ < r*q ≤ Y₁` with the difference of the closed prefixes at `Y₁` and `Y₀`.
+It proves this for AP counts, coprime mass and discrepancy, normalizes each
+moving fibre to `q ≤ Y/r`, and shows that a primitive target residue inserts
+exactly the upstream `Coprime r d` gate while leaving the bounded coefficient
+as the modulus-independent prime indicator. For an abstract prime-counting
+main term, the strip error is proved equal to upper-prefix error minus
+lower-prefix error, hence bounded by the sum of their absolute errors. These
+are finite identities; they do not assert a Pan estimate.
+
+The remaining geometric adapter must map the current same-mask-v2 cells into
+these literal strips and prove, separately for both prefix scales, all
+upstream hypotheses `N₀ ≤ Y`, `A₂ ≤ Y^(2/3)`,
+`log(Y)^(2B) ≤ A₁`, and `D ≤ panModulusCutoff Y B`. The residue `N mod d`
+also has to be transported to the upstream maximizing-residue family using
+the actual assumption `Coprime d N`. Gate loss must be accounted for when
+the analytic main term is compared with any ungated physical mass.
 
 Dependency audit: the upstream package uses the identical Lean and Mathlib
 pins and can be the sole analytic-number-theory dependency. It must not be

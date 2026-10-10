@@ -62,6 +62,7 @@ import ImbalancedChen.RealHalfProductMass
 import ImbalancedChen.RealHalfProductMassSplit
 import ImbalancedChen.RealHalfProductSieveBridge
 import ImbalancedChen.HalfProductPanFinite
+import ImbalancedChen.PanProductStrips
 import ImbalancedChen.EnlargedSelbergAsymptotic
 import ImbalancedChen.QuotientChenFourPrime
 import ImbalancedChen.QuotientChenFourCounts

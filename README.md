@@ -59,6 +59,7 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/SingularProductIdentity.lean`: genuinely convergent natural-index Euler products, exact centre correction and the prime-two factor.
 - `ImbalancedChen/HalfProductMassFibres.lean`: exact prime-counting fibres of the original half-product source, preserving strict power boundaries, squares and the real cutoff.
 - `ImbalancedChen/HalfProductPanFinite.lean`: exact arbitrary-cutoff decomposition of the actual congruence mass, coprime mass, bounding-sieve divisor sum and primitive discrepancy into smaller-prime moving-residue fibres; the prime-indicator coefficient is proved bounded by one.
+- `ImbalancedChen/PanProductStrips.lean`: exact `A₁ < r ≤ A₂`, `Y₀ < r*q ≤ Y₁` product strips as differences of closed Pan prefixes, including the primitive outer coprimality gate, normalized endpoint `q ≤ Y/r`, bounded prime-indicator coefficient and upper-minus-lower prefix-error identity.
 - `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
 - `ImbalancedChen/HalfProductMassSplit.lean`: exact high/low prime rectangle and order-error envelope for the original source.
 - `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.

@@ -459,3 +459,40 @@ allowed only `propext`, `Classical.choice` and `Quot.sound`. The complete-root
 bundled `leanchecker` was attempted and was killed by the local memory limit
 (exit 137), so root replay success is not claimed; remote workflows remain
 required for the submitted commit.
+
+## Exact product-strip Pan-prefix candidate
+
+`ImbalancedChen/PanProductStrips.lean` fixes the endpoint and coefficient
+conventions for the product cells needed by the restricted Pan estimate. Its
+literal finite strip has `A₁ < r ≤ A₂` and `Y₀ < r*q ≤ Y₁`; it is exactly the
+upper closed product prefix minus the lower closed product prefix. The module
+proves the resulting subtraction identities for AP counts, coprime mass and
+primitive discrepancy without dropping prime squares or introducing an
+ordering multiplicity.
+
+Each prefix is decomposed into first-prime fibres, and the product wall is
+proved equivalent to the external closed moving endpoint `q ≤ Y/r`. For a
+primitive residue, non-coprime outer fibres are empty, giving precisely an
+outer `Coprime r d` gate and a modulus-independent zero-one prime indicator;
+the latter has absolute value at most one. Finally, relative to any displayed
+prime-counting main term, the prefix error is the corresponding bounded
+indicator sum of fibre errors and the strip error is exactly the difference
+of its two prefix errors. Thus the triangle cost is exactly two prefix errors,
+with no hidden endpoint or normalization correction.
+
+The module source SHA-256 is
+`94a00af92118a864fc931e1543efe540f9e582a3263bc8e93e8f59ca30eb3c3e`.
+Local verification with the pinned Lean/Mathlib revisions passed direct
+compilation, the complete 2,868-job `lake build`, bundled module
+`leanchecker`, a 47-declaration module audit, a 2,297-declaration imported-root
+audit, and the independent 358-declaration VariableEnvelope workflow. Both
+transitive audits allowed only `propext`, `Classical.choice` and `Quot.sound`.
+The complete-root bundled `leanchecker` was attempted and was killed by the
+local memory limit (exit 137), so root replay success is not claimed; remote
+workflows remain required for the submitted commit.
+
+This module is a finite adapter only. It does not prove the Pan distribution
+theorem, nor that the 17,572 same-mask-v2 cells satisfy its scale gates. The
+next step is the exact cell-to-strip containment and the four per-prefix
+inequalities at both `Y₀` and `Y₁`, followed by import and transitive audit of
+the upstream bounded aggregate.
