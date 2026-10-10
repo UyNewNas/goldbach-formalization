@@ -429,3 +429,33 @@ regressions, eight bundled kernel replays and all 358 declaration audits.  A
 bundled kernel replay of the complete root was attempted but was killed by the
 local memory limit (exit 137), so root replay success is not claimed; remote
 core and VariableEnvelope workflows remain required for the submitted commit.
+
+## Finite half-product Pan expansion candidate
+
+`ImbalancedChen/HalfProductPanFinite.lean` rewrites every product-filtered
+half-product source count as an exact sum over its unique smaller prime.
+Specialization gives exact smaller-prime expansions for the actual congruence
+mass, coprime mass, `BoundingSieve` divisor sum and primitive discrepancy.
+All formulas retain the arbitrary real cutoff, the closed product endpoint,
+the strict power wall, the prime-square diagonal and multiplication
+multiplicity one. The equivalent outer prime-indicator form has absolute
+coefficient at most one.
+
+This closes the finite divisor-count decomposition needed before applying a
+bounded-coefficient Pan theorem. It does not yet turn each curved fibre into
+fixed product strips or prove a distribution estimate. The sharp fibre has a
+moving lower wall and strict power wall, so the next adapter must cover it by
+the manuscript's licensed cells and express each product strip as a difference
+of two Pan prefixes at their own scales.
+
+The module source SHA-256 is
+`f392c7642bd00e418c91000a3ed6ef7c4c30194808e974999d4a39699d2b62de`.
+Local verification with Lean `v4.33.0-rc1` and Mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` passed direct compilation, the
+complete 2,867-job `lake build`, bundled module `leanchecker`, an
+18-declaration module audit, a 2,250-declaration imported-root audit, and the
+independent 358-declaration VariableEnvelope workflow. Both transitive audits
+allowed only `propext`, `Classical.choice` and `Quot.sound`. The complete-root
+bundled `leanchecker` was attempted and was killed by the local memory limit
+(exit 137), so root replay success is not claimed; remote workflows remain
+required for the submitted commit.

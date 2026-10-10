@@ -217,3 +217,29 @@ exact local-product normalization with no extra factor two.  The older
 quantifier structure or are unproved `Prop` interfaces and are not accepted as
 analytic suppliers; the checked zeta-23 sources contain no matching sieve/AP
 distribution result.
+
+### Half-product to Pan finite interface
+
+`ImbalancedChen/HalfProductPanFinite.lean` supplies the exact missing first
+adapter: the source predicate is transported through the unique ordered
+factorization and grouped by the smaller prime `r`. The actual congruence mass
+is therefore a sum of larger-prime counts satisfying `r*q ≡ N [MOD d]`, and
+the actual primitive discrepancy is the sum of the corresponding fibre
+discrepancies. No factor two is introduced and `r = q` remains present.
+
+The checked upstream theorem
+`liuMainPanCoprimeIntervalMaxL_boundedAggregate_log_saving` in
+`subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`
+accepts one coefficient function `f` with `|f| ≤ 1` and sums its coprime
+moving-residue interval errors over `d`. Its scale, interval endpoints and
+logarithmic lower gate are explicit. The new prime-indicator theorem proves
+the required coefficient bound at the finite-source level, but the curved
+fibre is not one Pan prefix. A correct next bridge must use the same-mask-v2
+product cells and write each strip as an upper prefix minus a lower prefix;
+both prefixes must satisfy the Pan gates at their own product scale.
+
+Dependency audit: the upstream package uses the identical Lean and Mathlib
+pins and can be the sole analytic-number-theory dependency. It must not be
+required together with the separate `analytic-number-theory-lean` package,
+because both export the `AnalyticNumberTheory` and `PrimeNumberTheoremAnd`
+module roots. No dependency change is made in this checkpoint.
