@@ -9,6 +9,7 @@ import ImbalancedChen.NumericalTransfer
 import ImbalancedChen.NormalizationGrowth
 import ImbalancedChen.SingularSeries
 import ImbalancedChen.ManuscriptTransfer
+import ImbalancedChen.CurrentNumericalTransfer
 import ImbalancedChen.HalfProductGeometry
 import ImbalancedChen.BadSourceLocalization
 import ImbalancedChen.LogCutoffError
@@ -84,3 +85,4 @@ import ImbalancedChen.MovingWeightTransport
 import ImbalancedChen.ChenQuotientMovingWeight
 import ImbalancedChen.ChenPairHarmonicFinite
 import ImbalancedChen.SymmetricTriangleIntegral
+
