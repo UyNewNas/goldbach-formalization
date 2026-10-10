@@ -584,3 +584,13 @@ This is a purely finite combinatorial reduction. It does not identify the dynami
 
 The updated module SHA-256 is `e37bb4d2aa855c86e1601566e9ea6649092ac625c434d8a30476208057fab743`. Static checks pass (`git diff --check` and no `sorry`, `admit`, custom `axiom`, `native_decide` or `unsafe` in the module). This runner has no Lean or Lake executable, so no local elaboration, build, kernel replay or transitive axiom audit is claimed. The manuscript remains `master@ba6ec11d800eccc54406490631895e174de85766` and the pinned versions are unchanged.
 
+## Dynamic Pan endpoint-range candidate
+
+Code commit [`97a780a37a41952f10f4de0c3fe91184a7e2813d`](https://github.com/UyNewNas/goldbach-formalization/commit/97a780a37a41952f10f4de0c3fe91184a7e2813d) adds `ImbalancedChen/PanProductGridRanges.lean` and imports it from the public root. For each selected dynamic `(r,r*q)` cell and `1 < κ ≤ 2`, `actualPanProductGridIndices_productLowerEndpoint_gt` proves `T/2 - 1 < Y₀`, `actualPanProductGridIndices_productUpperEndpoint_lt` proves `Y₁ < 2N`, and `actualPanProductGridIndices_firstUpperEndpoint_lt` proves `A₂ < 2*sqrt N`. The combined theorem `actualPanProductGridIndices_endpoint_ranges` exports all three bounds.
+
+Every bound comes from the literal source witness used to select the cell. The lower product estimate pays the full multiplicative-width and ceiling-minus-one losses; the first-coordinate estimate uses the original ordering `r ≤ q`; and the upper product estimate retains the original closed cap `r*q ≤ N`. Prime squares and ordered-pair multiplicity remain unchanged. No statement clips the full product strip back to the curved source.
+
+This closes only the first finite endpoint-range layer. It does not yet prove the Liu--Pan threshold, two-thirds or logarithmic lower gates, and it deliberately does not infer either endpoint's `D ≤ panModulusCutoff Y B` condition from a cutoff at global scale `N`. Those two cutoff obligations remain independent.
+
+The new module SHA-256 is `dc19b118be3348a81503c236917400820f31af44bfbddea22d85b4f271fa79a0`. Static checks pass (`git diff --check` and no `sorry`, `admit`, custom `axiom`, `native_decide` or `unsafe`). An independent read-only review checked the source-level types, coercions, endpoint indices and inequality directions. This runner has no Lean or Lake executable, so no local elaboration, build, bundled kernel replay or transitive axiom audit is claimed. The manuscript remains `master@ba6ec11d800eccc54406490631895e174de85766`; all dependency pins and current constants are unchanged.
+

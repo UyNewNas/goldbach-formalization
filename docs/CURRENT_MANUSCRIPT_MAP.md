@@ -290,6 +290,15 @@ actual source-pair witness and the selected family has at most
 `(floor (log N / log κ) + 1)^2` cells.  This is the dynamic Pan-grid budget;
 it is not the separate 17,572-cell same-mask-v2 numerical certificate.
 
+`ImbalancedChen/PanProductGridRanges.lean` supplies the first selected-cell
+geometry needed by the Pan consumer.  For `1 < κ ≤ 2`, an actual source
+witness in the cell proves the exact endpoint bounds
+`T/2 - 1 < Y₀`, `Y₁ < 2N`, and `A₂ < 2 * sqrt N`, where the endpoints use
+the same ceiling-minus-one convention as the strict-lower/closed-upper product
+strip.  These bounds retain all rounding losses and do not claim that the full
+cell lies in the curved source.  They also do not transfer the global modulus
+cutoff to either product endpoint.
+
 The 17,572 same-mask-v2 cells are **not** this half-product Pan grid.  They are
 the separate fixed `(t,u)` cells in the eleven-term lower-weight numerical
 certificate, where the `7/3` refinement improves the lower mean.  The Pan
