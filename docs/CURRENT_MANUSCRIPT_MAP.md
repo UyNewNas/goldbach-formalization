@@ -45,6 +45,20 @@ the receiver-one absorption lemma.
 These results close the exact arithmetic and terminal quantifier assembly.
 They do **not** close the analytic hypotheses supplied to that theorem.
 
+## Current main-theorem statement
+
+`ImbalancedChen/CurrentMainTheorem.lean` extends the exact finite partition to
+every fixed real exponent through `RealBadReceiver`, `realBadPrimes`, and
+`RealB`.  The identity `D12_eq_RealDb_add_RealB` counts each additive prime
+once and makes no rationality assumption on `b`.  `B_eq_RealB` proves that at
+every positive-denominator rational exponent this is exactly the pre-existing
+integer-power count `B`, rather than a parallel convention.
+
+`current_theorem_1_1_of_manuscript_bounds` then states the literal lower limit
+through all even natural numbers, with `1/2 < b < 1` chosen first.  It uses an
+`EReal` liminf so no artificial global boundedness assumption is added to the
+normalized count.  Its two analytic estimates remain explicit hypotheses.
+
 ## Remaining proof obligations
 
 1. Formalize the restricted moving-residue distribution estimate with the
@@ -58,9 +72,11 @@ They do **not** close the analytic hypotheses supplied to that theorem.
    be added.
 5. Close the ordered bad-semiprime asymptotic with mass
    `J_b = log (1/b)` and discharge the three explicit upper-bound hypotheses.
-6. State and prove the even-restricted liminf form of Theorem 1.1 from those
-   inputs.  A conditional transfer or a zero-`sorry` finite core is not the
-   complete manuscript proof.
+6. Discharge the two explicit analytic hypotheses of
+   `current_theorem_1_1_of_manuscript_bounds`.  The exact arbitrary-real-`b`
+   partition and even-restricted liminf transfer are now formalized, but a
+   conditional theorem or a zero-`sorry` finite core is not the complete
+   manuscript proof.
 
 The external `1.9728` lower coefficient belongs only to a withdrawn branch and
 is not an input to the current theorem.

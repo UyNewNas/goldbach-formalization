@@ -10,6 +10,7 @@ import ImbalancedChen.NormalizationGrowth
 import ImbalancedChen.SingularSeries
 import ImbalancedChen.ManuscriptTransfer
 import ImbalancedChen.CurrentNumericalTransfer
+import ImbalancedChen.CurrentMainTheorem
 import ImbalancedChen.HalfProductGeometry
 import ImbalancedChen.BadSourceLocalization
 import ImbalancedChen.LogCutoffError
