@@ -11,6 +11,7 @@ import ImbalancedChen.SingularSeries
 import ImbalancedChen.ManuscriptTransfer
 import ImbalancedChen.CurrentNumericalTransfer
 import ImbalancedChen.CurrentMainTheorem
+import ImbalancedChen.RealHalfProductSource
 import ImbalancedChen.HalfProductGeometry
 import ImbalancedChen.BadSourceLocalization
 import ImbalancedChen.LogCutoffError

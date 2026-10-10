@@ -284,3 +284,39 @@ For the restricted Lebesgue measure, every singleton is null. Fubini therefore r
 Independent source review found a missing close for the anonymous noncomputable section. The local repair adds only the bare end before the named namespace end; all three statements and proof bodies are unchanged. The repaired source has static source/API and exact-polynomial checks, but no local Lean compiler or Lake executable is available. All three runtime gates remain pending. Adding the source and its one root import targets 85 owned modules and 86 replay targets; no post-addition audited declaration count is asserted.
 
 The Lebesgue-null diagonal here is distinct from the finite tensor diagonal with denominator (p-1)^2, whose arithmetic vanishing estimate belongs to ChenPairHarmonicFinite. For the intended Y5 application the full weighted integrand, including 1/(u*v), must satisfy the actual square's continuity and symmetry conditions; on u <= t the larger-coordinate profile can then be rewritten at t. The Y6 rectangle swap likewise needs continuity on the genuine rectangle. This module does not prove a prime-pair limit, uniform moving-kernel approximation, lower-positive sieve gate, evaluated coefficient 1.8271, or the full Chen theorem. Foreign supplier-backed consumers remain separate, and no VariableEnvelope change is included.
+
+
+## Arbitrary-real half-product localization candidate
+
+The frozen source for this checkpoint is the 10 October 2026 manuscript at
+`ba6ec11d800eccc54406490631895e174de85766`, with
+`paper/source/manuscript-body.tex` blob
+`d529bea2ecfcc74d64fc1664ac770a3becaa7c79`.  The new
+`RealHalfProductSource` module reindexes the arbitrary-real bad count by its
+receiver, partitions it at a literal real cutoff, and identifies the retained
+part with the inclusive ordered half-product source after the exact
+`m < N ∧ Nat.Prime (N-m)` filter.  Multiplication is proved bijective on the
+ordered prime-pair carrier, including prime squares, so the bridge introduces
+neither factor-witness multiplicity nor a factor two.  The new module source
+SHA-256 is `0c3211cb72d8f27eb380f57fe5d751f8fc3179cb646c683c1449d450c71c55e7`.
+
+Local verification with the pinned Lean `v4.33.0-rc1` and Mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` passed the targeted module build,
+the complete project build and bundled `leanchecker` replay of
+`ImbalancedChen.RealHalfProductSource`.  Direct transitive checks of the five
+key exported results report exactly `propext`, `Classical.choice` and
+`Quot.sound`.  A local root `leanchecker ImbalancedChen` process was killed by
+the container memory limit (exit 137), so no local root-replay success is
+claimed.  The independent local VariableEnvelope workflow separately passed
+all module builds, exact regressions, eight bundled kernel replays and the
+358-declaration transitive audit.  The required root replay, full root audit
+and both remote workflows remain pending on GitHub Actions for the submitted
+commit.
+
+This is only the exact finite input to the current ordered mass argument.  It
+does not yet instantiate `T_N = 2 N^(1-κ₀)`, prove the normalized small-tail
+error, the three moving geometric walls, the half-product PNT/Mertens limit,
+or `J_b = log(1/b)`.  The external reuse audit in
+`docs/CURRENT_MANUSCRIPT_MAP.md` records the same-pin real-exponent
+prime-reciprocal interval theorem that can supply the outer logarithmic mass;
+its moving product-boundary and fibre-uniformity obligations remain open.

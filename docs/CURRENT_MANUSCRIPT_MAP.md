@@ -23,6 +23,8 @@ statement before any later checkpoint is called current.
 | `eq:current-d12`, including `N-p > 1` | `Counting.D12` | Exact finite definition |
 | `eq:current-db`, distinct additive primes | `Counting.Db`; `RationalPowers.RealDb`; `Db_eq_RealDb` | Exact for positive denominator |
 | `eq:current-bb`, ordered bad factorization | `OrderedBad.badReceiver_iff_ordered_real_factors`; `CurrentMainTheorem.realBadReceiver_iff_realOrderedBadReceiver`; `RealB_eq_realOrderedBadPrimes_card` | Exact for rational and arbitrary real `b < 1`, including squares and strict endpoints |
+| `sec:current-transfer`, finite ordered source and cutoff | `RealHalfProductSource.RealB_eq_realHalfProductSource_filter_card_add_small`; `realHalfProductPairs_card_eq` | Exact finite localization for arbitrary real `b < 1`; analytic pair-mass limit open |
+| `eq:current-bad-mass`, `J_b = log (1/b)` | The finite source above is the input; no arbitrary-real mass-limit theorem yet | Open: prove the three geometric walls, uniform prime inputs and integral limit with no factor two |
 | `eq:current-exact-subtraction` | `D12_eq_Db_add_B`; `Db_cast_eq_D12_sub_B` | Proved finite identity |
 | `eq:current-normalization` | `SingularSeries.singularNormalization` | Product convergence, positivity and growth proved |
 
@@ -68,6 +70,24 @@ squares and proves that sorting adds no witness multiplicity.  Consequently
 `RealB_eq_realOrderedBadPrimes_card` is the exact finite input expected by the
 remaining ordered bad-semiprime mass estimate.
 
+`ImbalancedChen/RealHalfProductSource.lean` now continues this bridge for an
+arbitrary real exponent.  For every real cutoff `T` and `b < 1`,
+`RealB_eq_realHalfProductSource_filter_card_add_small` partitions `RealB`
+into the inclusive half-product source after the literal
+`m < N ∧ Nat.Prime (N - m)` filter and the complementary receivers `m < T`.
+The filter preserves the manuscript's strict upper endpoint even though the
+ambient analytic source uses `m ≤ N`.  `realHalfProductPairs_card_eq` counts
+the unique ordered pair, including prime squares, so this reindexing adds no
+factor two and no witness multiplicity.
+
+This closes only finite reindexing and localization.  It does not yet choose
+the manuscript cutoff `T_N = 2 N^(1-κ₀)`, prove its normalized small-tail
+error, establish the required uniform prime-number and reciprocal-prime
+limits, justify smoothing/partition of unity, or derive
+`J_b = log (1/b)`.  Those later geometric and analytic steps use `0 < b`
+(available from `1/2 < b` in Theorem 1.1), not merely the `b < 1` needed by
+the finite complement identity.
+
 ## Remaining proof obligations
 
 1. Formalize the restricted moving-residue distribution estimate with the
@@ -81,8 +101,9 @@ remaining ordered bad-semiprime mass estimate.
    be added.
 5. Close the ordered bad-semiprime asymptotic with mass
    `J_b = log (1/b)` and discharge the three explicit upper-bound hypotheses.
-   The arbitrary-real finite ordered-region identity feeding this estimate is
-   now proved; the prime-distribution asymptotic and its uniform error are not.
+   The arbitrary-real finite ordered-source localization and unique pair count
+   feeding this estimate are now proved; the three real-coordinate walls,
+   prime-distribution asymptotic and its uniform error are not.
 6. Discharge the two explicit analytic hypotheses of
    `current_theorem_1_1_of_manuscript_bounds`.  The exact arbitrary-real-`b`
    partition and even-restricted liminf transfer are now formalized, but a
@@ -91,3 +112,24 @@ remaining ordered bad-semiprime mass estimate.
 
 The external `1.9728` lower coefficient belongs only to a withdrawn branch and
 is not an input to the current theorem.
+
+## External reuse audit (10 October 2026)
+
+No checked repository currently supplies the complete arbitrary-real ordered
+half-product mass theorem.  The closest exact reusable interface is
+`subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`,
+`MathlibNt/SieveTheory/Arithmetic/PrimeReciprocalLogScale.lean`:
+`tendsto_primeReciprocalLogInterval` proves the genuine `Real.rpow` interval
+mass `log (b / a)`.  At `a = b/(1+b)` and upper exponent `1/(1+b)` this is
+exactly `log (1/b)`.  Its fixed-rectangle companion can support a finite
+Darboux partition, but neither theorem supplies the moving product boundary,
+the half-product fibre PNT step, or the required uniform error.
+
+The dependency pin matches this repository.  Its underlying PNT and Mertens
+results come from
+`UyNewNas/analytic-number-theory-lean@88ee563ba0021702ea370b13bae7c7e7fec59657`,
+whose audit covers those declarations with the standard three axioms.  Any
+reuse here must still be minimally ported or adapted and re-audited
+transitively.  Pinned Mathlib and the checked zeta-23 source do not contain a
+drop-in half-product theorem; no relevant open branch, PR, or issue supplied a
+more complete result.
