@@ -556,3 +556,13 @@ The new module source SHA-256 is `13b512d4c51a00b217ea72b3033ec50bd48d76c1081218
 
 This runner did not contain a Lean executable after workspace recovery, so no local compile, kernel replay or axiom audit is claimed for this checkpoint. The first core and VariableEnvelope runs for the code commit failed before creating workflow steps (`steps: null`) and were retried once; only an actual runner execution can count as remote verification.
 
+## Dynamic Pan product-coordinate grid candidate
+
+Commit [`1fc6dbc92739732edf890e47c1fe8eaa27817274`](https://github.com/UyNewNas/goldbach-formalization/commit/1fc6dbc92739732edf890e47c1fe8eaa27817274) adds `ImbalancedChen/PanProductGrid.lean`. It constructs the genuinely required multiplicative grid in `(r,m=r*q)` coordinates rather than transferring signed discrepancies from the older `(r,q)` rectangles. Each cell is definitionally an exact `panProductStripPairs` with `A₁<r≤A₂` and `Y₀<r*q≤Y₁`.
+
+`panProductGrid_existsUnique_strip` proves unique ownership for every prime pair below the product cap, including `r=q`. `panProductGridStrip_disjoint` proves pair-level disjointness, and `halfProductPair_existsUnique_actualPanProductGridStrip` plus `halfProductPairs_subset_actualPanProductGridPairs` give unique selected-cell ownership and the finite upper cover for the actual source. No equality with the curved source is claimed: a full selected strip may contain exterior points, and later projection must use pair weights so that different ordered pairs with the same product do not lose multiplicity. The 17,572 same-mask-v2 certificate cells remain a separate eleven-term numerical object.
+
+The module source SHA-256 is `d1390ccfd096821a87c8695e099754d7e9403c6632c2b18b0a641254e9a16d11`. The manuscript remains `master@ba6ec11d800eccc54406490631895e174de85766`; all constants and dependency pins are unchanged.
+
+No local Lean executable was available, so compilation, kernel replay and axiom audit are not claimed. Exact-head core run 38082267062 and VariableEnvelope run 38082267051, including one failed-jobs retry each, ended before creating any workflow step (`steps: null`, no logs). They are infrastructure-start failures, not proof verification. The next mathematical step is to prove the endpoint scale gates on these selected `(r,r*q)` cells and then apply `panProductStrip_physical_boundedAggregate_log_saving` cellwise.
+

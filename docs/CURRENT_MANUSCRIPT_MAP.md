@@ -269,11 +269,23 @@ deduces a single logarithmic-saving bound for the absolute errors of the
 strict-lower/closed-upper product strip.  No factor counting moduli or residue
 classes is introduced, and coprimality remains with the fixed additive target.
 
+`ImbalancedChen/PanProductGrid.lean` supplies the previously missing finite
+coordinate system.  It sends a prime pair `(r,q)` to `(r,r*q)` and uses the
+existing exact half-open multiplicative sides in those coordinates.  Each
+cell is definitionally a `panProductStripPairs` with an open lower and closed
+upper endpoint in both `r` and `r*q`.  Every actual source pair has a unique
+selected cell, and distinct cells are disjoint at the pair level; prime
+squares and ordered multiplicity are retained.  The selected union is only
+an upper cover, not an equality with the curved source, because complete
+strips also contain exterior points.  Projection to products must therefore
+continue through `pairProductWeight` rather than erase pair multiplicity.
+
 The 17,572 same-mask-v2 cells are **not** this half-product Pan grid.  They are
 the separate fixed `(t,u)` cells in the eleven-term lower-weight numerical
 certificate, where the `7/3` refinement improves the lower mean.  The Pan
-geometry instead needs a dynamic `(r,m=r*q)` product-strip grid.  The next
-geometric adapter must define that grid and prove, separately at `Y₀` and
+geometry instead uses the now-defined dynamic `(r,m=r*q)` product-strip grid.
+The next geometric adapter must prove, for its selected cells and separately
+at `Y₀` and
 `Y₁`, all upstream hypotheses `N₀ ≤ Y`, `A₂ ≤ Y^(2/3)`,
 `log(Y)^(2B) ≤ A₁`, and `D ≤ panModulusCutoff Y B`.  Once supplied, the new
 aggregate adapter consumes those eight gates directly.  The existing
