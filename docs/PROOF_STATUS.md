@@ -566,3 +566,13 @@ The module source SHA-256 is `d1390ccfd096821a87c8695e099754d7e9403c6632c2b18b0a
 
 No local Lean executable was available, so compilation, kernel replay and axiom audit are not claimed. Exact-head core run 38082267062 and VariableEnvelope run 38082267051, including one failed-jobs retry each, ended before creating any workflow step (`steps: null`, no logs). They are infrastructure-start failures, not proof verification. The next mathematical step is to prove the endpoint scale gates on these selected `(r,r*q)` cells and then apply `panProductStrip_physical_boundedAggregate_log_saving` cellwise.
 
+## Pinned PNT/Mertens source-mass supplier candidate
+
+Code commit [`244badc1dfb1f5a0fb7c4e6f748bed8a8bd68108`](https://github.com/UyNewNas/goldbach-formalization/commit/244badc1dfb1f5a0fb7c4e6f748bed8a8bd68108) adds `ImbalancedChen/RealHalfProductMassSuppliers.lean`. It connects the exact current arbitrary-real source-mass chain to proved theorems in the already-pinned `goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958` dependency.
+
+The local `realPrimeReciprocalLogIntervalSum` is proved definitionally equal to the supplier's `weightedPrimeReciprocalLogSum`: both use `Ioc`, prime filtering, the same logarithmic weight and `rpowFloor N a = floor(N^a)`. `realHalfProduct_primeCounting_asymptotic_real` specializes the supplier's real-variable PNT to the exact witness previously left as a premise. The kernel `1/(1-u)` is proved continuous on `[b/(1+b),1/2]`, so the pinned weighted Mertens theorem supplies the exact integral used by the existing coefficient proof.
+
+The exported `tendsto_realHalfProductSource_manuscriptCutoff_mass_of_suppliers` has only the mathematical parameters `0<b<1` and `κ>0`; it has no PNT or Mertens premise. Its conclusion is the literal ordered half-product source at `manuscriptHalfProductCutoff κ N`, normalized by `N/log N`, tending to `log(1/b)`. Strict badness, prime ordering, the inclusive square-root endpoint and prime squares are inherited unchanged. This closes the analytic source mass, not the subsequent additive-prime filtering or positive upper-sieve estimate needed for `RealB`.
+
+The new module source SHA-256 is `fd088cd1597ba6d2a47175c6bcb358387d5e1c5eebca116bcfdd53ea400884ad`. The manuscript remains `master@ba6ec11d800eccc54406490631895e174de85766`; constants and dependency pins are unchanged. The runner has no Lean executable, so this code is submitted for CI but compilation, kernel replay and transitive axiom audit are not claimed until an actual runner executes them.
+

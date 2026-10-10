@@ -25,7 +25,7 @@ statement before any later checkpoint is called current.
 | `eq:current-bb`, ordered bad factorization | `OrderedBad.badReceiver_iff_ordered_real_factors`; `CurrentMainTheorem.realBadReceiver_iff_realOrderedBadReceiver`; `RealB_eq_realOrderedBadPrimes_card` | Exact for rational and arbitrary real `b < 1`, including squares and strict endpoints |
 | `sec:current-transfer`, finite ordered source and cutoff | `RealHalfProductSource.RealB_eq_realHalfProductSource_filter_card_add_small`; `realHalfProductPairs_card_eq` | Exact finite localization for arbitrary real `b < 1`; analytic pair-mass limit open |
 | Rational minorant to the finite additive-prime sieve | `RealHalfProductSieveBridge.realHalfProductSource_primePartner_card_le_sifted_rat_add_cap`; `realHalfProductSource_primePartner_cast_le_optimized_of_rat_minorant`; `RealB_cast_le_optimized_of_rat_minorant` | Proved: for `num/den ≤ b`, the literal real source after `m < N ∧ Prime (N-m)` is bounded by the rational sifted source, retaining `+z` and `T+1`; the current physical-weight density/distribution estimates remain open |
-| `eq:current-bad-mass`, `J_b = log (1/b)` | `RealHalfProductMass.realHalfProductMass_exponents`; `RealHalfProductMassSplit.manuscriptHalfProductCutoff`; `eventually_realHalfProductSource_manuscriptCutoff_massApprox_error_of_real_pnt`; `tendsto_realHalfProductSource_manuscriptCutoff_mass_of_real_pnt_and_weighted_mertens` | Exact arbitrary-real source envelope at the current `2 N^(1-κ₀)` lower wall and conditional full source mass limit proved; actual PNT/Mertens suppliers and filtered additive-prime sieve transfer remain open |
+| `eq:current-bad-mass`, `J_b = log (1/b)` | `RealHalfProductMass.realHalfProductMass_exponents`; `RealHalfProductMassSplit.manuscriptHalfProductCutoff`; `RealHalfProductMassSuppliers.tendsto_realHalfProductSource_manuscriptCutoff_mass_of_suppliers` | Exact arbitrary-real source envelope at the current `2 N^(1-κ₀)` lower wall; pinned proved PNT/Mertens suppliers are connected without analytic premises. The filtered additive-prime positive-sieve transfer remains open |
 | `eq:current-exact-subtraction` | `D12_eq_Db_add_B`; `Db_cast_eq_D12_sub_B` | Proved finite identity |
 | `eq:current-normalization` | `SingularSeries.singularNormalization` | Product convergence, positivity and growth proved |
 
@@ -109,10 +109,12 @@ as an explicitly named historical auxiliary result, not as the displayed
 cutoff of the current manuscript.
 
 This closes finite reindexing, the real split algebra, the moving product
-boundary, the normalized current power-cutoff error and the source mass limit
-conditional on two explicit standard analytic suppliers.  It does not yet
-instantiate those PNT/Mertens suppliers in this repository or transport the
-source mass through the additive-prime filter and actual positive upper sieve.
+boundary and the normalized current power-cutoff error.  The new
+`RealHalfProductMassSuppliers` adapter identifies the local prime interval
+definitionally with the pinned weighted Mertens interval, instantiates the
+pinned real PNT, and removes both analytic premises from the source-mass
+limit.  It does not yet transport that source mass through the additive-prime
+filter and the actual positive upper sieve.
 
 `ImbalancedChen/RealHalfProductSieveBridge.lean` now proves the exact finite
 transport that is available without claiming the manuscript's missing

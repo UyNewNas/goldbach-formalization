@@ -69,6 +69,7 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.
 - `ImbalancedChen/HalfProductMassError.lean`: negligible original-source approximation error, conditional only on that real PNT.
 - `ImbalancedChen/HalfProductMassLimit.lean`: original cutoff-source mass limit from the explicit real PNT and literal fixed-test weighted-prime Mertens limit.
+- `ImbalancedChen/RealHalfProductMassSuppliers.lean`: exact adapter to the pinned proved real PNT and weighted-prime Mertens theorems, yielding the current arbitrary-real manuscript-cutoff source mass limit without analytic premises.
 - `docs/PROOF_STATUS.md`: outstanding analytic dependencies and the frontier comparison.
 
 Build: `lake exe cache get && lake build`. The workflow also runs `leanchecker` and a transitive axiom audit allowing only `propext`, `Classical.choice`, and `Quot.sound`.
@@ -172,7 +173,8 @@ the standard strict-left/inclusive-right logarithmic prime interval, and exposes
 Mertens adapter whose premise ends at the integral rather than at the desired
 bad-count theorem. The moving product-boundary source envelope and current
 power-cutoff tail are handled by `RealHalfProductMassSplit`; the actual
-Mertens/PNT suppliers and additive-prime filter remain open. This candidate
+PNT/Mertens suppliers are connected by `RealHalfProductMassSuppliers`, while
+the additive-prime positive-upper-sieve transfer remains open. This candidate
 alone does not complete the ordered bad-semiprime asymptotic.
 
 ## Arbitrary-real source mass-split candidate
@@ -187,8 +189,9 @@ explicit real-PNT witness it proves the full finite discrepancy at that
 literal power cutoff is `o(N/log N)`, and with the standard weighted-prime
 Mertens integral it derives the conditional source limit `log(1/b)`. The
 historical logarithmic auxiliary cutoff remains available as a separately
-named theorem. The analytic suppliers and the actual additive-prime
-upper-sieve transfer remain open, so this is not yet the `RealB` bound or the
+named theorem. `RealHalfProductMassSuppliers` now discharges both analytic
+premises from pinned proved theorems. The actual additive-prime upper-sieve
+transfer remains open, so this is not yet the `RealB` bound or the
 completed manuscript theorem.
 
 ## Arbitrary-real source to rational finite-sieve bridge candidate
