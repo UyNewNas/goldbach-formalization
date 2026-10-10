@@ -66,6 +66,7 @@ import ImbalancedChen.PanProductStrips
 import ImbalancedChen.PanProductResidueBudget
 import ImbalancedChen.PanProductLiuBridge
 import ImbalancedChen.PanProductAggregateBudget
+import ImbalancedChen.PanProductGrid
 import ImbalancedChen.EnlargedSelbergAsymptotic
 import ImbalancedChen.QuotientChenFourPrime
 import ImbalancedChen.QuotientChenFourCounts
