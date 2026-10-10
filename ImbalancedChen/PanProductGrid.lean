@@ -105,6 +105,36 @@ def actualPanProductGridIndices
     ∃ p ∈ halfProductPairs num den N T,
       p ∈ panProductGridStrip κ ij
 
+/-- Membership in the dynamically selected product grid records both the
+ambient logarithmic index bound and an actual source-pair witness.  This is
+the interface used when a rectangle estimate is summed only over nonempty
+source cells. -/
+@[simp] theorem mem_actualPanProductGridIndices
+    {num den N : ℕ} {T κ : ℝ} {ij : ℕ × ℕ} :
+    ij ∈ actualPanProductGridIndices num den N T κ ↔
+      ij ∈ multiplicativeGridIndices κ N ∧
+        ∃ p ∈ halfProductPairs num den N T,
+          p ∈ panProductGridStrip κ ij := by
+  simp only [actualPanProductGridIndices, Finset.mem_filter]
+
+/-- Selecting precisely the cells meeting the source never introduces an
+index outside the finite ambient product grid. -/
+theorem actualPanProductGridIndices_subset
+    (num den N : ℕ) (T κ : ℝ) :
+    actualPanProductGridIndices num den N T κ ⊆
+      multiplicativeGridIndices κ N := by
+  exact Finset.filter_subset _ _
+
+/-- The actual source cells inherit the proved finite logarithmic rectangle
+budget.  No geometric or distribution hypothesis is required for this
+combinatorial bound. -/
+theorem actualPanProductGridIndices_card_le
+    (num den N : ℕ) (T κ : ℝ) :
+    (actualPanProductGridIndices num den N T κ).card ≤
+      (Nat.floor (Real.log (N : ℝ) / Real.log κ) + 1) ^ 2 := by
+  exact multiplicativeGrid_subfamily_card_le
+    (actualPanProductGridIndices_subset num den N T κ)
+
 /-- The full prime-pair upper cover supplied by the selected product cells. -/
 def actualPanProductGridPairs
     (num den N : ℕ) (T κ : ℝ) : Finset (ℕ × ℕ) :=
