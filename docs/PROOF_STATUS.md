@@ -395,3 +395,37 @@ audit and remote CI must still pass for the submitted commit.  This remains
 short of the actual `RealB` upper bound: the additive-prime filter must still
 be estimated with the same positive upper sieve, and the two analytic
 suppliers must be imported or proved and transitively audited.
+
+## Arbitrary-real/rational finite-sieve bridge candidate
+
+`RealHalfProductSieveBridge` closes the exact finite mismatch between the
+current arbitrary-real theorem statement and the repository's rational
+finite-sieve implementation.  It proves antitonicity in the exponent,
+literal equality of real and natural-power sources at `num/den`, containment
+of the strict prime-partner filter under every rational minorant, and the
+cardinality bound by the rational sifted source plus the explicit cap `z`.
+It then composes this containment with the already proved optimized finite
+Selberg inequality, keeping the primitive-residue discrepancy hypothesis and
+finite normalizer unchanged.  The whole-count corollary retains both `z` and
+the exact real cutoff loss `T+1`; `RealB_le_B_of_rat_minorant` records the
+corresponding monotonic rational reduction.
+
+This candidate supplies no current-`K` density theorem.  The manuscript still
+requires the same physical coefficient in the pointwise nonnegative upper
+weight, its density estimate, and the restricted signed distribution theorem,
+as well as a licensed positive smooth outer approximation to the sharp bad
+region.  The existing finite Selberg normalizer has not been equated to that
+physical construction, so this is not the completed filtered `RealB` bound.
+
+The module source SHA-256 is
+`36f16ed6d0f7aa95227a7d3b3783186b3e9bb041255ee6ae24e1ac9e1f147a2e`.
+Local verification with the pinned Lean/Mathlib revisions passed direct module
+compilation, the complete 2,866-job `lake build`, bundled module `leanchecker`,
+the complete nine-declaration transitive audit for the new module, and a
+2,232-declaration audit of the imported `ImbalancedChen` root closure.  Both
+audits permit only `propext`, `Classical.choice` and `Quot.sound`.  The
+independent VariableEnvelope workflow also passed its builds, exact
+regressions, eight bundled kernel replays and all 358 declaration audits.  A
+bundled kernel replay of the complete root was attempted but was killed by the
+local memory limit (exit 137), so root replay success is not claimed; remote
+core and VariableEnvelope workflows remain required for the submitted commit.

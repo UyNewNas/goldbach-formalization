@@ -24,6 +24,7 @@ statement before any later checkpoint is called current.
 | `eq:current-db`, distinct additive primes | `Counting.Db`; `RationalPowers.RealDb`; `Db_eq_RealDb` | Exact for positive denominator |
 | `eq:current-bb`, ordered bad factorization | `OrderedBad.badReceiver_iff_ordered_real_factors`; `CurrentMainTheorem.realBadReceiver_iff_realOrderedBadReceiver`; `RealB_eq_realOrderedBadPrimes_card` | Exact for rational and arbitrary real `b < 1`, including squares and strict endpoints |
 | `sec:current-transfer`, finite ordered source and cutoff | `RealHalfProductSource.RealB_eq_realHalfProductSource_filter_card_add_small`; `realHalfProductPairs_card_eq` | Exact finite localization for arbitrary real `b < 1`; analytic pair-mass limit open |
+| Rational minorant to the finite additive-prime sieve | `RealHalfProductSieveBridge.realHalfProductSource_primePartner_card_le_sifted_rat_add_cap`; `realHalfProductSource_primePartner_cast_le_optimized_of_rat_minorant`; `RealB_cast_le_optimized_of_rat_minorant` | Proved: for `num/den ≤ b`, the literal real source after `m < N ∧ Prime (N-m)` is bounded by the rational sifted source, retaining `+z` and `T+1`; the current physical-weight density/distribution estimates remain open |
 | `eq:current-bad-mass`, `J_b = log (1/b)` | `RealHalfProductMass.realHalfProductMass_exponents`; `RealHalfProductMassSplit.manuscriptHalfProductCutoff`; `eventually_realHalfProductSource_manuscriptCutoff_massApprox_error_of_real_pnt`; `tendsto_realHalfProductSource_manuscriptCutoff_mass_of_real_pnt_and_weighted_mertens` | Exact arbitrary-real source envelope at the current `2 N^(1-κ₀)` lower wall and conditional full source mass limit proved; actual PNT/Mertens suppliers and filtered additive-prime sieve transfer remain open |
 | `eq:current-exact-subtraction` | `D12_eq_Db_add_B`; `Db_cast_eq_D12_sub_B` | Proved finite identity |
 | `eq:current-normalization` | `SingularSeries.singularNormalization` | Product convergence, positivity and growth proved |
@@ -113,6 +114,25 @@ conditional on two explicit standard analytic suppliers.  It does not yet
 instantiate those PNT/Mertens suppliers in this repository or transport the
 source mass through the additive-prime filter and actual positive upper sieve.
 
+`ImbalancedChen/RealHalfProductSieveBridge.lean` now proves the exact finite
+transport that is available without claiming the manuscript's missing
+analytic upper-weight theorem.  The ordered bad predicate and the real source
+are antitone in the exponent.  At every positive-denominator rational
+exponent, the arbitrary-real source is literally `halfProductSource`; hence a
+rational minorant `num/den ≤ b` contains the real source at `b`, including
+after the strict `m < N` and `Nat.Prime (N-m)` filter.  The resulting cardinal
+is bounded by `siftedHalfProductSource + z`, and composing the existing finite
+Selberg inequality leaves its primitive-residue discrepancy premise, exact
+finite normalizer, `+z`, and cutoff loss `T+1` visible.  The convenience lemma
+`RealB_le_B_of_rat_minorant` gives the corresponding whole-count monotonicity.
+
+This bridge does not identify the repository's generic finite Selberg weight
+with the manuscript's physical `rho_N`, and it does not produce the current
+coefficient `K`.  The manuscript requires one and the same `rho_N` in its
+pointwise nonnegative majorant, density bound and signed distribution theorem;
+those three properties, followed by the licensed smooth outer approximation,
+remain the actual filtered-source gap.
+
 ## Remaining proof obligations
 
 1. Formalize the restricted moving-residue distribution estimate with the
@@ -127,10 +147,13 @@ source mass through the additive-prime filter and actual positive upper sieve.
 5. Close the ordered bad-semiprime asymptotic with mass
    `J_b = log (1/b)` and discharge the three explicit upper-bound hypotheses.
    The arbitrary-real finite ordered-source localization and unique pair count
-   feeding this estimate are now proved.  The exact real exponent split,
+   feeding this estimate are now proved.  Rational minorants now connect the
+   real prime-partner filter to the existing finite rational sieve, retaining
+   both finite corrections.  The exact real exponent split,
    moving-boundary source envelope, normalized cutoff error and conditional
    source mass limit are also proved.  The actual PNT/Mertens suppliers and
-   the filtered additive-prime upper-sieve transfer are not.
+   the manuscript physical-weight density/distribution theorem and licensed
+   smooth outer approximation are not.
 6. Discharge the two explicit analytic hypotheses of
    `current_theorem_1_1_of_manuscript_bounds`.  The exact arbitrary-real-`b`
    partition and even-restricted liminf transfer are now formalized, but a
@@ -167,3 +190,30 @@ risks duplicate roots.  Any reuse here must therefore be pinned, adapted and
 re-audited transitively.  Pinned Mathlib and the checked zeta-23 source do not contain a
 drop-in half-product theorem; no relevant open branch, PR, or issue supplied a
 more complete result.
+
+For the additive-prime upper-sieve step, a stronger reusable chain was found
+in the same-pin repository
+`subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`:
+
+- `UpperRosserDensity.lean` proves the explicit `upperRosserWeight`, its
+  pointwise upper certificate, strict level support and
+  `abs_upperRosserWeight_le_one`;
+- `LiLiuPanBoundedAggregate.lean` proves the unconditional bounded-coefficient
+  coprime interval aggregate with logarithmic saving;
+- `LiLiuGoldbachB9HighFirstDistribution.lean` supplies an almost identical
+  divisor-count-to-Pan-error and Rosser-error assembly template; and
+- `LiLiuGoldbachUpperDensitySix.lean` proves a generic dimension-one Rosser
+  main-sum bound for an arbitrary `BoundingSieve` satisfying its displayed
+  local-product condition.
+
+This chain is a better next target than the repository's present
+lambda-squared Selberg route: `|upperRosserWeight| ≤ 1` matches the unweighted
+bounded-coefficient Pan aggregate and avoids demanding a `3^omega(d)` error
+estimate.  It has not yet been imported or replayed in this target project.
+The remaining adapter must still prove the half-product divisor-count identity,
+coprimality-gate and endpoint corrections, multiplicity-one support, and the
+exact local-product normalization with no extra factor two.  The older
+`analytic-number-theory-lean` BV/Pan declarations have the wrong uniform
+quantifier structure or are unproved `Prop` interfaces and are not accepted as
+analytic suppliers; the checked zeta-23 sources contain no matching sieve/AP
+distribution result.

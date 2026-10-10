@@ -184,3 +184,22 @@ historical logarithmic auxiliary cutoff remains available as a separately
 named theorem. The analytic suppliers and the actual additive-prime
 upper-sieve transfer remain open, so this is not yet the `RealB` bound or the
 completed manuscript theorem.
+
+## Arbitrary-real source to rational finite-sieve bridge candidate
+
+`ImbalancedChen/RealHalfProductSieveBridge.lean` proves that the ordered bad
+region and its literal finite source are antitone in the real exponent.  At a
+positive-denominator rational exponent, that real source is definitionally the
+existing natural-power `halfProductSource`.  Thus every rational minorant
+`num/den ≤ b` bounds the arbitrary-real source at `b`, even after retaining
+the exact `m < N ∧ Nat.Prime (N-m)` filter.
+
+The bridge feeds this filtered count into the existing rational
+`siftedHalfProductSource`, retaining the explicit small-prime-partner loss
+`+z`.  Its optimized composition keeps the actual finite normalizer and the
+unweighted primitive-residue discrepancy premise visible; the complete
+`RealB` version also retains the exact cutoff loss `T+1`.  No density constant,
+distribution estimate or final bad-count asymptotic is hidden in these
+statements.  In particular, the existing generic finite Selberg bound has not
+been identified with the manuscript's current physical positive weight and
+does not by itself yield `K = 8452171/1250000`.
