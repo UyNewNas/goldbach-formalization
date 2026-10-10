@@ -1,4 +1,5 @@
 import ImbalancedChen.CurrentNumericalTransfer
+import ImbalancedChen.OrderedBad
 import Mathlib.Topology.Instances.EReal.Lemmas
 
 /-!
@@ -25,6 +26,65 @@ the prime-or-semiprime receivers. -/
 def RealBadReceiver (b : ℝ) (m : ℕ) : Prop :=
   PrimeOrSemiprime m ∧ ¬ RealImbalancedReceiver b m
 
+/-- The manuscript's ordered bad-semiprime region for an arbitrary real
+exponent.  The strict inequality is the literal complement of the accepted
+condition, and repeated prime factors are retained. -/
+def RealOrderedBadReceiver (b : ℝ) (m : ℕ) : Prop :=
+  ∃ r q : ℕ, Nat.Prime r ∧ Nat.Prime q ∧ m = r * q ∧ r ≤ q ∧
+    (q : ℝ) ^ b < (r : ℝ)
+
+/-- Below exponent one, a real-exponent bad receiver is exactly a semiprime
+in the ordered strict region.  The reverse direction checks both possible
+orders of every prime factorization rather than rejecting a receiver from one
+chosen witness. -/
+theorem realBadReceiver_iff_realOrderedBadReceiver {b : ℝ} {m : ℕ}
+    (hb : b < 1) :
+    RealBadReceiver b m ↔ RealOrderedBadReceiver b m := by
+  constructor
+  · rintro ⟨hreceiver, hbad⟩
+    rcases hreceiver with hprime | ⟨r, q, hr, hq, hm⟩
+    · exact False.elim (hbad (Or.inl hprime))
+    · rcases le_total r q with hrq | hqr
+      · refine ⟨r, q, hr, hq, hm, hrq, ?_⟩
+        exact lt_of_not_ge fun hpow =>
+          hbad (Or.inr ⟨r, q, hr, hq, hm, hpow⟩)
+      · have hm' : m = q * r := hm.trans (Nat.mul_comm r q)
+        refine ⟨q, r, hq, hr, hm', hqr, ?_⟩
+        exact lt_of_not_ge fun hpow =>
+          hbad (Or.inr ⟨q, r, hq, hr, hm', hpow⟩)
+  · rintro ⟨r, q, hr, hq, hm, hrq, hpow⟩
+    refine ⟨Or.inr ⟨r, q, hr, hq, hm⟩, ?_⟩
+    rintro (hprime | ⟨s, t, hs, ht, hst, haccepted⟩)
+    · have hmnot : ¬ Nat.Prime m := by
+        rw [hm]
+        exact Nat.not_prime_mul hr.ne_one hq.ne_one
+      exact hmnot hprime
+    · have hfac : r * q = s * t := hm.symm.trans hst
+      rcases (prime_mul_eq_prime_mul_iff hr hq hs ht).mp hfac with
+        ⟨hrs, hqt⟩ | ⟨hrt, hqs⟩
+      · subst s
+        subst t
+        exact (not_lt_of_ge haccepted) hpow
+      · subst t
+        subst s
+        have hrR : (1 : ℝ) < (r : ℝ) := by exact_mod_cast hr.one_lt
+        have hrpow : (r : ℝ) ^ b < (r : ℝ) :=
+          Real.rpow_lt_self_of_one_lt hrR hb
+        have hrqR : (r : ℝ) ≤ (q : ℝ) := by exact_mod_cast hrq
+        exact (not_lt_of_ge haccepted) (hrpow.trans_le hrqR)
+
+/-- Ordered witnesses are unique even for prime squares.  This makes explicit
+that the ordered analytic region introduces no factor-witness multiplicity. -/
+theorem realOrderedBadReceiver_factors_unique
+    {m r q s t : ℕ}
+    (hr : Nat.Prime r) (hq : Nat.Prime q)
+    (hs : Nat.Prime s) (ht : Nat.Prime t)
+    (hmrq : m = r * q) (hmst : m = s * t)
+    (hrq : r ≤ q) (hst : s ≤ t) :
+    r = s ∧ q = t := by
+  exact ordered_prime_factors_unique hr hq hs ht hrq hst
+    (hmrq.symm.trans hmst)
+
 theorem RealImbalancedReceiver.primeOrSemiprime {b : ℝ} {m : ℕ}
     (h : RealImbalancedReceiver b m) : PrimeOrSemiprime m := by
   rcases h with hprime | ⟨r, q, hr, hq, hm, _⟩
@@ -41,6 +101,18 @@ def realBadPrimes (b : ℝ) (N : ℕ) : Finset ℕ := by
 /-- Real-exponent bad-representation count. -/
 def RealB (b : ℝ) (N : ℕ) : ℕ := (realBadPrimes b N).card
 
+/-- The finite ordered bad region, indexed by the additive prime. -/
+def realOrderedBadPrimes (b : ℝ) (N : ℕ) : Finset ℕ := by
+  classical
+  exact (Finset.range N).filter fun p =>
+    Nat.Prime p ∧ RealOrderedBadReceiver b (N - p)
+
+@[simp] theorem mem_realOrderedBadPrimes {b : ℝ} {N p : ℕ} :
+    p ∈ realOrderedBadPrimes b N ↔
+      p < N ∧ Nat.Prime p ∧ RealOrderedBadReceiver b (N - p) := by
+  classical
+  simp [realOrderedBadPrimes]
+
 @[simp] theorem mem_realBadPrimes {b : ℝ} {N p : ℕ} :
     p ∈ realBadPrimes b N ↔
       p < N ∧ Nat.Prime p ∧ PrimeOrSemiprime (N - p) ∧
@@ -48,6 +120,22 @@ def RealB (b : ℝ) (N : ℕ) : ℕ := (realBadPrimes b N).card
   classical
   unfold realBadPrimes RealBadReceiver
   simp only [Finset.mem_filter, Finset.mem_range]
+
+/-- For every exponent below one, the arbitrary-real complement set is
+literally the finite ordered bad region. -/
+theorem realBadPrimes_eq_realOrderedBadPrimes {b : ℝ} (hb : b < 1) (N : ℕ) :
+    realBadPrimes b N = realOrderedBadPrimes b N := by
+  classical
+  ext p
+  rw [mem_realBadPrimes, mem_realOrderedBadPrimes]
+  change (p < N ∧ Nat.Prime p ∧ RealBadReceiver b (N - p)) ↔
+    (p < N ∧ Nat.Prime p ∧ RealOrderedBadReceiver b (N - p))
+  rw [realBadReceiver_iff_realOrderedBadReceiver hb]
+
+theorem RealB_eq_realOrderedBadPrimes_card {b : ℝ} (hb : b < 1) (N : ℕ) :
+    RealB b N = (realOrderedBadPrimes b N).card := by
+  unfold RealB
+  rw [realBadPrimes_eq_realOrderedBadPrimes hb]
 
 /-- At a rational exponent, the new arbitrary-real complement is exactly the
 existing decidable integer-power complement. -/

@@ -22,7 +22,7 @@ statement before any later checkpoint is called current.
 | --- | --- | --- |
 | `eq:current-d12`, including `N-p > 1` | `Counting.D12` | Exact finite definition |
 | `eq:current-db`, distinct additive primes | `Counting.Db`; `RationalPowers.RealDb`; `Db_eq_RealDb` | Exact for positive denominator |
-| `eq:current-bb`, ordered bad factorization | `OrderedBad.badReceiver_iff_ordered_real_factors`; `B_eq_orderedBadPrimes_card` | Exact, including squares and strict endpoints |
+| `eq:current-bb`, ordered bad factorization | `OrderedBad.badReceiver_iff_ordered_real_factors`; `CurrentMainTheorem.realBadReceiver_iff_realOrderedBadReceiver`; `RealB_eq_realOrderedBadPrimes_card` | Exact for rational and arbitrary real `b < 1`, including squares and strict endpoints |
 | `eq:current-exact-subtraction` | `D12_eq_Db_add_B`; `Db_cast_eq_D12_sub_B` | Proved finite identity |
 | `eq:current-normalization` | `SingularSeries.singularNormalization` | Product convergence, positivity and growth proved |
 
@@ -59,6 +59,15 @@ through all even natural numbers, with `1/2 < b < 1` chosen first.  It uses an
 `EReal` liminf so no artificial global boundedness assumption is added to the
 normalized count.  Its two analytic estimates remain explicit hypotheses.
 
+For the arbitrary-real range of Theorem 1.1,
+`realBadReceiver_iff_realOrderedBadReceiver` identifies the complement with
+the literal ordered region
+`r ≤ q ∧ (q : ℝ) ^ b < (r : ℝ)`.  Its converse checks both orders of every
+prime factorization; `realOrderedBadReceiver_factors_unique` retains prime
+squares and proves that sorting adds no witness multiplicity.  Consequently
+`RealB_eq_realOrderedBadPrimes_card` is the exact finite input expected by the
+remaining ordered bad-semiprime mass estimate.
+
 ## Remaining proof obligations
 
 1. Formalize the restricted moving-residue distribution estimate with the
@@ -72,6 +81,8 @@ normalized count.  Its two analytic estimates remain explicit hypotheses.
    be added.
 5. Close the ordered bad-semiprime asymptotic with mass
    `J_b = log (1/b)` and discharge the three explicit upper-bound hypotheses.
+   The arbitrary-real finite ordered-region identity feeding this estimate is
+   now proved; the prime-distribution asymptotic and its uniform error are not.
 6. Discharge the two explicit analytic hypotheses of
    `current_theorem_1_1_of_manuscript_bounds`.  The exact arbitrary-real-`b`
    partition and even-restricted liminf transfer are now formalized, but a
