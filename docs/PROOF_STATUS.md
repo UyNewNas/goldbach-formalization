@@ -320,3 +320,35 @@ or `J_b = log(1/b)`.  The external reuse audit in
 `docs/CURRENT_MANUSCRIPT_MAP.md` records the same-pin real-exponent
 prime-reciprocal interval theorem that can supply the outer logarithmic mass;
 its moving product-boundary and fibre-uniformity obligations remain open.
+
+## Arbitrary-real half-product coefficient candidate
+
+`RealHalfProductMass` now proves the exact arbitrary-real exponents
+`alpha = b/(1+b)` and `beta = 1/(1+b)`, including
+`0 < alpha < 1/2`, `alpha < beta`, `alpha + beta = 1` and
+`beta/alpha = 1/b`.  The two elementary moving walls are proved directly for
+real powers: below the split, strict badness forces `q < N^beta`; above the
+split, the product bound forces `q^b < r`.  No primality or ordering is hidden
+in the latter implication.
+
+The same module evaluates the literal fixed-test integral on
+`(alpha,1/2]` as `log(1/b)`.  An exact finite equality identifies the literal
+high-prime sum with the repository-local standard logarithmic prime interval
+(strict lower endpoint and inclusive natural square-root endpoint).  Its
+Mertens adapter assumes convergence only to that independently proved integral and concludes the manuscript coefficient;
+it does not assume a half-product cardinality or the desired bad-count bound.
+Exact rational-specialization lemmas identify both exponents and the weighted
+sum with the existing `HalfProductMassLimit` definitions, preserving reuse of
+the already-checked finite and uniform-PNT machinery.
+
+The module source SHA-256 is
+`90c809c15ce26cd1f4785b5117e2d8a5dcfdc5720480bc690d198d95f33601f3`.
+Local verification passed its direct compilation, the complete `lake build`,
+bundled module `leanchecker`, and direct transitive audits of seven key
+exports; only `propext`, `Classical.choice` and `Quot.sound` occur.  The
+independent VariableEnvelope workflow also passed all 358 declarations.
+Remote verification remains pending.  The result is conditional on the actual
+weighted-prime Mertens supplier.  The real source envelope with its moving
+product boundary, the uniform PNT application, the additive-prime filter and
+the normalized small cutoff tail remain open, so this is not
+`J_b = log(1/b)` for the actual count.

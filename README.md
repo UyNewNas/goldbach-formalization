@@ -155,3 +155,15 @@ These are finite identities for the harmonic main sums. They do not replace the 
 The candidate proves rectangular integration-order exchange for a continuous real kernel on a closed rectangle. For a continuous symmetric real kernel on a closed square, it proves that one half of the square integral equals the iterated lower-triangle integral. A more general version assumes integrability on the genuine square. All statements allow weak endpoint inequalities, signed kernels and nonzero diagonal values. The diagonal is null for Lebesgue product measure by the null-singleton property and Fubini; an integral identity is not assumed.
 
 These analytic identities are separate from the finite prime-pair diagonal estimate. A manuscript application must supply continuity and symmetry of its full weighted integrand on the actual square, or continuity on the actual rectangle. This module does not supply a prime-pair limit, moving-kernel approximation, upper/lower sieve, coefficient 1.8271, or the full Chen theorem. No foreign consumer, existing proof body, dependency configuration or verification workflow changes in this addition.
+
+## Arbitrary-real half-product mass coefficient candidate
+
+`ImbalancedChen/RealHalfProductMass.lean` proves the exact split
+`b/(1+b), 1/(1+b)` for every real `0 < b < 1`, both elementary prime-variable
+walls, and the fixed-test integral `log(1/b)`. It also proves exact agreement
+with the existing rational mass definitions, identifies the literal sum with
+the standard strict-left/inclusive-right logarithmic prime interval, and exposes a weighted-prime
+Mertens adapter whose premise ends at the integral rather than at the desired
+bad-count theorem. The moving product-boundary source envelope, actual
+Mertens/PNT suppliers, additive-prime filter and normalized cutoff tail remain
+open; this candidate does not complete the ordered bad-semiprime asymptotic.

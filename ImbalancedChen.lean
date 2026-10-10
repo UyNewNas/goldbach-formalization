@@ -58,6 +58,7 @@ import ImbalancedChen.HalfProductMassSplit
 import ImbalancedChen.UniformPrimeTail
 import ImbalancedChen.HalfProductMassError
 import ImbalancedChen.HalfProductMassLimit
+import ImbalancedChen.RealHalfProductMass
 import ImbalancedChen.EnlargedSelbergAsymptotic
 import ImbalancedChen.QuotientChenFourPrime
 import ImbalancedChen.QuotientChenFourCounts
