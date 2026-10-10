@@ -60,6 +60,7 @@ import ImbalancedChen.HalfProductMassError
 import ImbalancedChen.HalfProductMassLimit
 import ImbalancedChen.RealHalfProductMass
 import ImbalancedChen.RealHalfProductMassSplit
+import ImbalancedChen.RealHalfProductMassSuppliers
 import ImbalancedChen.RealHalfProductSieveBridge
 import ImbalancedChen.HalfProductPanFinite
 import ImbalancedChen.PanProductStrips
