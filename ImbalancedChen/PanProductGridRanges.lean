@@ -1,4 +1,5 @@
 import ImbalancedChen.PanProductGrid
+import ImbalancedChen.RealHalfProductMassSplit
 
 /-!
 # Endpoint ranges for the dynamic Pan product grid
@@ -17,6 +18,8 @@ the global scale `N` to a smaller cell endpoint.
 namespace ImbalancedChen
 
 noncomputable section
+
+open Filter
 
 /-- The open product endpoint of every selected dynamic cell lies above the
 source cutoff, up to the full grid-width and integer-rounding losses. -/
@@ -103,6 +106,41 @@ theorem actualPanProductGridIndices_endpoint_ranges
   ⟨actualPanProductGridIndices_productLowerEndpoint_gt hκ hκ2 hij,
     actualPanProductGridIndices_productUpperEndpoint_lt hκ hκ2 hij,
     actualPanProductGridIndices_firstUpperEndpoint_lt hκ hκ2 hij⟩
+
+/-- For the manuscript cutoff `2 N^(1-κ₀)`, both product endpoints of
+every selected dynamic cell eventually clear any fixed natural threshold.
+
+This is the exact finite-size gate needed to instantiate the `N₀ ≤ Y₀` and
+`N₀ ≤ Y₁` hypotheses of the pinned Liu--Pan aggregate.  It remains
+uniform in all selected cells.  No modulus-cutoff comparison is asserted. -/
+theorem eventually_actualPanProductGridIndices_productEndpoints_ge
+    {num den : ℕ} {κm : ℝ} (_hκm0 : 0 < κm) (hκm1 : κm < 1)
+    {gridκ : ℝ} (hgridκ : 1 < gridκ) (hgridκ2 : gridκ ≤ 2) (N₀ : ℕ) :
+    ∀ᶠ N : ℕ in atTop,
+      ∀ ij ∈ actualPanProductGridIndices num den N
+          (manuscriptHalfProductCutoff κm N) gridκ,
+        N₀ ≤ multiplicativeGridIocEndpoint gridκ ij.2 ∧
+          N₀ ≤ multiplicativeGridIocEndpoint gridκ (ij.2 + 1) := by
+  have hexponent : 0 < 1 - κm := sub_pos.mpr hκm1
+  have hpower : Tendsto (fun N : ℕ => (N : ℝ) ^ (1 - κm)) atTop atTop :=
+    (tendsto_rpow_atTop hexponent).comp tendsto_natCast_atTop_atTop
+  have hlarge : ∀ᶠ N : ℕ in atTop,
+      (N₀ : ℝ) + 1 ≤ (N : ℝ) ^ (1 - κm) :=
+    hpower.eventually (eventually_ge_atTop ((N₀ : ℝ) + 1))
+  filter_upwards [hlarge] with N hN
+  intro ij hij
+  have hlower := actualPanProductGridIndices_productLowerEndpoint_gt
+    hgridκ hgridκ2 hij
+  have hlower' :
+      (N : ℝ) ^ (1 - κm) - 1 <
+        (multiplicativeGridIocEndpoint gridκ ij.2 : ℝ) := by
+    simpa [manuscriptHalfProductCutoff] using hlower
+  have hN₀real : (N₀ : ℝ) ≤
+      (multiplicativeGridIocEndpoint gridκ ij.2 : ℝ) := by
+    linarith
+  have hN₀ : N₀ ≤ multiplicativeGridIocEndpoint gridκ ij.2 := by
+    exact_mod_cast hN₀real
+  exact ⟨hN₀, hN₀.trans (multiplicativeGridIocEndpoint_le_succ hgridκ ij.2)⟩
 
 end
 
