@@ -313,10 +313,11 @@ all module builds, exact regressions, eight bundled kernel replays and the
 and both remote workflows remain pending on GitHub Actions for the submitted
 commit.
 
-This is only the exact finite input to the current ordered mass argument.  It
-does not yet instantiate `T_N = 2 N^(1-κ₀)`, prove the normalized small-tail
-error, the three moving geometric walls, the half-product PNT/Mertens limit,
-or `J_b = log(1/b)`.  The external reuse audit in
+This is only the exact finite input to the current ordered mass argument.  The
+later `RealHalfProductMassSplit` checkpoint now instantiates
+`T_N = 2 N^(1-κ₀)`, proves its normalized small-tail error and gives the
+conditional half-product PNT/Mertens limit `J_b = log(1/b)`.  The external
+reuse audit in
 `docs/CURRENT_MANUSCRIPT_MAP.md` records the same-pin real-exponent
 prime-reciprocal interval theorem that can supply the outer logarithmic mass;
 its moving product-boundary and fibre-uniformity obligations remain open.
@@ -349,6 +350,48 @@ exports; only `propext`, `Classical.choice` and `Quot.sound` occur.  The
 independent VariableEnvelope workflow also passed all 358 declarations.
 Remote verification remains pending.  The result is conditional on the actual
 weighted-prime Mertens supplier.  The real source envelope with its moving
-product boundary, the uniform PNT application, the additive-prime filter and
-the normalized small cutoff tail remain open, so this is not
-`J_b = log(1/b)` for the actual count.
+product boundary, uniform PNT application and current power-cutoff tail are
+handled by the later `RealHalfProductMassSplit` checkpoint.  The actual
+analytic suppliers and additive-prime filter remain open, so this module
+alone is not `J_b = log(1/b)` for the actual count.
+
+## Arbitrary-real source mass-split candidate
+
+`RealHalfProductMassSplit` now supplies the missing finite bridge from the
+literal arbitrary-real half-product source to the high-prime prefix sum.  It
+proves an exact smaller-prime fibre decomposition, assigns equality at
+`N^(b/(1+b))` to the low range, bounds that range by the complementary prime
+rectangle, and pays the high ordering loss by `pi(sqrt N)^2`.  Prime squares
+remain in the source and the strict/inclusive endpoints are unchanged.  A
+second exact partition pays an arbitrary real cutoff by only its natural
+ceiling.
+
+The module formalizes the current manuscript lower wall as
+`manuscriptHalfProductCutoff κ N = 2*N^(1-κ)`.  For every fixed `κ > 0` it
+proves the cutoff plus its exact ceiling unit is `o(N/log N)`.  Reusing the
+existing explicit real-PNT witness then proves the entire rectangle, square
+and ceiling discrepancy at that literal power cutoff is `o(N/log N)` in
+epsilon-eventual form.  It separately proves that uniform PNT turns the
+prime-prefix approximation into the literal fixed-test weighted prime sum.
+Consequently
+`tendsto_realHalfProductSource_manuscriptCutoff_mass_of_real_pnt_and_weighted_mertens`
+gives the full arbitrary-real source limit `log(1/b)` from precisely two
+visible upstream inputs: the real PNT witness and the standard weighted-prime
+Mertens integral (plus the proved elementary condition `κ > 0`).  No source
+cardinality or target bad-count bound appears in either premise.  The older
+`logCutoff = N/(log N)^10` result is retained as a historical auxiliary and is
+not identified with the current manuscript cutoff.
+
+The module source SHA-256 is
+`6516890accb0179098fca79f98791adeddad569a858fc69710b87a8d3b92a3ca`.
+Local verification with the pinned Lean/Mathlib revisions passed the direct
+module compilation, the complete 2,865-job `lake build`, bundled
+`leanchecker` replay of `ImbalancedChen.RealHalfProductMassSplit`, and direct
+transitive audits of the five current-cutoff exports; the latter report only
+`propext`, `Classical.choice` and `Quot.sound`.  The independent Variable
+Envelope workflow also passed its explicit builds, exact regressions, eight
+bundled kernel replays and all 358 declaration audits.  Root replay/full root
+audit and remote CI must still pass for the submitted commit.  This remains
+short of the actual `RealB` upper bound: the additive-prime filter must still
+be estimated with the same positive upper sieve, and the two analytic
+suppliers must be imported or proved and transitively audited.

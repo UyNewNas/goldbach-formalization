@@ -7,11 +7,16 @@ import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
 
 /-!
-# The actual logarithmic cutoff has negligible localization cost
+# A logarithmic auxiliary cutoff has negligible localization cost
 
-The manuscript's fixed cutoff is `T(N) = N / (log N)^10`. Its ratio to
+The historical auxiliary cutoff is `T(N) = N / (log N)^10`. Its ratio to
 `N / (log N)^2` is the reciprocal eighth power of the logarithm, which tends
 to zero by mathlib's logarithm, power, and reciprocal limit theorems.
+
+The current manuscript instead trims below `2 N^(1-κ₀)`; that literal cutoff
+is handled in `RealHalfProductMassSplit`.  The results here remain useful as
+stronger auxiliary localization statements and are not identified with the
+current manuscript's displayed lower wall.
 
 The genuine singular series is uniformly bounded below by the strictly
 positive `twinPrimeConstant`. Consequently `T(N)` is eventually smaller
@@ -34,7 +39,7 @@ namespace ImbalancedChen
 
 open Filter Topology
 
-/-- The manuscript's fixed tenth-logarithm cutoff, as a real number. -/
+/-- The historical tenth-logarithm auxiliary cutoff, as a real number. -/
 noncomputable def logCutoff (N : ℕ) : ℝ :=
   (N : ℝ) / (Real.log (N : ℝ)) ^ 10
 
@@ -55,7 +60,7 @@ theorem tendsto_one_div_nat_log_pow_eight :
     (tendsto_pow_atTop (α := ℝ) (n := 8) (by norm_num)).comp hlog
   exact hpow.const_div_atTop 1
 
-/-- The actual cutoff is negligible relative to the actual singular-series
+/-- The auxiliary cutoff is negligible relative to the actual singular-series
 normalization. The positive lower constant is proved in `SingularSeries`. -/
 theorem eventually_logCutoff_le_singularNormalization :
     ∀ epsilon : ℝ, 0 < epsilon →

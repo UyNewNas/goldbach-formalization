@@ -18,12 +18,12 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/ManuscriptTransfer.lean`: concrete-normalization conditional count and representation endpoints, removing the former growth premise while retaining both analytic count estimates.
 - `ImbalancedChen/HalfProductGeometry.lean`: actual bad-factor roughness localization and the exact integral coefficient `log(1/b)`.
 - `ImbalancedChen/BadSourceLocalization.lean`: exact bad-source reindexing, retained/discarded cutoff partition, and ceiling-correct real cutoff.
-- `ImbalancedChen/LogCutoffError.lean`: proved negligible loss from the actual cutoff `N / (log N)^10`, including the full ceiling error, composed with the retained prime-partner source.
+- `ImbalancedChen/LogCutoffError.lean`: proved negligible loss from the historical auxiliary cutoff `N / (log N)^10`, including the full ceiling error, composed with the retained prime-partner source; the current manuscript's power cutoff is handled separately below.
 - `ImbalancedChen/HalfProductSource.lean`: exact inclusive half-product sieve source, unique ordered-pair counting including squares, and its prime-partner filter.
 - `ImbalancedChen/RealHalfProductSource.lean`: arbitrary-real-exponent reindexing and cutoff localization of the current bad count, with exact prime-partner filtering and multiplicity-one ordered pairs.
 - `ImbalancedChen/PowerErrorBudget.lean`: fixed sublinear power-logarithm errors and exact floor/ceiling losses are negligible in the genuine normalization.
 - `ImbalancedChen/SieveSourceCoprimality.lean`: actual strict-cap sieve product, primitive congruence and rough-source coprimality, with explicit small-prime-partner correction.
-- `ImbalancedChen/ActualSieveGate.lean`: the original logarithmic cutoff eventually clears the exact fifth-root sieve cap, discharging rough-source coprimality conditions.
+- `ImbalancedChen/ActualSieveGate.lean`: the historical logarithmic auxiliary cutoff eventually clears the exact fifth-root sieve cap, discharging rough-source coprimality conditions.
 - `ImbalancedChen/FiniteSieveModel.lean`: genuine mathlib `BoundingSieve` on the actual shifted source, exact reciprocal-totient remainder, and finite upper-Möbius/λ² inequalities.
 - `ImbalancedChen/TruncatedSieveLevel.lean`: exact level-squared truncation of the actual λ² main/error sums and a divisor-count coefficient bound.
 - `ImbalancedChen/FiniteSieveEuler.lean`: exact finite Euler factorization with the explicit prime-two normalization, and actual Selberg terms on allowed squarefree divisors.
@@ -164,6 +164,23 @@ walls, and the fixed-test integral `log(1/b)`. It also proves exact agreement
 with the existing rational mass definitions, identifies the literal sum with
 the standard strict-left/inclusive-right logarithmic prime interval, and exposes a weighted-prime
 Mertens adapter whose premise ends at the integral rather than at the desired
-bad-count theorem. The moving product-boundary source envelope, actual
-Mertens/PNT suppliers, additive-prime filter and normalized cutoff tail remain
-open; this candidate does not complete the ordered bad-semiprime asymptotic.
+bad-count theorem. The moving product-boundary source envelope and current
+power-cutoff tail are handled by `RealHalfProductMassSplit`; the actual
+Mertens/PNT suppliers and additive-prime filter remain open. This candidate
+alone does not complete the ordered bad-semiprime asymptotic.
+
+## Arbitrary-real source mass-split candidate
+
+`ImbalancedChen/RealHalfProductMassSplit.lean` proves the exact finite
+high/low envelope for the literal arbitrary-real ordered source, including
+the moving product boundary, strict power split, prime squares, square-root
+endpoint and exact real cutoff ceiling. It instantiates the current
+manuscript lower wall as `2*N^(1-κ)` and proves, for every fixed `κ > 0`, that
+this wall plus the exact ceiling unit is `o(N/log N)`. With the repository's
+explicit real-PNT witness it proves the full finite discrepancy at that
+literal power cutoff is `o(N/log N)`, and with the standard weighted-prime
+Mertens integral it derives the conditional source limit `log(1/b)`. The
+historical logarithmic auxiliary cutoff remains available as a separately
+named theorem. The analytic suppliers and the actual additive-prime
+upper-sieve transfer remain open, so this is not yet the `RealB` bound or the
+completed manuscript theorem.
