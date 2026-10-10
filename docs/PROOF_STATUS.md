@@ -543,3 +543,16 @@ product-strip modules and the imported root, a 2,314-declaration audit of every
 project module, and the independent 358-declaration VariableEnvelope workflow.
 Both transitive audits allowed only `propext`, `Classical.choice` and
 `Quot.sound`. Remote workflows remain required for the submitted commit.
+
+## Physical product-strip aggregate candidate
+
+Code commit [`97b4d96fcf28146036a09c302eff40f4710a3b25`](https://github.com/UyNewNas/goldbach-formalization/commit/97b4d96fcf28146036a09c302eff40f4710a3b25) adds `ImbalancedChen/PanProductAggregateBudget.lean`. Its exported theorem `panProductStrip_physical_boundedAggregate_log_saving` applies the pinned unconditional Liu--Pan theorem to both exact product-strip endpoints. The physical set `{d ∈ Icc 1 D | Coprime d N}` is proved to lie in each full cutoff interval, and literal `MaxL` nonnegativity justifies enlargement without a modulus-cardinality factor. The output bounds the sum of absolute strip errors with the two endpoint logarithmic-saving terms.
+
+All endpoint obligations remain explicit: the common supplier threshold, order `Y₀ ≤ Y₁`, both two-thirds upper gates, both logarithmic lower gates and both modulus cutoffs. Thus this closes the finite aggregate adapter but not the dynamic `(r,r*q)` cell geometry, the coprime-gate main-term comparison, the physical positive upper-weight density, or the final ordered bad-semiprime estimate.
+
+The manuscript source was rechecked at `master@ba6ec11d800eccc54406490631895e174de85766`; no version change was found. The source attachment hash remains `ef70ecef4b4c310449a43db1093859b5d3377e670d7c9dc9fa23619d7e54be9c`. The target pins remain Lean `v4.33.0-rc1`, Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and goldbach-lean `09b97db5764ade1246bfb77206baa1b124760958`.
+
+The new module source SHA-256 is `13b512d4c51a00b217ea72b3033ec50bd48d76c10812184a20d1bc838ef04140`.
+
+This runner did not contain a Lean executable after workspace recovery, so no local compile, kernel replay or axiom audit is claimed for this checkpoint. The first core and VariableEnvelope runs for the code commit failed before creating workflow steps (`steps: null`) and were retried once; only an actual runner execution can count as remote verification.
+

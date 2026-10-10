@@ -261,13 +261,22 @@ unconditional logarithmic-saving aggregate and discharges its global
 coefficient bound. Its scale hypotheses remain visible and must be supplied
 twice, once at each product endpoint.
 
+`ImbalancedChen/PanProductAggregateBudget.lean` now performs that two-endpoint
+aggregation on the actual physical modulus set
+`{d ∈ Icc 1 D | Coprime d N}`.  It proves this set lies in each endpoint's
+full cutoff interval, enlarges the sum using literal `MaxL` nonnegativity, and
+deduces a single logarithmic-saving bound for the absolute errors of the
+strict-lower/closed-upper product strip.  No factor counting moduli or residue
+classes is introduced, and coprimality remains with the fixed additive target.
+
 The 17,572 same-mask-v2 cells are **not** this half-product Pan grid.  They are
 the separate fixed `(t,u)` cells in the eleven-term lower-weight numerical
 certificate, where the `7/3` refinement improves the lower mean.  The Pan
 geometry instead needs a dynamic `(r,m=r*q)` product-strip grid.  The next
 geometric adapter must define that grid and prove, separately at `Y₀` and
 `Y₁`, all upstream hypotheses `N₀ ≤ Y`, `A₂ ≤ Y^(2/3)`,
-`log(Y)^(2B) ≤ A₁`, and `D ≤ panModulusCutoff Y B`.  The existing
+`log(Y)^(2B) ≤ A₁`, and `D ≤ panModulusCutoff Y B`.  Once supplied, the new
+aggregate adapter consumes those eight gates directly.  The existing
 `(r,q)` rectangle grid gives useful global `4N` bounds, but mere containment
 of a signed rectangle discrepancy in a larger product strip would not be a
 valid transfer.  Gate loss must also be accounted for when the analytic main
@@ -280,3 +289,4 @@ Mathlib pins and is the sole analytic-number-theory dependency.  Its inherited
 `78dd66840d3efe8c824c699fc03381cec817c271`.  The separate
 `analytic-number-theory-lean` package must not be added because both projects
 export the `AnalyticNumberTheory` and `PrimeNumberTheoremAnd` module roots.
+

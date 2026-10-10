@@ -62,6 +62,7 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/PanProductStrips.lean`: exact `A₁ < r ≤ A₂`, `Y₀ < r*q ≤ Y₁` product strips as differences of closed Pan prefixes, including the primitive outer coprimality gate, normalized endpoint `q ≤ Y/r`, bounded prime-indicator coefficient and upper-minus-lower prefix-error identity.
 - `ImbalancedChen/PanProductResidueBudget.lean`: canonical reduction of the physical target to `N % d`, with selector-uniform prefix budgets and the exact two-prefix strip cost.
 - `ImbalancedChen/PanProductLiuBridge.lean`: audited identification of the product-prefix error with the pinned Liu--Pan interval sum and pointwise control by its primitive-residue `MaxL`, including the two-endpoint strip bound.
+- `ImbalancedChen/PanProductAggregateBudget.lean`: enlarges the actual coprime physical modulus set into both full nonnegative Liu--Pan cutoff aggregates and proves the two-endpoint logarithmic-saving bound for the literal product-strip error, while retaining all eight endpoint gates.
 - `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
 - `ImbalancedChen/HalfProductMassSplit.lean`: exact high/low prime rectangle and order-error envelope for the original source.
 - `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.
@@ -207,3 +208,4 @@ distribution estimate or final bad-count asymptotic is hidden in these
 statements.  In particular, the existing generic finite Selberg bound has not
 been identified with the manuscript's current physical positive weight and
 does not by itself yield `K = 8452171/1250000`.
+
