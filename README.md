@@ -12,16 +12,17 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
-The latest 12 October local checkpoint proves an exact positive boundary
-expansion for the same raw upper Rosser weight, actual prime-tuple box
-masses, and a concrete lower bound of `1+1/2000` for its normalized density
-at `y=N^(1/3), R=N`, for sufficiently large even targets and every covering
-cap. Five new modules passed strict compilation and individual kernel
-replay; an environment-based audit covered all 67 declarations under the
-standard three-axiom allowlist. The final aggregate build passed with
-9,648 jobs. This proves one actual boundary-box contribution. The full
-boundary-layer integrals, same-weight density limit, boxed compiler,
-sharp signed density and main analytic theorem remain open.
+The latest 12 October local checkpoint proves that the same raw upper
+Rosser density includes the entire continuous three-prime boundary layer.
+Finite disjoint prime boxes, strict inner meshes, genuine product integrals
+and dominated convergence supply the bound; a proved Fubini identity
+identifies its constant with Suzuki source layer three. One threshold works
+for all later even targets and every covering cap. Six new modules passed
+strict compilation and individual kernel replay; an environment-based audit
+covered all 108 declarations under the standard three-axiom allowlist.
+The final aggregate build passed with 9,654 jobs. Higher odd layers,
+arbitrary finite prefixes, the full same-weight density limit, boxed
+compiler, sharp signed density and main analytic theorem remain open.
 See [proof status](docs/PROOF_STATUS.md).
 
 The current-parameter Chen pointwise and paired-deletion modules, together
@@ -114,6 +115,12 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/ActualPrimeBoxMass.lean`: proves exact factorization and limiting mass for genuine prime-tuple boxes; adjacent separated boxes have distinct ordered coordinates and the same reciprocal-totient mass. The common target exclusions and every half-open endpoint are retained.
 - `ImbalancedChen/ActualPrimeBoxEulerLower.lean`: supplies an eventual lower bound for actual tuple boxes carrying the boundary Euler ratio, with one threshold uniform in every covering cap. It separately requires a geometric inclusion before a box can contribute to a Rosser boundary sum.
 - `ImbalancedChen/ActualRosserTripleBox.lean`: proves explicit power gates put a separated three-prime box inside the actual Rosser boundary, with an injective tuple-to-boundary map. A concrete rational box proves the same raw density ratio at `y=N^(1/3), R=N` is eventually at least `1+1/2000`, uniformly in all covering caps, with every geometric and analytic input discharged. This is one box contribution, not the full fixed-s density limit.
+- `ImbalancedChen/ActualRosserTripleBoxFamily.lean`: combines finite coordinate-separated boxes through disjoint actual tuple carriers and one injective boundary map. The base term is counted once; a common threshold supplies the sum of their gains, including the empty family.
+- `ImbalancedChen/LogPrimeBoxIntegral.lean`: proves genuine Lebesgue integrability and the product-of-logarithms formula on finite-dimensional half-open boxes, including degenerate and zero-dimensional boxes, and their constant-weighted versions.
+- `ImbalancedChen/RosserTripleMesh.lean`: constructs strict inner half-open mesh boxes in the normalized three-prime boundary region. It proves cross-cell separation, unique ownership and eventual coverage of every region point.
+- `ImbalancedChen/RosserTripleMeshIntegral.lean`: proves the actual mesh lower sums converge to the actual region integral by everywhere pointwise convergence and an integrable compact-box bound of 81. The integral is not defined as the mesh limit.
+- `ImbalancedChen/RosserTripleLayerIdentity.lean`: identifies the actual three-dimensional integral with the pinned first positive boundary mass and Suzuki source layer three, using measure-preserving coordinate maps, Fubini and the proved supplier identity.
+- `ImbalancedChen/ActualRosserTripleLayerLower.lean`: scales the normalized mesh into genuine prime boxes and chooses the mesh before the target threshold, proving the same raw density at `y=N^u, R=N^(3*u)` is eventually at least one plus the continuous three-prime layer integral minus any positive error, uniformly in covering caps.
 - `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
 - `ImbalancedChen/HalfProductMassSplit.lean`: exact high/low prime rectangle and order-error envelope for the original source.
 - `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.

@@ -207,10 +207,66 @@ inequalities and rational arithmetic, with `eta=1/10000`, yield
 `exists N0>=2, forall even N>=N0, forall cap>=N^(1/3),`
 `U_N(N^(1/3),N)/V_N(N^(1/3)) >= 1+1/2000`.
 
-This theorem has no geometric or analytic premise left to supply. It is
-one included box, not the full continuous Rosser layer integral or the
-fixed-s limit F(s). Higher ranks, disjoint box families and the continuous
-finite-prefix lower limit remain open.
+This theorem has no geometric or analytic premise left to supply. The next
+modules extend the one-box result to finite families and a full first-layer
+integral; the fixed-s limit F(s) remains open.
+
+`ActualRosserTripleBoxFamily` proves coordinate separation makes the actual
+tuple carriers disjoint, then injects their union into the boundary sum.
+The constant term is one for the entire family. A finite maximum of the
+one-box thresholds, with error `eta/(card I+1)` per box, proves the sum of
+all box gains with a common threshold. Explicit `u>0` also covers an empty
+family without a vacuous positive-level argument.
+
+`LogPrimeBoxIntegral` evaluates the genuine volume integral of `prod_i 1/x_i`
+over `prod_i [a_i,b_i)` as `prod_i log(b_i/a_i)` for `0<a_i<=b_i`.
+Integrability, zero-dimensional boxes, degenerate intervals and constant
+weights are included. `RosserTripleMesh` uses normalized coordinates
+`x_i=log(p_i)/log(y)` in decreasing order, and the open region
+
+`Omega3 = {0<x_2<x_1<x_0<1, 3<x_0+x_1+3*x_2}`.
+
+Every coordinate exceeds `1/3`. Uniform half-open mesh cells inside
+`[1/3,1]^3` are selected by separated adjacent intervals and a strict lower
+shell condition. Every selected cell lies inside Omega3, and every point
+of Omega3 eventually belongs to a selected cell. The proof preserves the
+strict shell and all half-open endpoints; it does not assume that a
+boundary exceptional set has measure zero.
+
+`RosserTripleMeshIntegral` identifies the finite sum
+
+`sum_cells (1/b_2)*prod_i log(b_i/a_i)`
+
+with an actual integral of indicator-weighted densities. These integrands
+converge at every point to the Omega3 indicator times
+`1/(x_0*x_1*x_2^2)`. The fixed bound `81*indicator([1/3,1]^3)` supplies
+dominated convergence, proving convergence to the real Lebesgue integral
+`rosserTripleLayerIntegral`.
+
+`ActualRosserTripleLayerLower` scales each mesh endpoint by a fixed `u>0`
+and takes `beta=3*u`. This preserves all actual box gates; `u/(u*b_2)` and
+the logarithmic ratios cancel exactly, leaving no extra scale factor.
+First choose the mesh with error `eta/2`, then its prime-density threshold
+with error `eta/2`. The result is
+
+`exists N0>=2, forall even N>=N0, forall cap>=N^u,`
+`U_N(N^u,N^(3*u))/V_N(N^u) >= 1+rosserTripleLayerIntegral-eta`.
+
+The original `u=1/3, R=N` case is included. This proves the first continuous
+boundary contribution. `RosserTripleLayerIdentity` further proves that
+the actual three-dimensional integral equals
+
+`integral_(0<q<1) q^(-2)*upperRosserBoundaryMass 1 3 q`
+`= SuzukiFiniteContinuousLayers.suzukiLayer 1 2 3 3`.
+
+The first equality uses measure-preserving extraction of the last coordinate
+and Fubini with proved integrability. The remaining two coordinates keep
+their order. In the open region the residual `3-x_0-x_1` is positive, and
+the supplier's strict shell is exactly `3<x_0+x_1+3*q`. The second equality
+uses the pinned proved source-layer identity at depth one and residual
+three; no identity or integrability premise is left open. Higher odd ranks,
+arbitrary finite-prefix lower limits, the full fixed-s equality and the
+main theorem remain open.
 
 ### Exact Euler-ratio correction in the frozen manuscript
 

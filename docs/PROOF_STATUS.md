@@ -1523,3 +1523,117 @@ Frozen source SHA-256 values:
 | `ActualPrimeBoxMass` | `3d17cfda8af10561829b23f7370b7a9481a4856dd7f78be05ebac3926bf1204f` |
 | `ActualPrimeBoxEulerLower` | `adc0657ea574d58a0364423062c556119a06380b6edcdb31d6175ca3f99083cb` |
 | `ActualRosserTripleBox` | `0fe4d963634c41442fa62f736543c70944f3f8eb0843e08f800ebebc0b02dea5` |
+
+## Finite box families and the continuous three-prime layer (12 October 2026)
+
+The first actual box now extends to the complete continuous three-prime
+boundary region. The proof combines true finite sums before taking limits:
+
+- `ActualRosserTripleBoxFamily` proves coordinate-separated boxes have
+  disjoint actual prime-tuple carriers. Their union injects into one
+  boundary sum via the strictly decreasing tuple's range. Thus the base
+  term one occurs once for the family. The eventual theorem allocates
+  `eta/(card I+1)` to each box and takes a finite maximum of thresholds;
+  it also covers the empty family with an explicit positive outer exponent.
+- `LogPrimeBoxIntegral` proves integrability and the genuine Lebesgue
+  product-box formula `integral prod_i (1/x_i) = prod_i log(b_i/a_i)` on
+  `prod_i [a_i,b_i)`, for `0<a_i<=b_i`. It includes arbitrary constant
+  multipliers, degenerate intervals and the zero-dimensional unit box.
+- `RosserTripleMesh` constructs finite half-open inner meshes of
+  `Omega3={0<x_2<x_1<x_0<1, 3<x_0+x_1+3*x_2}`. Each coordinate exceeds
+  `1/3`; every selected cell lies inside the region, distinct cells have
+  a separating coordinate, and every region point eventually belongs to
+  a selected cell. Strict shell and ordering gaps provide this coverage
+  at every point, without assuming a boundary-null-set result.
+- `RosserTripleMeshIntegral` proves the selected-cell lower sum
+  `sum (1/b_2)*prod_i log(b_i/a_i)` equals an integral of a finite sum of
+  indicator-weighted densities. The integrands converge everywhere to
+  the Omega3 indicator times `1/(x_0*x_1*x_2^2)`, and are dominated by
+  `81*indicator([1/3,1]^3)`. Dominated convergence therefore gives the
+  actual set integral `rosserTripleLayerIntegral`, rather than defining
+  that integral to be the limit.
+- `RosserTripleLayerIdentity` extracts the final coordinate through a
+  measure-preserving equivalence, preserves the order of the other two,
+  and applies Fubini to the proved integrable region indicator. The slice
+  is exactly `q^(-2)*upperRosserBoundaryMass 1 3 q` for positive q, and
+  vanishes outside `(0,1)`. The strict shell matches pointwise; the residual
+  nonnegativity condition follows from both larger coordinates being less
+  than one. The pinned proved source identity then identifies the entire
+  integral with `SuzukiFiniteContinuousLayers.suzukiLayer 1 2 3 3`.
+- `ActualRosserTripleLayerLower` scales all mesh endpoints by any fixed
+  `u>0`, uses `beta=3*u`, and proves every actual-prime box gate and the
+  exact cancellation of u in its logarithmic mass and endpoint ratio.
+  The continuous limit first chooses a mesh with error `eta/2`; the finite
+  family then chooses an N threshold with error `eta/2`. The threshold
+  precedes every later even N and every cap covering `N^u`.
+
+Consequently, for every fixed `u>0` and `eta>0`, the same raw upper Rosser
+density satisfies
+
+```text
+exists N0 >= 2, forall even N >= N0, forall cap >= N^u,
+  actualSmallRosserPlusDensity N cap (N^u) (N^(3*u))
+    / actualSmallEulerProduct N cap (N^u)
+      >= 1 + rosserTripleLayerIntegral - eta.
+```
+
+The original `u=1/3, R=N` case is a corollary. The integral is exactly Suzuki
+source layer three, with no extra scale, permutation or Jacobian factor.
+This proof discharges the
+prime-mass, Euler-ratio, mesh-limit and covering-cap inputs to the displayed
+first-layer lower bound. It is still not the full fixed-s density limit or
+Theorem 1.1/Corollary 1.2. Higher odd ranks and arbitrary finite prefixes,
+the causal boxed compiler, sharp K and certificate semantics, restricted
+signed distribution, current Chen mean and final bad-semiprime estimate
+remain to be proved.
+
+Independent read-only review checked cross-box injectivity and the single
+base term, error allocation and threshold order, half-open ownership and
+strict inner coverage, actual product-volume integration, the measure-
+preserving coordinate order, both Fubini steps, the exact shell, and the
+final Suzuki corollaries at their frozen source hashes.
+
+All six modules passed strict compilation and individual bundled kernel
+replay. The environment inventory audited all **108 declarations**,
+including private and generated declarations: 12 product-box integral,
+34 mesh geometry, 12 actual box-family, 34 mesh-integral, 11 layer-identity
+and 5 final actual-density declarations. Only `propext`, `Classical.choice`
+and `Quot.sound` occur transitively. Four early kernel replays were reused
+after checking their source, compiled object, binary, configuration, pin
+and log hashes; the identity and final actual-density modules were replayed
+after their final versions were frozen. The actual mathlib and goldbach
+supplier revisions match the manifest, and their tracked worktrees and
+indexes remained clean before and after the audit.
+
+The final aggregate `lake build` passed with **9,654 jobs**. The six source
+hashes, root, audit and pins were unchanged through verification; both
+supplier checkouts also remained tracked-clean after the build. Evidence
+is in `.lake/main-theorem-verification-20261012/box-family/`:
+`triple-layer-verification.json`, `triple-layer-declarations.json`,
+`triple-layer-theorem-types.txt`, and `final-aggregate-build-status.json`.
+This records six new module kernel replays and full aggregate compilation,
+not complete-root kernel replay or successful remote CI.
+
+Reproduce the six-module proof checks with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.ActualRosserTripleBoxFamily
+lake env leanchecker --verbose ImbalancedChen.LogPrimeBoxIntegral
+lake env leanchecker --verbose ImbalancedChen.RosserTripleMesh
+lake env leanchecker --verbose ImbalancedChen.RosserTripleMeshIntegral
+lake env leanchecker --verbose ImbalancedChen.RosserTripleLayerIdentity
+lake env leanchecker --verbose ImbalancedChen.ActualRosserTripleLayerLower
+lake env lean -DwarningAsError=true verification/TripleLayerAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `ActualRosserTripleBoxFamily` | `ca020750d0f3a39268943d097ac077099b63d86137404070f55107b8f0d18488` |
+| `LogPrimeBoxIntegral` | `0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28` |
+| `RosserTripleMesh` | `b3d6dcc66c1f5cc34898badaa5a2a4d5c0d2118647fc097e79974444dfc83752` |
+| `RosserTripleMeshIntegral` | `d604a69c3e9ecec37b8e32c64fd5b960f3efddf70ff3954623a58afae2dcd1a3` |
+| `RosserTripleLayerIdentity` | `a04f4b7c28a24e586207d5d8af2ca3bea1f31792886f4ed99a6f472c4338e1c0` |
+| `ActualRosserTripleLayerLower` | `810df71dae891618530951b1c1fb77859c0e5e7c48c72c336b7275be3f605d37` |
