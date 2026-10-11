@@ -38,6 +38,31 @@ theorem actualPanProductGridIndices_productLowerEndpoint_gt
   have hround := (multiplicativeGridIocEndpoint_bounds hκ ij.2).1
   nlinarith only [hpT, hside, hwidth, hround]
 
+/-- The first open endpoint of a selected product-coordinate cell inherits
+the genuine roughness lower bound from its source witness.  This is the same
+strict power split used by the prime-coordinate grid; changing the second
+coordinate from `q` to `r*q` does not change the first side. -/
+theorem actualPanProductGridIndices_firstLowerEndpoint_gt
+    {num den N : ℕ} {T κ : ℝ} (hden : 0 < den)
+    (hb : 0 < (num : ℝ) / (den : ℝ)) (hT : 0 < T)
+    (hκ : 1 < κ) (hκ2 : κ ≤ 2) {ij : ℕ × ℕ}
+    (hij : ij ∈ actualPanProductGridIndices num den N T κ) :
+    T ^ (((num : ℝ) / (den : ℝ)) /
+        (1 + (num : ℝ) / (den : ℝ))) / 2 - 1 <
+      (multiplicativeGridIocEndpoint κ ij.1 : ℝ) := by
+  obtain ⟨p, hp, hpij⟩ := (mem_actualPanProductGridIndices.mp hij).2
+  obtain ⟨hr, hq, hregion⟩ := (halfProductPairs_iff_prime_realRegion hden).mp hp
+  have hrough := halfProduct_rpow_lt_left hb hT
+    (Nat.cast_pos.mpr hr.pos) (Nat.cast_pos.mpr hq.pos)
+    hregion.2.2.2 hregion.1
+  have hpedge := ((mem_panProductGridStrip hκ).mp hpij).2.2.1
+  have hside := (mem_multiplicativeGridSide.mp hpedge).2
+  rw [pow_succ] at hside
+  have hwidth := mul_le_mul_of_nonneg_left hκ2
+    (pow_pos (zero_lt_one.trans hκ) ij.1).le
+  have hround := (multiplicativeGridIocEndpoint_bounds hκ ij.1).1
+  nlinarith only [hrough, hside, hwidth, hround]
+
 /-- The closed product endpoint of every selected dynamic cell stays below
 twice the original product cap.  This is an endpoint bound, not a clipping of
 the full strip back to the curved source. -/
@@ -261,6 +286,163 @@ theorem eventually_actualPanProductGridIndices_twoThirds_gates_of_manuscript
             (multiplicativeGridIocEndpoint gridκ (ij.2 + 1) : ℝ) ^ (2 / 3 : ℝ) :=
   eventually_actualPanProductGridIndices_twoThirds_gates hκm0
     (manuscript_kappaZero_lt_quarter hlocalκ hκm) hgridκ hgridκ2
+
+/-- At the manuscript cutoff, every selected dynamic cell eventually meets
+both Liu--Pan logarithmic lower gates at its exact product endpoints.
+
+The proof starts from the source inequality `q^b < r`, retains the complete
+`ceil - 1` loss in the first grid endpoint, and uses only the manuscript's
+licensed implication `κ₀ < 1/4`.  The real exponent `2 * B` is rounded up
+only after the logarithmic base has been proved at least one. -/
+theorem eventually_actualPanProductGridIndices_log_gates
+    {num den : ℕ} (hden : 0 < den)
+    (hb : 0 < (num : ℝ) / (den : ℝ))
+    {κm : ℝ} (hκm0 : 0 < κm) (hκmQuarter : κm < 1 / 4)
+    {gridκ : ℝ} (hgridκ : 1 < gridκ) (hgridκ2 : gridκ ≤ 2)
+    {B : ℝ} (hB : 0 ≤ B) :
+    ∀ᶠ N : ℕ in atTop,
+      ∀ ij ∈ actualPanProductGridIndices num den N
+          (manuscriptHalfProductCutoff κm N) gridκ,
+        Real.log (multiplicativeGridIocEndpoint gridκ ij.2 : ℝ) ^ (2 * B) ≤
+            (multiplicativeGridIocEndpoint gridκ ij.1 : ℝ) ∧
+          Real.log (multiplicativeGridIocEndpoint gridκ (ij.2 + 1) : ℝ) ^ (2 * B) ≤
+            (multiplicativeGridIocEndpoint gridκ ij.1 : ℝ) := by
+  let beta : ℝ := ((num : ℝ) / (den : ℝ)) /
+    (1 + (num : ℝ) / (den : ℝ))
+  have hbeta : 0 < beta := by
+    dsimp [beta]
+    exact div_pos hb (by linarith)
+  have hhalfBeta : 0 < beta / 2 := half_pos hbeta
+  have hκmHalf : κm ≤ 1 / 2 := by linarith
+  have hlog : ∀ᶠ N : ℕ in atTop, 1 ≤ Real.log (N : ℝ) :=
+    (Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually
+      (eventually_ge_atTop 1)
+  filter_upwards
+    [eventually_log_pow_le_half_logCutoff_rpow_sub_one
+      (Nat.ceil (2 * B)) hhalfBeta,
+      eventually_actualPanProductGridIndices_productEndpoints_ge
+        hκm0 (by linarith : κm < 1) hgridκ hgridκ2 1,
+      hlog, eventually_ge_atTop (1 : ℕ)]
+    with N hlogBound hendpointPos hlogN hN
+  intro ij hij
+  have hNpos : (0 : ℝ) < (N : ℝ) := by
+    exact_mod_cast (show 0 < N by omega)
+  have hNge : (1 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN
+  have hlogCutoffLeN : logCutoff N ≤ (N : ℝ) := by
+    have hpow : 1 ≤ (Real.log (N : ℝ)) ^ 10 := one_le_pow₀ hlogN
+    have hpowpos : 0 < (Real.log (N : ℝ)) ^ 10 := by linarith
+    unfold logCutoff
+    apply (div_le_iff₀ hpowpos).mpr
+    simpa only [mul_one] using
+      mul_le_mul_of_nonneg_left hpow (Nat.cast_nonneg N)
+  have hcutoffSqrt : (logCutoff N) ^ (1 / 2 : ℝ) ≤
+      (N : ℝ) ^ (1 - κm) := by
+    calc
+      (logCutoff N) ^ (1 / 2 : ℝ) ≤ (N : ℝ) ^ (1 / 2 : ℝ) :=
+        Real.rpow_le_rpow (logCutoff_nonneg N) hlogCutoffLeN (by norm_num)
+      _ ≤ (N : ℝ) ^ (1 - κm) :=
+        Real.rpow_le_rpow_of_exponent_le hNge (by linarith)
+  have hcutoffPower : (logCutoff N) ^ (beta / 2) ≤
+      manuscriptHalfProductCutoff κm N ^ beta := by
+    calc
+      (logCutoff N) ^ (beta / 2) =
+          (logCutoff N) ^ ((1 / 2 : ℝ) * beta) := by
+        congr 1
+        ring
+      _ = ((logCutoff N) ^ (1 / 2 : ℝ)) ^ beta :=
+        Real.rpow_mul (logCutoff_nonneg N) (1 / 2 : ℝ) beta
+      _ ≤ ((N : ℝ) ^ (1 - κm)) ^ beta :=
+        Real.rpow_le_rpow (Real.rpow_nonneg (logCutoff_nonneg N) _)
+          hcutoffSqrt hbeta.le
+      _ ≤ (2 * (N : ℝ) ^ (1 - κm)) ^ beta := by
+        apply Real.rpow_le_rpow
+        · exact Real.rpow_nonneg (Nat.cast_nonneg N) _
+        · nlinarith [Real.rpow_nonneg (Nat.cast_nonneg N) (1 - κm)]
+        · exact hbeta.le
+      _ = manuscriptHalfProductCutoff κm N ^ beta := by
+        rfl
+  have hTpos : 0 < manuscriptHalfProductCutoff κm N := by
+    unfold manuscriptHalfProductCutoff
+    positivity
+  have hfirstLower := actualPanProductGridIndices_firstLowerEndpoint_gt
+    hden hb hTpos hgridκ hgridκ2 hij
+  have hcommon :
+      (Real.log (4 * (N : ℝ))) ^ (Nat.ceil (2 * B)) ≤
+        (multiplicativeGridIocEndpoint gridκ ij.1 : ℝ) := by
+    calc
+      (Real.log (4 * (N : ℝ))) ^ (Nat.ceil (2 * B)) ≤
+          (logCutoff N) ^ (beta / 2) / 2 - 1 := hlogBound.2
+      _ ≤ manuscriptHalfProductCutoff κm N ^ beta / 2 - 1 := by
+        linarith
+      _ ≤ (multiplicativeGridIocEndpoint gridκ ij.1 : ℝ) := by
+        simpa only [beta] using hfirstLower.le
+  have hpoints := hendpointPos ij hij
+  have hY₀pos : (0 : ℝ) <
+      (multiplicativeGridIocEndpoint gridκ ij.2 : ℝ) := by
+    exact_mod_cast (show 0 < multiplicativeGridIocEndpoint gridκ ij.2 by omega)
+  have hY₁pos : (0 : ℝ) <
+      (multiplicativeGridIocEndpoint gridκ (ij.2 + 1) : ℝ) := by
+    exact_mod_cast
+      (show 0 < multiplicativeGridIocEndpoint gridκ (ij.2 + 1) by omega)
+  have hY₁cap := actualPanProductGridIndices_productUpperEndpoint_lt
+    hgridκ hgridκ2 hij
+  have hlogFour : 1 ≤ Real.log (4 * (N : ℝ)) :=
+    hlogN.trans (Real.log_le_log hNpos (by nlinarith))
+  have hlogY₀ : Real.log (multiplicativeGridIocEndpoint gridκ ij.2 : ℝ) ≤
+      Real.log (4 * (N : ℝ)) := by
+    apply Real.log_le_log hY₀pos
+    have hmono : (multiplicativeGridIocEndpoint gridκ ij.2 : ℝ) ≤
+        (multiplicativeGridIocEndpoint gridκ (ij.2 + 1) : ℝ) := by
+      exact_mod_cast (multiplicativeGridIocEndpoint_le_succ hgridκ ij.2)
+    linarith
+  have hlogY₁ : Real.log (multiplicativeGridIocEndpoint gridκ (ij.2 + 1) : ℝ) ≤
+      Real.log (4 * (N : ℝ)) := by
+    exact Real.log_le_log hY₁pos (by linarith)
+  have hlogY₀nonneg : 0 ≤
+      Real.log (multiplicativeGridIocEndpoint gridκ ij.2 : ℝ) :=
+    Real.log_nonneg (by exact_mod_cast hpoints.1)
+  have hlogY₁nonneg : 0 ≤
+      Real.log (multiplicativeGridIocEndpoint gridκ (ij.2 + 1) : ℝ) :=
+    Real.log_nonneg (by exact_mod_cast hpoints.2)
+  have hceil : 2 * B ≤ (Nat.ceil (2 * B) : ℝ) := Nat.le_ceil (2 * B)
+  constructor
+  · calc
+      Real.log (multiplicativeGridIocEndpoint gridκ ij.2 : ℝ) ^ (2 * B) ≤
+          Real.log (4 * (N : ℝ)) ^ (2 * B) :=
+        Real.rpow_le_rpow hlogY₀nonneg hlogY₀ (by positivity)
+      _ ≤ Real.log (4 * (N : ℝ)) ^ (Nat.ceil (2 * B) : ℝ) :=
+        Real.rpow_le_rpow_of_exponent_le hlogFour hceil
+      _ = Real.log (4 * (N : ℝ)) ^ Nat.ceil (2 * B) := by
+        rw [Real.rpow_natCast]
+      _ ≤ _ := hcommon
+  · calc
+      Real.log (multiplicativeGridIocEndpoint gridκ (ij.2 + 1) : ℝ) ^ (2 * B) ≤
+          Real.log (4 * (N : ℝ)) ^ (2 * B) :=
+        Real.rpow_le_rpow hlogY₁nonneg hlogY₁ (by positivity)
+      _ ≤ Real.log (4 * (N : ℝ)) ^ (Nat.ceil (2 * B) : ℝ) :=
+        Real.rpow_le_rpow_of_exponent_le hlogFour hceil
+      _ = Real.log (4 * (N : ℝ)) ^ Nat.ceil (2 * B) := by
+        rw [Real.rpow_natCast]
+      _ ≤ _ := hcommon
+
+/-- Direct specialization of both logarithmic gates to the manuscript's
+stronger licensed relation between `κ` and `κ₀`. -/
+theorem eventually_actualPanProductGridIndices_log_gates_of_manuscript
+    {num den : ℕ} (hden : 0 < den)
+    (hb : 0 < (num : ℝ) / (den : ℝ))
+    {localκ κm : ℝ} (hlocalκ : 0 < localκ)
+    (hκm0 : 0 < κm) (hκm : κm < localκ / (4 * (1 + localκ)))
+    {gridκ : ℝ} (hgridκ : 1 < gridκ) (hgridκ2 : gridκ ≤ 2)
+    {B : ℝ} (hB : 0 ≤ B) :
+    ∀ᶠ N : ℕ in atTop,
+      ∀ ij ∈ actualPanProductGridIndices num den N
+          (manuscriptHalfProductCutoff κm N) gridκ,
+        Real.log (multiplicativeGridIocEndpoint gridκ ij.2 : ℝ) ^ (2 * B) ≤
+            (multiplicativeGridIocEndpoint gridκ ij.1 : ℝ) ∧
+          Real.log (multiplicativeGridIocEndpoint gridκ (ij.2 + 1) : ℝ) ^ (2 * B) ≤
+            (multiplicativeGridIocEndpoint gridκ ij.1 : ℝ) :=
+  eventually_actualPanProductGridIndices_log_gates hden hb hκm0
+    (manuscript_kappaZero_lt_quarter hlocalκ hκm) hgridκ hgridκ2 hB
 
 end
 
