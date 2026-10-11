@@ -76,6 +76,7 @@ import ImbalancedChen.RoughPrimeUniverse
 import ImbalancedChen.SignSensitiveAttachment
 import ImbalancedChen.PhysicalUpperWeightBridge
 import ImbalancedChen.SmallRoughAttachment
+import ImbalancedChen.SmallRoughMainTerm
 import ImbalancedChen.EnlargedSelbergAsymptotic
 import ImbalancedChen.QuotientChenFourPrime
 import ImbalancedChen.QuotientChenFourCounts

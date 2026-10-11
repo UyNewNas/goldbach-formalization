@@ -69,6 +69,7 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/RetainedModuli.lean`: natural-number support and literal integer coefficient `lambda(d) = mu(d)` on retained first-exit moduli, including `lambda(1) = 1`, support uniqueness, squarefreeness and leaf-value lookup through the actual prime-factor finset. The recursive leaf list and its selected-product image are proved `Nodup` before the exact multiplicity-preserving `List.sum` to modulus `Finset.sum` reindex.
 - `ImbalancedChen/RoughPrimeUniverse.lean`: exact finite construction of primes `p ∤ N` in the real half-open range `w ≤ p < z`, sorted strictly decreasing. An explicit enumeration cap disappears from membership once `z ≤ cap`; no unproved floor/ceiling convention is substituted. The generic pointwise majorant and retained-coefficient lookup are specialized to this concrete universe.
 - `ImbalancedChen/SmallRoughAttachment.lean`: the strict `p < w` small support and inclusive `w ≤ p` rough support are cross-coprime, so multiplication is injective on the displayed small/rough pair carrier (prime powers included). The existing `signSensitiveAttachment` is proved literally equal to the divisor sum of one total coefficient `smallRoughRho` on a multiplicity-free physical modulus support; occupied fibres contain exactly one coefficient, scalar physical sums pull back without a fibre factor, and the unit absolute bound is preserved.
+- `ImbalancedChen/SmallRoughMainTerm.lean`: for that same literal `smallRoughRho`, the reciprocal-totient physical density is pulled back without multiplicity and factored using totient multiplicativity. Each nonnegative rough coefficient selects the upper small-weight density and each negative coefficient selects the lower one. The exact coprime-source correction and signed primitive-residue error are reindexed to the same pair carrier as well; no density or distribution estimate is assumed.
 - `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
 - `ImbalancedChen/HalfProductMassSplit.lean`: exact high/low prime rectangle and order-error envelope for the original source.
 - `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.
@@ -238,6 +239,18 @@ total `rho`, together with generic scalar and rho-weighted sum reindexing. The r
 current-`K` work is to instantiate the manuscript's actual causal policy and
 actual small weights, then prove both analytic estimates for that exact
 constructed `rho_N`.
+
+`SmallRoughMainTerm` now closes the finite main-term algebra for this same
+physical coefficient.  It proves the exact sign-sensitive factorization
+
+`sum rho(q) / phi(q) = sum_b c(b) / phi(b) * (if 0 <= c(b) then Dplus else Dminus)`
+
+with `Dminus` and `Dplus` the reciprocal-totient densities of the displayed
+small lower and upper weights.  The coprime correction and the signed
+primitive-residue error are also pulled back to the identical small/rough
+pair carrier.  The remaining current-`K` obligations are therefore the actual
+Rosser-density bounds and restricted moving-residue distribution theorem for
+this `rho`, plus the still-uninstantiated causal retained rough policy.
 
 ## Finite odd-first-exit tree candidate
 

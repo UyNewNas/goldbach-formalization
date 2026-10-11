@@ -938,3 +938,10 @@ factorized distribution estimate, complete eleven-term mean lower bound and
 final ordered-bad transfer therefore remain open; Theorem 1.1 and
 Corollary 1.2 are not claimed.
 
+
+
+## Exact same-rho main-term checkpoint (11 October 2026)
+
+`ImbalancedChen/SmallRoughMainTerm.lean` closes the finite main-term algebra for the literal physical coefficient `smallRoughRho`.  The reciprocal-totient density is reindexed without multiplicity to the displayed small/rough pair carrier and factored by totient multiplicativity.  Nonnegative rough coefficients select the upper small-weight density; negative coefficients select the lower density, preserving the sign reversal required by the pointwise majorant.  The exact coprime-source correction and signed primitive-residue distribution error are reindexed to the same pair carrier.
+
+No density or distribution estimate is assumed.  The module was directly elaborated under Lean 4.33.0-rc1 and Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`; its generated object passed bundled `leanchecker`, and all four theorem audits report only `propext`, `Classical.choice`, and `Quot.sound`.  Source SHA-256 is `3a3cdd6bc284237634da7744167e280c9ee56dc33555899ed98cc88e7e691b08`.  A complete clean-checkout CI build remains required before remote verification success is claimed.  The actual causal retained policy, actual lower/upper Rosser-weight instantiation, their sharp density bounds yielding current `K`, and the restricted moving-residue distribution theorem remain open.
