@@ -622,7 +622,9 @@ The updated module source SHA-256 is `88b2c972243ba1e33e89a08b6759c16512620751b7
 
 ## Dynamic Pan honest modulus-gate candidate
 
-`ImbalancedChen/PanProductGridModulus.lean` closes both endpoint cutoff gates
+Code and documentation commit
+[`56519975ad32d9b3616b33974b16756882106a4f`](https://github.com/UyNewNas/goldbach-formalization/commit/56519975ad32d9b3616b33974b16756882106a4f)
+adds `ImbalancedChen/PanProductGridModulus.lean` and closes both endpoint cutoff gates
 for a deliberately smaller physical modulus layer.  For fixed
 `0 < κ₀ < 1`, `0 ≤ theta < (1-κ₀)/2`, `1 < gridκ ≤ 2`, and the supplier's
 fixed `B ≥ 0`,
@@ -656,6 +658,10 @@ Module source SHA-256:
 `0e340bf79e581e5c46d324a83ad470036ff07f3cbd9fdb37dc4fe3f950e66fdd`.
 Static source checks pass (`git diff --check` and no forbidden proof escape).
 The runner contains no Lean or Lake executable, so no local elaboration,
-build, bundled kernel replay or transitive axiom audit is claimed pending an
-actual CI runner execution.
+build, bundled kernel replay or transitive axiom audit is claimed.  Exact
+code-head VariableEnvelope [run 38107471726](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38107471726)
+and core [run 38107471723](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38107471723),
+including one failed-jobs retry each, ended before any workflow step was
+created (`steps: null`, no logs or artifacts).  They are infrastructure-start
+failures and are not proof verification.
 
