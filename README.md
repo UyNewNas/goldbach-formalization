@@ -12,7 +12,41 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
-The latest finite extension sums the actual own-cube density changes over
+The latest extension constructs a finite rational-grid cap selector on
+the logarithms of actual selected primes. It uses the unique adopted
+half-open cell and inherits the old cap outside the adopted union. A
+licensed compact set has a fixed finite covering family whose whole-box
+checks pass. The selector supplies literal integer square gates and
+nondecreasing levels, and later selections preserve its chosen ancestor.
+For ordinary upper and lower parents, recursion proves complete prefix
+validity. Consequently the concrete fifth-upper and fourth-lower updates
+start from actual ordinary densities without prefix-validity or
+level-comparison hypotheses. They retain `N>1`, `old>0`, and the lower
+cutoff condition `z<=N^old`.
+
+Actual target-deleted prime tuple sums now also converge against every
+continuous real test function on a positive logarithmic cube. The limit
+is the genuine Lebesgue integral with density `prod_i 1/t_i`, including
+signed test functions. Exact half-open subdivision and separate arithmetic
+and integral error bounds prove the transfer. These cube sums do not
+include an ordering or a retained-frontier filter.
+
+On cubes satisfying explicit initial-branch inequalities, the actual
+normalized Rosser residual saving at the tuple product and last prime now
+also converges to its rational-profile integral. The proved compact
+density theorem supplies the uniform error, and the actual box-mass limit
+pays its sum. No density-error or integral-convergence premise is added.
+This remains a cube result; the admitted ordered regions, certified
+integrals, signed distribution and both final counting bounds are open.
+
+All seven new sources passed strict individual compilation and independent
+review. The full aggregate build passed with 9,759 jobs; all seven final
+Lake-built objects passed bundled kernel replay. The canonical audit
+passed for all 119 owned declarations, including private and generated
+ones, with only `propext`, `Classical.choice` and `Quot.sound` as
+transitive axioms. The manuscript's main theorem remains incomplete.
+
+The preceding finite extension sums the actual own-cube density changes over
 every candidate of the same parent frontier. Upper rank four-to-five
 gives the old upper tree minus the new tree; lower rank three-to-four
 gives the new lower tree minus the old tree. Both old and new admission

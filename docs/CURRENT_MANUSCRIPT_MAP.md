@@ -18,6 +18,59 @@ statement before any later checkpoint is called current.
 
 ## Exact finite semantics
 
+`SelectedPrefixRationalMesh` casts rational grid endpoints to the existing
+real mesh exactly, selects the finite family of cells meeting a compact
+licensed set, and proves unique half-open coverage. One mesh threshold
+makes every selected cell's cap check succeed. Endpoint and cell distances
+are bounded by the mesh step, including dimension zero. The finite family
+is selected classically; arbitrary compact-set intersection is not claimed
+to be a computable decision procedure.
+
+`PrimeHistoryLogCoordinates` identifies the actual reversed history with
+its processing-order tuple, preserving product and reciprocal-prime mass.
+Length and positivity pay the exact `N^(log p/log N)=p` dictionary.
+`ActualSelectedPrefixCapSelector` reads those coordinates with an explicit
+finite cell lookup: it uses the cell midpoint cap inside the adopted union
+and the old cap outside. Every adopted cell passes the whole-box check;
+the resulting integer square gates and old-level comparison are proved.
+The finite family is fixed before the target and history. Freezing this
+lookup at the selected ancestor preserves the same cap at later ranks.
+
+`FirstExitFrontierAdmission` proves complete validity of reachable ordinary
+parity-safe prefixes by recursion, maintaining the sign and inherited tests
+even at inactive parities. The upper root needs `Q>1`; the lower root also
+needs `z<=Q`. `ActualSelectedPrefixOwnCube` combines this result with the
+actual selector. Its upper fifth and lower fourth changes start directly
+from the actual ordinary upper/lower density at `N^old`, retain all
+candidates and both own-cube gates, and require no supplied prefix-validity
+or level-comparison hypothesis. They retain `N>1`, `old>0`, and the lower
+cutoff condition `z<=N^old`. This currently handles a fixed old cap and
+adopted family; the full manuscript's multistage certified policy is open.
+
+`ActualPrimeBoxTestFunctions` proves a continuous-test-function limit for
+the actual target-deleted prime tuples on any positive common-endpoint
+logarithmic cube. Exact finite partition into half-open cells and uniform
+continuity supply both arithmetic and genuine Lebesgue integral errors.
+The limit is the integral of `f(t)*prod_i 1/t_i`; `f` can have either sign.
+No convergence or approximation-error assumption is supplied. This result
+does not impose prime ordering, a retained-prefix filter, or an own-cube
+admission region. Those geometric transfers remain separate obligations.
+
+`ActualPrimeBoxInitialSavingIntegral` applies this transfer to actual
+residual densities. For a cube of dimension `d=k+1`, assume
+`0<a<b`, `lambdaOld<lambdaNew`, `(d+1)*b<lambdaOld` and
+`lambdaNew<=(d+3)*a`. Both residual parameter pairs lie in one legal
+compact set. At each actual tuple it uses `P=prod p_i`, `y=p_last`
+and the literal real levels `N^lambda/P`. The normalized difference of
+the two actual upper densities, summed against `prod_i 1/(p_i-1)`, tends
+along positive even targets to the integral of
+`4*(lambdaNew-lambdaOld)/((lambdaOld-sum t)*(lambdaNew-sum t))*prod_i 1/t_i`.
+Any enumeration cap sequence eventually covering `N^b` is allowed.
+Uniform density errors and bounded arithmetic mass are proved inputs from
+earlier theorems, not extra hypotheses of this limit. The cube allows
+repeated, unordered coordinates, so this does not yet identify the
+manuscript's retained eighth-prefix saving domain or its certificate value.
+
 `FirstExitCandidateGeometry` identifies every next-selection candidate,
 including rejected ones, by its literal remaining-list decomposition.
 It derives the prime history, decreasing processing order (stored histories
@@ -42,7 +95,8 @@ A pointwise strict license gives a radius within which all rational
 endpoint pairs pass the check. `SelectedPrefixCompactCaps` supplies one
 positive radius, or one reciprocal-mesh threshold, uniformly across a
 compact licensed set. These are actual cap construction and refinement
-theorems; concrete certificate coverage and the causal selector are open.
+theorems. The concrete finite selector is now proved above; certificate
+coverage and the full multistage causal policy remain open.
 
 `RestrictedResidueScale` proves the moving-residue range for the complete
 local product: fixed `c,C,kappa>0` and

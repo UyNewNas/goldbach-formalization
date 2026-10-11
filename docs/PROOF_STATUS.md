@@ -2,6 +2,156 @@
 
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
+## Actual finite selectors and prime-tuple integrals — 12 October
+
+`SelectedPrefixRationalMesh` defines rational endpoints whose casts are
+exactly the existing real mesh. Its finite adopted family consists of the
+cells meeting a specified compact licensed set. Unique half-open ownership
+covers that set at every mesh scale, when it lies in the ambient box.
+Compact uniform licensing supplies one threshold after which every adopted
+cell passes the rational cap check. Endpoint distances and the adopted
+union's distance from the set are bounded by one mesh step. This geometric
+bound is not an arithmetic boundary-mass estimate. Intersection with an
+arbitrary compact set is selected classically, not claimed decidable.
+
+`PrimeHistoryLogCoordinates` proves that reversing the stored history and
+indexing it by its exact length preserves every prime, the full product
+and the reciprocal-prime mass. The length condition excludes default
+entries. For positive entries and `N>1`, its coordinates satisfy
+`N^(log p/log N)=p`. Actual frontiers and candidates supply primality and
+the correct order; a candidate need not pass admission.
+
+`ActualSelectedPrefixCapSelector` uses the adopted finite family directly.
+The rational lookup is `old + sum_j 1[cell_j](cap_j-old)`. Unique ownership
+proves it equals the cell cap on an adopted cell and exactly `old` outside
+the union. Successful whole-box checks imply a global lower bound `old`,
+the strict on-cell exponent licenses, and their literal integer subproduct
+square gates. A licensed compact set admits one fixed finite covering
+family before any target or history is supplied. The chosen level reads
+the actual history's log coordinates; freezing at its selected ancestor
+preserves it under all later selections. There is no extra arbitrary-set
+membership filter in the arithmetic lookup.
+
+`FirstExitFrontierAdmission` proves complete ordinary prefix validity
+through the real recursion. For the parity-safe policy it maintains the
+sign, sorted carrier and inherited tests, and uses the proved parity/full
+step identity. An inactive parity's Boolean `true` alone is not used as
+evidence of validity. At the actual root the upper case needs `Q>1`; the
+lower case also needs `z<=Q`, which pays the strict first-prime bound.
+
+`ActualSelectedPrefixOwnCube` starts directly from the actual ordinary
+upper/lower density at `N^old`. Its concrete fifth-upper and fourth-lower
+updates use the finite selector and the actual ancestor. The parent
+validity and level comparison used by the generic difference identity are
+now conclusions, not inputs. The conditions `N>1`, `old>0` and, in the
+lower case, `z<=N^old` remain explicit. All candidates and both strict own-cube
+gates remain in the difference. This is one fixed old cap and adopted
+family, not the assembled multistage certified policy. A positive gain
+or the value of its integral is not inferred from this finite equality.
+
+`ActualPrimeBoxTestFunctions` proves, for every finite dimension, `0<a<b`
+and every real function continuous on the closed logarithmic cube, that
+the actual target-deleted prime tuple sum converges to
+
+```text
+sum_{p in actualPrimeBoxTuples N a b}
+  (prod_i 1/(p_i-1)) * f((log p_i/log N)_i)
+  --> integral_[a,b)^d f(t) * (prod_i 1/t_i) dt.
+```
+
+The function may have either sign. The proof identifies the exact
+arithmetic tuples with their half-open log coordinates, partitions the
+actual carrier into disjoint mesh cells, and uses uniform continuity.
+The arithmetic approximation costs at most epsilon times its actual
+nonnegative mass. A separate Lebesgue integrability and partition argument
+gives the same integral error. The already proved constant-mass limits,
+then an epsilon argument, prove the full weighted limit. No convergence
+or approximation-error premise is supplied. The tuple carrier here is a
+cube with no ordering, retained-frontier or own-cube-region filter.
+
+`ActualPrimeBoxInitialSavingIntegral` then applies that theorem to a
+genuine varying arithmetic summand. Fix dimension `d=k+1`,
+`0<a<b`, `lambdaOld<lambdaNew`, `(d+1)*b<lambdaOld` and
+`lambdaNew<=(d+3)*a`. On the closed cube these inequalities give
+`0<u`, `u<betaOld<=3*u` and `u<betaNew<=3*u`, where `u=t_last` and
+`beta=lambda-sum t`. The two parameter maps have a compact union of
+images, so the already proved actual residual-density theorem supplies
+one uniform threshold before the target, enumeration cap and every tuple.
+The tuple logarithms recover its literal natural product, with no
+distinctness premise.
+
+For `P=prod_i p_i` and `y=p_last`, define the actual normalized summand
+
+```text
+A_N(p) = (Vplus_N(y, N^lambdaOld/P) - Vplus_N(y, N^lambdaNew/P))
+           * log N / C_N.
+```
+
+The new limit states, along positive even targets,
+
+```text
+sum_{p in actualPrimeBoxTuples N a b} (prod_i 1/(p_i-1)) * A_N(p)
+  --> integral_[a,b)^d
+        4*(lambdaNew-lambdaOld)
+        / ((lambdaOld-sum_i t_i)*(lambdaNew-sum_i t_i))
+        * (prod_i 1/t_i) dt.
+```
+
+The enumeration cap can vary arbitrarily with the target, provided it
+eventually covers `N^b`. The compact density limit proves the uniform
+summand error; the actual box-mass limit gives an eventual mass bound;
+finite nonnegative-weight transport and the continuous-test theorem give
+the stated integral. No density-error or target-convergence hypothesis is
+assumed. This cube permits repeated coordinates and has no ordering or
+ancestor-admission filter. Its product reciprocal weight is not replaced
+by `1/phi(P)`, and no complete eighth frontier or numerical certificate
+value is claimed.
+
+All seven new sources passed strict individual compilation without
+diagnostics and independent review. The standard full aggregate build
+passed with 9,759 jobs in 58.095 seconds. Bundled `leanchecker` replayed
+all seven final Lake-built objects in 23.890 seconds. The canonical joint
+audit passed in 255.092 seconds for all 119 owned declarations, including
+private and generated declarations:
+
+| Module | Owned declarations |
+| --- | ---: |
+| `SelectedPrefixRationalMesh` | 19 |
+| `PrimeHistoryLogCoordinates` | 23 |
+| `FirstExitFrontierAdmission` | 11 |
+| `ActualSelectedPrefixCapSelector` | 15 |
+| `ActualSelectedPrefixOwnCube` | 7 |
+| `ActualPrimeBoxTestFunctions` | 30 |
+| `ActualPrimeBoxInitialSavingIntegral` | 14 |
+
+Every declaration is safe, none is an unproved axiom, and the only
+transitive axioms are `propext`, `Classical.choice` and `Quot.sound`.
+The checks used Lean `4.33.0-rc1`, mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and Goldbach
+`09b97db5764ade1246bfb77206baa1b124760958`. All eleven dependency revisions
+matched the manifest. Sources, root imports, audit, pins and final object
+hashes stayed unchanged; provider tracked worktrees and indexes remained
+clean. All 70 evidence files from the preceding own-cube-density checkpoint
+were unchanged. This replays the seven new final objects, not the entire
+root anew. The previously recorded whole-library warning-as-failure failure
+was not repeated or reclassified as passing.
+
+Evidence is in `.lake/main-theorem-verification-20261012/actual-selector/`.
+With the pinned dependencies, reproduce with `lake build`, then
+`lake env leanchecker --verbose ImbalancedChen.MODULE` for the seven names
+above, and
+`lake env lean -DwarningAsError=true verification/ActualSelectorAudit.lean`.
+The audit inventories actual defining-module metadata, not source-text
+matches or declaration-name prefixes. The separate next-step plan is
+explicitly unproved.
+
+The remaining work includes the full certified multistage selector and
+region coverage, geometric transfers to the actual ordered and admitted
+prefix regions with boundary reserves, physical factorization and support,
+integral certificates, restricted signed distribution, the current Chen
+mean and both analytic bounds in `CurrentMainTheorem`. Theorem 1.1 and
+Corollary 1.2 remain incomplete.
+
 ## Actual own-cube sums, selected caps and residue scales — 12 October
 
 `FirstExitCandidateGeometry` derives every possible next selection from
@@ -45,9 +195,9 @@ than supplied as a hypothesis of this existence theorem.
 choose one mesh threshold and one positive radius before every point and
 rational endpoint pair in the licensed compact set, including an empty
 set. This gives a uniform fineness criterion for a common refinement.
-It does not yet
-construct the finite grid selector or prove that the numerical certificate
-cells cover the required compact region.
+The subsequent extension above constructs the finite grid selector.
+Coverage of the required region by the numerical certificate cells
+remains open.
 
 `RestrictedResidueScale` proves that fixed positive `c,C,kappa` and
 `kappa0<kappa/(1+kappa)` give one threshold at which every complete local
