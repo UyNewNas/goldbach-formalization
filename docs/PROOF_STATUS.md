@@ -2,6 +2,185 @@
 
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
+## Actual residual policies, presieve projection and lower coefficients — 12 October
+
+The new finite append identity continues each retained rough leaf through
+the small carrier with its original history, sign and unsigned mass. It
+expresses the full polynomial as the rough polynomial times the small
+Euler product plus the sum of the actual continuation corrections. When
+every even prefix is retained, every correction is nonnegative; when
+every odd prefix is retained, every correction is nonpositive. Both facts
+hold for arbitrary incoming sign and nonnegative mass. No inequality is
+multiplied by a signed leaf coefficient.
+
+`ActualPrimePresieveSplit` proves that the decreasing target-deleted prime
+carrier below `z` is exactly `[w,z)` followed by the carrier below `w`,
+for every real `w<=z` and the same finite cap. A prime equal to `w` belongs
+to the rough side. The small continuation product is the actual Euler
+product. The retained polynomial at local weight `1/(p-1)` is exactly the
+fixed coefficient's reciprocal-totient density, including modulus one.
+This gives the upper projection `V(w)*rough <= full` on that same density.
+
+`FirstExitGenericModuli` proves squarefree selected products and injective
+modulus reindexing for any retention policy. Unit local weights fix the
+support before evaluation; every other local weight has exactly the same
+selected products. The actual coefficient is Mobius on that support and
+zero off it. `FixedEvenRoughCoefficients` specializes the construction to
+even first exits and supplies an actual all-integer rough minorant and its
+exact density dictionary. It does not assume a nonnegative lower divisor sum.
+
+`ActualLowerSmallRoughAttachment` constructs the physical lower coefficient
+using the unique small/rough decomposition. Positive rough coefficients
+select the actual beta-minus and negative ones select beta-plus, literally
+by reversing the two arguments of the existing `smallRoughRho`. It proves
+the same rho has squarefree target-coprime support, absolute coefficient
+bound one, the active small factor strictly below its real level, and a
+pointwise minorant for every integer including zero. The density identity
+uses that same coefficient and support.
+
+The exact lower attachment loss satisfies
+
+```text
+0 <= V(w)*signedRoughDensity - density(rho)
+  <= (V(w)*smallError)*absoluteRoughDensity.
+```
+
+`EvenRoughAbsoluteDensity` bounds the last factor by a genuine full Euler
+product and a uniform logarithmic envelope, allowing truncated caps and
+requiring `w>=2` for the analytic envelope. This condition is paid before
+use. `ActualLowerNormalizedRhoError` combines it with the actual small
+weight supplier, the target Euler normalization and the proved quartic
+epsilon absorption. For every prescribed positive reserve and precision
+upper bound it chooses epsilon, then a common target threshold, before
+the target, covering cap and arbitrary even-retention policy.
+
+The two final projection modules therefore prove
+
+```text
+density(upper rho) <= fullUpperPolicyDensity + eta*C_N/log N;
+density(lower rho) >= fullLowerPolicyDensity - eta*C_N/log N.
+```
+
+The lower result is also bundled with its all-integer pointwise minorant
+and unit coefficient bound, using one epsilon and one threshold. The full
+densities here are the exact corresponding raw-policy densities, not a
+newly assumed function or an already evaluated sharp numerical constant.
+
+`ActualRosserResidualDensity` pulls the ordinary compact density theorem
+back to `(beta,u)` via `(u,beta/u)`. It supplies both ratio and normalized
+thresholds and uniform limits on legal compact sets. It then proves the
+exact identities `N^(log y/log N)=y` and
+`N^(lambda-log P/log N)=N^lambda/P` for positive `P,y` and `N>1`.
+The quotient thresholds precede all `N,P,y,lambda,cap`; only fixed compact
+membership of their logarithmic parameters and cap coverage are needed.
+The literal ceiling level is unchanged.
+
+`ActualRosserPrefixDeletion` proves that prefix primes at least `y` are
+already excluded from the strict residual carrier below `y`. Every
+residual support modulus is coprime to their product. Excluding those
+primes explicitly leaves the actual prime carrier, weights, Euler product
+and densities unchanged. This finite identity does not change the target
+used in singular-series normalization.
+
+`ActualRosserInitialResidualSaving` first proves the positive-even target
+filter is nontrivial. Uniqueness of two limits of the same actual density
+then identifies the canonical upper factor as `2*exp(gamma)/s` on
+`1<s<=3`. The compact normalized limit is `4/beta`. Taking two estimates
+with half the reserve gives the exact signed residual saving
+
+```text
+4*(lambdaNew-lambdaOld)
+  / ((lambdaOld-log P/log N)*(lambdaNew-log P/log N)).
+```
+
+The common threshold precedes all residual parameters and covering caps.
+Both parameter pairs must lie in the same fixed legal compact set. A
+positive saving still requires an increase of the cap. This statement is
+about ordinary residual densities; it includes no prefix mass, integral
+or claimed numerical certificate.
+
+`FirstExitDepthSplice` cuts the actual parent tree immediately after a
+retained rank. Each frontier state keeps its selected history, sign, mass
+and remaining carrier. The exact new-minus-old root polynomial is the sum
+of the continuation differences over that one parent frontier; common
+terminal contributions before the rank cancel. The admission test at the
+cut rank remains the parent's test. A refinement of that rank's own cube
+test, such as the lower construction's fourth-prefix change, needs an additional before-test
+identity and cannot be obtained by relabeling this result.
+
+`FirstExitValidSelection` constructs a retained leaf from every valid
+chosen sublist and recovers a valid sublist from every retained leaf.
+`OrdinaryRosserFirstExitPolicy` uses both directions to identify the full
+ordinary prefix-test policy with the actual Rosser support, coefficients
+and density. The real level is unchanged, including its literal ceiling.
+It then proves equivalence of a globally parity-safe policy that retains
+the inactive parity unconditionally. For lower weights the first prime
+must be below the level; the actual-carrier corollaries pay this with
+`y<=R`. The active test still checks the full prefix predicate. This does
+not claim an arbitrary-history fresh-cube simplification or the causal
+residual continuation identity.
+
+| New module | Proved role |
+| --- | --- |
+| `FirstExitPresieveProjection` | Exact append substitution and both parity projection directions |
+| `ActualPrimePresieveSplit` | Actual descending carrier split and reciprocal-totient dictionary |
+| `ActualRosserResidualDensity` | Compact thresholds for literal levels `N^lambda/P` |
+| `ActualFirstExitDensityProjection` | Same upper physical coefficient bounded by full density plus reserve |
+| `FirstExitGenericModuli` | Fixed natural-modulus support, squarefreeness and exact coefficient reindexing |
+| `FixedEvenRoughCoefficients` | Actual even-exit rough minorant and its signed density |
+| `LowerSmallRoughAttachment` | Correct sign-sensitive lower attachment inequality |
+| `LowerSmallRoughDensityError` | Exact sign-sensitive lower density loss |
+| `EvenRoughAbsoluteDensity` | Uniform absolute-mass envelope for the actual lower rough support |
+| `ActualLowerSmallRoughAttachment` | One actual physical lower coefficient and its finite properties |
+| `ActualLowerNormalizedRhoError` | Arbitrary normalized reserve with precision chosen before the target |
+| `ActualLowerFirstExitDensityProjection` | Full-density lower bound for that same physical minorant |
+| `ActualRosserPrefixDeletion` | Exact irrelevance of already excluded prefix primes |
+| `ActualRosserInitialResidualSaving` | Initial-branch compact normalized limit and actual cap difference |
+| `FirstExitDepthSplice` | Exact continuation difference on a common retained-rank frontier |
+| `FirstExitValidSelection` | Both directions of valid sublist and retained-leaf correspondence |
+| `OrdinaryRosserFirstExitPolicy` | Ordinary full-prefix and parity-safe policies equal actual Rosser weights |
+
+All seventeen final sources passed strict individual compilation with no
+diagnostics. The standard full aggregate `lake build` passed with 9,733
+jobs in 15.739 seconds. An additional `lake --wfail build` attempt returned
+exit 1 because it replayed 101 existing linter warnings in 42 old modules;
+all seventeen new modules and the root built in that attempt, with no new
+module diagnostics. Its original failure log and classification are
+retained separately. No existing source or dependency pin was changed to
+silence that warning gate.
+
+Bundled `leanchecker` replayed all seventeen final Lake-built objects in
+66.45 seconds. One canonical audit then passed for all 286 owned
+declarations, including private and generated declarations, in 269.493
+seconds. Every audited declaration is safe, is not an unproved axiom, and
+has transitive axioms contained in `propext`, `Classical.choice`, and
+`Quot.sound`. Ten independent review records cover all seventeen modules.
+
+The checks used Lean `4.33.0-rc1`, mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and Goldbach
+`09b97db5764ade1246bfb77206baa1b124760958`. The final source, root imports,
+audit and seventeen object hashes stayed unchanged. Actual dependency
+revisions match the manifest; both providers' tracked worktrees and
+indexes remained clean. All 113 evidence files from the preceding
+compact-uniform checkpoint also remained unchanged. This checkpoint
+replays the seventeen new objects, not every object in the repository.
+Evidence is recorded in
+`.lake/main-theorem-verification-20261012/residual-policy/`.
+
+To reproduce the proof checks with the pinned dependencies, run `lake build`,
+then `lake env leanchecker --verbose ImbalancedChen.MODULE` for each of the
+seventeen names in the table. Run the joint owned-declaration audit with
+`lake env lean -DwarningAsError=true verification/ResidualPolicyAudit.lean`.
+The inventory uses Lean's defining-module metadata, not a source-text
+count or a public-namespace filter. The separate `--wfail` failure above
+is not presented as a passed check.
+
+Still open are the manuscript's causal cap-change/box compiler, physical
+support exponent, signed density evaluation and numerical certificates,
+restricted signed distribution, current Chen mean and the final two count
+bounds. Theorem 1.1 and Corollary 1.2 remain incomplete. The goal is active
+and the old scheduled task remains paused.
+
 ## Compact uniform limits for both actual Rosser weights — 12 October
 
 The current extension closes the ordinary raw-density parameter-uniformity

@@ -12,7 +12,43 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
-The latest 12 October extension proves two-sided convergence of the same
+The latest extension connects the actual full and presieved first-exit
+densities, with opposite projection directions for upper and lower trees.
+It also constructs the actual lower physical coefficient: positive rough
+coefficients select beta-minus, negative ones select beta-plus. The same
+coefficient minorizes the prime-roughness indicator at every integer,
+including zero, is bounded in absolute value by one and has squarefree,
+target-coprime support. Its density is at least its full raw-policy density
+minus any prescribed `eta*C_N/log N`, with the precision and threshold
+chosen before the target, cap and retention policy. The upper counterpart
+is at most its full raw-policy density plus that reserve. These statements
+do not evaluate the full density or supply its support exponent.
+
+The compact density theorem now applies directly to real residuals
+`y, N^lambda/P`: the common threshold precedes all varying `P,y,lambda`
+whose logarithmic parameters lie in the fixed legal compact set. Actual
+prefix primes at or above `y` are already absent from the strict residual
+carrier, as proved by exact coefficient and density identities.
+
+On the initial upper branch, the actual normalized density tends uniformly
+to `4/beta`. Subtracting two such estimates gives the actual residual saving
+`4*(lambdaNew-lambdaOld)/((lambdaOld-log P/log N)*(lambdaNew-log P/log N))`.
+A separate finite identity expresses a change below a retained rank as a
+sum of continuation differences over the same parent frontier. The ordinary
+first-exit policy is also identified coefficient by coefficient with the
+literal Rosser weight. Its parity-safe lower version requires `y<=R`.
+Identifying a history-dependent continuation with an ordinary residual,
+integrating prefix masses and proving the causal compiler remain open.
+
+This seventeen-module checkpoint passed strict individual compilation,
+the standard full aggregate build (9,733 jobs), kernel replay of all
+seventeen final objects and a joint audit of all 286 owned declarations.
+Ten independent review records cover the new sources. An additional
+whole-library warning-as-failure check did not pass because it replayed
+existing linter warnings; no new module produced a diagnostic. The proof
+status records both results and the remaining main-theorem obligations.
+
+The preceding 12 October extension proves two-sided convergence of the same
 actual Rosser density divided by its own target-deleted Euler product,
 uniformly on every compact set of parameters `(u,s)` with `u>0,s>1` for
 the upper weight and `u>0,s>=2` for the lower weight. The limits are the

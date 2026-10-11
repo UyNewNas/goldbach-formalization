@@ -18,7 +18,69 @@ statement before any later checkpoint is called current.
 
 ## Exact finite semantics
 
-The latest extension proves the same raw upper and lower Rosser density
+The full descending actual prime carrier is now proved equal to the rough
+carrier `[w,z)` followed by the small carrier below `w`. Exact leaf
+substitution preserves each rough leaf's selected history, sign and mass.
+Its correction is nonnegative for odd first exits and nonpositive for even
+first exits. Consequently the same fixed upper density satisfies
+`V(w)*rough <= full`, and the same fixed lower density satisfies
+`full <= V(w)*rough`. These are proved inequalities, not an assumed
+factorization of signed densities.
+
+`ActualLowerSmallRoughAttachment` supplies one actual lower physical rho,
+using beta-minus on positive rough coefficients and beta-plus on negative
+ones. It has a true all-integer minorant, squarefree target-coprime support,
+unit coefficient bound and strict active small-factor level. Its actual
+density loss is bounded by the actual absolute rough mass.
+`ActualLowerNormalizedRhoError` chooses the precision before the common
+target threshold and absorbs that loss at `eta*C_N/log N`.
+`ActualLowerFirstExitDensityProjection` proves the same rho's density is
+at least the full raw-policy density minus the reserve, and bundles this
+with its all-integer minorant and unit bound. The upper counterpart is
+proved in `ActualFirstExitDensityProjection`. Neither comparison yet
+evaluates the manuscript's full causal-policy density.
+
+`ActualRosserResidualDensity` transfers the ordinary compact theorem to
+`(beta,u)` and then to actual residual levels `N^lambda/P` and cutoffs `y`.
+Its one threshold is chosen before `N,P,y,lambda,cap`; positivity and fixed
+compact membership are the explicit legal parameter conditions.
+`ActualRosserPrefixDeletion` proves that a selected prime prefix above the
+strict residual cutoff needs no further deletion: residual moduli are
+coprime to its product, and the prime carrier, Rosser coefficients, Euler
+product and densities are unchanged by explicitly excluding that prefix.
+
+`ActualRosserInitialResidualSaving` identifies the canonical upper factor
+on `1<s<=3` by uniqueness of two proved limits of the same actual density.
+It proves a uniform `4/beta` limit and the signed difference for two actual
+residual levels `N^lambda/P`. A positive saving still requires the new cap
+to exceed the old cap. No prefix mass or certified integral is implicit.
+
+`FirstExitDepthSplice` proves that changing the policy after a retained
+rank changes the root polynomial by the sum of the new-minus-old
+continuations over the same parent frontier. It preserves the admission
+test at that rank. It therefore does not yet implement a change to that
+rank's own cube test, as required by the lower fourth-prefix restoration.
+`FirstExitValidSelection` gives both directions of
+the selected-sublist/support correspondence.
+`OrdinaryRosserFirstExitPolicy` identifies a full-prefix ordinary policy
+with the actual Rosser coefficients and density at the same real level.
+It also proves a globally parity-safe version, with inactive parity always
+retained. The lower version pays the first-prime level condition explicitly
+(`y<=R` on the actual carrier). This is a root ordinary-weight dictionary,
+not yet the required history-dependent causal residual identity.
+
+The next finite connection must prove that a valid nonempty prefix with
+product `P` leaves an ordinary continuation at the real level `Q/P`, with
+the exit parity flipped exactly when the prefix rank is odd. It must also
+derive the actual frontier's mass, sign and remaining strict prime carrier.
+The upper fourth-rank change acts after the retained fourth rank. The
+upper fifth-rank own-cube change must instead enumerate candidates from
+the common fourth-rank frontier and retain both old and new admission
+indicators; otherwise restored old exits are lost. The lower fourth-rank
+own-cube restoration similarly starts from rank-three candidates. These
+are still unproved connections, ahead of the box integrals and certificates.
+
+The preceding extension proves the same raw upper and lower Rosser density
 ratios uniformly on every compact set of `(u,s)` with `u>0,s>1` and
 `u>0,s>=2`, respectively. `ActualRosserCompactLimits` supplies one natural
 threshold before both parameters and every covering cap. The limits are
@@ -465,11 +527,15 @@ remain the actual filtered-source gap.
    residual interval. The explicit classical lower formula is identified
    on `[2,4]`; no new global classical-factor identity is inferred here.
    The causal boxed policy, its support exponent and the sharp signed
-   density of the same physical weight still require proofs.
+   density of the same physical weight still require proofs. The exact
+   full-to-rough projection, actual lower physical attachment and both
+   normalized attachment reserves are now proved for arbitrary permitted
+   retention policies; they do not discharge those policy-specific tasks.
 3. Prove the complete current eleven-term lower-weight mean after paired
    deletion. The literal pointwise inequality, full `Y11` endpoint, actual
    pair injection, repeated-prime error and unit removal are now proved;
-   their actual signed mean still needs the analytic sieve estimates.
+   their actual signed mean still needs the analytic sieve estimates for
+   the compiled policies, despite the now-constructed genuine lower rho.
 4. Connect the adopted 17,572-cell same-mask-v2 certificate and the `7/3`
    refinement to the analytic functions; the superseded `12/5` gain must not
    be added.
