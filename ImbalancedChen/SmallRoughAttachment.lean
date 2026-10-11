@@ -172,6 +172,39 @@ theorem smallRoughPairDivisorSum_eq_physicalDivisorSum
   · exact (Finset.mem_product.mp hx).1
   · exact (Finset.mem_product.mp hx).2
 
+/-- Any scalar sum over the multiplicity-free physical modulus support can
+be pulled back to the displayed small/rough pairs without a fibre factor. -/
+theorem sum_smallRoughModuli
+    {w : ℝ} {small rough : Finset ℕ}
+    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)
+    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)
+    (F : ℕ → ℝ) :
+    (∑ q ∈ smallRoughModuli small rough, F q) =
+      ∑ x ∈ smallRoughPairs small rough, F (x.1 * x.2) := by
+  classical
+  unfold smallRoughModuli
+  rw [Finset.sum_image (smallRough_mul_injOn hsmall hrough)]
+
+/-- In particular, a physical sum weighted by `smallRoughRho` is exactly
+the original pair-coefficient sum.  This is the finite reindexing needed by
+the later density and signed-distribution estimates. -/
+theorem sum_smallRoughRho_mul
+    {w : ℝ} {small rough : Finset ℕ}
+    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)
+    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)
+    (roughCoeff betaMinus betaPlus : ℕ → ℝ) (F : ℕ → ℝ) :
+    (∑ q ∈ smallRoughModuli small rough,
+        smallRoughRho small rough roughCoeff betaMinus betaPlus q * F q) =
+      ∑ x ∈ smallRoughPairs small rough,
+        smallRoughPairCoefficient roughCoeff betaMinus betaPlus x *
+          F (x.1 * x.2) := by
+  rw [sum_smallRoughModuli hsmall hrough]
+  apply Finset.sum_congr rfl
+  intro x hx
+  rw [smallRoughRho_mul hsmall hrough roughCoeff betaMinus betaPlus]
+  · exact (Finset.mem_product.mp hx).1
+  · exact (Finset.mem_product.mp hx).2
+
 /-- Divisibility by a physical product is equivalent to divisibility by
 both factors.  The reverse implication uses the cutoff-forced coprimality. -/
 theorem smallRough_mul_dvd_iff
@@ -185,6 +218,78 @@ theorem smallRough_mul_dvd_iff
   · rintro ⟨han, hbn⟩
     exact (smallPrimeSupportedAt_coprime_roughPrimeSupportedAt ha hb).mul_dvd_of_dvd_of_dvd
       han hbn
+
+/-- Expanding the upper or lower small-prime divisor sum selected by the
+sign of each rough coefficient gives exactly the pair-indexed attachment.
+The divisibility equivalence is where the strict small/rough cutoff is used. -/
+theorem smallRoughPairDivisorSum_eq_signSensitiveAttachment
+    {w : ℝ} {small rough : Finset ℕ}
+    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)
+    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)
+    (roughCoeff betaMinus betaPlus : ℕ → ℝ) (n : ℕ) :
+    smallRoughPairDivisorSum small rough roughCoeff betaMinus betaPlus n =
+      signSensitiveAttachment rough roughCoeff
+        (supportedDivisorSum small betaMinus n)
+        (supportedDivisorSum small betaPlus n) n := by
+  classical
+  unfold smallRoughPairDivisorSum smallRoughPairs
+  rw [Finset.sum_product, Finset.sum_comm]
+  unfold signSensitiveAttachment
+  rw [Finset.sum_filter]
+  apply Finset.sum_congr rfl
+  intro b hb
+  by_cases hbn : b ∣ n
+  · rw [if_pos hbn]
+    unfold signAttachedValue
+    by_cases hc : 0 ≤ roughCoeff b
+    · rw [if_pos hc]
+      unfold supportedDivisorSum
+      rw [Finset.sum_filter, Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro a ha
+      by_cases han : a ∣ n
+      · rw [if_pos ((smallRough_mul_dvd_iff
+          (hsmall a ha) (hrough b hb)).2 ⟨han, hbn⟩), if_pos han]
+        simp [hc, smallRoughPairCoefficient, signAttachedCoefficient]
+      · rw [if_neg (fun hab => han ((smallRough_mul_dvd_iff
+          (hsmall a ha) (hrough b hb)).1 hab).1), if_neg han]
+        simp
+    · rw [if_neg hc]
+      unfold supportedDivisorSum
+      rw [Finset.sum_filter, Finset.mul_sum]
+      apply Finset.sum_congr rfl
+      intro a ha
+      by_cases han : a ∣ n
+      · rw [if_pos ((smallRough_mul_dvd_iff
+          (hsmall a ha) (hrough b hb)).2 ⟨han, hbn⟩), if_pos han]
+        simp [hc, smallRoughPairCoefficient, signAttachedCoefficient]
+      · rw [if_neg (fun hab => han ((smallRough_mul_dvd_iff
+          (hsmall a ha) (hrough b hb)).1 hab).1), if_neg han]
+        simp
+  · rw [if_neg hbn]
+    apply Finset.sum_eq_zero
+    intro a ha
+    rw [if_neg]
+    intro hab
+    exact hbn ((dvd_mul_left b a).trans hab)
+
+/-- The sign-sensitive expression from the pointwise majorant is literally
+the divisor sum of the same physical coefficient used by the density and
+signed-distribution decomposition. -/
+theorem signSensitiveAttachment_eq_smallRough_physicalDivisorSum
+    {w : ℝ} {small rough : Finset ℕ}
+    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)
+    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)
+    (roughCoeff betaMinus betaPlus : ℕ → ℝ) (n : ℕ) :
+    signSensitiveAttachment rough roughCoeff
+        (supportedDivisorSum small betaMinus n)
+        (supportedDivisorSum small betaPlus n) n =
+      physicalDivisorSum (smallRoughModuli small rough)
+        (smallRoughRho small rough roughCoeff betaMinus betaPlus) n := by
+  rw [← smallRoughPairDivisorSum_eq_signSensitiveAttachment
+    hsmall hrough roughCoeff betaMinus betaPlus n]
+  exact smallRoughPairDivisorSum_eq_physicalDivisorSum
+    hsmall hrough roughCoeff betaMinus betaPlus n
 
 /-- Separate one-bounds transport to the single occupied physical
 coefficient, again without any cardinality or multiplicity loss. -/

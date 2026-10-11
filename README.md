@@ -68,7 +68,7 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/PanProductGridModulus.lean`: proves the two endpoint-dependent Pan modulus gates for an honest physical layer `D ≤ floor(N^theta)` under the necessary strict exponent condition `theta < (1-κ₀)/2`, and specializes this to the existing exact squared Selberg level. This is an auxiliary weak route: its `4/theta` normalization cannot yield the current `K`, and it deliberately does not transfer a global square-root cutoff to the smaller product endpoints.
 - `ImbalancedChen/RetainedModuli.lean`: natural-number support and literal integer coefficient `lambda(d) = mu(d)` on retained first-exit moduli, including `lambda(1) = 1`, support uniqueness, squarefreeness and leaf-value lookup through the actual prime-factor finset. The recursive leaf list and its selected-product image are proved `Nodup` before the exact multiplicity-preserving `List.sum` to modulus `Finset.sum` reindex.
 - `ImbalancedChen/RoughPrimeUniverse.lean`: exact finite construction of primes `p ∤ N` in the real half-open range `w ≤ p < z`, sorted strictly decreasing. An explicit enumeration cap disappears from membership once `z ≤ cap`; no unproved floor/ceiling convention is substituted. The generic pointwise majorant and retained-coefficient lookup are specialized to this concrete universe.
-- `ImbalancedChen/SmallRoughAttachment.lean`: the strict `p < w` small support and inclusive `w ≤ p` rough support are cross-coprime, so multiplication is injective on the displayed small/rough pair carrier (prime powers included). The sign-sensitive pair sum is reindexed exactly to one multiplicity-free physical modulus support and one total coefficient `smallRoughRho`; occupied fibres contain exactly one coefficient and preserve the unit absolute bound.
+- `ImbalancedChen/SmallRoughAttachment.lean`: the strict `p < w` small support and inclusive `w ≤ p` rough support are cross-coprime, so multiplication is injective on the displayed small/rough pair carrier (prime powers included). The existing `signSensitiveAttachment` is proved literally equal to the divisor sum of one total coefficient `smallRoughRho` on a multiplicity-free physical modulus support; occupied fibres contain exactly one coefficient, scalar physical sums pull back without a fibre factor, and the unit absolute bound is preserved.
 - `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
 - `ImbalancedChen/HalfProductMassSplit.lean`: exact high/low prime rectangle and order-error envelope for the original source.
 - `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.
@@ -233,7 +233,8 @@ These modules deliberately do not postulate the physical density or
 distribution estimates. `FirstExitTree` supplies the generic raw-tree
 identity and pointwise rough majorant, while `SmallRoughAttachment` proves
 the strict-boundary cross-coprimality, unique product decomposition and exact
-pair-to-physical-divisor-sum reindex for one total `rho`. The remaining
+pointwise sign-sensitive-attachment-to-physical-divisor-sum identity for one
+total `rho`, together with generic scalar and rho-weighted sum reindexing. The remaining
 current-`K` work is to instantiate the manuscript's actual causal policy and
 actual small weights, then prove both analytic estimates for that exact
 constructed `rho_N`.

@@ -897,17 +897,25 @@ fibre to the unique sign-sensitive pair coefficient, and
 physical support.  The exact theorem
 `smallRoughPairDivisorSum_eq_physicalDivisorSum` reindexes the complete
 pair-indexed divisor expression to `PhysicalUpperWeightBridge`'s one
-`physicalDivisorSum`; no multiplicity factor is introduced.  The separate
-theorems `smallRough_mul_dvd_iff` and `abs_smallRoughRho_mul_le_one` retain the
-literal divisibility semantics and the unit coefficient bound.
+`physicalDivisorSum`; no multiplicity factor is introduced.
+`smallRoughPairDivisorSum_eq_signSensitiveAttachment` expands the upper or
+lower small-prime sum selected by each rough coefficient's sign, and
+`signSensitiveAttachment_eq_smallRough_physicalDivisorSum` composes the two
+identities.  Thus the pointwise majorant's existing expression is literally
+the divisor sum of the same `rho`, rather than merely an isomorphic pair
+model.  `sum_smallRoughModuli` and `sum_smallRoughRho_mul` additionally
+reindex generic scalar and rho-weighted physical sums without a fibre factor.
+The separate theorems `smallRough_mul_dvd_iff` and
+`abs_smallRoughRho_mul_le_one` retain the literal divisibility semantics and
+the unit coefficient bound.
 
 Local verification under the pinned Lean 4.33.0-rc1 and Mathlib
 `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` passed direct elaboration, the
 complete 4,437-job `lake build`, bundled `leanchecker` replay of
 `ImbalancedChen.SmallRoughAttachment`, and direct transitive audits of all
-eight new theorems.  The audit reports only `propext`, `Classical.choice`, and
-`Quot.sound`.  Source SHA-256 is
-`f38146bf3dca4869cc428636c85b22f335e7e5114253ec9fc303764bc45c3f8b`.
+twelve new theorems.  The audit reports only `propext`, `Classical.choice`,
+and `Quot.sound`.  The delivered source SHA-256 is
+`8f69bb4f62110e54aeb69c371d4767253d8520d9d904e3dc97e578beaedfccba`.
 The independent VariableEnvelope runner was also invoked, but the local stale
 base checkout contains a reference snapshot whose bytes do not match its own
 manifest, so that runner stopped at provenance before any VE build or replay;
