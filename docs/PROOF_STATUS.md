@@ -687,10 +687,11 @@ majorant therefore bounds the actual sifted source by those three visible
 terms with the identical `rho` throughout.
 
 This closes only the finite sign-sensitive attachment and same-weight
-assembly interface.  The manuscript's odd first-exit tree, the unique
-small/rough product reindexing into `rho_N`, the physical density estimate
-that yields `K = 8452171/1250000`, and the signed local factorized
-distribution estimate are not proved by these modules.  Compilation, kernel
+assembly interface. `FirstExitTree` now proves the generic odd-first-exit
+identity and integer rough majorant, but the actual causal retained policy,
+unique small/rough product reindexing into `rho_N`, physical density estimate
+that yields `K = 8452171/1250000`, and signed local factorized distribution
+estimate are not proved by these modules. Compilation, kernel
 replay and transitive axiom audit remain pending on a runner containing the
 pinned Lean toolchain.  Source SHA-256 values are
 `c189987e7e66b2eaf2a03563c3be8ee275c250916533977723efb2c9dbe13dc6`
@@ -729,6 +730,11 @@ in `paper/source/manuscript-body.tex` lines 377--391 (blob
 or `unsafe` in the module). This runner has no Lean or Lake executable, so no
 local elaboration, build, bundled kernel replay or transitive axiom audit is
 claimed.
+
+Code commit
+[`6937c92d3d85a8081158f31308bd3850ee3077be`](https://github.com/UyNewNas/goldbach-formalization/commit/6937c92d3d85a8081158f31308bd3850ee3077be)
+contains the public-root import and the complete module. Module SHA-256 is
+`b97d463290a6c549ede5438de7f227b9ce5b34267017f3e929c894247d2b55fe`.
 
 The causal retained-set instantiation, explicit reindexing by squarefree
 prime products, unique small/rough decomposition, and the density and signed

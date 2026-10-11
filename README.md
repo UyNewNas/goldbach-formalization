@@ -227,10 +227,11 @@ distribution decomposition for one and the same explicit coefficient
 `rho` on the literal shifted half-product source.
 
 These modules deliberately do not postulate the physical density or
-distribution estimates.  The remaining current-`K` work is to instantiate
-the interface with the manuscript's first-exit tree and unique small/rough
-decomposition, and to prove both analytic estimates for that exact
-constructed `rho_N`.
+distribution estimates. `FirstExitTree` now supplies the generic raw-tree
+identity and pointwise rough majorant. The remaining current-`K` work is to
+instantiate the actual causal policy, reindex by the unique small/rough prime
+decomposition, and prove both analytic estimates for that exact constructed
+`rho_N`.
 
 ## Finite odd-first-exit tree candidate
 
