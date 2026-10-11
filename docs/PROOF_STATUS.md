@@ -665,3 +665,36 @@ including one failed-jobs retry each, ended before any workflow step was
 created (`steps: null`, no logs or artifacts).  They are infrastructure-start
 failures and are not proof verification.
 
+## Same-physical-weight finite bridge candidate
+
+`ImbalancedChen/SignSensitiveAttachment.lean` formalizes the finite ordered
+algebra in the manuscript's physical upper-weight construction.  It proves
+that an upper small-prime divisor sum must be attached to every nonnegative
+raw coefficient and a lower small-prime divisor sum to every negative raw
+coefficient; the negative multiplication reverses the inequality.  The
+resulting pair coefficient remains absolutely bounded by one when both
+factors are.  These statements do not assume a density estimate,
+distribution theorem, or the desired pointwise majorant as a structure
+field.
+
+`ImbalancedChen/PhysicalUpperWeightBridge.lean` connects any one explicitly
+given finite coefficient `rho` to the literal shifted half-product source.
+It proves the exact Fubini identity and then splits the same weighted
+congruence sum into (i) total source cardinality times the
+reciprocal-totient density, (ii) the exact coprime-source correction, and
+(iii) the signed primitive-residue distribution error.  A pointwise divisor
+majorant therefore bounds the actual sifted source by those three visible
+terms with the identical `rho` throughout.
+
+This closes only the finite sign-sensitive attachment and same-weight
+assembly interface.  The manuscript's odd first-exit tree, the unique
+small/rough product reindexing into `rho_N`, the physical density estimate
+that yields `K = 8452171/1250000`, and the signed local factorized
+distribution estimate are not proved by these modules.  Compilation, kernel
+replay and transitive axiom audit remain pending on a runner containing the
+pinned Lean toolchain.  Source SHA-256 values are
+`c189987e7e66b2eaf2a03563c3be8ee275c250916533977723efb2c9dbe13dc6`
+for `SignSensitiveAttachment.lean` and
+`7c179a6733bd163f5b8e8410a718effa609baa8a10b64b266caa36bf656e77a3`
+for `PhysicalUpperWeightBridge.lean`.
+

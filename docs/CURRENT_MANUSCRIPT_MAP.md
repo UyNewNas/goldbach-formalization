@@ -25,6 +25,7 @@ statement before any later checkpoint is called current.
 | `eq:current-bb`, ordered bad factorization | `OrderedBad.badReceiver_iff_ordered_real_factors`; `CurrentMainTheorem.realBadReceiver_iff_realOrderedBadReceiver`; `RealB_eq_realOrderedBadPrimes_card` | Exact for rational and arbitrary real `b < 1`, including squares and strict endpoints |
 | `sec:current-transfer`, finite ordered source and cutoff | `RealHalfProductSource.RealB_eq_realHalfProductSource_filter_card_add_small`; `realHalfProductPairs_card_eq` | Exact finite localization for arbitrary real `b < 1`; analytic pair-mass limit open |
 | Rational minorant to the finite additive-prime sieve | `RealHalfProductSieveBridge.realHalfProductSource_primePartner_card_le_sifted_rat_add_cap`; `realHalfProductSource_primePartner_cast_le_optimized_of_rat_minorant`; `RealB_cast_le_optimized_of_rat_minorant` | Proved: for `num/den ≤ b`, the literal real source after `m < N ∧ Prime (N-m)` is bounded by the rational sifted source, retaining `+z` and `T+1`; the current physical-weight density/distribution estimates remain open |
+| `sec:current-positive-majorant`, sign-sensitive small/rough attachment and one physical `ρ_N` | `SignSensitiveAttachment.productTarget_le_signSensitiveAttachment`; `abs_signAttachedCoefficient_le_one`; `PhysicalUpperWeightBridge.siftedHalfProductSource_card_le_same_rho_main_add_errors` | Finite algebra proved: positive raw coefficients attach to `β⁺`, negative ones to `β⁻`, and the resulting pointwise majorant feeds an exact density + coprime-correction + signed-distribution split using the identical `rho`. The actual first-exit tree, unique product reindexing, physical density bound giving `K`, and signed distribution estimate remain open |
 | `eq:current-bad-mass`, `J_b = log (1/b)` | `RealHalfProductMass.realHalfProductMass_exponents`; `RealHalfProductMassSplit.manuscriptHalfProductCutoff`; `RealHalfProductMassSuppliers.tendsto_realHalfProductSource_manuscriptCutoff_mass_of_suppliers` | Exact arbitrary-real source envelope at the current `2 N^(1-κ₀)` lower wall; pinned proved PNT/Mertens suppliers are connected without analytic premises. The filtered additive-prime positive-sieve transfer remains open |
 | `eq:current-exact-subtraction` | `D12_eq_Db_add_B`; `Db_cast_eq_D12_sub_B` | Proved finite identity |
 | `eq:current-normalization` | `SingularSeries.singularNormalization` | Product convergence, positivity and growth proved |
@@ -361,6 +362,26 @@ support reaches `theta* = 599/1000`.  The current-`K` proof must therefore
 formalize the manuscript's same `ρ_N` pointwise majorant, density and signed
 factorized local distribution, preserving the distinction between the
 physical modulus cap and the auxiliary factorization support.
+
+`ImbalancedChen/SignSensitiveAttachment.lean` and
+`ImbalancedChen/PhysicalUpperWeightBridge.lean` now isolate the finite
+same-weight interface required by this route.  The first module proves the
+order reversal in the negative branch: multiplying the lower small-prime
+divisor sum by a negative raw coefficient gives the required upper bound.
+It also proves the coefficientwise absolute bound after the sign-dependent
+attachment.  The second module proves finite Fubini for the literal shifted
+half-product source and decomposes its weighted congruence sum into the
+reciprocal-totient density, the exact coprime-source correction, and the
+signed primitive-residue distribution error.  All three terms contain the
+same function `rho`; no density or distribution conclusion is stored in a
+structure or assumed by the identity.
+
+The next proof step is therefore sharply delimited: instantiate this
+interface with the manuscript's first-exit rough tree and the unique
+small/rough prime decomposition, then prove the density estimate and signed
+factorized distribution estimate for that exact constructed `rho_N`.  A
+standard Rosser weight, the auxiliary weak Selberg route, or separate
+coefficients for the three terms cannot discharge this obligation.
 
 Dependency audit: `goldbach-lean` is pinned at
 `09b97db5764ade1246bfb77206baa1b124760958`; it uses the identical Lean and

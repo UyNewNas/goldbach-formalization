@@ -70,6 +70,8 @@ import ImbalancedChen.PanProductAggregateBudget
 import ImbalancedChen.PanProductGrid
 import ImbalancedChen.PanProductGridRanges
 import ImbalancedChen.PanProductGridModulus
+import ImbalancedChen.SignSensitiveAttachment
+import ImbalancedChen.PhysicalUpperWeightBridge
 import ImbalancedChen.EnlargedSelbergAsymptotic
 import ImbalancedChen.QuotientChenFourPrime
 import ImbalancedChen.QuotientChenFourCounts

@@ -215,3 +215,20 @@ statements.  In particular, the existing generic finite Selberg bound has not
 been identified with the manuscript's current physical positive weight and
 does not by itself yield `K = 8452171/1250000`.
 
+## Same physical positive-weight interface candidate
+
+`ImbalancedChen/SignSensitiveAttachment.lean` proves the finite
+sign-sensitive attachment required by the current manuscript: nonnegative
+rough coefficients use the upper small-prime weight, while negative rough
+coefficients use the lower one so that multiplication reverses the bound in
+the correct direction.  `ImbalancedChen/PhysicalUpperWeightBridge.lean`
+then proves finite Fubini and the exact density + coprime-correction + signed
+distribution decomposition for one and the same explicit coefficient
+`rho` on the literal shifted half-product source.
+
+These modules deliberately do not postulate the physical density or
+distribution estimates.  The remaining current-`K` work is to instantiate
+the interface with the manuscript's first-exit tree and unique small/rough
+decomposition, and to prove both analytic estimates for that exact
+constructed `rho_N`.
+
