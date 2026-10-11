@@ -82,6 +82,11 @@ import ImbalancedChen.ActualSmallRosser
 import ImbalancedChen.ActualSmallRosserDensity
 import ImbalancedChen.SmallRoughDensityError
 import ImbalancedChen.ActualSmallRoughAttachment
+import ImbalancedChen.RosserEndpointBridge
+import ImbalancedChen.RoughAbsoluteDensity
+import ImbalancedChen.RoughPowerParameters
+import ImbalancedChen.SmallRosserErrorLimit
+import ImbalancedChen.ActualSmallRoughErrorAbsorption
 import ImbalancedChen.EnlargedSelbergAsymptotic
 import ImbalancedChen.QuotientChenFourPrime
 import ImbalancedChen.QuotientChenFourCounts
@@ -114,5 +119,3 @@ import ImbalancedChen.MovingWeightTransport
 import ImbalancedChen.ChenQuotientMovingWeight
 import ImbalancedChen.ChenPairHarmonicFinite
 import ImbalancedChen.SymmetricTriangleIntegral
-
-

@@ -25,7 +25,7 @@ statement before any later checkpoint is called current.
 | `eq:current-bb`, ordered bad factorization | `OrderedBad.badReceiver_iff_ordered_real_factors`; `CurrentMainTheorem.realBadReceiver_iff_realOrderedBadReceiver`; `RealB_eq_realOrderedBadPrimes_card` | Exact for rational and arbitrary real `b < 1`, including squares and strict endpoints |
 | `sec:current-transfer`, finite ordered source and cutoff | `RealHalfProductSource.RealB_eq_realHalfProductSource_filter_card_add_small`; `realHalfProductPairs_card_eq` | Exact finite localization for arbitrary real `b < 1`; analytic pair-mass limit open |
 | Rational minorant to the finite additive-prime sieve | `RealHalfProductSieveBridge.realHalfProductSource_primePartner_card_le_sifted_rat_add_cap`; `realHalfProductSource_primePartner_cast_le_optimized_of_rat_minorant`; `RealB_cast_le_optimized_of_rat_minorant` | Proved: for `num/den ≤ b`, the literal real source after `m < N ∧ Prime (N-m)` is bounded by the rational sifted source, retaining `+z` and `T+1`; the current physical-weight density/distribution estimates remain open |
-| `sec:current-positive-majorant`, odd-first-exit raw tree, sign-sensitive small/rough attachment and one physical `ρ_N` | `FirstExitTree.oddFirstExitRetainedPolynomial_eq_product_add_exits`; `RetainedModuli.oddFirstExitRetainedLeaves_sum_eq_retainedModuli_sum`; `RoughPrimeUniverse.roughPrimeRetainedLeaves_sum_eq_retainedModuli_sum`; `RoughPrimeUniverse.manuscriptRoughIndicator_le_oddFirstExitRetainedPolynomial`; `SignSensitiveAttachment.productTarget_le_signSensitiveAttachment`; `SmallRoughAttachment.smallRough_factorization_unique`; `SmallRoughAttachment.signSensitiveAttachment_eq_smallRough_physicalDivisorSum`; `SmallRoughAttachment.sum_smallRoughRho_mul`; `SmallRoughMainTerm.physicalDensitySum_smallRoughRho_eq_signSensitive`; `SmallRoughMainTerm.physicalCoprimeCorrection_smallRoughRho_eq_pairSum`; `SmallRoughMainTerm.physicalDistributionError_smallRoughRho_eq_pairSum`; `PhysicalUpperWeightBridge.siftedHalfProductSource_card_le_same_rho_main_add_errors` | Generic first-exit identity, source leaf-list `Nodup`, natural-modulus coefficient lookup and multiplicity-preserving modulus reindex proved; the rough universe is the strictly decreasing finite list of literal primes `p ∤ N`, `w ≤ p < z`, with exact real endpoints. The strict `p<w`/inclusive `w≤p` split gives cross-coprimality and unique small/rough products. The pre-existing pointwise `signSensitiveAttachment` is now literally the divisor sum of the same total physical `rho`; scalar and rho-weighted physical sums reindex without a fibre factor, and occupied coefficients retain the unit bound. The same physical rho's reciprocal-totient density is now exactly factored with the sign-dependent upper/lower small density, and both exact error terms are reindexed to the same carrier. The literal small weights and their fundamental-lemma density are now instantiated in the modules below. The actual causal boxed policy, absolute rough-mass control, sharp density bounds giving `K`, and signed distribution estimate remain open |
+| `sec:current-positive-majorant`, odd-first-exit raw tree, sign-sensitive small/rough attachment and one physical `ρ_N` | `FirstExitTree.oddFirstExitRetainedPolynomial_eq_product_add_exits`; `RetainedModuli.oddFirstExitRetainedLeaves_sum_eq_retainedModuli_sum`; `RoughPrimeUniverse.roughPrimeRetainedLeaves_sum_eq_retainedModuli_sum`; `RoughPrimeUniverse.manuscriptRoughIndicator_le_oddFirstExitRetainedPolynomial`; `SignSensitiveAttachment.productTarget_le_signSensitiveAttachment`; `SmallRoughAttachment.smallRough_factorization_unique`; `SmallRoughAttachment.signSensitiveAttachment_eq_smallRough_physicalDivisorSum`; `SmallRoughAttachment.sum_smallRoughRho_mul`; `SmallRoughMainTerm.physicalDensitySum_smallRoughRho_eq_signSensitive`; `SmallRoughMainTerm.physicalCoprimeCorrection_smallRoughRho_eq_pairSum`; `SmallRoughMainTerm.physicalDistributionError_smallRoughRho_eq_pairSum`; `PhysicalUpperWeightBridge.siftedHalfProductSource_card_le_same_rho_main_add_errors` | Generic first-exit identity, source leaf-list `Nodup`, natural-modulus coefficient lookup and multiplicity-preserving modulus reindex proved; the rough universe is the strictly decreasing finite list of literal primes `p ∤ N`, `w ≤ p < z`, with exact real endpoints. The strict `p<w`/inclusive `w≤p` split gives cross-coprimality and unique small/rough products. The pre-existing pointwise `signSensitiveAttachment` is now literally the divisor sum of the same total physical `rho`; scalar and rho-weighted physical sums reindex without a fibre factor, and occupied coefficients retain the unit bound. The same physical rho's reciprocal-totient density is now exactly factored with the sign-dependent upper/lower small density, and both exact error terms are reindexed to the same carrier. The literal small weights and their fundamental-lemma density are now instantiated in the modules below. Absolute rough-mass control and the small-weight attachment reserve are now proved below. The actual causal boxed policy, sharp signed density bounds giving `K`, and signed distribution estimate remain open |
 | `eq:current-bad-mass`, `J_b = log (1/b)` | `RealHalfProductMass.realHalfProductMass_exponents`; `RealHalfProductMassSplit.manuscriptHalfProductCutoff`; `RealHalfProductMassSuppliers.tendsto_realHalfProductSource_manuscriptCutoff_mass_of_suppliers` | Exact arbitrary-real source envelope at the current `2 N^(1-κ₀)` lower wall; pinned proved PNT/Mertens suppliers are connected without analytic premises. The filtered additive-prime positive-sieve transfer remains open |
 | `eq:current-exact-subtraction` | `D12_eq_Db_add_B`; `Db_cast_eq_D12_sub_B` | Proved finite identity |
 | `eq:current-normalization` | `SingularSeries.singularNormalization` | Product convergence, positivity and growth proved |
@@ -45,8 +45,56 @@ support and coefficient bound; the retention policy is still a parameter.
 proved fundamental lemma, discharging the progression-density and uniform
 dimension assumptions. `SmallRoughDensityError` propagates the explicit
 small error to the same physical coefficient with the necessary absolute
-rough-mass multiplier. These statements do not instantiate the current
-boxed policy or prove its sharp density constant.
+rough-mass multiplier. `RoughAbsoluteDensity` now bounds that multiplier by
+an exact finite Euler product and a proved uniform logarithmic interval
+estimate. `RoughPowerParameters` specializes it to
+`w=D^(epsilon^2)`, `z=D^r`, with the precise factor
+`(r/epsilon^2)*(1+Krough/(epsilon^2*log D))`.
+`ActualSmallRoughErrorAbsorption` proves that for every `r>0` and `eta>0`
+there are `0<epsilon<1/8`, `epsilon^2<=r` and one `D0>=2` such that for all
+`D>=D0`, even targets, finite caps and fixed rough policies,
+
+`0 <= density(rho) - V * signedRoughDensity <= eta * V`.
+
+Here `V` is the literal small-prime Euler product and `rho` is the same
+physical coefficient already used in the pointwise majorant. The choice
+of epsilon precedes the large threshold; a fixed-epsilon error is not
+incorrectly called little-o. The bound is valid for truncated caps; using
+the full-interval pointwise majorant separately still requires `z<=cap`.
+
+`RosserEndpointBridge` also identifies the literal small coefficients and
+densities with the natural-level Goldbach sieve at `Nat.ceil R`, retaining
+strict tests at integral R. It does not replace that level by
+`Nat.floor R + 1`. These results do not instantiate the current boxed
+policy, normalize the reserve by `C_N/log D`, prove the same-weight
+fixed-rank reverse limits, or establish the sharp signed density constant.
+
+The next reserve must be chosen at the correct scale. Passing from `V(w)`
+to `C_N/log D` introduces another `epsilon^(-2)` at `w=D^(epsilon^2)`.
+Thus the needed exponential absorption is of order
+`epsilon^(-4)*exp(-1/epsilon)`. One cannot set `eta=delta*epsilon^2` after
+the existential epsilon above has already been selected. A direct proof
+can combine the existing exact finite Euler normalization with the pinned
+Mertens product bound, subject to a cap covering `w` and a nonzero target.
+
+### Exact Euler-ratio correction in the frozen manuscript
+
+At `paper/source/manuscript-body.tex` lines 425--429, the displayed exact
+ratio to `2 C_N product_(p<z)(1-1/p)` contains an incorrect target-prime
+tail factor. If the first product includes every prime `p>=z`, the second
+product over `p|N`, `p>=z` must use `(p-2)/(p-1)`, not `1-1/p`. Equivalently,
+the displayed second product may be retained if the first product excludes
+primes dividing `N`. This follows from
+
+`(1-1/(p-1)^2)^(-1) * ((p-2)/(p-1)) = 1-1/p`.
+
+For example, the excluded prime `p=5` contributes `3/4` in the second
+product, whereas the displayed factor is `4/5`. The existing Lean theorem
+`normalizedFiniteSieveDensity_eq_odd_div_tail` already has the correct
+normalization through `centerPrimeTailCorrection`. The fixed-positive-power
+tail limit is unaffected by this algebraic correction; the displayed exact
+identity itself must not be used as written. The manuscript source was not
+edited in this checkpoint.
 
 The current manuscript excludes receiver one from `D_{1,2}`.  Therefore its
 terminal transfer uses `D12`, not the historical `D12Omega` interface and not

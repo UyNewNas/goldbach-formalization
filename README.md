@@ -12,6 +12,14 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
+The 12 October local checkpoint proves the uniform absolute rough-mass
+bound and absorbs the same physical rho's small-weight attachment error
+relative to its small Euler product. Five new modules passed strict
+compilation, individual kernel replay and an environment-based audit of
+all 42 declarations under the standard three-axiom allowlist. The final
+aggregate build passed with 9,634 jobs. The normalized sharp density and
+the main analytic theorem remain open; see [proof status](docs/PROOF_STATUS.md).
+
 The current-parameter Chen pointwise and paired-deletion modules, together
 with their actual additive-prime count bridge, are described in
 [the current theorem map](docs/CURRENT_MANUSCRIPT_MAP.md). The older
@@ -88,7 +96,10 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/ActualSmallRosser.lean`: instantiates the literal lower/upper Rosser weights on primes `p < w`, `p ∤ N`; proves their pointwise sandwich for every integer, including zero, via the nonzero sieve product's gcd. Active coefficients satisfy the strict level `d < L` and have absolute value at most one.
 - `ImbalancedChen/ActualSmallRosserDensity.lean`: supplies the reciprocal-totient densities of those same weights from the proved fundamental lemma and a uniform progression-density dimension constant. The full error at `L=D^epsilon`, `w=D^(epsilon^2)` remains explicit; no fixed-epsilon little-o is asserted.
 - `ImbalancedChen/SmallRoughDensityError.lean`: proves that the sign-sensitive physical density error is nonnegative and at most the common small-weight error times the absolute rough density, without replacing that multiplier by a signed sum.
-- `ImbalancedChen/ActualSmallRoughAttachment.lean`: attaches the actual small weights to fixed raw rough coefficients and proves the same physical rho's integer majorant, one-bound, squarefree/coprime support, active small-factor level, and density-error estimate. The causal boxed policy, absolute rough-mass estimate and sharp current `K` remain open.
+- `ImbalancedChen/ActualSmallRoughAttachment.lean`: attaches the actual small weights to fixed raw rough coefficients and proves the same physical rho's integer majorant, one-bound, squarefree/coprime support, active small-factor level, and density-error estimate. The causal boxed policy and sharp current `K` remain open.
+- `ImbalancedChen/RosserEndpointBridge.lean`: identifies the literal small carriers, lower/upper coefficients, densities and Euler product with the pinned Goldbach sieve at `Nat.ceil R`, preserving strict tests even at integral levels.
+- `ImbalancedChen/RoughAbsoluteDensity.lean` and `RoughPowerParameters.lean`: bound the actual absolute rough density by a finite Euler product and then uniformly by `(log z/log w)*(1+Krough/log w)`, including truncated caps. The small Euler product is positive for even targets.
+- `ImbalancedChen/SmallRosserErrorLimit.lean` and `ActualSmallRoughErrorAbsorption.lean`: choose epsilon before the large threshold, uniformly in the even target, cap and rough policy, to bound the same physical rho's attachment error by any prescribed multiple of its literal small Euler product. This does not assert the final normalized sharp density.
 - `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
 - `ImbalancedChen/HalfProductMassSplit.lean`: exact high/low prime rectangle and order-error envelope for the original source.
 - `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.
@@ -267,9 +278,13 @@ physical coefficient.  It proves the exact sign-sensitive factorization
 with `Dminus` and `Dplus` the reciprocal-totient densities of the displayed
 small lower and upper weights.  The coprime correction and the signed
 primitive-residue error are also pulled back to the identical small/rough
-pair carrier.  The remaining current-`K` obligations are therefore the actual
-Rosser-density bounds and restricted moving-residue distribution theorem for
-this `rho`, plus the still-uninstantiated causal retained rough policy.
+pair carrier. The literal small Rosser weights now have a proved density
+sandwich. Their attachment error, including the absolute rough-mass cost,
+can be made arbitrarily small relative to the actual small Euler product
+by choosing epsilon before the large threshold. The remaining current-`K`
+obligations include the sharp signed rough density, its final normalization,
+the restricted moving-residue distribution theorem for this `rho`, and the
+still-uninstantiated causal retained rough policy.
 
 ## Finite odd-first-exit tree candidate
 

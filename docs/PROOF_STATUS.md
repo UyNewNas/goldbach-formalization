@@ -2,7 +2,7 @@
 
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
-## Latest verified checkpoint
+## Historical checkpoint with full remote replay
 
 Commit `50c355b3260da1699447df805f0a58e74e4e465e` passed full build, exact replay of all 84 owned modules plus the root (85 targets), and the 2043-declaration standard-three-axiom audit in [PR run 37880137858](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37880137858) and [push run 37880133970](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37880133970). Both proof-gate sequences finished before optional cache handling; the PR merge tree matches the head tree. The new symmetric-triangle integral module is CI-pending toward an 85-module checkpoint and 86 replay targets. Its source presence does not extend the verified checkpoint or establish a new audited declaration count.
 
@@ -1089,8 +1089,8 @@ exponent. No sharp current-K density, restricted distribution estimate,
 current signed lower mean, certificate-to-integral interpretation or final
 bad-semiprime bound is claimed. Theorem 1.1 and Corollary 1.2 remain open.
 
-Next concrete analytic steps are the finite absolute rough-mass Euler
-bound and a literal raw-Rosser coefficient dictionary. The fixed provider
+The following checkpoint supplies the finite absolute rough-mass Euler
+bound and literal raw-Rosser coefficient dictionary. The fixed provider
 `SmallRosser.upperWeight_eq_producer` uses `Nat.ceil R`; some real-level
 endpoint theorems instead use `Nat.floor R + 1`. These are not the same
 weight when R is an integer. The B8/B10 Goldbach carrier and its exact
@@ -1121,3 +1121,80 @@ Source SHA-256 values:
 | `SmallRoughDensityError` | `95854fdf8ac0e0b47368e71fb6a1fae20178bee004c384b80103f9abe45d40ab` |
 | `ActualSmallRosserDensity` | `9cfe1beef1a9ef09b88abf3c5593edebafc882e95639c50579cf4dc77b4d5ac8` |
 | `ActualSmallRoughAttachment` | `a7b17e728cb6ffe70e3b60c72f1a5d6febd38b12bf208f808a13b748a2da2625` |
+
+## Actual rough mass, strict endpoints and error absorption (12 October 2026)
+
+Five modules extend the actual physical coefficient checkpoint:
+
+- `RosserEndpointBridge` identifies the actual prime carrier, lower and
+  upper coefficients, reciprocal-totient densities and Euler product with
+  the pinned Goldbach bounding sieve at `Nat.ceil R`. The carrier cap must
+  cover the cutoff; integer strict endpoints are preserved exactly.
+- `RoughAbsoluteDensity` proves that every retained modulus divides the
+  actual rough-prime product, evaluates the full divisor sum by an Euler
+  product, and derives one logarithmic interval bound for the absolute
+  retained mass. Its analytic constant is uniform in the even target,
+  cap, real interval and retention policy. The interval `1<w<=z`, including
+  `w=z` and `w<2`, is covered. A truncated cap only decreases this bound.
+- `RoughPowerParameters` proves positivity of the actual small Euler
+  product and specializes the rough bound to `w=D^(epsilon^2)`, `z=D^r`.
+- `SmallRosserErrorLimit` proves the fixed-epsilon limit of the actual
+  error, retaining the floor `C*exp(-1/epsilon)`. Exponential decay beats
+  the required reciprocal-square cost when epsilon is chosen first.
+- `ActualSmallRoughErrorAbsorption` supplies epsilon and one threshold for
+  any `r>0` and `eta>0`, uniformly in every later even target, cap and rough
+  policy. For the same actual physical rho it proves
+  `0 <= density(rho)-V*signedRoughDensity <= eta*V`, with
+  `V=actualSmallEulerProduct N cap (D^(epsilon^2))`. The rough-mass bound
+  and scalar asymptotic are proved inputs, not terminal hypotheses.
+
+All five sources passed strict direct compilation and individual bundled
+kernel replay. The defining-module environment inventory audited all
+**42 declarations** (9 endpoint, 9 rough mass, 12 power parameters,
+11 scalar limits and 1 actual absorption), including private and generated
+declarations. Only `propext`, `Classical.choice` and `Quot.sound` occur
+transitively. The final aggregate `lake build` passed with **9,634 jobs**.
+The five sources, public root, audit and dependency pins were unchanged
+through verification; actual dependency revisions match the manifest.
+Evidence is in `.lake/main-theorem-verification-20261012/rough-density/`:
+`rough-density-verification.json`, `rough-density-declarations.json`,
+`rough-density-theorem-types.txt`, and `final-aggregate-build-status.json`.
+This is full aggregate compilation and five module kernel replays, not
+complete-root kernel replay or a remote CI claim. No final normalized
+sharp K or main analytic theorem is asserted by these modules.
+
+The next scale conversion needs a cap covering `w` and a nonzero target:
+`V(w) << C_N/log w` contributes a further `epsilon^(-2)`. Absorption at the
+manuscript's scale therefore requires a direct choice handling
+`epsilon^(-4)*exp(-1/epsilon)`, not a circular post-selection assignment
+`eta=delta*epsilon^2`. The exact Euler-ratio correction in the frozen
+manuscript is documented in `CURRENT_MANUSCRIPT_MAP.md`; the existing Lean
+finite normalization already has the correct factor.
+
+Remaining obligations include the current causal boxed policy and support
+exponent, same-raw-weight fixed-rank reverse density limits, sharp signed
+rough density, restricted signed distribution, actual current Chen mean,
+certificate-to-integral interpretation and final bad-semiprime estimate.
+Theorem 1.1 and Corollary 1.2 remain incomplete.
+
+Reproduce the new checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.RosserEndpointBridge
+lake env leanchecker --verbose ImbalancedChen.RoughAbsoluteDensity
+lake env leanchecker --verbose ImbalancedChen.RoughPowerParameters
+lake env leanchecker --verbose ImbalancedChen.SmallRosserErrorLimit
+lake env leanchecker --verbose ImbalancedChen.ActualSmallRoughErrorAbsorption
+lake env lean -DwarningAsError=true verification/RoughDensityAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `RosserEndpointBridge` | `eb3f17d88b430e3884f4767139f35999c3b10d921649e65b21fc058a67ac2a22` |
+| `RoughAbsoluteDensity` | `1a69ad42b618d8569f1bafcd546257a5b134ebb96d671bbd74adc0beca561d34` |
+| `RoughPowerParameters` | `d7df16e77e1d66fe7b0a961c260312679da10e93b1baf1c6d77b0987171b4b64` |
+| `SmallRosserErrorLimit` | `36774b9722bcad99ec4a90d86f1191618930d743b5649c5bfe51a66e31f9654e` |
+| `ActualSmallRoughErrorAbsorption` | `3b5bec690d259a6116b0ccfd647a375476baf09b631544afdc5707900dce4ca0` |
