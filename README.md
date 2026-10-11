@@ -1,6 +1,6 @@
 # Imbalanced Chen formalization
 
-Work toward a Lean formalization of *Transferring quantitative Chen bounds to imbalanced semiprime representations* (current manuscript: 10 October 2026).
+Work toward a Lean formalization of *Imbalanced semiprime representations of even integers* (current manuscript: 10 October 2026).
 
 The active goal is a complete proof of the manuscript's Theorem 1.1 and
 Corollary 1.2, called the **1+1.75 main theorem** in the research task.
@@ -84,6 +84,11 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/RoughPrimeUniverse.lean`: exact finite construction of primes `p ∤ N` in the real half-open range `w ≤ p < z`, sorted strictly decreasing. An explicit enumeration cap disappears from membership once `z ≤ cap`; no unproved floor/ceiling convention is substituted. The generic pointwise majorant and retained-coefficient lookup are specialized to this concrete universe.
 - `ImbalancedChen/SmallRoughAttachment.lean`: the strict `p < w` small support and inclusive `w ≤ p` rough support are cross-coprime, so multiplication is injective on the displayed small/rough pair carrier (prime powers included). The existing `signSensitiveAttachment` is proved literally equal to the divisor sum of one total coefficient `smallRoughRho` on a multiplicity-free physical modulus support; occupied fibres contain exactly one coefficient, scalar physical sums pull back without a fibre factor, and the unit absolute bound is preserved.
 - `ImbalancedChen/SmallRoughMainTerm.lean`: for that same literal `smallRoughRho`, the reciprocal-totient physical density is pulled back without multiplicity and factored using totient multiplicativity. Each nonnegative rough coefficient selects the upper small-weight density and each negative coefficient selects the lower one. The exact coprime-source correction and signed primitive-residue error are reindexed to the same pair carrier as well; no density or distribution estimate is assumed.
+- `ImbalancedChen/FixedRoughCoefficients.lean`: proves that retained selections and natural modulus support do not depend on local test weights. One fixed Mobius coefficient therefore gives the rough divisor-sum majorant for every integer, with squarefree, target-coprime, cutoff-separated support.
+- `ImbalancedChen/ActualSmallRosser.lean`: instantiates the literal lower/upper Rosser weights on primes `p < w`, `p ∤ N`; proves their pointwise sandwich for every integer, including zero, via the nonzero sieve product's gcd. Active coefficients satisfy the strict level `d < L` and have absolute value at most one.
+- `ImbalancedChen/ActualSmallRosserDensity.lean`: supplies the reciprocal-totient densities of those same weights from the proved fundamental lemma and a uniform progression-density dimension constant. The full error at `L=D^epsilon`, `w=D^(epsilon^2)` remains explicit; no fixed-epsilon little-o is asserted.
+- `ImbalancedChen/SmallRoughDensityError.lean`: proves that the sign-sensitive physical density error is nonnegative and at most the common small-weight error times the absolute rough density, without replacing that multiplier by a signed sum.
+- `ImbalancedChen/ActualSmallRoughAttachment.lean`: attaches the actual small weights to fixed raw rough coefficients and proves the same physical rho's integer majorant, one-bound, squarefree/coprime support, active small-factor level, and density-error estimate. The causal boxed policy, absolute rough-mass estimate and sharp current `K` remain open.
 - `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
 - `ImbalancedChen/HalfProductMassSplit.lean`: exact high/low prime rectangle and order-error envelope for the original source.
 - `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.

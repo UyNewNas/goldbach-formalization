@@ -1012,3 +1012,112 @@ restricted moving-residue distribution estimates, the analytic meaning of
 the 17,572-cell certificate, and final bad-semiprime bounds remain open.
 Theorem 1.1 and Corollary 1.2 still have their explicit analytic premises;
 no new theorem in this checkpoint claims to discharge them.
+Next concrete dependency: instantiate the small-prime weights from the
+pinned dependency's `MathlibNt/SieveTheory/LiLiuPrereqWFSmallRosser.lean`.
+Use the product of the actual primes `p < w`, `p ∤ N`, and reindex the
+proved Rosser divisor sums through `gcd(M, |n|)` to include `n = 0`.
+Connect these actual lower/upper weights, their strict support and unit
+coefficient bound to `SignSensitiveAttachment`; do not leave its small-side
+pointwise assumptions as new unexplained hypotheses. The dependency's
+fundamental-lemma density supplier then needs a separate semantic and
+transitive-axiom review before it is used toward the current `K`.
+
+## Full aggregate build of the Chen checkpoint (12 October 2026)
+
+The local aggregate at commit `e86c73b5cf4f8ed86b3040a095424fdad10723fe`
+completed `lake build` with exit code zero and `Build completed successfully
+(4441 jobs).` The toolchain, Lake configuration and manifest hashes were
+unchanged. The isolated evidence is in the ignored directory
+`.lake/main-theorem-verification-20261012/` (`incremental-full-build.log` and
+`incremental-full-build-status.json`). This supersedes the earlier local
+aggregate-build wait, not the outstanding analytic proof obligations. It
+does not assert remote CI success or include later modules that were not
+yet imported by that aggregate.
+
+## Actual small weights and fixed physical coefficient (12 October 2026)
+
+Five modules close the previously abstract small-weight input and connect
+its proved density to the same physical coefficient:
+
+- `FixedRoughCoefficients` proves that the selected lists and natural
+  modulus support of the retained tree are independent of local weights
+  and incoming masses. The fixed `h=1` carrier and Mobius coefficient work
+  for all test integers. The exact divisor-sum identity, squarefreeness,
+  coprimality to the target and coefficient one-bound are proved.
+- `ActualSmallRosser` takes the literal lower and upper Rosser weights on
+  the product of primes `p<w`, `p` not dividing `N`. A gcd reindex supplies
+  their sandwich for all integers, including zero and negative arguments.
+  The displayed support is the sieve product's divisors. Its members are
+  squarefree and target-coprime; nonzero coefficients satisfy `d<L` and
+  have absolute value at most one. Zero coefficients above the level are
+  not incorrectly asserted to be active.
+- `ActualSmallRosserDensity` proves a uniform density sandwich for exactly
+  those coefficients at `L=D^epsilon`, `w=D^(epsilon^2)`. It supplies all
+  multiplicativity, prime-density and dimension-one premises from proved
+  results for the progression density. Its constants and threshold precede
+  the varying even target and finite carrier. The relative error is
+  `C*(exp(-1/epsilon) + exp(sqrt(K_dim)-1/epsilon)*
+  (epsilon*log D)^(-1/3))`. Here `K_dim` is the dimension constant, not the
+  manuscript's numerical upper coefficient. For fixed epsilon the first
+  term does not tend to zero with D.
+- `SmallRoughDensityError` proves that the sign-sensitive density increase
+  lies between zero and `delta * sum(|c(d)|/phi(d))`. It preserves the
+  absolute rough mass rather than replacing it by the signed main term.
+- `ActualSmallRoughAttachment` constructs one integer-independent rho from
+  those actual small weights and the fixed raw rough coefficient. Its
+  pointwise majorant, nonnegativity at every integer, squarefree and
+  target-coprime support, one-bound and strict active small-factor level
+  are proved. The proved small-density supplier controls this same rho's
+  density error, with its absolute rough-mass multiplier explicit.
+
+All five sources passed direct elaboration with `warningAsError=true`.
+Their final frozen objects each passed bundled `leanchecker`. The defining-
+module environment inventory audited all **90 declarations** (16 fixed
+rough, 39 actual small, 4 error, 16 small density and 15 attachment), including
+private and automatically generated declarations. Only `propext`,
+`Classical.choice` and `Quot.sound` occur transitively. After importing all
+five modules in the public root, `lake build` passed with exit zero and
+**4,803 jobs**. Source, audit, root and dependency-pin hashes were unchanged
+through the final checks. Evidence is in the ignored
+`.lake/main-theorem-verification-20261012/final-source/` directory. This is
+full aggregate compilation and five module kernel replays, not a claim of
+complete-root kernel replay or remote CI success.
+
+The retained policy is still an arbitrary odd-first-exit policy: this does
+not instantiate the current causal boxed policy or prove its support
+exponent. No sharp current-K density, restricted distribution estimate,
+current signed lower mean, certificate-to-integral interpretation or final
+bad-semiprime bound is claimed. Theorem 1.1 and Corollary 1.2 remain open.
+
+Next concrete analytic steps are the finite absolute rough-mass Euler
+bound and a literal raw-Rosser coefficient dictionary. The fixed provider
+`SmallRosser.upperWeight_eq_producer` uses `Nat.ceil R`; some real-level
+endpoint theorems instead use `Nat.floor R + 1`. These are not the same
+weight when R is an integer. The B8/B10 Goldbach carrier and its exact
+`nu(d)=1/phi(d)` can supply a dictionary to the natural-level interface
+without changing coefficients. Existing single-sided F/f bounds must not
+be subtracted to assert the eighth-layer density saving; the required
+same-weight fixed-rank reverse limits and target-prime deletion uniformity
+remain to be proved.
+
+Reproduce this checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.FixedRoughCoefficients
+lake env leanchecker --verbose ImbalancedChen.ActualSmallRosser
+lake env leanchecker --verbose ImbalancedChen.SmallRoughDensityError
+lake env leanchecker --verbose ImbalancedChen.ActualSmallRosserDensity
+lake env leanchecker --verbose ImbalancedChen.ActualSmallRoughAttachment
+lake env lean -DwarningAsError=true verification/ActualSmallRoughAudit.lean
+```
+
+Source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `FixedRoughCoefficients` | `24bc451c0234f867cb85539b0d93d37e02c68e6f8d0bf6cf82f081e75e3d892b` |
+| `ActualSmallRosser` | `0dbcd4e45ededb9edfb601d8249cc554b3e53291985c09557ed2a9f5d4fb2cdf` |
+| `SmallRoughDensityError` | `95854fdf8ac0e0b47368e71fb6a1fae20178bee004c384b80103f9abe45d40ab` |
+| `ActualSmallRosserDensity` | `9cfe1beef1a9ef09b88abf3c5593edebafc882e95639c50579cf4dc77b4d5ac8` |
+| `ActualSmallRoughAttachment` | `a7b17e728cb6ffe70e3b60c72f1a5d6febd38b12bf208f808a13b748a2da2625` |

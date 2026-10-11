@@ -25,13 +25,28 @@ statement before any later checkpoint is called current.
 | `eq:current-bb`, ordered bad factorization | `OrderedBad.badReceiver_iff_ordered_real_factors`; `CurrentMainTheorem.realBadReceiver_iff_realOrderedBadReceiver`; `RealB_eq_realOrderedBadPrimes_card` | Exact for rational and arbitrary real `b < 1`, including squares and strict endpoints |
 | `sec:current-transfer`, finite ordered source and cutoff | `RealHalfProductSource.RealB_eq_realHalfProductSource_filter_card_add_small`; `realHalfProductPairs_card_eq` | Exact finite localization for arbitrary real `b < 1`; analytic pair-mass limit open |
 | Rational minorant to the finite additive-prime sieve | `RealHalfProductSieveBridge.realHalfProductSource_primePartner_card_le_sifted_rat_add_cap`; `realHalfProductSource_primePartner_cast_le_optimized_of_rat_minorant`; `RealB_cast_le_optimized_of_rat_minorant` | Proved: for `num/den ≤ b`, the literal real source after `m < N ∧ Prime (N-m)` is bounded by the rational sifted source, retaining `+z` and `T+1`; the current physical-weight density/distribution estimates remain open |
-| `sec:current-positive-majorant`, odd-first-exit raw tree, sign-sensitive small/rough attachment and one physical `ρ_N` | `FirstExitTree.oddFirstExitRetainedPolynomial_eq_product_add_exits`; `RetainedModuli.oddFirstExitRetainedLeaves_sum_eq_retainedModuli_sum`; `RoughPrimeUniverse.roughPrimeRetainedLeaves_sum_eq_retainedModuli_sum`; `RoughPrimeUniverse.manuscriptRoughIndicator_le_oddFirstExitRetainedPolynomial`; `SignSensitiveAttachment.productTarget_le_signSensitiveAttachment`; `SmallRoughAttachment.smallRough_factorization_unique`; `SmallRoughAttachment.signSensitiveAttachment_eq_smallRough_physicalDivisorSum`; `SmallRoughAttachment.sum_smallRoughRho_mul`; `SmallRoughMainTerm.physicalDensitySum_smallRoughRho_eq_signSensitive`; `SmallRoughMainTerm.physicalCoprimeCorrection_smallRoughRho_eq_pairSum`; `SmallRoughMainTerm.physicalDistributionError_smallRoughRho_eq_pairSum`; `PhysicalUpperWeightBridge.siftedHalfProductSource_card_le_same_rho_main_add_errors` | Generic first-exit identity, source leaf-list `Nodup`, natural-modulus coefficient lookup and multiplicity-preserving modulus reindex proved; the rough universe is the strictly decreasing finite list of literal primes `p ∤ N`, `w ≤ p < z`, with exact real endpoints. The strict `p<w`/inclusive `w≤p` split gives cross-coprimality and unique small/rough products. The pre-existing pointwise `signSensitiveAttachment` is now literally the divisor sum of the same total physical `rho`; scalar and rho-weighted physical sums reindex without a fibre factor, and occupied coefficients retain the unit bound. The same physical rho's reciprocal-totient density is now exactly factored with the sign-dependent upper/lower small density, and both exact error terms are reindexed to the same carrier. The actual causal policy and small-weight instantiation, sharp density bounds giving `K`, and signed distribution estimate remain open |
+| `sec:current-positive-majorant`, odd-first-exit raw tree, sign-sensitive small/rough attachment and one physical `ρ_N` | `FirstExitTree.oddFirstExitRetainedPolynomial_eq_product_add_exits`; `RetainedModuli.oddFirstExitRetainedLeaves_sum_eq_retainedModuli_sum`; `RoughPrimeUniverse.roughPrimeRetainedLeaves_sum_eq_retainedModuli_sum`; `RoughPrimeUniverse.manuscriptRoughIndicator_le_oddFirstExitRetainedPolynomial`; `SignSensitiveAttachment.productTarget_le_signSensitiveAttachment`; `SmallRoughAttachment.smallRough_factorization_unique`; `SmallRoughAttachment.signSensitiveAttachment_eq_smallRough_physicalDivisorSum`; `SmallRoughAttachment.sum_smallRoughRho_mul`; `SmallRoughMainTerm.physicalDensitySum_smallRoughRho_eq_signSensitive`; `SmallRoughMainTerm.physicalCoprimeCorrection_smallRoughRho_eq_pairSum`; `SmallRoughMainTerm.physicalDistributionError_smallRoughRho_eq_pairSum`; `PhysicalUpperWeightBridge.siftedHalfProductSource_card_le_same_rho_main_add_errors` | Generic first-exit identity, source leaf-list `Nodup`, natural-modulus coefficient lookup and multiplicity-preserving modulus reindex proved; the rough universe is the strictly decreasing finite list of literal primes `p ∤ N`, `w ≤ p < z`, with exact real endpoints. The strict `p<w`/inclusive `w≤p` split gives cross-coprimality and unique small/rough products. The pre-existing pointwise `signSensitiveAttachment` is now literally the divisor sum of the same total physical `rho`; scalar and rho-weighted physical sums reindex without a fibre factor, and occupied coefficients retain the unit bound. The same physical rho's reciprocal-totient density is now exactly factored with the sign-dependent upper/lower small density, and both exact error terms are reindexed to the same carrier. The literal small weights and their fundamental-lemma density are now instantiated in the modules below. The actual causal boxed policy, absolute rough-mass control, sharp density bounds giving `K`, and signed distribution estimate remain open |
 | `eq:current-bad-mass`, `J_b = log (1/b)` | `RealHalfProductMass.realHalfProductMass_exponents`; `RealHalfProductMassSplit.manuscriptHalfProductCutoff`; `RealHalfProductMassSuppliers.tendsto_realHalfProductSource_manuscriptCutoff_mass_of_suppliers` | Exact arbitrary-real source envelope at the current `2 N^(1-κ₀)` lower wall; pinned proved PNT/Mertens suppliers are connected without analytic premises. The filtered additive-prime positive-sieve transfer remains open |
 | `eq:current-exact-subtraction` | `D12_eq_Db_add_B`; `Db_cast_eq_D12_sub_B` | Proved finite identity |
 | `eq:current-normalization` | `SingularSeries.singularNormalization` | Product convergence, positivity and growth proved |
 | `lem:current-full-weight`, current cutoffs and full last range | `CurrentChenPointwise.currentChenElevenWeight_le_four_indicator` | Literal eleven-term quotient counts, with `a=417/5000`, `h=19/125`, `d=59/250`; proved for every squarefree `n ≤ N`, `N ≥ 1`, without the historical lower receiver-size band |
 | `lem:current-paired-injection`, same pair region on both terms | `CurrentChenPairedDeletion.chenY11Selected_le_chenY6Selected`; `currentChenPairedWeight_le_four_indicator` | Last-pair projection is injective on actual four-prime quotient tuples; the first pair is proved to be the unique smallest pair. Arbitrary same-region selection, including the current mask pullback, preserves the pointwise bound |
 | `eq:current-weight-to-count`, squareful receivers and unit | `CurrentChenSummedBridge.currentChenPairedPrimeSum_le_four_D12_add_error`; `eventually_currentChenPairedPrimeSum_sub_normalized_error_le_four_D12` | Actual additive-prime sum, without witness multiplicity, bounded by `4 D12 + 246 N/(N^a-1) + 4`; the loss is negligible uniformly in the pair selector. The mean estimate of this actual weight remains open |
+
+`FixedRoughCoefficients` proves that the retained prime selections and
+support are independent of the local test function. Its fixed coefficient
+majorizes the literal rough indicator on every integer. `ActualSmallRosser`
+provides the literal target-prime-deleted lower and upper small weights,
+their all-integer sandwich via `gcd(M, |n|)`, one-bounds and strict active
+level. `ActualSmallRoughAttachment` then constructs one actual physical
+coefficient with the full pointwise majorant, squarefree target-coprime
+support and coefficient bound; the retention policy is still a parameter.
+`ActualSmallRosserDensity` supplies the same weights' density from the
+proved fundamental lemma, discharging the progression-density and uniform
+dimension assumptions. `SmallRoughDensityError` propagates the explicit
+small error to the same physical coefficient with the necessary absolute
+rough-mass multiplier. These statements do not instantiate the current
+boxed policy or prove its sharp density constant.
 
 The current manuscript excludes receiver one from `D_{1,2}`.  Therefore its
 terminal transfer uses `D12`, not the historical `D12Omega` interface and not
@@ -144,7 +159,10 @@ remain the actual filtered-source gap.
 1. Formalize the restricted moving-residue distribution estimate with the
    actual common interval and common additive phase.
 2. Prove the current positive upper weight and its density, yielding the
-   coefficient `K` for the same physical source.
+   coefficient `K` for the same physical source. The fixed raw-tree
+   coefficient, actual small-weight sandwich and small-weight density
+   supplier are proved. The causal boxed policy, its support exponent,
+   absolute rough mass and same-raw-weight fixed-s density remain open.
 3. Prove the complete current eleven-term lower-weight mean after paired
    deletion. The literal pointwise inequality, full `Y11` endpoint, actual
    pair injection, repeated-prime error and unit removal are now proved;
@@ -159,9 +177,9 @@ remain the actual filtered-source gap.
    real prime-partner filter to the existing finite rational sieve, retaining
    both finite corrections.  The exact real exponent split,
    moving-boundary source envelope, normalized cutoff error and conditional
-   source mass limit are also proved.  The actual PNT/Mertens suppliers and
-   the manuscript physical-weight density/distribution theorem and licensed
-   smooth outer approximation are not.
+   source mass limit are also proved, and the actual PNT/Mertens suppliers
+   have been connected. The manuscript physical-weight density/distribution
+   theorem and licensed smooth outer approximation remain open.
 6. Discharge the two explicit analytic hypotheses of
    `current_theorem_1_1_of_manuscript_bounds`.  The exact arbitrary-real-`b`
    partition and even-restricted liminf transfer are now formalized, but a
@@ -471,4 +489,3 @@ Mathlib pins and is the sole analytic-number-theory dependency.  Its inherited
 `78dd66840d3efe8c824c699fc03381cec817c271`.  The separate
 `analytic-number-theory-lean` package must not be added because both projects
 export the `AnalyticNumberTheory` and `PrimeNumberTheoremAnd` module roots.
-

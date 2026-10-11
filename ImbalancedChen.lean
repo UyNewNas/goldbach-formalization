@@ -77,6 +77,11 @@ import ImbalancedChen.SignSensitiveAttachment
 import ImbalancedChen.PhysicalUpperWeightBridge
 import ImbalancedChen.SmallRoughAttachment
 import ImbalancedChen.SmallRoughMainTerm
+import ImbalancedChen.FixedRoughCoefficients
+import ImbalancedChen.ActualSmallRosser
+import ImbalancedChen.ActualSmallRosserDensity
+import ImbalancedChen.SmallRoughDensityError
+import ImbalancedChen.ActualSmallRoughAttachment
 import ImbalancedChen.EnlargedSelbergAsymptotic
 import ImbalancedChen.QuotientChenFourPrime
 import ImbalancedChen.QuotientChenFourCounts
