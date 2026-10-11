@@ -602,3 +602,13 @@ The proof uses the already established full-loss inequality `N^(1-κ₀)-1 < Y�
 
 The updated module source SHA-256 is `507217636bf1b1c7b4d1a7473bda0764664ee95ddb07a29706c610a6db1bafce`.  Static checks pass (`git diff --check` and no `sorry`, `admit`, custom `axiom`, `native_decide` or `unsafe` in the module).  The runner contains no Lean or Lake executable, so no local elaboration, build, bundled kernel replay, or transitive axiom audit is claimed.  The manuscript remains `master@ba6ec11d800eccc54406490631895e174de85766`; the PDF hash and all Lean, Mathlib, and dependency pins are unchanged.
 
+## Dynamic Pan two-thirds endpoint gates candidate
+
+Code commit [`bde4741bbd71511383b06bb1db1d6c6448aebba8`](https://github.com/UyNewNas/goldbach-formalization/commit/bde4741bbd71511383b06bb1db1d6c6448aebba8) further strengthens `ImbalancedChen/PanProductGridRanges.lean`.  The helper `eventually_const_mul_rpow_le_rpow` proves that any fixed multiplicative constant is absorbed by a strict real-power exponent gap.  `manuscript_kappaZero_lt_quarter` formalizes the implication from the manuscript's actual condition `0 < κ` and `κ₀ < κ/(4(1+κ))` to `κ₀ < 1/4`.
+
+With
+`alpha = ((3/4) + (1-κ₀))/2` and `gamma = (2/3)*alpha`, the strict quarter gap gives `alpha < 1-κ₀` and `1/2 < gamma`.  The theorem `eventually_actualPanProductGridIndices_twoThirds_gates` uses these two gaps to pay, respectively, the exact `-1` in `N^(1-κ₀)-1 < Y₀` and the factor `2` in `A₂ < 2*sqrt N`.  Its manuscript wrapper exports, uniformly over every selected dynamic cell,
+`A₂ ≤ Y₀^(2/3)` and `A₂ ≤ Y₁^(2/3)`.  The second gate follows only from consecutive endpoint monotonicity.  No modulus-cutoff condition is inferred.
+
+The updated module source SHA-256 is `d6a76d62281093c340d3d01ab36b8a65010f8b0acb32468c36a116b12f281860`.  Static checks pass (`git diff --check` and no forbidden proof escape in the module), and an independent read-only review checked the exponent arithmetic, manuscript parameter mapping, strict endpoint loss, `Real.rpow` directions, casts, and the two exact endpoint indices.  The runner contains no Lean or Lake executable, so no local elaboration, build, bundled kernel replay, or transitive axiom audit is claimed.  The manuscript source remains `master@ba6ec11d800eccc54406490631895e174de85766`; the PDF hash and all dependency pins remain unchanged.
+

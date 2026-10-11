@@ -304,8 +304,17 @@ At the manuscript cutoff `T = 2*N^(1-κ₀)`, the same module now proves
 `0 < κ₀ < 1`, fixed `1 < κ ≤ 2`, and every fixed natural threshold `N₀`,
 all selected cells eventually satisfy `N₀ ≤ Y₀` and `N₀ ≤ Y₁`
 simultaneously.  This discharges exactly the two supplier-threshold hypotheses
-of the Pan aggregate.  It does not discharge the two-thirds, logarithmic-lower,
-or modulus-cutoff gates.
+of the Pan aggregate.  It does not by itself discharge any power, logarithmic,
+or modulus-cutoff gate.
+
+The manuscript's actual parameter condition
+`κ₀ < κ/(4(1+κ))` with `κ > 0` is proved to imply `κ₀ < 1/4`.
+Using this strict exponent gap, the module now also proves
+`eventually_actualPanProductGridIndices_twoThirds_gates_of_manuscript`:
+every selected cell eventually satisfies both
+`A₂ ≤ Y₀^(2/3)` and `A₂ ≤ Y₁^(2/3)`.  The proof absorbs the full
+`-1` product-endpoint rounding loss and the factor `2` in `A₂ < 2*sqrt N`;
+it does not assume a fixed-proportion product endpoint.
 
 The 17,572 same-mask-v2 cells are **not** this half-product Pan grid.  They are
 the separate fixed `(t,u)` cells in the eleven-term lower-weight numerical
@@ -313,8 +322,7 @@ certificate, where the `7/3` refinement improves the lower mean.  The Pan
 geometry instead uses the now-defined dynamic `(r,m=r*q)` product-strip grid.
 The next geometric adapter must prove, for its selected cells and separately
 at `Y₀` and `Y₁`, the remaining upstream hypotheses
-`A₂ ≤ Y^(2/3)`, `log(Y)^(2B) ≤ A₁`, and
-`D ≤ panModulusCutoff Y B`.  Once supplied, the new
+`log(Y)^(2B) ≤ A₁` and `D ≤ panModulusCutoff Y B`.  Once supplied, the new
 aggregate adapter consumes those eight gates directly.  The existing
 `(r,q)` rectangle grid gives useful global `4N` bounds, but mere containment
 of a signed rectangle discrepancy in a larger product strip would not be a
