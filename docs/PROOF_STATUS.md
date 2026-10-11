@@ -737,8 +737,7 @@ introduced the public-root import and the initial identity module. Its source
 SHA-256 was
 `b97d463290a6c549ede5438de7f227b9ce5b34267017f3e929c894247d2b55fe`.
 
-The actual causal retained-set instantiation, source leaf-list `Nodup`,
-multiplicity-preserving filtered sum reindex, unique small/rough decomposition,
+The actual causal retained-set instantiation, unique small/rough decomposition,
 and the density and signed factorized distribution estimates for the exact
 constructed `rho_N` remain open. Consequently neither the current coefficient
 `K = 8452171/1250000` nor Theorem 1.1 is proved by this checkpoint.
@@ -775,6 +774,9 @@ branch carrier and proves:
   product;
 - `oddFirstExitRetainedLeaves_unit_mem`, explicitly retaining the empty
   branch, unit modulus `d = 1` and coefficient one even for an empty universe;
+- `firstExitRetainedLeaves_nodup` and
+  `oddFirstExitRetainedLeaves_nodup`, proving the literal recursive leaf list
+  duplicate-free before any conversion to a Finset;
 - `oddFirstExitRetainedLeaves_sum_eq_product_add_exits`, the manuscript
   product-plus-exit identity with the retained side displayed as a literal
   branch sum.
@@ -792,10 +794,10 @@ the unit modulus with coefficient one, gives a unique retained leaf as a
 value for each supported modulus under the existing prime-universe hypotheses,
 proves every supported modulus squarefree, and recovers every leaf value as
 the looked-up coefficient times the local-weight product over
-`d.primeFactors`. This is intentionally only a lookup layer: it does not
-replace the recursive leaf `List.sum` by a support `Finset.sum`, because the
-current `Set.InjOn` theorem does not rule out duplicate occurrences in the
-source list.
+`d.primeFactors`. The source leaf list is proved `Nodup` recursively; combining
+that fact with selected-product injectivity proves the modulus list `Nodup`,
+and `oddFirstExitRetainedLeaves_sum_eq_retainedModuli_sum` then replaces the
+literal leaf `List.sum` by the support `Finset.sum` without losing multiplicity.
 
 `ImbalancedChen/RoughPrimeUniverse.lean` constructs the finite carrier of
 literal primes `p ∤ N` satisfying the real half-open inequalities
@@ -804,21 +806,79 @@ derived `Nodup`, `SortedGT`, pairwise strict decrease and recovery of the
 original Finset. Finiteness uses an explicit natural enumeration cap; when
 `z ≤ cap`, membership is equivalent to the uncapped manuscript predicate,
 with no unproved floor/ceiling replacement. The squarefree,
-Möbius/coefficient leaf identities and integer pointwise roughness majorant
-are specialized to this concrete universe.
+Möbius/coefficient leaf identities, exact modulus-sum reindex and integer
+pointwise roughness majorant are specialized to this concrete universe.
 
-The remaining finite obligations are the actual causal retained policy, a
-proof that the recursively enumerated leaf list itself is `Nodup`, and the
-resulting multiplicity-preserving filtered `Finset` sum reindex. Unique
-small/rough attachment and the analytic density and signed-distribution
+The remaining finite obligations are the actual causal retained policy and
+unique small/rough attachment. The analytic density and signed-distribution
 estimates remain later obligations.
 
 The extended module source SHA-256 for this candidate is
-`ef25c9050019b3f0816204697b9ed6518c459483598b032b9cd5af81a0441222`.
+`6ab5eeb136969f76afc8fcc83dfa211985e0b7ffe85e89dab0702f381ad42a6b`.
 
 The new source SHA-256 values are
-`7c6e4969b6c1c35f5110d7c093fe9b614f03a2f01f8b0486a873c17a9b9b9068`
+`ec5df61712426350f0a93f36501ce2f2ca4bf49c9ee13c611920342e67386274`
 for `RetainedModuli.lean` and
-`3fb4e66e91581d819c0d51ca7560e91795df998e03267b034577ea51b99a61a4`
+`3d716d89548e2e453e96c598481db2f62ae1c76e7f092a960e490a4b70688e58`
 for `RoughPrimeUniverse.lean`.
+
+## Exact retained-modulus reindex checkpoint
+
+This checkpoint closes the multiplicity issue in the odd-first-exit branch
+sum rather than merely replacing a list by a set.  The recursive theorem
+`firstExitRetainedLeaves_nodup` separates the skip and select subtrees using
+the current label: every selected-subtree leaf contains it, while every
+skip-subtree leaf omits it.  Its odd-policy specialization gives
+`oddFirstExitRetainedLeaves_nodup`.  Combining that theorem with the already
+proved selected-prime-product injectivity yields
+`oddFirstExitRetainedLeaves_selectedProd_map_nodup`.
+
+`oddFirstExitRetainedLeaves_sum_eq_retainedModuli_sum` can therefore invoke
+the pinned Mathlib theorem `List.sum_toFinset` without collapsing duplicate
+moduli: the actual retained-leaf `List.sum` is exactly the natural support
+`Finset.sum`, with the literal Möbius coefficient and the local-weight product
+over `d.primeFactors`.  The concrete decreasing real half-open rough-prime
+carrier is discharged by
+`roughPrimeRetainedLeaves_sum_eq_retainedModuli_sum`.  These are kernel terms;
+no external enumeration, Python `PASS`, or saved numerical endpoint is used
+as their proof.
+
+The fixed Lean 4.33.0-rc1 toolchain additionally exposed missing selective
+imports and parser changes in the current PR stack.  The relevant modules now
+import the required real/ring instances explicitly, avoid identifiers that
+are reserved in this toolchain, and `SignSensitiveAttachment.lean` imports
+the exact finite-ring and `norm_num` interfaces it uses.  Its current source
+SHA-256 is
+`d34b8483983bf4243479bee70cd4bcd07fbf286abafe982021ca4625a3ab63bc`.
+
+Local verification on the pinned dependency graph completed as follows:
+
+- direct elaboration and explicit Lake builds passed for `FirstExitTree`,
+  `RetainedModuli`, `RoughPrimeUniverse`, and `SignSensitiveAttachment`;
+- the complete `lake build` passed all 4436 jobs, including the root module
+  and the downstream `PhysicalUpperWeightBridge`;
+- bundled Lean 4.33.0-rc1 `leanchecker` replay passed separately for those
+  four modules and `PhysicalUpperWeightBridge`;
+- Lean's transitive `#print axioms` collector reports only `propext`,
+  `Classical.choice`, and `Quot.sound` for the new leaf-`Nodup`, mapped-modulus
+  `Nodup`, abstract and concrete reindex theorems, and the repaired
+  sign-sensitive attachment theorem.
+
+A single-process bundled replay of the entire root import closure was also
+attempted locally but exceeded the available memory; it is not counted as a
+passed root replay.  The exact delivery commit must still pass the repository
+CI root replay and full-root declaration audit before this checkpoint can be
+called remotely verified.  The preceding exact PR head's core and variable-
+envelope workflows both failed before creating any job step or log, so those
+infrastructure-start failures likewise do not count as proof checks.
+
+The manuscript source was rechecked and remains exactly
+`master@ba6ec11d800eccc54406490631895e174de85766` (tree
+`2b5af758d1b4a4799a120d4ea108679cc02f2e11`); no statement or parameter
+comparison was required.  The remaining finite gap is now the actual causal
+retention policy together with the unique small/rough product attachment into
+one physical `rho_N`.  The density estimate giving the current `K`, the signed
+factorized distribution estimate, the eleven-term mean bound, and the final
+ordered-bad transfer remain open; consequently Theorem 1.1 and Corollary 1.2
+are not claimed.
 

@@ -176,18 +176,40 @@ theorem mem_roughPrimeRetainedLeaves_value_eq_coefficient_mul_primeFactors
       (roughPrimeUniverse_nodup N cap w z)
       (fun p hp => mem_roughPrimeUniverse_prime hp) leaf hleaf
 
+/-- On the concrete decreasing rough-prime universe, the entire retained
+branch sum is exactly the natural-modulus `Finset.sum`.  Every modulus occurs
+once; the source-list and selected-product `Nodup` proofs justify the lossless
+reindex. -/
+theorem roughPrimeRetainedLeaves_sum_eq_retainedModuli_sum
+    (retainOdd : List ℕ → Bool) (h : ℕ → ℝ)
+    (N cap : ℕ) (w z : ℝ) :
+    ((oddFirstExitRetainedLeaves retainOdd h
+      (roughPrimeUniverse N cap w z)).map FirstExitLeaf.value).sum =
+      ∑ d ∈ oddFirstExitRetainedModuli retainOdd h
+          (roughPrimeUniverse N cap w z),
+        (oddFirstExitRetainedCoefficient retainOdd h
+          (roughPrimeUniverse N cap w z) d : ℝ) *
+          d.primeFactors.prod h := by
+  exact oddFirstExitRetainedLeaves_sum_eq_retainedModuli_sum
+    retainOdd h (roughPrimeUniverse N cap w z)
+    (roughPrimeUniverse_nodup N cap w z)
+    (fun p hp => mem_roughPrimeUniverse_prime hp)
+
 /-- The generic integer pointwise majorant, now stated over precisely the
 manuscript's real half-open rough-prime range.  The enumeration cap is absent
 from the indicator because `hzcap` proves it is semantically inert. -/
 theorem manuscriptRoughIndicator_le_oddFirstExitRetainedPolynomial
     (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)
     (hzcap : z ≤ (cap : ℝ)) (n : ℤ) :
-    (if ∀ p,
+    (@ite ℝ
+      (∀ p,
         (p.Prime ∧ ¬p ∣ N ∧ w ≤ (p : ℝ) ∧ (p : ℝ) < z) →
-          ¬(p : ℤ) ∣ n
-      then 1 else 0 : ℝ) ≤
+          ¬(p : ℤ) ∣ n)
+      (Classical.propDecidable _)
+      1 0) ≤
       oddFirstExitRetainedPolynomial retainOdd
         (integerDivisorIndicator n) (roughPrimeUniverse N cap w z) := by
+  classical
   simpa only [mem_roughPrimeUniverse_iff_of_cutoff_le_cap hzcap] using
     integerRoughIndicator_le_oddFirstExitRetainedPolynomial retainOdd
       (roughPrimeUniverse N cap w z) n

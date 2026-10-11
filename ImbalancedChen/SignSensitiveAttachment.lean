@@ -1,4 +1,7 @@
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib.Algebra.BigOperators.Ring.Finset
+import Mathlib.Data.Real.Basic
+import Mathlib.Tactic.NormNum
 
 /-!
 # Sign-sensitive attachment of the small-prime sieve
