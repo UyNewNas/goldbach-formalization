@@ -12,16 +12,16 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
-The latest 12 October local checkpoint proves the exact strict cube
-reduction of the same raw upper Rosser weight, uniform Euler normalization
-on compact positive exponent intervals, and the actual target-deleted
-reciprocal-prime cell mass. Six new modules passed strict compilation and
-individual kernel replay. Two environment-based audits covered all
-79 + 23 = 102 declarations under the standard three-axiom allowlist.
-The final aggregate build passed with 9,643 jobs. The earlier normalized
-attachment reserve remains proved; the multi-prime boundary-layer limits,
-same-weight density limit, boxed compiler, sharp signed density and main
-analytic theorem remain open.
+The latest 12 October local checkpoint proves an exact positive boundary
+expansion for the same raw upper Rosser weight, actual prime-tuple box
+masses, and a concrete lower bound of `1+1/2000` for its normalized density
+at `y=N^(1/3), R=N`, for sufficiently large even targets and every covering
+cap. Five new modules passed strict compilation and individual kernel
+replay; an environment-based audit covered all 67 declarations under the
+standard three-axiom allowlist. The final aggregate build passed with
+9,648 jobs. This proves one actual boundary-box contribution. The full
+boundary-layer integrals, same-weight density limit, boxed compiler,
+sharp signed density and main analytic theorem remain open.
 See [proof status](docs/PROOF_STATUS.md).
 
 The current-parameter Chen pointwise and paired-deletion modules, together
@@ -110,6 +110,10 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/FullPowerEulerNormalization.lean`: proves `V_N(N^a)*log N/C_N -> 2*exp(-gamma)/a` and `V_N(N^a)/V_N(N^b) -> b/a` along positive even targets, for each fixed `a,b>0`, from the actual Mertens and target-prime-tail suppliers. These concern full prime carriers, not truncated caps or a uniform varying-exponent limit. The same-weight Rosser density limit remains open.
 - `ImbalancedChen/UniformPowerEulerNormalization.lean`: upgrades the proved leading constant to locally uniform convergence for positive exponents and uniform convergence on every positive compact interval. One threshold works for all exponents in the interval and all covering caps. Moving exponents converging to a positive limit are also covered, without assuming continuity of the finite Euler products.
 - `ImbalancedChen/ActualPrimeReciprocalMass.lean`: proves the actual target-deleted prime mass on `[N^a,N^b)` with summand `1/(p-1)` tends to `log(b/a)` for every fixed `0<a<b`, including `b>1`. The target and enumeration cap are kept separate; endpoint, target-prime and denominator corrections are explicitly paid. This is a single-prime interval result, not a multi-prime Rosser layer limit.
+- `ImbalancedChen/ActualPrimeEulerSplit.lean` and `ActualRosserBoundaryExpansion.lean`: prove the exact positive boundary expansion for the same actual upper Rosser density at `ceil R`, with every term expressed through `1/(p-1)` and the strict Euler ratio `V_N(q)/V_N(y)`. Any actual selected subcarrier gives a proved lower bound.
+- `ImbalancedChen/ActualPrimeBoxMass.lean`: proves exact factorization and limiting mass for genuine prime-tuple boxes; adjacent separated boxes have distinct ordered coordinates and the same reciprocal-totient mass. The common target exclusions and every half-open endpoint are retained.
+- `ImbalancedChen/ActualPrimeBoxEulerLower.lean`: supplies an eventual lower bound for actual tuple boxes carrying the boundary Euler ratio, with one threshold uniform in every covering cap. It separately requires a geometric inclusion before a box can contribute to a Rosser boundary sum.
+- `ImbalancedChen/ActualRosserTripleBox.lean`: proves explicit power gates put a separated three-prime box inside the actual Rosser boundary, with an injective tuple-to-boundary map. A concrete rational box proves the same raw density ratio at `y=N^(1/3), R=N` is eventually at least `1+1/2000`, uniformly in all covering caps, with every geometric and analytic input discharged. This is one box contribution, not the full fixed-s density limit.
 - `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
 - `ImbalancedChen/HalfProductMassSplit.lean`: exact high/low prime rectangle and order-error envelope for the original source.
 - `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.

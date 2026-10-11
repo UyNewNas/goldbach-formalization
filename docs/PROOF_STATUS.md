@@ -1395,15 +1395,16 @@ Together the two checkpoints cover six new module kernel replays and
 79 + 23 = 102 audited declarations, plus full aggregate compilation. This
 does not claim complete-root kernel replay or successful remote CI.
 
-The next actual-carrier bridge can reuse the pinned public theorem
+The next checkpoint supplies the actual-carrier bridge using the pinned
+exact set-density boundary identity. An alternative public API is
 `mainSum_upperRosserWeight_eq_sieveProduct_add_suzukiActualT` and its
-odd-depth expansion, or the exact set-density boundary identity. The
-generic expansion already cancels the apparent extra Euler denominator.
-The needed local dictionary identifies the lower-prime Euler product with
-the actual strict product at the boundary prime q. This will express each
+odd-depth expansion. The generic expansion already cancels the apparent
+extra Euler denominator.
+The local dictionary identifies the lower-prime Euler product with
+the actual strict product at the boundary prime q. This expresses each
 boundary contribution as a product of `1/(p-1)` factors times
-`V_N(q)/V_N(y)`, ready for the two suppliers above. This bridge and its
-subsequent finite-prefix integral lower bound are not proved here.
+`V_N(q)/V_N(y)`, ready for the two suppliers above. The continuous
+finite-prefix integral lower bound remains separate from this bridge.
 
 Reproduce the two-module checkpoint with the pinned toolchain on PATH:
 
@@ -1420,3 +1421,105 @@ Frozen source SHA-256 values:
 | --- | --- |
 | `UniformPowerEulerNormalization` | `8888d8d4df618d3504c6fbf08f1b6a132bba16b2a378e68906d2f17240d76475` |
 | `ActualPrimeReciprocalMass` | `f2cb90c3751d4bbc1208e9f1694f820befa948bddf1c396ca564c10ccd1e1108` |
+
+## Actual Rosser boundary boxes and a positive density gain (12 October 2026)
+
+Five modules connect the prime-mass suppliers to the same raw upper Rosser
+coefficient, rather than an independently chosen comparison weight:
+
+- `ActualPrimeEulerSplit` splits the actual finite Euler product at a prime
+  q into strict lower, singleton and strict upper factors. It rewrites the
+  boundary denominator as `V_N(q)/V_N(y)` and proves positivity of every
+  factor for even targets. The finite identities allow arbitrary caps.
+- `ActualRosserBoundaryExpansion` identifies the actual divisor density
+  with the pinned subset density at `ceil R`, then proves its exact
+  normalized expansion as one plus nonnegative actual boundary terms.
+  It requires a covering cap and every carrier prime strictly below R;
+  it does not assume any density asymptotic. Selected actual subcarriers
+  give lower bounds with the same coefficients.
+- `ActualPrimeBoxMass` defines genuine finite tuples of target-coprime
+  primes in `[N^(a_i),N^(b_i))`, proves exact mass factorization, and derives
+  the limit `prod_i log(b_i/a_i)` for fixed `0<a_i<b_i`. Adjacent separated
+  intervals give strictly decreasing, distinct coordinates and identify
+  this mass with the reciprocal totient of the tuple product. That last
+  identity is not asserted for overlapping intervals.
+- `ActualPrimeBoxEulerLower` proves Euler-product monotonicity and an
+  eventual lower bound for these tuples weighted by `V_N(p_j)/V_N(N^u)`:
+  `(u/b_j)*prod_i log(b_i/a_i)-eta`, when `b_j<=u`. The common threshold
+  precedes every later even target and every covering cap. Geometric
+  eligibility for a Rosser boundary is a separate obligation.
+- `ActualRosserTripleBox` discharges that obligation for three-prime boxes
+  satisfying adjacent separation, `b_0<=u`, `3*b_0<=beta`,
+  `beta<=a_0+a_1+3*a_2`, and `u<=beta`. It proves the strict first cube
+  test, inclusive shell test at `ceil(N^beta)`, and injection of a tuple
+  into `(p_2,{p_0,p_1})`. Thus the actual normalized density is eventually
+  at least `1+(u/b_2)*prod_i log(b_i/a_i)-eta`, without duplicate counting.
+
+The final module supplies all these geometric conditions for
+`u=1/3`, `beta=1`, and the box
+
+`[.30,.32) x [.27,.29) x [.17,.19)`
+
+in logarithmic prime coordinates. Its gain is
+`(100/57)*log(16/15)*log(29/27)*log(19/17)`, proved at least `25/31407`.
+Choosing `eta=1/10000` proves, with no remaining analytic or geometric
+premises:
+
+```text
+exists N0 >= 2, forall even N >= N0, forall cap >= N^(1/3),
+  actualSmallRosserPlusDensity N cap (N^(1/3)) N
+    / actualSmallEulerProduct N cap (N^(1/3)) >= 1 + 1/2000.
+```
+
+This is a positive contribution from one actual box. It does not prove
+the sharp `F(3)=2*exp(gamma)/3` limit, a continuous boundary-layer integral,
+or the manuscript's numerical constants. Disjoint box families, higher
+odd ranks and finite-prefix integral lower limits remain open, along with
+the boxed policy/compiler, signed distribution, sharp K, current Chen mean
+and the final Theorem 1.1/Corollary 1.2. Independent read-only review checked
+the same-coefficient identity, quantifier order, Euler-ratio orientation,
+strict endpoints, injection and exact numerical gain at the frozen hashes.
+
+All five modules passed strict compilation and individual bundled kernel
+replay. The environment-based inventory audited all **67 declarations**:
+18 Euler-split, 6 boundary-expansion, 17 box-mass, 10 Euler-weighted-box and
+16 triple-box declarations, including private and generated declarations.
+Only `propext`, `Classical.choice` and `Quot.sound` occur transitively.
+The first four replays were reused only after checking their source,
+compiled object, checker binary and log hashes; the fifth was replayed
+after its final numeric theorem was frozen. Actual dependency revisions
+match the manifest, and both the worktree and index of the actual mathlib
+and goldbach supplier checkouts were clean before and after the audit.
+
+The final aggregate `lake build` passed with **9,648 jobs**. All five
+sources, the root, audit and dependency pins were unchanged through
+verification; both supplier checkouts also remained tracked-clean after
+the build. Evidence is in
+`.lake/main-theorem-verification-20261012/boundary-box/`:
+`boundary-box-verification.json`, `boundary-box-declarations.json`,
+`boundary-box-theorem-types.txt`, and `final-aggregate-build-status.json`.
+The verification scope is five new module kernel replays, their full
+declaration inventory, and aggregate compilation. It is not complete-root
+kernel replay or evidence of successful remote CI.
+
+Reproduce the five-module proof checks with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.ActualPrimeEulerSplit
+lake env leanchecker --verbose ImbalancedChen.ActualRosserBoundaryExpansion
+lake env leanchecker --verbose ImbalancedChen.ActualPrimeBoxMass
+lake env leanchecker --verbose ImbalancedChen.ActualPrimeBoxEulerLower
+lake env leanchecker --verbose ImbalancedChen.ActualRosserTripleBox
+lake env lean -DwarningAsError=true verification/BoundaryBoxAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `ActualPrimeEulerSplit` | `d9194dfe21942b277cb3f5fc246ec448472bbc75b14cc30f6cacd9ca22dd74b9` |
+| `ActualRosserBoundaryExpansion` | `be0f26dc2405d3ae48d82cf70a72b31105014b8915c2098a1abdf279cdfa6768` |
+| `ActualPrimeBoxMass` | `3d17cfda8af10561829b23f7370b7a9481a4856dd7f78be05ebac3926bf1204f` |
+| `ActualPrimeBoxEulerLower` | `adc0657ea574d58a0364423062c556119a06380b6edcdb31d6175ca3f99083cb` |
+| `ActualRosserTripleBox` | `0fe4d963634c41442fa62f736543c70944f3f8eb0843e08f800ebebc0b02dea5` |

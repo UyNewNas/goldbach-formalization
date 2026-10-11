@@ -151,10 +151,66 @@ Its enumeration cap is `ceil(N^b)` independently of the target N, so b may
 exceed one. The exact change to the proved opposite-half-open Mertens
 interval costs at most `2*log N/(N^a*log 2)+6/N^a`; the target-prime deletion,
 denominator shift and both endpoint atoms are all paid before taking the
-limit. Multi-prime cells, boundary-layer predicates and their weighted
-integral lower limits remain to be connected to the exact raw-weight
-decomposition. Nonnegative layers permit finite-prefix lower bounds; no
-unproved vanishing normalized tail is needed for that lower-bound route.
+limit. Nonnegative layers permit finite-prefix lower bounds; no unproved
+vanishing normalized tail is needed for that lower-bound route.
+
+`ActualPrimeEulerSplit` partitions the same finite carrier at a boundary
+prime q into primes below q, q itself and primes above q. The lower factor
+is exactly `V_N(q)` with strict cutoff, for any enumeration cap.
+`ActualRosserBoundaryExpansion` identifies the actual upper coefficient's
+divisor density with the same subset density at `ceil R`, and proves the
+exact expansion
+
+`U_N(y,R)/V_N(y) = 1 + sum_q sum_s (nu(q)*prod_(p in s) nu(p))*V_N(q)/V_N(y)`.
+
+Here `nu(p)=1/(p-1)` and s runs over the actual first-boundary sets above q.
+All terms are proved nonnegative for even targets, so any actual subset
+gives a lower bound. The carrier must be covered by cap and its primes
+must lie strictly below R. No replacement coefficient or analytic density
+estimate is used in this equality.
+
+`ActualPrimeBoxMass` sums over genuine finite function tuples in the
+target-deleted intervals `[N^(a_i),N^(b_i))`. Finite distributivity proves
+the exact factorization and the mass limit `prod_i log(b_i/a_i)` for every
+fixed finite positive-width box. Adjacent separation implies strict
+decrease and distinct primes, allowing the same mass to be identified with
+the actual reciprocal totient of the tuple product. Without separation,
+that reciprocal-totient identification is not asserted.
+
+`ActualPrimeBoxEulerLower` weights these actual tuples by `V_N(p_j)/V_N(N^u)`.
+When `b_j<=u`, monotonicity gives a simultaneous lower bound by the ratio
+at `N^(b_j)`. The proved ratio and tuple limits give one threshold, before
+all later even targets and covering caps, for a lower bound
+`(u/b_j)*prod_i log(b_i/a_i)-eta`. This supplier alone does not place a box
+inside the Rosser boundary predicate; that geometric inclusion and its
+injective summation must be supplied separately.
+
+`ActualRosserTripleBox` supplies this inclusion for an actual three-prime
+box. In decreasing coordinate order, adjacent separation and the gates
+`b_0<=u`, `3*b_0<=beta`, and `beta<=a_0+a_1+3*a_2` put every tuple into the
+literal boundary at `ceil(N^beta)`. The first cube test is strict because
+the interval upper endpoint is excluded; the shell test is non-strict
+because the lower endpoints are included. The map
+`(p_0,p_1,p_2) -> (p_2,{p_0,p_1})` is proved injective on the box, so no
+factorial or multiplicity is lost. With `u<=beta`, the actual raw density
+therefore has the eventual lower bound
+
+`U_N(N^u,N^beta)/V_N(N^u) >= 1+(u/b_2)*prod_i log(b_i/a_i)-eta`.
+
+All prime-mass and Euler-ratio inputs to this theorem are supplied by
+proved results. At `u=1/3`, `beta=1`, the explicit box with lower endpoints
+`(3/10,27/100,17/100)` and upper endpoints `(8/25,29/100,19/100)` satisfies
+every geometric gate. Its contribution is bounded below by
+`(100/57)*log(16/15)*log(29/27)*log(19/17)-eta`. Exact logarithmic
+inequalities and rational arithmetic, with `eta=1/10000`, yield
+
+`exists N0>=2, forall even N>=N0, forall cap>=N^(1/3),`
+`U_N(N^(1/3),N)/V_N(N^(1/3)) >= 1+1/2000`.
+
+This theorem has no geometric or analytic premise left to supply. It is
+one included box, not the full continuous Rosser layer integral or the
+fixed-s limit F(s). Higher ranks, disjoint box families and the continuous
+finite-prefix lower limit remain open.
 
 ### Exact Euler-ratio correction in the frozen manuscript
 
