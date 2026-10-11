@@ -330,14 +330,37 @@ The 17,572 same-mask-v2 cells are **not** this half-product Pan grid.  They are
 the separate fixed `(t,u)` cells in the eleven-term lower-weight numerical
 certificate, where the `7/3` refinement improves the lower mean.  The Pan
 geometry instead uses the now-defined dynamic `(r,m=r*q)` product-strip grid.
-The next geometric adapter must prove, for its selected cells and separately
-at `Y₀` and `Y₁`, the remaining upstream hypotheses
-`D ≤ panModulusCutoff Y B`.  Once supplied, the new
-aggregate adapter consumes those eight gates directly.  The existing
+`ImbalancedChen/PanProductGridModulus.lean` now proves the remaining two
+endpoint gates for every honest power-bounded physical layer: if
+`0 ≤ theta < (1-κ₀)/2`, then uniformly over all selected cells,
+`floor(N^theta) ≤ panModulusCutoff Y₀ B` and
+`floor(N^theta) ≤ panModulusCutoff Y₁ B` eventually.  The proof uses a strict
+intermediate product exponent, absorbs the fixed logarithmic loss in the
+remaining power gap, and retains the exact `-1` endpoint rounding.  Its
+Selberg corollary applies the result to the literal level
+`enlargedSelbergLevel theta N ^ 2` via the previously proved finite floor
+bound.
+
+This does not license the false transfer of a global
+`sqrt(N)/log(N)^B` cutoff to `Y ≍ N^(1-κ₀)`: the missing factor is a genuine
+power `N^(κ₀/2)`.  The next analytic composition must therefore identify the
+manuscript's actual physical modulus layer and prove that its exponent has
+the displayed strict gap before applying the aggregate.  The existing
 `(r,q)` rectangle grid gives useful global `4N` bounds, but mere containment
 of a signed rectangle discrepancy in a larger product strip would not be a
 valid transfer.  Gate loss must also be accounted for when the analytic main
 term is compared with any ungated physical mass.
+
+This power-bounded Pan path is now classified as an auxiliary weak route,
+not the current-`K` proof spine.  For the existing Selberg level its
+normalizer contributes `4/theta`, while the local cutoff requires
+`theta < (1-κ₀)/2`; even at the limiting edge this is at least
+`8/(1-κ₀) > 8`, whereas the manuscript needs
+`K = 8452171/1250000`.  Moreover the manuscript's high-rank positive-weight
+support reaches `theta* = 599/1000`.  The current-`K` proof must therefore
+formalize the manuscript's same `ρ_N` pointwise majorant, density and signed
+factorized local distribution, preserving the distinction between the
+physical modulus cap and the auxiliary factorization support.
 
 Dependency audit: `goldbach-lean` is pinned at
 `09b97db5764ade1246bfb77206baa1b124760958`; it uses the identical Lean and

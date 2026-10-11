@@ -620,3 +620,42 @@ For `β = b/(1+b)`, the theorem `eventually_actualPanProductGridIndices_log_gate
 
 The updated module source SHA-256 is `88b2c972243ba1e33e89a08b6759c16512620751b7c25206dfa4d767bf79466a`.  Static checks pass (`git diff --check` and no `sorry`, `admit`, custom `axiom`, `native_decide` or `unsafe` in the module).  An independent read-only audit checked the strict roughness transfer, the two coordinate indices, real-power monotonicity, ceiling step, filter uniformity and exact endpoint bounds.  This runner has no Lean or Lake executable, so no local elaboration, build, bundled kernel replay or transitive axiom audit is claimed.  Checkpoint head `25be8488e6ab1fad00bce0a6d644c9f0ad5d9c0d` core [run 38104132595](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38104132595) and VariableEnvelope [run 38104132598](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38104132598), including one failed-jobs retry each, failed before creating workflow steps (`steps: null`, no logs); they are infrastructure-start failures and do not count as proof verification.  The only remaining endpoint gates for the pinned two-endpoint Pan aggregate are the two independent conditions `D ≤ panModulusCutoff Y₀ B` and `D ≤ panModulusCutoff Y₁ B`; they are not inferred from a global-scale cutoff.
 
+## Dynamic Pan honest modulus-gate candidate
+
+`ImbalancedChen/PanProductGridModulus.lean` closes both endpoint cutoff gates
+for a deliberately smaller physical modulus layer.  For fixed
+`0 < κ₀ < 1`, `0 ≤ theta < (1-κ₀)/2`, `1 < gridκ ≤ 2`, and the supplier's
+fixed `B ≥ 0`,
+`eventually_actualPanProductGridIndices_floor_rpow_modulus_gates` proves,
+uniformly over every selected dynamic product cell,
+`floor(N^theta) ≤ panModulusCutoff Y₀ B` and
+`floor(N^theta) ≤ panModulusCutoff Y₁ B`.  The corollary
+`eventually_actualPanProductGridIndices_enlargedSelberg_modulus_gates`
+applies the same result to the literal squared natural Selberg level.
+
+The strict inequality on `theta` is mathematically necessary for this
+argument.  Since the smallest endpoint is only of order `N^(1-κ₀)`, a
+global layer of order `sqrt(N)/log(N)^B` is larger than the local Pan cutoff
+by a power `N^(κ₀/2)`; adding logarithms cannot repair it.  The new result
+therefore does not claim that the manuscript's still-unidentified physical
+positive-weight modulus level already satisfies the hypothesis.  That layer,
+its effect on the current coefficient `K`, the coprime-gate main mass, and
+the cellwise-to-global positive upper-sieve composition remain open.
+
+The existing `enlargedSelbergLevel` specialization is only an auxiliary weak
+route.  Its normalizer produces coefficient `4/theta`; imposing
+`theta < (1-κ₀)/2` makes its best limiting coefficient at least
+`8/(1-κ₀) > 8`, so it cannot recover the manuscript's current
+`K = 8452171/1250000`.  The current-K route must instead formalize the
+manuscript's same positive weight `ρ_N`, its density, and its signed
+factorized local distribution at the actual local product scale.  In
+particular, the high-rank support reaching `theta* = 599/1000` cannot be
+covered wholesale by this absolute Pan aggregate.
+
+Module source SHA-256:
+`0e340bf79e581e5c46d324a83ad470036ff07f3cbd9fdb37dc4fe3f950e66fdd`.
+Static source checks pass (`git diff --check` and no forbidden proof escape).
+The runner contains no Lean or Lake executable, so no local elaboration,
+build, bundled kernel replay or transitive axiom audit is claimed pending an
+actual CI runner execution.
+
