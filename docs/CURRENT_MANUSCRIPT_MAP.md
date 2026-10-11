@@ -316,13 +316,23 @@ every selected cell eventually satisfies both
 `-1` product-endpoint rounding loss and the factor `2` in `A₂ < 2*sqrt N`;
 it does not assume a fixed-proportion product endpoint.
 
+The same source witness also gives the strict roughness inheritance
+`(2*N^(1-κ₀))^(b/(1+b))/2 - 1 < A₁` for every selected product-coordinate
+cell.  Combining this with the already proved fixed-logarithm estimate,
+`logCutoff N ≤ N`, and `κ₀ < 1/4` yields
+`eventually_actualPanProductGridIndices_log_gates_of_manuscript`: for the
+supplier's fixed nonnegative real `B`, both exact endpoints satisfy
+`log(Y₀)^(2B) ≤ A₁` and `log(Y₁)^(2B) ≤ A₁`, uniformly over the selected
+family.  The real exponent is rounded to `ceil(2B)` only after the logarithmic
+base is at least one; the grid's `ceil - 1` loss is retained throughout.
+
 The 17,572 same-mask-v2 cells are **not** this half-product Pan grid.  They are
 the separate fixed `(t,u)` cells in the eleven-term lower-weight numerical
 certificate, where the `7/3` refinement improves the lower mean.  The Pan
 geometry instead uses the now-defined dynamic `(r,m=r*q)` product-strip grid.
 The next geometric adapter must prove, for its selected cells and separately
 at `Y₀` and `Y₁`, the remaining upstream hypotheses
-`log(Y)^(2B) ≤ A₁` and `D ≤ panModulusCutoff Y B`.  Once supplied, the new
+`D ≤ panModulusCutoff Y B`.  Once supplied, the new
 aggregate adapter consumes those eight gates directly.  The existing
 `(r,q)` rectangle grid gives useful global `4N` bounds, but mere containment
 of a signed rectangle discrepancy in a larger product strip would not be a
