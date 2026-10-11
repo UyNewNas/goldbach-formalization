@@ -2,6 +2,134 @@
 
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
+## Finite sums of odd-rank continuous lower contributions — 12 October
+
+Nine new modules generalize the actual three-prime lower-contribution
+argument to every fixed odd rank. `ActualRosserOddBox` proves every
+alternating prefix gate, the active tail product and terminal crossing at
+the same `ceil (N^beta)`. Its exact tail cardinality is `2*k`, and strict
+order makes the boundary map injective within each rank. Empty tails and
+empty box families are covered. `ActualRosserOddBoxFamily` sums separated
+boxes before injecting into one actual boundary expansion, so the base
+term one occurs once.
+
+`RosserOddLogRegion` uses strict continuous prefix tests, proves the
+total-tail-sum constraint from the geometric residual budget, embeds the
+region in the provider's continuous region, and proves every coordinate
+exceeds `s/3^(k+1)`. `LogPrimeBoxMesh` and `RosserOddMesh` provide disjoint
+half-open inner grids and eventual coverage of every region point.
+`RosserOddMeshIntegral` proves the actual mesh sums converge to the
+Lebesgue integral using the compact box `[s/3^(k+1),1]^(2*k+1)` and the
+dominator `(1/a)*(1/a)^(2*k+1)`, where `a=s/3^(k+1)>0`.
+
+`ActualRosserOddLayerLower` scales those cells by `u>0` and proves the
+lower contribution at `R=N^(s*u)` for each fixed `s>=1` with
+`s/3^(k+1)<1`. The mesh is chosen before the target threshold. For every
+`k>=1` this gives, at `s=3`,
+
+```text
+forall u > 0, forall eta > 0, exists N0 >= 2,
+  forall even N >= N0, forall cap >= N^u,
+    actualSmallRosserPlusDensity N cap (N^u) (N^(3*u))
+      / actualSmallEulerProduct N cap (N^u)
+        >= 1 + rosserOddLayerIntegral k 3 - eta.
+```
+
+`ActualRosserOddBoxUnion` further combines every box from a fixed finite
+rank set in one boundary expansion. Boundary tails from two injective
+tuples have equal cardinality only when their ranks agree. This makes the
+rank images disjoint before summing and retains just one constant term.
+The finite dependent set `K.sigma J` indexes all box thresholds and their
+error allocation; empty rank sets and empty box families are included.
+
+`ActualRosserOddFiniteLayers` takes the finite sum of the proved mesh
+limits to choose one shared mesh index, then applies that joint box
+theorem. For every finite set `K` of positive ranks, `u>0` and `eta>0`,
+it proves one threshold before all later even N and covering caps with
+
+```text
+actualSmallRosserPlusDensity N cap (N^u) (N^(3*u))
+  / actualSmallEulerProduct N cap (N^u)
+    >= 1 + sum_{k in K} rosserOddLayerIntegral k 3 - eta.
+```
+
+The `u=1/3, R=N` specialization is also proved. All analytic inputs to
+these finite-sum bounds are discharged; thresholds may depend on the
+fixed finite rank set. The proof does not add separate fixed-layer lower
+inequalities. Identifying each general integral with the pinned Suzuki
+source layer remains open. After that identity, the proved continuous
+source summability can supply the full lower direction without estimating
+a discarded nonnegative discrete tail. The same-weight full density
+limit, causal boxed compiler, sharp K/certificate semantics, restricted
+signed distribution, current Chen mean and final main theorem remain open.
+
+All nine modules passed strict compilation and individual bundled kernel
+replay. A canonical environment importing all nine modules audited every
+one of its **137 distinct declarations**, including private and generated
+declarations, permitting only `propext`, `Classical.choice` and `Quot.sound`
+transitively. The module counts are 14 odd-box, 4 box-family, 30 generic
+mesh, 23 odd-region, 21 odd-mesh, 30 mesh-integral, 6 single-layer lower,
+4 cross-rank box union and 5 finite-layer sum declarations.
+
+The four earlier inventories contained 138 provenance records with one
+repeated, automatically generated `rosserOddMeshLowerSum.eq_1`. The initial
+union-count assertion failed and was retained as a failed evidence record.
+The additional canonical audit resolved the actual owner as
+`ActualRosserOddLayerLower`, recomputed transitive axioms in the joint
+environment, and verified that its name set equals the earlier inventories'
+unique union. The final declaration count comes from this canonical audit.
+Individual kernel replays were reused only after exact source, object,
+binary, configuration, pin and log hash checks.
+
+Independent read-only reviews checked the literal ceiling endpoints,
+actual boundary weights, same-rank injection, cross-rank disjointness,
+single base term, genuine region integrals, compact domination, empty
+families and the order of mesh/threshold/target/cap quantifiers. The pinned
+mathlib and goldbach revisions and their tracked worktrees and indexes
+were checked around verification. Evidence is recorded in
+`.lake/main-theorem-verification-20261012/odd-box/` under
+`odd-layers-verification.json`, `odd-layers-declarations.json` and
+`odd-layers-theorem-types.txt`, with the canonical audit in its
+`canonical-audit/` subdirectory. These are nine individual module replays
+and a joint new-module axiom audit, not complete-root kernel replay.
+
+The final aggregate `lake build` passed with **9,663 jobs** (exit zero).
+All nine source hashes, the root, five audit sources and dependency pins
+were unchanged across verification and the build. The actual mathlib and
+goldbach tracked worktrees and indexes remained clean after the build.
+The aggregate result is recorded in `final-aggregate-build-status.json`.
+This local checkpoint does not claim successful remote CI.
+
+Reproduce this checkpoint's module checks with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.ActualRosserOddBox
+lake env leanchecker --verbose ImbalancedChen.RosserOddLogRegion
+lake env leanchecker --verbose ImbalancedChen.LogPrimeBoxMesh
+lake env leanchecker --verbose ImbalancedChen.ActualRosserOddBoxFamily
+lake env leanchecker --verbose ImbalancedChen.RosserOddMesh
+lake env leanchecker --verbose ImbalancedChen.RosserOddMeshIntegral
+lake env leanchecker --verbose ImbalancedChen.ActualRosserOddLayerLower
+lake env leanchecker --verbose ImbalancedChen.ActualRosserOddBoxUnion
+lake env leanchecker --verbose ImbalancedChen.ActualRosserOddFiniteLayers
+lake env lean -DwarningAsError=true verification/OddLayersAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `ActualRosserOddBox` | `2beffd8af22239e3a5428713c614e8e37bcbb300b16c950ff254d2c9ba031888` |
+| `RosserOddLogRegion` | `a261b313c8a3c3179c7d3bb1f4d73fbc59c76787c89f8086db415f0408ad3452` |
+| `LogPrimeBoxMesh` | `87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d` |
+| `ActualRosserOddBoxFamily` | `74b06cb2b72c109f8482c1cb3e40b8b1f2cfe2d2e5cfe5522f2c50460f7b9a3e` |
+| `RosserOddMesh` | `d99f1ea021f4976eef94f8796260873870b4171a944b481477a9328aa22d2cbc` |
+| `RosserOddMeshIntegral` | `daf9a51c5c0d803916947b0c77632588839b6a73e04e64f4514b03f0d4a5483e` |
+| `ActualRosserOddLayerLower` | `c25a9b09b0d15319e3e75f0cf0a5ae3b3d33cacf572f34cb54704f0a5c4a4cfa` |
+| `ActualRosserOddBoxUnion` | `676c703060700b25dc21d1ac1ca3933b8839181255fec1cf88c9c1aaf459115a` |
+| `ActualRosserOddFiniteLayers` | `1bfa43451c53fbf272566a2d7f8dfe0360a94cba3e7db5e877daf3b905057c11` |
+
 ## Historical checkpoint with full remote replay
 
 Commit `50c355b3260da1699447df805f0a58e74e4e465e` passed full build, exact replay of all 84 owned modules plus the root (85 targets), and the 2043-declaration standard-three-axiom audit in [PR run 37880137858](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37880137858) and [push run 37880133970](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37880133970). Both proof-gate sequences finished before optional cache handling; the PR merge tree matches the head tree. The new symmetric-triangle integral module is CI-pending toward an 85-module checkpoint and 86 replay targets. Its source presence does not extend the verified checkpoint or establish a new audited declaration count.

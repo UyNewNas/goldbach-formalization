@@ -18,6 +18,34 @@ statement before any later checkpoint is called current.
 
 ## Exact finite semantics
 
+The latest analytic extension proves, for each fixed finite set `K` of
+positive ranks, `u>0` and `eta>0`, a threshold `N0>=2` such that all later even targets
+and all caps covering `N^u` satisfy
+
+```text
+actualSmallRosserPlusDensity N cap (N^u) (N^(3*u))
+  / actualSmallEulerProduct N cap (N^u)
+    >= 1 + sum_{k in K} rosserOddLayerIntegral k 3 - eta.
+```
+
+The integral is the actual Lebesgue integral of
+`(product_i 1/x_i) / x_last` on the strictly decreasing odd boundary
+region, with all strict alternating prefix tests and terminal crossing.
+Its positive cutoff is proved from the provider's geometric budget.
+Disjoint finite boxes, genuine product integrals and dominated convergence
+discharge the analytic inputs to each fixed-layer lower bound. Exact tail
+cardinalities make different ranks disjoint, and a finite sum of the mesh
+limits chooses one common mesh before the common target threshold. The same
+literal natural level `ceil (N^(3*u))` is retained throughout.
+
+This generalizes the three-prime lower-contribution proof to every finite
+collection of odd ranks, including the empty collection. The joint proof
+injects the complete family into a single boundary sum and counts the base
+term one once. It does not yet identify the higher-rank integrals with Suzuki
+source layers or take the continuous infinite-series limit. The full density
+limit, current Chen mean, sharp bad-semiprime estimate and final main
+theorem remain open.
+
 | Manuscript item | Lean interface | Status |
 | --- | --- | --- |
 | `eq:current-d12`, including `N-p > 1` | `Counting.D12` | Exact finite definition |

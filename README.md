@@ -13,16 +13,18 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 ## Verification status
 
 The latest 12 October local checkpoint proves that the same raw upper
-Rosser density includes the entire continuous three-prime boundary layer.
-Finite disjoint prime boxes, strict inner meshes, genuine product integrals
-and dominated convergence supply the bound; a proved Fubini identity
-identifies its constant with Suzuki source layer three. One threshold works
-for all later even targets and every covering cap. Six new modules passed
-strict compilation and individual kernel replay; an environment-based audit
-covered all 108 declarations under the standard three-axiom allowlist.
-The final aggregate build passed with 9,654 jobs. Higher odd layers,
-arbitrary finite prefixes, the full same-weight density limit, boxed
-compiler, sharp signed density and main analytic theorem remain open.
+Rosser density includes every fixed finite sum of continuous odd boundary
+layers. Exact tail cardinalities separate the ranks before one boundary
+sum, with the base term one counted once. Inner meshes, genuine integrals
+and dominated convergence provide a common threshold for all later even
+targets and every covering cap. Nine new modules passed strict compilation
+and individual kernel replay. A canonical joint-environment audit covered
+all 137 distinct declarations under the standard three-axiom allowlist;
+the final aggregate build passed with 9,663 jobs. The three-prime integral
+is already identified with Suzuki source layer three. The higher-rank
+identities, continuous-series reverse limit, full same-weight density
+limit, boxed compiler, sharp signed density and main analytic theorem
+remain open.
 See [proof status](docs/PROOF_STATUS.md).
 
 The current-parameter Chen pointwise and paired-deletion modules, together
@@ -121,6 +123,15 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/RosserTripleMeshIntegral.lean`: proves the actual mesh lower sums converge to the actual region integral by everywhere pointwise convergence and an integrable compact-box bound of 81. The integral is not defined as the mesh limit.
 - `ImbalancedChen/RosserTripleLayerIdentity.lean`: identifies the actual three-dimensional integral with the pinned first positive boundary mass and Suzuki source layer three, using measure-preserving coordinate maps, Fubini and the proved supplier identity.
 - `ImbalancedChen/ActualRosserTripleLayerLower.lean`: scales the normalized mesh into genuine prime boxes and chooses the mesh before the target threshold, proving the same raw density at `y=N^u, R=N^(3*u)` is eventually at least one plus the continuous three-prime layer integral minus any positive error, uniformly in covering caps.
+- `ImbalancedChen/ActualRosserOddBox.lean`: maps every fixed decreasing `2*k+1` prime tuple through all alternating prefix gates into the same literal ceiling-level boundary. The tail has cardinality `2*k`, and the boundary map is injective within a rank, including the empty tail.
+- `ImbalancedChen/ActualRosserOddBoxFamily.lean`: combines all disjoint boxes of any fixed rank in one actual boundary sum and supplies a common eventual threshold for their logarithmic gains. The base term one is counted once.
+- `ImbalancedChen/LogPrimeBoxMesh.lean`: constructs separated half-open grids in arbitrary finite dimension, with exact coverage and convergence of both endpoint vectors.
+- `ImbalancedChen/RosserOddLogRegion.lean`: defines the strict odd boundary region, embeds it in the provider's region, derives the redundant total-tail budget, and proves openness and the positive coordinate cutoff `s/3^(k+1)`.
+- `ImbalancedChen/RosserOddMesh.lean`: proves every selected cell satisfies all strict region tests and every point of the region is eventually covered, using finite endpoint tests and vector convergence.
+- `ImbalancedChen/RosserOddMeshIntegral.lean`: proves the actual lower mesh sums converge to the genuine `2*k+1` dimensional region integral, using an explicit compact dominator at every fixed rank.
+- `ImbalancedChen/ActualRosserOddLayerLower.lean`: proves the same raw density is eventually at least `1 + rosserOddLayerIntegral k s - eta` for each fixed admissible rank, uniformly in later even targets and covering caps. In particular this holds for every `k>=1` at `s=3`, and at `u=1/3, R=N`.
+- `ImbalancedChen/ActualRosserOddBoxUnion.lean`: uses exact tail cardinality to make the boundary images of different ranks disjoint, and includes all boxes from a finite set of ranks in the same positive boundary expansion with one base term. A threshold chosen from the finite dependent family supplies their summed logarithmic gains.
+- `ImbalancedChen/ActualRosserOddFiniteLayers.lean`: chooses one common mesh for a fixed finite set of ranks, then a common target threshold, proving the actual raw ratio is at least `1 + sum_{k in K} rosserOddLayerIntegral k s - eta`. Empty rank sets are supported. The higher-rank Suzuki identities and the full continuous-series reverse limit remain open.
 - `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
 - `ImbalancedChen/HalfProductMassSplit.lean`: exact high/low prime rectangle and order-error envelope for the original source.
 - `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.
