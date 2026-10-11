@@ -87,6 +87,9 @@ import ImbalancedChen.QuotientChenNinthSwitch
 import ImbalancedChen.QuotientChenWeightCases
 import ImbalancedChen.QuotientChenPositiveBound
 import ImbalancedChen.QuotientChenSummedBridge
+import ImbalancedChen.CurrentChenPointwise
+import ImbalancedChen.CurrentChenPairedDeletion
+import ImbalancedChen.CurrentChenSummedBridge
 import ImbalancedChen.QuotientChenElevenSum
 import ImbalancedChen.ChenWeightErrorBudget
 import ImbalancedChen.ChenInitialPrimeSource

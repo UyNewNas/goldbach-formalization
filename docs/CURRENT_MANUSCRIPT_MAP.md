@@ -29,6 +29,9 @@ statement before any later checkpoint is called current.
 | `eq:current-bad-mass`, `J_b = log (1/b)` | `RealHalfProductMass.realHalfProductMass_exponents`; `RealHalfProductMassSplit.manuscriptHalfProductCutoff`; `RealHalfProductMassSuppliers.tendsto_realHalfProductSource_manuscriptCutoff_mass_of_suppliers` | Exact arbitrary-real source envelope at the current `2 N^(1-κ₀)` lower wall; pinned proved PNT/Mertens suppliers are connected without analytic premises. The filtered additive-prime positive-sieve transfer remains open |
 | `eq:current-exact-subtraction` | `D12_eq_Db_add_B`; `Db_cast_eq_D12_sub_B` | Proved finite identity |
 | `eq:current-normalization` | `SingularSeries.singularNormalization` | Product convergence, positivity and growth proved |
+| `lem:current-full-weight`, current cutoffs and full last range | `CurrentChenPointwise.currentChenElevenWeight_le_four_indicator` | Literal eleven-term quotient counts, with `a=417/5000`, `h=19/125`, `d=59/250`; proved for every squarefree `n ≤ N`, `N ≥ 1`, without the historical lower receiver-size band |
+| `lem:current-paired-injection`, same pair region on both terms | `CurrentChenPairedDeletion.chenY11Selected_le_chenY6Selected`; `currentChenPairedWeight_le_four_indicator` | Last-pair projection is injective on actual four-prime quotient tuples; the first pair is proved to be the unique smallest pair. Arbitrary same-region selection, including the current mask pullback, preserves the pointwise bound |
+| `eq:current-weight-to-count`, squareful receivers and unit | `CurrentChenSummedBridge.currentChenPairedPrimeSum_le_four_D12_add_error`; `eventually_currentChenPairedPrimeSum_sub_normalized_error_le_four_D12` | Actual additive-prime sum, without witness multiplicity, bounded by `4 D12 + 246 N/(N^a-1) + 4`; the loss is negligible uniformly in the pair selector. The mean estimate of this actual weight remains open |
 
 The current manuscript excludes receiver one from `D_{1,2}`.  Therefore its
 terminal transfer uses `D12`, not the historical `D12Omega` interface and not
@@ -142,8 +145,10 @@ remain the actual filtered-source gap.
    actual common interval and common additive phase.
 2. Prove the current positive upper weight and its density, yielding the
    coefficient `K` for the same physical source.
-3. Prove the complete eleven-term lower-weight mean and paired deletion,
-   including all `Y11` endpoints and repeated-prime errors.
+3. Prove the complete current eleven-term lower-weight mean after paired
+   deletion. The literal pointwise inequality, full `Y11` endpoint, actual
+   pair injection, repeated-prime error and unit removal are now proved;
+   their actual signed mean still needs the analytic sieve estimates.
 4. Connect the adopted 17,572-cell same-mask-v2 certificate and the `7/3`
    refinement to the analytic functions; the superseded `12/5` gain must not
    be added.

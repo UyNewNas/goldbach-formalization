@@ -1,8 +1,22 @@
 # Imbalanced Chen formalization
 
-Work toward a Lean formalization of *Transferring quantitative Chen bounds to imbalanced semiprime representations* (8 October 2026).
+Work toward a Lean formalization of *Transferring quantitative Chen bounds to imbalanced semiprime representations* (current manuscript: 10 October 2026).
+
+The active goal is a complete proof of the manuscript's Theorem 1.1 and
+Corollary 1.2, called the **1+1.75 main theorem** in the research task.
+The source is pinned to
+[`chen-imbalanced-semiprimes@ba6ec11`](https://github.com/UyNewNas/chen-imbalanced-semiprimes/tree/ba6ec11d800eccc54406490631895e174de85766).
+This means the arbitrary-real-exponent lower-limit statement and all three
+common-threshold endpoints, with the analytic premises discharged, not just
+an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCRIPT_MAP.md).
 
 ## Verification status
+
+The current-parameter Chen pointwise and paired-deletion modules, together
+with their actual additive-prime count bridge, are described in
+[the current theorem map](docs/CURRENT_MANUSCRIPT_MAP.md). The older
+`chenFixedElevenWeight` remains a historical result at different exponents;
+it is not used as the current weight under a renamed alias.
 
 At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module checkpoint compiled, bundled `leanchecker` replayed every `ImbalancedChen.*` module and the root (85 targets), and the transitive axiom audit passed for 2043 declarations using only `propext`, `Classical.choice`, and `Quot.sound`. [Successful PR CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37880137858) and [same-head push CI](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37880133970) passed all three proof gates before optional cache handling. This verifies the stated lemmas and conditional transfers; the manuscript's main analytic theorem is **not formally verified**.
 

@@ -945,3 +945,70 @@ Corollary 1.2 are not claimed.
 `ImbalancedChen/SmallRoughMainTerm.lean` closes the finite main-term algebra for the literal physical coefficient `smallRoughRho`.  The reciprocal-totient density is reindexed without multiplicity to the displayed small/rough pair carrier and factored by totient multiplicativity.  Nonnegative rough coefficients select the upper small-weight density; negative coefficients select the lower density, preserving the sign reversal required by the pointwise majorant.  The exact coprime-source correction and signed primitive-residue distribution error are reindexed to the same pair carrier.
 
 No density or distribution estimate is assumed.  The module was directly elaborated under Lean 4.33.0-rc1 and Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`; its generated object passed bundled `leanchecker`, and all four theorem audits report only `propext`, `Classical.choice`, and `Quot.sound`.  Source SHA-256 is `3a3cdd6bc284237634da7744167e280c9ee56dc33555899ed98cc88e7e691b08`.  A complete clean-checkout CI build remains required before remote verification success is claimed.  The actual causal retained policy, actual lower/upper Rosser-weight instantiation, their sharp density bounds yielding current `K`, and the restricted moving-residue distribution theorem remain open.
+
+## Current Chen pointwise and paired-count checkpoint (11 October 2026)
+
+The active target is the complete current Theorem 1.1 and Corollary 1.2,
+using manuscript commit `ba6ec11d800eccc54406490631895e174de85766`.
+The historical `chenFixedElevenWeight` uses different exponents and a lower
+receiver-size band, so it cannot supply the current constant by itself.
+
+Three new modules close the corresponding finite gap:
+
+- `CurrentChenPointwise` proves the full eleven-term inequality at
+  `a=417/5000`, `h=19/125`, `d=59/250`. In the ninth branch the actual three
+  prime factors give `N < H D C^2 <= n*p3`, removing the old lower-size-band
+  assumption. The final theorem needs only `N >= 1`, squarefreeness and
+  `n <= N`, and includes receiver one.
+- `CurrentChenPairedDeletion` uses the same predicate on `Y6` pairs and the
+  last pair of full `Y11` tuples. The first pair is proved to be the unique
+  smallest pair of the receiver, so last-pair projection is an injection.
+  Thus `Y11(E) <= Y6(E)` and the current paired weight inherits the exact
+  pointwise inequality. The arbitrary predicate is a selection of actual
+  tuples, not an assumed certificate estimate.
+- `CurrentChenSummedBridge` sums over the actual coprime additive primes.
+  On arbitrary squareful receivers it does not use the squarefree injection:
+  `Y11(E) <= Y11(full)` first cancels the positive correction. Bounding only
+  the remaining positive terms gives 246. Nonrough receivers are
+  nonpositive, and the exceptional rough squareful receivers inject into
+  the previously proved large-prime-square set. The result is
+  `sum W_E <= 4 D12 + 246 N/(N^a-1) + 4`. For `N^a >= 2` the loss is at most
+  `492 N^(1-a) + 4`, which is proved negligible in the actual
+  `singularNormalization`, uniformly over the selected pair region.
+  This smaller one-sided error budget is compatible with the manuscript's
+  coarser absolute-value budget; it does not improve the main coefficient.
+
+All three new modules passed direct Lean 4.33.0-rc1 elaboration with
+`warningAsError=true` and individual bundled `leanchecker` replay.
+`verification/CurrentChenAudit.lean` inventories declarations using defining
+module metadata, including private and automatically generated declarations;
+all **94 declarations** passed its transitive audit, with only `propext`,
+`Classical.choice`, and `Quot.sound` allowed. The 14 existing local dependency
+modules were rebuilt with the same pinned compiler; the external Mathlib
+cache uses the pinned `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` revision.
+This is a scoped local checkpoint, not a new full-root CI checkpoint.
+
+Reproduce the scoped checks with the pinned toolchain on PATH:
+
+```sh
+lake build ImbalancedChen.CurrentChenSummedBridge
+lake env leanchecker --verbose ImbalancedChen.CurrentChenPointwise
+lake env leanchecker --verbose ImbalancedChen.CurrentChenPairedDeletion
+lake env leanchecker --verbose ImbalancedChen.CurrentChenSummedBridge
+lake env lean -DwarningAsError=true verification/CurrentChenAudit.lean
+```
+
+Source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `CurrentChenPointwise` | `17ade795542a81bac8b659b7d24b96ab76cba45e5f3850db5fe0bc04d47a9ee8` |
+| `CurrentChenPairedDeletion` | `6101bf1057504895d2413bf814249deabdd12a3e53a0b21067a68df03dee4794` |
+| `CurrentChenSummedBridge` | `e7897e67a0a51db8e2d0dc410a1240dea62774f5b94782bc30ddf9055a7be832` |
+
+The current signed lower mean has not been proved. The actual causal
+retained policy and small Rosser weights, the same-rho sharp density and
+restricted moving-residue distribution estimates, the analytic meaning of
+the 17,572-cell certificate, and final bad-semiprime bounds remain open.
+Theorem 1.1 and Corollary 1.2 still have their explicit analytic premises;
+no new theorem in this checkpoint claims to discharge them.
