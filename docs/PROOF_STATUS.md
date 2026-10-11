@@ -733,7 +733,8 @@ claimed.
 
 Code commit
 [`6937c92d3d85a8081158f31308bd3850ee3077be`](https://github.com/UyNewNas/goldbach-formalization/commit/6937c92d3d85a8081158f31308bd3850ee3077be)
-contains the public-root import and the complete module. Module SHA-256 is
+introduced the public-root import and the initial identity module. Its source
+SHA-256 was
 `b97d463290a6c549ede5438de7f227b9ce5b34267017f3e929c894247d2b55fe`.
 
 The causal retained-set instantiation, explicit reindexing by squarefree
@@ -741,4 +742,29 @@ prime products, unique small/rough decomposition, and the density and signed
 factorized distribution estimates for the exact constructed `rho_N` remain
 open. Consequently neither the current coefficient
 `K = 8452171/1250000` nor Theorem 1.1 is proved by this checkpoint.
+
+The module now additionally exposes `FirstExitLeaf` as a data-only terminal
+branch carrier and proves:
+
+- `firstExitRetainedPolynomial_eq_leaves_sum`, the exact equality between the
+  recursive evaluator and the explicit finite retained-leaf sum;
+- `mem_oddFirstExitRetainedLeaves_mass_eq_selected_prod`, identifying every
+  stored leaf mass with the product over its selected labels;
+- `mem_oddFirstExitRetainedLeaves_positive_eq_evenListLength`, identifying
+  every stored sign with selected-list parity;
+- `mem_oddFirstExitRetainedLeaves_selected_reverse_sublist`, proving the exact
+  carrier/order invariant: reversing the accumulated selected list gives a
+  sublist of the original ordered universe;
+- `oddFirstExitRetainedLeaves_sum_eq_product_add_exits`, the manuscript
+  product-plus-exit identity with the retained side displayed as a literal
+  branch sum.
+
+These statements close the evaluator-to-branch-sum interface and make the
+reverse accumulator convention explicit. They still do not derive `Nodup`
+from a concrete prime universe, map prime lists injectively to squarefree
+natural products, or identify the alternating sign with
+`ArithmeticFunction.moebius` on that product.
+
+The extended module source SHA-256 is
+`b2a872475ec73fbb4a282f33fb80aa6bcaac2f6154c6c688d627f231c6ed3c2d`.
 

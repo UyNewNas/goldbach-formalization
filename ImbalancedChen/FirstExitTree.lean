@@ -95,6 +95,135 @@ theorem firstExitRetainedPolynomial_eq_product_add_correction
       · rw [if_neg hr, ih, signedTreeCoefficient_not_mul]
         ring
 
+/-- One retained terminal branch of the finite tree.  `selected` records the
+chosen labels, `positive` records the alternating sign, and `mass` is the
+product accumulated along that branch.  These are data, not proof fields. -/
+structure FirstExitLeaf (α : Type*) where
+  selected : List α
+  positive : Bool
+  mass : ℝ
+
+/-- The signed value contributed by one terminal retained branch. -/
+def FirstExitLeaf.value {α : Type*} (leaf : FirstExitLeaf α) : ℝ :=
+  signedTreeCoefficient leaf.positive leaf.mass
+
+/-- Explicit enumeration of all terminal retained branches.  The skip branch
+is always present; the select branch is followed exactly when its new prefix
+is retained. -/
+def firstExitRetainedLeaves {α : Type*}
+    (retained : Bool → List α → Bool) (h : α → ℝ)
+    (prefix : List α) (positive : Bool) (mass : ℝ) :
+    List α → List (FirstExitLeaf α)
+  | [] => [{ selected := prefix, positive := positive, mass := mass }]
+  | p :: ps =>
+      firstExitRetainedLeaves retained h prefix positive mass ps ++
+        if retained (!positive) (p :: prefix) = true then
+          firstExitRetainedLeaves retained h (p :: prefix) (!positive)
+            (mass * h p) ps
+        else []
+
+/-- The recursive retained polynomial is exactly the sum of its explicitly
+enumerated retained terminal branches. -/
+theorem firstExitRetainedPolynomial_eq_leaves_sum
+    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)
+    (prefix remaining : List α) (positive : Bool) (mass : ℝ) :
+    firstExitRetainedPolynomial retained h prefix positive mass remaining =
+      ((firstExitRetainedLeaves retained h prefix positive mass remaining).map
+        FirstExitLeaf.value).sum := by
+  induction remaining generalizing prefix positive mass with
+  | nil => simp [firstExitRetainedPolynomial, firstExitRetainedLeaves,
+      FirstExitLeaf.value]
+  | cons p ps ih =>
+      by_cases hr : retained (!positive) (p :: prefix) = true
+      · simp [firstExitRetainedPolynomial, firstExitRetainedLeaves, hr, ih]
+      · simp [firstExitRetainedPolynomial, firstExitRetainedLeaves, hr, ih]
+
+/-- If the incoming mass is the product of the already selected labels, the
+recorded mass of every enumerated leaf is the product of its selected labels.
+This is the invariant needed for the later prime-product reindexing. -/
+theorem firstExitRetainedLeaves_mass_eq_selected_prod
+    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)
+    (prefix remaining : List α) (positive : Bool) (mass : ℝ)
+    (hmass : mass = (prefix.map h).prod) :
+    ∀ leaf ∈ firstExitRetainedLeaves retained h prefix positive mass remaining,
+      leaf.mass = (leaf.selected.map h).prod := by
+  induction remaining generalizing prefix positive mass with
+  | nil =>
+      intro leaf hleaf
+      simp [firstExitRetainedLeaves] at hleaf
+      subst leaf
+      exact hmass
+  | cons p ps ih =>
+      intro leaf hleaf
+      by_cases hr : retained (!positive) (p :: prefix) = true
+      · rw [firstExitRetainedLeaves, if_pos hr, List.mem_append] at hleaf
+        rcases hleaf with hskip | hselect
+        · exact ih prefix positive mass hmass leaf hskip
+        · have hmass' : mass * h p = ((p :: prefix).map h).prod := by
+            simp [hmass, mul_comm]
+          exact ih (p :: prefix) (!positive) (mass * h p) hmass' leaf hselect
+      · rw [firstExitRetainedLeaves, if_neg hr, List.append_nil] at hleaf
+        exact ih prefix positive mass hmass leaf hleaf
+
+/-- Boolean parity of a list length: `true` means even. -/
+def evenListLength {α : Type*} : List α → Bool
+  | [] => true
+  | _ :: xs => !evenListLength xs
+
+/-- The sign bit stored in every leaf agrees with the parity of the number of
+selected labels, provided it agrees at the incoming prefix. -/
+theorem firstExitRetainedLeaves_positive_eq_evenListLength
+    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)
+    (prefix remaining : List α) (positive : Bool) (mass : ℝ)
+    (hpositive : positive = evenListLength prefix) :
+    ∀ leaf ∈ firstExitRetainedLeaves retained h prefix positive mass remaining,
+      leaf.positive = evenListLength leaf.selected := by
+  induction remaining generalizing prefix positive mass with
+  | nil =>
+      intro leaf hleaf
+      simp [firstExitRetainedLeaves] at hleaf
+      subst leaf
+      exact hpositive
+  | cons p ps ih =>
+      intro leaf hleaf
+      by_cases hr : retained (!positive) (p :: prefix) = true
+      · rw [firstExitRetainedLeaves, if_pos hr, List.mem_append] at hleaf
+        rcases hleaf with hskip | hselect
+        · exact ih prefix positive mass hpositive leaf hskip
+        · have hpositive' : !positive = evenListLength (p :: prefix) := by
+            simp [evenListLength, hpositive]
+          exact ih (p :: prefix) (!positive) (mass * h p)
+            hpositive' leaf hselect
+      · rw [firstExitRetainedLeaves, if_neg hr, List.append_nil] at hleaf
+        exact ih prefix positive mass hpositive leaf hleaf
+
+/-- Every selected list is accumulated in reverse processing order.  Reversing
+it therefore gives a sublist of the labels that were already selected followed
+by the labels still available at the current node. -/
+theorem firstExitRetainedLeaves_selected_reverse_sublist
+    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)
+    (prefix remaining : List α) (positive : Bool) (mass : ℝ) :
+    ∀ leaf ∈ firstExitRetainedLeaves retained h prefix positive mass remaining,
+      leaf.selected.reverse <+ prefix.reverse ++ remaining := by
+  induction remaining generalizing prefix positive mass with
+  | nil =>
+      intro leaf hleaf
+      simp [firstExitRetainedLeaves] at hleaf
+      subst leaf
+      simp
+  | cons p ps ih =>
+      intro leaf hleaf
+      by_cases hr : retained (!positive) (p :: prefix) = true
+      · rw [firstExitRetainedLeaves, if_pos hr, List.mem_append] at hleaf
+        rcases hleaf with hskip | hselect
+        · exact (ih prefix positive mass leaf hskip).trans
+            ((List.Sublist.refl _).append (List.sublist_cons_self p ps))
+        · simpa [List.reverse_cons, List.append_assoc] using
+            ih (p :: prefix) (!positive) (mass * h p) leaf hselect
+      · rw [firstExitRetainedLeaves, if_neg hr, List.append_nil] at hleaf
+        exact (ih prefix positive mass leaf hleaf).trans
+          ((List.Sublist.refl _).append (List.sublist_cons_self p ps))
+
 /-- A retention policy with no even-rank exit.  At odd rank `retainOdd`
 decides whether the branch continues; at even rank it always continues. -/
 def oddFirstExitPolicy {α : Type*}
@@ -110,6 +239,69 @@ def oddFirstExitPolicy {α : Type*}
 def oddFirstExitRetainedPolynomial {α : Type*}
     (retainOdd : List α → Bool) (h : α → ℝ) (universe : List α) : ℝ :=
   firstExitRetainedPolynomial (oddFirstExitPolicy retainOdd) h [] true 1 universe
+
+/-- Explicit retained terminal branches of an odd-first-exit tree. -/
+def oddFirstExitRetainedLeaves {α : Type*}
+    (retainOdd : List α → Bool) (h : α → ℝ) (universe : List α) :
+    List (FirstExitLeaf α) :=
+  firstExitRetainedLeaves (oddFirstExitPolicy retainOdd) h [] true 1 universe
+
+/-- The root retained polynomial is a literal finite sum over the enumerated
+terminal retained branches. -/
+theorem oddFirstExitRetainedPolynomial_eq_leaves_sum
+    {α : Type*} (retainOdd : List α → Bool) (h : α → ℝ)
+    (universe : List α) :
+    oddFirstExitRetainedPolynomial retainOdd h universe =
+      ((oddFirstExitRetainedLeaves retainOdd h universe).map
+        FirstExitLeaf.value).sum := by
+  exact firstExitRetainedPolynomial_eq_leaves_sum
+    (oddFirstExitPolicy retainOdd) h [] universe true 1
+
+/-- Every root leaf records exactly the product of the local weights at its
+selected labels. -/
+theorem mem_oddFirstExitRetainedLeaves_mass_eq_selected_prod
+    {α : Type*} (retainOdd : List α → Bool) (h : α → ℝ)
+    (universe : List α) (leaf : FirstExitLeaf α)
+    (hleaf : leaf ∈ oddFirstExitRetainedLeaves retainOdd h universe) :
+    leaf.mass = (leaf.selected.map h).prod := by
+  exact firstExitRetainedLeaves_mass_eq_selected_prod
+    (oddFirstExitPolicy retainOdd) h [] universe true 1 (by simp) leaf hleaf
+
+/-- At the root, every retained branch carries exactly the parity sign of its
+selected list. -/
+theorem mem_oddFirstExitRetainedLeaves_positive_eq_evenListLength
+    {α : Type*} (retainOdd : List α → Bool) (h : α → ℝ)
+    (universe : List α) (leaf : FirstExitLeaf α)
+    (hleaf : leaf ∈ oddFirstExitRetainedLeaves retainOdd h universe) :
+    leaf.positive = evenListLength leaf.selected := by
+  exact firstExitRetainedLeaves_positive_eq_evenListLength
+    (oddFirstExitPolicy retainOdd) h [] universe true 1 (by simp [evenListLength])
+      leaf hleaf
+
+/-- At the root, reversing a leaf's accumulated selected list gives a sublist
+of the original ordered universe. -/
+theorem mem_oddFirstExitRetainedLeaves_selected_reverse_sublist
+    {α : Type*} (retainOdd : List α → Bool) (h : α → ℝ)
+    (universe : List α) (leaf : FirstExitLeaf α)
+    (hleaf : leaf ∈ oddFirstExitRetainedLeaves retainOdd h universe) :
+    leaf.selected.reverse <+ universe := by
+  simpa [oddFirstExitRetainedLeaves] using
+    firstExitRetainedLeaves_selected_reverse_sublist
+      (oddFirstExitPolicy retainOdd) h [] universe true 1 leaf hleaf
+
+/-- The value of every root leaf is its selected-label product with exactly
+the alternating sign determined by the selected-list parity. -/
+theorem mem_oddFirstExitRetainedLeaves_value_eq_signed_selected_prod
+    {α : Type*} (retainOdd : List α → Bool) (h : α → ℝ)
+    (universe : List α) (leaf : FirstExitLeaf α)
+    (hleaf : leaf ∈ oddFirstExitRetainedLeaves retainOdd h universe) :
+    leaf.value = signedTreeCoefficient (evenListLength leaf.selected)
+      (leaf.selected.map h).prod := by
+  unfold FirstExitLeaf.value
+  rw [mem_oddFirstExitRetainedLeaves_positive_eq_evenListLength
+      retainOdd h universe leaf hleaf,
+    mem_oddFirstExitRetainedLeaves_mass_eq_selected_prod
+      retainOdd h universe leaf hleaf]
 
 /-- The sum of the residual Euler products at all odd first exits. -/
 def oddFirstExitCorrection {α : Type*}
@@ -127,6 +319,18 @@ theorem oddFirstExitRetainedPolynomial_eq_product_add_exits
   simpa [oddFirstExitRetainedPolynomial, oddFirstExitCorrection] using
     firstExitRetainedPolynomial_eq_product_add_correction
       (oddFirstExitPolicy retainOdd) h [] universe true 1
+
+/-- Fully explicit branch-sum form of the manuscript identity. -/
+theorem oddFirstExitRetainedLeaves_sum_eq_product_add_exits
+    {α : Type*} (retainOdd : List α → Bool) (h : α → ℝ)
+    (universe : List α) :
+    ((oddFirstExitRetainedLeaves retainOdd h universe).map
+        FirstExitLeaf.value).sum =
+      (universe.map fun p => 1 - h p).prod +
+        oddFirstExitCorrection retainOdd h universe := by
+  rw [← oddFirstExitRetainedPolynomial_eq_leaves_sum]
+  exact oddFirstExitRetainedPolynomial_eq_product_add_exits
+    retainOdd h universe
 
 /-- A product of nonnegative factors indexed by a list is nonnegative. -/
 theorem list_prod_nonneg_of_mem {α : Type*} (f : α → ℝ) (xs : List α)

@@ -407,6 +407,20 @@ coefficientwise domination of the raw tree; they must not be treated as a
 new prefix-closed tree. The physical density and signed factorized local
 distribution estimates remain subsequent analytic obligations.
 
+The retained side is no longer hidden behind the recursive evaluator.
+`FirstExitLeaf` records each terminal selected list, sign bit and accumulated
+mass; `oddFirstExitRetainedPolynomial_eq_leaves_sum` proves exact equality
+with the evaluator; and the two root membership invariants identify the mass
+with the selected-label product and the sign bit with selected-list parity.
+The additional root invariant
+`mem_oddFirstExitRetainedLeaves_selected_reverse_sublist` records the precise
+order convention: `selected` is accumulated backwards, and its reverse is a
+sublist of the ordered universe. Thus the remaining finite bridge is
+specifically a list/set/product reindexing problem, not another first-exit
+identity: derive duplicate-freeness from the actual prime universe, map
+retained prime subsets injectively to squarefree products, and identify the
+parity sign with the Möbius value of that product.
+
 Dependency audit: `goldbach-lean` is pinned at
 `09b97db5764ade1246bfb77206baa1b124760958`; it uses the identical Lean and
 Mathlib pins and is the sole analytic-number-theory dependency.  Its inherited

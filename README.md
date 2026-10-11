@@ -256,3 +256,14 @@ or prove the density and signed factorized distribution estimates for the
 resulting physical `rho_N`. In particular it does not yet establish the
 current coefficient `K = 8452171/1250000`.
 
+The same module now also enumerates the retained terminal branches explicitly.
+`oddFirstExitRetainedPolynomial_eq_leaves_sum` identifies the recursive
+polynomial with that literal finite branch sum.  Membership lemmas prove that
+each leaf's stored mass is exactly the product of its selected local weights
+and that its sign bit is exactly the parity of the selected-list length.
+`mem_oddFirstExitRetainedLeaves_selected_reverse_sublist` additionally proves
+that reversing the tree's accumulator gives a sublist of the original ordered
+universe.  This removes the evaluator-to-branch-sum and carrier-order gaps
+before the later squarefree product and Möbius reindexing; it does not claim
+that reindexing itself.
+
