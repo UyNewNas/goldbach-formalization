@@ -383,6 +383,30 @@ factorized distribution estimate for that exact constructed `rho_N`.  A
 standard Rosser weight, the auxiliary weak Selberg route, or separate
 coefficients for the three terms cannot discharge this obligation.
 
+`ImbalancedChen/FirstExitTree.lean` now closes the first finite part of that
+step. For an arbitrary finite ordered universe it defines the retained
+alternating polynomial and the residual correction at each first rejected
+selected prefix. `oddFirstExitPolicy` forces every even-rank prefix to be
+retained. The exact theorem is
+
+`retained polynomial = product (1-h(p)) + odd-first-exit correction`,
+
+and the correction is nonnegative whenever `0 ≤ h(p) ≤ 1`. Specializing to
+the literal predicate `(p : ℤ) ∣ n` identifies the Euler product with the
+roughness indicator and proves the pointwise majorant for all integers,
+including zero and negative integers. This is the raw tree identity at
+`manuscript-body.tex` lines 377--391, not a replacement standard Rosser
+weight.
+
+The ordered universe is still abstract: the next bridge must instantiate it
+with the manuscript's decreasing prime universe, prove `Nodup`, expose the
+retained branch sum as squarefree prime products with the correct Möbius
+sign, and then attach the small-prime weights through the unique small/rough
+decomposition. The boxed coefficients may inherit the majorant from their
+coefficientwise domination of the raw tree; they must not be treated as a
+new prefix-closed tree. The physical density and signed factorized local
+distribution estimates remain subsequent analytic obligations.
+
 Dependency audit: `goldbach-lean` is pinned at
 `09b97db5764ade1246bfb77206baa1b124760958`; it uses the identical Lean and
 Mathlib pins and is the sole analytic-number-theory dependency.  Its inherited

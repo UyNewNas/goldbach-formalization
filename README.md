@@ -232,3 +232,26 @@ the interface with the manuscript's first-exit tree and unique small/rough
 decomposition, and to prove both analytic estimates for that exact
 constructed `rho_N`.
 
+## Finite odd-first-exit tree candidate
+
+`ImbalancedChen/FirstExitTree.lean` now proves the raw finite identity behind
+the manuscript's physical positive weight. Labels are scanned in their given
+order (the manuscript application will supply decreasing primes), all
+even-rank prefixes are retained, and only an odd-rank selected prefix may be
+the first rejected prefix. The retained alternating polynomial is exactly
+the complete Euler product plus the residual product at every first exit.
+
+For arbitrary local weights in `[0,1]`, every exit term is nonnegative, so
+the retained polynomial majorizes the Euler product. At the literal integer
+divisibility specialization this product is proved equal to the `0`/`1`
+predicate that no label in the finite universe divides the integer. The
+statement is over `ℤ`, so zero and negative integers are covered rather than
+excluded by an implicit natural-number convention.
+
+This module proves the finite tree algebra and pointwise rough majorant only.
+It does not identify an actual causal box policy, reindex retained prime lists
+by their squarefree products, perform the unique small/rough decomposition,
+or prove the density and signed factorized distribution estimates for the
+resulting physical `rho_N`. In particular it does not yet establish the
+current coefficient `K = 8452171/1250000`.
+

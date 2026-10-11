@@ -698,3 +698,41 @@ for `SignSensitiveAttachment.lean` and
 `7c179a6733bd163f5b8e8410a718effa609baa8a10b64b266caa36bf656e77a3`
 for `PhysicalUpperWeightBridge.lean`.
 
+## Finite odd-first-exit tree candidate
+
+`ImbalancedChen/FirstExitTree.lean` formalizes the exact finite
+product-plus-first-exit identity from the current manuscript. Its recursive
+retained polynomial scans a finite ordered label list, flips the coefficient
+sign whenever a label is selected, and stops a selected branch precisely at
+its first rejection. `oddFirstExitPolicy` totalizes the even-rank decision to
+`true`, preventing the invalid even-exit counterexample.
+
+`firstExitRetainedPolynomial_eq_product_add_correction` proves the signed
+identity before imposing parity. The root specialization
+`oddFirstExitRetainedPolynomial_eq_product_add_exits` has a complete Euler
+product plus the odd-first-exit correction. The correction is nonnegative for
+local weights in `[0,1]`, yielding
+`product_le_oddFirstExitRetainedPolynomial`.
+
+The integer specialization uses literal divisibility in `ℤ`.
+`finiteIntegerRoughIndicator_eq_indicator` proves that the Euler product is
+exactly the indicator of having no divisor from the finite universe, and
+`integerRoughIndicator_le_oddFirstExitRetainedPolynomial` proves the
+pointwise majorant for every integer, including zero and negative integers.
+No prime, ordering or positivity premise on the integer is silently added.
+
+The manuscript source is fixed at
+`master@ba6ec11d800eccc54406490631895e174de85766`, with the displayed identity
+in `paper/source/manuscript-body.tex` lines 377--391 (blob
+`d529bea2ecfcc74d64fc1664ac770a3becaa7c79`). Static checks pass
+(`git diff --check` and no `sorry`, `admit`, custom `axiom`, `native_decide`
+or `unsafe` in the module). This runner has no Lean or Lake executable, so no
+local elaboration, build, bundled kernel replay or transitive axiom audit is
+claimed.
+
+The causal retained-set instantiation, explicit reindexing by squarefree
+prime products, unique small/rough decomposition, and the density and signed
+factorized distribution estimates for the exact constructed `rho_N` remain
+open. Consequently neither the current coefficient
+`K = 8452171/1250000` nor Theorem 1.1 is proved by this checkpoint.
+
