@@ -18,7 +18,25 @@ statement before any later checkpoint is called current.
 
 ## Exact finite semantics
 
-The latest analytic extension proves the same raw upper Rosser density
+The latest extension proves the same raw upper and lower Rosser density
+ratios uniformly on every compact set of `(u,s)` with `u>0,s>1` and
+`u>0,s>=2`, respectively. `ActualRosserCompactLimits` supplies one natural
+threshold before both parameters and every covering cap. The limits are
+the canonical Suzuki continuous factors; all coefficients retain the
+literal natural-ceiling level and target-prime exclusions. The actual
+finite box neighborhoods and compact all-depth error are both proved.
+`ActualRosserCompactNormalization` supplies the corresponding uniform
+limits after multiplication by `log N/C_N`, equal to
+`(2*exp(-gamma)/u)` times the respective canonical factor. The cap may
+depend on the target and parameter, with eventual simultaneous coverage.
+The ordinary raw-density uniformity gap is therefore closed for these
+factors. Global equivalence to any separately defined classical function,
+the boxed policy/compiler, sharp signed density and main theorem are
+separate obligations.
+
+### Earlier fixed-parameter specializations
+
+The earlier analytic extension proves the same raw upper Rosser density
 limit for every fixed `u>0`, `beta>0`, `beta<=3*u`, along positive even
 targets and for any eventually covering enumeration cap:
 
@@ -50,10 +68,10 @@ The exact coefficientwise cube reduction and the target-deleted Euler
 ratio extend the result from residual three to `beta<=3*u`. This proves
 the upper identity in manuscript `eq:current-raw-density` for every fixed
 `1<s<=3`, `s=beta/u`, with the correct Mertens normalization. It does not
-yet prove compact-parameter uniformity, the upper identity at `s>3`, or
-the lower-weight identity involving `f(s)`. The causal boxed compiler,
-current Chen mean, sharp bad-semiprime estimate and final main theorem
-also remain open.
+by itself prove compact-parameter uniformity or the lower-weight identity.
+Those ordinary density results have since been extended as stated above.
+The causal boxed compiler, current Chen mean, sharp bad-semiprime estimate
+and final main theorem remain open.
 
 | Manuscript item | Lean interface | Status |
 | --- | --- | --- |
@@ -438,15 +456,16 @@ remain the actual filtered-source gap.
    coefficient `K` for the same physical source. The fixed raw-tree
    coefficient, actual small-weight sandwich, small-weight density
    supplier and absolute rough-mass bound are proved. The same raw upper
-   density limit is now proved for fixed `0<s<=4`. Its upper direction has
-   a threshold uniform for `u>=a>0`, `3/2<=s<=4`. The actual lower weight
-   now has a two-sided density limit for every fixed `u>0,s>=2`, equal to
-   the concrete Suzuki continuous lower factor. Actual even prime-box
-   losses, genuine region integrals and a proved finite-prefix limit
-   discharge its reverse bound. The explicit classical factor is identified
-   on `[2,4]`; no global classical-factor identity is inferred here. The causal boxed
-   policy, its support exponent, upper residuals beyond four and the needed
-   two-sided uniform parameter limits also remain open.
+   and lower density ratios now converge two-sidedly and uniformly on
+   every legal compact set of `(u,s)`, to the canonical Suzuki factors.
+   Upper residuals `s>1` have no finite upper restriction; lower residuals
+   include `s=2`. Actual strict-margin prime-box families supply local
+   thresholds and a finite subcover gives the required compact uniformity.
+   All-depth analytic errors are controlled uniformly on each fixed
+   residual interval. The explicit classical lower formula is identified
+   on `[2,4]`; no new global classical-factor identity is inferred here.
+   The causal boxed policy, its support exponent and the sharp signed
+   density of the same physical weight still require proofs.
 3. Prove the complete current eleven-term lower-weight mean after paired
    deletion. The literal pointwise inequality, full `Y11` endpoint, actual
    pair injection, repeated-prime error and unit removal are now proved;

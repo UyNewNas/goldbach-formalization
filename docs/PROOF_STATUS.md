@@ -2,6 +2,117 @@
 
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
+## Compact uniform limits for both actual Rosser weights — 12 October
+
+The current extension closes the ordinary raw-density parameter-uniformity
+gap. For any compact set `S` of pairs `(u,s)`, the same actual upper density
+divided by its target-deleted Euler product tends uniformly to
+`suzukiContinuousUpperFactor s` if `u>0,s>1` throughout `S`. The lower
+ratio tends uniformly to `suzukiContinuousLowerFactor s` if `u>0,s>=2`.
+The endpoint `s=2` is included. Every coefficient uses the literal natural
+ceiling of `N^(s*u)`. A single target threshold precedes both real
+parameters and every enumeration cap covering `N^u`.
+
+`ActualRosserCompactNormalization` also proves, uniformly on the same
+compact sets along positive even targets,
+
+```text
+actualSmallRosserPlusDensity N cap (N^u) (N^(s*u)) * log N / C_N
+  -> (2*exp(-gamma)/u) * suzukiContinuousUpperFactor s;
+actualSmallRosserMinusDensity N cap (N^u) (N^(s*u)) * log N / C_N
+  -> (2*exp(-gamma)/u) * suzukiContinuousLowerFactor s.
+```
+
+The cap may be a function of both `N` and `(u,s)`. Its only premise is
+eventual simultaneous coverage for every parameter in `S`. The explicit
+ratio thresholds are stronger: after their threshold, every covering cap
+is permitted separately. Neither signed coefficient monotonicity nor
+continuity of the finite arithmetic density is assumed.
+
+The proof has two independent directions. The all-depth analytic estimate
+uses the public moving-range source supplier, a target-independent local
+product bound, and a uniform bound for both continuous error hats on a
+fixed positive residual interval. Depth only selects a parity, so one
+logarithmic-decay threshold controls every adaptive depth simultaneously.
+The same literal-ceiling consumer now works on the full upper domain
+`s>1`, without an artificial upper residual bound. All analytic premises
+of the helper consumer are supplied inside the actual-density theorem.
+
+The reverse direction is arithmetic. A finite prefix of the genuine
+continuous series is approximated by half-open mesh cells with strict
+top face `Hi(0)<1`. Their actual integrals still converge to the original
+region integral by coverage and dominated convergence. All physical boxes
+are frozen at a parameter center. A fixed reference exponent `u_min<u0`
+lies above every box top and changes the finite gain by less than a chosen
+error. The mass comparison uses only the decreasing positive Euler
+denominator of that fixed box. Finite strict prefix, product and terminal
+gates persist on a neighborhood. Thus one actual target threshold works
+throughout that neighborhood. Continuity of the source factors and a
+finite compact subcover then yield a common threshold over `S`.
+
+The source continuity and uniform tail are proved by the M-test:
+nonnegative layers decrease in `s`, so their summable values at a fixed
+left endpoint dominate the whole half-line. Odd endpoints must exceed
+one, while the even endpoint may equal two. Collapsed support regions are
+proved empty and discarded with exactly zero integral; rank zero is not
+arbitrarily removed. Empty finite families and empty compact sets are
+supported. Both boundary expansions count the constant one exactly once.
+
+| New module | Proved role |
+| --- | --- |
+| `ActualRosserOddGeneralLayers` | All finite odd layers without a cutoff premise, genuine series, full-domain lower threshold |
+| `ActualRosserUpperGeneralUpper` | Public full-domain literal-ceiling consumer and actual upper threshold |
+| `ActualRosserUpperGeneralLimit` | Fixed-parameter full-domain ratio and normalized limits |
+| `RosserContinuousSourceUniformity` | Uniform source tails on half-lines, continuous canonical factors |
+| `RosserTopStrictMeshes` | Both parity meshes with strict top margin and unchanged integral limit |
+| `RosserTopStrictFiniteApproximation` | Finite strict-margin families approximating the complete factors |
+| `ActualPrimeBoxOuterUniformity` | Fixed-box Euler-mass monotonicity and a threshold for all larger outer exponents |
+| `ActualRosserBoxUnionUniformity` | One finite-family threshold before both varying exponents |
+| `RosserBoxFamilyMargins` | Finite strict gate margins and controlled reference-gain loss |
+| `ActualRosserLocalBoxThreshold` | Actual density estimates with a common threshold on a center neighborhood |
+| `CompactLocalThreshold` | Proved finite-subcover passage from local to compact thresholds |
+| `RosserCompactParameterBounds` | Compact coordinate ranges bounded away from excluded endpoints |
+| `RosserCompactErrorAbsorption` | One scalar error threshold for every depth and residual in a fixed interval |
+| `ActualRosserCompactAnalyticBounds` | Uniform analytic bounds for both actual weights on rectangles |
+| `ActualRosserCompactBoxBounds` | Opposite uniform bounds on arbitrary legal compact sets |
+| `ActualRosserCompactLimits` | Two-sided ratio thresholds and uniform convergence for both weights |
+| `ActualCompactEulerNormalization` | Same-carrier Euler normalization for parameter-dependent caps |
+| `ActualRosserCompactNormalization` | Uniform singular-series-normalized actual density limits |
+
+All eighteen sources passed strict individual compilation. The final
+aggregate build passed with 9,716 jobs in 55.555 seconds. Bundled
+`leanchecker` then replayed each of the eighteen final Lake-built objects.
+The canonical joint audit passed for all 147 declarations owned by these
+modules, including private and generated declarations, in 251.407 seconds.
+Every declaration is safe and proved or defined; their transitive axioms
+are contained in `propext`, `Classical.choice`, and `Quot.sound`.
+Ten independent review records cover all eighteen source modules.
+
+These checks used Lean `4.33.0-rc1`, mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and Goldbach
+`09b97db5764ade1246bfb77206baa1b124760958`. Source, root import file,
+audit, dependency pins and final object hashes were unchanged throughout
+verification; both providers' tracked worktrees and indexes were clean.
+This checkpoint replays the eighteen new objects, not every object in the
+repository. The local evidence is recorded in
+`.lake/main-theorem-verification-20261012/general-density/`.
+
+To reproduce the proof checks with the pinned dependencies, run `lake build`,
+then `lake env leanchecker --verbose ImbalancedChen.MODULE` for each of the
+eighteen module names in the table. Run the complete owned-declaration audit
+with `lake env lean -DwarningAsError=true verification/RosserGeneralDensityAudit.lean`.
+Its inventory uses defining-module metadata, not a source-text declaration
+count or a public-namespace filter.
+
+This is a result for ordinary raw Rosser coefficients and the canonical
+Suzuki source factors. It does not assert a new global identity with a
+separately defined classical factor. It also does not prove the manuscript's
+causal boxed policy, its support exponent, the sharp signed physical-density
+constant `K`, restricted signed distribution, the current eleven-term mean,
+certificate-to-integral semantics or the final two count estimates. The
+main theorem remains conditional on its explicitly displayed analytic
+bounds; the goal is still active and the old automation remains paused.
+
 ## Same-weight lower density limit from actual even layers — 12 October
 
 `ActualRosserLowerLimit` proves the genuine two-sided limit of the actual

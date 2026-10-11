@@ -12,25 +12,35 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
-The latest 12 October extension proves that the same actual upper Rosser
-density ratio at `y=N^u, R=N^(s*u)` tends to the Jurkat-Richert upper factor
-for each fixed `u>0` and `0<s<=4`. The matching singular-series-normalized
-limit is `(2*exp(-gamma)/u)*F(s)`. The upper direction also has one threshold
-uniform for `u>=a>0` and `3/2<=s<=4`; no two-sided uniform limit is claimed.
-All statements retain target-prime exclusions and arbitrary covering caps.
-The actual lower density ratio now also has its two-sided limit, equal to
-the Suzuki continuous lower factor for every fixed `u>0` and `s>=2`.
-On `2<=s<=4`, this is exactly `2*exp(gamma)*log(s-1)/s`, and the
-singular-series-normalized limit is `4*log(s-1)/(s*u)`. Genuine even-region
-integrals, actual prime boxes and one finite prefix of the proved even
-series supply the reverse bound. Upper residuals beyond four, the required two-sided parameter
-uniformity, boxed compiler, sharp signed density and main analytic theorem
-remain open. Verification details and the fixed private-provider interface
-used for the global odd-source identity are recorded in the proof status.
-The nine new lower-density modules passed strict compilation, kernel
-replay of the final Lake objects, and one joint audit of all 111 declarations
-under the standard three-axiom allowlist. The full local build passed with
-9,698 jobs. Verification scope and reproduction commands are in the proof status.
+The latest 12 October extension proves two-sided convergence of the same
+actual Rosser density divided by its own target-deleted Euler product,
+uniformly on every compact set of parameters `(u,s)` with `u>0,s>1` for
+the upper weight and `u>0,s>=2` for the lower weight. The limits are the
+canonical Suzuki continuous factors. The common threshold precedes both
+real parameters and every enumeration cap covering `N^u`; the level remains
+the literal `ceil (N^(s*u))`. Pointwise convergence is not used as a substitute
+for uniform convergence: actual strict-margin boxes give local thresholds,
+and a finite subcover supplies the compact result. A separate compact
+all-depth error bound supplies the other side.
+
+Both actual densities also converge uniformly after multiplication by
+`log N/C_N`, with limits `(2*exp(-gamma)/u)` times their respective
+canonical factor. Here the covering cap may depend on both the target
+and the parameters, and need only cover the whole compact set eventually.
+
+This eighteen-module extension passed the full aggregate build (9,716 jobs),
+kernel replay of all eighteen final objects, and an audit of all 147 owned
+declarations, including private and generated ones. The audit permits only
+`propext`, `Classical.choice`, and `Quot.sound` as transitive axioms.
+
+The earlier fixed-parameter formulas remain valid: on `0<s<=4` the upper
+factor is the proved Jurkat-Richert factor, and on `2<=s<=4` the normalized
+lower limit is `4*log(s-1)/(s*u)`. No additional global identification with
+a separately defined classical factor is claimed. The causal boxed compiler,
+sharp signed density, restricted signed distribution, current Chen mean,
+certificate semantics and main analytic theorem remain open. Verification
+scope, pins and the existing private-provider interface for the global odd
+source identity are recorded in the proof status.
 See [proof status](docs/PROOF_STATUS.md).
 
 The current-parameter Chen pointwise and paired-deletion modules, together
