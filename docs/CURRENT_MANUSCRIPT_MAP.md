@@ -66,16 +66,39 @@ the full-interval pointwise majorant separately still requires `z<=cap`.
 densities with the natural-level Goldbach sieve at `Nat.ceil R`, retaining
 strict tests at integral R. It does not replace that level by
 `Nat.floor R + 1`. These results do not instantiate the current boxed
-policy, normalize the reserve by `C_N/log D`, prove the same-weight
-fixed-rank reverse limits, or establish the sharp signed density constant.
+policy, prove the same-weight fixed-rank reverse limits, or establish the
+sharp signed density constant.
 
-The next reserve must be chosen at the correct scale. Passing from `V(w)`
-to `C_N/log D` introduces another `epsilon^(-2)` at `w=D^(epsilon^2)`.
-Thus the needed exponential absorption is of order
-`epsilon^(-4)*exp(-1/epsilon)`. One cannot set `eta=delta*epsilon^2` after
-the existential epsilon above has already been selected. A direct proof
-can combine the existing exact finite Euler normalization with the pinned
-Mertens product bound, subject to a cap covering `w` and a nonzero target.
+`ActualSmallEulerNormalization` now proves the scale conversion from
+`V(w)` to `C_N/log D`: the full small product is at most `B*C_N/log w`
+for every positive even target, `w>=4` and cap covering `w`, with one
+positive constant before all targets and caps. The proof uses the exact
+finite Euler factorization, bounds the finite odd-prime product by one and
+the below-cap target correction by the full correction, and supplies the
+ordinary product bound from the pinned Mertens theorem at the inclusive
+endpoint `ceil w - 1`. No target-prime tail limit is assumed.
+
+`NormalizedSmallRosserError` directly absorbs the resulting
+`epsilon^(-4)*exp(-1/epsilon)` cost while also requiring epsilon to be below
+any earlier positive upper bound. It does not select a tolerance depending
+on an already-chosen epsilon. `ActualNormalizedRhoError` applies these
+proved suppliers to the same physical coefficient and establishes
+
+`0 <= density(rho) - V*signedRoughDensity <= eta*C_N/log D`.
+
+For fixed `nu>0` it then sets `D=N^nu`, selects the earlier tolerance as
+`eta*nu`, and proves the target-scale version with one natural threshold:
+
+`0 <= density(rho) - V*signedRoughDensity <= eta*C_N/log N`.
+
+The real-D theorem needs only a cap covering `w` and may use a truncated
+rough carrier. The target-scale theorem requires a cap covering the full
+`z=N^(nu*r)`, allowing the existing complete-interval majorant to be used.
+Both theorems choose epsilon and the threshold before the varying positive
+even target, cap and retained policy. They concern the actual coefficient
+built from the fixed raw retained support, not a yet-unproved identification
+with the manuscript's finite boxed compiler. The signed rough main term,
+causal policy, compiler and sharp K still require their separate proofs.
 
 ### Exact Euler-ratio correction in the frozen manuscript
 

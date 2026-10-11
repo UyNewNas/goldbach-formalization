@@ -1163,7 +1163,8 @@ This is full aggregate compilation and five module kernel replays, not
 complete-root kernel replay or a remote CI claim. No final normalized
 sharp K or main analytic theorem is asserted by these modules.
 
-The next scale conversion needs a cap covering `w` and a nonzero target:
+The scale conversion supplied in the following checkpoint needs a cap
+covering `w` and a nonzero target:
 `V(w) << C_N/log w` contributes a further `epsilon^(-2)`. Absorption at the
 manuscript's scale therefore requires a direct choice handling
 `epsilon^(-4)*exp(-1/epsilon)`, not a circular post-selection assignment
@@ -1198,3 +1199,80 @@ Frozen source SHA-256 values:
 | `RoughPowerParameters` | `d7df16e77e1d66fe7b0a961c260312679da10e93b1baf1c6d77b0987171b4b64` |
 | `SmallRosserErrorLimit` | `36774b9722bcad99ec4a90d86f1191618930d743b5649c5bfe51a66e31f9654e` |
 | `ActualSmallRoughErrorAbsorption` | `3b5bec690d259a6116b0ccfd647a375476baf09b631544afdc5707900dce4ca0` |
+
+## Uniform attachment reserve at the manuscript scale (12 October 2026)
+
+Three modules close the small-weight attachment error at `C_N/log N`:
+
+- `ActualSmallEulerNormalization` identifies the actual small product with
+  the strict natural sieve product at `ceil w`, then uses the inclusive
+  Mertens product at `ceil w - 1`. Finite Euler factorization, the odd-prime
+  product bound and the target-correction comparison prove
+  `V_N(w) <= B*C_N/log w` with one positive B for every positive even N,
+  `w>=4`, and cap covering w. No target-tail convergence is assumed, the
+  prime-two factor is retained, and integer endpoints are covered.
+- `NormalizedSmallRosserError` uses `t^4*exp(-t) -> 0` to choose epsilon
+  directly with `0<epsilon<min(1/8,epsilonMax)` and `epsilon^2<=r`, absorbing
+  both reciprocal-square losses. Its fixed-epsilon scalar limit retains
+  the positive exponential floor; it is not a fixed-epsilon little-o claim.
+- `ActualNormalizedRhoError` supplies epsilon and one real threshold with
+  `0 <= density(rho)-V*signedRoughDensity <= eta*C_N/log D`, uniformly in
+  every later positive even target, cap covering w and retention policy.
+  Its second theorem sets `D=N^nu`, chooses tolerance `eta*nu` before epsilon,
+  and produces one natural threshold for the exact `eta*C_N/log N` reserve.
+  This target-scale version requires a cap covering `z=N^(nu*r)`.
+
+The same fixed raw retained coefficient and actual small Rosser weights
+occur throughout. The D-scale theorem may still truncate the rough carrier;
+only the full-cap target-scale version has the cap condition for the
+existing complete-interval majorant. Neither theorem identifies this raw
+construction with the manuscript's boxed compiler or bounds the signed
+rough main density. The causal policy, box compiler, sharp K, restricted
+signed distribution, current Chen mean, integral certificates and final
+bad-semiprime estimate remain outstanding. Theorem 1.1 and Corollary 1.2
+are not complete.
+
+All three modules passed strict direct compilation and individual bundled
+kernel replay. The defining-module environment inventory audited all
+**47 declarations**: 19 Euler normalization, 10 scalar absorption and 18
+actual error declarations, including private and generated declarations.
+Only `propext`, `Classical.choice` and `Quot.sound` occur transitively.
+The final aggregate `lake build` passed with **9,637 jobs**. The three
+sources, public root, audit and pins had identical hashes before and after
+verification, and actual dependency revisions match the manifest.
+Evidence is in `.lake/main-theorem-verification-20261012/normalized-rho/`:
+`normalized-rho-verification.json`, `normalized-rho-declarations.json`,
+`normalized-rho-theorem-types.txt`, and `final-aggregate-build-status.json`.
+This covers three new module kernel replays and full aggregate compilation;
+it is not complete-root kernel replay or a claim of remote CI success.
+
+Reproduce this checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.ActualSmallEulerNormalization
+lake env leanchecker --verbose ImbalancedChen.NormalizedSmallRosserError
+lake env leanchecker --verbose ImbalancedChen.ActualNormalizedRhoError
+lake env lean -DwarningAsError=true verification/NormalizedRhoAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `ActualSmallEulerNormalization` | `10733388e3a16ceddc1a58387c6fb60a8c261fc46f97666575670251bc523b63` |
+| `NormalizedSmallRosserError` | `18b7f3cb38d9b1e534106a173c482e20525352248aec5a8b802fc551804e7be4` |
+| `ActualNormalizedRhoError` | `ac6936d7ae3d493d36b3cf5f84c24d9e45cfb21a366bfad13cb09222481558c5` |
+
+The fixed-s raw density remains a separate analytic gap. The pinned
+`upperRosserSetDensityRatio_eq_one_add_sum_relativeBoundaryDepths` gives
+an exact finite exit-layer decomposition, while the available all-depth
+upper and lower theorems give only their respective one-sided bounds.
+The scaled-prefix-tail bridge still takes its comparison as a hypothesis,
+and a bound on `tail*V` must not be read as a bound on `tail`.
+The next finite step can isolate the exact strict first-cube carrier
+`p^3<R` of the raw upper weight. Subsequent reverse limits must link
+`R=N^beta`, `y=N^u` at positive fixed or compact exponent parameters and
+control deletion of primes dividing N. An equality limit uniform in N
+independently of the prime carrier is false: if N contains every carrier
+prime, the actual density ratio is one.

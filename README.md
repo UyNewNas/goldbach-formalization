@@ -12,13 +12,13 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
-The 12 October local checkpoint proves the uniform absolute rough-mass
-bound and absorbs the same physical rho's small-weight attachment error
-relative to its small Euler product. Five new modules passed strict
-compilation, individual kernel replay and an environment-based audit of
-all 42 declarations under the standard three-axiom allowlist. The final
-aggregate build passed with 9,634 jobs. The normalized sharp density and
-the main analytic theorem remain open; see [proof status](docs/PROOF_STATUS.md).
+The latest 12 October local checkpoint bounds the full small Euler product
+and directly absorbs the same raw-policy rho's attachment error on the
+manuscript's `C_N/log N` scale. Three new modules passed strict compilation,
+individual kernel replay and an environment-based audit of all 47
+declarations under the standard three-axiom allowlist. The final aggregate
+build passed with 9,637 jobs. The boxed compiler, sharp signed density and
+main analytic theorem remain open; see [proof status](docs/PROOF_STATUS.md).
 
 The current-parameter Chen pointwise and paired-deletion modules, together
 with their actual additive-prime count bridge, are described in
@@ -100,6 +100,8 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/RosserEndpointBridge.lean`: identifies the literal small carriers, lower/upper coefficients, densities and Euler product with the pinned Goldbach sieve at `Nat.ceil R`, preserving strict tests even at integral levels.
 - `ImbalancedChen/RoughAbsoluteDensity.lean` and `RoughPowerParameters.lean`: bound the actual absolute rough density by a finite Euler product and then uniformly by `(log z/log w)*(1+Krough/log w)`, including truncated caps. The small Euler product is positive for even targets.
 - `ImbalancedChen/SmallRosserErrorLimit.lean` and `ActualSmallRoughErrorAbsorption.lean`: choose epsilon before the large threshold, uniformly in the even target, cap and rough policy, to bound the same physical rho's attachment error by any prescribed multiple of its literal small Euler product. This does not assert the final normalized sharp density.
+- `ImbalancedChen/ActualSmallEulerNormalization.lean`: proves a uniform bound for the literal full small Euler product by `B*C_N/log w`, retaining strict real endpoints through the inclusive Mertens product at `ceil w - 1`. It requires a positive even target and a cap covering `w`.
+- `ImbalancedChen/NormalizedSmallRosserError.lean` and `ActualNormalizedRhoError.lean`: directly absorb the fourth-power epsilon loss, then bound the same raw-policy rho's attachment error by `eta*C_N/log D` and, at `D=N^nu`, by `eta*C_N/log N`. Epsilon satisfies any earlier positive upper bound and is chosen before the common threshold. The signed rough main term and boxed compiler remain open.
 - `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
 - `ImbalancedChen/HalfProductMassSplit.lean`: exact high/low prime rectangle and order-error envelope for the original source.
 - `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.
@@ -281,10 +283,12 @@ primitive-residue error are also pulled back to the identical small/rough
 pair carrier. The literal small Rosser weights now have a proved density
 sandwich. Their attachment error, including the absolute rough-mass cost,
 can be made arbitrarily small relative to the actual small Euler product
-by choosing epsilon before the large threshold. The remaining current-`K`
-obligations include the sharp signed rough density, its final normalization,
-the restricted moving-residue distribution theorem for this `rho`, and the
-still-uninstantiated causal retained rough policy.
+by choosing epsilon before the large threshold. The full small-product
+normalization and direct fourth-power absorption now give the corresponding
+reserve on the manuscript's `C_N/log N` scale. The remaining current-`K`
+obligations include the sharp signed rough density, the restricted
+moving-residue distribution theorem for this `rho`, and the still-
+uninstantiated causal retained policy and boxed compiler.
 
 ## Finite odd-first-exit tree candidate
 

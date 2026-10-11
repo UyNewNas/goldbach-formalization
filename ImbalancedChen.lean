@@ -87,6 +87,9 @@ import ImbalancedChen.RoughAbsoluteDensity
 import ImbalancedChen.RoughPowerParameters
 import ImbalancedChen.SmallRosserErrorLimit
 import ImbalancedChen.ActualSmallRoughErrorAbsorption
+import ImbalancedChen.ActualSmallEulerNormalization
+import ImbalancedChen.NormalizedSmallRosserError
+import ImbalancedChen.ActualNormalizedRhoError
 import ImbalancedChen.EnlargedSelbergAsymptotic
 import ImbalancedChen.QuotientChenFourPrime
 import ImbalancedChen.QuotientChenFourCounts
