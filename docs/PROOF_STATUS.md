@@ -737,10 +737,10 @@ introduced the public-root import and the initial identity module. Its source
 SHA-256 was
 `b97d463290a6c549ede5438de7f227b9ce5b34267017f3e929c894247d2b55fe`.
 
-The causal retained-set instantiation, explicit reindexing by squarefree
-prime products, unique small/rough decomposition, and the density and signed
-factorized distribution estimates for the exact constructed `rho_N` remain
-open. Consequently neither the current coefficient
+The actual causal retained-set instantiation, source leaf-list `Nodup`,
+multiplicity-preserving filtered sum reindex, unique small/rough decomposition,
+and the density and signed factorized distribution estimates for the exact
+constructed `rho_N` remain open. Consequently neither the current coefficient
 `K = 8452171/1250000` nor Theorem 1.1 is proved by this checkpoint.
 
 The module now additionally exposes `FirstExitLeaf` as a data-only terminal
@@ -782,10 +782,43 @@ branch carrier and proves:
 These statements close the evaluator-to-branch-sum interface, make the reverse
 accumulator convention explicit, close prime-product uniqueness and identify
 the raw branch sign with the Möbius value at the abstract ordered-universe
-layer. They still do not construct the manuscript's literal decreasing
-universe `p ∤ N`, `w ≤ p < z`, prove the retained leaf/product lists themselves
-duplicate-free, or perform the filtered `Finset` sum reindexing.
+layer.
+
+`ImbalancedChen/RetainedModuli.lean` now adds the natural-number support of
+selected products and the literal integer coefficient
+`oddFirstExitRetainedCoefficient`: `mu(d)` on retained support and zero
+outside. It proves support membership by a retained-leaf witness, preserves
+the unit modulus with coefficient one, gives a unique retained leaf as a
+value for each supported modulus under the existing prime-universe hypotheses,
+proves every supported modulus squarefree, and recovers every leaf value as
+the looked-up coefficient times the local-weight product over
+`d.primeFactors`. This is intentionally only a lookup layer: it does not
+replace the recursive leaf `List.sum` by a support `Finset.sum`, because the
+current `Set.InjOn` theorem does not rule out duplicate occurrences in the
+source list.
+
+`ImbalancedChen/RoughPrimeUniverse.lean` constructs the finite carrier of
+literal primes `p ∤ N` satisfying the real half-open inequalities
+`w ≤ p < z`, sorts it strictly decreasing, and proves exact membership,
+derived `Nodup`, `SortedGT`, pairwise strict decrease and recovery of the
+original Finset. Finiteness uses an explicit natural enumeration cap; when
+`z ≤ cap`, membership is equivalent to the uncapped manuscript predicate,
+with no unproved floor/ceiling replacement. The squarefree,
+Möbius/coefficient leaf identities and integer pointwise roughness majorant
+are specialized to this concrete universe.
+
+The remaining finite obligations are the actual causal retained policy, a
+proof that the recursively enumerated leaf list itself is `Nodup`, and the
+resulting multiplicity-preserving filtered `Finset` sum reindex. Unique
+small/rough attachment and the analytic density and signed-distribution
+estimates remain later obligations.
 
 The extended module source SHA-256 for this candidate is
 `ef25c9050019b3f0816204697b9ed6518c459483598b032b9cd5af81a0441222`.
+
+The new source SHA-256 values are
+`7c6e4969b6c1c35f5110d7c093fe9b614f03a2f01f8b0486a873c17a9b9b9068`
+for `RetainedModuli.lean` and
+`3fb4e66e91581d819c0d51ca7560e91795df998e03267b034577ea51b99a61a4`
+for `RoughPrimeUniverse.lean`.
 

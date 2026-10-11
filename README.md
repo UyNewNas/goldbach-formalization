@@ -66,6 +66,8 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/PanProductGrid.lean`: constructs the required dynamic grid in exact `(r,m=r*q)` coordinates, identifies every cell with a strict-lower/closed-upper Pan strip, proves unique source-pair coverage and pairwise disjointness without dropping squares or ordered multiplicity, and exposes the selected-cell witness predicate and finite logarithmic cardinality budget needed for later error summation.
 - `ImbalancedChen/PanProductGridRanges.lean`: transfers each selected cell's literal source witness to the exact dynamic-grid endpoints, proving `T/2-1 < Y₀`, `Y₁ < 2N`, `A₂ < 2√N`, and the roughness-driven first-endpoint bound with the full grid-width and integer-rounding losses visible; at the current cutoff it proves that both product endpoints eventually clear every fixed Liu--Pan supplier threshold and satisfy both `A₂ ≤ Yᵢ^(2/3)` and `log(Yᵢ)^(2B) ≤ A₁` gates under the manuscript's licensed `κ₀` relation.
 - `ImbalancedChen/PanProductGridModulus.lean`: proves the two endpoint-dependent Pan modulus gates for an honest physical layer `D ≤ floor(N^theta)` under the necessary strict exponent condition `theta < (1-κ₀)/2`, and specializes this to the existing exact squared Selberg level. This is an auxiliary weak route: its `4/theta` normalization cannot yield the current `K`, and it deliberately does not transfer a global square-root cutoff to the smaller product endpoints.
+- `ImbalancedChen/RetainedModuli.lean`: natural-number support and literal integer coefficient `lambda(d) = mu(d)` on retained first-exit moduli, including `lambda(1) = 1`, support uniqueness as leaf values, squarefreeness and leaf-value lookup through the actual prime-factor finset. It deliberately does not erase branch-list multiplicity before the separate leaf-list `Nodup` proof.
+- `ImbalancedChen/RoughPrimeUniverse.lean`: exact finite construction of primes `p ∤ N` in the real half-open range `w ≤ p < z`, sorted strictly decreasing. An explicit enumeration cap disappears from membership once `z ≤ cap`; no unproved floor/ceiling convention is substituted. The generic pointwise majorant and retained-coefficient lookup are specialized to this concrete universe.
 - `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
 - `ImbalancedChen/HalfProductMassSplit.lean`: exact high/low prime rectangle and order-error envelope for the original source.
 - `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.
@@ -274,5 +276,27 @@ value is the existing parity sign. Consequently each leaf value is literally
 proved present explicitly, preserving the unit modulus `d = 1` with value one.
 This removes the evaluator-to-branch-sum, carrier-order, product uniqueness,
 squarefree and sign-identification gaps; the retained leaf list still has to
-be reindexed as a duplicate-free modulus `Finset` sum.
+be proved `Nodup` and reindexed as a multiplicity-preserving modulus `Finset`
+sum.
+
+`ImbalancedChen/RetainedModuli.lean` now defines the natural support of those
+selected products and the literal integer coefficient
+`oddFirstExitRetainedCoefficient`: it is `moebius d` on the retained support
+and zero off it. The unit branch gives coefficient one, every support element
+has a unique retained leaf as a value in a duplicate-free prime universe,
+and each leaf value is recovered as this coefficient times the local-weight
+product over `d.primeFactors`. This is a lookup theorem, not yet a sum
+reindex: `Set.InjOn` on leaf values cannot rule out duplicate occurrences in
+the recursively generated leaf list.
+
+`ImbalancedChen/RoughPrimeUniverse.lean` instantiates the carrier as the
+literal primes satisfying `p ∤ N` and the real inequalities `w ≤ p < z`, then
+sorts the finite carrier strictly decreasing. `Nodup`, strict order, exact
+membership, the original Finset after forgetting order, the concrete
+Möbius/coefficient leaf formula, and the integer pointwise majorant are
+proved. Finiteness is witnessed by an explicit natural enumeration cap; a
+proof `z ≤ cap` removes that cap from membership, so neither endpoint is
+silently rounded. The actual causal retention predicate, leaf-list `Nodup`,
+filtered sum reindex, and small/rough attachment into the final `rho_N` remain
+open.
 

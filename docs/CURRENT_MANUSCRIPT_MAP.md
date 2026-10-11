@@ -25,7 +25,7 @@ statement before any later checkpoint is called current.
 | `eq:current-bb`, ordered bad factorization | `OrderedBad.badReceiver_iff_ordered_real_factors`; `CurrentMainTheorem.realBadReceiver_iff_realOrderedBadReceiver`; `RealB_eq_realOrderedBadPrimes_card` | Exact for rational and arbitrary real `b < 1`, including squares and strict endpoints |
 | `sec:current-transfer`, finite ordered source and cutoff | `RealHalfProductSource.RealB_eq_realHalfProductSource_filter_card_add_small`; `realHalfProductPairs_card_eq` | Exact finite localization for arbitrary real `b < 1`; analytic pair-mass limit open |
 | Rational minorant to the finite additive-prime sieve | `RealHalfProductSieveBridge.realHalfProductSource_primePartner_card_le_sifted_rat_add_cap`; `realHalfProductSource_primePartner_cast_le_optimized_of_rat_minorant`; `RealB_cast_le_optimized_of_rat_minorant` | Proved: for `num/den ≤ b`, the literal real source after `m < N ∧ Prime (N-m)` is bounded by the rational sifted source, retaining `+z` and `T+1`; the current physical-weight density/distribution estimates remain open |
-| `sec:current-positive-majorant`, odd-first-exit raw tree, sign-sensitive small/rough attachment and one physical `ρ_N` | `FirstExitTree.oddFirstExitRetainedPolynomial_eq_product_add_exits`; `mem_oddFirstExitRetainedLeaves_value_eq_moebius_mul_selected_prod`; `integerRoughIndicator_le_oddFirstExitRetainedPolynomial`; `SignSensitiveAttachment.productTarget_le_signSensitiveAttachment`; `PhysicalUpperWeightBridge.siftedHalfProductSource_card_le_same_rho_main_add_errors` | Generic finite odd-first-exit identity, integer rough majorant and abstract prime-list squarefree/Möbius identification proved; sign-sensitive attachment and the same-`rho` density/error split are also proved. The actual causal policy, duplicate-free filtered modulus-sum reindexing, unique small/rough decomposition, physical density bound giving `K`, and signed distribution estimate remain open |
+| `sec:current-positive-majorant`, odd-first-exit raw tree, sign-sensitive small/rough attachment and one physical `ρ_N` | `FirstExitTree.oddFirstExitRetainedPolynomial_eq_product_add_exits`; `RetainedModuli.oddFirstExitRetainedCoefficient`; `RoughPrimeUniverse.manuscriptRoughIndicator_le_oddFirstExitRetainedPolynomial`; `SignSensitiveAttachment.productTarget_le_signSensitiveAttachment`; `PhysicalUpperWeightBridge.siftedHalfProductSource_card_le_same_rho_main_add_errors` | Generic first-exit identity and natural-modulus coefficient lookup proved; the rough universe is now the strictly decreasing finite list of literal primes `p ∤ N`, `w ≤ p < z`, with exact real endpoints and derived `Nodup`. Sign-sensitive attachment and same-`rho` finite density/error split are proved. The actual causal policy, source leaf-list `Nodup`, multiplicity-preserving filtered sum reindex, unique small/rough decomposition, physical density bound giving `K`, and signed distribution estimate remain open |
 | `eq:current-bad-mass`, `J_b = log (1/b)` | `RealHalfProductMass.realHalfProductMass_exponents`; `RealHalfProductMassSplit.manuscriptHalfProductCutoff`; `RealHalfProductMassSuppliers.tendsto_realHalfProductSource_manuscriptCutoff_mass_of_suppliers` | Exact arbitrary-real source envelope at the current `2 N^(1-κ₀)` lower wall; pinned proved PNT/Mertens suppliers are connected without analytic premises. The filtered additive-prime positive-sieve transfer remains open |
 | `eq:current-exact-subtraction` | `D12_eq_Db_add_B`; `Db_cast_eq_D12_sub_B` | Proved finite identity |
 | `eq:current-normalization` | `SingularSeries.singularNormalization` | Product convergence, positivity and growth proved |
@@ -398,7 +398,7 @@ including zero and negative integers. This is the raw tree identity at
 `manuscript-body.tex` lines 377--391, not a replacement standard Rosser
 weight.
 
-The ordered universe is still abstract. At this layer,
+At the abstract ordered-universe layer,
 `mem_oddFirstExitRetainedLeaves_selectedProd_squarefree` proves every retained
 prime product squarefree,
 `mem_oddFirstExitRetainedLeaves_moebius_selectedProd` identifies its Möbius
@@ -406,10 +406,27 @@ value with selected-list parity, and
 `mem_oddFirstExitRetainedLeaves_value_eq_moebius_mul_selected_prod` rewrites
 the real leaf value as the Möbius coefficient times the local-weight product.
 `oddFirstExitRetainedLeaves_unit_mem` explicitly keeps the empty branch
-`d = 1`. The next bridge must instantiate the manuscript's decreasing prime
-universe, derive its `Nodup`, prove the generated leaf/product list itself
-duplicate-free, and reindex the branch list as a filtered modulus `Finset`
-sum before attaching the small-prime weights through the unique small/rough
+`d = 1`.
+
+`ImbalancedChen/RoughPrimeUniverse.lean` now constructs the manuscript's
+literal rough-prime carrier from `p ∤ N` and the real inequalities
+`w ≤ p < z`, sorts it strictly decreasing, and derives `Nodup`, `SortedGT`,
+exact membership and the original Finset after forgetting order. An explicit
+enumeration cap witnesses finiteness, and `z ≤ cap` removes it from the
+membership theorem without changing either real endpoint to a floor or
+ceiling. The generic pointwise roughness majorant and Möbius leaf formula are
+specialized to this concrete carrier.
+
+`ImbalancedChen/RetainedModuli.lean` defines the natural support and integer
+coefficient `lambda(d) = mu(d)` on that support, zero off support. It proves
+`lambda(1) = 1`, squarefreeness of every supported modulus, uniqueness of the
+retained leaf as a value for each supported modulus, and recovery of each
+leaf value as the looked-up coefficient times the local-weight product over
+`d.primeFactors`. This does not yet turn the recursive `List.sum` into a
+`Finset.sum`: product injectivity on member values does not exclude duplicate
+occurrences in the source leaf list. The next bridge must prove that leaf list
+`Nodup`, then perform a multiplicity-preserving filtered modulus reindex
+before attaching the small-prime weights through the unique small/rough
 decomposition. The boxed coefficients may inherit the majorant from their
 coefficientwise domination of the raw tree; they must not be treated as a
 new prefix-closed tree. The physical density and signed factorized local
@@ -430,13 +447,13 @@ every retained selection. If all universe entries are prime,
 product injective on actual retained leaves. The new squarefree, exact
 `cardFactors`, Möbius-parity and real-value lemmas close the summand
 identification, including the empty unit branch. Thus the remaining finite
-bridge is now specifically the duplicate-free filtered sum reindexing after
-constructing the manuscript's decreasing rough-prime universe with exact
-endpoints.
+bridge is now specifically the source leaf-list `Nodup` proof and the
+resulting multiplicity-preserving filtered sum reindex.
 
 The manuscript's raw rough universe is the strictly decreasing list of primes
-`p ∤ N` with `w ≤ p < z`; the small side is `p < w`.  Its `Nodup` must come
-from sorting a finite prime set, not from a new number-theoretic assumption.
+`p ∤ N` with `w ≤ p < z`; the small side is `p < w`. Its `Nodup` now comes
+from sorting the concrete finite prime set, not from a new number-theoretic
+assumption.
 Fine box labels may repeat even though the underlying prime universe cannot.
 The product injection above applies to the raw prefix tree only: boxed support
 need not be prefix-closed and inherits the majorant only through
