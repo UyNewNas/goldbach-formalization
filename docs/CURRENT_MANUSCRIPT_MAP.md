@@ -18,6 +18,29 @@ statement before any later checkpoint is called current.
 
 ## Exact finite semantics
 
+The ordinary nonempty-history continuation is now proved in
+`OrdinaryRosserContinuation`: if all inherited prefix tests hold at the
+current real level `Q`, a prefix of product `P` leaves an ordinary root
+at `Q/P`, with the upper/lower type flipped precisely at odd prefix rank.
+Its polynomial is multiplied by the actual incoming signed mass. The
+actual-density corollary retains the same target, enumeration cap and
+strict cutoff. It also applies to the parity-safe policy on a nonempty
+sorted history. It does not assume a continuation equality or any analytic
+estimate. Inherited legality at the new cap remains an explicit finite
+condition to prove for the manuscript's actual causal cap changes.
+
+`FirstExitFrontierInvariants` derives the actual selected history, sign
+and product mass. At positive rank its remaining carrier is exactly
+`roughPrimeUniverse N cap w q`, where `q` is the last selected prime;
+the lower cutoff, target deletion and finite cap are unchanged.
+`FirstExitOwnCubeSplice` expands each common parent frontier into all
+next-selection candidates, independently of admission. Its exact
+new-minus-old difference keeps the new and old admission indicators
+multiplied by their respective continuations. Thus the finite algebra
+includes restored old exits without assuming a shared continuation.
+The actual cube tests, cap legality and integral limits still need to be
+connected to this generic candidate identity.
+
 The full descending actual prime carrier is now proved equal to the rough
 carrier `[w,z)` followed by the small carrier below `w`. Exact leaf
 substitution preserves each rough leaf's selected history, sign and mass.
@@ -69,16 +92,16 @@ retained. The lower version pays the first-prime level condition explicitly
 (`y<=R` on the actual carrier). This is a root ordinary-weight dictionary,
 not yet the required history-dependent causal residual identity.
 
-The next finite connection must prove that a valid nonempty prefix with
-product `P` leaves an ordinary continuation at the real level `Q/P`, with
-the exit parity flipped exactly when the prefix rank is odd. It must also
-derive the actual frontier's mass, sign and remaining strict prime carrier.
+The generic nonempty-prefix dictionary and the actual frontier invariants
+are now supplied by the newer modules above. Their hypotheses still have
+to be discharged by the actual changing-cap policy.
 The upper fourth-rank change acts after the retained fourth rank. The
 upper fifth-rank own-cube change must instead enumerate candidates from
 the common fourth-rank frontier and retain both old and new admission
 indicators; otherwise restored old exits are lost. The lower fourth-rank
 own-cube restoration similarly starts from rank-three candidates. These
-are still unproved connections, ahead of the box integrals and certificates.
+are the intended applications of the proved candidate expansion; the
+actual policy connections remain ahead of the box integrals and certificates.
 
 The preceding extension proves the same raw upper and lower Rosser density
 ratios uniformly on every compact set of `(u,s)` with `u>0,s>1` and

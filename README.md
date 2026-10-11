@@ -12,7 +12,24 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
-The latest extension connects the actual full and presieved first-exit
+The latest finite extension proves the nonempty-history continuation
+dictionary. A valid inherited prefix of product `P` leaves the actual
+ordinary density at the real level `Q/P`, multiplied by its signed mass;
+an odd prefix rank flips the upper/lower type. The inherited tests must
+hold at the current `Q`. The actual frontier's sign, mass and strict
+remaining prime carrier are derived from the recursion. A separate
+candidate expansion compares both old and new admission indicators and
+their respective continuations, including branches restored by the new
+test. Proving those inherited tests for the manuscript's varying caps,
+and evaluating the resulting box integrals, remain separate obligations.
+
+These three modules passed strict individual compilation, the full
+aggregate build (9,736 jobs), final-object kernel replay and a joint audit
+of all 64 owned declarations, including private and generated declarations.
+Their only transitive axioms are the standard three listed in the proof
+status. Independent reviews cover each final source.
+
+The preceding extension connects the actual full and presieved first-exit
 densities, with opposite projection directions for upper and lower trees.
 It also constructs the actual lower physical coefficient: positive rough
 coefficients select beta-minus, negative ones select beta-plus. The same
@@ -37,8 +54,8 @@ A separate finite identity expresses a change below a retained rank as a
 sum of continuation differences over the same parent frontier. The ordinary
 first-exit policy is also identified coefficient by coefficient with the
 literal Rosser weight. Its parity-safe lower version requires `y<=R`.
-Identifying a history-dependent continuation with an ordinary residual,
-integrating prefix masses and proving the causal compiler remain open.
+The generic history-dependent continuation is now proved as stated above.
+Integrating prefix masses and proving the causal compiler remain open.
 
 This seventeen-module checkpoint passed strict individual compilation,
 the standard full aggregate build (9,733 jobs), kernel replay of all

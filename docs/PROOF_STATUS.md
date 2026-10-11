@@ -2,6 +2,105 @@
 
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
+## Nonempty continuations and restored candidates — 12 October
+
+`OrdinaryRosserContinuation` splits the filtered prime sets at an inherited
+prefix. A filter at an old prime excludes every residual prime; a filter
+at a residual prime includes the entire old prefix. Disjoint union gives
+the exact product factor `P` and cardinality shift by the prefix rank.
+Consequently the full total-product and cubic-prefix predicate at `Q`
+is equivalent to the residual predicate at `Q/P`, with upper/lower type
+flipped exactly when that rank is odd.
+
+The resulting finite identity is
+
+```text
+continuation(lower, Q, pre, sign, mass, carrier)
+  = signedTreeCoefficient(sign, mass)
+      * ordinaryRoot(residualType(lower, length pre), Q/prod(pre), carrier).
+```
+
+It holds for arbitrary local weights and signed incoming mass. The actual
+carrier corollary evaluates the root as the literal actual upper or lower
+Rosser density, with the same `N`, finite cap and strict cutoff `y`.
+The real quotient remains `Q/P`, so its natural level is `ceil(Q/P)`, not
+an integer quotient of `ceil Q`. The strict inequality `Q/P>1` is proved
+from the inherited total-product test and positive prefix product.
+
+The parity-safe policy has the same continuation on a valid sorted
+history with the correct sign. On a nonempty prefix, `y` below every
+prefix entry and the inherited total-product cutoff imply `y<Q`, paying
+the original policy's lower first-prime condition. No analytic threshold,
+even-target premise, full-cap premise or continuation-equality hypothesis
+is introduced. Crucially, the old history must satisfy all its tests at
+the current `Q`; membership in an unrelated parent frontier does not
+automatically prove this when a causal cap changes.
+
+`FirstExitFrontierInvariants` turns each frontier state into a real retained
+leaf by skipping its remaining labels. It derives the sign parity and
+mass product and retains the combined selected-history/remaining-carrier
+sublist. At positive rank, the frontier stops immediately after its last
+selection. This yields the exact suffix after the last prime `q`, hence
+`remaining = roughPrimeUniverse N cap w q` on the actual decreasing
+carrier. The target, finite cap, lower cutoff and strict upper endpoint
+are preserved, including truncated caps. Rank zero is explicitly excluded
+from the last-prime assertion.
+
+`FirstExitOwnCubeSplice` enumerates every possible next selected label
+before applying either policy. Each candidate keeps its extended history,
+flipped sign, multiplied mass and exact remaining suffix. A polynomial is
+its skip-all term plus the sum of admitted candidate continuations.
+Subtraction cancels the skip-all terms. Applying this identity on the
+common retained rank `r` frontier gives the exact new-minus-old sum of
+`I_new*continuation_new - I_old*continuation_old` at the next selection.
+It includes branches rejected by the old test and restored by the new
+one. The two continuations are not assumed equal. Rank zero, empty
+carriers and either sign are supported. The concrete Rosser own-cube
+tests and the manuscript's causal cap values are not yet instantiated.
+
+| New module | Proved role |
+| --- | --- |
+| `FirstExitFrontierInvariants` | Actual frontier history, sign, mass and exact strict residual carrier |
+| `OrdinaryRosserContinuation` | Nonempty-history predicate, polynomial and actual-density dictionary at `Q/P` |
+| `FirstExitOwnCubeSplice` | Common-frontier candidate difference retaining both admission indicators |
+
+All three sources passed strict individual compilation without diagnostics
+and independent review. The standard full aggregate build passed with
+9,736 jobs in 43.029 seconds. Bundled `leanchecker` replayed the three
+final Lake-built objects in 8.121 seconds. The canonical joint audit passed
+for all 64 owned declarations, including private and generated declarations,
+in 261.357 seconds: 19 in `FirstExitFrontierInvariants`, 17 in
+`FirstExitOwnCubeSplice`, and 28 in `OrdinaryRosserContinuation`.
+Every declaration is safe, is not an unproved axiom, and has transitive
+axioms contained in `propext`, `Classical.choice`, and `Quot.sound`.
+
+The checks used Lean `4.33.0-rc1`, mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and Goldbach
+`09b97db5764ade1246bfb77206baa1b124760958`. Source, root imports, audit,
+dependency pins and final objects stayed unchanged during verification;
+the actual provider revisions match the manifest and both providers'
+tracked worktrees and indexes remained clean. The preceding checkpoint's
+117 evidence files, including its delivery record, were unchanged. This
+checks the three new objects, not a new full-root kernel replay. Evidence
+is recorded separately in
+`.lake/main-theorem-verification-20261012/ordinary-continuation/`.
+
+With the pinned dependencies, reproduce the checks using `lake build`,
+then `lake env leanchecker --verbose ImbalancedChen.MODULE` for the three
+names in the table, and
+`lake env lean -DwarningAsError=true verification/OrdinaryContinuationAudit.lean`.
+The inventory uses actual defining-module metadata and includes private
+and generated declarations. The prior whole-library `--wfail` failure
+remains recorded below; it was not repeated or reclassified as passing.
+
+The remaining work is to prove inherited legality for the actual varying
+caps, connect the concrete stage policies and their disjoint regions,
+compile physical support, evaluate prefix integrals and certificates,
+prove the restricted signed distribution and current Chen mean, and
+discharge both counting bounds in the main theorem. Theorem 1.1 and
+Corollary 1.2 remain incomplete; the goal is active and the old automation
+remains paused.
+
 ## Actual residual policies, presieve projection and lower coefficients — 12 October
 
 The new finite append identity continues each retained rough leaf through

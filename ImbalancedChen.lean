@@ -176,6 +176,9 @@ import ImbalancedChen.ActualRosserInitialResidualSaving
 import ImbalancedChen.FirstExitDepthSplice
 import ImbalancedChen.FirstExitValidSelection
 import ImbalancedChen.OrdinaryRosserFirstExitPolicy
+import ImbalancedChen.FirstExitFrontierInvariants
+import ImbalancedChen.OrdinaryRosserContinuation
+import ImbalancedChen.FirstExitOwnCubeSplice
 import ImbalancedChen.EnlargedSelbergAsymptotic
 import ImbalancedChen.QuotientChenFourPrime
 import ImbalancedChen.QuotientChenFourCounts
