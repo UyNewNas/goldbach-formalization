@@ -2,6 +2,120 @@
 
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
+## Upper density through residual four and the lower boundary — 12 October
+
+For each fixed `u>0` and `0<s<=4`, `ActualRosserUpperWindowLimit` proves
+that the literal actual upper density at `y=N^u, R=N^(s*u)`, divided by
+its actual target-deleted Euler product, tends to the Jurkat-Richert
+factor `F(s)`. The filter is positive even targets, and every cap sequence
+eventually covering `N^u` is permitted. Multiplication by `log N/C_N`
+gives `(2*exp(-gamma)/u)*F(s)`. On `3<=s<=4`, the lower direction selects
+a finite prefix of the proved source series before the target and cap;
+the upper direction uses the literal ceiling and a supplier error uniform
+in odd depth. Below three, the earlier exact cube reduction applies.
+
+`ActualRosserUpperWindowUpper` additionally proves one upper threshold
+for all `u>=a>0` and `3/2<=s<=4`. This one-sided uniform result must not be
+read as uniform two-sided convergence. The two-sided limit fixes `u,s`.
+The source constant and local-product constant are selected before the
+target; no target-dependent constant is hidden in the threshold.
+
+`ActualRosserLowerThreshold` proves the actual lower weight is eventually
+at least `f(s)-eta` times its actual Euler product for every fixed `s>=2`.
+On `2<=s<=4`, the factor is explicitly
+`2*exp(gamma)*log(s-1)/s`. It does not prove the reverse bound.
+`ActualLowerRosserBoundaryExpansion` proves the exact finite identity
+`actualMinus/V = 1 - sum(nonnegative boundary losses)`, with the same
+target exclusions, coefficients, cap and natural ceiling. Selecting a
+finite subset of losses therefore bounds the ratio from above. The finite
+selected-loss interface leaves its stated mass inequality explicit; no
+analytic estimate of that selected loss is assumed to have been proved.
+
+`RosserGlobalSourceIdentity` connects the genuine odd-region integral to
+Suzuki's odd layer for every `s>0`. It references the **already proved
+private** declaration `source_layer_identity_all` in the pinned goldbach
+provider `09b97db5764ade1246bfb77206baa1b124760958`, source file
+`SuzukiUpperRosserBoundarySourceSuccLayer.lean`, line 1107. A local term
+elaborator constructs that exact internal name and returns the proof
+constant. This is a deliberate dependency on an internal API, not a new
+axiom or a public upstream interface; any provider-pin change requires
+reviewing it. All helper and generated declarations receive the same
+safety and transitive-axiom checks as the mathematical theorems.
+
+`RosserEvenLogRegion` identifies the literal even-dimensional geometry:
+strict cubic-prefix gates at odd indices, strict descending coordinates,
+and the terminal crossing. It derives the total nonterminal budget.
+For `s>1`, all coordinates lie strictly above `(s-1)/3^(k+1)` and below one.
+The exact largest/least-coordinate slice is the odd tail at residual
+`s-t` and inherited upper face `t`, with `0<q<t<1`, including `k=0`.
+`RosserEvenLayerIntegral` proves compact-box integrability and uses
+measure-preserving Fubini, taking the second slice only almost everywhere,
+to prove
+
+```text
+rosserEvenLayerIntegral k s =
+  integral_{0<t<1} t^(-1) * upperRosserBoundarySourceIntegral k (s-t) t.
+```
+
+No even-Suzuki identity, even prime-box mass limit or actual lower-density
+reverse estimate is claimed at this checkpoint. These, the required
+two-sided parameter uniformity, upper residuals beyond four, causal boxed
+compiler, certificate-integral semantics, sharp K, restricted signed
+distribution and current Chen mean remain before the main theorem.
+
+All eight sources passed strict individual compilation. The full aggregate
+`lake build` then passed with **9,689 jobs** (exit zero, 53.096 seconds).
+Each of its final eight object files passed bundled kernel replay. One
+canonical environment then audited **73 distinct declarations** from those
+same final objects, including all private and generated declarations.
+The per-module counts are 5, 5, 14, 4, 13, 5, 19 and 8 in the table order
+below. Every declaration is safe and is not an unproved axiom; the only
+transitive axioms are `propext`, `Classical.choice` and `Quot.sound`.
+The canonical audit took 249.995 seconds.
+
+The eight source files, root, audit, pins and final objects remained
+unchanged through these checks. All actual dependency revisions match
+the manifest, and both principal providers' tracked worktrees and indexes
+remained clean. Independent read-only reviews checked the parameter and
+cap quantifiers, uniform error absorption, selected finite source prefix,
+negative boundary sign, literal even geometry, compact integrability,
+almost-everywhere Fubini slices and the pinned private source reference.
+Evidence is in `.lake/main-theorem-verification-20261012/upper-window/`:
+`final-aggregate-build-status.json`, `upper-window-verification.json`,
+`upper-window-declarations.json` and `upper-window-theorem-types.txt`.
+The verification report SHA-256 is
+`6fc695fe4878f01c3c766e50e9f5d8e973932730164ba6618cd08bfcea1ea6d2`.
+This records full aggregate compilation and new-module kernel/axiom
+checks; it does not claim complete-root kernel replay or successful remote CI.
+
+Reproduce this checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.ActualRosserUpperWindowLower
+lake env leanchecker --verbose ImbalancedChen.ActualRosserUpperWindowUpper
+lake env leanchecker --verbose ImbalancedChen.ActualRosserUpperWindowLimit
+lake env leanchecker --verbose ImbalancedChen.ActualRosserLowerThreshold
+lake env leanchecker --verbose ImbalancedChen.ActualLowerRosserBoundaryExpansion
+lake env leanchecker --verbose ImbalancedChen.RosserGlobalSourceIdentity
+lake env leanchecker --verbose ImbalancedChen.RosserEvenLogRegion
+lake env leanchecker --verbose ImbalancedChen.RosserEvenLayerIntegral
+lake env lean -DwarningAsError=true verification/RosserUpperWindowAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `ActualRosserUpperWindowLower` | `71249828cc0cec9e912b2b161ab174ddc068665aac18ba61921b7e10b035a5da` |
+| `ActualRosserUpperWindowUpper` | `1f08d794af3e7c671da46933e5f94167a172c204ab3f9272aff68c46b4bcf46b` |
+| `ActualRosserUpperWindowLimit` | `83da3aeec3201c4d3960c224deee3c4457ff5ce97c9e3eff645122bf548038a9` |
+| `ActualRosserLowerThreshold` | `09ec16485c57105afb02d80451175568dd119f0953d23d3f08a2822544443746` |
+| `ActualLowerRosserBoundaryExpansion` | `9b012143bf99e7e411bc002c2adb90aee7ea06db6add34b405c495b4f4c32d56` |
+| `RosserGlobalSourceIdentity` | `a3b06d2cc390e1fa0a37ae23cbced555d2e6ce4bbd653810fc54f1ce96ef1273` |
+| `RosserEvenLogRegion` | `bdbddd7cadba090750f2e921ba48fa29edb471bf36cd8677e124bff65145dd2f` |
+| `RosserEvenLayerIntegral` | `bde4b5544f09f0614cb4611981c321e30d12f3d72ccef8cd5134e023ea03ad3c` |
+
 ## Same-weight upper density limit through residual three — 12 October
 
 `FinitePiIntegral` proves measure-preserving coordinate extraction and
@@ -67,7 +181,7 @@ proved for every fixed `1<s<=3`. The formal result also has the literal
 cube-identity extension to `0<s<=1`; it does not invoke a definition of
 the classical sieve factor outside its usual domain.
 
-These are fixed-parameter limits. Compact-parameter uniformity, the
+At this earlier checkpoint these were fixed-parameter limits. Compact-parameter uniformity, the
 upper raw-density identity for `s>3`, the lower-weight identity involving
 `f(s)`, the causal boxed compiler, sharp K/certificate semantics,
 restricted signed distribution, current Chen mean and Theorem 1.1 /

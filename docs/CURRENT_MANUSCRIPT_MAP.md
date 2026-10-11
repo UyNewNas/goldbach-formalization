@@ -438,9 +438,13 @@ remain the actual filtered-source gap.
    coefficient `K` for the same physical source. The fixed raw-tree
    coefficient, actual small-weight sandwich, small-weight density
    supplier and absolute rough-mass bound are proved. The same raw upper
-   density limit is now proved for fixed `0<s<=3`. The causal boxed
-   policy, its support exponent, larger residuals, lower-weight density
-   and the needed uniform parameter limits remain open.
+   density limit is now proved for fixed `0<s<=4`. Its upper direction has
+   a threshold uniform for `u>=a>0`, `3/2<=s<=4`. The actual lower weight
+   has a lower threshold for fixed `s>=2`, an exact negative-boundary
+   expansion, and genuine even-region integral identities. Its reverse
+   prime-box bound and full density identity remain open. The causal boxed
+   policy, its support exponent, upper residuals beyond four and the needed
+   two-sided uniform parameter limits also remain open.
 3. Prove the complete current eleven-term lower-weight mean after paired
    deletion. The literal pointwise inequality, full `Y11` endpoint, actual
    pair injection, repeated-prime error and unit removal are now proved;

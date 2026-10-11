@@ -12,20 +12,23 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
-The latest 12 October extension proves the same raw upper Rosser density
-ratio tends to `2*exp(gamma)/3` at `y=N^u, R=N^(3*u)`, for every fixed
-`u>0`. General odd-region integrals are identified with the proved Suzuki
-source layers; the convergent series supplies the lower direction and a
-literal-ceiling, all-depth estimate supplies the upper direction. The
-singular-series-normalized density tends to `4/(3*u)`. The exact cube
-identity extends this to fixed `beta>0`, `beta<=3*u`, with normalized
-constant `4/beta`. All limits retain target-prime exclusions and permit
-arbitrary eventually covering enumeration caps. Eight new modules passed
-strict compilation and individual kernel replay; a single joint audit
-checked all 77 declarations under the standard three-axiom allowlist.
-The full local aggregate build passed with 9,677 jobs. The general `s>3` upper density, lower
-density, parameter uniformity, boxed compiler, sharp signed density and
-main analytic theorem remain open.
+The latest 12 October extension proves that the same actual upper Rosser
+density ratio at `y=N^u, R=N^(s*u)` tends to the Jurkat-Richert upper factor
+for each fixed `u>0` and `0<s<=4`. The matching singular-series-normalized
+limit is `(2*exp(-gamma)/u)*F(s)`. The upper direction also has one threshold
+uniform for `u>=a>0` and `3/2<=s<=4`; no two-sided uniform limit is claimed.
+All statements retain target-prime exclusions and arbitrary covering caps.
+The actual lower weight has its lower threshold for fixed `s>=2`, and its
+exact finite expansion is one minus nonnegative even-boundary losses.
+Genuine even-region integrals are now identified with an inherited
+odd-tail source integral. These facts do not yet prove the lower density
+limit. Upper residuals beyond four, the required two-sided parameter
+uniformity, boxed compiler, sharp signed density and main analytic theorem
+remain open. Verification details and the fixed private-provider interface
+used for the global odd-source identity are recorded in the proof status.
+The eight new modules passed strict compilation, final-object kernel replay
+and one joint audit of all 73 declarations under the standard three-axiom
+allowlist. The full local aggregate build passed with 9,689 jobs.
 See [proof status](docs/PROOF_STATUS.md).
 
 The current-parameter Chen pointwise and paired-deletion modules, together
@@ -111,7 +114,7 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/ActualSmallEulerNormalization.lean`: proves a uniform bound for the literal full small Euler product by `B*C_N/log w`, retaining strict real endpoints through the inclusive Mertens product at `ceil w - 1`. It requires a positive even target and a cap covering `w`.
 - `ImbalancedChen/NormalizedSmallRosserError.lean` and `ActualNormalizedRhoError.lean`: directly absorb the fourth-power epsilon loss, then bound the same raw-policy rho's attachment error by `eta*C_N/log D` and, at `D=N^nu`, by `eta*C_N/log N`. Epsilon satisfies any earlier positive upper bound and is chosen before the common threshold. The signed rough main term and boxed compiler remain open.
 - `ImbalancedChen/UpperRosserCubeCarrier.lean`, `PrimeCubeCutoff.lean` and `ActualRosserCubeReduction.lean`: prove the strict `p^3<R` carrier reduction for the same actual upper coefficient, every weighted divisor sum, its density and its integer divisor polynomial. In the range `beta<=3*u`, the exact cutoff is `D^(beta/3)`, with the Euler-product ratio retained explicitly.
-- `ImbalancedChen/FullPowerEulerNormalization.lean`: proves `V_N(N^a)*log N/C_N -> 2*exp(-gamma)/a` and `V_N(N^a)/V_N(N^b) -> b/a` along positive even targets, for each fixed `a,b>0`, from the actual Mertens and target-prime-tail suppliers. These concern full prime carriers, not truncated caps or a uniform varying-exponent limit. The same-weight Rosser density limit remains open.
+- `ImbalancedChen/FullPowerEulerNormalization.lean`: proves `V_N(N^a)*log N/C_N -> 2*exp(-gamma)/a` and `V_N(N^a)/V_N(N^b) -> b/a` along positive even targets, for each fixed `a,b>0`, from the actual Mertens and target-prime-tail suppliers. These concern full prime carriers, not truncated caps or a uniform varying-exponent limit. Subsequent modules connect the same-weight upper density for fixed `0<s<=4`.
 - `ImbalancedChen/UniformPowerEulerNormalization.lean`: upgrades the proved leading constant to locally uniform convergence for positive exponents and uniform convergence on every positive compact interval. One threshold works for all exponents in the interval and all covering caps. Moving exponents converging to a positive limit are also covered, without assuming continuity of the finite Euler products.
 - `ImbalancedChen/ActualPrimeReciprocalMass.lean`: proves the actual target-deleted prime mass on `[N^a,N^b)` with summand `1/(p-1)` tends to `log(b/a)` for every fixed `0<a<b`, including `b>1`. The target and enumeration cap are kept separate; endpoint, target-prime and denominator corrections are explicitly paid. This is a single-prime interval result, not a multi-prime Rosser layer limit.
 - `ImbalancedChen/ActualPrimeEulerSplit.lean` and `ActualRosserBoundaryExpansion.lean`: prove the exact positive boundary expansion for the same actual upper Rosser density at `ceil R`, with every term expressed through `1/(p-1)` and the strict Euler ratio `V_N(q)/V_N(y)`. Any actual selected subcarrier gives a proved lower bound.
@@ -140,6 +143,14 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/ActualRosserAtThreeUpper.lean`: applies the proved all-depth estimate at the literal natural level `ceil R`, the target-deleted local product bound, and an error bound uniform in odd depth to obtain the matching upper threshold.
 - `ImbalancedChen/ActualRosserAtThreeLimit.lean`: combines both sides for a common cap-uniform threshold and the genuine same-weight limit at three; Mertens normalization gives `4/(3*u)`, or four when `R=N`.
 - `ImbalancedChen/ActualRosserCubeLimit.lean`: combines the exact cube reduction with the proved Euler ratio to obtain the fixed-parameter upper raw-density limit for `beta<=3*u`, including the manuscript's `1<s<=3` range. No compact-parameter uniform convergence is asserted.
+- `ImbalancedChen/ActualRosserUpperWindowLower.lean`: selects a finite prefix of the proved source series to obtain the actual cap-uniform lower threshold on `3<=s<=4`.
+- `ImbalancedChen/ActualRosserUpperWindowUpper.lean`: proves one actual upper threshold uniform for `u>=a>0` and `3/2<=s<=4`, including all adaptive odd depths.
+- `ImbalancedChen/ActualRosserUpperWindowLimit.lean`: combines both bounds with cube reduction for the fixed-parameter raw and normalized upper density limits through residual four.
+- `ImbalancedChen/ActualRosserLowerThreshold.lean`: proves the actual lower-weight lower threshold for every fixed `s>=2`, with explicit factor `2*exp(gamma)*log(s-1)/s` for `2<=s<=4`.
+- `ImbalancedChen/ActualLowerRosserBoundaryExpansion.lean`: proves the exact finite negative-boundary expansion and the selected-loss upper interface for the same actual lower weight.
+- `ImbalancedChen/RosserGlobalSourceIdentity.lean`: exposes the pinned provider's already-proved private global odd-source identity for all `s>0`; its internal-name dependency is documented explicitly.
+- `ImbalancedChen/RosserEvenLogRegion.lean`: proves the literal even-region geometry, exact first/last-coordinate slices, and compact positive containment for `s>1`.
+- `ImbalancedChen/RosserEvenLayerIntegral.lean`: proves integrability and the exact inherited boundary-source integral identity by measure-preserving Fubini.
 - `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
 - `ImbalancedChen/HalfProductMassSplit.lean`: exact high/low prime rectangle and order-error envelope for the original source.
 - `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.
