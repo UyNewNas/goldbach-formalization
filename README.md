@@ -12,7 +12,30 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
-The latest finite extension freezes a continuation level at the actual
+The latest finite extension sums the actual own-cube density changes over
+every candidate of the same parent frontier. Upper rank four-to-five
+gives the old upper tree minus the new tree; lower rank three-to-four
+gives the new lower tree minus the old tree. Both old and new admission
+indicators are retained, so previously rejected branches are included.
+Inherited prefix validity and monotonicity of the chosen levels remain
+explicit conditions to prove for the manuscript's selectors.
+
+A rational whole-box cap is now constructed between the strict prefix
+tests and the selected-subproduct envelope. Its exponent bounds imply
+the literal integer subproduct square tests. Pointwise strict licenses
+on a compact set give one refinement radius before all points and box
+endpoints. This does not yet import or verify the certificate coverage.
+The complete local product's trimmed scale also supplies the moving
+residue range, uniformly across cells; it is not a distribution estimate.
+
+All five new sources passed strict individual compilation and independent
+review. The full aggregate build passed with 9,752 jobs; the five final
+Lake-built objects passed bundled kernel replay. The canonical audit
+passed for all 76 owned declarations, including private and generated
+ones, using only `propext`, `Classical.choice` and `Quot.sound` as
+transitive axioms. The main theorem remains incomplete.
+
+The preceding finite extension freezes a continuation level at the actual
 selected ancestor and derives its residual density directly from the
 tree recursion. On the actual prime frontier, its sign, mass and strict
 cutoff are proved; changing the frozen level below the same parent rank

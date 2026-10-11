@@ -18,6 +18,41 @@ statement before any later checkpoint is called current.
 
 ## Exact finite semantics
 
+`FirstExitCandidateGeometry` identifies every next-selection candidate,
+including rejected ones, by its literal remaining-list decomposition.
+It derives the prime history, decreasing processing order (stored histories
+are reversed), positive product, sign,
+Euler mass and exact residual carrier from the actual parent frontier.
+At rank four it supplies the explicit five-prime tuple used by
+`ActualFrozenOwnCubeDensity`. That module proves both full own-cube sums:
+upper fourth-to-fifth old-minus-new and lower third-to-fourth
+new-minus-old. Each summand is the positive prefix mass times the new
+gated lower residual density minus the old gated density. The old level
+uses the parent ancestor; the new level uses the candidate. Neither sum
+filters candidates by old admission. Inherited validity at the old level
+and nondecreasing levels remain finite premises, not analytic estimates.
+
+`SelectedPrefixBoxCap` constructs a rational cap from the midpoint of a
+finite maximum of lower tests and the envelope's whole-box lower bound.
+A successful check proves the same cap exceeds the old level, one half,
+all full prefix-square tests and the selected-subproduct square tests,
+and lies below the chosen ceiling and the envelope everywhere in the box.
+The inequalities imply the corresponding literal integer product tests.
+A pointwise strict license gives a radius within which all rational
+endpoint pairs pass the check. `SelectedPrefixCompactCaps` supplies one
+positive radius, or one reciprocal-mesh threshold, uniformly across a
+compact licensed set. These are actual cap construction and refinement
+theorems; concrete certificate coverage and the causal selector are open.
+
+`RestrictedResidueScale` proves the moving-residue range for the complete
+local product: fixed `c,C,kappa>0` and
+`kappa0<kappa/(1+kappa)` give one threshold before all
+`c*N^(1-kappa0)<=x<=C*N`, at which
+`1<x` and `C^(-1)*x<=N<=x^(1+kappa)`. The manuscript's stronger buffered
+condition is a specialization. This pays fixed multiplicative constants
+by a strict power gap; it does not replace the complete product by a
+residual quotient or prove the restricted signed distribution theorem.
+
 `FrozenRosserPolicy` freezes the level at the oldest `k` selected entries,
 implemented by `history.drop (history.length-k)` because the tree stores
 histories in reverse order. Appending later selections preserves this
@@ -56,8 +91,7 @@ Certificate success additionally bounds the literal clipped certificate
 cap, rather than only the original envelope.
 
 These finite results do not yet instantiate all certified third/fourth/
-fifth selectors or their disjoint regions, aggregate the own-cube terms
-on the common parent candidate set, evaluate their prefix integrals, or
+fifth selectors or their disjoint regions, evaluate their prefix integrals, or
 supply restricted signed distribution and the main counting bounds.
 
 The ordinary nonempty-history continuation is now proved in
@@ -81,8 +115,9 @@ new-minus-old difference keeps the new and old admission indicators
 multiplied by their respective continuations. Thus the finite algebra
 includes restored old exits without assuming a shared continuation.
 The short-prefix cube tests and local density terms are now proved as
-above. They still need to be assembled on this generic candidate identity
-for the actual certified cap selectors and then taken to integral limits.
+above, and their actual own-cube sums have now been assembled on the
+common parent candidate set. The actual certified cap selectors and
+the passage to integral limits remain open.
 
 The full descending actual prime carrier is now proved equal to the rough
 carrier `[w,z)` followed by the small carrier below `w`. Exact leaf

@@ -2,6 +2,102 @@
 
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
+## Actual own-cube sums, selected caps and residue scales — 12 October
+
+`FirstExitCandidateGeometry` derives every possible next selection from
+the literal list decomposition of an actual parent frontier. This includes
+its selected history, prime ordering, positive product, parity, Euler mass
+and strict residual carrier. Candidates are enumerated before admission.
+
+`ActualFrozenOwnCubeDensity` then proves the full finite identities for
+raising a level at its own-cube test:
+
+| Change | Exact difference |
+| --- | --- |
+| Upper rank four to five | old upper tree minus new upper tree |
+| Lower rank three to four | new lower tree minus old lower tree |
+
+Both differences equal the sum, over every next candidate of the common
+parent frontier, of its positive prefix mass times new gated lower density
+minus old gated lower density. Each gate is the literal strict test
+`prod(pre)*head(pre)^2<Q(pre)`. The old level is read at the parent
+ancestor, the new at the candidate. Rejected old candidates are retained
+in the sum. The inherited parent tests must hold at the old level, and
+the new level must be at least the old one; these hypotheses supply the
+inherited tests at the new level. No continuation equality or asymptotic
+density estimate is assumed. The carrier stays `roughPrimeUniverse N cap
+0 head`, and the level in each actual residual density is the real `Q/P`.
+This is a finite difference identity, not a claim that the difference is
+nonnegative or has the manuscript's stated integral lower bound.
+
+`SelectedPrefixBoxCap` constructs one rational cap for a whole rational
+box. The lower endpoint is the finite maximum of the old cap, one half,
+the full prefix-square expressions and the selected-subproduct square
+expressions. The upper endpoint is the minimum of the chosen ceiling
+and the proved whole-box lower bound for `v(sum I t)`. When the check
+succeeds, their rational midpoint satisfies every strict test throughout
+the box. The exponent tests imply the actual natural subproduct-square
+inequalities. A pointwise strict license supplies a neighborhood in which
+all rational endpoint pairs pass; a rational cap is constructed, rather
+than supplied as a hypothesis of this existence theorem.
+
+`SelectedPrefixCompactCaps` uses local neighborhoods and compactness to
+choose one mesh threshold and one positive radius before every point and
+rational endpoint pair in the licensed compact set, including an empty
+set. This gives a uniform fineness criterion for a common refinement.
+It does not yet
+construct the finite grid selector or prove that the numerical certificate
+cells cover the required compact region.
+
+`RestrictedResidueScale` proves that fixed positive `c,C,kappa` and
+`kappa0<kappa/(1+kappa)` give one threshold at which every complete local
+product `c*N^(1-kappa0)<=x<=C*N` satisfies
+`1<x` and `C^(-1)*x<=N<=x^(1+kappa)`. Fixed constants are absorbed using
+the strict power gap `(1-kappa0)*(1+kappa)>1`. The manuscript's buffered
+choice `kappa0<kappa/(4*(1+kappa))` is included. The result uses the
+complete local product, not a residual quotient. It supplies neither the
+coefficient and modulus hypotheses nor the spectral/distribution estimate.
+
+All five sources passed strict individual compilation without diagnostics
+and independent review. The full aggregate build passed with 9,752 jobs
+in 25.202 seconds. Bundled `leanchecker` replayed the five final Lake-built
+objects in 13.460 seconds. The canonical joint audit passed in 274.642
+seconds for all 76 owned declarations, including private and generated ones:
+
+| Module | Owned declarations |
+| --- | ---: |
+| `FirstExitCandidateGeometry` | 7 |
+| `ActualFrozenOwnCubeDensity` | 16 |
+| `SelectedPrefixBoxCap` | 45 |
+| `SelectedPrefixCompactCaps` | 2 |
+| `RestrictedResidueScale` | 6 |
+
+Every declaration is safe, none is an unproved axiom, and only `propext`,
+`Classical.choice` and `Quot.sound` occur as transitive axioms. The checks
+used Lean `4.33.0-rc1`, mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and Goldbach
+`09b97db5764ade1246bfb77206baa1b124760958`. All eleven dependency revisions
+matched the manifest. Source, root import, audit, pin and final object
+hashes stayed unchanged; provider tracked worktrees and indexes remained
+clean. All 60 evidence files from the preceding frozen-cap checkpoint
+were unchanged. This checks the five final new objects, not a fresh
+kernel replay of the entire root. The earlier whole-library
+warning-as-failure failure remains recorded below.
+
+Evidence is in
+`.lake/main-theorem-verification-20261012/own-cube-density/`. With the
+pinned dependencies, reproduce using `lake build`,
+`lake env leanchecker --verbose ImbalancedChen.MODULE` for the five names
+in the table, and
+`lake env lean -DwarningAsError=true verification/OwnCubeDensityAudit.lean`.
+The audit inventories defining-module metadata in the actual environment.
+
+The remaining main-theorem obligations include the actual causal cap
+selectors and certified stage coverage, physical factorization and support,
+prefix mass integrals and integral certificates, restricted signed
+distribution, the current Chen mean, and both analytic counting bounds
+in `CurrentMainTheorem`. Theorem 1.1 and Corollary 1.2 remain incomplete.
+
 ## Frozen ancestors, prefix cubes and actual density terms — 12 October
 
 The level of a frozen policy is computed from the oldest selected `k`
@@ -92,9 +188,10 @@ in the table, and
 The audit inventories actual defining-module metadata rather than matching
 declaration names or parsing source text.
 
+At that checkpoint the own-cube sums on the common parent candidate set
+were open; the subsequent extension above proves those finite identities.
 Remaining main-theorem work includes constructing the actual certified
-causal selectors and admissible disjoint stage regions, assembling own-cube
-restorations on the common parent candidate set, compiling physical
+causal selectors and admissible disjoint stage regions, compiling physical
 support, evaluating prefix mass integrals and certificates, proving the
 restricted signed distribution and current Chen mean, and discharging
 both counting bounds in `CurrentMainTheorem`. Theorem 1.1 and Corollary
