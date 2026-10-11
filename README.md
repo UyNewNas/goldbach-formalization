@@ -12,13 +12,17 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
-The latest 12 October local checkpoint bounds the full small Euler product
-and directly absorbs the same raw-policy rho's attachment error on the
-manuscript's `C_N/log N` scale. Three new modules passed strict compilation,
-individual kernel replay and an environment-based audit of all 47
-declarations under the standard three-axiom allowlist. The final aggregate
-build passed with 9,637 jobs. The boxed compiler, sharp signed density and
-main analytic theorem remain open; see [proof status](docs/PROOF_STATUS.md).
+The latest 12 October local checkpoint proves the exact strict cube
+reduction of the same raw upper Rosser weight, uniform Euler normalization
+on compact positive exponent intervals, and the actual target-deleted
+reciprocal-prime cell mass. Six new modules passed strict compilation and
+individual kernel replay. Two environment-based audits covered all
+79 + 23 = 102 declarations under the standard three-axiom allowlist.
+The final aggregate build passed with 9,643 jobs. The earlier normalized
+attachment reserve remains proved; the multi-prime boundary-layer limits,
+same-weight density limit, boxed compiler, sharp signed density and main
+analytic theorem remain open.
+See [proof status](docs/PROOF_STATUS.md).
 
 The current-parameter Chen pointwise and paired-deletion modules, together
 with their actual additive-prime count bridge, are described in
@@ -102,6 +106,10 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/SmallRosserErrorLimit.lean` and `ActualSmallRoughErrorAbsorption.lean`: choose epsilon before the large threshold, uniformly in the even target, cap and rough policy, to bound the same physical rho's attachment error by any prescribed multiple of its literal small Euler product. This does not assert the final normalized sharp density.
 - `ImbalancedChen/ActualSmallEulerNormalization.lean`: proves a uniform bound for the literal full small Euler product by `B*C_N/log w`, retaining strict real endpoints through the inclusive Mertens product at `ceil w - 1`. It requires a positive even target and a cap covering `w`.
 - `ImbalancedChen/NormalizedSmallRosserError.lean` and `ActualNormalizedRhoError.lean`: directly absorb the fourth-power epsilon loss, then bound the same raw-policy rho's attachment error by `eta*C_N/log D` and, at `D=N^nu`, by `eta*C_N/log N`. Epsilon satisfies any earlier positive upper bound and is chosen before the common threshold. The signed rough main term and boxed compiler remain open.
+- `ImbalancedChen/UpperRosserCubeCarrier.lean`, `PrimeCubeCutoff.lean` and `ActualRosserCubeReduction.lean`: prove the strict `p^3<R` carrier reduction for the same actual upper coefficient, every weighted divisor sum, its density and its integer divisor polynomial. In the range `beta<=3*u`, the exact cutoff is `D^(beta/3)`, with the Euler-product ratio retained explicitly.
+- `ImbalancedChen/FullPowerEulerNormalization.lean`: proves `V_N(N^a)*log N/C_N -> 2*exp(-gamma)/a` and `V_N(N^a)/V_N(N^b) -> b/a` along positive even targets, for each fixed `a,b>0`, from the actual Mertens and target-prime-tail suppliers. These concern full prime carriers, not truncated caps or a uniform varying-exponent limit. The same-weight Rosser density limit remains open.
+- `ImbalancedChen/UniformPowerEulerNormalization.lean`: upgrades the proved leading constant to locally uniform convergence for positive exponents and uniform convergence on every positive compact interval. One threshold works for all exponents in the interval and all covering caps. Moving exponents converging to a positive limit are also covered, without assuming continuity of the finite Euler products.
+- `ImbalancedChen/ActualPrimeReciprocalMass.lean`: proves the actual target-deleted prime mass on `[N^a,N^b)` with summand `1/(p-1)` tends to `log(b/a)` for every fixed `0<a<b`, including `b>1`. The target and enumeration cap are kept separate; endpoint, target-prime and denominator corrections are explicitly paid. This is a single-prime interval result, not a multi-prime Rosser layer limit.
 - `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
 - `ImbalancedChen/HalfProductMassSplit.lean`: exact high/low prime rectangle and order-error envelope for the original source.
 - `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.

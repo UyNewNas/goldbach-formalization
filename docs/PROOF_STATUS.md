@@ -1270,9 +1270,153 @@ an exact finite exit-layer decomposition, while the available all-depth
 upper and lower theorems give only their respective one-sided bounds.
 The scaled-prefix-tail bridge still takes its comparison as a hypothesis,
 and a bound on `tail*V` must not be read as a bound on `tail`.
-The next finite step can isolate the exact strict first-cube carrier
+The following checkpoint isolates the exact strict first-cube carrier
 `p^3<R` of the raw upper weight. Subsequent reverse limits must link
 `R=N^beta`, `y=N^u` at positive fixed or compact exponent parameters and
 control deletion of primes dividing N. An equality limit uniform in N
 independently of the prime carrier is false: if N contains every carrier
 prime, the actual density ratio is one.
+
+## Strict cube reduction and full power Euler constants (12 October 2026)
+
+Four modules advance the same-weight density problem:
+
+- `UpperRosserCubeCarrier` derives `p^3<R` from the first odd-prefix test
+  for every prime in an active upper coefficient. Restricting the finite
+  prime carrier to that strict cubic region leaves every coefficient and
+  every weighted divisor sum unchanged, without assumptions on the test
+  function or a positive lower bound on R.
+- `PrimeCubeCutoff` identifies the filtered actual prime carrier with
+  `min(y,R^(1/3))` for `R>=0`. It retains the target-prime exclusions,
+  enumeration cap, and excluded boundary `p^3=R`. For `D>1` and
+  `beta<=3*u`, this is `D^(beta/3)`; positive beta gives logarithmic
+  coordinate three.
+- `ActualRosserCubeReduction` proves exact equality of the actual upper
+  coefficient, reciprocal-totient density and divisor polynomial at both
+  cutoffs, for every integer test argument. The normalized identity keeps
+  the Euler-product ratio as a separate factor. These finite identities
+  remain valid for truncated caps and are not density asymptotics.
+- `FullPowerEulerNormalization` proves the full leading constant
+  `V_N(N^a)*log N/C_N -> 2*exp(-gamma)/a` along positive even targets for
+  every fixed `a>0`, and the ratio `V_N(N^a)/V_N(N^b) -> b/a` for fixed
+  `a,b>0`. The Mertens product is evaluated at `ceil(N^a)-1`; the actual
+  odd-prime product and target-prime tail supply the remaining factors.
+  No desired density limit or prime theorem is a terminal hypothesis.
+
+The power-limit theorems use the full product
+`finiteSieveDensity N (ceil(N^a))`. Using the actual finite-cap interface
+requires a cap covering each cutoff. These four modules alone do not give
+uniformity over a compact set of varying exponents; the next checkpoint
+supplies it. At `D=N`, the cube-reduction Euler
+ratio now has limit `3*u/beta`; the remaining same-raw-weight density at
+coordinate three is still open. An upper sieve bound alone does not prove
+that its limit is `2*exp(gamma)/3`. Theorem 1.1 and Corollary 1.2 remain
+incomplete, including the causal policy/compiler, sharp signed density,
+restricted signed distribution, current Chen mean, integral-certificate
+semantics and final bad-semiprime estimate.
+
+All four modules passed strict direct compilation and individual bundled
+kernel replay. The defining-module environment inventory audited all
+**79 declarations**: 8 cube-carrier, 14 cutoff, 16 actual-reduction and 41
+full-power-normalization declarations, including private and generated
+declarations. Only `propext`, `Classical.choice` and `Quot.sound` occur
+transitively. The final aggregate `lake build` passed with **9,641 jobs**.
+All four sources, root, audit and pins were unchanged through verification;
+actual dependency revisions match the manifest. Evidence is in
+`.lake/main-theorem-verification-20261012/rosser-cube/`:
+`rosser-cube-verification.json`, `rosser-cube-declarations.json`,
+`rosser-cube-theorem-types.txt`, and `final-aggregate-build-status.json`.
+This is four new module kernel replays and full aggregate compilation, not
+complete-root kernel replay or remote CI success.
+
+Reproduce this checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.UpperRosserCubeCarrier
+lake env leanchecker --verbose ImbalancedChen.PrimeCubeCutoff
+lake env leanchecker --verbose ImbalancedChen.ActualRosserCubeReduction
+lake env leanchecker --verbose ImbalancedChen.FullPowerEulerNormalization
+lake env lean -DwarningAsError=true verification/RosserCubeAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `UpperRosserCubeCarrier` | `a10e233e5e5b944c0dad801ee624a1c389f4b23eab41e31c84d62bc5e2d50b66` |
+| `PrimeCubeCutoff` | `8ff53f694ee8de699b2cc240d4b4bf574ca0e1ac68c0b490710c195a4c0d07f7` |
+| `ActualRosserCubeReduction` | `a16059f33af6864fe99965d647e96b63a2c3a9100758766452ab0599adcec720` |
+| `FullPowerEulerNormalization` | `32f6fba88d1e9bcb40bd2865013187c24d25cd06d72e2b6dacc367a863150371` |
+
+## Uniform powers and actual reciprocal-prime cells (12 October 2026)
+
+Two further modules supply analytic inputs for compact logarithmic cells:
+
+- `UniformPowerEulerNormalization` proves locally uniform convergence of
+  `V_N(N^a)*log N/C_N` to `2*exp(-gamma)/a` on `a>0`, then uniform convergence
+  on every `[a0,a1]` with `a0>0`, along positive even targets. It uses
+  monotonicity in the exponent, the proved pointwise limits and compactness;
+  the finite Euler products are not assumed continuous. The actual-cap
+  corollary chooses one `N0>=2` before N, the exponent and the cap, with only
+  the covering condition `N^a<=cap`. Moving exponents `alpha(N)->a>0` and
+  eventually covering caps are included in two path-limit corollaries.
+- `ActualPrimeReciprocalMass` proves the actual single-prime mass
+  `sum_(N^a<=p<N^b, prime p, p not dividing N) 1/(p-1) -> log(b/a)` for fixed
+  `0<a<b`, with no upper bound on b and no parity restriction on N. Its
+  canonical cap is `ceil(N^b)`, independent of the target N. Separate exact
+  finite bridges pay target-prime removal, denominator replacement and
+  opposite half-open endpoints by
+  `2*log N/(N^a*log 2)+6/N^a`. The remaining interval limit comes from the
+  pinned proved Mertens supplier; the explicit error tends to zero.
+
+These are genuine suppliers, not hypotheses naming the desired limits.
+They do not yet prove multi-prime cell masses, the weighted fixed-rank
+Rosser boundary integrals, or a same-weight limit equal to F(s). The finite
+nonnegative boundary-layer expansion suggests proving arbitrary finite
+prefix lower limits and then letting the prefix grow, without claiming
+that the normalized discrete tail vanishes. The causal compiler, sharp K,
+distribution, current Chen mean and final main theorem remain incomplete.
+
+Both sources passed strict direct compilation and individual bundled
+kernel replay. The defining-module environment inventory audited all
+**23 declarations**: 8 uniform-normalization and 15 actual-prime-mass
+declarations, including private and generated declarations. Only `propext`,
+`Classical.choice` and `Quot.sound` occur transitively. The final aggregate
+`lake build`, including all six new modules from these two checkpoints,
+passed with **9,643 jobs**. All six source hashes and the final root, audit
+and dependency pins were unchanged through this verification; actual
+dependency revisions match the manifest.
+
+Evidence is in `.lake/main-theorem-verification-20261012/power-prime-mass/`:
+`power-prime-mass-verification.json`, `power-prime-mass-declarations.json`,
+`power-prime-mass-theorem-types.txt`, and `final-aggregate-build-status.json`.
+Together the two checkpoints cover six new module kernel replays and
+79 + 23 = 102 audited declarations, plus full aggregate compilation. This
+does not claim complete-root kernel replay or successful remote CI.
+
+The next actual-carrier bridge can reuse the pinned public theorem
+`mainSum_upperRosserWeight_eq_sieveProduct_add_suzukiActualT` and its
+odd-depth expansion, or the exact set-density boundary identity. The
+generic expansion already cancels the apparent extra Euler denominator.
+The needed local dictionary identifies the lower-prime Euler product with
+the actual strict product at the boundary prime q. This will express each
+boundary contribution as a product of `1/(p-1)` factors times
+`V_N(q)/V_N(y)`, ready for the two suppliers above. This bridge and its
+subsequent finite-prefix integral lower bound are not proved here.
+
+Reproduce the two-module checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.UniformPowerEulerNormalization
+lake env leanchecker --verbose ImbalancedChen.ActualPrimeReciprocalMass
+lake env lean -DwarningAsError=true verification/PowerPrimeMassAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `UniformPowerEulerNormalization` | `8888d8d4df618d3504c6fbf08f1b6a132bba16b2a378e68906d2f17240d76475` |
+| `ActualPrimeReciprocalMass` | `f2cb90c3751d4bbc1208e9f1694f820befa948bddf1c396ca564c10ccd1e1108` |

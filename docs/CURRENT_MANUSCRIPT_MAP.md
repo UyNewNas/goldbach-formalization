@@ -100,6 +100,62 @@ built from the fixed raw retained support, not a yet-unproved identification
 with the manuscript's finite boxed compiler. The signed rough main term,
 causal policy, compiler and sharp K still require their separate proofs.
 
+`UpperRosserCubeCarrier` proves that every prime factor of a nonzero upper
+coefficient satisfies the strict first-prefix test `p^3<R`. It follows that
+removing all other carrier primes leaves the entire arithmetic function and
+every weighted divisor sum unchanged. `PrimeCubeCutoff` identifies that
+filtered actual carrier with the cutoff `min(y,R^(1/3))`, including equality
+at the excluded boundary. `ActualRosserCubeReduction` transfers these
+identities to the actual upper coefficient, reciprocal-totient density and
+divisor polynomial on every integer. These finite results allow truncated
+enumeration caps and do not assert an asymptotic.
+
+For `D>1` and `beta<=3*u`, the reduced cutoff is exactly `D^(beta/3)`.
+When `beta>0` its logarithmic sieve coordinate is three. The actual upper
+density divided by `V_N(D^u)` factors exactly into the reduced density
+divided by `V_N(D^(beta/3))` and the ratio of the two Euler products.
+
+`FullPowerEulerNormalization` supplies the full leading Euler constant for
+each fixed positive real exponent, using the strict natural endpoint
+`ceil(N^a)-1` in the proved Mertens theorem and the proved target-prime tail:
+
+`V_N(N^a)*log N/C_N -> 2*exp(-gamma)/a`.
+
+For any two fixed positive exponents it also gives
+`V_N(N^a)/V_N(N^b) -> b/a`, along positive even targets. Here V is the full
+prime product (`finiteSieveDensity N (ceil(N^a))`). Applying it to an actual
+enumeration cap requires that cap to cover the cutoff; the earlier exact
+finite product bridge supplies this identification. These statements are
+fixed-exponent limits; the next module supplies their parameter uniformity.
+At `D=N`, `a=beta/3` and `b=u`, the Euler factor in the cube reduction thus
+has limit `3*u/beta`. The other factor's same-raw-weight limit at coordinate
+three remains unproved. Neither the finite identity nor the Mertens limit
+turns the available one-sided sieve estimates into equality with F(s).
+
+`UniformPowerEulerNormalization` uses antitonicity in the exponent and
+continuity of `2*exp(-gamma)/a` to prove locally uniform convergence on
+`a>0`, then uniform convergence on each interval `[a0,a1]` with `a0>0`.
+It does not assume that the finite prime products are continuous. The
+actual-carrier version gives one `N0>=2` before every later even N, every
+exponent in the interval, and every cap covering `N^a`. The moving-exponent
+corollaries allow `alpha(N)->a>0` and an eventually covering cap depending
+on N. This supplies the Euler normalization uniformity needed for compact
+logarithmic cells; it does not supply the raw Rosser boundary-layer masses.
+
+`ActualPrimeReciprocalMass` supplies the genuine single-prime cell mass:
+
+`sum_(N^a<=p<N^b, prime p, p not dividing N) 1/(p-1) -> log(b/a)`
+
+for every fixed `0<a<b`, along all natural targets tending to infinity.
+Its enumeration cap is `ceil(N^b)` independently of the target N, so b may
+exceed one. The exact change to the proved opposite-half-open Mertens
+interval costs at most `2*log N/(N^a*log 2)+6/N^a`; the target-prime deletion,
+denominator shift and both endpoint atoms are all paid before taking the
+limit. Multi-prime cells, boundary-layer predicates and their weighted
+integral lower limits remain to be connected to the exact raw-weight
+decomposition. Nonnegative layers permit finite-prefix lower bounds; no
+unproved vanishing normalized tail is needed for that lower-bound route.
+
 ### Exact Euler-ratio correction in the frozen manuscript
 
 At `paper/source/manuscript-body.tex` lines 425--429, the displayed exact
