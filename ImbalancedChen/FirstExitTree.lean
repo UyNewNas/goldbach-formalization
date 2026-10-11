@@ -2,6 +2,7 @@ import Mathlib.Algebra.Order.BigOperators.Group.List
 import Mathlib.Data.List.Prime
 import Mathlib.Data.List.Sublists
 import Mathlib.Data.Nat.Prime.Basic
+import Mathlib.NumberTheory.ArithmeticFunction.Moebius
 import Mathlib.Tactic.Ring
 
 /-!
@@ -125,6 +126,21 @@ def firstExitRetainedLeaves {α : Type*}
             (mass * h p) ps
         else []
 
+/-- Skipping every remaining label always produces the incoming branch as a
+terminal leaf.  In particular, the root tree always contains its empty
+selection, even when the universe itself is empty. -/
+theorem firstExitRetainedLeaves_skipAll_mem
+    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)
+    (prefix remaining : List α) (positive : Bool) (mass : ℝ) :
+    ({ selected := prefix, positive := positive, mass := mass } :
+        FirstExitLeaf α) ∈
+      firstExitRetainedLeaves retained h prefix positive mass remaining := by
+  induction remaining generalizing prefix positive mass with
+  | nil => simp [firstExitRetainedLeaves]
+  | cons p ps ih =>
+      rw [firstExitRetainedLeaves]
+      exact List.mem_append_left _ (ih prefix positive mass)
+
 /-- The recursive retained polynomial is exactly the sum of its explicitly
 enumerated retained terminal branches. -/
 theorem firstExitRetainedPolynomial_eq_leaves_sum
@@ -172,6 +188,23 @@ theorem firstExitRetainedLeaves_mass_eq_selected_prod
 def evenListLength {α : Type*} : List α → Bool
   | [] => true
   | _ :: xs => !evenListLength xs
+
+/-- The Boolean parity sign is the usual algebraic factor `(-1)^length`. -/
+theorem signedTreeCoefficient_evenListLength_eq_negOnePow
+    {α : Type*} (xs : List α) (mass : ℝ) :
+    signedTreeCoefficient (evenListLength xs) mass =
+      (-1 : ℝ) ^ xs.length * mass := by
+  induction xs with
+  | nil => simp [evenListLength]
+  | cons x xs ih =>
+      calc
+        signedTreeCoefficient (evenListLength (x :: xs)) mass =
+            -signedTreeCoefficient (evenListLength xs) mass := by
+              simpa [evenListLength] using
+                signedTreeCoefficient_not_mul (evenListLength xs) mass 1
+        _ = -((-1 : ℝ) ^ xs.length * mass) := by rw [ih]
+        _ = (-1 : ℝ) ^ (x :: xs).length * mass := by
+              simp [pow_succ]
 
 /-- The sign bit stored in every leaf agrees with the parity of the number of
 selected labels, provided it agrees at the incoming prefix. -/
@@ -249,6 +282,22 @@ def oddFirstExitRetainedLeaves {α : Type*}
     List (FirstExitLeaf α) :=
   firstExitRetainedLeaves (oddFirstExitPolicy retainOdd) h [] true 1 universe
 
+/-- The empty branch is always present.  It is the unit modulus `d = 1`,
+with positive sign and coefficient one. -/
+theorem oddFirstExitRetainedLeaves_unit_mem
+    {α : Type*} (retainOdd : List α → Bool) (h : α → ℝ)
+    (universe : List α) :
+    ({ selected := [], positive := true, mass := 1 } : FirstExitLeaf α) ∈
+      oddFirstExitRetainedLeaves retainOdd h universe := by
+  exact firstExitRetainedLeaves_skipAll_mem
+    (oddFirstExitPolicy retainOdd) h [] universe true 1
+
+/-- The empty retained branch contributes exactly the unit term. -/
+@[simp] theorem oddFirstExitUnitLeaf_value {α : Type*} :
+    FirstExitLeaf.value
+        ({ selected := [], positive := true, mass := 1 } : FirstExitLeaf α) = 1 := by
+  rfl
+
 /-- The root retained polynomial is a literal finite sum over the enumerated
 terminal retained branches. -/
 theorem oddFirstExitRetainedPolynomial_eq_leaves_sum
@@ -304,6 +353,123 @@ theorem mem_oddFirstExitRetainedLeaves_selected_nodup
       (mem_oddFirstExitRetainedLeaves_selected_reverse_sublist
         retainOdd h universe leaf hleaf)
   simpa using hreverse
+
+/-- Every selected label of a retained root branch inherits primality from
+the common universe. -/
+theorem mem_oddFirstExitRetainedLeaves_selected_prime
+    (retainOdd : List ℕ → Bool) (h : ℕ → ℝ)
+    (universe : List ℕ) (hprime : ∀ p ∈ universe, Nat.Prime p)
+    (leaf : FirstExitLeaf ℕ)
+    (hleaf : leaf ∈ oddFirstExitRetainedLeaves retainOdd h universe) :
+    ∀ p ∈ leaf.selected, Nat.Prime p := by
+  intro p hp
+  have hsub : leaf.selected.reverse <+ universe :=
+    mem_oddFirstExitRetainedLeaves_selected_reverse_sublist
+      retainOdd h universe leaf hleaf
+  apply hprime p
+  apply hsub.subset
+  simpa using hp
+
+/-- A duplicate-free list of prime natural numbers has squarefree product. -/
+theorem list_prod_squarefree_of_nodup_primes
+    (xs : List ℕ) (hnodup : xs.Nodup)
+    (hprime : ∀ p ∈ xs, Nat.Prime p) :
+    Squarefree xs.prod := by
+  have hprod : xs.toFinset.prod (fun p : ℕ => p) = xs.prod := by
+    simpa using List.prod_toFinset (fun p : ℕ => p) hnodup
+  rw [← hprod]
+  refine Finset.squarefree_prod_of_pairwise_isCoprime
+    (fun p hp q hq hpq => ?_) (fun p hp => ?_)
+  · simp only [← Nat.coprime_iff_isRelPrime]
+    exact (Nat.coprime_primes
+      (hprime p (List.mem_toFinset.mp hp))
+      (hprime q (List.mem_toFinset.mp hq))).mpr hpq
+  · exact (hprime p (List.mem_toFinset.mp hp)).squarefree
+
+/-- The prime-factor set of a retained branch product is exactly the Finset
+of its selected labels.  This is the carrier inverse needed by the later
+filtered modulus reindexing. -/
+theorem mem_oddFirstExitRetainedLeaves_primeFactors_selectedProd
+    (retainOdd : List ℕ → Bool) (h : ℕ → ℝ)
+    (universe : List ℕ) (huniverse : universe.Nodup)
+    (hprime : ∀ p ∈ universe, Nat.Prime p)
+    (leaf : FirstExitLeaf ℕ)
+    (hleaf : leaf ∈ oddFirstExitRetainedLeaves retainOdd h universe) :
+    leaf.selected.prod.primeFactors = leaf.selected.toFinset := by
+  have hnodup : leaf.selected.Nodup :=
+    mem_oddFirstExitRetainedLeaves_selected_nodup
+      retainOdd h universe huniverse leaf hleaf
+  have hprod :
+      (∏ p ∈ leaf.selected.toFinset, p) = leaf.selected.prod := by
+    simpa using List.prod_toFinset (fun p : ℕ => p) hnodup
+  rw [← hprod]
+  exact Nat.primeFactors_prod fun p hp =>
+    mem_oddFirstExitRetainedLeaves_selected_prime
+      retainOdd h universe hprime leaf hleaf p (List.mem_toFinset.mp hp)
+
+/-- Counting prime factors with multiplicity recovers the length of a list
+whose entries are all prime.  Repetitions are allowed in this auxiliary
+lemma; the squarefree application below supplies `Nodup` separately. -/
+theorem cardFactors_list_prod_eq_length_of_primes
+    (xs : List ℕ) (hprime : ∀ p ∈ xs, Nat.Prime p) :
+    ArithmeticFunction.cardFactors xs.prod = xs.length := by
+  have hprod0 : xs.prod ≠ 0 := by
+    apply List.prod_ne_zero
+    intro hzero
+    exact (hprime 0 hzero).ne_zero rfl
+  have hcard := ArithmeticFunction.cardFactors_multiset_prod
+    (s := (xs : Multiset ℕ)) (by
+      simpa only [Multiset.prod_coe] using hprod0)
+  rw [Multiset.prod_coe] at hcard
+  have hmap :
+      Multiset.map ArithmeticFunction.cardFactors (xs : Multiset ℕ) =
+        Multiset.map (fun _ : ℕ => 1) (xs : Multiset ℕ) := by
+    exact Multiset.map_congr rfl fun p hp =>
+      ArithmeticFunction.cardFactors_apply_prime
+        (hprime p (by simpa using hp))
+  rw [hcard, hmap]
+  simp
+
+/-- For a duplicate-free prime list, the Möbius value of its product is the
+alternating sign determined by the list length. -/
+theorem moebius_list_prod_eq_negOnePow_length
+    (xs : List ℕ) (hnodup : xs.Nodup)
+    (hprime : ∀ p ∈ xs, Nat.Prime p) :
+    ArithmeticFunction.moebius xs.prod = (-1 : ℤ) ^ xs.length := by
+  rw [ArithmeticFunction.moebius_apply_of_squarefree
+      (list_prod_squarefree_of_nodup_primes xs hnodup hprime),
+    cardFactors_list_prod_eq_length_of_primes xs hprime]
+
+/-- Every retained branch in a duplicate-free prime universe has squarefree
+selected product. -/
+theorem mem_oddFirstExitRetainedLeaves_selectedProd_squarefree
+    (retainOdd : List ℕ → Bool) (h : ℕ → ℝ)
+    (universe : List ℕ) (huniverse : universe.Nodup)
+    (hprime : ∀ p ∈ universe, Nat.Prime p)
+    (leaf : FirstExitLeaf ℕ)
+    (hleaf : leaf ∈ oddFirstExitRetainedLeaves retainOdd h universe) :
+    Squarefree leaf.selected.prod := by
+  exact list_prod_squarefree_of_nodup_primes leaf.selected
+    (mem_oddFirstExitRetainedLeaves_selected_nodup
+      retainOdd h universe huniverse leaf hleaf)
+    (mem_oddFirstExitRetainedLeaves_selected_prime
+      retainOdd h universe hprime leaf hleaf)
+
+/-- The Möbius value of a retained branch product is exactly its stored
+alternating parity sign, before casting to the real-valued polynomial. -/
+theorem mem_oddFirstExitRetainedLeaves_moebius_selectedProd
+    (retainOdd : List ℕ → Bool) (h : ℕ → ℝ)
+    (universe : List ℕ) (huniverse : universe.Nodup)
+    (hprime : ∀ p ∈ universe, Nat.Prime p)
+    (leaf : FirstExitLeaf ℕ)
+    (hleaf : leaf ∈ oddFirstExitRetainedLeaves retainOdd h universe) :
+    ArithmeticFunction.moebius leaf.selected.prod =
+      (-1 : ℤ) ^ leaf.selected.length := by
+  exact moebius_list_prod_eq_negOnePow_length leaf.selected
+    (mem_oddFirstExitRetainedLeaves_selected_nodup
+      retainOdd h universe huniverse leaf hleaf)
+    (mem_oddFirstExitRetainedLeaves_selected_prime
+      retainOdd h universe hprime leaf hleaf)
 
 /-- Two retained root branches in a duplicate-free prime universe with the
 same product select exactly the same labels. -/
@@ -391,6 +557,32 @@ theorem mem_oddFirstExitRetainedLeaves_value_eq_signed_selected_prod
       retainOdd h universe leaf hleaf,
     mem_oddFirstExitRetainedLeaves_mass_eq_selected_prod
       retainOdd h universe leaf hleaf]
+
+/-- On an actual retained branch, the real coefficient is the Möbius value
+of the selected squarefree prime product times its local-weight product. -/
+theorem mem_oddFirstExitRetainedLeaves_value_eq_moebius_mul_selected_prod
+    (retainOdd : List ℕ → Bool) (h : ℕ → ℝ)
+    (universe : List ℕ) (huniverse : universe.Nodup)
+    (hprime : ∀ p ∈ universe, Nat.Prime p)
+    (leaf : FirstExitLeaf ℕ)
+    (hleaf : leaf ∈ oddFirstExitRetainedLeaves retainOdd h universe) :
+    leaf.value =
+      (ArithmeticFunction.moebius leaf.selected.prod : ℝ) *
+        (leaf.selected.map h).prod := by
+  calc
+    leaf.value = signedTreeCoefficient (evenListLength leaf.selected)
+        (leaf.selected.map h).prod :=
+      mem_oddFirstExitRetainedLeaves_value_eq_signed_selected_prod
+        retainOdd h universe leaf hleaf
+    _ = (-1 : ℝ) ^ leaf.selected.length *
+        (leaf.selected.map h).prod :=
+      signedTreeCoefficient_evenListLength_eq_negOnePow
+        leaf.selected (leaf.selected.map h).prod
+    _ = (ArithmeticFunction.moebius leaf.selected.prod : ℝ) *
+        (leaf.selected.map h).prod := by
+      rw [mem_oddFirstExitRetainedLeaves_moebius_selectedProd
+        retainOdd h universe huniverse hprime leaf hleaf]
+      simp only [Int.cast_pow, Int.cast_neg, Int.cast_one]
 
 /-- The sum of the residual Euler products at all odd first exits. -/
 def oddFirstExitCorrection {α : Type*}

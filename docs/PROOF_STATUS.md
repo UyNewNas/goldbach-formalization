@@ -761,17 +761,31 @@ branch carrier and proves:
   `oddFirstExitRetainedLeaves_selectedProd_injOn`, proving that, in a
   duplicate-free prime universe, the selected natural product determines the
   selected list and the entire retained leaf;
+- `list_prod_squarefree_of_nodup_primes`,
+  `mem_oddFirstExitRetainedLeaves_primeFactors_selectedProd`,
+  `cardFactors_list_prod_eq_length_of_primes`, and
+  `moebius_list_prod_eq_negOnePow_length`, proving the squarefree product,
+  exact prime-factor carrier, factor count and Möbius parity formula for a
+  duplicate-free prime list;
+- `mem_oddFirstExitRetainedLeaves_selectedProd_squarefree`,
+  `mem_oddFirstExitRetainedLeaves_moebius_selectedProd`, and
+  `mem_oddFirstExitRetainedLeaves_value_eq_moebius_mul_selected_prod`,
+  specializing those facts to actual retained leaves and identifying the
+  real branch coefficient with `(moebius d : ℝ)` times the local-weight
+  product;
+- `oddFirstExitRetainedLeaves_unit_mem`, explicitly retaining the empty
+  branch, unit modulus `d = 1` and coefficient one even for an empty universe;
 - `oddFirstExitRetainedLeaves_sum_eq_product_add_exits`, the manuscript
   product-plus-exit identity with the retained side displayed as a literal
   branch sum.
 
 These statements close the evaluator-to-branch-sum interface, make the reverse
-accumulator convention explicit and close prime-product uniqueness at the
-abstract ordered-universe layer. They still do not construct the manuscript's
-literal decreasing universe `p ∤ N`, `w ≤ p < z`, prove the selected products
-squarefree, perform the filtered sum reindexing, or identify the alternating
-sign with `ArithmeticFunction.moebius` on that product.
+accumulator convention explicit, close prime-product uniqueness and identify
+the raw branch sign with the Möbius value at the abstract ordered-universe
+layer. They still do not construct the manuscript's literal decreasing
+universe `p ∤ N`, `w ≤ p < z`, prove the retained leaf/product lists themselves
+duplicate-free, or perform the filtered `Finset` sum reindexing.
 
-The extended module source SHA-256 is
-`26cc97977bbc105ded8a623f000a2015b4b222ff9dd39617ade272c1189c4068`.
+The extended module source SHA-256 for this candidate is
+`ef25c9050019b3f0816204697b9ed6518c459483598b032b9cd5af81a0441222`.
 

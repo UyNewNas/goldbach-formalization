@@ -250,11 +250,11 @@ statement is over `ℤ`, so zero and negative integers are covered rather than
 excluded by an implicit natural-number convention.
 
 This module proves the finite tree algebra and pointwise rough majorant only.
-It does not identify an actual causal box policy, reindex retained prime lists
-by their squarefree products, perform the unique small/rough decomposition,
-or prove the density and signed factorized distribution estimates for the
-resulting physical `rho_N`. In particular it does not yet establish the
-current coefficient `K = 8452171/1250000`.
+It does not identify an actual causal box policy, finish the retained-filter
+sum reindexing, perform the unique small/rough decomposition, or prove the
+density and signed factorized distribution estimates for the resulting
+physical `rho_N`. In particular it does not yet establish the current
+coefficient `K = 8452171/1250000`.
 
 The same module now also enumerates the retained terminal branches explicitly.
 `oddFirstExitRetainedPolynomial_eq_leaves_sum` identifies the recursive
@@ -267,7 +267,12 @@ universe. Given a duplicate-free universe, every retained selection is now
 proved duplicate-free; when every universe entry is prime, equality of two
 selected products forces equality of the selected lists and of the entire
 leaves. Thus the selected-prime product is injective on the actual retained
-leaves. This removes the evaluator-to-branch-sum, carrier-order and product
-uniqueness gaps before the later squarefree/Möbius reindexing; it does not yet
-claim that reindexing itself.
+leaves. The module also proves that every such product is squarefree, that its
+prime-factor count is exactly the selected-list length, and that its Möbius
+value is the existing parity sign. Consequently each leaf value is literally
+`(moebius d : ℝ)` times its selected local-weight product. The all-skip leaf is
+proved present explicitly, preserving the unit modulus `d = 1` with value one.
+This removes the evaluator-to-branch-sum, carrier-order, product uniqueness,
+squarefree and sign-identification gaps; the retained leaf list still has to
+be reindexed as a duplicate-free modulus `Finset` sum.
 
