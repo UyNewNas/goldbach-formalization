@@ -415,11 +415,22 @@ with the selected-label product and the sign bit with selected-list parity.
 The additional root invariant
 `mem_oddFirstExitRetainedLeaves_selected_reverse_sublist` records the precise
 order convention: `selected` is accumulated backwards, and its reverse is a
-sublist of the ordered universe. Thus the remaining finite bridge is
-specifically a list/set/product reindexing problem, not another first-exit
-identity: derive duplicate-freeness from the actual prime universe, map
-retained prime subsets injectively to squarefree products, and identify the
-parity sign with the Möbius value of that product.
+sublist of the ordered universe. From an explicit `universe.Nodup` hypothesis,
+`mem_oddFirstExitRetainedLeaves_selected_nodup` derives duplicate-freeness of
+every retained selection. If all universe entries are prime,
+`oddFirstExitRetainedLeaves_selectedProd_injOn` proves the selected-prime
+product injective on actual retained leaves. Thus the remaining finite bridge
+is now specifically the squarefree/Möbius sum reindexing: construct the
+manuscript's decreasing rough-prime universe with exact endpoints, prove the
+product squarefree, and identify the parity sign with the Möbius value.
+
+The manuscript's raw rough universe is the strictly decreasing list of primes
+`p ∤ N` with `w ≤ p < z`; the small side is `p < w`.  Its `Nodup` must come
+from sorting a finite prime set, not from a new number-theoretic assumption.
+Fine box labels may repeat even though the underlying prime universe cannot.
+The product injection above applies to the raw prefix tree only: boxed support
+need not be prefix-closed and inherits the majorant only through
+coefficientwise domination.
 
 Dependency audit: `goldbach-lean` is pinned at
 `09b97db5764ade1246bfb77206baa1b124760958`; it uses the identical Lean and

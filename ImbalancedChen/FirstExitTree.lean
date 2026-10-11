@@ -1,4 +1,7 @@
 import Mathlib.Algebra.Order.BigOperators.Group.List
+import Mathlib.Data.List.Prime
+import Mathlib.Data.List.Sublists
+import Mathlib.Data.Nat.Prime.Basic
 import Mathlib.Tactic.Ring
 
 /-!
@@ -288,6 +291,92 @@ theorem mem_oddFirstExitRetainedLeaves_selected_reverse_sublist
   simpa [oddFirstExitRetainedLeaves] using
     firstExitRetainedLeaves_selected_reverse_sublist
       (oddFirstExitPolicy retainOdd) h [] universe true 1 leaf hleaf
+
+/-- A root leaf selects each universe label at most once. -/
+theorem mem_oddFirstExitRetainedLeaves_selected_nodup
+    {α : Type*} (retainOdd : List α → Bool) (h : α → ℝ)
+    (universe : List α) (huniverse : universe.Nodup)
+    (leaf : FirstExitLeaf α)
+    (hleaf : leaf ∈ oddFirstExitRetainedLeaves retainOdd h universe) :
+    leaf.selected.Nodup := by
+  have hreverse : leaf.selected.reverse.Nodup :=
+    huniverse.sublist
+      (mem_oddFirstExitRetainedLeaves_selected_reverse_sublist
+        retainOdd h universe leaf hleaf)
+  simpa using hreverse
+
+/-- Two retained root branches in a duplicate-free prime universe with the
+same product select exactly the same labels. -/
+theorem oddFirstExitRetainedLeaves_selected_eq_of_prod_eq
+    (retainOdd : List ℕ → Bool) (h : ℕ → ℝ)
+    (universe : List ℕ) (huniverse : universe.Nodup)
+    (hprime : ∀ p ∈ universe, Nat.Prime p)
+    (leaf₁ leaf₂ : FirstExitLeaf ℕ)
+    (hleaf₁ : leaf₁ ∈ oddFirstExitRetainedLeaves retainOdd h universe)
+    (hleaf₂ : leaf₂ ∈ oddFirstExitRetainedLeaves retainOdd h universe)
+    (hprod : leaf₁.selected.prod = leaf₂.selected.prod) :
+    leaf₁.selected = leaf₂.selected := by
+  have hsub₁ : leaf₁.selected.reverse <+ universe :=
+    mem_oddFirstExitRetainedLeaves_selected_reverse_sublist
+      retainOdd h universe leaf₁ hleaf₁
+  have hsub₂ : leaf₂.selected.reverse <+ universe :=
+    mem_oddFirstExitRetainedLeaves_selected_reverse_sublist
+      retainOdd h universe leaf₂ hleaf₂
+  have hprime₁ : ∀ p ∈ leaf₁.selected.reverse, _root_.Prime p := by
+    intro p hp
+    exact Nat.prime_iff.mp (hprime p (hsub₁.subset hp))
+  have hprime₂ : ∀ p ∈ leaf₂.selected.reverse, _root_.Prime p := by
+    intro p hp
+    exact Nat.prime_iff.mp (hprime p (hsub₂.subset hp))
+  have hprodReverse :
+      leaf₁.selected.reverse.prod = leaf₂.selected.reverse.prod := by
+    simpa only [List.prod_reverse] using hprod
+  have hperm : leaf₁.selected.reverse ~ leaf₂.selected.reverse :=
+    perm_of_prod_eq_prod hprodReverse hprime₁ hprime₂
+  have hreverseEq : leaf₁.selected.reverse = leaf₂.selected.reverse :=
+    (huniverse.perm_iff_eq_of_sublist hsub₁ hsub₂).1 hperm
+  exact List.reverse_injective hreverseEq
+
+/-- On retained root leaves of a duplicate-free prime universe, the selected
+prime product determines the entire leaf. -/
+theorem oddFirstExitRetainedLeaves_eq_of_selected_prod_eq
+    (retainOdd : List ℕ → Bool) (h : ℕ → ℝ)
+    (universe : List ℕ) (huniverse : universe.Nodup)
+    (hprime : ∀ p ∈ universe, Nat.Prime p)
+    (leaf₁ leaf₂ : FirstExitLeaf ℕ)
+    (hleaf₁ : leaf₁ ∈ oddFirstExitRetainedLeaves retainOdd h universe)
+    (hleaf₂ : leaf₂ ∈ oddFirstExitRetainedLeaves retainOdd h universe)
+    (hprod : leaf₁.selected.prod = leaf₂.selected.prod) :
+    leaf₁ = leaf₂ := by
+  have hselected : leaf₁.selected = leaf₂.selected :=
+    oddFirstExitRetainedLeaves_selected_eq_of_prod_eq
+      retainOdd h universe huniverse hprime leaf₁ leaf₂ hleaf₁ hleaf₂ hprod
+  have hpositive : leaf₁.positive = leaf₂.positive := by
+    rw [mem_oddFirstExitRetainedLeaves_positive_eq_evenListLength
+        retainOdd h universe leaf₁ hleaf₁,
+      mem_oddFirstExitRetainedLeaves_positive_eq_evenListLength
+        retainOdd h universe leaf₂ hleaf₂,
+      hselected]
+  have hmass : leaf₁.mass = leaf₂.mass := by
+    rw [mem_oddFirstExitRetainedLeaves_mass_eq_selected_prod
+        retainOdd h universe leaf₁ hleaf₁,
+      mem_oddFirstExitRetainedLeaves_mass_eq_selected_prod
+        retainOdd h universe leaf₂ hleaf₂,
+      hselected]
+  exact FirstExitLeaf.ext hselected hpositive hmass
+
+/-- The selected-prime product is injective on the actual retained root
+leaves.  This is the finite uniqueness input for reindexing the leaf sum by a
+single natural modulus. -/
+theorem oddFirstExitRetainedLeaves_selectedProd_injOn
+    (retainOdd : List ℕ → Bool) (h : ℕ → ℝ)
+    (universe : List ℕ) (huniverse : universe.Nodup)
+    (hprime : ∀ p ∈ universe, Nat.Prime p) :
+    Set.InjOn (fun leaf : FirstExitLeaf ℕ => leaf.selected.prod)
+      {leaf | leaf ∈ oddFirstExitRetainedLeaves retainOdd h universe} := by
+  intro leaf₁ hleaf₁ leaf₂ hleaf₂ hprod
+  exact oddFirstExitRetainedLeaves_eq_of_selected_prod_eq
+    retainOdd h universe huniverse hprime leaf₁ leaf₂ hleaf₁ hleaf₂ hprod
 
 /-- The value of every root leaf is its selected-label product with exactly
 the alternating sign determined by the selected-list parity. -/

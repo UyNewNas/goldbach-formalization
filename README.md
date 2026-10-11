@@ -263,7 +263,11 @@ each leaf's stored mass is exactly the product of its selected local weights
 and that its sign bit is exactly the parity of the selected-list length.
 `mem_oddFirstExitRetainedLeaves_selected_reverse_sublist` additionally proves
 that reversing the tree's accumulator gives a sublist of the original ordered
-universe.  This removes the evaluator-to-branch-sum and carrier-order gaps
-before the later squarefree product and Möbius reindexing; it does not claim
-that reindexing itself.
+universe. Given a duplicate-free universe, every retained selection is now
+proved duplicate-free; when every universe entry is prime, equality of two
+selected products forces equality of the selected lists and of the entire
+leaves. Thus the selected-prime product is injective on the actual retained
+leaves. This removes the evaluator-to-branch-sum, carrier-order and product
+uniqueness gaps before the later squarefree/Möbius reindexing; it does not yet
+claim that reindexing itself.
 

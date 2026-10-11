@@ -755,16 +755,23 @@ branch carrier and proves:
 - `mem_oddFirstExitRetainedLeaves_selected_reverse_sublist`, proving the exact
   carrier/order invariant: reversing the accumulated selected list gives a
   sublist of the original ordered universe;
+- `mem_oddFirstExitRetainedLeaves_selected_nodup`, deriving duplicate-freeness
+  of every selection from duplicate-freeness of the ordered universe;
+- `oddFirstExitRetainedLeaves_selected_eq_of_prod_eq` and
+  `oddFirstExitRetainedLeaves_selectedProd_injOn`, proving that, in a
+  duplicate-free prime universe, the selected natural product determines the
+  selected list and the entire retained leaf;
 - `oddFirstExitRetainedLeaves_sum_eq_product_add_exits`, the manuscript
   product-plus-exit identity with the retained side displayed as a literal
   branch sum.
 
-These statements close the evaluator-to-branch-sum interface and make the
-reverse accumulator convention explicit. They still do not derive `Nodup`
-from a concrete prime universe, map prime lists injectively to squarefree
-natural products, or identify the alternating sign with
-`ArithmeticFunction.moebius` on that product.
+These statements close the evaluator-to-branch-sum interface, make the reverse
+accumulator convention explicit and close prime-product uniqueness at the
+abstract ordered-universe layer. They still do not construct the manuscript's
+literal decreasing universe `p ∤ N`, `w ≤ p < z`, prove the selected products
+squarefree, perform the filtered sum reindexing, or identify the alternating
+sign with `ArithmeticFunction.moebius` on that product.
 
 The extended module source SHA-256 is
-`b2a872475ec73fbb4a282f33fb80aa6bcaac2f6154c6c688d627f231c6ed3c2d`.
+`26cc97977bbc105ded8a623f000a2015b4b222ff9dd39617ade272c1189c4068`.
 
