@@ -2,6 +2,104 @@
 
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
+## Frozen ancestors, prefix cubes and actual density terms — 12 October
+
+The level of a frozen policy is computed from the oldest selected `k`
+labels, which are the last `k` entries of the stored reverse history.
+`FrozenRosserPolicy` proves that every later actual selection preserves
+that ancestor and that the true recursive continuation uses its single
+fixed level. It also proves nested-ancestor identities, including ranks
+four and five. Its actual-density bridge supports both rank exactly `k`
+and longer histories; residual parity and the divisor `P` always use
+the whole current history. This does not certify an arbitrary level
+function as the manuscript's cap selector.
+
+`ActualFrozenFrontierDensity` obtains the length, sorted history,
+positive product, sign, Euler mass and literal strict remaining carrier
+from the actual parent frontier on `roughPrimeUniverse N cap 0 z`.
+For an admissible prefix it evaluates a frozen continuation at `Q/P`.
+It then proves the full terminal-plus-density expansion and the exact
+difference between two frozen replacements on one shared parent frontier.
+The carrier with lower endpoint zero is the full carrier used after
+the previously proved presieve projection. No equality with the rough
+carrier starting at positive `w` is assumed. Both old and new inherited
+admissibility conditions remain visible.
+
+`RosserShortPrefixAdmissibility` proves the literal provider tests for
+upper rank four, upper rank five and lower rank four. Their total-product
+cutoffs follow from their cubic tests and positive decreasing natural
+labels. Raising the level preserves the complete predicate. In
+`ActualRosserShortPrefixDensity`, these tests supply the actual local
+continuation formulas:
+
+| Prefix | Actual signed continuation or admitted contribution |
+| --- | --- |
+| Upper rank four | `mass * Vplus(Q/P4, p4)` |
+| Upper rank five | `1[P5*p5^2<Q] * (-mass) * Vminus(Q/P5, p5)` |
+| Lower rank four | `1[P4*p4^2<Q] * mass * Vminus(Q/P4, p4)` |
+
+Here the inherited first/third or second tests are checked at the current
+selected `Q`, and the indicators are literal finite admission tests.
+Rejected branches contribute zero before any analytic estimate is used.
+Accepted fifth branches also satisfy `Q/P5>p5^2`; the lower density is
+not asserted to vanish outside that domain. The same target and arbitrary
+finite enumeration cap are preserved in every density.
+
+`BufferedFirstCubeGeometry` proves the buffered first-cube margin at
+`rho=19/96`, `Theta=299/500`, including the exact surplus
+`Theta-2e-3*(rho-4e)=17/4000+10e`. The full envelope uses its proved
+`3/256` margin, and the fallback uses the two branches of `v`, including
+the transition strip. A whole-box lower error at most `e`, with
+`3e<3/256`, leaves the strict margin after subtracting `2e`.
+The actual rational and integer box lower algorithms are instantiated;
+the latter retains its `2/D` rounding loss. The exponent margin implies
+the literal integer prime-cube test. Successful margin checks also bound
+the certificate's clipped lower cap itself, not just the envelope.
+
+All five sources passed strict individual compilation without diagnostics
+and independent review. The standard full aggregate build passed with
+9,747 jobs in 46.968 seconds. Bundled `leanchecker` replayed the five
+final Lake-built objects in 17.426 seconds. The canonical joint audit
+passed in 257.158 seconds for all 137 owned declarations, including
+private and generated declarations:
+
+| Module | Owned declarations |
+| --- | ---: |
+| `ActualFrozenFrontierDensity` | 8 |
+| `ActualRosserShortPrefixDensity` | 26 |
+| `BufferedFirstCubeGeometry` | 21 |
+| `FrozenRosserPolicy` | 36 |
+| `RosserShortPrefixAdmissibility` | 46 |
+
+All declarations are safe, none is an unproved axiom, and every transitive
+axiom belongs to `propext`, `Classical.choice` and `Quot.sound`.
+The checks used Lean `4.33.0-rc1`, mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and Goldbach
+`09b97db5764ade1246bfb77206baa1b124760958`. All eleven actual dependency
+revisions matched the manifest. Sources, root imports, audit, dependency
+pins and final objects stayed unchanged; provider tracked worktrees and
+indexes remained clean. The preceding checkpoint's 43 evidence files
+were unchanged. This replays five new objects, not the entire root again.
+The earlier whole-library warning-as-failure result remains recorded
+below and was not repeated or reclassified as passing.
+
+Evidence is separate in
+`.lake/main-theorem-verification-20261012/frozen-cap/`. With the pinned
+dependencies, reproduce using `lake build`, then
+`lake env leanchecker --verbose ImbalancedChen.MODULE` for the five names
+in the table, and
+`lake env lean -DwarningAsError=true verification/FrozenCapAudit.lean`.
+The audit inventories actual defining-module metadata rather than matching
+declaration names or parsing source text.
+
+Remaining main-theorem work includes constructing the actual certified
+causal selectors and admissible disjoint stage regions, assembling own-cube
+restorations on the common parent candidate set, compiling physical
+support, evaluating prefix mass integrals and certificates, proving the
+restricted signed distribution and current Chen mean, and discharging
+both counting bounds in `CurrentMainTheorem`. Theorem 1.1 and Corollary
+1.2 are still incomplete.
+
 ## Nonempty continuations and restored candidates — 12 October
 
 `OrdinaryRosserContinuation` splits the filtered prime sets at an inherited

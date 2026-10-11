@@ -12,18 +12,31 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
-The latest finite extension proves the nonempty-history continuation
-dictionary. A valid inherited prefix of product `P` leaves the actual
-ordinary density at the real level `Q/P`, multiplied by its signed mass;
-an odd prefix rank flips the upper/lower type. The inherited tests must
-hold at the current `Q`. The actual frontier's sign, mass and strict
-remaining prime carrier are derived from the recursion. A separate
-candidate expansion compares both old and new admission indicators and
-their respective continuations, including branches restored by the new
-test. Proving those inherited tests for the manuscript's varying caps,
-and evaluating the resulting box integrals, remain separate obligations.
+The latest finite extension freezes a continuation level at the actual
+selected ancestor and derives its residual density directly from the
+tree recursion. On the actual prime frontier, its sign, mass and strict
+cutoff are proved; changing the frozen level below the same parent rank
+gives an exact sum of actual density differences at the real quotient
+`Q/P`. Prefix validity at each chosen level remains explicit.
 
-These three modules passed strict individual compilation, the full
+For upper rank four, that validity is exactly the inherited first and
+third cube tests. For upper rank five it also includes the fifth own
+cube; its contribution is the gated negative lower density. The lower
+fourth own-cube contribution is the gated positive lower density.
+Rejected branches contribute zero before any limiting estimate is used.
+Buffered coarse-cap geometry pays the first cube on whole rational and
+integer boxes, including rounding error and the transition-strip fallback.
+The actual certified cap selector, physical support, prefix integrals and
+signed distribution estimates are still required for the main theorem.
+
+All five new sources passed strict individual compilation and independent
+review. The full aggregate build passed with 9,747 jobs, the five final
+Lake-built objects passed bundled kernel replay, and the canonical audit
+passed for all 137 owned declarations, including generated and private
+ones. Only `propext`, `Classical.choice` and `Quot.sound` occur as
+transitive axioms. The manuscript's main theorem remains incomplete.
+
+The preceding nonempty-continuation extension's three modules passed strict individual compilation, the full
 aggregate build (9,736 jobs), final-object kernel replay and a joint audit
 of all 64 owned declarations, including private and generated declarations.
 Their only transitive axioms are the standard three listed in the proof

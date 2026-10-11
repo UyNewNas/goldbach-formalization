@@ -18,6 +18,48 @@ statement before any later checkpoint is called current.
 
 ## Exact finite semantics
 
+`FrozenRosserPolicy` freezes the level at the oldest `k` selected entries,
+implemented by `history.drop (history.length-k)` because the tree stores
+histories in reverse order. Appending later selections preserves this
+ancestor, and taking the fourth ancestor of the fifth gives the fourth.
+The actual recursive continuation is proved equal to the constant-level
+one at that ancestor's level. No continuation equality is a premise.
+
+`ActualFrozenFrontierDensity` derives the history length, sortedness,
+positive product, actual Euler mass, parity and strict residual cutoff
+from the literal parent frontier. It rewrites the full spliced polynomial
+as its unchanged terminal part plus actual residual densities. Comparing
+two replacements gives their density differences on that same frontier.
+Both prefixes must be admissible at their respective current levels;
+the cap selector is not assumed to implement the manuscript merely
+because it is a function on finite histories.
+
+`RosserShortPrefixAdmissibility` expands the complete provider predicates:
+upper four checks ranks one and three, upper five checks one, three and
+five, and lower four checks two and four. The earlier or own cube proves
+the additional total-product cutoff. `ActualRosserShortPrefixDensity`
+then evaluates upper four as a positive upper density, upper five as
+its own-cube-gated negative lower density, and lower four as its
+own-cube-gated positive lower density. Accepted upper fifth branches
+also have `Q/P5 > p5^2`. The indicator is retained exactly, including
+branches that a previous level rejected.
+
+`BufferedFirstCubeGeometry` proves the extended-prefix first-cube margin
+for `rho=19/96`, `Theta=299/500` and
+`lambda=min(Theta-2e,Gamma-2e)`. It uses the retained first-label cutoff
+`x<=rho-4e`, `0<e`, `3e<3/256`, and a whole-box lower-bound error at most
+`e`. Rational boxes use their proved width bound; integer boxes retain
+the separate `2/D` rounding loss. Rational one-variable intervals cover
+the fallback, including intervals crossing `mu`. It converts the
+resulting strict exponent margin to the actual integer cube inequality.
+Certificate success additionally bounds the literal clipped certificate
+cap, rather than only the original envelope.
+
+These finite results do not yet instantiate all certified third/fourth/
+fifth selectors or their disjoint regions, aggregate the own-cube terms
+on the common parent candidate set, evaluate their prefix integrals, or
+supply restricted signed distribution and the main counting bounds.
+
 The ordinary nonempty-history continuation is now proved in
 `OrdinaryRosserContinuation`: if all inherited prefix tests hold at the
 current real level `Q`, a prefix of product `P` leaves an ordinary root
@@ -38,8 +80,9 @@ next-selection candidates, independently of admission. Its exact
 new-minus-old difference keeps the new and old admission indicators
 multiplied by their respective continuations. Thus the finite algebra
 includes restored old exits without assuming a shared continuation.
-The actual cube tests, cap legality and integral limits still need to be
-connected to this generic candidate identity.
+The short-prefix cube tests and local density terms are now proved as
+above. They still need to be assembled on this generic candidate identity
+for the actual certified cap selectors and then taken to integral limits.
 
 The full descending actual prime carrier is now proved equal to the rough
 carrier `[w,z)` followed by the small carrier below `w`. Exact leaf
