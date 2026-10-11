@@ -18,33 +18,42 @@ statement before any later checkpoint is called current.
 
 ## Exact finite semantics
 
-The latest analytic extension proves, for each fixed finite set `K` of
-positive ranks, `u>0` and `eta>0`, a threshold `N0>=2` such that all later even targets
-and all caps covering `N^u` satisfy
+The latest analytic extension proves the same raw upper Rosser density
+limit for every fixed `u>0`, `beta>0`, `beta<=3*u`, along positive even
+targets and for any eventually covering enumeration cap:
 
 ```text
 actualSmallRosserPlusDensity N cap (N^u) (N^(3*u))
   / actualSmallEulerProduct N cap (N^u)
-    >= 1 + sum_{k in K} rosserOddLayerIntegral k 3 - eta.
+    -> 2*exp(gamma)/3;
+
+actualSmallRosserPlusDensity N cap (N^u) (N^beta)
+  / actualSmallEulerProduct N cap (N^u)
+    -> 2*exp(gamma)*u/beta;
+
+actualSmallRosserPlusDensity N cap (N^u) (N^beta)
+  * log N / singularSeries N -> 4/beta.
 ```
 
-The integral is the actual Lebesgue integral of
-`(product_i 1/x_i) / x_last` on the strictly decreasing odd boundary
-region, with all strict alternating prefix tests and terminal crossing.
-Its positive cutoff is proved from the provider's geometric budget.
-Disjoint finite boxes, genuine product integrals and dominated convergence
-discharge the analytic inputs to each fixed-layer lower bound. Exact tail
-cardinalities make different ranks disjoint, and a finite sum of the mesh
-limits chooses one common mesh before the common target threshold. The same
-literal natural level `ceil (N^(3*u))` is retained throughout.
+The lower direction combines true finite prime-box contributions in one
+positive boundary expansion, counting the base term one once. Strict
+pair-removal geometry and measure-preserving Fubini identify every actual
+odd-region integral with its pinned boundary mass and Suzuki source layer.
+The proved continuous series then selects a finite prefix before the
+actual N threshold. The upper direction uses the proved all-depth estimate
+at the literal `ceil (N^(3*u))`, a target-uniform local product bound and
+error absorption uniform in the carrier's adaptive odd depth. Both bounds
+concern the same coefficient and Euler product, with no new analytic
+premises. Their common threshold is uniform in every covering cap.
 
-This generalizes the three-prime lower-contribution proof to every finite
-collection of odd ranks, including the empty collection. The joint proof
-injects the complete family into a single boundary sum and counts the base
-term one once. It does not yet identify the higher-rank integrals with Suzuki
-source layers or take the continuous infinite-series limit. The full density
-limit, current Chen mean, sharp bad-semiprime estimate and final main
-theorem remain open.
+The exact coefficientwise cube reduction and the target-deleted Euler
+ratio extend the result from residual three to `beta<=3*u`. This proves
+the upper identity in manuscript `eq:current-raw-density` for every fixed
+`1<s<=3`, `s=beta/u`, with the correct Mertens normalization. It does not
+yet prove compact-parameter uniformity, the upper identity at `s>3`, or
+the lower-weight identity involving `f(s)`. The causal boxed compiler,
+current Chen mean, sharp bad-semiprime estimate and final main theorem
+also remain open.
 
 | Manuscript item | Lean interface | Status |
 | --- | --- | --- |
@@ -427,9 +436,11 @@ remain the actual filtered-source gap.
    actual common interval and common additive phase.
 2. Prove the current positive upper weight and its density, yielding the
    coefficient `K` for the same physical source. The fixed raw-tree
-   coefficient, actual small-weight sandwich and small-weight density
-   supplier are proved. The causal boxed policy, its support exponent,
-   absolute rough mass and same-raw-weight fixed-s density remain open.
+   coefficient, actual small-weight sandwich, small-weight density
+   supplier and absolute rough-mass bound are proved. The same raw upper
+   density limit is now proved for fixed `0<s<=3`. The causal boxed
+   policy, its support exponent, larger residuals, lower-weight density
+   and the needed uniform parameter limits remain open.
 3. Prove the complete current eleven-term lower-weight mean after paired
    deletion. The literal pointwise inequality, full `Y11` endpoint, actual
    pair injection, repeated-prime error and unit removal are now proved;

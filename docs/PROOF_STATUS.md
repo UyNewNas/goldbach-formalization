@@ -2,6 +2,129 @@
 
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
+## Same-weight upper density limit through residual three — 12 October
+
+`FinitePiIntegral` proves measure-preserving coordinate extraction and
+Fubini for finite real coordinate spaces. Its empty-dimensional integral
+has mass one, and its second extraction uses almost-everywhere integrable
+slices. `RosserOddTailRegion` proves the exact strict two-coordinate
+recursion with residual `s-x0-x1` and inherited upper cutoff `x1`.
+`RosserOddTailIntegral` proves compact-box integrability for every positive
+terminal coordinate and identifies the genuine region integral with
+`upperRosserBoundaryMassAux`. The empty tail retains `0<=s<3*q` without
+an extra condition on its upper cutoff.
+
+`RosserOddLayerIdentity` extracts the least coordinate and proves that the
+actual odd-dimensional kernel integral is the boundary-mass integral with
+factor `q^(-2)`. Outside `0<q<1` its slices vanish, including both endpoints.
+For every rank and `3/2<=s<=4`, the proved provider identity gives the
+Suzuki source index `2*k+1`. At `s=3` the zero-depth layer vanishes.
+
+`ActualRosserAtThreeLower` connects the genuine finite-layer sums to the
+proved JR source series. It chooses a finite prefix within `eta/2` of
+`2*exp(gamma)/3`, removes the zero layer, and then chooses the actual
+prime-box threshold with the other `eta/2`. Consequently, for every fixed
+`u>0` and `eta>0`, one `N0>=2` works for all later even N and every cap
+covering `N^u`, giving
+
+```text
+actualSmallRosserPlusDensity N cap (N^u) (N^(3*u))
+  / actualSmallEulerProduct N cap (N^u) >= 2*exp(gamma)/3 - eta.
+```
+
+The finite prefix is selected before N, and the constant term one is
+counted once. No estimate of the discarded nonnegative discrete tail and
+no additional analytic premise is used.
+
+`ActualRosserAtThreeUpper` applies the proved all-depth upper estimate at
+`D=ceil(N^(3*u))`. Actual primes satisfy
+`p<N^u<=(ceil(N^(3*u)))^(1/3)`, hence meet its strict natural ceiling
+cutoff, even when the level is integral. The Goldbach local-product bound
+provides one constant before the target; the source error is absorbed
+uniformly in every odd adaptive depth. The actual main-sum and Euler
+dictionaries preserve the same coefficients and cap. This gives the
+matching cap-uniform upper threshold `2*exp(gamma)/3+eta`.
+
+`ActualRosserAtThreeLimit` combines the two thresholds using `eta/2` and
+takes their maximum before N and the covering cap. The ratio therefore
+converges to `2*exp(gamma)/3` along positive even targets, for any cap
+sequence that eventually covers `N^u`. The canonical ceiling cap is a
+corollary. The proved Mertens normalization then gives
+
+```text
+actualSmallRosserPlusDensity N cap (N^u) (N^(3*u))
+  * log N / singularSeries N -> 4/(3*u).
+```
+
+In particular, at `u=1/3, R=N` this constant is four.
+`ActualRosserCubeLimit` uses the previously proved exact cube identity,
+with reduced exponent `beta/3`, and the target-deleted Euler ratio
+`V(N^(beta/3))/V(N^u) -> u/(beta/3)`. For fixed positive `u,beta` with
+`beta<=3*u`, the same actual raw ratio tends to
+`2*exp(gamma)*u/beta`, while the singular-series-normalized density tends
+to `4/beta`. Thus the manuscript's upper raw-density identity is now
+proved for every fixed `1<s<=3`. The formal result also has the literal
+cube-identity extension to `0<s<=1`; it does not invoke a definition of
+the classical sieve factor outside its usual domain.
+
+These are fixed-parameter limits. Compact-parameter uniformity, the
+upper raw-density identity for `s>3`, the lower-weight identity involving
+`f(s)`, the causal boxed compiler, sharp K/certificate semantics,
+restricted signed distribution, current Chen mean and Theorem 1.1 /
+Corollary 1.2 remain open.
+
+All eight new modules passed strict compilation and individual bundled
+kernel replay. A single canonical environment importing all eight audited
+all **77 distinct declarations**, including private and generated ones.
+The per-module counts are 5, 19, 11, 8, 5, 5, 14 and 10 in the table order
+below. Only `propext`, `Classical.choice` and `Quot.sound` occur
+transitively; no declaration is unsafe or an unproved axiom. Earlier
+kernel replays were reused only after matching source, compiled object,
+binary, configuration, pin and log hashes. Independent
+read-only reviews checked the recursive region and residual endpoints,
+zero-dimensional volume, the almost-everywhere second Fubini extraction,
+the source index, source-contract premises, cap/filter quantifiers and
+both normalizations.
+
+The full aggregate `lake build` passed with **9,677 jobs** (exit zero).
+The eight sources, root, audit and pins were unchanged through verification
+and build. Both actual supplier revisions match the manifest and their
+tracked worktrees and indexes remained clean. Evidence is in
+`.lake/main-theorem-verification-20261012/tail-integral/`:
+`rosser-at-three-verification.json`, `rosser-at-three-declarations.json`,
+`rosser-at-three-theorem-types.txt`, and `final-aggregate-build-status.json`.
+This verifies the eight new modules, their joint transitive axiom audit
+and the complete aggregate compilation. It does not claim complete-root
+kernel replay or successful remote CI.
+
+Reproduce this checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.FinitePiIntegral
+lake env leanchecker --verbose ImbalancedChen.RosserOddTailRegion
+lake env leanchecker --verbose ImbalancedChen.RosserOddTailIntegral
+lake env leanchecker --verbose ImbalancedChen.RosserOddLayerIdentity
+lake env leanchecker --verbose ImbalancedChen.ActualRosserAtThreeLower
+lake env leanchecker --verbose ImbalancedChen.ActualRosserAtThreeUpper
+lake env leanchecker --verbose ImbalancedChen.ActualRosserAtThreeLimit
+lake env leanchecker --verbose ImbalancedChen.ActualRosserCubeLimit
+lake env lean -DwarningAsError=true verification/RosserAtThreeAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `FinitePiIntegral` | `22c7e16d66361c4aec2913237c8b8866db59575d36c50416805094e351f5c54c` |
+| `RosserOddTailRegion` | `4eeb475ca7edb37873d54bea4d95cdf9188f0d4a72ce7f35d7cb3f51c8d29501` |
+| `RosserOddTailIntegral` | `4f2bfe4bcb92b9884f1f6bf1ba919cd117c794169ad9a8c659cb282a287e2d60` |
+| `RosserOddLayerIdentity` | `150cdc0162e77d9110cb7f45e1fcf7db42da98a12633cdc6cdd06280f804ec5d` |
+| `ActualRosserAtThreeLower` | `f1deb4194fbe76b30460d9895717365e20b32414108dc60aea5177d16ad0d78d` |
+| `ActualRosserAtThreeUpper` | `707de374153818ed853f87fa86595243ac02931c396aa1367385cd292fc7d006` |
+| `ActualRosserAtThreeLimit` | `da6d978db72fdb7f2d45468637a00987f1b2fdd104468199ee3f767702b8ed7f` |
+| `ActualRosserCubeLimit` | `a2a2d04ca6fe2d1e53e311bdb880f945ce30e27a71203b8590c90aa498aef7a4` |
+
 ## Finite sums of odd-rank continuous lower contributions — 12 October
 
 Nine new modules generalize the actual three-prime lower-contribution
@@ -56,10 +179,9 @@ actualSmallRosserPlusDensity N cap (N^u) (N^(3*u))
 The `u=1/3, R=N` specialization is also proved. All analytic inputs to
 these finite-sum bounds are discharged; thresholds may depend on the
 fixed finite rank set. The proof does not add separate fixed-layer lower
-inequalities. Identifying each general integral with the pinned Suzuki
-source layer remains open. After that identity, the proved continuous
-source summability can supply the full lower direction without estimating
-a discarded nonnegative discrete tail. The same-weight full density
+inequalities. The subsequent integral-identity checkpoint above identifies
+the general layers and supplies the full lower direction at three. At
+this earlier finite-sum checkpoint those steps were still open. The same-weight full density
 limit, causal boxed compiler, sharp K/certificate semantics, restricted
 signed distribution, current Chen mean and final main theorem remain open.
 
