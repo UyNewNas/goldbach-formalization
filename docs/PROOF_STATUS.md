@@ -594,3 +594,11 @@ This closes only the first finite endpoint-range layer. It does not yet prove th
 
 The new module SHA-256 is `dc19b118be3348a81503c236917400820f31af44bfbddea22d85b4f271fa79a0`. Static checks pass (`git diff --check` and no `sorry`, `admit`, custom `axiom`, `native_decide` or `unsafe`). An independent read-only review checked the source-level types, coercions, endpoint indices and inequality directions. This runner has no Lean or Lake executable, so no local elaboration, build, bundled kernel replay or transitive axiom audit is claimed. The manuscript remains `master@ba6ec11d800eccc54406490631895e174de85766`; all dependency pins and current constants are unchanged.
 
+## Dynamic Pan supplier-threshold gate candidate
+
+Code commit [`06357c231773d642aff6b759731fffd7d5315b3c`](https://github.com/UyNewNas/goldbach-formalization/commit/06357c231773d642aff6b759731fffd7d5315b3c) strengthens `ImbalancedChen/PanProductGridRanges.lean` with `eventually_actualPanProductGridIndices_productEndpoints_ge`.  For fixed manuscript parameter `0 < κ₀ < 1`, fixed grid ratio `1 < κ ≤ 2`, and every fixed natural threshold `N₀`, both exact product endpoints of every selected dynamic cell eventually satisfy `N₀ ≤ Y₀` and `N₀ ≤ Y₁`, uniformly over the selected family.
+
+The proof uses the already established full-loss inequality `N^(1-κ₀)-1 < Y₀`, the divergence of the positive real power `N^(1-κ₀)`, and monotonicity of consecutive ceiling-minus-one grid endpoints.  It therefore discharges exactly the two common-threshold hypotheses of `panProductStrip_physical_boundedAggregate_log_saving`.  The two-thirds, logarithmic-lower, and endpoint-dependent modulus-cutoff hypotheses remain open and are not inferred from this result.
+
+The updated module source SHA-256 is `507217636bf1b1c7b4d1a7473bda0764664ee95ddb07a29706c610a6db1bafce`.  Static checks pass (`git diff --check` and no `sorry`, `admit`, custom `axiom`, `native_decide` or `unsafe` in the module).  The runner contains no Lean or Lake executable, so no local elaboration, build, bundled kernel replay, or transitive axiom audit is claimed.  The manuscript remains `master@ba6ec11d800eccc54406490631895e174de85766`; the PDF hash and all Lean, Mathlib, and dependency pins are unchanged.
+

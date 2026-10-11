@@ -299,14 +299,22 @@ strip.  These bounds retain all rounding losses and do not claim that the full
 cell lies in the curved source.  They also do not transfer the global modulus
 cutoff to either product endpoint.
 
+At the manuscript cutoff `T = 2*N^(1-κ₀)`, the same module now proves
+`eventually_actualPanProductGridIndices_productEndpoints_ge`: for fixed
+`0 < κ₀ < 1`, fixed `1 < κ ≤ 2`, and every fixed natural threshold `N₀`,
+all selected cells eventually satisfy `N₀ ≤ Y₀` and `N₀ ≤ Y₁`
+simultaneously.  This discharges exactly the two supplier-threshold hypotheses
+of the Pan aggregate.  It does not discharge the two-thirds, logarithmic-lower,
+or modulus-cutoff gates.
+
 The 17,572 same-mask-v2 cells are **not** this half-product Pan grid.  They are
 the separate fixed `(t,u)` cells in the eleven-term lower-weight numerical
 certificate, where the `7/3` refinement improves the lower mean.  The Pan
 geometry instead uses the now-defined dynamic `(r,m=r*q)` product-strip grid.
 The next geometric adapter must prove, for its selected cells and separately
-at `Y₀` and
-`Y₁`, all upstream hypotheses `N₀ ≤ Y`, `A₂ ≤ Y^(2/3)`,
-`log(Y)^(2B) ≤ A₁`, and `D ≤ panModulusCutoff Y B`.  Once supplied, the new
+at `Y₀` and `Y₁`, the remaining upstream hypotheses
+`A₂ ≤ Y^(2/3)`, `log(Y)^(2B) ≤ A₁`, and
+`D ≤ panModulusCutoff Y B`.  Once supplied, the new
 aggregate adapter consumes those eight gates directly.  The existing
 `(r,q)` rectangle grid gives useful global `4N` bounds, but mere containment
 of a signed rectangle discrepancy in a larger product strip would not be a
