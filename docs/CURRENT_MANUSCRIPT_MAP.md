@@ -18,6 +18,59 @@ statement before any later checkpoint is called current.
 
 ## Exact finite semantics
 
+`FirstExitFrontierTupleReindex` identifies the actual rank-`k` stopped
+frontier's flattened next-candidate list with the length-`k+1` sublists
+whose `dropLast` passes the parent. A permutation theorem preserves the
+original multiplicities. A duplicate-free carrier then gives duplicate-free
+tuples before conversion to a finite set. The exact weighted sum preserves
+the reciprocal-prime mass and contains every last candidate, including
+candidates rejected by the old own-cube gate. Actual-prime specializations
+retain the target deletion, enumeration cap and strict real cutoff.
+
+`AffinePrimeGates` proves that a nonzero continuous real linear form has
+zero-volume level sets and constructs finite continuous ramps.
+`ActualPrimePolyhedralTestFunctions` uses these to prove the actual signed
+continuous-test limit on a cube intersected with finitely many strict
+affine inequalities. `AffinePrimeWallReserve` proves an arithmetic reserve
+for the union of closed affine-wall strips: given `eta>0`, first choose
+`delta>0`, then `N0`, then every `N>=N0` has actual weighted strip mass
+less than `eta`. Empty gate families and dimension zero are allowed; each
+specified wall row must be nonzero. No null-wall or prime-limit premise
+is supplied by the caller.
+
+`ActualPrimeBoxOwnCubeResidual` preserves the literal test
+`P*p_last^2<N^lambda`, with `P` the tuple's natural product. Its exact
+logarithmic equivalent is `sum t+2*t_last<lambda`. On the closed legal
+part of a positive cube the actual normalized lower residual has a
+proved uniform approximation by
+`(2*exp(-gamma)/t_last)*suzukiContinuousLowerFactor((lambda-sum t)/t_last)`.
+The extension using `max 2` makes this profile continuous on the whole
+ambient cube and agrees with it on the admitted part. No illegal residual
+is used. `ActualOwnCubeTupleDictionary` connects the tuple expression back
+to the actual reverse-stored history, density, strict gate and mass;
+only the separate totient rewriting requires distinctness.
+
+`PrimeOwnCubeAffineGates` attaches a separate nonzero own-cube row to any
+finite affine region. `ActualPrimeOwnCubeAffineIntegral` then integrates
+the actual gated residual and its new-minus-old difference. Each level
+keeps its own indicator; no positivity of the difference is asserted.
+
+`OrdinaryPrimeFrontierAffineRegion` and `OrdinaryUpperFiveAffineGates`
+identify the ordinary upper fifth-candidate region exactly. With
+processing-order coordinates `t0>t1>t2>t3>t4`, its inherited tests are
+`3*t0<old` and `t0+t1+3*t2<old`; the rank-four total-product cutoff
+follows from the third cube inequality and decreasing positive primes. The fifth gate
+does not enter the candidate enumeration.
+`ActualOrdinaryUpperFiveCubeIntegral` combines the actual finite
+reindexing, this region identity and the actual lower-residual limit.
+For fixed `0<a<b`, `old>0` and caps eventually covering `N^b`, the real
+ordinary-parent candidate sum localized to `[a,b)^5` converges along
+positive even targets to the difference of two separately gated integrals. This is
+not an equality for a complete untruncated or multistage selected policy.
+The lower fourth-candidate (rank-three parent) counterpart, causal historical-level cell
+assembly, integral certificates and signed distribution remain separate
+obligations; neither main analytic counting bound is discharged.
+
 `SelectedPrefixRationalMesh` casts rational grid endpoints to the existing
 real mesh exactly, selects the finite family of cells meeting a compact
 licensed set, and proves unique half-open coverage. One mesh threshold
@@ -54,7 +107,8 @@ continuity supply both arithmetic and genuine Lebesgue integral errors.
 The limit is the integral of `f(t)*prod_i 1/t_i`; `f` can have either sign.
 No convergence or approximation-error assumption is supplied. This result
 does not impose prime ordering, a retained-prefix filter, or an own-cube
-admission region. Those geometric transfers remain separate obligations.
+admission region. The newer modules above supply the finite affine
+transfer and its localized ordinary upper fifth-parent application.
 
 `ActualPrimeBoxInitialSavingIntegral` applies this transfer to actual
 residual densities. For a cube of dimension `d=k+1`, assume

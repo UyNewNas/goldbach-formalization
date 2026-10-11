@@ -2,6 +2,154 @@
 
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
+## Actual affine regions and the ordinary fifth-candidate integral — 12 October
+
+Eleven new modules connect an actual stopped sieve frontier with a genuine
+localized prime-prefix integral. They do not discharge either analytic
+counting hypothesis of `current_theorem_1_1_of_manuscript_bounds`.
+
+`FirstExitFrontierTupleReindex` first proves a permutation of the literal
+`frontier.flatMap nextCandidates` history list and the length-`k+1`
+selected sublists whose first `k` selections are admitted. Only after
+proving no repeated tuple for a duplicate-free carrier does it form a
+finite tuple set or rewrite sums. Exact specializations preserve actual
+primes, target exclusion, both real endpoints and the enumeration cap.
+The final candidate is never filtered by the old own-cube test. There is
+no factorial or multiplicity correction hidden in the sum.
+
+`AffinePrimeGates` proves zero volume for the level set of each nonzero
+real continuous linear form. Its finite products of continuous ramps
+sandwich the strict-region indicator. `ActualPrimePolyhedralTestFunctions`
+uses signed arithmetic error estimates and dominated convergence to prove
+
+```text
+sum_{p in actualPrimeBoxTuples N a b}
+  prod_i 1/(p_i-1) * 1[forall j, L_j(log p/log N)<c_j] * f(log p/log N)
+  --> integral_[a,b)^d intersect {forall j,L_j(t)<c_j}
+        f(t) * prod_i 1/t_i dt.
+```
+
+Here `0<a<b`, `f` is any real continuous function on the closed cube,
+and every specified `L_j` is nonzero. Empty gate families and dimension
+zero are supported. The result holds along all targets tending to
+infinity, with target-prime exclusion in the actual tuple carrier.
+No null-wall, arithmetic-limit or approximation-error premise occurs.
+
+`AffinePrimeWallReserve` bounds the actual weight of the union of the
+closed strips `|L_j(t)-c_j|<=delta`. For every `eta>0` it supplies
+`delta>0` and then `N0>=2`, after which that real arithmetic mass is less
+than `eta` for every target. Continuous tents dominate even strip
+endpoints, and the proved null-wall theorem pays the genuine integral
+error. A small volume alone is not asserted to bound an unbounded kernel.
+
+For a nonempty tuple set `P=prod p_i`, `y=p_last`, and write
+
+```text
+A_N,lambda(p) = 1[P*y^2<N^lambda]
+                  * Vminus_N(y,N^lambda/P) * log N/C_N,
+H_lambda(t) = (2*exp(-gamma)/t_last)
+               * suzukiContinuousLowerFactor(max 2 ((lambda-sum t)/t_last)).
+```
+
+`ActualPrimeBoxOwnCubeResidual` proves the literal strict gate is
+equivalent to `sum t+2*t_last<lambda`. The closed cube intersected with
+`sum t+2*t_last<=lambda` is compact and lies in the actual lower-density
+supplier's legal domain, including `s=2`. That supplier gives one
+uniform threshold before every later even target, covering cap and
+actual tuple. The gated residual differs uniformly from
+`1[sum t+2*t_last<lambda]*H_lambda(t)` by a vanishing error. The `max 2`
+extension is continuous on the entire positive closed cube and is equal
+to the genuine profile everywhere admitted. The actual total-mass limit
+pays the error even after restriction to an arbitrary additional fixed
+set. A finite lower density is not assumed nonnegative.
+
+`PrimeOwnCubeAffineGates` adds the strict own-cube row as an explicitly
+nonzero linear form. `ActualPrimeOwnCubeAffineIntegral` combines the
+proved error estimate and affine-region prime limit to integrate
+`A_N,lambda` over any additional finite nondegenerate affine region.
+Its new-minus-old limit is a difference of two separately gated
+integrals, without an assumed sign or level comparison.
+
+`ActualOwnCubeTupleDictionary` proves that these tuple residuals equal
+the original reverse-stored history's actual gated minus density at
+`N^lambda/history.prod`, with the same normalization. It preserves
+the history product, last selected prime and reciprocal-prime mass.
+The totient corollary alone requires duplicate-free prime labels.
+The actual candidate state mass is derived from frontier geometry,
+including for rejected candidates.
+
+`OrdinaryPrimeFrontierAffineRegion` proves both directions of the actual
+ordinary upper fifth-candidate description. Prime ordering and actual
+endpoints are retained. The first four selections pass the parity-safe
+parent precisely when the real first and third cube tests hold.
+The rank-four total-product bound follows from the proved full-prefix
+predicate and decreasing primes; it is not silently deleted.
+`OrdinaryUpperFiveAffineGates` supplies its six nonzero affine rows:
+four adjacent-order tests, `3*t0<old`, and `t0+t1+3*t2<old`.
+
+Finally, `ActualOrdinaryUpperFiveCubeIntegral` starts with the literal
+rank-four frontier and all next candidates on `roughPrimeUniverse N cap
+0 (N^b)`. It restricts the selected tuple to `[a,b)^5` and sums the
+original history mass times actual gated lower density, normalized by
+`log N/C_N`. Exact finite reindexing proves equality with the cube sum
+on the six-row parent region. For `0<a<b`, `old>0` and caps eventually
+covering `N^b`, the result converges along positive even targets to the
+true own-cube affine integral. Subtracting the old-level result from the
+new-level result retains every restored candidate and both indicators.
+
+This is a fixed positive-cube result for a constant ordinary upper
+parent. It neither removes the lower logarithmic cutoff nor identifies
+the full causal third/fourth/fifth selected-cap policy. No numerical
+integral certificate, physical signed progression estimate or final
+Chen/bad-semiprime count is claimed. The lower fourth-candidate
+(rank-three parent) analogue
+and the multistage cell assembly remain additional tasks.
+
+All eleven new sources have passed strict individual compilation without
+diagnostics. Independent semantic reviews cover their final sources.
+The standard full aggregate build passed with 9,770 jobs in 42.192 seconds.
+Bundled `leanchecker` replayed all eleven final Lake-built objects in
+35.488 seconds. The canonical safety and transitive-axiom audit passed
+in 254.678 seconds for all 151 owned declarations, including private
+and generated declarations:
+
+| Module | Owned declarations |
+| --- | ---: |
+| `AffinePrimeGates` | 26 |
+| `ActualPrimePolyhedralTestFunctions` | 6 |
+| `AffinePrimeWallReserve` | 12 |
+| `FirstExitFrontierTupleReindex` | 37 |
+| `OrdinaryPrimeFrontierAffineRegion` | 7 |
+| `ActualPrimeBoxOwnCubeResidual` | 14 |
+| `PrimeOwnCubeAffineGates` | 17 |
+| `ActualPrimeOwnCubeAffineIntegral` | 4 |
+| `OrdinaryUpperFiveAffineGates` | 14 |
+| `ActualOwnCubeTupleDictionary` | 7 |
+| `ActualOrdinaryUpperFiveCubeIntegral` | 7 |
+
+All declarations are safe, none is an unproved axiom, and their only
+transitive axioms are `propext`, `Classical.choice` and `Quot.sound`.
+The checks used Lean `4.33.0-rc1`, mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and Goldbach
+`09b97db5764ade1246bfb77206baa1b124760958`. All eleven pins matched
+the manifest; provider tracked worktrees and indexes stayed clean.
+Source, root, audit, runtime binaries and final object hashes stayed
+unchanged. This replays the eleven new final objects, not the full root
+anew. The historical whole-library warning-as-failure result is unchanged.
+
+With the pinned dependencies, reproduce with `lake build`,
+`lake env leanchecker --verbose ImbalancedChen.MODULE` for each module
+above, and
+`lake env lean -DwarningAsError=true verification/PolyhedralFrontierAudit.lean`.
+The declaration inventory uses Lean's defining-module metadata, including
+private/generated declarations, rather than a source-text name filter.
+
+Evidence is in `.lake/main-theorem-verification-20261012/polyhedral-frontier/`.
+The prior `actual-selector` directory's 77 files, including its final
+delivery metadata, are preserved by a complete hash snapshot. The exact
+source pin and both unresolved main-theorem counting hypotheses remain
+unchanged. The next-step plan is explicitly unproved.
+
 ## Actual finite selectors and prime-tuple integrals — 12 October
 
 `SelectedPrefixRationalMesh` defines rational endpoints whose casts are

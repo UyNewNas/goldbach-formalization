@@ -12,7 +12,33 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
-The latest extension constructs a finite rational-grid cap selector on
+The latest extension proves genuine prime-sum integrals on finite strict
+affine regions, including signed continuous tests. Nonzero affine walls
+are proved null, and their closed strips have arbitrarily small actual
+prime weight after one fixed strip width and target threshold are chosen.
+The actual stopped frontier is reindexed with its multiplicities intact:
+only the proper parent selections are tested, and the last candidate is
+not filtered by the old own-cube gate.
+
+For the ordinary upper parent, the fifth-candidate region is now proved
+to be strict decreasing order together with its inherited first and third
+cube tests. On any fixed positive logarithmic cube, the actual history
+sum of gated lower residuals converges to the corresponding integral.
+The new-minus-old saving retains the two separate own-cube indicators.
+The literal natural product and quotient level are preserved, and the
+proved compact residual theorem supplies the uniform summand error.
+
+This closes a localized ordinary-parent integral, not the manuscript's
+causal multistage selected-cap policy. The finite selected-cell assembly,
+numerical certificates, physical signed distribution and both final counting
+bounds remain open. No complete untruncated frontier integral is claimed.
+Theorem 1.1 and Corollary 1.2 are still incomplete. All eleven new sources
+passed strict individual compilation and independent review. The full
+aggregate build passed with 9,770 jobs, all eleven final objects passed
+kernel replay, and all 151 owned declarations passed the canonical safety
+and transitive-axiom audit, using only the standard three axioms below.
+
+The preceding extension constructs a finite rational-grid cap selector on
 the logarithms of actual selected primes. It uses the unique adopted
 half-open cell and inherits the old cap outside the adopted union. A
 licensed compact set has a fixed finite covering family whose whole-box
@@ -36,8 +62,9 @@ normalized Rosser residual saving at the tuple product and last prime now
 also converges to its rational-profile integral. The proved compact
 density theorem supplies the uniform error, and the actual box-mass limit
 pays its sum. No density-error or integral-convergence premise is added.
-This remains a cube result; the admitted ordered regions, certified
-integrals, signed distribution and both final counting bounds are open.
+This earlier result remains a cube result. The newer ordinary fifth-prefix
+integration above does not evaluate its distinct initial-branch domain or
+the manuscript's numerical certificates.
 
 All seven new sources passed strict individual compilation and independent
 review. The full aggregate build passed with 9,759 jobs; all seven final
