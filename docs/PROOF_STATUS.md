@@ -875,10 +875,58 @@ infrastructure-start failures likewise do not count as proof checks.
 The manuscript source was rechecked and remains exactly
 `master@ba6ec11d800eccc54406490631895e174de85766` (tree
 `2b5af758d1b4a4799a120d4ea108679cc02f2e11`); no statement or parameter
-comparison was required.  The remaining finite gap is now the actual causal
-retention policy together with the unique small/rough product attachment into
-one physical `rho_N`.  The density estimate giving the current `K`, the signed
-factorized distribution estimate, the eleven-term mean bound, and the final
-ordered-bad transfer remain open; consequently Theorem 1.1 and Corollary 1.2
-are not claimed.
+comparison was required.  At that checkpoint the remaining finite gap was
+the actual causal retention policy together with the unique small/rough
+product attachment into one physical `rho_N`.
+
+## Strict small/rough product attachment checkpoint
+
+`ImbalancedChen/SmallRoughAttachment.lean` closes the abstract unique-product
+part of that gap.  `SmallPrimeSupportedAt w a` uses the strict boundary
+`p < w`, while `RoughPrimeSupportedAt w b` uses the inclusive boundary
+`w ≤ p`.  `smallPrimeSupportedAt_coprime_roughPrimeSupportedAt` proves that
+these supports are cross-coprime directly from their literal prime-factor
+finsets.  `smallRough_factorization_unique` then proves
+`a*b = c*d -> (a,b)=(c,d)` for supported factors, including arbitrary prime
+powers and unit factors; squarefreeness is not smuggled in.
+
+`smallRoughRho` is a total natural-number coefficient defined by the finite
+product fibre.  On every occupied modulus `smallRoughRho_mul` collapses that
+fibre to the unique sign-sensitive pair coefficient, and
+`smallRoughRho_eq_zero_of_not_mem` proves it vanishes off the displayed
+physical support.  The exact theorem
+`smallRoughPairDivisorSum_eq_physicalDivisorSum` reindexes the complete
+pair-indexed divisor expression to `PhysicalUpperWeightBridge`'s one
+`physicalDivisorSum`; no multiplicity factor is introduced.  The separate
+theorems `smallRough_mul_dvd_iff` and `abs_smallRoughRho_mul_le_one` retain the
+literal divisibility semantics and the unit coefficient bound.
+
+Local verification under the pinned Lean 4.33.0-rc1 and Mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` passed direct elaboration, the
+complete 4,437-job `lake build`, bundled `leanchecker` replay of
+`ImbalancedChen.SmallRoughAttachment`, and direct transitive audits of all
+eight new theorems.  The audit reports only `propext`, `Classical.choice`, and
+`Quot.sound`.  Source SHA-256 is
+`f38146bf3dca4869cc428636c85b22f335e7e5114253ec9fc303764bc45c3f8b`.
+The independent VariableEnvelope runner was also invoked, but the local stale
+base checkout contains a reference snapshot whose bytes do not match its own
+manifest, so that runner stopped at provenance before any VE build or replay;
+it is not counted as passed.  Exact delivery-head CI remains required.
+
+External reuse was checked at pinned `goldbach-lean`
+`09b97db5764ade1246bfb77206baa1b124760958`.  Its
+`goldbachOrderedPair_mul_injective` is directly reusable for an ordered pair
+of rough primes times a divisor of its concrete strict-small product, while
+Mathlib provides the `Nat.Coprime` cancellation and `Finset.sum_image`
+interfaces used here.  The present theorem is intentionally more generic on
+the rough side (any nonzero composite with all prime factors `w ≤ p`) and
+therefore proves the short cutoff argument locally rather than importing a
+research-only carrier theorem with narrower labels.
+
+This checkpoint does not instantiate the manuscript's actual small Rosser
+weights or the causal retained policy, and it proves no density or
+distribution estimate.  The current-`K` density calculation, signed
+factorized distribution estimate, complete eleven-term mean lower bound and
+final ordered-bad transfer therefore remain open; Theorem 1.1 and
+Corollary 1.2 are not claimed.
 
