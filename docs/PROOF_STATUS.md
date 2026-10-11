@@ -2,6 +2,131 @@
 
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
+## Same-weight lower density limit from actual even layers — 12 October
+
+`ActualRosserLowerLimit` proves the genuine two-sided limit of the actual
+lower Rosser density divided by its own target-deleted Euler product, at
+`y=N^u, R=N^(s*u)`, for every fixed `u>0` and `s>=2`. Its limit is
+`suzukiContinuousLowerFactor s`. The filter is positive even targets, and
+any enumeration-cap sequence eventually covering `N^u` is permitted.
+The proof supplies a common threshold before the target and cap for each
+fixed pair of parameters; it does not assert uniform parameter convergence.
+
+The reverse bound is now derived from actual arithmetic contributions.
+`ActualRosserEvenBox` sends strictly ordered tuples of `2*k+2` actual
+primes into the literal lower boundary at `ceil (N^(s*u))`. The active tail
+has cardinality `2*k+1`, the cubic-prefix tests use odd indices, and the
+terminal crossing retains equality. At `k=0` the tail is a singleton,
+with no internal cubic-prefix test. `ActualRosserEvenBoxFamily` and
+`ActualRosserEvenBoxUnion` prove disjointness within and between ranks
+before entering one negative boundary expansion. The resulting upper
+bound is `1 - sum(actual box Euler masses)`. Existing genuine prime/Euler
+mass limits supply a common threshold and an error allocated over one
+finite dependent set of all boxes. The base term one is counted once,
+including empty sets of ranks or boxes.
+
+`RosserEvenMesh` selects half-open inner cells using strict endpoint tests.
+Every region point is eventually covered; the total-tail budget used by
+the mesh is derived from the original strict region. For `s>1`, its
+compact ambient box has lower coordinate `(s-1)/3^(k+1)>0`.
+`RosserEvenMeshIntegral` proves that the actual mesh lower sums converge
+to the genuine even-region integral by pointwise coverage and an explicit
+integrable dominator. No boundary-null-set or integral-limit supplier is
+assumed. `ActualRosserEvenFiniteLayers` scales those cells by `u`, so their
+actual box gains become exactly the proved mesh lower sums. It chooses
+one common mesh for each finite rank set before the target threshold.
+Ranks whose support box has collapsed are proved to have empty regions
+and zero integrals; filtering them removes the mesh nondegeneracy premise
+from the final finite-layer theorem, including `s=4,k=0`.
+
+`RosserEvenLayerIdentity` applies the proved reciprocal substitution to
+the actual largest-coordinate integral and then uses the global positive
+odd-source identity. Finite support identifies the improper tail with
+Suzuki's even recursion for **all `s>=2`**. The weaker condition `s>1`
+suffices for compact integrability but is not used as the domain of this
+Suzuki identity. `ActualRosserEvenSourceSeries` supplies nonnegativity,
+summability and real finite-prefix convergence of those genuine integrals
+to `1 - suzukiContinuousLowerFactor s` from the concrete proved JR source
+contract. Selecting one finite prefix within `eta/2`, then using its
+actual finite-layer bound with another `eta/2`, proves the full upper
+threshold for the actual lower density. The previous all-depth lower
+threshold supplies the other side. No discrete-tail decay is required.
+
+The independently proved Euler normalization also gives
+
+```text
+actualSmallRosserMinusDensity N cap (N^u) (N^(s*u)) * log N / C_N
+  -> (2*exp(-gamma)/u) * suzukiContinuousLowerFactor s.
+```
+
+On `2<=s<=4`, the concrete source factor is proved to equal
+`2*exp(gamma)*log(s-1)/s`, so this normalized limit is exactly
+`4*log(s-1)/(s*u)`, including the zero endpoint at two. The all-`s>=2`
+result concerns the defined Suzuki continuous lower factor; it does not
+claim an additional all-residual identity with a separately defined
+classical factor.
+
+All nine new sources passed strict compilation. The full aggregate
+`lake build` passed with **9,698 jobs** (exit zero, 60.973 seconds).
+All nine final Lake object files then passed bundled kernel replay.
+One canonical environment audited **111 distinct declarations** from
+those same objects, including private and generated declarations. The
+module counts are 21, 26, 4, 5, 17, 4, 4, 6 and 24 in the table order below.
+Every declaration is safe and is not an unproved axiom; only `propext`,
+`Classical.choice` and `Quot.sound` occur transitively. The canonical
+audit took 261.587 seconds.
+
+The frozen sources, root, audit, pins and final objects stayed unchanged
+through verification. All actual dependency revisions matched their
+manifest pins, and both principal providers' tracked worktrees and
+indexes stayed clean. Independent read-only reviews checked the actual
+boundary parity and ceiling endpoints, same-rank/cross-rank injections,
+single base term, common threshold, compact DCT, reciprocal substitution,
+series selection, collapsed regions and both normalized constants.
+Evidence is in `.lake/main-theorem-verification-20261012/even-density/`:
+`final-aggregate-build-status.json`, `even-density-verification.json`,
+`even-density-declarations.json` and `even-density-theorem-types.txt`.
+The verification report SHA-256 is
+`14bf767eba298c815ac363c3faa107d9d79002c837b22534dff2f5855e1dfa66`.
+This is full aggregate compilation plus nine new-module kernel and joint
+axiom checks, not complete-root kernel replay or a remote CI success claim.
+
+Reproduce this checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.RosserEvenMesh
+lake env leanchecker --verbose ImbalancedChen.RosserEvenMeshIntegral
+lake env leanchecker --verbose ImbalancedChen.RosserEvenLayerIdentity
+lake env leanchecker --verbose ImbalancedChen.ActualRosserEvenSourceSeries
+lake env leanchecker --verbose ImbalancedChen.ActualRosserEvenBox
+lake env leanchecker --verbose ImbalancedChen.ActualRosserEvenBoxFamily
+lake env leanchecker --verbose ImbalancedChen.ActualRosserEvenBoxUnion
+lake env leanchecker --verbose ImbalancedChen.ActualRosserEvenFiniteLayers
+lake env leanchecker --verbose ImbalancedChen.ActualRosserLowerLimit
+lake env lean -DwarningAsError=true verification/RosserEvenDensityAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `RosserEvenMesh` | `cc6469967dc0f974e0522a596ca4d314b62dec431f55351643613e33c2c5d4ff` |
+| `RosserEvenMeshIntegral` | `a766869d7bf084bf4e1faac9d793f4ff4a753a84d150a861de8e3446c0d4eb1c` |
+| `RosserEvenLayerIdentity` | `220cb8cec24c1ab61500af8df639d693493fbf9807556210a5f768f3f1502754` |
+| `ActualRosserEvenSourceSeries` | `1ae9712f24ebd8cd43ec657b6fad8017b6c35176354a6da9f05a0854ef29eb14` |
+| `ActualRosserEvenBox` | `55287bfc6e22bfe8bb7f5d00a8698f4030c4c1cea23468c4edb72bea30a2bf52` |
+| `ActualRosserEvenBoxFamily` | `6c705afd258edaa92e159cab13dd311040cbdc1f368f1c57a949beb04f53a65f` |
+| `ActualRosserEvenBoxUnion` | `a71813f545f0f6ca5f259b44002e93aae1fb103676f9ba2a4bc28bcd46079d89` |
+| `ActualRosserEvenFiniteLayers` | `d974929526b48e807a9f04f62d6e37dd31aa76daf968374a28d5f8fc343dd828` |
+| `ActualRosserLowerLimit` | `bec3ee9d8fb3585444fac10a1051948700e8c129eb52853913873fae05e83335` |
+
+Upper residuals beyond four, the required two-sided parameter uniformity,
+the causal boxed compiler and support exponent, sharp K and certificate
+integral semantics, restricted signed distribution, current Chen mean and
+the final bad-semiprime estimate remain open. Theorem 1.1 and Corollary 1.2
+still retain their explicit analytic premises and are not complete.
+
 ## Upper density through residual four and the lower boundary — 12 October
 
 For each fixed `u>0` and `0<s<=4`, `ActualRosserUpperWindowLimit` proves

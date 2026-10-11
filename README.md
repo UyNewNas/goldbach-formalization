@@ -18,17 +18,19 @@ for each fixed `u>0` and `0<s<=4`. The matching singular-series-normalized
 limit is `(2*exp(-gamma)/u)*F(s)`. The upper direction also has one threshold
 uniform for `u>=a>0` and `3/2<=s<=4`; no two-sided uniform limit is claimed.
 All statements retain target-prime exclusions and arbitrary covering caps.
-The actual lower weight has its lower threshold for fixed `s>=2`, and its
-exact finite expansion is one minus nonnegative even-boundary losses.
-Genuine even-region integrals are now identified with an inherited
-odd-tail source integral. These facts do not yet prove the lower density
-limit. Upper residuals beyond four, the required two-sided parameter
+The actual lower density ratio now also has its two-sided limit, equal to
+the Suzuki continuous lower factor for every fixed `u>0` and `s>=2`.
+On `2<=s<=4`, this is exactly `2*exp(gamma)*log(s-1)/s`, and the
+singular-series-normalized limit is `4*log(s-1)/(s*u)`. Genuine even-region
+integrals, actual prime boxes and one finite prefix of the proved even
+series supply the reverse bound. Upper residuals beyond four, the required two-sided parameter
 uniformity, boxed compiler, sharp signed density and main analytic theorem
 remain open. Verification details and the fixed private-provider interface
 used for the global odd-source identity are recorded in the proof status.
-The eight new modules passed strict compilation, final-object kernel replay
-and one joint audit of all 73 declarations under the standard three-axiom
-allowlist. The full local aggregate build passed with 9,689 jobs.
+The nine new lower-density modules passed strict compilation, kernel
+replay of the final Lake objects, and one joint audit of all 111 declarations
+under the standard three-axiom allowlist. The full local build passed with
+9,698 jobs. Verification scope and reproduction commands are in the proof status.
 See [proof status](docs/PROOF_STATUS.md).
 
 The current-parameter Chen pointwise and paired-deletion modules, together
@@ -151,6 +153,11 @@ At commit `50c355b3260da1699447df805f0a58e74e4e465e`, the eighty-four-module che
 - `ImbalancedChen/RosserGlobalSourceIdentity.lean`: exposes the pinned provider's already-proved private global odd-source identity for all `s>0`; its internal-name dependency is documented explicitly.
 - `ImbalancedChen/RosserEvenLogRegion.lean`: proves the literal even-region geometry, exact first/last-coordinate slices, and compact positive containment for `s>1`.
 - `ImbalancedChen/RosserEvenLayerIntegral.lean`: proves integrability and the exact inherited boundary-source integral identity by measure-preserving Fubini.
+- `ImbalancedChen/RosserEvenMesh.lean` and `RosserEvenMeshIntegral.lean`: prove strict inner-cell inclusion, eventual coverage, and convergence of actual mesh lower sums to each genuine even-region integral.
+- `ImbalancedChen/RosserEvenLayerIdentity.lean` and `ActualRosserEvenSourceSeries.lean`: identify every even integral with the Suzuki layer for `s>=2` and prove the concrete real finite-prefix limit to one minus the continuous lower factor.
+- `ImbalancedChen/ActualRosserEvenBox.lean`, `ActualRosserEvenBoxFamily.lean` and `ActualRosserEvenBoxUnion.lean`: inject actual prime boxes into the same negative boundary expansion, preserving the literal ceiling, singleton tails, disjoint ranks and a common target/cap threshold.
+- `ImbalancedChen/ActualRosserEvenFiniteLayers.lean`: scales the proved meshes and removes collapsed support boxes as genuinely empty regions, obtaining the finite continuous-loss upper bound for arbitrary finite rank sets.
+- `ImbalancedChen/ActualRosserLowerLimit.lean`: proves the two-sided same-weight lower density limit for fixed `u>0,s>=2`, plus Euler normalization and the explicit first-interval constants.
 - `ImbalancedChen/MassLogIntegral.lean`: fixed-test continuity and exact logarithmic weight conversion, reusing the existing integral proof.
 - `ImbalancedChen/HalfProductMassSplit.lean`: exact high/low prime rectangle and order-error envelope for the original source.
 - `ImbalancedChen/UniformPrimeTail.lean`: uniform moving-endpoint and fixed-power consequences of the explicitly supplied real PNT.

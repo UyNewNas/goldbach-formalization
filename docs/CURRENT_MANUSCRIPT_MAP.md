@@ -440,9 +440,11 @@ remain the actual filtered-source gap.
    supplier and absolute rough-mass bound are proved. The same raw upper
    density limit is now proved for fixed `0<s<=4`. Its upper direction has
    a threshold uniform for `u>=a>0`, `3/2<=s<=4`. The actual lower weight
-   has a lower threshold for fixed `s>=2`, an exact negative-boundary
-   expansion, and genuine even-region integral identities. Its reverse
-   prime-box bound and full density identity remain open. The causal boxed
+   now has a two-sided density limit for every fixed `u>0,s>=2`, equal to
+   the concrete Suzuki continuous lower factor. Actual even prime-box
+   losses, genuine region integrals and a proved finite-prefix limit
+   discharge its reverse bound. The explicit classical factor is identified
+   on `[2,4]`; no global classical-factor identity is inferred here. The causal boxed
    policy, its support exponent, upper residuals beyond four and the needed
    two-sided uniform parameter limits also remain open.
 3. Prove the complete current eleven-term lower-weight mean after paired
