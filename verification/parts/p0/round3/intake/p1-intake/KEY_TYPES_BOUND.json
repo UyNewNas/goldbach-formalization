@@ -1,0 +1,198 @@
+[
+  {
+    "name": "ImbalancedChen.mem_ordinaryLowerFourFrontierTuples_iff_log",
+    "module": "ImbalancedChen.OrdinaryLowerFourFrontier",
+    "source_commit": "b09d5361e0b30f3e85cb912a03c7bfb85a99bf8f",
+    "source_sha256": "97f5e3390d9c90a9598a7fa5fa1ede84c174da9497f23c88be6ea04ffb0bc9e8",
+    "source_header": "theorem mem_ordinaryLowerFourFrontierTuples_iff_log\n    (N cap : ℕ) (old w z : ℝ) (hN : 1 < N)\n    (hzcap : z ≤ (cap : ℝ)) (p : Fin 4 → ℕ) :\n    p ∈ firstExitFrontierTuples 3 (ordinaryParityRosserPolicy true ((N : ℝ) ^ old))\n      (roughPrimeUniverse N cap w z) ↔\n      StrictAnti p ∧\n        (∀ i, Nat.Prime (p i) ∧ ¬p i ∣ N ∧\n          w ≤ (p i : ℝ) ∧ (p i : ℝ) < z) ∧\n        actualPrimeTupleLog N p 0 + 3 * actualPrimeTupleLog N p 1 < old",
+    "compiler_confirmed_pretty_type": "∀ (N cap : ℕ) (old w z : ℝ),\n  1 < N →\n    z ≤ ↑cap →\n      ∀ (p : Fin 4 → ℕ),\n        p ∈\n            ImbalancedChen.firstExitFrontierTuples 3 (ImbalancedChen.ordinaryParityRosserPolicy true (↑N ^ old))\n              (ImbalancedChen.roughPrimeUniverse N cap w z) ↔\n          StrictAnti p ∧\n            (∀ (i : Fin 4), Nat.Prime (p i) ∧ ¬p i ∣ N ∧ w ≤ ↑(p i) ∧ ↑(p i) < z) ∧\n              ImbalancedChen.actualPrimeTupleLog N p 0 + 3 * ImbalancedChen.actualPrimeTupleLog N p 1 < old",
+    "compiler_type_has_omission_marker": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  {
+    "name": "ImbalancedChen.actualSelectedPrefixLowerOwnCubeSum_eq_cells",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerCellSum",
+    "source_commit": "b09d5361e0b30f3e85cb912a03c7bfb85a99bf8f",
+    "source_sha256": "48b9b1b50d1fec780378e61a5250971cf0f5222b12fcf04706ad357f90040714",
+    "source_header": "theorem actualSelectedPrefixLowerOwnCubeSum_eq_cells\n    (N cap : ℕ) (I : Finset (Fin 4)) (old nu a b : ℚ)\n    (hab : a < b) (hN : 1 < N)\n    (hcap : (N : ℝ) ^ (b : ℝ) ≤ (cap : ℝ))\n    (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1))) :\n    actualSelectedPrefixOwnCubeSum true N cap ((N : ℝ) ^ (b : ℝ)) I old nu a b m J *\n        Real.log (N : ℝ) / singularSeries N =\n      ∑ j ∈ J,\n        (actualPrimeBoxOwnCubeMinusSum 3 N cap (a : ℝ) (b : ℝ)\n          (selectedPrefixCellCap I old nu a b m j : ℝ)\n          (logPrimeMeshCell (a : ℝ) (b : ℝ) m j ∩\n            primeAffineGateRegion ordinaryLowerFourGateForms (ordinaryLowerFourGateBounds old)) -\n        actualPrimeBoxOwnCubeMinusSum 3 N cap (a : ℝ) (b : ℝ) (old : ℝ)\n          (logPrimeMeshCell (a : ℝ) (b : ℝ) m j ∩\n            primeAffineGateRegion ordinaryLowerFourGateForms (ordinaryLowerFourGateBounds old)))",
+    "compiler_confirmed_pretty_type": "∀ (N cap : ℕ) (I : Finset (Fin 4)) (old nu a b : ℚ),\n  a < b →\n    1 < N →\n      ↑N ^ ↑b ≤ ↑cap →\n        ∀ (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1))),\n          ImbalancedChen.actualSelectedPrefixOwnCubeSum true N cap (↑N ^ ↑b) I old nu a b m J * Real.log ↑N /\n              ImbalancedChen.singularSeries N =\n            ∑ j ∈ J,\n              (ImbalancedChen.actualPrimeBoxOwnCubeMinusSum 3 N cap (↑a) (↑b)\n                  (↑(ImbalancedChen.selectedPrefixCellCap I old nu a b m j))\n                  (ImbalancedChen.logPrimeMeshCell (↑a) (↑b) m j ∩\n                    ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryLowerFourGateForms\n                      (ImbalancedChen.ordinaryLowerFourGateBounds ↑old)) -\n                ImbalancedChen.actualPrimeBoxOwnCubeMinusSum 3 N cap (↑a) (↑b) (↑old)\n                  (ImbalancedChen.logPrimeMeshCell (↑a) (↑b) m j ∩\n                    ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryLowerFourGateForms\n                      (ImbalancedChen.ordinaryLowerFourGateBounds ↑old)))",
+    "compiler_type_has_omission_marker": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  {
+    "name": "ImbalancedChen.selectedPrefixLowerRestorationIntegral_eq_integrals",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerOwnCubeIntegral",
+    "source_commit": "b09d5361e0b30f3e85cb912a03c7bfb85a99bf8f",
+    "source_sha256": "c98fd3407d59f27cd140689de36f888cfd804130dc9787e3e60ea451b4e1dcd1",
+    "source_header": "theorem selectedPrefixLowerRestorationIntegral_eq_integrals\n    (I : Finset (Fin 4)) (old nu a b : ℚ) (ha : 0 < a) (hab : a < b)\n    (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1))) :\n    selectedPrefixLowerRestorationIntegral I old nu a b m J =\n      ∑ j ∈ J, ∫ t in logPrimeMeshCell (a : ℝ) (b : ℝ) m j ∩\n          primeAffineGateRegion ordinaryLowerFourGateForms (ordinaryLowerFourGateBounds old),\n        (primeOwnCubeGatedProfile (selectedPrefixCellCap I old nu a b m j : ℝ) t -\n          primeOwnCubeGatedProfile (old : ℝ) t) * ∏ i, 1 / t i",
+    "compiler_confirmed_pretty_type": "∀ (I : Finset (Fin 4)) (old nu a b : ℚ),\n  0 < a →\n    a < b →\n      ∀ (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1))),\n        ImbalancedChen.selectedPrefixLowerRestorationIntegral I old nu a b m J =\n          ∑ j ∈ J,\n            ∫ (t : Fin 4 → ℝ) in\n              ImbalancedChen.logPrimeMeshCell (↑a) (↑b) m j ∩\n                ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryLowerFourGateForms\n                  (ImbalancedChen.ordinaryLowerFourGateBounds ↑old),\n              (ImbalancedChen.primeOwnCubeGatedProfile (↑(ImbalancedChen.selectedPrefixCellCap I old nu a b m j)) t -\n                  ImbalancedChen.primeOwnCubeGatedProfile (↑old) t) *\n                ∏ i, 1 / t i",
+    "compiler_type_has_omission_marker": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  {
+    "name": "ImbalancedChen.tendsto_actualSelectedPrefixLowerOwnCubeSum",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerOwnCubeIntegral",
+    "source_commit": "b09d5361e0b30f3e85cb912a03c7bfb85a99bf8f",
+    "source_sha256": "c98fd3407d59f27cd140689de36f888cfd804130dc9787e3e60ea451b4e1dcd1",
+    "source_header": "theorem tendsto_actualSelectedPrefixLowerOwnCubeSum\n    (I : Finset (Fin 4)) (old nu a b : ℚ)\n    (ha : 0 < a) (hab : a < b)\n    (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1))) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (b : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ =>\n      actualSelectedPrefixOwnCubeSum true N (cap N) ((N : ℝ) ^ (b : ℝ))\n        I old nu a b m J * Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (selectedPrefixLowerRestorationIntegral I old nu a b m J))",
+    "compiler_confirmed_pretty_type": "∀ (I : Finset (Fin 4)) (old nu a b : ℚ),\n  0 < a →\n    a < b →\n      ∀ (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1))) (cap : ℕ → ℕ),\n        (∀ᶠ (N : ℕ) in Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N}, ↑N ^ ↑b ≤ ↑(cap N)) →\n          Filter.Tendsto\n            (fun N =>\n              ImbalancedChen.actualSelectedPrefixOwnCubeSum true N (cap N) (↑N ^ ↑b) I old nu a b m J * Real.log ↑N /\n                ImbalancedChen.singularSeries N)\n            (Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N})\n            (nhds (ImbalancedChen.selectedPrefixLowerRestorationIntegral I old nu a b m J))",
+    "compiler_type_has_omission_marker": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  {
+    "name": "ImbalancedChen.tendsto_actualSelectedPrefixLowerDensity_restoration",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerOwnCubeIntegral",
+    "source_commit": "b09d5361e0b30f3e85cb912a03c7bfb85a99bf8f",
+    "source_sha256": "c98fd3407d59f27cd140689de36f888cfd804130dc9787e3e60ea451b4e1dcd1",
+    "source_header": "theorem tendsto_actualSelectedPrefixLowerDensity_restoration\n    (I : Finset (Fin 4)) (old nu a b : ℚ)\n    (ha : 0 < a) (hab : a < b) (hbo : b ≤ old)\n    (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1)))\n    (hchecks : ∀ j ∈ J, selectedBoxCapCheck I old nu\n      (qLogPrimeMeshLo a b m j) (qLogPrimeMeshHi a b m j) = true)\n    (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (b : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ =>\n      (actualSelectedPrefixLowerDensity N (cap N) I old nu a b m J -\n        actualSmallRosserMinusDensity N (cap N) ((N : ℝ) ^ (b : ℝ))\n          ((N : ℝ) ^ (old : ℝ))) * Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (selectedPrefixLowerRestorationIntegral I old nu a b m J))",
+    "compiler_confirmed_pretty_type": "∀ (I : Finset (Fin 4)) (old nu a b : ℚ),\n  0 < a →\n    a < b →\n      b ≤ old →\n        ∀ (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1))),\n          (∀ j ∈ J,\n              ImbalancedChen.selectedBoxCapCheck I old nu (ImbalancedChen.qLogPrimeMeshLo a b m j)\n                  (ImbalancedChen.qLogPrimeMeshHi a b m j) =\n                true) →\n            ∀ (cap : ℕ → ℕ),\n              (∀ᶠ (N : ℕ) in Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N}, ↑N ^ ↑b ≤ ↑(cap N)) →\n                Filter.Tendsto\n                  (fun N =>\n                    (ImbalancedChen.actualSelectedPrefixLowerDensity N (cap N) I old nu a b m J -\n                          ImbalancedChen.actualSmallRosserMinusDensity N (cap N) (↑N ^ ↑b) (↑N ^ ↑old)) *\n                        Real.log ↑N /\n                      ImbalancedChen.singularSeries N)\n                  (Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N})\n                  (nhds (ImbalancedChen.selectedPrefixLowerRestorationIntegral I old nu a b m J))",
+    "compiler_type_has_omission_marker": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  {
+    "name": "ImbalancedChen.tendsto_actualSelectedPrefixLowerDensity_ceil_normalized",
+    "module": "ImbalancedChen.ActualSelectedPrefixLowerOwnCubeIntegral",
+    "source_commit": "b09d5361e0b30f3e85cb912a03c7bfb85a99bf8f",
+    "source_sha256": "c98fd3407d59f27cd140689de36f888cfd804130dc9787e3e60ea451b4e1dcd1",
+    "source_header": "theorem tendsto_actualSelectedPrefixLowerDensity_ceil_normalized\n    (I : Finset (Fin 4)) (old nu a b : ℚ)\n    (ha : 0 < a) (hab : a < b) (hbo : 2 * b ≤ old)\n    (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1)))\n    (hchecks : ∀ j ∈ J, selectedBoxCapCheck I old nu\n      (qLogPrimeMeshLo a b m j) (qLogPrimeMeshHi a b m j) = true) :\n    Tendsto (fun N : ℕ =>\n      actualSelectedPrefixLowerDensity N (Nat.ceil ((N : ℝ) ^ (b : ℝ)))\n        I old nu a b m J * Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 ((2 * Real.exp (-Real.eulerMascheroniConstant) / (b : ℝ)) *\n        suzukiContinuousLowerFactor ((old : ℝ) / (b : ℝ)) +\n        selectedPrefixLowerRestorationIntegral I old nu a b m J))",
+    "compiler_confirmed_pretty_type": "∀ (I : Finset (Fin 4)) (old nu a b : ℚ),\n  0 < a →\n    a < b →\n      2 * b ≤ old →\n        ∀ (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1))),\n          (∀ j ∈ J,\n              ImbalancedChen.selectedBoxCapCheck I old nu (ImbalancedChen.qLogPrimeMeshLo a b m j)\n                  (ImbalancedChen.qLogPrimeMeshHi a b m j) =\n                true) →\n            Filter.Tendsto\n              (fun N =>\n                ImbalancedChen.actualSelectedPrefixLowerDensity N ⌈↑N ^ ↑b⌉₊ I old nu a b m J * Real.log ↑N /\n                  ImbalancedChen.singularSeries N)\n              (Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N})\n              (nhds\n                (2 * Real.exp (-Real.eulerMascheroniConstant) / ↑b *\n                    MathlibNt.SieveTheory.suzukiContinuousLowerFactor (↑old / ↑b) +\n                  ImbalancedChen.selectedPrefixLowerRestorationIntegral I old nu a b m J))",
+    "compiler_type_has_omission_marker": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  {
+    "name": "ImbalancedChen.historicalPrefixAncestorCell_unique",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "source_commit": "b09d5361e0b30f3e85cb912a03c7bfb85a99bf8f",
+    "source_sha256": "b6ef2c6febc61e28ddf5bbeb5c02fd665e5266833df4cd1b5b2640481cb6e6f3",
+    "source_header": "theorem historicalPrefixAncestorCell_unique {r d m : ℕ}\n    (hrd : r ≤ d) {a b : ℝ} (hab : a ≤ b)\n    {j : Fin d → Fin (m + 1)} {q : Fin r → Fin (m + 1)}\n    {t : Fin d → ℝ} (ht : t ∈ logPrimeMeshCell a b m j)\n    (hq : historicalPrefixProject hrd t ∈ logPrimeMeshCell a b m q) :\n    q = historicalPrefixProject hrd j",
+    "compiler_confirmed_pretty_type": "∀ {r d m : ℕ} (hrd : r ≤ d) {a b : ℝ},\n  a ≤ b →\n    ∀ {j : Fin d → Fin (m + 1)} {q : Fin r → Fin (m + 1)} {t : Fin d → ℝ},\n      t ∈ ImbalancedChen.logPrimeMeshCell a b m j →\n        ImbalancedChen.historicalPrefixProject hrd t ∈ ImbalancedChen.logPrimeMeshCell a b m q →\n          q = ImbalancedChen.historicalPrefixProject hrd j",
+    "compiler_type_has_omission_marker": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  {
+    "name": "ImbalancedChen.primeHistoryLogCoordinates_eq_historicalPrefixProject",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "source_commit": "b09d5361e0b30f3e85cb912a03c7bfb85a99bf8f",
+    "source_sha256": "b6ef2c6febc61e28ddf5bbeb5c02fd665e5266833df4cd1b5b2640481cb6e6f3",
+    "source_header": "theorem primeHistoryLogCoordinates_eq_historicalPrefixProject (N : ℝ)\n    {r d : ℕ} (hrd : r ≤ d) {history : List ℕ} (hlen : history.length = d) :\n    primeHistoryLogCoordinates N r (rosserAncestor r history) =\n      historicalPrefixProject hrd (primeHistoryLogCoordinates N d history)",
+    "compiler_confirmed_pretty_type": "∀ (N : ℝ) {r d : ℕ} (hrd : r ≤ d) {history : List ℕ},\n  history.length = d →\n    ImbalancedChen.primeHistoryLogCoordinates N r (ImbalancedChen.rosserAncestor r history) =\n      ImbalancedChen.historicalPrefixProject hrd (ImbalancedChen.primeHistoryLogCoordinates N d history)",
+    "compiler_type_has_omission_marker": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  {
+    "name": "ImbalancedChen.HistoricalPrefixCapData.level4_outside",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "source_commit": "b09d5361e0b30f3e85cb912a03c7bfb85a99bf8f",
+    "source_sha256": "b6ef2c6febc61e28ddf5bbeb5c02fd665e5266833df4cd1b5b2640481cb6e6f3",
+    "source_header": "theorem level4_outside (D : HistoricalPrefixCapData) (N : ℝ)\n    (history : List ℕ) (hlen : history.length = 4)\n    (hout : ∀ j ∈ D.cells4, primeHistoryLogCoordinates N 4 history ∉\n      logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :\n    D.level4 N history = D.level3 N (rosserAncestor 3 history)",
+    "compiler_confirmed_pretty_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N : ℝ) (history : List ℕ),\n  history.length = 4 →\n    (∀ j ∈ D.cells4,\n        ImbalancedChen.primeHistoryLogCoordinates N 4 history ∉ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j) →\n      D.level4 N history = D.level3 N (ImbalancedChen.rosserAncestor 3 history)",
+    "compiler_type_has_omission_marker": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  {
+    "name": "ImbalancedChen.HistoricalPrefixCapData.level5_outside",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "source_commit": "b09d5361e0b30f3e85cb912a03c7bfb85a99bf8f",
+    "source_sha256": "b6ef2c6febc61e28ddf5bbeb5c02fd665e5266833df4cd1b5b2640481cb6e6f3",
+    "source_header": "theorem level5_outside (D : HistoricalPrefixCapData) (N : ℝ)\n    (history : List ℕ) (hlen : history.length = 5)\n    (hout : ∀ j ∈ D.cells5, primeHistoryLogCoordinates N 5 history ∉\n      logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :\n    D.level5 N history = D.level4 N (rosserAncestor 4 history)",
+    "compiler_confirmed_pretty_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N : ℝ) (history : List ℕ),\n  history.length = 5 →\n    (∀ j ∈ D.cells5,\n        ImbalancedChen.primeHistoryLogCoordinates N 5 history ∉ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j) →\n      D.level5 N history = D.level4 N (ImbalancedChen.rosserAncestor 4 history)",
+    "compiler_type_has_omission_marker": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  {
+    "name": "ImbalancedChen.HistoricalPrefixCapData.levelCheck_of_selectedBoxCapChecks",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "source_commit": "b09d5361e0b30f3e85cb912a03c7bfb85a99bf8f",
+    "source_sha256": "b6ef2c6febc61e28ddf5bbeb5c02fd665e5266833df4cd1b5b2640481cb6e6f3",
+    "source_header": "theorem levelCheck_of_selectedBoxCapChecks (D : HistoricalPrefixCapData)\n    (I3 : (Fin 3 → Fin (D.m + 1)) → Finset (Fin 3))\n    (I4 : (Fin 4 → Fin (D.m + 1)) → Finset (Fin 4))\n    (I5 : (Fin 5 → Fin (D.m + 1)) → Finset (Fin 5))\n    (nu3 : (Fin 3 → Fin (D.m + 1)) → ℚ)\n    (nu4 : (Fin 4 → Fin (D.m + 1)) → ℚ)\n    (nu5 : (Fin 5 → Fin (D.m + 1)) → ℚ)\n    (h3 : ∀ j ∈ D.cells3,\n      D.cap3 j = selectedBoxCap (I3 j) D.old (nu3 j)\n        (qLogPrimeMeshLo D.a D.b D.m j) (qLogPrimeMeshHi D.a D.b D.m j) ∧\n      selectedBoxCapCheck (I3 j) D.old (nu3 j)\n        (qLogPrimeMeshLo D.a D.b D.m j) (qLogPrimeMeshHi D.a D.b D.m j) = true)\n    (h4 : ∀ j ∈ D.cells4,\n      D.cap4 j = selectedBoxCap (I4 j) (D.old4 j) (nu4 j)\n        (qLogPrimeMeshLo D.a D.b D.m j) (qLogPrimeMeshHi D.a D.b D.m j) ∧\n      selectedBoxCapCheck (I4 j) (D.old4 j) (nu4 j)\n        (qLogPrimeMeshLo D.a D.b D.m j) (qLogPrimeMeshHi D.a D.b D.m j) = true)\n    (h5 : ∀ j ∈ D.cells5,\n      D.cap5 j = selectedBoxCap (I5 j) (D.old5 j) (nu5 j)\n        (qLogPrimeMeshLo D.a D.b D.m j) (qLogPrimeMeshHi D.a D.b D.m j) ∧\n      selectedBoxCapCheck (I5 j) (D.old5 j) (nu5 j)\n        (qLogPrimeMeshLo D.a D.b D.m j) (qLogPrimeMeshHi D.a D.b D.m j) = true) :\n    D.levelCheck = true",
+    "compiler_confirmed_pretty_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (I3 : (Fin 3 → Fin (D.m + 1)) → Finset (Fin 3))\n  (I4 : (Fin 4 → Fin (D.m + 1)) → Finset (Fin 4)) (I5 : (Fin 5 → Fin (D.m + 1)) → Finset (Fin 5))\n  (nu3 : (Fin 3 → Fin (D.m + 1)) → ℚ) (nu4 : (Fin 4 → Fin (D.m + 1)) → ℚ) (nu5 : (Fin 5 → Fin (D.m + 1)) → ℚ),\n  (∀ j ∈ D.cells3,\n      D.cap3 j =\n          ImbalancedChen.selectedBoxCap (I3 j) D.old (nu3 j) (ImbalancedChen.qLogPrimeMeshLo D.a D.b D.m j)\n            (ImbalancedChen.qLogPrimeMeshHi D.a D.b D.m j) ∧\n        ImbalancedChen.selectedBoxCapCheck (I3 j) D.old (nu3 j) (ImbalancedChen.qLogPrimeMeshLo D.a D.b D.m j)\n            (ImbalancedChen.qLogPrimeMeshHi D.a D.b D.m j) =\n          true) →\n    (∀ j ∈ D.cells4,\n        D.cap4 j =\n            ImbalancedChen.selectedBoxCap (I4 j) (D.old4 j) (nu4 j) (ImbalancedChen.qLogPrimeMeshLo D.a D.b D.m j)\n              (ImbalancedChen.qLogPrimeMeshHi D.a D.b D.m j) ∧\n          ImbalancedChen.selectedBoxCapCheck (I4 j) (D.old4 j) (nu4 j) (ImbalancedChen.qLogPrimeMeshLo D.a D.b D.m j)\n              (ImbalancedChen.qLogPrimeMeshHi D.a D.b D.m j) =\n            true) →\n      (∀ j ∈ D.cells5,\n          D.cap5 j =\n              ImbalancedChen.selectedBoxCap (I5 j) (D.old5 j) (nu5 j) (ImbalancedChen.qLogPrimeMeshLo D.a D.b D.m j)\n                (ImbalancedChen.qLogPrimeMeshHi D.a D.b D.m j) ∧\n            ImbalancedChen.selectedBoxCapCheck (I5 j) (D.old5 j) (nu5 j) (ImbalancedChen.qLogPrimeMeshLo D.a D.b D.m j)\n                (ImbalancedChen.qLogPrimeMeshHi D.a D.b D.m j) =\n              true) →\n        D.levelCheck = true",
+    "compiler_type_has_omission_marker": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  {
+    "name": "ImbalancedChen.HistoricalPrefixCapData.upperThirdToFifthSaving_eq",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "source_commit": "b09d5361e0b30f3e85cb912a03c7bfb85a99bf8f",
+    "source_sha256": "b6ef2c6febc61e28ddf5bbeb5c02fd665e5266833df4cd1b5b2640481cb6e6f3",
+    "source_header": "theorem upperThirdToFifthSaving_eq (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)\n    (hcheck : D.levelCheck = true) (N cap : ℕ) (hN : 1 < (N : ℝ)) (z : ℝ) :\n    firstExitRetainedPolynomial (D.upperThirdPolicy (N : ℝ))\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) -\n      firstExitRetainedPolynomial (D.upperFifthPolicy (N : ℝ))\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) =\n      actualHistoricalFourthSaving\n          (ordinaryParityRosserPolicy false ((N : ℝ) ^ (D.old : ℝ)))\n          (D.level3 (N : ℝ)) (D.level4 (N : ℝ)) N cap z +\n        actualHistoricalFifthSaving\n          (ordinaryParityRosserPolicy false ((N : ℝ) ^ (D.old : ℝ)))\n          (D.level3 (N : ℝ)) (D.level4 (N : ℝ)) (D.level5 (N : ℝ)) N cap z",
+    "compiler_confirmed_pretty_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b →\n    D.levelCheck = true →\n      ∀ (N cap : ℕ),\n        1 < ↑N →\n          ∀ (z : ℝ),\n            ImbalancedChen.firstExitRetainedPolynomial (D.upperThirdPolicy ↑N) (fun p => 1 / (↑p - 1)) [] true 1\n                  (ImbalancedChen.roughPrimeUniverse N cap 0 z) -\n                ImbalancedChen.firstExitRetainedPolynomial (D.upperFifthPolicy ↑N) (fun p => 1 / (↑p - 1)) [] true 1\n                  (ImbalancedChen.roughPrimeUniverse N cap 0 z) =\n              ImbalancedChen.actualHistoricalFourthSaving\n                  (ImbalancedChen.ordinaryParityRosserPolicy false (↑N ^ ↑D.old)) (D.level3 ↑N) (D.level4 ↑N) N cap z +\n                ImbalancedChen.actualHistoricalFifthSaving\n                  (ImbalancedChen.ordinaryParityRosserPolicy false (↑N ^ ↑D.old)) (D.level3 ↑N) (D.level4 ↑N)\n                  (D.level5 ↑N) N cap z",
+    "compiler_type_has_omission_marker": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  {
+    "name": "ImbalancedChen.HistoricalPrefixCapData.exponent5_apply_sub",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "source_commit": "b09d5361e0b30f3e85cb912a03c7bfb85a99bf8f",
+    "source_sha256": "b6ef2c6febc61e28ddf5bbeb5c02fd665e5266833df4cd1b5b2640481cb6e6f3",
+    "source_header": "theorem exponent5_apply_sub (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)\n    (t : Fin 5 → ℝ) (f : ℚ → ℝ) :\n    f (D.exponent5 t) -\n        f (D.exponent4 (historicalPrefixProject (by omega : 4 ≤ 5) t)) =\n      ∑ j ∈ D.cells5,\n        if t ∈ logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j then\n          f (D.cap5 j) - f (D.old5 j) else 0",
+    "compiler_confirmed_pretty_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b →\n    ∀ (t : Fin 5 → ℝ) (f : ℚ → ℝ),\n      f (D.exponent5 t) - f (D.exponent4 (ImbalancedChen.historicalPrefixProject ⋯ t)) =\n        ∑ j ∈ D.cells5,\n          if t ∈ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j then f (D.cap5 j) - f (D.old5 j) else 0",
+    "compiler_type_has_omission_marker": true,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  {
+    "name": "ImbalancedChen.HistoricalPrefixCapData.upperFifthPolicy_eq_oddFirstExitPolicy",
+    "module": "ImbalancedChen.HistoricalPrefixCertificate",
+    "source_commit": "b09d5361e0b30f3e85cb912a03c7bfb85a99bf8f",
+    "source_sha256": "b6ef2c6febc61e28ddf5bbeb5c02fd665e5266833df4cd1b5b2640481cb6e6f3",
+    "source_header": "theorem upperFifthPolicy_eq_oddFirstExitPolicy (D : HistoricalPrefixCapData) (N : ℝ) :\n    D.upperFifthPolicy N = oddFirstExitPolicy (fun pre => D.upperFifthPolicy N false pre)",
+    "compiler_confirmed_pretty_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N : ℝ),\n  D.upperFifthPolicy N = ImbalancedChen.oddFirstExitPolicy fun pre => D.upperFifthPolicy N false pre",
+    "compiler_type_has_omission_marker": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  }
+]

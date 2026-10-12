@@ -8,6 +8,7 @@ batch="${1:-buchstab}"
 test "$(cat lean-toolchain)" = leanprover/lean4:v4.33.0-rc1
 python3 verification/parts/p0/check_pins.py
 suppliers=()
+auxiliary=()
 
 case "$batch" in
   buchstab)
@@ -34,9 +35,46 @@ case "$batch" in
       ImbalancedChen.Certificates.PairedV2Data
       ImbalancedChen.Certificates.PairedV2
       ImbalancedChen.Certificates.AboveMuSecondCoarse
+      ImbalancedChen.Certificates.PairedV2Geometry
+      ImbalancedChen.Certificates.PairedV2Prefix4Data
+      ImbalancedChen.Certificates.PairedV2Prefix4
     )
     replay=("${production[@]}")
     audit=verification.part2.CertificateAudit
+    ;;
+  p2-prefix4)
+    production=(
+      ImbalancedChen.Certificates.PairedV2Geometry
+      ImbalancedChen.Certificates.PairedV2Prefix4Data
+      ImbalancedChen.Certificates.PairedV2Prefix4
+    )
+    suppliers=(
+      ImbalancedChen.Certificates.RationalLogCertificate
+      ImbalancedChen.Certificates.PairedFibreIntegral
+      ImbalancedChen.Certificates.PairedCertificateChecker
+      ImbalancedChen.Certificates.PairedV2Data
+      ImbalancedChen.Certificates.PairedV2
+      ImbalancedChen.Certificates.AboveMuSecondCoarse
+    )
+    replay=("${production[@]}")
+    audit=verification.part2.CertificateAudit
+    ;;
+  p1-history)
+    production=(
+      ImbalancedChen.OrdinaryLowerFourFrontier
+      ImbalancedChen.ActualSelectedPrefixLowerCellSum
+      ImbalancedChen.ActualSelectedPrefixLowerOwnCubeIntegral
+      ImbalancedChen.HistoricalPrefixCertificate
+    )
+    auxiliary=(verification.parts.p1.LevelCheckProbe)
+    audit=verification.parts.p1.Part1HistoryAudit
+    replay=("${production[@]}" "${auxiliary[@]}" "$audit")
+    ;;
+  p3-normalization)
+    production=(ImbalancedChen.Part3LongSlotNormalization)
+    suppliers=(ImbalancedChen.Part3LongSlotDistribution ImbalancedChen.BoundaryArbitraryLog)
+    replay=("${production[@]}")
+    audit=verification.parts.p3.LongSlotNormalizationAudit
     ;;
   p3-long-slot)
     production=(ImbalancedChen.Part3LongSlotDistribution)
@@ -76,11 +114,14 @@ esac
 sources=(lean-toolchain lakefile.toml lake-manifest.json
   verification/parts/p0/check_batch.sh verification/parts/p0/check_pins.py
   verification/parts/p0/check_sources.py verification/verify_variable_envelope_boxes.py)
-if [[ "$batch" = p2-first || "$batch" = p2 ]]; then
+if [[ "$batch" = p2-first || "$batch" = p2 || "$batch" = p2-prefix4 ]]; then
   sources+=(verification/part2/import_paired_v2.py
     verification/part2/data/corpus-renewal-paired-certificate-v2-20261010.json)
 fi
-for module in "${production[@]}" "${suppliers[@]}" "$audit"; do
+if [[ "$batch" = p2 || "$batch" = p2-prefix4 ]]; then
+  sources+=(verification/part2/generate_paired_prefix.py)
+fi
+for module in "${production[@]}" "${suppliers[@]}" "${auxiliary[@]}" "$audit"; do
   test -f "${module//.//}.lean"
   sources+=("${module//.//}.lean")
 done
@@ -96,20 +137,27 @@ mkdir -p "$receipt_dir"
 git rev-parse HEAD > "$receipt_dir/source-commit.txt"
 git status --porcelain > "$receipt_dir/source-status.txt"
 sha256sum "${sources[@]}" > "$receipt_dir/source-sha256.txt"
-python3 verification/parts/p0/check_sources.py "${production[@]}" "${suppliers[@]}" "$audit" \
+python3 verification/parts/p0/check_sources.py "${production[@]}" "${suppliers[@]}" "${auxiliary[@]}" "$audit" \
   | tee "$receipt_dir/source-guard.json"
-if [[ "$batch" = p2-first || "$batch" = p2 ]]; then
+if [[ "$batch" = p2-first || "$batch" = p2 || "$batch" = p2-prefix4 ]]; then
   python3 verification/part2/import_paired_v2.py \
     verification/part2/data/corpus-renewal-paired-certificate-v2-20261010.json \
     --check-generated ImbalancedChen/Certificates/PairedV2Data.lean \
     --report "$receipt_dir/decode-report.json" \
     | tee "$receipt_dir/decode.log"
 fi
+if [[ "$batch" = p2 || "$batch" = p2-prefix4 ]]; then
+  python3 verification/part2/generate_paired_prefix.py \
+    verification/part2/data/corpus-renewal-paired-certificate-v2-20261010.json \
+    --count 4 --check-generated ImbalancedChen/Certificates \
+    --report "$receipt_dir/prefix4-decode-report.json" \
+    | tee "$receipt_dir/prefix4-decode.log"
+fi
 lake env lean --version 2>&1 | tee "$receipt_dir/toolchain.log"
 
 # The common old root is insufficient: every new production module is explicit.
-lake build "${production[@]}" 2>&1 | tee "$receipt_dir/lake-build.log"
-for module in "${production[@]}" "$audit"; do
+lake build "${production[@]}" "${suppliers[@]}" 2>&1 | tee "$receipt_dir/lake-build.log"
+for module in "${production[@]}" "${auxiliary[@]}" "$audit"; do
   source="${module//.//}.lean"
   object=".lake/build/lib/lean/${module//.//}.olean"
   mkdir -p "$(dirname "$object")"

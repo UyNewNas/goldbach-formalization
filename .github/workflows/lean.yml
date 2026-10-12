@@ -135,36 +135,50 @@ jobs:
           # The unchanged upstream script re-builds the project, verifies the
           # axiom-audit v0.1.2 SHA, builds it with this toolchain, and audits the root.
           "$RUNNER_TEMP/lean-ci/run-stage" axiom-audit "$LEAN_ACTION_DIR/scripts/run_axiom_audit.sh"
+      - name: Export complete round 3 types and the existing conditional main bridge
+        id: round3-types
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 10
+        run: |
+          "$RUNNER_TEMP/lean-ci/run-stage" round3-types python3 verification/parts/p0/check_round3_types.py --timeout-seconds 540
       - name: Record required verification outcomes
         if: ${{ always() }}
         env:
           BUILD_OUTCOME: ${{ steps.build.outcome }}
           LEANCHECKER_OUTCOME: ${{ steps.leanchecker.outcome }}
           AXIOM_AUDIT_OUTCOME: ${{ steps.axiom-audit.outcome }}
+          ROUND3_TYPES_OUTCOME: ${{ steps.round3-types.outcome }}
         run: |
           mkdir -p "$RUNNER_TEMP/lean-verification-logs"
           {
             printf 'build=%s\n' "$BUILD_OUTCOME"
             printf 'leanchecker=%s\n' "$LEANCHECKER_OUTCOME"
             printf 'axiom-audit=%s\n' "$AXIOM_AUDIT_OUTCOME"
+            printf 'round3-types=%s\n' "$ROUND3_TYPES_OUTCOME"
           } | tee "$RUNNER_TEMP/lean-verification-logs/outcomes.log"
           {
             printf '\n### Required core verification stages\n'
             printf -- '- Build: %s\n' "$BUILD_OUTCOME"
             printf -- '- Bundled leanchecker (ImbalancedChen): %s\n' "$LEANCHECKER_OUTCOME"
             printf -- '- Full root/transitive axiom audit: %s\n' "$AXIOM_AUDIT_OUTCOME"
+            printf -- '- Complete round 3 and conditional main types: %s\n' "$ROUND3_TYPES_OUTCOME"
             printf '\nAllowed axioms: propext, Classical.choice, Quot.sound.\n'
             printf 'A skipped or uncompleted stage is not a successful verification.\n'
           } >> "$GITHUB_STEP_SUMMARY"
           test "$BUILD_OUTCOME" = success
           test "$LEANCHECKER_OUTCOME" = success
           test "$AXIOM_AUDIT_OUTCOME" = success
+          test "$ROUND3_TYPES_OUTCOME" = success
       - name: Retain stage logs and timings, including failures
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: lean-verification-${{ github.run_id }}-${{ github.run_attempt }}
-          path: ${{ runner.temp }}/lean-verification-logs/
+          path: |
+            ${{ runner.temp }}/lean-verification-logs/
+            .lake/part0-round3-types/
+          # The only hidden input is the explicitly scoped type-export directory.
+          include-hidden-files: true
           if-no-files-found: warn
           retention-days: 14
       # Cache archiving is optional and must not precede proof gates or retention.

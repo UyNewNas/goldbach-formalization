@@ -12,6 +12,12 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
+### Part 0 round 3 batch acceptance
+
+Eight further production modules are now explicitly imported: four P1 lower-fourth/history modules, three P2 same-mask-v2 prefix4 modules, and P3 long-slot normalization. Fixed producer source/object records and all three component gates were checked before reception. The accepted component inventory is now 19 modules and 591 defining-module declarations; P1 probe declarations and the pinned upstream S1Carrier audit are counted separately.
+
+The actual parent `cce2334906f068fda2f58c400646366f2aa2d417` passed the complete 9,790-job build, bundled root replay and 5,260-declaration root axiom audit. The new root must pass its own exact-commit CI, which also exports the new 198 declarations and conditional main theorem in full. See [round 3 verification and remaining inputs](docs/PART0_ROUND3_VERIFICATION.md). The full historical certificate, actual K/c suppliers, hLower and hUpper remain open.
+
 ### Part 0 round 2 component acceptance
 
 Commit `278f949444748a30b5165ff47bfa283ab0bad0d8` contains the verified

@@ -1,5 +1,15 @@
 # Verification boundary
 
+## Part 0 round 3 reception
+
+The branch now imports eight further fixed, component-verified modules: P1 ordinary lower-fourth frontier, lower cell sum, lower own-cube integral and finite historical cap certificate; P2 geometry and the first four adopted E0 integral cells; P3 integer long-slot normalization. Nineteen received production modules have 591 audited defining-module declarations. This does not include the ten P1 probe declarations or the pinned upstream S1Carrier's 36 declarations.
+
+The parent cce2334906f068fda2f58c400646366f2aa2d417 completed the full build, root kernel replay and root axiom audit. New-root checks are separately tied to the commit that changes the imports. The new type-export step must execute successfully before its types are called compiler-confirmed; previously elided P1 pretty-print terms have not been silently relabelled.
+
+InitialSource awaits the missing audit/import-object binding; InitialMean and five P4 sources remain unaccepted candidates. Two new, uncommitted P1 fifth-layer sources have been located, but are not identified with the previously reported independent single-module candidate. Actual same-rho K, complete Chen means/c, hLower and hUpper remain open, and no unconditional main entry is claimed. P5 depends on P4-A, not P4-B.
+
+See [round 3 verification](PART0_ROUND3_VERIFICATION.md) and its exact source, object, gate and open-input ledger.
+
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
 ## Part 0 round 2: eleven verified components — 12 October

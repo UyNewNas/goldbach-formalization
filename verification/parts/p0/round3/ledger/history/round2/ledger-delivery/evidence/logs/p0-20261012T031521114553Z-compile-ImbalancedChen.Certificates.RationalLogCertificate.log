@@ -1,0 +1,38 @@
+{"action": "compile", "module": "ImbalancedChen.Certificates.RationalLogCertificate", "source": "/workspace/scratch/535d89efd063/p0-round2/validation/ImbalancedChen/Certificates/RationalLogCertificate.lean", "source_sha256_before": "525d4eb7e87932aef7c2ecee816c8f1eb3dee5fcfc679c275444e278b06094c2", "command": ["/workspace/scratch/127408f63891/lean-runtime/lean-4.33.0-rc1-linux/bin/lake", "-d", "/workspace/scratch/535d89efd063/p0-round2/runtime/frontend-driver", "-f", "lakefile.lean", "script", "run", "compileOne", "/workspace/scratch/535d89efd063/p0-round2/validation/ImbalancedChen/Certificates/RationalLogCertificate.lean", "ImbalancedChen.Certificates.RationalLogCertificate", "/workspace/scratch/535d89efd063/p0-round2/validation/.lake/build/lib/lean/ImbalancedChen/Certificates/RationalLogCertificate.olean", "strict"], "cwd": "/workspace/scratch/535d89efd063/p0-round2/validation", "started_utc": "20261012T031521114553Z", "trustLevel": 0, "strict": true, "metadata_adapter": false, "LEAN_SYSROOT": "/workspace/scratch/127408f63891/lean-runtime/lean-4.33.0-rc1-linux", "LEAN_PATH": "/workspace/scratch/535d89efd063/p0-round2/validation/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/goldbach/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/LeanArchitect/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/plausible/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/aesop/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/Qq/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/batteries/.lake/build/lib/lean:/workspace/scratch/127408f63891/goldbach-formalization/.lake/packages/Cli/.lake/build/lib/lean"}
+FRONTEND_FAILED module=ImbalancedChen.Certificates.RationalLogCertificate
+FRONTEND_START module=ImbalancedChen.Certificates.RationalLogCertificate trustLevel=0 strict=strict Lean.githash=62eed1db4d67327ec8120be05f1a1b0847d74561
+/workspace/scratch/535d89efd063/p0-round2/validation/ImbalancedChen/Certificates/RationalLogCertificate.lean:66:20: error: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+/workspace/scratch/535d89efd063/p0-round2/validation/ImbalancedChen/Certificates/RationalLogCertificate.lean:102:18: error: linarith failed to find a contradiction
+case right
+c : RationalLogCertificate
+hcheck : c.check = true
+hq : 1 ≤ c.argument
+hlo : c.lower ≤ logSeriesLower c.argument c.terms
+hhi : logSeriesUpper c.argument c.terms ≤ c.upper
+hx0 : 0 ≤ logParameter c.argument
+hx1 : logParameter c.argument < 1
+hx0R : 0 ≤ ↑(logParameter c.argument)
+hx1R : ↑(logParameter c.argument) < 1
+heq : (1 + ↑(logParameter c.argument)) / (1 - ↑(logParameter c.argument)) = ↑c.argument
+hl : ∑ i ∈ Finset.range c.terms, ↑(logParameter c.argument) ^ (2 * i + 1) / (2 * ↑i + 1) ≤ 1 / 2 * Real.log ↑c.argument
+hu :
+  1 / 2 * Real.log ↑c.argument ≤
+    ∑ i ∈ Finset.range c.terms, ↑(logParameter c.argument) ^ (2 * i + 1) / (2 * ↑i + 1) +
+      ↑(logParameter c.argument) ^ (2 * c.terms + 1) / (1 - ↑(logParameter c.argument) ^ 2)
+hlCast :
+  ↑(logSeriesLower c.argument c.terms) =
+    2 * ∑ i ∈ Finset.range c.terms, ↑(logParameter c.argument) ^ (2 * i + 1) / (2 * ↑i + 1)
+huCast :
+  ↑(logSeriesUpper c.argument c.terms) =
+    ↑(logSeriesLower c.argument c.terms) +
+      2 * ↑(logParameter c.argument) ^ (2 * c.terms + 1) / (1 - ↑(logParameter c.argument) ^ 2)
+hloR : ↑c.lower ≤ 2 * ∑ i ∈ Finset.range c.terms, ↑(logParameter c.argument) ^ (2 * i + 1) / (2 * ↑i + 1)
+hhiR :
+  2 * ∑ i ∈ Finset.range c.terms, ↑(logParameter c.argument) ^ (2 * i + 1) / (2 * ↑i + 1) +
+      2 * ↑(logParameter c.argument) ^ (2 * c.terms + 1) / (1 - ↑(logParameter c.argument) ^ 2) ≤
+    ↑c.upper
+a✝ : ↑c.upper < Real.log ↑c.argument
+⊢ False
+failed
