@@ -42,7 +42,8 @@ private theorem currentChen_log_rational_lower {x : ℝ} (hx : 1 ≤ x) :
   have he : (1 + z) / (1 - z) = x := by
     apply (div_eq_iff (show 1 - z ≠ 0 by linarith)).mpr
     dsimp [z]
-    field_simp [hxp.ne'] <;> ring
+    field_simp [hxp.ne']
+    ring
   have hl := Real.sum_range_le_log_div hz hz₁ 1
   rw [he] at hl
   norm_num [Finset.sum_range_succ] at hl

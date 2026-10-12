@@ -1,5 +1,13 @@
 # Part 5 handoff: eleven-term mean ledger and independent candidates
 
+> **Round 2 update:** the corrected actual Buchstab theorem has now passed
+> strict trust-zero frontend compilation, bundled kernel replay, and the
+> full defining-module transitive axiom audit. See
+> [CHEN_P5_BUCHSTAB_HANDOFF.md](CHEN_P5_BUCHSTAB_HANDOFF.md) for the immediate
+> Part 2 delivery. The rest of this document records the fixed first-round
+> status at the commits below; its unexecuted gates are historical and do
+> not supersede the round-2 receipts.
+
 ## Fixed identity and delivery status
 
 **This is a staged candidate delivery. The complete adopted-mask mean and
