@@ -2,6 +2,131 @@
 
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
+## Complete finite-selector integrals and the shared historical tree — 12 October
+
+Six new modules close the full ordinary-parent fifth-prefix selector's
+integral, and separately prove finite fourth/fifth updates on one historical
+third-level tree. Neither actual counting hypothesis of
+`current_theorem_1_1_of_manuscript_bounds` is discharged.
+
+`ActualPrimeIcoCellTestFunctions` proves the real signed-test prime limit on
+one half-open mesh cell intersected with finitely many strict affine gates.
+The mixed boundary indicator lies between the strict and weak gate regions;
+continuous ramps bound its actual arithmetic error. Null Lebesgue walls
+are used for the integral identity, not to discard discrete prime atoms.
+Dimension zero and an empty gate family are included. The actual prime
+carrier still excludes primes dividing the target.
+
+`ActualPrimeOwnCubeIcoIntegral` combines that limit with the proved uniform
+actual lower-residual approximation. New and old levels retain separate
+strict own-cube gates. It proves integrability before expressing their
+difference as a single integral on the same Ico cell. No ordering of the
+two levels or positivity of a finite lower density is assumed.
+
+`ActualSelectedPrefixCellDecomposition` proves an exact finite identity for
+any real function of the selected rational cap. Unique half-open ownership
+selects one cell, and outside all adopted cells the old fallback gives zero
+difference. The literal nested frontier/candidate density sum, with its
+actual history masses, equals the normalized tuple sum. The history's level
+and the tuple's level read the same logarithmic coordinates.
+
+`ActualSelectedPrefixUpperCellSum` then identifies each actual parent cell
+in both directions with its six-row affine region. It keeps strict
+decreasing order and the inherited first and third cube tests; it does not
+add the old fifth gate to the parent enumeration. Finite sum interchange
+gives the entire selected saving as a sum of cell residual differences.
+There is no discarded small-prime, boundary or truncation remainder because
+every nonzero difference already belongs to an adopted cell.
+
+`ActualSelectedPrefixOwnCubeIntegral` assembles those exact identities and
+proved limits. Fix rational `old,nu,a,b`, `old>0`, `0<a<b`, a mesh and a
+finite adopted family `J` before the target tends to infinity. If `lambda_j`
+is the selected cap of cell `C_j`, and `Omega_old` is the inherited ordinary
+parent region, it proves
+
+```text
+actualSelectedPrefixOwnCubeSum(N) * log N/C_N
+  --> sum_{j in J} integral_{C_j intersect Omega_old}
+        (H_lambda_j(t) - H_old(t)) * prod_i 1/t_i dt,
+H_lambda(t) = 1[sum t + 2*t_last < lambda]
+               * primeTupleMinusProfile lambda t.
+```
+
+The limit is along positive even targets, and the enumeration cap need only
+cover `N^b` eventually. The arithmetic sum limit itself does not require cap
+checks. With the explicit finite rational checks for the adopted cells,
+the previously proved finite identity gives the actual retained tree's
+ordinary-minus-selected saving. In the explicit legal range `b<old`, the
+selected density itself has limit
+
+```text
+(2*exp(-gamma)/b) * suzukiContinuousUpperFactor(old/b)
+  - selectedPrefixUpperSavingIntegral.
+```
+
+Here `b` is the internal prime cutoff exponent of the cube, not the
+arbitrary Goldbach imbalance exponent in Theorem 1.1. No target limit,
+region identity or analytic approximation bound is assumed by these
+statements. This remains a single fifth-prefix update of an ordinary
+constant-level parent, not the full historical manuscript policy.
+
+`FirstExitHistoricalLevels` proves that splicing strictly after rank `m`
+preserves every earlier actual frontier, including carrier, sign and mass.
+Ancestor histories become initial processing-order subtuples. It defines
+`T3 = splice 2 base (frozen upper 3 Q3)`, then `T4` and `T5` as rank-four
+splices of that same `T3`. Actual third-rank admission supplies complete
+prefix validity; later inactive steps propagate it using sorted primes,
+inherited validity and the true sign. The actual-root corollary requires
+no caller prefix-validity hypothesis. Refreezing the third level after
+rank four recovers exactly the same policy.
+
+Consequently `T3-T4` is the sum of inherited-minus-raised actual fourth
+residuals, and `T4-T5` is the new-minus-old gated lower-density sum over all
+next candidates of the common T3 rank-four frontier. Their sum equals
+`T3-T5`. Explicit finite comparisons `Q3<=Q4` and `Q4<=Q5` remain. Neither
+saving is asserted nonnegative. Arbitrary `base,Q3,Q4,Q5` do not by
+themselves identify the manuscript's certified table, rough-cutoff fallback,
+global upper majorant, joint-cell integral or physical distribution theorem.
+
+All six sources passed strict individual compilation with no final
+diagnostics, and independent source reviews cover their final versions.
+The standard full aggregate build passed with 9,776 jobs in 53.891 seconds.
+Bundled kernel replay passed for all six final Lake-built objects in
+23.184 seconds. The canonical safety and transitive-axiom audit passed in
+313.838 seconds for all 87 owned declarations, including private and
+generated ones:
+
+| Module | Owned declarations |
+| --- | ---: |
+| `ActualPrimeIcoCellTestFunctions` | 17 |
+| `ActualPrimeOwnCubeIcoIntegral` | 15 |
+| `ActualSelectedPrefixCellDecomposition` | 8 |
+| `ActualSelectedPrefixUpperCellSum` | 7 |
+| `FirstExitHistoricalLevels` | 34 |
+| `ActualSelectedPrefixOwnCubeIntegral` | 6 |
+
+Every audited declaration is safe and is not an unproved axiom. The only
+transitive axioms are `propext`, `Classical.choice` and `Quot.sound`.
+Eight independent review records cover the exact final sources. Lean
+`4.33.0-rc1`, all eleven dependency pins, runtime binaries, sources, root
+imports, audit and final objects matched before and after verification;
+the mathlib and Goldbach provider worktrees and indexes remained clean.
+This is replay of the six new final objects, not a full-root kernel replay.
+The historical whole-library warning-as-failure result is unchanged.
+
+With the pinned dependencies, reproduce with `lake build`, bundled
+`lake env leanchecker --verbose ImbalancedChen.MODULE` for each module
+above, and
+`lake env lean -DwarningAsError=true verification/SelectedIntegralAudit.lean`.
+The inventory uses Lean defining-module metadata, not a source-name filter.
+The standard aggregate was run once after the inputs were frozen. A prior
+launcher/precheck failure occurred before Lake ran and is retained separately
+from the proof results. Development diagnostics are also preserved.
+
+The preceding checkpoint's 103 evidence files are preserved by a full hash
+snapshot. The new next-step plan is explicitly `PLAN_ONLY`. New evidence is under
+`.lake/main-theorem-verification-20261012/selected-integral/`.
+
 ## Actual affine regions and the ordinary fifth-candidate integral — 12 October
 
 Eleven new modules connect an actual stopped sieve frontier with a genuine

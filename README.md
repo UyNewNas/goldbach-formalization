@@ -12,7 +12,32 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
-The latest extension proves genuine prime-sum integrals on finite strict
+The latest extension integrates the complete saving of the actual finite
+fifth-prefix selector over its owned half-open cells. Outside their union,
+the selected and old levels agree exactly, so their actual gated density
+difference cancels. The result retains the ordinary parent's first and
+third tests and both separate fifth own-cube indicators. For checked cells,
+this is the actual retained tree's saving. In the legal ordinary upper
+range, subtracting it gives the normalized selected density limit itself.
+The proof handles the discrete prime mass on cell boundaries explicitly.
+
+A separate finite extension now preserves the same historical third-level
+tree through its fourth and fifth updates. The active third admission and
+the actual sorted prime recursion prove complete inherited validity.
+The two density differences telescope on one common rank-four frontier,
+with only finite level comparisons remaining. Its arbitrary level tables
+have not yet been identified with the manuscript's certified tables.
+
+All six new modules have passed strict individual compilation and independent
+review. The full aggregate build passed with 9,776 jobs; all six final objects
+passed kernel replay, and all 87 owned declarations passed the canonical
+safety and transitive-axiom audit using only `propext`, `Classical.choice`
+and `Quot.sound`. The main theorem is still incomplete: the historical joint-cell
+integrals and certificate values, the physical signed distribution estimate,
+and both final counting bounds remain to be proved. This checkpoint does not
+turn those obligations into assumptions of a claimed complete theorem.
+
+The preceding affine extension proves genuine prime-sum integrals on finite strict
 affine regions, including signed continuous tests. Nonzero affine walls
 are proved null, and their closed strips have arbitrarily small actual
 prime weight after one fixed strip width and target threshold are chosen.
@@ -28,10 +53,11 @@ The new-minus-old saving retains the two separate own-cube indicators.
 The literal natural product and quotient level are preserved, and the
 proved compact residual theorem supplies the uniform summand error.
 
-This closes a localized ordinary-parent integral, not the manuscript's
-causal multistage selected-cap policy. The finite selected-cell assembly,
-numerical certificates, physical signed distribution and both final counting
-bounds remain open. No complete untruncated frontier integral is claimed.
+That checkpoint closed a localized ordinary-parent integral. The complete
+finite ordinary-parent selector is now integrated above; the manuscript's
+causal multistage selected-cap integrals, numerical certificates, physical
+signed distribution and both final counting bounds remain open. No complete
+untruncated frontier integral is claimed.
 Theorem 1.1 and Corollary 1.2 are still incomplete. All eleven new sources
 passed strict individual compilation and independent review. The full
 aggregate build passed with 9,770 jobs, all eleven final objects passed

@@ -18,6 +18,36 @@ statement before any later checkpoint is called current.
 
 ## Exact finite semantics
 
+`ActualPrimeIcoCellTestFunctions` and `ActualPrimeOwnCubeIcoIntegral` now
+integrate actual prime tests and actual normalized lower residuals on the
+selector's original half-open cells. Arithmetic boundary atoms are paid
+by pointwise ramps before null-volume integral identities are used. The
+new and old own-cube indicators remain separate.
+
+`ActualSelectedPrefixCellDecomposition` proves exact ownership and outside
+fallback cancellation for any real function of the selected cap, then
+rewrites the literal nested actual candidate sum as a tuple sum.
+`ActualSelectedPrefixUpperCellSum` identifies each candidate cell with its
+actual ordinary-parent affine region and proves equality of the entire
+selected saving with the finite sum of cell residual differences.
+`ActualSelectedPrefixOwnCubeIntegral` proves its genuine integral limit,
+the corresponding actual retained-tree saving when finite cap checks pass,
+and the normalized selected density itself in the legal range `b<old`.
+The cube's internal `b` is not the theorem's imbalance parameter. No
+analytic convergence premise remains in this fixed-family result.
+
+`FirstExitHistoricalLevels` separately defines third-, fourth- and
+fifth-capped policies on the same actual tree. It proves earlier-frontier
+preservation, exact ancestor coordinates, and complete inherited validity
+from the actual active third test and sorted prime recursion. Fourth and
+fifth updates use the identical T3 rank-four frontier, and their actual
+finite density differences telescope. Only explicit finite level
+comparisons remain. Those arbitrary level functions must still be
+instantiated by the manuscript's buffered and inherited certified tables;
+their joint-cell integrals, rough-cutoff fallback and physical signed
+distribution have not been supplied. Theorem 1.1 and Corollary 1.2 remain
+incomplete.
+
 `FirstExitFrontierTupleReindex` identifies the actual rank-`k` stopped
 frontier's flattened next-candidate list with the length-`k+1` sublists
 whose `dropLast` passes the parent. A permutation theorem preserves the
