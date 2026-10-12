@@ -123,6 +123,10 @@ def main() -> None:
         version = run(["lake", "env", "lean", "--version"], "bv-lean-version").strip()
         if not re.search(r"\bversion 4\.33\.0-rc1(?:,|\))", version):
             raise RuntimeError("Unexpected Lean version: " + version)
+        lean = run(["lake", "env", "bash", "-c", "command -v lean"],
+                   "bv-lean-path").strip()
+        lake = run(["lake", "env", "bash", "-c", "command -v lake"],
+                   "bv-lake-path").strip()
         checker = run(["lake", "env", "bash", "-c", "command -v leanchecker"],
                       "bv-checker-path").strip()
         replay = run(["lake", "env", checker, "--verbose", MODULE], "bv-production-replay")
@@ -161,12 +165,27 @@ def main() -> None:
             raise RuntimeError("Incomplete or unproved supplier declaration")
         if not imports or len({row["module"] for row in imports}) != len(imports):
             raise RuntimeError("Incomplete or duplicate actual import-object inventory")
+        for row in imports:
+            path = Path(row["olean"]).resolve()
+            if not path.is_file():
+                raise RuntimeError(f"Missing inventoried import object: {path}")
+            row.update(olean=str(path), bytes=path.stat().st_size, sha256=digest(path))
+        if len({row["olean"] for row in imports}) != len(imports):
+            raise RuntimeError("Duplicate resolved object in actual import-object inventory")
         (out / "bv-supplier-declarations.json").write_text(
             json.dumps(declarations, indent=2) + "\n")
         (out / "bv-supplier-imports.json").write_text(json.dumps(imports, indent=2) + "\n")
+        tools = {}
+        for name, raw_path in (("lean", lean), ("lake", lake), ("leanchecker", checker)):
+            path = Path(raw_path).resolve()
+            if not path.is_file():
+                raise RuntimeError(f"Missing resolved tool binary: {path}")
+            tools[name] = {
+                "reported_path": raw_path, "resolved_path": str(path),
+                "bytes": path.stat().st_size, "sha256": digest(path)}
         report.update(
             status="PASSED", head_commit=head, lean_version=version,
-            checker=checker, owned_declaration_count=len(declarations),
+            tools=tools, owned_declaration_count=len(declarations),
             actual_import_object_count=len(imports),
             audit_objects={
                 str(path.relative_to(ROOT)): digest(path)
