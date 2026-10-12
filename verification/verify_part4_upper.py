@@ -1,4 +1,4 @@
-"""Build and freshly replay the five Part 4 modules at the frozen dependency pins.
+"""Build and replay the five Part 4 modules at the frozen dependency pins.
 
 Run with the pinned Lean/Lake on PATH:
     python3 verification/verify_part4_upper.py
@@ -52,6 +52,31 @@ def digest(path: Path) -> str:
 
 def source_path(module: str) -> Path:
     return ROOT / (module.replace(".", "/") + ".lean")
+
+
+def object_snapshot(target: Path) -> dict[str, str]:
+    """Bind a compiler output to its complete current set of object parts."""
+    if not target.is_file() or target.stat().st_size == 0:
+        raise RuntimeError(f"Missing or empty compiled module: {target}")
+    return {
+        path.relative_to(ROOT).as_posix(): digest(path)
+        for path in (target, target.with_suffix(".olean.server"),
+                     target.with_suffix(".olean.private")) if path.is_file()
+    }
+
+
+def check_object_snapshot(target: Path, expected: dict[str, str]) -> None:
+    current = object_snapshot(target)
+    if current.keys() != expected.keys():
+        raise RuntimeError(f"Compiled object parts changed during verification: {target}")
+    if current != expected:
+        raise RuntimeError(f"Compiled object bytes changed during verification: {target}")
+
+
+def check_binary_snapshots(binaries: dict[str, dict[str, str]]) -> None:
+    for name, expected in binaries.items():
+        if digest(Path(expected["path"])) != expected["sha256"]:
+            raise RuntimeError(f"Toolchain executable changed during verification: {name}")
 
 
 def check_lockfiles() -> dict:
@@ -194,7 +219,8 @@ def main() -> None:
         "modules": list(MODULES),
         "run_directory": run_output.relative_to(ROOT).as_posix(),
         "allowed_transitive_axioms": sorted(ALLOWED),
-        "kernel_replay": "Bundled leanchecker --fresh, one explicitly named module per invocation",
+        "kernel_replay": "Five individual bundled leanchecker replays, then one --fresh replay "
+                         "of the audit module importing all five targets and their full closure",
         "stages": [],
     }
 
@@ -205,11 +231,12 @@ def main() -> None:
         temporary.write_text(data, encoding="utf-8")
         temporary.replace(report_path)
 
-    def run(arguments: list[str], log_name: str) -> str:
+    def run(arguments: list[str], log_name: str, *, timeout_seconds: int = 1800) -> str:
         stage = {
             "command": arguments,
             "log": (run_output / log_name).relative_to(ROOT).as_posix(),
             "started_utc": datetime.now(timezone.utc).isoformat(),
+            "timeout_seconds": timeout_seconds,
             "status": "RUNNING",
         }
         report["stages"].append(stage)
@@ -223,7 +250,7 @@ def main() -> None:
                 handle.flush()
                 result = subprocess.run(
                     arguments, cwd=ROOT, stdout=handle, stderr=subprocess.STDOUT,
-                    text=True, timeout=1800,
+                    text=True, timeout=timeout_seconds,
                 )
             stage["exit_code"] = result.returncode
             stage["status"] = "PASSED" if result.returncode == 0 else "FAILED"
@@ -293,7 +320,15 @@ def main() -> None:
         # Existing dependencies have baseline linter warnings. Build their
         # closure normally, then force a warning-as-error compilation of every
         # new target. No warning from a new source can pass this second gate.
-        run([args.lake, "build", *MODULES], "dependencies-and-targets-build.log")
+        # The pinned supplier closure imports full Mathlib. The first real
+        # hosted run reached build item 9326/9404 before the old 30-minute
+        # subprocess limit expired; it had not reached any Part 4 target.
+        # Keep every proof gate, but give this dependency build the same
+        # 90-minute allowance as the repository's core build.
+        run([args.lake, "build", *MODULES], "dependencies-and-targets-build.log",
+            timeout_seconds=5400)
+        target_objects = {}
+        olean_hashes = {}
         for module in MODULES:
             relative = module.replace(".", "/")
             target = ROOT / ".lake/build/lib/lean" / (relative + ".olean")
@@ -301,26 +336,41 @@ def main() -> None:
             run([args.lake, "env", "lean", "-DwarningAsError=true",
                  "-o", str(target), relative + ".lean"],
                 module.rsplit(".", 1)[1] + "-strict-build.log")
-        olean_hashes = {}
+            # Freeze each strict output immediately, before another target is
+            # compiled or any replay is started.
+            target_objects[module] = object_snapshot(target)
+            olean_hashes.update(target_objects[module])
         for module in MODULES:
             path = ROOT / ".lake/build/lib/lean" / (module.replace(".", "/") + ".olean")
-            if not path.is_file() or path.stat().st_size == 0:
-                raise RuntimeError(f"Missing compiled target module: {module}")
-            for part in (path, path.with_suffix(".olean.server"), path.with_suffix(".olean.private")):
-                if part.is_file():
-                    olean_hashes[part.relative_to(ROOT).as_posix()] = digest(part)
+            check_object_snapshot(path, target_objects[module])
             replay = run(
-                [args.lake, "env", str(checker), "--fresh", "--verbose", module],
-                module.rsplit(".", 1)[1] + "-fresh-replay.log",
+                [args.lake, "env", str(checker), "--verbose", module],
+                module.rsplit(".", 1)[1] + "-individual-replay.log",
             )
-            expected = f"replaying {module} with --fresh"
+            expected = f"replaying {module}"
             if replay.splitlines().count(expected) != 1:
-                raise RuntimeError(f"Missing explicit fresh kernel replay evidence for {module}")
+                raise RuntimeError(f"Missing explicit individual kernel replay evidence for {module}")
+            check_object_snapshot(path, target_objects[module])
         report["compiled_module_sha256"] = olean_hashes
+        audit_module = AUDIT.removesuffix(".lean").replace("/", ".")
+        audit_target = ROOT / ".lake/build/lib/lean" / AUDIT.replace(".lean", ".olean")
+        audit_target.parent.mkdir(parents=True, exist_ok=True)
         audit_log = run(
-            [args.lake, "env", "lean", "-DwarningAsError=true", AUDIT], "axioms-and-types.log"
+            [args.lake, "env", "lean", "-DwarningAsError=true", "-o", str(audit_target), AUDIT],
+            "axioms-and-types.log"
         )
+        audit_objects = object_snapshot(audit_target)
         records, counts = parse_inventory(audit_log)
+        # --fresh replays imported declarations too. A single replay of the
+        # audit's union of all five import closures has the same coverage as
+        # five separate --fresh calls, without repeating full Mathlib five times.
+        fresh = run([args.lake, "env", str(checker), "--fresh", "--verbose", audit_module],
+                    "all-five-and-imports-fresh-replay.log")
+        if fresh.splitlines().count(f"replaying {audit_module} with --fresh") != 1:
+            raise RuntimeError("Missing aggregate fresh kernel replay evidence")
+        check_object_snapshot(audit_target, audit_objects)
+        report["aggregate_fresh_replay_module"] = audit_module
+        report["audit_module_sha256"] = audit_objects
         (run_output / "declarations.json").write_text(
             json.dumps(records, indent=2) + "\n", encoding="utf-8"
         )
@@ -348,7 +398,7 @@ def main() -> None:
                     for record in selected
                 ) + "\n", encoding="utf-8",
             )
-        for relative, expected_hash in {**hashes, **olean_hashes}.items():
+        for relative, expected_hash in {**hashes, **olean_hashes, **audit_objects}.items():
             if digest(ROOT / relative) != expected_hash:
                 raise RuntimeError(f"Verification input changed during this run: {relative}")
         if check_dependency_heads(manifest) != report["dependency_revisions"]:
@@ -356,9 +406,17 @@ def main() -> None:
         final_head = run(["git", "rev-parse", "HEAD"], "final-head-commit.log").strip()
         if final_head != report["head_commit"]:
             raise RuntimeError("HEAD changed during verification")
+        for module in MODULES:
+            target = ROOT / ".lake/build/lib/lean" / (module.replace(".", "/") + ".olean")
+            check_object_snapshot(target, target_objects[module])
+        check_object_snapshot(audit_target, audit_objects)
+        check_binary_snapshots(report["toolchain_binaries"])
+        report["output_part_sets_and_hashes_rechecked"] = True
+        report["toolchain_binary_hashes_rechecked"] = True
         report.update(status="PASSED", declaration_count=len(records), module_counts=counts)
         save_report()
-        print(f"PASS: {len(MODULES)} explicit builds and bundled fresh kernel replays; "
+        print(f"PASS: {len(MODULES)} explicit builds and individual kernel replays; "
+              "one aggregate fresh replay of all five modules and their imports; "
               f"{len(records)} declarations with complete types and only allowed axioms.", flush=True)
         print("This verifies the stated interfaces, not unprovided analytic hypotheses.", flush=True)
         print(f"Report: {report_path}", flush=True)

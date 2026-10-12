@@ -29,7 +29,7 @@ conventions at the two small exceptional natural arguments. -/
 theorem sourceMassScale_mul_densityScale (N : ℕ) :
     ((N : ℝ) / Real.log (N : ℝ)) *
         (singularSeries N / Real.log (N : ℝ)) = singularNormalization N := by
-  simp only [singularNormalization, div_eq_mul_inv, inv_pow]
+  simp only [singularNormalization, div_eq_mul_inv]
   ring
 
 theorem densityScale_pos {N : ℕ} (hN : 2 ≤ N) :
@@ -53,7 +53,7 @@ theorem same_rho_normalized_mainTerm (N : ℕ) (mass : ℝ)
     (mass * physicalDensitySum Q rho) / singularNormalization N =
       (mass * Real.log (N : ℝ) / (N : ℝ)) *
         (physicalDensitySum Q rho * Real.log (N : ℝ) / singularSeries N) := by
-  simp only [singularNormalization, div_eq_mul_inv, mul_inv_rev, inv_inv, inv_pow]
+  simp only [singularNormalization, div_eq_mul_inv, mul_inv_rev, inv_inv]
   ring
 
 /-- An actual full-policy integral bound with strict slack produces a
@@ -136,7 +136,7 @@ theorem exists_actualSmallRoughRho_density_le_of_full_policy_limits
           (fixedRoughCoefficient (retainOdd epsilon N) N (cap N) 0 ((N : ℝ) ^ (nu * sieveR))) +
           eta * singularSeries N / Real.log (N : ℝ) := hAN
     _ ≤ (rawBound + eta) * (singularSeries N / Real.log (N : ℝ)) +
-        eta * singularSeries N / Real.log (N : ℝ) := add_le_add_right hFull _
+        eta * singularSeries N / Real.log (N : ℝ) := add_le_add hFull (le_refl _)
     _ = (rawBound + 2 * eta) * (singularSeries N / Real.log (N : ℝ)) := by ring
     _ ≤ densityCap * (singularSeries N / Real.log (N : ℝ)) :=
       mul_le_mul_of_nonneg_right hcoeff hscale

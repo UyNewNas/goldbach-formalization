@@ -2,12 +2,16 @@
 
 ## Status and fixed sources
 
-This checkpoint contains candidate proofs of finite same-weight bridges,
-exact normalization, and explicitly conditional assembly theorems. **The
-new Lean sources have not yet passed compilation and kernel replay. This
-checkpoint does not prove the manuscript's sharp K bound or the final
-hUpper.** A successful compilation
-of an assembly theorem does not discharge its displayed analytic inputs.
+**Delivery A (the actual sharp K density bound) and Delivery B (hUpper)
+remain open.** The five modules' strict compilations, five individual kernel
+replays and the strict Audit compile were actually observed to succeed in
+the continuing second round, after proof-body repairs in three modules.
+Environment maintenance removed their raw logs, generated objects and
+compiler inventory before aggregate fresh replay and final sealing. This
+checkpoint restores the exact repaired sources, records that evidence
+deficit and supplies source-extracted types; it is not a sealed acceptance
+receipt. A successful conditional theorem does not discharge its analytic
+inputs. The separate finite support adapter remains an uncompiled candidate.
 
 - Accepted base: `1a80c1bcce67886f699d097fc37fd245cd3620bf`.
 - Accepted base tree: `1fd54b8b4d5fd89abc767ee7e8d814453453b29c`.
@@ -20,13 +24,77 @@ of an assembly theorem does not discharge its displayed analytic inputs.
 - Lean: `leanprover/lean4:v4.33.0-rc1`; all eleven dependency revisions and
   the bytes of the three toolchain/dependency files remain frozen.
 
-The verification artifact records its own complete checked-out commit SHA,
-source hashes, final object hashes, declaration inventory and actual gate
-results. Use that SHA and its run result when forwarding this checkpoint.
-No change to `ImbalancedChen.lean`, existing modules, existing workflows or
-Lake configuration is required by these additions.
+The latest source parent is `3d5dd058cf6bef5fe90719ee277580baf8b5bf41`, tree
+`6625bb851b60a5b5c386cee560b6a7882bf99db1`. The commit containing this updated
+document is the restored-source checkpoint. The source changes preserve all
+theorem signatures and dependency pins, and preserve the parent's core
+workflow change. The verification runner is required to record its actual
+checked-out SHA, source/object hashes, complete compiler inventory and gate
+results on a future completed run; such a final receipt is not present now.
 
-## Second round: actual verification status, 12 October 2026
+## Current round-2 checkpoint: repairs and observed, unsealed checks
+
+The current handoff is
+[`verification/parts/p4a/round2/README.md`](../verification/parts/p4a/round2/README.md).
+It supersedes the historical early-round verification status below and
+separates source identity, actual earlier observations, retained evidence,
+unexecuted gates and unproved analytic premises.
+
+| Module | Earlier strict compile | Earlier individual original-kernel replay |
+|---|---|---|
+| `ActualUpperPolicyDensity` | exit 0; 97.813 s | exit 0; 50.465 s |
+| `UpperCoefficientPerturbation` | exit 0; 4.618 s | exit 0; 10.926 s |
+| `ActualUpperDensityAssembly` | exit 0; 67.865 s | exit 0; 51.165 s |
+| `RealPhysicalUpperWeightBridge` | exit 0; 4.686 s | exit 0; 12.412 s |
+| `RealUpperCountingAssembly` | exit 0; 76.012 s | exit 0; 50.788 s |
+
+The strict driver used the pinned official `Lean.Elab.runFrontend`, trust
+level 0 and warnings as errors. The replays used the original pinned
+`leanchecker --verbose MODULE`, without `--fresh`; their exact target
+replay markers were observed. `verification.Part4UpperAudit` also returned
+exit 0 in 383.887 s, with its existing complete defining-module coverage
+and transitive axiom guards. The original output inventory was lost before
+its per-declaration records or total were read. No compiler declaration
+count or per-declaration axiom set is reconstructed here. One aggregate
+`--fresh` Audit replay and finalizer were **not run**.
+
+[`OBSERVED_CHECKS.json`](../verification/parts/p4a/round2/OBSERVED_CHECKS.json)
+is a clearly labelled conversation transcription, not a raw log or a final
+PASS. [`SOURCE_TYPES.md`](../verification/parts/p4a/round2/SOURCE_TYPES.md)
+contains all 53 public source-extracted signatures; they are not the lost
+compiler-printed elaborated types. Their proof bodies were repaired without
+changing any signature. The common-carrier adapter is isolated in a `.txt`
+candidate file, outside production imports and outside the five-module
+Audit, because it has not been compiled.
+
+The current actual source/configuration hashes have been rechecked after
+restoration. No new local Lean compile is claimed after the cache was
+removed. The complete imported object cache is absent; a source-only or
+Python check cannot fill this gap. The earlier fixed-parent CI run
+[`38227776544`](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38227776544)
+did have a real runner and successful installation/cache steps. Its
+dependency build timed out at 1800 seconds (9326/9404 jobs), before the five
+strict checks, kernel replays or Audit. This supersedes any inference that
+all later CI runs had no execution steps. No manual retry was launched.
+
+The raw-to-compiled theorem still requires both the literal weighted
+coefficient error and `rawBound + compilerReserve ≤ currentK`. A raw bound
+at `currentK` leaves no positive reserve. P1's fixed fifth-policy parity
+fragment (`7f894bfb57b7aa561360e335c6d610b7c30614e0`) fits an existing finite
+policy-identification input, but does not supply the complete adopted
+construction or support. P2's fixed A5-saving lower certificate
+(`076473720210ee602e6e9735902e16bb6c5f1398`) does not supply the complete K
+upper integral. The exact unfilled A/B types and receiving Parts are in
+the current round-2 README and full source-type inventory. **P5 receives
+status/interfaces only; no actual K or hUpper supplier is claimed.**
+
+## Historical early second-round record, before the current repairs
+
+Everything in this historical section describes the earlier documentation
+checkpoint `c942b4c51d9d0005f0bd566906a3f0c88eeb1dba` and its then-current
+evidence. In particular, its statements that no target compile had run
+are historical, not the current status. The fixed mathematical interfaces
+below remain unchanged; the current evidence is recorded above.
 
 **This round does not upgrade any of the five modules to verified status.**
 The proof-source checkpoint is still

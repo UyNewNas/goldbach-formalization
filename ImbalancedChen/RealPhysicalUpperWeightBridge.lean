@@ -175,7 +175,7 @@ theorem realHalfProductSource_primePartner_card_le_realSifted_add_cap
   calc
     A.card = (A.filter (fun m => z ≤ N - m)).card +
         (A.filter (fun m => ¬z ≤ N - m)).card :=
-      (Finset.card_filter_add_card_filter_not A (fun m => z ≤ N - m)).symm
+      (Finset.card_filter_add_card_filter_not (s := A) (fun m => z ≤ N - m)).symm
     _ ≤ _ := Nat.add_le_add (Finset.card_le_card hlarge) hsmall
 
 /-- RealB enters the finite sieve without rationalizing b. Both endpoint
@@ -204,9 +204,9 @@ theorem RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff
       (∑ m ∈ realHalfProductSource b N T,
         physicalDivisorSum Q rho (N - m)) + (z : ℝ) + (T + 1) := by
   exact (RealB_cast_le_realSiftedHalfProductSource_card_add_cap_cutoff N z hb hT).trans
-    (add_le_add_right (add_le_add_right
+    (add_le_add (add_le_add
       (realSiftedHalfProductSource_card_le_sum_physicalDivisorSum b N z T Q rho hmajor)
-      (z : ℝ)) (T + 1))
+      (le_refl (z : ℝ))) (le_refl (T + 1)))
 
 /-- Exact assembly interface for the upper analytic estimate. Every term
 uses this one rho, and no lower-count hypothesis appears. -/
@@ -326,10 +326,11 @@ theorem sum_weight_mul_physicalDivisorSum_eq_rho_mul_finiteCongruenceMass
   rw [Finset.mul_sum, Finset.sum_filter]
   apply Finset.sum_congr rfl
   intro m hm
-  rw [dvd_sub_iff_modEq_of_le (hSN m hm)]
+  have hiff : d ∣ N - m ↔ Nat.ModEq d m N := dvd_sub_iff_modEq_of_le (hSN m hm)
   by_cases hmod : Nat.ModEq d m N
-  · simp only [hmod, if_pos, mul_comm]
-  · simp only [hmod, if_neg, mul_zero]
+  · simp only [if_pos (hiff.mpr hmod), if_pos hmod, mul_comm]
+  · have hdvd : ¬d ∣ N - m := fun h => hmod (hiff.mp h)
+    simp only [if_neg hdvd, if_neg hmod, mul_zero]
 
 /-- The weighted outer-source decomposition keeps the sign of rho until
 after the complete physical modulus sum. No absolute discrepancy sum is
@@ -397,12 +398,12 @@ theorem RealB_cast_le_same_rho_outer_main_add_errors
             physicalDivisorSum Q rho (N - m) := by
         apply Finset.sum_subset hsource
         intro m hmS hmSource
-        simp only [hmSource, if_neg, zero_mul]
+        simp only [if_neg hmSource, zero_mul]
       _ ≤ _ := Finset.sum_le_sum fun m hm =>
         mul_le_mul_of_nonneg_right (houter m hm) (hnonneg (N - m))
   have h := (RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff
     N z Q rho hb hT hmajor).trans
-      (add_le_add_right (add_le_add_right hsum (z : ℝ)) (T + 1))
+      (add_le_add (add_le_add hsum (le_refl (z : ℝ))) (le_refl (T + 1)))
   rw [sum_weight_mul_physicalDivisorSum_eq_same_rho_main_add_errors
     N S Q weight rho hSN] at h
   exact h

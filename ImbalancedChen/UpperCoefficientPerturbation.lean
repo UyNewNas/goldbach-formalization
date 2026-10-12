@@ -81,7 +81,8 @@ theorem abs_signSensitiveReciprocalTotientDensity_sub_le
     _ ≤ ∑ d ∈ rough, M * (|compiled d - raw d| / (Nat.totient d : ℝ)) := by
       apply Finset.sum_le_sum
       intro d _
-      rw [← sub_div, abs_div, abs_of_nonneg (Nat.cast_nonneg (Nat.totient d))]
+      rw [← sub_div, abs_div,
+        abs_of_nonneg (show (0 : ℝ) ≤ (Nat.totient d : ℝ) from Nat.cast_nonneg _)]
       calc
         |signAttachedValue (compiled d) lo hi - signAttachedValue (raw d) lo hi| /
             (Nat.totient d : ℝ) ≤ (M * |compiled d - raw d|) / (Nat.totient d : ℝ) :=
