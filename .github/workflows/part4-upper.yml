@@ -18,7 +18,6 @@ jobs:
     timeout-minutes: 90
     env:
       LEAN_NUM_THREADS: 2
-      MATHLIB_CACHE_DIR: ${{ runner.temp }}/part4-mathlib-cache
     defaults:
       run:
         shell: bash
@@ -48,6 +47,7 @@ jobs:
           test ! -e "$PART4_LEAN_ACTION_DIR"
           mv .ci-part4-lean-action "$PART4_LEAN_ACTION_DIR"
           printf 'PART4_LEAN_ACTION_DIR=%s\n' "$PART4_LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          printf 'MATHLIB_CACHE_DIR=%s\n' "$RUNNER_TEMP/part4-mathlib-cache" >> "$GITHUB_ENV"
           test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
           git merge-base --is-ancestor 1a80c1bcce67886f699d097fc37fd245cd3620bf HEAD
           python3 verification/verify_part4_upper.py --check-lockfiles | tee "$logdir/lockfiles.log"

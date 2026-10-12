@@ -2,9 +2,11 @@
 
 ## Status and fixed sources
 
-This checkpoint supplies finite same-weight bridges, exact normalization,
-and explicitly conditional assembly theorems. **It does not prove the
-manuscript's sharp K bound or the final hUpper.** A successful compilation
+This checkpoint contains candidate proofs of finite same-weight bridges,
+exact normalization, and explicitly conditional assembly theorems. **The
+new Lean sources have not yet passed compilation and kernel replay. This
+checkpoint does not prove the manuscript's sharp K bound or the final
+hUpper.** A successful compilation
 of an assembly theorem does not discharge its displayed analytic inputs.
 
 - Accepted base: `1a80c1bcce67886f699d097fc37fd245cd3620bf`.
@@ -124,6 +126,14 @@ small positive precision. The attachment theorem then chooses a precision
 in that interval before taking a common target threshold. A theorem at an
 unrelated single precision is insufficient.
 
+The more general
+`exists_actualSmallRoughRho_density_le_of_full_policy_limits` retains an
+explicit `densityCap`. For example, after the true integral is bounded by
+E, a cap of E+u allocates u to the limit/attachment step and leaves the
+second u for compilation. The two internal approximation errors each use
+one third of `densityCap - rawBound`. Returning only a raw bound at K
+would discard the reserve needed by a later compiler step.
+
 For the compiled path, also supply coefficient domination, an actual
 compiler-error budget, cutoff-separated support, squarefreeness,
 target-coprimality, bounded coefficients and the physical/support
@@ -150,6 +160,16 @@ and compilation. The already proved small-prime attachment reserve must
 be allocated within this chain, not treated as proof of the entire
 compiler budget. The rational identity above is not the integral theorem.
 The 17,572-cell lower certificate is not an upper-K supplier.
+
+A read-only check of Part 2 at
+`195f19cfcedeaf7793ccce3f1d42d27fcfe4f815` confirms that its new first-row
+paired-fibre integral certificate is a lower-side result. Its
+[`docs/part2/PART1_INTERFACE.md`](https://github.com/UyNewNas/goldbach-formalization/blob/195f19cfcedeaf7793ccce3f1d42d27fcfe4f815/docs/part2/PART1_INTERFACE.md)
+explicitly excludes certification of the whole upper K. It does not supply
+the missing upper integral premise here. Its independent workflow
+`38193423556` failed before any job steps ran and has no successful
+compilation artifact. That snapshot has not been imported or used as an
+accepted replacement baseline.
 
 ### Part 3 to Part 4: the same final physical weight
 
@@ -199,3 +219,192 @@ declaration's safety and transitive axioms. Only `propext`,
 including private/generated declarations, are retained with the run logs.
 A failed, skipped, incomplete or only statically scanned run is not a
 verified proof. Existing full-project checks remain independently visible.
+
+### Observed attempts
+
+- The complete local runner reached `lean-version.log` and failed with
+  `error: failed to locate application`; its report status is `FAILED`.
+- First candidate commit:
+  `4befa13602117435a3a64dfca001c20bbbb7d4c2`.
+  [Part 4 run 38193908304](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38193908304)
+  failed with no jobs. The job-level cache path used a `runner` context
+  where GitHub does not permit that context; the present workflow moves
+  that assignment into the existing shell step through `GITHUB_ENV`.
+- At the same first candidate commit, existing core run `38193909112` and
+  variable-envelope run `38193909046` each failed with `steps = []` and
+  `runner_id = 0`. No Lean log exists for those attempts. This is not
+  evidence of either proof success or an elaboration error.
+- Static checks passed: three frozen configuration hashes, all eleven
+  dependency HEADs and source cleanliness, Python syntax, YAML parsing,
+  five shell-block syntax checks and whitespace checks. All 303 baseline
+  source blobs remain byte-for-byte identical.
+
+Use the final handoff's fixed SHA and its own actual workflow result for
+the latest attempt. The candidate source types below are copied from the
+source; they are not an elaborated type inventory.
+
+## Candidate key declaration types
+
+All declarations are in namespace `ImbalancedChen`; `Filter` and
+`Topology` are open. These are complete source signatures with every
+hypothesis retained. They remain uncompiled candidates at this checkpoint.
+
+### Exact density normalization
+
+```lean
+theorem density_le_manuscriptScale_iff_normalized {N : ℕ}
+    (hN : 2 ≤ N) (density coefficient : ℝ) :
+    density ≤ coefficient * (singularSeries N / Real.log (N : ℝ)) ↔
+      density * Real.log (N : ℝ) / singularSeries N ≤ coefficient
+```
+
+### Exact main-term product
+
+```lean
+theorem same_rho_normalized_mainTerm (N : ℕ) (mass : ℝ)
+    (Q : Finset ℕ) (rho : ℕ → ℝ) :
+    (mass * physicalDensitySum Q rho) / singularNormalization N =
+      (mass * Real.log (N : ℝ) / (N : ℝ)) *
+        (physicalDensitySum Q rho * Real.log (N : ℝ) / singularSeries N)
+```
+
+### A raw density cap that preserves the compiler reserve
+
+```lean
+theorem exists_actualSmallRoughRho_density_le_of_full_policy_limits
+    (nu sieveR epsilonMax rawBound densityCap : ℝ)
+    (hnu : 0 < nu) (hr : 0 < sieveR) (hepsilonMax : 0 < epsilonMax)
+    (retainOdd : ℝ → ℕ → List ℕ → Bool) (cap : ℕ → ℕ) (integral : ℝ → ℝ)
+    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},
+      (N : ℝ) ^ (nu * sieveR) ≤ (cap N : ℝ))
+    (hIntegral : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →
+      Tendsto (fun N : ℕ =>
+        reciprocalTotientDensity
+          (fixedRoughSupport (retainOdd epsilon N) N (cap N) 0
+            ((N : ℝ) ^ (nu * sieveR)))
+          (fixedRoughCoefficient (retainOdd epsilon N) N (cap N) 0
+            ((N : ℝ) ^ (nu * sieveR))) *
+          Real.log (N : ℝ) / singularSeries N)
+        (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})
+        (𝓝 (integral epsilon)))
+    (hCertificate : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →
+      integral epsilon ≤ rawBound)
+    (hgap : rawBound < densityCap) :
+    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧
+      epsilon < epsilonMax ∧ epsilon ^ 2 ≤ sieveR ∧
+      ∃ N₀ : ℕ, 2 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → Even N →
+        let w := (N : ℝ) ^ (nu * epsilon ^ 2)
+        let z := (N : ℝ) ^ (nu * sieveR)
+        let L := (N : ℝ) ^ (nu * epsilon)
+        physicalDensitySum (actualSmallRoughModuli (retainOdd epsilon N) N (cap N) w z)
+            (actualSmallRoughRho (retainOdd epsilon N) N (cap N) w z L) ≤
+          densityCap * (singularSeries N / Real.log (N : ℝ))
+```
+
+### The currentK specialization for the raw attachment
+
+```lean
+theorem exists_actualSmallRoughRho_density_le_currentK_of_full_policy_limits
+    (nu sieveR epsilonMax rawBound : ℝ)
+    (hnu : 0 < nu) (hr : 0 < sieveR) (hepsilonMax : 0 < epsilonMax)
+    (retainOdd : ℝ → ℕ → List ℕ → Bool) (cap : ℕ → ℕ) (integral : ℝ → ℝ)
+    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},
+      (N : ℝ) ^ (nu * sieveR) ≤ (cap N : ℝ))
+    (hIntegral : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →
+      Tendsto (fun N : ℕ =>
+        reciprocalTotientDensity
+          (fixedRoughSupport (retainOdd epsilon N) N (cap N) 0
+            ((N : ℝ) ^ (nu * sieveR)))
+          (fixedRoughCoefficient (retainOdd epsilon N) N (cap N) 0
+            ((N : ℝ) ^ (nu * sieveR))) *
+          Real.log (N : ℝ) / singularSeries N)
+        (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})
+        (𝓝 (integral epsilon)))
+    (hCertificate : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →
+      integral epsilon ≤ rawBound)
+    (hgap : rawBound < currentK) :
+    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧
+      epsilon < epsilonMax ∧ epsilon ^ 2 ≤ sieveR ∧
+      ∃ N₀ : ℕ, 2 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → Even N →
+        let w := (N : ℝ) ^ (nu * epsilon ^ 2)
+        let z := (N : ℝ) ^ (nu * sieveR)
+        let L := (N : ℝ) ^ (nu * epsilon)
+        physicalDensitySum (actualSmallRoughModuli (retainOdd epsilon N) N (cap N) w z)
+            (actualSmallRoughRho (retainOdd epsilon N) N (cap N) w z L) ≤
+          currentK * (singularSeries N / Real.log (N : ℝ))
+```
+
+### Transport to the compiled physical coefficient
+
+```lean
+theorem compiled_physicalDensity_le_currentK_of_raw_and_coefficient_budget
+    {N : ℕ} (hN : 2 ≤ N) {w : ℝ} {small rough : Finset ℕ}
+    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)
+    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)
+    (compiled raw betaMinus betaPlus : ℕ → ℝ) (M rawBound compilerReserve : ℝ)
+    (hminus : |reciprocalTotientDensity small betaMinus| ≤ M)
+    (hplus : |reciprocalTotientDensity small betaPlus| ≤ M)
+    (hraw : physicalDensitySum (smallRoughModuli small rough)
+        (smallRoughRho small rough raw betaMinus betaPlus) ≤
+      rawBound * (singularSeries N / Real.log (N : ℝ)))
+    (hcompiler : M * reciprocalTotientDensity rough (fun d => |compiled d - raw d|) ≤
+      compilerReserve * (singularSeries N / Real.log (N : ℝ)))
+    (hbudget : rawBound + compilerReserve ≤ currentK) :
+    physicalDensitySum (smallRoughModuli small rough)
+        (smallRoughRho small rough compiled betaMinus betaPlus) *
+        Real.log (N : ℝ) / singularSeries N ≤ currentK
+```
+
+### Actual raw weight majorant
+
+```lean
+theorem actualSmallRoughRho_sieveProduct_majorant
+    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)
+    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z)
+    (hzcap : z ≤ (cap : ℝ)) (n : ℕ) :
+    (if Nat.Coprime n (sieveProduct N (Nat.ceil z)) then (1 : ℝ) else 0) ≤
+      physicalDivisorSum (actualSmallRoughModuli retainOdd N cap w z)
+        (actualSmallRoughRho retainOdd N cap w z L) n
+```
+
+### Actual raw weight in the finite real count
+
+```lean
+theorem RealB_cast_le_actualSmallRoughRho_main_add_errors
+    {b T : ℝ} (N cap : ℕ) (retainOdd : List ℕ → Bool) (w z L : ℝ)
+    (hb : b < 1) (hT : 0 ≤ T)
+    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z) (hzcap : z ≤ (cap : ℝ)) :
+    (RealB b N : ℝ) ≤
+      ((realHalfProductSource b N T).card : ℝ) *
+        physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)
+          (actualSmallRoughRho retainOdd N cap w z L) +
+      realPhysicalCoprimeCorrection b N T (actualSmallRoughModuli retainOdd N cap w z)
+        (actualSmallRoughRho retainOdd N cap w z L) +
+      realPhysicalDistributionError b N T (actualSmallRoughModuli retainOdd N cap w z)
+        (actualSmallRoughRho retainOdd N cap w z L) + (Nat.ceil z : ℝ) + (T + 1)
+```
+
+### Conditional hUpper with the same precision-indexed weight
+
+```lean
+theorem eventually_RealB_le_currentK_log_of_same_rho_inputs
+    {b kappa sieveExponent : ℝ}
+    (hb : 0 < b) (hb1 : b < 1) (hkappa : 0 < kappa)
+    (hsieve : sieveExponent < 1)
+    (Q : ℝ → ℕ → Finset ℕ) (rho : ℝ → ℕ → ℕ → ℝ)
+    (hmajor : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N → ∀ n : ℕ,
+      (if Nat.Coprime n (sieveProduct N (Nat.ceil ((N : ℝ) ^ sieveExponent)))
+        then (1 : ℝ) else 0) ≤ physicalDivisorSum (Q delta N) (rho delta N) n)
+    (hdensity : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →
+      physicalDensitySum (Q delta N) (rho delta N) ≤
+        (currentK + delta) * (singularSeries N / Real.log (N : ℝ)))
+    (hcoprime : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →
+      |realPhysicalCoprimeCorrection b N (manuscriptHalfProductCutoff kappa N)
+        (Q delta N) (rho delta N)| ≤ delta * singularNormalization N)
+    (hdistribution : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →
+      |realPhysicalDistributionError b N (manuscriptHalfProductCutoff kappa N)
+        (Q delta N) (rho delta N)| ≤ delta * singularNormalization N) :
+    ∀ epsilon : ℝ, 0 < epsilon → ∀ᶠ N : ℕ in atTop, Even N →
+      (RealB b N : ℝ) ≤
+        (currentK * Real.log (1 / b) + epsilon) * singularNormalization N
+```
