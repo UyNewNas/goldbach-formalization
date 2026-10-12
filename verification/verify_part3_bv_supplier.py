@@ -9,6 +9,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import shutil
 import subprocess
 import time
 
@@ -120,6 +121,13 @@ def main() -> None:
                          for suffix in ("", ".server", ".private")]
             if path.is_file()
         }
+        report["archived_production_objects"] = {}
+        for suffix in ("", ".server", ".private"):
+            path = Path(str(object_path) + suffix)
+            if path.is_file():
+                archived = out / ("bv-production.olean" + suffix)
+                shutil.copy2(path, archived)
+                report["archived_production_objects"][archived.name] = digest(archived)
         version = run(["lake", "env", "lean", "--version"], "bv-lean-version").strip()
         if not re.search(r"\bversion 4\.33\.0-rc1(?:,|\))", version):
             raise RuntimeError("Unexpected Lean version: " + version)
@@ -195,6 +203,13 @@ def main() -> None:
             },
             completed_utc=datetime.now(timezone.utc).isoformat(),
         )
+        report["archived_audit_objects"] = {}
+        for suffix in ("", ".server", ".private"):
+            path = Path(str(audit_object) + suffix)
+            if path.is_file():
+                archived = out / ("bv-audit.olean" + suffix)
+                shutil.copy2(path, archived)
+                report["archived_audit_objects"][archived.name] = digest(archived)
         if digest(source) != SOURCE_SHA256 or digest(AUDIT_SOURCE) != audit_hash:
             raise RuntimeError("Source changed during verification")
         save()
