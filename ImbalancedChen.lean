@@ -246,3 +246,5 @@ import ImbalancedChen.ChenQuotientMovingWeight
 import ImbalancedChen.ChenPairHarmonicFinite
 import ImbalancedChen.SymmetricTriangleIntegral
 import ImbalancedChen.CurrentChenBuchstabRefinement
+import ImbalancedChen.Certificates.PairedV2
+import ImbalancedChen.CurrentPairedBuchstabBridge

@@ -1,0 +1,1091 @@
+ImbalancedChen.Certificates.PairedIntegralCertificate
+Type
+
+ImbalancedChen.Certificates.RationalLogCertificate
+Type
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate
+DecidableEq.{1} ImbalancedChen.Certificates.PairedIntegralCertificate
+
+ImbalancedChen.Certificates.instDecidableEqRationalLogCertificate
+DecidableEq.{1} ImbalancedChen.Certificates.RationalLogCertificate
+
+ImbalancedChen.Certificates.instDecidableValid
+(c : ImbalancedChen.Certificates.RationalLogCertificate) → Decidable c.Valid
+
+ImbalancedChen.Certificates.instDecidableValid_1
+(c : ImbalancedChen.Certificates.PairedIntegralCertificate) → Decidable c.Valid
+
+ImbalancedChen.Certificates.instReprPairedIntegralCertificate
+Repr.{0} ImbalancedChen.Certificates.PairedIntegralCertificate
+
+ImbalancedChen.Certificates.instReprRationalLogCertificate
+Repr.{0} ImbalancedChen.Certificates.RationalLogCertificate
+
+ImbalancedChen.Certificates.intervalIntegrable_pairedFibreKernel
+∀ {a Z : ℝ},
+  LT.lt.{0} 0 a →
+    LE.le.{0} a Z →
+      IntervalIntegrable.{0}
+        (fun z => HDiv.hDiv.{0, 0, 0} (Real.log (HDiv.hDiv.{0, 0, 0} z a)) (HPow.hPow.{0, 0, 0} z 2))
+        MeasureTheory.MeasureSpace.volume.{0} a Z
+
+ImbalancedChen.Certificates.logParameter
+ℚ → ℚ
+
+ImbalancedChen.Certificates.logSeriesLower
+ℚ → ℕ → ℚ
+
+ImbalancedChen.Certificates.logSeriesUpper
+ℚ → ℕ → ℚ
+
+ImbalancedChen.Certificates.pairedFibreIntegral
+ℝ → ℝ → ℝ
+
+ImbalancedChen.Certificates.pairedFibreIntegral_eq
+∀ {a Z : ℝ},
+  LT.lt.{0} 0 a →
+    LE.le.{0} a Z →
+      Eq.{1} (ImbalancedChen.Certificates.pairedFibreIntegral a Z)
+        (HSub.hSub.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} 1 a)
+          (HDiv.hDiv.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 1 (Real.log (HDiv.hDiv.{0, 0, 0} Z a))) Z))
+
+ImbalancedChen.Certificates.pairedFibreIntegral_eq_iterated
+∀ {a Z : ℝ},
+  LT.lt.{0} 0 a →
+    LE.le.{0} a Z →
+      Eq.{1}
+        (∫ (z : ℝ) in a..Z,
+          HMul.hMul.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} 1 (HPow.hPow.{0, 0, 0} z 2))
+            (∫ (w : ℝ) in a..z, HDiv.hDiv.{0, 0, 0} 1 w))
+        (ImbalancedChen.Certificates.pairedFibreIntegral a Z)
+
+ImbalancedChen.Certificates.pairedFibreKernel
+ℝ → ℝ → ℝ → ℝ → ℝ
+
+ImbalancedChen.Certificates.pairedFibreKernel_eq
+∀ (t u z w : ℝ),
+  Eq.{1} (ImbalancedChen.Certificates.pairedFibreKernel t u z w)
+    (HDiv.hDiv.{0, 0, 0} 1
+      (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} t u) (HPow.hPow.{0, 0, 0} z 2)) w))
+
+ImbalancedChen.Certificates.pairedLocalIntegral
+ℝ → ℝ → ℝ → ℝ → ℝ → ℝ → ℝ → ℝ
+
+ImbalancedChen.Certificates.pairedLocalIntegral_eq
+∀ (K : ℝ) {a tl tr ul ur Z : ℝ},
+  LT.lt.{0} 0 a →
+    LE.le.{0} a Z →
+      LT.lt.{0} 0 tl →
+        LT.lt.{0} 0 tr →
+          LT.lt.{0} 0 ul →
+            LT.lt.{0} 0 ur →
+              Eq.{1} (ImbalancedChen.Certificates.pairedLocalIntegral K a tl tr ul ur Z)
+                (HMul.hMul.{0, 0, 0}
+                  (HMul.hMul.{0, 0, 0}
+                    (HMul.hMul.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} K 80) (Real.log (HDiv.hDiv.{0, 0, 0} tr tl)))
+                    (Real.log (HDiv.hDiv.{0, 0, 0} ur ul)))
+                  (HSub.hSub.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} 1 a)
+                    (HDiv.hDiv.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 1 (Real.log (HDiv.hDiv.{0, 0, 0} Z a))) Z)))
+
+ImbalancedChen.Certificates.pairedLocalIntegral_eq_literal
+∀ (K a tl tr ul ur Z : ℝ),
+  Eq.{1} (ImbalancedChen.Certificates.pairedLocalIntegral K a tl tr ul ur Z)
+    (HMul.hMul.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} K 80)
+      (∫ (t : ℝ) in tl..tr,
+        ∫ (u : ℝ) in ul..ur,
+          ∫ (z : ℝ) in a..Z,
+            ∫ (w : ℝ) in a..z,
+              HDiv.hDiv.{0, 0, 0} 1
+                (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} t u) (HPow.hPow.{0, 0, 0} z 2)) w)))
+
+_private.ImbalancedChen.Certificates.PairedFibreIntegral.0.ImbalancedChen.Certificates.hasDerivAt_pairedFibrePrimitive
+∀ {a z : ℝ},
+  LT.lt.{0} 0 a →
+    LT.lt.{0} 0 z →
+      HasDerivAt.{0, 0}
+        (fun x =>
+          Neg.neg.{0} (HDiv.hDiv.{0, 0, 0} (HSub.hSub.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 1 (Real.log x)) (Real.log a)) x))
+        (HDiv.hDiv.{0, 0, 0} (Real.log (HDiv.hDiv.{0, 0, 0} z a)) (HPow.hPow.{0, 0, 0} z 2)) z
+
+_private.ImbalancedChen.Certificates.RationalLogCertificate.0.ImbalancedChen.Certificates.logParameter_bounds
+∀ {q : ℚ},
+  LE.le.{0} 1 q →
+    LE.le.{0} 0 (ImbalancedChen.Certificates.logParameter q) ∧ LT.lt.{0} (ImbalancedChen.Certificates.logParameter q) 1
+
+_private.ImbalancedChen.Certificates.RationalLogCertificate.0.ImbalancedChen.Certificates.logParameter_identity
+∀ {q : ℚ},
+  LE.le.{0} 1 q →
+    Eq.{1}
+      (HDiv.hDiv.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 1 (ImbalancedChen.Certificates.logParameter q))
+        (HSub.hSub.{0, 0, 0} 1 (ImbalancedChen.Certificates.logParameter q)))
+      q
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.K
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℚ
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.Valid
+ImbalancedChen.Certificates.PairedIntegralCertificate → Prop
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.Z
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℚ
+
+ImbalancedChen.Certificates.PairedIntegralCertificate._sizeOf_1
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℕ
+
+ImbalancedChen.Certificates.PairedIntegralCertificate._sizeOf_inst
+SizeOf.{1} ImbalancedChen.Certificates.PairedIntegralCertificate
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.a
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℚ
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.bracketLower
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℚ
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.bracketUpper
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℚ
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.casesOn
+{motive : ImbalancedChen.Certificates.PairedIntegralCertificate → Sort u} →
+  (t : ImbalancedChen.Certificates.PairedIntegralCertificate) →
+    ((K a tl tr ul ur Z : ℚ) →
+        (logT logU logZ : ImbalancedChen.Certificates.RationalLogCertificate) →
+          (lower upper : ℚ) →
+            motive
+              { K := K, a := a, tl := tl, tr := tr, ul := ul, ur := ur, Z := Z, logT := logT, logU := logU,
+                logZ := logZ, lower := lower, upper := upper }) →
+      motive t
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.check
+ImbalancedChen.Certificates.PairedIntegralCertificate → Bool
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.check_sound
+∀ (c : ImbalancedChen.Certificates.PairedIntegralCertificate),
+  Eq.{1} c.check Bool.true →
+    LE.le.{0} (↑c.lower) (ImbalancedChen.Certificates.pairedLocalIntegral ↑c.K ↑c.a ↑c.tl ↑c.tr ↑c.ul ↑c.ur ↑c.Z) ∧
+      LE.le.{0} (ImbalancedChen.Certificates.pairedLocalIntegral ↑c.K ↑c.a ↑c.tl ↑c.tr ↑c.ul ↑c.ur ↑c.Z) ↑c.upper
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.ctorIdx
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℕ
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.logT
+ImbalancedChen.Certificates.PairedIntegralCertificate → ImbalancedChen.Certificates.RationalLogCertificate
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.logU
+ImbalancedChen.Certificates.PairedIntegralCertificate → ImbalancedChen.Certificates.RationalLogCertificate
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.logZ
+ImbalancedChen.Certificates.PairedIntegralCertificate → ImbalancedChen.Certificates.RationalLogCertificate
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.lower
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℚ
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.mk
+ℚ →
+  ℚ →
+    ℚ →
+      ℚ →
+        ℚ →
+          ℚ →
+            ℚ →
+              ImbalancedChen.Certificates.RationalLogCertificate →
+                ImbalancedChen.Certificates.RationalLogCertificate →
+                  ImbalancedChen.Certificates.RationalLogCertificate →
+                    ℚ → ℚ → ImbalancedChen.Certificates.PairedIntegralCertificate
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.noConfusion
+{P : Sort u} →
+  {t t' : ImbalancedChen.Certificates.PairedIntegralCertificate} →
+    Eq.{1} t t' → ImbalancedChen.Certificates.PairedIntegralCertificate.noConfusionType.{u} P t t'
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.noConfusionType
+Sort u →
+  ImbalancedChen.Certificates.PairedIntegralCertificate → ImbalancedChen.Certificates.PairedIntegralCertificate → Sort u
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.productLower
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℚ
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.productUpper
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℚ
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.rec
+{motive : ImbalancedChen.Certificates.PairedIntegralCertificate → Sort u} →
+  ((K a tl tr ul ur Z : ℚ) →
+      (logT logU logZ : ImbalancedChen.Certificates.RationalLogCertificate) →
+        (lower upper : ℚ) →
+          motive
+            { K := K, a := a, tl := tl, tr := tr, ul := ul, ur := ur, Z := Z, logT := logT, logU := logU, logZ := logZ,
+              lower := lower, upper := upper }) →
+    (t : ImbalancedChen.Certificates.PairedIntegralCertificate) → motive t
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.recOn
+{motive : ImbalancedChen.Certificates.PairedIntegralCertificate → Sort u} →
+  (t : ImbalancedChen.Certificates.PairedIntegralCertificate) →
+    ((K a tl tr ul ur Z : ℚ) →
+        (logT logU logZ : ImbalancedChen.Certificates.RationalLogCertificate) →
+          (lower upper : ℚ) →
+            motive
+              { K := K, a := a, tl := tl, tr := tr, ul := ul, ur := ur, Z := Z, logT := logT, logU := logU,
+                logZ := logZ, lower := lower, upper := upper }) →
+      motive t
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.sum_check_sound
+∀ {ι : Type u_1} (s : Finset.{u_1} ι) (c : ι → ImbalancedChen.Certificates.PairedIntegralCertificate),
+  (∀ (i : ι), Membership.mem.{u_1, u_1} s i → Eq.{1} (c i).check Bool.true) →
+    LE.le.{0} (↑(∑ i ∈ s, (c i).lower))
+        (∑ i ∈ s,
+          ImbalancedChen.Certificates.pairedLocalIntegral ↑(c i).K ↑(c i).a ↑(c i).tl ↑(c i).tr ↑(c i).ul ↑(c i).ur
+            ↑(c i).Z) ∧
+      LE.le.{0}
+        (∑ i ∈ s,
+          ImbalancedChen.Certificates.pairedLocalIntegral ↑(c i).K ↑(c i).a ↑(c i).tl ↑(c i).tr ↑(c i).ul ↑(c i).ur
+            ↑(c i).Z)
+        ↑(∑ i ∈ s, (c i).upper)
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.tl
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℚ
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.tr
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℚ
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.ul
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℚ
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.upper
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℚ
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.ur
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℚ
+
+ImbalancedChen.Certificates.PairedV2.K
+ℚ
+
+ImbalancedChen.Certificates.PairedV2.a
+ℚ
+
+ImbalancedChen.Certificates.PairedV2.d
+ℚ
+
+ImbalancedChen.Certificates.PairedV2.firstCertificate
+ImbalancedChen.Certificates.PairedIntegralCertificate
+
+ImbalancedChen.Certificates.PairedV2.firstDiscardedQ80
+ℕ
+
+ImbalancedChen.Certificates.PairedV2.firstFibreSupport
+ℝ → ℝ → ℝ → ℝ → Prop
+
+ImbalancedChen.Certificates.PairedV2.firstGroup
+String
+
+ImbalancedChen.Certificates.PairedV2.firstIntegral
+ℝ
+
+ImbalancedChen.Certificates.PairedV2.firstIntegral_bounds
+LE.le.{0} (31703 / 1000000000000) ImbalancedChen.Certificates.PairedV2.firstIntegral ∧
+  LE.le.{0} ImbalancedChen.Certificates.PairedV2.firstIntegral (31704 / 1000000000000)
+
+ImbalancedChen.Certificates.PairedV2.firstIntegral_pos
+LT.lt.{0} 0 ImbalancedChen.Certificates.PairedV2.firstIntegral
+
+ImbalancedChen.Certificates.PairedV2.firstIntegral_semantics
+Eq.{1} ImbalancedChen.Certificates.PairedV2.firstIntegral
+  (HMul.hMul.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} (8452171 / 1250000) 80)
+    (∫ (t : ℝ) in 937361 / 4096000..1875373 / 8192000,
+      ∫ (u : ℝ) in 194217 / 1280000..388777 / 2560000,
+        ∫ (z : ℝ) in 417 / 5000..76088109 / 532480000,
+          ∫ (w : ℝ) in 417 / 5000..z,
+            HDiv.hDiv.{0, 0, 0} 1
+              (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} t u) (HPow.hPow.{0, 0, 0} z 2)) w)))
+
+ImbalancedChen.Certificates.PairedV2.firstOrdinal
+ℕ
+
+ImbalancedChen.Certificates.PairedV2.firstStoredLowerQ160
+ℤ
+
+ImbalancedChen.Certificates.PairedV2.firstStoredUpperQ160
+ℤ
+
+ImbalancedChen.Certificates.PairedV2.firstTIndex
+ℕ
+
+ImbalancedChen.Certificates.PairedV2.firstUIndex
+ℕ
+
+ImbalancedChen.Certificates.PairedV2.firstZ
+ℚ
+
+ImbalancedChen.Certificates.PairedV2.first_certificate_checked
+Eq.{1} ImbalancedChen.Certificates.PairedV2.firstCertificate.check Bool.true
+
+ImbalancedChen.Certificates.PairedV2.first_coordinates
+Eq.{1} (ImbalancedChen.Certificates.PairedV2.tLower ImbalancedChen.Certificates.PairedV2.firstTIndex)
+    (937361 / 4096000) ∧
+  Eq.{1} (ImbalancedChen.Certificates.PairedV2.tUpper ImbalancedChen.Certificates.PairedV2.firstTIndex)
+      (1875373 / 8192000) ∧
+    Eq.{1} (ImbalancedChen.Certificates.PairedV2.uLower ImbalancedChen.Certificates.PairedV2.firstUIndex)
+        (194217 / 1280000) ∧
+      Eq.{1} (ImbalancedChen.Certificates.PairedV2.uUpper ImbalancedChen.Certificates.PairedV2.firstUIndex)
+        (388777 / 2560000)
+
+ImbalancedChen.Certificates.PairedV2.first_cutoff_definition
+Eq.{1} ImbalancedChen.Certificates.PairedV2.firstZ
+  (Min.min.{0} (ImbalancedChen.Certificates.PairedV2.uLower ImbalancedChen.Certificates.PairedV2.firstUIndex)
+    (HDiv.hDiv.{0, 0, 0}
+      (HMul.hMul.{0, 0, 0} 3
+        (HSub.hSub.{0, 0, 0}
+          (HSub.hSub.{0, 0, 0} 1
+            (ImbalancedChen.Certificates.PairedV2.tUpper ImbalancedChen.Certificates.PairedV2.firstTIndex))
+          (ImbalancedChen.Certificates.PairedV2.uUpper ImbalancedChen.Certificates.PairedV2.firstUIndex)))
+      13))
+
+ImbalancedChen.Certificates.PairedV2.first_fibre_argument
+∀ {t u z w : ℝ},
+  ImbalancedChen.Certificates.PairedV2.firstFibreSupport t u z w →
+    LT.lt.{0} (417 / 5000) w ∧
+      LT.lt.{0} w z ∧
+        LT.lt.{0} z u ∧
+          LT.lt.{0} u (19 / 125) ∧
+            LT.lt.{0} (19 / 125) t ∧
+              LT.lt.{0} t (59 / 250) ∧
+                LE.le.{0} (7 / 3)
+                  (HDiv.hDiv.{0, 0, 0}
+                    (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} 1 t) u) z) w) z)
+
+ImbalancedChen.Certificates.PairedV2.first_fibre_nonempty
+∃ t u z w, ImbalancedChen.Certificates.PairedV2.firstFibreSupport t u z w
+
+ImbalancedChen.Certificates.PairedV2.first_geometry_checked
+LT.lt.{0} 0 ImbalancedChen.Certificates.PairedV2.a ∧
+  LT.lt.{0} ImbalancedChen.Certificates.PairedV2.a ImbalancedChen.Certificates.PairedV2.firstZ ∧
+    LE.le.{0} ImbalancedChen.Certificates.PairedV2.firstZ
+        (ImbalancedChen.Certificates.PairedV2.uLower ImbalancedChen.Certificates.PairedV2.firstUIndex) ∧
+      LT.lt.{0} (ImbalancedChen.Certificates.PairedV2.uLower ImbalancedChen.Certificates.PairedV2.firstUIndex)
+          (ImbalancedChen.Certificates.PairedV2.uUpper ImbalancedChen.Certificates.PairedV2.firstUIndex) ∧
+        LT.lt.{0} (ImbalancedChen.Certificates.PairedV2.uUpper ImbalancedChen.Certificates.PairedV2.firstUIndex)
+            ImbalancedChen.Certificates.PairedV2.h ∧
+          LT.lt.{0} ImbalancedChen.Certificates.PairedV2.h
+              (ImbalancedChen.Certificates.PairedV2.tLower ImbalancedChen.Certificates.PairedV2.firstTIndex) ∧
+            LT.lt.{0} (ImbalancedChen.Certificates.PairedV2.tLower ImbalancedChen.Certificates.PairedV2.firstTIndex)
+                (ImbalancedChen.Certificates.PairedV2.tUpper ImbalancedChen.Certificates.PairedV2.firstTIndex) ∧
+              LT.lt.{0} (ImbalancedChen.Certificates.PairedV2.tUpper ImbalancedChen.Certificates.PairedV2.firstTIndex)
+                  ImbalancedChen.Certificates.PairedV2.d ∧
+                LE.le.{0} (HMul.hMul.{0, 0, 0} (13 / 3) ImbalancedChen.Certificates.PairedV2.firstZ)
+                    (HSub.hSub.{0, 0, 0}
+                      (HSub.hSub.{0, 0, 0} 1
+                        (ImbalancedChen.Certificates.PairedV2.tUpper ImbalancedChen.Certificates.PairedV2.firstTIndex))
+                      (ImbalancedChen.Certificates.PairedV2.uUpper ImbalancedChen.Certificates.PairedV2.firstUIndex)) ∧
+                  LE.le.{0}
+                      (HSub.hSub.{0, 0, 0}
+                        (HSub.hSub.{0, 0, 0} (57 / 64)
+                          (HMul.hMul.{0, 0, 0} (5 / 2)
+                            (ImbalancedChen.Certificates.PairedV2.tLower
+                              ImbalancedChen.Certificates.PairedV2.firstTIndex)))
+                        (ImbalancedChen.Certificates.PairedV2.uLower ImbalancedChen.Certificates.PairedV2.firstUIndex))
+                      (HMul.hMul.{0, 0, 0} 2 ImbalancedChen.Certificates.PairedV2.a) ∧
+                    Eq.{1} ImbalancedChen.Certificates.PairedV2.firstDiscardedQ80 0
+
+ImbalancedChen.Certificates.PairedV2.h
+ℚ
+
+ImbalancedChen.Certificates.PairedV2.mu
+ℚ
+
+ImbalancedChen.Certificates.PairedV2.tLower
+ℕ → ℚ
+
+ImbalancedChen.Certificates.PairedV2.tUpper
+ℕ → ℚ
+
+ImbalancedChen.Certificates.PairedV2.uLower
+ℕ → ℚ
+
+ImbalancedChen.Certificates.PairedV2.uUpper
+ℕ → ℚ
+
+ImbalancedChen.Certificates.RationalLogCertificate.Valid
+ImbalancedChen.Certificates.RationalLogCertificate → Prop
+
+ImbalancedChen.Certificates.RationalLogCertificate._sizeOf_1
+ImbalancedChen.Certificates.RationalLogCertificate → ℕ
+
+ImbalancedChen.Certificates.RationalLogCertificate._sizeOf_inst
+SizeOf.{1} ImbalancedChen.Certificates.RationalLogCertificate
+
+ImbalancedChen.Certificates.RationalLogCertificate.argument
+ImbalancedChen.Certificates.RationalLogCertificate → ℚ
+
+ImbalancedChen.Certificates.RationalLogCertificate.casesOn
+{motive : ImbalancedChen.Certificates.RationalLogCertificate → Sort u} →
+  (t : ImbalancedChen.Certificates.RationalLogCertificate) →
+    ((argument : ℚ) →
+        (terms : ℕ) →
+          (lower upper : ℚ) → motive { argument := argument, terms := terms, lower := lower, upper := upper }) →
+      motive t
+
+ImbalancedChen.Certificates.RationalLogCertificate.check
+ImbalancedChen.Certificates.RationalLogCertificate → Bool
+
+ImbalancedChen.Certificates.RationalLogCertificate.check_sound
+∀ (c : ImbalancedChen.Certificates.RationalLogCertificate),
+  Eq.{1} c.check Bool.true → LE.le.{0} (↑c.lower) (Real.log ↑c.argument) ∧ LE.le.{0} (Real.log ↑c.argument) ↑c.upper
+
+ImbalancedChen.Certificates.RationalLogCertificate.ctorIdx
+ImbalancedChen.Certificates.RationalLogCertificate → ℕ
+
+ImbalancedChen.Certificates.RationalLogCertificate.lower
+ImbalancedChen.Certificates.RationalLogCertificate → ℚ
+
+ImbalancedChen.Certificates.RationalLogCertificate.mk
+ℚ → ℕ → ℚ → ℚ → ImbalancedChen.Certificates.RationalLogCertificate
+
+ImbalancedChen.Certificates.RationalLogCertificate.noConfusion
+{P : Sort u} →
+  {t t' : ImbalancedChen.Certificates.RationalLogCertificate} →
+    Eq.{1} t t' → ImbalancedChen.Certificates.RationalLogCertificate.noConfusionType.{u} P t t'
+
+ImbalancedChen.Certificates.RationalLogCertificate.noConfusionType
+Sort u →
+  ImbalancedChen.Certificates.RationalLogCertificate → ImbalancedChen.Certificates.RationalLogCertificate → Sort u
+
+ImbalancedChen.Certificates.RationalLogCertificate.rec
+{motive : ImbalancedChen.Certificates.RationalLogCertificate → Sort u} →
+  ((argument : ℚ) →
+      (terms : ℕ) →
+        (lower upper : ℚ) → motive { argument := argument, terms := terms, lower := lower, upper := upper }) →
+    (t : ImbalancedChen.Certificates.RationalLogCertificate) → motive t
+
+ImbalancedChen.Certificates.RationalLogCertificate.recOn
+{motive : ImbalancedChen.Certificates.RationalLogCertificate → Sort u} →
+  (t : ImbalancedChen.Certificates.RationalLogCertificate) →
+    ((argument : ℚ) →
+        (terms : ℕ) →
+          (lower upper : ℚ) → motive { argument := argument, terms := terms, lower := lower, upper := upper }) →
+      motive t
+
+ImbalancedChen.Certificates.RationalLogCertificate.terms
+ImbalancedChen.Certificates.RationalLogCertificate → ℕ
+
+ImbalancedChen.Certificates.RationalLogCertificate.upper
+ImbalancedChen.Certificates.RationalLogCertificate → ℚ
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate.decEq
+(x x_1 : ImbalancedChen.Certificates.PairedIntegralCertificate) → Decidable (Eq.{1} x x_1)
+
+ImbalancedChen.Certificates.instDecidableEqRationalLogCertificate.decEq
+(x x_1 : ImbalancedChen.Certificates.RationalLogCertificate) → Decidable (Eq.{1} x x_1)
+
+ImbalancedChen.Certificates.instReprPairedIntegralCertificate.repr
+ImbalancedChen.Certificates.PairedIntegralCertificate → ℕ → Std.Format
+
+ImbalancedChen.Certificates.instReprRationalLogCertificate.repr
+ImbalancedChen.Certificates.RationalLogCertificate → ℕ → Std.Format
+
+ImbalancedChen.Certificates.logParameter.eq_1
+∀ (q : ℚ),
+  Eq.{1} (ImbalancedChen.Certificates.logParameter q)
+    (HDiv.hDiv.{0, 0, 0} (HSub.hSub.{0, 0, 0} q 1) (HAdd.hAdd.{0, 0, 0} q 1))
+
+ImbalancedChen.Certificates.logSeriesLower.eq_1
+∀ (q : ℚ) (n : ℕ),
+  Eq.{1} (ImbalancedChen.Certificates.logSeriesLower q n)
+    (HMul.hMul.{0, 0, 0} 2
+      (∑ i ∈ Finset.range n,
+        HDiv.hDiv.{0, 0, 0}
+          (HPow.hPow.{0, 0, 0} (ImbalancedChen.Certificates.logParameter q)
+            (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 i) 1))
+          ↑(HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 i) 1)))
+
+ImbalancedChen.Certificates.logSeriesUpper.eq_1
+∀ (q : ℚ) (n : ℕ),
+  Eq.{1} (ImbalancedChen.Certificates.logSeriesUpper q n)
+    (HAdd.hAdd.{0, 0, 0} (ImbalancedChen.Certificates.logSeriesLower q n)
+      (HDiv.hDiv.{0, 0, 0}
+        (HMul.hMul.{0, 0, 0} 2
+          (HPow.hPow.{0, 0, 0} (ImbalancedChen.Certificates.logParameter q)
+            (HAdd.hAdd.{0, 0, 0} (HMul.hMul.{0, 0, 0} 2 n) 1)))
+        (HSub.hSub.{0, 0, 0} 1 (HPow.hPow.{0, 0, 0} (ImbalancedChen.Certificates.logParameter q) 2))))
+
+ImbalancedChen.Certificates.pairedFibreKernel.eq_1
+∀ (t u z w : ℝ),
+  Eq.{1} (ImbalancedChen.Certificates.pairedFibreKernel t u z w)
+    (HMul.hMul.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} 1 t)
+      (HMul.hMul.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} 1 u)
+        (HMul.hMul.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} 1 (HPow.hPow.{0, 0, 0} z 2)) (HDiv.hDiv.{0, 0, 0} 1 w))))
+
+ImbalancedChen.Certificates.pairedLocalIntegral._proof_1
+(HAdd.hAdd.{0, 0, 0} 79 1).AtLeastTwo
+
+ImbalancedChen.Certificates.pairedLocalIntegral.eq_1
+∀ (K a tl tr ul ur Z : ℝ),
+  Eq.{1} (ImbalancedChen.Certificates.pairedLocalIntegral K a tl tr ul ur Z)
+    (HMul.hMul.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} K 80)
+      (∫ (t : ℝ) in tl..tr,
+        ∫ (u : ℝ) in ul..ur,
+          ∫ (z : ℝ) in a..Z, ∫ (w : ℝ) in a..z, ImbalancedChen.Certificates.pairedFibreKernel t u z w))
+
+_private.ImbalancedChen.Certificates.RationalLogCertificate.0.ImbalancedChen.Certificates.logParameter_identity._simp_1_1
+∀ {α : Type u_2} [inst : Zero.{u_2} α] [inst_1 : OfNat.{u_2} α 2] [NeZero.{u_2} 2], Eq.{1} (Eq.{u_2 + 1} 2 0) False
+
+_private.ImbalancedChen.Certificates.RationalLogCertificate.0.ImbalancedChen.Certificates.logParameter_identity._simp_1_2
+∀ {α : Type u_2} [inst : Zero.{u_2} α] [inst_1 : OfNat.{u_2} α 3] [NeZero.{u_2} 3], Eq.{1} (Eq.{u_2 + 1} 3 0) False
+
+_private.ImbalancedChen.Certificates.RationalLogCertificate.0.ImbalancedChen.Certificates.logParameter_identity._simp_1_3
+∀ {α : Type u_2} [inst : Zero.{u_2} α] [inst_1 : OfNat.{u_2} α 4] [NeZero.{u_2} 4], Eq.{1} (Eq.{u_2 + 1} 4 0) False
+
+_private.ImbalancedChen.Certificates.RationalLogCertificate.0.ImbalancedChen.Certificates.logParameter_identity._simp_1_4
+∀ {M₀ : Type u_1} [inst : Mul.{u_1} M₀] [inst_1 : Zero.{u_1} M₀] [NoZeroDivisors.{u_1} M₀] {a b : M₀},
+  Ne.{u_1 + 1} a 0 → Ne.{u_1 + 1} b 0 → Eq.{1} (Eq.{u_1 + 1} (HMul.hMul.{u_1, u_1, u_1} a b) 0) False
+
+_private.ImbalancedChen.Certificates.RationalLogCertificate.0.ImbalancedChen.Certificates.logParameter_identity._simp_1_5
+∀ {M₀ : Type u_1} [inst : MonoidWithZero.{u_1} M₀] {a : M₀} [IsReduced.{u_1} M₀] (n : ℕ),
+  Ne.{u_1 + 1} a 0 → Eq.{1} (Eq.{u_1 + 1} (HPow.hPow.{u_1, 0, u_1} a n) 0) False
+
+_private.ImbalancedChen.Certificates.RationalLogCertificate.0.ImbalancedChen.Certificates.logParameter_identity._simp_1_6
+∀ {G₀ : Type u_3} [inst : GroupWithZero.{u_3} G₀] {a : G₀} (n : ℤ),
+  Ne.{u_3 + 1} a 0 → Eq.{1} (Eq.{u_3 + 1} (HPow.hPow.{u_3, 0, u_3} a n) 0) False
+
+_private.ImbalancedChen.Certificates.RationalLogCertificate.0.ImbalancedChen.Certificates.logParameter_identity._simp_1_7
+∀ {R : Type u_1} [inst : AddMonoidWithOne.{u_1} R] [CharZero.{u_1} R] (n : ℕ),
+  Eq.{1} (Eq.{u_1 + 1} (HAdd.hAdd.{u_1, u_1, u_1} (↑n) 1) 0) False
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.Valid.eq_1
+∀ (c : ImbalancedChen.Certificates.PairedIntegralCertificate),
+  Eq.{1} c.Valid
+    (LT.lt.{0} 0 c.K ∧
+      LT.lt.{0} 0 c.a ∧
+        LE.le.{0} c.a c.Z ∧
+          LT.lt.{0} 0 c.tl ∧
+            LE.le.{0} c.tl c.tr ∧
+              LT.lt.{0} 0 c.ul ∧
+                LE.le.{0} c.ul c.ur ∧
+                  Eq.{1} c.logT.argument (HDiv.hDiv.{0, 0, 0} c.tr c.tl) ∧
+                    Eq.{1} c.logU.argument (HDiv.hDiv.{0, 0, 0} c.ur c.ul) ∧
+                      Eq.{1} c.logZ.argument (HDiv.hDiv.{0, 0, 0} c.Z c.a) ∧
+                        Eq.{1} c.logT.check Bool.true ∧
+                          Eq.{1} c.logU.check Bool.true ∧
+                            Eq.{1} c.logZ.check Bool.true ∧
+                              LE.le.{0} 0 c.logT.lower ∧
+                                LE.le.{0} 0 c.logU.lower ∧
+                                  LE.le.{0} 0 c.bracketLower ∧
+                                    LE.le.{0} c.lower c.productLower ∧ LE.le.{0} c.productUpper c.upper)
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.bracketLower.eq_1
+∀ (c : ImbalancedChen.Certificates.PairedIntegralCertificate),
+  Eq.{1} c.bracketLower
+    (HSub.hSub.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} 1 c.a) (HDiv.hDiv.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 1 c.logZ.upper) c.Z))
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.bracketUpper.eq_1
+∀ (c : ImbalancedChen.Certificates.PairedIntegralCertificate),
+  Eq.{1} c.bracketUpper
+    (HSub.hSub.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} 1 c.a) (HDiv.hDiv.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 1 c.logZ.lower) c.Z))
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.check.eq_1
+∀ (c : ImbalancedChen.Certificates.PairedIntegralCertificate), Eq.{1} c.check (Decidable.decide c.Valid)
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.mk._flat_ctor
+ℚ →
+  ℚ →
+    ℚ →
+      ℚ →
+        ℚ →
+          ℚ →
+            ℚ →
+              ImbalancedChen.Certificates.RationalLogCertificate →
+                ImbalancedChen.Certificates.RationalLogCertificate →
+                  ImbalancedChen.Certificates.RationalLogCertificate →
+                    ℚ → ℚ → ImbalancedChen.Certificates.PairedIntegralCertificate
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.mk.inj
+∀ {K a tl tr ul ur Z : ℚ} {logT logU logZ : ImbalancedChen.Certificates.RationalLogCertificate}
+  {lower upper K_1 a_1 tl_1 tr_1 ul_1 ur_1 Z_1 : ℚ}
+  {logT_1 logU_1 logZ_1 : ImbalancedChen.Certificates.RationalLogCertificate} {lower_1 upper_1 : ℚ},
+  Eq.{1}
+      { K := K, a := a, tl := tl, tr := tr, ul := ul, ur := ur, Z := Z, logT := logT, logU := logU, logZ := logZ,
+        lower := lower, upper := upper }
+      { K := K_1, a := a_1, tl := tl_1, tr := tr_1, ul := ul_1, ur := ur_1, Z := Z_1, logT := logT_1, logU := logU_1,
+        logZ := logZ_1, lower := lower_1, upper := upper_1 } →
+    Eq.{1} K K_1 ∧
+      Eq.{1} a a_1 ∧
+        Eq.{1} tl tl_1 ∧
+          Eq.{1} tr tr_1 ∧
+            Eq.{1} ul ul_1 ∧
+              Eq.{1} ur ur_1 ∧
+                Eq.{1} Z Z_1 ∧
+                  Eq.{1} logT logT_1 ∧
+                    Eq.{1} logU logU_1 ∧ Eq.{1} logZ logZ_1 ∧ Eq.{1} lower lower_1 ∧ Eq.{1} upper upper_1
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.mk.injEq
+∀ (K a tl tr ul ur Z : ℚ) (logT logU logZ : ImbalancedChen.Certificates.RationalLogCertificate)
+  (lower upper K_1 a_1 tl_1 tr_1 ul_1 ur_1 Z_1 : ℚ)
+  (logT_1 logU_1 logZ_1 : ImbalancedChen.Certificates.RationalLogCertificate) (lower_1 upper_1 : ℚ),
+  Eq.{1}
+    (Eq.{1}
+      { K := K, a := a, tl := tl, tr := tr, ul := ul, ur := ur, Z := Z, logT := logT, logU := logU, logZ := logZ,
+        lower := lower, upper := upper }
+      { K := K_1, a := a_1, tl := tl_1, tr := tr_1, ul := ul_1, ur := ur_1, Z := Z_1, logT := logT_1, logU := logU_1,
+        logZ := logZ_1, lower := lower_1, upper := upper_1 })
+    (Eq.{1} K K_1 ∧
+      Eq.{1} a a_1 ∧
+        Eq.{1} tl tl_1 ∧
+          Eq.{1} tr tr_1 ∧
+            Eq.{1} ul ul_1 ∧
+              Eq.{1} ur ur_1 ∧
+                Eq.{1} Z Z_1 ∧
+                  Eq.{1} logT logT_1 ∧
+                    Eq.{1} logU logU_1 ∧ Eq.{1} logZ logZ_1 ∧ Eq.{1} lower lower_1 ∧ Eq.{1} upper upper_1)
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.mk.noConfusion
+{P : Sort u} →
+  {K a tl tr ul ur Z : ℚ} →
+    {logT logU logZ : ImbalancedChen.Certificates.RationalLogCertificate} →
+      {lower upper K' a' tl' tr' ul' ur' Z' : ℚ} →
+        {logT' logU' logZ' : ImbalancedChen.Certificates.RationalLogCertificate} →
+          {lower' upper' : ℚ} →
+            Eq.{1}
+                { K := K, a := a, tl := tl, tr := tr, ul := ul, ur := ur, Z := Z, logT := logT, logU := logU,
+                  logZ := logZ, lower := lower, upper := upper }
+                { K := K', a := a', tl := tl', tr := tr', ul := ul', ur := ur', Z := Z', logT := logT', logU := logU',
+                  logZ := logZ', lower := lower', upper := upper' } →
+              (Eq.{1} K K' →
+                  Eq.{1} a a' →
+                    Eq.{1} tl tl' →
+                      Eq.{1} tr tr' →
+                        Eq.{1} ul ul' →
+                          Eq.{1} ur ur' →
+                            Eq.{1} Z Z' →
+                              Eq.{1} logT logT' →
+                                Eq.{1} logU logU' → Eq.{1} logZ logZ' → Eq.{1} lower lower' → Eq.{1} upper upper' → P) →
+                P
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.mk.sizeOf_spec
+∀ (K a tl tr ul ur Z : ℚ) (logT logU logZ : ImbalancedChen.Certificates.RationalLogCertificate) (lower upper : ℚ),
+  Eq.{1}
+    (SizeOf.sizeOf.{1}
+      { K := K, a := a, tl := tl, tr := tr, ul := ul, ur := ur, Z := Z, logT := logT, logU := logU, logZ := logZ,
+        lower := lower, upper := upper })
+    (HAdd.hAdd.{0, 0, 0}
+      (HAdd.hAdd.{0, 0, 0}
+        (HAdd.hAdd.{0, 0, 0}
+          (HAdd.hAdd.{0, 0, 0}
+            (HAdd.hAdd.{0, 0, 0}
+              (HAdd.hAdd.{0, 0, 0}
+                (HAdd.hAdd.{0, 0, 0}
+                  (HAdd.hAdd.{0, 0, 0}
+                    (HAdd.hAdd.{0, 0, 0}
+                      (HAdd.hAdd.{0, 0, 0}
+                        (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 1 (SizeOf.sizeOf.{1} K)) (SizeOf.sizeOf.{1} a))
+                        (SizeOf.sizeOf.{1} tl))
+                      (SizeOf.sizeOf.{1} tr))
+                    (SizeOf.sizeOf.{1} ul))
+                  (SizeOf.sizeOf.{1} ur))
+                (SizeOf.sizeOf.{1} Z))
+              (SizeOf.sizeOf.{1} logT))
+            (SizeOf.sizeOf.{1} logU))
+          (SizeOf.sizeOf.{1} logZ))
+        (SizeOf.sizeOf.{1} lower))
+      (SizeOf.sizeOf.{1} upper))
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.productLower.eq_1
+∀ (c : ImbalancedChen.Certificates.PairedIntegralCertificate),
+  Eq.{1} c.productLower
+    (HMul.hMul.{0, 0, 0}
+      (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} c.K 80) c.logT.lower) c.logU.lower) c.bracketLower)
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.productUpper.eq_1
+∀ (c : ImbalancedChen.Certificates.PairedIntegralCertificate),
+  Eq.{1} c.productUpper
+    (HMul.hMul.{0, 0, 0}
+      (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} c.K 80) c.logT.upper) c.logU.upper) c.bracketUpper)
+
+ImbalancedChen.Certificates.PairedV2.K.eq_1
+Eq.{1} ImbalancedChen.Certificates.PairedV2.K (8452171 / 1250000)
+
+ImbalancedChen.Certificates.PairedV2.a.eq_1
+Eq.{1} ImbalancedChen.Certificates.PairedV2.a (417 / 5000)
+
+ImbalancedChen.Certificates.PairedV2.d.eq_1
+Eq.{1} ImbalancedChen.Certificates.PairedV2.d (59 / 250)
+
+ImbalancedChen.Certificates.PairedV2.firstCertificate.eq_1
+Eq.{1} ImbalancedChen.Certificates.PairedV2.firstCertificate
+  { K := ImbalancedChen.Certificates.PairedV2.K, a := ImbalancedChen.Certificates.PairedV2.a,
+    tl := ImbalancedChen.Certificates.PairedV2.tLower ImbalancedChen.Certificates.PairedV2.firstTIndex,
+    tr := ImbalancedChen.Certificates.PairedV2.tUpper ImbalancedChen.Certificates.PairedV2.firstTIndex,
+    ul := ImbalancedChen.Certificates.PairedV2.uLower ImbalancedChen.Certificates.PairedV2.firstUIndex,
+    ur := ImbalancedChen.Certificates.PairedV2.uUpper ImbalancedChen.Certificates.PairedV2.firstUIndex,
+    Z := ImbalancedChen.Certificates.PairedV2.firstZ,
+    logT :=
+      { argument := 1875373 / 1874722, terms := 1, lower := 347191204489 / 1000000000000000,
+        upper := 347191214953 / 1000000000000000 },
+    logU :=
+      { argument := 388777 / 388434, terms := 1, lower := 176528638941 / 200000000000000,
+        upper := 882643366613 / 1000000000000000 },
+    logZ :=
+      { argument := 25362703 / 14802944, terms := 6, lower := 538453624463727 / 1000000000000000,
+        upper := 538453686055971 / 1000000000000000 },
+    lower := 31703 / 1000000000000, upper := 31704 / 1000000000000 }
+
+ImbalancedChen.Certificates.PairedV2.firstDiscardedQ80.eq_1
+Eq.{1} ImbalancedChen.Certificates.PairedV2.firstDiscardedQ80 0
+
+ImbalancedChen.Certificates.PairedV2.firstFibreSupport._proof_1
+(HAdd.hAdd.{0, 0, 0} 937360 1).AtLeastTwo
+
+ImbalancedChen.Certificates.PairedV2.firstFibreSupport._proof_10
+(HAdd.hAdd.{0, 0, 0} 4999 1).AtLeastTwo
+
+ImbalancedChen.Certificates.PairedV2.firstFibreSupport._proof_11
+(HAdd.hAdd.{0, 0, 0} 76088108 1).AtLeastTwo
+
+ImbalancedChen.Certificates.PairedV2.firstFibreSupport._proof_12
+(HAdd.hAdd.{0, 0, 0} 532479999 1).AtLeastTwo
+
+ImbalancedChen.Certificates.PairedV2.firstFibreSupport._proof_2
+(HAdd.hAdd.{0, 0, 0} 4095999 1).AtLeastTwo
+
+ImbalancedChen.Certificates.PairedV2.firstFibreSupport._proof_3
+(HAdd.hAdd.{0, 0, 0} 1875372 1).AtLeastTwo
+
+ImbalancedChen.Certificates.PairedV2.firstFibreSupport._proof_4
+(HAdd.hAdd.{0, 0, 0} 8191999 1).AtLeastTwo
+
+ImbalancedChen.Certificates.PairedV2.firstFibreSupport._proof_5
+(HAdd.hAdd.{0, 0, 0} 194216 1).AtLeastTwo
+
+ImbalancedChen.Certificates.PairedV2.firstFibreSupport._proof_6
+(HAdd.hAdd.{0, 0, 0} 1279999 1).AtLeastTwo
+
+ImbalancedChen.Certificates.PairedV2.firstFibreSupport._proof_7
+(HAdd.hAdd.{0, 0, 0} 388776 1).AtLeastTwo
+
+ImbalancedChen.Certificates.PairedV2.firstFibreSupport._proof_8
+(HAdd.hAdd.{0, 0, 0} 2559999 1).AtLeastTwo
+
+ImbalancedChen.Certificates.PairedV2.firstFibreSupport._proof_9
+(HAdd.hAdd.{0, 0, 0} 416 1).AtLeastTwo
+
+ImbalancedChen.Certificates.PairedV2.firstFibreSupport.eq_1
+∀ (t u z w : ℝ),
+  Eq.{1} (ImbalancedChen.Certificates.PairedV2.firstFibreSupport t u z w)
+    (LE.le.{0} (937361 / 4096000) t ∧
+      LE.le.{0} t (1875373 / 8192000) ∧
+        LE.le.{0} (194217 / 1280000) u ∧
+          LE.le.{0} u (388777 / 2560000) ∧
+            LT.lt.{0} (417 / 5000) w ∧ LT.lt.{0} w z ∧ LT.lt.{0} z (76088109 / 532480000))
+
+ImbalancedChen.Certificates.PairedV2.firstIntegral._proof_1
+(HAdd.hAdd.{0, 0, 0} 8452170 1).AtLeastTwo
+
+ImbalancedChen.Certificates.PairedV2.firstIntegral._proof_2
+(HAdd.hAdd.{0, 0, 0} 1249999 1).AtLeastTwo
+
+ImbalancedChen.Certificates.PairedV2.firstIntegral.eq_1
+Eq.{1} ImbalancedChen.Certificates.PairedV2.firstIntegral
+  (ImbalancedChen.Certificates.pairedLocalIntegral (8452171 / 1250000) (417 / 5000) (937361 / 4096000)
+    (1875373 / 8192000) (194217 / 1280000) (388777 / 2560000) (76088109 / 532480000))
+
+ImbalancedChen.Certificates.PairedV2.firstTIndex.eq_1
+Eq.{1} ImbalancedChen.Certificates.PairedV2.firstTIndex 422
+
+ImbalancedChen.Certificates.PairedV2.firstUIndex.eq_1
+Eq.{1} ImbalancedChen.Certificates.PairedV2.firstUIndex 510
+
+ImbalancedChen.Certificates.PairedV2.firstZ.eq_1
+Eq.{1} ImbalancedChen.Certificates.PairedV2.firstZ (76088109 / 532480000)
+
+ImbalancedChen.Certificates.PairedV2.h.eq_1
+Eq.{1} ImbalancedChen.Certificates.PairedV2.h (19 / 125)
+
+ImbalancedChen.Certificates.PairedV2.mu.eq_1
+Eq.{1} ImbalancedChen.Certificates.PairedV2.mu (25 / 128)
+
+ImbalancedChen.Certificates.PairedV2.tLower.eq_1
+∀ (i : ℕ),
+  Eq.{1} (ImbalancedChen.Certificates.PairedV2.tLower i)
+    (HAdd.hAdd.{0, 0, 0} ImbalancedChen.Certificates.PairedV2.mu
+      (HDiv.hDiv.{0, 0, 0}
+        (HMul.hMul.{0, 0, 0}
+          (HSub.hSub.{0, 0, 0} ImbalancedChen.Certificates.PairedV2.d ImbalancedChen.Certificates.PairedV2.mu) ↑i)
+        512))
+
+ImbalancedChen.Certificates.PairedV2.tUpper.eq_1
+∀ (i : ℕ),
+  Eq.{1} (ImbalancedChen.Certificates.PairedV2.tUpper i)
+    (HAdd.hAdd.{0, 0, 0} ImbalancedChen.Certificates.PairedV2.mu
+      (HDiv.hDiv.{0, 0, 0}
+        (HMul.hMul.{0, 0, 0}
+          (HSub.hSub.{0, 0, 0} ImbalancedChen.Certificates.PairedV2.d ImbalancedChen.Certificates.PairedV2.mu)
+          (HAdd.hAdd.{0, 0, 0} (↑i) 1))
+        512))
+
+ImbalancedChen.Certificates.PairedV2.uLower.eq_1
+∀ (j : ℕ),
+  Eq.{1} (ImbalancedChen.Certificates.PairedV2.uLower j)
+    (HAdd.hAdd.{0, 0, 0} ImbalancedChen.Certificates.PairedV2.a
+      (HDiv.hDiv.{0, 0, 0}
+        (HMul.hMul.{0, 0, 0}
+          (HSub.hSub.{0, 0, 0} ImbalancedChen.Certificates.PairedV2.h ImbalancedChen.Certificates.PairedV2.a) ↑j)
+        512))
+
+ImbalancedChen.Certificates.PairedV2.uUpper.eq_1
+∀ (j : ℕ),
+  Eq.{1} (ImbalancedChen.Certificates.PairedV2.uUpper j)
+    (HAdd.hAdd.{0, 0, 0} ImbalancedChen.Certificates.PairedV2.a
+      (HDiv.hDiv.{0, 0, 0}
+        (HMul.hMul.{0, 0, 0}
+          (HSub.hSub.{0, 0, 0} ImbalancedChen.Certificates.PairedV2.h ImbalancedChen.Certificates.PairedV2.a)
+          (HAdd.hAdd.{0, 0, 0} (↑j) 1))
+        512))
+
+ImbalancedChen.Certificates.RationalLogCertificate.Valid.eq_1
+∀ (c : ImbalancedChen.Certificates.RationalLogCertificate),
+  Eq.{1} c.Valid
+    (LE.le.{0} 1 c.argument ∧
+      LE.le.{0} c.lower (ImbalancedChen.Certificates.logSeriesLower c.argument c.terms) ∧
+        LE.le.{0} (ImbalancedChen.Certificates.logSeriesUpper c.argument c.terms) c.upper)
+
+ImbalancedChen.Certificates.RationalLogCertificate.check.eq_1
+∀ (c : ImbalancedChen.Certificates.RationalLogCertificate), Eq.{1} c.check (Decidable.decide c.Valid)
+
+ImbalancedChen.Certificates.RationalLogCertificate.mk._flat_ctor
+ℚ → ℕ → ℚ → ℚ → ImbalancedChen.Certificates.RationalLogCertificate
+
+ImbalancedChen.Certificates.RationalLogCertificate.mk.inj
+∀ {argument : ℚ} {terms : ℕ} {lower upper argument_1 : ℚ} {terms_1 : ℕ} {lower_1 upper_1 : ℚ},
+  Eq.{1} { argument := argument, terms := terms, lower := lower, upper := upper }
+      { argument := argument_1, terms := terms_1, lower := lower_1, upper := upper_1 } →
+    Eq.{1} argument argument_1 ∧ Eq.{1} terms terms_1 ∧ Eq.{1} lower lower_1 ∧ Eq.{1} upper upper_1
+
+ImbalancedChen.Certificates.RationalLogCertificate.mk.injEq
+∀ (argument : ℚ) (terms : ℕ) (lower upper argument_1 : ℚ) (terms_1 : ℕ) (lower_1 upper_1 : ℚ),
+  Eq.{1}
+    (Eq.{1} { argument := argument, terms := terms, lower := lower, upper := upper }
+      { argument := argument_1, terms := terms_1, lower := lower_1, upper := upper_1 })
+    (Eq.{1} argument argument_1 ∧ Eq.{1} terms terms_1 ∧ Eq.{1} lower lower_1 ∧ Eq.{1} upper upper_1)
+
+ImbalancedChen.Certificates.RationalLogCertificate.mk.noConfusion
+{P : Sort u} →
+  {argument : ℚ} →
+    {terms : ℕ} →
+      {lower upper argument' : ℚ} →
+        {terms' : ℕ} →
+          {lower' upper' : ℚ} →
+            Eq.{1} { argument := argument, terms := terms, lower := lower, upper := upper }
+                { argument := argument', terms := terms', lower := lower', upper := upper' } →
+              (Eq.{1} argument argument' → Eq.{1} terms terms' → Eq.{1} lower lower' → Eq.{1} upper upper' → P) → P
+
+ImbalancedChen.Certificates.RationalLogCertificate.mk.sizeOf_spec
+∀ (argument : ℚ) (terms : ℕ) (lower upper : ℚ),
+  Eq.{1} (SizeOf.sizeOf.{1} { argument := argument, terms := terms, lower := lower, upper := upper })
+    (HAdd.hAdd.{0, 0, 0}
+      (HAdd.hAdd.{0, 0, 0}
+        (HAdd.hAdd.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 1 (SizeOf.sizeOf.{1} argument)) (SizeOf.sizeOf.{1} terms))
+        (SizeOf.sizeOf.{1} lower))
+      (SizeOf.sizeOf.{1} upper))
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate.decEq._proof_1
+∀ (a a_1 a_2 a_3 a_4 a_5 a_6 : ℚ) (a_7 a_8 a_9 : ImbalancedChen.Certificates.RationalLogCertificate) (a_10 a_11 : ℚ),
+  Eq.{1}
+    { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+      lower := a_10, upper := a_11 }
+    { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+      lower := a_10, upper := a_11 }
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate.decEq._proof_10
+∀ (a a_1 a_2 a_3 a_4 a_5 a_6 : ℚ) (a_7 a_8 a_9 : ImbalancedChen.Certificates.RationalLogCertificate)
+  (a_10 a_11 b b_1 b_2 b_3 : ℚ) (b_4 b_5 b_6 : ImbalancedChen.Certificates.RationalLogCertificate) (b_7 b_8 : ℚ),
+  ¬Eq.{1} a_3 b →
+    Eq.{1}
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+          lower := a_10, upper := a_11 }
+        { K := a, a := a_1, tl := a_2, tr := b, ul := b_1, ur := b_2, Z := b_3, logT := b_4, logU := b_5, logZ := b_6,
+          lower := b_7, upper := b_8 } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate.decEq._proof_11
+∀ (a a_1 a_2 a_3 a_4 a_5 a_6 : ℚ) (a_7 a_8 a_9 : ImbalancedChen.Certificates.RationalLogCertificate)
+  (a_10 a_11 b b_1 b_2 b_3 b_4 : ℚ) (b_5 b_6 b_7 : ImbalancedChen.Certificates.RationalLogCertificate) (b_8 b_9 : ℚ),
+  ¬Eq.{1} a_2 b →
+    Eq.{1}
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+          lower := a_10, upper := a_11 }
+        { K := a, a := a_1, tl := b, tr := b_1, ul := b_2, ur := b_3, Z := b_4, logT := b_5, logU := b_6, logZ := b_7,
+          lower := b_8, upper := b_9 } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate.decEq._proof_12
+∀ (a a_1 a_2 a_3 a_4 a_5 a_6 : ℚ) (a_7 a_8 a_9 : ImbalancedChen.Certificates.RationalLogCertificate)
+  (a_10 a_11 b b_1 b_2 b_3 b_4 b_5 : ℚ) (b_6 b_7 b_8 : ImbalancedChen.Certificates.RationalLogCertificate)
+  (b_9 b_10 : ℚ),
+  ¬Eq.{1} a_1 b →
+    Eq.{1}
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+          lower := a_10, upper := a_11 }
+        { K := a, a := b, tl := b_1, tr := b_2, ul := b_3, ur := b_4, Z := b_5, logT := b_6, logU := b_7, logZ := b_8,
+          lower := b_9, upper := b_10 } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate.decEq._proof_13
+∀ (a a_1 a_2 a_3 a_4 a_5 a_6 : ℚ) (a_7 a_8 a_9 : ImbalancedChen.Certificates.RationalLogCertificate)
+  (a_10 a_11 b b_1 b_2 b_3 b_4 b_5 b_6 : ℚ) (b_7 b_8 b_9 : ImbalancedChen.Certificates.RationalLogCertificate)
+  (b_10 b_11 : ℚ),
+  ¬Eq.{1} a b →
+    Eq.{1}
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+          lower := a_10, upper := a_11 }
+        { K := b, a := b_1, tl := b_2, tr := b_3, ul := b_4, ur := b_5, Z := b_6, logT := b_7, logU := b_8, logZ := b_9,
+          lower := b_10, upper := b_11 } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate.decEq._proof_2
+∀ (a a_1 a_2 a_3 a_4 a_5 a_6 : ℚ) (a_7 a_8 a_9 : ImbalancedChen.Certificates.RationalLogCertificate) (a_10 a_11 b : ℚ),
+  ¬Eq.{1} a_11 b →
+    Eq.{1}
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+          lower := a_10, upper := a_11 }
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+          lower := a_10, upper := b } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate.decEq._proof_3
+∀ (a a_1 a_2 a_3 a_4 a_5 a_6 : ℚ) (a_7 a_8 a_9 : ImbalancedChen.Certificates.RationalLogCertificate)
+  (a_10 a_11 b b_1 : ℚ),
+  ¬Eq.{1} a_10 b →
+    Eq.{1}
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+          lower := a_10, upper := a_11 }
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+          lower := b, upper := b_1 } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate.decEq._proof_4
+∀ (a a_1 a_2 a_3 a_4 a_5 a_6 : ℚ) (a_7 a_8 a_9 : ImbalancedChen.Certificates.RationalLogCertificate) (a_10 a_11 : ℚ)
+  (b : ImbalancedChen.Certificates.RationalLogCertificate) (b_1 b_2 : ℚ),
+  ¬Eq.{1} a_9 b →
+    Eq.{1}
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+          lower := a_10, upper := a_11 }
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := b,
+          lower := b_1, upper := b_2 } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate.decEq._proof_5
+∀ (a a_1 a_2 a_3 a_4 a_5 a_6 : ℚ) (a_7 a_8 a_9 : ImbalancedChen.Certificates.RationalLogCertificate) (a_10 a_11 : ℚ)
+  (b b_1 : ImbalancedChen.Certificates.RationalLogCertificate) (b_2 b_3 : ℚ),
+  ¬Eq.{1} a_8 b →
+    Eq.{1}
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+          lower := a_10, upper := a_11 }
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := b, logZ := b_1,
+          lower := b_2, upper := b_3 } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate.decEq._proof_6
+∀ (a a_1 a_2 a_3 a_4 a_5 a_6 : ℚ) (a_7 a_8 a_9 : ImbalancedChen.Certificates.RationalLogCertificate) (a_10 a_11 : ℚ)
+  (b b_1 b_2 : ImbalancedChen.Certificates.RationalLogCertificate) (b_3 b_4 : ℚ),
+  ¬Eq.{1} a_7 b →
+    Eq.{1}
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+          lower := a_10, upper := a_11 }
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := b, logU := b_1, logZ := b_2,
+          lower := b_3, upper := b_4 } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate.decEq._proof_7
+∀ (a a_1 a_2 a_3 a_4 a_5 a_6 : ℚ) (a_7 a_8 a_9 : ImbalancedChen.Certificates.RationalLogCertificate) (a_10 a_11 b : ℚ)
+  (b_1 b_2 b_3 : ImbalancedChen.Certificates.RationalLogCertificate) (b_4 b_5 : ℚ),
+  ¬Eq.{1} a_6 b →
+    Eq.{1}
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+          lower := a_10, upper := a_11 }
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := b, logT := b_1, logU := b_2, logZ := b_3,
+          lower := b_4, upper := b_5 } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate.decEq._proof_8
+∀ (a a_1 a_2 a_3 a_4 a_5 a_6 : ℚ) (a_7 a_8 a_9 : ImbalancedChen.Certificates.RationalLogCertificate)
+  (a_10 a_11 b b_1 : ℚ) (b_2 b_3 b_4 : ImbalancedChen.Certificates.RationalLogCertificate) (b_5 b_6 : ℚ),
+  ¬Eq.{1} a_5 b →
+    Eq.{1}
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+          lower := a_10, upper := a_11 }
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := b, Z := b_1, logT := b_2, logU := b_3, logZ := b_4,
+          lower := b_5, upper := b_6 } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate.decEq._proof_9
+∀ (a a_1 a_2 a_3 a_4 a_5 a_6 : ℚ) (a_7 a_8 a_9 : ImbalancedChen.Certificates.RationalLogCertificate)
+  (a_10 a_11 b b_1 b_2 : ℚ) (b_3 b_4 b_5 : ImbalancedChen.Certificates.RationalLogCertificate) (b_6 b_7 : ℚ),
+  ¬Eq.{1} a_4 b →
+    Eq.{1}
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8, logZ := a_9,
+          lower := a_10, upper := a_11 }
+        { K := a, a := a_1, tl := a_2, tr := a_3, ul := b, ur := b_1, Z := b_2, logT := b_3, logU := b_4, logZ := b_5,
+          lower := b_6, upper := b_7 } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqPairedIntegralCertificate.decEq.match_1
+(motive :
+    ImbalancedChen.Certificates.PairedIntegralCertificate →
+      ImbalancedChen.Certificates.PairedIntegralCertificate → Sort u_1) →
+  (x x_1 : ImbalancedChen.Certificates.PairedIntegralCertificate) →
+    ((a a_1 a_2 a_3 a_4 a_5 a_6 : ℚ) →
+        (a_7 a_8 a_9 : ImbalancedChen.Certificates.RationalLogCertificate) →
+          (a_10 a_11 b b_1 b_2 b_3 b_4 b_5 b_6 : ℚ) →
+            (b_7 b_8 b_9 : ImbalancedChen.Certificates.RationalLogCertificate) →
+              (b_10 b_11 : ℚ) →
+                motive
+                  { K := a, a := a_1, tl := a_2, tr := a_3, ul := a_4, ur := a_5, Z := a_6, logT := a_7, logU := a_8,
+                    logZ := a_9, lower := a_10, upper := a_11 }
+                  { K := b, a := b_1, tl := b_2, tr := b_3, ul := b_4, ur := b_5, Z := b_6, logT := b_7, logU := b_8,
+                    logZ := b_9, lower := b_10, upper := b_11 }) →
+      motive x x_1
+
+ImbalancedChen.Certificates.instDecidableEqRationalLogCertificate.decEq._proof_1
+∀ (a : ℚ) (a_1 : ℕ) (a_2 a_3 : ℚ),
+  Eq.{1} { argument := a, terms := a_1, lower := a_2, upper := a_3 }
+    { argument := a, terms := a_1, lower := a_2, upper := a_3 }
+
+ImbalancedChen.Certificates.instDecidableEqRationalLogCertificate.decEq._proof_2
+∀ (a : ℚ) (a_1 : ℕ) (a_2 a_3 b : ℚ),
+  ¬Eq.{1} a_3 b →
+    Eq.{1} { argument := a, terms := a_1, lower := a_2, upper := a_3 }
+        { argument := a, terms := a_1, lower := a_2, upper := b } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqRationalLogCertificate.decEq._proof_3
+∀ (a : ℚ) (a_1 : ℕ) (a_2 a_3 b b_1 : ℚ),
+  ¬Eq.{1} a_2 b →
+    Eq.{1} { argument := a, terms := a_1, lower := a_2, upper := a_3 }
+        { argument := a, terms := a_1, lower := b, upper := b_1 } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqRationalLogCertificate.decEq._proof_4
+∀ (a : ℚ) (a_1 : ℕ) (a_2 a_3 : ℚ) (b : ℕ) (b_1 b_2 : ℚ),
+  ¬Eq.{1} a_1 b →
+    Eq.{1} { argument := a, terms := a_1, lower := a_2, upper := a_3 }
+        { argument := a, terms := b, lower := b_1, upper := b_2 } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqRationalLogCertificate.decEq._proof_5
+∀ (a : ℚ) (a_1 : ℕ) (a_2 a_3 b : ℚ) (b_1 : ℕ) (b_2 b_3 : ℚ),
+  ¬Eq.{1} a b →
+    Eq.{1} { argument := a, terms := a_1, lower := a_2, upper := a_3 }
+        { argument := b, terms := b_1, lower := b_2, upper := b_3 } →
+      False
+
+ImbalancedChen.Certificates.instDecidableEqRationalLogCertificate.decEq.match_1
+(motive :
+    ImbalancedChen.Certificates.RationalLogCertificate →
+      ImbalancedChen.Certificates.RationalLogCertificate → Sort u_1) →
+  (x x_1 : ImbalancedChen.Certificates.RationalLogCertificate) →
+    ((a : ℚ) →
+        (a_1 : ℕ) →
+          (a_2 a_3 b : ℚ) →
+            (b_1 : ℕ) →
+              (b_2 b_3 : ℚ) →
+                motive { argument := a, terms := a_1, lower := a_2, upper := a_3 }
+                  { argument := b, terms := b_1, lower := b_2, upper := b_3 }) →
+      motive x x_1
