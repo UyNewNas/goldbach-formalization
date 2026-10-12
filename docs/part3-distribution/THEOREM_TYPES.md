@@ -1,6 +1,6 @@
 # Part 3 完整 source theorem types
 
-以下逐字提取本 Part 四个证明候选模块的全部 theorem signatures，含 private 辅助定理。命名空间均为 `ImbalancedChen`；每节保留所需的 open 声明。此清单不是 Lean 的 `#print` 输出，没有暗示 elaboration 或 kernel replay 已成功。正常 CI 的 audit 会另输出逐声明完整类型。
+以下逐字提取本 Part 六个证明候选模块的全部 theorem signatures，含 private 辅助定理。旧四个模块的命名空间为 `ImbalancedChen`；两个 rough SW 模块为 `ImbalancedChen.Part3`。每节保留所需的 open 声明。此清单是 SOURCE_EXTRACTED_NOT_ELABORATED，不是 Lean 的 `#print` 输出；编译器确认类型清单为空。正常环境的 audit 会另输出逐声明完整类型。
 
 实际误差对象的定义应与相应模块一起阅读；最后一节附上全部未闭合分布目标的数据与定义。
 
@@ -284,6 +284,264 @@ theorem part3_eventually_longSlot_singularNormalization
 
 end ImbalancedChen
 ```
+
+## Part3RoughAuxiliarySW
+
+[完整证明候选](../../ImbalancedChen/Part3RoughAuxiliarySW.lean)
+
+状态：SOURCE_EXTRACTED_NOT_ELABORATED。
+
+```lean
+import ImbalancedChen.Part3RoughAuxiliarySW
+
+namespace ImbalancedChen.Part3
+
+open Classical Finset
+open scoped BigOperators
+
+theorem MediumAtom.auxSWError_eq_auxiliarySWError (d : MediumAtom) (k q b : ℕ) :
+    d.auxSWError k q b = auxiliarySWError d.alphaCarrier d.alpha k q b
+
+private theorem norm_sum_ite_and_not_coprime_le
+    (S : Finset ℕ) (α : ℕ → ℂ) (k : ℕ) (P : ℕ → Prop) [DecidablePred P] :
+    ‖∑ n ∈ S, if P n ∧ ¬Nat.Coprime n k then α n else 0‖ ≤
+      ∑ n ∈ S with ¬Nat.Coprime n k, ‖α n‖
+
+theorem auxiliarySWError_sub_one_norm_le_bad_mass
+    (S : Finset ℕ) (α : ℕ → ℂ) (k q b : ℕ) (hq : 0 < q) :
+    ‖auxiliarySWError S α k q b - auxiliarySWError S α 1 q b‖ ≤
+      2 * (∑ n ∈ S with ¬Nat.Coprime n k, ‖α n‖)
+
+theorem sum_norm_not_coprime_le_rough
+    (S : Finset ℕ) (α : ℕ → ℂ) (H k : ℕ) (z : ℝ)
+    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k)
+    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1)
+    (hrough : ∀ n ∈ S, α n ≠ 0 → ∀ p : ℕ,
+      p.Prime → p ∣ n → z < (p : ℝ)) :
+    (∑ n ∈ S with ¬Nat.Coprime n k, ‖α n‖) ≤
+      (k.primeFactors.card : ℝ) * (H : ℝ) / z
+
+theorem auxiliarySWError_sub_one_norm_le_primeFactors
+    (S : Finset ℕ) (α : ℕ → ℂ) (H k q b : ℕ) (z : ℝ)
+    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k) (hq : 0 < q)
+    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1)
+    (hrough : ∀ n ∈ S, α n ≠ 0 → ∀ p : ℕ,
+      p.Prime → p ∣ n → z < (p : ℝ)) :
+    ‖auxiliarySWError S α k q b - auxiliarySWError S α 1 q b‖ ≤
+      2 * (k.primeFactors.card : ℝ) * (H : ℝ) / z
+
+theorem auxiliarySWError_sub_one_norm_le
+    (S : Finset ℕ) (α : ℕ → ℂ) (H k q b : ℕ) (z : ℝ)
+    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k) (hq : 0 < q)
+    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1)
+    (hrough : ∀ n ∈ S, α n ≠ 0 → ∀ p : ℕ,
+      p.Prime → p ∣ n → z < (p : ℝ)) :
+    ‖auxiliarySWError S α k q b - auxiliarySWError S α 1 q b‖ ≤
+      2 * (k.divisors.card : ℝ) * (H : ℝ) / z
+
+theorem auxiliarySWError_norm_le_one_add
+    (S : Finset ℕ) (α : ℕ → ℂ) (H k q b : ℕ) (z : ℝ)
+    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k) (hq : 0 < q)
+    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1)
+    (hrough : ∀ n ∈ S, α n ≠ 0 → ∀ p : ℕ,
+      p.Prime → p ∣ n → z < (p : ℝ)) :
+    ‖auxiliarySWError S α k q b‖ ≤ ‖auxiliarySWError S α 1 q b‖ +
+      2 * (k.divisors.card : ℝ) * (H : ℝ) / z
+
+theorem roughOneSlot_norm_le (z : ℝ) (n : ℕ) : ‖roughOneSlot z n‖ ≤ 1
+
+theorem roughOneSlot_support (z : ℝ) (n : ℕ) (hn : roughOneSlot z n ≠ 0) :
+    ∀ p : ℕ, p.Prime → p ∣ n → z < (p : ℝ)
+
+theorem roughMoebiusSlot_norm_le (z : ℝ) (n : ℕ) : ‖roughMoebiusSlot z n‖ ≤ 1
+
+theorem roughMoebiusSlot_support (z : ℝ) (n : ℕ) (hn : roughMoebiusSlot z n ≠ 0) :
+    ∀ p : ℕ, p.Prime → p ∣ n → z < (p : ℝ)
+
+theorem roughOneSlot_auxiliarySWError_sub_one_norm_le
+    (S : Finset ℕ) (H k q b : ℕ) (z : ℝ)
+    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k) (hq : 0 < q) :
+    ‖auxiliarySWError S (roughOneSlot z) k q b -
+      auxiliarySWError S (roughOneSlot z) 1 q b‖ ≤
+        2 * (k.divisors.card : ℝ) * (H : ℝ) / z
+
+theorem roughMoebiusSlot_auxiliarySWError_sub_one_norm_le
+    (S : Finset ℕ) (H k q b : ℕ) (z : ℝ)
+    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k) (hq : 0 < q) :
+    ‖auxiliarySWError S (roughMoebiusSlot z) k q b -
+      auxiliarySWError S (roughMoebiusSlot z) 1 q b‖ ≤
+        2 * (k.divisors.card : ℝ) * (H : ℝ) / z
+
+theorem auxiliarySWError_sub_one_norm_le_mellin
+    (S : Finset ℕ) (α : ℕ → ℂ) (H k q b : ℕ) (z t : ℝ)
+    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k) (hq : 0 < q)
+    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1)
+    (hrough : ∀ n ∈ S, α n ≠ 0 → ∀ p : ℕ,
+      p.Prime → p ∣ n → z < (p : ℝ)) :
+    ‖auxiliarySWError S (fun n => α n * (n : ℂ) ^ (Complex.I * (t : ℂ))) k q b -
+      auxiliarySWError S (fun n => α n * (n : ℂ) ^ (Complex.I * (t : ℂ))) 1 q b‖ ≤
+        2 * (k.divisors.card : ℝ) * (H : ℝ) / z
+
+private theorem card_filter_modEq_le_prefix
+    (S : Finset ℕ) (H q b : ℕ) (hS : S ⊆ Finset.Ioc 0 H) (hq : 0 < q) :
+    ((S.filter (fun n => Nat.ModEq q n b)).card : ℝ) ≤ (H : ℝ) / q + 2
+
+theorem auxiliarySWError_norm_le_large_modulus
+    (S : Finset ℕ) (α : ℕ → ℂ) (H k q b : ℕ)
+    (hS : S ⊆ Finset.Ioc 0 H) (hH : 3 ≤ H) (hq : 0 < q)
+    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1) :
+    ‖auxiliarySWError S α k q b‖ ≤ (H : ℝ) / q + 2 +
+      (H : ℝ) * MathlibNt.SieveTheory.Richert1969.richertReciprocalTotientConstant *
+        Real.log (H : ℝ) / (min q H : ℕ)
+
+end ImbalancedChen.Part3
+```
+
+## Part3RoughAuxiliarySWNormalization
+
+[完整证明候选](../../ImbalancedChen/Part3RoughAuxiliarySWNormalization.lean)
+
+状态：SOURCE_EXTRACTED_NOT_ELABORATED。
+
+```lean
+import ImbalancedChen.Part3RoughAuxiliarySWNormalization
+
+namespace ImbalancedChen.Part3
+
+open Filter Topology
+open scoped BigOperators
+
+theorem tendsto_logLog_four_div_log :
+    Tendsto (fun x : ℝ => (Real.log (Real.log x)) ^ 4 / Real.log x)
+      atTop (𝓝 0)
+
+theorem eventually_log_rpow_le_roughCutoff (B : ℝ) :
+    ∀ᶠ x : ℝ in atTop,
+      (Real.log x) ^ B ≤ x ^ (1 / (Real.log (Real.log x)) ^ 3)
+
+theorem eventually_roughCutoff_inv_logAccuracy
+    (A c epsilon : ℝ) (hc : 0 ≤ c) (hepsilon : 0 < epsilon) :
+    ∀ᶠ x : ℝ in atTop,
+      c / x ^ (1 / (Real.log (Real.log x)) ^ 3) ≤
+        epsilon / (Real.log x) ^ A
+
+theorem MediumAtom.alphaCarrier_subset_Ioc (d : MediumAtom) (hU : 0 < d.U) :
+    d.alphaCarrier ⊆ Finset.Ioc 0 (Nat.floor (2 * d.U))
+
+theorem MediumAtom.auxSWError_sub_one_norm_le
+    (d : MediumAtom) (z : ℝ) (hU : 0 < d.U) (hz : 0 < z)
+    (hα : ∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1)
+    (hrough : ∀ n ∈ d.alphaCarrier, d.alpha n ≠ 0 → ∀ p : ℕ,
+      Nat.Prime p → p ∣ n → z < (p : ℝ))
+    (k q b : ℕ) (hk : 1 ≤ k) (hq : 1 ≤ q) :
+    ‖d.auxSWError k q b - d.auxSWError 1 q b‖ ≤
+      4 * d.U * (k.divisors.card : ℝ) / z
+
+theorem exists_medium_auxSWError_sub_one_logAccuracy
+    (A epsilon : ℝ) (hepsilon : 0 < epsilon) :
+    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom, x0 ≤ d.scale →
+      0 < d.U →
+      (∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1) →
+      (∀ n ∈ d.alphaCarrier, d.alpha n ≠ 0 → ∀ p : ℕ,
+        Nat.Prime p → p ∣ n →
+          d.scale ^ (1 / (Real.log (Real.log d.scale)) ^ 3) < (p : ℝ)) →
+      ∀ k q b : ℕ, 1 ≤ k → 1 ≤ q →
+        ‖d.auxSWError k q b - d.auxSWError 1 q b‖ ≤
+          epsilon * d.U * (k.divisors.card : ℝ) / (Real.log d.scale) ^ A
+
+theorem uniformAuxiliarySW_of_rough_one
+    {ι : Type*} (F : ι → MediumAtom)
+    (hU : ∀ i, 0 < (F i).U)
+    (hα : ∀ i, ∀ n ∈ (F i).alphaCarrier, ‖(F i).alpha n‖ ≤ 1)
+    (hrough : ∀ i, ∀ n ∈ (F i).alphaCarrier, (F i).alpha n ≠ 0 → ∀ p : ℕ,
+      Nat.Prime p → p ∣ n →
+        (F i).scale ^ (1 / (Real.log (Real.log (F i).scale)) ^ 3) < (p : ℝ))
+    (hSW : ∀ A : ℝ, 0 < A → ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧
+      ∀ i : ι, x0 ≤ (F i).scale → ∀ q b : ℕ,
+        1 ≤ q → Nat.Coprime b q →
+        ‖(F i).auxSWError 1 q b‖ ≤
+          C * (F i).U / (Real.log (F i).scale) ^ A) :
+    UniformAuxiliarySW F 1
+
+theorem eventually_const_mul_log_rpow_le_rpow
+    (c A xi : ℝ) (hxi : 0 < xi) :
+    ∀ᶠ x : ℝ in atTop, c * (Real.log x) ^ A ≤ x ^ xi
+
+theorem eventually_auxiliarySW_large_modulus_logAccuracy
+    (A epsilon xi : ℝ) (hepsilon : 0 < epsilon) (hxi : 0 < xi) :
+    ∀ᶠ x : ℝ in atTop, ∀ H k q b : ℕ, ∀ S : Finset ℕ, ∀ α : ℕ → ℂ,
+      S ⊆ Finset.Ioc 0 H → x ^ xi ≤ (H : ℝ) → (H : ℝ) ≤ 2 * x →
+      (Real.log x) ^ (A + 2) ≤ (q : ℝ) →
+      (∀ n ∈ S, ‖α n‖ ≤ 1) →
+      ‖auxiliarySWError S α k q b‖ ≤
+        epsilon * (H : ℝ) / (Real.log x) ^ A
+
+theorem exists_medium_auxSW_large_modulus_logAccuracy
+    (A epsilon xi : ℝ) (hepsilon : 0 < epsilon) (hxi : 0 < xi) :
+    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom, x0 ≤ d.scale →
+      d.scale ^ xi ≤ d.U → 1 ≤ d.V →
+      (∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1) →
+      ∀ k q b : ℕ, (Real.log d.scale) ^ (A + 2) ≤ (q : ℝ) →
+        ‖d.auxSWError k q b‖ ≤ epsilon * d.U / (Real.log d.scale) ^ A
+
+theorem uniformAuxiliarySW_of_rough_small_moduli
+    {ι : Type*} (F : ι → MediumAtom) (xi : ℝ) (hxi : 0 < xi)
+    (hU : ∀ i, 1 ≤ (F i).U) (hV : ∀ i, 1 ≤ (F i).V)
+    (hUlow : ∀ i, (F i).scale ^ xi ≤ (F i).U)
+    (hα : ∀ i, ∀ n ∈ (F i).alphaCarrier, ‖(F i).alpha n‖ ≤ 1)
+    (hrough : ∀ i, ∀ n ∈ (F i).alphaCarrier, (F i).alpha n ≠ 0 → ∀ p : ℕ,
+      Nat.Prime p → p ∣ n →
+        (F i).scale ^ (1 / (Real.log (Real.log (F i).scale)) ^ 3) < (p : ℝ))
+    (hSW : ∀ A : ℝ, 0 < A → ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧
+      ∀ i : ι, x0 ≤ (F i).scale → ∀ q b : ℕ,
+        1 ≤ q → (q : ℝ) < (Real.log (F i).scale) ^ (A + 2) →
+        Nat.Coprime b q →
+        ‖(F i).auxSWError 1 q b‖ ≤
+          C * (F i).U / (Real.log (F i).scale) ^ A) :
+    UniformAuxiliarySW F 1
+
+theorem MediumAdmissible.alphaScaleLower
+    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}
+    (hd : MediumAdmissible B sigma kappa c0 d) :
+    d.scale ^ sigma < d.U
+
+theorem uniformAuxiliarySW_of_mediumAdmissible_small_moduli
+    {ι : Type*} (F : ι → MediumAtom) (B : ℕ) (sigma kappa c0 : ℝ)
+    (hsigma : 0 < sigma)
+    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))
+    (hSW : ∀ A : ℝ, 0 < A → ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧
+      ∀ i : ι, x0 ≤ (F i).scale → ∀ q b : ℕ,
+        1 ≤ q → (q : ℝ) < (Real.log (F i).scale) ^ (A + 2) →
+        Nat.Coprime b q →
+        ‖(F i).auxSWError 1 q b‖ ≤
+          C * (F i).U / (Real.log (F i).scale) ^ A) :
+    UniformAuxiliarySW F 1
+
+end ImbalancedChen.Part3
+```
+
+## 新增 rough SW 的实际算术定义
+
+```lean
+namespace ImbalancedChen.Part3
+
+open scoped BigOperators
+
+def auxiliarySWError (S : Finset ℕ) (α : ℕ → ℂ) (k q b : ℕ) : ℂ :=
+  (∑ n ∈ S, if Nat.ModEq q n b ∧ Nat.Coprime n k then α n else 0) -
+  (∑ n ∈ S, if Nat.Coprime n (k * q) then α n else 0) / (Nat.totient q : ℂ)
+
+def roughOneSlot (z : ℝ) (n : ℕ) : ℂ := by
+  classical
+  exact if ∀ p : ℕ, p.Prime → p ∣ n → z < (p : ℝ) then 1 else 0
+
+def roughMoebiusSlot (z : ℝ) (n : ℕ) : ℂ :=
+  ((ArithmeticFunction.moebius n : ℤ) : ℂ) * roughOneSlot z n
+
+end ImbalancedChen.Part3
+```
+
+这些是实际系数／误差定义，未包含待证的 SW 或 dispersion 字段。小模数剩余 SW 完整印在上述条件定理的 `hSW` 参数中。
 
 ## 未闭合目标与实际算术定义
 

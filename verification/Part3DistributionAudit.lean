@@ -3,6 +3,8 @@ import all ImbalancedChen.Part3PrimeAPDistribution
 import all ImbalancedChen.Part3CurrentLowerDistribution
 import all ImbalancedChen.Part3LongSlotDistribution
 import all ImbalancedChen.Part3LongSlotNormalization
+import all ImbalancedChen.Part3RoughAuxiliarySW
+import all ImbalancedChen.Part3RoughAuxiliarySWNormalization
 import Lean.Util.CollectAxioms
 
 /-!
@@ -27,7 +29,9 @@ run_cmd do
     `ImbalancedChen.Part3PrimeAPDistribution,
     `ImbalancedChen.Part3CurrentLowerDistribution,
     `ImbalancedChen.Part3LongSlotDistribution,
-    `ImbalancedChen.Part3LongSlotNormalization]
+    `ImbalancedChen.Part3LongSlotNormalization,
+    `ImbalancedChen.Part3RoughAuxiliarySW,
+    `ImbalancedChen.Part3RoughAuxiliarySWNormalization]
   let allowed := #[`propext, `Classical.choice, `Quot.sound]
   let names := env.constants.fold (init := #[]) fun names name _ =>
     match env.getModuleIdxFor? name with

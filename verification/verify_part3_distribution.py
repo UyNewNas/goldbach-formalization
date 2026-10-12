@@ -1,4 +1,4 @@
-"""Verify the five owned Part 3 modules without modifying the shared root.
+"""Verify the owned Part 3 modules without modifying the shared root.
 
 Run with the original pinned Lean/Lake on PATH. Every module is built
 explicitly, strictly compiled, replayed by the bundled kernel checker, and
@@ -38,7 +38,8 @@ CONFIG_SHA256 = {
 MODULES = tuple("ImbalancedChen." + name for name in (
     "Part3DistributionTargets", "Part3PrimeAPDistribution",
     "Part3CurrentLowerDistribution", "Part3LongSlotDistribution",
-    "Part3LongSlotNormalization"))
+    "Part3LongSlotNormalization", "Part3RoughAuxiliarySW",
+    "Part3RoughAuxiliarySWNormalization"))
 ALLOWED = {"propext", "Classical.choice", "Quot.sound"}
 AUDIT = "verification/Part3DistributionAudit.lean"
 WORKFLOW = ".github/workflows/part3-distribution.yml"

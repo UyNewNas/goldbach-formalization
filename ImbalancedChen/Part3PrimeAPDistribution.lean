@@ -178,7 +178,7 @@ theorem part3_abs_sum_mul_primeAPIntervalError_log_saving
   filter_upwards [h] with N hN
   intro Q hQ S hS L U hLU hUN a ha w hw
   simp only [part3PrimeAPIntervalError_eq_sub, mul_sub, Finset.sum_sub_distrib]
-  exact (abs_sub_le _ _).trans (by
+  exact (abs_sub _ _).trans (by
     have hU := hN Q hQ S hS U hUN a ha w hw
     have hL := hN Q hQ S hS L (hLU.trans hUN) a ha w hw
     linarith)

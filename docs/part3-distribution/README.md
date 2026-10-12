@@ -2,11 +2,13 @@
 
 ## 结论与验证状态
 
-本 Part 已写出有完整证明体的 Lean 候选：真实素数 BV 的共同区间／变化余数接口、当前四个下界素数带的完整 quotient 余项在实际归一化上的统一估计，以及一个长整数因子的实际同余分布与归一化。高物理模数的 restricted signed factorized distribution 仍未闭合，实际完整上／下 policy 的误差供应者也未闭合。
+**第二轮从真实最新检查点 `64598da177adf861df3763d7c465ff941388b6d6` 继续。** 本轮修复真实素数 BV 区间证明中的一个确定 API 错误，并新增 rough 槽辅助互素剥离、大模数误差和统一阈值的完整证明候选。当前原有 `MediumAdmissible` 的 full auxiliary SW 已归约为：同一实际 rough `1`／Möbius 槽族、`k=1`、`q<log(x)^(A+2)` 的统一小模数 SW。该剩余 SW 输入没有被藏入 admissibility；它尚未得到证明。详细推导、供应者差异、验证和接收分工见 [ROUND2.md](ROUND2.md)。
 
-**目前没有成功执行新文件的 Lean elaboration、kernel replay 或传递公理检查。候选代码不能登记成已核验定理。** 本地原版 Lean 在读取参数前退出；独立 CI 配置用于正常验证全部五个新模块。执行证据单独记在本目录，不能把静态扫描或 workflow 的存在当作证明验证。
+本 Part 还保留首轮的真实素数 BV 共同区间／变化余数适配、当前 Y3–Y6 完整 quotient 余项归一化，以及未加粗糙筛选的长整数因子分布候选。高物理模数的 restricted signed factorized distribution 仍未闭合，实际完整上／下 policy 的误差供应者也未闭合。
 
-本次没有把主线改为弱 Pan/Selberg，也没有修改共享根导入、原有证明文件、依赖、手稿地图或其他 Part 的文件。
+**目前没有成功执行本 Part 文件的 Lean elaboration、kernel replay 或传递公理检查；已验证的新定理数为 0。** 第二轮唯一一次原版 Lean 启动探测仍在解析源码前退出。第一轮同源记录均为 source-only，未找到可复用的成功编译对象；旧 CI 最后一次 run 仍无 runner、无执行步骤，未手动重试。验证器现覆盖全部七个本 Part 模块，仍保持原有严格编译、bundled kernel replay 和传递公理检查门。不能把源码审查或 workflow 的存在当作证明验证。
+
+本次没有把主线改为弱 Pan/Selberg，也没有修改共享根导入、共同基线原有证明文件、依赖、手稿地图或其他 Part 的文件。所有新增或修改均在本 Part 所有的源码、验证文件与文档中。
 
 ## 1. 固定来源
 
@@ -42,6 +44,9 @@
 | `HalfProductPanFinite` | 真正半乘积源按较小素数分纤维，保留平方对角线与计数重数 | 有限重排不提供误差渐近 |
 | `PanProductLiuBridge` | 真正乘积前缀／区间与 Pan API 的精确对应，原始余数归约 | 每个端点仍须满足以该端点为尺度的 Pan 门槛 |
 | `ChenPooledQuotientAP` | 完整模数 `b(t)*e` 的注入池化；保留次级 AP 误差、中心修正，无 selector-cardinality 损失 | 它是有限不等式；须另给该完整物理模数范围内的分布供应者 |
+| `LiLiuPrereqFouvry.primeSW_uniform_eventually` | 实际 prime-indicator 源，附辅助互素条件的统一 SW | 不等于合数 rough `1` 或 rough Möbius 槽的 SW；没有直接供给实际 Mellin 槽族的小模数结论 |
+| `LiLiuPrereqFouvry.primeSW_reciprocal_totient` | 对所有 `q>0`，包括 `q>H`，给出 `1/φ(q)≤c_R log(H)/min(q,H)`；这是无素数源前提的标量定理 | 本轮用于实际复系数误差的大 `q` 分支；不能据此支付小模数 SW 或高模数 signed medium 的抵消 |
+| `LiLiuPrereqFouvry.completeKloosterman_weil` | 无条件完整 Weil 界，含非本原、零和负频率 | (18) 仍需平滑完成、Ramanujan 零频率分拆和实际 determinant/gcd 聚合；(24) 所需谱返回不由此给出 |
 
 `trueLogarithmicIntegral x` 在 pin 中是 `2/log 2 + ∫₂ˣ dt/log t`。本 Part 的真实素数适配器没有改成 `x/log x`，也没有把 primitive-coprime 主项改成未经互素过滤的总质量。
 
@@ -188,7 +193,7 @@ R_{q,a}(m)=\#\{L\le n<U:mn\equiv a\pmod q\}
 
 本次审查未建立针对**当前 restricted 版本**的具体反例，也未发现可确定宣告为错误的引用接口。旧版本的 unrestricted 扩张不作为本次靶标。以下是准确的未完成证明位置，不是已证明其错误：
 
-- medium 补全的 (18)、(23)、(24)：从保留主 Gram 方差、完整互素分拆、retained phase 和 packet 二次型到实际算术 dispersion estimate 的推导，尚未在 Lean 供应者中找到，也未独立重建完毕。
+- medium 补全的 (18)、(23)、(24)：完整目标尚未闭合。第二轮进一步区分了已有完整 Weil、已有 gcd 谐调行界与缺失的实际碰撞／谱返回；准确类型和不能直接套用的条件见 [ROUND2.md](ROUND2.md)。
 - (21) 的 reciprocity 必须保留最后相位；其五坐标变化损失是 `x^(5*kappa+o(1))`，不能改称任意 `x^epsilon`。代码未声称已供应这一步。
 - (24) 到 (25) 的代数比较、最终指数预算可以核对，但这些比较不证明其输入 (24)。以 `kappa≤sigma/100` 支付负指数间隙，也不能替代谱估计。
 - 从 medium、一长槽、两长槽和低秩 BV 拼装到 `eq:current-PP`，仍须为实际几何 family 支付共同 smooth/Mellin、Brun 和有限分拆成本。
@@ -203,7 +208,7 @@ R_{q,a}(m)=\#\{L\le n<U:mn\equiv a\pmod q\}
 |---|---|---|
 | 实际有限 policy 数据与恒等式 | Part 1 构造上下／marked／switched 物理 `rho_N`，证明 actual source 等于这些 labelled prime-product 权的组合，保留重数、目标删除、实际物理 cap 与有限 atom 的端点归属 | Part 1 → Part 3；Part 0 跟踪 |
 | 几何合法类 | 固定 `a_*>0`、rank、正下界 `p_i≥c*N^a_*`、完整乘积 `O(N)`、仅几何 gates、共同 polylog Euler-derivative bounds；每个 high-rank box 有整个 box 上的独立三因子分解许可 | Part 1 → Part 3 |
-| restricted medium theorem | 证明上文完整 `RestrictedMediumObligation`，包括统一辅助 SW 的实际 rough `1`/Möbius 槽和谱返回；不是新增公理 | Part 3 → Parts 4/5 |
+| restricted medium theorem | 证明完整 `RestrictedMediumObligation` 和谱返回。本轮 full auxiliary SW 已有条件归约候选：对原有 admissibility，只剩同一实际 rough `1`/Möbius 槽族的 `k=1`、小 `q` 统一 SW 输入；这个输入和 medium 的 signed 结论仍须 Part 3 证明 | Part 3 → Parts 4/5 |
 | prime-product 组装 | 把低秩 BV、rough/smooth one-long、two-long 与 medium 分支接到同一个 `UniformPrimeProductTarget`，阈值覆盖全部实际 family | Part 3 → Parts 4/5 |
 | 当前 lower 的合法低秩实例 | 实际 Y3–Y6 支持满足完整 `p*e`／`p1*p2*e` BV cap，外系数属于已控制类；新 `part3_currentLowerRemainder_negligible` 候选已在该类内支付次级对数损失和全部 centre cost | Part 1 + Part 3 → Part 5 |
 | 最终误差归一化 | 用同一批已冻结政策与全部误差裕量，给出实际 upper/lower signed error 在 `singularNormalization N` 上趋零 | Part 3 → Parts 4/5 |
@@ -216,7 +221,7 @@ R_{q,a}(m)=\#\{L\le n<U:mn\equiv a\pmod q\}
 
 - [THEOREM_TYPES.md](THEOREM_TYPES.md)：新文件里全部 theorem 的原样 source signatures，含显式和隐式 binders；这不是未经运行的 `#print` 输出。
 - [Part3DistributionAudit.lean](../../verification/Part3DistributionAudit.lean)：按 defining-module 元数据覆盖 public/private/generated declarations，拒绝新增公理与 unsafe declaration，传递允许项只有 `propext`、`Classical.choice`、`Quot.sound`。
-- [verify_part3_distribution.py](../../verification/verify_part3_distribution.py)：精确 pin、全部五个模块 build、warning-as-error compile、bundled leanchecker replay、完整类型与公理清单；任一失败不会输出 `PASSED`。
+- [verify_part3_distribution.py](../../verification/verify_part3_distribution.py)：精确 pin、全部七个模块 build、warning-as-error compile、bundled leanchecker replay、完整类型与公理清单；任一失败不会输出 `PASSED`。
 - [part3-distribution.yml](../../.github/workflows/part3-distribution.yml)：只增加本 Part 的显式 CI 范围，未改共享根与现有 CI。
 
 正常可执行环境中的验证命令：
@@ -229,6 +234,12 @@ python3 verification/verify_part3_distribution.py
 `python3 verification/verify_part3_distribution.py --source-only` 仅产生 `SOURCE_ONLY_NOT_COMPILED`。它既不运行 Lean，也不证明定理成立。
 
 ## 9. 已实际执行的验证与阻塞
+
+### 第二轮当前记录
+
+本轮 `lean --version` 的唯一一次新探测仍以退出码 `1` 返回 `failed to locate application`，没有进入 Lean 源码解析。旧 CI run `38194578264` 经只读查询仍无 runner、无步骤；未手动重试。七模块的当前 source-only 检查实际执行成功，状态为 `SOURCE_ONLY_NOT_COMPILED`；共同基线的 303 个 blob 仍全部相同。两个新模块共增加 29 条有证明体的 theorem 候选，连同旧模块共 63 条 source signatures；编译器确认类型为 0 条。完整本轮证据放在 `VERIFICATION.json` 的 `round2` 项中。
+
+### 首轮历史记录
 
 结构化证据见 [VERIFICATION.json](VERIFICATION.json)。第一份提交 `d5d1fffbf9e74061985da31d82dedaeab02d9659` 已触发 [专用 CI run 38194200272](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38194200272)。GitHub 返回 `failure`，但其唯一 job `114633178850` 的 `runner_id=0`、`runner_name=""`、`steps=[]`；请求 job 日志返回 `404/BlobNotFound`。这不是 Lean 报错，也不是编译通过，不能据此推断 GitHub 的具体调度拒绝原因。
 
