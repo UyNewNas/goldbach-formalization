@@ -13,6 +13,10 @@ python3 verification/part2/generate_paired_prefix.py \
   verification/part2/data/corpus-renewal-paired-certificate-v2-20261010.json \
   --count 4 --check-generated ImbalancedChen/Certificates
 python3 verification/part2/round2/upstream/verify_upstream_acceptance.py
+python3 verification/part2/generate_paired_prefix.py \
+  verification/part2/data/corpus-renewal-paired-certificate-v2-20261010.json \
+  --start 4 --count 60 --check-generated ImbalancedChen/Certificates
+python3 verification/part2/round3/batch4-to64/verify_acceptance.py
 
 modules=(
   ImbalancedChen.Certificates.PairedFibreIntegral
@@ -24,6 +28,9 @@ modules=(
   ImbalancedChen.Certificates.PairedV2Geometry
   ImbalancedChen.Certificates.PairedV2Prefix4Data
   ImbalancedChen.Certificates.PairedV2Prefix4
+  ImbalancedChen.Certificates.PairedV2Batch4To64Data
+  ImbalancedChen.Certificates.PairedV2Batch4To64
+  ImbalancedChen.Certificates.PairedV2Prefix64
 )
 
 for module in "${modules[@]}"; do

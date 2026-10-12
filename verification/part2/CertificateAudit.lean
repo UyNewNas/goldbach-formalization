@@ -7,6 +7,9 @@ import ImbalancedChen.Certificates.AboveMuSecondCoarse
 import ImbalancedChen.Certificates.PairedV2Geometry
 import ImbalancedChen.Certificates.PairedV2Prefix4Data
 import ImbalancedChen.Certificates.PairedV2Prefix4
+import ImbalancedChen.Certificates.PairedV2Batch4To64Data
+import ImbalancedChen.Certificates.PairedV2Batch4To64
+import ImbalancedChen.Certificates.PairedV2Prefix64
 import Lean.Util.CollectAxioms
 
 /-! Explicit Part 2 batch: defining-module inventory, including private/generated declarations.
@@ -33,7 +36,10 @@ run_cmd do
     `ImbalancedChen.Certificates.AboveMuSecondCoarse,
     `ImbalancedChen.Certificates.PairedV2Geometry,
     `ImbalancedChen.Certificates.PairedV2Prefix4Data,
-    `ImbalancedChen.Certificates.PairedV2Prefix4]
+    `ImbalancedChen.Certificates.PairedV2Prefix4,
+    `ImbalancedChen.Certificates.PairedV2Batch4To64Data,
+    `ImbalancedChen.Certificates.PairedV2Batch4To64,
+    `ImbalancedChen.Certificates.PairedV2Prefix64]
   let allowed := #[`propext, `Classical.choice, `Quot.sound]
   let names := env.constants.fold (init := #[]) fun names name _ =>
     match env.getModuleIdxFor? name with
