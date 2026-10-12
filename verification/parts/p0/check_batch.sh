@@ -48,6 +48,11 @@ case "$batch" in
     replay=("${production[@]}")
     audit=verification.parts.p0.CoarseAudit
     ;;
+  p5-finite)
+    production=(ImbalancedChen.CurrentChenMeanLedger ImbalancedChen.CurrentChenLowerScale)
+    replay=("${production[@]}")
+    audit=verification.parts.p0.ChenFiniteAudit
+    ;;
   paired-buchstab)
     production=(ImbalancedChen.CurrentPairedBuchstabBridge)
     suppliers=(
