@@ -1,12 +1,18 @@
 # Part 3：算术分布与实际误差供应者交接
 
-## 结论与验证状态
+## 最新局部验收：长整数槽归一化
+
+在 `7d70a2545fd819706e473eb41e4d430ad19119d8` 之后的小批中，已按 Part 0 固定提交 `80aca6710c83b5160f4c5fdd05d180e507990e95` 接收长槽修复，并完成 `Part3LongSlotNormalization` 原有两条定理的严格编译、原装生产对象重放、全部定义模块声明传递公理审计。两条证明源码保持不变；编译器库存与序列化库存均为 2 条，三门绑定同一源码、目标对象和实际导入对象。
+
+本批交接、编译器确认类型与局部回执见 [HANDOFF.md](../../verification/parts/p3/long-slot-normalization/HANDOFF.md)。其余候选与真实 rough／prime／相位推广不在本批验收范围；完整七模块验证门保持不变。
+
+## 第二轮历史结论与验证状态
 
 **第二轮从真实最新检查点 `64598da177adf861df3763d7c465ff941388b6d6` 继续。** 本轮修复真实素数 BV 区间证明中的一个确定 API 错误，并新增 rough 槽辅助互素剥离、大模数误差和统一阈值的完整证明候选。当前原有 `MediumAdmissible` 的 full auxiliary SW 已归约为：同一实际 rough `1`／Möbius 槽族、`k=1`、`q<log(x)^(A+2)` 的统一小模数 SW。该剩余 SW 输入没有被藏入 admissibility；它尚未得到证明。详细推导、供应者差异、验证和接收分工见 [ROUND2.md](ROUND2.md)。
 
 本 Part 还保留首轮的真实素数 BV 共同区间／变化余数适配、当前 Y3–Y6 完整 quotient 余项归一化，以及未加粗糙筛选的长整数因子分布候选。高物理模数的 restricted signed factorized distribution 仍未闭合，实际完整上／下 policy 的误差供应者也未闭合。
 
-**目前没有成功执行本 Part 文件的 Lean elaboration、kernel replay 或传递公理检查；已验证的新定理数为 0。** 第二轮唯一一次原版 Lean 启动探测仍在解析源码前退出。第一轮同源记录均为 source-only，未找到可复用的成功编译对象；旧 CI 最后一次 run 仍无 runner、无执行步骤，未手动重试。验证器现覆盖全部七个本 Part 模块，仍保持原有严格编译、bundled kernel replay 和传递公理检查门。不能把源码审查或 workflow 的存在当作证明验证。
+**第二轮交付时没有成功执行本 Part 文件的 Lean elaboration、kernel replay 或传递公理检查；当时已验证的新定理数为 0。** 第二轮唯一一次原版 Lean 启动探测仍在解析源码前退出。第一轮同源记录均为 source-only，未找到可复用的成功编译对象；旧 CI 最后一次 run 仍无 runner、无执行步骤，未手动重试。验证器现覆盖全部七个本 Part 模块，仍保持原有严格编译、bundled kernel replay 和传递公理检查门。不能把源码审查或 workflow 的存在当作证明验证。
 
 本次没有把主线改为弱 Pan/Selberg，也没有修改共享根导入、共同基线原有证明文件、依赖、手稿地图或其他 Part 的文件。所有新增或修改均在本 Part 所有的源码、验证文件与文档中。
 
