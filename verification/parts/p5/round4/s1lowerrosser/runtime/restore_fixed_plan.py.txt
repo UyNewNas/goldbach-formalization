@@ -1,0 +1,31 @@
+"""Serial execution of the frozen missing-object list; no closure expansion."""
+from pathlib import Path
+import json, subprocess, sys, time
+import verify_s1lowerrosser as m
+
+plan_path = m.HERE / 'restore/plan.json'
+plan = json.loads(plan_path.read_text())
+assert plan['target'] == m.s.TARGET and plan['required_by'] == m.CARRIER
+assert plan['no_future_supplier_modules_included']
+started = time.monotonic()
+executed, reused = [], []
+for row in plan['source_order']:
+    module = row['module']
+    obj = m.s.resolved_object(module)
+    if obj is not None:
+        m.check_objects(module, row['expected_objects'])
+        reused.append(module)
+        print('RESTORE_ALREADY_HASH_MATCHED ' + module, flush=True)
+        continue
+    command = [sys.executable, str(m.HERE/'restore_needed.py'), module]
+    run = subprocess.run(command)
+    executed.append({'module': module, 'command': command, 'returncode': run.returncode})
+    m.s.save(m.HERE/'restore/serial-progress.json', {'planned': len(plan['source_order']),
+        'reused': reused, 'executed': executed, 'elapsed_seconds': round(time.monotonic()-started,3)})
+    if run.returncode:
+        raise SystemExit(run.returncode)
+m.s.save(m.HERE/'restore/serial-completion.json', {'status':'EXACT_MISSING_IMPORT_OBJECTS_RESTORED',
+    'planned':len(plan['source_order']), 'reused':reused, 'executed':executed,
+    'elapsed_seconds':round(time.monotonic()-started,3), 'plan_sha256':m.d.digest(plan_path),
+    'old_319_supplier_queue_started':False, 'future_supplier_modules_started':[]})
+print('FIXED_RESTORATION_COMPLETE',flush=True)

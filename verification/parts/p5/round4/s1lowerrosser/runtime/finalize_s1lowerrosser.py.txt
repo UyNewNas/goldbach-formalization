@@ -1,0 +1,180 @@
+"""Assemble a receipt only after all three actual target gates have passed."""
+from pathlib import Path
+from collections import Counter
+import base64, gzip, hashlib, json, shlex, shutil
+import verify_s1lowerrosser as m
+
+s, d, E = m.s, m.d, m.EVIDENCE
+LOGS = m.HERE / 'logs'
+RESTORE = m.HERE / 'restore'
+records = [json.loads(line) for line in (LOGS/'results.jsonl').read_text().splitlines()]
+gates = {}
+for action in ['compile', 'replay', 'audit']:
+    matches = [r for r in records if r['action'] == action]
+    assert matches, ('missing gate', action)
+    r = matches[-1]
+    assert r['returncode'] == 0 and r['source_unchanged'] and r['imports_unchanged'] and r['guards_unchanged']
+    if action != 'replay':
+        assert r['trustLevel'] == 0 and r['warningAsError'] and not r['metadata_adapter']
+        assert 'FRONTEND_OK module=' + r['module'] + ' trustLevel=0' in Path(r['log']).read_text()
+    assert d.digest(Path(r['log'])) == r['raw_log_sha256']
+    gates[action] = r
+assert gates['compile']['source_sha256_after'] == s.SOURCE_SHA
+assert gates['compile']['objects_after'] == gates['replay']['objects_before'] == gates['replay']['objects_after']
+assert gates['audit']['imports_before'][0]['objects'] == gates['compile']['objects_after']
+pre = json.loads((LOGS/'preflight.json').read_text())
+assert not pre['missing_import_objects']
+
+audit_lines = Path(gates['audit']['log']).read_text().splitlines()
+marker = 'CHEN_P5_S1LOWERROSSER_AUDIT_DECL '
+decls = [json.loads(line[len(marker):]) for line in audit_lines if line.startswith(marker)]
+count_lines = [line for line in audit_lines if line.startswith('CHEN_P5_S1LOWERROSSER_AUDIT_COUNT ')]
+assert len(count_lines) == 1 and int(count_lines[0].split()[-1]) == len(decls) and decls
+assert len({x['name'] for x in decls}) == len(decls)
+allowed = {'propext', 'Classical.choice', 'Quot.sound'}
+for x in decls:
+    assert x['module'] == s.TARGET and not x['is_unsafe'] and not x['is_axiom']
+    assert set(x['axioms']) <= allowed and x['type_explicit'] and x['type_expr_repr']
+public = [x for x in decls if x['requested_public_theorem']]
+assert len(public) == 2
+assert {x['name'].split('.')[-1] for x in public} == {
+    'goldbachS1BoundingSieve_lowerErrSum_le_prefixSum', 'goldbachS1_lowerRosser_mainTerm_sub_prefix_le'}
+assert all(x['kind'] == 'theorem' for x in public)
+types = {x['name'].split('.')[-1]:x for x in public}
+assert '@Int.cast' in types['goldbachS1_lowerRosser_mainTerm_sub_prefix_le']['type_explicit']
+
+restore_rows = [json.loads(line) for line in (RESTORE/'results.jsonl').read_text().splitlines()]
+restore_plan = json.loads((RESTORE/'plan.json').read_text())
+restore_done = json.loads((RESTORE/'serial-completion.json').read_text())
+assert restore_done['status'] == 'EXACT_MISSING_IMPORT_OBJECTS_RESTORED'
+assert {x['module'] for x in restore_rows} == {x['module'] for x in restore_plan['source_order']}
+for row in restore_rows:
+    assert row['historical_object_sha256_reproduced'] and row['source_unchanged'] and row['imports_unchanged'] and row['guards_unchanged']
+    if row['action'] == 'restore_required_import':
+        assert row['returncode'] == 0 and row['trustLevel'] == 0 and not row['metadata_adapter']
+    else:
+        assert row['action'] == 'reuse_matching_restored_import' and not row['frontend_run_by_this_copy']
+restore_compiled = [x for x in restore_rows if x['action'] == 'restore_required_import']
+restore_copied = [x for x in restore_rows if x['action'] == 'reuse_matching_restored_import']
+
+E.mkdir(parents=True, exist_ok=True)
+for name in ['raw', 'runtime', 'restoration', 'restoration/raw', 'source', 'objects']:
+    (E/name).mkdir(parents=True, exist_ok=True)
+shutil.copy2(LOGS/'preflight.json', E/'preflight.json')
+s.save(E/'commands-and-results.json', records)
+for r in records:
+    shutil.copy2(r['log'], E/'raw'/Path(r['log']).name)
+for p in RESTORE.iterdir():
+    if p.is_file() and p.name != 'active.json':
+        dest = E/'restoration/raw'/p.name if p.suffix == '.log' else E/'restoration'/p.name
+        shutil.copy2(p, dest)
+for name in ['recovery-required.json', 'setup-diagnostics.json']:
+    if (LOGS/name).exists():
+        shutil.copy2(LOGS/name, E/'restoration'/name)
+for p in m.HERE.glob('*.py'):
+    shutil.copy2(p, E/'runtime'/(p.name+'.txt'))
+for p in (m.HERE/'versions').glob('*'):
+    shutil.copy2(p, E/'runtime'/p.name)
+shutil.copy2(m.PRIOR_RUNTIME, E/'runtime/verify_s1carrier.reused.py.txt')
+shutil.copy2(s.OLD/'verify_batch.py', E/'runtime/verify_batch.reused.py.txt')
+shutil.copy2(d.DRIVER/'lakefile.lean', E/'runtime/frontend-driver.lakefile.lean.txt')
+s.save(E/'declarations.json', decls)
+s.save(E/'public-theorem-types.json', public)
+(E/'declaration-axioms.jsonl').write_text(''.join(json.dumps({k:x[k] for k in ['name','module','kind','is_unsafe','is_axiom','axioms']},ensure_ascii=False)+'\n' for x in decls))
+header = ('Compiler-confirmed types from the elaborated defining-module environment.\n'
+    'Readable pretty print, fully explicit pretty print, and the exact Expr representation are archived.\n'
+    'Implicit arguments hidden in the readable version are preserved in the explicit version and JSON Expr.\n\n')
+(E/'compiler-types.txt').write_text(header+'\n\n'.join(
+    x['name']+'\nkind: '+x['kind']+'\naxioms: '+', '.join(x['axioms'])+'\n\nTYPE:\n'+x['type']+'\n\nEXPLICIT TYPE:\n'+x['type_explicit'] for x in decls)+'\n')
+(E/'public-theorem-types.lean.txt').write_text(header+'\n\n'.join(
+    x['name']+' :\n'+x['type']+'\n\n-- Complete explicit compiler type:\n'+x['type_explicit'] for x in public)+'\n')
+cmds = ['#!/usr/bin/env bash', 'set -euo pipefail', '# Actual target commands, in execution order. See JSON for cwd, environment and results.',
+    '# The fixed frontend driver calls Lean.Elab.runFrontend at trustLevel=0.',
+    'export LEAN_SYSROOT='+shlex.quote(str(d.TOOLROOT)), 'export LAKE_HOME='+shlex.quote(str(d.TOOLROOT)),
+    'export LEAN_NUM_THREADS=1', 'export PATH='+shlex.quote(str(d.TOOLROOT/'bin'))+':"$PATH"',
+    'export LEAN_PATH='+shlex.quote(d.environment()['LEAN_PATH']),
+    'export LEAN_SRC_PATH='+shlex.quote(d.environment()['LEAN_SRC_PATH']), 'cd '+shlex.quote(str(d.REPO))]
+for r in records:
+    cmds += ['', '# '+r['action']+': exit '+str(r['returncode'])+', '+str(r['elapsed_seconds'])+' seconds', shlex.join(r['command'])]
+(E/'commands.sh').write_text('\n'.join(cmds)+'\n')
+union = sorted({a for x in decls for a in x['axioms']})
+object_bytes=Path(gates['compile']['objects_after'][0]['path']).read_bytes()
+object_packed=gzip.compress(object_bytes,mtime=0)
+object_encoded=base64.encodebytes(object_packed)
+assert gzip.decompress(base64.decodebytes(object_encoded))==object_bytes
+object_archive=E/'objects/LiLiuGoldbachS1LowerRosser.olean.gz.b64'
+object_archive.write_bytes(object_encoded)
+object_archive_record={'path':'objects/'+object_archive.name,'format':'base64 of gzip, mtime=0',
+    'transport_sha256':d.digest(object_archive),'gzip_sha256':hashlib.sha256(object_packed).hexdigest(),
+    'decoded_object_sha256':hashlib.sha256(object_bytes).hexdigest(),
+    'decoded_object_bytes':len(object_bytes),'roundtrip_bytes_verified':True,
+    'scope':'Transport copy of the already strictly compiled, replayed and audited target object; reuse still requires matching fixed source/toolchain/import identities.'}
+s.save(E/'objects/manifest.json',object_archive_record)
+receipt = {
+    'scope':'Only '+s.TARGET, 'status':'STRICT_REPLAY_FULL_AXIOM_AUDIT_PASSED', 'accepted_utc':s.now(),
+    'branch':'chatgpt/chen-p5-lower', 'starting_checkpoint':s.START_HEAD, 'common_baseline':s.BASELINE,
+    'acceptance_commit':'The full enclosing published commit SHA, supplied with this receipt; no self-referential SHA is embedded.',
+    'toolchain':pre['guards']['toolchain'], 'dependencies':pre['packages'],
+    'source':pre['source'], 'source_sha256':s.SOURCE_SHA, 'source_equals_pinned_dependency':True,
+    'source_patch':None, 'production_source_changes':[], 'compiled_objects':gates['compile']['objects_after'],
+    'compiled_object_transport_archive':object_archive_record,
+    'direct_imports':pre['direct_imports'],
+    'gates':{k:{'result':'passed','returncode':v['returncode'],'elapsed_seconds':v['elapsed_seconds'],
+        'command':v['command'],'log':'raw/'+Path(v['log']).name,'log_sha256':v['raw_log_sha256'],
+        'trustLevel':v['trustLevel'],'warningAsError':v['warningAsError']} for k,v in gates.items()},
+    'audit':{'method':'Defining-module environment inventory and bundled Lean.collectAxioms',
+        'source_path':'verification/parts/p5/S1LowerRosserAudit.lean',
+        'source_sha256':gates['audit']['source_sha256_after'], 'compiled_objects':gates['audit']['objects_after'],
+        'declaration_count':len(decls),'requested_public_theorem_count':len(public),
+        'kind_counts':dict(Counter(x['kind'] for x in decls)),
+        'private_name_count':sum(x['name'].startswith('_private.') for x in decls),
+        'private_and_generated_included':True,'unsafe_declarations':[], 'own_axiom_declarations':[], 'forbidden_axioms':[],
+        'transitive_axiom_union':union,'types_status':'COMPILER_CONFIRMED_FROM_ELABORATED_ENVIRONMENT',
+        'explicit_type_and_raw_expression_for_every_declaration':True},
+    'auxiliary_audit_diagnostic':json.loads((E/'audit-helper-diagnostic.json').read_text()),
+    'preflight_version_note':'The final preflight was refreshed after the auxiliary audit options fix. Earlier commands retain their originally observed preflight digest and complete direct-import/source/object snapshots; the final preflight is not presented as their original byte-identical file.',
+    'reuse':{'S1Carrier_acceptance_commit':s.START_HEAD,'S1Carrier_recompiled_this_batch':False,
+        'S1Carrier_replayed_this_batch':False,'S1Carrier_reaudited_this_batch':False,
+        'previous_S1Carrier_gates_reused':pre['reused_S1Carrier']['gates'],
+        'missing_after_restoration':pre['missing_import_objects'],
+        'source_import_closure_count':pre['direct_import_closure_source_modules'],
+        'previously_compiled_local_imports_rechecked':pre['local_previously_compiled_import_count'],
+        'official_cache_source_modules':pre['official_cache_source_module_count'],
+        'official_cache_restoration':'Separate successful P1 official-cache run, reused with its raw receipt/log; not launched by this P5 session.',
+        'scope':'No claim of fresh replay or full axiom audit for the entire imported closure.'},
+    'required_environment_recovery':{'vanished_local_object_count':restore_plan['restore_count'],
+        'successful_P5_recompilations':len(restore_compiled),'hash_verified_copies_from_P1':len(restore_copied),
+        'all_recovered_objects_equal_historical_sha256':True,
+        'diagnostic_mode':'Each required import rebuild used its original recorded diagnostic mode at trustLevel=0. Target gates remain strict.',
+        'recompiled_modules':[x['module'] for x in restore_compiled],
+        'copied_modules':[x['module'] for x in restore_copied],
+        'successful_recompile_seconds':round(sum(x['elapsed_seconds'] for x in restore_compiled),3),
+        'failed_import_stage_attempt':'restoration/namespace-import-diagnostic.json',
+        'failed_attempt_scope':'Wiener import-path visibility during recovery, before proof elaboration; original source unchanged. Controller exit 1; frontend numeric returncode was not persisted, and is not fabricated.',
+        'old_319_supplier_queue_started':False,'future_suppliers_started':[]},
+    'unblocked_edges':[
+        {'consumer':'MathlibNt.SieveTheory.LiLiuGoldbachS1BetaPaidLower','input':'Actual finite lower-Rosser main term minus the AP prefix error; actual source call to goldbachS1_lowerRosser_mainTerm_sub_prefix_le.'},
+        {'consumer':'MathlibNt.SieveTheory.LiLiuGoldbachS1BetaLowerDensity','input':'Direct import edge only; no density estimate accepted by this batch.'}],
+    'next_small_target':json.loads((E/'context.json').read_text())['next_small_target'],
+    'next_target_started':False,'initial_mean':json.loads((E/'context.json').read_text())['initial_mean'],
+    'root_ci':{'checkpoint':s.START_HEAD,'run_id':38229846294,'result':'failure','build':'success',
+        'leanchecker_step':'failure','leanchecker_timeout_minutes':25,'leanchecker_observed_seconds':1513,
+        'axiom_audit_step':'failure','axiom_audit_timeout_minutes':10,'axiom_audit_observed_seconds':613,
+        'timeout_reason_source':'User report; API step outcomes/durations and unchanged workflow limits independently checked. Raw timeout annotations were unavailable through the permitted GitHub Fetch endpoint.',
+        'evidence':['context/root-ci-run.json','context/root-ci-jobs.json','context/root-ci-fetch.json'],
+        'workflow_modified':False,'manual_rerun':False,'whole_project_success_claimed':False},
+    'protected_files':pre['guards']['protected'], 'root_ci_files':pre['guards']['unchanged_root_ci'],
+    'no_shared_dependency_write':True,'no_Codex_CLI_or_task_started':True,'receiving_parts':['P5 first-mean supplier chain','P0 integration validation']}
+s.save(E/'receipt.json',receipt)
+context=json.loads((E/'context.json').read_text())
+for row in context['supplier_graph']:
+    if row['module']==s.TARGET:row['status']='STRICT_REPLAY_FULL_AXIOM_AUDIT_PASSED'
+context['environment_restoration']['final_successful_P5_recompilations']=len(restore_compiled)
+context['environment_restoration']['final_hash_verified_copies_from_P1']=len(restore_copied)
+s.save(E/'context.json',context)
+
+print(json.dumps({'status':receipt['status'],'target':s.TARGET,'source_sha256':s.SOURCE_SHA,
+    'objects':receipt['compiled_objects'],'gates':{k:{'returncode':v['returncode'],'seconds':v['elapsed_seconds']} for k,v in gates.items()},
+    'declarations':len(decls),'kind_counts':receipt['audit']['kind_counts'],
+    'private_name_count':receipt['audit']['private_name_count'],'axioms':union,
+    'recovery_recompiled':len(restore_compiled),'recovery_copied':len(restore_copied)},ensure_ascii=False),flush=True)

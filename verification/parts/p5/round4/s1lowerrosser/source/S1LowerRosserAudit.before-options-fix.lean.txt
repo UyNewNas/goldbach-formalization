@@ -1,0 +1,74 @@
+import MathlibNt.SieveTheory.LiLiuGoldbachS1LowerRosser
+import Lean.Util.CollectAxioms
+
+/-!
+Inventory the actual defining module, including private/generated declarations.
+Use the bundled transitive axiom collector and fail closed on unsafe declarations,
+own axioms, or any axiom outside the three standard foundational axioms.
+Both readable and explicit compiler types, plus the exact type expression, are
+printed in the same run. No theorem or hypothesis is introduced by this audit.
+-/
+
+open Lean Elab Command in
+run_cmd do
+  let env ← getEnv
+  let moduleName := `MathlibNt.SieveTheory.LiLiuGoldbachS1LowerRosser
+  let allowed := #[`propext, `Classical.choice, `Quot.sound]
+  let publicNames := #[
+    `MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve_lowerErrSum_le_prefixSum,
+    `MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1_lowerRosser_mainTerm_sub_prefix_le]
+  let names := env.constants.fold (init := #[]) fun names name _ =>
+    match env.getModuleIdxFor? name with
+    | some idx => if env.header.moduleNames[idx]! == moduleName then names.push name else names
+    | none => names
+  unless names.size > 0 do
+    throwError "Audited defining module has no declarations: {moduleName}"
+  for name in names.qsort Name.lt do
+    let some info := env.find? name | throwError "Missing inventoried declaration {name}"
+    if info.isUnsafe then
+      throwError "Unsafe declaration in audited defining module: {name}"
+    if info.isAxiom then
+      throwError "Unproved axiom in audited defining module: {name}"
+    let axioms ← collectAxioms name
+    for ax in axioms do
+      unless allowed.contains ax do
+        throwError "Forbidden transitive axiom {ax} in {name}"
+    let kind := match info with
+      | .thmInfo _ => "theorem"
+      | .defnInfo _ => "definition"
+      | .opaqueInfo _ => "opaque"
+      | .quotInfo _ => "quotient"
+      | .axiomInfo _ => "axiom"
+      | .inductInfo _ => "inductive"
+      | .ctorInfo _ => "constructor"
+      | .recInfo _ => "recursor"
+    let type ← liftTermElabM do
+      return (← Meta.ppExpr info.type).pretty
+    let typeExplicit ← withOptions (fun opts =>
+        (((opts.setBool `pp.explicit true).setBool `pp.universes true)
+          .setBool `pp.fullNames true).setBool `pp.proofs true) do
+      liftTermElabM do
+        return (← Meta.ppExpr info.type).pretty
+    let record := Json.mkObj [
+      ("name", toJson name.toString),
+      ("module", toJson moduleName.toString),
+      ("kind", toJson kind),
+      ("is_unsafe", toJson info.isUnsafe),
+      ("is_axiom", toJson info.isAxiom),
+      ("requested_public_theorem", toJson (publicNames.contains name)),
+      ("type", toJson type),
+      ("type_explicit", toJson typeExplicit),
+      ("type_expr_repr", toJson (reprStr info.type)),
+      ("axioms", toJson (axioms.map Name.toString))]
+    liftIO <| IO.println s!"CHEN_P5_S1LOWERROSSER_AUDIT_DECL {record.compress}"
+  for name in publicNames do
+    unless names.contains name do
+      throwError "Requested public theorem absent from defining-module inventory: {name}"
+    let some (.thmInfo _) := env.find? name
+      | throwError "Requested declaration is not a theorem: {name}"
+  let record := Json.mkObj [
+    ("module", toJson moduleName.toString),
+    ("count", toJson names.size),
+    ("requested_public_theorem_count", toJson publicNames.size)]
+  liftIO <| IO.println s!"CHEN_P5_S1LOWERROSSER_AUDIT_MODULE {record.compress}"
+  liftIO <| IO.println s!"CHEN_P5_S1LOWERROSSER_AUDIT_COUNT {names.size}"

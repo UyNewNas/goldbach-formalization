@@ -1,0 +1,195 @@
+"""Exactly one P5 supplier; reuse hash-bound S1Carrier acceptance.
+
+There is no dependency build loop. Only compile, replay and audit are runnable.
+The unchanged prior controller supplies the normal official frontend invocation,
+the namespace-aware Lean object resolver, and before/after hash recording.
+"""
+from pathlib import Path
+import importlib.util, json, sys, fcntl
+
+HERE = Path(__file__).resolve().parent
+PRIOR_RUNTIME = Path('/workspace/scratch/cd30ec11ea1d/p5-s1carrier/runtime/verify_s1carrier.py')
+spec = importlib.util.spec_from_file_location('p5_s1carrier_verified_controller', PRIOR_RUNTIME)
+s = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(s)
+d = s.d
+s.HERE = HERE
+s.LOGS = HERE / 'logs'
+s.TARGET = 'MathlibNt.SieveTheory.LiLiuGoldbachS1LowerRosser'
+s.AUDIT = 'verification.parts.p5.S1LowerRosserAudit'
+s.SOURCE_SHA = 'c07c0704c975bef4d772090ce03d7536f28edd319c700c4d9feb27c9f111ef62'
+s.START_HEAD = 'bf54caeb5e708474cacefac13a171d307b4c64f2'
+CARRIER = 'MathlibNt.SieveTheory.LiLiuGoldbachS1Carrier'
+PRIOR = d.REPO / 'verification/parts/p5/round3/s1carrier'
+EVIDENCE = d.REPO / 'verification/parts/p5/round4/s1lowerrosser'
+# The old transient P1 logs directory is absent. Use the byte-identical
+# toolchain receipt already published inside P5; do not recreate shared logs.
+s.P1 = PRIOR / 'context'
+_pinned_file = s.pinned_file
+_guards = s.guards
+
+def pinned_file(module):
+    record = _pinned_file(module)
+    record['pinned_content_sha256'] = record.pop('git_blob')
+    return record
+
+def guards():
+    result = _guards()
+    result['reused_s1carrier_controller_sha256'] = d.digest(PRIOR_RUNTIME)
+    result['this_controller_sha256'] = d.digest(Path(__file__))
+    result['audit_source_sha256'] = d.digest(d.INDEX[s.AUDIT])
+    result['unchanged_root_ci'] = []
+    for rel in ['.github/workflows/lean.yml', '.github/workflows/variable-envelope.yml']:
+        actual = d.digest(d.REPO / rel)
+        assert actual == s.sha_bytes(s.git(d.REPO, 'show', s.START_HEAD + ':' + rel))
+        result['unchanged_root_ci'].append({'path': rel, 'sha256': actual, 'equals_starting_checkpoint': True})
+    return result
+
+s.pinned_file = pinned_file
+s.guards = guards
+
+def check_objects(module, expected):
+    actual = s.files(module)
+    identity = lambda rows: [(Path(x['path']).name, x['sha256'], x['bytes']) for x in rows]
+    assert identity(actual) == identity(expected), ('object identity mismatch', module, expected, actual)
+    return actual
+
+def pinned_record(path):
+    rel = path.relative_to(d.REPO).as_posix()
+    actual = d.digest(path)
+    assert actual == s.sha_bytes(s.git(d.REPO, 'show', s.START_HEAD + ':' + rel)), rel
+    return {'path': rel, 'commit': s.START_HEAD, 'sha256': actual,
+            'equals_published_commit_bytes': True}
+
+def preflight():
+    s.LOGS.mkdir(parents=True, exist_ok=True)
+    assert s.git(d.REPO, 'rev-parse', 'HEAD').decode().strip() == s.START_HEAD
+    required = [d.REPO / 'docs/CHEN_P5_S1CARRIER_HANDOFF.md'] + [
+        PRIOR / name for name in ['receipt.json', 'context.json', 'preflight.json', 'commands-and-results.json',
+            'context/toolchain-binary-hashes.json']]
+    references = [pinned_record(p) for p in required]
+    previous = json.loads((PRIOR / 'preflight.json').read_text())
+    receipt = json.loads((PRIOR / 'receipt.json').read_text())
+    commands = json.loads((PRIOR / 'commands-and-results.json').read_text())
+    context = json.loads((PRIOR / 'context.json').read_text())
+    source = pinned_file(s.TARGET)
+    assert source['sha256'] == s.SOURCE_SHA
+    assert d.imports(s.TARGET) == [CARRIER]
+    guard = guards()
+    assert guard['toolchain'] == receipt['toolchain']
+    assert guard['frontend_driver_sha256'] == previous['guards']['frontend_driver_sha256']
+    pins = []
+    for package in d.PACKAGES:
+        root = d.SHARED / '.lake/packages' / package['name']
+        head = s.git(root, 'rev-parse', 'HEAD').decode().strip()
+        changes = s.git(root, 'diff', '--name-only', 'HEAD').decode().splitlines()
+        assert head == package['rev'] and not changes, (package['name'], head, changes)
+        pins.append({'package': package['name'], 'revision': head, 'tracked_changes': changes})
+    assert pins == receipt['dependencies']
+    carrier_source = pinned_file(CARRIER)
+    assert carrier_source['sha256'] == receipt['source_sha256']
+    carrier_objects = check_objects(CARRIER, receipt['compiled_objects'])
+    current_carrier_imports = s.import_snapshot(CARRIER)
+    for expected, actual in zip(previous['direct_imports'], current_carrier_imports, strict=True):
+        assert expected['module'] == actual['module']
+        assert expected['source']['sha256'] == actual['source']['sha256']
+        check_objects(expected['module'], expected['objects'])
+    assert receipt['status'] == 'STRICT_REPLAY_FULL_AXIOM_AUDIT_PASSED'
+    inherited_gates = []
+    for action in ['compile', 'replay', 'audit']:
+        gate = receipt['gates'][action]
+        assert gate['result'] == 'passed' and gate['returncode'] == 0
+        log = PRIOR / gate['log']
+        assert d.digest(log) == gate['log_sha256']
+        record = next(r for r in commands if r['action'] == action and r['returncode'] == 0)
+        assert record['raw_log_sha256'] == gate['log_sha256']
+        assert record['source_unchanged'] and record['imports_unchanged'] and record['guards_unchanged']
+        if action == 'compile':
+            assert record['source_sha256_after'] == carrier_source['sha256']
+            assert record['objects_after'] == carrier_objects
+            assert record['trustLevel'] == 0 and record['warningAsError']
+        inherited_gates.append({'action': action, 'status': 'REUSED_NOT_RERUN',
+            'returncode': gate['returncode'], 'raw_log': pinned_record(log)})
+    audit = receipt['audit']
+    assert not audit['unsafe_declarations'] and not audit['own_axiom_declarations']
+    assert not audit['forbidden_axioms']
+    assert set(audit['transitive_axiom_union']) == {'propext', 'Classical.choice', 'Quot.sound'}
+    # Recheck the prior local closure against its accepted source/object and
+    # recorded direct-import hashes; reuse its archived complete raw logs.
+    previous_raw = {x['module']: x for x in context['reused_logs']}
+    local_matches = []
+    for record in previous['local_compiled_imports']:
+        module = record['module']
+        src = pinned_file(module)
+        assert src['sha256'] == record['source']['sha256']
+        objects = check_objects(module, record['objects'])
+        cert = record['certificate']
+        r = cert['result']
+        assert r['returncode'] == 0 and r['trustLevel'] == 0 and not r['metadata_adapter']
+        assert r['source_sha256_before'] == r['source_sha256_after'] == src['sha256']
+        assert r['olean_sha256'] == objects[0]['sha256']
+        archived = previous_raw[module]
+        raw_path = d.REPO / archived['path']
+        assert d.digest(raw_path) == cert['raw_log_sha256']
+        raw = raw_path.read_text()
+        assert 'FRONTEND_OK module=' + module + ' trustLevel=0' in raw
+        assert 'Lean.githash=' + s.LEAN_GIT in raw
+        witnesses = []
+        for dep in cert['recorded_imports_matched']:
+            obj = s.resolved_object(dep['module'])
+            assert obj is not None and d.digest(obj) == dep['sha256'], dep['module']
+            witnesses.append({'module': dep['module'], 'path': str(obj), 'sha256': dep['sha256']})
+        local_matches.append({'module': module, 'source': src, 'objects': objects,
+            'reused_raw_log': pinned_record(raw_path), 'recorded_direct_imports_matched': witnesses})
+    official_evidence = []
+    for item in previous['direct_imports']:
+        if 'cache_evidence' not in item:
+            continue
+        evidence = item['cache_evidence']
+        for name, hash_key in [('context/result.json', 'cache_result_sha256'), ('context/get.log', 'cache_log_sha256')]:
+            assert d.digest(PRIOR / name) == evidence[hash_key]
+        official_evidence.append({'module': item['module'], 'objects': item['objects'],
+            'previous_successful_import_witness': evidence['witness']['module'],
+            'witness_object_sha256': evidence['witness']['import_olean_sha256'][item['module']],
+            'cache_result_sha256': evidence['cache_result_sha256'], 'cache_log_sha256': evidence['cache_log_sha256']})
+    closure = d.closure([CARRIER])
+    expected_modules = {x['module'] for x in previous['local_compiled_imports']} | set(previous['official_cache_modules']) | {CARRIER}
+    assert set(closure) == expected_modules
+    missing = [m for m in closure if s.resolved_object(m) is None]
+    assert not missing, ('minimum_missing_closure', missing)
+    result = {'observed_utc': s.now(), 'target': s.TARGET, 'starting_head': s.START_HEAD,
+        'common_baseline': s.BASELINE, 'source': source, 'guards': guard, 'packages': pins,
+        'prior_acceptance_records': references, 'reused_S1Carrier': {
+            'source': carrier_source, 'objects': carrier_objects,
+            'direct_imports_rechecked': current_carrier_imports, 'gates': inherited_gates,
+            'declaration_count_from_prior_audit': audit['declaration_count']},
+        'direct_imports': s.import_snapshot(s.TARGET),
+        'direct_import_closure_source_modules': len(closure),
+        'missing_import_objects': missing, 'local_compiled_imports_rechecked': local_matches,
+        'local_previously_compiled_import_count': len(local_matches),
+        'additional_accepted_Carrier_import_count': 1,
+        'official_cache_source_module_count': len(previous['official_cache_modules']),
+        'official_cache_evidence': official_evidence,
+        'official_cache_scope': 'Reuse the fixed-checkpoint official content-hash cache acceptance and its existing successful object-hash witnesses. This batch does not recompile, replay or re-audit the import closure.',
+        'LEAN_PATH': d.environment()['LEAN_PATH'],
+        'target_existing_before': s.files(s.TARGET) if s.resolved_object(s.TARGET) else [],
+        'dependencies_compiled_this_batch': [], 'old_supplier_queue_started': False}
+    s.save(s.LOGS / 'preflight.json', result)
+    print(json.dumps({k: result[k] for k in ['target', 'source', 'direct_import_closure_source_modules',
+        'missing_import_objects', 'local_previously_compiled_import_count',
+        'additional_accepted_Carrier_import_count', 'official_cache_source_module_count',
+        'target_existing_before']}, ensure_ascii=False), flush=True)
+
+if __name__ == '__main__':
+    action = sys.argv[1]
+    if action == 'preflight':
+        preflight()
+    elif action in ['compile', 'replay', 'audit']:
+        HERE.mkdir(parents=True, exist_ok=True)
+        # The reused controller's lock also prevents overlap with the preceding
+        # P5 single-module session; there is no parallel heavy operation here.
+        with (PRIOR_RUNTIME.parent / 'single-module.lock').open('a') as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            s.run_one(action)
+    else:
+        raise SystemExit('only preflight, compile, replay, audit are supported')
