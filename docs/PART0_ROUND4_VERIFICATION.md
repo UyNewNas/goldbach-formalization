@@ -1,5 +1,14 @@
 # Part 0：储存 cap、前 64 行和 S1LowerRosser 的分批接收
 
+> **发布后核验（2026-10-13 北京时间）：** 本文件对应的集成提交
+> `d0366ce64272e81faf6166a8a90050f56b328d38` 已通过完整根验证。
+> [Lean core run 38289734671](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38289734671)
+> 与 [Variable envelope run 38289734726](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38289734726)
+> 均为 `success`。原始 artifacts、GitHub run/job/artifact 元数据、固定摘要和独立复核器见
+> [post-publication-d036](../verification/parts/p0/round4/post-publication-d036/README.md)。
+> 因此下文“新提交必须另行通过”的预发布条件已经满足；`hLower`、`hUpper`
+> 仍未消去，主桥仍是条件式。
+
 本批从已完成整根验证的 `28fd630ef7cc38eba86beb6c0ba123336b5d05f2` 接入 **4 个生产模块、414 项所属声明**。累计组件接收范围为 **23 个自有生产模块、1,005 项所属声明**。固定依赖的 S1LowerRosser 另有 8 项声明，不计入这两个数字。
 
 组件接收依据是固定源码及已经实际完成的严格编译、同对象原装重放和完整所属声明公理审计。本文件随新集成源码一起提交，因而不预报该新提交的 CI 结果。新提交必须另行通过完整构建、四个明确指定的生产目标、根内核重放、根公理审计、原 Round3 类型门和新增 Round4 类型门。执行结果绑定实际 `GITHUB_SHA`，由原始 Actions artifact 及后续接收回执给出。

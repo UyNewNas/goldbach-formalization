@@ -2,6 +2,17 @@
 
 ## Part 0 round 4 reception
 
+Post-publication verification is now fixed for integration commit
+`d0366ce64272e81faf6166a8a90050f56b328d38`: core run
+[38289734671](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38289734671)
+and variable-envelope run
+[38289734726](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38289734726)
+both completed successfully. The core artifact records the 9,802-job full
+build, explicit Round 4 target build, stock root replay, an audit of 5,872 root
+declarations, and PASS receipts for both compiler-type exports. The sealed raw
+artifacts and exact API metadata are in
+[`post-publication-d036`](../verification/parts/p0/round4/post-publication-d036/README.md).
+
 The received component inventory is now 23 own production modules and 1,005
 defining-module declarations. Four exact source additions contribute 414:
 StoredHistoricalBoxPermit (14), PairedV2Batch4To64Data (72), PairedV2Batch4To64
