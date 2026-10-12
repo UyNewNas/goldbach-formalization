@@ -38,11 +38,16 @@ Their finite identities, scale transfer, and genuine Buchstab lower barrier
 are independent work toward this obligation. The mean ledger supplies
 actual prime-source identities for all eleven rows, including the moving
 cutoffs and selected last pair in rows seven through eleven. These are
-identities, not the missing mean estimates. The Buchstab module contains a
-candidate proof of the manuscript's literal \(11/20\) barrier for the actual pinned function on
-\([7/3,\infty)\); it does not certify the retained fibre quadrature.
-Their exact compilation and axiom evidence must be reported for the final
-integration commit; they do not close the missing analytic rows.
+identities, not the missing mean estimates. The Buchstab module now proves
+the manuscript's literal \(11/20\) barrier for the actual pinned function
+on \([7/3,\infty)\), with strict compilation, bundled kernel replay and
+transitive axiom audit passed at
+`db97d0fe03250f4d9a8aea34b23e9c20f67010b8`. See
+[CHEN_P5_BUCHSTAB_HANDOFF.md](CHEN_P5_BUCHSTAB_HANDOFF.md).
+This does not certify the retained fibre quadrature. The current finite
+and scale validation status is recorded in
+[CHEN_P5_ROUND2_HANDOFF.md](CHEN_P5_ROUND2_HANDOFF.md); these components do
+not close the missing analytic rows.
 
 ## 1. Carrier, quotient semantics, and the unchanged factor four
 
@@ -207,7 +212,7 @@ A certificate may instead provide a joint bound on
 \(\Upsilon_{10}+\Upsilon_{11}\). That is acceptable if the actual joint
 family and its error budget are stated and proved. One must not invent two
 independent endpoints from the single selected `U10_plus_U11` field.
-The candidate `currentChenPairedPrimeSum_ge_of_joint_last_bounds` consumes
+The finite `currentChenPairedPrimeSum_ge_of_joint_last_bounds` consumes
 that joint inequality directly. Its normalized companion uses
 \((b_{10,11}+2\delta)H_N\) for the combined last two rows, so the complete
 weight error remains \(14\delta H_N\).

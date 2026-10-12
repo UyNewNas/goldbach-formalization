@@ -1,0 +1,296 @@
+# Complete theorem type declarations from the two strictly compiled sources
+
+These are literal declaration headers from the successful source hashes below.
+Namespace: ImbalancedChen. MeanLedger opens BigOperators; both files are noncomputable sections.
+Proof bodies are omitted. No additional Lean invocation was used for this extraction.
+
+## ImbalancedChen.CurrentChenMeanLedger
+
+Source SHA256: 30597d5f381031fc7d7e794fe105a11d6981053b34a1406d46f40bf7840dc0c8
+
+theorem chenY6Selected_add_compl (n : ℕ) (A H D : ℝ)
+    (E : ℕ × ℕ → Prop) :
+    chenY6Selected n A H D E + chenY6Selected n A H D (fun t => ¬ E t) =
+      chenY6 n A H D
+
+theorem chenY11Selected_add_compl (n : ℕ) (A H D : ℝ)
+    (E : ℕ × ℕ → Prop) :
+    chenY11Selected n A H D E + chenY11Selected n A H D (fun t => ¬ E t) =
+      chenY11Full n A H D
+
+theorem chenPairedElevenWeight_eq_unselected (n : ℕ) (N A H D C : ℝ)
+    (E : ℕ × ℕ → Prop) :
+    chenPairedElevenWeight n N A H D C E =
+      3 * (chenY1 n A : ℝ) + (chenY2 n H : ℝ) - (chenY3 n A C : ℝ) -
+        (chenY4 n A D : ℝ) + (chenY5 n A H : ℝ) +
+        (chenY6Selected n A H D (fun t => ¬ E t) : ℝ) -
+        2 * (chenY7 n N D : ℝ) - (chenY8 n N A C : ℝ) -
+        (chenY9 n N H D : ℝ) - (chenY10 n A H : ℝ) -
+        (chenY11Selected n A H D (fun t => ¬ E t) : ℝ)
+
+theorem chen_sum_quotient_tuple_card_moving_cutoff {α : Type*} [DecidableEq α]
+    (N : ℕ) (T : Finset α) (b : α → ℕ) (z : α → ℝ) :
+    (∑ P ∈ chenAdditivePrimeCarrier N,
+      ((T.filter (fun t => ChenQuotient (b t) (z t) (N - P))).card : ℝ)) =
+      ∑ t ∈ T, ((chenSiftedQuotientPrimeSource N (b t) (z t)).card : ℝ)
+
+theorem chen_prime_dvd_receiver_mem_additiveCarrier {N P p : ℕ}
+    (hP : P ∈ chenAdditivePrimeCarrier N) (hp : Nat.Prime p)
+    (hd : p ∣ N - P) : p ∈ chenAdditivePrimeCarrier N
+
+theorem chenY7Tuples_eq_selector_filter {N P : ℕ}
+    (hP : P ∈ chenAdditivePrimeCarrier N) (D : ℝ) :
+    chenY7Tuples (N - P) (N : ℝ) D =
+      (chenY7PrimeSelector N D).filter
+        (fun t => ChenQuotient (t.1 * t.2) (t.2 : ℝ) (N - P))
+
+theorem chenY8Tuples_eq_selector_filter {N P : ℕ}
+    (hP : P ∈ chenAdditivePrimeCarrier N) (A C : ℝ) :
+    chenY8Tuples (N - P) (N : ℝ) A C =
+      (chenY8PrimeSelector N A C).filter
+        (fun t => ChenQuotient (t.1 * t.2) (t.2 : ℝ) (N - P))
+
+theorem chenY9Tuples_eq_selector_filter {N P : ℕ}
+    (hP : P ∈ chenAdditivePrimeCarrier N) (H D : ℝ) :
+    chenY9Tuples (N - P) (N : ℝ) H D =
+      (chenY9PrimeSelector N H D).filter
+        (fun t => ChenQuotient (t.1 * t.2)
+          (Real.sqrt ((N : ℝ) / ((t.1 : ℝ) * (t.2 : ℝ)))) (N - P))
+
+theorem chenY10Tuples_eq_selector_filter {N P : ℕ}
+    (hP : P ∈ chenAdditivePrimeCarrier N) (A H : ℝ) :
+    chenY10Tuples (N - P) A H =
+      (chenY10PrimeSelector N A H).filter
+        (fun t => ChenQuotient (t.1.1 * t.1.2 * t.2.1 * t.2.2)
+          (t.1.2 : ℝ) (N - P))
+
+theorem chenY11FullTuples_eq_selector_filter {N P : ℕ}
+    (hP : P ∈ chenAdditivePrimeCarrier N) (A H D : ℝ) :
+    chenY11FullTuples (N - P) A H D =
+      (chenY11FullPrimeSelector N A H D).filter
+        (fun t => ChenQuotient (t.1.1 * t.1.2 * t.2.1 * t.2.2)
+          (t.1.2 : ℝ) (N - P))
+
+theorem sum_chenY7_eq_siftedQuotientPrimeSource (N : ℕ) (D : ℝ) :
+    (∑ P ∈ chenAdditivePrimeCarrier N, (chenY7 (N - P) (N : ℝ) D : ℝ)) =
+      ∑ t ∈ chenY7PrimeSelector N D,
+        ((chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)).card : ℝ)
+
+theorem sum_chenY8_eq_siftedQuotientPrimeSource (N : ℕ) (A C : ℝ) :
+    (∑ P ∈ chenAdditivePrimeCarrier N, (chenY8 (N - P) (N : ℝ) A C : ℝ)) =
+      ∑ t ∈ chenY8PrimeSelector N A C,
+        ((chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)).card : ℝ)
+
+theorem sum_chenY9_eq_siftedQuotientPrimeSource (N : ℕ) (H D : ℝ) :
+    (∑ P ∈ chenAdditivePrimeCarrier N, (chenY9 (N - P) (N : ℝ) H D : ℝ)) =
+      ∑ t ∈ chenY9PrimeSelector N H D,
+        ((chenSiftedQuotientPrimeSource N (t.1 * t.2)
+          (Real.sqrt ((N : ℝ) / ((t.1 : ℝ) * (t.2 : ℝ))))).card : ℝ)
+
+theorem sum_chenY10_eq_siftedQuotientPrimeSource (N : ℕ) (A H : ℝ) :
+    (∑ P ∈ chenAdditivePrimeCarrier N, (chenY10 (N - P) A H : ℝ)) =
+      ∑ t ∈ chenY10PrimeSelector N A H,
+        ((chenSiftedQuotientPrimeSource N (t.1.1 * t.1.2 * t.2.1 * t.2.2)
+          (t.1.2 : ℝ)).card : ℝ)
+
+theorem sum_chenY11Selected_eq_siftedQuotientPrimeSource (N : ℕ) (A H D : ℝ)
+    (E : ℕ × ℕ → Prop) :
+    (∑ P ∈ chenAdditivePrimeCarrier N,
+      (chenY11Selected (N - P) A H D E : ℝ)) =
+      ∑ t ∈ (chenY11FullPrimeSelector N A H D).filter (fun t => E t.2),
+        ((chenSiftedQuotientPrimeSource N (t.1.1 * t.1.2 * t.2.1 * t.2.2)
+          (t.1.2 : ℝ)).card : ℝ)
+
+theorem currentChenUpsilon1_eq_actual_siftedSum (N : ℕ) (hN : Even N) :
+    currentChenUpsilon1 N =
+      (chenInitialBoundingSieve N ((N : ℝ) ^ (417 / 5000 : ℝ)) hN).siftedSum
+
+theorem currentChenUpsilon2_eq_actual_siftedSum (N : ℕ) (hN : Even N) :
+    currentChenUpsilon2 N =
+      (chenInitialBoundingSieve N ((N : ℝ) ^ (19 / 125 : ℝ)) hN).siftedSum
+
+theorem currentChenUpsilon1_eq_actual_sifted_card (N : ℕ) (hN : Even N) :
+    currentChenUpsilon1 N =
+      ((chenSiftedPrimeSource N ((N : ℝ) ^ (417 / 5000 : ℝ))).card : ℝ)
+
+theorem currentChenUpsilon2_eq_actual_sifted_card (N : ℕ) (hN : Even N) :
+    currentChenUpsilon2 N =
+      ((chenSiftedPrimeSource N ((N : ℝ) ^ (19 / 125 : ℝ))).card : ℝ)
+
+theorem currentChenUpsilon3_eq_siftedQuotientPrimeSource (N : ℕ) :
+    currentChenUpsilon3 N =
+      ∑ p ∈ chenSinglePrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))
+          ((N : ℝ) ^ (1 / 3 : ℝ)),
+        ((chenSiftedQuotientPrimeSource N p
+          ((N : ℝ) ^ (417 / 5000 : ℝ))).card : ℝ)
+
+theorem currentChenUpsilon4_eq_siftedQuotientPrimeSource (N : ℕ) :
+    currentChenUpsilon4 N =
+      ∑ p ∈ chenSinglePrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))
+          ((N : ℝ) ^ (59 / 250 : ℝ)),
+        ((chenSiftedQuotientPrimeSource N p
+          ((N : ℝ) ^ (417 / 5000 : ℝ))).card : ℝ)
+
+theorem currentChenUpsilon5_eq_siftedQuotientPrimeSource (N : ℕ) :
+    currentChenUpsilon5 N =
+      ∑ t ∈ chenY5PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))
+          ((N : ℝ) ^ (19 / 125 : ℝ)),
+        ((chenSiftedQuotientPrimeSource N (t.1 * t.2)
+          ((N : ℝ) ^ (417 / 5000 : ℝ))).card : ℝ)
+
+theorem sum_chenY6Selected_eq_siftedQuotientPrimeSource (N : ℕ) (A H D : ℝ)
+    (E : ℕ × ℕ → Prop) :
+    (∑ P ∈ chenAdditivePrimeCarrier N, (chenY6Selected (N - P) A H D E : ℝ)) =
+      ∑ t ∈ (chenY6PrimeSelector N A H D).filter E,
+        ((chenSiftedQuotientPrimeSource N (t.1 * t.2) A).card : ℝ)
+
+theorem currentChenUpsilon6_eq_siftedQuotientPrimeSource (N : ℕ)
+    (E : ℕ × ℕ → Prop) :
+    currentChenUpsilon6 N E =
+      ∑ t ∈ (chenY6PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))
+          ((N : ℝ) ^ (19 / 125 : ℝ)) ((N : ℝ) ^ (59 / 250 : ℝ))).filter
+          (fun t => ¬ E t),
+        ((chenSiftedQuotientPrimeSource N (t.1 * t.2)
+          ((N : ℝ) ^ (417 / 5000 : ℝ))).card : ℝ)
+
+theorem currentChenUpsilon7_eq_siftedQuotientPrimeSource (N : ℕ) :
+    currentChenUpsilon7 N =
+      ∑ t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)),
+        ((chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)).card : ℝ)
+
+theorem currentChenUpsilon8_eq_siftedQuotientPrimeSource (N : ℕ) :
+    currentChenUpsilon8 N =
+      ∑ t ∈ chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))
+          ((N : ℝ) ^ (1 / 3 : ℝ)),
+        ((chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)).card : ℝ)
+
+theorem currentChenUpsilon9_eq_siftedQuotientPrimeSource (N : ℕ) :
+    currentChenUpsilon9 N =
+      ∑ t ∈ chenY9PrimeSelector N ((N : ℝ) ^ (19 / 125 : ℝ))
+          ((N : ℝ) ^ (59 / 250 : ℝ)),
+        ((chenSiftedQuotientPrimeSource N (t.1 * t.2)
+          (Real.sqrt ((N : ℝ) / ((t.1 : ℝ) * (t.2 : ℝ))))).card : ℝ)
+
+theorem currentChenUpsilon10_eq_siftedQuotientPrimeSource (N : ℕ) :
+    currentChenUpsilon10 N =
+      ∑ t ∈ chenY10PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))
+          ((N : ℝ) ^ (19 / 125 : ℝ)),
+        ((chenSiftedQuotientPrimeSource N (t.1.1 * t.1.2 * t.2.1 * t.2.2)
+          (t.1.2 : ℝ)).card : ℝ)
+
+theorem currentChenUpsilon11_eq_siftedQuotientPrimeSource (N : ℕ)
+    (E : ℕ × ℕ → Prop) :
+    currentChenUpsilon11 N E =
+      ∑ t ∈ (chenY11FullPrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))
+          ((N : ℝ) ^ (19 / 125 : ℝ)) ((N : ℝ) ^ (59 / 250 : ℝ))).filter
+          (fun t => ¬ E t.2),
+        ((chenSiftedQuotientPrimeSource N (t.1.1 * t.1.2 * t.2.1 * t.2.2)
+          (t.1.2 : ℝ)).card : ℝ)
+
+theorem currentChenPairedPrimeSum_eq_upsilon (N : ℕ) (E : ℕ × ℕ → Prop) :
+    currentChenPairedPrimeSum N E =
+      3 * currentChenUpsilon1 N + currentChenUpsilon2 N - currentChenUpsilon3 N -
+        currentChenUpsilon4 N + currentChenUpsilon5 N + currentChenUpsilon6 N E -
+        2 * currentChenUpsilon7 N - currentChenUpsilon8 N - currentChenUpsilon9 N -
+        currentChenUpsilon10 N - currentChenUpsilon11 N E
+
+theorem currentChenPairedPrimeSum_ge_of_term_bounds (N : ℕ) (E : ℕ × ℕ → Prop)
+    (l₁ l₂ u₃ u₄ l₅ l₆ u₇ u₈ u₉ u₁₀ u₁₁ : ℝ)
+    (h₁ : l₁ ≤ currentChenUpsilon1 N)
+    (h₂ : l₂ ≤ currentChenUpsilon2 N)
+    (h₃ : currentChenUpsilon3 N ≤ u₃)
+    (h₄ : currentChenUpsilon4 N ≤ u₄)
+    (h₅ : l₅ ≤ currentChenUpsilon5 N)
+    (h₆ : l₆ ≤ currentChenUpsilon6 N E)
+    (h₇ : currentChenUpsilon7 N ≤ u₇)
+    (h₈ : currentChenUpsilon8 N ≤ u₈)
+    (h₉ : currentChenUpsilon9 N ≤ u₉)
+    (h₁₀ : currentChenUpsilon10 N ≤ u₁₀)
+    (h₁₁ : currentChenUpsilon11 N E ≤ u₁₁) :
+    3 * l₁ + l₂ - u₃ - u₄ + l₅ + l₆ - 2 * u₇ - u₈ - u₉ - u₁₀ - u₁₁ ≤
+      currentChenPairedPrimeSum N E
+
+theorem currentChenPairedPrimeSum_ge_of_normalized_term_bounds
+    (N : ℕ) (E : ℕ × ℕ → Prop)
+    (b₁ b₂ b₃ b₄ b₅ b₆ b₇ b₈ b₉ b₁₀ b₁₁ delta : ℝ)
+    (h₁ : (b₁ - delta) * singularNormalization N ≤ currentChenUpsilon1 N)
+    (h₂ : (b₂ - delta) * singularNormalization N ≤ currentChenUpsilon2 N)
+    (h₃ : currentChenUpsilon3 N ≤ (b₃ + delta) * singularNormalization N)
+    (h₄ : currentChenUpsilon4 N ≤ (b₄ + delta) * singularNormalization N)
+    (h₅ : (b₅ - delta) * singularNormalization N ≤ currentChenUpsilon5 N)
+    (h₆ : (b₆ - delta) * singularNormalization N ≤ currentChenUpsilon6 N E)
+    (h₇ : currentChenUpsilon7 N ≤ (b₇ + delta) * singularNormalization N)
+    (h₈ : currentChenUpsilon8 N ≤ (b₈ + delta) * singularNormalization N)
+    (h₉ : currentChenUpsilon9 N ≤ (b₉ + delta) * singularNormalization N)
+    (h₁₀ : currentChenUpsilon10 N ≤ (b₁₀ + delta) * singularNormalization N)
+    (h₁₁ : currentChenUpsilon11 N E ≤ (b₁₁ + delta) * singularNormalization N) :
+    (3 * b₁ + b₂ - b₃ - b₄ + b₅ + b₆ - 2 * b₇ - b₈ - b₉ - b₁₀ - b₁₁ -
+      14 * delta) * singularNormalization N ≤ currentChenPairedPrimeSum N E
+
+theorem currentChenPairedPrimeSum_ge_of_joint_last_bounds
+    (N : ℕ) (E : ℕ × ℕ → Prop)
+    (l₁ l₂ u₃ u₄ l₅ l₆ u₇ u₈ u₉ u₁₀₁₁ : ℝ)
+    (h₁ : l₁ ≤ currentChenUpsilon1 N)
+    (h₂ : l₂ ≤ currentChenUpsilon2 N)
+    (h₃ : currentChenUpsilon3 N ≤ u₃)
+    (h₄ : currentChenUpsilon4 N ≤ u₄)
+    (h₅ : l₅ ≤ currentChenUpsilon5 N)
+    (h₆ : l₆ ≤ currentChenUpsilon6 N E)
+    (h₇ : currentChenUpsilon7 N ≤ u₇)
+    (h₈ : currentChenUpsilon8 N ≤ u₈)
+    (h₉ : currentChenUpsilon9 N ≤ u₉)
+    (h₁₀₁₁ : currentChenUpsilon10 N + currentChenUpsilon11 N E ≤ u₁₀₁₁) :
+    3 * l₁ + l₂ - u₃ - u₄ + l₅ + l₆ - 2 * u₇ - u₈ - u₉ - u₁₀₁₁ ≤
+      currentChenPairedPrimeSum N E
+
+theorem currentChenPairedPrimeSum_ge_of_normalized_joint_last_bounds
+    (N : ℕ) (E : ℕ × ℕ → Prop)
+    (b₁ b₂ b₃ b₄ b₅ b₆ b₇ b₈ b₉ b₁₀₁₁ delta : ℝ)
+    (h₁ : (b₁ - delta) * singularNormalization N ≤ currentChenUpsilon1 N)
+    (h₂ : (b₂ - delta) * singularNormalization N ≤ currentChenUpsilon2 N)
+    (h₃ : currentChenUpsilon3 N ≤ (b₃ + delta) * singularNormalization N)
+    (h₄ : currentChenUpsilon4 N ≤ (b₄ + delta) * singularNormalization N)
+    (h₅ : (b₅ - delta) * singularNormalization N ≤ currentChenUpsilon5 N)
+    (h₆ : (b₆ - delta) * singularNormalization N ≤ currentChenUpsilon6 N E)
+    (h₇ : currentChenUpsilon7 N ≤ (b₇ + delta) * singularNormalization N)
+    (h₈ : currentChenUpsilon8 N ≤ (b₈ + delta) * singularNormalization N)
+    (h₉ : currentChenUpsilon9 N ≤ (b₉ + delta) * singularNormalization N)
+    (h₁₀₁₁ : currentChenUpsilon10 N + currentChenUpsilon11 N E ≤
+      (b₁₀₁₁ + 2 * delta) * singularNormalization N) :
+    (3 * b₁ + b₂ - b₃ - b₄ + b₅ + b₆ - 2 * b₇ - b₈ - b₉ - b₁₀₁₁ -
+      14 * delta) * singularNormalization N ≤ currentChenPairedPrimeSum N E
+
+## ImbalancedChen.CurrentChenLowerScale
+
+Source SHA256: cea233e4897e4f550760ca82eba84e6ca9254593a8cbba030f22940e3086ab13
+
+theorem currentChen_four_currentC :
+    4 * currentC = (49044063 : ℝ) / 6250000
+
+theorem currentChen_lower_scale_from_finite_weight_bound
+    {N : ℕ} (E : ℕ × ℕ → Prop) {etaMean : ℝ}
+    (hN : 1 ≤ (N : ℝ))
+    (hA : 1 < (N : ℝ) ^ (417 / 5000 : ℝ))
+    (hweight : (4 * currentC - etaMean) * singularNormalization N ≤
+      currentChenPairedPrimeSum N E) :
+    (currentC - etaMean / 4) * singularNormalization N -
+      ((123 : ℝ) / 2 *
+        ((N : ℝ) / ((N : ℝ) ^ (417 / 5000 : ℝ) - 1)) + 1) ≤
+      (D12 N : ℝ)
+
+theorem currentChen_lower_scale_of_finite_budgets
+    {N : ℕ} (E : ℕ × ℕ → Prop) {epsilon etaMean etaCount : ℝ}
+    (hbudget : etaMean + etaCount ≤ 4 * epsilon)
+    (hweight : (4 * currentC - etaMean) * singularNormalization N ≤
+      currentChenPairedPrimeSum N E)
+    (hcount : currentChenPairedPrimeSum N E -
+      etaCount * singularNormalization N ≤ 4 * (D12 N : ℝ)) :
+    (currentC - epsilon) * singularNormalization N ≤ (D12 N : ℝ)
+
+theorem currentChen_lower_scale_of_equal_finite_budgets
+    {N : ℕ} (E : ℕ × ℕ → Prop) {epsilon : ℝ}
+    (hweight : (4 * currentC - 2 * epsilon) * singularNormalization N ≤
+      currentChenPairedPrimeSum N E)
+    (hcount : currentChenPairedPrimeSum N E -
+      (2 * epsilon) * singularNormalization N ≤ 4 * (D12 N : ℝ)) :
+    (currentC - epsilon) * singularNormalization N ≤ (D12 N : ℝ)

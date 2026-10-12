@@ -25,8 +25,8 @@ The final lemma is finite signed arithmetic with eleven separate actual
 term bounds. No distribution estimate, adopted mask, numerical integral
 certificate, or lower mean theorem is supplied or assumed here.
 
-Source candidate: strict compilation, kernel replay, and the transitive
-axiom audit are pending.
+Validation status and actual execution receipts are recorded in
+`docs/CHEN_P5_ROUND2_HANDOFF.md`.
 -/
 
 namespace ImbalancedChen
@@ -44,7 +44,8 @@ theorem chenY6Selected_add_compl (n : ℕ) (A H D : ℝ)
       chenY6 n A H D := by
   classical
   unfold chenY6Selected chenY6SelectedTuples chenY6
-  exact Finset.card_filter_add_card_filter_not (s := chenY6Tuples n A H D) E
+  convert (Finset.card_filter_add_card_filter_not (s := chenY6Tuples n A H D) E) using 1
+  congr
 
 /-- The same partition in the full eleventh support applies the mask to
 the last pair, without changing any factor cutoff or quotient condition. -/
@@ -54,8 +55,9 @@ theorem chenY11Selected_add_compl (n : ℕ) (A H D : ℝ)
       chenY11Full n A H D := by
   classical
   unfold chenY11Selected chenY11SelectedTuples chenY11Full
-  exact Finset.card_filter_add_card_filter_not (s := chenY11FullTuples n A H D)
-    (fun t => E t.2)
+  simpa only [Finset.filter_congr_decidable] using
+    (Finset.card_filter_add_card_filter_not (s := chenY11FullTuples n A H D)
+      (fun t => E t.2))
 
 /-- Paired deletion is exactly replacement of terms six and eleven by
 their unselected actual quotient counts. The equality needs no injection
@@ -518,7 +520,11 @@ theorem currentChenUpsilon6_eq_siftedQuotientPrimeSource (N : ℕ)
           (fun t => ¬ E t),
         ((chenSiftedQuotientPrimeSource N (t.1 * t.2)
           ((N : ℝ) ^ (417 / 5000 : ℝ))).card : ℝ) := by
-  exact sum_chenY6Selected_eq_siftedQuotientPrimeSource N _ _ _ (fun t => ¬ E t)
+  unfold currentChenUpsilon6
+  convert (sum_chenY6Selected_eq_siftedQuotientPrimeSource N
+    ((N : ℝ) ^ (417 / 5000 : ℝ)) ((N : ℝ) ^ (19 / 125 : ℝ))
+    ((N : ℝ) ^ (59 / 250 : ℝ)) (fun t => ¬ E t)) using 1
+  congr
 
 /-- Current seventh term, with its actual second-prime quotient cutoff. -/
 theorem currentChenUpsilon7_eq_siftedQuotientPrimeSource (N : ℕ) :
@@ -562,7 +568,11 @@ theorem currentChenUpsilon11_eq_siftedQuotientPrimeSource (N : ℕ)
           (fun t => ¬ E t.2),
         ((chenSiftedQuotientPrimeSource N (t.1.1 * t.1.2 * t.2.1 * t.2.2)
           (t.1.2 : ℝ)).card : ℝ) := by
-  exact sum_chenY11Selected_eq_siftedQuotientPrimeSource N _ _ _ (fun t => ¬ E t)
+  unfold currentChenUpsilon11
+  convert (sum_chenY11Selected_eq_siftedQuotientPrimeSource N
+    ((N : ℝ) ^ (417 / 5000 : ℝ)) ((N : ℝ) ^ (19 / 125 : ℝ))
+    ((N : ℝ) ^ (59 / 250 : ℝ)) (fun t => ¬ E t)) using 1
+  congr
 
 /-- Exact eleven-term identity for the actual current paired prime sum.
 It preserves both the coefficient three on term one and the coefficient
@@ -634,7 +644,8 @@ theorem currentChenPairedPrimeSum_ge_of_normalized_term_bounds
     ((b₁₀ + delta) * singularNormalization N)
     ((b₁₁ + delta) * singularNormalization N)
     h₁ h₂ h₃ h₄ h₅ h₆ h₇ h₈ h₉ h₁₀ h₁₁
-  convert h using 1 <;> ring
+  convert h using 1
+  ring
 
 /-- A certificate for the combined last two terms can be consumed as one
 upper bound on their actual sum. No separate numerical endpoints for
@@ -690,7 +701,8 @@ theorem currentChenPairedPrimeSum_ge_of_normalized_joint_last_bounds
     ((b₉ + delta) * singularNormalization N)
     ((b₁₀₁₁ + 2 * delta) * singularNormalization N)
     h₁ h₂ h₃ h₄ h₅ h₆ h₇ h₈ h₉ h₁₀₁₁
-  convert h using 1 <;> ring
+  convert h using 1
+  ring
 
 end
 

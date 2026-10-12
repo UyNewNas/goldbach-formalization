@@ -62,3 +62,23 @@ run_cmd do
     let record := Json.mkObj [("module", toJson m.toString), ("count", toJson count)]
     liftIO <| IO.println s!"CHEN_P5_AUDIT_MODULE {record.compress}"
   liftIO <| IO.println s!"CHEN_P5_AUDIT_COUNT {names.size}"
+  -- Also print and audit the two existing count bridges used to interpret
+  -- the finite scale. These imports are separate from the own-module inventory.
+  let dependencyNames := #[
+    `ImbalancedChen.currentChenPairedPrimeSum_le_four_D12_add_error,
+    `ImbalancedChen.eventually_currentChenPairedPrimeSum_sub_normalized_error_le_four_D12]
+  for name in dependencyNames do
+    let some info := env.find? name | throwError "Missing imported count bridge {name}"
+    if info.isUnsafe || info.isAxiom then
+      throwError "Invalid imported count bridge {name}"
+    let axioms ← collectAxioms name
+    for ax in axioms do
+      unless allowed.contains ax do
+        throwError "Forbidden transitive axiom {ax} in imported count bridge {name}"
+    let type ← liftTermElabM do
+      return (← Meta.ppExpr info.type).pretty
+    let record := Json.mkObj [
+      ("name", toJson name.toString),
+      ("type", toJson type),
+      ("axioms", toJson (axioms.map Name.toString))]
+    liftIO <| IO.println s!"CHEN_P5_IMPORTED_COUNT_BRIDGE {record.compress}"
