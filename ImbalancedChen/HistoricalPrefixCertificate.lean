@@ -191,18 +191,23 @@ def old5 (D : HistoricalPrefixCapData) (j : Fin 5 → Fin (D.m + 1)) : ℚ :=
 def cell5 (D : HistoricalPrefixCapData) (j : Fin 5 → Fin (D.m + 1)) : ℚ :=
   if j ∈ D.cells5 then D.cap5 j else D.old5 j
 
-/-- Only level comparisons are checked here.  Square/envelope licenses
-and numerical integral bounds remain separate obligations. -/
+/-- Only level comparisons are checked here.  The bounded deciders
+explicitly traverse the selected finsets, not the full cell-label types.
+Square/envelope licenses and numerical integral bounds remain separate
+obligations. -/
 def levelCheck (D : HistoricalPrefixCapData) : Bool :=
-  decide ((∀ j ∈ D.cells3, D.old ≤ D.cap3 j) ∧
-    (∀ j ∈ D.cells4, D.old4 j ≤ D.cap4 j) ∧
-    (∀ j ∈ D.cells5, D.old5 j ≤ D.cap5 j))
+  @decide _ (Finset.decidableDforallFinset (s := D.cells3)
+    (p := fun j _ => D.old ≤ D.cap3 j)) &&
+    (@decide _ (Finset.decidableDforallFinset (s := D.cells4)
+      (p := fun j _ => D.old4 j ≤ D.cap4 j)) &&
+    @decide _ (Finset.decidableDforallFinset (s := D.cells5)
+      (p := fun j _ => D.old5 j ≤ D.cap5 j)))
 
 theorem levelCheck_sound (D : HistoricalPrefixCapData) (h : D.levelCheck = true) :
     (∀ j ∈ D.cells3, D.old ≤ D.cap3 j) ∧
       (∀ j ∈ D.cells4, D.old4 j ≤ D.cap4 j) ∧
-      (∀ j ∈ D.cells5, D.old5 j ≤ D.cap5 j) :=
-  of_decide_eq_true h
+      (∀ j ∈ D.cells5, D.old5 j ≤ D.cap5 j) := by
+  simpa only [levelCheck, Bool.and_eq_true, decide_eq_true_eq] using h
 
 /-- Existing whole-box checks supply the finite historical comparisons
 when each stored new cap is identified with its checked midpoint cap.
@@ -230,8 +235,7 @@ theorem levelCheck_of_selectedBoxCapChecks (D : HistoricalPrefixCapData)
       selectedBoxCapCheck (I5 j) (D.old5 j) (nu5 j)
         (qLogPrimeMeshLo D.a D.b D.m j) (qLogPrimeMeshHi D.a D.b D.m j) = true) :
     D.levelCheck = true := by
-  unfold levelCheck
-  apply decide_eq_true
+  simp only [levelCheck, Bool.and_eq_true, decide_eq_true_eq]
   refine ⟨?_, ?_, ?_⟩
   · intro j hj
     obtain ⟨hcap, hcheck⟩ := h3 j hj

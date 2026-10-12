@@ -3,7 +3,9 @@ import ImbalancedChen.HistoricalPrefixCertificate
 /-!
 Computation-only probe for the finite level checker.  These small tables
 are not manuscript certificate data and assert no box or integral bound.
-There is deliberately no `classical` command or native decision procedure.
+Kernel reduction unfolds the pinned rational multiplication and inversion,
+which are irreducible to the default elaborator reduction used by `decide`.
+There is no `classical` command or native decision procedure.
 -/
 
 open ImbalancedChen
@@ -23,19 +25,19 @@ def increasing : HistoricalPrefixCapData where
   cap5 := fun _ => 2 / 3
 
 theorem increasing_check : increasing.levelCheck = true := by
-  decide
+  decide +kernel
 
 def fallingFourth : HistoricalPrefixCapData :=
   { increasing with cap4 := fun _ => 1 / 2 }
 
 theorem fallingFourth_check : fallingFourth.levelCheck = false := by
-  decide
+  decide +kernel
 
 def fallingFifth : HistoricalPrefixCapData :=
   { increasing with cap5 := fun _ => 3 / 5 }
 
 theorem fallingFifth_check : fallingFifth.levelCheck = false := by
-  decide
+  decide +kernel
 
 #print axioms increasing_check
 #print axioms fallingFourth_check

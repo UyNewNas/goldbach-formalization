@@ -8,10 +8,12 @@
 - Delivery branch: `chatgpt/chen-p1-history`.
 - Frozen manuscript: `ba6ec11d800eccc54406490631895e174de85766`.
 - Manuscript body blob: `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`.
-- Part 0 interface rechecked at `30fdb230428e91d7eb5deb8deb5cbe3fdc113ceb`,
+- Part 0 interface rechecked at `80aca6710c83b5160f4c5fdd05d180e507990e95`,
   `docs/CHEN_175_BASELINE_INTERFACES.md`, unchanged blob
-  `fd97c85489ce1613245a65e0c9f21736bc8cb7dc`. Its new Buchstab integration
-  does not replace this milestone's original proof baseline.
+  `fd97c85489ce1613245a65e0c9f21736bc8cb7dc`. Its later component acceptance
+  does not replace this milestone's original proof baseline. The separate
+  Part 0 validation head `6d1e5c4710a66f68fd101d0b40b5514bbbba4919`
+  preserves the same baseline document.
 - Part 2 interface read at `195f19cfcedeaf7793ccce3f1d42d27fcfe4f815`,
   `docs/part2/PART1_INTERFACE.md`.
 - Later Part 2 handoff read at `b47a8d38ac1d2bcbd9c191df1c0c4da76700af3e`,
@@ -20,23 +22,32 @@
 - Part 3/4/5 producer/receiver requirements reviewed at
   `7d70a2545fd819706e473eb41e4d430ad19119d8`,
   `c942b4c51d9d0005f0bd566906a3f0c88eeb1dba`, and
-  `db97d0fe03250f4d9a8aea34b23e9c20f67010b8`, respectively.
+  `a03a57265a49d542e6fac8ba72094dd673e5ed7d`, respectively.
   The Part 4 head is a documentation update; its uncompiled proof-source
   checkpoint remains `262f69822a386a9d44efc059bceba11049668d68`.
-  The latest Part 3 sources remain uncompiled. Part 5's new published
-  receipt verifies its independent Buchstab module only; it does not
-  certify the adopted lower policy or mean. These external sources are
-  not imported or recompiled by this branch.
+  Part 3's complete producer branch remains unverified; Part 0 separately
+  accepted its repaired LongSlot component. Part 5 now reports verified
+  Buchstab, finite eleven-term ledger, lower scale and actual InitialSource
+  components; its InitialMean and complete adopted mean remain open.
+  These external sources are not imported or recompiled by this branch.
 
 This milestone supplies the ordinary-parent **lower fourth** integral and
 the finite common-mesh **upper third/fourth/fifth** cap construction. It
 does not claim the complete adopted manuscript policy, a historical fifth
 integral, physical support licensing, or either final numerical bound.
-At this source checkpoint the new P1 targets have **not yet been compiled**.
-Compilation of the unchanged dependency closure is in progress. The source
-checkpoint makes the fields and statements available for cross-Part review;
-it does not claim that the proposed proof bodies or audit have passed.
-An accepted delivery requires the subsequent actual verification receipt.
+The current six P1 targets have passed strict original-frontend compilation,
+the complete five-defining-module audit of **150 declarations**, and six
+sequential original `leanchecker` replays. The audit includes private and
+generated declarations and observes only `propext`, `Classical.choice`
+and `Quot.sound`. This is actual `Lean.Elab.runFrontend` compilation with
+`trustLevel = 0`; a standard `lake build` invocation is not claimed.
+
+The earlier published commit
+`70ad4d737a2ff4a77413a5975af2fb41bdfb7d66` remains a source-only checkpoint.
+This delivery updates its bounded checker and kernel computation probe,
+then supplies current-source verification. See [VERIFICATION.md](VERIFICATION.md),
+[VERIFICATION.json](VERIFICATION.json), [KEY_THEOREM_TYPES.md](KEY_THEOREM_TYPES.md)
+and the raw [EVIDENCE.tar.gz](EVIDENCE.tar.gz) archive.
 
 ## Fifth-candidate reconciliation
 
@@ -73,9 +84,12 @@ These are newly registered P1 auxiliary leaves, not aliases for a completed
 | `ImbalancedChen/ActualSelectedPrefixLowerCellSum.lean` | Whole selected lower correction as exact owned-cell actual residual differences |
 | `ImbalancedChen/ActualSelectedPrefixLowerOwnCubeIntegral.lean` | Genuine cell integrals, actual selected-tree restoration and normalized lower limit |
 | `ImbalancedChen/HistoricalPrefixCertificate.lean` | Fixed finite tables, common ancestor cells, inherited fallback, finite level checks and actual upper telescope |
-| `verification/parts/p1/LevelCheckProbe.lean` | Ordinary `decide` proves acceptance of a nonempty increasing table and rejection of decreasing fourth/fifth caps; these are computation checks, not adopted certificate data |
+| `verification/parts/p1/LevelCheckProbe.lean` | Kernel `decide` checks acceptance of a nonempty increasing table and rejection of decreasing fourth/fifth caps; these are computation checks, not adopted certificate data |
 | `verification/parts/p1/Part1HistoryAudit.lean` | All defining-module declarations of the four leaves and the finite-check probe, including private/generated declarations, with complete types and transitive axioms |
 | `verification/parts/p1/check.sh` | Explicit stock-CLI reproduction of the six P1 elaboration/replay targets; this does not replace the shared integration gates |
+| `verification/parts/p1/KEY_THEOREM_TYPES.md` | Fourteen complete source declaration types matched to the actual Lean audit, alongside its pretty-printed types |
+| `verification/parts/p1/VERIFICATION.md` / `VERIFICATION.json` | Human-readable and structured verification scope, source/object bindings and remaining integration gates |
+| `verification/parts/p1/EVIDENCE.tar.gz` | Original current and historical logs, receipts, source snapshots and a path/hash manifest |
 
 No existing source, root import, toolchain, manifest, dependency pin,
 workflow, public status file, or final theorem entrypoint is modified.
@@ -214,7 +228,13 @@ f may therefore retain both own-cube indicators.
 old ≤ cap3(j3), old4(j4) ≤ cap4(j4), old5(j5) ≤ cap5(j5)
 ```
 
-on the adopted cells. It supplies all h34/h45 premises of the existing
+on the adopted cells. Each of its three Boolean checks explicitly uses
+`Finset.decidableDforallFinset`, so the outer checks traverse `cells3`,
+`cells4`, and `cells5` independently of implicit instance priority.
+Ancestor membership and the supplied cap functions still have their own
+evaluation costs; no runtime bound for large tables is claimed.
+
+It supplies all h34/h45 premises of the existing
 actual historical telescope. `levelCheck_of_selectedBoxCapChecks` also
 provides an adapter from the existing whole-box check, with per-cell I
 and nu and an explicit stored-cap equality. Each fourth/fifth check uses
@@ -301,20 +321,47 @@ range on the same actual selected fibre and outer mask. Its K/80 integral
 already contains the quarter factor; this bound neither replaces the
 lower-fourth restoration nor adds the withdrawn 12/5 gain again.
 
+The final upstream read at Part 0 `80aca6710c83b5160f4c5fdd05d180e507990e95`
+and Part 5 `a03a57265a49d542e6fac8ba72094dd673e5ed7d` still identifies P1's
+`70ad4d737a2ff4a77413a5975af2fb41bdfb7d66` as a source checkpoint, with the
+older `347e367e...` historical checker. Those are historical intake records;
+they are not receipts for the updated checker or probe in this delivery.
+The new P5 finite-ledger, scale and InitialSource receipts do not bind the
+present selector to all eleven adopted rows. P5 consumes the same actual
+rho density from Part 4-A and need not wait for Part 4-B.
+
 No full historical fifth Tendsto, sixth/eighth integral, complete U or
 lowerL functional, numerical K/c certificate, physical-distribution
 theorem, or main counting bound is exported by this milestone.
 
 ## Verification
 
-At this source checkpoint, strict target compilation, target kernel replay
-and the defining-module axiom census are pending. The unchanged dependency
-closure is being compiled; successful dependency modules are not counted
-as successful P1 targets. Static review alone is never called Lean
-compilation. The normal CLI path, any
-explicit official-frontend API path, original bundled kernel replay,
-all-declaration axiom audit, and remote Actions are reported separately.
-No pre-existing source is edited to obtain a successful check.
+All six current targets passed strict compilation with the original
+`Lean.Elab.runFrontend`, `trustLevel = 0` and warnings as errors. The final
+graph contains 9,368 source modules: 8,679 official cached dependencies
+and 689 locally compiled modules. Current local source, object and direct
+import hashes were checked. The four production modules and the finite
+probe contain 150 audited declarations; the audit includes three auxiliary
+kernel proofs produced by `decide +kernel`. All six original checker
+processes exited zero and independently replayed their named module's
+declarations. This default checker mode does not freshly replay every
+declaration of all imported dependencies.
+
+The updated finite checker explicitly traverses the selected finsets.
+The first ordinary `decide` probe failed at the pinned irreducible rational
+operations. Its replacement requests kernel conversion of the same proof
+term and has passed both strict compilation and original replay. The first
+outdated dependency graph also failed because it predated the repository
+probe. Both original failures and their precise source identities remain
+in the archive; error-recovery placeholders are not accepted proof evidence.
+
+The normal CLI path, official-frontend API path, original bundled replay,
+all-declaration audit and remote Actions are recorded separately. At the
+old `70ad4d737a2ff4a77413a5975af2fb41bdfb7d66` checkpoint, Variable envelope CI
+passed its existing eight-module scope, while Lean core CI was cancelled
+during the full build and skipped its root replay/audit. Neither run
+provides verification of these six P1 targets. No pre-existing source,
+dependency pin, toolchain binary or workflow was edited to obtain a pass.
 
 In an environment where the pinned stock Lean CLI starts, the explicit
 P1 reproduction command is:
