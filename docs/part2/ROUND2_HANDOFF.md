@@ -4,12 +4,12 @@
 
 **本轮新增 E0 Geometry / Prefix4 三模块已各自通过严格编译与原版内核重放；联合公理审计实际覆盖全部 9 个生产模块、309 个所属声明。旧六模块的编译和重放按确切同源码复用 P0 验收，新三模块的编译和重放由本轮独立执行。已认证 B 的实际四格积分有限和以及 A 的采用粗双图积分，完整 mask 和完整 K/c 尚未闭合。**
 
-下表的本轮证明提交在创建 Git proof commit 后绑定；其源码内容由本轮 receipt 中的 SHA256 精确标识。原证明基线和 `docs/CURRENT_MANUSCRIPT_MAP.md` 不在本 Part 修改范围内。
+下表绑定本轮固定证明提交；交接元数据由其后继提交发布，九模块源码与该证明提交及验收哈希相同。原证明基线和 `docs/CURRENT_MANUSCRIPT_MAP.md` 不在本 Part 修改范围内。
 
 | 对象 | 完整 SHA / 当前状态 |
 |---|---|
-| 当前 P2 远程父提交 | `b2ecfdc74b1ebb17be8509c3664f3ca558538b3e` |
-| 本轮固定证明提交 | `P2_PROOF_COMMIT_TO_BIND` |
+| 本轮起点（原 P2 分支头） | `b2ecfdc74b1ebb17be8509c3664f3ca558538b3e` |
+| 本轮固定证明提交 | `6acf61cc28f227a9154363f2347c386ec01dffb0` |
 | 接收的统一 P0 证明源码 | `278f949444748a30b5165ff47bfa283ab0bad0d8` |
 | P0 原始验收证据提交 | `cce2334906f068fda2f58c400646366f2aa2d417` |
 | P0 receipt 记录的原 P2 交接源 | `b47a8d38ac1d2bcbd9c191df1c0c4da76700af3e` |
