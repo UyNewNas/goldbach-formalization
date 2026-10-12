@@ -1,0 +1,20 @@
+--- prepared/check_actual_p4_receipt.py
++++ consumer-v2-code/check_actual_p4_receipt_v2.py
+@@ -20,7 +20,7 @@
+ import sys
+ import zipfile
+ 
+-PREP = Path(__file__).resolve().parent
++PREP = Path(__file__).resolve().parents[2]
+ SOURCE = '1089a965e20664e63ffd51e0105c11befa406a1f'
+ BASE = '1a80c1bcce67886f699d097fc37fd245cd3620bf'
+ RUN_ID = 38288356713
+@@ -58,7 +58,7 @@
+ SEVERITY_FIRST = re.compile(
+     r'^(?P<severity>error|warning)(?:\((?P<code>[^)]*)\))?:\s+'
+     r'(?P<file>.+?\.lean):(?P<line>\d+):(?P<column>\d+):\s*(?P<message>.*)$')
+-GENERAL = re.compile(r'^(?:error(?:\([^)]*\))?:|uncaught exception:|'
++GENERAL = re.compile(r'^(?:FAILED:|error(?:\([^)]*\))?:|uncaught exception:|'
+                      r'panic(?:!|:)|AssertionError:|RuntimeError:|'
+                      r'subprocess\.TimeoutExpired:)', re.I)
+ SHA = re.compile(r'[0-9a-f]{64}\Z')

@@ -1,0 +1,153 @@
+/-
+UNCOMPILED_NON_PRODUCTION_CANDIDATE
+
+Recovered finite common-carrier proof design from retained conversation context.
+This file is not production source and is not a compiler/replay/audit log.
+The four candidate declarations and the two usage examples have not been compiled.
+They are not included in the existing five-module, 53-theorem source inventory.
+
+The import and namespace mirror UpperCoefficientPerturbation.lean.
+When inserting into that file, copy only the declarations/examples into its
+existing namespace. No analytic assembly theorem is added here.
+-/
+
+import ImbalancedChen.ActualSmallRoughAttachment
+
+namespace ImbalancedChen
+
+noncomputable section
+
+open scoped BigOperators
+
+theorem smallRoughRho_eq_of_rough_subset
+    (small Rraw R : Finset ℕ)
+    (raw betaMinus betaPlus : ℕ → ℝ)
+    (hsub : Rraw ⊆ R)
+    (hzero : ∀ d ∈ R, d ∉ Rraw → raw d = 0) :
+    smallRoughRho small R raw betaMinus betaPlus =
+      smallRoughRho small Rraw raw betaMinus betaPlus := by
+  classical
+  funext q
+  simp only [smallRoughRho, Finset.sum_filter, smallRoughPairs, Finset.sum_product]
+  apply Finset.sum_congr rfl
+  intro a _ha
+  symm
+  apply Finset.sum_subset hsub
+  intro d hd hdRaw
+  simp [smallRoughPairCoefficient, signAttachedCoefficient, hzero d hd hdRaw]
+
+theorem sum_smallRoughRho_mul_eq_of_rough_subset
+    (small Rraw R : Finset ℕ)
+    (raw betaMinus betaPlus F : ℕ → ℝ)
+    (hsub : Rraw ⊆ R)
+    (hzero : ∀ d ∈ R, d ∉ Rraw → raw d = 0) :
+    (∑ q ∈ smallRoughModuli small R,
+      smallRoughRho small R raw betaMinus betaPlus q * F q) =
+    ∑ q ∈ smallRoughModuli small Rraw,
+      smallRoughRho small Rraw raw betaMinus betaPlus q * F q := by
+  classical
+  have hmod :
+      smallRoughModuli small Rraw ⊆ smallRoughModuli small R := by
+    intro q hq
+    rcases Finset.mem_image.mp hq with ⟨x, hx, rfl⟩
+    refine Finset.mem_image.mpr ⟨x, ?_, rfl⟩
+    exact Finset.mem_product.mpr
+      ⟨(Finset.mem_product.mp hx).1, hsub ((Finset.mem_product.mp hx).2)⟩
+  rw [smallRoughRho_eq_of_rough_subset
+    small Rraw R raw betaMinus betaPlus hsub hzero]
+  symm
+  apply Finset.sum_subset hmod
+  intro q _hq hqRaw
+  simp only [smallRoughRho_eq_zero_of_not_mem
+    small Rraw raw betaMinus betaPlus hqRaw, zero_mul]
+
+theorem actualSmallRoughRho_eq_rough_union
+    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)
+    (extra : Finset ℕ) :
+    smallRoughRho (actualSmallRosserSupport N cap w)
+      (fixedRoughSupport retainOdd N cap w z ∪ extra)
+      (fixedRoughCoefficient retainOdd N cap w z)
+      (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L) =
+    actualSmallRoughRho retainOdd N cap w z L := by
+  unfold actualSmallRoughRho
+  apply smallRoughRho_eq_of_rough_subset
+  · exact Finset.subset_union_left
+  · intro d _hd hnot
+    change (oddFirstExitRetainedCoefficient retainOdd (fun _ => 1)
+      (roughPrimeUniverse N cap w z) d : ℝ) = 0
+    exact_mod_cast
+      (oddFirstExitRetainedCoefficient_eq_zero_of_not_mem
+        retainOdd (fun _ => 1) (roughPrimeUniverse N cap w z) d hnot)
+
+theorem supportedDivisorSum_eq_of_subset
+    (Rraw R : Finset ℕ) (raw : ℕ → ℝ) (n : ℕ)
+    (hsub : Rraw ⊆ R)
+    (hzero : ∀ d ∈ R, d ∉ Rraw → raw d = 0) :
+    supportedDivisorSum R raw n = supportedDivisorSum Rraw raw n := by
+  classical
+  simp only [supportedDivisorSum, Finset.sum_filter]
+  symm
+  apply Finset.sum_subset hsub
+  intro d hd hdRaw
+  simp [hzero d hd hdRaw]
+
+/-- Uncompiled usage example: the actual raw physical density is unchanged
+when its rough carrier is enlarged by arbitrary extra indices. -/
+example (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)
+    (extra : Finset ℕ) :
+    physicalDensitySum
+      (smallRoughModuli (actualSmallRosserSupport N cap w)
+        (fixedRoughSupport retainOdd N cap w z ∪ extra))
+      (smallRoughRho (actualSmallRosserSupport N cap w)
+        (fixedRoughSupport retainOdd N cap w z ∪ extra)
+        (fixedRoughCoefficient retainOdd N cap w z)
+        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) =
+    physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)
+      (actualSmallRoughRho retainOdd N cap w z L) := by
+  have hzero : ∀ d ∈ fixedRoughSupport retainOdd N cap w z ∪ extra,
+      d ∉ fixedRoughSupport retainOdd N cap w z →
+        fixedRoughCoefficient retainOdd N cap w z d = 0 := by
+    intro d _hd hnot
+    change (oddFirstExitRetainedCoefficient retainOdd (fun _ => 1)
+      (roughPrimeUniverse N cap w z) d : ℝ) = 0
+    exact_mod_cast
+      (oddFirstExitRetainedCoefficient_eq_zero_of_not_mem
+        retainOdd (fun _ => 1) (roughPrimeUniverse N cap w z) d hnot)
+  unfold actualSmallRoughModuli actualSmallRoughRho
+  simpa only [physicalDensitySum, div_eq_mul_inv] using
+    (sum_smallRoughRho_mul_eq_of_rough_subset
+      (actualSmallRosserSupport N cap w)
+      (fixedRoughSupport retainOdd N cap w z)
+      (fixedRoughSupport retainOdd N cap w z ∪ extra)
+      (fixedRoughCoefficient retainOdd N cap w z)
+      (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)
+      (fun q => (Nat.totient q : ℝ)⁻¹)
+      Finset.subset_union_left hzero)
+
+/-- Uncompiled usage example: the baseline actual rough majorant transfers
+to the common carrier with no additional raw-zero hypothesis. -/
+example (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)
+    (extra : Finset ℕ) (hzcap : z ≤ (cap : ℝ)) (n : ℤ) :
+    actualIntervalRoughIndicator N w z n ≤
+      supportedDivisorSum (fixedRoughSupport retainOdd N cap w z ∪ extra)
+        (fixedRoughCoefficient retainOdd N cap w z) n.natAbs := by
+  have hzero : ∀ d ∈ fixedRoughSupport retainOdd N cap w z ∪ extra,
+      d ∉ fixedRoughSupport retainOdd N cap w z →
+        fixedRoughCoefficient retainOdd N cap w z d = 0 := by
+    intro d _hd hnot
+    change (oddFirstExitRetainedCoefficient retainOdd (fun _ => 1)
+      (roughPrimeUniverse N cap w z) d : ℝ) = 0
+    exact_mod_cast
+      (oddFirstExitRetainedCoefficient_eq_zero_of_not_mem
+        retainOdd (fun _ => 1) (roughPrimeUniverse N cap w z) d hnot)
+  rw [supportedDivisorSum_eq_of_subset
+    (fixedRoughSupport retainOdd N cap w z)
+    (fixedRoughSupport retainOdd N cap w z ∪ extra)
+    (fixedRoughCoefficient retainOdd N cap w z) n.natAbs
+    Finset.subset_union_left hzero]
+  exact roughIndicator_le_fixedRoughDivisorSum retainOdd N cap w z hzcap n
+
+end
+
+end ImbalancedChen
+

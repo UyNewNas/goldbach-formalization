@@ -1,0 +1,214 @@
+name: Lean core verification
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: lean-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  lean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    env:
+      LEAN_NUM_THREADS: 2
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Check out the existing pinned lean-action scripts
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Prepare stage timing and logs
+        run: |
+          set -euo pipefail
+          LEAN_ACTION_DIR="$RUNNER_TEMP/lean-action-f061402b"
+          printf 'LEAN_ACTION_DIR=%s\n' "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          test ! -e "$LEAN_ACTION_DIR"
+          mv .ci-lean-action "$LEAN_ACTION_DIR"
+          mkdir -p "$RUNNER_TEMP/lean-ci" "$RUNNER_TEMP/lean-verification-logs"
+          cat > "$RUNNER_TEMP/lean-ci/run-stage" <<'BASH'
+          #!/usr/bin/env bash
+          set -euo pipefail
+          stage="$1"
+          shift
+          logdir="$RUNNER_TEMP/lean-verification-logs"
+          log="$logdir/$stage.log"
+          started="$(date -u +%FT%TZ)"
+          start_seconds="$(date +%s)"
+          printf 'stage=%s started=%s\n' "$stage" "$started" | tee "$log"
+          finish() {
+            status=$?
+            trap - EXIT
+            set +e
+            finished="$(date -u +%FT%TZ)"
+            elapsed=$(( $(date +%s) - start_seconds ))
+            printf 'stage=%s finished=%s elapsed_seconds=%s exit_code=%s\n' \
+              "$stage" "$finished" "$elapsed" "$status" | tee -a "$log"
+            printf 'stage\tstarted_utc\tfinished_utc\telapsed_seconds\texit_code\n%s\t%s\t%s\t%s\t%s\n' \
+              "$stage" "$started" "$finished" "$elapsed" "$status" > "$logdir/$stage.timing.tsv"
+            printf 'elapsed-seconds=%s\nexit-code=%s\n' "$elapsed" "$status" >> "$GITHUB_OUTPUT"
+            printf -- '- %s: %s seconds; exit code %s\n' "$stage" "$elapsed" "$status" >> "$GITHUB_STEP_SUMMARY"
+            exit "$status"
+          }
+          trap finish EXIT
+          set +e
+          "$@" 2>&1 | tee -a "$log"
+          statuses=("${PIPESTATUS[@]}")
+          set -e
+          # Preserve the tool's failure; fail on a broken logging pipe as well.
+          if (( statuses[0] != 0 )); then
+            exit "${statuses[0]}"
+          fi
+          exit "${statuses[1]}"
+          BASH
+          chmod +x "$RUNNER_TEMP/lean-ci/run-stage"
+          {
+            printf 'project_commit='; git rev-parse HEAD
+            printf 'lean_action_commit='; git -C "$LEAN_ACTION_DIR" rev-parse HEAD
+            printf 'toolchain='; cat lean-toolchain
+            printf 'run=%s attempt=%s\n' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT"
+          } | tee "$RUNNER_TEMP/lean-verification-logs/provenance.log"
+      - name: Install Elan and the pinned project toolchain
+        run: |
+          "$RUNNER_TEMP/lean-ci/run-stage" install-elan "$LEAN_ACTION_DIR/scripts/install_elan.sh"
+      - name: Configure lean-action with the existing inputs
+        id: config
+        env:
+          AUTO_CONFIG: 'false'
+          BUILD: 'true'
+          TEST: 'false'
+          LINT: 'false'
+        run: |
+          "$RUNNER_TEMP/lean-ci/run-stage" configure "$LEAN_ACTION_DIR/scripts/config.sh"
+      - name: Restore the existing Lake cache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ./.lake
+          key: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}-${{ github.sha }}
+          restore-keys: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}
+      - name: Get the existing Mathlib cache
+        run: |
+          "$RUNNER_TEMP/lean-ci/run-stage" mathlib-cache lake exe cache get
+      - name: Build the full project
+        id: build
+        timeout-minutes: 90
+        if: ${{ steps.config.outputs.run-lake-build == 'true' }}
+        env:
+          BUILD_ARGS: ''
+        run: |
+          "$RUNNER_TEMP/lean-ci/run-stage" build "$LEAN_ACTION_DIR/scripts/lake_build.sh"
+      - name: Recheck ImbalancedChen with bundled Lean 4.33.0-rc1 leanchecker
+        id: leanchecker
+        timeout-minutes: 25
+        env:
+          LEANCHECKER_INPUT: 'true'
+          LEAN4CHECKER_INPUT: 'false'
+          LEANCHECKER_ARGS: --verbose ImbalancedChen
+        run: |
+          "$RUNNER_TEMP/lean-ci/run-stage" leanchecker bash -euo pipefail -c '
+            test "$(cat lean-toolchain)" = leanprover/lean4:v4.33.0-rc1
+            checker="$(elan which leanchecker)"
+            test -x "$checker"
+            printf "Bundled leanchecker: %s\n" "$checker"
+            lean --version
+            "$LEAN_ACTION_DIR/scripts/run_leanchecker.sh"
+          '
+      - name: Audit ImbalancedChen root declarations and transitive axioms
+        id: axiom-audit
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 10
+        env:
+          AXIOM_AUDIT_ROOT: ImbalancedChen
+          AXIOM_AUDIT_ALLOW: propext,Classical.choice,Quot.sound
+        run: |
+          # The unchanged upstream script re-builds the project, verifies the
+          # axiom-audit v0.1.2 SHA, builds it with this toolchain, and audits the root.
+          "$RUNNER_TEMP/lean-ci/run-stage" axiom-audit "$LEAN_ACTION_DIR/scripts/run_axiom_audit.sh"
+      - name: Record required verification outcomes
+        if: ${{ always() }}
+        env:
+          BUILD_OUTCOME: ${{ steps.build.outcome }}
+          LEANCHECKER_OUTCOME: ${{ steps.leanchecker.outcome }}
+          AXIOM_AUDIT_OUTCOME: ${{ steps.axiom-audit.outcome }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/lean-verification-logs"
+          {
+            printf 'build=%s\n' "$BUILD_OUTCOME"
+            printf 'leanchecker=%s\n' "$LEANCHECKER_OUTCOME"
+            printf 'axiom-audit=%s\n' "$AXIOM_AUDIT_OUTCOME"
+          } | tee "$RUNNER_TEMP/lean-verification-logs/outcomes.log"
+          {
+            printf '\n### Required core verification stages\n'
+            printf -- '- Build: %s\n' "$BUILD_OUTCOME"
+            printf -- '- Bundled leanchecker (ImbalancedChen): %s\n' "$LEANCHECKER_OUTCOME"
+            printf -- '- Full root/transitive axiom audit: %s\n' "$AXIOM_AUDIT_OUTCOME"
+            printf '\nAllowed axioms: propext, Classical.choice, Quot.sound.\n'
+            printf 'A skipped or uncompleted stage is not a successful verification.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+          test "$BUILD_OUTCOME" = success
+          test "$LEANCHECKER_OUTCOME" = success
+          test "$AXIOM_AUDIT_OUTCOME" = success
+      - name: Retain stage logs and timings, including failures
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: lean-verification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/lean-verification-logs/
+          if-no-files-found: warn
+          retention-days: 14
+      # Cache archiving is optional and must not precede proof gates or retention.
+      - name: Check space for the optional Lake cache archive
+        id: cache-space
+        continue-on-error: true
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          # Fail closed if either measurement fails or yields an invalid value.
+          printf 'save=false\n' >> "$GITHUB_OUTPUT"
+          lake_bytes="$(du --apparent-size --block-size=1 --summarize .lake | awk '{print $1}')"
+          free_bytes="$(df --block-size=1 --output=avail "$RUNNER_TEMP" | awk 'NR == 2 {print $1}')"
+          [[ "$lake_bytes" =~ ^[0-9]{1,18}$ && "$free_bytes" =~ ^[0-9]{1,18}$ ]]
+          # Budget the uncompressed apparent size plus 2 GiB for archive overhead
+          # and runner activity. The cache action writes its archive in RUNNER_TEMP.
+          reserve_bytes=$((2 * 1024 * 1024 * 1024))
+          required_bytes=$((10#$lake_bytes + reserve_bytes))
+          printf 'Lake cache apparent bytes=%s; free bytes=%s; required bytes=%s\n' \
+            "$lake_bytes" "$free_bytes" "$required_bytes" | tee -a "$GITHUB_STEP_SUMMARY"
+          if (( 10#$free_bytes >= required_bytes )); then
+            printf 'save=true\n' >> "$GITHUB_OUTPUT"
+          else
+            printf 'Optional Lake cache save skipped: insufficient archive space.\n' | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Save the existing Lake cache
+        id: cache-save
+        if: ${{ success() && steps.cache-space.outcome == 'success' && steps.cache-space.outputs.save == 'true' }}
+        continue-on-error: true
+        timeout-minutes: 3
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ./.lake
+          key: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}-${{ github.sha }}
+      - name: Record optional Lake cache outcomes
+        if: ${{ always() }}
+        continue-on-error: true
+        env:
+          CACHE_SPACE_OUTCOME: ${{ steps.cache-space.outcome }}
+          CACHE_SAVE_ELIGIBLE: ${{ steps.cache-space.outputs.save }}
+          CACHE_SAVE_OUTCOME: ${{ steps.cache-save.outcome }}
+        run: |
+          {
+            printf '\nOptional Lake cache: capacity-check=%s; eligible=%s; save-step=%s.\n' \
+              "$CACHE_SPACE_OUTCOME" "${CACHE_SAVE_ELIGIBLE:-false}" "$CACHE_SAVE_OUTCOME"
+            printf 'Cache saving is best-effort; a successful step does not guarantee an upload. See cache action logs for warnings.\n'
+          } | tee -a "$GITHUB_STEP_SUMMARY"

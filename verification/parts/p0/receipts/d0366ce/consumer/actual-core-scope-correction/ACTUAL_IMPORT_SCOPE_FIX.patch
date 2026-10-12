@@ -1,0 +1,92 @@
+--- consumer-before-actual-scope-fix.py
++++ consumer-after-actual-scope-fix.py
+@@ -568,11 +568,29 @@
+         root_code = lean_code(self.fixed("ImbalancedChen.lean").decode("utf-8"))
+         root_imports = {name for line in root_code.splitlines() if line.strip().startswith("import ")
+                         for name in line.strip().split()[1:]}
++        # Root membership is transitive. The frozen exporter intentionally
++        # captures only its documented direct-import object scope; these two
++        # scopes must not be conflated or filled with invented object hashes.
++        root_paths = {"ImbalancedChen": ["ImbalancedChen"]}
++        pending_modules = ["ImbalancedChen"]
++        while pending_modules:
++            current = pending_modules.pop(0)
++            code = lean_code(self.fixed(current.replace(".", "/") + ".lean").decode("utf-8"))
++            imports = {name for line in code.splitlines() if line.strip().startswith("import ")
++                       for name in line.strip().split()[1:]}
++            for dependency in sorted(imports):
++                if dependency.startswith("ImbalancedChen.") and dependency not in root_paths:
++                    root_paths[dependency] = root_paths[current] + [dependency]
++                    pending_modules.append(dependency)
++        self.report["observed"]["root_project_source_closure_modules"] = len(root_paths)
++        self.report["observed"]["accepted_module_root_import_paths"] = {
++            row["module"]: root_paths.get(row["module"]) for row in accepted
++        }
+         for row in accepted:
+             module = row["module"]
+             source_digest = sha256(self.fixed(row["repository_path"]))
+             self.require(source_digest == row["source"]["sha256"], "Accepted source matches published producer-bound bytes for " + module)
+-            self.require(module in root_imports, "Accepted production module is explicitly imported by the root: " + module)
++            self.require(module in root_paths, "Accepted production module is reachable through fixed root imports: " + module)
+         for relative, digest in FROZEN.items():
+             self.require(sha256(self.fixed(relative)) == digest, "Frozen toolchain/dependency file remains exact: " + relative)
+         self.require(self.fixed("lean-toolchain").decode().strip() == TOOLCHAIN, "Toolchain pin is unchanged")
+@@ -580,6 +598,7 @@
+             self.require(self.fixed(relative) == self.fixed(relative, PREVIOUS_SHA),
+                          "Existing conditional bridge and numerical transfer remain byte-identical: " + relative)
+         for module in ROUND_MODULES[4]:
++            self.require(module in root_imports, "New production module is explicitly imported by the root: " + module)
+             self.require(module in workflow, "Fixed workflow explicitly names the new target " + module)
+         for number in [3, 4]:
+             audit = self.fixed(f"verification/parts/p0/Round{number}Audit.lean").decode("utf-8")
+@@ -816,6 +835,18 @@
+             self.require(self.export_receipts[3]["inputs_before"][key] == self.export_receipts[4]["inputs_before"][key],
+                          "Production object bindings remain identical across Round3 and Round4 actual exports")
+         objects = self.export_receipts[4]["inputs_before"]["production_olean_parts"]
++        uncaptured_inherited = {
++            row["module"] for row in self.accepted if row["module"] not in objects
++        }
++        self.require(uncaptured_inherited == {
++            "ImbalancedChen.Certificates.PairedCertificateChecker",
++            "ImbalancedChen.Certificates.PairedFibreIntegral",
++            "ImbalancedChen.Certificates.RationalLogCertificate",
++        }, "Only the three fixed historical transitive imports lack current exporter object snapshots")
++        self.require(not (uncaptured_inherited & (set(ROUND_MODULES[3]) | set(ROUND_MODULES[4]))),
++                     "Every module freshly type-exported this run has captured production objects")
++        self.report["observed"]["accepted_modules_with_current_object_snapshots"] = len(self.accepted) - len(uncaptured_inherited)
++        self.report["observed"]["historical_transitive_modules_without_current_object_snapshots"] = sorted(uncaptured_inherited)
+         inherited393 = [record for record in inherited if record["module"] not in ROUND_MODULES[3]]
+         previous198 = [record for record in inherited if record["module"] in ROUND_MODULES[3]]
+         self.require(len(inherited393) == 393 and len(previous198) == 198, "Inherited 591 splits into old393 and previous Round3 198 without duplication")
+@@ -849,8 +880,9 @@
+             record["integration_source_commit"] = EXPECTED_SHA
+             record["current_root_verification"] = {"run_id": EXPECTED_RUN, "job_id": EXPECTED_JOB,
+                                                     "kernel_replay_marker": "replaying " + record["module"],
+-                                                    "production_olean_parts": objects[record["module"]],
+-                                                    "object_capture_scope": "Subsequent Round3/4 exporter snapshots; the root replay marker itself has no object digest"}
++                                                    "production_olean_parts": objects.get(record["module"]),
++                                                    "object_capture_status": "CAPTURED_AFTER_ROOT_REPLAY" if record["module"] in objects else "NOT_IN_FIXED_EXPORTER_SNAPSHOT_SCOPE",
++                                                    "object_capture_scope": "Subsequent Round3/4 direct-import exporter snapshots when present; historical transitive imports retain original producer binding and actual current root replay, without a newly captured object hash"}
+             merged.append(record)
+         for number, records in [(3, r3), (4, r4)]:
+             for raw in records:
+@@ -918,7 +950,8 @@
+                 module = row["module"]
+                 row["new_integration_sha"] = EXPECTED_SHA
+                 row["new_integration_gates"] = "PASS_ORIGINAL_EXACT_CORE_CI_EVIDENCE"
+-                row["current_integration_production_olean_parts"] = objects[module]
++                row["current_integration_production_olean_parts"] = objects.get(module)
++                row["current_integration_object_capture_status"] = "CAPTURED_AFTER_ROOT_REPLAY" if module in objects else "NOT_IN_FIXED_EXPORTER_SNAPSHOT_SCOPE"
+                 row["current_integration_kernel_replay_marker"] = "replaying " + module
+                 row["current_integration_source_sha256"] = sha256(self.fixed(row["repository_path"]))
+                 row["current_type_formats"] = dict(Counter(record["actual_type_format"] for record in merged if record["module"] == module))
+@@ -948,7 +981,8 @@
+             "round4_inputs_before_and_after": self.export_receipts[4]["inputs_before"],
+             "equality_checked_within_and_between_exports": True,
+             "production_object_bytes_all_embedded": False,
+-            "object_scope": "Original runner-captured production object part hashes; audit output objects are in the supplied archive.",
++            "object_scope": "Original runner-captured direct-import production object part hashes; audit output objects are in the supplied archive. The three named historical transitive modules have current root replay markers and retained original producer source/object receipts, but no new object hashes in this exporter scope.",
++            "historical_transitive_modules_without_current_object_snapshots": sorted(uncaptured_inherited),
+         })
+         self.report["status"] = "PASS_ORIGINAL_EXACT_CORE_CI_EVIDENCE"
+         self.report["evidence_status"] = "FULLY_CONSUMED_ALL_REQUIRED_GATES_AND_TYPES_PASS"

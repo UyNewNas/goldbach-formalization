@@ -1,0 +1,392 @@
+--- before/consume_core_artifact.py
++++ after/consume_core_artifact.py
+@@ -19,7 +19,6 @@
+ import json
+ from pathlib import Path, PurePosixPath
+ import re
+-import shutil
+ import subprocess
+ import sys
+ import zipfile
+@@ -84,6 +83,10 @@
+     pass
+ 
+ 
++class KnownCIFailure(RuntimeError):
++    """A bound supplied run/job/required-step metadata record is non-successful."""
++
++
+ def utc_now() -> str:
+     return datetime.now(timezone.utc).isoformat()
+ 
+@@ -163,7 +166,7 @@
+         self.stage_logs: dict[str, str] = {}
+         self.stage_receipts: dict[str, dict] = {}
+         self.export_receipts: dict[int, dict] = {}
+-        self.metadata_completion_checks: list[tuple[bool, str, object]] = []
++        self.pending_metadata_reasons: list[str] = []
+         self.report = {
+             "schema": "chen-p0-round4-exact-core-consumer-v1",
+             "status": "PENDING",
+@@ -175,6 +178,10 @@
+             "expected_attempt": EXPECTED_ATTEMPT,
+             "verification_mode": "OFFLINE_CONSUMPTION_OF_SUPPLIED_ORIGINAL_CI_ARTIFACT",
+             "consumer_executes_lean_or_ci": False,
++            "ci_metadata_status": "NOT_OBSERVED",
++            "known_ci_failures": [],
++            "evidence_status": "NOT_CONSUMED",
++            "pending_evidence_reasons": [],
+             "expected_on_actual_success": {
+                 "required_stages": list(STAGE_NAMES),
+                 "accepted_modules": 23,
+@@ -262,58 +269,136 @@
+         missing = [key for key, path in paths.items()
+                    if path is None or not path.exists() or (key != "repo" and not path.is_file())]
+         self.report["supplied_input_paths"] = {key: str(path) if path else None for key, path in paths.items()}
+-        if missing:
+-            self.report["missing_inputs"] = missing
+-            raise EvidencePending("Required real evidence is not supplied: " + ", ".join(missing))
++        self.report["missing_inputs"] = missing
++        for key in missing:
++            self.note_missing_evidence("Required input is not supplied: " + key)
++        # Do not fail on a missing archive or local Git object before reading
++        # available run/job/step metadata: a known CI failure must survive.
++
++    def check_fixed_commit(self) -> None:
++        if not self.args.repo.is_dir():
++            raise EvidencePending("The local fixed-source Git repository is not supplied")
+         revision = subprocess.run(["git", "rev-parse", EXPECTED_SHA + "^{tree}"], cwd=self.args.repo,
+                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=False)
+         if revision.returncode:
+             raise EvidencePending("The published fixed Git commit is not readable locally")
+         self.require(revision.stdout.strip() == EXPECTED_TREE, "Published commit has the exact expected tree")
+ 
++    def note_missing_evidence(self, reason: str) -> None:
++        self.report["evidence_status"] = "INCOMPLETE"
++        if reason not in self.report["pending_evidence_reasons"]:
++            self.report["pending_evidence_reasons"].append(reason)
++
++    def read_supplied_metadata(self, key: str, path: Path | None) -> object | None:
++        if path is None or not path.is_file():
++            self.note_missing_evidence("Missing supplied metadata: " + key)
++            return None
++        raw = path.read_bytes()
++        target = self.output / "original-metadata" / (key + ".json")
++        target.parent.mkdir(parents=True, exist_ok=True)
++        target.write_bytes(raw)
++        self.report.setdefault("metadata_files", {})[key] = {
++            "input_path": str(path), "retained_path": str(target.relative_to(self.output)),
++            "bytes": len(raw), "sha256": sha256(raw),
++        }
++        return json.loads(raw)
++
++    def observe_ci_entity(self, scope: str, identity: object, record: dict) -> None:
++        """Called only after binding the supplied entity to the fixed run/job."""
++        status, conclusion = record.get("status"), record.get("conclusion")
++        if status == "completed" and isinstance(conclusion, str) and bool(conclusion) and conclusion != "success":
++            self.report["known_ci_failures"].append({
++                "scope": scope, "identity": identity, "status": status, "conclusion": conclusion,
++                "evidence_kind": "SUPPLIED_BOUND_CI_METADATA_NOT_A_LEAN_DIAGNOSTIC",
++            })
++            self.report["ci_metadata_status"] = "KNOWN_FAILURE_FROM_SUPPLIED_METADATA"
++        elif status != "completed" or conclusion != "success":
++            reason = f"Supplied {scope} metadata is not completed with a conclusion: {identity}"
++            self.pending_metadata_reasons.append(reason)
++            self.note_missing_evidence(reason)
++            if not self.report["known_ci_failures"]:
++                self.report["ci_metadata_status"] = "NONFINAL_OR_INCOMPLETE_METADATA"
++
+     def read_metadata(self) -> None:
+-        run = json.loads(self.args.run_json.read_bytes())
+-        jobs_value = json.loads(self.args.jobs_json.read_bytes())
+-        artifact_value = json.loads(self.args.artifacts_json.read_bytes())
+-        self.require(isinstance(run, dict), "Run metadata is a raw GitHub run object")
+-        self.require(run.get("id") == EXPECTED_RUN and run.get("head_sha") == EXPECTED_SHA,
+-                     "Run metadata binds the expected run and exact source SHA")
+-        self.require(run.get("run_attempt") == EXPECTED_ATTEMPT, "Run attempt is fixed to 1")
+-        self.require(run.get("repository", {}).get("full_name") == EXPECTED_REPOSITORY,
+-                     "Run repository identity is exact")
+-        self.require(run.get("head_branch") == EXPECTED_BRANCH and run.get("path") == ".github/workflows/lean.yml",
+-                     "Run uses the published integration branch and core workflow")
+-        if run.get("status") != "completed":
+-            raise EvidencePending("The supplied run metadata is not completed")
+-        self.metadata_completion_checks.append((run.get("conclusion") == "success", "Actual completed core workflow concluded success", run.get("conclusion")))
+-
+-        jobs = jobs_value.get("jobs", []) if isinstance(jobs_value, dict) else jobs_value
+-        if isinstance(jobs_value, dict) and jobs_value.get("id") == EXPECTED_JOB:
+-            jobs = [jobs_value]
+-        self.require(isinstance(jobs, list), "Job metadata contains raw job records")
+-        selected = [j for j in jobs if j.get("id") == EXPECTED_JOB]
+-        self.require(len(selected) == 1, "Exactly the expected actual core job is present")
+-        job = selected[0]
+-        self.require(job.get("run_id") == EXPECTED_RUN, "Core job belongs to the expected run")
+-        for key, expected in [("head_sha", EXPECTED_SHA), ("run_attempt", EXPECTED_ATTEMPT)]:
+-            if key in job:
+-                self.require(job[key] == expected, "Actual job metadata matches " + key)
+-        if job.get("status") != "completed":
+-            raise EvidencePending("The supplied core job metadata is not completed")
+-        self.metadata_completion_checks.append((job.get("conclusion") == "success", "Actual completed core job concluded success", job.get("conclusion")))
+-        steps = job.get("steps", [])
+-        self.require(isinstance(steps, list) and bool(steps), "Actual core job has execution steps")
++        run = self.read_supplied_metadata("run", self.args.run_json)
++        if run is None:
++            self.pending_metadata_reasons.append("The raw run metadata is missing")
++        else:
++            self.require(isinstance(run, dict), "Run metadata is a raw GitHub run object")
++            self.require(run.get("id") == EXPECTED_RUN and run.get("head_sha") == EXPECTED_SHA,
++                         "Run metadata binds the expected run and exact source SHA")
++            self.require(run.get("run_attempt") == EXPECTED_ATTEMPT, "Run attempt is fixed to 1")
++            self.require(run.get("repository", {}).get("full_name") == EXPECTED_REPOSITORY,
++                         "Run repository identity is exact")
++            self.require(run.get("head_branch") == EXPECTED_BRANCH and run.get("path") == ".github/workflows/lean.yml",
++                         "Run uses the published integration branch and core workflow")
++            self.report["observed"].update(
++                run_id=run["id"], source_commit=run["head_sha"], run_url=run.get("html_url"),
++                run_status=run.get("status"), run_conclusion=run.get("conclusion"),
++            )
++            self.observe_ci_entity("run", run["id"], run)
++
++        jobs_value = self.read_supplied_metadata("jobs", self.args.jobs_json)
++        job = None
++        if jobs_value is None:
++            self.pending_metadata_reasons.append("The raw job metadata is missing")
++        else:
++            jobs = jobs_value.get("jobs", []) if isinstance(jobs_value, dict) else jobs_value
++            if isinstance(jobs_value, dict) and jobs_value.get("id") == EXPECTED_JOB:
++                jobs = [jobs_value]
++            self.require(isinstance(jobs, list), "Job metadata contains raw job records")
++            selected = [j for j in jobs if isinstance(j, dict) and j.get("id") == EXPECTED_JOB]
++            self.require(len(selected) <= 1, "At most one expected actual core job is present")
++            if not selected:
++                reason = "The expected core job is not listed in the supplied job metadata"
++                self.pending_metadata_reasons.append(reason)
++                self.note_missing_evidence(reason)
++            else:
++                job = selected[0]
++                self.require(job.get("run_id") == EXPECTED_RUN, "Core job belongs to the expected run")
++                for key, expected in [("head_sha", EXPECTED_SHA), ("run_attempt", EXPECTED_ATTEMPT)]:
++                    if key in job:
++                        self.require(job[key] == expected, "Actual job metadata matches " + key)
++                self.report["observed"].update(
++                    job_id=job["id"], job_url=job.get("html_url"),
++                    job_status=job.get("status"), job_conclusion=job.get("conclusion"),
++                )
++                self.observe_ci_entity("job", job["id"], job)
++                self.job = job
++        steps = job.get("steps", []) if job is not None else []
++        self.require(isinstance(steps, list), "Available job execution steps form a list")
+         self.report["observed"]["required_job_steps"] = []
+         for stage, name in STAGE_NAMES.items():
+-            matches = [step for step in steps if step.get("name") == name]
+-            self.require(len(matches) == 1, "Actual step exists exactly once for " + stage)
++            matches = [step for step in steps if isinstance(step, dict) and step.get("name") == name]
++            self.require(len(matches) <= 1, "At most one actual step exists for " + stage)
++            if not matches:
++                reason = "The actual required step is not present in supplied metadata: " + stage
++                self.pending_metadata_reasons.append(reason)
++                self.note_missing_evidence(reason)
++                continue
+             step = matches[0]
+-            self.metadata_completion_checks.append((step.get("status") == "completed" and step.get("conclusion") == "success",
+-                                                    "Actual step completed successfully for " + stage, step))
+-            self.metadata_completion_checks.append((bool(step.get("started_at")) and bool(step.get("completed_at")),
+-                                                    "Actual step has start and completion timestamps for " + stage, step))
+             self.report["observed"]["required_job_steps"].append({"stage": stage, **step})
+-
++            self.observe_ci_entity("required_step", stage, step)
++            if not step.get("started_at") or not step.get("completed_at"):
++                reason = "The required step lacks complete execution timestamps: " + stage
++                self.pending_metadata_reasons.append(reason)
++                self.note_missing_evidence(reason)
++        self.report["observed"]["optional_cache_steps"] = [
++            step for step in steps if isinstance(step, dict)
++            and ("optional Lake cache" in step.get("name", "") or step.get("name") == "Save the existing Lake cache")
++        ]
++        if self.report["known_ci_failures"]:
++            self.report["ci_metadata_status"] = "KNOWN_FAILURE_FROM_SUPPLIED_METADATA"
++        elif self.pending_metadata_reasons:
++            self.report["ci_metadata_status"] = "NONFINAL_OR_INCOMPLETE_METADATA"
++        else:
++            self.report["ci_metadata_status"] = "COMPLETED_SUCCESS_METADATA_ONLY"
++
++        # Artifact availability is a separate axis. It must never erase the
++        # source-bound run/job/step observations already retained above.
++        artifact_value = self.read_supplied_metadata("artifacts", self.args.artifacts_json)
++        if artifact_value is None:
++            raise EvidencePending("The raw artifact metadata is missing")
+         artifacts = artifact_value.get("artifacts", []) if isinstance(artifact_value, dict) else artifact_value
+         if isinstance(artifact_value, dict) and "workflow_run" in artifact_value:
+             artifacts = [artifact_value]
+@@ -327,24 +412,24 @@
+         binding = artifact.get("workflow_run", {})
+         self.require(binding.get("id") == EXPECTED_RUN and binding.get("head_sha") == EXPECTED_SHA,
+                      "Artifact metadata binds the exact run and source SHA")
++        self.report["observed"]["artifact_metadata"] = {
++            "id": artifact.get("id"), "name": artifact.get("name"),
++            "digest": artifact.get("digest"), "size_in_bytes": artifact.get("size_in_bytes"),
++            "workflow_run": binding,
++        }
+         digest = artifact.get("digest")
+         if not isinstance(digest, str) or not digest.startswith("sha256:"):
+             raise EvidencePending("GitHub artifact SHA-256 metadata is missing")
++        if self.args.artifact_zip is None or not self.args.artifact_zip.is_file():
++            raise EvidencePending("The actual core artifact ZIP has not been supplied")
+         archive_bytes = self.args.artifact_zip.read_bytes()
+         archive_digest = sha256(archive_bytes)
+         self.require(digest == "sha256:" + archive_digest, "Downloaded archive matches GitHub's artifact digest")
+         self.require(artifact.get("size_in_bytes") == len(archive_bytes), "Downloaded archive byte count matches artifact metadata")
+         self.report["observed"].update(
+-            run_id=run["id"], job_id=job["id"], source_commit=run["head_sha"],
+-            run_url=run.get("html_url"), job_url=job.get("html_url"),
+-            run_status=run["status"], run_conclusion=run["conclusion"],
+-            job_status=job["status"], job_conclusion=job["conclusion"],
+             artifact_id=artifact.get("id"), artifact_name=artifact_name,
+             artifact_sha256=archive_digest, artifact_bytes=len(archive_bytes),
+-            optional_cache_steps=[step for step in steps if "optional Lake cache" in step.get("name", "")
+-                                  or step.get("name") == "Save the existing Lake cache"],
+         )
+-        self.job = job
+         self.archive = zipfile.ZipFile(io.BytesIO(archive_bytes))
+         names = [info.filename for info in self.archive.infolist() if not info.is_dir()]
+         self.require(len(names) == len(set(names)), "Archive contains no duplicate file member names")
+@@ -353,11 +438,6 @@
+         self.require(self.archive.testzip() is None, "All archive member CRCs validate")
+         self.members = names
+         self.report["observed"]["artifact_file_members"] = len(names)
+-        for key, source in [("run", self.args.run_json), ("jobs", self.args.jobs_json),
+-                            ("artifacts", self.args.artifacts_json)]:
+-            target = self.output / "original-metadata" / (key + ".json")
+-            target.parent.mkdir(parents=True, exist_ok=True)
+-            shutil.copyfile(source, target)
+         (self.output / "original-metadata" / "core-artifact.zip").write_bytes(archive_bytes)
+         write_json(self.output / "ARTIFACT_MEMBERS.json", [
+             {"member": name, "bytes": len(self.archive.read(name)), "sha256": sha256(self.archive.read(name))}
+@@ -395,8 +475,22 @@
+                         self.diagnostics.append({"stream": stream, "stage": f"round{number}-types",
+                                                  "artifact_member": stream_member, **diagnostic})
+                         self.save_member(stream_member, f"diagnostic-evidence/round{number}-" + PurePosixPath(parent).name + "-" + stream + ".log")
+-        for condition, label, detail in self.metadata_completion_checks:
+-            self.require(condition, label, detail)
++        self.report["evidence_status"] = "ARCHIVE_IDENTITY_VALIDATED_AVAILABLE_LOGS_RETAINED"
++        if self.report["known_ci_failures"]:
++            raise KnownCIFailure("A bound supplied run/job/required-step metadata record is completed without success")
++        if self.pending_metadata_reasons:
++            for reason in self.pending_metadata_reasons:
++                self.note_missing_evidence(reason)
++            raise EvidencePending("Required run/job/step metadata is incomplete or not final")
++        self.require(run is not None and job is not None and len(self.report["observed"]["required_job_steps"]) == 6,
++                     "All complete successful run/job and six required-step metadata records are present")
++        self.require(run.get("status") == "completed" and run.get("conclusion") == "success"
++                     and job.get("status") == "completed" and job.get("conclusion") == "success",
++                     "Actual complete run and job metadata both record success")
++        for step in self.report["observed"]["required_job_steps"]:
++            self.require(step.get("status") == "completed" and step.get("conclusion") == "success"
++                         and bool(step.get("started_at")) and bool(step.get("completed_at")),
++                         "Actual required-step metadata records executed success for " + step["stage"])
+ 
+     def read_logs(self) -> None:
+         provenance_member = self.unique_suffix("lean-verification-logs/provenance.log")
+@@ -857,23 +951,36 @@
+             "object_scope": "Original runner-captured production object part hashes; audit output objects are in the supplied archive.",
+         })
+         self.report["status"] = "PASS_ORIGINAL_EXACT_CORE_CI_EVIDENCE"
++        self.report["evidence_status"] = "FULLY_CONSUMED_ALL_REQUIRED_GATES_AND_TYPES_PASS"
+ 
+     def run(self) -> int:
+         exit_code = 1
+         try:
+             self.prepare()
+             self.read_metadata()
++            self.check_fixed_commit()
+             self.read_logs()
+             _, inherited = self.check_root_and_fixed_inputs()
+             r3, bridge3, _ = self.read_export(3)
+             r4, bridge4, _ = self.read_export(4)
+             self.merge_and_write(inherited, r3, r4, bridge3, bridge4)
+             exit_code = 0
++        except KnownCIFailure as error:
++            self.report.update(status="FAILED_CI_FROM_SUPPLIED_METADATA", ci_failure_reason=str(error))
++            exit_code = 1
+         except EvidencePending as error:
+-            self.report.update(status="PENDING", pending_reason=str(error))
+-            exit_code = 2
++            self.note_missing_evidence(str(error))
++            self.report["pending_reason"] = str(error)
++            if self.report["known_ci_failures"]:
++                self.report.update(status="FAILED_CI_WITH_INCOMPLETE_EVIDENCE",
++                                   ci_failure_reason="Known bound CI metadata failure is retained despite missing or incomplete evidence")
++                exit_code = 1
++            else:
++                self.report["status"] = "PENDING"
++                exit_code = 2
+         except Exception as error:
+-            self.report.update(status="FAILED_EVIDENCE_CONSUMPTION", error=f"{type(error).__name__}: {error}")
++            self.report.update(status="FAILED_EVIDENCE_CONSUMPTION", evidence_status="INVALID_OR_CONSUMER_BLOCKED",
++                               error=f"{type(error).__name__}: {error}")
+             exit_code = 1
+         finally:
+             if self.archive is not None:
+@@ -900,6 +1007,9 @@
+                 ])
+         print(json.dumps({"status": self.report["status"], "consumer_exit_code": exit_code,
+                           "expected_source_commit": EXPECTED_SHA,
++                          "ci_metadata_status": self.report["ci_metadata_status"],
++                          "known_ci_failure_count": len(self.report["known_ci_failures"]),
++                          "evidence_status": self.report["evidence_status"],
+                           "receipt": str(self.output / "CORE_RECEIPT.json"),
+                           "pending_reason": self.report.get("pending_reason"), "error": self.report.get("error")}, ensure_ascii=False))
+         return exit_code
+@@ -910,9 +1020,21 @@
+                  "Expected source: " + EXPECTED_SHA, "", "Expected tree: " + EXPECTED_TREE, "",
+                  f"Actual requested run/job: {EXPECTED_RUN} / {EXPECTED_JOB} (attempt {EXPECTED_ATTEMPT}).", "",
+                  "This is an offline evidence consumer. It does not execute Lean, a kernel checker, or Actions.", ""]
++        lines += ["CI metadata status: " + self.report["ci_metadata_status"] + ". Evidence status: " + self.report["evidence_status"] + ".", ""]
++        if self.report["known_ci_failures"]:
++            lines += ["## Known CI metadata failure", "",
++                      "The following source/run/job-bound supplied metadata was already non-successful. Missing evidence does not replace these observations with a pending CI result.", "",
++                      "| Scope | Identity | Status | Conclusion |", "|---|---|---|---|"]
++            for item in self.report["known_ci_failures"]:
++                lines.append(f"| {item['scope']} | {item['identity']} | {item['status']} | {item['conclusion']} |")
++            lines += ["", "These metadata conclusions are not Lean error diagnostics. Available actual raw Lean diagnostics are recorded separately.", ""]
+         if self.report.get("pending_reason"):
+             lines += ["## Pending evidence", "", self.report["pending_reason"], "",
+                       "No verified 1005-type payload or successful integrated module ledger has been produced.", ""]
++        if self.report["pending_evidence_reasons"]:
++            lines += ["## Missing or incomplete evidence", ""]
++            lines += ["- " + reason for reason in self.report["pending_evidence_reasons"]]
++            lines.append("")
+         if self.report.get("error"):
+             lines += ["## First consumer failure", "", self.report["error"], "",
+                       "Raw supplied evidence and any retained real Lean diagnostics remain distinguishable from this consumer failure.", ""]
+--- before/README.md
++++ after/README.md
+@@ -67,8 +67,10 @@
+ | 返回码 | 状态 | 含义 |
+ |---|---|---|
+ | `0` | `PASS_ORIGINAL_EXACT_CORE_CI_EVIDENCE` | 实际六门与全部归档、源码、类型核对通过；消费者自身仍只是离线检查 |
+-| `2` | `PENDING` | 缺少实际归档/元数据/固定 Git 对象，或实际运行尚未完成；不会生成验证后的 1005 文件 |
+-| `1` | `FAILED_EVIDENCE_CONSUMPTION` | 真实门失败、身份或内容冲突、归档不完整、消费者检查错误；保留首个消费者诊断，并区分已取得的真实 Lean 诊断 |
++| `2` | `PENDING` | 缺少实际归档/元数据/固定 Git 对象，或实际运行尚未完成，且已有绑定元数据没有已知失败；不会生成验证后的 1005 文件 |
++| `1` | `FAILED_CI_WITH_INCOMPLETE_EVIDENCE` | 已有绑定 run / job / 必需 step 元数据明确非成功，同时还缺 ZIP、artifact 项、digest 或其他证据；两种状态同时保留 |
++| `1` | `FAILED_CI_FROM_SUPPLIED_METADATA` | 已有绑定元数据明确非成功；可取得的归档身份与原始诊断先保留，不能升级为通过 |
++| `1` | `FAILED_EVIDENCE_CONSUMPTION` | 身份或内容冲突、归档不完整、消费者检查错误等；若此前已知 CI 失败，其独立记录也继续保留 |
+ 
+ 每次会生成 `CORE_RECEIPT.json`、`CHECKS.json`、`FIRST_REAL_LEAN_DIAGNOSTICS.json`、`RECEIPT.md` 和校验清单。只有真实全部成功后才生成：
+ 
+@@ -79,7 +81,15 @@
+ 
+ 取得真实证据后也会保留原始 metadata、完整 ZIP 和已有原始日志；这些保留动作不以全部门成功为条件。两个实际类型导出目录通过消费检查后复制其原始 payload。
+ 
+-本消费者的第一条失败属于证据消费层；不能将它描述成生产 Lean 诊断。真实 Lean 首诊断按各原始流分别保留，不断言跨流的先后次序。
++消费者自身的首条诊断属于证据消费层；CI 元数据中的非成功结论另列，两者都不能描述成生产 Lean 诊断。真实 Lean 首诊断按各原始流分别保留，不断言跨流的先后次序。
++
++### CI 状态与证据完整性分别记录
++
++程序先读取现有的原始 run / job / step 元数据；其固定 run、job、SHA 等身份核对成功后，立即保存 `observed` 和 `known_ci_failures`，再检查归档是否存在及其 digest。`prepare()` 记录缺件，不会在读取现有失败元数据之前因为缺 ZIP 提前退出。原始元数据字节也会在归档取得之前保留。
++
++`ci_metadata_status` 与 `evidence_status` 是两个字段。例如，完成失败的 run 元数据加上缺 ZIP，应得到 `FAILED_CI_WITH_INCOMPLETE_EVIDENCE` / exit 1，同时留下该 run 的 `failure` 结论、缺件清单和 `pending_evidence_reasons`。它不能只被写成 CI 仍待定。没有实际 Lean 日志时，`FIRST_REAL_LEAN_DIAGNOSTICS.json` 中不会用元数据失败或消费者错误补出一条 Lean 诊断。
++
++该修复保留全部成功门槛：只有真实归档、固定 Git 内容、实际六门、612 条本次类型与继承 393 条全部满足要求，才生成成功回执及 1005 文件。局部行为检查使用明确标记的消费者层失败元数据 fixture；它不代表真实 GitHub run，本次实际核心构建仍由 P0 root 独自监控。
+ 
+ ## 仍需真实供应者与证据边界
+ 

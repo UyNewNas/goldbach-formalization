@@ -1,0 +1,126 @@
+name: Part 4 upper weight verification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: part4-upper-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  part4-upper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      LEAN_NUM_THREADS: 2
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out the exact PR head or pushed commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check out the existing pinned lean-action scripts
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-part4-lean-action
+          persist-credentials: false
+      - name: Check frozen configuration and record source provenance
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          logdir="$GITHUB_WORKSPACE/.lake/part4-upper-verification"
+          mkdir -p "$logdir"
+          PART4_LEAN_ACTION_DIR="$RUNNER_TEMP/part4-lean-action-f061402b"
+          test "$(git -C .ci-part4-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          test ! -e "$PART4_LEAN_ACTION_DIR"
+          mv .ci-part4-lean-action "$PART4_LEAN_ACTION_DIR"
+          printf 'PART4_LEAN_ACTION_DIR=%s\n' "$PART4_LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          printf 'MATHLIB_CACHE_DIR=%s\n' "$RUNNER_TEMP/part4-mathlib-cache" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          git merge-base --is-ancestor 1a80c1bcce67886f699d097fc37fd245cd3620bf HEAD
+          python3 verification/verify_part4_upper.py --check-lockfiles | tee "$logdir/lockfiles.log"
+          {
+            printf 'head_commit='
+            git rev-parse HEAD
+            printf 'expected_head=%s\n' "$EXPECTED_HEAD"
+            printf 'event_commit=%s\n' "$GITHUB_SHA"
+            printf 'lean_action_commit='
+            git -C "$PART4_LEAN_ACTION_DIR" rev-parse HEAD
+            printf 'toolchain='
+            cat lean-toolchain
+            printf 'run=%s attempt=%s event=%s\n' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$GITHUB_EVENT_NAME"
+          } | tee "$logdir/provenance.log"
+      - name: Install Elan and the unchanged project toolchain
+        run: |
+          set -euo pipefail
+          "$PART4_LEAN_ACTION_DIR/scripts/install_elan.sh" 2>&1 | tee .lake/part4-upper-verification/install.log
+      - name: Resolve fixed dependencies and fetch their required Mathlib import closure
+        id: cache
+        run: |
+          set -euo pipefail
+          lake env lean --version 2>&1 | tee .lake/part4-upper-verification/dependencies.log
+          python3 verification/verify_part4_upper.py --cache-imports > .lake/part4-upper-verification/cache-imports.log
+          mapfile -t imports < .lake/part4-upper-verification/cache-imports.log
+          test "${#imports[@]}" -gt 0
+          lake exe cache get --repo=leanprover-community/mathlib4 --cache-from=master,legacy "${imports[@]}" 2>&1 | tee .lake/part4-upper-verification/cache.log
+      - name: Five strict builds and individual replays, complete audit, and one aggregate fresh replay
+        id: verification
+        run: |
+          set -euo pipefail
+          python3 verification/verify_part4_upper.py 2>&1 | tee .lake/part4-upper-verification/runner.log
+      - name: Record and enforce the required outcome
+        if: ${{ always() }}
+        env:
+          CACHE_OUTCOME: ${{ steps.cache.outcome }}
+          VERIFICATION_OUTCOME: ${{ steps.verification.outcome }}
+        run: |
+          set -euo pipefail
+          mkdir -p .lake/part4-upper-verification
+          {
+            printf 'cache=%s\n' "$CACHE_OUTCOME"
+            printf 'verification=%s\n' "$VERIFICATION_OUTCOME"
+          } | tee .lake/part4-upper-verification/outcome.log
+          {
+            printf '### Independent Part 4 upper weight verification\n\n'
+            printf -- '- Required dependency cache: %s\n' "$CACHE_OUTCOME"
+            printf -- '- Five named strict source builds and individual kernel replays, full declaration inventory, one aggregate fresh replay: %s\n' "$VERIFICATION_OUTCOME"
+            printf -- '- Allowed axioms: propext, Classical.choice, Quot.sound.\n'
+            printf -- '- Type output retains universes, implicit arguments and all hypotheses.\n'
+            printf -- '- Conditional assembly remains conditional; this check does not supply missing analytic inputs to K or hUpper.\n'
+            printf -- '- Failed, cancelled or skipped verification is not a successful proof check.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+          test "$CACHE_OUTCOME" = success
+          test "$VERIFICATION_OUTCOME" = success
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path(".lake/part4-upper-verification/report.json").read_text())
+          assert report["status"] == "PASSED", report["status"]
+          assert report["declaration_count"] > 0
+          assert len(report["module_counts"]) == 5
+          assert report["aggregate_fresh_replay_module"] == "verification.Part4UpperAudit"
+          assert report["output_part_sets_and_hashes_rechecked"] is True
+          assert report["toolchain_binary_hashes_rechecked"] is True
+          assert report["stages"] and all(stage["status"] == "PASSED" for stage in report["stages"])
+          print("All required Part 4 verification stages completed successfully.")
+          PY
+      - name: Retain actual logs, complete types and inventories, including failures
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: part4-upper-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .lake/part4-upper-verification/
+          if-no-files-found: error
+          retention-days: 30

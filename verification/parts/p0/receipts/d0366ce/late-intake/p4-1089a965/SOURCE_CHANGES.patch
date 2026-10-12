@@ -1,0 +1,2873 @@
+diff --git a/.github/workflows/part4-upper.yml b/.github/workflows/part4-upper.yml
+index 781b6b7..887a482 100644
+--- a/.github/workflows/part4-upper.yml
++++ b/.github/workflows/part4-upper.yml
+@@ -15,7 +15,7 @@ concurrency:
+ jobs:
+   part4-upper:
+     runs-on: ubuntu-latest
+-    timeout-minutes: 90
++    timeout-minutes: 180
+     env:
+       LEAN_NUM_THREADS: 2
+     defaults:
+@@ -75,7 +75,7 @@ jobs:
+           mapfile -t imports < .lake/part4-upper-verification/cache-imports.log
+           test "${#imports[@]}" -gt 0
+           lake exe cache get --repo=leanprover-community/mathlib4 --cache-from=master,legacy "${imports[@]}" 2>&1 | tee .lake/part4-upper-verification/cache.log
+-      - name: Five strict source builds, fresh bundled kernel replays and complete axiom/type inventory
++      - name: Five strict builds and individual replays, complete audit, and one aggregate fresh replay
+         id: verification
+         run: |
+           set -euo pipefail
+@@ -95,7 +95,7 @@ jobs:
+           {
+             printf '### Independent Part 4 upper weight verification\n\n'
+             printf -- '- Required dependency cache: %s\n' "$CACHE_OUTCOME"
+-            printf -- '- Five named source builds with warnings as errors, five fresh kernel replays, full declaration inventory: %s\n' "$VERIFICATION_OUTCOME"
++            printf -- '- Five named strict source builds and individual kernel replays, full declaration inventory, one aggregate fresh replay: %s\n' "$VERIFICATION_OUTCOME"
+             printf -- '- Allowed axioms: propext, Classical.choice, Quot.sound.\n'
+             printf -- '- Type output retains universes, implicit arguments and all hypotheses.\n'
+             printf -- '- Conditional assembly remains conditional; this check does not supply missing analytic inputs to K or hUpper.\n'
+@@ -110,6 +110,9 @@ jobs:
+           assert report["status"] == "PASSED", report["status"]
+           assert report["declaration_count"] > 0
+           assert len(report["module_counts"]) == 5
++          assert report["aggregate_fresh_replay_module"] == "verification.Part4UpperAudit"
++          assert report["output_part_sets_and_hashes_rechecked"] is True
++          assert report["toolchain_binary_hashes_rechecked"] is True
+           assert report["stages"] and all(stage["status"] == "PASSED" for stage in report["stages"])
+           print("All required Part 4 verification stages completed successfully.")
+           PY
+diff --git a/ImbalancedChen/ActualUpperDensityAssembly.lean b/ImbalancedChen/ActualUpperDensityAssembly.lean
+index 80ec535..e363dee 100644
+--- a/ImbalancedChen/ActualUpperDensityAssembly.lean
++++ b/ImbalancedChen/ActualUpperDensityAssembly.lean
+@@ -29,7 +29,7 @@ conventions at the two small exceptional natural arguments. -/
+ theorem sourceMassScale_mul_densityScale (N : ℕ) :
+     ((N : ℝ) / Real.log (N : ℝ)) *
+         (singularSeries N / Real.log (N : ℝ)) = singularNormalization N := by
+-  simp only [singularNormalization, div_eq_mul_inv, inv_pow]
++  simp only [singularNormalization, div_eq_mul_inv]
+   ring
+ 
+ theorem densityScale_pos {N : ℕ} (hN : 2 ≤ N) :
+@@ -53,7 +53,7 @@ theorem same_rho_normalized_mainTerm (N : ℕ) (mass : ℝ)
+     (mass * physicalDensitySum Q rho) / singularNormalization N =
+       (mass * Real.log (N : ℝ) / (N : ℝ)) *
+         (physicalDensitySum Q rho * Real.log (N : ℝ) / singularSeries N) := by
+-  simp only [singularNormalization, div_eq_mul_inv, mul_inv_rev, inv_inv, inv_pow]
++  simp only [singularNormalization, div_eq_mul_inv, mul_inv_rev, inv_inv]
+   ring
+ 
+ /-- An actual full-policy integral bound with strict slack produces a
+@@ -136,7 +136,7 @@ theorem exists_actualSmallRoughRho_density_le_of_full_policy_limits
+           (fixedRoughCoefficient (retainOdd epsilon N) N (cap N) 0 ((N : ℝ) ^ (nu * sieveR))) +
+           eta * singularSeries N / Real.log (N : ℝ) := hAN
+     _ ≤ (rawBound + eta) * (singularSeries N / Real.log (N : ℝ)) +
+-        eta * singularSeries N / Real.log (N : ℝ) := add_le_add_right hFull _
++        eta * singularSeries N / Real.log (N : ℝ) := add_le_add hFull (le_refl _)
+     _ = (rawBound + 2 * eta) * (singularSeries N / Real.log (N : ℝ)) := by ring
+     _ ≤ densityCap * (singularSeries N / Real.log (N : ℝ)) :=
+       mul_le_mul_of_nonneg_right hcoeff hscale
+diff --git a/ImbalancedChen/RealPhysicalUpperWeightBridge.lean b/ImbalancedChen/RealPhysicalUpperWeightBridge.lean
+index 9fcdf56..c774859 100644
+--- a/ImbalancedChen/RealPhysicalUpperWeightBridge.lean
++++ b/ImbalancedChen/RealPhysicalUpperWeightBridge.lean
+@@ -175,7 +175,7 @@ theorem realHalfProductSource_primePartner_card_le_realSifted_add_cap
+   calc
+     A.card = (A.filter (fun m => z ≤ N - m)).card +
+         (A.filter (fun m => ¬z ≤ N - m)).card :=
+-      (Finset.card_filter_add_card_filter_not A (fun m => z ≤ N - m)).symm
++      (Finset.card_filter_add_card_filter_not (s := A) (fun m => z ≤ N - m)).symm
+     _ ≤ _ := Nat.add_le_add (Finset.card_le_card hlarge) hsmall
+ 
+ /-- RealB enters the finite sieve without rationalizing b. Both endpoint
+@@ -204,9 +204,9 @@ theorem RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff
+       (∑ m ∈ realHalfProductSource b N T,
+         physicalDivisorSum Q rho (N - m)) + (z : ℝ) + (T + 1) := by
+   exact (RealB_cast_le_realSiftedHalfProductSource_card_add_cap_cutoff N z hb hT).trans
+-    (add_le_add_right (add_le_add_right
++    (add_le_add (add_le_add
+       (realSiftedHalfProductSource_card_le_sum_physicalDivisorSum b N z T Q rho hmajor)
+-      (z : ℝ)) (T + 1))
++      (le_refl (z : ℝ))) (le_refl (T + 1)))
+ 
+ /-- Exact assembly interface for the upper analytic estimate. Every term
+ uses this one rho, and no lower-count hypothesis appears. -/
+@@ -326,10 +326,11 @@ theorem sum_weight_mul_physicalDivisorSum_eq_rho_mul_finiteCongruenceMass
+   rw [Finset.mul_sum, Finset.sum_filter]
+   apply Finset.sum_congr rfl
+   intro m hm
+-  rw [dvd_sub_iff_modEq_of_le (hSN m hm)]
++  have hiff : d ∣ N - m ↔ Nat.ModEq d m N := dvd_sub_iff_modEq_of_le (hSN m hm)
+   by_cases hmod : Nat.ModEq d m N
+-  · simp only [hmod, if_pos, mul_comm]
+-  · simp only [hmod, if_neg, mul_zero]
++  · simp only [if_pos (hiff.mpr hmod), if_pos hmod, mul_comm]
++  · have hdvd : ¬d ∣ N - m := fun h => hmod (hiff.mp h)
++    simp only [if_neg hdvd, if_neg hmod, mul_zero]
+ 
+ /-- The weighted outer-source decomposition keeps the sign of rho until
+ after the complete physical modulus sum. No absolute discrepancy sum is
+@@ -397,12 +398,12 @@ theorem RealB_cast_le_same_rho_outer_main_add_errors
+             physicalDivisorSum Q rho (N - m) := by
+         apply Finset.sum_subset hsource
+         intro m hmS hmSource
+-        simp only [hmSource, if_neg, zero_mul]
++        simp only [if_neg hmSource, zero_mul]
+       _ ≤ _ := Finset.sum_le_sum fun m hm =>
+         mul_le_mul_of_nonneg_right (houter m hm) (hnonneg (N - m))
+   have h := (RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff
+     N z Q rho hb hT hmajor).trans
+-      (add_le_add_right (add_le_add_right hsum (z : ℝ)) (T + 1))
++      (add_le_add (add_le_add hsum (le_refl (z : ℝ))) (le_refl (T + 1)))
+   rw [sum_weight_mul_physicalDivisorSum_eq_same_rho_main_add_errors
+     N S Q weight rho hSN] at h
+   exact h
+diff --git a/ImbalancedChen/UpperCoefficientPerturbation.lean b/ImbalancedChen/UpperCoefficientPerturbation.lean
+index 498d09c..7b02403 100644
+--- a/ImbalancedChen/UpperCoefficientPerturbation.lean
++++ b/ImbalancedChen/UpperCoefficientPerturbation.lean
+@@ -81,7 +81,8 @@ theorem abs_signSensitiveReciprocalTotientDensity_sub_le
+     _ ≤ ∑ d ∈ rough, M * (|compiled d - raw d| / (Nat.totient d : ℝ)) := by
+       apply Finset.sum_le_sum
+       intro d _
+-      rw [← sub_div, abs_div, abs_of_nonneg (Nat.cast_nonneg (Nat.totient d))]
++      rw [← sub_div, abs_div,
++        abs_of_nonneg (show (0 : ℝ) ≤ (Nat.totient d : ℝ) from Nat.cast_nonneg _)]
+       calc
+         |signAttachedValue (compiled d) lo hi - signAttachedValue (raw d) lo hi| /
+             (Nat.totient d : ℝ) ≤ (M * |compiled d - raw d|) / (Nat.totient d : ℝ) :=
+diff --git a/docs/PART4_UPPER_HANDOFF.md b/docs/PART4_UPPER_HANDOFF.md
+index dc45388..64d7f8c 100644
+--- a/docs/PART4_UPPER_HANDOFF.md
++++ b/docs/PART4_UPPER_HANDOFF.md
+@@ -2,12 +2,16 @@
+ 
+ ## Status and fixed sources
+ 
+-This checkpoint contains candidate proofs of finite same-weight bridges,
+-exact normalization, and explicitly conditional assembly theorems. **The
+-new Lean sources have not yet passed compilation and kernel replay. This
+-checkpoint does not prove the manuscript's sharp K bound or the final
+-hUpper.** A successful compilation
+-of an assembly theorem does not discharge its displayed analytic inputs.
++**Delivery A (the actual sharp K density bound) and Delivery B (hUpper)
++remain open.** The five modules' strict compilations, five individual kernel
++replays and the strict Audit compile were actually observed to succeed in
++the continuing second round, after proof-body repairs in three modules.
++Environment maintenance removed their raw logs, generated objects and
++compiler inventory before aggregate fresh replay and final sealing. This
++checkpoint restores the exact repaired sources, records that evidence
++deficit and supplies source-extracted types; it is not a sealed acceptance
++receipt. A successful conditional theorem does not discharge its analytic
++inputs. The separate finite support adapter remains an uncompiled candidate.
+ 
+ - Accepted base: `1a80c1bcce67886f699d097fc37fd245cd3620bf`.
+ - Accepted base tree: `1fd54b8b4d5fd89abc767ee7e8d814453453b29c`.
+@@ -20,13 +24,77 @@ of an assembly theorem does not discharge its displayed analytic inputs.
+ - Lean: `leanprover/lean4:v4.33.0-rc1`; all eleven dependency revisions and
+   the bytes of the three toolchain/dependency files remain frozen.
+ 
+-The verification artifact records its own complete checked-out commit SHA,
+-source hashes, final object hashes, declaration inventory and actual gate
+-results. Use that SHA and its run result when forwarding this checkpoint.
+-No change to `ImbalancedChen.lean`, existing modules, existing workflows or
+-Lake configuration is required by these additions.
++The latest source parent is `3d5dd058cf6bef5fe90719ee277580baf8b5bf41`, tree
++`6625bb851b60a5b5c386cee560b6a7882bf99db1`. The commit containing this updated
++document is the restored-source checkpoint. The source changes preserve all
++theorem signatures and dependency pins, and preserve the parent's core
++workflow change. The verification runner is required to record its actual
++checked-out SHA, source/object hashes, complete compiler inventory and gate
++results on a future completed run; such a final receipt is not present now.
+ 
+-## Second round: actual verification status, 12 October 2026
++## Current round-2 checkpoint: repairs and observed, unsealed checks
++
++The current handoff is
++[`verification/parts/p4a/round2/README.md`](../verification/parts/p4a/round2/README.md).
++It supersedes the historical early-round verification status below and
++separates source identity, actual earlier observations, retained evidence,
++unexecuted gates and unproved analytic premises.
++
++| Module | Earlier strict compile | Earlier individual original-kernel replay |
++|---|---|---|
++| `ActualUpperPolicyDensity` | exit 0; 97.813 s | exit 0; 50.465 s |
++| `UpperCoefficientPerturbation` | exit 0; 4.618 s | exit 0; 10.926 s |
++| `ActualUpperDensityAssembly` | exit 0; 67.865 s | exit 0; 51.165 s |
++| `RealPhysicalUpperWeightBridge` | exit 0; 4.686 s | exit 0; 12.412 s |
++| `RealUpperCountingAssembly` | exit 0; 76.012 s | exit 0; 50.788 s |
++
++The strict driver used the pinned official `Lean.Elab.runFrontend`, trust
++level 0 and warnings as errors. The replays used the original pinned
++`leanchecker --verbose MODULE`, without `--fresh`; their exact target
++replay markers were observed. `verification.Part4UpperAudit` also returned
++exit 0 in 383.887 s, with its existing complete defining-module coverage
++and transitive axiom guards. The original output inventory was lost before
++its per-declaration records or total were read. No compiler declaration
++count or per-declaration axiom set is reconstructed here. One aggregate
++`--fresh` Audit replay and finalizer were **not run**.
++
++[`OBSERVED_CHECKS.json`](../verification/parts/p4a/round2/OBSERVED_CHECKS.json)
++is a clearly labelled conversation transcription, not a raw log or a final
++PASS. [`SOURCE_TYPES.md`](../verification/parts/p4a/round2/SOURCE_TYPES.md)
++contains all 53 public source-extracted signatures; they are not the lost
++compiler-printed elaborated types. Their proof bodies were repaired without
++changing any signature. The common-carrier adapter is isolated in a `.txt`
++candidate file, outside production imports and outside the five-module
++Audit, because it has not been compiled.
++
++The current actual source/configuration hashes have been rechecked after
++restoration. No new local Lean compile is claimed after the cache was
++removed. The complete imported object cache is absent; a source-only or
++Python check cannot fill this gap. The earlier fixed-parent CI run
++[`38227776544`](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38227776544)
++did have a real runner and successful installation/cache steps. Its
++dependency build timed out at 1800 seconds (9326/9404 jobs), before the five
++strict checks, kernel replays or Audit. This supersedes any inference that
++all later CI runs had no execution steps. No manual retry was launched.
++
++The raw-to-compiled theorem still requires both the literal weighted
++coefficient error and `rawBound + compilerReserve ≤ currentK`. A raw bound
++at `currentK` leaves no positive reserve. P1's fixed fifth-policy parity
++fragment (`7f894bfb57b7aa561360e335c6d610b7c30614e0`) fits an existing finite
++policy-identification input, but does not supply the complete adopted
++construction or support. P2's fixed A5-saving lower certificate
++(`076473720210ee602e6e9735902e16bb6c5f1398`) does not supply the complete K
++upper integral. The exact unfilled A/B types and receiving Parts are in
++the current round-2 README and full source-type inventory. **P5 receives
++status/interfaces only; no actual K or hUpper supplier is claimed.**
++
++## Historical early second-round record, before the current repairs
++
++Everything in this historical section describes the earlier documentation
++checkpoint `c942b4c51d9d0005f0bd566906a3f0c88eeb1dba` and its then-current
++evidence. In particular, its statements that no target compile had run
++are historical, not the current status. The fixed mathematical interfaces
++below remain unchanged; the current evidence is recorded above.
+ 
+ **This round does not upgrade any of the five modules to verified status.**
+ The proof-source checkpoint is still
+diff --git a/verification/parts/p4a/round2/COMMON_CARRIER_CANDIDATE.lean.txt b/verification/parts/p4a/round2/COMMON_CARRIER_CANDIDATE.lean.txt
+new file mode 100644
+index 0000000..bca6b9c
+--- /dev/null
++++ b/verification/parts/p4a/round2/COMMON_CARRIER_CANDIDATE.lean.txt
+@@ -0,0 +1,153 @@
++/-
++UNCOMPILED_NON_PRODUCTION_CANDIDATE
++
++Recovered finite common-carrier proof design from retained conversation context.
++This file is not production source and is not a compiler/replay/audit log.
++The four candidate declarations and the two usage examples have not been compiled.
++They are not included in the existing five-module, 53-theorem source inventory.
++
++The import and namespace mirror UpperCoefficientPerturbation.lean.
++When inserting into that file, copy only the declarations/examples into its
++existing namespace. No analytic assembly theorem is added here.
++-/
++
++import ImbalancedChen.ActualSmallRoughAttachment
++
++namespace ImbalancedChen
++
++noncomputable section
++
++open scoped BigOperators
++
++theorem smallRoughRho_eq_of_rough_subset
++    (small Rraw R : Finset ℕ)
++    (raw betaMinus betaPlus : ℕ → ℝ)
++    (hsub : Rraw ⊆ R)
++    (hzero : ∀ d ∈ R, d ∉ Rraw → raw d = 0) :
++    smallRoughRho small R raw betaMinus betaPlus =
++      smallRoughRho small Rraw raw betaMinus betaPlus := by
++  classical
++  funext q
++  simp only [smallRoughRho, Finset.sum_filter, smallRoughPairs, Finset.sum_product]
++  apply Finset.sum_congr rfl
++  intro a _ha
++  symm
++  apply Finset.sum_subset hsub
++  intro d hd hdRaw
++  simp [smallRoughPairCoefficient, signAttachedCoefficient, hzero d hd hdRaw]
++
++theorem sum_smallRoughRho_mul_eq_of_rough_subset
++    (small Rraw R : Finset ℕ)
++    (raw betaMinus betaPlus F : ℕ → ℝ)
++    (hsub : Rraw ⊆ R)
++    (hzero : ∀ d ∈ R, d ∉ Rraw → raw d = 0) :
++    (∑ q ∈ smallRoughModuli small R,
++      smallRoughRho small R raw betaMinus betaPlus q * F q) =
++    ∑ q ∈ smallRoughModuli small Rraw,
++      smallRoughRho small Rraw raw betaMinus betaPlus q * F q := by
++  classical
++  have hmod :
++      smallRoughModuli small Rraw ⊆ smallRoughModuli small R := by
++    intro q hq
++    rcases Finset.mem_image.mp hq with ⟨x, hx, rfl⟩
++    refine Finset.mem_image.mpr ⟨x, ?_, rfl⟩
++    exact Finset.mem_product.mpr
++      ⟨(Finset.mem_product.mp hx).1, hsub ((Finset.mem_product.mp hx).2)⟩
++  rw [smallRoughRho_eq_of_rough_subset
++    small Rraw R raw betaMinus betaPlus hsub hzero]
++  symm
++  apply Finset.sum_subset hmod
++  intro q _hq hqRaw
++  simp only [smallRoughRho_eq_zero_of_not_mem
++    small Rraw raw betaMinus betaPlus hqRaw, zero_mul]
++
++theorem actualSmallRoughRho_eq_rough_union
++    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)
++    (extra : Finset ℕ) :
++    smallRoughRho (actualSmallRosserSupport N cap w)
++      (fixedRoughSupport retainOdd N cap w z ∪ extra)
++      (fixedRoughCoefficient retainOdd N cap w z)
++      (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L) =
++    actualSmallRoughRho retainOdd N cap w z L := by
++  unfold actualSmallRoughRho
++  apply smallRoughRho_eq_of_rough_subset
++  · exact Finset.subset_union_left
++  · intro d _hd hnot
++    change (oddFirstExitRetainedCoefficient retainOdd (fun _ => 1)
++      (roughPrimeUniverse N cap w z) d : ℝ) = 0
++    exact_mod_cast
++      (oddFirstExitRetainedCoefficient_eq_zero_of_not_mem
++        retainOdd (fun _ => 1) (roughPrimeUniverse N cap w z) d hnot)
++
++theorem supportedDivisorSum_eq_of_subset
++    (Rraw R : Finset ℕ) (raw : ℕ → ℝ) (n : ℕ)
++    (hsub : Rraw ⊆ R)
++    (hzero : ∀ d ∈ R, d ∉ Rraw → raw d = 0) :
++    supportedDivisorSum R raw n = supportedDivisorSum Rraw raw n := by
++  classical
++  simp only [supportedDivisorSum, Finset.sum_filter]
++  symm
++  apply Finset.sum_subset hsub
++  intro d hd hdRaw
++  simp [hzero d hd hdRaw]
++
++/-- Uncompiled usage example: the actual raw physical density is unchanged
++when its rough carrier is enlarged by arbitrary extra indices. -/
++example (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)
++    (extra : Finset ℕ) :
++    physicalDensitySum
++      (smallRoughModuli (actualSmallRosserSupport N cap w)
++        (fixedRoughSupport retainOdd N cap w z ∪ extra))
++      (smallRoughRho (actualSmallRosserSupport N cap w)
++        (fixedRoughSupport retainOdd N cap w z ∪ extra)
++        (fixedRoughCoefficient retainOdd N cap w z)
++        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) =
++    physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)
++      (actualSmallRoughRho retainOdd N cap w z L) := by
++  have hzero : ∀ d ∈ fixedRoughSupport retainOdd N cap w z ∪ extra,
++      d ∉ fixedRoughSupport retainOdd N cap w z →
++        fixedRoughCoefficient retainOdd N cap w z d = 0 := by
++    intro d _hd hnot
++    change (oddFirstExitRetainedCoefficient retainOdd (fun _ => 1)
++      (roughPrimeUniverse N cap w z) d : ℝ) = 0
++    exact_mod_cast
++      (oddFirstExitRetainedCoefficient_eq_zero_of_not_mem
++        retainOdd (fun _ => 1) (roughPrimeUniverse N cap w z) d hnot)
++  unfold actualSmallRoughModuli actualSmallRoughRho
++  simpa only [physicalDensitySum, div_eq_mul_inv] using
++    (sum_smallRoughRho_mul_eq_of_rough_subset
++      (actualSmallRosserSupport N cap w)
++      (fixedRoughSupport retainOdd N cap w z)
++      (fixedRoughSupport retainOdd N cap w z ∪ extra)
++      (fixedRoughCoefficient retainOdd N cap w z)
++      (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)
++      (fun q => (Nat.totient q : ℝ)⁻¹)
++      Finset.subset_union_left hzero)
++
++/-- Uncompiled usage example: the baseline actual rough majorant transfers
++to the common carrier with no additional raw-zero hypothesis. -/
++example (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)
++    (extra : Finset ℕ) (hzcap : z ≤ (cap : ℝ)) (n : ℤ) :
++    actualIntervalRoughIndicator N w z n ≤
++      supportedDivisorSum (fixedRoughSupport retainOdd N cap w z ∪ extra)
++        (fixedRoughCoefficient retainOdd N cap w z) n.natAbs := by
++  have hzero : ∀ d ∈ fixedRoughSupport retainOdd N cap w z ∪ extra,
++      d ∉ fixedRoughSupport retainOdd N cap w z →
++        fixedRoughCoefficient retainOdd N cap w z d = 0 := by
++    intro d _hd hnot
++    change (oddFirstExitRetainedCoefficient retainOdd (fun _ => 1)
++      (roughPrimeUniverse N cap w z) d : ℝ) = 0
++    exact_mod_cast
++      (oddFirstExitRetainedCoefficient_eq_zero_of_not_mem
++        retainOdd (fun _ => 1) (roughPrimeUniverse N cap w z) d hnot)
++  rw [supportedDivisorSum_eq_of_subset
++    (fixedRoughSupport retainOdd N cap w z)
++    (fixedRoughSupport retainOdd N cap w z ∪ extra)
++    (fixedRoughCoefficient retainOdd N cap w z) n.natAbs
++    Finset.subset_union_left hzero]
++  exact roughIndicator_le_fixedRoughDivisorSum retainOdd N cap w z hzcap n
++
++end
++
++end ImbalancedChen
++
+diff --git a/verification/parts/p4a/round2/OBSERVED_CHECKS.json b/verification/parts/p4a/round2/OBSERVED_CHECKS.json
+new file mode 100644
+index 0000000..41eb455
+--- /dev/null
++++ b/verification/parts/p4a/round2/OBSERVED_CHECKS.json
+@@ -0,0 +1,158 @@
++{
++  "record_kind": "CONVERSATION_TRANSCRIPTION_AFTER_WORKSPACE_MAINTENANCE",
++  "acceptance_status": "INCOMPLETE_ORIGINAL_RECEIPTS_LOST",
++  "is_original_log": false,
++  "is_sealed_verification_receipt": false,
++  "baseline_commit": "1a80c1bcce67886f699d097fc37fd245cd3620bf",
++  "parent_commit": "3d5dd058cf6bef5fe90719ee277580baf8b5bf41",
++  "branch": "chatgpt/chen-p4-upper",
++  "scope_note": "Terminal outcomes below were actually observed earlier in this continuing session. Raw stdout/stderr, generated Lean objects and compiler inventory were removed during environment maintenance before the aggregate fresh gate or finalizer ran. This file transcribes those observations; it does not recreate the lost receipts or establish final acceptance.",
++  "strict_driver": {
++    "entrypoint": "Lean.Elab.runFrontend",
++    "trust_level": 0,
++    "warning_as_error": true,
++    "driver_source_sha256": "ede18bb7c68c9950c2096ed79211c4c26948c21c28ba1985bf9f38d909024f50",
++    "ordinary_lake_build": false
++  },
++  "modules": [
++    {
++      "module": "ImbalancedChen.ActualUpperPolicyDensity",
++      "source_path": "ImbalancedChen/ActualUpperPolicyDensity.lean",
++      "recovered_source_sha256": "16d81ee162d9ed2a5efad703c9a900b2c5ada622b2613472f70eaef4cbd02ae6",
++      "recovered_source_git_blob": "487f13707ee13159cd7f161879b5a2e44ffb8c19",
++      "strict_compile_observation": {
++        "returncode": 0,
++        "verification_passed": true,
++        "verification_failure_reasons": [],
++        "elapsed_seconds": 97.813,
++        "original_started_label": "20261012T102438777259Z"
++      },
++      "individual_kernel_replay_observation": {
++        "returncode": 0,
++        "elapsed_seconds": 50.465,
++        "original_started_label": "20261012T103850077019Z",
++        "fresh": false,
++        "exact_module_replay_marker_observed": true
++      }
++    },
++    {
++      "module": "ImbalancedChen.UpperCoefficientPerturbation",
++      "source_path": "ImbalancedChen/UpperCoefficientPerturbation.lean",
++      "recovered_source_sha256": "e4d1d84fa128f7f84fb4f7d4f0b03acf8401312de1ceaed045de3aaf3b5d6e86",
++      "recovered_source_git_blob": "7b024033e58e19c0dcf94de322d6cb7d6815d987",
++      "strict_compile_observation": {
++        "returncode": 0,
++        "verification_passed": true,
++        "verification_failure_reasons": [],
++        "elapsed_seconds": 4.618,
++        "original_started_label": "20261012T101106126078Z"
++      },
++      "individual_kernel_replay_observation": {
++        "returncode": 0,
++        "elapsed_seconds": 10.926,
++        "original_started_label": "20261012T103940555845Z",
++        "fresh": false,
++        "exact_module_replay_marker_observed": true
++      }
++    },
++    {
++      "module": "ImbalancedChen.ActualUpperDensityAssembly",
++      "source_path": "ImbalancedChen/ActualUpperDensityAssembly.lean",
++      "recovered_source_sha256": "659aa3d8cfa50345f912ba070e30cd57a6caa1738e4146d1c051a7506f944cec",
++      "recovered_source_git_blob": "e363dee459e99b2be6f83f2c70b15f8968fd4817",
++      "strict_compile_observation": {
++        "returncode": 0,
++        "verification_passed": true,
++        "verification_failure_reasons": [],
++        "elapsed_seconds": 67.865,
++        "original_started_label": "20261012T102910436534Z"
++      },
++      "individual_kernel_replay_observation": {
++        "returncode": 0,
++        "elapsed_seconds": 51.165,
++        "original_started_label": "20261012T103951486271Z",
++        "fresh": false,
++        "exact_module_replay_marker_observed": true
++      }
++    },
++    {
++      "module": "ImbalancedChen.RealPhysicalUpperWeightBridge",
++      "source_path": "ImbalancedChen/RealPhysicalUpperWeightBridge.lean",
++      "recovered_source_sha256": "8a86c2e7fd2383fcae243b5958f3447675a4f5b7a4c9078ba1ba832ea067878f",
++      "recovered_source_git_blob": "c774859dab0bdcfc1266200d7437a62d0c69e5ea",
++      "strict_compile_observation": {
++        "returncode": 0,
++        "verification_passed": true,
++        "verification_failure_reasons": [],
++        "elapsed_seconds": 4.686,
++        "original_started_label": "20261012T103309455388Z"
++      },
++      "individual_kernel_replay_observation": {
++        "returncode": 0,
++        "elapsed_seconds": 12.412,
++        "original_started_label": "20261012T104042660811Z",
++        "fresh": false,
++        "exact_module_replay_marker_observed": true
++      }
++    },
++    {
++      "module": "ImbalancedChen.RealUpperCountingAssembly",
++      "source_path": "ImbalancedChen/RealUpperCountingAssembly.lean",
++      "recovered_source_sha256": "56bab762d3f765f5080a441910a8696e297bcd72801e13f4338b0ed7142a9a96",
++      "recovered_source_git_blob": "6e6843444cafa0e1d51a903981da0092983d2ac0",
++      "strict_compile_observation": {
++        "returncode": 0,
++        "verification_passed": true,
++        "verification_failure_reasons": [],
++        "elapsed_seconds": 76.012,
++        "original_started_label": "20261012T103352898101Z"
++      },
++      "individual_kernel_replay_observation": {
++        "returncode": 0,
++        "elapsed_seconds": 50.788,
++        "original_started_label": "20261012T104055086071Z",
++        "fresh": false,
++        "exact_module_replay_marker_observed": true
++      }
++    }
++  ],
++  "audit_compile_observation": {
++    "module": "verification.Part4UpperAudit",
++    "returncode": 0,
++    "verification_passed": true,
++    "verification_failure_reasons": [],
++    "elapsed_seconds": 383.887,
++    "original_started_label": "20261012T104155210719Z",
++    "allowed_transitive_axioms_in_source_guard": [
++      "propext",
++      "Classical.choice",
++      "Quot.sound"
++    ],
++    "raw_inventory_available": false,
++    "compiler_declaration_count": null,
++    "per_declaration_types_and_axioms_available": false,
++    "scope": "Defining-module metadata, including private/generated/structural declarations; no namespace regex."
++  },
++  "aggregate_fresh_replay": {
++    "executed": false,
++    "result": "NOT_RUN"
++  },
++  "finalizer": {
++    "executed": false,
++    "result": "NOT_RUN"
++  },
++  "earlier_interrupted_fresh_attempt": {
++    "module": "ImbalancedChen.UpperCoefficientPerturbation",
++    "original_started_label": "20261012T101125948295Z",
++    "exit_code_observed_after_interrupt": 130,
++    "counted_as_success": false,
++    "reason": "Avoid repeating the full Mathlib fresh replay five times; later individual replay succeeded. No aggregate fresh replay was subsequently completed."
++  },
++  "new_recovery_lean_execution": false,
++  "recovery_validation_scope": "Exact restored source/configuration hashes and source-signature comparison only; separate Python tests are not Lean evidence.",
++  "analytical_results": {
++    "delivery_A_K": "NOT_CLOSED",
++    "delivery_B_hUpper": "NOT_CLOSED"
++  },
++  "candidate_scope": "COMMON_CARRIER_CANDIDATE.lean.txt is uncompiled and is not included in the five production targets or their audit."
++}
+diff --git a/verification/parts/p4a/round2/README.md b/verification/parts/p4a/round2/README.md
+new file mode 100644
+index 0000000..7c2532c
+--- /dev/null
++++ b/verification/parts/p4a/round2/README.md
+@@ -0,0 +1,233 @@
++# Part 4 round 2: proof repairs and incomplete verification evidence
++
++## Status of this checkpoint
++
++**Delivery A (the actual manuscript K density bound) is not closed.
++Delivery B (hUpper) is not closed.** The five existing modules remain
++components with their displayed hypotheses; this checkpoint adds no new
++conditional analytic assembly theorem. The common proof baseline remains
++`1a80c1bcce67886f699d097fc37fd245cd3620bf`. The parent checkpoint is
++`3d5dd058cf6bef5fe90719ee277580baf8b5bf41`, on
++`chatgpt/chen-p4-upper`. The commit containing this file identifies the
++complete source delivery; it is not a sealed proof-verification receipt.
++
++Earlier in this continuing session, **all five strict source compilations,
++all five individual original-kernel replays, and the strict compile of
++`verification.Part4UpperAudit` actually returned success**. Environment
++maintenance removed the raw logs, generated objects and complete compiler
++inventory before the aggregate fresh replay and finalizer. A second
++maintenance event removed the first recovery working directory. The proof
++repairs have now been restored and their source hashes rechecked.
++
++`OBSERVED_CHECKS.json` is explicitly a transcription of observed terminal
++results, **not a reconstructed raw log**. No lost output, compiler type,
++declaration count, per-declaration axiom list or final PASS is invented.
++Fresh aggregate replay and final sealing did not run. This evidence is
++insufficient for final P0 acceptance, despite the actual earlier successes.
++
++## Actual earlier executions
++
++The strict driver used the unchanged pinned `Lean.Elab.runFrontend`, trust
++level 0 and warnings as errors. It was not an ordinary `lake build` run.
++The five replay commands used the pinned original
++`leanchecker --verbose MODULE`, with exact target replay markers checked.
++
++| Module | Strict compile | Individual kernel replay |
++|---|---|---|
++| `ActualUpperPolicyDensity` | exit 0; 97.813 s | exit 0; 50.465 s |
++| `UpperCoefficientPerturbation` | exit 0; 4.618 s | exit 0; 10.926 s |
++| `ActualUpperDensityAssembly` | exit 0; 67.865 s | exit 0; 51.165 s |
++| `RealPhysicalUpperWeightBridge` | exit 0; 4.686 s | exit 0; 12.412 s |
++| `RealUpperCountingAssembly` | exit 0; 76.012 s | exit 0; 50.788 s |
++
++The strict Audit compile returned exit 0 in 383.887 s. Its unchanged source
++rejects unsafe declarations, newly declared axioms, transitive axioms other
++than `propext`, `Classical.choice`, `Quot.sound`, and elided printed types.
++It inventories defining-module metadata, including private, generated and
++structural declarations. Its raw output was not inspected for a declaration
++count or per-declaration type/axiom records before deletion, so those fields
++are unknown here. The public source-type inventory is a different artifact.
++
++An earlier per-module `--fresh` attempt was interrupted with exit 130 and
++is not a success. The intended single aggregate fresh replay was never
++executed. No new Lean verification is claimed during recovery: the prior
++complete Mathlib object cache and verified target objects were no longer
++available. No blind CI rerun or upstream polling was used to fill that gap.
++
++## Proof changes and unchanged obligations
++
++Only proof bodies in three of the five owned modules changed:
++
++* `UpperCoefficientPerturbation`: make the real cast in the totient
++  nonnegativity proof explicit.
++* `ActualUpperDensityAssembly`: remove two unused simp arguments that the
++  strict gate rejects, and use the correct additive monotonicity proof.
++* `RealPhysicalUpperWeightBridge`: supply the pinned Finset API's named
++  argument; repair additive monotonicity and the divisibility/congruence
++  conditional rewrites, including the zero outside the source.
++
++The other two modules and the Audit source retain their fixed bytes. No
++theorem statement, constant, dependency pin, manuscript definition or
++quantifier changed. The core workflow change already present at the parent
++checkpoint is preserved. The owned verification runner's changes are
++verification infrastructure, not additional mathematical premises or a
++replacement for the missing final run.
++
++The runner retains all five strict builds and all five individual kernel
++replays, then requires a single original `--fresh` replay of the Audit
++module's combined import closure. It snapshots the complete current set of
++target object parts immediately after each strict build, rechecks them
++around replay and at completion, and rechecks all three toolchain binary
++hashes. The dependency-build allowance is 5400 seconds; the owned workflow
++job allowance is 180 minutes. This addresses the observed 1800-second
++dependency-build timeout without removing a proof gate or changing a pin.
++
++The new recovery-only Python execution has **39 passing cases, exit 0**,
++covering actual inventory-parser gates, object-part/byte mutation detection,
++binary mutation detection, replay-marker checks and workflow outcome gates.
++See `runner-recovery-python.json` and its actual stdout/stderr logs. Both
++Python files passed AST parse/compile. The first fixture attempt returned
++exit 1 because its last check wrongly assumed a lowercase Python outcome
++guard instead of the workflow's uppercase shell guard; the original
++`attempt1-*` records are retained. Only that fixture was corrected before
++the successful run. These are Python checks, not Lean proof evidence.
++
++[`SOURCE_TYPES.md`](SOURCE_TYPES.md) and
++[`SOURCE_TYPES.json`](SOURCE_TYPES.json) contain the full **53 public
++source-extracted theorem signatures** from the five modules. They are not
++compiler-printed elaborated types and do not include private/generated
++declarations. A compiler inventory must be recovered by an actual new Audit
++execution; the source inventory cannot substitute for it.
++
++## Same coefficient, carrier and normalization
++
++For the actual raw rough policy before the outer coefficient compiler,
++`actualSmallRoughRho` is the
++literal small/rough attachment of `fixedRoughCoefficient`, with
++`actualSmallRosserMinus` and `actualSmallRosserPlus`, and carrier
++`actualSmallRoughModuli`. The policy module identifies both the coefficient
++and its carrier with an even-retaining first-exit policy. The nonnegative
++pointwise object is the divisor sum, not each signed coefficient.
++
++The density is exactly `physicalDensitySum Q rho`, the reciprocal-totient
++sum over that same finite carrier. The scale is
++`singularSeries N / Real.log (N : ℝ)`. For count estimates, the source mass
++scale is `N / log N`, and their product is exactly
++`singularNormalization N`. `same_rho_normalized_mainTerm` also supplies
++the exact quotient identity. The scale inequality equivalence requires
++`2 ≤ N`; the algebraic identities use Lean's total division at small N.
++No extra ordering factor or factor two is introduced. An upstream integral
++normalized by `log (N^nu)` still needs its exact conversion to `log N`:
++its coefficient converts by division by `nu` when `nu > 0`. The current
++attachment estimate is not a proof of an unrelated integral's conversion.
++
++The finite real counting bridge retains the same `Q` and `rho` in its
++pointwise majorant, density, coprime correction and signed distribution
++error. It retains both endpoint costs `z` and `T + 1`; the asymptotic bridge
++uses `Nat.ceil ((N : ℝ)^sieveExponent)` for the strict real sieve cutoff.
++The fixed legal real imbalance parameter `b` is distinct from internal
++`nu`, `sieveR`, `sieveExponent` and attachment precision. The ordered source
++mass is `Real.log (1 / b)` with no rational approximation to `b`.
++
++The finite zero-coprime-correction theorem still requires actual nonzero
++support to divide `sieveProduct N z` and
++`(z : ℝ) ≤ T ^ (b / (1 + b))`, with `0 < b`, `0 < T`. Weighted outer-source
++Fubini explicitly requires `m ≤ N` on its carrier; truncating natural
++subtraction outside that range is not silently replaced by integer
++translation.
++
++## Raw-to-compiled reserve is still unpaid
++
++`compiled_physicalDensity_le_currentK_of_raw_and_coefficient_budget` uses
++one common small/rough carrier and the same two small weights. Its inputs
++are a raw density cap `rawBound`, small-density bounds by `M`, and the
++literal error
++
++```lean
++M * reciprocalTotientDensity rough (fun d => |compiled d - raw d|) ≤
++  compilerReserve * (singularSeries N / Real.log (N : ℝ))
++```
++
++together with `rawBound + compilerReserve ≤ currentK`. Therefore a raw
++bound equal to `currentK` supplies no positive compiler reserve. The
++general full-policy limit theorem exposes a separate `densityCap` precisely
++so that raw attachment can stop below the final K. Its `hIntegral`,
++`hCertificate`, `hcap` and strict gap are still hypotheses.
++
++The existing numerical slack can only be used after the actual full
++upper-integral certificate is supplied. Neither a rational comparison, the
++first-cell lower certificate nor one A5 saving discharges this premise.
++`RoughPrimeSupportedAt` by itself is not the complete squarefree,
++coprime-to-N, exponent and unit-bound support package.
++
++## Fixed upstream fragments and exact remaining inputs
++
++P0's fixed round-2 ledger inspected for this work is
++`cce2334906f068fda2f58c400646366f2aa2d417`,
++`verification/parts/p0/round2/ledger-final/MODULE_LEDGER.md`. It does not
++certify these five new P4 modules and does not replace the accepted baseline.
++
++P1's inspected fixed fragment is
++`7f894bfb57b7aa561360e335c6d610b7c30614e0`,
++`ImbalancedChen/HistoricalPrefixCertificate.lean`.
++`HistoricalPrefixCapData.upperFifthPolicy_even` supplies the existing
++`heven` parameter in `actualSmallRoughRho_eq_firstExitAttachment` once a
++particular cap datum is supplied. Its policy equality supplies the matching
++odd first-exit representation. This is an aligned finite input, but does
++not construct the complete adopted datum, all historical levels, compiled
++support, majorant transport or the full-density limit. No production P1
++cherry-pick or uncompiled wrapper is represented as an accepted integration.
++
++P2's inspected fixed fragment is
++`076473720210ee602e6e9735902e16bb6c5f1398`,
++`ImbalancedChen/Certificates/AboveMuSecondCoarse.lean`. It proves
++`(640339 / 15210735000 : ℝ) ≤ totalChartIntegral`, a lower bound for one
++A5-saving chart. It is not an upper bound for the complete actual policy
++density. Its pointwise pullback also does not supply all integration and
++domain coverage transformations needed for the full manuscript constant.
++
++The minimal A inputs are the actual complete policy/support construction,
++the normalized full-policy limit `hIntegral` with the precise even-target
++filter and universal small-precision range displayed in
++`exists_actualSmallRoughRho_density_le_of_full_policy_limits`, the bound
++`hCertificate` for that same integral and precision, cap coverage `hcap`,
++and a genuinely positive gap after all attachment/limit/compiler errors.
++If the supplied analytic result is a limsup upper envelope, it must be
++proved to compare with the displayed actual density; it cannot be called
++that density's exact `Tendsto` limit. Complete support and pointwise
++majorant after compilation are also needed for a final same-weight handoff.
++
++The exact additional B inputs are the four parameters `hmajor`, `hdensity`,
++`hcoprime`, `hdistribution` of
++`eventually_RealB_le_currentK_log_of_same_rho_inputs`, all instantiated
++with the same `Q delta N` and `rho delta N`. Their full source types are in
++`SOURCE_TYPES.md`. P3's inspected fixed fragment
++`f37f341412eb239f7e7e8937921ee8d01c9c2922` supplies normalized slot results,
++not the actual same-weight prime-product-source distribution estimate and
++legal smoothing transfer. A smooth outer source must explicitly majorize
++the exact ordered source, retain the arithmetic range, and bound the
++mass/coprime/distribution changes. The counting theorem does not assume
++`hLower` and does not close any of these inputs by circularity.
++
++## One finite next component, explicitly a candidate
++
++[`COMMON_CARRIER_CANDIDATE.lean.txt`](COMMON_CARRIER_CANDIDATE.lean.txt)
++records the selected finite extension-by-zero adapter. Its downstream
++purpose is to compare raw and compiled rough supports on their union while
++preserving the raw physical rho, its density sum and its divisor sum.
++The required zero outside the raw first-exit support is already a finite
++supplier; an arbitrary support extension does not establish legality of
++the compiled support or its error bound. This file is **uncompiled**, is
++not a production `.lean` import, and is outside the five-target Audit.
++No theorem from it is used to claim A or B.
++
++## Recipients
++
++* **P0:** these proof repairs and the explicit evidence deficit; final
++  acceptance needs reproducible raw strict/replay/Audit output, complete
++  compiler inventory, aggregate fresh replay and source/object sealing.
++* **P1/P2:** the precise remaining actual-policy, full upper-integral,
++  normalization and compiler-reserve inputs described above.
++* **P3:** the unchanged same-rho source-error and legal outer-transfer slots.
++* **P5:** the interface/status only. This checkpoint is **not** a K supplier
++  and is not a proof of `hUpper`; no completion claim should be propagated.
+diff --git a/verification/parts/p4a/round2/RECOVERY_SOURCE_COMPARISON.json b/verification/parts/p4a/round2/RECOVERY_SOURCE_COMPARISON.json
+new file mode 100644
+index 0000000..3fb82b9
+--- /dev/null
++++ b/verification/parts/p4a/round2/RECOVERY_SOURCE_COMPARISON.json
+@@ -0,0 +1,15 @@
++{
++  "kind": "SOURCE_COMPARISON_NOT_LEAN",
++  "reference_commit": "3d5dd058cf6bef5fe90719ee277580baf8b5bf41",
++  "public_theorem_signatures_unchanged": 53,
++  "unchanged_paths": [
++    "ImbalancedChen/ActualUpperPolicyDensity.lean",
++    "ImbalancedChen/RealUpperCountingAssembly.lean",
++    "verification/Part4UpperAudit.lean",
++    "lean-toolchain",
++    "lakefile.toml",
++    "lake-manifest.json"
++  ],
++  "proof_signature_comparison": "exact string equality for every public theorem declaration before the proof body",
++  "comparison_result": "PASSED"
++}
+diff --git a/verification/parts/p4a/round2/SOURCE_TYPES.json b/verification/parts/p4a/round2/SOURCE_TYPES.json
+new file mode 100644
+index 0000000..55886e3
+--- /dev/null
++++ b/verification/parts/p4a/round2/SOURCE_TYPES.json
+@@ -0,0 +1,408 @@
++{
++  "status": "SOURCE_EXTRACTED_NOT_COMPILER_INVENTORY",
++  "extracted_at_utc": "2026-10-12T17:57:24.689668+00:00",
++  "namespace": "ImbalancedChen",
++  "source_scope": "Five stabilized current working-tree Part 4 modules; source hashes recorded after root confirmed the proof-only repairs complete.",
++  "verification_note": "Text extraction only. No Lean, original replay, axiom audit, or CI was run by this extraction. Compiler confirmation belongs to the final inventory.",
++  "proofs_included": false,
++  "full_source_hashes_included": true,
++  "public_theorem_count": 53,
++  "files": [
++    {
++      "module": "ImbalancedChen.ActualUpperPolicyDensity",
++      "path": "ImbalancedChen/ActualUpperPolicyDensity.lean",
++      "imports": [
++        "import ImbalancedChen.ActualFirstExitDensityProjection",
++        "import ImbalancedChen.ActualSelectedPrefixOwnCubeIntegral",
++        "import ImbalancedChen.FirstExitHistoricalLevels"
++      ],
++      "public_theorem_count": 13,
++      "declarations": [
++        {
++          "name": "oddFirstExitPolicy_eq_of_even_retained",
++          "full_name": "ImbalancedChen.oddFirstExitPolicy_eq_of_even_retained",
++          "signature": "theorem oddFirstExitPolicy_eq_of_even_retained {α : Type*}\n    (retained : Bool → List α → Bool)\n    (heven : ∀ pre, retained true pre = true) :\n    oddFirstExitPolicy (retained false) = retained",
++          "qualified_signature": "theorem ImbalancedChen.oddFirstExitPolicy_eq_of_even_retained {α : Type*}\n    (retained : Bool → List α → Bool)\n    (heven : ∀ pre, retained true pre = true) :\n    oddFirstExitPolicy (retained false) = retained"
++        },
++        {
++          "name": "fixedRoughSupport_eq_firstExitRetainedModuli_of_even_retained",
++          "full_name": "ImbalancedChen.fixedRoughSupport_eq_firstExitRetainedModuli_of_even_retained",
++          "signature": "theorem fixedRoughSupport_eq_firstExitRetainedModuli_of_even_retained\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z : ℝ) :\n    fixedRoughSupport (retained false) N cap w z =\n      firstExitRetainedModuli retained (roughPrimeUniverse N cap w z)",
++          "qualified_signature": "theorem ImbalancedChen.fixedRoughSupport_eq_firstExitRetainedModuli_of_even_retained\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z : ℝ) :\n    fixedRoughSupport (retained false) N cap w z =\n      firstExitRetainedModuli retained (roughPrimeUniverse N cap w z)"
++        },
++        {
++          "name": "fixedRoughCoefficient_eq_firstExitRetainedCoefficient_of_even_retained",
++          "full_name": "ImbalancedChen.fixedRoughCoefficient_eq_firstExitRetainedCoefficient_of_even_retained",
++          "signature": "theorem fixedRoughCoefficient_eq_firstExitRetainedCoefficient_of_even_retained\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z : ℝ) (d : ℕ) :\n    fixedRoughCoefficient (retained false) N cap w z d =\n      (firstExitRetainedCoefficient retained (roughPrimeUniverse N cap w z) d : ℝ)",
++          "qualified_signature": "theorem ImbalancedChen.fixedRoughCoefficient_eq_firstExitRetainedCoefficient_of_even_retained\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z : ℝ) (d : ℕ) :\n    fixedRoughCoefficient (retained false) N cap w z d =\n      (firstExitRetainedCoefficient retained (roughPrimeUniverse N cap w z) d : ℝ)"
++        },
++        {
++          "name": "actualSmallRoughModuli_eq_firstExitAttachment",
++          "full_name": "ImbalancedChen.actualSmallRoughModuli_eq_firstExitAttachment",
++          "signature": "theorem actualSmallRoughModuli_eq_firstExitAttachment\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z : ℝ) :\n    actualSmallRoughModuli (retained false) N cap w z =\n      smallRoughModuli (actualSmallRosserSupport N cap w)\n        (firstExitRetainedModuli retained (roughPrimeUniverse N cap w z))",
++          "qualified_signature": "theorem ImbalancedChen.actualSmallRoughModuli_eq_firstExitAttachment\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z : ℝ) :\n    actualSmallRoughModuli (retained false) N cap w z =\n      smallRoughModuli (actualSmallRosserSupport N cap w)\n        (firstExitRetainedModuli retained (roughPrimeUniverse N cap w z))"
++        },
++        {
++          "name": "actualSmallRoughRho_eq_firstExitAttachment",
++          "full_name": "ImbalancedChen.actualSmallRoughRho_eq_firstExitAttachment",
++          "signature": "theorem actualSmallRoughRho_eq_firstExitAttachment\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z L : ℝ) :\n    actualSmallRoughRho (retained false) N cap w z L =\n      smallRoughRho (actualSmallRosserSupport N cap w)\n        (firstExitRetainedModuli retained (roughPrimeUniverse N cap w z))\n        (fun d => (firstExitRetainedCoefficient retained\n          (roughPrimeUniverse N cap w z) d : ℝ))\n        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)",
++          "qualified_signature": "theorem ImbalancedChen.actualSmallRoughRho_eq_firstExitAttachment\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z L : ℝ) :\n    actualSmallRoughRho (retained false) N cap w z L =\n      smallRoughRho (actualSmallRosserSupport N cap w)\n        (firstExitRetainedModuli retained (roughPrimeUniverse N cap w z))\n        (fun d => (firstExitRetainedCoefficient retained\n          (roughPrimeUniverse N cap w z) d : ℝ))\n        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)"
++        },
++        {
++          "name": "firstExitRetainedPolynomial_eq_fixedRoughDensity_of_even_retained",
++          "full_name": "ImbalancedChen.firstExitRetainedPolynomial_eq_fixedRoughDensity_of_even_retained",
++          "signature": "theorem firstExitRetainedPolynomial_eq_fixedRoughDensity_of_even_retained\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z : ℝ) :\n    firstExitRetainedPolynomial retained\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n        (roughPrimeUniverse N cap w z) =\n      reciprocalTotientDensity (fixedRoughSupport (retained false) N cap w z)\n        (fixedRoughCoefficient (retained false) N cap w z)",
++          "qualified_signature": "theorem ImbalancedChen.firstExitRetainedPolynomial_eq_fixedRoughDensity_of_even_retained\n    (retained : Bool → List ℕ → Bool)\n    (heven : ∀ pre, retained true pre = true)\n    (N cap : ℕ) (w z : ℝ) :\n    firstExitRetainedPolynomial retained\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n        (roughPrimeUniverse N cap w z) =\n      reciprocalTotientDensity (fixedRoughSupport (retained false) N cap w z)\n        (fixedRoughCoefficient (retained false) N cap w z)"
++        },
++        {
++          "name": "fixedRoughDensity_nonneg",
++          "full_name": "ImbalancedChen.fixedRoughDensity_nonneg",
++          "signature": "theorem fixedRoughDensity_nonneg\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) :\n    0 ≤ reciprocalTotientDensity (fixedRoughSupport retainOdd N cap w z)\n      (fixedRoughCoefficient retainOdd N cap w z)",
++          "qualified_signature": "theorem ImbalancedChen.fixedRoughDensity_nonneg\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) :\n    0 ≤ reciprocalTotientDensity (fixedRoughSupport retainOdd N cap w z)\n      (fixedRoughCoefficient retainOdd N cap w z)"
++        },
++        {
++          "name": "firstExitDepthSplicePolicy_even_retained",
++          "full_name": "ImbalancedChen.firstExitDepthSplicePolicy_even_retained",
++          "signature": "theorem firstExitDepthSplicePolicy_even_retained {α : Type*} (k : ℕ)\n    (parent replacement : Bool → List α → Bool)\n    (hparent : ∀ pre, parent true pre = true)\n    (hreplacement : ∀ pre, replacement true pre = true) (pre : List α) :\n    firstExitDepthSplicePolicy k parent replacement true pre = true",
++          "qualified_signature": "theorem ImbalancedChen.firstExitDepthSplicePolicy_even_retained {α : Type*} (k : ℕ)\n    (parent replacement : Bool → List α → Bool)\n    (hparent : ∀ pre, parent true pre = true)\n    (hreplacement : ∀ pre, replacement true pre = true) (pre : List α) :\n    firstExitDepthSplicePolicy k parent replacement true pre = true"
++        },
++        {
++          "name": "actualSelectedPrefixSplicePolicy_upper_even",
++          "full_name": "ImbalancedChen.actualSelectedPrefixSplicePolicy_upper_even",
++          "signature": "@[simp] theorem actualSelectedPrefixSplicePolicy_upper_even {d : ℕ} (N : ℝ)\n    (I : Finset (Fin d)) (old nu a b : ℚ) (m : ℕ)\n    (J : Finset (Fin d → Fin (m + 1))) (pre : List ℕ) :\n    actualSelectedPrefixSplicePolicy false N I old nu a b m J true pre = true",
++          "qualified_signature": "@[simp] theorem ImbalancedChen.actualSelectedPrefixSplicePolicy_upper_even {d : ℕ} (N : ℝ)\n    (I : Finset (Fin d)) (old nu a b : ℚ) (m : ℕ)\n    (J : Finset (Fin d → Fin (m + 1))) (pre : List ℕ) :\n    actualSelectedPrefixSplicePolicy false N I old nu a b m J true pre = true"
++        },
++        {
++          "name": "thirdCappedUpperPolicy_even_retained",
++          "full_name": "ImbalancedChen.thirdCappedUpperPolicy_even_retained",
++          "signature": "theorem thirdCappedUpperPolicy_even_retained\n    (base : Bool → List ℕ → Bool) (Q3 : List ℕ → ℝ)\n    (hbase : ∀ pre, base true pre = true) (pre : List ℕ) :\n    thirdCappedUpperPolicy base Q3 true pre = true",
++          "qualified_signature": "theorem ImbalancedChen.thirdCappedUpperPolicy_even_retained\n    (base : Bool → List ℕ → Bool) (Q3 : List ℕ → ℝ)\n    (hbase : ∀ pre, base true pre = true) (pre : List ℕ) :\n    thirdCappedUpperPolicy base Q3 true pre = true"
++        },
++        {
++          "name": "fourthCappedUpperPolicy_even_retained",
++          "full_name": "ImbalancedChen.fourthCappedUpperPolicy_even_retained",
++          "signature": "theorem fourthCappedUpperPolicy_even_retained\n    (base : Bool → List ℕ → Bool) (Q3 Q4 : List ℕ → ℝ)\n    (hbase : ∀ pre, base true pre = true) (pre : List ℕ) :\n    fourthCappedUpperPolicy base Q3 Q4 true pre = true",
++          "qualified_signature": "theorem ImbalancedChen.fourthCappedUpperPolicy_even_retained\n    (base : Bool → List ℕ → Bool) (Q3 Q4 : List ℕ → ℝ)\n    (hbase : ∀ pre, base true pre = true) (pre : List ℕ) :\n    fourthCappedUpperPolicy base Q3 Q4 true pre = true"
++        },
++        {
++          "name": "fifthCappedUpperPolicy_even_retained",
++          "full_name": "ImbalancedChen.fifthCappedUpperPolicy_even_retained",
++          "signature": "theorem fifthCappedUpperPolicy_even_retained\n    (base : Bool → List ℕ → Bool) (Q3 Q5 : List ℕ → ℝ)\n    (hbase : ∀ pre, base true pre = true) (pre : List ℕ) :\n    fifthCappedUpperPolicy base Q3 Q5 true pre = true",
++          "qualified_signature": "theorem ImbalancedChen.fifthCappedUpperPolicy_even_retained\n    (base : Bool → List ℕ → Bool) (Q3 Q5 : List ℕ → ℝ)\n    (hbase : ∀ pre, base true pre = true) (pre : List ℕ) :\n    fifthCappedUpperPolicy base Q3 Q5 true pre = true"
++        },
++        {
++          "name": "actualSelectedPrefixUpperDensity_eq_fixedRoughDensity",
++          "full_name": "ImbalancedChen.actualSelectedPrefixUpperDensity_eq_fixedRoughDensity",
++          "signature": "theorem actualSelectedPrefixUpperDensity_eq_fixedRoughDensity\n    (N cap : ℕ) (I : Finset (Fin 5)) (old nu a b : ℚ)\n    (m : ℕ) (J : Finset (Fin 5 → Fin (m + 1))) :\n    actualSelectedPrefixUpperDensity N cap I old nu a b m J =\n      reciprocalTotientDensity\n        (fixedRoughSupport\n          (actualSelectedPrefixSplicePolicy false (N : ℝ) I old nu a b m J false)\n          N cap 0 ((N : ℝ) ^ (b : ℝ)))\n        (fixedRoughCoefficient\n          (actualSelectedPrefixSplicePolicy false (N : ℝ) I old nu a b m J false)\n          N cap 0 ((N : ℝ) ^ (b : ℝ)))",
++          "qualified_signature": "theorem ImbalancedChen.actualSelectedPrefixUpperDensity_eq_fixedRoughDensity\n    (N cap : ℕ) (I : Finset (Fin 5)) (old nu a b : ℚ)\n    (m : ℕ) (J : Finset (Fin 5 → Fin (m + 1))) :\n    actualSelectedPrefixUpperDensity N cap I old nu a b m J =\n      reciprocalTotientDensity\n        (fixedRoughSupport\n          (actualSelectedPrefixSplicePolicy false (N : ℝ) I old nu a b m J false)\n          N cap 0 ((N : ℝ) ^ (b : ℝ)))\n        (fixedRoughCoefficient\n          (actualSelectedPrefixSplicePolicy false (N : ℝ) I old nu a b m J false)\n          N cap 0 ((N : ℝ) ^ (b : ℝ)))"
++        }
++      ],
++      "sha256": "16d81ee162d9ed2a5efad703c9a900b2c5ada622b2613472f70eaef4cbd02ae6",
++      "git_blob_sha1": "487f13707ee13159cd7f161879b5a2e44ffb8c19",
++      "source_bytes": 10144
++    },
++    {
++      "module": "ImbalancedChen.UpperCoefficientPerturbation",
++      "path": "ImbalancedChen/UpperCoefficientPerturbation.lean",
++      "imports": [
++        "import ImbalancedChen.ActualSmallRoughAttachment"
++      ],
++      "public_theorem_count": 6,
++      "declarations": [
++        {
++          "name": "abs_signAttachedValue_sub_le",
++          "full_name": "ImbalancedChen.abs_signAttachedValue_sub_le",
++          "signature": "theorem abs_signAttachedValue_sub_le\n    {c d lo hi M : ℝ} (hlo : |lo| ≤ M) (hhi : |hi| ≤ M) :\n    |signAttachedValue c lo hi - signAttachedValue d lo hi| ≤ M * |c - d|",
++          "qualified_signature": "theorem ImbalancedChen.abs_signAttachedValue_sub_le\n    {c d lo hi M : ℝ} (hlo : |lo| ≤ M) (hhi : |hi| ≤ M) :\n    |signAttachedValue c lo hi - signAttachedValue d lo hi| ≤ M * |c - d|"
++        },
++        {
++          "name": "signSensitiveReciprocalTotientDensity_eq_sum_attached",
++          "full_name": "ImbalancedChen.signSensitiveReciprocalTotientDensity_eq_sum_attached",
++          "signature": "theorem signSensitiveReciprocalTotientDensity_eq_sum_attached\n    (rough : Finset ℕ) (c : ℕ → ℝ) (lo hi : ℝ) :\n    signSensitiveReciprocalTotientDensity rough c lo hi =\n      ∑ d ∈ rough, signAttachedValue (c d) lo hi / (Nat.totient d : ℝ)",
++          "qualified_signature": "theorem ImbalancedChen.signSensitiveReciprocalTotientDensity_eq_sum_attached\n    (rough : Finset ℕ) (c : ℕ → ℝ) (lo hi : ℝ) :\n    signSensitiveReciprocalTotientDensity rough c lo hi =\n      ∑ d ∈ rough, signAttachedValue (c d) lo hi / (Nat.totient d : ℝ)"
++        },
++        {
++          "name": "abs_signSensitiveReciprocalTotientDensity_sub_le",
++          "full_name": "ImbalancedChen.abs_signSensitiveReciprocalTotientDensity_sub_le",
++          "signature": "theorem abs_signSensitiveReciprocalTotientDensity_sub_le\n    (rough : Finset ℕ) (compiled raw : ℕ → ℝ) {lo hi M : ℝ}\n    (hlo : |lo| ≤ M) (hhi : |hi| ≤ M) :\n    |signSensitiveReciprocalTotientDensity rough compiled lo hi -\n        signSensitiveReciprocalTotientDensity rough raw lo hi| ≤\n      M * reciprocalTotientDensity rough (fun d => |compiled d - raw d|)",
++          "qualified_signature": "theorem ImbalancedChen.abs_signSensitiveReciprocalTotientDensity_sub_le\n    (rough : Finset ℕ) (compiled raw : ℕ → ℝ) {lo hi M : ℝ}\n    (hlo : |lo| ≤ M) (hhi : |hi| ≤ M) :\n    |signSensitiveReciprocalTotientDensity rough compiled lo hi -\n        signSensitiveReciprocalTotientDensity rough raw lo hi| ≤\n      M * reciprocalTotientDensity rough (fun d => |compiled d - raw d|)"
++        },
++        {
++          "name": "abs_physicalDensitySum_smallRoughRho_sub_le",
++          "full_name": "ImbalancedChen.abs_physicalDensitySum_smallRoughRho_sub_le",
++          "signature": "theorem abs_physicalDensitySum_smallRoughRho_sub_le\n    {w : ℝ} {small rough : Finset ℕ}\n    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)\n    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)\n    (compiled raw betaMinus betaPlus : ℕ → ℝ) {M : ℝ}\n    (hminus : |reciprocalTotientDensity small betaMinus| ≤ M)\n    (hplus : |reciprocalTotientDensity small betaPlus| ≤ M) :\n    |physicalDensitySum (smallRoughModuli small rough)\n          (smallRoughRho small rough compiled betaMinus betaPlus) -\n        physicalDensitySum (smallRoughModuli small rough)\n          (smallRoughRho small rough raw betaMinus betaPlus)| ≤\n      M * reciprocalTotientDensity rough (fun d => |compiled d - raw d|)",
++          "qualified_signature": "theorem ImbalancedChen.abs_physicalDensitySum_smallRoughRho_sub_le\n    {w : ℝ} {small rough : Finset ℕ}\n    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)\n    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)\n    (compiled raw betaMinus betaPlus : ℕ → ℝ) {M : ℝ}\n    (hminus : |reciprocalTotientDensity small betaMinus| ≤ M)\n    (hplus : |reciprocalTotientDensity small betaPlus| ≤ M) :\n    |physicalDensitySum (smallRoughModuli small rough)\n          (smallRoughRho small rough compiled betaMinus betaPlus) -\n        physicalDensitySum (smallRoughModuli small rough)\n          (smallRoughRho small rough raw betaMinus betaPlus)| ≤\n      M * reciprocalTotientDensity rough (fun d => |compiled d - raw d|)"
++        },
++        {
++          "name": "supportedDivisorSum_le_of_coefficient_le",
++          "full_name": "ImbalancedChen.supportedDivisorSum_le_of_coefficient_le",
++          "signature": "theorem supportedDivisorSum_le_of_coefficient_le\n    (rough : Finset ℕ) (raw compiled : ℕ → ℝ)\n    (hdom : ∀ d ∈ rough, raw d ≤ compiled d) (n : ℕ) :\n    supportedDivisorSum rough raw n ≤ supportedDivisorSum rough compiled n",
++          "qualified_signature": "theorem ImbalancedChen.supportedDivisorSum_le_of_coefficient_le\n    (rough : Finset ℕ) (raw compiled : ℕ → ℝ)\n    (hdom : ∀ d ∈ rough, raw d ≤ compiled d) (n : ℕ) :\n    supportedDivisorSum rough raw n ≤ supportedDivisorSum rough compiled n"
++        },
++        {
++          "name": "actualAttachedRho_majorant_of_rough_domination",
++          "full_name": "ImbalancedChen.actualAttachedRho_majorant_of_rough_domination",
++          "signature": "theorem actualAttachedRho_majorant_of_rough_domination\n    (N cap : ℕ) (w z L : ℝ) (rough : Finset ℕ) (raw compiled : ℕ → ℝ)\n    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)\n    (hraw : ∀ n : ℤ, actualIntervalRoughIndicator N w z n ≤\n      supportedDivisorSum rough raw n.natAbs)\n    (hdom : ∀ d ∈ rough, raw d ≤ compiled d)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z) (hzcap : z ≤ (cap : ℝ))\n    (n : ℤ) :\n    actualSmallRoughIndicator N z n ≤\n      physicalDivisorSum (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n        (smallRoughRho (actualSmallRosserSupport N cap w) rough compiled\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) n.natAbs",
++          "qualified_signature": "theorem ImbalancedChen.actualAttachedRho_majorant_of_rough_domination\n    (N cap : ℕ) (w z L : ℝ) (rough : Finset ℕ) (raw compiled : ℕ → ℝ)\n    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)\n    (hraw : ∀ n : ℤ, actualIntervalRoughIndicator N w z n ≤\n      supportedDivisorSum rough raw n.natAbs)\n    (hdom : ∀ d ∈ rough, raw d ≤ compiled d)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z) (hzcap : z ≤ (cap : ℝ))\n    (n : ℤ) :\n    actualSmallRoughIndicator N z n ≤\n      physicalDivisorSum (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n        (smallRoughRho (actualSmallRosserSupport N cap w) rough compiled\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) n.natAbs"
++        }
++      ],
++      "sha256": "e4d1d84fa128f7f84fb4f7d4f0b03acf8401312de1ceaed045de3aaf3b5d6e86",
++      "git_blob_sha1": "7b024033e58e19c0dcf94de322d6cb7d6815d987",
++      "source_bytes": 7963
++    },
++    {
++      "module": "ImbalancedChen.ActualUpperDensityAssembly",
++      "path": "ImbalancedChen/ActualUpperDensityAssembly.lean",
++      "imports": [
++        "import ImbalancedChen.ActualFirstExitDensityProjection",
++        "import ImbalancedChen.UpperCoefficientPerturbation",
++        "import ImbalancedChen.CurrentNumericalTransfer"
++      ],
++      "public_theorem_count": 7,
++      "declarations": [
++        {
++          "name": "sourceMassScale_mul_densityScale",
++          "full_name": "ImbalancedChen.sourceMassScale_mul_densityScale",
++          "signature": "theorem sourceMassScale_mul_densityScale (N : ℕ) :\n    ((N : ℝ) / Real.log (N : ℝ)) *\n        (singularSeries N / Real.log (N : ℝ)) = singularNormalization N",
++          "qualified_signature": "theorem ImbalancedChen.sourceMassScale_mul_densityScale (N : ℕ) :\n    ((N : ℝ) / Real.log (N : ℝ)) *\n        (singularSeries N / Real.log (N : ℝ)) = singularNormalization N"
++        },
++        {
++          "name": "densityScale_pos",
++          "full_name": "ImbalancedChen.densityScale_pos",
++          "signature": "theorem densityScale_pos {N : ℕ} (hN : 2 ≤ N) :\n    0 < singularSeries N / Real.log (N : ℝ)",
++          "qualified_signature": "theorem ImbalancedChen.densityScale_pos {N : ℕ} (hN : 2 ≤ N) :\n    0 < singularSeries N / Real.log (N : ℝ)"
++        },
++        {
++          "name": "density_le_manuscriptScale_iff_normalized",
++          "full_name": "ImbalancedChen.density_le_manuscriptScale_iff_normalized",
++          "signature": "theorem density_le_manuscriptScale_iff_normalized {N : ℕ}\n    (hN : 2 ≤ N) (density coefficient : ℝ) :\n    density ≤ coefficient * (singularSeries N / Real.log (N : ℝ)) ↔\n      density * Real.log (N : ℝ) / singularSeries N ≤ coefficient",
++          "qualified_signature": "theorem ImbalancedChen.density_le_manuscriptScale_iff_normalized {N : ℕ}\n    (hN : 2 ≤ N) (density coefficient : ℝ) :\n    density ≤ coefficient * (singularSeries N / Real.log (N : ℝ)) ↔\n      density * Real.log (N : ℝ) / singularSeries N ≤ coefficient"
++        },
++        {
++          "name": "same_rho_normalized_mainTerm",
++          "full_name": "ImbalancedChen.same_rho_normalized_mainTerm",
++          "signature": "theorem same_rho_normalized_mainTerm (N : ℕ) (mass : ℝ)\n    (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    (mass * physicalDensitySum Q rho) / singularNormalization N =\n      (mass * Real.log (N : ℝ) / (N : ℝ)) *\n        (physicalDensitySum Q rho * Real.log (N : ℝ) / singularSeries N)",
++          "qualified_signature": "theorem ImbalancedChen.same_rho_normalized_mainTerm (N : ℕ) (mass : ℝ)\n    (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    (mass * physicalDensitySum Q rho) / singularNormalization N =\n      (mass * Real.log (N : ℝ) / (N : ℝ)) *\n        (physicalDensitySum Q rho * Real.log (N : ℝ) / singularSeries N)"
++        },
++        {
++          "name": "exists_actualSmallRoughRho_density_le_of_full_policy_limits",
++          "full_name": "ImbalancedChen.exists_actualSmallRoughRho_density_le_of_full_policy_limits",
++          "signature": "theorem exists_actualSmallRoughRho_density_le_of_full_policy_limits\n    (nu sieveR epsilonMax rawBound densityCap : ℝ)\n    (hnu : 0 < nu) (hr : 0 < sieveR) (hepsilonMax : 0 < epsilonMax)\n    (retainOdd : ℝ → ℕ → List ℕ → Bool) (cap : ℕ → ℕ) (integral : ℝ → ℝ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (nu * sieveR) ≤ (cap N : ℝ))\n    (hIntegral : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →\n      Tendsto (fun N : ℕ =>\n        reciprocalTotientDensity\n          (fixedRoughSupport (retainOdd epsilon N) N (cap N) 0\n            ((N : ℝ) ^ (nu * sieveR)))\n          (fixedRoughCoefficient (retainOdd epsilon N) N (cap N) 0\n            ((N : ℝ) ^ (nu * sieveR))) *\n          Real.log (N : ℝ) / singularSeries N)\n        (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n        (𝓝 (integral epsilon)))\n    (hCertificate : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →\n      integral epsilon ≤ rawBound)\n    (hgap : rawBound < densityCap) :\n    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧\n      epsilon < epsilonMax ∧ epsilon ^ 2 ≤ sieveR ∧\n      ∃ N₀ : ℕ, 2 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → Even N →\n        let w := (N : ℝ) ^ (nu * epsilon ^ 2)\n        let z := (N : ℝ) ^ (nu * sieveR)\n        let L := (N : ℝ) ^ (nu * epsilon)\n        physicalDensitySum (actualSmallRoughModuli (retainOdd epsilon N) N (cap N) w z)\n            (actualSmallRoughRho (retainOdd epsilon N) N (cap N) w z L) ≤\n          densityCap * (singularSeries N / Real.log (N : ℝ))",
++          "qualified_signature": "theorem ImbalancedChen.exists_actualSmallRoughRho_density_le_of_full_policy_limits\n    (nu sieveR epsilonMax rawBound densityCap : ℝ)\n    (hnu : 0 < nu) (hr : 0 < sieveR) (hepsilonMax : 0 < epsilonMax)\n    (retainOdd : ℝ → ℕ → List ℕ → Bool) (cap : ℕ → ℕ) (integral : ℝ → ℝ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (nu * sieveR) ≤ (cap N : ℝ))\n    (hIntegral : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →\n      Tendsto (fun N : ℕ =>\n        reciprocalTotientDensity\n          (fixedRoughSupport (retainOdd epsilon N) N (cap N) 0\n            ((N : ℝ) ^ (nu * sieveR)))\n          (fixedRoughCoefficient (retainOdd epsilon N) N (cap N) 0\n            ((N : ℝ) ^ (nu * sieveR))) *\n          Real.log (N : ℝ) / singularSeries N)\n        (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n        (𝓝 (integral epsilon)))\n    (hCertificate : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →\n      integral epsilon ≤ rawBound)\n    (hgap : rawBound < densityCap) :\n    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧\n      epsilon < epsilonMax ∧ epsilon ^ 2 ≤ sieveR ∧\n      ∃ N₀ : ℕ, 2 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → Even N →\n        let w := (N : ℝ) ^ (nu * epsilon ^ 2)\n        let z := (N : ℝ) ^ (nu * sieveR)\n        let L := (N : ℝ) ^ (nu * epsilon)\n        physicalDensitySum (actualSmallRoughModuli (retainOdd epsilon N) N (cap N) w z)\n            (actualSmallRoughRho (retainOdd epsilon N) N (cap N) w z L) ≤\n          densityCap * (singularSeries N / Real.log (N : ℝ))"
++        },
++        {
++          "name": "exists_actualSmallRoughRho_density_le_currentK_of_full_policy_limits",
++          "full_name": "ImbalancedChen.exists_actualSmallRoughRho_density_le_currentK_of_full_policy_limits",
++          "signature": "theorem exists_actualSmallRoughRho_density_le_currentK_of_full_policy_limits\n    (nu sieveR epsilonMax rawBound : ℝ)\n    (hnu : 0 < nu) (hr : 0 < sieveR) (hepsilonMax : 0 < epsilonMax)\n    (retainOdd : ℝ → ℕ → List ℕ → Bool) (cap : ℕ → ℕ) (integral : ℝ → ℝ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (nu * sieveR) ≤ (cap N : ℝ))\n    (hIntegral : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →\n      Tendsto (fun N : ℕ =>\n        reciprocalTotientDensity\n          (fixedRoughSupport (retainOdd epsilon N) N (cap N) 0\n            ((N : ℝ) ^ (nu * sieveR)))\n          (fixedRoughCoefficient (retainOdd epsilon N) N (cap N) 0\n            ((N : ℝ) ^ (nu * sieveR))) *\n          Real.log (N : ℝ) / singularSeries N)\n        (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n        (𝓝 (integral epsilon)))\n    (hCertificate : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →\n      integral epsilon ≤ rawBound)\n    (hgap : rawBound < currentK) :\n    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧\n      epsilon < epsilonMax ∧ epsilon ^ 2 ≤ sieveR ∧\n      ∃ N₀ : ℕ, 2 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → Even N →\n        let w := (N : ℝ) ^ (nu * epsilon ^ 2)\n        let z := (N : ℝ) ^ (nu * sieveR)\n        let L := (N : ℝ) ^ (nu * epsilon)\n        physicalDensitySum (actualSmallRoughModuli (retainOdd epsilon N) N (cap N) w z)\n            (actualSmallRoughRho (retainOdd epsilon N) N (cap N) w z L) ≤\n          currentK * (singularSeries N / Real.log (N : ℝ))",
++          "qualified_signature": "theorem ImbalancedChen.exists_actualSmallRoughRho_density_le_currentK_of_full_policy_limits\n    (nu sieveR epsilonMax rawBound : ℝ)\n    (hnu : 0 < nu) (hr : 0 < sieveR) (hepsilonMax : 0 < epsilonMax)\n    (retainOdd : ℝ → ℕ → List ℕ → Bool) (cap : ℕ → ℕ) (integral : ℝ → ℝ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (nu * sieveR) ≤ (cap N : ℝ))\n    (hIntegral : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →\n      Tendsto (fun N : ℕ =>\n        reciprocalTotientDensity\n          (fixedRoughSupport (retainOdd epsilon N) N (cap N) 0\n            ((N : ℝ) ^ (nu * sieveR)))\n          (fixedRoughCoefficient (retainOdd epsilon N) N (cap N) 0\n            ((N : ℝ) ^ (nu * sieveR))) *\n          Real.log (N : ℝ) / singularSeries N)\n        (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n        (𝓝 (integral epsilon)))\n    (hCertificate : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →\n      integral epsilon ≤ rawBound)\n    (hgap : rawBound < currentK) :\n    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧\n      epsilon < epsilonMax ∧ epsilon ^ 2 ≤ sieveR ∧\n      ∃ N₀ : ℕ, 2 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → Even N →\n        let w := (N : ℝ) ^ (nu * epsilon ^ 2)\n        let z := (N : ℝ) ^ (nu * sieveR)\n        let L := (N : ℝ) ^ (nu * epsilon)\n        physicalDensitySum (actualSmallRoughModuli (retainOdd epsilon N) N (cap N) w z)\n            (actualSmallRoughRho (retainOdd epsilon N) N (cap N) w z L) ≤\n          currentK * (singularSeries N / Real.log (N : ℝ))"
++        },
++        {
++          "name": "compiled_physicalDensity_le_currentK_of_raw_and_coefficient_budget",
++          "full_name": "ImbalancedChen.compiled_physicalDensity_le_currentK_of_raw_and_coefficient_budget",
++          "signature": "theorem compiled_physicalDensity_le_currentK_of_raw_and_coefficient_budget\n    {N : ℕ} (hN : 2 ≤ N) {w : ℝ} {small rough : Finset ℕ}\n    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)\n    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)\n    (compiled raw betaMinus betaPlus : ℕ → ℝ) (M rawBound compilerReserve : ℝ)\n    (hminus : |reciprocalTotientDensity small betaMinus| ≤ M)\n    (hplus : |reciprocalTotientDensity small betaPlus| ≤ M)\n    (hraw : physicalDensitySum (smallRoughModuli small rough)\n        (smallRoughRho small rough raw betaMinus betaPlus) ≤\n      rawBound * (singularSeries N / Real.log (N : ℝ)))\n    (hcompiler : M * reciprocalTotientDensity rough (fun d => |compiled d - raw d|) ≤\n      compilerReserve * (singularSeries N / Real.log (N : ℝ)))\n    (hbudget : rawBound + compilerReserve ≤ currentK) :\n    physicalDensitySum (smallRoughModuli small rough)\n        (smallRoughRho small rough compiled betaMinus betaPlus) *\n        Real.log (N : ℝ) / singularSeries N ≤ currentK",
++          "qualified_signature": "theorem ImbalancedChen.compiled_physicalDensity_le_currentK_of_raw_and_coefficient_budget\n    {N : ℕ} (hN : 2 ≤ N) {w : ℝ} {small rough : Finset ℕ}\n    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)\n    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)\n    (compiled raw betaMinus betaPlus : ℕ → ℝ) (M rawBound compilerReserve : ℝ)\n    (hminus : |reciprocalTotientDensity small betaMinus| ≤ M)\n    (hplus : |reciprocalTotientDensity small betaPlus| ≤ M)\n    (hraw : physicalDensitySum (smallRoughModuli small rough)\n        (smallRoughRho small rough raw betaMinus betaPlus) ≤\n      rawBound * (singularSeries N / Real.log (N : ℝ)))\n    (hcompiler : M * reciprocalTotientDensity rough (fun d => |compiled d - raw d|) ≤\n      compilerReserve * (singularSeries N / Real.log (N : ℝ)))\n    (hbudget : rawBound + compilerReserve ≤ currentK) :\n    physicalDensitySum (smallRoughModuli small rough)\n        (smallRoughRho small rough compiled betaMinus betaPlus) *\n        Real.log (N : ℝ) / singularSeries N ≤ currentK"
++        }
++      ],
++      "sha256": "659aa3d8cfa50345f912ba070e30cd57a6caa1738e4146d1c051a7506f944cec",
++      "git_blob_sha1": "e363dee459e99b2be6f83f2c70b15f8968fd4817",
++      "source_bytes": 11482
++    },
++    {
++      "module": "ImbalancedChen.RealPhysicalUpperWeightBridge",
++      "path": "ImbalancedChen/RealPhysicalUpperWeightBridge.lean",
++      "imports": [
++        "import ImbalancedChen.PhysicalUpperWeightBridge",
++        "import ImbalancedChen.RealHalfProductSource",
++        "import ImbalancedChen.CurvedRegionDiscrepancy",
++        "import ImbalancedChen.ActualSmallRoughAttachment"
++      ],
++      "public_theorem_count": 26,
++      "declarations": [
++        {
++          "name": "realHalfProductSource_filter_dvd_eq_filter_modEq",
++          "full_name": "ImbalancedChen.realHalfProductSource_filter_dvd_eq_filter_modEq",
++          "signature": "theorem realHalfProductSource_filter_dvd_eq_filter_modEq\n    (b : ℝ) (N d : ℕ) (T : ℝ) :\n    (realHalfProductSource b N T).filter (fun m : ℕ => d ∣ N - m) =\n      (realHalfProductSource b N T).filter (fun m : ℕ => Nat.ModEq d m N)",
++          "qualified_signature": "theorem ImbalancedChen.realHalfProductSource_filter_dvd_eq_filter_modEq\n    (b : ℝ) (N d : ℕ) (T : ℝ) :\n    (realHalfProductSource b N T).filter (fun m : ℕ => d ∣ N - m) =\n      (realHalfProductSource b N T).filter (fun m : ℕ => Nat.ModEq d m N)"
++        },
++        {
++          "name": "sum_physicalDivisorSum_realHalfProductSource",
++          "full_name": "ImbalancedChen.sum_physicalDivisorSum_realHalfProductSource",
++          "signature": "theorem sum_physicalDivisorSum_realHalfProductSource\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    (∑ m ∈ realHalfProductSource b N T,\n      physicalDivisorSum Q rho (N - m)) =\n      ∑ d ∈ Q, rho d * realHalfProductCongruenceMass b N T d",
++          "qualified_signature": "theorem ImbalancedChen.sum_physicalDivisorSum_realHalfProductSource\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    (∑ m ∈ realHalfProductSource b N T,\n      physicalDivisorSum Q rho (N - m)) =\n      ∑ d ∈ Q, rho d * realHalfProductCongruenceMass b N T d"
++        },
++        {
++          "name": "sum_rho_mul_realHalfProductCongruenceMass_eq",
++          "full_name": "ImbalancedChen.sum_rho_mul_realHalfProductCongruenceMass_eq",
++          "signature": "theorem sum_rho_mul_realHalfProductCongruenceMass_eq\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    (∑ d ∈ Q, rho d * realHalfProductCongruenceMass b N T d) =\n      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +\n        realPhysicalCoprimeCorrection b N T Q rho +\n        realPhysicalDistributionError b N T Q rho",
++          "qualified_signature": "theorem ImbalancedChen.sum_rho_mul_realHalfProductCongruenceMass_eq\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) :\n    (∑ d ∈ Q, rho d * realHalfProductCongruenceMass b N T d) =\n      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +\n        realPhysicalCoprimeCorrection b N T Q rho +\n        realPhysicalDistributionError b N T Q rho"
++        },
++        {
++          "name": "mem_realSiftedHalfProductSource",
++          "full_name": "ImbalancedChen.mem_realSiftedHalfProductSource",
++          "signature": "@[simp] theorem mem_realSiftedHalfProductSource {b T : ℝ} {N m z : ℕ} :\n    m ∈ realSiftedHalfProductSource b N T z ↔\n      m ∈ realHalfProductSource b N T ∧\n        Nat.Coprime (N - m) (sieveProduct N z)",
++          "qualified_signature": "@[simp] theorem ImbalancedChen.mem_realSiftedHalfProductSource {b T : ℝ} {N m z : ℕ} :\n    m ∈ realSiftedHalfProductSource b N T z ↔\n      m ∈ realHalfProductSource b N T ∧\n        Nat.Coprime (N - m) (sieveProduct N z)"
++        },
++        {
++          "name": "realSiftedHalfProductSource_card_le_sum_physicalDivisorSum",
++          "full_name": "ImbalancedChen.realSiftedHalfProductSource_card_le_sum_physicalDivisorSum",
++          "signature": "theorem realSiftedHalfProductSource_card_le_sum_physicalDivisorSum\n    (b : ℝ) (N z : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    ((realSiftedHalfProductSource b N T z).card : ℝ) ≤\n      ∑ m ∈ realHalfProductSource b N T, physicalDivisorSum Q rho (N - m)",
++          "qualified_signature": "theorem ImbalancedChen.realSiftedHalfProductSource_card_le_sum_physicalDivisorSum\n    (b : ℝ) (N z : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    ((realSiftedHalfProductSource b N T z).card : ℝ) ≤\n      ∑ m ∈ realHalfProductSource b N T, physicalDivisorSum Q rho (N - m)"
++        },
++        {
++          "name": "realSiftedHalfProductSource_card_le_same_rho_main_add_errors",
++          "full_name": "ImbalancedChen.realSiftedHalfProductSource_card_le_same_rho_main_add_errors",
++          "signature": "theorem realSiftedHalfProductSource_card_le_same_rho_main_add_errors\n    (b : ℝ) (N z : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    ((realSiftedHalfProductSource b N T z).card : ℝ) ≤\n      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +\n        realPhysicalCoprimeCorrection b N T Q rho +\n        realPhysicalDistributionError b N T Q rho",
++          "qualified_signature": "theorem ImbalancedChen.realSiftedHalfProductSource_card_le_same_rho_main_add_errors\n    (b : ℝ) (N z : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    ((realSiftedHalfProductSource b N T z).card : ℝ) ≤\n      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +\n        realPhysicalCoprimeCorrection b N T Q rho +\n        realPhysicalDistributionError b N T Q rho"
++        },
++        {
++          "name": "realHalfProductSource_primePartner_card_le_realSifted_add_cap",
++          "full_name": "ImbalancedChen.realHalfProductSource_primePartner_card_le_realSifted_add_cap",
++          "signature": "theorem realHalfProductSource_primePartner_card_le_realSifted_add_cap\n    (b : ℝ) (N z : ℕ) (T : ℝ) :\n    ((realHalfProductSource b N T).filter\n      (fun m => m < N ∧ Nat.Prime (N - m))).card ≤\n      (realSiftedHalfProductSource b N T z).card + z",
++          "qualified_signature": "theorem ImbalancedChen.realHalfProductSource_primePartner_card_le_realSifted_add_cap\n    (b : ℝ) (N z : ℕ) (T : ℝ) :\n    ((realHalfProductSource b N T).filter\n      (fun m => m < N ∧ Nat.Prime (N - m))).card ≤\n      (realSiftedHalfProductSource b N T z).card + z"
++        },
++        {
++          "name": "RealB_cast_le_realSiftedHalfProductSource_card_add_cap_cutoff",
++          "full_name": "ImbalancedChen.RealB_cast_le_realSiftedHalfProductSource_card_add_cap_cutoff",
++          "signature": "theorem RealB_cast_le_realSiftedHalfProductSource_card_add_cap_cutoff\n    {b T : ℝ} (N z : ℕ) (hb : b < 1) (hT : 0 ≤ T) :\n    (RealB b N : ℝ) ≤\n      ((realSiftedHalfProductSource b N T z).card : ℝ) + (z : ℝ) + (T + 1)",
++          "qualified_signature": "theorem ImbalancedChen.RealB_cast_le_realSiftedHalfProductSource_card_add_cap_cutoff\n    {b T : ℝ} (N z : ℕ) (hb : b < 1) (hT : 0 ≤ T) :\n    (RealB b N : ℝ) ≤\n      ((realSiftedHalfProductSource b N T z).card : ℝ) + (z : ℝ) + (T + 1)"
++        },
++        {
++          "name": "RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff",
++          "full_name": "ImbalancedChen.RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff",
++          "signature": "theorem RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff\n    {b T : ℝ} (N z : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      (∑ m ∈ realHalfProductSource b N T,\n        physicalDivisorSum Q rho (N - m)) + (z : ℝ) + (T + 1)",
++          "qualified_signature": "theorem ImbalancedChen.RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff\n    {b T : ℝ} (N z : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      (∑ m ∈ realHalfProductSource b N T,\n        physicalDivisorSum Q rho (N - m)) + (z : ℝ) + (T + 1)"
++        },
++        {
++          "name": "RealB_cast_le_same_rho_main_add_errors",
++          "full_name": "ImbalancedChen.RealB_cast_le_same_rho_main_add_errors",
++          "signature": "theorem RealB_cast_le_same_rho_main_add_errors\n    {b T : ℝ} (N z : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +\n        realPhysicalCoprimeCorrection b N T Q rho +\n        realPhysicalDistributionError b N T Q rho + (z : ℝ) + (T + 1)",
++          "qualified_signature": "theorem ImbalancedChen.RealB_cast_le_same_rho_main_add_errors\n    {b T : ℝ} (N z : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +\n        realPhysicalCoprimeCorrection b N T Q rho +\n        realPhysicalDistributionError b N T Q rho + (z : ℝ) + (T + 1)"
++        },
++        {
++          "name": "realHalfProductSource_prime_divisor_rough",
++          "full_name": "ImbalancedChen.realHalfProductSource_prime_divisor_rough",
++          "signature": "theorem realHalfProductSource_prime_divisor_rough\n    {b T : ℝ} {N m ell : ℕ} (hb : 0 < b) (hT : 0 < T)\n    (hm : m ∈ realHalfProductSource b N T)\n    (hell : Nat.Prime ell) (hdvd : ell ∣ m) :\n    T ^ (b / (1 + b)) < (ell : ℝ)",
++          "qualified_signature": "theorem ImbalancedChen.realHalfProductSource_prime_divisor_rough\n    {b T : ℝ} {N m ell : ℕ} (hb : 0 < b) (hT : 0 < T)\n    (hm : m ∈ realHalfProductSource b N T)\n    (hell : Nat.Prime ell) (hdvd : ell ∣ m) :\n    T ^ (b / (1 + b)) < (ell : ℝ)"
++        },
++        {
++          "name": "realHalfProductSource_coprime_of_dvd_sieveProduct",
++          "full_name": "ImbalancedChen.realHalfProductSource_coprime_of_dvd_sieveProduct",
++          "signature": "theorem realHalfProductSource_coprime_of_dvd_sieveProduct\n    {b T : ℝ} {N m z d : ℕ} (hb : 0 < b) (hT : 0 < T)\n    (hcap : (z : ℝ) ≤ T ^ (b / (1 + b)))\n    (hm : m ∈ realHalfProductSource b N T) (hd : d ∣ sieveProduct N z) :\n    Nat.Coprime m d",
++          "qualified_signature": "theorem ImbalancedChen.realHalfProductSource_coprime_of_dvd_sieveProduct\n    {b T : ℝ} {N m z d : ℕ} (hb : 0 < b) (hT : 0 < T)\n    (hcap : (z : ℝ) ≤ T ^ (b / (1 + b)))\n    (hm : m ∈ realHalfProductSource b N T) (hd : d ∣ sieveProduct N z) :\n    Nat.Coprime m d"
++        },
++        {
++          "name": "realHalfProductCoprimeMass_eq_card_of_gate",
++          "full_name": "ImbalancedChen.realHalfProductCoprimeMass_eq_card_of_gate",
++          "signature": "theorem realHalfProductCoprimeMass_eq_card_of_gate\n    {b T : ℝ} {N z d : ℕ} (hb : 0 < b) (hT : 0 < T)\n    (hcap : (z : ℝ) ≤ T ^ (b / (1 + b))) (hd : d ∣ sieveProduct N z) :\n    realHalfProductCoprimeMass b N T d =\n      ((realHalfProductSource b N T).card : ℝ)",
++          "qualified_signature": "theorem ImbalancedChen.realHalfProductCoprimeMass_eq_card_of_gate\n    {b T : ℝ} {N z d : ℕ} (hb : 0 < b) (hT : 0 < T)\n    (hcap : (z : ℝ) ≤ T ^ (b / (1 + b))) (hd : d ∣ sieveProduct N z) :\n    realHalfProductCoprimeMass b N T d =\n      ((realHalfProductSource b N T).card : ℝ)"
++        },
++        {
++          "name": "realPhysicalCoprimeCorrection_eq_zero_of_gate",
++          "full_name": "ImbalancedChen.realPhysicalCoprimeCorrection_eq_zero_of_gate",
++          "signature": "theorem realPhysicalCoprimeCorrection_eq_zero_of_gate\n    {b T : ℝ} {N z : ℕ} (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hb : 0 < b) (hT : 0 < T) (hcap : (z : ℝ) ≤ T ^ (b / (1 + b)))\n    (hsupport : ∀ d ∈ Q, rho d ≠ 0 → d ∣ sieveProduct N z) :\n    realPhysicalCoprimeCorrection b N T Q rho = 0",
++          "qualified_signature": "theorem ImbalancedChen.realPhysicalCoprimeCorrection_eq_zero_of_gate\n    {b T : ℝ} {N z : ℕ} (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hb : 0 < b) (hT : 0 < T) (hcap : (z : ℝ) ≤ T ^ (b / (1 + b)))\n    (hsupport : ∀ d ∈ Q, rho d ≠ 0 → d ∣ sieveProduct N z) :\n    realPhysicalCoprimeCorrection b N T Q rho = 0"
++        },
++        {
++          "name": "RealB_cast_le_same_rho_main_add_distribution_of_gate",
++          "full_name": "ImbalancedChen.RealB_cast_le_same_rho_main_add_distribution_of_gate",
++          "signature": "theorem RealB_cast_le_same_rho_main_add_distribution_of_gate\n    {b T : ℝ} (N z : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hb : 0 < b) (hb1 : b < 1) (hT : 0 < T)\n    (hcap : (z : ℝ) ≤ T ^ (b / (1 + b)))\n    (hsupport : ∀ d ∈ Q, rho d ≠ 0 → d ∣ sieveProduct N z)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +\n        realPhysicalDistributionError b N T Q rho + (z : ℝ) + (T + 1)",
++          "qualified_signature": "theorem ImbalancedChen.RealB_cast_le_same_rho_main_add_distribution_of_gate\n    {b T : ℝ} (N z : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ)\n    (hb : 0 < b) (hb1 : b < 1) (hT : 0 < T)\n    (hcap : (z : ℝ) ≤ T ^ (b / (1 + b)))\n    (hsupport : ∀ d ∈ Q, rho d ≠ 0 → d ∣ sieveProduct N z)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +\n        realPhysicalDistributionError b N T Q rho + (z : ℝ) + (T + 1)"
++        },
++        {
++          "name": "sum_weight_mul_physicalDivisorSum_eq_rho_mul_finiteCongruenceMass",
++          "full_name": "ImbalancedChen.sum_weight_mul_physicalDivisorSum_eq_rho_mul_finiteCongruenceMass",
++          "signature": "theorem sum_weight_mul_physicalDivisorSum_eq_rho_mul_finiteCongruenceMass\n    (N : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hSN : ∀ m ∈ S, m ≤ N) :\n    (∑ m ∈ S, weight m * physicalDivisorSum Q rho (N - m)) =\n      ∑ d ∈ Q, rho d * finiteCongruenceMass S weight N d",
++          "qualified_signature": "theorem ImbalancedChen.sum_weight_mul_physicalDivisorSum_eq_rho_mul_finiteCongruenceMass\n    (N : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hSN : ∀ m ∈ S, m ≤ N) :\n    (∑ m ∈ S, weight m * physicalDivisorSum Q rho (N - m)) =\n      ∑ d ∈ Q, rho d * finiteCongruenceMass S weight N d"
++        },
++        {
++          "name": "sum_weight_mul_physicalDivisorSum_eq_same_rho_main_add_errors",
++          "full_name": "ImbalancedChen.sum_weight_mul_physicalDivisorSum_eq_same_rho_main_add_errors",
++          "signature": "theorem sum_weight_mul_physicalDivisorSum_eq_same_rho_main_add_errors\n    (N : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hSN : ∀ m ∈ S, m ≤ N) :\n    (∑ m ∈ S, weight m * physicalDivisorSum Q rho (N - m)) =\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        ∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d",
++          "qualified_signature": "theorem ImbalancedChen.sum_weight_mul_physicalDivisorSum_eq_same_rho_main_add_errors\n    (N : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hSN : ∀ m ∈ S, m ≤ N) :\n    (∑ m ∈ S, weight m * physicalDivisorSum Q rho (N - m)) =\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        ∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d"
++        },
++        {
++          "name": "RealB_cast_le_same_rho_outer_main_add_errors",
++          "full_name": "ImbalancedChen.RealB_cast_le_same_rho_outer_main_add_errors",
++          "signature": "theorem RealB_cast_le_same_rho_outer_main_add_errors\n    {b T : ℝ} (N z : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hSN : ∀ m ∈ S, m ≤ N)\n    (hsource : realHalfProductSource b N T ⊆ S)\n    (houter : ∀ m ∈ S,\n      (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) ≤ weight m)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        (∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d) +\n        (z : ℝ) + (T + 1)",
++          "qualified_signature": "theorem ImbalancedChen.RealB_cast_le_same_rho_outer_main_add_errors\n    {b T : ℝ} (N z : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hSN : ∀ m ∈ S, m ≤ N)\n    (hsource : realHalfProductSource b N T ⊆ S)\n    (houter : ∀ m ∈ S,\n      (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) ≤ weight m)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        (∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d) +\n        (z : ℝ) + (T + 1)"
++        },
++        {
++          "name": "actualSmallPrimeFinset_eq_sievePrimes_ceil",
++          "full_name": "ImbalancedChen.actualSmallPrimeFinset_eq_sievePrimes_ceil",
++          "signature": "theorem actualSmallPrimeFinset_eq_sievePrimes_ceil\n    (N cap : ℕ) (z : ℝ) (hzcap : z ≤ (cap : ℝ)) :\n    actualSmallPrimeFinset N cap z = sievePrimes N (Nat.ceil z)",
++          "qualified_signature": "theorem ImbalancedChen.actualSmallPrimeFinset_eq_sievePrimes_ceil\n    (N cap : ℕ) (z : ℝ) (hzcap : z ≤ (cap : ℝ)) :\n    actualSmallPrimeFinset N cap z = sievePrimes N (Nat.ceil z)"
++        },
++        {
++          "name": "actualSmallPrimeProduct_eq_sieveProduct_ceil",
++          "full_name": "ImbalancedChen.actualSmallPrimeProduct_eq_sieveProduct_ceil",
++          "signature": "theorem actualSmallPrimeProduct_eq_sieveProduct_ceil\n    (N cap : ℕ) (z : ℝ) (hzcap : z ≤ (cap : ℝ)) :\n    actualSmallPrimeProduct N cap z = sieveProduct N (Nat.ceil z)",
++          "qualified_signature": "theorem ImbalancedChen.actualSmallPrimeProduct_eq_sieveProduct_ceil\n    (N cap : ℕ) (z : ℝ) (hzcap : z ≤ (cap : ℝ)) :\n    actualSmallPrimeProduct N cap z = sieveProduct N (Nat.ceil z)"
++        },
++        {
++          "name": "actualSmallRoughIndicator_eq_sieveProduct_natAbs",
++          "full_name": "ImbalancedChen.actualSmallRoughIndicator_eq_sieveProduct_natAbs",
++          "signature": "theorem actualSmallRoughIndicator_eq_sieveProduct_natAbs\n    (N : ℕ) (z : ℝ) (n : ℤ) :\n    actualSmallRoughIndicator N z n =\n      if Nat.Coprime n.natAbs (sieveProduct N (Nat.ceil z)) then (1 : ℝ) else 0",
++          "qualified_signature": "theorem ImbalancedChen.actualSmallRoughIndicator_eq_sieveProduct_natAbs\n    (N : ℕ) (z : ℝ) (n : ℤ) :\n    actualSmallRoughIndicator N z n =\n      if Nat.Coprime n.natAbs (sieveProduct N (Nat.ceil z)) then (1 : ℝ) else 0"
++        },
++        {
++          "name": "actualSmallRoughRho_sieveProduct_majorant",
++          "full_name": "ImbalancedChen.actualSmallRoughRho_sieveProduct_majorant",
++          "signature": "theorem actualSmallRoughRho_sieveProduct_majorant\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z)\n    (hzcap : z ≤ (cap : ℝ)) (n : ℕ) :\n    (if Nat.Coprime n (sieveProduct N (Nat.ceil z)) then (1 : ℝ) else 0) ≤\n      physicalDivisorSum (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) n",
++          "qualified_signature": "theorem ImbalancedChen.actualSmallRoughRho_sieveProduct_majorant\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z)\n    (hzcap : z ≤ (cap : ℝ)) (n : ℕ) :\n    (if Nat.Coprime n (sieveProduct N (Nat.ceil z)) then (1 : ℝ) else 0) ≤\n      physicalDivisorSum (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) n"
++        },
++        {
++          "name": "actualSmallRosserSupport_dvd_sieveProduct_ceil",
++          "full_name": "ImbalancedChen.actualSmallRosserSupport_dvd_sieveProduct_ceil",
++          "signature": "theorem actualSmallRosserSupport_dvd_sieveProduct_ceil\n    (N cap : ℕ) (w z : ℝ) (hwz : w ≤ z) {d : ℕ}\n    (hd : d ∈ actualSmallRosserSupport N cap w) :\n    d ∣ sieveProduct N (Nat.ceil z)",
++          "qualified_signature": "theorem ImbalancedChen.actualSmallRosserSupport_dvd_sieveProduct_ceil\n    (N cap : ℕ) (w z : ℝ) (hwz : w ≤ z) {d : ℕ}\n    (hd : d ∈ actualSmallRosserSupport N cap w) :\n    d ∣ sieveProduct N (Nat.ceil z)"
++        },
++        {
++          "name": "fixedRoughSupport_dvd_sieveProduct_ceil",
++          "full_name": "ImbalancedChen.fixedRoughSupport_dvd_sieveProduct_ceil",
++          "signature": "theorem fixedRoughSupport_dvd_sieveProduct_ceil\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) {d : ℕ}\n    (hd : d ∈ fixedRoughSupport retainOdd N cap w z) :\n    d ∣ sieveProduct N (Nat.ceil z)",
++          "qualified_signature": "theorem ImbalancedChen.fixedRoughSupport_dvd_sieveProduct_ceil\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) {d : ℕ}\n    (hd : d ∈ fixedRoughSupport retainOdd N cap w z) :\n    d ∣ sieveProduct N (Nat.ceil z)"
++        },
++        {
++          "name": "actualSmallRoughModuli_dvd_sieveProduct_ceil",
++          "full_name": "ImbalancedChen.actualSmallRoughModuli_dvd_sieveProduct_ceil",
++          "signature": "theorem actualSmallRoughModuli_dvd_sieveProduct_ceil\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) (hwz : w ≤ z) {d : ℕ}\n    (hd : d ∈ actualSmallRoughModuli retainOdd N cap w z) :\n    d ∣ sieveProduct N (Nat.ceil z)",
++          "qualified_signature": "theorem ImbalancedChen.actualSmallRoughModuli_dvd_sieveProduct_ceil\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) (hwz : w ≤ z) {d : ℕ}\n    (hd : d ∈ actualSmallRoughModuli retainOdd N cap w z) :\n    d ∣ sieveProduct N (Nat.ceil z)"
++        },
++        {
++          "name": "RealB_cast_le_actualSmallRoughRho_main_add_errors",
++          "full_name": "ImbalancedChen.RealB_cast_le_actualSmallRoughRho_main_add_errors",
++          "signature": "theorem RealB_cast_le_actualSmallRoughRho_main_add_errors\n    {b T : ℝ} (N cap : ℕ) (retainOdd : List ℕ → Bool) (w z L : ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z) (hzcap : z ≤ (cap : ℝ)) :\n    (RealB b N : ℝ) ≤\n      ((realHalfProductSource b N T).card : ℝ) *\n        physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)\n          (actualSmallRoughRho retainOdd N cap w z L) +\n      realPhysicalCoprimeCorrection b N T (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) +\n      realPhysicalDistributionError b N T (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) + (Nat.ceil z : ℝ) + (T + 1)",
++          "qualified_signature": "theorem ImbalancedChen.RealB_cast_le_actualSmallRoughRho_main_add_errors\n    {b T : ℝ} (N cap : ℕ) (retainOdd : List ℕ → Bool) (w z L : ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z) (hzcap : z ≤ (cap : ℝ)) :\n    (RealB b N : ℝ) ≤\n      ((realHalfProductSource b N T).card : ℝ) *\n        physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)\n          (actualSmallRoughRho retainOdd N cap w z L) +\n      realPhysicalCoprimeCorrection b N T (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) +\n      realPhysicalDistributionError b N T (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) + (Nat.ceil z : ℝ) + (T + 1)"
++        }
++      ],
++      "sha256": "8a86c2e7fd2383fcae243b5958f3447675a4f5b7a4c9078ba1ba832ea067878f",
++      "git_blob_sha1": "c774859dab0bdcfc1266200d7437a62d0c69e5ea",
++      "source_bytes": 26157
++    },
++    {
++      "module": "ImbalancedChen.RealUpperCountingAssembly",
++      "path": "ImbalancedChen/RealUpperCountingAssembly.lean",
++      "imports": [
++        "import ImbalancedChen.ActualUpperDensityAssembly",
++        "import ImbalancedChen.RealPhysicalUpperWeightBridge",
++        "import ImbalancedChen.RealHalfProductMassSuppliers",
++        "import ImbalancedChen.PowerErrorBudget"
++      ],
++      "public_theorem_count": 1,
++      "declarations": [
++        {
++          "name": "eventually_RealB_le_currentK_log_of_same_rho_inputs",
++          "full_name": "ImbalancedChen.eventually_RealB_le_currentK_log_of_same_rho_inputs",
++          "signature": "theorem eventually_RealB_le_currentK_log_of_same_rho_inputs\n    {b kappa sieveExponent : ℝ}\n    (hb : 0 < b) (hb1 : b < 1) (hkappa : 0 < kappa)\n    (hsieve : sieveExponent < 1)\n    (Q : ℝ → ℕ → Finset ℕ) (rho : ℝ → ℕ → ℕ → ℝ)\n    (hmajor : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N → ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N (Nat.ceil ((N : ℝ) ^ sieveExponent)))\n        then (1 : ℝ) else 0) ≤ physicalDivisorSum (Q delta N) (rho delta N) n)\n    (hdensity : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →\n      physicalDensitySum (Q delta N) (rho delta N) ≤\n        (currentK + delta) * (singularSeries N / Real.log (N : ℝ)))\n    (hcoprime : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →\n      |realPhysicalCoprimeCorrection b N (manuscriptHalfProductCutoff kappa N)\n        (Q delta N) (rho delta N)| ≤ delta * singularNormalization N)\n    (hdistribution : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →\n      |realPhysicalDistributionError b N (manuscriptHalfProductCutoff kappa N)\n        (Q delta N) (rho delta N)| ≤ delta * singularNormalization N) :\n    ∀ epsilon : ℝ, 0 < epsilon → ∀ᶠ N : ℕ in atTop, Even N →\n      (RealB b N : ℝ) ≤\n        (currentK * Real.log (1 / b) + epsilon) * singularNormalization N",
++          "qualified_signature": "theorem ImbalancedChen.eventually_RealB_le_currentK_log_of_same_rho_inputs\n    {b kappa sieveExponent : ℝ}\n    (hb : 0 < b) (hb1 : b < 1) (hkappa : 0 < kappa)\n    (hsieve : sieveExponent < 1)\n    (Q : ℝ → ℕ → Finset ℕ) (rho : ℝ → ℕ → ℕ → ℝ)\n    (hmajor : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N → ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N (Nat.ceil ((N : ℝ) ^ sieveExponent)))\n        then (1 : ℝ) else 0) ≤ physicalDivisorSum (Q delta N) (rho delta N) n)\n    (hdensity : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →\n      physicalDensitySum (Q delta N) (rho delta N) ≤\n        (currentK + delta) * (singularSeries N / Real.log (N : ℝ)))\n    (hcoprime : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →\n      |realPhysicalCoprimeCorrection b N (manuscriptHalfProductCutoff kappa N)\n        (Q delta N) (rho delta N)| ≤ delta * singularNormalization N)\n    (hdistribution : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →\n      |realPhysicalDistributionError b N (manuscriptHalfProductCutoff kappa N)\n        (Q delta N) (rho delta N)| ≤ delta * singularNormalization N) :\n    ∀ epsilon : ℝ, 0 < epsilon → ∀ᶠ N : ℕ in atTop, Even N →\n      (RealB b N : ℝ) ≤\n        (currentK * Real.log (1 / b) + epsilon) * singularNormalization N"
++        }
++      ],
++      "sha256": "56bab762d3f765f5080a441910a8696e297bcd72801e13f4338b0ed7142a9a96",
++      "git_blob_sha1": "6e6843444cafa0e1d51a903981da0092983d2ac0",
++      "source_bytes": 8031
++    }
++  ],
++  "hashes_recorded_at_utc": "2026-10-12T18:00:00.880460+00:00",
++  "source_commit_note": "No source commit is asserted by this extraction. Root handles repository recovery and final commit binding; the exact read source bytes are identified by the per-file hashes.",
++  "qualification_note": "signature preserves the original source declaration text; qualified_signature only prefixes the declared theorem name with ImbalancedChen. All remaining identifiers are read in the original ImbalancedChen namespace context. This is not compiler elaboration."
++}
+diff --git a/verification/parts/p4a/round2/SOURCE_TYPES.md b/verification/parts/p4a/round2/SOURCE_TYPES.md
+new file mode 100644
+index 0000000..a3212c3
+--- /dev/null
++++ b/verification/parts/p4a/round2/SOURCE_TYPES.md
+@@ -0,0 +1,768 @@
++# SOURCE_EXTRACTED_NOT_COMPILER_INVENTORY
++
++## 源码提取的完整类型；本文件本身不声称编译成功，编译器确认见最终 inventory
++
++提取时间：2026-10-12T17:57:24.689668+00:00。
++
++本文件逐字提取当前五个 Part 4 工作树源码中的全部 **53 个公开 theorem** 的完整 signature。保留所有显式和隐式参数、量词、前提、let 绑定与结论；去掉 `:= by` 和证明体。本次没有运行 Lean、原版 replay、axiom audit 或 CI。
++
++root 通知五个源码的证明修复完成、内容稳定后，本文件计算并记录了实际源码 SHA256 与 Git blob SHA1。源码指纹不代表编译成功；真实 strict compile、原版 replay、axiom audit 及其固定提交由最终 inventory 确认。`SOURCE_TYPES.json` 同时保存原始 signature 和完整限定声明名的 qualified_signature。
++
++所有声明均来自 `namespace ImbalancedChen`。下方标题和代码块中的定理名均加上完整 `ImbalancedChen.` 限定；参数、量词、前提及结论逐字保留。JSON 的 signature 字段另外保留原始源码声明名。其余短标识符按原 ImbalancedChen 命名空间解释；阅读完整限定代码块时可采用 `open ImbalancedChen`、`open scoped BigOperators`、`open Filter Topology` 的上下文。各模块列出原 imports。这只是源码接口摘录，不是编译器全名展开、新的 Lean 声明或独立可编译文件。
++
++| 模块 | 公开 theorem 数 |
++|---|---:|
++| `ImbalancedChen/ActualUpperPolicyDensity.lean` | 13 |
++| `ImbalancedChen/UpperCoefficientPerturbation.lean` | 6 |
++| `ImbalancedChen/ActualUpperDensityAssembly.lean` | 7 |
++| `ImbalancedChen/RealPhysicalUpperWeightBridge.lean` | 26 |
++| `ImbalancedChen/RealUpperCountingAssembly.lean` | 1 |
++
++
++## 源码内容身份（不是编译验证）
++
++源码哈希计算时间：2026-10-12T18:00:00.880460+00:00。
++
++本次提取不宣称源码属于某个已验证 commit；根代理负责 Git 恢复与最终提交绑定。以下哈希标识本次实际读取的五个源码内容。
++
++| 源文件 | SHA256 | Git blob SHA1 |
++|---|---|---|
++| `ImbalancedChen/ActualUpperPolicyDensity.lean` | `16d81ee162d9ed2a5efad703c9a900b2c5ada622b2613472f70eaef4cbd02ae6` | `487f13707ee13159cd7f161879b5a2e44ffb8c19` |
++| `ImbalancedChen/UpperCoefficientPerturbation.lean` | `e4d1d84fa128f7f84fb4f7d4f0b03acf8401312de1ceaed045de3aaf3b5d6e86` | `7b024033e58e19c0dcf94de322d6cb7d6815d987` |
++| `ImbalancedChen/ActualUpperDensityAssembly.lean` | `659aa3d8cfa50345f912ba070e30cd57a6caa1738e4146d1c051a7506f944cec` | `e363dee459e99b2be6f83f2c70b15f8968fd4817` |
++| `ImbalancedChen/RealPhysicalUpperWeightBridge.lean` | `8a86c2e7fd2383fcae243b5958f3447675a4f5b7a4c9078ba1ba832ea067878f` | `c774859dab0bdcfc1266200d7437a62d0c69e5ea` |
++| `ImbalancedChen/RealUpperCountingAssembly.lean` | `56bab762d3f765f5080a441910a8696e297bcd72801e13f4338b0ed7142a9a96` | `6e6843444cafa0e1d51a903981da0092983d2ac0` |
++
++## 必需接口覆盖
++
++| 接口 | 完整限定声明名 |
++|---|---|
++| policy／同一实际权等式 | `ImbalancedChen.actualSmallRoughRho_eq_firstExitAttachment` |
++| 同一 raw density | `ImbalancedChen.firstExitRetainedPolynomial_eq_fixedRoughDensity_of_even_retained` |
++| absolute physical density perturbation | `ImbalancedChen.abs_physicalDensitySum_smallRoughRho_sub_le` |
++| raw reserve 存在式 | `ImbalancedChen.exists_actualSmallRoughRho_density_le_of_full_policy_limits` |
++| compiler budget | `ImbalancedChen.compiled_physicalDensity_le_currentK_of_raw_and_coefficient_budget` |
++| real finite 分解 | `ImbalancedChen.sum_rho_mul_realHalfProductCongruenceMass_eq` |
++| 编译后 actual majorant | `ImbalancedChen.actualAttachedRho_majorant_of_rough_domination` |
++| actual rho 的 ceil majorant | `ImbalancedChen.actualSmallRoughRho_sieveProduct_majorant` |
++| coprime-zero gate | `ImbalancedChen.realPhysicalCoprimeCorrection_eq_zero_of_gate` |
++| outer source 有限式 | `ImbalancedChen.RealB_cast_le_same_rho_outer_main_add_errors` |
++| 最终 same-rho 条件式 hUpper | `ImbalancedChen.eventually_RealB_le_currentK_log_of_same_rho_inputs` |
++
++## ImbalancedChen.ActualUpperPolicyDensity
++
++来源：`ImbalancedChen/ActualUpperPolicyDensity.lean`。
++
++```lean
++import ImbalancedChen.ActualFirstExitDensityProjection
++import ImbalancedChen.ActualSelectedPrefixOwnCubeIntegral
++import ImbalancedChen.FirstExitHistoricalLevels
++```
++
++### ImbalancedChen.oddFirstExitPolicy_eq_of_even_retained
++
++```lean
++theorem ImbalancedChen.oddFirstExitPolicy_eq_of_even_retained {α : Type*}
++    (retained : Bool → List α → Bool)
++    (heven : ∀ pre, retained true pre = true) :
++    oddFirstExitPolicy (retained false) = retained
++```
++
++### ImbalancedChen.fixedRoughSupport_eq_firstExitRetainedModuli_of_even_retained
++
++```lean
++theorem ImbalancedChen.fixedRoughSupport_eq_firstExitRetainedModuli_of_even_retained
++    (retained : Bool → List ℕ → Bool)
++    (heven : ∀ pre, retained true pre = true)
++    (N cap : ℕ) (w z : ℝ) :
++    fixedRoughSupport (retained false) N cap w z =
++      firstExitRetainedModuli retained (roughPrimeUniverse N cap w z)
++```
++
++### ImbalancedChen.fixedRoughCoefficient_eq_firstExitRetainedCoefficient_of_even_retained
++
++```lean
++theorem ImbalancedChen.fixedRoughCoefficient_eq_firstExitRetainedCoefficient_of_even_retained
++    (retained : Bool → List ℕ → Bool)
++    (heven : ∀ pre, retained true pre = true)
++    (N cap : ℕ) (w z : ℝ) (d : ℕ) :
++    fixedRoughCoefficient (retained false) N cap w z d =
++      (firstExitRetainedCoefficient retained (roughPrimeUniverse N cap w z) d : ℝ)
++```
++
++### ImbalancedChen.actualSmallRoughModuli_eq_firstExitAttachment
++
++```lean
++theorem ImbalancedChen.actualSmallRoughModuli_eq_firstExitAttachment
++    (retained : Bool → List ℕ → Bool)
++    (heven : ∀ pre, retained true pre = true)
++    (N cap : ℕ) (w z : ℝ) :
++    actualSmallRoughModuli (retained false) N cap w z =
++      smallRoughModuli (actualSmallRosserSupport N cap w)
++        (firstExitRetainedModuli retained (roughPrimeUniverse N cap w z))
++```
++
++### ImbalancedChen.actualSmallRoughRho_eq_firstExitAttachment
++
++```lean
++theorem ImbalancedChen.actualSmallRoughRho_eq_firstExitAttachment
++    (retained : Bool → List ℕ → Bool)
++    (heven : ∀ pre, retained true pre = true)
++    (N cap : ℕ) (w z L : ℝ) :
++    actualSmallRoughRho (retained false) N cap w z L =
++      smallRoughRho (actualSmallRosserSupport N cap w)
++        (firstExitRetainedModuli retained (roughPrimeUniverse N cap w z))
++        (fun d => (firstExitRetainedCoefficient retained
++          (roughPrimeUniverse N cap w z) d : ℝ))
++        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)
++```
++
++### ImbalancedChen.firstExitRetainedPolynomial_eq_fixedRoughDensity_of_even_retained
++
++```lean
++theorem ImbalancedChen.firstExitRetainedPolynomial_eq_fixedRoughDensity_of_even_retained
++    (retained : Bool → List ℕ → Bool)
++    (heven : ∀ pre, retained true pre = true)
++    (N cap : ℕ) (w z : ℝ) :
++    firstExitRetainedPolynomial retained
++        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1
++        (roughPrimeUniverse N cap w z) =
++      reciprocalTotientDensity (fixedRoughSupport (retained false) N cap w z)
++        (fixedRoughCoefficient (retained false) N cap w z)
++```
++
++### ImbalancedChen.fixedRoughDensity_nonneg
++
++```lean
++theorem ImbalancedChen.fixedRoughDensity_nonneg
++    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) :
++    0 ≤ reciprocalTotientDensity (fixedRoughSupport retainOdd N cap w z)
++      (fixedRoughCoefficient retainOdd N cap w z)
++```
++
++### ImbalancedChen.firstExitDepthSplicePolicy_even_retained
++
++```lean
++theorem ImbalancedChen.firstExitDepthSplicePolicy_even_retained {α : Type*} (k : ℕ)
++    (parent replacement : Bool → List α → Bool)
++    (hparent : ∀ pre, parent true pre = true)
++    (hreplacement : ∀ pre, replacement true pre = true) (pre : List α) :
++    firstExitDepthSplicePolicy k parent replacement true pre = true
++```
++
++### ImbalancedChen.actualSelectedPrefixSplicePolicy_upper_even
++
++```lean
++@[simp] theorem ImbalancedChen.actualSelectedPrefixSplicePolicy_upper_even {d : ℕ} (N : ℝ)
++    (I : Finset (Fin d)) (old nu a b : ℚ) (m : ℕ)
++    (J : Finset (Fin d → Fin (m + 1))) (pre : List ℕ) :
++    actualSelectedPrefixSplicePolicy false N I old nu a b m J true pre = true
++```
++
++### ImbalancedChen.thirdCappedUpperPolicy_even_retained
++
++```lean
++theorem ImbalancedChen.thirdCappedUpperPolicy_even_retained
++    (base : Bool → List ℕ → Bool) (Q3 : List ℕ → ℝ)
++    (hbase : ∀ pre, base true pre = true) (pre : List ℕ) :
++    thirdCappedUpperPolicy base Q3 true pre = true
++```
++
++### ImbalancedChen.fourthCappedUpperPolicy_even_retained
++
++```lean
++theorem ImbalancedChen.fourthCappedUpperPolicy_even_retained
++    (base : Bool → List ℕ → Bool) (Q3 Q4 : List ℕ → ℝ)
++    (hbase : ∀ pre, base true pre = true) (pre : List ℕ) :
++    fourthCappedUpperPolicy base Q3 Q4 true pre = true
++```
++
++### ImbalancedChen.fifthCappedUpperPolicy_even_retained
++
++```lean
++theorem ImbalancedChen.fifthCappedUpperPolicy_even_retained
++    (base : Bool → List ℕ → Bool) (Q3 Q5 : List ℕ → ℝ)
++    (hbase : ∀ pre, base true pre = true) (pre : List ℕ) :
++    fifthCappedUpperPolicy base Q3 Q5 true pre = true
++```
++
++### ImbalancedChen.actualSelectedPrefixUpperDensity_eq_fixedRoughDensity
++
++```lean
++theorem ImbalancedChen.actualSelectedPrefixUpperDensity_eq_fixedRoughDensity
++    (N cap : ℕ) (I : Finset (Fin 5)) (old nu a b : ℚ)
++    (m : ℕ) (J : Finset (Fin 5 → Fin (m + 1))) :
++    actualSelectedPrefixUpperDensity N cap I old nu a b m J =
++      reciprocalTotientDensity
++        (fixedRoughSupport
++          (actualSelectedPrefixSplicePolicy false (N : ℝ) I old nu a b m J false)
++          N cap 0 ((N : ℝ) ^ (b : ℝ)))
++        (fixedRoughCoefficient
++          (actualSelectedPrefixSplicePolicy false (N : ℝ) I old nu a b m J false)
++          N cap 0 ((N : ℝ) ^ (b : ℝ)))
++```
++
++## ImbalancedChen.UpperCoefficientPerturbation
++
++来源：`ImbalancedChen/UpperCoefficientPerturbation.lean`。
++
++```lean
++import ImbalancedChen.ActualSmallRoughAttachment
++```
++
++### ImbalancedChen.abs_signAttachedValue_sub_le
++
++```lean
++theorem ImbalancedChen.abs_signAttachedValue_sub_le
++    {c d lo hi M : ℝ} (hlo : |lo| ≤ M) (hhi : |hi| ≤ M) :
++    |signAttachedValue c lo hi - signAttachedValue d lo hi| ≤ M * |c - d|
++```
++
++### ImbalancedChen.signSensitiveReciprocalTotientDensity_eq_sum_attached
++
++```lean
++theorem ImbalancedChen.signSensitiveReciprocalTotientDensity_eq_sum_attached
++    (rough : Finset ℕ) (c : ℕ → ℝ) (lo hi : ℝ) :
++    signSensitiveReciprocalTotientDensity rough c lo hi =
++      ∑ d ∈ rough, signAttachedValue (c d) lo hi / (Nat.totient d : ℝ)
++```
++
++### ImbalancedChen.abs_signSensitiveReciprocalTotientDensity_sub_le
++
++```lean
++theorem ImbalancedChen.abs_signSensitiveReciprocalTotientDensity_sub_le
++    (rough : Finset ℕ) (compiled raw : ℕ → ℝ) {lo hi M : ℝ}
++    (hlo : |lo| ≤ M) (hhi : |hi| ≤ M) :
++    |signSensitiveReciprocalTotientDensity rough compiled lo hi -
++        signSensitiveReciprocalTotientDensity rough raw lo hi| ≤
++      M * reciprocalTotientDensity rough (fun d => |compiled d - raw d|)
++```
++
++### ImbalancedChen.abs_physicalDensitySum_smallRoughRho_sub_le
++
++```lean
++theorem ImbalancedChen.abs_physicalDensitySum_smallRoughRho_sub_le
++    {w : ℝ} {small rough : Finset ℕ}
++    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)
++    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)
++    (compiled raw betaMinus betaPlus : ℕ → ℝ) {M : ℝ}
++    (hminus : |reciprocalTotientDensity small betaMinus| ≤ M)
++    (hplus : |reciprocalTotientDensity small betaPlus| ≤ M) :
++    |physicalDensitySum (smallRoughModuli small rough)
++          (smallRoughRho small rough compiled betaMinus betaPlus) -
++        physicalDensitySum (smallRoughModuli small rough)
++          (smallRoughRho small rough raw betaMinus betaPlus)| ≤
++      M * reciprocalTotientDensity rough (fun d => |compiled d - raw d|)
++```
++
++### ImbalancedChen.supportedDivisorSum_le_of_coefficient_le
++
++```lean
++theorem ImbalancedChen.supportedDivisorSum_le_of_coefficient_le
++    (rough : Finset ℕ) (raw compiled : ℕ → ℝ)
++    (hdom : ∀ d ∈ rough, raw d ≤ compiled d) (n : ℕ) :
++    supportedDivisorSum rough raw n ≤ supportedDivisorSum rough compiled n
++```
++
++### ImbalancedChen.actualAttachedRho_majorant_of_rough_domination
++
++```lean
++theorem ImbalancedChen.actualAttachedRho_majorant_of_rough_domination
++    (N cap : ℕ) (w z L : ℝ) (rough : Finset ℕ) (raw compiled : ℕ → ℝ)
++    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)
++    (hraw : ∀ n : ℤ, actualIntervalRoughIndicator N w z n ≤
++      supportedDivisorSum rough raw n.natAbs)
++    (hdom : ∀ d ∈ rough, raw d ≤ compiled d)
++    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z) (hzcap : z ≤ (cap : ℝ))
++    (n : ℤ) :
++    actualSmallRoughIndicator N z n ≤
++      physicalDivisorSum (smallRoughModuli (actualSmallRosserSupport N cap w) rough)
++        (smallRoughRho (actualSmallRosserSupport N cap w) rough compiled
++          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) n.natAbs
++```
++
++## ImbalancedChen.ActualUpperDensityAssembly
++
++来源：`ImbalancedChen/ActualUpperDensityAssembly.lean`。
++
++```lean
++import ImbalancedChen.ActualFirstExitDensityProjection
++import ImbalancedChen.UpperCoefficientPerturbation
++import ImbalancedChen.CurrentNumericalTransfer
++```
++
++### ImbalancedChen.sourceMassScale_mul_densityScale
++
++```lean
++theorem ImbalancedChen.sourceMassScale_mul_densityScale (N : ℕ) :
++    ((N : ℝ) / Real.log (N : ℝ)) *
++        (singularSeries N / Real.log (N : ℝ)) = singularNormalization N
++```
++
++### ImbalancedChen.densityScale_pos
++
++```lean
++theorem ImbalancedChen.densityScale_pos {N : ℕ} (hN : 2 ≤ N) :
++    0 < singularSeries N / Real.log (N : ℝ)
++```
++
++### ImbalancedChen.density_le_manuscriptScale_iff_normalized
++
++```lean
++theorem ImbalancedChen.density_le_manuscriptScale_iff_normalized {N : ℕ}
++    (hN : 2 ≤ N) (density coefficient : ℝ) :
++    density ≤ coefficient * (singularSeries N / Real.log (N : ℝ)) ↔
++      density * Real.log (N : ℝ) / singularSeries N ≤ coefficient
++```
++
++### ImbalancedChen.same_rho_normalized_mainTerm
++
++```lean
++theorem ImbalancedChen.same_rho_normalized_mainTerm (N : ℕ) (mass : ℝ)
++    (Q : Finset ℕ) (rho : ℕ → ℝ) :
++    (mass * physicalDensitySum Q rho) / singularNormalization N =
++      (mass * Real.log (N : ℝ) / (N : ℝ)) *
++        (physicalDensitySum Q rho * Real.log (N : ℝ) / singularSeries N)
++```
++
++### ImbalancedChen.exists_actualSmallRoughRho_density_le_of_full_policy_limits
++
++```lean
++theorem ImbalancedChen.exists_actualSmallRoughRho_density_le_of_full_policy_limits
++    (nu sieveR epsilonMax rawBound densityCap : ℝ)
++    (hnu : 0 < nu) (hr : 0 < sieveR) (hepsilonMax : 0 < epsilonMax)
++    (retainOdd : ℝ → ℕ → List ℕ → Bool) (cap : ℕ → ℕ) (integral : ℝ → ℝ)
++    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},
++      (N : ℝ) ^ (nu * sieveR) ≤ (cap N : ℝ))
++    (hIntegral : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →
++      Tendsto (fun N : ℕ =>
++        reciprocalTotientDensity
++          (fixedRoughSupport (retainOdd epsilon N) N (cap N) 0
++            ((N : ℝ) ^ (nu * sieveR)))
++          (fixedRoughCoefficient (retainOdd epsilon N) N (cap N) 0
++            ((N : ℝ) ^ (nu * sieveR))) *
++          Real.log (N : ℝ) / singularSeries N)
++        (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})
++        (𝓝 (integral epsilon)))
++    (hCertificate : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →
++      integral epsilon ≤ rawBound)
++    (hgap : rawBound < densityCap) :
++    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧
++      epsilon < epsilonMax ∧ epsilon ^ 2 ≤ sieveR ∧
++      ∃ N₀ : ℕ, 2 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → Even N →
++        let w := (N : ℝ) ^ (nu * epsilon ^ 2)
++        let z := (N : ℝ) ^ (nu * sieveR)
++        let L := (N : ℝ) ^ (nu * epsilon)
++        physicalDensitySum (actualSmallRoughModuli (retainOdd epsilon N) N (cap N) w z)
++            (actualSmallRoughRho (retainOdd epsilon N) N (cap N) w z L) ≤
++          densityCap * (singularSeries N / Real.log (N : ℝ))
++```
++
++### ImbalancedChen.exists_actualSmallRoughRho_density_le_currentK_of_full_policy_limits
++
++```lean
++theorem ImbalancedChen.exists_actualSmallRoughRho_density_le_currentK_of_full_policy_limits
++    (nu sieveR epsilonMax rawBound : ℝ)
++    (hnu : 0 < nu) (hr : 0 < sieveR) (hepsilonMax : 0 < epsilonMax)
++    (retainOdd : ℝ → ℕ → List ℕ → Bool) (cap : ℕ → ℕ) (integral : ℝ → ℝ)
++    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},
++      (N : ℝ) ^ (nu * sieveR) ≤ (cap N : ℝ))
++    (hIntegral : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →
++      Tendsto (fun N : ℕ =>
++        reciprocalTotientDensity
++          (fixedRoughSupport (retainOdd epsilon N) N (cap N) 0
++            ((N : ℝ) ^ (nu * sieveR)))
++          (fixedRoughCoefficient (retainOdd epsilon N) N (cap N) 0
++            ((N : ℝ) ^ (nu * sieveR))) *
++          Real.log (N : ℝ) / singularSeries N)
++        (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})
++        (𝓝 (integral epsilon)))
++    (hCertificate : ∀ epsilon : ℝ, 0 < epsilon → epsilon < epsilonMax →
++      integral epsilon ≤ rawBound)
++    (hgap : rawBound < currentK) :
++    ∃ epsilon : ℝ, 0 < epsilon ∧ epsilon < 1 / 8 ∧
++      epsilon < epsilonMax ∧ epsilon ^ 2 ≤ sieveR ∧
++      ∃ N₀ : ℕ, 2 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → Even N →
++        let w := (N : ℝ) ^ (nu * epsilon ^ 2)
++        let z := (N : ℝ) ^ (nu * sieveR)
++        let L := (N : ℝ) ^ (nu * epsilon)
++        physicalDensitySum (actualSmallRoughModuli (retainOdd epsilon N) N (cap N) w z)
++            (actualSmallRoughRho (retainOdd epsilon N) N (cap N) w z L) ≤
++          currentK * (singularSeries N / Real.log (N : ℝ))
++```
++
++### ImbalancedChen.compiled_physicalDensity_le_currentK_of_raw_and_coefficient_budget
++
++```lean
++theorem ImbalancedChen.compiled_physicalDensity_le_currentK_of_raw_and_coefficient_budget
++    {N : ℕ} (hN : 2 ≤ N) {w : ℝ} {small rough : Finset ℕ}
++    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)
++    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)
++    (compiled raw betaMinus betaPlus : ℕ → ℝ) (M rawBound compilerReserve : ℝ)
++    (hminus : |reciprocalTotientDensity small betaMinus| ≤ M)
++    (hplus : |reciprocalTotientDensity small betaPlus| ≤ M)
++    (hraw : physicalDensitySum (smallRoughModuli small rough)
++        (smallRoughRho small rough raw betaMinus betaPlus) ≤
++      rawBound * (singularSeries N / Real.log (N : ℝ)))
++    (hcompiler : M * reciprocalTotientDensity rough (fun d => |compiled d - raw d|) ≤
++      compilerReserve * (singularSeries N / Real.log (N : ℝ)))
++    (hbudget : rawBound + compilerReserve ≤ currentK) :
++    physicalDensitySum (smallRoughModuli small rough)
++        (smallRoughRho small rough compiled betaMinus betaPlus) *
++        Real.log (N : ℝ) / singularSeries N ≤ currentK
++```
++
++## ImbalancedChen.RealPhysicalUpperWeightBridge
++
++来源：`ImbalancedChen/RealPhysicalUpperWeightBridge.lean`。
++
++```lean
++import ImbalancedChen.PhysicalUpperWeightBridge
++import ImbalancedChen.RealHalfProductSource
++import ImbalancedChen.CurvedRegionDiscrepancy
++import ImbalancedChen.ActualSmallRoughAttachment
++```
++
++### ImbalancedChen.realHalfProductSource_filter_dvd_eq_filter_modEq
++
++```lean
++theorem ImbalancedChen.realHalfProductSource_filter_dvd_eq_filter_modEq
++    (b : ℝ) (N d : ℕ) (T : ℝ) :
++    (realHalfProductSource b N T).filter (fun m : ℕ => d ∣ N - m) =
++      (realHalfProductSource b N T).filter (fun m : ℕ => Nat.ModEq d m N)
++```
++
++### ImbalancedChen.sum_physicalDivisorSum_realHalfProductSource
++
++```lean
++theorem ImbalancedChen.sum_physicalDivisorSum_realHalfProductSource
++    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) :
++    (∑ m ∈ realHalfProductSource b N T,
++      physicalDivisorSum Q rho (N - m)) =
++      ∑ d ∈ Q, rho d * realHalfProductCongruenceMass b N T d
++```
++
++### ImbalancedChen.sum_rho_mul_realHalfProductCongruenceMass_eq
++
++```lean
++theorem ImbalancedChen.sum_rho_mul_realHalfProductCongruenceMass_eq
++    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) :
++    (∑ d ∈ Q, rho d * realHalfProductCongruenceMass b N T d) =
++      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +
++        realPhysicalCoprimeCorrection b N T Q rho +
++        realPhysicalDistributionError b N T Q rho
++```
++
++### ImbalancedChen.mem_realSiftedHalfProductSource
++
++```lean
++@[simp] theorem ImbalancedChen.mem_realSiftedHalfProductSource {b T : ℝ} {N m z : ℕ} :
++    m ∈ realSiftedHalfProductSource b N T z ↔
++      m ∈ realHalfProductSource b N T ∧
++        Nat.Coprime (N - m) (sieveProduct N z)
++```
++
++### ImbalancedChen.realSiftedHalfProductSource_card_le_sum_physicalDivisorSum
++
++```lean
++theorem ImbalancedChen.realSiftedHalfProductSource_card_le_sum_physicalDivisorSum
++    (b : ℝ) (N z : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ)
++    (hmajor : ∀ n : ℕ,
++      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤
++        physicalDivisorSum Q rho n) :
++    ((realSiftedHalfProductSource b N T z).card : ℝ) ≤
++      ∑ m ∈ realHalfProductSource b N T, physicalDivisorSum Q rho (N - m)
++```
++
++### ImbalancedChen.realSiftedHalfProductSource_card_le_same_rho_main_add_errors
++
++```lean
++theorem ImbalancedChen.realSiftedHalfProductSource_card_le_same_rho_main_add_errors
++    (b : ℝ) (N z : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ)
++    (hmajor : ∀ n : ℕ,
++      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤
++        physicalDivisorSum Q rho n) :
++    ((realSiftedHalfProductSource b N T z).card : ℝ) ≤
++      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +
++        realPhysicalCoprimeCorrection b N T Q rho +
++        realPhysicalDistributionError b N T Q rho
++```
++
++### ImbalancedChen.realHalfProductSource_primePartner_card_le_realSifted_add_cap
++
++```lean
++theorem ImbalancedChen.realHalfProductSource_primePartner_card_le_realSifted_add_cap
++    (b : ℝ) (N z : ℕ) (T : ℝ) :
++    ((realHalfProductSource b N T).filter
++      (fun m => m < N ∧ Nat.Prime (N - m))).card ≤
++      (realSiftedHalfProductSource b N T z).card + z
++```
++
++### ImbalancedChen.RealB_cast_le_realSiftedHalfProductSource_card_add_cap_cutoff
++
++```lean
++theorem ImbalancedChen.RealB_cast_le_realSiftedHalfProductSource_card_add_cap_cutoff
++    {b T : ℝ} (N z : ℕ) (hb : b < 1) (hT : 0 ≤ T) :
++    (RealB b N : ℝ) ≤
++      ((realSiftedHalfProductSource b N T z).card : ℝ) + (z : ℝ) + (T + 1)
++```
++
++### ImbalancedChen.RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff
++
++```lean
++theorem ImbalancedChen.RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff
++    {b T : ℝ} (N z : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ)
++    (hb : b < 1) (hT : 0 ≤ T)
++    (hmajor : ∀ n : ℕ,
++      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤
++        physicalDivisorSum Q rho n) :
++    (RealB b N : ℝ) ≤
++      (∑ m ∈ realHalfProductSource b N T,
++        physicalDivisorSum Q rho (N - m)) + (z : ℝ) + (T + 1)
++```
++
++### ImbalancedChen.RealB_cast_le_same_rho_main_add_errors
++
++```lean
++theorem ImbalancedChen.RealB_cast_le_same_rho_main_add_errors
++    {b T : ℝ} (N z : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ)
++    (hb : b < 1) (hT : 0 ≤ T)
++    (hmajor : ∀ n : ℕ,
++      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤
++        physicalDivisorSum Q rho n) :
++    (RealB b N : ℝ) ≤
++      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +
++        realPhysicalCoprimeCorrection b N T Q rho +
++        realPhysicalDistributionError b N T Q rho + (z : ℝ) + (T + 1)
++```
++
++### ImbalancedChen.realHalfProductSource_prime_divisor_rough
++
++```lean
++theorem ImbalancedChen.realHalfProductSource_prime_divisor_rough
++    {b T : ℝ} {N m ell : ℕ} (hb : 0 < b) (hT : 0 < T)
++    (hm : m ∈ realHalfProductSource b N T)
++    (hell : Nat.Prime ell) (hdvd : ell ∣ m) :
++    T ^ (b / (1 + b)) < (ell : ℝ)
++```
++
++### ImbalancedChen.realHalfProductSource_coprime_of_dvd_sieveProduct
++
++```lean
++theorem ImbalancedChen.realHalfProductSource_coprime_of_dvd_sieveProduct
++    {b T : ℝ} {N m z d : ℕ} (hb : 0 < b) (hT : 0 < T)
++    (hcap : (z : ℝ) ≤ T ^ (b / (1 + b)))
++    (hm : m ∈ realHalfProductSource b N T) (hd : d ∣ sieveProduct N z) :
++    Nat.Coprime m d
++```
++
++### ImbalancedChen.realHalfProductCoprimeMass_eq_card_of_gate
++
++```lean
++theorem ImbalancedChen.realHalfProductCoprimeMass_eq_card_of_gate
++    {b T : ℝ} {N z d : ℕ} (hb : 0 < b) (hT : 0 < T)
++    (hcap : (z : ℝ) ≤ T ^ (b / (1 + b))) (hd : d ∣ sieveProduct N z) :
++    realHalfProductCoprimeMass b N T d =
++      ((realHalfProductSource b N T).card : ℝ)
++```
++
++### ImbalancedChen.realPhysicalCoprimeCorrection_eq_zero_of_gate
++
++```lean
++theorem ImbalancedChen.realPhysicalCoprimeCorrection_eq_zero_of_gate
++    {b T : ℝ} {N z : ℕ} (Q : Finset ℕ) (rho : ℕ → ℝ)
++    (hb : 0 < b) (hT : 0 < T) (hcap : (z : ℝ) ≤ T ^ (b / (1 + b)))
++    (hsupport : ∀ d ∈ Q, rho d ≠ 0 → d ∣ sieveProduct N z) :
++    realPhysicalCoprimeCorrection b N T Q rho = 0
++```
++
++### ImbalancedChen.RealB_cast_le_same_rho_main_add_distribution_of_gate
++
++```lean
++theorem ImbalancedChen.RealB_cast_le_same_rho_main_add_distribution_of_gate
++    {b T : ℝ} (N z : ℕ) (Q : Finset ℕ) (rho : ℕ → ℝ)
++    (hb : 0 < b) (hb1 : b < 1) (hT : 0 < T)
++    (hcap : (z : ℝ) ≤ T ^ (b / (1 + b)))
++    (hsupport : ∀ d ∈ Q, rho d ≠ 0 → d ∣ sieveProduct N z)
++    (hmajor : ∀ n : ℕ,
++      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤
++        physicalDivisorSum Q rho n) :
++    (RealB b N : ℝ) ≤
++      ((realHalfProductSource b N T).card : ℝ) * physicalDensitySum Q rho +
++        realPhysicalDistributionError b N T Q rho + (z : ℝ) + (T + 1)
++```
++
++### ImbalancedChen.sum_weight_mul_physicalDivisorSum_eq_rho_mul_finiteCongruenceMass
++
++```lean
++theorem ImbalancedChen.sum_weight_mul_physicalDivisorSum_eq_rho_mul_finiteCongruenceMass
++    (N : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)
++    (hSN : ∀ m ∈ S, m ≤ N) :
++    (∑ m ∈ S, weight m * physicalDivisorSum Q rho (N - m)) =
++      ∑ d ∈ Q, rho d * finiteCongruenceMass S weight N d
++```
++
++### ImbalancedChen.sum_weight_mul_physicalDivisorSum_eq_same_rho_main_add_errors
++
++```lean
++theorem ImbalancedChen.sum_weight_mul_physicalDivisorSum_eq_same_rho_main_add_errors
++    (N : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)
++    (hSN : ∀ m ∈ S, m ≤ N) :
++    (∑ m ∈ S, weight m * physicalDivisorSum Q rho (N - m)) =
++      finiteSourceMass S weight * physicalDensitySum Q rho +
++        (∑ d ∈ Q, rho d *
++          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /
++            (Nat.totient d : ℝ))) +
++        ∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d
++```
++
++### ImbalancedChen.RealB_cast_le_same_rho_outer_main_add_errors
++
++```lean
++theorem ImbalancedChen.RealB_cast_le_same_rho_outer_main_add_errors
++    {b T : ℝ} (N z : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)
++    (hb : b < 1) (hT : 0 ≤ T)
++    (hSN : ∀ m ∈ S, m ≤ N)
++    (hsource : realHalfProductSource b N T ⊆ S)
++    (houter : ∀ m ∈ S,
++      (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) ≤ weight m)
++    (hmajor : ∀ n : ℕ,
++      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤
++        physicalDivisorSum Q rho n) :
++    (RealB b N : ℝ) ≤
++      finiteSourceMass S weight * physicalDensitySum Q rho +
++        (∑ d ∈ Q, rho d *
++          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /
++            (Nat.totient d : ℝ))) +
++        (∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d) +
++        (z : ℝ) + (T + 1)
++```
++
++### ImbalancedChen.actualSmallPrimeFinset_eq_sievePrimes_ceil
++
++```lean
++theorem ImbalancedChen.actualSmallPrimeFinset_eq_sievePrimes_ceil
++    (N cap : ℕ) (z : ℝ) (hzcap : z ≤ (cap : ℝ)) :
++    actualSmallPrimeFinset N cap z = sievePrimes N (Nat.ceil z)
++```
++
++### ImbalancedChen.actualSmallPrimeProduct_eq_sieveProduct_ceil
++
++```lean
++theorem ImbalancedChen.actualSmallPrimeProduct_eq_sieveProduct_ceil
++    (N cap : ℕ) (z : ℝ) (hzcap : z ≤ (cap : ℝ)) :
++    actualSmallPrimeProduct N cap z = sieveProduct N (Nat.ceil z)
++```
++
++### ImbalancedChen.actualSmallRoughIndicator_eq_sieveProduct_natAbs
++
++```lean
++theorem ImbalancedChen.actualSmallRoughIndicator_eq_sieveProduct_natAbs
++    (N : ℕ) (z : ℝ) (n : ℤ) :
++    actualSmallRoughIndicator N z n =
++      if Nat.Coprime n.natAbs (sieveProduct N (Nat.ceil z)) then (1 : ℝ) else 0
++```
++
++### ImbalancedChen.actualSmallRoughRho_sieveProduct_majorant
++
++```lean
++theorem ImbalancedChen.actualSmallRoughRho_sieveProduct_majorant
++    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)
++    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z)
++    (hzcap : z ≤ (cap : ℝ)) (n : ℕ) :
++    (if Nat.Coprime n (sieveProduct N (Nat.ceil z)) then (1 : ℝ) else 0) ≤
++      physicalDivisorSum (actualSmallRoughModuli retainOdd N cap w z)
++        (actualSmallRoughRho retainOdd N cap w z L) n
++```
++
++### ImbalancedChen.actualSmallRosserSupport_dvd_sieveProduct_ceil
++
++```lean
++theorem ImbalancedChen.actualSmallRosserSupport_dvd_sieveProduct_ceil
++    (N cap : ℕ) (w z : ℝ) (hwz : w ≤ z) {d : ℕ}
++    (hd : d ∈ actualSmallRosserSupport N cap w) :
++    d ∣ sieveProduct N (Nat.ceil z)
++```
++
++### ImbalancedChen.fixedRoughSupport_dvd_sieveProduct_ceil
++
++```lean
++theorem ImbalancedChen.fixedRoughSupport_dvd_sieveProduct_ceil
++    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) {d : ℕ}
++    (hd : d ∈ fixedRoughSupport retainOdd N cap w z) :
++    d ∣ sieveProduct N (Nat.ceil z)
++```
++
++### ImbalancedChen.actualSmallRoughModuli_dvd_sieveProduct_ceil
++
++```lean
++theorem ImbalancedChen.actualSmallRoughModuli_dvd_sieveProduct_ceil
++    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) (hwz : w ≤ z) {d : ℕ}
++    (hd : d ∈ actualSmallRoughModuli retainOdd N cap w z) :
++    d ∣ sieveProduct N (Nat.ceil z)
++```
++
++### ImbalancedChen.RealB_cast_le_actualSmallRoughRho_main_add_errors
++
++```lean
++theorem ImbalancedChen.RealB_cast_le_actualSmallRoughRho_main_add_errors
++    {b T : ℝ} (N cap : ℕ) (retainOdd : List ℕ → Bool) (w z L : ℝ)
++    (hb : b < 1) (hT : 0 ≤ T)
++    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z) (hzcap : z ≤ (cap : ℝ)) :
++    (RealB b N : ℝ) ≤
++      ((realHalfProductSource b N T).card : ℝ) *
++        physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)
++          (actualSmallRoughRho retainOdd N cap w z L) +
++      realPhysicalCoprimeCorrection b N T (actualSmallRoughModuli retainOdd N cap w z)
++        (actualSmallRoughRho retainOdd N cap w z L) +
++      realPhysicalDistributionError b N T (actualSmallRoughModuli retainOdd N cap w z)
++        (actualSmallRoughRho retainOdd N cap w z L) + (Nat.ceil z : ℝ) + (T + 1)
++```
++
++## ImbalancedChen.RealUpperCountingAssembly
++
++来源：`ImbalancedChen/RealUpperCountingAssembly.lean`。
++
++```lean
++import ImbalancedChen.ActualUpperDensityAssembly
++import ImbalancedChen.RealPhysicalUpperWeightBridge
++import ImbalancedChen.RealHalfProductMassSuppliers
++import ImbalancedChen.PowerErrorBudget
++```
++
++### ImbalancedChen.eventually_RealB_le_currentK_log_of_same_rho_inputs
++
++```lean
++theorem ImbalancedChen.eventually_RealB_le_currentK_log_of_same_rho_inputs
++    {b kappa sieveExponent : ℝ}
++    (hb : 0 < b) (hb1 : b < 1) (hkappa : 0 < kappa)
++    (hsieve : sieveExponent < 1)
++    (Q : ℝ → ℕ → Finset ℕ) (rho : ℝ → ℕ → ℕ → ℝ)
++    (hmajor : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N → ∀ n : ℕ,
++      (if Nat.Coprime n (sieveProduct N (Nat.ceil ((N : ℝ) ^ sieveExponent)))
++        then (1 : ℝ) else 0) ≤ physicalDivisorSum (Q delta N) (rho delta N) n)
++    (hdensity : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →
++      physicalDensitySum (Q delta N) (rho delta N) ≤
++        (currentK + delta) * (singularSeries N / Real.log (N : ℝ)))
++    (hcoprime : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →
++      |realPhysicalCoprimeCorrection b N (manuscriptHalfProductCutoff kappa N)
++        (Q delta N) (rho delta N)| ≤ delta * singularNormalization N)
++    (hdistribution : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →
++      |realPhysicalDistributionError b N (manuscriptHalfProductCutoff kappa N)
++        (Q delta N) (rho delta N)| ≤ delta * singularNormalization N) :
++    ∀ epsilon : ℝ, 0 < epsilon → ∀ᶠ N : ℕ in atTop, Even N →
++      (RealB b N : ℝ) ≤
++        (currentK * Real.log (1 / b) + epsilon) * singularNormalization N
++```
++
++## 接收 Part 与最小未闭合输入
++
++- **P1 → P4：**完整 adopted policy／compiler 的实例、合法性及支持许可；实际零延拓必须保持同一 raw coefficient、相同 small weights 与相同参数。
++- **P2 → P4：**对应完整实际 policy 的 `hIntegral`／`hCertificate`、留有 compiler reserve 的全量数值上界，以及同一 carrier 上的实际 compiler budget。若主项以 `log D` 表示且 `D=N^nu`，到 `log N` 的系数为 `U/nu`。
++- **P3 → P4：**相同精度下相同 `Q delta N`／`rho delta N` 的 distribution 与合法平滑外逼近转换，覆盖这里指定的真实有序源和截断。
++- **P4 → P5：**这里提供准确接口；实际 K 密度结论和无条件 hUpper 须在解析输入闭合且真实验证后另行交付。条件式本身不宣称交付 A／B 已完成。
++- **P0／验证整合：**最终 inventory 负责精确源码身份、真实 strict compile、原版 replay 和 axiom audit；本文不替代这些证据。
++
++互素修正归零仍保留 cutoff gate 与所有非零系数的除尽支持。最终 hUpper 允许权依精度 delta 变化，但同一 delta 的 majorant、density、coprime correction 与 distribution 全部使用同一权。有限式保留 ceil 截断及端点项，全部签名没有 hLower 依赖。
++
++已有 small Rosser density sandwich 可用于取得 M 的有限上界；不应把这个可复用有限推论重复列为 P2 新解析缺口。共同 carrier 的有限适配候选单列于 `COMMON_CARRIER_CANDIDATE.lean.txt`，尚未编译、尚非生产代码，不属于本次 53 个现有声明。
+diff --git a/verification/parts/p4a/round2/attempt1-runner-recovery-fixtures.stderr.log b/verification/parts/p4a/round2/attempt1-runner-recovery-fixtures.stderr.log
+new file mode 100644
+index 0000000..e2b4ae5
+--- /dev/null
++++ b/verification/parts/p4a/round2/attempt1-runner-recovery-fixtures.stderr.log
+@@ -0,0 +1,11 @@
++Traceback (most recent call last):
++  File "/workspace/scratch/8c23f867e026/goldbach-formalization/verification/parts/p4a/round2/verify_runner_recovery.py", line 161, in <module>
++    check("workflow_failure_and_skip_fail", lambda: require('verification_outcome' in workflow and 'cache_outcome' in workflow
++  File "/workspace/scratch/8c23f867e026/goldbach-formalization/verification/parts/p4a/round2/verify_runner_recovery.py", line 40, in check
++    action()
++  File "/workspace/scratch/8c23f867e026/goldbach-formalization/verification/parts/p4a/round2/verify_runner_recovery.py", line 161, in <lambda>
++    check("workflow_failure_and_skip_fail", lambda: require('verification_outcome' in workflow and 'cache_outcome' in workflow
++                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++  File "/workspace/scratch/8c23f867e026/goldbach-formalization/verification/parts/p4a/round2/verify_runner_recovery.py", line 36, in require
++    raise AssertionError("Fixture condition failed")
++AssertionError: Fixture condition failed
+diff --git a/verification/parts/p4a/round2/attempt1-runner-recovery-fixtures.stdout.log b/verification/parts/p4a/round2/attempt1-runner-recovery-fixtures.stdout.log
+new file mode 100644
+index 0000000..94038bc
+--- /dev/null
++++ b/verification/parts/p4a/round2/attempt1-runner-recovery-fixtures.stdout.log
+@@ -0,0 +1,38 @@
++PASS runner_ast_parse_and_compile
++PASS runner_exact_previous_sha256
++PASS five_module_inventory_accept
++PASS empty_inventory_reject
++PASS wrong_total_reject
++PASS duplicate_total_reject
++PASS duplicate_name_reject
++PASS forbidden_transitive_axiom_reject
++PASS axioms_nonlist_reject
++PASS axiom_declaration_reject
++PASS abbreviated_type_reject
++PASS empty_type_reject
++PASS missing_universes_reject
++PASS wrong_declaration_module_reject
++PASS missing_module_reject
++PASS boolean_module_count_reject
++PASS unchanged_object_accept
++PASS object_byte_change_reject
++PASS added_server_part_reject
++PASS removed_server_part_reject
++PASS added_private_part_reject
++PASS removed_private_part_reject
++PASS empty_primary_object_reject
++PASS missing_primary_object_reject
++PASS three_unchanged_binaries_accept
++PASS changed_lean_binary_reject
++PASS changed_lake_binary_reject
++PASS changed_leanchecker_binary_reject
++PASS individual_exact_marker_accept
++PASS individual_missing_marker_reject
++PASS individual_duplicate_marker_reject
++PASS aggregate_fresh_exact_marker_accept
++PASS aggregate_fresh_missing_marker_reject
++PASS aggregate_fresh_duplicate_marker_reject
++PASS dependency_build_timeout_5400
++PASS workflow_final_gate_aggregate_fresh_replay_module
++PASS workflow_final_gate_output_part_sets_and_hashes_rechecked
++PASS workflow_final_gate_toolchain_binary_hashes_rechecked
+diff --git a/verification/parts/p4a/round2/attempt1-runner-recovery-python.json b/verification/parts/p4a/round2/attempt1-runner-recovery-python.json
+new file mode 100644
+index 0000000..d4d0077
+--- /dev/null
++++ b/verification/parts/p4a/round2/attempt1-runner-recovery-python.json
+@@ -0,0 +1,37 @@
++{
++  "schema": "p4-runner-recovery-python-v1",
++  "observed_at_utc": "2026-10-12T18:00:28.427777+00:00",
++  "command": [
++    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
++    "/workspace/scratch/8c23f867e026/goldbach-formalization/verification/parts/p4a/round2/verify_runner_recovery.py"
++  ],
++  "cwd": "/workspace/scratch/8c23f867e026/goldbach-formalization",
++  "exit_code": 1,
++  "elapsed_seconds": 0.064,
++  "ast_checks": [
++    {
++      "path": "verification/verify_part4_upper.py",
++      "status": "PASSED"
++    },
++    {
++      "path": "verification/parts/p4a/round2/verify_runner_recovery.py",
++      "status": "PASSED"
++    }
++  ],
++  "sha256_before": {
++    "verification/verify_part4_upper.py": "4cccc00cbb5261aedd53d3fda6a8d3d630b751cfa6f788abe29747449bbc3818",
++    ".github/workflows/part4-upper.yml": "817bb054499f4b7f197957d5fe7b2fed1e26b72edef7f54fe47610fbb8ddd629",
++    "verification/parts/p4a/round2/verify_runner_recovery.py": "4cc9093cc3ddcc11c0246194744e701f670a703bc06f5dde54202c6378d7473b"
++  },
++  "sha256_after": {
++    "verification/verify_part4_upper.py": "4cccc00cbb5261aedd53d3fda6a8d3d630b751cfa6f788abe29747449bbc3818",
++    ".github/workflows/part4-upper.yml": "817bb054499f4b7f197957d5fe7b2fed1e26b72edef7f54fe47610fbb8ddd629",
++    "verification/parts/p4a/round2/verify_runner_recovery.py": "4cc9093cc3ddcc11c0246194744e701f670a703bc06f5dde54202c6378d7473b"
++  },
++  "input_hashes_unchanged": true,
++  "status": "FAILED",
++  "lean_status": "NOT_RERUN",
++  "ci_status": "NOT_STARTED",
++  "old_raw_logs_recovered": false,
++  "evidence_scope": "New Python-only execution after second maintenance; no old fixture or Lean receipt asserted."
++}
+diff --git a/verification/parts/p4a/round2/extract_source_types.py b/verification/parts/p4a/round2/extract_source_types.py
+new file mode 100644
+index 0000000..14d78a2
+--- /dev/null
++++ b/verification/parts/p4a/round2/extract_source_types.py
+@@ -0,0 +1,139 @@
++#!/usr/bin/env python3
++"""Read-only Part 4 source-type extraction, not compiler verification.
++
++Usage from the repository root:
++  python verification/parts/p4a/round2/extract_source_types.py --repo .
++  python verification/parts/p4a/round2/extract_source_types.py --repo . \
++    --check-json verification/parts/p4a/round2/SOURCE_TYPES.json
++
++Without --check-json, JSON is printed to stdout. This script writes no files,
++does not require .git, and never runs Lean, a build, replay, or an axiom audit.
++It extracts theorem signatures ending in ':= by' from the five known modules.
++"""
++
++from __future__ import annotations
++
++import argparse
++from datetime import datetime, timezone
++import hashlib
++import json
++from pathlib import Path
++import re
++
++STATUS = "SOURCE_EXTRACTED_NOT_COMPILER_INVENTORY"
++MODULES = (
++    "ActualUpperPolicyDensity",
++    "UpperCoefficientPerturbation",
++    "ActualUpperDensityAssembly",
++    "RealPhysicalUpperWeightBridge",
++    "RealUpperCountingAssembly",
++)
++DECLARATION = re.compile(
++    r"(?m)^(?:@\[[^\n]*?\] )?theorem ([A-Za-z_][A-Za-z0-9_]*)\b"
++)
++PROOF_DELIMITER = re.compile(r"\s:= by(?:\s|$)")
++
++
++def extract_module(repo: Path, module: str) -> dict:
++    relative = f"ImbalancedChen/{module}.lean"
++    source_bytes = (repo / relative).read_bytes()
++    source = source_bytes.decode("utf-8")
++    declarations = []
++    for match in DECLARATION.finditer(source):
++        tail = source[match.start():]
++        delimiter = PROOF_DELIMITER.search(tail)
++        if delimiter is None:
++            raise ValueError(f"No ':= by' delimiter: {module}.{match.group(1)}")
++        signature = tail[:delimiter.start()].rstrip()
++        if len(list(DECLARATION.finditer(signature))) != 1:
++            raise ValueError(f"Unexpected declaration boundary: {module}.{match.group(1)}")
++        name = match.group(1)
++        full_name = f"ImbalancedChen.{name}"
++        declarations.append(
++            {
++                "name": name,
++                "full_name": full_name,
++                "signature": signature,
++                "qualified_signature": signature.replace(
++                    "theorem " + name, "theorem " + full_name, 1
++                ),
++            }
++        )
++    blob_header = b"blob " + str(len(source_bytes)).encode("ascii") + b"\0"
++    return {
++        "module": f"ImbalancedChen.{module}",
++        "path": relative,
++        "imports": [line for line in source.splitlines() if line.startswith("import ")],
++        "public_theorem_count": len(declarations),
++        "declarations": declarations,
++        "sha256": hashlib.sha256(source_bytes).hexdigest(),
++        "git_blob_sha1": hashlib.sha1(blob_header + source_bytes).hexdigest(),
++        "source_bytes": len(source_bytes),
++    }
++
++
++def verify_saved_inventory(current: dict, saved: dict) -> None:
++    if saved.get("status") != STATUS:
++        raise ValueError("Saved file is not explicitly a source-only inventory")
++    current_files = {item["path"]: item for item in current["files"]}
++    saved_files = {item["path"]: item for item in saved["files"]}
++    if current_files.keys() != saved_files.keys():
++        raise ValueError("Module set differs")
++    if current["public_theorem_count"] != saved.get("public_theorem_count"):
++        raise ValueError("Public theorem count differs")
++    for path, item in current_files.items():
++        previous = saved_files[path]
++        for field in ("sha256", "git_blob_sha1", "public_theorem_count"):
++            if item[field] != previous.get(field):
++                raise ValueError(f"{path}: {field} differs")
++        if item["declarations"] != previous["declarations"]:
++            raise ValueError(f"{path}: original or qualified signatures differ")
++
++
++def main() -> None:
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument("--repo", type=Path, default=Path("."))
++    parser.add_argument("--expected-count", type=int, default=53)
++    parser.add_argument("--check-json", type=Path)
++    args = parser.parse_args()
++    repo = args.repo.resolve()
++    files = [extract_module(repo, module) for module in MODULES]
++    total = sum(item["public_theorem_count"] for item in files)
++    if total != args.expected_count:
++        raise ValueError(f"Expected {args.expected_count} declarations; found {total}")
++    data = {
++        "status": STATUS,
++        "extracted_at_utc": datetime.now(timezone.utc).isoformat(),
++        "namespace": "ImbalancedChen",
++        "proofs_included": False,
++        "full_source_hashes_included": True,
++        "public_theorem_count": total,
++        "verification_note": "Source-text extraction only; no compiler verification.",
++        "qualification_note": (
++            "signature preserves the source text. qualified_signature only qualifies "
++            "the declared theorem name; all other identifiers retain their original "
++            "ImbalancedChen namespace context. This is not compiler elaboration."
++        ),
++        "files": files,
++    }
++    if args.check_json is not None:
++        path = args.check_json
++        if not path.is_absolute():
++            path = repo / path
++        verify_saved_inventory(data, json.loads(path.read_text()))
++        print(json.dumps({
++            "status": STATUS,
++            "modules": len(files),
++            "public_theorems": total,
++            "original_signatures_match": True,
++            "qualified_signatures_match": True,
++            "source_hashes_match": True,
++            "compiler_run": False,
++        }, ensure_ascii=False))
++    else:
++        print(json.dumps(data, ensure_ascii=False, indent=2))
++
++
++if __name__ == "__main__":
++    main()
++
+diff --git a/verification/parts/p4a/round2/runner-recovery-fixtures.stderr.log b/verification/parts/p4a/round2/runner-recovery-fixtures.stderr.log
+new file mode 100644
+index 0000000..e69de29
+diff --git a/verification/parts/p4a/round2/runner-recovery-fixtures.stdout.log b/verification/parts/p4a/round2/runner-recovery-fixtures.stdout.log
+new file mode 100644
+index 0000000..1aced6e
+--- /dev/null
++++ b/verification/parts/p4a/round2/runner-recovery-fixtures.stdout.log
+@@ -0,0 +1,40 @@
++PASS runner_ast_parse_and_compile
++PASS runner_exact_previous_sha256
++PASS five_module_inventory_accept
++PASS empty_inventory_reject
++PASS wrong_total_reject
++PASS duplicate_total_reject
++PASS duplicate_name_reject
++PASS forbidden_transitive_axiom_reject
++PASS axioms_nonlist_reject
++PASS axiom_declaration_reject
++PASS abbreviated_type_reject
++PASS empty_type_reject
++PASS missing_universes_reject
++PASS wrong_declaration_module_reject
++PASS missing_module_reject
++PASS boolean_module_count_reject
++PASS unchanged_object_accept
++PASS object_byte_change_reject
++PASS added_server_part_reject
++PASS removed_server_part_reject
++PASS added_private_part_reject
++PASS removed_private_part_reject
++PASS empty_primary_object_reject
++PASS missing_primary_object_reject
++PASS three_unchanged_binaries_accept
++PASS changed_lean_binary_reject
++PASS changed_lake_binary_reject
++PASS changed_leanchecker_binary_reject
++PASS individual_exact_marker_accept
++PASS individual_missing_marker_reject
++PASS individual_duplicate_marker_reject
++PASS aggregate_fresh_exact_marker_accept
++PASS aggregate_fresh_missing_marker_reject
++PASS aggregate_fresh_duplicate_marker_reject
++PASS dependency_build_timeout_5400
++PASS workflow_final_gate_aggregate_fresh_replay_module
++PASS workflow_final_gate_output_part_sets_and_hashes_rechecked
++PASS workflow_final_gate_toolchain_binary_hashes_rechecked
++PASS workflow_failure_and_skip_fail
++{"status": "PASSED", "case_count": 39, "cases": [{"name": "runner_ast_parse_and_compile", "status": "PASSED"}, {"name": "runner_exact_previous_sha256", "status": "PASSED"}, {"name": "five_module_inventory_accept", "status": "PASSED"}, {"name": "empty_inventory_reject", "status": "PASSED"}, {"name": "wrong_total_reject", "status": "PASSED"}, {"name": "duplicate_total_reject", "status": "PASSED"}, {"name": "duplicate_name_reject", "status": "PASSED"}, {"name": "forbidden_transitive_axiom_reject", "status": "PASSED"}, {"name": "axioms_nonlist_reject", "status": "PASSED"}, {"name": "axiom_declaration_reject", "status": "PASSED"}, {"name": "abbreviated_type_reject", "status": "PASSED"}, {"name": "empty_type_reject", "status": "PASSED"}, {"name": "missing_universes_reject", "status": "PASSED"}, {"name": "wrong_declaration_module_reject", "status": "PASSED"}, {"name": "missing_module_reject", "status": "PASSED"}, {"name": "boolean_module_count_reject", "status": "PASSED"}, {"name": "unchanged_object_accept", "status": "PASSED"}, {"name": "object_byte_change_reject", "status": "PASSED"}, {"name": "added_server_part_reject", "status": "PASSED"}, {"name": "removed_server_part_reject", "status": "PASSED"}, {"name": "added_private_part_reject", "status": "PASSED"}, {"name": "removed_private_part_reject", "status": "PASSED"}, {"name": "empty_primary_object_reject", "status": "PASSED"}, {"name": "missing_primary_object_reject", "status": "PASSED"}, {"name": "three_unchanged_binaries_accept", "status": "PASSED"}, {"name": "changed_lean_binary_reject", "status": "PASSED"}, {"name": "changed_lake_binary_reject", "status": "PASSED"}, {"name": "changed_leanchecker_binary_reject", "status": "PASSED"}, {"name": "individual_exact_marker_accept", "status": "PASSED"}, {"name": "individual_missing_marker_reject", "status": "PASSED"}, {"name": "individual_duplicate_marker_reject", "status": "PASSED"}, {"name": "aggregate_fresh_exact_marker_accept", "status": "PASSED"}, {"name": "aggregate_fresh_missing_marker_reject", "status": "PASSED"}, {"name": "aggregate_fresh_duplicate_marker_reject", "status": "PASSED"}, {"name": "dependency_build_timeout_5400", "status": "PASSED"}, {"name": "workflow_final_gate_aggregate_fresh_replay_module", "status": "PASSED"}, {"name": "workflow_final_gate_output_part_sets_and_hashes_rechecked", "status": "PASSED"}, {"name": "workflow_final_gate_toolchain_binary_hashes_rechecked", "status": "PASSED"}, {"name": "workflow_failure_and_skip_fail", "status": "PASSED"}], "scope": "New Python-only fixtures against actual AST-extracted gates; no Lean execution", "old_raw_logs_recovered": false}
+diff --git a/verification/parts/p4a/round2/runner-recovery-python.json b/verification/parts/p4a/round2/runner-recovery-python.json
+new file mode 100644
+index 0000000..324f18b
+--- /dev/null
++++ b/verification/parts/p4a/round2/runner-recovery-python.json
+@@ -0,0 +1,202 @@
++{
++  "schema": "p4-runner-recovery-python-v1",
++  "observed_at_utc": "2026-10-12T18:00:58.635643+00:00",
++  "command": [
++    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
++    "/workspace/scratch/8c23f867e026/goldbach-formalization/verification/parts/p4a/round2/verify_runner_recovery.py"
++  ],
++  "cwd": "/workspace/scratch/8c23f867e026/goldbach-formalization",
++  "exit_code": 0,
++  "elapsed_seconds": 0.059,
++  "ast_checks": [
++    {
++      "path": "verification/verify_part4_upper.py",
++      "status": "PASSED"
++    },
++    {
++      "path": "verification/parts/p4a/round2/verify_runner_recovery.py",
++      "status": "PASSED"
++    }
++  ],
++  "sha256_before": {
++    "verification/verify_part4_upper.py": "4cccc00cbb5261aedd53d3fda6a8d3d630b751cfa6f788abe29747449bbc3818",
++    ".github/workflows/part4-upper.yml": "817bb054499f4b7f197957d5fe7b2fed1e26b72edef7f54fe47610fbb8ddd629",
++    "verification/parts/p4a/round2/verify_runner_recovery.py": "ab3297bcf5b314bae8f93245d9165ab162f2a6b50ed7ec503f525cbcaed7e7ef"
++  },
++  "sha256_after": {
++    "verification/verify_part4_upper.py": "4cccc00cbb5261aedd53d3fda6a8d3d630b751cfa6f788abe29747449bbc3818",
++    ".github/workflows/part4-upper.yml": "817bb054499f4b7f197957d5fe7b2fed1e26b72edef7f54fe47610fbb8ddd629",
++    "verification/parts/p4a/round2/verify_runner_recovery.py": "ab3297bcf5b314bae8f93245d9165ab162f2a6b50ed7ec503f525cbcaed7e7ef"
++  },
++  "input_hashes_unchanged": true,
++  "status": "PASSED",
++  "lean_status": "NOT_RERUN",
++  "ci_status": "NOT_STARTED",
++  "old_raw_logs_recovered": false,
++  "evidence_scope": "New Python-only execution after second maintenance; no old fixture or Lean receipt asserted.",
++  "previous_attempt": "attempt1-runner-recovery-python.json; exit 1 due to fixture assuming lowercase Python outcome guards; corrected to actual uppercase shell guards; production files unchanged.",
++  "fixture_results": {
++    "status": "PASSED",
++    "case_count": 39,
++    "cases": [
++      {
++        "name": "runner_ast_parse_and_compile",
++        "status": "PASSED"
++      },
++      {
++        "name": "runner_exact_previous_sha256",
++        "status": "PASSED"
++      },
++      {
++        "name": "five_module_inventory_accept",
++        "status": "PASSED"
++      },
++      {
++        "name": "empty_inventory_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "wrong_total_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "duplicate_total_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "duplicate_name_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "forbidden_transitive_axiom_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "axioms_nonlist_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "axiom_declaration_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "abbreviated_type_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "empty_type_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "missing_universes_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "wrong_declaration_module_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "missing_module_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "boolean_module_count_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "unchanged_object_accept",
++        "status": "PASSED"
++      },
++      {
++        "name": "object_byte_change_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "added_server_part_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "removed_server_part_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "added_private_part_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "removed_private_part_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "empty_primary_object_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "missing_primary_object_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "three_unchanged_binaries_accept",
++        "status": "PASSED"
++      },
++      {
++        "name": "changed_lean_binary_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "changed_lake_binary_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "changed_leanchecker_binary_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "individual_exact_marker_accept",
++        "status": "PASSED"
++      },
++      {
++        "name": "individual_missing_marker_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "individual_duplicate_marker_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "aggregate_fresh_exact_marker_accept",
++        "status": "PASSED"
++      },
++      {
++        "name": "aggregate_fresh_missing_marker_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "aggregate_fresh_duplicate_marker_reject",
++        "status": "PASSED"
++      },
++      {
++        "name": "dependency_build_timeout_5400",
++        "status": "PASSED"
++      },
++      {
++        "name": "workflow_final_gate_aggregate_fresh_replay_module",
++        "status": "PASSED"
++      },
++      {
++        "name": "workflow_final_gate_output_part_sets_and_hashes_rechecked",
++        "status": "PASSED"
++      },
++      {
++        "name": "workflow_final_gate_toolchain_binary_hashes_rechecked",
++        "status": "PASSED"
++      },
++      {
++        "name": "workflow_failure_and_skip_fail",
++        "status": "PASSED"
++      }
++    ],
++    "scope": "New Python-only fixtures against actual AST-extracted gates; no Lean execution",
++    "old_raw_logs_recovered": false
++  }
++}
+diff --git a/verification/parts/p4a/round2/verify_runner_recovery.py b/verification/parts/p4a/round2/verify_runner_recovery.py
+new file mode 100644
+index 0000000..4b980d0
+--- /dev/null
++++ b/verification/parts/p4a/round2/verify_runner_recovery.py
+@@ -0,0 +1,165 @@
++"""New recovery fixtures; executes only actual pure Python gates extracted by AST.
++
++No Lean/Lake/checker, subprocess, production main, source lexer, or old receipts
++are executed or substituted. Temporary files are dummy Python test objects.
++"""
++from collections import Counter
++import ast
++import copy
++import hashlib
++import json
++from pathlib import Path
++import tempfile
++
++ROOT = Path(__file__).resolve().parents[4]
++RUNNER = ROOT / "verification/verify_part4_upper.py"
++WORKFLOW = ROOT / ".github/workflows/part4-upper.yml"
++source = RUNNER.read_text()
++tree = ast.parse(source, filename=str(RUNNER))
++compile(tree, str(RUNNER), "exec")
++helpers = {"digest", "object_snapshot", "check_object_snapshot",
++           "check_binary_snapshots", "parse_inventory"}
++nodes = [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name in helpers]
++assert {n.name for n in nodes} == helpers
++ns = {"Path": Path, "hashlib": hashlib, "json": json, "Counter": Counter}
++for node in tree.body:
++    if isinstance(node, ast.Assign):
++        for target in node.targets:
++            if isinstance(target, ast.Name) and target.id in {"MODULES", "ALLOWED"}:
++                ns[target.id] = ast.literal_eval(node.value)
++exec(compile(ast.Module(body=nodes, type_ignores=[]), str(RUNNER), "exec"), ns)
++results = []
++
++
++def require(condition):
++    if not condition:
++        raise AssertionError("Fixture condition failed")
++
++
++def check(name, action):
++    action()
++    results.append({"name": name, "status": "PASSED"})
++    print("PASS " + name)
++
++
++def rejected(action):
++    try:
++        action()
++    except RuntimeError:
++        return
++    raise AssertionError("Expected production gate to reject")
++
++
++modules = ns["MODULES"]
++records = [{"name": m + ".fixture", "module": m, "kind": "theorem",
++            "universe_parameters": [], "type": "True", "axioms": ["propext"]}
++           for m in modules]
++counts = [{"module": m, "count": 1} for m in modules]
++
++
++def inventory(rs=None, cs=None, total=None):
++    rs = records if rs is None else rs
++    cs = counts if cs is None else cs
++    total = len(rs) if total is None else total
++    return "\n".join([*("PART4_UPPER_AUDIT_DECL " + json.dumps(r) for r in rs),
++                      *("PART4_UPPER_AUDIT_MODULE " + json.dumps(c) for c in cs),
++                      "PART4_UPPER_AUDIT_COUNT " + str(total)])
++
++
++def bad_record(field, value):
++    rs = copy.deepcopy(records)
++    rs[0][field] = value
++    rejected(lambda: ns["parse_inventory"](inventory(rs=rs)))
++
++
++check("runner_ast_parse_and_compile", lambda: require(bool(tree.body)))
++check("runner_exact_previous_sha256", lambda: require(hashlib.sha256(RUNNER.read_bytes()).hexdigest()
++      == "4cccc00cbb5261aedd53d3fda6a8d3d630b751cfa6f788abe29747449bbc3818"))
++check("five_module_inventory_accept", lambda: require(ns["parse_inventory"](inventory()) == (records, counts)))
++check("empty_inventory_reject", lambda: rejected(lambda: ns["parse_inventory"]("")))
++check("wrong_total_reject", lambda: rejected(lambda: ns["parse_inventory"](inventory(total=6))))
++check("duplicate_total_reject", lambda: rejected(lambda: ns["parse_inventory"](inventory() + "\nPART4_UPPER_AUDIT_COUNT 5")))
++check("duplicate_name_reject", lambda: bad_record("name", records[1]["name"]))
++check("forbidden_transitive_axiom_reject", lambda: bad_record("axioms", ["sorryAx"]))
++check("axioms_nonlist_reject", lambda: bad_record("axioms", "propext"))
++check("axiom_declaration_reject", lambda: bad_record("kind", "axiom"))
++check("abbreviated_type_reject", lambda: bad_record("type", "True ⋯"))
++check("empty_type_reject", lambda: bad_record("type", " "))
++check("missing_universes_reject", lambda: bad_record("universe_parameters", None))
++check("wrong_declaration_module_reject", lambda: bad_record("module", "Other"))
++check("missing_module_reject", lambda: rejected(lambda: ns["parse_inventory"](inventory(cs=counts[:-1]))))
++bad_counts = copy.deepcopy(counts)
++bad_counts[0]["count"] = True
++check("boolean_module_count_reject", lambda: rejected(lambda: ns["parse_inventory"](inventory(cs=bad_counts))))
++
++with tempfile.TemporaryDirectory(prefix="p4-runner-fixtures-") as temporary:
++    tmp = Path(temporary)
++    ns["ROOT"] = tmp
++    target = tmp / "Fixture.olean"
++    target.write_bytes(b"dummy compiler object")
++    expected = ns["object_snapshot"](target)
++    check("unchanged_object_accept", lambda: ns["check_object_snapshot"](target, expected))
++    target.write_bytes(b"mutated dummy object")
++    check("object_byte_change_reject", lambda: rejected(lambda: ns["check_object_snapshot"](target, expected)))
++    target.write_bytes(b"dummy compiler object")
++    for part in ("server", "private"):
++        p = target.with_suffix(".olean." + part)
++        p.write_bytes(b"dummy additional part")
++        check("added_" + part + "_part_reject", lambda: rejected(lambda: ns["check_object_snapshot"](target, expected)))
++        with_part = ns["object_snapshot"](target)
++        p.unlink()
++        check("removed_" + part + "_part_reject", lambda: rejected(lambda: ns["check_object_snapshot"](target, with_part)))
++    target.write_bytes(b"")
++    check("empty_primary_object_reject", lambda: rejected(lambda: ns["object_snapshot"](target)))
++    target.unlink()
++    check("missing_primary_object_reject", lambda: rejected(lambda: ns["object_snapshot"](target)))
++    binaries = {}
++    for name in ("lean", "lake", "leanchecker"):
++        path = tmp / name
++        path.write_bytes(b"dummy executable bytes")
++        binaries[name] = {"path": str(path), "sha256": ns["digest"](path)}
++    check("three_unchanged_binaries_accept", lambda: ns["check_binary_snapshots"](binaries))
++    for name in binaries:
++        path = Path(binaries[name]["path"])
++        path.write_bytes(b"changed")
++        check("changed_" + name + "_binary_reject", lambda: rejected(lambda: ns["check_binary_snapshots"](binaries)))
++        path.write_bytes(b"dummy executable bytes")
++
++
++def marker_gate(error_text):
++    candidates = [n for n in ast.walk(tree) if isinstance(n, ast.If)
++                  and any(isinstance(x, ast.Constant) and isinstance(x.value, str)
++                          and error_text in x.value for x in ast.walk(n))]
++    candidates.sort(key=lambda n: len(list(ast.walk(n))))
++    require(bool(candidates))
++    return compile(ast.Module(body=[candidates[0]], type_ignores=[]), str(RUNNER), "exec")
++
++
++individual = marker_gate("Missing explicit individual kernel replay evidence")
++aggregate = marker_gate("Missing aggregate fresh kernel replay evidence")
++for label, gate, variable, expected_marker in (
++    ("individual", individual, "replay", "replaying " + modules[0]),
++    ("aggregate_fresh", aggregate, "fresh", "replaying verification.Part4UpperAudit with --fresh"),
++):
++    context = {"module": modules[0], "audit_module": "verification.Part4UpperAudit",
++               "expected": expected_marker}
++    def execute_marker(value):
++        exec(gate, {**context, variable: value})
++    check(label + "_exact_marker_accept", lambda: execute_marker(expected_marker))
++    check(label + "_missing_marker_reject", lambda: rejected(lambda: execute_marker("")))
++    check(label + "_duplicate_marker_reject", lambda: rejected(lambda: execute_marker(expected_marker + "\n" + expected_marker)))
++
++calls = [n for n in ast.walk(tree) if isinstance(n, ast.Call)
++         and isinstance(n.func, ast.Name) and n.func.id == "run"]
++check("dependency_build_timeout_5400", lambda: require(any(
++    any(isinstance(a, ast.Constant) and a.value == "dependencies-and-targets-build.log" for a in n.args)
++    and any(k.arg == "timeout_seconds" and isinstance(k.value, ast.Constant) and k.value.value == 5400 for k in n.keywords)
++    for n in calls)))
++workflow = WORKFLOW.read_text()
++for field in ("aggregate_fresh_replay_module", "output_part_sets_and_hashes_rechecked", "toolchain_binary_hashes_rechecked"):
++    check("workflow_final_gate_" + field, lambda f=field: require('report["' + f + '"]' in workflow))
++check("workflow_failure_and_skip_fail", lambda: require('test "$CACHE_OUTCOME" = success' in workflow
++      and 'test "$VERIFICATION_OUTCOME" = success' in workflow and 'set -euo pipefail' in workflow))
++print(json.dumps({"status": "PASSED", "case_count": len(results), "cases": results,
++                  "scope": "New Python-only fixtures against actual AST-extracted gates; no Lean execution",
++                  "old_raw_logs_recovered": False}, ensure_ascii=False))
+diff --git a/verification/verify_part4_upper.py b/verification/verify_part4_upper.py
+index b1e4d82..865f7bd 100644
+--- a/verification/verify_part4_upper.py
++++ b/verification/verify_part4_upper.py
+@@ -1,4 +1,4 @@
+-"""Build and freshly replay the five Part 4 modules at the frozen dependency pins.
++"""Build and replay the five Part 4 modules at the frozen dependency pins.
+ 
+ Run with the pinned Lean/Lake on PATH:
+     python3 verification/verify_part4_upper.py
+@@ -54,6 +54,31 @@ def source_path(module: str) -> Path:
+     return ROOT / (module.replace(".", "/") + ".lean")
+ 
+ 
++def object_snapshot(target: Path) -> dict[str, str]:
++    """Bind a compiler output to its complete current set of object parts."""
++    if not target.is_file() or target.stat().st_size == 0:
++        raise RuntimeError(f"Missing or empty compiled module: {target}")
++    return {
++        path.relative_to(ROOT).as_posix(): digest(path)
++        for path in (target, target.with_suffix(".olean.server"),
++                     target.with_suffix(".olean.private")) if path.is_file()
++    }
++
++
++def check_object_snapshot(target: Path, expected: dict[str, str]) -> None:
++    current = object_snapshot(target)
++    if current.keys() != expected.keys():
++        raise RuntimeError(f"Compiled object parts changed during verification: {target}")
++    if current != expected:
++        raise RuntimeError(f"Compiled object bytes changed during verification: {target}")
++
++
++def check_binary_snapshots(binaries: dict[str, dict[str, str]]) -> None:
++    for name, expected in binaries.items():
++        if digest(Path(expected["path"])) != expected["sha256"]:
++            raise RuntimeError(f"Toolchain executable changed during verification: {name}")
++
++
+ def check_lockfiles() -> dict:
+     for relative, expected in LOCK_SHA256.items():
+         if digest(ROOT / relative) != expected:
+@@ -194,7 +219,8 @@ def main() -> None:
+         "modules": list(MODULES),
+         "run_directory": run_output.relative_to(ROOT).as_posix(),
+         "allowed_transitive_axioms": sorted(ALLOWED),
+-        "kernel_replay": "Bundled leanchecker --fresh, one explicitly named module per invocation",
++        "kernel_replay": "Five individual bundled leanchecker replays, then one --fresh replay "
++                         "of the audit module importing all five targets and their full closure",
+         "stages": [],
+     }
+ 
+@@ -205,11 +231,12 @@ def main() -> None:
+         temporary.write_text(data, encoding="utf-8")
+         temporary.replace(report_path)
+ 
+-    def run(arguments: list[str], log_name: str) -> str:
++    def run(arguments: list[str], log_name: str, *, timeout_seconds: int = 1800) -> str:
+         stage = {
+             "command": arguments,
+             "log": (run_output / log_name).relative_to(ROOT).as_posix(),
+             "started_utc": datetime.now(timezone.utc).isoformat(),
++            "timeout_seconds": timeout_seconds,
+             "status": "RUNNING",
+         }
+         report["stages"].append(stage)
+@@ -223,7 +250,7 @@ def main() -> None:
+                 handle.flush()
+                 result = subprocess.run(
+                     arguments, cwd=ROOT, stdout=handle, stderr=subprocess.STDOUT,
+-                    text=True, timeout=1800,
++                    text=True, timeout=timeout_seconds,
+                 )
+             stage["exit_code"] = result.returncode
+             stage["status"] = "PASSED" if result.returncode == 0 else "FAILED"
+@@ -293,7 +320,15 @@ def main() -> None:
+         # Existing dependencies have baseline linter warnings. Build their
+         # closure normally, then force a warning-as-error compilation of every
+         # new target. No warning from a new source can pass this second gate.
+-        run([args.lake, "build", *MODULES], "dependencies-and-targets-build.log")
++        # The pinned supplier closure imports full Mathlib. The first real
++        # hosted run reached build item 9326/9404 before the old 30-minute
++        # subprocess limit expired; it had not reached any Part 4 target.
++        # Keep every proof gate, but give this dependency build the same
++        # 90-minute allowance as the repository's core build.
++        run([args.lake, "build", *MODULES], "dependencies-and-targets-build.log",
++            timeout_seconds=5400)
++        target_objects = {}
++        olean_hashes = {}
+         for module in MODULES:
+             relative = module.replace(".", "/")
+             target = ROOT / ".lake/build/lib/lean" / (relative + ".olean")
+@@ -301,26 +336,41 @@ def main() -> None:
+             run([args.lake, "env", "lean", "-DwarningAsError=true",
+                  "-o", str(target), relative + ".lean"],
+                 module.rsplit(".", 1)[1] + "-strict-build.log")
+-        olean_hashes = {}
++            # Freeze each strict output immediately, before another target is
++            # compiled or any replay is started.
++            target_objects[module] = object_snapshot(target)
++            olean_hashes.update(target_objects[module])
+         for module in MODULES:
+             path = ROOT / ".lake/build/lib/lean" / (module.replace(".", "/") + ".olean")
+-            if not path.is_file() or path.stat().st_size == 0:
+-                raise RuntimeError(f"Missing compiled target module: {module}")
+-            for part in (path, path.with_suffix(".olean.server"), path.with_suffix(".olean.private")):
+-                if part.is_file():
+-                    olean_hashes[part.relative_to(ROOT).as_posix()] = digest(part)
++            check_object_snapshot(path, target_objects[module])
+             replay = run(
+-                [args.lake, "env", str(checker), "--fresh", "--verbose", module],
+-                module.rsplit(".", 1)[1] + "-fresh-replay.log",
++                [args.lake, "env", str(checker), "--verbose", module],
++                module.rsplit(".", 1)[1] + "-individual-replay.log",
+             )
+-            expected = f"replaying {module} with --fresh"
++            expected = f"replaying {module}"
+             if replay.splitlines().count(expected) != 1:
+-                raise RuntimeError(f"Missing explicit fresh kernel replay evidence for {module}")
++                raise RuntimeError(f"Missing explicit individual kernel replay evidence for {module}")
++            check_object_snapshot(path, target_objects[module])
+         report["compiled_module_sha256"] = olean_hashes
++        audit_module = AUDIT.removesuffix(".lean").replace("/", ".")
++        audit_target = ROOT / ".lake/build/lib/lean" / AUDIT.replace(".lean", ".olean")
++        audit_target.parent.mkdir(parents=True, exist_ok=True)
+         audit_log = run(
+-            [args.lake, "env", "lean", "-DwarningAsError=true", AUDIT], "axioms-and-types.log"
++            [args.lake, "env", "lean", "-DwarningAsError=true", "-o", str(audit_target), AUDIT],
++            "axioms-and-types.log"
+         )
++        audit_objects = object_snapshot(audit_target)
+         records, counts = parse_inventory(audit_log)
++        # --fresh replays imported declarations too. A single replay of the
++        # audit's union of all five import closures has the same coverage as
++        # five separate --fresh calls, without repeating full Mathlib five times.
++        fresh = run([args.lake, "env", str(checker), "--fresh", "--verbose", audit_module],
++                    "all-five-and-imports-fresh-replay.log")
++        if fresh.splitlines().count(f"replaying {audit_module} with --fresh") != 1:
++            raise RuntimeError("Missing aggregate fresh kernel replay evidence")
++        check_object_snapshot(audit_target, audit_objects)
++        report["aggregate_fresh_replay_module"] = audit_module
++        report["audit_module_sha256"] = audit_objects
+         (run_output / "declarations.json").write_text(
+             json.dumps(records, indent=2) + "\n", encoding="utf-8"
+         )
+@@ -348,7 +398,7 @@ def main() -> None:
+                     for record in selected
+                 ) + "\n", encoding="utf-8",
+             )
+-        for relative, expected_hash in {**hashes, **olean_hashes}.items():
++        for relative, expected_hash in {**hashes, **olean_hashes, **audit_objects}.items():
+             if digest(ROOT / relative) != expected_hash:
+                 raise RuntimeError(f"Verification input changed during this run: {relative}")
+         if check_dependency_heads(manifest) != report["dependency_revisions"]:
+@@ -356,9 +406,17 @@ def main() -> None:
+         final_head = run(["git", "rev-parse", "HEAD"], "final-head-commit.log").strip()
+         if final_head != report["head_commit"]:
+             raise RuntimeError("HEAD changed during verification")
++        for module in MODULES:
++            target = ROOT / ".lake/build/lib/lean" / (module.replace(".", "/") + ".olean")
++            check_object_snapshot(target, target_objects[module])
++        check_object_snapshot(audit_target, audit_objects)
++        check_binary_snapshots(report["toolchain_binaries"])
++        report["output_part_sets_and_hashes_rechecked"] = True
++        report["toolchain_binary_hashes_rechecked"] = True
+         report.update(status="PASSED", declaration_count=len(records), module_counts=counts)
+         save_report()
+-        print(f"PASS: {len(MODULES)} explicit builds and bundled fresh kernel replays; "
++        print(f"PASS: {len(MODULES)} explicit builds and individual kernel replays; "
++              "one aggregate fresh replay of all five modules and their imports; "
+               f"{len(records)} declarations with complete types and only allowed axioms.", flush=True)
+         print("This verifies the stated interfaces, not unprovided analytic hypotheses.", flush=True)
+         print(f"Report: {report_path}", flush=True)

@@ -1,0 +1,94 @@
+source_commit=d0366ce64272e81faf6166a8a90050f56b328d38
+run_id=38289734671
+
+ImbalancedChen.current_theorem_1_1_of_manuscript_bounds
+
+Actual complete pp.all type:
+∀ {b : Real}
+  (hbLower :
+    @LT.lt.{0} Real Real.instLT
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))
+        (@OfNat.ofNat.{0} Real (nat_lit 2)
+          (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))))))
+      b)
+  (hbUpper : @LT.lt.{0} Real Real.instLT b (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))
+  (hLower :
+    ∀ (epsilon : Real),
+      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) epsilon →
+        @Filter.Eventually.{0} Nat
+          (fun (N : Nat) =>
+            @Even.{0} Nat instAddNat N →
+              @LE.le.{0} Real Real.instLE
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) ImbalancedChen.currentC
+                    epsilon)
+                  (ImbalancedChen.singularNormalization N))
+                (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.D12 N)))
+          (@Filter.atTop.{0} Nat Nat.instPreorder))
+  (hUpper :
+    ∀ (epsilon : Real),
+      @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) epsilon →
+        @Filter.Eventually.{0} Nat
+          (fun (N : Nat) =>
+            @Even.{0} Nat instAddNat N →
+              @LE.le.{0} Real Real.instLE (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.RealB b N))
+                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+                  (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)
+                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) ImbalancedChen.currentK
+                      (Real.log
+                        (@HDiv.hDiv.{0, 0, 0} Real Real Real
+                          (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+                          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) b)))
+                    epsilon)
+                  (ImbalancedChen.singularNormalization N)))
+          (@Filter.atTop.{0} Nat Nat.instPreorder)),
+  @LE.le.{0} EReal (@Preorder.toLE.{0} EReal (@PartialOrder.toPreorder.{0} EReal instPartialOrderEReal))
+    (Real.toEReal
+      (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) ImbalancedChen.currentC
+        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) ImbalancedChen.currentK
+          (Real.log
+            (@HDiv.hDiv.{0, 0, 0} Real Real Real
+              (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) b)))))
+    (@Filter.liminf.{0, 0} EReal Nat
+      (@ConditionallyCompleteLinearOrder.toConditionallyCompleteLattice.{0} EReal
+        (@ConditionallyCompleteLinearOrderBot.toConditionallyCompleteLinearOrder.{0} EReal
+          (@CompleteLinearOrder.toConditionallyCompleteLinearOrderBot.{0} EReal instCompleteLinearOrderEReal)))
+      (fun (N : Nat) =>
+        Real.toEReal
+          (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+            (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.RealDb b N)) (ImbalancedChen.singularNormalization N)))
+      ImbalancedChen.evenNatAtTop)
+
+Actual complete readable type:
+∀ {b : ℝ},
+  LT.lt.{0} (1 / 2) b →
+    LT.lt.{0} b 1 →
+      (∀ (epsilon : ℝ),
+          LT.lt.{0} 0 epsilon →
+            ∀ᶠ (N : ℕ) in Filter.atTop.{0},
+              Even.{0} N →
+                LE.le.{0}
+                  (HMul.hMul.{0, 0, 0} (HSub.hSub.{0, 0, 0} ImbalancedChen.currentC epsilon)
+                    (ImbalancedChen.singularNormalization N))
+                  ↑(ImbalancedChen.D12 N)) →
+        (∀ (epsilon : ℝ),
+            LT.lt.{0} 0 epsilon →
+              ∀ᶠ (N : ℕ) in Filter.atTop.{0},
+                Even.{0} N →
+                  LE.le.{0} (↑(ImbalancedChen.RealB b N))
+                    (HMul.hMul.{0, 0, 0}
+                      (HAdd.hAdd.{0, 0, 0}
+                        (HMul.hMul.{0, 0, 0} ImbalancedChen.currentK (Real.log (HDiv.hDiv.{0, 0, 0} 1 b))) epsilon)
+                      (ImbalancedChen.singularNormalization N))) →
+          LE.le.{0}
+            (↑(HSub.hSub.{0, 0, 0} ImbalancedChen.currentC
+                (HMul.hMul.{0, 0, 0} ImbalancedChen.currentK (Real.log (HDiv.hDiv.{0, 0, 0} 1 b)))))
+            (Filter.liminf.{0, 0}
+              (fun N => ↑(HDiv.hDiv.{0, 0, 0} (↑(ImbalancedChen.RealDb b N)) (ImbalancedChen.singularNormalization N)))
+              ImbalancedChen.evenNatAtTop)
+
+This existing theorem still requires hLower and hUpper. The full theorem is not closed.

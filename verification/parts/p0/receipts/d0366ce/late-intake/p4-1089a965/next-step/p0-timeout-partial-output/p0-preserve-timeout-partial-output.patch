@@ -1,0 +1,27 @@
+--- a/verification/verify_part4_upper.py
++++ b/verification/verify_part4_upper.py
+@@ -258,6 +258,24 @@
+                 tail = log_path.read_text(encoding="utf-8", errors="replace").splitlines()[-60:]
+                 print("\n".join(tail), flush=True)
+                 raise RuntimeError(f"{log_name} failed with exit code {result.returncode}")
++        except subprocess.TimeoutExpired as error:
++            stage.update(status="FAILED", error=str(error), timed_out=True, exit_code=None)
++            stage["timeout_output_bytes"] = {}
++            for stream, partial in (("stdout", error.stdout), ("stderr", error.stderr)):
++                if partial is None:
++                    stage["timeout_output_bytes"][stream] = None
++                    continue
++                data = partial if isinstance(partial, bytes) else partial.encode("utf-8")
++                stage["timeout_output_bytes"][stream] = len(data)
++                if not data:
++                    continue
++                try:
++                    with log_path.open("ab") as handle:
++                        handle.write(f"\nTimeoutExpired.{stream} (captured partial output):\n".encode("utf-8"))
++                        handle.write(data)
++                except OSError as log_error:
++                    stage.setdefault("timeout_output_log_errors", {})[stream] = str(log_error)
++            raise
+         except BaseException as error:
+             stage.update(status="FAILED", error=str(error))
+             raise

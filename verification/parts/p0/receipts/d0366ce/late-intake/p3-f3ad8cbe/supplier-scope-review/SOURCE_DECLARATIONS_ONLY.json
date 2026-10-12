@@ -1,0 +1,133 @@
+{
+  "scope": "READ_ONLY_SOURCE_INVENTORY_NOT_LEAN_ENVIRONMENT",
+  "source_commit": "f3ad8cbe43c61c903857c7411626ee8c56f4f2f9",
+  "source_file": "ImbalancedChen/Part3PrimeAPDistribution.lean",
+  "source_bytes": 9873,
+  "source_sha256": "55319b7e1150799a5bd2ed4bcc0ef3dd486de57409d9b859f678c068bcb8c7fc",
+  "source_git_blob_sha1": "2d761133b313302ab3a89ae906eb6944037a093d",
+  "theorems": 13,
+  "definitions": 2,
+  "compiler_confirmed_types": false,
+  "records": [
+    {
+      "name": "ImbalancedChen.part3_chenPrimeAPCount_eq_primesInAP",
+      "kind": "theorem",
+      "line": 30,
+      "complete_source_statement": "theorem part3_chenPrimeAPCount_eq_primesInAP (Y a d : ℕ) :\n    chenPrimeAPCount Y a d = (primesInAP Y d a : ℝ)",
+      "compiler_confirmed": false,
+      "format": "SOURCE_HEADER_ONLY_NOT_COMPILER_OUTPUT"
+    },
+    {
+      "name": "ImbalancedChen.part3PrimeAPError",
+      "kind": "def",
+      "line": 36,
+      "complete_source_statement": "def part3PrimeAPError (Y a d : ℕ) : ℝ",
+      "compiler_confirmed": false,
+      "format": "SOURCE_HEADER_ONLY_NOT_COMPILER_OUTPUT"
+    },
+    {
+      "name": "ImbalancedChen.part3PrimeAPError_eq_standard",
+      "kind": "theorem",
+      "line": 39,
+      "complete_source_statement": "theorem part3PrimeAPError_eq_standard (Y a d : ℕ) :\n    part3PrimeAPError Y a d = standardPrimeAPError Y d (a % d)",
+      "compiler_confirmed": false,
+      "format": "SOURCE_HEADER_ONLY_NOT_COMPILER_OUTPUT"
+    },
+    {
+      "name": "ImbalancedChen.part3PrimeAPError_target_eq_chenQuotientPrimeAPError",
+      "kind": "theorem",
+      "line": 44,
+      "complete_source_statement": "theorem part3PrimeAPError_target_eq_chenQuotientPrimeAPError (N d : ℕ) :\n    part3PrimeAPError N N d =\n      chenQuotientPrimeAPError N (trueLogarithmicIntegral N) d",
+      "compiler_confirmed": false,
+      "format": "SOURCE_HEADER_ONLY_NOT_COMPILER_OUTPUT"
+    },
+    {
+      "name": "ImbalancedChen.part3_standardPrimeAPMaxError_le_prefix",
+      "kind": "theorem",
+      "line": 50,
+      "complete_source_statement": "theorem part3_standardPrimeAPMaxError_le_prefix\n    {N Y d : ℕ} (hY : Y ≤ N) :\n    standardPrimeAPMaxError Y d ≤ standardPrimeAPPrefixMaxError N d",
+      "compiler_confirmed": false,
+      "format": "SOURCE_HEADER_ONLY_NOT_COMPILER_OUTPUT"
+    },
+    {
+      "name": "ImbalancedChen.part3_abs_primeAPError_le_prefix",
+      "kind": "theorem",
+      "line": 60,
+      "complete_source_statement": "theorem part3_abs_primeAPError_le_prefix\n    {N Y a d : ℕ} (hY : Y ≤ N) (hd : 0 < d) (ha : Nat.Coprime a d) :\n    |part3PrimeAPError Y a d| ≤ standardPrimeAPPrefixMaxError N d",
+      "compiler_confirmed": false,
+      "format": "SOURCE_HEADER_ONLY_NOT_COMPILER_OUTPUT"
+    },
+    {
+      "name": "ImbalancedChen.part3_abs_chenQuotientPrimeAPError_le_prefix",
+      "kind": "theorem",
+      "line": 72,
+      "complete_source_statement": "theorem part3_abs_chenQuotientPrimeAPError_le_prefix\n    {N d : ℕ} (hd : 0 < d) (hNd : Nat.Coprime N d) :\n    |chenQuotientPrimeAPError N (trueLogarithmicIntegral N) d| ≤\n      standardPrimeAPPrefixMaxError N d",
+      "compiler_confirmed": false,
+      "format": "SOURCE_HEADER_ONLY_NOT_COMPILER_OUTPUT"
+    },
+    {
+      "name": "ImbalancedChen.part3_sum_abs_primeAPError_le_prefix",
+      "kind": "theorem",
+      "line": 81,
+      "complete_source_statement": "theorem part3_sum_abs_primeAPError_le_prefix\n    (N D : ℕ) (S : Finset ℕ) (hS : S ⊆ Finset.Icc 1 D)\n    (Y : ℕ) (hY : Y ≤ N) (a : ℕ → ℕ)\n    (ha : ∀ d ∈ S, Nat.Coprime (a d) d) :\n    (∑ d ∈ S, |part3PrimeAPError Y (a d) d|) ≤\n      ∑ d ∈ Finset.Icc 1 D, standardPrimeAPPrefixMaxError N d",
+      "compiler_confirmed": false,
+      "format": "SOURCE_HEADER_ONLY_NOT_COMPILER_OUTPUT"
+    },
+    {
+      "name": "ImbalancedChen.part3_abs_sum_mul_primeAPError_le_sum_abs",
+      "kind": "theorem",
+      "line": 98,
+      "complete_source_statement": "theorem part3_abs_sum_mul_primeAPError_le_sum_abs\n    (S : Finset ℕ) (Y : ℕ) (a : ℕ → ℕ) (w : ℕ → ℝ)\n    (hw : ∀ d ∈ S, |w d| ≤ 1) :\n    |∑ d ∈ S, w d * part3PrimeAPError Y (a d) d| ≤\n      ∑ d ∈ S, |part3PrimeAPError Y (a d) d|",
+      "compiler_confirmed": false,
+      "format": "SOURCE_HEADER_ONLY_NOT_COMPILER_OUTPUT"
+    },
+    {
+      "name": "ImbalancedChen.part3_sum_abs_primeAPError_log_saving",
+      "kind": "theorem",
+      "line": 113,
+      "complete_source_statement": "theorem part3_sum_abs_primeAPError_log_saving (A : ℝ) (hA : 0 < A) :\n    ∃ B : ℝ, 0 ≤ B ∧ ∃ C : ℝ, 0 < C ∧\n      ∀ᶠ N : ℕ in atTop, ∀ Q : ℕ, Q ≤ panModulusCutoff N B →\n        ∀ S : Finset ℕ, S ⊆ Finset.Icc 1 Q →\n          ∀ Y : ℕ, Y ≤ N → ∀ a : ℕ → ℕ,\n            (∀ d ∈ S, Nat.Coprime (a d) d) →\n            (∑ d ∈ S, |part3PrimeAPError Y (a d) d|) ≤\n              C * (N : ℝ) / Real.log (N : ℝ) ^ A",
+      "compiler_confirmed": false,
+      "format": "SOURCE_HEADER_ONLY_NOT_COMPILER_OUTPUT"
+    },
+    {
+      "name": "ImbalancedChen.part3_abs_sum_mul_primeAPError_log_saving",
+      "kind": "theorem",
+      "line": 136,
+      "complete_source_statement": "theorem part3_abs_sum_mul_primeAPError_log_saving (A : ℝ) (hA : 0 < A) :\n    ∃ B : ℝ, 0 ≤ B ∧ ∃ C : ℝ, 0 < C ∧\n      ∀ᶠ N : ℕ in atTop, ∀ Q : ℕ, Q ≤ panModulusCutoff N B →\n        ∀ S : Finset ℕ, S ⊆ Finset.Icc 1 Q →\n          ∀ Y : ℕ, Y ≤ N → ∀ a : ℕ → ℕ,\n            (∀ d ∈ S, Nat.Coprime (a d) d) →\n            ∀ w : ℕ → ℝ, (∀ d ∈ S, |w d| ≤ 1) →\n            |∑ d ∈ S, w d * part3PrimeAPError Y (a d) d| ≤\n              C * (N : ℝ) / Real.log (N : ℝ) ^ A",
+      "compiler_confirmed": false,
+      "format": "SOURCE_HEADER_ONLY_NOT_COMPILER_OUTPUT"
+    },
+    {
+      "name": "ImbalancedChen.part3PrimeAPIntervalError",
+      "kind": "def",
+      "line": 154,
+      "complete_source_statement": "def part3PrimeAPIntervalError (L U a d : ℕ) : ℝ",
+      "compiler_confirmed": false,
+      "format": "SOURCE_HEADER_ONLY_NOT_COMPILER_OUTPUT"
+    },
+    {
+      "name": "ImbalancedChen.part3PrimeAPIntervalError_eq_sub",
+      "kind": "theorem",
+      "line": 158,
+      "complete_source_statement": "theorem part3PrimeAPIntervalError_eq_sub (L U a d : ℕ) :\n    part3PrimeAPIntervalError L U a d =\n      part3PrimeAPError U a d - part3PrimeAPError L a d",
+      "compiler_confirmed": false,
+      "format": "SOURCE_HEADER_ONLY_NOT_COMPILER_OUTPUT"
+    },
+    {
+      "name": "ImbalancedChen.part3_abs_sum_mul_primeAPIntervalError_log_saving",
+      "kind": "theorem",
+      "line": 166,
+      "complete_source_statement": "theorem part3_abs_sum_mul_primeAPIntervalError_log_saving\n    (A : ℝ) (hA : 0 < A) :\n    ∃ B : ℝ, 0 ≤ B ∧ ∃ C : ℝ, 0 < C ∧\n      ∀ᶠ N : ℕ in atTop, ∀ Q : ℕ, Q ≤ panModulusCutoff N B →\n        ∀ S : Finset ℕ, S ⊆ Finset.Icc 1 Q →\n          ∀ L U : ℕ, L ≤ U → U ≤ N → ∀ a : ℕ → ℕ,\n            (∀ d ∈ S, Nat.Coprime (a d) d) →\n            ∀ w : ℕ → ℝ, (∀ d ∈ S, |w d| ≤ 1) →\n            |∑ d ∈ S, w d * part3PrimeAPIntervalError L U (a d) d| ≤\n              2 * (C * (N : ℝ) / Real.log (N : ℝ) ^ A)",
+      "compiler_confirmed": false,
+      "format": "SOURCE_HEADER_ONLY_NOT_COMPILER_OUTPUT"
+    },
+    {
+      "name": "ImbalancedChen.part3_chenQuotientPrimeAPError_pool_log_saving",
+      "kind": "theorem",
+      "line": 188,
+      "complete_source_statement": "theorem part3_chenQuotientPrimeAPError_pool_log_saving\n    (A : ℝ) (hA : 0 < A) :\n    ∃ B : ℝ, 0 ≤ B ∧ ∃ C : ℝ, 0 < C ∧\n      ∀ᶠ N : ℕ in atTop, ∀ Q : ℕ, Q ≤ panModulusCutoff N B →\n        (∑ k ∈ Finset.Icc 1 Q with Nat.Coprime k N,\n          |chenQuotientPrimeAPError N (trueLogarithmicIntegral N) k|) ≤\n            C * (N : ℝ) / Real.log (N : ℝ) ^ A",
+      "compiler_confirmed": false,
+      "format": "SOURCE_HEADER_ONLY_NOT_COMPILER_OUTPUT"
+    }
+  ]
+}

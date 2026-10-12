@@ -1,0 +1,64 @@
+{
+  "status": "UNEXECUTED_SOURCE_ONLY_P0_PATCH_CANDIDATE",
+  "owner": "P0 verification runner; no Part proof source ownership transfer",
+  "source_commit": "1089a965e20664e63ffd51e0105c11befa406a1f",
+  "source_path": "verification/verify_part4_upper.py",
+  "source_git_blob": "865f7bda72b1d3b5e281cae63851ce7e38320da3",
+  "source_sha256": "4cccc00cbb5261aedd53d3fda6a8d3d630b751cfa6f788abe29747449bbc3818",
+  "candidate_sha256": "0b428167896c81f4129225984d808dd2fdaac30b9d050160dd94a5d9a32cb870",
+  "patch_sha256": "205cbafa14ebceb11e4c6370f5d60018043bf222418da15dd82ae144abfcb653",
+  "reason": "Actual run 38288356713 timed out in aggregate fresh replay; 161-byte original phase log contains only its command header. The existing generic exception handler records failure but neither a timed_out flag/unknown exit_code nor available TimeoutExpired stdout/stderr. This patch preserves only data the exception actually provides, without asserting progress or cause beyond timeout.",
+  "record_semantics": {
+    "timed_out": true,
+    "exit_code": null,
+    "exit_code_note": "TimeoutExpired does not supply a completed-process returncode; null means unknown, never fabricated 124/130/-9.",
+    "timeout_output_bytes": "Per stream: null means unavailable, 0 means available but empty, positive counts preserved payload bytes; byte payloads preserved exactly, string payloads encoded as UTF-8.",
+    "append_failure": "If appending raises OSError, record that secondary logging error while re-raising the original timeout."
+  },
+  "constraints": {
+    "subprocess_stdout_strategy_unchanged": true,
+    "stderr_STDOUT_unchanged": true,
+    "timeouts_unchanged": true,
+    "success_gates_unchanged": true,
+    "failure_preserved_and_exception_reraised": true,
+    "lean_and_certificates_unchanged": true,
+    "same_phase_log_used": true,
+    "historical_artifacts_unchanged": true
+  },
+  "known_limit": "The existing runner redirects stdout directly to a file and merges stderr. TimeoutExpired.stdout/stderr may both be None. Then no payload is added and this patch does not recover unavailable or internally buffered output, establish fresh progress, or fix the timeout.",
+  "historical_evidence": {
+    "run_id": 38288356713,
+    "job_id": 114942066124,
+    "fresh_log_bytes": 161,
+    "fresh_log_sha256": "f865e32cc0ef071452ec86d72f10b044ee103f10b4b823d9c4271b24e3536569",
+    "fresh_body_bytes": 0,
+    "observed_completed_fresh_markers": 0,
+    "ci_outcome": "FAILURE"
+  },
+  "validation": {
+    "status": "PASS_SOURCE_ONLY_SYNTAX_AND_INSERTION_SCOPE",
+    "checked_utc": "2026-10-12T19:40:46.613874+00:00",
+    "python_version": "3.12.14",
+    "operations": [
+      "ast.parse original",
+      "ast.parse candidate",
+      "compile candidate to an in-memory code object, without execution",
+      "remove only added TimeoutExpired handler from candidate AST and compare entire remaining AST to original"
+    ],
+    "candidate_sha256": "0b428167896c81f4129225984d808dd2fdaac30b9d050160dd94a5d9a32cb870",
+    "original_sha256": "4cccc00cbb5261aedd53d3fda6a8d3d630b751cfa6f788abe29747449bbc3818",
+    "source_commit": "1089a965e20664e63ffd51e0105c11befa406a1f",
+    "source_git_blob": "865f7bda72b1d3b5e281cae63851ce7e38320da3",
+    "no_execution": [
+      "No source module import or top-level execution",
+      "No fixture or simulated successful process result",
+      "No Lean, Lake, leanchecker, CI, proof/certificate mutation, budget/gate changes",
+      "No repository, source branch or original artifact mutation"
+    ]
+  },
+  "not_performed": [
+    "No new CI run or Lean process",
+    "No subprocess execution or runtime validation of this Python candidate",
+    "No acceptance into d0366ce64272e81faf6166a8a90050f56b328d38"
+  ]
+}
