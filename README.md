@@ -12,6 +12,24 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
+### Part 0 round 2 component acceptance
+
+Commit `278f949444748a30b5165ff47bfa283ab0bad0d8` contains the verified
+Buchstab refinement, the adopted paired certificate's actual first cell,
+its Buchstab bridge, the adopted coarse two-chart integral lower bound,
+the finite integer long-slot remainder bound, and the finite eleven-term
+Chen ledger with factor-four count conversion. All eleven production
+modules passed strict compilation, matching-object bundled kernel replay,
+and complete defining-module audits for **393 declarations**, including
+private and generated declarations, using only the standard three axioms.
+The full 17,572-cell certificate, actual arithmetic K/c suppliers and both
+final counting bounds remain open. Component checks and complete-root CI
+are recorded separately in [the round 2 receipts](docs/PART0_ROUND2_VERIFICATION.md).
+Toolchain, dependency pins, manuscript, actual count definitions and both
+conditional final bridges are unchanged.
+
+### Earlier finite-selector checkpoint
+
 The latest extension integrates the complete saving of the actual finite
 fifth-prefix selector over its owned half-open cells. Outside their union,
 the selected and old levels agree exactly, so their actual gated density

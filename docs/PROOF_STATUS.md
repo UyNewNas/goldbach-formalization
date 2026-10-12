@@ -2,6 +2,38 @@
 
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
+## Part 0 round 2: eleven verified components — 12 October
+
+The fixed proof acceptance `278f949444748a30b5165ff47bfa283ab0bad0d8`
+retains Buchstab acceptance `30fdb230428e91d7eb5deb8deb5cbe3fdc113ceb`
+and first-cell/bridge acceptance `c9f407efe66240c08c2e8a678330ba7b98b74db5`,
+then retains `AboveMuSecondCoarse` and `Part3LongSlotDistribution` at
+`5e31713690daba5ff926da61875a99171718fd1d`, and adds the exact P5 bd83
+`CurrentChenMeanLedger` and `CurrentChenLowerScale` sources.
+All eleven production modules have strict trust-level-zero compilation,
+matching-object stock kernel replay, and complete defining-module safety
+and transitive-axiom audits: **393 declarations**, including private and
+generated declarations; only `propext`, `Classical.choice`, and `Quot.sound`.
+
+The coarse module proves the adopted real two-chart integral lower bound
+`640339/15210735000`. The paired certificate proves only the actual first
+row's independent weaker rational enclosure, not all 17,572 stored Q160
+rows. The long-slot module proves an integer finite remainder bound and
+does not provide the actual rough/prime or medium/two-long distribution.
+All initial Lean diagnostics, minimal P0 repairs, source/object hashes,
+complete compiler types and scoped gate logs are retained in
+[`PART0_ROUND2_VERIFICATION.md`](PART0_ROUND2_VERIFICATION.md) and the
+referenced `verification/parts/p0/round2/` receipts.
+
+These component gates do not assert complete-root verification at a later
+SHA. Actual construction/support, physical change of variables, actual
+same-rho K density, the full Chen mean/c, `hLower`, and `hUpper` remain
+open. P5 needs P4-A's density result and does not need to wait for P4-B.
+The two conditional final bridges and all pins/definitions/quantifiers/
+constants are unchanged. The separately described inherited fifth-layer
+single-module candidate has not been located and is not silently identified
+with any earlier ordinary-parent or finite inherited-selector result.
+
 ## Complete finite-selector integrals and the shared historical tree — 12 October
 
 Six new modules close the full ordinary-parent fifth-prefix selector's
