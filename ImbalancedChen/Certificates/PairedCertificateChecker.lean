@@ -1,7 +1,10 @@
 import ImbalancedChen.Certificates.PairedFibreIntegral
 import ImbalancedChen.Certificates.RationalLogCertificate
+import Mathlib.Data.Rat.BigOperators
 
 /-!
+Verification status: uncompiled candidate. See `docs/part2/HANDOFF.md`.
+
 # A sound checker for the adopted paired-fibre integral
 
 Acceptance checks rational endpoints, three proved logarithm enclosures,
@@ -16,6 +19,8 @@ the former, while Part 5 must supply the latter in its counting argument.
 -/
 
 namespace ImbalancedChen.Certificates
+
+open scoped BigOperators
 
 structure PairedIntegralCertificate where
   K a tl tr ul ur Z : ℚ
@@ -118,5 +123,26 @@ theorem PairedIntegralCertificate.check_sound (c : PairedIntegralCertificate)
   rw [pairedLocalIntegral_eq (c.K : ℝ) haR haZR htlR (htlR.trans_le htR)
     hulR (hulR.trans_le huR)]
   exact ⟨hloR.trans hLprod, hUprod.trans hhiR⟩
+
+/-- Checked finite rows bound the sum of their actual fourfold integrals.
+The hypotheses are individual finite checks. This theorem neither asserts
+that the adopted rows have all passed, nor identifies a union integral
+without the separate ownership/disjointness proof. -/
+theorem PairedIntegralCertificate.sum_check_sound {ι : Type*}
+    (s : Finset ι) (c : ι → PairedIntegralCertificate)
+    (hchecks : ∀ i ∈ s, (c i).check = true) :
+    ((∑ i ∈ s, (c i).lower : ℚ) : ℝ) ≤
+        ∑ i ∈ s, pairedLocalIntegral ((c i).K : ℝ)
+          (c i).a (c i).tl (c i).tr (c i).ul (c i).ur (c i).Z ∧
+      (∑ i ∈ s, pairedLocalIntegral ((c i).K : ℝ)
+          (c i).a (c i).tl (c i).tr (c i).ul (c i).ur (c i).Z) ≤
+        ((∑ i ∈ s, (c i).upper : ℚ) : ℝ) := by
+  constructor
+  · simpa only [Rat.cast_sum] using
+      (Finset.sum_le_sum (s := s)
+        (fun i hi => ((c i).check_sound (hchecks i hi)).1))
+  · simpa only [Rat.cast_sum] using
+      (Finset.sum_le_sum (s := s)
+        (fun i hi => ((c i).check_sound (hchecks i hi)).2))
 
 end ImbalancedChen.Certificates

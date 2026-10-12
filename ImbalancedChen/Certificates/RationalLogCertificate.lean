@@ -2,6 +2,8 @@ import Mathlib.Analysis.SpecialFunctions.Log.Deriv
 import Mathlib.Tactic
 
 /-!
+Verification status: uncompiled candidate. See `docs/part2/HANDOFF.md`.
+
 # Kernel-checked rational enclosures of the actual real logarithm
 
 The numerical producer may suggest a certificate, but acceptance consists

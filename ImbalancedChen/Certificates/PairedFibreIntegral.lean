@@ -3,6 +3,8 @@ import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Ring
 
 /-!
+Verification status: uncompiled candidate. See `docs/part2/HANDOFF.md`.
+
 # Genuine integrals for the adopted paired positive fibre
 
 The local certificate has coordinates `(t, u, z, w)` with

@@ -38,6 +38,7 @@ jobs:
         ImbalancedChen.Certificates.PairedCertificateChecker
         ImbalancedChen.Certificates.PairedV2Data
         ImbalancedChen.Certificates.PairedV2
+        ImbalancedChen.Certificates.AboveMuSecondCoarse
     defaults:
       run:
         shell: bash
@@ -102,6 +103,15 @@ jobs:
           (out / 'provenance.json').write_text(json.dumps(report, indent=2) + '\n')
           print(json.dumps(report, indent=2))
           PY
+      - name: Reproduce exact adopted-data decoding
+        run: |
+          set -euo pipefail
+          python3 verification/part2/import_paired_v2.py \
+            verification/part2/data/corpus-renewal-paired-certificate-v2-20261010.json \
+            --check-generated ImbalancedChen/Certificates/PairedV2Data.lean \
+            2>&1 | tee "$PART2_LOG_DIR/data-decoding.log"
+          # This step validates bytes and arithmetic decoding only. The later
+          # Lean build, kernel replay and axiom audit are independent gates.
       - name: Install Elan and the pinned project toolchain
         run: |
           set -euo pipefail
@@ -151,8 +161,8 @@ jobs:
         run: |
           set -euo pipefail
           lean --version 2>&1 | tee "$PART2_LOG_DIR/lean-version.log"
-          lake build ImbalancedChen.Certificates.PairedV2 2>&1 | tee "$PART2_LOG_DIR/build.log"
           read -r -a modules <<< "$PART2_MODULES"
+          lake build "${modules[@]}" 2>&1 | tee "$PART2_LOG_DIR/build.log"
           for module in "${modules[@]}"; do
             source="${module//.//}.lean"
             lake env lean -DwarningAsError=true "$source" 2>&1 | tee "$PART2_LOG_DIR/${module##*.}-strict.log"

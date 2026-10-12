@@ -1,6 +1,8 @@
 import ImbalancedChen.Certificates.PairedV2Data
 
 /-!
+Verification status: uncompiled candidate. See `docs/part2/HANDOFF.md`.
+
 # The first actual row of the adopted same-mask-v2 certificate
 
 Source row 0 is E0, t-index 422, u-index 510. The deterministic importer

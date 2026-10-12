@@ -3,6 +3,7 @@ import ImbalancedChen.Certificates.RationalLogCertificate
 import ImbalancedChen.Certificates.PairedCertificateChecker
 import ImbalancedChen.Certificates.PairedV2Data
 import ImbalancedChen.Certificates.PairedV2
+import ImbalancedChen.Certificates.AboveMuSecondCoarse
 import Lean.Util.CollectAxioms
 
 /-!
@@ -21,7 +22,8 @@ run_cmd do
     `ImbalancedChen.Certificates.RationalLogCertificate,
     `ImbalancedChen.Certificates.PairedCertificateChecker,
     `ImbalancedChen.Certificates.PairedV2Data,
-    `ImbalancedChen.Certificates.PairedV2]
+    `ImbalancedChen.Certificates.PairedV2,
+    `ImbalancedChen.Certificates.AboveMuSecondCoarse]
   let allowed := #[`propext, `Classical.choice, `Quot.sound]
   let names := env.constants.fold (init := #[]) fun names name _ =>
     match env.getModuleIdxFor? name with
