@@ -1,5 +1,18 @@
 # Part 3 小批交接：真实素数 BV 导入诊断
 
+## 后续小批：首个直接供应者三门完成
+
+在本交接记录的 185 个缺失导入对象之后，已单独恢复并验收
+`ImbalancedChen.ChenQuotientSieveRemainders`。生产源码保持 SHA256
+`caaca61f7e87eab1fe60b82b09d1f3438ebcace6b16f9ed7eac2d2411646664e`；严格
+`trustLevel=0` 编译、同对象原装 `leanchecker` 重放、34 项全部所属声明审计和审计对象重放均通过。
+完整编译器类型、公理列表、4,237 条实际 import 对象身份、原始日志及对象归档见
+[supplier-chen-quotient](supplier-chen-quotient/README.md)。
+
+这消除了两个直接导入中的项目供应者，不代表目标模块已经编译。另一个直接供应者
+`MathlibNt.AnalyticNumberTheory.BombieriVinogradov.Bombieri1965Richert418Unconditional`
+及其冻结 goldbach BV 闭包仍待恢复；`Part3PrimeAPDistribution` 的新增编译器确认定理数仍为 0。
+
 ## 验收结论
 
 **状态：BLOCKED_MISSING_IMPORT_OBJECTS。本批新增编译器确认定理数为 0。**

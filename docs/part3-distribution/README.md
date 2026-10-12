@@ -1,5 +1,15 @@
 # Part 3：算术分布与实际误差供应者交接
 
+## 最新小批：quotient 筛余项直接供应者已验收
+
+`ImbalancedChen.ChenQuotientSieveRemainders` 已完成严格编译、同对象原装重放、
+34 项所属声明的完整编译器类型／传递公理审计，以及审计对象重放。独立复编对象与被重放对象
+SHA256 完全相同；仅出现 `propext`、`Classical.choice`、`Quot.sound`。详见
+[供应者回执](../../verification/parts/p3/prime-ap-distribution/supplier-chen-quotient/README.md)。
+
+这一小批只消除了 `Part3PrimeAPDistribution` 的两个直接导入阻塞之一。冻结 goldbach
+BV 供应者仍缺，目标模块尚未开始实际 elaboration，故新增已确认的分布定理仍为 0。
+
 ## 最新小批：真实素数 BV 的导入诊断（阻塞）
 
 从 `f37f341412eb239f7e7e8937921ee8d01c9c2922` 继续，仅核对并尝试验收 `Part3PrimeAPDistribution`。生产源码保持不变。固定分支的 348 个文件逐 Git blob 恢复匹配；目标涉及的 25 个项目源码和 11 个依赖包固定版本均已核对。
