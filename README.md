@@ -12,6 +12,22 @@ an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCR
 
 ## Verification status
 
+### Part 0 round 4 batch acceptance
+
+Four fixed production modules extend the received inventory to 23 modules and
+1,005 defining-module declarations: P1's stored-cap permit and P2's actual
+same-mask-v2 rows 4–63 plus their 64-row cumulative integral. Original component
+compilation, object-bound stock replay and full declaration audits passed.
+The pinned S1LowerRosser's eight declarations are accepted separately as
+upstream evidence. The two now-fixed P1 fifth-layer candidates remain uncompiled.
+
+Parent `28fd630ef7cc38eba86beb6c0ba123336b5d05f2` passed the full 9,798-job
+build, root replay, 5,458-declaration root axiom audit and 198-declaration
+Round3 type export. The new root must pass its own exact-commit gates, including
+four explicit production targets and a further 414-declaration type export.
+See [round 4 sources, evidence, interfaces and remaining inputs](docs/PART0_ROUND4_VERIFICATION.md).
+The actual same-rho K bound, complete Chen means/c, hLower and hUpper remain open.
+
 ### Part 0 round 3 batch acceptance
 
 Eight further production modules are now explicitly imported: four P1 lower-fourth/history modules, three P2 same-mask-v2 prefix4 modules, and P3 long-slot normalization. Fixed producer source/object records and all three component gates were checked before reception. The accepted component inventory is now 19 modules and 591 defining-module declarations; P1 probe declarations and the pinned upstream S1Carrier audit are counted separately.

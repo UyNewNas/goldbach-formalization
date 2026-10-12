@@ -1,0 +1,42 @@
+{
+  "scope": "Python setup/preflight diagnostics before any S1LowerRosser frontend invocation",
+  "attempts": [
+    {
+      "command": [
+        "python",
+        "/workspace/scratch/cd30ec11ea1d/p5-s1lowerrosser/runtime/verify_s1lowerrosser.py",
+        "preflight"
+      ],
+      "tool_session_exit_code": 1,
+      "error": "FileNotFoundError: /workspace/scratch/127408f63891/lean-runtime/logs/toolchain-binary-hashes.json",
+      "classification": "Transient P1 log missing; same toolchain record exists in fixed P5 round3 archive.",
+      "repair": "Use the published P5 context/toolchain-binary-hashes.json after commit-byte and binary-hash checks.",
+      "Lean_started": false
+    },
+    {
+      "command": [
+        "python",
+        "/workspace/scratch/cd30ec11ea1d/p5-s1lowerrosser/runtime/verify_s1lowerrosser.py",
+        "preflight"
+      ],
+      "tool_session_exit_code": 1,
+      "error": "AssertionError: Mathlib.Data.Real.Basic",
+      "classification": "Required resolver-visible import object absent during separate P1 official-cache recovery.",
+      "repair": "Reuse completed P1 official cache receipt and match current object hashes; restore only vanished local objects.",
+      "Lean_started": false
+    },
+    {
+      "command": [
+        "python",
+        "/workspace/scratch/cd30ec11ea1d/p5-s1lowerrosser/runtime/restore_needed.py",
+        "AnalyticNumberTheory.Sieve.BombieriVinogradov"
+      ],
+      "tool_session_exit_code": 1,
+      "error": "FileNotFoundError: /workspace/scratch/cd30ec11ea1d/p5-s1lowerrosser/runtime/restore/plan.json",
+      "classification": "Restoration planner had not yet completed; no compiler launched.",
+      "repair": "Wait for the actual planner exit and plan file before the single-module call.",
+      "Lean_started": false
+    }
+  ],
+  "note": "These setup errors are separate from the raw Wiener import-stage diagnostic and from the three target gates. They are not Lean proof failures."
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Emit an exact adopted E0 prefix and its proof-producing Lean checks.
+"""Emit an exact adopted E0 prefix or range and its proof-producing Lean checks.
 
 The source hash binds every row to the frozen full witness. Python suggests
 independent rational logarithm enclosures; only successful Lean compilation
@@ -32,13 +32,15 @@ def lookup(name: str, typ: str, values: list[str], count: int) -> list[str]:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=Path)
+    parser.add_argument("--start", type=int, default=0,
+                        help="Original zero-based source ordinal; never a renumbering.")
     parser.add_argument("--count", type=int, default=4)
     parser.add_argument("--emit-dir", type=Path)
     parser.add_argument("--check-generated", type=Path)
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
-    if not 1 <= args.count <= 6091:
-        raise SystemExit("The E0 prefix count must be between 1 and 6091.")
+    if not (0 <= args.start and 1 <= args.count and args.start + args.count <= 6091):
+        raise SystemExit("The nonempty E0 range must lie in original ordinals [0,6091).")
     raw = args.source.read_bytes()
     assert hashlib.sha256(raw).hexdigest() == SOURCE_SHA256
     assert hashlib.sha1(f"blob {len(raw)}\0".encode() + raw).hexdigest() == SOURCE_BLOB
@@ -47,9 +49,10 @@ def main() -> None:
     assert source["omega_argument_threshold"] == "7/3"
     assert source["omega_lower"] == "11/20" and Q(source["K"]) == K
     assert len(source["rows"]) == 17572
-    rows = source["rows"][:args.count]
+    start, end = args.start, args.start + args.count
+    rows = source["rows"][start:end]
     decoded = []
-    for ordinal, row in enumerate(rows):
+    for ordinal, row in enumerate(rows, start=start):
         group, i, j, ztext, lost, stored_lo, stored_hi = row
         assert group == "E0" and int(lost) == 0
         assert type(i) is int and type(j) is int and 0 <= i < 512 and 0 <= j < 512
@@ -73,20 +76,28 @@ def main() -> None:
     lower_total = sum((r["lower"] for r in decoded), Q(0))
     upper_total = sum((r["upper"] for r in decoded), Q(0))
     count = args.count
-    namespace = f"ImbalancedChen.Certificates.PairedV2.Prefix{count}"
-    stem = f"PairedV2Prefix{count}"
+    label = f"Batch{start}To{end}" if start else f"Prefix{count}"
+    namespace = f"ImbalancedChen.Certificates.PairedV2.{label}"
+    stem = f"PairedV2{label}"
+    range_option = f"--start {start} " if start else ""
     lines = ["import ImbalancedChen.Certificates.PairedV2Data", "", "/-!",
              "Deterministic adopted-source import. Regenerate with",
-             f"`verification/part2/generate_paired_prefix.py --count {count}`.",
+             f"`verification/part2/generate_paired_prefix.py {range_option}--count {count}`.",
              f"Frozen manuscript: {SOURCE_COMMIT}", f"Original source: {SOURCE_PATH}",
              f"Original SHA256: {SOURCE_SHA256}", f"Original git blob: {SOURCE_BLOB}",
-             f"Selected source ordinals: 0..{count - 1}; all E0, all discarded Q80 = 0.",
+             f"Selected source ordinals: {start}..{end - 1}; all E0, all discarded Q80 = 0.",
              f"Selected row stream SHA256: {prefix_digest}",
              "The stored Q160 bounds are provenance in the source/report, not proof premises.",
              "-/", "", f"namespace {namespace}", ""]
     lines += lookup("rowIndices", "ℕ × ℕ", [f"({r['i']}, {r['j']})" for r in decoded], count)
     lines += lookup("rowZ", "ℚ", [lean_rat(r["z"]) for r in decoded], count)
-    lines += [f"def rowOrdinal (i : Fin {count}) : ℕ := i.val", ""]
+    ordinal_expr = f"{start} + i.val" if start else "i.val"
+    lines += [f"def rowOrdinal (i : Fin {count}) : ℕ := {ordinal_expr}", ""]
+    if start:
+        lines += [f"def start : ℕ := {start}", f"def count : ℕ := {count}",
+                  f"def endOrdinal : ℕ := {end}",
+                  f'def rowGroup (_ : Fin {count}) : String := "E0"',
+                  f"def rowDiscardedFloorQ80 (_ : Fin {count}) : ℕ := 0", ""]
     for r in decoded:
         n = r["ordinal"]
         lines += [f"def certificate{n:04d} : PairedIntegralCertificate where",
@@ -114,21 +125,30 @@ def main() -> None:
         "logSeriesLower", "logSeriesUpper", "logParameter", "Finset.sum_range_succ",
         "tLower", "tUpper", "uLower", "uUpper", "a", "h", "d", "mu", "K",
     ]
-    defs = ", ".join(f"certificate{n:04d}" for n in range(count))
+    defs = ", ".join(f"certificate{n:04d}" for n in range(start, end))
     proof = [f"import ImbalancedChen.Certificates.{stem}Data",
              "import ImbalancedChen.Certificates.PairedV2Geometry", "", "/-!",
-             f"Actual first {count} adopted E0 cells. Each numerical check has its own",
+             (f"Actual adopted E0 cells at original ordinals [{start},{end}). Each check has its own"
+              if start else f"Actual first {count} adopted E0 cells. Each numerical check has its own"),
              "proof term, then the accepted checker bounds the sum of real integrals.",
-             "This prefix includes row 0; it is not an additional gain to add to row 0.",
+             ("Local Fin indices are offsets; all source ordinals and certificate names remain global."
+              if start else "This prefix includes row 0; it is not an additional gain to add to row 0."),
              "The finite sum is not asserted equal to the full mask or to a union integral.",
              "-/", "", f"namespace {namespace}", "", "open MeasureTheory Set",
              "open scoped BigOperators Interval", ""]
-    for n in range(count):
+    if start:
+        proof += ["set_option maxHeartbeats 4000000", "set_option maxRecDepth 4096", "",
+                  f"theorem rowOrdinal_range (i : Fin {count}) :",
+                  f"    {start} ≤ rowOrdinal i ∧ rowOrdinal i < {end} := by",
+                  "  dsimp only [rowOrdinal]", "  omega", "",
+                  f'theorem row_group (i : Fin {count}) : rowGroup i = "E0" := rfl',
+                  f"theorem discarded_floor_zero (i : Fin {count}) : rowDiscardedFloorQ80 i = 0 := rfl", ""]
+    for n in range(start, end):
         proof += [f"theorem row{n:04d}_checked : certificate{n:04d}.check = true := by",
                   "  norm_num [" + ", ".join([f"certificate{n:04d}"] + unfold_checks) + "]", ""]
     proof += [f"theorem certificates_checked (i : Fin {count}) : (certificates i).check = true := by",
               "  fin_cases i"]
-    proof += [f"  · exact row{n:04d}_checked" for n in range(count)]
+    proof += [f"  · exact row{n:04d}_checked" for n in range(start, end)]
     proof += ["", f"theorem geometry_checked (i : Fin {count}) :",
               "    E0Geometry (rowIndices i).1 (rowIndices i).2 (rowZ i) := by",
               "  fin_cases i <;>",
@@ -182,6 +202,14 @@ def main() -> None:
               "theorem integral_pos : 0 < integral := by",
               "  exact lt_of_lt_of_le (by norm_num [lowerBound]) integral_bounds.1", "",
               f"end {namespace}", ""]
+    if start:
+        semantic_marker = proof.index("/-- The finite sum exposes the actual fourfold manuscript kernel. -/")
+        proof[semantic_marker:semantic_marker] = [
+            f"theorem rowIntegral_bounds (i : Fin {count}) :",
+            "    ((certificates i).lower : ℝ) ≤ rowIntegral i ∧",
+            "      rowIntegral i ≤ ((certificates i).upper : ℝ) := by",
+            "  rw [rowIntegral_eq_certificate]",
+            "  exact (certificates i).check_sound (certificates_checked i)", ""]
     generated = {stem + "Data.lean": data_text, stem + ".lean": "\n".join(proof)}
     for name, content in generated.items():
         data = content.encode()
@@ -192,17 +220,35 @@ def main() -> None:
             assert (args.check_generated / name).read_bytes() == data, name
     report = dict(source_commit=SOURCE_COMMIT, source_path=SOURCE_PATH,
                   source_sha256=SOURCE_SHA256, source_git_blob=SOURCE_BLOB,
-                  count=count, original_ordinals=list(range(count)), original_rows=rows,
+                  count=count, original_ordinals=list(range(start, end)), original_rows=rows,
                   prefix_row_stream_sha256=prefix_digest, group="E0", discarded_Q80_sum=0,
                   log_scale=LOG_SCALE, cell_scale=CELL_SCALE,
                   candidate_lower=str(lower_total), candidate_upper=str(upper_total),
                   candidate_lean_status="REQUIRES_SEPARATE_STRICT_COMPILE_KERNEL_REPLAY_AND_AUDIT",
                   generated_sha256={name: hashlib.sha256(text.encode()).hexdigest()
                                     for name, text in generated.items()})
+    if start:
+        report.update(start=start, end=end, row_stream_sha256=prefix_digest,
+                      source_file_newlines="CRLF", row_stream_newlines="LF",
+                      coordinate_order=["t", "u", "z", "w"],
+                      decoded_rows=[dict(
+                          original_ordinal=r["ordinal"], original_row=rows[offset],
+                          group="E0", discarded_floor_Q80=0,
+                          t_index=r["i"], u_index=r["j"],
+                          tl=str(r["tl"]), tr=str(r["tr"]), ul=str(r["ul"]), ur=str(r["ur"]),
+                          Z=str(r["z"]), cutoff="min(ul,3*(1-tr-ur)/13)",
+                          E0_residual=str(Q(57, 64) - Q(5, 2) * r["tl"] - r["ul"]),
+                          E0_residual_upper=str(2 * A), geometry_check=True,
+                          log_t=[str(q) for q in r["log_t"]],
+                          log_u=[str(q) for q in r["log_u"]],
+                          log_z=[str(q) for q in r["log_z"]],
+                          lower=str(r["lower"]), upper=str(r["upper"]))
+                          for offset, r in enumerate(decoded)])
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps(report, indent=2) + "\n")
-    print(json.dumps({key: value for key, value in report.items() if key != "original_rows"}, indent=2))
+    print(json.dumps({key: value for key, value in report.items()
+                      if key not in {"original_rows", "decoded_rows"}}, indent=2))
 
 
 if __name__ == "__main__":

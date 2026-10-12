@@ -1,0 +1,153 @@
+"""Restore only vanished objects in S1Carrier's already-accepted local closure.
+
+All modules and expected object hashes come from the fixed P5 round3 preflight.
+This has no discovery/expansion of later suppliers. Rebuild one explicit module
+at a time with its historical diagnostic mode, trust level zero, unchanged
+pinned source and official frontend. A restored object is accepted only if it
+reproduces the prior SHA256. Every output is in this Part's own workspace.
+"""
+from pathlib import Path
+import datetime, fcntl, json, os, subprocess, sys, time
+import verify_s1lowerrosser as m
+
+s, d = m.s, m.d
+LOGS = m.HERE / 'restore'
+PRIOR = json.loads((m.PRIOR / 'preflight.json').read_text())
+RECORDS = {x['module']: x for x in PRIOR['local_compiled_imports']}
+
+def save_context():
+    LOGS.mkdir(parents=True, exist_ok=True)
+    cache_result = Path('/workspace/scratch/127408f63891/lean-runtime/logs/round2/cache/result.json')
+    cache = json.loads(cache_result.read_text())
+    assert cache['status'] == 'SUCCEEDED' and cache['returncode'] == 0 and cache['verified']
+    assert cache['official_api_complete_marker'] and not cache['missing_required_objects']
+    assert cache['project_pin_sha256_before'] == cache['project_pin_sha256_after']
+    cache_log = Path(cache['log'])
+    assert d.digest(cache_log) == cache['log_sha256']
+    (LOGS / 'reused-P1-cache-result.json').write_bytes(cache_result.read_bytes())
+    (LOGS / 'reused-P1-cache.log').write_bytes(cache_log.read_bytes())
+    order = d.closure([m.CARRIER])
+    missing = [x for x in order if s.resolved_object(x) is None]
+    assert all(x in RECORDS for x in missing), ('missing object outside previously accepted local closure', missing)
+    rows = []
+    for module in missing:
+        r = RECORDS[module]
+        assert m.pinned_file(module)['sha256'] == r['source']['sha256']
+        assert r['certificate']['result']['trustLevel'] == 0
+        rows.append({'module': module, 'source': m.pinned_file(module),
+            'expected_objects': r['objects'],
+            'historical_strict': r['certificate']['result'].get('strict', False),
+            'historical_elapsed_seconds': r['certificate']['result']['elapsed_seconds']})
+    result = {'observed_utc': s.now(), 'target': s.TARGET, 'required_by': m.CARRIER,
+        'prior_receipt_commit': s.START_HEAD, 'prior_preflight_sha256': d.digest(m.PRIOR/'preflight.json'),
+        'official_cache_reused_from_separate_P1_run': {
+            'result_path': str(cache_result), 'result_sha256': d.digest(cache_result),
+            'log_path': str(cache_log), 'log_sha256': d.digest(cache_log),
+            'returncode': cache['returncode'], 'elapsed_seconds': cache['elapsed_seconds']},
+        'restore_count': len(rows), 'source_order': rows,
+        'criterion': 'Exact pinned source, original diagnostic mode, trustLevel=0, unchanged official toolchain/frontend, and exact historical object SHA256.',
+        'no_future_supplier_modules_included': True, 'write_root': str(d.OUTPUT),
+        'shared_dependencies_written': False}
+    s.save(LOGS / 'plan.json', result)
+    print(json.dumps({'restore_count': len(rows), 'historical_seconds_sum': sum(x['historical_elapsed_seconds'] for x in rows),
+        'first': rows[0]['module'] if rows else None}), flush=True)
+
+def restore_one(module):
+    plan = json.loads((LOGS/'plan.json').read_text())
+    allowed = {x['module']: x for x in plan['source_order']}
+    assert module in allowed, 'not a fixed required missing object'
+    expected = allowed[module]
+    assert s.resolved_object(module) is None, 'already present; inspect rather than overwrite'
+    guard = m.guards()
+    source = m.pinned_file(module)
+    assert source['sha256'] == expected['source']['sha256']
+    before_imports = s.import_snapshot(module)
+    recorded = RECORDS[module]['certificate']['recorded_imports_matched']
+    for witness in recorded:
+        obj = s.resolved_object(witness['module'])
+        assert obj is not None and d.digest(obj) == witness['sha256'], witness['module']
+    target = d.OUTPUT / d.rel_object(module)
+    assert not target.exists()
+    target.parent.mkdir(parents=True, exist_ok=True)
+    # An independent P1 recovery may have reproduced the vanished original
+    # objects meanwhile. Reuse only their exact prior byte identities instead
+    # of launching a duplicate frontend. Never write to the shared location.
+    original_objects = expected['expected_objects']
+    if all(Path(x['path']).is_file() and d.digest(Path(x['path'])) == x['sha256']
+            for x in original_objects):
+        stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+        started = time.monotonic()
+        for item in original_objects:
+            src = Path(item['path'])
+            dst = target.parent / src.name
+            assert not dst.exists()
+            tmp = dst.with_name(dst.name + '.p5-copy-tmp')
+            tmp.write_bytes(src.read_bytes())
+            assert d.digest(src) == item['sha256'] == d.digest(tmp)
+            os.replace(tmp, dst)
+        objects = m.check_objects(module, original_objects)
+        rec = {'action':'reuse_matching_restored_import', 'module':module,
+            'target_supplier':s.TARGET, 'source':source,
+            'source_sha256_before':source['sha256'], 'source_sha256_after':d.digest(Path(source['path'])),
+            'imports_before':before_imports, 'imports_after':s.import_snapshot(module),
+            'copied_from':original_objects, 'objects_after':objects,
+            'command':None, 'returncode':None, 'frontend_run_by_this_copy':False,
+            'historical_object_sha256_reproduced':True,
+            'source_unchanged':source['sha256']==d.digest(Path(source['path'])),
+            'imports_unchanged':before_imports==s.import_snapshot(module),
+            'guards_unchanged':guard==m.guards(),
+            'elapsed_seconds':round(time.monotonic()-started,3), 'completed_utc':s.now(),
+            'receipt_basis':'Exact object SHA256, fixed source and matched recorded imports from P5 round3; separate P1 restoration reused, not a P5 fresh frontend/replay/audit.',
+            'controller_sha256':d.digest(Path(__file__))}
+        assert rec['source_unchanged'] and rec['imports_unchanged'] and rec['guards_unchanged']
+        s.save(LOGS/(stamp+'-copy-result.json'),rec)
+        with (LOGS/'results.jsonl').open('a') as out:out.write(json.dumps(rec,ensure_ascii=False)+'\n')
+        print('RESTORE_HASH_VERIFIED_COPY '+module,flush=True)
+        return
+    strict = expected['historical_strict']
+    cmd = [str(d.TOOLROOT/'bin/lake'), '-d', str(d.DRIVER), '-f', 'lakefile.lean',
+        'script', 'run', 'compileOne', source['path'], module, str(target), 'strict' if strict else 'normal']
+    stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+    log = LOGS / (stamp + '-' + module + '.log')
+    rec = {'action': 'restore_required_import', 'module': module, 'target_supplier': s.TARGET,
+        'started_utc': s.now(), 'source': source, 'source_sha256_before': source['sha256'],
+        'imports_before': before_imports, 'expected_objects': expected['expected_objects'],
+        'command': cmd, 'cwd': str(d.REPO), 'trustLevel': 0, 'warningAsError': strict,
+        'diagnostic_mode_reason': 'Reproduce the previously accepted object with its original compiler options; not a new supplier acceptance.',
+        'LEAN_SYSROOT': str(d.TOOLROOT), 'LEAN_PATH': d.environment()['LEAN_PATH'],
+        'LEAN_NUM_THREADS': '1', 'metadata_adapter': False, 'log': str(log),
+        'controller_sha256':d.digest(Path(__file__))}
+    s.save(LOGS/'active.json', rec)
+    print('RESTORE_START ' + module, flush=True)
+    started = time.monotonic()
+    with log.open('w') as out:
+        out.write(json.dumps(rec, ensure_ascii=False) + '\n'); out.flush()
+        run = subprocess.run(cmd, cwd=d.REPO, env=d.environment(), stdout=out, stderr=subprocess.STDOUT)
+    rec.update(returncode=run.returncode, elapsed_seconds=round(time.monotonic()-started,3), completed_utc=s.now())
+    rec['source_sha256_after'] = d.digest(Path(source['path']))
+    rec['imports_after'] = s.import_snapshot(module)
+    rec['objects_after'] = s.files(module) if s.resolved_object(module) else []
+    rec['raw_log_sha256'] = d.digest(log)
+    rec['source_unchanged'] = rec['source_sha256_after'] == rec['source_sha256_before']
+    rec['imports_unchanged'] = rec['imports_after'] == before_imports
+    rec['guards_unchanged'] = m.guards() == guard
+    rec['historical_object_sha256_reproduced'] = bool(rec['objects_after']) and [x['sha256'] for x in rec['objects_after']] == [x['sha256'] for x in expected['expected_objects']]
+    s.save(LOGS/(stamp+'-result.json'), rec)
+    with (LOGS/'results.jsonl').open('a') as out: out.write(json.dumps(rec,ensure_ascii=False)+'\n')
+    s.save(LOGS/'active.json', dict(rec, status='COMPLETED'))
+    print(json.dumps({k:rec[k] for k in ['module','returncode','elapsed_seconds','historical_object_sha256_reproduced','source_unchanged','imports_unchanged']},ensure_ascii=False),flush=True)
+    if run.returncode:
+        print(log.read_text().split('\n',1)[1],flush=True)
+        raise SystemExit(run.returncode)
+    assert rec['source_unchanged'] and rec['imports_unchanged'] and rec['guards_unchanged']
+    assert rec['historical_object_sha256_reproduced'], 'Do not reuse changed object bytes against old acceptance'
+
+if __name__ == '__main__':
+    if sys.argv[1:] == ['plan']:
+        save_context()
+    elif len(sys.argv) == 2:
+        with (m.PRIOR_RUNTIME.parent/'single-module.lock').open('a') as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            restore_one(sys.argv[1])
+    else:
+        raise SystemExit('supply one exact required module, or plan')

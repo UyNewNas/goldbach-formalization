@@ -1,0 +1,400 @@
+{
+  "source_commit": "744316efd1887f21c91dd4b63c218fa27704c931",
+  "format": "DEFAULT_META_PPEXPR_COMPLETE_NO_ELISION",
+  "pp_all": false,
+  "source_audit_sha256": "c5cb2cd40e7d8b591302ccb2e3b0e36c2b3a99a786385316feeec62db4617b33",
+  "raw_audit_log_sha256": "f942c8432aee8ae28d70dc97dd804ffa0a1323e9f55edfb55d999c5f74a805f5",
+  "declarations": [
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "definition",
+      "module": "ImbalancedChen.StoredHistoricalBoxPermit",
+      "name": "ImbalancedChen.storedBoxCapCheck",
+      "type": "{n : ℕ} → Finset (Fin n) → ℚ → ℚ → (Fin n → ℚ) → (Fin n → ℚ) → ℚ → Bool"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "ImbalancedChen.StoredHistoricalBoxPermit",
+      "name": "ImbalancedChen.storedBoxCapCheck_actual_square_gates",
+      "type": "∀ {n : ℕ} (I : Finset (Fin n)) (old nu : ℚ) (lo hi : Fin n → ℚ) (cap : ℚ),\n  ImbalancedChen.storedBoxCapCheck I old nu lo hi cap = true →\n    ∀ (t : Fin n → ℝ),\n      (∀ (i : Fin n), ↑(lo i) ≤ t i) →\n        (∀ (i : Fin n), t i ≤ ↑(hi i)) →\n          ∀ (N : ℝ),\n            1 < N →\n              ∀ (p : Fin n → ℕ),\n                (∀ (i : Fin n), ↑(p i) ≤ N ^ t i) →\n                  (∀ (j : Fin n), ↑(∏ i with i < j, p i) * ↑(p j) ^ 2 < N ^ ↑cap) ∧\n                    ∀ j ∉ I, ↑(∏ i ∈ I, p i) * ↑(∏ i with i < j ∧ i ∉ I, p i) * ↑(p j) ^ 2 < N ^ ↑cap"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "ImbalancedChen.StoredHistoricalBoxPermit",
+      "name": "ImbalancedChen.storedBoxCapCheck_iff",
+      "type": "∀ {n : ℕ} (I : Finset (Fin n)) (old nu : ℚ) (lo hi : Fin n → ℚ) (cap : ℚ),\n  ImbalancedChen.storedBoxCapCheck I old nu lo hi cap = true ↔\n    ImbalancedChen.selectedCapLower I old hi < cap ∧ cap < ImbalancedChen.selectedCapUpper I nu lo hi"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "ImbalancedChen.StoredHistoricalBoxPermit",
+      "name": "ImbalancedChen.storedBoxCapCheck_midpoint",
+      "type": "∀ {n : ℕ} (I : Finset (Fin n)) (old nu : ℚ) (lo hi : Fin n → ℚ),\n  ImbalancedChen.selectedBoxCapCheck I old nu lo hi = true →\n    ImbalancedChen.storedBoxCapCheck I old nu lo hi (ImbalancedChen.selectedBoxCap I old nu lo hi) = true"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "ImbalancedChen.StoredHistoricalBoxPermit",
+      "name": "ImbalancedChen.storedBoxCapCheck_old_lt",
+      "type": "∀ {n : ℕ} (I : Finset (Fin n)) (old nu : ℚ) (lo hi : Fin n → ℚ) (cap : ℚ),\n  ImbalancedChen.storedBoxCapCheck I old nu lo hi cap = true → old < cap"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "ImbalancedChen.StoredHistoricalBoxPermit",
+      "name": "ImbalancedChen.storedBoxCapCheck_sound",
+      "type": "∀ {n : ℕ} (I : Finset (Fin n)) (old nu : ℚ) (lo hi : Fin n → ℚ) (cap : ℚ),\n  ImbalancedChen.storedBoxCapCheck I old nu lo hi cap = true →\n    ∀ (t : Fin n → ℝ),\n      (∀ (i : Fin n), ↑(lo i) ≤ t i) →\n        (∀ (i : Fin n), t i ≤ ↑(hi i)) →\n          ↑old < ↑cap ∧\n            ↑cap < ↑nu ∧\n              1 / 2 < ↑cap ∧\n                (∀ (j : Fin n), ImbalancedChen.prefixSquareExpr t j < ↑cap) ∧\n                  (∀ j ∉ I, ImbalancedChen.selectedSquareExpr I t j < ↑cap) ∧\n                    ↑cap < ImbalancedChen.VariableEnvelope.v (∑ i ∈ I, t i)"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "definition",
+      "module": "ImbalancedChen.StoredHistoricalBoxPermit",
+      "name": "ImbalancedChen.storedMeshCapCheck",
+      "type": "{n : ℕ} →\n  ℚ →\n    ℚ →\n      (m : ℕ) →\n        Finset (Fin n → Fin (m + 1)) →\n          ((Fin n → Fin (m + 1)) → Finset (Fin n)) →\n            ((Fin n → Fin (m + 1)) → ℚ) → ((Fin n → Fin (m + 1)) → ℚ) → ((Fin n → Fin (m + 1)) → ℚ) → Bool"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "ImbalancedChen.StoredHistoricalBoxPermit",
+      "name": "ImbalancedChen.storedMeshCapCheck_actual_square_gates",
+      "type": "∀ {n : ℕ} (a b : ℚ) (m : ℕ) (J : Finset (Fin n → Fin (m + 1))) (I : (Fin n → Fin (m + 1)) → Finset (Fin n))\n  (old nu cap : (Fin n → Fin (m + 1)) → ℚ),\n  ImbalancedChen.storedMeshCapCheck a b m J I old nu cap = true →\n    ∀ j ∈ J,\n      ∀ t ∈ ImbalancedChen.logPrimeMeshCell (↑a) (↑b) m j,\n        ∀ (N : ℝ),\n          1 < N →\n            ∀ (p : Fin n → ℕ),\n              (∀ (i : Fin n), ↑(p i) ≤ N ^ t i) →\n                (∀ (k : Fin n), ↑(∏ i with i < k, p i) * ↑(p k) ^ 2 < N ^ ↑(cap j)) ∧\n                  ∀ k ∉ I j, ↑(∏ i ∈ I j, p i) * ↑(∏ i with i < k ∧ i ∉ I j, p i) * ↑(p k) ^ 2 < N ^ ↑(cap j)"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "ImbalancedChen.StoredHistoricalBoxPermit",
+      "name": "ImbalancedChen.storedMeshCapCheck_iff",
+      "type": "∀ {n : ℕ} (a b : ℚ) (m : ℕ) (J : Finset (Fin n → Fin (m + 1))) (I : (Fin n → Fin (m + 1)) → Finset (Fin n))\n  (old nu cap : (Fin n → Fin (m + 1)) → ℚ),\n  ImbalancedChen.storedMeshCapCheck a b m J I old nu cap = true ↔\n    ∀ j ∈ J,\n      ImbalancedChen.storedBoxCapCheck (I j) (old j) (nu j) (ImbalancedChen.qLogPrimeMeshLo a b m j)\n          (ImbalancedChen.qLogPrimeMeshHi a b m j) (cap j) =\n        true"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "ImbalancedChen.StoredHistoricalBoxPermit",
+      "name": "ImbalancedChen.storedMeshCapCheck_of_selectedBoxCapChecks",
+      "type": "∀ {n : ℕ} (a b : ℚ) (m : ℕ) (J : Finset (Fin n → Fin (m + 1))) (I : (Fin n → Fin (m + 1)) → Finset (Fin n))\n  (old nu : (Fin n → Fin (m + 1)) → ℚ),\n  (∀ j ∈ J,\n      ImbalancedChen.selectedBoxCapCheck (I j) (old j) (nu j) (ImbalancedChen.qLogPrimeMeshLo a b m j)\n          (ImbalancedChen.qLogPrimeMeshHi a b m j) =\n        true) →\n    (ImbalancedChen.storedMeshCapCheck a b m J I old nu fun j =>\n        ImbalancedChen.selectedBoxCap (I j) (old j) (nu j) (ImbalancedChen.qLogPrimeMeshLo a b m j)\n          (ImbalancedChen.qLogPrimeMeshHi a b m j)) =\n      true"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "ImbalancedChen.StoredHistoricalBoxPermit",
+      "name": "ImbalancedChen.storedMeshCapCheck_old_lt",
+      "type": "∀ {n : ℕ} (a b : ℚ) (m : ℕ) (J : Finset (Fin n → Fin (m + 1))) (I : (Fin n → Fin (m + 1)) → Finset (Fin n))\n  (old nu cap : (Fin n → Fin (m + 1)) → ℚ),\n  ImbalancedChen.storedMeshCapCheck a b m J I old nu cap = true → ∀ j ∈ J, old j < cap j"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "ImbalancedChen.StoredHistoricalBoxPermit",
+      "name": "ImbalancedChen.storedMeshCapCheck_sound",
+      "type": "∀ {n : ℕ} (a b : ℚ) (m : ℕ) (J : Finset (Fin n → Fin (m + 1))) (I : (Fin n → Fin (m + 1)) → Finset (Fin n))\n  (old nu cap : (Fin n → Fin (m + 1)) → ℚ),\n  ImbalancedChen.storedMeshCapCheck a b m J I old nu cap = true →\n    ∀ j ∈ J,\n      ∀ t ∈ ImbalancedChen.logPrimeMeshCell (↑a) (↑b) m j,\n        ↑(old j) < ↑(cap j) ∧\n          ↑(cap j) < ↑(nu j) ∧\n            1 / 2 < ↑(cap j) ∧\n              (∀ (i : Fin n), ImbalancedChen.prefixSquareExpr t i < ↑(cap j)) ∧\n                (∀ i ∉ I j, ImbalancedChen.selectedSquareExpr (I j) t i < ↑(cap j)) ∧\n                  ↑(cap j) < ImbalancedChen.VariableEnvelope.v (∑ i ∈ I j, t i)"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.accepts_stored_cap",
+      "type": "ImbalancedChen.storedBoxCapCheck P1StoredCapProbe.mask (1 / 2) (3 / 5) P1StoredCapProbe.lo P1StoredCapProbe.hi\n    (53 / 100) =\n  true"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.accepts_stored_mesh_cap",
+      "type": "(ImbalancedChen.storedMeshCapCheck (1 / 10) (11 / 100) 0 {P1StoredCapProbe.cell} (fun x => P1StoredCapProbe.mask)\n    (fun x => 1 / 2) (fun x => 3 / 5) fun x => 53 / 100) =\n  true"
+    },
+    {
+      "axioms": [
+        "propext"
+      ],
+      "kind": "definition",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.cell",
+      "type": "Fin 1 → Fin 1"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "definition",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.hi",
+      "type": "Fin 1 → ℚ"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "definition",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.lo",
+      "type": "Fin 1 → ℚ"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ],
+      "kind": "definition",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.mask",
+      "type": "Finset (Fin 1)"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.midpoint_value",
+      "type": "ImbalancedChen.selectedBoxCap P1StoredCapProbe.mask (1 / 2) (3 / 5) P1StoredCapProbe.lo P1StoredCapProbe.hi = 21 / 40"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.rejects_empty_mask",
+      "type": "ImbalancedChen.storedBoxCapCheck ∅ (1 / 2) (3 / 5) P1StoredCapProbe.lo P1StoredCapProbe.hi (53 / 100) = false"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.rejects_lower_ceiling",
+      "type": "ImbalancedChen.storedBoxCapCheck P1StoredCapProbe.mask (1 / 2) (13 / 25) P1StoredCapProbe.lo P1StoredCapProbe.hi\n    (53 / 100) =\n  false"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.rejects_lower_equality",
+      "type": "ImbalancedChen.storedBoxCapCheck P1StoredCapProbe.mask (1 / 2) (3 / 5) P1StoredCapProbe.lo P1StoredCapProbe.hi (1 / 2) =\n  false"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.rejects_stronger_history",
+      "type": "ImbalancedChen.storedBoxCapCheck P1StoredCapProbe.mask (11 / 20) (3 / 5) P1StoredCapProbe.lo P1StoredCapProbe.hi\n    (53 / 100) =\n  false"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.rejects_upper_equality",
+      "type": "ImbalancedChen.storedBoxCapCheck P1StoredCapProbe.mask (1 / 2) (3 / 5) P1StoredCapProbe.lo P1StoredCapProbe.hi\n    (11 / 20) =\n  false"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.stored_cap_is_not_midpoint",
+      "type": "53 / 100 ≠ ImbalancedChen.selectedBoxCap P1StoredCapProbe.mask (1 / 2) (3 / 5) P1StoredCapProbe.lo P1StoredCapProbe.hi"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "ImbalancedChen.StoredHistoricalBoxPermit",
+      "name": "ImbalancedChen.storedBoxCapCheck.eq_1",
+      "type": "∀ {n : ℕ} (I : Finset (Fin n)) (old nu : ℚ) (lo hi : Fin n → ℚ) (cap : ℚ),\n  ImbalancedChen.storedBoxCapCheck I old nu lo hi cap =\n    decide (ImbalancedChen.selectedCapLower I old hi < cap ∧ cap < ImbalancedChen.selectedCapUpper I nu lo hi)"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "ImbalancedChen.StoredHistoricalBoxPermit",
+      "name": "ImbalancedChen.storedMeshCapCheck.eq_1",
+      "type": "∀ {n : ℕ} (a b : ℚ) (m : ℕ) (J : Finset (Fin n → Fin (m + 1))) (I : (Fin n → Fin (m + 1)) → Finset (Fin n))\n  (old nu cap : (Fin n → Fin (m + 1)) → ℚ),\n  ImbalancedChen.storedMeshCapCheck a b m J I old nu cap =\n    decide\n      (∀ a_1 ∈ J,\n        ImbalancedChen.storedBoxCapCheck (I a_1) (old a_1) (nu a_1) (ImbalancedChen.qLogPrimeMeshLo a b m a_1)\n            (ImbalancedChen.qLogPrimeMeshHi a b m a_1) (cap a_1) =\n          true)"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.accepts_stored_cap._proof_1_1",
+      "type": "ImbalancedChen.storedBoxCapCheck P1StoredCapProbe.mask (1 / 2) (3 / 5) P1StoredCapProbe.lo P1StoredCapProbe.hi\n    (53 / 100) =\n  true"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.accepts_stored_mesh_cap._proof_1_1",
+      "type": "(ImbalancedChen.storedMeshCapCheck (1 / 10) (11 / 100) 0 {P1StoredCapProbe.cell} (fun x => P1StoredCapProbe.mask)\n    (fun x => 1 / 2) (fun x => 3 / 5) fun x => 53 / 100) =\n  true"
+    },
+    {
+      "axioms": [
+        "propext"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.mask._proof_1",
+      "type": "NeZero (0 + 1)"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.midpoint_value._proof_1_1",
+      "type": "ImbalancedChen.selectedBoxCap P1StoredCapProbe.mask (1 / 2) (3 / 5) P1StoredCapProbe.lo P1StoredCapProbe.hi = 21 / 40"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.rejects_empty_mask._proof_1_1",
+      "type": "ImbalancedChen.storedBoxCapCheck ∅ (1 / 2) (3 / 5) P1StoredCapProbe.lo P1StoredCapProbe.hi (53 / 100) = false"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.rejects_lower_ceiling._proof_1_1",
+      "type": "ImbalancedChen.storedBoxCapCheck P1StoredCapProbe.mask (1 / 2) (13 / 25) P1StoredCapProbe.lo P1StoredCapProbe.hi\n    (53 / 100) =\n  false"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.rejects_lower_equality._proof_1_1",
+      "type": "ImbalancedChen.storedBoxCapCheck P1StoredCapProbe.mask (1 / 2) (3 / 5) P1StoredCapProbe.lo P1StoredCapProbe.hi (1 / 2) =\n  false"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.rejects_stronger_history._proof_1_1",
+      "type": "ImbalancedChen.storedBoxCapCheck P1StoredCapProbe.mask (11 / 20) (3 / 5) P1StoredCapProbe.lo P1StoredCapProbe.hi\n    (53 / 100) =\n  false"
+    },
+    {
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "kind": "theorem",
+      "module": "verification.parts.p1.round2.permit.StoredCapProbe",
+      "name": "P1StoredCapProbe.rejects_upper_equality._proof_1_1",
+      "type": "ImbalancedChen.storedBoxCapCheck P1StoredCapProbe.mask (1 / 2) (3 / 5) P1StoredCapProbe.lo P1StoredCapProbe.hi\n    (11 / 20) =\n  false"
+    }
+  ]
+}

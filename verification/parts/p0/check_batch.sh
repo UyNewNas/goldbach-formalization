@@ -59,6 +59,33 @@ case "$batch" in
     replay=("${production[@]}")
     audit=verification.part2.CertificateAudit
     ;;
+  p2-prefix64)
+    production=(
+      ImbalancedChen.Certificates.PairedV2Batch4To64Data
+      ImbalancedChen.Certificates.PairedV2Batch4To64
+      ImbalancedChen.Certificates.PairedV2Prefix64
+    )
+    suppliers=(
+      ImbalancedChen.Certificates.RationalLogCertificate
+      ImbalancedChen.Certificates.PairedFibreIntegral
+      ImbalancedChen.Certificates.PairedCertificateChecker
+      ImbalancedChen.Certificates.PairedV2Data
+      ImbalancedChen.Certificates.PairedV2
+      ImbalancedChen.Certificates.AboveMuSecondCoarse
+      ImbalancedChen.Certificates.PairedV2Geometry
+      ImbalancedChen.Certificates.PairedV2Prefix4Data
+      ImbalancedChen.Certificates.PairedV2Prefix4
+    )
+    replay=("${production[@]}" "${suppliers[@]}")
+    audit=verification.parts.p0.CertificatesPrefix64Audit
+    ;;
+  p1-permit)
+    production=(ImbalancedChen.StoredHistoricalBoxPermit)
+    suppliers=(ImbalancedChen.SelectedPrefixRationalMesh)
+    auxiliary=(verification.parts.p1.round2.permit.StoredCapProbe)
+    audit=verification.parts.p1.round2.permit.StoredCapAudit
+    replay=("${production[@]}" "${auxiliary[@]}" "$audit")
+    ;;
   p1-history)
     production=(
       ImbalancedChen.OrdinaryLowerFourFrontier
@@ -114,11 +141,11 @@ esac
 sources=(lean-toolchain lakefile.toml lake-manifest.json
   verification/parts/p0/check_batch.sh verification/parts/p0/check_pins.py
   verification/parts/p0/check_sources.py verification/verify_variable_envelope_boxes.py)
-if [[ "$batch" = p2-first || "$batch" = p2 || "$batch" = p2-prefix4 ]]; then
+if [[ "$batch" = p2-first || "$batch" = p2 || "$batch" = p2-prefix4 || "$batch" = p2-prefix64 ]]; then
   sources+=(verification/part2/import_paired_v2.py
     verification/part2/data/corpus-renewal-paired-certificate-v2-20261010.json)
 fi
-if [[ "$batch" = p2 || "$batch" = p2-prefix4 ]]; then
+if [[ "$batch" = p2 || "$batch" = p2-prefix4 || "$batch" = p2-prefix64 ]]; then
   sources+=(verification/part2/generate_paired_prefix.py)
 fi
 for module in "${production[@]}" "${suppliers[@]}" "${auxiliary[@]}" "$audit"; do
@@ -139,19 +166,26 @@ git status --porcelain > "$receipt_dir/source-status.txt"
 sha256sum "${sources[@]}" > "$receipt_dir/source-sha256.txt"
 python3 verification/parts/p0/check_sources.py "${production[@]}" "${suppliers[@]}" "${auxiliary[@]}" "$audit" \
   | tee "$receipt_dir/source-guard.json"
-if [[ "$batch" = p2-first || "$batch" = p2 || "$batch" = p2-prefix4 ]]; then
+if [[ "$batch" = p2-first || "$batch" = p2 || "$batch" = p2-prefix4 || "$batch" = p2-prefix64 ]]; then
   python3 verification/part2/import_paired_v2.py \
     verification/part2/data/corpus-renewal-paired-certificate-v2-20261010.json \
     --check-generated ImbalancedChen/Certificates/PairedV2Data.lean \
     --report "$receipt_dir/decode-report.json" \
     | tee "$receipt_dir/decode.log"
 fi
-if [[ "$batch" = p2 || "$batch" = p2-prefix4 ]]; then
+if [[ "$batch" = p2 || "$batch" = p2-prefix4 || "$batch" = p2-prefix64 ]]; then
   python3 verification/part2/generate_paired_prefix.py \
     verification/part2/data/corpus-renewal-paired-certificate-v2-20261010.json \
     --count 4 --check-generated ImbalancedChen/Certificates \
     --report "$receipt_dir/prefix4-decode-report.json" \
     | tee "$receipt_dir/prefix4-decode.log"
+fi
+if [[ "$batch" = p2-prefix64 ]]; then
+  python3 verification/part2/generate_paired_prefix.py \
+    verification/part2/data/corpus-renewal-paired-certificate-v2-20261010.json \
+    --start 4 --count 60 --check-generated ImbalancedChen/Certificates \
+    --report "$receipt_dir/batch4to64-decode-report.json" \
+    | tee "$receipt_dir/batch4to64-decode.log"
 fi
 lake env lean --version 2>&1 | tee "$receipt_dir/toolchain.log"
 

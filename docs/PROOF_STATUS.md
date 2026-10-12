@@ -1,5 +1,30 @@
 # Verification boundary
 
+## Part 0 round 4 reception
+
+The received component inventory is now 23 own production modules and 1,005
+defining-module declarations. Four exact source additions contribute 414:
+StoredHistoricalBoxPermit (14), PairedV2Batch4To64Data (72), PairedV2Batch4To64
+(207), and PairedV2Prefix64 (121). Their original strict compilation, same-object
+stock replay and full owned audits have passed. P5's pinned S1LowerRosser has
+eight separately accepted upstream declarations and no production source change.
+
+Parent 28fd630ef7cc38eba86beb6c0ba123336b5d05f2 has actual complete-root CI
+success. This changed root requires its own complete build, explicit leaf scope,
+root replay, root axiom audit and both Round3/Round4 type exports; component
+reception does not predict those outcomes. The old 591 compiler types are
+correctly classified as 586 complete pp.all plus five complete default Buchstab
+types. Original records are retained and format corrections are explicit.
+
+The two historical fifth-layer continuations now have a fixed P1 source commit,
+but all four targets including probe/audit remain uncompiled. The separately
+reported single-module candidate still lacks corresponding fixed source and
+receipts. K, c, hLower and hUpper still require real analytic suppliers; the
+existing final theorem remains conditional. P5 needs P4-A, not P4-B.
+
+See [round 4 verification](PART0_ROUND4_VERIFICATION.md) for source ownership,
+actual execution records, exact integral bounds and remaining dependencies.
+
 ## Part 0 round 3 reception
 
 The branch now imports eight further fixed, component-verified modules: P1 ordinary lower-fourth frontier, lower cell sum, lower own-cube integral and finite historical cap certificate; P2 geometry and the first four adopted E0 integral cells; P3 integer long-slot normalization. Nineteen received production modules have 591 audited defining-module declarations. This does not include the ten P1 probe declarations or the pinned upstream S1Carrier's 36 declarations.
