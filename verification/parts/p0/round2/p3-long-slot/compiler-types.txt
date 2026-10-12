@@ -1,0 +1,413 @@
+ImbalancedChen.part3IntervalAPCount
+(L U q a : Nat) → Nat
+
+ImbalancedChen.part3IntervalAPCount_abs_sub_le_two
+∀ (L U q a b : Nat) (hq : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) q),
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+        (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.part3IntervalAPCount L U q a))
+        (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.part3IntervalAPCount L U q b))))
+    (@OfNat.ofNat.{0} Real (nat_lit 2)
+      (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+        (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+          (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+
+ImbalancedChen.part3IntervalAPCount_coprimeMean_error
+∀ (L U q a : Nat) (hq : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) q),
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup
+      (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+        (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.part3IntervalAPCount L U q a))
+        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+          (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.part3IntervalCoprimeCount L U q))
+          (@Nat.cast.{0} Real Real.instNatCast (Nat.totient q)))))
+    (@OfNat.ofNat.{0} Real (nat_lit 2)
+      (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+        (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+          (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+
+ImbalancedChen.part3IntervalAPCount_le_add_two
+∀ (L U q a b : Nat) (hq : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) q),
+  @LE.le.{0} Nat instLENat (ImbalancedChen.part3IntervalAPCount L U q a)
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) (ImbalancedChen.part3IntervalAPCount L U q b)
+      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))
+
+ImbalancedChen.part3IntervalCoprimeCount
+(L U q : Nat) → Nat
+
+ImbalancedChen.part3IntervalCoprimeCount_eq_sum
+∀ (L U q : Nat) (hq : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) q),
+  @Eq.{1} Nat (ImbalancedChen.part3IntervalCoprimeCount L U q)
+    (@Finset.sum.{0, 0} Nat Nat Nat.instAddCommMonoid
+      (@Finset.filter.{0} Nat (fun (a : Nat) => Nat.Coprime q a) (Nat.instDecidableCoprime q) (Finset.range q))
+      fun (a : Nat) => ImbalancedChen.part3IntervalAPCount L U q a)
+
+ImbalancedChen.part3LongSlotAPCount
+(L U q a m : Nat) → Nat
+
+ImbalancedChen.part3LongSlotCoprimeCount
+(L U q m : Nat) → Nat
+
+ImbalancedChen.part3LongSlotRemainder
+(L U q a m : Nat) → Real
+
+ImbalancedChen.part3LongSlotRemainder_abs_le_two
+∀ (L U q a m : Nat) (hq : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) q)
+  (ha : Nat.Coprime a q),
+  @LE.le.{0} Real Real.instLE
+    (@abs.{0} Real Real.lattice Real.instAddGroup (ImbalancedChen.part3LongSlotRemainder L U q a m))
+    (@OfNat.ofNat.{0} Real (nat_lit 2)
+      (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+        (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+          (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+
+ImbalancedChen.part3LongSlotRemainder_eq_zero_of_not_coprime
+∀ (L U q a m : Nat) (ha : Nat.Coprime a q) (hm : Not (Nat.Coprime m q)),
+  @Eq.{1} Real (ImbalancedChen.part3LongSlotRemainder L U q a m)
+    (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero))
+
+ImbalancedChen.part3LongSlotSignedError
+(S Q : Finset.{0} Nat) → (α ρ : Nat → Complex) → (L U a : Nat) → Complex
+
+ImbalancedChen.part3LongSlotSignedError_norm_le
+∀ (S Q : Finset.{0} Nat) (α ρ : Nat → Complex) (L U a : Nat)
+  (hq :
+    ∀ (q : Nat),
+      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) Q q →
+        @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) q)
+  (ha :
+    ∀ (q : Nat),
+      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) Q q →
+        Nat.Coprime a q),
+  @LE.le.{0} Real Real.instLE
+    (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.part3LongSlotSignedError S Q α ρ L U a))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real (nat_lit 2)
+          (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+        (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid S fun (m : Nat) =>
+          @Norm.norm.{0} Complex Complex.instNorm (α m)))
+      (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid Q fun (q : Nat) =>
+        @Norm.norm.{0} Complex Complex.instNorm (ρ q)))
+
+ImbalancedChen.part3LongSlotSignedError_norm_le_box
+∀ (M D L U a : Nat) (α ρ : Nat → Complex)
+  (hα :
+    ∀ (m : Nat),
+      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))
+          (@Finset.Icc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) M)
+          m →
+        @LE.le.{0} Real Real.instLE (@Norm.norm.{0} Complex Complex.instNorm (α m))
+          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))
+  (hρ :
+    ∀ (q : Nat),
+      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))
+          (@Finset.filter.{0} Nat (fun (q : Nat) => Nat.Coprime a q) (Nat.instDecidableCoprime a)
+            (@Finset.Icc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) D))
+          q →
+        @LE.le.{0} Real Real.instLE (@Norm.norm.{0} Complex Complex.instNorm (ρ q))
+          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))),
+  @LE.le.{0} Real Real.instLE
+    (@Norm.norm.{0} Complex Complex.instNorm
+      (ImbalancedChen.part3LongSlotSignedError
+        (@Finset.Icc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) M)
+        (@Finset.filter.{0} Nat (fun (q : Nat) => Nat.Coprime a q) (Nat.instDecidableCoprime a)
+          (@Finset.Icc.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) D))
+        α ρ L U a))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real (nat_lit 2)
+          (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+        (@Nat.cast.{0} Real Real.instNatCast M))
+      (@Nat.cast.{0} Real Real.instNatCast D))
+
+ImbalancedChen.part3LongSlotSignedError_norm_le_card
+∀ (S Q : Finset.{0} Nat) (α ρ : Nat → Complex) (L U a : Nat)
+  (hq :
+    ∀ (q : Nat),
+      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) Q q →
+        @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) q)
+  (ha :
+    ∀ (q : Nat),
+      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) Q q →
+        Nat.Coprime a q)
+  (hα :
+    ∀ (m : Nat),
+      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) S m →
+        @LE.le.{0} Real Real.instLE (@Norm.norm.{0} Complex Complex.instNorm (α m))
+          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))
+  (hρ :
+    ∀ (q : Nat),
+      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) Q q →
+        @LE.le.{0} Real Real.instLE (@Norm.norm.{0} Complex Complex.instNorm (ρ q))
+          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))),
+  @LE.le.{0} Real Real.instLE
+    (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.part3LongSlotSignedError S Q α ρ L U a))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real (nat_lit 2)
+          (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+        (@Nat.cast.{0} Real Real.instNatCast (@Finset.card.{0} Nat S)))
+      (@Nat.cast.{0} Real Real.instNatCast (@Finset.card.{0} Nat Q)))
+
+ImbalancedChen.part3LongSlotSignedError_norm_le_of_mass
+∀ (S Q : Finset.{0} Nat) (α ρ : Nat → Complex) (L U a : Nat) (M D : Real)
+  (hq :
+    ∀ (q : Nat),
+      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) Q q →
+        @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) q)
+  (ha :
+    ∀ (q : Nat),
+      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) Q q →
+        Nat.Coprime a q)
+  (hM :
+    @LE.le.{0} Real Real.instLE
+      (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid S fun (m : Nat) =>
+        @Norm.norm.{0} Complex Complex.instNorm (α m))
+      M)
+  (hD :
+    @LE.le.{0} Real Real.instLE
+      (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid Q fun (q : Nat) =>
+        @Norm.norm.{0} Complex Complex.instNorm (ρ q))
+      D),
+  @LE.le.{0} Real Real.instLE
+    (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.part3LongSlotSignedError S Q α ρ L U a))
+    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)
+        (@OfNat.ofNat.{0} Real (nat_lit 2)
+          (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast
+            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))
+        M)
+      D)
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_Ico_filter_card_sub
+∀ (L U : Nat) (hLU : @LE.le.{0} Nat instLENat L U) (P : Nat → Prop) [inst : @DecidablePred.{1} Nat P],
+  @Eq.{1} Nat
+    (@Finset.card.{0} Nat
+      (@Finset.filter.{0} Nat P inst (@Finset.Ico.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder L U)))
+    (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) (@Nat.count P inst U) (@Nat.count P inst L))
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_prefix_count_le_add_one
+∀ (U q a b : Nat) (hq : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) q),
+  @LE.le.{0} Nat instLENat
+    (@Nat.count (fun (n : Nat) => Nat.ModEq q n a) (fun (a_1 : Nat) => @Nat.instDecidableModEq q a_1 a) U)
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@Nat.count (fun (n : Nat) => Nat.ModEq q n b) (fun (a : Nat) => @Nat.instDecidableModEq q a b) U)
+      (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+
+ImbalancedChen.part3IntervalAPCount.eq_1
+∀ (L U q a : Nat),
+  @Eq.{1} Nat (ImbalancedChen.part3IntervalAPCount L U q a)
+    (@Finset.card.{0} Nat
+      (@Finset.filter.{0} Nat (fun (n : Nat) => Nat.ModEq q n a) (fun (a_1 : Nat) => @Nat.instDecidableModEq q a_1 a)
+        (@Finset.Ico.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder L U)))
+
+ImbalancedChen.part3IntervalAPCount_le_add_two._proof_1_1
+∀ (L U q a b : Nat)
+  (hU :
+    @LE.le.{0} Nat instLENat
+      (@Nat.count (fun (n : Nat) => Nat.ModEq q n a) (fun (a_1 : Nat) => @Nat.instDecidableModEq q a_1 a) U)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@Nat.count (fun (n : Nat) => Nat.ModEq q n b) (fun (a : Nat) => @Nat.instDecidableModEq q a b) U)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+  (hL :
+    @LE.le.{0} Nat instLENat
+      (@Nat.count (fun (n : Nat) => Nat.ModEq q n b) (fun (a : Nat) => @Nat.instDecidableModEq q a b) L)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@Nat.count (fun (n : Nat) => Nat.ModEq q n a) (fun (a_1 : Nat) => @Nat.instDecidableModEq q a_1 a) L)
+        (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+  (ha :
+    @LE.le.{0} Nat (@Preorder.toLE.{0} Nat Nat.instPreorder)
+      (@Nat.count (fun (n : Nat) => Nat.ModEq q n a) (fun (a_1 : Nat) => @Nat.instDecidableModEq q a_1 a) L)
+      (@Nat.count (fun (n : Nat) => Nat.ModEq q n a) (fun (a_1 : Nat) => @Nat.instDecidableModEq q a_1 a) U))
+  (hb :
+    @LE.le.{0} Nat (@Preorder.toLE.{0} Nat Nat.instPreorder)
+      (@Nat.count (fun (n : Nat) => Nat.ModEq q n b) (fun (a : Nat) => @Nat.instDecidableModEq q a b) L)
+      (@Nat.count (fun (n : Nat) => Nat.ModEq q n b) (fun (a : Nat) => @Nat.instDecidableModEq q a b) U)),
+  Not
+      (@LE.le.{0} Nat instLENat
+        (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+          (@Nat.count (fun (n : Nat) => Nat.ModEq q n a) (fun (a_1 : Nat) => @Nat.instDecidableModEq q a_1 a) U)
+          (@Nat.count (fun (n : Nat) => Nat.ModEq q n a) (fun (a_1 : Nat) => @Nat.instDecidableModEq q a_1 a) L))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)
+            (@Nat.count (fun (n : Nat) => Nat.ModEq q n b) (fun (a : Nat) => @Nat.instDecidableModEq q a b) U)
+            (@Nat.count (fun (n : Nat) => Nat.ModEq q n b) (fun (a : Nat) => @Nat.instDecidableModEq q a b) L))
+          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))) →
+    False
+
+ImbalancedChen.part3IntervalAPCount_le_add_two._proof_1_3
+∀ (L U q : Nat) (hLU : Not (@LE.le.{0} Nat instLENat L U)), Not (@LE.le.{0} Nat instLENat U L) → False
+
+ImbalancedChen.part3IntervalCoprimeCount.eq_1
+∀ (L U q : Nat),
+  @Eq.{1} Nat (ImbalancedChen.part3IntervalCoprimeCount L U q)
+    (@Finset.card.{0} Nat
+      (@Finset.filter.{0} Nat (fun (n : Nat) => Nat.Coprime q n) (Nat.instDecidableCoprime q)
+        (@Finset.Ico.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder L U)))
+
+ImbalancedChen.part3IntervalCoprimeCount_eq_sum._simp_1_1
+∀ {α : Type u_1} {p : α → Prop} [inst : @DecidablePred.{u_1 + 1} α p] {s : Finset.{u_1} α} {a : α},
+  @Eq.{1} Prop
+    (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α))
+      (@Finset.filter.{u_1} α p inst s) a)
+    (And
+      (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+        (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α)) s a)
+      (p a))
+
+ImbalancedChen.part3LongSlotAPCount.eq_1
+∀ (L U q a m : Nat),
+  @Eq.{1} Nat (ImbalancedChen.part3LongSlotAPCount L U q a m)
+    (@Finset.card.{0} Nat
+      (@Finset.filter.{0} Nat
+        (fun (n : Nat) => Nat.ModEq q (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m n) a)
+        (fun (a_1 : Nat) =>
+          @Nat.instDecidableModEq q (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m a_1) a)
+        (@Finset.Ico.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder L U)))
+
+ImbalancedChen.part3LongSlotCoprimeCount.eq_1
+∀ (L U q m : Nat),
+  @Eq.{1} Nat (ImbalancedChen.part3LongSlotCoprimeCount L U q m)
+    (@Finset.card.{0} Nat
+      (@Finset.filter.{0} Nat
+        (fun (n : Nat) => Nat.Coprime (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m n) q)
+        (fun (a : Nat) =>
+          Nat.instDecidableCoprime (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) m a) q)
+        (@Finset.Ico.{0} Nat Nat.instPreorder Nat.instLocallyFiniteOrder L U)))
+
+ImbalancedChen.part3LongSlotRemainder.eq_1
+∀ (L U q a m : Nat),
+  @Eq.{1} Real (ImbalancedChen.part3LongSlotRemainder L U q a m)
+    (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)
+      (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.part3LongSlotAPCount L U q a m))
+      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))
+        (@Nat.cast.{0} Real Real.instNatCast (ImbalancedChen.part3LongSlotCoprimeCount L U q m))
+        (@Nat.cast.{0} Real Real.instNatCast (Nat.totient q))))
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_Ico_filter_card_sub._proof_1_5
+∀ (L U n : Nat),
+  Not
+      (Iff
+        (And (@LE.le.{0} Nat (@Preorder.toLE.{0} Nat Nat.instPreorder) L n)
+          (@LT.lt.{0} Nat (@Preorder.toLT.{0} Nat Nat.instPreorder) n U))
+        (And (@LT.lt.{0} Nat instLTNat n U) (Not (@LT.lt.{0} Nat instLTNat n L)))) →
+    False
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_Ico_filter_card_sub._simp_1_1
+∀ {α : Type u_1} {p : α → Prop} [inst : @DecidablePred.{u_1 + 1} α p] {s : Finset.{u_1} α} {a : α},
+  @Eq.{1} Prop
+    (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α))
+      (@Finset.filter.{u_1} α p inst s) a)
+    (And
+      (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+        (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α)) s a)
+      (p a))
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_Ico_filter_card_sub._simp_1_2
+∀ {α : Type u_1} [inst : Preorder.{u_1} α] [inst_1 : @LocallyFiniteOrder.{u_1} α inst] {a b x : α},
+  @Eq.{1} Prop
+    (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α))
+      (@Finset.Ico.{u_1} α inst inst_1 a b) x)
+    (And (@LE.le.{u_1} α (@Preorder.toLE.{u_1} α inst) a x) (@LT.lt.{u_1} α (@Preorder.toLT.{u_1} α inst) x b))
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_Ico_filter_card_sub._simp_1_3
+∀ {α : Type u_1} [inst : DecidableEq.{u_1 + 1} α] {s t : Finset.{u_1} α} {a : α},
+  @Eq.{1} Prop
+    (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+      (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α))
+      (@SDiff.sdiff.{u_1} (Finset.{u_1} α) (@Finset.instSDiff.{u_1} α inst) s t) a)
+    (And
+      (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+        (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α)) s a)
+      (Not
+        (@Membership.mem.{u_1, u_1} α (Finset.{u_1} α)
+          (@SetLike.instMembership.{u_1, u_1} (Finset.{u_1} α) α (@Finset.instSetLike.{u_1} α)) t a)))
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_Ico_filter_card_sub._simp_1_4
+∀ {n m : Nat},
+  @Eq.{1} Prop
+    (@Membership.mem.{0, 0} Nat (Finset.{0} Nat)
+      (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) (Finset.range n) m)
+    (@LT.lt.{0} Nat instLTNat m n)
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_prefix_count_le_add_one._proof_1_1
+∀ (U q a b : Nat),
+  Not
+      (@LE.le.{0} Nat instLENat
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) U q)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) U q)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+    False
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_prefix_count_le_add_one._proof_1_2
+∀ (U q a b : Nat),
+  Not
+      (@LE.le.{0} Nat instLENat
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) U q)
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) U q)
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+    False
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_prefix_count_le_add_one._proof_1_3
+∀ (U q a b : Nat),
+  Not
+      (@LE.le.{0} Nat instLENat
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) U q)
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) U q)
+            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+    False
+
+_private.ImbalancedChen.Part3LongSlotDistribution.0.ImbalancedChen.part3_prefix_count_le_add_one._proof_1_4
+∀ (U q a b : Nat),
+  Not
+      (@LE.le.{0} Nat instLENat
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) U q)
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) U q)
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) →
+    False

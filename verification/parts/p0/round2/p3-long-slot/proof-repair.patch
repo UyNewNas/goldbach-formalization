@@ -1,0 +1,24 @@
+--- a/ImbalancedChen/Part3LongSlotDistribution.lean
++++ b/ImbalancedChen/Part3LongSlotDistribution.lean
+@@ -174,7 +174,7 @@
+     (hq : 0 < q) (ha : a.Coprime q) :
+     |part3LongSlotRemainder L U q a m| ≤ 2 := by
+   by_cases hm : m.Coprime q
+-  · letI : NeZero q := ⟨hq.ne'⟩
++  · let : NeZero q := ⟨hq.ne'⟩
+     let b := ((m : ZMod q)⁻¹ * (a : ZMod q)).val
+     have hmb : m * b ≡ a [MOD q] := by
+       rw [← ZMod.natCast_eq_natCast_iff, Nat.cast_mul]
+@@ -187,7 +187,11 @@
+       · intro h
+         exact (h.mul_left m).trans hmb
+     have hcpred (n : ℕ) : (m * n).Coprime q ↔ q.Coprime n := by
+-      simp only [Nat.coprime_mul_iff_left, hm, true_and, Nat.coprime_comm]
++      constructor
++      · intro h
++        exact (Nat.coprime_mul_iff_left.mp h).2.symm
++      · intro h
++        exact Nat.coprime_mul_iff_left.mpr ⟨hm, h.symm⟩
+     simpa only [part3LongSlotRemainder, part3LongSlotAPCount, part3LongSlotCoprimeCount,
+       hpred, hcpred, part3IntervalAPCount, part3IntervalCoprimeCount] using
+       part3IntervalAPCount_coprimeMean_error L U q b hq

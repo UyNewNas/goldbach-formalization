@@ -248,3 +248,5 @@ import ImbalancedChen.SymmetricTriangleIntegral
 import ImbalancedChen.CurrentChenBuchstabRefinement
 import ImbalancedChen.Certificates.PairedV2
 import ImbalancedChen.CurrentPairedBuchstabBridge
+import ImbalancedChen.Certificates.AboveMuSecondCoarse
+import ImbalancedChen.Part3LongSlotDistribution
