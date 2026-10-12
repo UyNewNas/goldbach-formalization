@@ -1,0 +1,270 @@
+#!/usr/bin/env python3
+"""Serial, hash-recorded acceptance runner for the single P5 S1MainMass node."""
+
+from __future__ import annotations
+
+import datetime as dt
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import time
+
+ROOT = Path("/workspace/scratch/399183f4923f")
+REPO = ROOT / "goldbach-formalization"
+SHARED = Path("/workspace/scratch/127408f63891/goldbach-formalization")
+GOLDBACH = SHARED / ".lake/packages/goldbach"
+TOOLROOT = Path("/workspace/scratch/127408f63891/lean-runtime/lean-4.33.0-rc1-linux")
+DRIVER = Path("/workspace/scratch/127408f63891/lean-runtime/frontend-driver")
+RUNTIME = ROOT / "p5-s1mainmass/runtime"
+LOGS = RUNTIME / "logs"
+OUTROOT = REPO / ".lake/build/lib/lean"
+
+START_HEAD = "7b1283e4a70874e4fb7004bafad0793069bdea71"
+BASELINE = "1a80c1bcce67886f699d097fc37fd245cd3620bf"
+LEAN_GITHASH = "62eed1db4d67327ec8120be05f1a1b0847d74561"
+TARGET = "MathlibNt.SieveTheory.LiLiuGoldbachS1MainMass"
+TARGET_SHA = "4fdcdd6001278a1c7636a40ba8f2e2e6c685a20331a4b0c803c0146f516a4533"
+DIRECT = "MathlibNt.SieveTheory.BombieriVinogradov"
+DIRECT_SHA = "17be57e0cc3542112ab4e558eb92c5e3a06e0839491a672205a01ebe3f554bc9"
+AUDIT = "verification.parts.p5.S1MainMassAudit"
+RESTORED_IMPORT = "MathlibNt.SieveTheory.Distribution.BombieriVinogradov"
+RESTORED_SOURCE_SHA = "4b4373503523f966367ae3852989a16cb64de632ec10489ca3ce8a3acdf403fc"
+RESTORED_OBJECT_SHA = "46c383b020fe55401286fedc101bb858c86f5f115e38618d2b6a9af11eb0efde"
+
+PACKAGES = {
+    "goldbach": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "LeanArchitect": "78dd66840d3efe8c824c699fc03381cec817c271",
+    "plausible": "b1c4a69a7e247ab7df20460212001673d74f08c0",
+    "LeanSearchClient": "0498c7c070c143a3bf7379f4d99a2c63bb9d9715",
+    "importGraph": "18a90119a5d316358fde6c86e0ca24e59212e32c",
+    "proofwidgets": "b1436dc749e722c9920036b52cdc43b3451d0b69",
+    "aesop": "57d3325be72a842920813bcb40f96a6f7393c185",
+    "Qq": "ee41917ae11d38479fb8fb24745f7ca4bf0a784d",
+    "batteries": "41bd267b3f6b7252f6676af46d4ffc6783b64de9",
+    "Cli": "da07ca808b6718cb2aed14dba154e5a08b8f8ecf",
+}
+
+
+def now() -> str:
+    return dt.datetime.now(dt.timezone.utc).isoformat()
+
+
+def digest(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for block in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+def file_record(path: Path) -> dict:
+    return {"path": str(path), "sha256": digest(path), "bytes": path.stat().st_size}
+
+
+def git(repo: Path, *args: str) -> str:
+    return subprocess.check_output(["git", "-C", str(repo), *args], text=True).strip()
+
+
+def source(module: str) -> Path:
+    return GOLDBACH / (module.replace(".", "/") + ".lean")
+
+
+def output(module: str) -> Path:
+    return OUTROOT / (module.replace(".", "/") + ".olean")
+
+
+def imports(path: Path) -> list[str]:
+    result = []
+    for line in path.read_text().splitlines():
+        if line.startswith("import "):
+            result.extend(line.removeprefix("import ").split())
+    return result
+
+
+def environment() -> dict[str, str]:
+    roots = [OUTROOT, SHARED / ".lake/build/lib/lean"]
+    src_roots = [REPO, SHARED]
+    for name in PACKAGES:
+        package = SHARED / ".lake/packages" / name
+        roots.append(package / ".lake/build/lib/lean")
+        src_roots.append(package)
+    env = os.environ.copy()
+    env.update({
+        "LEAN_SYSROOT": str(TOOLROOT),
+        "LAKE_HOME": str(TOOLROOT),
+        "LEAN_NUM_THREADS": "1",
+        "LEAN_PATH": ":".join(str(x) for x in roots),
+        "LEAN_SRC_PATH": ":".join(str(x) for x in src_roots),
+        "PATH": str(TOOLROOT / "bin") + ":" + env.get("PATH", ""),
+    })
+    return env
+
+
+def save(path: Path, value: object) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n")
+
+
+def preflight() -> dict:
+    assert git(REPO, "rev-parse", "HEAD") == START_HEAD
+    target_source = source(TARGET)
+    direct_source = source(DIRECT)
+    assert digest(target_source) == TARGET_SHA
+    assert digest(direct_source) == DIRECT_SHA
+    assert imports(target_source) == [DIRECT]
+    packages = []
+    for name, rev in PACKAGES.items():
+        root = SHARED / ".lake/packages" / name
+        actual = git(root, "rev-parse", "HEAD")
+        changes = git(root, "diff", "--name-only", "HEAD").splitlines()
+        assert actual == rev and changes == [], (name, actual, changes)
+        packages.append({"package": name, "revision": actual, "tracked_changes": changes})
+    binaries = {name: file_record(TOOLROOT / "bin" / name)
+                for name in ["lean", "lake", "leanchecker", "leantar"]}
+    driver = file_record(DRIVER / "lakefile.lean")
+    manifest = file_record(DRIVER / "lake-manifest.json")
+    result = {
+        "observed_utc": now(), "starting_head": START_HEAD, "common_baseline": BASELINE,
+        "target": TARGET, "target_source": file_record(target_source),
+        "direct_imports": [{"module": DIRECT, "source": file_record(direct_source),
+                            "objects_before": [file_record(output(DIRECT))] if output(DIRECT).exists() else []}],
+        "target_objects_before": [file_record(output(TARGET))] if output(TARGET).exists() else [],
+        "imports_exact": imports(target_source), "packages": packages,
+        "toolchain": {"name": "leanprover/lean4:v4.33.0-rc1", "githash": LEAN_GITHASH,
+                      "binaries": binaries},
+        "frontend_driver": driver, "frontend_manifest": manifest,
+        "audit_source": file_record(REPO / "verification/parts/p5/S1MainMassAudit.lean"),
+        "LEAN_PATH": environment()["LEAN_PATH"],
+        "scope": "Compile one necessary missing compatibility import, then accept S1MainMass only; no closure replay/audit.",
+    }
+    save(RUNTIME / "preflight.json", result)
+    return result
+
+
+def compile_command(module: str, src: Path, out: Path) -> list[str]:
+    return [str(TOOLROOT / "bin/lake"), "-d", str(DRIVER), "-f", "lakefile.lean",
+            "script", "run", "compileOne", str(src), module, str(out), "strict"]
+
+
+def restore_certified_import() -> dict:
+    """Restore the hash-certified local namespace closure into P5 output."""
+    prior_path = REPO / "verification/parts/p5/round3/s1carrier/preflight.json"
+    prior = json.loads(prior_path.read_text())
+    restored_rows = []
+    direct_certificate = None
+    for certificate in prior["local_compiled_imports"]:
+        module = certificate["module"]
+        source_record = certificate["source"]
+        result = certificate["certificate"]["result"]
+        assert result["returncode"] == 0 and result["trustLevel"] == 0
+        source_path = Path(source_record["path"])
+        assert source_path.exists() and digest(source_path) == source_record["sha256"]
+        cached_base = Path(source_record["package_root"]) / ".lake/build/lib/lean" / (module.replace(".", "/") + ".olean")
+        expected = certificate["objects"][0]
+        if module == DIRECT and not cached_base.exists():
+            direct_certificate = {
+                "module": module, "source_sha256": source_record["sha256"],
+                "historical_object_sha256": expected["sha256"],
+                "historical_object_bytes": expected["bytes"],
+                "historical_returncode": result["returncode"],
+                "historical_trustLevel": result["trustLevel"],
+                "historical_raw_log_sha256": certificate["certificate"]["raw_log_sha256"],
+                "current_cached_object_missing": True,
+                "action": "compile_strict_in_this_batch_after_restoring_certified_imports",
+            }
+            continue
+        object_rows = []
+        for expected_file in certificate["objects"]:
+            cached = cached_base.parent / Path(expected_file["path"]).name
+            assert cached.exists() and digest(cached) == expected_file["sha256"]
+            assert cached.stat().st_size == expected_file["bytes"]
+            restored = output(module).parent / cached.name
+            restored.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(cached, restored)
+            assert digest(restored) == expected_file["sha256"]
+            object_rows.append({"path": str(restored), "sha256": expected_file["sha256"],
+                                "bytes": expected_file["bytes"]})
+        restored_rows.append({
+            "module": module, "source_sha256": source_record["sha256"],
+            "object_sha256": expected["sha256"], "object_bytes": expected["bytes"],
+            "restored_objects": object_rows, "historical_returncode": result["returncode"],
+            "historical_trustLevel": result["trustLevel"],
+            "historical_raw_log_sha256": certificate["certificate"]["raw_log_sha256"],
+        })
+    matches = [x for x in restored_rows if x["module"] == RESTORED_IMPORT]
+    assert len(matches) == 1
+    assert matches[0]["source_sha256"] == RESTORED_SOURCE_SHA
+    assert matches[0]["object_sha256"] == RESTORED_OBJECT_SHA
+    assert direct_certificate is not None and direct_certificate["source_sha256"] == DIRECT_SHA
+    manifest_path = RUNTIME / "restoration-manifest.json"
+    save(manifest_path, restored_rows)
+    record = {
+        "action": "restore_hash_certified_local_namespace_closure",
+        "restored_module_count": len(restored_rows),
+        "manifest": {"path": str(manifest_path), "sha256": digest(manifest_path)},
+        "direct_import": direct_certificate,
+        "named_distribution_witness": matches[0],
+        "historical_certificate": {
+            "path": str(prior_path), "sha256": digest(prior_path),
+        },
+        "scope": "Byte-identical restoration of 95 prior P5 hash-certified local objects; none was recompiled, replayed, or re-audited in this batch. The missing compatibility import is compiled strictly in this batch. Official-cache modules stay in their unchanged package roots."
+    }
+    save(RUNTIME / "restoration.json", record)
+    return record
+
+
+def run(action: str, command: list[str]) -> dict:
+    stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    log = LOGS / f"{stamp}-{action}.log"
+    LOGS.mkdir(parents=True, exist_ok=True)
+    start = time.monotonic()
+    with log.open("wb") as f:
+        proc = subprocess.run(command, cwd=REPO, env=environment(), stdout=f, stderr=subprocess.STDOUT)
+    elapsed = time.monotonic() - start
+    record = {"action": action, "command": command, "cwd": str(REPO),
+              "started_utc": stamp, "returncode": proc.returncode,
+              "elapsed_seconds": round(elapsed, 3), "raw_log": str(log),
+              "raw_log_sha256": digest(log), "trustLevel": 0 if action != "replay" else None,
+              "warningAsError": action != "replay"}
+    print(json.dumps(record, ensure_ascii=False), flush=True)
+    if proc.returncode != 0:
+        print(log.read_text(errors="replace")[-12000:], file=sys.stderr, flush=True)
+        raise SystemExit(proc.returncode)
+    return record
+
+
+def main() -> None:
+    pf = preflight()
+    restoration = restore_certified_import()
+    records = []
+    dep_out = output(DIRECT)
+    if not dep_out.exists():
+        records.append(run("dependency-compile", compile_command(DIRECT, source(DIRECT), dep_out)))
+    target_out = output(TARGET)
+    records.append(run("compile", compile_command(TARGET, source(TARGET), target_out)))
+    records.append(run("replay", [str(TOOLROOT / "bin/leanchecker"), "--verbose", TARGET]))
+    audit_src = REPO / "verification/parts/p5/S1MainMassAudit.lean"
+    audit_out = output(AUDIT)
+    records.append(run("audit", compile_command(AUDIT, audit_src, audit_out)))
+    assert digest(source(TARGET)) == TARGET_SHA and digest(source(DIRECT)) == DIRECT_SHA
+    result = {
+        "status": "GATES_PASSED", "completed_utc": now(), "preflight_sha256": digest(RUNTIME / "preflight.json"),
+        "restoration": restoration, "commands": records, "target_object": file_record(target_out),
+        "direct_import_object": file_record(dep_out), "audit_object": file_record(audit_out),
+        "target_source_after": file_record(source(TARGET)), "direct_import_source_after": file_record(source(DIRECT)),
+        "audit_source_after": file_record(audit_src), "starting_head_after": git(REPO, "rev-parse", "HEAD"),
+        "packages_after": pf["packages"],
+    }
+    save(RUNTIME / "result.json", result)
+    print(json.dumps({"status": result["status"], "target_object": result["target_object"],
+                      "direct_import_object": result["direct_import_object"],
+                      "audit_object": result["audit_object"]}, ensure_ascii=False), flush=True)
+
+
+if __name__ == "__main__":
+    main()

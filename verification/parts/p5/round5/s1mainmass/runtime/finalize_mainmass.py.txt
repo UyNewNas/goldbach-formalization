@@ -1,0 +1,227 @@
+#!/usr/bin/env python3
+"""Archive S1MainMass acceptance evidence and write the P5 handoff."""
+
+from __future__ import annotations
+
+import base64
+import collections
+import datetime as dt
+import gzip
+import hashlib
+import json
+from pathlib import Path
+import shutil
+
+ROOT = Path("/workspace/scratch/399183f4923f")
+REPO = ROOT / "goldbach-formalization"
+RUNTIME = ROOT / "p5-s1mainmass/runtime"
+DEST = REPO / "verification/parts/p5/round5/s1mainmass"
+RAW = DEST / "raw"
+TARGET = "MathlibNt.SieveTheory.LiLiuGoldbachS1MainMass"
+PUBLIC = "MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1_strictEndpoint_mainMass_lower"
+
+
+def sha(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for b in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(b)
+    return h.hexdigest()
+
+
+def write(path: Path, value) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if isinstance(value, str):
+        path.write_text(value)
+    else:
+        path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n")
+
+
+def copy(src: Path, dst: Path) -> dict:
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(src, dst)
+    return {"path": str(dst.relative_to(DEST)), "sha256": sha(dst), "bytes": dst.stat().st_size}
+
+
+def main() -> None:
+    DEST.mkdir(parents=True, exist_ok=True)
+    result = json.loads((RUNTIME / "result.json").read_text())
+    preflight = json.loads((RUNTIME / "preflight.json").read_text())
+    assert result["status"] == "GATES_PASSED"
+    archived_commands = []
+    for command in result["commands"]:
+        src = Path(command["raw_log"])
+        record = dict(command)
+        record["raw_log"] = copy(src, RAW / src.name)["path"]
+        assert record["raw_log_sha256"] == sha(DEST / record["raw_log"])
+        archived_commands.append(record)
+    # Preserve every real failed diagnostic preceding the successful gates.
+    success_logs = {Path(x["raw_log"]).name for x in result["commands"]}
+    diagnostics = []
+    for src in sorted((RUNTIME / "logs").glob("*-dependency-compile.log")):
+        if src.name in success_logs:
+            continue
+        diagnostics.append(copy(src, RAW / src.name))
+
+    audit_log = DEST / next(x["raw_log"] for x in archived_commands if x["action"] == "audit")
+    decls = []
+    module_summary = None
+    for line in audit_log.read_text().splitlines():
+        if line.startswith("CHEN_P5_S1MAINMASS_AUDIT_DECL "):
+            decls.append(json.loads(line.split(" ", 1)[1]))
+        elif line.startswith("CHEN_P5_S1MAINMASS_AUDIT_MODULE "):
+            module_summary = json.loads(line.split(" ", 1)[1])
+    assert module_summary and module_summary["count"] == len(decls) == 6
+    assert sum(bool(d["requested_public_theorem"]) for d in decls) == 1
+    assert all(not d["is_unsafe"] and not d["is_axiom"] for d in decls)
+    allowed = {"propext", "Classical.choice", "Quot.sound"}
+    assert all(set(d["axioms"]) <= allowed for d in decls)
+    axiom_union = sorted(set().union(*(set(d["axioms"]) for d in decls)))
+    assert set(axiom_union) == allowed
+    public = next(d for d in decls if d["name"] == PUBLIC)
+    generated = [d["name"] for d in decls if d["name"] != PUBLIC]
+    assert all("._proof_" in name for name in generated)
+    write(DEST / "declarations.json", decls)
+    write(DEST / "declaration-axioms.jsonl", "".join(json.dumps({"name": d["name"], "axioms": d["axioms"]}, ensure_ascii=False) + "\n" for d in decls))
+    write(DEST / "public-theorem-types.json", [public])
+    write(DEST / "compiler-types.txt", public["name"] + " :\n" + public["type"] + "\n")
+
+    source_snap = copy(Path(preflight["target_source"]["path"]), DEST / "source/upstream-LiLiuGoldbachS1MainMass.lean.txt")
+    audit_snap = copy(REPO / "verification/parts/p5/S1MainMassAudit.lean", DEST / "source/S1MainMassAudit.lean.txt")
+    controller_snap = copy(RUNTIME / "verify_mainmass.py", DEST / "runtime/verify_mainmass.py.txt")
+    finalizer_snap = copy(Path(__file__), DEST / "runtime/finalize_mainmass.py.txt")
+    driver_snap = copy(Path(preflight["frontend_driver"]["path"]), DEST / "runtime/frontend-driver.lakefile.lean.txt")
+    manifest_snap = copy(Path(preflight["frontend_manifest"]["path"]), DEST / "runtime/frontend-driver.lake-manifest.json")
+    restoration_snap = copy(RUNTIME / "restoration.json", DEST / "restoration.json")
+    restoration_manifest_snap = copy(RUNTIME / "restoration-manifest.json", DEST / "restoration-manifest.json")
+    write(DEST / "preflight.json", preflight)
+    write(DEST / "commands-and-results.json", archived_commands)
+
+    target_obj = Path(result["target_object"]["path"])
+    packed = gzip.compress(target_obj.read_bytes(), compresslevel=9, mtime=0)
+    transport = base64.b64encode(packed)
+    transport_path = DEST / "objects/LiLiuGoldbachS1MainMass.olean.gz.b64"
+    transport_path.parent.mkdir(parents=True, exist_ok=True)
+    transport_path.write_bytes(transport)
+    assert gzip.decompress(base64.b64decode(transport_path.read_bytes())) == target_obj.read_bytes()
+    object_manifest = {
+        "object": result["target_object"], "transport_path": str(transport_path.relative_to(DEST)),
+        "transport_sha256": sha(transport_path), "gzip_sha256": hashlib.sha256(packed).hexdigest(),
+        "decoded_sha256": sha(target_obj), "decoded_bytes": target_obj.stat().st_size,
+        "roundtrip_verified": True,
+    }
+    write(DEST / "objects/manifest.json", object_manifest)
+
+    gates = {x["action"]: {"result": "passed", **x} for x in archived_commands if x["action"] in {"compile", "replay", "audit"}}
+    dependency_gate = next(x for x in archived_commands if x["action"] == "dependency-compile")
+    audit = {
+        "method": "Defining-module environment inventory plus Lean.collectAxioms",
+        "source_path": "verification/parts/p5/S1MainMassAudit.lean",
+        "source_sha256": sha(REPO / "verification/parts/p5/S1MainMassAudit.lean"),
+        "declaration_count": len(decls), "requested_public_theorem_count": 1,
+        "kind_counts": dict(collections.Counter(d["kind"] for d in decls)),
+        "generated_private_count": len(generated), "generated_private_names": generated,
+        "private_and_generated_included": True,
+        "unsafe_declarations": [], "own_axiom_declarations": [], "forbidden_axioms": [],
+        "transitive_axiom_union": axiom_union,
+        "types_status": "COMPILER_CONFIRMED_FROM_ELABORATED_ENVIRONMENT",
+        "explicit_type_and_raw_expression_for_every_declaration": True,
+    }
+    receipt = {
+        "scope": "Only MathlibNt.SieveTheory.LiLiuGoldbachS1MainMass",
+        "status": "STRICT_REPLAY_FULL_AXIOM_AUDIT_PASSED",
+        "accepted_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "branch": "chatgpt/chen-p5-lower",
+        "starting_checkpoint": preflight["starting_head"], "common_baseline": preflight["common_baseline"],
+        "acceptance_commit": "The full enclosing published commit SHA is supplied with this receipt; no self-referential SHA is embedded.",
+        "toolchain": preflight["toolchain"], "dependencies": preflight["packages"],
+        "source": preflight["target_source"], "source_sha256": preflight["target_source"]["sha256"],
+        "source_equals_pinned_dependency": True, "source_patch": None, "production_source_changes": [],
+        "compiled_objects": [result["target_object"]], "compiled_object_transport_archive": object_manifest,
+        "direct_imports": [{"module": "MathlibNt.SieveTheory.BombieriVinogradov",
+                            "source": preflight["direct_imports"][0]["source"],
+                            "objects": [result["direct_import_object"]],
+                            "compiled_strict_this_batch": dependency_gate}],
+        "reused_cache": {"restoration": result["restoration"],
+                         "restoration_record": restoration_snap,
+                         "restoration_manifest": restoration_manifest_snap,
+                         "claim": "95 hash-matched prior P5 local objects restored; not replayed or re-audited this batch."},
+        "gates": gates, "audit": audit,
+        "public_theorems": [{"name": public["name"], "type": public["type"],
+                             "type_status": "COMPILER_CONFIRMED_FROM_ELABORATED_ENVIRONMENT"}],
+        "failed_pre_acceptance_diagnostics": diagnostics,
+        "source_snapshots": [source_snap, audit_snap],
+        "runtime_snapshots": [controller_snap, finalizer_snap, driver_snap, manifest_snap],
+        "root_ci": {"status": "NOT_RUN_FOR_THIS_UNPUBLISHED_CHECKPOINT",
+                    "separate_from_single_module_acceptance": True,
+                    "configuration_or_threshold_changed": False},
+    }
+    write(DEST / "receipt.json", receipt)
+    context = {
+        "scope": receipt["scope"], "compiler_confirmed_type": public,
+        "mathematical_reading": {
+            "strict_endpoint": "m = Nat.ceil ((1 - ε) * N) - 1",
+            "conclusion": "2 ≤ m ∧ m ≤ N ∧ (1 - ε - η) * (N / log N) ≤ trueLogarithmicIntegral m",
+            "hypotheses": ["0 < ε", "ε < 1", "0 < η", "N sufficiently large"],
+            "absent_hypotheses": ["Even N"],
+            "not_proved_here": ["sieve product scale", "Rosser main term", "AP error payment", "singular normalization", "complete eleven-term mean", "hLower"],
+        },
+        "supply_chain": {
+            "unblocked": ["strict endpoint and true-logarithmic-integral main-mass input for S1MainScale",
+                          "endpoint/nonnegativity input used downstream by S1BetaPaidLower and S1BetaFixedNormalizedLower"],
+            "next_candidate": "MathlibNt.SieveTheory.LiLiuGoldbachS1BetaPaidLower",
+            "warning": "The actual beta product main scale still comes from goldbachS1_beta_mainMass_mul_product_lower; this node alone does not close beta main scale."
+        },
+        "p5_global_status": {
+            "CurrentChenInitialMean": "not accepted; (33/4) * Real.log 3 remains an independent first-term candidate, not manuscript L1",
+            "complete_eleven_term_mean": "open", "hLower": "open",
+            "scale_invariant": "W_N ≤ 4*D12(N)+error, so the weight target remains 4c = 49044063/6250000 = 7.84705008"
+        }
+    }
+    write(DEST / "context.json", context)
+    commands_sh = "\n".join(" ".join(x["command"]) for x in archived_commands) + "\n"
+    write(DEST / "commands.sh", commands_sh)
+
+    handoff = f"""# Chen Part 5 — S1MainMass independent acceptance
+
+## Result
+
+`MathlibNt.SieveTheory.LiLiuGoldbachS1MainMass` is accepted as a single supplier node at the enclosing published commit. Its fixed upstream source SHA256 is `{preflight['target_source']['sha256']}` and its strictly compiled object SHA256 is `{result['target_object']['sha256']}`.
+
+The target passed strict official-frontend compilation (`trustLevel=0`, `warningAsError=true`, {gates['compile']['elapsed_seconds']} s), stock `leanchecker` replay ({gates['replay']['elapsed_seconds']} s), and a defining-module audit ({gates['audit']['elapsed_seconds']} s). The compiler enumerated {len(decls)} declarations: six theorems, consisting of the requested public theorem and five generated/private proof declarations. No unsafe or own axiom declaration was found. The complete transitive axiom union is exactly `propext`, `Classical.choice`, and `Quot.sound`.
+
+The unique direct compatibility import `MathlibNt.SieveTheory.BombieriVinogradov` was absent from the live cache and was strictly recompiled in this batch ({dependency_gate['elapsed_seconds']} s), reproducing its previously recorded object SHA256 `{result['direct_import_object']['sha256']}`. To provide its local namespace closure, 95 byte-identical objects were restored into the P5-owned output directory only after matching the prior S1Carrier source hashes, object hashes, successful trust-zero certificates, and all recorded sidecars. They were not described as recompiled, replayed, or re-audited here. Three pre-acceptance missing-object diagnostics are retained under `raw/`.
+
+## Compiler-confirmed theorem type
+
+```lean
+{public['name']} :
+{public['type']}
+```
+
+Thus for `0 < ε < 1` and `0 < η`, sufficiently large `N` has the strict endpoint `m = Nat.ceil ((1-ε)*N)-1` with `2 ≤ m ≤ N`, and `(1-ε-η)*(N/log N) ≤ trueLogarithmicIntegral m`. There is no evenness hypothesis. This theorem does not itself contain a sieve product, Rosser weight, AP-error payment, singular normalization, or an `N/log² N` conclusion.
+
+## Supply-chain status
+
+This acceptance removes the strict-endpoint/true-logarithmic-integral main-mass input used by `S1MainScale`, and the endpoint/nonnegativity use downstream of `S1BetaPaidLower` and `S1BetaFixedNormalizedLower`. It does **not** close the beta product scale: that still depends on `goldbachS1_beta_mainMass_mul_product_lower` and its own supplier chain.
+
+The next small candidate is `MathlibNt.SieveTheory.LiLiuGoldbachS1BetaPaidLower`, subject to an actual direct-dependency check. `CurrentChenInitialMean`, the complete eleven-term signed mean, and `hLower` remain open. In particular, `(33/4) * Real.log 3` remains an independent first-term candidate and is not the manuscript-adopted `L1`. The final scale remains `W_N ≤ 4*D12(N)+error`, hence the weight target remains `4c = 49044063/6250000 = 7.84705008`.
+
+## Evidence
+
+- `receipt.json`: identities, object hashes, gates, and audit summary.
+- `commands-and-results.json` and `raw/`: actual commands, exit codes, elapsed times, and complete logs.
+- `declarations.json` and `declaration-axioms.jsonl`: all defining-module declarations, including generated/private declarations.
+- `public-theorem-types.json` and `compiler-types.txt`: compiler-confirmed type, distinct from source extraction.
+- `restoration.json` and `restoration-manifest.json`: exact cache-reuse proof.
+- `source/`, `runtime/`, and `objects/`: source/driver snapshots and a round-tripped transport copy of the accepted target object.
+
+Root CI was not run for this as-yet unpublished checkpoint; its state is separate from this single-module acceptance. No CI configuration or threshold was changed. Receiving parts: P5 and P0.
+"""
+    write(REPO / "docs/CHEN_P5_S1MAINMASS_HANDOFF.md", handoff)
+    print(json.dumps({"status": receipt["status"], "declarations": len(decls),
+                      "axioms": axiom_union, "destination": str(DEST)}, ensure_ascii=False))
+
+
+if __name__ == "__main__":
+    main()
