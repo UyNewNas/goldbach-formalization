@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import base64, collections, datetime as dt, gzip, hashlib, json, shutil
+
+ROOT=Path('/workspace/scratch/399183f4923f');REPO=ROOT/'goldbach-formalization';RUN=ROOT/'p5-logpower/runtime';DEST=REPO/'verification/parts/p5/round6/logpowerbounds';RAW=DEST/'raw'
+PUBLIC='MathlibNt.Analysis.eventually_nat_log_rpow_le_rpow'
+def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+def write(p,x):
+ p=Path(p);p.parent.mkdir(parents=True,exist_ok=True);p.write_text(x if isinstance(x,str) else json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def copy(s,d):
+ s=Path(s);d=Path(d);d.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(s,d);return {'path':str(d.relative_to(DEST)),'sha256':sha(d),'bytes':d.stat().st_size}
+def main():
+ pre=json.load(open(RUN/'preflight.json'));res=json.load(open(RUN/'result.json'));assert res['status']=='GATES_PASSED'
+ commands=[]
+ for x in res['commands']:
+  y=dict(x);p=Path(x['raw_log']);y['raw_log']=copy(p,RAW/p.name)['path'];assert sha(DEST/y['raw_log'])==y['raw_log_sha256'];commands.append(y)
+ auditlog=DEST/next(x['raw_log'] for x in commands if x['action']=='audit');decls=[];summary=None
+ for l in auditlog.read_text().splitlines():
+  if l.startswith('CHEN_P5_LOGPOWER_AUDIT_DECL '):decls.append(json.loads(l.split(' ',1)[1]))
+  elif l.startswith('CHEN_P5_LOGPOWER_AUDIT_MODULE '):summary=json.loads(l.split(' ',1)[1])
+ assert summary['count']==len(decls)==3 and all(not x['is_unsafe'] and not x['is_axiom'] for x in decls)
+ allowed={'propext','Classical.choice','Quot.sound'};assert all(set(x['axioms'])<=allowed for x in decls)
+ union=sorted(set().union(*(set(x['axioms']) for x in decls)));assert set(union)==allowed
+ public=next(x for x in decls if x['name']==PUBLIC);generated=[x['name'] for x in decls if x['name']!=PUBLIC]
+ assert all('._proof_' in x for x in generated)
+ write(DEST/'declarations.json',decls);write(DEST/'declaration-axioms.jsonl',''.join(json.dumps({'name':x['name'],'axioms':x['axioms']},ensure_ascii=False)+'\n' for x in decls));write(DEST/'public-theorem-types.json',[public]);write(DEST/'compiler-types.txt',public['name']+' :\n'+public['type']+'\n');write(DEST/'preflight.json',pre);write(DEST/'commands-and-results.json',commands)
+ source=copy(pre['source']['path'],DEST/'source/upstream-LogPowerBounds.lean.txt');audit_src=copy(REPO/'verification/parts/p5/LogPowerBoundsAudit.lean',DEST/'source/LogPowerBoundsAudit.lean.txt');controller=copy(RUN/'verify_logpower.py',DEST/'runtime/verify_logpower.py.txt');finalizer=copy(__file__,DEST/'runtime/finalize_logpower.py.txt');driver=copy(pre['driver']['path'],DEST/'runtime/frontend-driver.lakefile.lean.txt')
+ obj=Path(res['target_object']['path']);packed=gzip.compress(obj.read_bytes(),9,mtime=0);transport=DEST/'objects/LogPowerBounds.olean.gz.b64';transport.parent.mkdir(parents=True,exist_ok=True);transport.write_bytes(base64.b64encode(packed));assert gzip.decompress(base64.b64decode(transport.read_bytes()))==obj.read_bytes();objm={'object':res['target_object'],'transport_path':str(transport.relative_to(DEST)),'transport_sha256':sha(transport),'gzip_sha256':hashlib.sha256(packed).hexdigest(),'roundtrip_verified':True};write(DEST/'objects/manifest.json',objm)
+ gates={x['action']:{'result':'passed',**x} for x in commands}
+ audit={'method':'Defining-module environment inventory plus Lean.collectAxioms','source_path':'verification/parts/p5/LogPowerBoundsAudit.lean','source_sha256':sha(REPO/'verification/parts/p5/LogPowerBoundsAudit.lean'),'declaration_count':3,'requested_public_theorem_count':1,'kind_counts':dict(collections.Counter(x['kind'] for x in decls)),'generated_private_count':2,'generated_private_names':generated,'private_and_generated_included':True,'unsafe_declarations':[],'own_axiom_declarations':[],'forbidden_axioms':[],'transitive_axiom_union':union,'types_status':'COMPILER_CONFIRMED_FROM_ELABORATED_ENVIRONMENT','explicit_type_and_raw_expression_for_every_declaration':True}
+ receipt={'scope':'Only MathlibNt.Analysis.LogPowerBounds','status':'STRICT_REPLAY_FULL_AXIOM_AUDIT_PASSED','accepted_utc':dt.datetime.now(dt.timezone.utc).isoformat(),'branch':'chatgpt/chen-p5-lower','starting_checkpoint':pre['starting_checkpoint'],'common_baseline':'1a80c1bcce67886f699d097fc37fd245cd3620bf','acceptance_commit':'The full enclosing published commit SHA is supplied with this receipt; no self-reference is embedded.','toolchain':pre['toolchain'],'dependencies':pre['packages'],'source':pre['source'],'source_patch':None,'production_source_changes':[],'compiled_objects':[res['target_object']],'compiled_object_transport_archive':objm,'direct_imports':pre['imports'],'direct_import_cache_scope':'Exact source/object identity reuse only; direct imports were not recompiled, replayed or re-audited in this batch.','gates':gates,'audit':audit,'public_theorems':[{'name':PUBLIC,'type':public['type'],'type_status':'COMPILER_CONFIRMED_FROM_ELABORATED_ENVIRONMENT'}],'source_snapshots':[source,audit_src],'runtime_snapshots':[controller,finalizer,driver],'root_ci':{'status':'NOT_RUN_FOR_THIS_UNPUBLISHED_CHECKPOINT','separate_from_single_module_acceptance':True,'configuration_or_threshold_changed':False}}
+ write(DEST/'receipt.json',receipt)
+ context={'compiler_confirmed_type':public,'mathematical_reading':'For every real b and every positive real d, eventually along natural N, (log N)^b ≤ N^d.','actual_consumers':[{'module':'MathlibNt.SieveTheory.Distribution.LiuPan.LiuPanPrimitiveLedgerAssembly','use':'eventually_pan_log_rpow_le_rpow and eventual conductor bounds'},{'module':'MathlibNt.SieveTheory.Distribution.LiuPan.LiuPanPrincipalPNT','use':'the same log-power payment'}],'supply_path':['LogPowerBounds','Distribution.LiuPan.LiuPanPrimitiveLedgerAssembly','LiuPanPrimitiveLedgerAssembly compatibility import','LiLiuGoldbachS1BetaGeometry','LiLiuGoldbachS1BetaPaidLower'],'not_closed':['remaining 288 missing source modules in the current BetaGeometry closure before applying already accepted-object restorations','S1BetaGeometry','S1BetaPaidLower','CurrentChenInitialMean','complete eleven-term mean','hLower'],'next_candidate':'Choose the next ready leaf in the actual LiuPan ledger dependency DAG; do not jump to S1BetaPaidLower.'};write(DEST/'context.json',context)
+ write(DEST/'commands.sh','\n'.join(' '.join(x['command']) for x in commands)+'\n')
+ handoff=f'''# Chen Part 5 — LogPowerBounds leaf acceptance
+
+## Result
+
+`MathlibNt.Analysis.LogPowerBounds` is accepted as one independent leaf of the real `S1BetaGeometry → LiuPanPrimitiveLedgerAssembly` supplier chain. Fixed source SHA256: `{pre['source']['sha256']}`. Strictly compiled object SHA256: `{res['target_object']['sha256']}`.
+
+The official frontend strict compile passed in {gates['compile']['elapsed_seconds']} s; stock `leanchecker` replay passed in {gates['replay']['elapsed_seconds']} s; the complete defining-module audit passed in {gates['audit']['elapsed_seconds']} s. The compiler enumerated three theorem declarations: the requested public theorem plus two generated/private proof declarations. There are no unsafe or own axiom declarations and the transitive axiom union is exactly `propext`, `Classical.choice`, and `Quot.sound`.
+
+## Compiler-confirmed type
+
+```lean
+{PUBLIC} :
+{public['type']}
+```
+
+This pays only the elementary asymptotic fact that every positive power of `N` eventually dominates any fixed real power of `log N`. The actual consumer `LiuPanPrimitiveLedgerAssembly` uses it in `eventually_pan_log_rpow_le_rpow` and the eventual conductor bounds.
+
+The two direct imports are fixed mathlib objects and were reused only after exact source/object hashing; they were not recompiled, replayed, or re-audited here. No proof source was patched and no production file was changed.
+
+## Supply status
+
+This removes one genuine leaf from the path
+
+`LogPowerBounds → Distribution.LiuPan.LiuPanPrimitiveLedgerAssembly → LiuPanPrimitiveLedgerAssembly → S1BetaGeometry → S1BetaPaidLower`.
+
+It does not accept the remaining Liu–Pan ledger DAG, `S1BetaGeometry`, or `S1BetaPaidLower`. The next batch must choose another ready leaf from the actual DAG. `CurrentChenInitialMean`, the complete eleven-term mean, and `hLower` remain open; `(33/4) * Real.log 3` is still only an independent first-term candidate. The final weight scale remains `4c = 49044063/6250000 = 7.84705008` because `W_N ≤ 4*D12(N)+error`.
+
+Evidence is under `verification/parts/p5/round6/logpowerbounds/`. Root CI is tracked separately. Receiving parts: P5 and P0.
+''';write(REPO/'docs/CHEN_P5_LOGPOWERBOUNDS_HANDOFF.md',handoff)
+ print(json.dumps({'status':receipt['status'],'declarations':3,'axioms':union,'destination':str(DEST)}))
+main()

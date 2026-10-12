@@ -1,0 +1,73 @@
+#!/usr/bin/env python3
+"""Strict single-node verification for MathlibNt.Analysis.LogPowerBounds."""
+from pathlib import Path
+import datetime as dt, hashlib, json, os, subprocess, time
+
+ROOT=Path('/workspace/scratch/399183f4923f'); REPO=ROOT/'goldbach-formalization'
+SHARED=Path('/workspace/scratch/127408f63891/goldbach-formalization')
+GOLD=SHARED/'.lake/packages/goldbach'; MATH=SHARED/'.lake/packages/mathlib'
+TOOL=Path('/workspace/scratch/127408f63891/lean-runtime/lean-4.33.0-rc1-linux')
+DRIVER=Path('/workspace/scratch/127408f63891/lean-runtime/frontend-driver')
+HERE=ROOT/'p5-logpower/runtime'; LOGS=HERE/'logs'; OUT=REPO/'.lake/build/lib/lean'
+START='9186084fb96de00540b5732b35a158178fd5f079'; START_TREE='75ca49407040e28b3ccf549aed5f9f4d035554c4'
+TARGET='MathlibNt.Analysis.LogPowerBounds'; SOURCE_SHA='b1f24d0f70f59fa85c05c56ce51e15bb830f615d81fe6f490fcc650d2d8e3e1a'
+AUDIT='verification.parts.p5.LogPowerBoundsAudit'
+PINS={'goldbach':'09b97db5764ade1246bfb77206baa1b124760958','mathlib':'e4c91783ca8e6a7c693ae624ade32fd22d4e43c1','LeanArchitect':'78dd66840d3efe8c824c699fc03381cec817c271','plausible':'b1c4a69a7e247ab7df20460212001673d74f08c0','LeanSearchClient':'0498c7c070c143a3bf7379f4d99a2c63bb9d9715','importGraph':'18a90119a5d316358fde6c86e0ca24e59212e32c','proofwidgets':'b1436dc749e722c9920036b52cdc43b3451d0b69','aesop':'57d3325be72a842920813bcb40f96a6f7393c185','Qq':'ee41917ae11d38479fb8fb24745f7ca4bf0a784d','batteries':'41bd267b3f6b7252f6676af46d4ffc6783b64de9','Cli':'da07ca808b6718cb2aed14dba154e5a08b8f8ecf'}
+
+def sha(p):
+ h=hashlib.sha256();
+ with Path(p).open('rb') as f:
+  for b in iter(lambda:f.read(1048576),b''):h.update(b)
+ return h.hexdigest()
+def rec(p): p=Path(p);return {'path':str(p),'sha256':sha(p),'bytes':p.stat().st_size}
+def git(p,*a):return subprocess.check_output(['git','-C',str(p),*a],text=True).strip()
+def src(m,root=GOLD):return root/(m.replace('.','/')+'.lean')
+def out(m):return OUT/(m.replace('.','/')+'.olean')
+def save(p,x):p=Path(p);p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def env():
+ roots=[OUT,SHARED/'.lake/build/lib/lean']+[SHARED/'.lake/packages'/n/'.lake/build/lib/lean' for n in PINS]
+ sources=[REPO,SHARED]+[SHARED/'.lake/packages'/n for n in PINS]
+ e=os.environ.copy();e.update({'LEAN_SYSROOT':str(TOOL),'LAKE_HOME':str(TOOL),'LEAN_NUM_THREADS':'1','LEAN_PATH':':'.join(map(str,roots)),'LEAN_SRC_PATH':':'.join(map(str,sources)),'PATH':str(TOOL/'bin')+':'+e.get('PATH','')});return e
+def imports(p):
+ r=[]
+ for l in Path(p).read_text().splitlines():
+  if l.startswith('import '):r+=l[7:].split()
+ return r
+def resolve_obj(m):
+ rel=Path(m.replace('.','/')+'.olean')
+ for root in [OUT,SHARED/'.lake/build/lib/lean']+[SHARED/'.lake/packages'/n/'.lake/build/lib/lean' for n in PINS]:
+  p=root/rel
+  if p.is_file():return p
+ raise FileNotFoundError(m)
+def resolve_src(m):
+ rel=Path(m.replace('.','/')+'.lean')
+ for root in [REPO,SHARED]+[SHARED/'.lake/packages'/n for n in PINS]:
+  p=root/rel
+  if p.is_file():return p
+ raise FileNotFoundError(m)
+def cmd_compile(m,s,o):return [str(TOOL/'bin/lake'),'-d',str(DRIVER),'-f','lakefile.lean','script','run','compileOne',str(s),m,str(o),'strict']
+def run(action,cmd):
+ LOGS.mkdir(parents=True,exist_ok=True);stamp=dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ');log=LOGS/f'{stamp}-{action}.log';t=time.monotonic()
+ with log.open('wb') as f:p=subprocess.run(cmd,cwd=REPO,env=env(),stdout=f,stderr=subprocess.STDOUT)
+ r={'action':action,'command':cmd,'cwd':str(REPO),'started_utc':stamp,'returncode':p.returncode,'elapsed_seconds':round(time.monotonic()-t,3),'raw_log':str(log),'raw_log_sha256':sha(log),'trustLevel':0 if action!='replay' else None,'warningAsError':action!='replay'}
+ print(json.dumps(r),flush=True)
+ if p.returncode: print(log.read_text(errors='replace')[-10000:]);raise SystemExit(p.returncode)
+ return r
+
+def main():
+ assert git(REPO,'rev-parse','HEAD^{tree}')==START_TREE
+ s=src(TARGET);assert sha(s)==SOURCE_SHA
+ im=imports(s);assert im==['Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics','Mathlib.Tactic']
+ packages=[]
+ for n,v in PINS.items():
+  p=SHARED/'.lake/packages'/n; changes=git(p,'diff','--name-only','HEAD').splitlines();assert git(p,'rev-parse','HEAD')==v and not changes;packages.append({'package':n,'revision':v,'tracked_changes':changes})
+ direct=[]
+ for m in im:
+  direct.append({'module':m,'source':rec(resolve_src(m)),'objects':[rec(resolve_obj(m))]})
+ pre={'observed_utc':dt.datetime.now(dt.timezone.utc).isoformat(),'starting_checkpoint':START,'starting_tree':START_TREE,'target':TARGET,'source':rec(s),'imports':direct,'packages':packages,'toolchain':{'toolchain':'leanprover/lean4:v4.33.0-rc1','githash':'62eed1db4d67327ec8120be05f1a1b0847d74561','binaries':{n:rec(TOOL/'bin'/n) for n in ['lean','lake','leanchecker','leantar']}},'driver':rec(DRIVER/'lakefile.lean'),'audit_source':rec(REPO/'verification/parts/p5/LogPowerBoundsAudit.lean'),'target_existing_before':[rec(out(TARGET))] if out(TARGET).exists() else [],'scope':'Only LogPowerBounds; direct imports reused by exact source/object hashes and not replayed or re-audited.'}
+ save(HERE/'preflight.json',pre)
+ commands=[run('compile',cmd_compile(TARGET,s,out(TARGET))),run('replay',[str(TOOL/'bin/leanchecker'),'--verbose',TARGET]),run('audit',cmd_compile(AUDIT,REPO/'verification/parts/p5/LogPowerBoundsAudit.lean',out(AUDIT)))]
+ assert sha(s)==SOURCE_SHA
+ result={'status':'GATES_PASSED','completed_utc':dt.datetime.now(dt.timezone.utc).isoformat(),'preflight_sha256':sha(HERE/'preflight.json'),'commands':commands,'target_object':rec(out(TARGET)),'audit_object':rec(out(AUDIT)),'source_after':rec(s),'imports_after':[{'module':x['module'],'source':rec(resolve_src(x['module'])),'objects':[rec(resolve_obj(x['module']))]} for x in direct]}
+ save(HERE/'result.json',result);print(json.dumps({'status':result['status'],'target_object':result['target_object']}))
+main()
