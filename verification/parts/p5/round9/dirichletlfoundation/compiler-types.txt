@@ -1,0 +1,18 @@
+DirichletCharacter.lFunction_entire_of_ne_one :
+∀ {q : ℕ} [inst : NeZero q] {χ : DirichletCharacter ℂ q}, χ ≠ 1 → Differentiable ℂ (DirichletCharacter.LFunction χ)
+
+DirichletCharacter.completedLFunction_entire_of_ne_one :
+∀ {q : ℕ} [inst : NeZero q] {χ : DirichletCharacter ℂ q},
+  χ ≠ 1 → Differentiable ℂ (DirichletCharacter.completedLFunction χ)
+
+DirichletCharacter.LSeries_twist_vonMangoldt_eq_neg_logDeriv_LFunction :
+∀ {q : ℕ} [inst : NeZero q] (χ : DirichletCharacter ℂ q) {s : ℂ},
+  1 < s.re →
+    LSeries ((fun n => χ ↑n) * fun n => ↑(ArithmeticFunction.vonMangoldt n)) s =
+      -deriv (DirichletCharacter.LFunction χ) s / DirichletCharacter.LFunction χ s
+
+DirichletCharacter.continuousOn_neg_logDeriv_LFunction :
+∀ {q : ℕ} [inst : NeZero q] {χ : DirichletCharacter ℂ q},
+  χ ≠ 1 →
+    ContinuousOn (fun s => -deriv (DirichletCharacter.LFunction χ) s / DirichletCharacter.LFunction χ s)
+      {s | DirichletCharacter.LFunction χ s ≠ 0}

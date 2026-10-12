@@ -1,0 +1,308 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import base64, collections, datetime as dt, gzip, hashlib, json, shutil
+
+ROOT = Path('/workspace/scratch/399183f4923f')
+REPO = ROOT / 'goldbach-formalization'
+RUN = ROOT / 'p5-dirichletlfoundation/runtime'
+DEST = REPO / 'verification/parts/p5/round9/dirichletlfoundation'
+RAW = DEST / 'raw'
+PUBLIC = [
+    'DirichletCharacter.lFunction_entire_of_ne_one',
+    'DirichletCharacter.completedLFunction_entire_of_ne_one',
+    'DirichletCharacter.LSeries_twist_vonMangoldt_eq_neg_logDeriv_LFunction',
+    'DirichletCharacter.continuousOn_neg_logDeriv_LFunction',
+]
+
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def write(path, value):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if isinstance(value, str):
+        path.write_text(value)
+    else:
+        path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+
+
+def copy(source, destination):
+    source = Path(source)
+    destination = Path(destination)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source, destination)
+    return {
+        'path': str(destination.relative_to(DEST)),
+        'sha256': sha(destination),
+        'bytes': destination.stat().st_size,
+    }
+
+
+def main():
+    pre = json.load(open(RUN / 'preflight.json'))
+    result = json.load(open(RUN / 'result.json'))
+    assert result['status'] == 'GATES_PASSED'
+    assert pre['source']['sha256'] == 'ab7d737510d353e6f7791ed24a8d77be7a6ec80beaec617dcf6dd21da2bc0787'
+    assert [item['module'] for item in pre['imports']] == ['Mathlib.NumberTheory.LSeries.Nonvanishing']
+
+    commands = []
+    for command in result['commands']:
+        archived = dict(command)
+        raw = Path(command['raw_log'])
+        archived['raw_log'] = copy(raw, RAW / raw.name)['path']
+        assert sha(DEST / archived['raw_log']) == archived['raw_log_sha256']
+        assert archived['returncode'] == 0
+        commands.append(archived)
+
+    audit_log = DEST / next(item['raw_log'] for item in commands if item['action'] == 'audit')
+    declarations = []
+    module_summary = None
+    for line in audit_log.read_text().splitlines():
+        if line.startswith('CHEN_P5_DIRICHLETLFOUND_AUDIT_DECL '):
+            declarations.append(json.loads(line.split(' ', 1)[1]))
+        elif line.startswith('CHEN_P5_DIRICHLETLFOUND_AUDIT_MODULE '):
+            module_summary = json.loads(line.split(' ', 1)[1])
+
+    assert module_summary['count'] == len(declarations) == 4
+    assert module_summary['requested_public_theorem_count'] == 4
+    assert {item['name'] for item in declarations} == set(PUBLIC)
+    assert all(item['requested_public_theorem'] for item in declarations)
+    assert all(item['kind'] == 'theorem' for item in declarations)
+    assert all(not item['is_unsafe'] and not item['is_axiom'] for item in declarations)
+    allowed = {'propext', 'Classical.choice', 'Quot.sound'}
+    assert all(set(item['axioms']) <= allowed for item in declarations)
+    axiom_union = sorted(set().union(*(set(item['axioms']) for item in declarations)))
+    assert set(axiom_union) == allowed
+    public = [next(item for item in declarations if item['name'] == name) for name in PUBLIC]
+
+    write(DEST / 'declarations.json', declarations)
+    write(
+        DEST / 'declaration-axioms.jsonl',
+        ''.join(
+            json.dumps(
+                {
+                    'name': item['name'],
+                    'kind': item['kind'],
+                    'is_unsafe': item['is_unsafe'],
+                    'is_axiom': item['is_axiom'],
+                    'axioms': item['axioms'],
+                },
+                ensure_ascii=False,
+            ) + '\n'
+            for item in declarations
+        ),
+    )
+    write(DEST / 'public-theorem-types.json', public)
+    write(
+        DEST / 'compiler-types.txt',
+        '\n\n'.join(item['name'] + ' :\n' + item['type'] for item in public) + '\n',
+    )
+    write(DEST / 'preflight.json', pre)
+    write(DEST / 'commands-and-results.json', commands)
+
+    source_snapshot = copy(
+        pre['source']['path'],
+        DEST / 'source/upstream-DirichletLFoundation.lean.txt',
+    )
+    audit_snapshot = copy(
+        REPO / 'verification/parts/p5/DirichletLFoundationAudit.lean',
+        DEST / 'source/DirichletLFoundationAudit.lean.txt',
+    )
+    verifier_snapshot = copy(
+        RUN / 'verify_dirichletlfoundation.py',
+        DEST / 'runtime/verify_dirichletlfoundation.py.txt',
+    )
+    finalizer_snapshot = copy(
+        __file__,
+        DEST / 'runtime/finalize_dirichletlfoundation.py.txt',
+    )
+    frontier_scanner_snapshot = copy(
+        RUN / 'scan_frontier.py',
+        DEST / 'runtime/scan_frontier.py.txt',
+    )
+    frontier_snapshot = copy(
+        RUN / 'dependency-frontier.json',
+        DEST / 'dependency-frontier.json',
+    )
+    driver_snapshot = copy(
+        pre['driver']['path'],
+        DEST / 'runtime/frontend-driver.lakefile.lean.txt',
+    )
+
+    target_object = Path(result['target_object']['path'])
+    compressed = gzip.compress(target_object.read_bytes(), 9, mtime=0)
+    transport = DEST / 'objects/DirichletLFoundation.olean.gz.b64'
+    transport.parent.mkdir(parents=True, exist_ok=True)
+    transport.write_bytes(base64.b64encode(compressed))
+    assert gzip.decompress(base64.b64decode(transport.read_bytes())) == target_object.read_bytes()
+    object_manifest = {
+        'object': result['target_object'],
+        'transport_path': str(transport.relative_to(DEST)),
+        'transport_sha256': sha(transport),
+        'gzip_sha256': hashlib.sha256(compressed).hexdigest(),
+        'roundtrip_verified': True,
+    }
+    write(DEST / 'objects/manifest.json', object_manifest)
+
+    gates = {item['action']: {'result': 'passed', **item} for item in commands}
+    audit = {
+        'method': 'Defining-module environment inventory plus Lean.collectAxioms',
+        'source_path': 'verification/parts/p5/DirichletLFoundationAudit.lean',
+        'source_sha256': sha(REPO / 'verification/parts/p5/DirichletLFoundationAudit.lean'),
+        'declaration_count': 4,
+        'requested_public_theorem_count': 4,
+        'kind_counts': dict(collections.Counter(item['kind'] for item in declarations)),
+        'generated_private_count': 0,
+        'generated_private_names': [],
+        'private_and_generated_included': True,
+        'unsafe_declarations': [],
+        'own_axiom_declarations': [],
+        'forbidden_axioms': [],
+        'transitive_axiom_union': axiom_union,
+        'types_status': 'COMPILER_CONFIRMED_FROM_ELABORATED_ENVIRONMENT',
+        'explicit_type_and_raw_expression_for_every_declaration': True,
+    }
+    receipt = {
+        'scope': 'Only MathlibNt.AnalyticNumberTheory.DirichletL.DirichletLFoundation',
+        'status': 'STRICT_REPLAY_FULL_AXIOM_AUDIT_PASSED',
+        'accepted_utc': dt.datetime.now(dt.timezone.utc).isoformat(),
+        'branch': 'chatgpt/chen-p5-lower',
+        'starting_checkpoint': pre['starting_checkpoint'],
+        'common_baseline': '1a80c1bcce67886f699d097fc37fd245cd3620bf',
+        'acceptance_commit': 'The full enclosing published commit SHA is supplied with this receipt; no self-reference is embedded.',
+        'toolchain': pre['toolchain'],
+        'dependencies': pre['packages'],
+        'source': pre['source'],
+        'source_patch': None,
+        'production_source_changes': [],
+        'compiled_objects': [result['target_object']],
+        'compiled_object_transport_archive': object_manifest,
+        'direct_imports': pre['imports'],
+        'direct_import_cache_scope': 'Exact source/object identity reuse only; the direct import was not recompiled, replayed, or re-audited in this batch.',
+        'gates': gates,
+        'audit': audit,
+        'public_theorems': [
+            {
+                'name': item['name'],
+                'type': item['type'],
+                'type_status': 'COMPILER_CONFIRMED_FROM_ELABORATED_ENVIRONMENT',
+            }
+            for item in public
+        ],
+        'source_snapshots': [source_snapshot, audit_snapshot],
+        'runtime_snapshots': [
+            verifier_snapshot,
+            finalizer_snapshot,
+            frontier_scanner_snapshot,
+            driver_snapshot,
+        ],
+        'dependency_frontier_snapshot': frontier_snapshot,
+        'root_ci': {
+            'status': 'NOT_RUN_FOR_THIS_UNPUBLISHED_CHECKPOINT',
+            'separate_from_single_module_acceptance': True,
+            'configuration_or_threshold_changed': False,
+        },
+    }
+    write(DEST / 'receipt.json', receipt)
+
+    next_candidate = {
+        'module': 'MathlibNt.AnalyticNumberTheory.LargeSieve.DirichLTwistedPointwiseSWPaymentCore',
+        'source_sha256': '3798b1a9798e1a7390ba5d3ba879287e6c1a466b4f91f39a434f3f1bc41b65d2',
+        'reason': 'Smallest remaining ready leaf in the recomputed current Liu–Pan closure (20 source lines); its only MathlibNt direct import is the already accepted LargeSieve.LogPowerBounds.',
+        'status': 'UNCOMPILED_CANDIDATE',
+    }
+    context = {
+        'compiler_confirmed_types': public,
+        'mathematical_reading': [
+            'A nonprincipal Dirichlet character has an entire L-function.',
+            'Its completed L-function is entire.',
+            'On Re(s) > 1, the von-Mangoldt-twisted character L-series is the negative logarithmic derivative of the L-function.',
+            'That negative logarithmic derivative is continuous on the nonzero locus of the L-function.',
+        ],
+        'actual_consumers': [
+            {
+                'module': 'MathlibNt.AnalyticNumberTheory.DirichletL.DirichletLTwistedSmoothedPerron',
+                'use': 'direct import in the same fixed dependency closure',
+            },
+            {
+                'module': 'MathlibNt.AnalyticNumberTheory.Chen1973.Chen1973Lemma6Equations16And17',
+                'use': 'analytic Dirichlet-L foundations on a shortest dependency path into the Liu–Pan ledger',
+            },
+        ],
+        'supply_path': [
+            'MathlibNt.AnalyticNumberTheory.DirichletL.DirichletLFoundation',
+            'Chen1973Lemma6Equations16And17',
+            'Chen1973Lemma6Equation19',
+            'Chen1973Lemma6Equation19MomentTransport',
+            'Chen1973Lemma6Equation19UniformMoments',
+            'ChenLiuCoprimeProducerShort',
+            'ChenLiuCoprimeProducerHalfStepContour',
+            'ChenLiuCoprimeProducerPerronAssembly',
+            'ChenLiuCoprimeProducerHighAggregate',
+            'Distribution.LiuPan.LiuPanPrimitiveLedgerAssembly',
+            'S1BetaGeometry',
+            'S1BetaPaidLower',
+        ],
+        'recomputed_closure': {
+            'module_count': 314,
+            'missing_object_count_after_this_acceptance': 282,
+            'ready_leaf_count_after_this_acceptance': 20,
+        },
+        'not_closed': [
+            'remaining Liu–Pan primitive-ledger dependency DAG',
+            'S1BetaGeometry',
+            'S1BetaPaidLower',
+            'S1BetaLowerDensity',
+            'S1BetaMainScale',
+            'S1BetaFixedNormalizedLower',
+            'CurrentChenInitialMean',
+            'complete eleven-term mean',
+            'hLower',
+        ],
+        'next_candidate': next_candidate,
+    }
+    write(DEST / 'context.json', context)
+    write(DEST / 'commands.sh', '\n'.join(' '.join(item['command']) for item in commands) + '\n')
+
+    type_blocks = '\n\n'.join('```lean\n' + item['name'] + ' :\n' + item['type'] + '\n```' for item in public)
+    handoff = f'''# Chen Part 5 — DirichletLFoundation leaf acceptance
+
+## Result
+
+`MathlibNt.AnalyticNumberTheory.DirichletL.DirichletLFoundation` is accepted as one independent leaf of the real Liu–Pan/S1 supplier chain. Fixed source SHA256: `{pre['source']['sha256']}`. Strictly compiled object SHA256: `{result['target_object']['sha256']}`.
+
+The official frontend strict compile passed in {gates['compile']['elapsed_seconds']} s; stock `leanchecker` replay passed in {gates['replay']['elapsed_seconds']} s; the complete defining-module audit passed in {gates['audit']['elapsed_seconds']} s. The compiler enumerated exactly four theorem declarations, all requested public theorems. There are no private/generated declarations, unsafe declarations, or own axiom declarations. The transitive axiom union is exactly `propext`, `Classical.choice`, and `Quot.sound`.
+
+## Compiler-confirmed types
+
+{type_blocks}
+
+These are types extracted from the elaborated compiler environment, not source-only signatures. They establish the nonprincipal entire L-functions, the von-Mangoldt twist/logarithmic-derivative identity on `1 < s.re`, and continuity on the actual nonzero locus.
+
+The unique direct import is `Mathlib.NumberTheory.LSeries.Nonvanishing`. Its fixed source and object were reused only after exact hashing; it was not recompiled, replayed, or re-audited in this batch. No proof source was patched and no production file was changed.
+
+## Supply status
+
+One actual path from this leaf to the current first-term target is
+
+`DirichletLFoundation → Chen1973Lemma6Equations16And17 → Chen1973Lemma6Equation19 → Chen1973Lemma6Equation19MomentTransport → Chen1973Lemma6Equation19UniformMoments → ChenLiuCoprimeProducerShort → ChenLiuCoprimeProducerHalfStepContour → ChenLiuCoprimeProducerPerronAssembly → ChenLiuCoprimeProducerHighAggregate → Distribution.LiuPan.LiuPanPrimitiveLedgerAssembly → S1BetaGeometry → S1BetaPaidLower`.
+
+This batch does not accept those downstream modules. After installing this object, the actual Liu–Pan closure was recomputed as 314 modules, with 282 missing objects and 20 ready leaves. Its smallest remaining ready leaf is the **uncompiled candidate** `MathlibNt.AnalyticNumberTheory.LargeSieve.DirichLTwistedPointwiseSWPaymentCore`, source SHA256 `3798b1a9798e1a7390ba5d3ba879287e6c1a466b4f91f39a434f3f1bc41b65d2`; it has 20 source lines and depends on the already accepted `LargeSieve.LogPowerBounds` leaf.
+
+`CurrentChenInitialMean`, the complete eleven-term mean, and `hLower` remain open; `(33/4) * Real.log 3` remains only an independent first-term candidate. The final weight scale remains `4c = 49044063/6250000 = 7.84705008` because `W_N ≤ 4*D12(N)+error`.
+
+Evidence is under `verification/parts/p5/round9/dirichletlfoundation/`. Root CI is tracked separately and was not run for this single-module checkpoint. Receiving parts: P5 and P0.
+'''
+    write(REPO / 'docs/CHEN_P5_DIRICHLETLFOUNDATION_HANDOFF.md', handoff)
+    print(json.dumps({
+        'status': receipt['status'],
+        'declarations': 4,
+        'axioms': axiom_union,
+        'destination': str(DEST),
+        'next_candidate': next_candidate,
+    }))
+
+
+main()
