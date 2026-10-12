@@ -2,7 +2,1503 @@
 
 This project is not a proof of Goldbach's conjecture or of the attached manuscript's main analytic theorem.
 
-## Latest verified checkpoint
+## Complete finite-selector integrals and the shared historical tree — 12 October
+
+Six new modules close the full ordinary-parent fifth-prefix selector's
+integral, and separately prove finite fourth/fifth updates on one historical
+third-level tree. Neither actual counting hypothesis of
+`current_theorem_1_1_of_manuscript_bounds` is discharged.
+
+`ActualPrimeIcoCellTestFunctions` proves the real signed-test prime limit on
+one half-open mesh cell intersected with finitely many strict affine gates.
+The mixed boundary indicator lies between the strict and weak gate regions;
+continuous ramps bound its actual arithmetic error. Null Lebesgue walls
+are used for the integral identity, not to discard discrete prime atoms.
+Dimension zero and an empty gate family are included. The actual prime
+carrier still excludes primes dividing the target.
+
+`ActualPrimeOwnCubeIcoIntegral` combines that limit with the proved uniform
+actual lower-residual approximation. New and old levels retain separate
+strict own-cube gates. It proves integrability before expressing their
+difference as a single integral on the same Ico cell. No ordering of the
+two levels or positivity of a finite lower density is assumed.
+
+`ActualSelectedPrefixCellDecomposition` proves an exact finite identity for
+any real function of the selected rational cap. Unique half-open ownership
+selects one cell, and outside all adopted cells the old fallback gives zero
+difference. The literal nested frontier/candidate density sum, with its
+actual history masses, equals the normalized tuple sum. The history's level
+and the tuple's level read the same logarithmic coordinates.
+
+`ActualSelectedPrefixUpperCellSum` then identifies each actual parent cell
+in both directions with its six-row affine region. It keeps strict
+decreasing order and the inherited first and third cube tests; it does not
+add the old fifth gate to the parent enumeration. Finite sum interchange
+gives the entire selected saving as a sum of cell residual differences.
+There is no discarded small-prime, boundary or truncation remainder because
+every nonzero difference already belongs to an adopted cell.
+
+`ActualSelectedPrefixOwnCubeIntegral` assembles those exact identities and
+proved limits. Fix rational `old,nu,a,b`, `old>0`, `0<a<b`, a mesh and a
+finite adopted family `J` before the target tends to infinity. If `lambda_j`
+is the selected cap of cell `C_j`, and `Omega_old` is the inherited ordinary
+parent region, it proves
+
+```text
+actualSelectedPrefixOwnCubeSum(N) * log N/C_N
+  --> sum_{j in J} integral_{C_j intersect Omega_old}
+        (H_lambda_j(t) - H_old(t)) * prod_i 1/t_i dt,
+H_lambda(t) = 1[sum t + 2*t_last < lambda]
+               * primeTupleMinusProfile lambda t.
+```
+
+The limit is along positive even targets, and the enumeration cap need only
+cover `N^b` eventually. The arithmetic sum limit itself does not require cap
+checks. With the explicit finite rational checks for the adopted cells,
+the previously proved finite identity gives the actual retained tree's
+ordinary-minus-selected saving. In the explicit legal range `b<old`, the
+selected density itself has limit
+
+```text
+(2*exp(-gamma)/b) * suzukiContinuousUpperFactor(old/b)
+  - selectedPrefixUpperSavingIntegral.
+```
+
+Here `b` is the internal prime cutoff exponent of the cube, not the
+arbitrary Goldbach imbalance exponent in Theorem 1.1. No target limit,
+region identity or analytic approximation bound is assumed by these
+statements. This remains a single fifth-prefix update of an ordinary
+constant-level parent, not the full historical manuscript policy.
+
+`FirstExitHistoricalLevels` proves that splicing strictly after rank `m`
+preserves every earlier actual frontier, including carrier, sign and mass.
+Ancestor histories become initial processing-order subtuples. It defines
+`T3 = splice 2 base (frozen upper 3 Q3)`, then `T4` and `T5` as rank-four
+splices of that same `T3`. Actual third-rank admission supplies complete
+prefix validity; later inactive steps propagate it using sorted primes,
+inherited validity and the true sign. The actual-root corollary requires
+no caller prefix-validity hypothesis. Refreezing the third level after
+rank four recovers exactly the same policy.
+
+Consequently `T3-T4` is the sum of inherited-minus-raised actual fourth
+residuals, and `T4-T5` is the new-minus-old gated lower-density sum over all
+next candidates of the common T3 rank-four frontier. Their sum equals
+`T3-T5`. Explicit finite comparisons `Q3<=Q4` and `Q4<=Q5` remain. Neither
+saving is asserted nonnegative. Arbitrary `base,Q3,Q4,Q5` do not by
+themselves identify the manuscript's certified table, rough-cutoff fallback,
+global upper majorant, joint-cell integral or physical distribution theorem.
+
+All six sources passed strict individual compilation with no final
+diagnostics, and independent source reviews cover their final versions.
+The standard full aggregate build passed with 9,776 jobs in 53.891 seconds.
+Bundled kernel replay passed for all six final Lake-built objects in
+23.184 seconds. The canonical safety and transitive-axiom audit passed in
+313.838 seconds for all 87 owned declarations, including private and
+generated ones:
+
+| Module | Owned declarations |
+| --- | ---: |
+| `ActualPrimeIcoCellTestFunctions` | 17 |
+| `ActualPrimeOwnCubeIcoIntegral` | 15 |
+| `ActualSelectedPrefixCellDecomposition` | 8 |
+| `ActualSelectedPrefixUpperCellSum` | 7 |
+| `FirstExitHistoricalLevels` | 34 |
+| `ActualSelectedPrefixOwnCubeIntegral` | 6 |
+
+Every audited declaration is safe and is not an unproved axiom. The only
+transitive axioms are `propext`, `Classical.choice` and `Quot.sound`.
+Eight independent review records cover the exact final sources. Lean
+`4.33.0-rc1`, all eleven dependency pins, runtime binaries, sources, root
+imports, audit and final objects matched before and after verification;
+the mathlib and Goldbach provider worktrees and indexes remained clean.
+This is replay of the six new final objects, not a full-root kernel replay.
+The historical whole-library warning-as-failure result is unchanged.
+
+With the pinned dependencies, reproduce with `lake build`, bundled
+`lake env leanchecker --verbose ImbalancedChen.MODULE` for each module
+above, and
+`lake env lean -DwarningAsError=true verification/SelectedIntegralAudit.lean`.
+The inventory uses Lean defining-module metadata, not a source-name filter.
+The standard aggregate was run once after the inputs were frozen. A prior
+launcher/precheck failure occurred before Lake ran and is retained separately
+from the proof results. Development diagnostics are also preserved.
+
+The preceding checkpoint's 103 evidence files are preserved by a full hash
+snapshot. The new next-step plan is explicitly `PLAN_ONLY`. New evidence is under
+`.lake/main-theorem-verification-20261012/selected-integral/`.
+
+## Actual affine regions and the ordinary fifth-candidate integral — 12 October
+
+Eleven new modules connect an actual stopped sieve frontier with a genuine
+localized prime-prefix integral. They do not discharge either analytic
+counting hypothesis of `current_theorem_1_1_of_manuscript_bounds`.
+
+`FirstExitFrontierTupleReindex` first proves a permutation of the literal
+`frontier.flatMap nextCandidates` history list and the length-`k+1`
+selected sublists whose first `k` selections are admitted. Only after
+proving no repeated tuple for a duplicate-free carrier does it form a
+finite tuple set or rewrite sums. Exact specializations preserve actual
+primes, target exclusion, both real endpoints and the enumeration cap.
+The final candidate is never filtered by the old own-cube test. There is
+no factorial or multiplicity correction hidden in the sum.
+
+`AffinePrimeGates` proves zero volume for the level set of each nonzero
+real continuous linear form. Its finite products of continuous ramps
+sandwich the strict-region indicator. `ActualPrimePolyhedralTestFunctions`
+uses signed arithmetic error estimates and dominated convergence to prove
+
+```text
+sum_{p in actualPrimeBoxTuples N a b}
+  prod_i 1/(p_i-1) * 1[forall j, L_j(log p/log N)<c_j] * f(log p/log N)
+  --> integral_[a,b)^d intersect {forall j,L_j(t)<c_j}
+        f(t) * prod_i 1/t_i dt.
+```
+
+Here `0<a<b`, `f` is any real continuous function on the closed cube,
+and every specified `L_j` is nonzero. Empty gate families and dimension
+zero are supported. The result holds along all targets tending to
+infinity, with target-prime exclusion in the actual tuple carrier.
+No null-wall, arithmetic-limit or approximation-error premise occurs.
+
+`AffinePrimeWallReserve` bounds the actual weight of the union of the
+closed strips `|L_j(t)-c_j|<=delta`. For every `eta>0` it supplies
+`delta>0` and then `N0>=2`, after which that real arithmetic mass is less
+than `eta` for every target. Continuous tents dominate even strip
+endpoints, and the proved null-wall theorem pays the genuine integral
+error. A small volume alone is not asserted to bound an unbounded kernel.
+
+For a nonempty tuple set `P=prod p_i`, `y=p_last`, and write
+
+```text
+A_N,lambda(p) = 1[P*y^2<N^lambda]
+                  * Vminus_N(y,N^lambda/P) * log N/C_N,
+H_lambda(t) = (2*exp(-gamma)/t_last)
+               * suzukiContinuousLowerFactor(max 2 ((lambda-sum t)/t_last)).
+```
+
+`ActualPrimeBoxOwnCubeResidual` proves the literal strict gate is
+equivalent to `sum t+2*t_last<lambda`. The closed cube intersected with
+`sum t+2*t_last<=lambda` is compact and lies in the actual lower-density
+supplier's legal domain, including `s=2`. That supplier gives one
+uniform threshold before every later even target, covering cap and
+actual tuple. The gated residual differs uniformly from
+`1[sum t+2*t_last<lambda]*H_lambda(t)` by a vanishing error. The `max 2`
+extension is continuous on the entire positive closed cube and is equal
+to the genuine profile everywhere admitted. The actual total-mass limit
+pays the error even after restriction to an arbitrary additional fixed
+set. A finite lower density is not assumed nonnegative.
+
+`PrimeOwnCubeAffineGates` adds the strict own-cube row as an explicitly
+nonzero linear form. `ActualPrimeOwnCubeAffineIntegral` combines the
+proved error estimate and affine-region prime limit to integrate
+`A_N,lambda` over any additional finite nondegenerate affine region.
+Its new-minus-old limit is a difference of two separately gated
+integrals, without an assumed sign or level comparison.
+
+`ActualOwnCubeTupleDictionary` proves that these tuple residuals equal
+the original reverse-stored history's actual gated minus density at
+`N^lambda/history.prod`, with the same normalization. It preserves
+the history product, last selected prime and reciprocal-prime mass.
+The totient corollary alone requires duplicate-free prime labels.
+The actual candidate state mass is derived from frontier geometry,
+including for rejected candidates.
+
+`OrdinaryPrimeFrontierAffineRegion` proves both directions of the actual
+ordinary upper fifth-candidate description. Prime ordering and actual
+endpoints are retained. The first four selections pass the parity-safe
+parent precisely when the real first and third cube tests hold.
+The rank-four total-product bound follows from the proved full-prefix
+predicate and decreasing primes; it is not silently deleted.
+`OrdinaryUpperFiveAffineGates` supplies its six nonzero affine rows:
+four adjacent-order tests, `3*t0<old`, and `t0+t1+3*t2<old`.
+
+Finally, `ActualOrdinaryUpperFiveCubeIntegral` starts with the literal
+rank-four frontier and all next candidates on `roughPrimeUniverse N cap
+0 (N^b)`. It restricts the selected tuple to `[a,b)^5` and sums the
+original history mass times actual gated lower density, normalized by
+`log N/C_N`. Exact finite reindexing proves equality with the cube sum
+on the six-row parent region. For `0<a<b`, `old>0` and caps eventually
+covering `N^b`, the result converges along positive even targets to the
+true own-cube affine integral. Subtracting the old-level result from the
+new-level result retains every restored candidate and both indicators.
+
+This is a fixed positive-cube result for a constant ordinary upper
+parent. It neither removes the lower logarithmic cutoff nor identifies
+the full causal third/fourth/fifth selected-cap policy. No numerical
+integral certificate, physical signed progression estimate or final
+Chen/bad-semiprime count is claimed. The lower fourth-candidate
+(rank-three parent) analogue
+and the multistage cell assembly remain additional tasks.
+
+All eleven new sources have passed strict individual compilation without
+diagnostics. Independent semantic reviews cover their final sources.
+The standard full aggregate build passed with 9,770 jobs in 42.192 seconds.
+Bundled `leanchecker` replayed all eleven final Lake-built objects in
+35.488 seconds. The canonical safety and transitive-axiom audit passed
+in 254.678 seconds for all 151 owned declarations, including private
+and generated declarations:
+
+| Module | Owned declarations |
+| --- | ---: |
+| `AffinePrimeGates` | 26 |
+| `ActualPrimePolyhedralTestFunctions` | 6 |
+| `AffinePrimeWallReserve` | 12 |
+| `FirstExitFrontierTupleReindex` | 37 |
+| `OrdinaryPrimeFrontierAffineRegion` | 7 |
+| `ActualPrimeBoxOwnCubeResidual` | 14 |
+| `PrimeOwnCubeAffineGates` | 17 |
+| `ActualPrimeOwnCubeAffineIntegral` | 4 |
+| `OrdinaryUpperFiveAffineGates` | 14 |
+| `ActualOwnCubeTupleDictionary` | 7 |
+| `ActualOrdinaryUpperFiveCubeIntegral` | 7 |
+
+All declarations are safe, none is an unproved axiom, and their only
+transitive axioms are `propext`, `Classical.choice` and `Quot.sound`.
+The checks used Lean `4.33.0-rc1`, mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and Goldbach
+`09b97db5764ade1246bfb77206baa1b124760958`. All eleven pins matched
+the manifest; provider tracked worktrees and indexes stayed clean.
+Source, root, audit, runtime binaries and final object hashes stayed
+unchanged. This replays the eleven new final objects, not the full root
+anew. The historical whole-library warning-as-failure result is unchanged.
+
+With the pinned dependencies, reproduce with `lake build`,
+`lake env leanchecker --verbose ImbalancedChen.MODULE` for each module
+above, and
+`lake env lean -DwarningAsError=true verification/PolyhedralFrontierAudit.lean`.
+The declaration inventory uses Lean's defining-module metadata, including
+private/generated declarations, rather than a source-text name filter.
+
+Evidence is in `.lake/main-theorem-verification-20261012/polyhedral-frontier/`.
+The prior `actual-selector` directory's 77 files, including its final
+delivery metadata, are preserved by a complete hash snapshot. The exact
+source pin and both unresolved main-theorem counting hypotheses remain
+unchanged. The next-step plan is explicitly unproved.
+
+## Actual finite selectors and prime-tuple integrals — 12 October
+
+`SelectedPrefixRationalMesh` defines rational endpoints whose casts are
+exactly the existing real mesh. Its finite adopted family consists of the
+cells meeting a specified compact licensed set. Unique half-open ownership
+covers that set at every mesh scale, when it lies in the ambient box.
+Compact uniform licensing supplies one threshold after which every adopted
+cell passes the rational cap check. Endpoint distances and the adopted
+union's distance from the set are bounded by one mesh step. This geometric
+bound is not an arithmetic boundary-mass estimate. Intersection with an
+arbitrary compact set is selected classically, not claimed decidable.
+
+`PrimeHistoryLogCoordinates` proves that reversing the stored history and
+indexing it by its exact length preserves every prime, the full product
+and the reciprocal-prime mass. The length condition excludes default
+entries. For positive entries and `N>1`, its coordinates satisfy
+`N^(log p/log N)=p`. Actual frontiers and candidates supply primality and
+the correct order; a candidate need not pass admission.
+
+`ActualSelectedPrefixCapSelector` uses the adopted finite family directly.
+The rational lookup is `old + sum_j 1[cell_j](cap_j-old)`. Unique ownership
+proves it equals the cell cap on an adopted cell and exactly `old` outside
+the union. Successful whole-box checks imply a global lower bound `old`,
+the strict on-cell exponent licenses, and their literal integer subproduct
+square gates. A licensed compact set admits one fixed finite covering
+family before any target or history is supplied. The chosen level reads
+the actual history's log coordinates; freezing at its selected ancestor
+preserves it under all later selections. There is no extra arbitrary-set
+membership filter in the arithmetic lookup.
+
+`FirstExitFrontierAdmission` proves complete ordinary prefix validity
+through the real recursion. For the parity-safe policy it maintains the
+sign, sorted carrier and inherited tests, and uses the proved parity/full
+step identity. An inactive parity's Boolean `true` alone is not used as
+evidence of validity. At the actual root the upper case needs `Q>1`; the
+lower case also needs `z<=Q`, which pays the strict first-prime bound.
+
+`ActualSelectedPrefixOwnCube` starts directly from the actual ordinary
+upper/lower density at `N^old`. Its concrete fifth-upper and fourth-lower
+updates use the finite selector and the actual ancestor. The parent
+validity and level comparison used by the generic difference identity are
+now conclusions, not inputs. The conditions `N>1`, `old>0` and, in the
+lower case, `z<=N^old` remain explicit. All candidates and both strict own-cube
+gates remain in the difference. This is one fixed old cap and adopted
+family, not the assembled multistage certified policy. A positive gain
+or the value of its integral is not inferred from this finite equality.
+
+`ActualPrimeBoxTestFunctions` proves, for every finite dimension, `0<a<b`
+and every real function continuous on the closed logarithmic cube, that
+the actual target-deleted prime tuple sum converges to
+
+```text
+sum_{p in actualPrimeBoxTuples N a b}
+  (prod_i 1/(p_i-1)) * f((log p_i/log N)_i)
+  --> integral_[a,b)^d f(t) * (prod_i 1/t_i) dt.
+```
+
+The function may have either sign. The proof identifies the exact
+arithmetic tuples with their half-open log coordinates, partitions the
+actual carrier into disjoint mesh cells, and uses uniform continuity.
+The arithmetic approximation costs at most epsilon times its actual
+nonnegative mass. A separate Lebesgue integrability and partition argument
+gives the same integral error. The already proved constant-mass limits,
+then an epsilon argument, prove the full weighted limit. No convergence
+or approximation-error premise is supplied. The tuple carrier here is a
+cube with no ordering, retained-frontier or own-cube-region filter.
+
+`ActualPrimeBoxInitialSavingIntegral` then applies that theorem to a
+genuine varying arithmetic summand. Fix dimension `d=k+1`,
+`0<a<b`, `lambdaOld<lambdaNew`, `(d+1)*b<lambdaOld` and
+`lambdaNew<=(d+3)*a`. On the closed cube these inequalities give
+`0<u`, `u<betaOld<=3*u` and `u<betaNew<=3*u`, where `u=t_last` and
+`beta=lambda-sum t`. The two parameter maps have a compact union of
+images, so the already proved actual residual-density theorem supplies
+one uniform threshold before the target, enumeration cap and every tuple.
+The tuple logarithms recover its literal natural product, with no
+distinctness premise.
+
+For `P=prod_i p_i` and `y=p_last`, define the actual normalized summand
+
+```text
+A_N(p) = (Vplus_N(y, N^lambdaOld/P) - Vplus_N(y, N^lambdaNew/P))
+           * log N / C_N.
+```
+
+The new limit states, along positive even targets,
+
+```text
+sum_{p in actualPrimeBoxTuples N a b} (prod_i 1/(p_i-1)) * A_N(p)
+  --> integral_[a,b)^d
+        4*(lambdaNew-lambdaOld)
+        / ((lambdaOld-sum_i t_i)*(lambdaNew-sum_i t_i))
+        * (prod_i 1/t_i) dt.
+```
+
+The enumeration cap can vary arbitrarily with the target, provided it
+eventually covers `N^b`. The compact density limit proves the uniform
+summand error; the actual box-mass limit gives an eventual mass bound;
+finite nonnegative-weight transport and the continuous-test theorem give
+the stated integral. No density-error or target-convergence hypothesis is
+assumed. This cube permits repeated coordinates and has no ordering or
+ancestor-admission filter. Its product reciprocal weight is not replaced
+by `1/phi(P)`, and no complete eighth frontier or numerical certificate
+value is claimed.
+
+All seven new sources passed strict individual compilation without
+diagnostics and independent review. The standard full aggregate build
+passed with 9,759 jobs in 58.095 seconds. Bundled `leanchecker` replayed
+all seven final Lake-built objects in 23.890 seconds. The canonical joint
+audit passed in 255.092 seconds for all 119 owned declarations, including
+private and generated declarations:
+
+| Module | Owned declarations |
+| --- | ---: |
+| `SelectedPrefixRationalMesh` | 19 |
+| `PrimeHistoryLogCoordinates` | 23 |
+| `FirstExitFrontierAdmission` | 11 |
+| `ActualSelectedPrefixCapSelector` | 15 |
+| `ActualSelectedPrefixOwnCube` | 7 |
+| `ActualPrimeBoxTestFunctions` | 30 |
+| `ActualPrimeBoxInitialSavingIntegral` | 14 |
+
+Every declaration is safe, none is an unproved axiom, and the only
+transitive axioms are `propext`, `Classical.choice` and `Quot.sound`.
+The checks used Lean `4.33.0-rc1`, mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and Goldbach
+`09b97db5764ade1246bfb77206baa1b124760958`. All eleven dependency revisions
+matched the manifest. Sources, root imports, audit, pins and final object
+hashes stayed unchanged; provider tracked worktrees and indexes remained
+clean. All 70 evidence files from the preceding own-cube-density checkpoint
+were unchanged. This replays the seven new final objects, not the entire
+root anew. The previously recorded whole-library warning-as-failure failure
+was not repeated or reclassified as passing.
+
+Evidence is in `.lake/main-theorem-verification-20261012/actual-selector/`.
+With the pinned dependencies, reproduce with `lake build`, then
+`lake env leanchecker --verbose ImbalancedChen.MODULE` for the seven names
+above, and
+`lake env lean -DwarningAsError=true verification/ActualSelectorAudit.lean`.
+The audit inventories actual defining-module metadata, not source-text
+matches or declaration-name prefixes. The separate next-step plan is
+explicitly unproved.
+
+The remaining work includes the full certified multistage selector and
+region coverage, geometric transfers to the actual ordered and admitted
+prefix regions with boundary reserves, physical factorization and support,
+integral certificates, restricted signed distribution, the current Chen
+mean and both analytic bounds in `CurrentMainTheorem`. Theorem 1.1 and
+Corollary 1.2 remain incomplete.
+
+## Actual own-cube sums, selected caps and residue scales — 12 October
+
+`FirstExitCandidateGeometry` derives every possible next selection from
+the literal list decomposition of an actual parent frontier. This includes
+its selected history, prime ordering, positive product, parity, Euler mass
+and strict residual carrier. Candidates are enumerated before admission.
+
+`ActualFrozenOwnCubeDensity` then proves the full finite identities for
+raising a level at its own-cube test:
+
+| Change | Exact difference |
+| --- | --- |
+| Upper rank four to five | old upper tree minus new upper tree |
+| Lower rank three to four | new lower tree minus old lower tree |
+
+Both differences equal the sum, over every next candidate of the common
+parent frontier, of its positive prefix mass times new gated lower density
+minus old gated lower density. Each gate is the literal strict test
+`prod(pre)*head(pre)^2<Q(pre)`. The old level is read at the parent
+ancestor, the new at the candidate. Rejected old candidates are retained
+in the sum. The inherited parent tests must hold at the old level, and
+the new level must be at least the old one; these hypotheses supply the
+inherited tests at the new level. No continuation equality or asymptotic
+density estimate is assumed. The carrier stays `roughPrimeUniverse N cap
+0 head`, and the level in each actual residual density is the real `Q/P`.
+This is a finite difference identity, not a claim that the difference is
+nonnegative or has the manuscript's stated integral lower bound.
+
+`SelectedPrefixBoxCap` constructs one rational cap for a whole rational
+box. The lower endpoint is the finite maximum of the old cap, one half,
+the full prefix-square expressions and the selected-subproduct square
+expressions. The upper endpoint is the minimum of the chosen ceiling
+and the proved whole-box lower bound for `v(sum I t)`. When the check
+succeeds, their rational midpoint satisfies every strict test throughout
+the box. The exponent tests imply the actual natural subproduct-square
+inequalities. A pointwise strict license supplies a neighborhood in which
+all rational endpoint pairs pass; a rational cap is constructed, rather
+than supplied as a hypothesis of this existence theorem.
+
+`SelectedPrefixCompactCaps` uses local neighborhoods and compactness to
+choose one mesh threshold and one positive radius before every point and
+rational endpoint pair in the licensed compact set, including an empty
+set. This gives a uniform fineness criterion for a common refinement.
+The subsequent extension above constructs the finite grid selector.
+Coverage of the required region by the numerical certificate cells
+remains open.
+
+`RestrictedResidueScale` proves that fixed positive `c,C,kappa` and
+`kappa0<kappa/(1+kappa)` give one threshold at which every complete local
+product `c*N^(1-kappa0)<=x<=C*N` satisfies
+`1<x` and `C^(-1)*x<=N<=x^(1+kappa)`. Fixed constants are absorbed using
+the strict power gap `(1-kappa0)*(1+kappa)>1`. The manuscript's buffered
+choice `kappa0<kappa/(4*(1+kappa))` is included. The result uses the
+complete local product, not a residual quotient. It supplies neither the
+coefficient and modulus hypotheses nor the spectral/distribution estimate.
+
+All five sources passed strict individual compilation without diagnostics
+and independent review. The full aggregate build passed with 9,752 jobs
+in 25.202 seconds. Bundled `leanchecker` replayed the five final Lake-built
+objects in 13.460 seconds. The canonical joint audit passed in 274.642
+seconds for all 76 owned declarations, including private and generated ones:
+
+| Module | Owned declarations |
+| --- | ---: |
+| `FirstExitCandidateGeometry` | 7 |
+| `ActualFrozenOwnCubeDensity` | 16 |
+| `SelectedPrefixBoxCap` | 45 |
+| `SelectedPrefixCompactCaps` | 2 |
+| `RestrictedResidueScale` | 6 |
+
+Every declaration is safe, none is an unproved axiom, and only `propext`,
+`Classical.choice` and `Quot.sound` occur as transitive axioms. The checks
+used Lean `4.33.0-rc1`, mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and Goldbach
+`09b97db5764ade1246bfb77206baa1b124760958`. All eleven dependency revisions
+matched the manifest. Source, root import, audit, pin and final object
+hashes stayed unchanged; provider tracked worktrees and indexes remained
+clean. All 60 evidence files from the preceding frozen-cap checkpoint
+were unchanged. This checks the five final new objects, not a fresh
+kernel replay of the entire root. The earlier whole-library
+warning-as-failure failure remains recorded below.
+
+Evidence is in
+`.lake/main-theorem-verification-20261012/own-cube-density/`. With the
+pinned dependencies, reproduce using `lake build`,
+`lake env leanchecker --verbose ImbalancedChen.MODULE` for the five names
+in the table, and
+`lake env lean -DwarningAsError=true verification/OwnCubeDensityAudit.lean`.
+The audit inventories defining-module metadata in the actual environment.
+
+The remaining main-theorem obligations include the actual causal cap
+selectors and certified stage coverage, physical factorization and support,
+prefix mass integrals and integral certificates, restricted signed
+distribution, the current Chen mean, and both analytic counting bounds
+in `CurrentMainTheorem`. Theorem 1.1 and Corollary 1.2 remain incomplete.
+
+## Frozen ancestors, prefix cubes and actual density terms — 12 October
+
+The level of a frozen policy is computed from the oldest selected `k`
+labels, which are the last `k` entries of the stored reverse history.
+`FrozenRosserPolicy` proves that every later actual selection preserves
+that ancestor and that the true recursive continuation uses its single
+fixed level. It also proves nested-ancestor identities, including ranks
+four and five. Its actual-density bridge supports both rank exactly `k`
+and longer histories; residual parity and the divisor `P` always use
+the whole current history. This does not certify an arbitrary level
+function as the manuscript's cap selector.
+
+`ActualFrozenFrontierDensity` obtains the length, sorted history,
+positive product, sign, Euler mass and literal strict remaining carrier
+from the actual parent frontier on `roughPrimeUniverse N cap 0 z`.
+For an admissible prefix it evaluates a frozen continuation at `Q/P`.
+It then proves the full terminal-plus-density expansion and the exact
+difference between two frozen replacements on one shared parent frontier.
+The carrier with lower endpoint zero is the full carrier used after
+the previously proved presieve projection. No equality with the rough
+carrier starting at positive `w` is assumed. Both old and new inherited
+admissibility conditions remain visible.
+
+`RosserShortPrefixAdmissibility` proves the literal provider tests for
+upper rank four, upper rank five and lower rank four. Their total-product
+cutoffs follow from their cubic tests and positive decreasing natural
+labels. Raising the level preserves the complete predicate. In
+`ActualRosserShortPrefixDensity`, these tests supply the actual local
+continuation formulas:
+
+| Prefix | Actual signed continuation or admitted contribution |
+| --- | --- |
+| Upper rank four | `mass * Vplus(Q/P4, p4)` |
+| Upper rank five | `1[P5*p5^2<Q] * (-mass) * Vminus(Q/P5, p5)` |
+| Lower rank four | `1[P4*p4^2<Q] * mass * Vminus(Q/P4, p4)` |
+
+Here the inherited first/third or second tests are checked at the current
+selected `Q`, and the indicators are literal finite admission tests.
+Rejected branches contribute zero before any analytic estimate is used.
+Accepted fifth branches also satisfy `Q/P5>p5^2`; the lower density is
+not asserted to vanish outside that domain. The same target and arbitrary
+finite enumeration cap are preserved in every density.
+
+`BufferedFirstCubeGeometry` proves the buffered first-cube margin at
+`rho=19/96`, `Theta=299/500`, including the exact surplus
+`Theta-2e-3*(rho-4e)=17/4000+10e`. The full envelope uses its proved
+`3/256` margin, and the fallback uses the two branches of `v`, including
+the transition strip. A whole-box lower error at most `e`, with
+`3e<3/256`, leaves the strict margin after subtracting `2e`.
+The actual rational and integer box lower algorithms are instantiated;
+the latter retains its `2/D` rounding loss. The exponent margin implies
+the literal integer prime-cube test. Successful margin checks also bound
+the certificate's clipped lower cap itself, not just the envelope.
+
+All five sources passed strict individual compilation without diagnostics
+and independent review. The standard full aggregate build passed with
+9,747 jobs in 46.968 seconds. Bundled `leanchecker` replayed the five
+final Lake-built objects in 17.426 seconds. The canonical joint audit
+passed in 257.158 seconds for all 137 owned declarations, including
+private and generated declarations:
+
+| Module | Owned declarations |
+| --- | ---: |
+| `ActualFrozenFrontierDensity` | 8 |
+| `ActualRosserShortPrefixDensity` | 26 |
+| `BufferedFirstCubeGeometry` | 21 |
+| `FrozenRosserPolicy` | 36 |
+| `RosserShortPrefixAdmissibility` | 46 |
+
+All declarations are safe, none is an unproved axiom, and every transitive
+axiom belongs to `propext`, `Classical.choice` and `Quot.sound`.
+The checks used Lean `4.33.0-rc1`, mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and Goldbach
+`09b97db5764ade1246bfb77206baa1b124760958`. All eleven actual dependency
+revisions matched the manifest. Sources, root imports, audit, dependency
+pins and final objects stayed unchanged; provider tracked worktrees and
+indexes remained clean. The preceding checkpoint's 43 evidence files
+were unchanged. This replays five new objects, not the entire root again.
+The earlier whole-library warning-as-failure result remains recorded
+below and was not repeated or reclassified as passing.
+
+Evidence is separate in
+`.lake/main-theorem-verification-20261012/frozen-cap/`. With the pinned
+dependencies, reproduce using `lake build`, then
+`lake env leanchecker --verbose ImbalancedChen.MODULE` for the five names
+in the table, and
+`lake env lean -DwarningAsError=true verification/FrozenCapAudit.lean`.
+The audit inventories actual defining-module metadata rather than matching
+declaration names or parsing source text.
+
+At that checkpoint the own-cube sums on the common parent candidate set
+were open; the subsequent extension above proves those finite identities.
+Remaining main-theorem work includes constructing the actual certified
+causal selectors and admissible disjoint stage regions, compiling physical
+support, evaluating prefix mass integrals and certificates, proving the
+restricted signed distribution and current Chen mean, and discharging
+both counting bounds in `CurrentMainTheorem`. Theorem 1.1 and Corollary
+1.2 are still incomplete.
+
+## Nonempty continuations and restored candidates — 12 October
+
+`OrdinaryRosserContinuation` splits the filtered prime sets at an inherited
+prefix. A filter at an old prime excludes every residual prime; a filter
+at a residual prime includes the entire old prefix. Disjoint union gives
+the exact product factor `P` and cardinality shift by the prefix rank.
+Consequently the full total-product and cubic-prefix predicate at `Q`
+is equivalent to the residual predicate at `Q/P`, with upper/lower type
+flipped exactly when that rank is odd.
+
+The resulting finite identity is
+
+```text
+continuation(lower, Q, pre, sign, mass, carrier)
+  = signedTreeCoefficient(sign, mass)
+      * ordinaryRoot(residualType(lower, length pre), Q/prod(pre), carrier).
+```
+
+It holds for arbitrary local weights and signed incoming mass. The actual
+carrier corollary evaluates the root as the literal actual upper or lower
+Rosser density, with the same `N`, finite cap and strict cutoff `y`.
+The real quotient remains `Q/P`, so its natural level is `ceil(Q/P)`, not
+an integer quotient of `ceil Q`. The strict inequality `Q/P>1` is proved
+from the inherited total-product test and positive prefix product.
+
+The parity-safe policy has the same continuation on a valid sorted
+history with the correct sign. On a nonempty prefix, `y` below every
+prefix entry and the inherited total-product cutoff imply `y<Q`, paying
+the original policy's lower first-prime condition. No analytic threshold,
+even-target premise, full-cap premise or continuation-equality hypothesis
+is introduced. Crucially, the old history must satisfy all its tests at
+the current `Q`; membership in an unrelated parent frontier does not
+automatically prove this when a causal cap changes.
+
+`FirstExitFrontierInvariants` turns each frontier state into a real retained
+leaf by skipping its remaining labels. It derives the sign parity and
+mass product and retains the combined selected-history/remaining-carrier
+sublist. At positive rank, the frontier stops immediately after its last
+selection. This yields the exact suffix after the last prime `q`, hence
+`remaining = roughPrimeUniverse N cap w q` on the actual decreasing
+carrier. The target, finite cap, lower cutoff and strict upper endpoint
+are preserved, including truncated caps. Rank zero is explicitly excluded
+from the last-prime assertion.
+
+`FirstExitOwnCubeSplice` enumerates every possible next selected label
+before applying either policy. Each candidate keeps its extended history,
+flipped sign, multiplied mass and exact remaining suffix. A polynomial is
+its skip-all term plus the sum of admitted candidate continuations.
+Subtraction cancels the skip-all terms. Applying this identity on the
+common retained rank `r` frontier gives the exact new-minus-old sum of
+`I_new*continuation_new - I_old*continuation_old` at the next selection.
+It includes branches rejected by the old test and restored by the new
+one. The two continuations are not assumed equal. Rank zero, empty
+carriers and either sign are supported. The concrete Rosser own-cube
+tests and the manuscript's causal cap values are not yet instantiated.
+
+| New module | Proved role |
+| --- | --- |
+| `FirstExitFrontierInvariants` | Actual frontier history, sign, mass and exact strict residual carrier |
+| `OrdinaryRosserContinuation` | Nonempty-history predicate, polynomial and actual-density dictionary at `Q/P` |
+| `FirstExitOwnCubeSplice` | Common-frontier candidate difference retaining both admission indicators |
+
+All three sources passed strict individual compilation without diagnostics
+and independent review. The standard full aggregate build passed with
+9,736 jobs in 43.029 seconds. Bundled `leanchecker` replayed the three
+final Lake-built objects in 8.121 seconds. The canonical joint audit passed
+for all 64 owned declarations, including private and generated declarations,
+in 261.357 seconds: 19 in `FirstExitFrontierInvariants`, 17 in
+`FirstExitOwnCubeSplice`, and 28 in `OrdinaryRosserContinuation`.
+Every declaration is safe, is not an unproved axiom, and has transitive
+axioms contained in `propext`, `Classical.choice`, and `Quot.sound`.
+
+The checks used Lean `4.33.0-rc1`, mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and Goldbach
+`09b97db5764ade1246bfb77206baa1b124760958`. Source, root imports, audit,
+dependency pins and final objects stayed unchanged during verification;
+the actual provider revisions match the manifest and both providers'
+tracked worktrees and indexes remained clean. The preceding checkpoint's
+117 evidence files, including its delivery record, were unchanged. This
+checks the three new objects, not a new full-root kernel replay. Evidence
+is recorded separately in
+`.lake/main-theorem-verification-20261012/ordinary-continuation/`.
+
+With the pinned dependencies, reproduce the checks using `lake build`,
+then `lake env leanchecker --verbose ImbalancedChen.MODULE` for the three
+names in the table, and
+`lake env lean -DwarningAsError=true verification/OrdinaryContinuationAudit.lean`.
+The inventory uses actual defining-module metadata and includes private
+and generated declarations. The prior whole-library `--wfail` failure
+remains recorded below; it was not repeated or reclassified as passing.
+
+The remaining work is to prove inherited legality for the actual varying
+caps, connect the concrete stage policies and their disjoint regions,
+compile physical support, evaluate prefix integrals and certificates,
+prove the restricted signed distribution and current Chen mean, and
+discharge both counting bounds in the main theorem. Theorem 1.1 and
+Corollary 1.2 remain incomplete; the goal is active and the old automation
+remains paused.
+
+## Actual residual policies, presieve projection and lower coefficients — 12 October
+
+The new finite append identity continues each retained rough leaf through
+the small carrier with its original history, sign and unsigned mass. It
+expresses the full polynomial as the rough polynomial times the small
+Euler product plus the sum of the actual continuation corrections. When
+every even prefix is retained, every correction is nonnegative; when
+every odd prefix is retained, every correction is nonpositive. Both facts
+hold for arbitrary incoming sign and nonnegative mass. No inequality is
+multiplied by a signed leaf coefficient.
+
+`ActualPrimePresieveSplit` proves that the decreasing target-deleted prime
+carrier below `z` is exactly `[w,z)` followed by the carrier below `w`,
+for every real `w<=z` and the same finite cap. A prime equal to `w` belongs
+to the rough side. The small continuation product is the actual Euler
+product. The retained polynomial at local weight `1/(p-1)` is exactly the
+fixed coefficient's reciprocal-totient density, including modulus one.
+This gives the upper projection `V(w)*rough <= full` on that same density.
+
+`FirstExitGenericModuli` proves squarefree selected products and injective
+modulus reindexing for any retention policy. Unit local weights fix the
+support before evaluation; every other local weight has exactly the same
+selected products. The actual coefficient is Mobius on that support and
+zero off it. `FixedEvenRoughCoefficients` specializes the construction to
+even first exits and supplies an actual all-integer rough minorant and its
+exact density dictionary. It does not assume a nonnegative lower divisor sum.
+
+`ActualLowerSmallRoughAttachment` constructs the physical lower coefficient
+using the unique small/rough decomposition. Positive rough coefficients
+select the actual beta-minus and negative ones select beta-plus, literally
+by reversing the two arguments of the existing `smallRoughRho`. It proves
+the same rho has squarefree target-coprime support, absolute coefficient
+bound one, the active small factor strictly below its real level, and a
+pointwise minorant for every integer including zero. The density identity
+uses that same coefficient and support.
+
+The exact lower attachment loss satisfies
+
+```text
+0 <= V(w)*signedRoughDensity - density(rho)
+  <= (V(w)*smallError)*absoluteRoughDensity.
+```
+
+`EvenRoughAbsoluteDensity` bounds the last factor by a genuine full Euler
+product and a uniform logarithmic envelope, allowing truncated caps and
+requiring `w>=2` for the analytic envelope. This condition is paid before
+use. `ActualLowerNormalizedRhoError` combines it with the actual small
+weight supplier, the target Euler normalization and the proved quartic
+epsilon absorption. For every prescribed positive reserve and precision
+upper bound it chooses epsilon, then a common target threshold, before
+the target, covering cap and arbitrary even-retention policy.
+
+The two final projection modules therefore prove
+
+```text
+density(upper rho) <= fullUpperPolicyDensity + eta*C_N/log N;
+density(lower rho) >= fullLowerPolicyDensity - eta*C_N/log N.
+```
+
+The lower result is also bundled with its all-integer pointwise minorant
+and unit coefficient bound, using one epsilon and one threshold. The full
+densities here are the exact corresponding raw-policy densities, not a
+newly assumed function or an already evaluated sharp numerical constant.
+
+`ActualRosserResidualDensity` pulls the ordinary compact density theorem
+back to `(beta,u)` via `(u,beta/u)`. It supplies both ratio and normalized
+thresholds and uniform limits on legal compact sets. It then proves the
+exact identities `N^(log y/log N)=y` and
+`N^(lambda-log P/log N)=N^lambda/P` for positive `P,y` and `N>1`.
+The quotient thresholds precede all `N,P,y,lambda,cap`; only fixed compact
+membership of their logarithmic parameters and cap coverage are needed.
+The literal ceiling level is unchanged.
+
+`ActualRosserPrefixDeletion` proves that prefix primes at least `y` are
+already excluded from the strict residual carrier below `y`. Every
+residual support modulus is coprime to their product. Excluding those
+primes explicitly leaves the actual prime carrier, weights, Euler product
+and densities unchanged. This finite identity does not change the target
+used in singular-series normalization.
+
+`ActualRosserInitialResidualSaving` first proves the positive-even target
+filter is nontrivial. Uniqueness of two limits of the same actual density
+then identifies the canonical upper factor as `2*exp(gamma)/s` on
+`1<s<=3`. The compact normalized limit is `4/beta`. Taking two estimates
+with half the reserve gives the exact signed residual saving
+
+```text
+4*(lambdaNew-lambdaOld)
+  / ((lambdaOld-log P/log N)*(lambdaNew-log P/log N)).
+```
+
+The common threshold precedes all residual parameters and covering caps.
+Both parameter pairs must lie in the same fixed legal compact set. A
+positive saving still requires an increase of the cap. This statement is
+about ordinary residual densities; it includes no prefix mass, integral
+or claimed numerical certificate.
+
+`FirstExitDepthSplice` cuts the actual parent tree immediately after a
+retained rank. Each frontier state keeps its selected history, sign, mass
+and remaining carrier. The exact new-minus-old root polynomial is the sum
+of the continuation differences over that one parent frontier; common
+terminal contributions before the rank cancel. The admission test at the
+cut rank remains the parent's test. A refinement of that rank's own cube
+test, such as the lower construction's fourth-prefix change, needs an additional before-test
+identity and cannot be obtained by relabeling this result.
+
+`FirstExitValidSelection` constructs a retained leaf from every valid
+chosen sublist and recovers a valid sublist from every retained leaf.
+`OrdinaryRosserFirstExitPolicy` uses both directions to identify the full
+ordinary prefix-test policy with the actual Rosser support, coefficients
+and density. The real level is unchanged, including its literal ceiling.
+It then proves equivalence of a globally parity-safe policy that retains
+the inactive parity unconditionally. For lower weights the first prime
+must be below the level; the actual-carrier corollaries pay this with
+`y<=R`. The active test still checks the full prefix predicate. This does
+not claim an arbitrary-history fresh-cube simplification or the causal
+residual continuation identity.
+
+| New module | Proved role |
+| --- | --- |
+| `FirstExitPresieveProjection` | Exact append substitution and both parity projection directions |
+| `ActualPrimePresieveSplit` | Actual descending carrier split and reciprocal-totient dictionary |
+| `ActualRosserResidualDensity` | Compact thresholds for literal levels `N^lambda/P` |
+| `ActualFirstExitDensityProjection` | Same upper physical coefficient bounded by full density plus reserve |
+| `FirstExitGenericModuli` | Fixed natural-modulus support, squarefreeness and exact coefficient reindexing |
+| `FixedEvenRoughCoefficients` | Actual even-exit rough minorant and its signed density |
+| `LowerSmallRoughAttachment` | Correct sign-sensitive lower attachment inequality |
+| `LowerSmallRoughDensityError` | Exact sign-sensitive lower density loss |
+| `EvenRoughAbsoluteDensity` | Uniform absolute-mass envelope for the actual lower rough support |
+| `ActualLowerSmallRoughAttachment` | One actual physical lower coefficient and its finite properties |
+| `ActualLowerNormalizedRhoError` | Arbitrary normalized reserve with precision chosen before the target |
+| `ActualLowerFirstExitDensityProjection` | Full-density lower bound for that same physical minorant |
+| `ActualRosserPrefixDeletion` | Exact irrelevance of already excluded prefix primes |
+| `ActualRosserInitialResidualSaving` | Initial-branch compact normalized limit and actual cap difference |
+| `FirstExitDepthSplice` | Exact continuation difference on a common retained-rank frontier |
+| `FirstExitValidSelection` | Both directions of valid sublist and retained-leaf correspondence |
+| `OrdinaryRosserFirstExitPolicy` | Ordinary full-prefix and parity-safe policies equal actual Rosser weights |
+
+All seventeen final sources passed strict individual compilation with no
+diagnostics. The standard full aggregate `lake build` passed with 9,733
+jobs in 15.739 seconds. An additional `lake --wfail build` attempt returned
+exit 1 because it replayed 101 existing linter warnings in 42 old modules;
+all seventeen new modules and the root built in that attempt, with no new
+module diagnostics. Its original failure log and classification are
+retained separately. No existing source or dependency pin was changed to
+silence that warning gate.
+
+Bundled `leanchecker` replayed all seventeen final Lake-built objects in
+66.45 seconds. One canonical audit then passed for all 286 owned
+declarations, including private and generated declarations, in 269.493
+seconds. Every audited declaration is safe, is not an unproved axiom, and
+has transitive axioms contained in `propext`, `Classical.choice`, and
+`Quot.sound`. Ten independent review records cover all seventeen modules.
+
+The checks used Lean `4.33.0-rc1`, mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and Goldbach
+`09b97db5764ade1246bfb77206baa1b124760958`. The final source, root imports,
+audit and seventeen object hashes stayed unchanged. Actual dependency
+revisions match the manifest; both providers' tracked worktrees and
+indexes remained clean. All 113 evidence files from the preceding
+compact-uniform checkpoint also remained unchanged. This checkpoint
+replays the seventeen new objects, not every object in the repository.
+Evidence is recorded in
+`.lake/main-theorem-verification-20261012/residual-policy/`.
+
+To reproduce the proof checks with the pinned dependencies, run `lake build`,
+then `lake env leanchecker --verbose ImbalancedChen.MODULE` for each of the
+seventeen names in the table. Run the joint owned-declaration audit with
+`lake env lean -DwarningAsError=true verification/ResidualPolicyAudit.lean`.
+The inventory uses Lean's defining-module metadata, not a source-text
+count or a public-namespace filter. The separate `--wfail` failure above
+is not presented as a passed check.
+
+Still open are the manuscript's causal cap-change/box compiler, physical
+support exponent, signed density evaluation and numerical certificates,
+restricted signed distribution, current Chen mean and the final two count
+bounds. Theorem 1.1 and Corollary 1.2 remain incomplete. The goal is active
+and the old scheduled task remains paused.
+
+## Compact uniform limits for both actual Rosser weights — 12 October
+
+The current extension closes the ordinary raw-density parameter-uniformity
+gap. For any compact set `S` of pairs `(u,s)`, the same actual upper density
+divided by its target-deleted Euler product tends uniformly to
+`suzukiContinuousUpperFactor s` if `u>0,s>1` throughout `S`. The lower
+ratio tends uniformly to `suzukiContinuousLowerFactor s` if `u>0,s>=2`.
+The endpoint `s=2` is included. Every coefficient uses the literal natural
+ceiling of `N^(s*u)`. A single target threshold precedes both real
+parameters and every enumeration cap covering `N^u`.
+
+`ActualRosserCompactNormalization` also proves, uniformly on the same
+compact sets along positive even targets,
+
+```text
+actualSmallRosserPlusDensity N cap (N^u) (N^(s*u)) * log N / C_N
+  -> (2*exp(-gamma)/u) * suzukiContinuousUpperFactor s;
+actualSmallRosserMinusDensity N cap (N^u) (N^(s*u)) * log N / C_N
+  -> (2*exp(-gamma)/u) * suzukiContinuousLowerFactor s.
+```
+
+The cap may be a function of both `N` and `(u,s)`. Its only premise is
+eventual simultaneous coverage for every parameter in `S`. The explicit
+ratio thresholds are stronger: after their threshold, every covering cap
+is permitted separately. Neither signed coefficient monotonicity nor
+continuity of the finite arithmetic density is assumed.
+
+The proof has two independent directions. The all-depth analytic estimate
+uses the public moving-range source supplier, a target-independent local
+product bound, and a uniform bound for both continuous error hats on a
+fixed positive residual interval. Depth only selects a parity, so one
+logarithmic-decay threshold controls every adaptive depth simultaneously.
+The same literal-ceiling consumer now works on the full upper domain
+`s>1`, without an artificial upper residual bound. All analytic premises
+of the helper consumer are supplied inside the actual-density theorem.
+
+The reverse direction is arithmetic. A finite prefix of the genuine
+continuous series is approximated by half-open mesh cells with strict
+top face `Hi(0)<1`. Their actual integrals still converge to the original
+region integral by coverage and dominated convergence. All physical boxes
+are frozen at a parameter center. A fixed reference exponent `u_min<u0`
+lies above every box top and changes the finite gain by less than a chosen
+error. The mass comparison uses only the decreasing positive Euler
+denominator of that fixed box. Finite strict prefix, product and terminal
+gates persist on a neighborhood. Thus one actual target threshold works
+throughout that neighborhood. Continuity of the source factors and a
+finite compact subcover then yield a common threshold over `S`.
+
+The source continuity and uniform tail are proved by the M-test:
+nonnegative layers decrease in `s`, so their summable values at a fixed
+left endpoint dominate the whole half-line. Odd endpoints must exceed
+one, while the even endpoint may equal two. Collapsed support regions are
+proved empty and discarded with exactly zero integral; rank zero is not
+arbitrarily removed. Empty finite families and empty compact sets are
+supported. Both boundary expansions count the constant one exactly once.
+
+| New module | Proved role |
+| --- | --- |
+| `ActualRosserOddGeneralLayers` | All finite odd layers without a cutoff premise, genuine series, full-domain lower threshold |
+| `ActualRosserUpperGeneralUpper` | Public full-domain literal-ceiling consumer and actual upper threshold |
+| `ActualRosserUpperGeneralLimit` | Fixed-parameter full-domain ratio and normalized limits |
+| `RosserContinuousSourceUniformity` | Uniform source tails on half-lines, continuous canonical factors |
+| `RosserTopStrictMeshes` | Both parity meshes with strict top margin and unchanged integral limit |
+| `RosserTopStrictFiniteApproximation` | Finite strict-margin families approximating the complete factors |
+| `ActualPrimeBoxOuterUniformity` | Fixed-box Euler-mass monotonicity and a threshold for all larger outer exponents |
+| `ActualRosserBoxUnionUniformity` | One finite-family threshold before both varying exponents |
+| `RosserBoxFamilyMargins` | Finite strict gate margins and controlled reference-gain loss |
+| `ActualRosserLocalBoxThreshold` | Actual density estimates with a common threshold on a center neighborhood |
+| `CompactLocalThreshold` | Proved finite-subcover passage from local to compact thresholds |
+| `RosserCompactParameterBounds` | Compact coordinate ranges bounded away from excluded endpoints |
+| `RosserCompactErrorAbsorption` | One scalar error threshold for every depth and residual in a fixed interval |
+| `ActualRosserCompactAnalyticBounds` | Uniform analytic bounds for both actual weights on rectangles |
+| `ActualRosserCompactBoxBounds` | Opposite uniform bounds on arbitrary legal compact sets |
+| `ActualRosserCompactLimits` | Two-sided ratio thresholds and uniform convergence for both weights |
+| `ActualCompactEulerNormalization` | Same-carrier Euler normalization for parameter-dependent caps |
+| `ActualRosserCompactNormalization` | Uniform singular-series-normalized actual density limits |
+
+All eighteen sources passed strict individual compilation. The final
+aggregate build passed with 9,716 jobs in 55.555 seconds. Bundled
+`leanchecker` then replayed each of the eighteen final Lake-built objects.
+The canonical joint audit passed for all 147 declarations owned by these
+modules, including private and generated declarations, in 251.407 seconds.
+Every declaration is safe and proved or defined; their transitive axioms
+are contained in `propext`, `Classical.choice`, and `Quot.sound`.
+Ten independent review records cover all eighteen source modules.
+
+These checks used Lean `4.33.0-rc1`, mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and Goldbach
+`09b97db5764ade1246bfb77206baa1b124760958`. Source, root import file,
+audit, dependency pins and final object hashes were unchanged throughout
+verification; both providers' tracked worktrees and indexes were clean.
+This checkpoint replays the eighteen new objects, not every object in the
+repository. The local evidence is recorded in
+`.lake/main-theorem-verification-20261012/general-density/`.
+
+To reproduce the proof checks with the pinned dependencies, run `lake build`,
+then `lake env leanchecker --verbose ImbalancedChen.MODULE` for each of the
+eighteen module names in the table. Run the complete owned-declaration audit
+with `lake env lean -DwarningAsError=true verification/RosserGeneralDensityAudit.lean`.
+Its inventory uses defining-module metadata, not a source-text declaration
+count or a public-namespace filter.
+
+This is a result for ordinary raw Rosser coefficients and the canonical
+Suzuki source factors. It does not assert a new global identity with a
+separately defined classical factor. It also does not prove the manuscript's
+causal boxed policy, its support exponent, the sharp signed physical-density
+constant `K`, restricted signed distribution, the current eleven-term mean,
+certificate-to-integral semantics or the final two count estimates. The
+main theorem remains conditional on its explicitly displayed analytic
+bounds; the goal is still active and the old automation remains paused.
+
+## Same-weight lower density limit from actual even layers — 12 October
+
+`ActualRosserLowerLimit` proves the genuine two-sided limit of the actual
+lower Rosser density divided by its own target-deleted Euler product, at
+`y=N^u, R=N^(s*u)`, for every fixed `u>0` and `s>=2`. Its limit is
+`suzukiContinuousLowerFactor s`. The filter is positive even targets, and
+any enumeration-cap sequence eventually covering `N^u` is permitted.
+The proof supplies a common threshold before the target and cap for each
+fixed pair of parameters; it does not assert uniform parameter convergence.
+
+The reverse bound is now derived from actual arithmetic contributions.
+`ActualRosserEvenBox` sends strictly ordered tuples of `2*k+2` actual
+primes into the literal lower boundary at `ceil (N^(s*u))`. The active tail
+has cardinality `2*k+1`, the cubic-prefix tests use odd indices, and the
+terminal crossing retains equality. At `k=0` the tail is a singleton,
+with no internal cubic-prefix test. `ActualRosserEvenBoxFamily` and
+`ActualRosserEvenBoxUnion` prove disjointness within and between ranks
+before entering one negative boundary expansion. The resulting upper
+bound is `1 - sum(actual box Euler masses)`. Existing genuine prime/Euler
+mass limits supply a common threshold and an error allocated over one
+finite dependent set of all boxes. The base term one is counted once,
+including empty sets of ranks or boxes.
+
+`RosserEvenMesh` selects half-open inner cells using strict endpoint tests.
+Every region point is eventually covered; the total-tail budget used by
+the mesh is derived from the original strict region. For `s>1`, its
+compact ambient box has lower coordinate `(s-1)/3^(k+1)>0`.
+`RosserEvenMeshIntegral` proves that the actual mesh lower sums converge
+to the genuine even-region integral by pointwise coverage and an explicit
+integrable dominator. No boundary-null-set or integral-limit supplier is
+assumed. `ActualRosserEvenFiniteLayers` scales those cells by `u`, so their
+actual box gains become exactly the proved mesh lower sums. It chooses
+one common mesh for each finite rank set before the target threshold.
+Ranks whose support box has collapsed are proved to have empty regions
+and zero integrals; filtering them removes the mesh nondegeneracy premise
+from the final finite-layer theorem, including `s=4,k=0`.
+
+`RosserEvenLayerIdentity` applies the proved reciprocal substitution to
+the actual largest-coordinate integral and then uses the global positive
+odd-source identity. Finite support identifies the improper tail with
+Suzuki's even recursion for **all `s>=2`**. The weaker condition `s>1`
+suffices for compact integrability but is not used as the domain of this
+Suzuki identity. `ActualRosserEvenSourceSeries` supplies nonnegativity,
+summability and real finite-prefix convergence of those genuine integrals
+to `1 - suzukiContinuousLowerFactor s` from the concrete proved JR source
+contract. Selecting one finite prefix within `eta/2`, then using its
+actual finite-layer bound with another `eta/2`, proves the full upper
+threshold for the actual lower density. The previous all-depth lower
+threshold supplies the other side. No discrete-tail decay is required.
+
+The independently proved Euler normalization also gives
+
+```text
+actualSmallRosserMinusDensity N cap (N^u) (N^(s*u)) * log N / C_N
+  -> (2*exp(-gamma)/u) * suzukiContinuousLowerFactor s.
+```
+
+On `2<=s<=4`, the concrete source factor is proved to equal
+`2*exp(gamma)*log(s-1)/s`, so this normalized limit is exactly
+`4*log(s-1)/(s*u)`, including the zero endpoint at two. The all-`s>=2`
+result concerns the defined Suzuki continuous lower factor; it does not
+claim an additional all-residual identity with a separately defined
+classical factor.
+
+All nine new sources passed strict compilation. The full aggregate
+`lake build` passed with **9,698 jobs** (exit zero, 60.973 seconds).
+All nine final Lake object files then passed bundled kernel replay.
+One canonical environment audited **111 distinct declarations** from
+those same objects, including private and generated declarations. The
+module counts are 21, 26, 4, 5, 17, 4, 4, 6 and 24 in the table order below.
+Every declaration is safe and is not an unproved axiom; only `propext`,
+`Classical.choice` and `Quot.sound` occur transitively. The canonical
+audit took 261.587 seconds.
+
+The frozen sources, root, audit, pins and final objects stayed unchanged
+through verification. All actual dependency revisions matched their
+manifest pins, and both principal providers' tracked worktrees and
+indexes stayed clean. Independent read-only reviews checked the actual
+boundary parity and ceiling endpoints, same-rank/cross-rank injections,
+single base term, common threshold, compact DCT, reciprocal substitution,
+series selection, collapsed regions and both normalized constants.
+Evidence is in `.lake/main-theorem-verification-20261012/even-density/`:
+`final-aggregate-build-status.json`, `even-density-verification.json`,
+`even-density-declarations.json` and `even-density-theorem-types.txt`.
+The verification report SHA-256 is
+`14bf767eba298c815ac363c3faa107d9d79002c837b22534dff2f5855e1dfa66`.
+This is full aggregate compilation plus nine new-module kernel and joint
+axiom checks, not complete-root kernel replay or a remote CI success claim.
+
+Reproduce this checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.RosserEvenMesh
+lake env leanchecker --verbose ImbalancedChen.RosserEvenMeshIntegral
+lake env leanchecker --verbose ImbalancedChen.RosserEvenLayerIdentity
+lake env leanchecker --verbose ImbalancedChen.ActualRosserEvenSourceSeries
+lake env leanchecker --verbose ImbalancedChen.ActualRosserEvenBox
+lake env leanchecker --verbose ImbalancedChen.ActualRosserEvenBoxFamily
+lake env leanchecker --verbose ImbalancedChen.ActualRosserEvenBoxUnion
+lake env leanchecker --verbose ImbalancedChen.ActualRosserEvenFiniteLayers
+lake env leanchecker --verbose ImbalancedChen.ActualRosserLowerLimit
+lake env lean -DwarningAsError=true verification/RosserEvenDensityAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `RosserEvenMesh` | `cc6469967dc0f974e0522a596ca4d314b62dec431f55351643613e33c2c5d4ff` |
+| `RosserEvenMeshIntegral` | `a766869d7bf084bf4e1faac9d793f4ff4a753a84d150a861de8e3446c0d4eb1c` |
+| `RosserEvenLayerIdentity` | `220cb8cec24c1ab61500af8df639d693493fbf9807556210a5f768f3f1502754` |
+| `ActualRosserEvenSourceSeries` | `1ae9712f24ebd8cd43ec657b6fad8017b6c35176354a6da9f05a0854ef29eb14` |
+| `ActualRosserEvenBox` | `55287bfc6e22bfe8bb7f5d00a8698f4030c4c1cea23468c4edb72bea30a2bf52` |
+| `ActualRosserEvenBoxFamily` | `6c705afd258edaa92e159cab13dd311040cbdc1f368f1c57a949beb04f53a65f` |
+| `ActualRosserEvenBoxUnion` | `a71813f545f0f6ca5f259b44002e93aae1fb103676f9ba2a4bc28bcd46079d89` |
+| `ActualRosserEvenFiniteLayers` | `d974929526b48e807a9f04f62d6e37dd31aa76daf968374a28d5f8fc343dd828` |
+| `ActualRosserLowerLimit` | `bec3ee9d8fb3585444fac10a1051948700e8c129eb52853913873fae05e83335` |
+
+Upper residuals beyond four, the required two-sided parameter uniformity,
+the causal boxed compiler and support exponent, sharp K and certificate
+integral semantics, restricted signed distribution, current Chen mean and
+the final bad-semiprime estimate remain open. Theorem 1.1 and Corollary 1.2
+still retain their explicit analytic premises and are not complete.
+
+## Upper density through residual four and the lower boundary — 12 October
+
+For each fixed `u>0` and `0<s<=4`, `ActualRosserUpperWindowLimit` proves
+that the literal actual upper density at `y=N^u, R=N^(s*u)`, divided by
+its actual target-deleted Euler product, tends to the Jurkat-Richert
+factor `F(s)`. The filter is positive even targets, and every cap sequence
+eventually covering `N^u` is permitted. Multiplication by `log N/C_N`
+gives `(2*exp(-gamma)/u)*F(s)`. On `3<=s<=4`, the lower direction selects
+a finite prefix of the proved source series before the target and cap;
+the upper direction uses the literal ceiling and a supplier error uniform
+in odd depth. Below three, the earlier exact cube reduction applies.
+
+`ActualRosserUpperWindowUpper` additionally proves one upper threshold
+for all `u>=a>0` and `3/2<=s<=4`. This one-sided uniform result must not be
+read as uniform two-sided convergence. The two-sided limit fixes `u,s`.
+The source constant and local-product constant are selected before the
+target; no target-dependent constant is hidden in the threshold.
+
+`ActualRosserLowerThreshold` proves the actual lower weight is eventually
+at least `f(s)-eta` times its actual Euler product for every fixed `s>=2`.
+On `2<=s<=4`, the factor is explicitly
+`2*exp(gamma)*log(s-1)/s`. It does not prove the reverse bound.
+`ActualLowerRosserBoundaryExpansion` proves the exact finite identity
+`actualMinus/V = 1 - sum(nonnegative boundary losses)`, with the same
+target exclusions, coefficients, cap and natural ceiling. Selecting a
+finite subset of losses therefore bounds the ratio from above. The finite
+selected-loss interface leaves its stated mass inequality explicit; no
+analytic estimate of that selected loss is assumed to have been proved.
+
+`RosserGlobalSourceIdentity` connects the genuine odd-region integral to
+Suzuki's odd layer for every `s>0`. It references the **already proved
+private** declaration `source_layer_identity_all` in the pinned goldbach
+provider `09b97db5764ade1246bfb77206baa1b124760958`, source file
+`SuzukiUpperRosserBoundarySourceSuccLayer.lean`, line 1107. A local term
+elaborator constructs that exact internal name and returns the proof
+constant. This is a deliberate dependency on an internal API, not a new
+axiom or a public upstream interface; any provider-pin change requires
+reviewing it. All helper and generated declarations receive the same
+safety and transitive-axiom checks as the mathematical theorems.
+
+`RosserEvenLogRegion` identifies the literal even-dimensional geometry:
+strict cubic-prefix gates at odd indices, strict descending coordinates,
+and the terminal crossing. It derives the total nonterminal budget.
+For `s>1`, all coordinates lie strictly above `(s-1)/3^(k+1)` and below one.
+The exact largest/least-coordinate slice is the odd tail at residual
+`s-t` and inherited upper face `t`, with `0<q<t<1`, including `k=0`.
+`RosserEvenLayerIntegral` proves compact-box integrability and uses
+measure-preserving Fubini, taking the second slice only almost everywhere,
+to prove
+
+```text
+rosserEvenLayerIntegral k s =
+  integral_{0<t<1} t^(-1) * upperRosserBoundarySourceIntegral k (s-t) t.
+```
+
+No even-Suzuki identity, even prime-box mass limit or actual lower-density
+reverse estimate is claimed at this checkpoint. These, the required
+two-sided parameter uniformity, upper residuals beyond four, causal boxed
+compiler, certificate-integral semantics, sharp K, restricted signed
+distribution and current Chen mean remain before the main theorem.
+
+All eight sources passed strict individual compilation. The full aggregate
+`lake build` then passed with **9,689 jobs** (exit zero, 53.096 seconds).
+Each of its final eight object files passed bundled kernel replay. One
+canonical environment then audited **73 distinct declarations** from those
+same final objects, including all private and generated declarations.
+The per-module counts are 5, 5, 14, 4, 13, 5, 19 and 8 in the table order
+below. Every declaration is safe and is not an unproved axiom; the only
+transitive axioms are `propext`, `Classical.choice` and `Quot.sound`.
+The canonical audit took 249.995 seconds.
+
+The eight source files, root, audit, pins and final objects remained
+unchanged through these checks. All actual dependency revisions match
+the manifest, and both principal providers' tracked worktrees and indexes
+remained clean. Independent read-only reviews checked the parameter and
+cap quantifiers, uniform error absorption, selected finite source prefix,
+negative boundary sign, literal even geometry, compact integrability,
+almost-everywhere Fubini slices and the pinned private source reference.
+Evidence is in `.lake/main-theorem-verification-20261012/upper-window/`:
+`final-aggregate-build-status.json`, `upper-window-verification.json`,
+`upper-window-declarations.json` and `upper-window-theorem-types.txt`.
+The verification report SHA-256 is
+`6fc695fe4878f01c3c766e50e9f5d8e973932730164ba6618cd08bfcea1ea6d2`.
+This records full aggregate compilation and new-module kernel/axiom
+checks; it does not claim complete-root kernel replay or successful remote CI.
+
+Reproduce this checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.ActualRosserUpperWindowLower
+lake env leanchecker --verbose ImbalancedChen.ActualRosserUpperWindowUpper
+lake env leanchecker --verbose ImbalancedChen.ActualRosserUpperWindowLimit
+lake env leanchecker --verbose ImbalancedChen.ActualRosserLowerThreshold
+lake env leanchecker --verbose ImbalancedChen.ActualLowerRosserBoundaryExpansion
+lake env leanchecker --verbose ImbalancedChen.RosserGlobalSourceIdentity
+lake env leanchecker --verbose ImbalancedChen.RosserEvenLogRegion
+lake env leanchecker --verbose ImbalancedChen.RosserEvenLayerIntegral
+lake env lean -DwarningAsError=true verification/RosserUpperWindowAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `ActualRosserUpperWindowLower` | `71249828cc0cec9e912b2b161ab174ddc068665aac18ba61921b7e10b035a5da` |
+| `ActualRosserUpperWindowUpper` | `1f08d794af3e7c671da46933e5f94167a172c204ab3f9272aff68c46b4bcf46b` |
+| `ActualRosserUpperWindowLimit` | `83da3aeec3201c4d3960c224deee3c4457ff5ce97c9e3eff645122bf548038a9` |
+| `ActualRosserLowerThreshold` | `09ec16485c57105afb02d80451175568dd119f0953d23d3f08a2822544443746` |
+| `ActualLowerRosserBoundaryExpansion` | `9b012143bf99e7e411bc002c2adb90aee7ea06db6add34b405c495b4f4c32d56` |
+| `RosserGlobalSourceIdentity` | `a3b06d2cc390e1fa0a37ae23cbced555d2e6ce4bbd653810fc54f1ce96ef1273` |
+| `RosserEvenLogRegion` | `bdbddd7cadba090750f2e921ba48fa29edb471bf36cd8677e124bff65145dd2f` |
+| `RosserEvenLayerIntegral` | `bde4b5544f09f0614cb4611981c321e30d12f3d72ccef8cd5134e023ea03ad3c` |
+
+## Same-weight upper density limit through residual three — 12 October
+
+`FinitePiIntegral` proves measure-preserving coordinate extraction and
+Fubini for finite real coordinate spaces. Its empty-dimensional integral
+has mass one, and its second extraction uses almost-everywhere integrable
+slices. `RosserOddTailRegion` proves the exact strict two-coordinate
+recursion with residual `s-x0-x1` and inherited upper cutoff `x1`.
+`RosserOddTailIntegral` proves compact-box integrability for every positive
+terminal coordinate and identifies the genuine region integral with
+`upperRosserBoundaryMassAux`. The empty tail retains `0<=s<3*q` without
+an extra condition on its upper cutoff.
+
+`RosserOddLayerIdentity` extracts the least coordinate and proves that the
+actual odd-dimensional kernel integral is the boundary-mass integral with
+factor `q^(-2)`. Outside `0<q<1` its slices vanish, including both endpoints.
+For every rank and `3/2<=s<=4`, the proved provider identity gives the
+Suzuki source index `2*k+1`. At `s=3` the zero-depth layer vanishes.
+
+`ActualRosserAtThreeLower` connects the genuine finite-layer sums to the
+proved JR source series. It chooses a finite prefix within `eta/2` of
+`2*exp(gamma)/3`, removes the zero layer, and then chooses the actual
+prime-box threshold with the other `eta/2`. Consequently, for every fixed
+`u>0` and `eta>0`, one `N0>=2` works for all later even N and every cap
+covering `N^u`, giving
+
+```text
+actualSmallRosserPlusDensity N cap (N^u) (N^(3*u))
+  / actualSmallEulerProduct N cap (N^u) >= 2*exp(gamma)/3 - eta.
+```
+
+The finite prefix is selected before N, and the constant term one is
+counted once. No estimate of the discarded nonnegative discrete tail and
+no additional analytic premise is used.
+
+`ActualRosserAtThreeUpper` applies the proved all-depth upper estimate at
+`D=ceil(N^(3*u))`. Actual primes satisfy
+`p<N^u<=(ceil(N^(3*u)))^(1/3)`, hence meet its strict natural ceiling
+cutoff, even when the level is integral. The Goldbach local-product bound
+provides one constant before the target; the source error is absorbed
+uniformly in every odd adaptive depth. The actual main-sum and Euler
+dictionaries preserve the same coefficients and cap. This gives the
+matching cap-uniform upper threshold `2*exp(gamma)/3+eta`.
+
+`ActualRosserAtThreeLimit` combines the two thresholds using `eta/2` and
+takes their maximum before N and the covering cap. The ratio therefore
+converges to `2*exp(gamma)/3` along positive even targets, for any cap
+sequence that eventually covers `N^u`. The canonical ceiling cap is a
+corollary. The proved Mertens normalization then gives
+
+```text
+actualSmallRosserPlusDensity N cap (N^u) (N^(3*u))
+  * log N / singularSeries N -> 4/(3*u).
+```
+
+In particular, at `u=1/3, R=N` this constant is four.
+`ActualRosserCubeLimit` uses the previously proved exact cube identity,
+with reduced exponent `beta/3`, and the target-deleted Euler ratio
+`V(N^(beta/3))/V(N^u) -> u/(beta/3)`. For fixed positive `u,beta` with
+`beta<=3*u`, the same actual raw ratio tends to
+`2*exp(gamma)*u/beta`, while the singular-series-normalized density tends
+to `4/beta`. Thus the manuscript's upper raw-density identity is now
+proved for every fixed `1<s<=3`. The formal result also has the literal
+cube-identity extension to `0<s<=1`; it does not invoke a definition of
+the classical sieve factor outside its usual domain.
+
+At this earlier checkpoint these were fixed-parameter limits. Compact-parameter uniformity, the
+upper raw-density identity for `s>3`, the lower-weight identity involving
+`f(s)`, the causal boxed compiler, sharp K/certificate semantics,
+restricted signed distribution, current Chen mean and Theorem 1.1 /
+Corollary 1.2 remain open.
+
+All eight new modules passed strict compilation and individual bundled
+kernel replay. A single canonical environment importing all eight audited
+all **77 distinct declarations**, including private and generated ones.
+The per-module counts are 5, 19, 11, 8, 5, 5, 14 and 10 in the table order
+below. Only `propext`, `Classical.choice` and `Quot.sound` occur
+transitively; no declaration is unsafe or an unproved axiom. Earlier
+kernel replays were reused only after matching source, compiled object,
+binary, configuration, pin and log hashes. Independent
+read-only reviews checked the recursive region and residual endpoints,
+zero-dimensional volume, the almost-everywhere second Fubini extraction,
+the source index, source-contract premises, cap/filter quantifiers and
+both normalizations.
+
+The full aggregate `lake build` passed with **9,677 jobs** (exit zero).
+The eight sources, root, audit and pins were unchanged through verification
+and build. Both actual supplier revisions match the manifest and their
+tracked worktrees and indexes remained clean. Evidence is in
+`.lake/main-theorem-verification-20261012/tail-integral/`:
+`rosser-at-three-verification.json`, `rosser-at-three-declarations.json`,
+`rosser-at-three-theorem-types.txt`, and `final-aggregate-build-status.json`.
+This verifies the eight new modules, their joint transitive axiom audit
+and the complete aggregate compilation. It does not claim complete-root
+kernel replay or successful remote CI.
+
+Reproduce this checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.FinitePiIntegral
+lake env leanchecker --verbose ImbalancedChen.RosserOddTailRegion
+lake env leanchecker --verbose ImbalancedChen.RosserOddTailIntegral
+lake env leanchecker --verbose ImbalancedChen.RosserOddLayerIdentity
+lake env leanchecker --verbose ImbalancedChen.ActualRosserAtThreeLower
+lake env leanchecker --verbose ImbalancedChen.ActualRosserAtThreeUpper
+lake env leanchecker --verbose ImbalancedChen.ActualRosserAtThreeLimit
+lake env leanchecker --verbose ImbalancedChen.ActualRosserCubeLimit
+lake env lean -DwarningAsError=true verification/RosserAtThreeAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `FinitePiIntegral` | `22c7e16d66361c4aec2913237c8b8866db59575d36c50416805094e351f5c54c` |
+| `RosserOddTailRegion` | `4eeb475ca7edb37873d54bea4d95cdf9188f0d4a72ce7f35d7cb3f51c8d29501` |
+| `RosserOddTailIntegral` | `4f2bfe4bcb92b9884f1f6bf1ba919cd117c794169ad9a8c659cb282a287e2d60` |
+| `RosserOddLayerIdentity` | `150cdc0162e77d9110cb7f45e1fcf7db42da98a12633cdc6cdd06280f804ec5d` |
+| `ActualRosserAtThreeLower` | `f1deb4194fbe76b30460d9895717365e20b32414108dc60aea5177d16ad0d78d` |
+| `ActualRosserAtThreeUpper` | `707de374153818ed853f87fa86595243ac02931c396aa1367385cd292fc7d006` |
+| `ActualRosserAtThreeLimit` | `da6d978db72fdb7f2d45468637a00987f1b2fdd104468199ee3f767702b8ed7f` |
+| `ActualRosserCubeLimit` | `a2a2d04ca6fe2d1e53e311bdb880f945ce30e27a71203b8590c90aa498aef7a4` |
+
+## Finite sums of odd-rank continuous lower contributions — 12 October
+
+Nine new modules generalize the actual three-prime lower-contribution
+argument to every fixed odd rank. `ActualRosserOddBox` proves every
+alternating prefix gate, the active tail product and terminal crossing at
+the same `ceil (N^beta)`. Its exact tail cardinality is `2*k`, and strict
+order makes the boundary map injective within each rank. Empty tails and
+empty box families are covered. `ActualRosserOddBoxFamily` sums separated
+boxes before injecting into one actual boundary expansion, so the base
+term one occurs once.
+
+`RosserOddLogRegion` uses strict continuous prefix tests, proves the
+total-tail-sum constraint from the geometric residual budget, embeds the
+region in the provider's continuous region, and proves every coordinate
+exceeds `s/3^(k+1)`. `LogPrimeBoxMesh` and `RosserOddMesh` provide disjoint
+half-open inner grids and eventual coverage of every region point.
+`RosserOddMeshIntegral` proves the actual mesh sums converge to the
+Lebesgue integral using the compact box `[s/3^(k+1),1]^(2*k+1)` and the
+dominator `(1/a)*(1/a)^(2*k+1)`, where `a=s/3^(k+1)>0`.
+
+`ActualRosserOddLayerLower` scales those cells by `u>0` and proves the
+lower contribution at `R=N^(s*u)` for each fixed `s>=1` with
+`s/3^(k+1)<1`. The mesh is chosen before the target threshold. For every
+`k>=1` this gives, at `s=3`,
+
+```text
+forall u > 0, forall eta > 0, exists N0 >= 2,
+  forall even N >= N0, forall cap >= N^u,
+    actualSmallRosserPlusDensity N cap (N^u) (N^(3*u))
+      / actualSmallEulerProduct N cap (N^u)
+        >= 1 + rosserOddLayerIntegral k 3 - eta.
+```
+
+`ActualRosserOddBoxUnion` further combines every box from a fixed finite
+rank set in one boundary expansion. Boundary tails from two injective
+tuples have equal cardinality only when their ranks agree. This makes the
+rank images disjoint before summing and retains just one constant term.
+The finite dependent set `K.sigma J` indexes all box thresholds and their
+error allocation; empty rank sets and empty box families are included.
+
+`ActualRosserOddFiniteLayers` takes the finite sum of the proved mesh
+limits to choose one shared mesh index, then applies that joint box
+theorem. For every finite set `K` of positive ranks, `u>0` and `eta>0`,
+it proves one threshold before all later even N and covering caps with
+
+```text
+actualSmallRosserPlusDensity N cap (N^u) (N^(3*u))
+  / actualSmallEulerProduct N cap (N^u)
+    >= 1 + sum_{k in K} rosserOddLayerIntegral k 3 - eta.
+```
+
+The `u=1/3, R=N` specialization is also proved. All analytic inputs to
+these finite-sum bounds are discharged; thresholds may depend on the
+fixed finite rank set. The proof does not add separate fixed-layer lower
+inequalities. The subsequent integral-identity checkpoint above identifies
+the general layers and supplies the full lower direction at three. At
+this earlier finite-sum checkpoint those steps were still open. The same-weight full density
+limit, causal boxed compiler, sharp K/certificate semantics, restricted
+signed distribution, current Chen mean and final main theorem remain open.
+
+All nine modules passed strict compilation and individual bundled kernel
+replay. A canonical environment importing all nine modules audited every
+one of its **137 distinct declarations**, including private and generated
+declarations, permitting only `propext`, `Classical.choice` and `Quot.sound`
+transitively. The module counts are 14 odd-box, 4 box-family, 30 generic
+mesh, 23 odd-region, 21 odd-mesh, 30 mesh-integral, 6 single-layer lower,
+4 cross-rank box union and 5 finite-layer sum declarations.
+
+The four earlier inventories contained 138 provenance records with one
+repeated, automatically generated `rosserOddMeshLowerSum.eq_1`. The initial
+union-count assertion failed and was retained as a failed evidence record.
+The additional canonical audit resolved the actual owner as
+`ActualRosserOddLayerLower`, recomputed transitive axioms in the joint
+environment, and verified that its name set equals the earlier inventories'
+unique union. The final declaration count comes from this canonical audit.
+Individual kernel replays were reused only after exact source, object,
+binary, configuration, pin and log hash checks.
+
+Independent read-only reviews checked the literal ceiling endpoints,
+actual boundary weights, same-rank injection, cross-rank disjointness,
+single base term, genuine region integrals, compact domination, empty
+families and the order of mesh/threshold/target/cap quantifiers. The pinned
+mathlib and goldbach revisions and their tracked worktrees and indexes
+were checked around verification. Evidence is recorded in
+`.lake/main-theorem-verification-20261012/odd-box/` under
+`odd-layers-verification.json`, `odd-layers-declarations.json` and
+`odd-layers-theorem-types.txt`, with the canonical audit in its
+`canonical-audit/` subdirectory. These are nine individual module replays
+and a joint new-module axiom audit, not complete-root kernel replay.
+
+The final aggregate `lake build` passed with **9,663 jobs** (exit zero).
+All nine source hashes, the root, five audit sources and dependency pins
+were unchanged across verification and the build. The actual mathlib and
+goldbach tracked worktrees and indexes remained clean after the build.
+The aggregate result is recorded in `final-aggregate-build-status.json`.
+This local checkpoint does not claim successful remote CI.
+
+Reproduce this checkpoint's module checks with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.ActualRosserOddBox
+lake env leanchecker --verbose ImbalancedChen.RosserOddLogRegion
+lake env leanchecker --verbose ImbalancedChen.LogPrimeBoxMesh
+lake env leanchecker --verbose ImbalancedChen.ActualRosserOddBoxFamily
+lake env leanchecker --verbose ImbalancedChen.RosserOddMesh
+lake env leanchecker --verbose ImbalancedChen.RosserOddMeshIntegral
+lake env leanchecker --verbose ImbalancedChen.ActualRosserOddLayerLower
+lake env leanchecker --verbose ImbalancedChen.ActualRosserOddBoxUnion
+lake env leanchecker --verbose ImbalancedChen.ActualRosserOddFiniteLayers
+lake env lean -DwarningAsError=true verification/OddLayersAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `ActualRosserOddBox` | `2beffd8af22239e3a5428713c614e8e37bcbb300b16c950ff254d2c9ba031888` |
+| `RosserOddLogRegion` | `a261b313c8a3c3179c7d3bb1f4d73fbc59c76787c89f8086db415f0408ad3452` |
+| `LogPrimeBoxMesh` | `87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d` |
+| `ActualRosserOddBoxFamily` | `74b06cb2b72c109f8482c1cb3e40b8b1f2cfe2d2e5cfe5522f2c50460f7b9a3e` |
+| `RosserOddMesh` | `d99f1ea021f4976eef94f8796260873870b4171a944b481477a9328aa22d2cbc` |
+| `RosserOddMeshIntegral` | `daf9a51c5c0d803916947b0c77632588839b6a73e04e64f4514b03f0d4a5483e` |
+| `ActualRosserOddLayerLower` | `c25a9b09b0d15319e3e75f0cf0a5ae3b3d33cacf572f34cb54704f0a5c4a4cfa` |
+| `ActualRosserOddBoxUnion` | `676c703060700b25dc21d1ac1ca3933b8839181255fec1cf88c9c1aaf459115a` |
+| `ActualRosserOddFiniteLayers` | `1bfa43451c53fbf272566a2d7f8dfe0360a94cba3e7db5e877daf3b905057c11` |
+
+## Historical checkpoint with full remote replay
 
 Commit `50c355b3260da1699447df805f0a58e74e4e465e` passed full build, exact replay of all 84 owned modules plus the root (85 targets), and the 2043-declaration standard-three-axiom audit in [PR run 37880137858](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37880137858) and [push run 37880133970](https://github.com/UyNewNas/goldbach-formalization/actions/runs/37880133970). Both proof-gate sequences finished before optional cache handling; the PR merge tree matches the head tree. The new symmetric-triangle integral module is CI-pending toward an 85-module checkpoint and 86 replay targets. Its source presence does not extend the verified checkpoint or establish a new audited declaration count.
 
@@ -284,3 +1780,1356 @@ For the restricted Lebesgue measure, every singleton is null. Fubini therefore r
 Independent source review found a missing close for the anonymous noncomputable section. The local repair adds only the bare end before the named namespace end; all three statements and proof bodies are unchanged. The repaired source has static source/API and exact-polynomial checks, but no local Lean compiler or Lake executable is available. All three runtime gates remain pending. Adding the source and its one root import targets 85 owned modules and 86 replay targets; no post-addition audited declaration count is asserted.
 
 The Lebesgue-null diagonal here is distinct from the finite tensor diagonal with denominator (p-1)^2, whose arithmetic vanishing estimate belongs to ChenPairHarmonicFinite. For the intended Y5 application the full weighted integrand, including 1/(u*v), must satisfy the actual square's continuity and symmetry conditions; on u <= t the larger-coordinate profile can then be rewritten at t. The Y6 rectangle swap likewise needs continuity on the genuine rectangle. This module does not prove a prime-pair limit, uniform moving-kernel approximation, lower-positive sieve gate, evaluated coefficient 1.8271, or the full Chen theorem. Foreign supplier-backed consumers remain separate, and no VariableEnvelope change is included.
+
+
+## Arbitrary-real half-product localization candidate
+
+The frozen source for this checkpoint is the 10 October 2026 manuscript at
+`ba6ec11d800eccc54406490631895e174de85766`, with
+`paper/source/manuscript-body.tex` blob
+`d529bea2ecfcc74d64fc1664ac770a3becaa7c79`.  The new
+`RealHalfProductSource` module reindexes the arbitrary-real bad count by its
+receiver, partitions it at a literal real cutoff, and identifies the retained
+part with the inclusive ordered half-product source after the exact
+`m < N ∧ Nat.Prime (N-m)` filter.  Multiplication is proved bijective on the
+ordered prime-pair carrier, including prime squares, so the bridge introduces
+neither factor-witness multiplicity nor a factor two.  The new module source
+SHA-256 is `0c3211cb72d8f27eb380f57fe5d751f8fc3179cb646c683c1449d450c71c55e7`.
+
+Local verification with the pinned Lean `v4.33.0-rc1` and Mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` passed the targeted module build,
+the complete project build and bundled `leanchecker` replay of
+`ImbalancedChen.RealHalfProductSource`.  Direct transitive checks of the five
+key exported results report exactly `propext`, `Classical.choice` and
+`Quot.sound`.  A local root `leanchecker ImbalancedChen` process was killed by
+the container memory limit (exit 137), so no local root-replay success is
+claimed.  The independent local VariableEnvelope workflow separately passed
+all module builds, exact regressions, eight bundled kernel replays and the
+358-declaration transitive audit.  The required root replay, full root audit
+and both remote workflows remain pending on GitHub Actions for the submitted
+commit.
+
+This is only the exact finite input to the current ordered mass argument.  The
+later `RealHalfProductMassSplit` checkpoint now instantiates
+`T_N = 2 N^(1-κ₀)`, proves its normalized small-tail error and gives the
+conditional half-product PNT/Mertens limit `J_b = log(1/b)`.  The external
+reuse audit in
+`docs/CURRENT_MANUSCRIPT_MAP.md` records the same-pin real-exponent
+prime-reciprocal interval theorem that can supply the outer logarithmic mass;
+its moving product-boundary and fibre-uniformity obligations remain open.
+
+## Arbitrary-real half-product coefficient candidate
+
+`RealHalfProductMass` now proves the exact arbitrary-real exponents
+`alpha = b/(1+b)` and `beta = 1/(1+b)`, including
+`0 < alpha < 1/2`, `alpha < beta`, `alpha + beta = 1` and
+`beta/alpha = 1/b`.  The two elementary moving walls are proved directly for
+real powers: below the split, strict badness forces `q < N^beta`; above the
+split, the product bound forces `q^b < r`.  No primality or ordering is hidden
+in the latter implication.
+
+The same module evaluates the literal fixed-test integral on
+`(alpha,1/2]` as `log(1/b)`.  An exact finite equality identifies the literal
+high-prime sum with the repository-local standard logarithmic prime interval
+(strict lower endpoint and inclusive natural square-root endpoint).  Its
+Mertens adapter assumes convergence only to that independently proved integral and concludes the manuscript coefficient;
+it does not assume a half-product cardinality or the desired bad-count bound.
+Exact rational-specialization lemmas identify both exponents and the weighted
+sum with the existing `HalfProductMassLimit` definitions, preserving reuse of
+the already-checked finite and uniform-PNT machinery.
+
+The module source SHA-256 is
+`90c809c15ce26cd1f4785b5117e2d8a5dcfdc5720480bc690d198d95f33601f3`.
+Local verification passed its direct compilation, the complete `lake build`,
+bundled module `leanchecker`, and direct transitive audits of seven key
+exports; only `propext`, `Classical.choice` and `Quot.sound` occur.  The
+independent VariableEnvelope workflow also passed all 358 declarations.
+Remote verification remains pending.  The result is conditional on the actual
+weighted-prime Mertens supplier.  The real source envelope with its moving
+product boundary, uniform PNT application and current power-cutoff tail are
+handled by the later `RealHalfProductMassSplit` checkpoint.  The actual
+analytic suppliers and additive-prime filter remain open, so this module
+alone is not `J_b = log(1/b)` for the actual count.
+
+## Arbitrary-real source mass-split candidate
+
+`RealHalfProductMassSplit` now supplies the missing finite bridge from the
+literal arbitrary-real half-product source to the high-prime prefix sum.  It
+proves an exact smaller-prime fibre decomposition, assigns equality at
+`N^(b/(1+b))` to the low range, bounds that range by the complementary prime
+rectangle, and pays the high ordering loss by `pi(sqrt N)^2`.  Prime squares
+remain in the source and the strict/inclusive endpoints are unchanged.  A
+second exact partition pays an arbitrary real cutoff by only its natural
+ceiling.
+
+The module formalizes the current manuscript lower wall as
+`manuscriptHalfProductCutoff κ N = 2*N^(1-κ)`.  For every fixed `κ > 0` it
+proves the cutoff plus its exact ceiling unit is `o(N/log N)`.  Reusing the
+existing explicit real-PNT witness then proves the entire rectangle, square
+and ceiling discrepancy at that literal power cutoff is `o(N/log N)` in
+epsilon-eventual form.  It separately proves that uniform PNT turns the
+prime-prefix approximation into the literal fixed-test weighted prime sum.
+Consequently
+`tendsto_realHalfProductSource_manuscriptCutoff_mass_of_real_pnt_and_weighted_mertens`
+gives the full arbitrary-real source limit `log(1/b)` from precisely two
+visible upstream inputs: the real PNT witness and the standard weighted-prime
+Mertens integral (plus the proved elementary condition `κ > 0`).  No source
+cardinality or target bad-count bound appears in either premise.  The older
+`logCutoff = N/(log N)^10` result is retained as a historical auxiliary and is
+not identified with the current manuscript cutoff.
+
+The module source SHA-256 is
+`6516890accb0179098fca79f98791adeddad569a858fc69710b87a8d3b92a3ca`.
+Local verification with the pinned Lean/Mathlib revisions passed the direct
+module compilation, the complete 2,865-job `lake build`, bundled
+`leanchecker` replay of `ImbalancedChen.RealHalfProductMassSplit`, and direct
+transitive audits of the five current-cutoff exports; the latter report only
+`propext`, `Classical.choice` and `Quot.sound`.  The independent Variable
+Envelope workflow also passed its explicit builds, exact regressions, eight
+bundled kernel replays and all 358 declaration audits.  Root replay/full root
+audit and remote CI must still pass for the submitted commit.  This remains
+short of the actual `RealB` upper bound: the additive-prime filter must still
+be estimated with the same positive upper sieve, and the two analytic
+suppliers must be imported or proved and transitively audited.
+
+## Arbitrary-real/rational finite-sieve bridge candidate
+
+`RealHalfProductSieveBridge` closes the exact finite mismatch between the
+current arbitrary-real theorem statement and the repository's rational
+finite-sieve implementation.  It proves antitonicity in the exponent,
+literal equality of real and natural-power sources at `num/den`, containment
+of the strict prime-partner filter under every rational minorant, and the
+cardinality bound by the rational sifted source plus the explicit cap `z`.
+It then composes this containment with the already proved optimized finite
+Selberg inequality, keeping the primitive-residue discrepancy hypothesis and
+finite normalizer unchanged.  The whole-count corollary retains both `z` and
+the exact real cutoff loss `T+1`; `RealB_le_B_of_rat_minorant` records the
+corresponding monotonic rational reduction.
+
+This candidate supplies no current-`K` density theorem.  The manuscript still
+requires the same physical coefficient in the pointwise nonnegative upper
+weight, its density estimate, and the restricted signed distribution theorem,
+as well as a licensed positive smooth outer approximation to the sharp bad
+region.  The existing finite Selberg normalizer has not been equated to that
+physical construction, so this is not the completed filtered `RealB` bound.
+
+The module source SHA-256 is
+`36f16ed6d0f7aa95227a7d3b3783186b3e9bb041255ee6ae24e1ac9e1f147a2e`.
+Local verification with the pinned Lean/Mathlib revisions passed direct module
+compilation, the complete 2,866-job `lake build`, bundled module `leanchecker`,
+the complete nine-declaration transitive audit for the new module, and a
+2,232-declaration audit of the imported `ImbalancedChen` root closure.  Both
+audits permit only `propext`, `Classical.choice` and `Quot.sound`.  The
+independent VariableEnvelope workflow also passed its builds, exact
+regressions, eight bundled kernel replays and all 358 declaration audits.  A
+bundled kernel replay of the complete root was attempted but was killed by the
+local memory limit (exit 137), so root replay success is not claimed; remote
+core and VariableEnvelope workflows remain required for the submitted commit.
+
+## Finite half-product Pan expansion candidate
+
+`ImbalancedChen/HalfProductPanFinite.lean` rewrites every product-filtered
+half-product source count as an exact sum over its unique smaller prime.
+Specialization gives exact smaller-prime expansions for the actual congruence
+mass, coprime mass, `BoundingSieve` divisor sum and primitive discrepancy.
+All formulas retain the arbitrary real cutoff, the closed product endpoint,
+the strict power wall, the prime-square diagonal and multiplication
+multiplicity one. The equivalent outer prime-indicator form has absolute
+coefficient at most one.
+
+This closes the finite divisor-count decomposition needed before applying a
+bounded-coefficient Pan theorem. It does not yet turn each curved fibre into
+fixed product strips or prove a distribution estimate. The sharp fibre has a
+moving lower wall and strict power wall, so the next adapter must cover it by
+the manuscript's licensed cells and express each product strip as a difference
+of two Pan prefixes at their own scales.
+
+The module source SHA-256 is
+`f392c7642bd00e418c91000a3ed6ef7c4c30194808e974999d4a39699d2b62de`.
+Local verification with Lean `v4.33.0-rc1` and Mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` passed direct compilation, the
+complete 2,867-job `lake build`, bundled module `leanchecker`, an
+18-declaration module audit, a 2,250-declaration imported-root audit, and the
+independent 358-declaration VariableEnvelope workflow. Both transitive audits
+allowed only `propext`, `Classical.choice` and `Quot.sound`. The complete-root
+bundled `leanchecker` was attempted and was killed by the local memory limit
+(exit 137), so root replay success is not claimed; remote workflows remain
+required for the submitted commit.
+
+## Exact product-strip Pan-prefix candidate
+
+`ImbalancedChen/PanProductStrips.lean` fixes the endpoint and coefficient
+conventions for the product cells needed by the restricted Pan estimate. Its
+literal finite strip has `A₁ < r ≤ A₂` and `Y₀ < r*q ≤ Y₁`; it is exactly the
+upper closed product prefix minus the lower closed product prefix. The module
+proves the resulting subtraction identities for AP counts, coprime mass and
+primitive discrepancy without dropping prime squares or introducing an
+ordering multiplicity.
+
+Each prefix is decomposed into first-prime fibres, and the product wall is
+proved equivalent to the external closed moving endpoint `q ≤ Y/r`. For a
+primitive residue, non-coprime outer fibres are empty, giving precisely an
+outer `Coprime r d` gate and a modulus-independent zero-one prime indicator;
+the latter has absolute value at most one. Finally, relative to any displayed
+prime-counting main term, the prefix error is the corresponding bounded
+indicator sum of fibre errors and the strip error is exactly the difference
+of its two prefix errors. Thus the triangle cost is exactly two prefix errors,
+with no hidden endpoint or normalization correction.
+
+After correcting the analytic main term to the supplier's real scale
+`(Y : ℝ) / r`, the module source SHA-256 is
+`eb97d23050e3ec624cde24ef779acc67d7ded44283dc60097edc2d715429863b`.
+
+This module is a finite adapter only. It does not prove the Pan distribution
+theorem or the geometric scale gates for the moving product cells.  The
+17,572 same-mask-v2 cells are not Pan product cells: they are the separate
+fixed `(t,u)` cells for the eleven-term lower-weight certificate and its
+`7/3` refinement.  The correct next geometry is a dynamic `(r,m=r*q)` grid,
+not a signed-discrepancy containment from the existing `(r,q)` rectangles.
+
+## Pinned Liu--Pan primitive-residue bridge candidate
+
+The project now pins
+`subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`,
+whose Mathlib revision is identical to the project pin.  The imported
+supplier theorem is
+`liuMainPanCoprimeIntervalMaxL_boundedAggregate_log_saving`; its coefficient
+bound, two-thirds upper gate, logarithmic lower gate, modulus cutoff and
+endpoint-dependent right side remain explicit.
+
+`ImbalancedChen/PanProductResidueBudget.lean` proves that reducing the fixed
+target to `N mod d` leaves every prefix and strip AP count unchanged.  It
+transports selector-uniform prefix budgets to the physical target and combines
+two independent endpoint budgets with no residue-class or modulus-cardinality
+factor.
+
+`ImbalancedChen/PanProductLiuBridge.lean` then identifies the local fibre with
+the supplier's `primesInAPBelow`, identifies the two canonical reduced-residue
+families, and proves the full prefix error equal to
+`liuMainPanCoprimeIntervalSum` with the modulus-independent prime indicator.
+The target residue belongs to `unitResidues d` from `1 ≤ d` and
+`Coprime d N`; no coprimality with `Y₀` or `Y₁` is used.  Consequently the
+physical prefix error is bounded by the supplier's literal finite `MaxL`, and
+one product strip is bounded by the sum of its upper- and lower-endpoint
+`MaxL` values.
+
+The exported theorem
+`panProductPrimeIndicatorMaxL_boundedAggregate_log_saving` specializes the
+pinned unconditional aggregate to this exact prime-indicator coefficient and
+thereby discharges the global bound `|f| ≤ 1`. It deliberately preserves the
+supplier's endpoint, two-thirds, logarithmic-lower and modulus-cutoff gates.
+
+This is a genuine imported-theorem interface, not yet the aggregate
+application.  A separate `(r,r*q)` product-strip grid must still supply, at
+both endpoints, `N₀ ≤ Y`, `A₂ ≤ Y^(2/3)`,
+`log(Y)^(2B) ≤ A₁`, and `D ≤ panModulusCutoff Y B`; the physical
+coprime-modulus subset must then be enlarged to the full nonnegative `Icc`
+aggregate.  The coprime gate's main-term loss also remains to be reconciled
+with the ungated physical mass.
+
+The residue-budget and pinned-bridge source SHA-256 values are respectively
+`4b5dcf30d8aebee0779f6dc3e4f1188a6797f9cd5215f71737b8369a79a9fbaf`
+and
+`dd239cb5a36898abe49cdb23d60cc1e3e86dede36bd849c41013f18a99ee2d61`.
+Local verification with Lean `v4.33.0-rc1`, Mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and goldbach-lean
+`09b97db5764ade1246bfb77206baa1b124760958` passed direct bridge compilation,
+the complete 4,426-job `lake build`, bundled `leanchecker` replays of all three
+product-strip modules and the imported root, a 2,314-declaration audit of every
+project module, and the independent 358-declaration VariableEnvelope workflow.
+Both transitive audits allowed only `propext`, `Classical.choice` and
+`Quot.sound`. Remote workflows remain required for the submitted commit.
+
+## Physical product-strip aggregate candidate
+
+Code commit [`97b4d96fcf28146036a09c302eff40f4710a3b25`](https://github.com/UyNewNas/goldbach-formalization/commit/97b4d96fcf28146036a09c302eff40f4710a3b25) adds `ImbalancedChen/PanProductAggregateBudget.lean`. Its exported theorem `panProductStrip_physical_boundedAggregate_log_saving` applies the pinned unconditional Liu--Pan theorem to both exact product-strip endpoints. The physical set `{d ∈ Icc 1 D | Coprime d N}` is proved to lie in each full cutoff interval, and literal `MaxL` nonnegativity justifies enlargement without a modulus-cardinality factor. The output bounds the sum of absolute strip errors with the two endpoint logarithmic-saving terms.
+
+All endpoint obligations remain explicit: the common supplier threshold, order `Y₀ ≤ Y₁`, both two-thirds upper gates, both logarithmic lower gates and both modulus cutoffs. Thus this closes the finite aggregate adapter but not the dynamic `(r,r*q)` cell geometry, the coprime-gate main-term comparison, the physical positive upper-weight density, or the final ordered bad-semiprime estimate.
+
+The manuscript source was rechecked at `master@ba6ec11d800eccc54406490631895e174de85766`; no version change was found. The source attachment hash remains `ef70ecef4b4c310449a43db1093859b5d3377e670d7c9dc9fa23619d7e54be9c`. The target pins remain Lean `v4.33.0-rc1`, Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` and goldbach-lean `09b97db5764ade1246bfb77206baa1b124760958`.
+
+The new module source SHA-256 is `13b512d4c51a00b217ea72b3033ec50bd48d76c10812184a20d1bc838ef04140`.
+
+This runner did not contain a Lean executable after workspace recovery, so no local compile, kernel replay or axiom audit is claimed for this checkpoint. The first core and VariableEnvelope runs for the code commit failed before creating workflow steps (`steps: null`) and were retried once; only an actual runner execution can count as remote verification.
+
+## Dynamic Pan product-coordinate grid candidate
+
+Commit [`1fc6dbc92739732edf890e47c1fe8eaa27817274`](https://github.com/UyNewNas/goldbach-formalization/commit/1fc6dbc92739732edf890e47c1fe8eaa27817274) adds `ImbalancedChen/PanProductGrid.lean`. It constructs the genuinely required multiplicative grid in `(r,m=r*q)` coordinates rather than transferring signed discrepancies from the older `(r,q)` rectangles. Each cell is definitionally an exact `panProductStripPairs` with `A₁<r≤A₂` and `Y₀<r*q≤Y₁`.
+
+`panProductGrid_existsUnique_strip` proves unique ownership for every prime pair below the product cap, including `r=q`. `panProductGridStrip_disjoint` proves pair-level disjointness, and `halfProductPair_existsUnique_actualPanProductGridStrip` plus `halfProductPairs_subset_actualPanProductGridPairs` give unique selected-cell ownership and the finite upper cover for the actual source. No equality with the curved source is claimed: a full selected strip may contain exterior points, and later projection must use pair weights so that different ordered pairs with the same product do not lose multiplicity. The 17,572 same-mask-v2 certificate cells remain a separate eleven-term numerical object.
+
+The module source SHA-256 is `d1390ccfd096821a87c8695e099754d7e9403c6632c2b18b0a641254e9a16d11`. The manuscript remains `master@ba6ec11d800eccc54406490631895e174de85766`; all constants and dependency pins are unchanged.
+
+No local Lean executable was available, so compilation, kernel replay and axiom audit are not claimed. Exact-head core run 38082267062 and VariableEnvelope run 38082267051, including one failed-jobs retry each, ended before creating any workflow step (`steps: null`, no logs). They are infrastructure-start failures, not proof verification. The next mathematical step is to prove the endpoint scale gates on these selected `(r,r*q)` cells and then apply `panProductStrip_physical_boundedAggregate_log_saving` cellwise.
+
+## Pinned PNT/Mertens source-mass supplier candidate
+
+Code commit [`244badc1dfb1f5a0fb7c4e6f748bed8a8bd68108`](https://github.com/UyNewNas/goldbach-formalization/commit/244badc1dfb1f5a0fb7c4e6f748bed8a8bd68108) adds `ImbalancedChen/RealHalfProductMassSuppliers.lean`. It connects the exact current arbitrary-real source-mass chain to proved theorems in the already-pinned `goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958` dependency.
+
+The local `realPrimeReciprocalLogIntervalSum` is proved definitionally equal to the supplier's `weightedPrimeReciprocalLogSum`: both use `Ioc`, prime filtering, the same logarithmic weight and `rpowFloor N a = floor(N^a)`. `realHalfProduct_primeCounting_asymptotic_real` specializes the supplier's real-variable PNT to the exact witness previously left as a premise. The kernel `1/(1-u)` is proved continuous on `[b/(1+b),1/2]`, so the pinned weighted Mertens theorem supplies the exact integral used by the existing coefficient proof.
+
+The exported `tendsto_realHalfProductSource_manuscriptCutoff_mass_of_suppliers` has only the mathematical parameters `0<b<1` and `κ>0`; it has no PNT or Mertens premise. Its conclusion is the literal ordered half-product source at `manuscriptHalfProductCutoff κ N`, normalized by `N/log N`, tending to `log(1/b)`. Strict badness, prime ordering, the inclusive square-root endpoint and prime squares are inherited unchanged. This closes the analytic source mass, not the subsequent additive-prime filtering or positive upper-sieve estimate needed for `RealB`.
+
+The new module source SHA-256 is `fd088cd1597ba6d2a47175c6bcb358387d5e1c5eebca116bcfdd53ea400884ad`. The manuscript remains `master@ba6ec11d800eccc54406490631895e174de85766`; constants and dependency pins are unchanged. The runner has no Lean executable, so this code is submitted for CI but compilation, kernel replay and transitive axiom audit are not claimed until an actual runner executes them.
+
+## Dynamic Pan selected-cell budget candidate
+
+Code commit [`921924ab1859dd227a3028c5c76d42aca351efde`](https://github.com/UyNewNas/goldbach-formalization/commit/921924ab1859dd227a3028c5c76d42aca351efde) strengthens `ImbalancedChen/PanProductGrid.lean` with the public interfaces required to sum cellwise Pan errors. `mem_actualPanProductGridIndices` records both ambient-grid membership and a literal half-product source-pair witness; `actualPanProductGridIndices_subset` proves no selected index escapes the finite grid; and `actualPanProductGridIndices_card_le` bounds the selected family by `(floor (log N / log κ) + 1)^2`.
+
+This is a purely finite combinatorial reduction. It does not identify the dynamic family with the separate 17,572 same-mask-v2 cells, prove any endpoint gate, or apply the Liu--Pan distribution theorem. In particular, the two endpoint-dependent modulus-cutoff obligations remain explicit and cannot be obtained by downward monotonicity from a cutoff at the global scale `N`.
+
+The updated module SHA-256 is `e37bb4d2aa855c86e1601566e9ea6649092ac625c434d8a30476208057fab743`. Static checks pass (`git diff --check` and no `sorry`, `admit`, custom `axiom`, `native_decide` or `unsafe` in the module). This runner has no Lean or Lake executable, so no local elaboration, build, kernel replay or transitive axiom audit is claimed. The manuscript remains `master@ba6ec11d800eccc54406490631895e174de85766` and the pinned versions are unchanged.
+
+## Dynamic Pan endpoint-range candidate
+
+Code commit [`97a780a37a41952f10f4de0c3fe91184a7e2813d`](https://github.com/UyNewNas/goldbach-formalization/commit/97a780a37a41952f10f4de0c3fe91184a7e2813d) adds `ImbalancedChen/PanProductGridRanges.lean` and imports it from the public root. For each selected dynamic `(r,r*q)` cell and `1 < κ ≤ 2`, `actualPanProductGridIndices_productLowerEndpoint_gt` proves `T/2 - 1 < Y₀`, `actualPanProductGridIndices_productUpperEndpoint_lt` proves `Y₁ < 2N`, and `actualPanProductGridIndices_firstUpperEndpoint_lt` proves `A₂ < 2*sqrt N`. The combined theorem `actualPanProductGridIndices_endpoint_ranges` exports all three bounds.
+
+Every bound comes from the literal source witness used to select the cell. The lower product estimate pays the full multiplicative-width and ceiling-minus-one losses; the first-coordinate estimate uses the original ordering `r ≤ q`; and the upper product estimate retains the original closed cap `r*q ≤ N`. Prime squares and ordered-pair multiplicity remain unchanged. No statement clips the full product strip back to the curved source.
+
+This closes only the first finite endpoint-range layer. It does not yet prove the Liu--Pan threshold, two-thirds or logarithmic lower gates, and it deliberately does not infer either endpoint's `D ≤ panModulusCutoff Y B` condition from a cutoff at global scale `N`. Those two cutoff obligations remain independent.
+
+The new module SHA-256 is `dc19b118be3348a81503c236917400820f31af44bfbddea22d85b4f271fa79a0`. Static checks pass (`git diff --check` and no `sorry`, `admit`, custom `axiom`, `native_decide` or `unsafe`). An independent read-only review checked the source-level types, coercions, endpoint indices and inequality directions. This runner has no Lean or Lake executable, so no local elaboration, build, bundled kernel replay or transitive axiom audit is claimed. The manuscript remains `master@ba6ec11d800eccc54406490631895e174de85766`; all dependency pins and current constants are unchanged.
+
+## Dynamic Pan supplier-threshold gate candidate
+
+Code commit [`06357c231773d642aff6b759731fffd7d5315b3c`](https://github.com/UyNewNas/goldbach-formalization/commit/06357c231773d642aff6b759731fffd7d5315b3c) strengthens `ImbalancedChen/PanProductGridRanges.lean` with `eventually_actualPanProductGridIndices_productEndpoints_ge`.  For fixed manuscript parameter `0 < κ₀ < 1`, fixed grid ratio `1 < κ ≤ 2`, and every fixed natural threshold `N₀`, both exact product endpoints of every selected dynamic cell eventually satisfy `N₀ ≤ Y₀` and `N₀ ≤ Y₁`, uniformly over the selected family.
+
+The proof uses the already established full-loss inequality `N^(1-κ₀)-1 < Y₀`, the divergence of the positive real power `N^(1-κ₀)`, and monotonicity of consecutive ceiling-minus-one grid endpoints.  It therefore discharges exactly the two common-threshold hypotheses of `panProductStrip_physical_boundedAggregate_log_saving`.  The two-thirds, logarithmic-lower, and endpoint-dependent modulus-cutoff hypotheses remain open and are not inferred from this result.
+
+The updated module source SHA-256 is `507217636bf1b1c7b4d1a7473bda0764664ee95ddb07a29706c610a6db1bafce`.  Static checks pass (`git diff --check` and no `sorry`, `admit`, custom `axiom`, `native_decide` or `unsafe` in the module).  The runner contains no Lean or Lake executable, so no local elaboration, build, bundled kernel replay, or transitive axiom audit is claimed.  The manuscript remains `master@ba6ec11d800eccc54406490631895e174de85766`; the PDF hash and all Lean, Mathlib, and dependency pins are unchanged.
+
+## Dynamic Pan two-thirds endpoint gates candidate
+
+Code commit [`bde4741bbd71511383b06bb1db1d6c6448aebba8`](https://github.com/UyNewNas/goldbach-formalization/commit/bde4741bbd71511383b06bb1db1d6c6448aebba8) further strengthens `ImbalancedChen/PanProductGridRanges.lean`.  The helper `eventually_const_mul_rpow_le_rpow` proves that any fixed multiplicative constant is absorbed by a strict real-power exponent gap.  `manuscript_kappaZero_lt_quarter` formalizes the implication from the manuscript's actual condition `0 < κ` and `κ₀ < κ/(4(1+κ))` to `κ₀ < 1/4`.
+
+With
+`alpha = ((3/4) + (1-κ₀))/2` and `gamma = (2/3)*alpha`, the strict quarter gap gives `alpha < 1-κ₀` and `1/2 < gamma`.  The theorem `eventually_actualPanProductGridIndices_twoThirds_gates` uses these two gaps to pay, respectively, the exact `-1` in `N^(1-κ₀)-1 < Y₀` and the factor `2` in `A₂ < 2*sqrt N`.  Its manuscript wrapper exports, uniformly over every selected dynamic cell,
+`A₂ ≤ Y₀^(2/3)` and `A₂ ≤ Y₁^(2/3)`.  The second gate follows only from consecutive endpoint monotonicity.  No modulus-cutoff condition is inferred.
+
+The updated module source SHA-256 is `d6a76d62281093c340d3d01ab36b8a65010f8b0acb32468c36a116b12f281860`.  Static checks pass (`git diff --check` and no forbidden proof escape in the module), and an independent read-only review checked the exponent arithmetic, manuscript parameter mapping, strict endpoint loss, `Real.rpow` directions, casts, and the two exact endpoint indices.  The runner contains no Lean or Lake executable, so no local elaboration, build, bundled kernel replay, or transitive axiom audit is claimed.  The manuscript source remains `master@ba6ec11d800eccc54406490631895e174de85766`; the PDF hash and all dependency pins remain unchanged.
+
+## Dynamic Pan logarithmic endpoint gates candidate
+
+Code commit [`3f240087a371b0d09f8b4e26cf956ee508903502`](https://github.com/UyNewNas/goldbach-formalization/commit/3f240087a371b0d09f8b4e26cf956ee508903502) further strengthens `ImbalancedChen/PanProductGridRanges.lean`.  `actualPanProductGridIndices_firstLowerEndpoint_gt` transports the source's strict `q^b < r` roughness inequality to the first exact open grid endpoint, paying both the full grid-width factor and the `ceil - 1` rounding loss.
+
+For `β = b/(1+b)`, the theorem `eventually_actualPanProductGridIndices_log_gates` reuses the proved bound `log(4N)^A ≤ logCutoff(N)^(β/2)/2 - 1`.  The inequalities `logCutoff N ≤ N` and `κ₀ < 1/4 < 1/2` place that quantity below the actual manuscript cutoff power `(2*N^(1-κ₀))^β/2 - 1`, which the new strict endpoint theorem places below `A₁`.  Product-endpoint positivity and `Y₀ ≤ Y₁ < 2N < 4N` then give both exact supplier gates `log(Y₀)^(2B) ≤ A₁` and `log(Y₁)^(2B) ≤ A₁`, uniformly over all selected dynamic cells.  The manuscript wrapper derives the quarter gap from the actual licensed condition `κ₀ < κ/(4(1+κ))`.
+
+The updated module source SHA-256 is `88b2c972243ba1e33e89a08b6759c16512620751b7c25206dfa4d767bf79466a`.  Static checks pass (`git diff --check` and no `sorry`, `admit`, custom `axiom`, `native_decide` or `unsafe` in the module).  An independent read-only audit checked the strict roughness transfer, the two coordinate indices, real-power monotonicity, ceiling step, filter uniformity and exact endpoint bounds.  This runner has no Lean or Lake executable, so no local elaboration, build, bundled kernel replay or transitive axiom audit is claimed.  Checkpoint head `25be8488e6ab1fad00bce0a6d644c9f0ad5d9c0d` core [run 38104132595](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38104132595) and VariableEnvelope [run 38104132598](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38104132598), including one failed-jobs retry each, failed before creating workflow steps (`steps: null`, no logs); they are infrastructure-start failures and do not count as proof verification.  The only remaining endpoint gates for the pinned two-endpoint Pan aggregate are the two independent conditions `D ≤ panModulusCutoff Y₀ B` and `D ≤ panModulusCutoff Y₁ B`; they are not inferred from a global-scale cutoff.
+
+## Dynamic Pan honest modulus-gate candidate
+
+Code and documentation commit
+[`56519975ad32d9b3616b33974b16756882106a4f`](https://github.com/UyNewNas/goldbach-formalization/commit/56519975ad32d9b3616b33974b16756882106a4f)
+adds `ImbalancedChen/PanProductGridModulus.lean` and closes both endpoint cutoff gates
+for a deliberately smaller physical modulus layer.  For fixed
+`0 < κ₀ < 1`, `0 ≤ theta < (1-κ₀)/2`, `1 < gridκ ≤ 2`, and the supplier's
+fixed `B ≥ 0`,
+`eventually_actualPanProductGridIndices_floor_rpow_modulus_gates` proves,
+uniformly over every selected dynamic product cell,
+`floor(N^theta) ≤ panModulusCutoff Y₀ B` and
+`floor(N^theta) ≤ panModulusCutoff Y₁ B`.  The corollary
+`eventually_actualPanProductGridIndices_enlargedSelberg_modulus_gates`
+applies the same result to the literal squared natural Selberg level.
+
+The strict inequality on `theta` is mathematically necessary for this
+argument.  Since the smallest endpoint is only of order `N^(1-κ₀)`, a
+global layer of order `sqrt(N)/log(N)^B` is larger than the local Pan cutoff
+by a power `N^(κ₀/2)`; adding logarithms cannot repair it.  The new result
+therefore does not claim that the manuscript's still-unidentified physical
+positive-weight modulus level already satisfies the hypothesis.  That layer,
+its effect on the current coefficient `K`, the coprime-gate main mass, and
+the cellwise-to-global positive upper-sieve composition remain open.
+
+The existing `enlargedSelbergLevel` specialization is only an auxiliary weak
+route.  Its normalizer produces coefficient `4/theta`; imposing
+`theta < (1-κ₀)/2` makes its best limiting coefficient at least
+`8/(1-κ₀) > 8`, so it cannot recover the manuscript's current
+`K = 8452171/1250000`.  The current-K route must instead formalize the
+manuscript's same positive weight `ρ_N`, its density, and its signed
+factorized local distribution at the actual local product scale.  In
+particular, the high-rank support reaching `theta* = 599/1000` cannot be
+covered wholesale by this absolute Pan aggregate.
+
+Module source SHA-256:
+`0e340bf79e581e5c46d324a83ad470036ff07f3cbd9fdb37dc4fe3f950e66fdd`.
+Static source checks pass (`git diff --check` and no forbidden proof escape).
+The runner contains no Lean or Lake executable, so no local elaboration,
+build, bundled kernel replay or transitive axiom audit is claimed.  Exact
+code-head VariableEnvelope [run 38107471726](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38107471726)
+and core [run 38107471723](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38107471723),
+including one failed-jobs retry each, ended before any workflow step was
+created (`steps: null`, no logs or artifacts).  They are infrastructure-start
+failures and are not proof verification.
+
+## Same-physical-weight finite bridge candidate
+
+`ImbalancedChen/SignSensitiveAttachment.lean` formalizes the finite ordered
+algebra in the manuscript's physical upper-weight construction.  It proves
+that an upper small-prime divisor sum must be attached to every nonnegative
+raw coefficient and a lower small-prime divisor sum to every negative raw
+coefficient; the negative multiplication reverses the inequality.  The
+resulting pair coefficient remains absolutely bounded by one when both
+factors are.  These statements do not assume a density estimate,
+distribution theorem, or the desired pointwise majorant as a structure
+field.
+
+`ImbalancedChen/PhysicalUpperWeightBridge.lean` connects any one explicitly
+given finite coefficient `rho` to the literal shifted half-product source.
+It proves the exact Fubini identity and then splits the same weighted
+congruence sum into (i) total source cardinality times the
+reciprocal-totient density, (ii) the exact coprime-source correction, and
+(iii) the signed primitive-residue distribution error.  A pointwise divisor
+majorant therefore bounds the actual sifted source by those three visible
+terms with the identical `rho` throughout.
+
+This closes only the finite sign-sensitive attachment and same-weight
+assembly interface. `FirstExitTree` now proves the generic odd-first-exit
+identity and integer rough majorant, but the actual causal retained policy,
+unique small/rough product reindexing into `rho_N`, physical density estimate
+that yields `K = 8452171/1250000`, and signed local factorized distribution
+estimate are not proved by these modules. Compilation, kernel
+replay and transitive axiom audit remain pending on a runner containing the
+pinned Lean toolchain.  Source SHA-256 values are
+`c189987e7e66b2eaf2a03563c3be8ee275c250916533977723efb2c9dbe13dc6`
+for `SignSensitiveAttachment.lean` and
+`7c179a6733bd163f5b8e8410a718effa609baa8a10b64b266caa36bf656e77a3`
+for `PhysicalUpperWeightBridge.lean`.
+
+## Finite odd-first-exit tree candidate
+
+`ImbalancedChen/FirstExitTree.lean` formalizes the exact finite
+product-plus-first-exit identity from the current manuscript. Its recursive
+retained polynomial scans a finite ordered label list, flips the coefficient
+sign whenever a label is selected, and stops a selected branch precisely at
+its first rejection. `oddFirstExitPolicy` totalizes the even-rank decision to
+`true`, preventing the invalid even-exit counterexample.
+
+`firstExitRetainedPolynomial_eq_product_add_correction` proves the signed
+identity before imposing parity. The root specialization
+`oddFirstExitRetainedPolynomial_eq_product_add_exits` has a complete Euler
+product plus the odd-first-exit correction. The correction is nonnegative for
+local weights in `[0,1]`, yielding
+`product_le_oddFirstExitRetainedPolynomial`.
+
+The integer specialization uses literal divisibility in `ℤ`.
+`finiteIntegerRoughIndicator_eq_indicator` proves that the Euler product is
+exactly the indicator of having no divisor from the finite universe, and
+`integerRoughIndicator_le_oddFirstExitRetainedPolynomial` proves the
+pointwise majorant for every integer, including zero and negative integers.
+No prime, ordering or positivity premise on the integer is silently added.
+
+The manuscript source is fixed at
+`master@ba6ec11d800eccc54406490631895e174de85766`, with the displayed identity
+in `paper/source/manuscript-body.tex` lines 377--391 (blob
+`d529bea2ecfcc74d64fc1664ac770a3becaa7c79`). Static checks pass
+(`git diff --check` and no `sorry`, `admit`, custom `axiom`, `native_decide`
+or `unsafe` in the module). This runner has no Lean or Lake executable, so no
+local elaboration, build, bundled kernel replay or transitive axiom audit is
+claimed.
+
+Code commit
+[`6937c92d3d85a8081158f31308bd3850ee3077be`](https://github.com/UyNewNas/goldbach-formalization/commit/6937c92d3d85a8081158f31308bd3850ee3077be)
+introduced the public-root import and the initial identity module. Its source
+SHA-256 was
+`b97d463290a6c549ede5438de7f227b9ce5b34267017f3e929c894247d2b55fe`.
+
+The actual causal retained-set instantiation, unique small/rough decomposition,
+and the density and signed factorized distribution estimates for the exact
+constructed `rho_N` remain open. Consequently neither the current coefficient
+`K = 8452171/1250000` nor Theorem 1.1 is proved by this checkpoint.
+
+The module now additionally exposes `FirstExitLeaf` as a data-only terminal
+branch carrier and proves:
+
+- `firstExitRetainedPolynomial_eq_leaves_sum`, the exact equality between the
+  recursive evaluator and the explicit finite retained-leaf sum;
+- `mem_oddFirstExitRetainedLeaves_mass_eq_selected_prod`, identifying every
+  stored leaf mass with the product over its selected labels;
+- `mem_oddFirstExitRetainedLeaves_positive_eq_evenListLength`, identifying
+  every stored sign with selected-list parity;
+- `mem_oddFirstExitRetainedLeaves_selected_reverse_sublist`, proving the exact
+  carrier/order invariant: reversing the accumulated selected list gives a
+  sublist of the original ordered universe;
+- `mem_oddFirstExitRetainedLeaves_selected_nodup`, deriving duplicate-freeness
+  of every selection from duplicate-freeness of the ordered universe;
+- `oddFirstExitRetainedLeaves_selected_eq_of_prod_eq` and
+  `oddFirstExitRetainedLeaves_selectedProd_injOn`, proving that, in a
+  duplicate-free prime universe, the selected natural product determines the
+  selected list and the entire retained leaf;
+- `list_prod_squarefree_of_nodup_primes`,
+  `mem_oddFirstExitRetainedLeaves_primeFactors_selectedProd`,
+  `cardFactors_list_prod_eq_length_of_primes`, and
+  `moebius_list_prod_eq_negOnePow_length`, proving the squarefree product,
+  exact prime-factor carrier, factor count and Möbius parity formula for a
+  duplicate-free prime list;
+- `mem_oddFirstExitRetainedLeaves_selectedProd_squarefree`,
+  `mem_oddFirstExitRetainedLeaves_moebius_selectedProd`, and
+  `mem_oddFirstExitRetainedLeaves_value_eq_moebius_mul_selected_prod`,
+  specializing those facts to actual retained leaves and identifying the
+  real branch coefficient with `(moebius d : ℝ)` times the local-weight
+  product;
+- `oddFirstExitRetainedLeaves_unit_mem`, explicitly retaining the empty
+  branch, unit modulus `d = 1` and coefficient one even for an empty universe;
+- `firstExitRetainedLeaves_nodup` and
+  `oddFirstExitRetainedLeaves_nodup`, proving the literal recursive leaf list
+  duplicate-free before any conversion to a Finset;
+- `oddFirstExitRetainedLeaves_sum_eq_product_add_exits`, the manuscript
+  product-plus-exit identity with the retained side displayed as a literal
+  branch sum.
+
+These statements close the evaluator-to-branch-sum interface, make the reverse
+accumulator convention explicit, close prime-product uniqueness and identify
+the raw branch sign with the Möbius value at the abstract ordered-universe
+layer.
+
+`ImbalancedChen/RetainedModuli.lean` now adds the natural-number support of
+selected products and the literal integer coefficient
+`oddFirstExitRetainedCoefficient`: `mu(d)` on retained support and zero
+outside. It proves support membership by a retained-leaf witness, preserves
+the unit modulus with coefficient one, gives a unique retained leaf as a
+value for each supported modulus under the existing prime-universe hypotheses,
+proves every supported modulus squarefree, and recovers every leaf value as
+the looked-up coefficient times the local-weight product over
+`d.primeFactors`. The source leaf list is proved `Nodup` recursively; combining
+that fact with selected-product injectivity proves the modulus list `Nodup`,
+and `oddFirstExitRetainedLeaves_sum_eq_retainedModuli_sum` then replaces the
+literal leaf `List.sum` by the support `Finset.sum` without losing multiplicity.
+
+`ImbalancedChen/RoughPrimeUniverse.lean` constructs the finite carrier of
+literal primes `p ∤ N` satisfying the real half-open inequalities
+`w ≤ p < z`, sorts it strictly decreasing, and proves exact membership,
+derived `Nodup`, `SortedGT`, pairwise strict decrease and recovery of the
+original Finset. Finiteness uses an explicit natural enumeration cap; when
+`z ≤ cap`, membership is equivalent to the uncapped manuscript predicate,
+with no unproved floor/ceiling replacement. The squarefree,
+Möbius/coefficient leaf identities, exact modulus-sum reindex and integer
+pointwise roughness majorant are specialized to this concrete universe.
+
+The remaining finite obligations are the actual causal retained policy and
+unique small/rough attachment. The analytic density and signed-distribution
+estimates remain later obligations.
+
+The extended module source SHA-256 for this candidate is
+`6ab5eeb136969f76afc8fcc83dfa211985e0b7ffe85e89dab0702f381ad42a6b`.
+
+The new source SHA-256 values are
+`ec5df61712426350f0a93f36501ce2f2ca4bf49c9ee13c611920342e67386274`
+for `RetainedModuli.lean` and
+`3d716d89548e2e453e96c598481db2f62ae1c76e7f092a960e490a4b70688e58`
+for `RoughPrimeUniverse.lean`.
+
+## Exact retained-modulus reindex checkpoint
+
+This checkpoint closes the multiplicity issue in the odd-first-exit branch
+sum rather than merely replacing a list by a set.  The recursive theorem
+`firstExitRetainedLeaves_nodup` separates the skip and select subtrees using
+the current label: every selected-subtree leaf contains it, while every
+skip-subtree leaf omits it.  Its odd-policy specialization gives
+`oddFirstExitRetainedLeaves_nodup`.  Combining that theorem with the already
+proved selected-prime-product injectivity yields
+`oddFirstExitRetainedLeaves_selectedProd_map_nodup`.
+
+`oddFirstExitRetainedLeaves_sum_eq_retainedModuli_sum` can therefore invoke
+the pinned Mathlib theorem `List.sum_toFinset` without collapsing duplicate
+moduli: the actual retained-leaf `List.sum` is exactly the natural support
+`Finset.sum`, with the literal Möbius coefficient and the local-weight product
+over `d.primeFactors`.  The concrete decreasing real half-open rough-prime
+carrier is discharged by
+`roughPrimeRetainedLeaves_sum_eq_retainedModuli_sum`.  These are kernel terms;
+no external enumeration, Python `PASS`, or saved numerical endpoint is used
+as their proof.
+
+The fixed Lean 4.33.0-rc1 toolchain additionally exposed missing selective
+imports and parser changes in the current PR stack.  The relevant modules now
+import the required real/ring instances explicitly, avoid identifiers that
+are reserved in this toolchain, and `SignSensitiveAttachment.lean` imports
+the exact finite-ring and `norm_num` interfaces it uses.  Its current source
+SHA-256 is
+`d34b8483983bf4243479bee70cd4bcd07fbf286abafe982021ca4625a3ab63bc`.
+
+Local verification on the pinned dependency graph completed as follows:
+
+- direct elaboration and explicit Lake builds passed for `FirstExitTree`,
+  `RetainedModuli`, `RoughPrimeUniverse`, and `SignSensitiveAttachment`;
+- the complete `lake build` passed all 4436 jobs, including the root module
+  and the downstream `PhysicalUpperWeightBridge`;
+- bundled Lean 4.33.0-rc1 `leanchecker` replay passed separately for those
+  four modules and `PhysicalUpperWeightBridge`;
+- Lean's transitive `#print axioms` collector reports only `propext`,
+  `Classical.choice`, and `Quot.sound` for the new leaf-`Nodup`, mapped-modulus
+  `Nodup`, abstract and concrete reindex theorems, and the repaired
+  sign-sensitive attachment theorem.
+
+A single-process bundled replay of the entire root import closure was also
+attempted locally but exceeded the available memory; it is not counted as a
+passed root replay.  The exact delivery commit must still pass the repository
+CI root replay and full-root declaration audit before this checkpoint can be
+called remotely verified.  The preceding exact PR head's core and variable-
+envelope workflows both failed before creating any job step or log, so those
+infrastructure-start failures likewise do not count as proof checks.
+
+The manuscript source was rechecked and remains exactly
+`master@ba6ec11d800eccc54406490631895e174de85766` (tree
+`2b5af758d1b4a4799a120d4ea108679cc02f2e11`); no statement or parameter
+comparison was required.  At that checkpoint the remaining finite gap was
+the actual causal retention policy together with the unique small/rough
+product attachment into one physical `rho_N`.
+
+## Strict small/rough product attachment checkpoint
+
+`ImbalancedChen/SmallRoughAttachment.lean` closes the abstract unique-product
+part of that gap.  `SmallPrimeSupportedAt w a` uses the strict boundary
+`p < w`, while `RoughPrimeSupportedAt w b` uses the inclusive boundary
+`w ≤ p`.  `smallPrimeSupportedAt_coprime_roughPrimeSupportedAt` proves that
+these supports are cross-coprime directly from their literal prime-factor
+finsets.  `smallRough_factorization_unique` then proves
+`a*b = c*d -> (a,b)=(c,d)` for supported factors, including arbitrary prime
+powers and unit factors; squarefreeness is not smuggled in.
+
+`smallRoughRho` is a total natural-number coefficient defined by the finite
+product fibre.  On every occupied modulus `smallRoughRho_mul` collapses that
+fibre to the unique sign-sensitive pair coefficient, and
+`smallRoughRho_eq_zero_of_not_mem` proves it vanishes off the displayed
+physical support.  The exact theorem
+`smallRoughPairDivisorSum_eq_physicalDivisorSum` reindexes the complete
+pair-indexed divisor expression to `PhysicalUpperWeightBridge`'s one
+`physicalDivisorSum`; no multiplicity factor is introduced.
+`smallRoughPairDivisorSum_eq_signSensitiveAttachment` expands the upper or
+lower small-prime sum selected by each rough coefficient's sign, and
+`signSensitiveAttachment_eq_smallRough_physicalDivisorSum` composes the two
+identities.  Thus the pointwise majorant's existing expression is literally
+the divisor sum of the same `rho`, rather than merely an isomorphic pair
+model.  `sum_smallRoughModuli` and `sum_smallRoughRho_mul` additionally
+reindex generic scalar and rho-weighted physical sums without a fibre factor.
+The separate theorems `smallRough_mul_dvd_iff` and
+`abs_smallRoughRho_mul_le_one` retain the literal divisibility semantics and
+the unit coefficient bound.
+
+Local verification under the pinned Lean 4.33.0-rc1 and Mathlib
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` passed direct elaboration, the
+complete 4,437-job `lake build`, bundled `leanchecker` replay of
+`ImbalancedChen.SmallRoughAttachment`, and direct transitive audits of all
+twelve new theorems.  The audit reports only `propext`, `Classical.choice`,
+and `Quot.sound`.  The delivered source SHA-256 is
+`8f69bb4f62110e54aeb69c371d4767253d8520d9d904e3dc97e578beaedfccba`.
+The independent VariableEnvelope runner was also invoked, but the local stale
+base checkout contains a reference snapshot whose bytes do not match its own
+manifest, so that runner stopped at provenance before any VE build or replay;
+it is not counted as passed.  Exact delivery-head CI remains required.
+
+External reuse was checked at pinned `goldbach-lean`
+`09b97db5764ade1246bfb77206baa1b124760958`.  Its
+`goldbachOrderedPair_mul_injective` is directly reusable for an ordered pair
+of rough primes times a divisor of its concrete strict-small product, while
+Mathlib provides the `Nat.Coprime` cancellation and `Finset.sum_image`
+interfaces used here.  The present theorem is intentionally more generic on
+the rough side (any nonzero composite with all prime factors `w ≤ p`) and
+therefore proves the short cutoff argument locally rather than importing a
+research-only carrier theorem with narrower labels.
+
+This checkpoint does not instantiate the manuscript's actual small Rosser
+weights or the causal retained policy, and it proves no density or
+distribution estimate.  The current-`K` density calculation, signed
+factorized distribution estimate, complete eleven-term mean lower bound and
+final ordered-bad transfer therefore remain open; Theorem 1.1 and
+Corollary 1.2 are not claimed.
+
+
+
+## Exact same-rho main-term checkpoint (11 October 2026)
+
+`ImbalancedChen/SmallRoughMainTerm.lean` closes the finite main-term algebra for the literal physical coefficient `smallRoughRho`.  The reciprocal-totient density is reindexed without multiplicity to the displayed small/rough pair carrier and factored by totient multiplicativity.  Nonnegative rough coefficients select the upper small-weight density; negative coefficients select the lower density, preserving the sign reversal required by the pointwise majorant.  The exact coprime-source correction and signed primitive-residue distribution error are reindexed to the same pair carrier.
+
+No density or distribution estimate is assumed.  The module was directly elaborated under Lean 4.33.0-rc1 and Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`; its generated object passed bundled `leanchecker`, and all four theorem audits report only `propext`, `Classical.choice`, and `Quot.sound`.  Source SHA-256 is `3a3cdd6bc284237634da7744167e280c9ee56dc33555899ed98cc88e7e691b08`.  A complete clean-checkout CI build remains required before remote verification success is claimed.  The actual causal retained policy, actual lower/upper Rosser-weight instantiation, their sharp density bounds yielding current `K`, and the restricted moving-residue distribution theorem remain open.
+
+## Current Chen pointwise and paired-count checkpoint (11 October 2026)
+
+The active target is the complete current Theorem 1.1 and Corollary 1.2,
+using manuscript commit `ba6ec11d800eccc54406490631895e174de85766`.
+The historical `chenFixedElevenWeight` uses different exponents and a lower
+receiver-size band, so it cannot supply the current constant by itself.
+
+Three new modules close the corresponding finite gap:
+
+- `CurrentChenPointwise` proves the full eleven-term inequality at
+  `a=417/5000`, `h=19/125`, `d=59/250`. In the ninth branch the actual three
+  prime factors give `N < H D C^2 <= n*p3`, removing the old lower-size-band
+  assumption. The final theorem needs only `N >= 1`, squarefreeness and
+  `n <= N`, and includes receiver one.
+- `CurrentChenPairedDeletion` uses the same predicate on `Y6` pairs and the
+  last pair of full `Y11` tuples. The first pair is proved to be the unique
+  smallest pair of the receiver, so last-pair projection is an injection.
+  Thus `Y11(E) <= Y6(E)` and the current paired weight inherits the exact
+  pointwise inequality. The arbitrary predicate is a selection of actual
+  tuples, not an assumed certificate estimate.
+- `CurrentChenSummedBridge` sums over the actual coprime additive primes.
+  On arbitrary squareful receivers it does not use the squarefree injection:
+  `Y11(E) <= Y11(full)` first cancels the positive correction. Bounding only
+  the remaining positive terms gives 246. Nonrough receivers are
+  nonpositive, and the exceptional rough squareful receivers inject into
+  the previously proved large-prime-square set. The result is
+  `sum W_E <= 4 D12 + 246 N/(N^a-1) + 4`. For `N^a >= 2` the loss is at most
+  `492 N^(1-a) + 4`, which is proved negligible in the actual
+  `singularNormalization`, uniformly over the selected pair region.
+  This smaller one-sided error budget is compatible with the manuscript's
+  coarser absolute-value budget; it does not improve the main coefficient.
+
+All three new modules passed direct Lean 4.33.0-rc1 elaboration with
+`warningAsError=true` and individual bundled `leanchecker` replay.
+`verification/CurrentChenAudit.lean` inventories declarations using defining
+module metadata, including private and automatically generated declarations;
+all **94 declarations** passed its transitive audit, with only `propext`,
+`Classical.choice`, and `Quot.sound` allowed. The 14 existing local dependency
+modules were rebuilt with the same pinned compiler; the external Mathlib
+cache uses the pinned `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` revision.
+This is a scoped local checkpoint, not a new full-root CI checkpoint.
+
+Reproduce the scoped checks with the pinned toolchain on PATH:
+
+```sh
+lake build ImbalancedChen.CurrentChenSummedBridge
+lake env leanchecker --verbose ImbalancedChen.CurrentChenPointwise
+lake env leanchecker --verbose ImbalancedChen.CurrentChenPairedDeletion
+lake env leanchecker --verbose ImbalancedChen.CurrentChenSummedBridge
+lake env lean -DwarningAsError=true verification/CurrentChenAudit.lean
+```
+
+Source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `CurrentChenPointwise` | `17ade795542a81bac8b659b7d24b96ab76cba45e5f3850db5fe0bc04d47a9ee8` |
+| `CurrentChenPairedDeletion` | `6101bf1057504895d2413bf814249deabdd12a3e53a0b21067a68df03dee4794` |
+| `CurrentChenSummedBridge` | `e7897e67a0a51db8e2d0dc410a1240dea62774f5b94782bc30ddf9055a7be832` |
+
+The current signed lower mean has not been proved. The actual causal
+retained policy and small Rosser weights, the same-rho sharp density and
+restricted moving-residue distribution estimates, the analytic meaning of
+the 17,572-cell certificate, and final bad-semiprime bounds remain open.
+Theorem 1.1 and Corollary 1.2 still have their explicit analytic premises;
+no new theorem in this checkpoint claims to discharge them.
+Next concrete dependency: instantiate the small-prime weights from the
+pinned dependency's `MathlibNt/SieveTheory/LiLiuPrereqWFSmallRosser.lean`.
+Use the product of the actual primes `p < w`, `p ∤ N`, and reindex the
+proved Rosser divisor sums through `gcd(M, |n|)` to include `n = 0`.
+Connect these actual lower/upper weights, their strict support and unit
+coefficient bound to `SignSensitiveAttachment`; do not leave its small-side
+pointwise assumptions as new unexplained hypotheses. The dependency's
+fundamental-lemma density supplier then needs a separate semantic and
+transitive-axiom review before it is used toward the current `K`.
+
+## Full aggregate build of the Chen checkpoint (12 October 2026)
+
+The local aggregate at commit `e86c73b5cf4f8ed86b3040a095424fdad10723fe`
+completed `lake build` with exit code zero and `Build completed successfully
+(4441 jobs).` The toolchain, Lake configuration and manifest hashes were
+unchanged. The isolated evidence is in the ignored directory
+`.lake/main-theorem-verification-20261012/` (`incremental-full-build.log` and
+`incremental-full-build-status.json`). This supersedes the earlier local
+aggregate-build wait, not the outstanding analytic proof obligations. It
+does not assert remote CI success or include later modules that were not
+yet imported by that aggregate.
+
+## Actual small weights and fixed physical coefficient (12 October 2026)
+
+Five modules close the previously abstract small-weight input and connect
+its proved density to the same physical coefficient:
+
+- `FixedRoughCoefficients` proves that the selected lists and natural
+  modulus support of the retained tree are independent of local weights
+  and incoming masses. The fixed `h=1` carrier and Mobius coefficient work
+  for all test integers. The exact divisor-sum identity, squarefreeness,
+  coprimality to the target and coefficient one-bound are proved.
+- `ActualSmallRosser` takes the literal lower and upper Rosser weights on
+  the product of primes `p<w`, `p` not dividing `N`. A gcd reindex supplies
+  their sandwich for all integers, including zero and negative arguments.
+  The displayed support is the sieve product's divisors. Its members are
+  squarefree and target-coprime; nonzero coefficients satisfy `d<L` and
+  have absolute value at most one. Zero coefficients above the level are
+  not incorrectly asserted to be active.
+- `ActualSmallRosserDensity` proves a uniform density sandwich for exactly
+  those coefficients at `L=D^epsilon`, `w=D^(epsilon^2)`. It supplies all
+  multiplicativity, prime-density and dimension-one premises from proved
+  results for the progression density. Its constants and threshold precede
+  the varying even target and finite carrier. The relative error is
+  `C*(exp(-1/epsilon) + exp(sqrt(K_dim)-1/epsilon)*
+  (epsilon*log D)^(-1/3))`. Here `K_dim` is the dimension constant, not the
+  manuscript's numerical upper coefficient. For fixed epsilon the first
+  term does not tend to zero with D.
+- `SmallRoughDensityError` proves that the sign-sensitive density increase
+  lies between zero and `delta * sum(|c(d)|/phi(d))`. It preserves the
+  absolute rough mass rather than replacing it by the signed main term.
+- `ActualSmallRoughAttachment` constructs one integer-independent rho from
+  those actual small weights and the fixed raw rough coefficient. Its
+  pointwise majorant, nonnegativity at every integer, squarefree and
+  target-coprime support, one-bound and strict active small-factor level
+  are proved. The proved small-density supplier controls this same rho's
+  density error, with its absolute rough-mass multiplier explicit.
+
+All five sources passed direct elaboration with `warningAsError=true`.
+Their final frozen objects each passed bundled `leanchecker`. The defining-
+module environment inventory audited all **90 declarations** (16 fixed
+rough, 39 actual small, 4 error, 16 small density and 15 attachment), including
+private and automatically generated declarations. Only `propext`,
+`Classical.choice` and `Quot.sound` occur transitively. After importing all
+five modules in the public root, `lake build` passed with exit zero and
+**4,803 jobs**. Source, audit, root and dependency-pin hashes were unchanged
+through the final checks. Evidence is in the ignored
+`.lake/main-theorem-verification-20261012/final-source/` directory. This is
+full aggregate compilation and five module kernel replays, not a claim of
+complete-root kernel replay or remote CI success.
+
+The retained policy is still an arbitrary odd-first-exit policy: this does
+not instantiate the current causal boxed policy or prove its support
+exponent. No sharp current-K density, restricted distribution estimate,
+current signed lower mean, certificate-to-integral interpretation or final
+bad-semiprime bound is claimed. Theorem 1.1 and Corollary 1.2 remain open.
+
+The following checkpoint supplies the finite absolute rough-mass Euler
+bound and literal raw-Rosser coefficient dictionary. The fixed provider
+`SmallRosser.upperWeight_eq_producer` uses `Nat.ceil R`; some real-level
+endpoint theorems instead use `Nat.floor R + 1`. These are not the same
+weight when R is an integer. The B8/B10 Goldbach carrier and its exact
+`nu(d)=1/phi(d)` can supply a dictionary to the natural-level interface
+without changing coefficients. Existing single-sided F/f bounds must not
+be subtracted to assert the eighth-layer density saving; the required
+same-weight fixed-rank reverse limits and target-prime deletion uniformity
+remain to be proved.
+
+Reproduce this checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.FixedRoughCoefficients
+lake env leanchecker --verbose ImbalancedChen.ActualSmallRosser
+lake env leanchecker --verbose ImbalancedChen.SmallRoughDensityError
+lake env leanchecker --verbose ImbalancedChen.ActualSmallRosserDensity
+lake env leanchecker --verbose ImbalancedChen.ActualSmallRoughAttachment
+lake env lean -DwarningAsError=true verification/ActualSmallRoughAudit.lean
+```
+
+Source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `FixedRoughCoefficients` | `24bc451c0234f867cb85539b0d93d37e02c68e6f8d0bf6cf82f081e75e3d892b` |
+| `ActualSmallRosser` | `0dbcd4e45ededb9edfb601d8249cc554b3e53291985c09557ed2a9f5d4fb2cdf` |
+| `SmallRoughDensityError` | `95854fdf8ac0e0b47368e71fb6a1fae20178bee004c384b80103f9abe45d40ab` |
+| `ActualSmallRosserDensity` | `9cfe1beef1a9ef09b88abf3c5593edebafc882e95639c50579cf4dc77b4d5ac8` |
+| `ActualSmallRoughAttachment` | `a7b17e728cb6ffe70e3b60c72f1a5d6febd38b12bf208f808a13b748a2da2625` |
+
+## Actual rough mass, strict endpoints and error absorption (12 October 2026)
+
+Five modules extend the actual physical coefficient checkpoint:
+
+- `RosserEndpointBridge` identifies the actual prime carrier, lower and
+  upper coefficients, reciprocal-totient densities and Euler product with
+  the pinned Goldbach bounding sieve at `Nat.ceil R`. The carrier cap must
+  cover the cutoff; integer strict endpoints are preserved exactly.
+- `RoughAbsoluteDensity` proves that every retained modulus divides the
+  actual rough-prime product, evaluates the full divisor sum by an Euler
+  product, and derives one logarithmic interval bound for the absolute
+  retained mass. Its analytic constant is uniform in the even target,
+  cap, real interval and retention policy. The interval `1<w<=z`, including
+  `w=z` and `w<2`, is covered. A truncated cap only decreases this bound.
+- `RoughPowerParameters` proves positivity of the actual small Euler
+  product and specializes the rough bound to `w=D^(epsilon^2)`, `z=D^r`.
+- `SmallRosserErrorLimit` proves the fixed-epsilon limit of the actual
+  error, retaining the floor `C*exp(-1/epsilon)`. Exponential decay beats
+  the required reciprocal-square cost when epsilon is chosen first.
+- `ActualSmallRoughErrorAbsorption` supplies epsilon and one threshold for
+  any `r>0` and `eta>0`, uniformly in every later even target, cap and rough
+  policy. For the same actual physical rho it proves
+  `0 <= density(rho)-V*signedRoughDensity <= eta*V`, with
+  `V=actualSmallEulerProduct N cap (D^(epsilon^2))`. The rough-mass bound
+  and scalar asymptotic are proved inputs, not terminal hypotheses.
+
+All five sources passed strict direct compilation and individual bundled
+kernel replay. The defining-module environment inventory audited all
+**42 declarations** (9 endpoint, 9 rough mass, 12 power parameters,
+11 scalar limits and 1 actual absorption), including private and generated
+declarations. Only `propext`, `Classical.choice` and `Quot.sound` occur
+transitively. The final aggregate `lake build` passed with **9,634 jobs**.
+The five sources, public root, audit and dependency pins were unchanged
+through verification; actual dependency revisions match the manifest.
+Evidence is in `.lake/main-theorem-verification-20261012/rough-density/`:
+`rough-density-verification.json`, `rough-density-declarations.json`,
+`rough-density-theorem-types.txt`, and `final-aggregate-build-status.json`.
+This is full aggregate compilation and five module kernel replays, not
+complete-root kernel replay or a remote CI claim. No final normalized
+sharp K or main analytic theorem is asserted by these modules.
+
+The scale conversion supplied in the following checkpoint needs a cap
+covering `w` and a nonzero target:
+`V(w) << C_N/log w` contributes a further `epsilon^(-2)`. Absorption at the
+manuscript's scale therefore requires a direct choice handling
+`epsilon^(-4)*exp(-1/epsilon)`, not a circular post-selection assignment
+`eta=delta*epsilon^2`. The exact Euler-ratio correction in the frozen
+manuscript is documented in `CURRENT_MANUSCRIPT_MAP.md`; the existing Lean
+finite normalization already has the correct factor.
+
+Remaining obligations include the current causal boxed policy and support
+exponent, same-raw-weight fixed-rank reverse density limits, sharp signed
+rough density, restricted signed distribution, actual current Chen mean,
+certificate-to-integral interpretation and final bad-semiprime estimate.
+Theorem 1.1 and Corollary 1.2 remain incomplete.
+
+Reproduce the new checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.RosserEndpointBridge
+lake env leanchecker --verbose ImbalancedChen.RoughAbsoluteDensity
+lake env leanchecker --verbose ImbalancedChen.RoughPowerParameters
+lake env leanchecker --verbose ImbalancedChen.SmallRosserErrorLimit
+lake env leanchecker --verbose ImbalancedChen.ActualSmallRoughErrorAbsorption
+lake env lean -DwarningAsError=true verification/RoughDensityAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `RosserEndpointBridge` | `eb3f17d88b430e3884f4767139f35999c3b10d921649e65b21fc058a67ac2a22` |
+| `RoughAbsoluteDensity` | `1a69ad42b618d8569f1bafcd546257a5b134ebb96d671bbd74adc0beca561d34` |
+| `RoughPowerParameters` | `d7df16e77e1d66fe7b0a961c260312679da10e93b1baf1c6d77b0987171b4b64` |
+| `SmallRosserErrorLimit` | `36774b9722bcad99ec4a90d86f1191618930d743b5649c5bfe51a66e31f9654e` |
+| `ActualSmallRoughErrorAbsorption` | `3b5bec690d259a6116b0ccfd647a375476baf09b631544afdc5707900dce4ca0` |
+
+## Uniform attachment reserve at the manuscript scale (12 October 2026)
+
+Three modules close the small-weight attachment error at `C_N/log N`:
+
+- `ActualSmallEulerNormalization` identifies the actual small product with
+  the strict natural sieve product at `ceil w`, then uses the inclusive
+  Mertens product at `ceil w - 1`. Finite Euler factorization, the odd-prime
+  product bound and the target-correction comparison prove
+  `V_N(w) <= B*C_N/log w` with one positive B for every positive even N,
+  `w>=4`, and cap covering w. No target-tail convergence is assumed, the
+  prime-two factor is retained, and integer endpoints are covered.
+- `NormalizedSmallRosserError` uses `t^4*exp(-t) -> 0` to choose epsilon
+  directly with `0<epsilon<min(1/8,epsilonMax)` and `epsilon^2<=r`, absorbing
+  both reciprocal-square losses. Its fixed-epsilon scalar limit retains
+  the positive exponential floor; it is not a fixed-epsilon little-o claim.
+- `ActualNormalizedRhoError` supplies epsilon and one real threshold with
+  `0 <= density(rho)-V*signedRoughDensity <= eta*C_N/log D`, uniformly in
+  every later positive even target, cap covering w and retention policy.
+  Its second theorem sets `D=N^nu`, chooses tolerance `eta*nu` before epsilon,
+  and produces one natural threshold for the exact `eta*C_N/log N` reserve.
+  This target-scale version requires a cap covering `z=N^(nu*r)`.
+
+The same fixed raw retained coefficient and actual small Rosser weights
+occur throughout. The D-scale theorem may still truncate the rough carrier;
+only the full-cap target-scale version has the cap condition for the
+existing complete-interval majorant. Neither theorem identifies this raw
+construction with the manuscript's boxed compiler or bounds the signed
+rough main density. The causal policy, box compiler, sharp K, restricted
+signed distribution, current Chen mean, integral certificates and final
+bad-semiprime estimate remain outstanding. Theorem 1.1 and Corollary 1.2
+are not complete.
+
+All three modules passed strict direct compilation and individual bundled
+kernel replay. The defining-module environment inventory audited all
+**47 declarations**: 19 Euler normalization, 10 scalar absorption and 18
+actual error declarations, including private and generated declarations.
+Only `propext`, `Classical.choice` and `Quot.sound` occur transitively.
+The final aggregate `lake build` passed with **9,637 jobs**. The three
+sources, public root, audit and pins had identical hashes before and after
+verification, and actual dependency revisions match the manifest.
+Evidence is in `.lake/main-theorem-verification-20261012/normalized-rho/`:
+`normalized-rho-verification.json`, `normalized-rho-declarations.json`,
+`normalized-rho-theorem-types.txt`, and `final-aggregate-build-status.json`.
+This covers three new module kernel replays and full aggregate compilation;
+it is not complete-root kernel replay or a claim of remote CI success.
+
+Reproduce this checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.ActualSmallEulerNormalization
+lake env leanchecker --verbose ImbalancedChen.NormalizedSmallRosserError
+lake env leanchecker --verbose ImbalancedChen.ActualNormalizedRhoError
+lake env lean -DwarningAsError=true verification/NormalizedRhoAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `ActualSmallEulerNormalization` | `10733388e3a16ceddc1a58387c6fb60a8c261fc46f97666575670251bc523b63` |
+| `NormalizedSmallRosserError` | `18b7f3cb38d9b1e534106a173c482e20525352248aec5a8b802fc551804e7be4` |
+| `ActualNormalizedRhoError` | `ac6936d7ae3d493d36b3cf5f84c24d9e45cfb21a366bfad13cb09222481558c5` |
+
+The fixed-s raw density remains a separate analytic gap. The pinned
+`upperRosserSetDensityRatio_eq_one_add_sum_relativeBoundaryDepths` gives
+an exact finite exit-layer decomposition, while the available all-depth
+upper and lower theorems give only their respective one-sided bounds.
+The scaled-prefix-tail bridge still takes its comparison as a hypothesis,
+and a bound on `tail*V` must not be read as a bound on `tail`.
+The following checkpoint isolates the exact strict first-cube carrier
+`p^3<R` of the raw upper weight. Subsequent reverse limits must link
+`R=N^beta`, `y=N^u` at positive fixed or compact exponent parameters and
+control deletion of primes dividing N. An equality limit uniform in N
+independently of the prime carrier is false: if N contains every carrier
+prime, the actual density ratio is one.
+
+## Strict cube reduction and full power Euler constants (12 October 2026)
+
+Four modules advance the same-weight density problem:
+
+- `UpperRosserCubeCarrier` derives `p^3<R` from the first odd-prefix test
+  for every prime in an active upper coefficient. Restricting the finite
+  prime carrier to that strict cubic region leaves every coefficient and
+  every weighted divisor sum unchanged, without assumptions on the test
+  function or a positive lower bound on R.
+- `PrimeCubeCutoff` identifies the filtered actual prime carrier with
+  `min(y,R^(1/3))` for `R>=0`. It retains the target-prime exclusions,
+  enumeration cap, and excluded boundary `p^3=R`. For `D>1` and
+  `beta<=3*u`, this is `D^(beta/3)`; positive beta gives logarithmic
+  coordinate three.
+- `ActualRosserCubeReduction` proves exact equality of the actual upper
+  coefficient, reciprocal-totient density and divisor polynomial at both
+  cutoffs, for every integer test argument. The normalized identity keeps
+  the Euler-product ratio as a separate factor. These finite identities
+  remain valid for truncated caps and are not density asymptotics.
+- `FullPowerEulerNormalization` proves the full leading constant
+  `V_N(N^a)*log N/C_N -> 2*exp(-gamma)/a` along positive even targets for
+  every fixed `a>0`, and the ratio `V_N(N^a)/V_N(N^b) -> b/a` for fixed
+  `a,b>0`. The Mertens product is evaluated at `ceil(N^a)-1`; the actual
+  odd-prime product and target-prime tail supply the remaining factors.
+  No desired density limit or prime theorem is a terminal hypothesis.
+
+The power-limit theorems use the full product
+`finiteSieveDensity N (ceil(N^a))`. Using the actual finite-cap interface
+requires a cap covering each cutoff. These four modules alone do not give
+uniformity over a compact set of varying exponents; the next checkpoint
+supplies it. At `D=N`, the cube-reduction Euler
+ratio now has limit `3*u/beta`; the remaining same-raw-weight density at
+coordinate three is still open. An upper sieve bound alone does not prove
+that its limit is `2*exp(gamma)/3`. Theorem 1.1 and Corollary 1.2 remain
+incomplete, including the causal policy/compiler, sharp signed density,
+restricted signed distribution, current Chen mean, integral-certificate
+semantics and final bad-semiprime estimate.
+
+All four modules passed strict direct compilation and individual bundled
+kernel replay. The defining-module environment inventory audited all
+**79 declarations**: 8 cube-carrier, 14 cutoff, 16 actual-reduction and 41
+full-power-normalization declarations, including private and generated
+declarations. Only `propext`, `Classical.choice` and `Quot.sound` occur
+transitively. The final aggregate `lake build` passed with **9,641 jobs**.
+All four sources, root, audit and pins were unchanged through verification;
+actual dependency revisions match the manifest. Evidence is in
+`.lake/main-theorem-verification-20261012/rosser-cube/`:
+`rosser-cube-verification.json`, `rosser-cube-declarations.json`,
+`rosser-cube-theorem-types.txt`, and `final-aggregate-build-status.json`.
+This is four new module kernel replays and full aggregate compilation, not
+complete-root kernel replay or remote CI success.
+
+Reproduce this checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.UpperRosserCubeCarrier
+lake env leanchecker --verbose ImbalancedChen.PrimeCubeCutoff
+lake env leanchecker --verbose ImbalancedChen.ActualRosserCubeReduction
+lake env leanchecker --verbose ImbalancedChen.FullPowerEulerNormalization
+lake env lean -DwarningAsError=true verification/RosserCubeAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `UpperRosserCubeCarrier` | `a10e233e5e5b944c0dad801ee624a1c389f4b23eab41e31c84d62bc5e2d50b66` |
+| `PrimeCubeCutoff` | `8ff53f694ee8de699b2cc240d4b4bf574ca0e1ac68c0b490710c195a4c0d07f7` |
+| `ActualRosserCubeReduction` | `a16059f33af6864fe99965d647e96b63a2c3a9100758766452ab0599adcec720` |
+| `FullPowerEulerNormalization` | `32f6fba88d1e9bcb40bd2865013187c24d25cd06d72e2b6dacc367a863150371` |
+
+## Uniform powers and actual reciprocal-prime cells (12 October 2026)
+
+Two further modules supply analytic inputs for compact logarithmic cells:
+
+- `UniformPowerEulerNormalization` proves locally uniform convergence of
+  `V_N(N^a)*log N/C_N` to `2*exp(-gamma)/a` on `a>0`, then uniform convergence
+  on every `[a0,a1]` with `a0>0`, along positive even targets. It uses
+  monotonicity in the exponent, the proved pointwise limits and compactness;
+  the finite Euler products are not assumed continuous. The actual-cap
+  corollary chooses one `N0>=2` before N, the exponent and the cap, with only
+  the covering condition `N^a<=cap`. Moving exponents `alpha(N)->a>0` and
+  eventually covering caps are included in two path-limit corollaries.
+- `ActualPrimeReciprocalMass` proves the actual single-prime mass
+  `sum_(N^a<=p<N^b, prime p, p not dividing N) 1/(p-1) -> log(b/a)` for fixed
+  `0<a<b`, with no upper bound on b and no parity restriction on N. Its
+  canonical cap is `ceil(N^b)`, independent of the target N. Separate exact
+  finite bridges pay target-prime removal, denominator replacement and
+  opposite half-open endpoints by
+  `2*log N/(N^a*log 2)+6/N^a`. The remaining interval limit comes from the
+  pinned proved Mertens supplier; the explicit error tends to zero.
+
+These are genuine suppliers, not hypotheses naming the desired limits.
+They do not yet prove multi-prime cell masses, the weighted fixed-rank
+Rosser boundary integrals, or a same-weight limit equal to F(s). The finite
+nonnegative boundary-layer expansion suggests proving arbitrary finite
+prefix lower limits and then letting the prefix grow, without claiming
+that the normalized discrete tail vanishes. The causal compiler, sharp K,
+distribution, current Chen mean and final main theorem remain incomplete.
+
+Both sources passed strict direct compilation and individual bundled
+kernel replay. The defining-module environment inventory audited all
+**23 declarations**: 8 uniform-normalization and 15 actual-prime-mass
+declarations, including private and generated declarations. Only `propext`,
+`Classical.choice` and `Quot.sound` occur transitively. The final aggregate
+`lake build`, including all six new modules from these two checkpoints,
+passed with **9,643 jobs**. All six source hashes and the final root, audit
+and dependency pins were unchanged through this verification; actual
+dependency revisions match the manifest.
+
+Evidence is in `.lake/main-theorem-verification-20261012/power-prime-mass/`:
+`power-prime-mass-verification.json`, `power-prime-mass-declarations.json`,
+`power-prime-mass-theorem-types.txt`, and `final-aggregate-build-status.json`.
+Together the two checkpoints cover six new module kernel replays and
+79 + 23 = 102 audited declarations, plus full aggregate compilation. This
+does not claim complete-root kernel replay or successful remote CI.
+
+The next checkpoint supplies the actual-carrier bridge using the pinned
+exact set-density boundary identity. An alternative public API is
+`mainSum_upperRosserWeight_eq_sieveProduct_add_suzukiActualT` and its
+odd-depth expansion. The generic expansion already cancels the apparent
+extra Euler denominator.
+The local dictionary identifies the lower-prime Euler product with
+the actual strict product at the boundary prime q. This expresses each
+boundary contribution as a product of `1/(p-1)` factors times
+`V_N(q)/V_N(y)`, ready for the two suppliers above. The continuous
+finite-prefix integral lower bound remains separate from this bridge.
+
+Reproduce the two-module checkpoint with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.UniformPowerEulerNormalization
+lake env leanchecker --verbose ImbalancedChen.ActualPrimeReciprocalMass
+lake env lean -DwarningAsError=true verification/PowerPrimeMassAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `UniformPowerEulerNormalization` | `8888d8d4df618d3504c6fbf08f1b6a132bba16b2a378e68906d2f17240d76475` |
+| `ActualPrimeReciprocalMass` | `f2cb90c3751d4bbc1208e9f1694f820befa948bddf1c396ca564c10ccd1e1108` |
+
+## Actual Rosser boundary boxes and a positive density gain (12 October 2026)
+
+Five modules connect the prime-mass suppliers to the same raw upper Rosser
+coefficient, rather than an independently chosen comparison weight:
+
+- `ActualPrimeEulerSplit` splits the actual finite Euler product at a prime
+  q into strict lower, singleton and strict upper factors. It rewrites the
+  boundary denominator as `V_N(q)/V_N(y)` and proves positivity of every
+  factor for even targets. The finite identities allow arbitrary caps.
+- `ActualRosserBoundaryExpansion` identifies the actual divisor density
+  with the pinned subset density at `ceil R`, then proves its exact
+  normalized expansion as one plus nonnegative actual boundary terms.
+  It requires a covering cap and every carrier prime strictly below R;
+  it does not assume any density asymptotic. Selected actual subcarriers
+  give lower bounds with the same coefficients.
+- `ActualPrimeBoxMass` defines genuine finite tuples of target-coprime
+  primes in `[N^(a_i),N^(b_i))`, proves exact mass factorization, and derives
+  the limit `prod_i log(b_i/a_i)` for fixed `0<a_i<b_i`. Adjacent separated
+  intervals give strictly decreasing, distinct coordinates and identify
+  this mass with the reciprocal totient of the tuple product. That last
+  identity is not asserted for overlapping intervals.
+- `ActualPrimeBoxEulerLower` proves Euler-product monotonicity and an
+  eventual lower bound for these tuples weighted by `V_N(p_j)/V_N(N^u)`:
+  `(u/b_j)*prod_i log(b_i/a_i)-eta`, when `b_j<=u`. The common threshold
+  precedes every later even target and every covering cap. Geometric
+  eligibility for a Rosser boundary is a separate obligation.
+- `ActualRosserTripleBox` discharges that obligation for three-prime boxes
+  satisfying adjacent separation, `b_0<=u`, `3*b_0<=beta`,
+  `beta<=a_0+a_1+3*a_2`, and `u<=beta`. It proves the strict first cube
+  test, inclusive shell test at `ceil(N^beta)`, and injection of a tuple
+  into `(p_2,{p_0,p_1})`. Thus the actual normalized density is eventually
+  at least `1+(u/b_2)*prod_i log(b_i/a_i)-eta`, without duplicate counting.
+
+The final module supplies all these geometric conditions for
+`u=1/3`, `beta=1`, and the box
+
+`[.30,.32) x [.27,.29) x [.17,.19)`
+
+in logarithmic prime coordinates. Its gain is
+`(100/57)*log(16/15)*log(29/27)*log(19/17)`, proved at least `25/31407`.
+Choosing `eta=1/10000` proves, with no remaining analytic or geometric
+premises:
+
+```text
+exists N0 >= 2, forall even N >= N0, forall cap >= N^(1/3),
+  actualSmallRosserPlusDensity N cap (N^(1/3)) N
+    / actualSmallEulerProduct N cap (N^(1/3)) >= 1 + 1/2000.
+```
+
+This is a positive contribution from one actual box. It does not prove
+the sharp `F(3)=2*exp(gamma)/3` limit, a continuous boundary-layer integral,
+or the manuscript's numerical constants. Disjoint box families, higher
+odd ranks and finite-prefix integral lower limits remain open, along with
+the boxed policy/compiler, signed distribution, sharp K, current Chen mean
+and the final Theorem 1.1/Corollary 1.2. Independent read-only review checked
+the same-coefficient identity, quantifier order, Euler-ratio orientation,
+strict endpoints, injection and exact numerical gain at the frozen hashes.
+
+All five modules passed strict compilation and individual bundled kernel
+replay. The environment-based inventory audited all **67 declarations**:
+18 Euler-split, 6 boundary-expansion, 17 box-mass, 10 Euler-weighted-box and
+16 triple-box declarations, including private and generated declarations.
+Only `propext`, `Classical.choice` and `Quot.sound` occur transitively.
+The first four replays were reused only after checking their source,
+compiled object, checker binary and log hashes; the fifth was replayed
+after its final numeric theorem was frozen. Actual dependency revisions
+match the manifest, and both the worktree and index of the actual mathlib
+and goldbach supplier checkouts were clean before and after the audit.
+
+The final aggregate `lake build` passed with **9,648 jobs**. All five
+sources, the root, audit and dependency pins were unchanged through
+verification; both supplier checkouts also remained tracked-clean after
+the build. Evidence is in
+`.lake/main-theorem-verification-20261012/boundary-box/`:
+`boundary-box-verification.json`, `boundary-box-declarations.json`,
+`boundary-box-theorem-types.txt`, and `final-aggregate-build-status.json`.
+The verification scope is five new module kernel replays, their full
+declaration inventory, and aggregate compilation. It is not complete-root
+kernel replay or evidence of successful remote CI.
+
+Reproduce the five-module proof checks with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.ActualPrimeEulerSplit
+lake env leanchecker --verbose ImbalancedChen.ActualRosserBoundaryExpansion
+lake env leanchecker --verbose ImbalancedChen.ActualPrimeBoxMass
+lake env leanchecker --verbose ImbalancedChen.ActualPrimeBoxEulerLower
+lake env leanchecker --verbose ImbalancedChen.ActualRosserTripleBox
+lake env lean -DwarningAsError=true verification/BoundaryBoxAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `ActualPrimeEulerSplit` | `d9194dfe21942b277cb3f5fc246ec448472bbc75b14cc30f6cacd9ca22dd74b9` |
+| `ActualRosserBoundaryExpansion` | `be0f26dc2405d3ae48d82cf70a72b31105014b8915c2098a1abdf279cdfa6768` |
+| `ActualPrimeBoxMass` | `3d17cfda8af10561829b23f7370b7a9481a4856dd7f78be05ebac3926bf1204f` |
+| `ActualPrimeBoxEulerLower` | `adc0657ea574d58a0364423062c556119a06380b6edcdb31d6175ca3f99083cb` |
+| `ActualRosserTripleBox` | `0fe4d963634c41442fa62f736543c70944f3f8eb0843e08f800ebebc0b02dea5` |
+
+## Finite box families and the continuous three-prime layer (12 October 2026)
+
+The first actual box now extends to the complete continuous three-prime
+boundary region. The proof combines true finite sums before taking limits:
+
+- `ActualRosserTripleBoxFamily` proves coordinate-separated boxes have
+  disjoint actual prime-tuple carriers. Their union injects into one
+  boundary sum via the strictly decreasing tuple's range. Thus the base
+  term one occurs once for the family. The eventual theorem allocates
+  `eta/(card I+1)` to each box and takes a finite maximum of thresholds;
+  it also covers the empty family with an explicit positive outer exponent.
+- `LogPrimeBoxIntegral` proves integrability and the genuine Lebesgue
+  product-box formula `integral prod_i (1/x_i) = prod_i log(b_i/a_i)` on
+  `prod_i [a_i,b_i)`, for `0<a_i<=b_i`. It includes arbitrary constant
+  multipliers, degenerate intervals and the zero-dimensional unit box.
+- `RosserTripleMesh` constructs finite half-open inner meshes of
+  `Omega3={0<x_2<x_1<x_0<1, 3<x_0+x_1+3*x_2}`. Each coordinate exceeds
+  `1/3`; every selected cell lies inside the region, distinct cells have
+  a separating coordinate, and every region point eventually belongs to
+  a selected cell. Strict shell and ordering gaps provide this coverage
+  at every point, without assuming a boundary-null-set result.
+- `RosserTripleMeshIntegral` proves the selected-cell lower sum
+  `sum (1/b_2)*prod_i log(b_i/a_i)` equals an integral of a finite sum of
+  indicator-weighted densities. The integrands converge everywhere to
+  the Omega3 indicator times `1/(x_0*x_1*x_2^2)`, and are dominated by
+  `81*indicator([1/3,1]^3)`. Dominated convergence therefore gives the
+  actual set integral `rosserTripleLayerIntegral`, rather than defining
+  that integral to be the limit.
+- `RosserTripleLayerIdentity` extracts the final coordinate through a
+  measure-preserving equivalence, preserves the order of the other two,
+  and applies Fubini to the proved integrable region indicator. The slice
+  is exactly `q^(-2)*upperRosserBoundaryMass 1 3 q` for positive q, and
+  vanishes outside `(0,1)`. The strict shell matches pointwise; the residual
+  nonnegativity condition follows from both larger coordinates being less
+  than one. The pinned proved source identity then identifies the entire
+  integral with `SuzukiFiniteContinuousLayers.suzukiLayer 1 2 3 3`.
+- `ActualRosserTripleLayerLower` scales all mesh endpoints by any fixed
+  `u>0`, uses `beta=3*u`, and proves every actual-prime box gate and the
+  exact cancellation of u in its logarithmic mass and endpoint ratio.
+  The continuous limit first chooses a mesh with error `eta/2`; the finite
+  family then chooses an N threshold with error `eta/2`. The threshold
+  precedes every later even N and every cap covering `N^u`.
+
+Consequently, for every fixed `u>0` and `eta>0`, the same raw upper Rosser
+density satisfies
+
+```text
+exists N0 >= 2, forall even N >= N0, forall cap >= N^u,
+  actualSmallRosserPlusDensity N cap (N^u) (N^(3*u))
+    / actualSmallEulerProduct N cap (N^u)
+      >= 1 + rosserTripleLayerIntegral - eta.
+```
+
+The original `u=1/3, R=N` case is a corollary. The integral is exactly Suzuki
+source layer three, with no extra scale, permutation or Jacobian factor.
+This proof discharges the
+prime-mass, Euler-ratio, mesh-limit and covering-cap inputs to the displayed
+first-layer lower bound. It is still not the full fixed-s density limit or
+Theorem 1.1/Corollary 1.2. Higher odd ranks and arbitrary finite prefixes,
+the causal boxed compiler, sharp K and certificate semantics, restricted
+signed distribution, current Chen mean and final bad-semiprime estimate
+remain to be proved.
+
+Independent read-only review checked cross-box injectivity and the single
+base term, error allocation and threshold order, half-open ownership and
+strict inner coverage, actual product-volume integration, the measure-
+preserving coordinate order, both Fubini steps, the exact shell, and the
+final Suzuki corollaries at their frozen source hashes.
+
+All six modules passed strict compilation and individual bundled kernel
+replay. The environment inventory audited all **108 declarations**,
+including private and generated declarations: 12 product-box integral,
+34 mesh geometry, 12 actual box-family, 34 mesh-integral, 11 layer-identity
+and 5 final actual-density declarations. Only `propext`, `Classical.choice`
+and `Quot.sound` occur transitively. Four early kernel replays were reused
+after checking their source, compiled object, binary, configuration, pin
+and log hashes; the identity and final actual-density modules were replayed
+after their final versions were frozen. The actual mathlib and goldbach
+supplier revisions match the manifest, and their tracked worktrees and
+indexes remained clean before and after the audit.
+
+The final aggregate `lake build` passed with **9,654 jobs**. The six source
+hashes, root, audit and pins were unchanged through verification; both
+supplier checkouts also remained tracked-clean after the build. Evidence
+is in `.lake/main-theorem-verification-20261012/box-family/`:
+`triple-layer-verification.json`, `triple-layer-declarations.json`,
+`triple-layer-theorem-types.txt`, and `final-aggregate-build-status.json`.
+This records six new module kernel replays and full aggregate compilation,
+not complete-root kernel replay or successful remote CI.
+
+Reproduce the six-module proof checks with the pinned toolchain on PATH:
+
+```sh
+lake build
+lake env leanchecker --verbose ImbalancedChen.ActualRosserTripleBoxFamily
+lake env leanchecker --verbose ImbalancedChen.LogPrimeBoxIntegral
+lake env leanchecker --verbose ImbalancedChen.RosserTripleMesh
+lake env leanchecker --verbose ImbalancedChen.RosserTripleMeshIntegral
+lake env leanchecker --verbose ImbalancedChen.RosserTripleLayerIdentity
+lake env leanchecker --verbose ImbalancedChen.ActualRosserTripleLayerLower
+lake env lean -DwarningAsError=true verification/TripleLayerAudit.lean
+```
+
+Frozen source SHA-256 values:
+
+| Module | SHA-256 |
+| --- | --- |
+| `ActualRosserTripleBoxFamily` | `ca020750d0f3a39268943d097ac077099b63d86137404070f55107b8f0d18488` |
+| `LogPrimeBoxIntegral` | `0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28` |
+| `RosserTripleMesh` | `b3d6dcc66c1f5cc34898badaa5a2a4d5c0d2118647fc097e79974444dfc83752` |
+| `RosserTripleMeshIntegral` | `d604a69c3e9ecec37b8e32c64fd5b960f3efddf70ff3954623a58afae2dcd1a3` |
+| `RosserTripleLayerIdentity` | `a04f4b7c28a24e586207d5d8af2ca3bea1f31792886f4ed99a6f472c4338e1c0` |
+| `ActualRosserTripleLayerLower` | `810df71dae891618530951b1c1fb77859c0e5e7c48c72c336b7275be3f605d37` |
