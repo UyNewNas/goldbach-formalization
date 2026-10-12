@@ -296,9 +296,11 @@ private theorem squareIntegral_mono {f g : ℝ → ℝ → ℝ}
 theorem squareIntegral_weightedMass (C : ℝ) :
     squareIntegral (fun u v => C * u ^ 2 * (1 - v)) = C / 6 := by
   have hv : (∫ v in (0 : ℝ)..1, (1 : ℝ) - v) = 1 / 2 := by
-    rw [intervalIntegral.integral_sub (continuous_const.intervalIntegrable 0 1)
+    rw [intervalIntegral.integral_sub (μ := volume)
+      (f := fun _ : ℝ => (1 : ℝ)) (g := fun v : ℝ => v)
+      (continuous_const.intervalIntegrable 0 1)
       (continuous_id.intervalIntegrable 0 1), intervalIntegral.integral_const,
-      intervalIntegral.integral_id]
+      integral_id]
     norm_num
   calc
     squareIntegral (fun u v => C * u ^ 2 * (1 - v)) =
@@ -307,8 +309,8 @@ theorem squareIntegral_weightedMass (C : ℝ) :
         intervalIntegral.integral_mul_const]
       ring
     _ = C / 6 := by
-      rw [hv, intervalIntegral.integral_pow]
-      norm_num <;> ring
+      rw [hv, integral_pow]
+      norm_num; ring
 
 /-- A proved denominator cap gives a lower bound on the actual chart integral. -/
 theorem chartIntegral_lower_of_denominatorCap {k D : ℝ} (hk : k = -3 ∨ k = 1)
@@ -331,7 +333,9 @@ theorem chartIntegral_lower_of_denominatorCap {k D : ℝ} (hk : k = -3 ∨ k = 1
         div_le_div_of_nonneg_left hn (chartDenominator_pos hk hu hv) (hD u hu v hv)
   rw [squareIntegral_weightedMass] at hbound
   change |k| * step ^ 3 / D ≤ squareIntegral (chartKernel k)
-  convert hbound using 1 <;> dsimp [C] <;> ring
+  convert hbound using 1
+  dsimp [C]
+  ring
 
 def negativeDenominatorCap : ℝ := rho * mu * (5 / 24 : ℝ) ^ 2
 def positiveDenominatorCap : ℝ := rho ^ 2 * (53 / 256 : ℝ) ^ 2

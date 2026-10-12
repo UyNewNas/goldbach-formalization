@@ -64,7 +64,7 @@ For `k=-3,1`, the two charts use `0<u,v<1` and
 - absolute Jacobian `abs(k)*h^2*u`;
 - integral `6*abs(k)*h^3 * integral_0^1 integral_0^1 u^2*(1-v)/(x*y*Ro*Rn) dv du`.
 
-The four denominators are positive on the closed square. For `k=-3` they are bounded above by `(rho,mu,5/24,5/24)`; for `k=1`, by `(rho,rho,53/256,53/256)`. The exact numerator integral is `1/6`, giving `3/95000` and `32/3042147`. Thus this coarse bound can be certified directly without obtaining the large archive. The source distinguishes its endpoint-tree limit from an arbitrary frozen finite tree; finite realization and the rough-cutoff tail remain a separate semantic interface.
+The four denominators are positive on the closed square. For `k=-3` they are bounded above by `(rho,mu,5/24,5/24)`; for `k=1`, by `(rho,rho,53/256,53/256)`. The exact numerator integral is `1/6`, giving `3/95000` and `32/3042147`. These real chart-integral bounds and their adopted sum now have strict compilation, original kernel replay and owned-declaration audit acceptance on the exact P0 source; see [ROUND2_HANDOFF.md](ROUND2_HANDOFF.md). The physical-domain change of variables and coverage, identification with the actual tree/density, finite realization and rough-cutoff tail remain separate semantic interfaces. The selected values and accounting are unchanged.
 
 ### Upper error ledger
 
@@ -102,7 +102,7 @@ and the required semantic formula is
 
 The coefficient `K/80` is exactly `K*(1/20)*(1/4)`. The added `1/20` comes from proving the actual Buchstab bound `omega(s)>=11/20` for `s>=7/3`, beyond the already used `1/2`. No permutation factor or extra factor 2 appears.
 
-### First actual row and certification target
+### First actual row and accepted local certificates
 
 ```json
 ["E0", 422, 510, "76088109/532480000", "0", "46334240358131757333311787501124513918660", "46334240358131757333311787501124513918662"]
@@ -110,7 +110,7 @@ The coefficient `K/80` is exactly `K*(1/20)*(1/4)`. The added `1/20` comes from 
 
 Its endpoints are `tl=937361/4096000`, `tr=1875373/8192000`, `ul=194217/1280000`, `ur=388777/2560000`, `Z=76088109/532480000`. The inner gate is attained with exact margin zero, while `Z-a=31679277/532480000>0`.
 
-The first Lean target uses the actual fibre above and the simpler rational enclosure `[31703/10^12,31704/10^12]`. It must prove the integral identity, logarithm-enclosure correctness, and the concrete row conditions. This catalog does not state that the original much tighter Q160 endpoint interval has been kernel checked. The first-cell result must not be promoted to a theorem about the sum over all rows.
+The actual first fibre now has accepted Lean certificates for its integral identity, logarithm-enclosure correctness, concrete row conditions and the simpler rational enclosure `[31703/10^12,31704/10^12]`. The receiving round additionally certifies the real finite integral sum of the first four E0 rows, including this first row, through independently accepted Geometry / Prefix4 modules; see [ROUND2_HANDOFF.md](ROUND2_HANDOFF.md) for source hashes, full theorem types and gate evidence. The four-row sum must not be added to the first-row value again. Neither result certifies the original tighter Q160 intervals, all 17,572 rows, the E1 contribution or the full mask/ledger.
 
 ### Lower refinement and complete explicit reserves
 

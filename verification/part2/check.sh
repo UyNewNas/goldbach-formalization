@@ -9,6 +9,11 @@ python3 verification/part2/import_paired_v2.py \
   verification/part2/data/corpus-renewal-paired-certificate-v2-20261010.json \
   --check-generated ImbalancedChen/Certificates/PairedV2Data.lean
 
+python3 verification/part2/generate_paired_prefix.py \
+  verification/part2/data/corpus-renewal-paired-certificate-v2-20261010.json \
+  --count 4 --check-generated ImbalancedChen/Certificates
+python3 verification/part2/round2/upstream/verify_upstream_acceptance.py
+
 modules=(
   ImbalancedChen.Certificates.PairedFibreIntegral
   ImbalancedChen.Certificates.RationalLogCertificate
@@ -16,9 +21,14 @@ modules=(
   ImbalancedChen.Certificates.PairedV2Data
   ImbalancedChen.Certificates.PairedV2
   ImbalancedChen.Certificates.AboveMuSecondCoarse
+  ImbalancedChen.Certificates.PairedV2Geometry
+  ImbalancedChen.Certificates.PairedV2Prefix4Data
+  ImbalancedChen.Certificates.PairedV2Prefix4
 )
 
-lake build "${modules[@]}"
+for module in "${modules[@]}"; do
+  lake build "$module"
+done
 for module in "${modules[@]}"; do
   lake env lean -DwarningAsError=true "${module//.//}.lean"
 done

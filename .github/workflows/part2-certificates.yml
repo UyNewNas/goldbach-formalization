@@ -29,9 +29,9 @@ concurrency:
 jobs:
   certificates:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 90
     env:
-      LEAN_NUM_THREADS: 2
+      LEAN_NUM_THREADS: 1
       PART2_MODULES: >-
         ImbalancedChen.Certificates.PairedFibreIntegral
         ImbalancedChen.Certificates.RationalLogCertificate
@@ -39,6 +39,9 @@ jobs:
         ImbalancedChen.Certificates.PairedV2Data
         ImbalancedChen.Certificates.PairedV2
         ImbalancedChen.Certificates.AboveMuSecondCoarse
+        ImbalancedChen.Certificates.PairedV2Geometry
+        ImbalancedChen.Certificates.PairedV2Prefix4Data
+        ImbalancedChen.Certificates.PairedV2Prefix4
     defaults:
       run:
         shell: bash
@@ -110,6 +113,12 @@ jobs:
             verification/part2/data/corpus-renewal-paired-certificate-v2-20261010.json \
             --check-generated ImbalancedChen/Certificates/PairedV2Data.lean \
             2>&1 | tee "$PART2_LOG_DIR/data-decoding.log"
+          python3 verification/part2/generate_paired_prefix.py \
+            verification/part2/data/corpus-renewal-paired-certificate-v2-20261010.json \
+            --count 4 --check-generated ImbalancedChen/Certificates \
+            2>&1 | tee "$PART2_LOG_DIR/prefix4-decoding.log"
+          python3 verification/part2/round2/upstream/verify_upstream_acceptance.py \
+            2>&1 | tee "$PART2_LOG_DIR/upstream-reception.log"
           # This step validates bytes and arithmetic decoding only. The later
           # Lean build, kernel replay and axiom audit are independent gates.
       - name: Install Elan and the pinned project toolchain
@@ -162,7 +171,9 @@ jobs:
           set -euo pipefail
           lean --version 2>&1 | tee "$PART2_LOG_DIR/lean-version.log"
           read -r -a modules <<< "$PART2_MODULES"
-          lake build "${modules[@]}" 2>&1 | tee "$PART2_LOG_DIR/build.log"
+          for module in "${modules[@]}"; do
+            lake build "$module" 2>&1 | tee -a "$PART2_LOG_DIR/build.log"
+          done
           for module in "${modules[@]}"; do
             source="${module//.//}.lean"
             lake env lean -DwarningAsError=true "$source" 2>&1 | tee "$PART2_LOG_DIR/${module##*.}-strict.log"
@@ -212,8 +223,11 @@ jobs:
                   raise SystemExit('Unexpected declaration module')
               if set(record['axioms']) - {'propext', 'Classical.choice', 'Quot.sound'}:
                   raise SystemExit(f'Forbidden transitive axioms: {record}')
-              if not isinstance(record.get('type'), str) or not record['type']:
-                  raise SystemExit('Missing Lean-printed declaration type')
+              for field in ['type', 'readable_type']:
+                  if not isinstance(record.get(field), str) or not record[field]:
+                      raise SystemExit(f'Missing Lean-printed declaration type: {field}')
+                  if '⋯' in record[field]:
+                      raise SystemExit('Truncated Lean-printed declaration type')
           for module in modules:
               replay = (out / (module.rsplit('.', 1)[1] + '-replay.log')).read_text().splitlines()
               if 'replaying ' + module not in replay:

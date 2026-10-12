@@ -23,9 +23,18 @@ namespace ImbalancedChen.Certificates
 open scoped BigOperators
 
 structure PairedIntegralCertificate where
-  K a tl tr ul ur Z : ℚ
-  logT logU logZ : RationalLogCertificate
-  lower upper : ℚ
+  K : ℚ
+  a : ℚ
+  tl : ℚ
+  tr : ℚ
+  ul : ℚ
+  ur : ℚ
+  Z : ℚ
+  logT : RationalLogCertificate
+  logU : RationalLogCertificate
+  logZ : RationalLogCertificate
+  lower : ℚ
+  upper : ℚ
   deriving DecidableEq, Repr
 
 def PairedIntegralCertificate.bracketLower (c : PairedIntegralCertificate) : ℚ :=
@@ -87,12 +96,14 @@ theorem PairedIntegralCertificate.check_sound (c : PairedIntegralCertificate)
       1 / (c.a : ℝ) - (1 + Real.log ((c.Z : ℝ) / c.a)) / c.Z := by
     simp only [PairedIntegralCertificate.bracketLower, Rat.cast_sub,
       Rat.cast_div, Rat.cast_add, Rat.cast_one]
-    exact sub_le_sub_left (div_le_div_of_nonneg_right (add_le_add_left hZ.2 1) hzR.le) _
+    exact sub_le_sub_left
+      (div_le_div_of_nonneg_right (add_le_add (le_refl (1 : ℝ)) hZ.2) hzR.le) _
   have hBU : 1 / (c.a : ℝ) - (1 + Real.log ((c.Z : ℝ) / c.a)) / c.Z ≤
       (c.bracketUpper : ℝ) := by
     simp only [PairedIntegralCertificate.bracketUpper, Rat.cast_sub,
       Rat.cast_div, Rat.cast_add, Rat.cast_one]
-    exact sub_le_sub_left (div_le_div_of_nonneg_right (add_le_add_left hZ.1 1) hzR.le) _
+    exact sub_le_sub_left
+      (div_le_div_of_nonneg_right (add_le_add (le_refl (1 : ℝ)) hZ.1) hzR.le) _
   have hc0 : (0 : ℝ) ≤ (c.K : ℝ) / 80 := by positivity
   have hTL : (c.K : ℝ) / 80 * c.logT.lower ≤
       (c.K : ℝ) / 80 * Real.log ((c.tr : ℝ) / c.tl) :=

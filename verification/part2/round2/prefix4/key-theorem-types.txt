@@ -1,0 +1,129 @@
+Exact readable_type fields from the successful complete compiler census.
+Full explicit types are in compiler-types.json.
+
+ImbalancedChen.Certificates.pairedLocalIntegral_eq :
+∀ (K : ℝ) {a tl tr ul ur Z : ℝ},
+  LT.lt.{0} 0 a →
+    LE.le.{0} a Z →
+      LT.lt.{0} 0 tl →
+        LT.lt.{0} 0 tr →
+          LT.lt.{0} 0 ul →
+            LT.lt.{0} 0 ur →
+              Eq.{1} (ImbalancedChen.Certificates.pairedLocalIntegral K a tl tr ul ur Z)
+                (HMul.hMul.{0, 0, 0}
+                  (HMul.hMul.{0, 0, 0}
+                    (HMul.hMul.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} K 80) (Real.log (HDiv.hDiv.{0, 0, 0} tr tl)))
+                    (Real.log (HDiv.hDiv.{0, 0, 0} ur ul)))
+                  (HSub.hSub.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} 1 a)
+                    (HDiv.hDiv.{0, 0, 0} (HAdd.hAdd.{0, 0, 0} 1 (Real.log (HDiv.hDiv.{0, 0, 0} Z a))) Z)))
+transitive_axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Certificates.RationalLogCertificate.check_sound :
+∀ (c : ImbalancedChen.Certificates.RationalLogCertificate),
+  Eq.{1} c.check Bool.true → LE.le.{0} (↑c.lower) (Real.log ↑c.argument) ∧ LE.le.{0} (Real.log ↑c.argument) ↑c.upper
+transitive_axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.check_sound :
+∀ (c : ImbalancedChen.Certificates.PairedIntegralCertificate),
+  Eq.{1} c.check Bool.true →
+    LE.le.{0} (↑c.lower) (ImbalancedChen.Certificates.pairedLocalIntegral ↑c.K ↑c.a ↑c.tl ↑c.tr ↑c.ul ↑c.ur ↑c.Z) ∧
+      LE.le.{0} (ImbalancedChen.Certificates.pairedLocalIntegral ↑c.K ↑c.a ↑c.tl ↑c.tr ↑c.ul ↑c.ur ↑c.Z) ↑c.upper
+transitive_axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Certificates.PairedIntegralCertificate.sum_check_sound :
+∀ {ι : Type u_1} (s : Finset.{u_1} ι) (c : ι → ImbalancedChen.Certificates.PairedIntegralCertificate),
+  (∀ (i : ι), Membership.mem.{u_1, u_1} s i → Eq.{1} (c i).check Bool.true) →
+    LE.le.{0} (↑(∑ i ∈ s, (c i).lower))
+        (∑ i ∈ s,
+          ImbalancedChen.Certificates.pairedLocalIntegral ↑(c i).K ↑(c i).a ↑(c i).tl ↑(c i).tr ↑(c i).ul ↑(c i).ur
+            ↑(c i).Z) ∧
+      LE.le.{0}
+        (∑ i ∈ s,
+          ImbalancedChen.Certificates.pairedLocalIntegral ↑(c i).K ↑(c i).a ↑(c i).tl ↑(c i).tr ↑(c i).ul ↑(c i).ur
+            ↑(c i).Z)
+        ↑(∑ i ∈ s, (c i).upper)
+transitive_axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Certificates.PairedV2.e0GeometryCheck_sound :
+∀ {i j : ℕ} {Z : ℚ},
+  Eq.{1} (ImbalancedChen.Certificates.PairedV2.e0GeometryCheck i j Z) Bool.true →
+    ImbalancedChen.Certificates.PairedV2.E0Geometry i j Z
+transitive_axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Certificates.PairedV2.E0Geometry.fibre_argument :
+∀ {i j : ℕ} {Z : ℚ},
+  ImbalancedChen.Certificates.PairedV2.E0Geometry i j Z →
+    ∀ {t u z w : ℝ},
+      ImbalancedChen.Certificates.PairedV2.openFibreSupport i j Z t u z w →
+        LT.lt.{0} (↑ImbalancedChen.Certificates.PairedV2.a) w ∧
+          LT.lt.{0} w z ∧
+            LT.lt.{0} z u ∧
+              LT.lt.{0} u ↑ImbalancedChen.Certificates.PairedV2.h ∧
+                LT.lt.{0} (↑ImbalancedChen.Certificates.PairedV2.h) t ∧
+                  LT.lt.{0} t ↑ImbalancedChen.Certificates.PairedV2.d ∧
+                    LE.le.{0} (7 / 3)
+                      (HDiv.hDiv.{0, 0, 0}
+                        (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} 1 t) u) z)
+                          w)
+                        z)
+transitive_axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Certificates.PairedV2.Prefix4.certificates_checked :
+∀ (i : Fin 4), Eq.{1} (ImbalancedChen.Certificates.PairedV2.Prefix4.certificates i).check Bool.true
+transitive_axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Certificates.PairedV2.Prefix4.geometry_checked :
+∀ (i : Fin 4),
+  ImbalancedChen.Certificates.PairedV2.E0Geometry (ImbalancedChen.Certificates.PairedV2.Prefix4.rowIndices i).1
+    (ImbalancedChen.Certificates.PairedV2.Prefix4.rowIndices i).2 (ImbalancedChen.Certificates.PairedV2.Prefix4.rowZ i)
+transitive_axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Certificates.PairedV2.Prefix4.certificate_inputs :
+∀ (i : Fin 4),
+  Eq.{1} (ImbalancedChen.Certificates.PairedV2.Prefix4.certificates i).K ImbalancedChen.Certificates.PairedV2.K ∧
+    Eq.{1} (ImbalancedChen.Certificates.PairedV2.Prefix4.certificates i).a ImbalancedChen.Certificates.PairedV2.a ∧
+      Eq.{1} (ImbalancedChen.Certificates.PairedV2.Prefix4.certificates i).tl
+          (ImbalancedChen.Certificates.PairedV2.tLower (ImbalancedChen.Certificates.PairedV2.Prefix4.rowIndices i).1) ∧
+        Eq.{1} (ImbalancedChen.Certificates.PairedV2.Prefix4.certificates i).tr
+            (ImbalancedChen.Certificates.PairedV2.tUpper
+              (ImbalancedChen.Certificates.PairedV2.Prefix4.rowIndices i).1) ∧
+          Eq.{1} (ImbalancedChen.Certificates.PairedV2.Prefix4.certificates i).ul
+              (ImbalancedChen.Certificates.PairedV2.uLower
+                (ImbalancedChen.Certificates.PairedV2.Prefix4.rowIndices i).2) ∧
+            Eq.{1} (ImbalancedChen.Certificates.PairedV2.Prefix4.certificates i).ur
+                (ImbalancedChen.Certificates.PairedV2.uUpper
+                  (ImbalancedChen.Certificates.PairedV2.Prefix4.rowIndices i).2) ∧
+              Eq.{1} (ImbalancedChen.Certificates.PairedV2.Prefix4.certificates i).Z
+                (ImbalancedChen.Certificates.PairedV2.Prefix4.rowZ i)
+transitive_axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Certificates.PairedV2.Prefix4.integral_semantics :
+Eq.{1} ImbalancedChen.Certificates.PairedV2.Prefix4.integral
+  (HMul.hMul.{0, 0, 0} (HDiv.hDiv.{0, 0, 0} (↑ImbalancedChen.Certificates.PairedV2.K) 80)
+    (∑ i,
+      ∫ (t : ℝ) in
+        ↑(ImbalancedChen.Certificates.PairedV2.tLower
+            (ImbalancedChen.Certificates.PairedV2.Prefix4.rowIndices
+                i).1)..↑(ImbalancedChen.Certificates.PairedV2.tUpper
+            (ImbalancedChen.Certificates.PairedV2.Prefix4.rowIndices i).1),
+        ∫ (u : ℝ) in
+          ↑(ImbalancedChen.Certificates.PairedV2.uLower
+              (ImbalancedChen.Certificates.PairedV2.Prefix4.rowIndices
+                  i).2)..↑(ImbalancedChen.Certificates.PairedV2.uUpper
+              (ImbalancedChen.Certificates.PairedV2.Prefix4.rowIndices i).2),
+          ∫ (z : ℝ) in ↑ImbalancedChen.Certificates.PairedV2.a..↑(ImbalancedChen.Certificates.PairedV2.Prefix4.rowZ i),
+            ∫ (w : ℝ) in ↑ImbalancedChen.Certificates.PairedV2.a..z,
+              HDiv.hDiv.{0, 0, 0} 1
+                (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} (HMul.hMul.{0, 0, 0} t u) (HPow.hPow.{0, 0, 0} z 2)) w)))
+transitive_axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Certificates.PairedV2.Prefix4.integral_bounds :
+LE.le.{0} (↑ImbalancedChen.Certificates.PairedV2.Prefix4.lowerBound)
+    ImbalancedChen.Certificates.PairedV2.Prefix4.integral ∧
+  LE.le.{0} ImbalancedChen.Certificates.PairedV2.Prefix4.integral
+    ↑ImbalancedChen.Certificates.PairedV2.Prefix4.upperBound
+transitive_axioms=propext,Classical.choice,Quot.sound
+
+ImbalancedChen.Certificates.AboveMuSecondCoarse.adopted_coarse_lower :
+LE.le.{0} (640339 / 15210735000) ImbalancedChen.Certificates.AboveMuSecondCoarse.totalChartIntegral
+transitive_axioms=propext,Classical.choice,Quot.sound

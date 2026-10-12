@@ -5,6 +5,17 @@
 This is a proposed interface contract, not a claim that another session
 has acknowledged it. No shared definition or aggregate import is changed.
 
+The independent analytic supplier and actual first-row certificate now have
+exact-source P0 acceptance; see [the second-round handoff](ROUND2_HANDOFF.md).
+This acceptance does not constitute Part 1's agreement to this proposed
+interface. The three new E0 Geometry / Prefix4 modules have now separately
+passed strict trust-zero compilation and original stock kernel replay. This
+round's complete owned-declaration audit covers all nine production modules
+(309 declarations); the old six modules' compile/replay gates are reused from
+the fixed P0 receipt. Prefix4 certifies the actual finite sum of the first four
+E0 fibre integrals, including the previously certified first row. It does not
+identify that sum with the entire mask or supply an arithmetic parent license.
+
 - Formalization baseline: `1a80c1bcce67886f699d097fc37fd245cd3620bf`.
 - Manuscript source fixed by `docs/CURRENT_MANUSCRIPT_MAP.md`:
   `ba6ec11d800eccc54406490631895e174de85766`.
@@ -151,7 +162,7 @@ theorem ImbalancedChen.Certificates.pairedLocalIntegral_eq
 
 The intermediate theorem evaluates the actual integral
 `∫z in a..Z, log(z/a)/z^2`. The inner `w`, outer `t`, and outer `u`
-integrals use Mathlib's `intervalIntegral.integral_one_div_of_pos`.
+integrals use the proved `integral_one_div_of_pos` identity.
 The displayed closed form is a theorem conclusion, not the integral's
 definition.
 
@@ -168,9 +179,14 @@ The first adopted-row specialization uses:
 | `K` | `8452171/1250000` |
 
 This local gross fibre needs no theorem about the complete historical
-tree. Part 2 still must prove its actual decoded row, region and mask
-checks, then its rational enclosure. Part 5 receives the resulting local
-integral bound and the full retained/subtracted ledger when available.
+tree. The actual first row's concrete checks, independent rational enclosure,
+and literal integral identity are covered by the fixed P0 acceptance. The
+receiving-round Prefix4 acceptance covers the actual finite sum of source rows
+0 through 3, all E0, with exact row checks and actual integral semantics. It
+includes row 0 and must not be added to the first-row gain again. Extension to
+the remaining adopted rows, including E1, and identification with the complete
+mask/construction remain separate obligations. Part 5 receives these local
+integral bounds and the full retained/subtracted ledger when that ledger is proved.
 
 The 17,572-row same-mask-v2 data and `7/3` are lower-side adopted inputs.
 They do not certify the whole upper constant `K`. The replaced `12/5`
@@ -222,8 +238,10 @@ multiplying inequalities.
 - Whole lower ledger: all retained gains, replaced gains, discarded
   old-cell floors, rounding reserves and their exact subtraction signs
   remain explicit until the complete ledger is proved.
-- The new integral file's validation state is reported in the Part 2
-  handoff. An uncompiled source candidate is not a proved supplier.
+- The independent first-row, E0 four-row finite-sum and A coarse-chart
+  components now have the scoped acceptance reported in the Part 2 handoff.
+  Their full-mask, physical-domain and arithmetic-construction interfaces remain
+  separate; a generated candidate field alone does not provide acceptance.
 
 No interface accepts the final manuscript gain or the desired numerical
 integral inequality as an analytic assumption.

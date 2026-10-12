@@ -1,0 +1,16 @@
+--- a/verification/part2/import_paired_v2.py
++++ b/verification/part2/import_paired_v2.py
+@@ -146,8 +146,11 @@
+     for label, q, n, bounds in [("T",first["tr"]/first["tl"],1,first["lt"]),
+                                 ("U",first["ur"]/first["ul"],1,first["lu"]),
+                                 ("Z",first["z"]/A,6,first["lz"])]:
+-        lines.extend([f"  log{label} := {{ argument := {lean_rat(q)}, terms := {n},",
+-                      f"    lower := {lean_rat(bounds[0])}, upper := {lean_rat(bounds[1])} }}"])
++        lines.extend([f"  log{label} :=",
++                      f"    {{ argument := {lean_rat(q)}",
++                      f"      terms := {n}",
++                      f"      lower := {lean_rat(bounds[0])}",
++                      f"      upper := {lean_rat(bounds[1])} }}"])
+     lines.extend(["  lower := 31703 / 1000000000000", "  upper := 31704 / 1000000000000", "",
+                   "end ImbalancedChen.Certificates.PairedV2", ""])
+     lean_source = "\n".join(lines)

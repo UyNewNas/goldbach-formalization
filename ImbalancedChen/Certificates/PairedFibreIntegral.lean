@@ -41,9 +41,11 @@ private theorem hasDerivAt_pairedFibrePrimitive {a z : ℝ}
   have hd := (((hasDerivAt_const z (1 : ℝ)).add
     (Real.hasDerivAt_log hz.ne')).sub_const (Real.log a)).div
       (hasDerivAt_id z) hz.ne'
-  convert hd.neg using 1
+  apply hd.neg.congr_deriv
+  dsimp
   rw [Real.log_div hz.ne' ha.ne']
-  field_simp [hz.ne'] <;> ring
+  field_simp [hz.ne']
+  ring
 
 /-- The fibre kernel is integrable on the complete closed interval.
 Its logarithm and denominator stay within their actual domains. -/
@@ -118,8 +120,9 @@ theorem pairedFibreIntegral_eq_iterated {a Z : ℝ}
   apply intervalIntegral.integral_congr
   intro z hz
   rw [Set.uIcc_of_le hAZ] at hz
-  rw [intervalIntegral.integral_one_div_of_pos ha (ha.trans_le hz.1)]
-  simp only [div_eq_mul_inv, one_mul, mul_comm]
+  dsimp only
+  rw [integral_one_div_of_pos ha (ha.trans_le hz.1)]
+  ring
 
 /-- The exact logarithmic expression for the actual local integral.
 All three logarithms arise from proved real integration identities. -/
@@ -131,8 +134,8 @@ theorem pairedLocalIntegral_eq (K : ℝ) {a tl tr ul ur Z : ℝ}
         (1 / a - (1 + Real.log (Z / a)) / Z) := by
   unfold pairedLocalIntegral pairedFibreKernel
   simp only [intervalIntegral.integral_const_mul, intervalIntegral.integral_mul_const]
-  rw [intervalIntegral.integral_one_div_of_pos htl htr,
-    intervalIntegral.integral_one_div_of_pos hul hur,
+  rw [integral_one_div_of_pos htl htr,
+    integral_one_div_of_pos hul hur,
     pairedFibreIntegral_eq_iterated ha hAZ,
     pairedFibreIntegral_eq ha hAZ]
   ring
