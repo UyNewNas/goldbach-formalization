@@ -11,7 +11,7 @@ concurrency:
 jobs:
   lean:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 150
     env:
       LEAN_NUM_THREADS: 2
     defaults:
@@ -102,6 +102,7 @@ jobs:
           "$RUNNER_TEMP/lean-ci/run-stage" mathlib-cache lake exe cache get
       - name: Build the full project
         id: build
+        timeout-minutes: 90
         if: ${{ steps.config.outputs.run-lake-build == 'true' }}
         env:
           BUILD_ARGS: ''
