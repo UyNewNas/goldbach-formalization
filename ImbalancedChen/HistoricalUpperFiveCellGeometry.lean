@@ -141,7 +141,7 @@ private theorem historicalUpperFive_singleton_admissible_iff
     have hm := mul_le_mul_of_nonneg_left hsq (Nat.cast_nonneg (α := ℝ) p)
     simpa only [mul_one, pow_succ, mul_comm] using hm
   have hc : UpperAdmissibleSet Q [p].toFinset ↔ (p : ℝ) ^ 3 < Q := by
-    simp [UpperAdmissibleSet, pow_succ, mul_comm]
+    simp [UpperAdmissibleSet, Finset.filter_singleton, pow_succ, mul_comm]
   simp only [ordinaryRosserPrefixAdmissible, Bool.false_eq_true, if_false,
     List.prod_cons, List.prod_nil, mul_one]
   rw [hc]

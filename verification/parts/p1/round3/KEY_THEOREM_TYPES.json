@@ -1,0 +1,203 @@
+{
+  "status": "EXTRACTED_FROM_ACTUAL_VERIFIED_SOURCES",
+  "recorded_utc": "2026-10-12T21:45:28.457319+00:00",
+  "receipt_sha256": "4bd9c3220492d29202625fbfcf54745b34458eac7394fd7443bb74251c34b8db",
+  "count": 15,
+  "declarations": [
+    {
+      "name": "ImbalancedChen.mem_historicalUpperFiveFrontierTuples_iff_log_on_cell",
+      "module": "ImbalancedChen.HistoricalUpperFiveCellGeometry",
+      "source_sha256": "a131b783d59540ea98cc11574f31489e2f75d519927445b49a2e4c688ab74cbe",
+      "source_type": "theorem mem_historicalUpperFiveFrontierTuples_iff_log_on_cell\n    (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)\n    (hold : 0 < D.old) (hcheck : D.levelCheck = true)\n    (N cap : ℕ) (hN : 1 < N)\n    (hcap : (N : ℝ) ^ (D.b : ℝ) ≤ (cap : ℝ))\n    (p : Fin 5 → ℕ) (j : Fin 5 → Fin (D.m + 1))\n    (ht : actualPrimeTupleLog N p ∈\n      logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :\n    p ∈ firstExitFrontierTuples 4 (D.upperThirdPolicy (N : ℝ))\n        (roughPrimeUniverse N cap 0 ((N : ℝ) ^ (D.b : ℝ))) ↔\n      StrictAnti p ∧\n        (∀ i, Nat.Prime (p i) ∧ ¬p i ∣ N ∧\n          0 ≤ (p i : ℝ) ∧ (p i : ℝ) < (N : ℝ) ^ (D.b : ℝ)) ∧\n        3 * actualPrimeTupleLog N p 0 < (D.old : ℝ) ∧\n          actualPrimeTupleLog N p 0 + actualPrimeTupleLog N p 1 +\n            3 * actualPrimeTupleLog N p 2 <\n              (D.cell3 (historicalPrefixProject (by omega : 3 ≤ 5) j) : ℝ)",
+      "source_type_sha256": "f4edd30a7a72813fa20b1353a2c5e30e8fc60a7f7f13dbac6695f567d52b627b",
+      "elaborated_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b →\n    0 < D.old →\n      D.levelCheck = true →\n        ∀ (N cap : ℕ),\n          1 < N →\n            ↑N ^ ↑D.b ≤ ↑cap →\n              ∀ (p : Fin 5 → ℕ) (j : Fin 5 → Fin (D.m + 1)),\n                ImbalancedChen.actualPrimeTupleLog N p ∈ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j →\n                  (p ∈\n                      ImbalancedChen.firstExitFrontierTuples 4 (D.upperThirdPolicy ↑N)\n                        (ImbalancedChen.roughPrimeUniverse N cap 0 (↑N ^ ↑D.b)) ↔\n                    StrictAnti p ∧\n                      (∀ (i : Fin 5), Nat.Prime (p i) ∧ ¬p i ∣ N ∧ 0 ≤ ↑(p i) ∧ ↑(p i) < ↑N ^ ↑D.b) ∧\n                        3 * ImbalancedChen.actualPrimeTupleLog N p 0 < ↑D.old ∧\n                          ImbalancedChen.actualPrimeTupleLog N p 0 + ImbalancedChen.actualPrimeTupleLog N p 1 +\n                              3 * ImbalancedChen.actualPrimeTupleLog N p 2 <\n                            ↑(D.cell3 (ImbalancedChen.historicalPrefixProject ⋯ j)))",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "ImbalancedChen.historicalUpperFiveFrontierTuples_cell_filter",
+      "module": "ImbalancedChen.HistoricalUpperFiveCellGeometry",
+      "source_sha256": "a131b783d59540ea98cc11574f31489e2f75d519927445b49a2e4c688ab74cbe",
+      "source_type": "theorem historicalUpperFiveFrontierTuples_cell_filter\n    (D : HistoricalPrefixCapData) (hab : D.a < D.b)\n    (hold : 0 < D.old) (hcheck : D.levelCheck = true)\n    (N cap : ℕ) (hN : 1 < N)\n    (hcap : (N : ℝ) ^ (D.b : ℝ) ≤ (cap : ℝ))\n    (j : Fin 5 → Fin (D.m + 1)) :\n    (firstExitFrontierTuples 4 (D.upperThirdPolicy (N : ℝ))\n      (roughPrimeUniverse N cap 0 ((N : ℝ) ^ (D.b : ℝ)))).filter\n        (fun p => actualPrimeTupleLog N p ∈\n          logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) =\n      (actualPrimeBoxTuples N (fun _ : Fin 5 => (D.a : ℝ))\n        (fun _ => (D.b : ℝ))).filter\n        (fun p => actualPrimeTupleLog N p ∈\n          logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j ∩\n            primeAffineGateRegion ordinaryUpperFiveGateForms\n              (D.fifthParentGateBounds j))",
+      "source_type_sha256": "40b5bde2857f70d256deaabc1954a3b51bb446ad2ad2ee72231282d65f5008a0",
+      "elaborated_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a < D.b →\n    0 < D.old →\n      D.levelCheck = true →\n        ∀ (N cap : ℕ),\n          1 < N →\n            ↑N ^ ↑D.b ≤ ↑cap →\n              ∀ (j : Fin 5 → Fin (D.m + 1)),\n                {p ∈\n                      ImbalancedChen.firstExitFrontierTuples 4 (D.upperThirdPolicy ↑N)\n                        (ImbalancedChen.roughPrimeUniverse N cap 0 (↑N ^ ↑D.b)) |\n                    ImbalancedChen.actualPrimeTupleLog N p ∈ ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j} =\n                  {p ∈ ImbalancedChen.actualPrimeBoxTuples N (fun x => ↑D.a) fun x => ↑D.b |\n                    ImbalancedChen.actualPrimeTupleLog N p ∈\n                      ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j ∩\n                        ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryUpperFiveGateForms\n                          (D.fifthParentGateBounds j)}",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.fifthPrimeCorrection_eq_cells",
+      "module": "ImbalancedChen.ActualHistoricalFifthCellIntegral",
+      "source_sha256": "550602f634e27641bf1f0b811e5e201130f48587bd0760192d032b75c0c405de",
+      "source_type": "theorem fifthPrimeCorrection_eq_cells (D : HistoricalPrefixCapData)\n    (hab : D.a ≤ D.b) (N cap : ℕ) :\n    D.fifthPrimeCorrection N cap =\n      ∑ j ∈ D.cells5, D.fifthCellPrimeCorrection N cap j",
+      "source_type_sha256": "8059936db7a64bc48508634456c18da75923b3c8e8ddaa28401e40e9b9e1ae00",
+      "elaborated_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b → ∀ (N cap : ℕ), D.fifthPrimeCorrection N cap = ∑ j ∈ D.cells5, D.fifthCellPrimeCorrection N cap j",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.fifthCellPrimeCorrection_eq_residual_sums",
+      "module": "ImbalancedChen.ActualHistoricalFifthCellIntegral",
+      "source_sha256": "550602f634e27641bf1f0b811e5e201130f48587bd0760192d032b75c0c405de",
+      "source_type": "theorem fifthCellPrimeCorrection_eq_residual_sums (D : HistoricalPrefixCapData)\n    (hab : D.a < D.b) (hold : 0 < D.old) (hcheck : D.levelCheck = true)\n    (N cap : ℕ) (hN : 1 < N)\n    (hcap : (N : ℝ) ^ (D.b : ℝ) ≤ (cap : ℝ))\n    (j : Fin 5 → Fin (D.m + 1)) (hj : j ∈ D.cells5) :\n    D.fifthCellPrimeCorrection N cap j =\n      actualPrimeBoxOwnCubeMinusSum 4 N cap (D.a : ℝ) (D.b : ℝ) (D.cap5 j : ℝ)\n        (logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j ∩\n          primeAffineGateRegion ordinaryUpperFiveGateForms (D.fifthParentGateBounds j)) -\n      actualPrimeBoxOwnCubeMinusSum 4 N cap (D.a : ℝ) (D.b : ℝ) (D.old5 j : ℝ)\n        (logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j ∩\n          primeAffineGateRegion ordinaryUpperFiveGateForms (D.fifthParentGateBounds j))",
+      "source_type_sha256": "0a64761bf598c18c178b7c4834fa34c1171dd9195a60a9bb957d70e73c1491bd",
+      "elaborated_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a < D.b →\n    0 < D.old →\n      D.levelCheck = true →\n        ∀ (N cap : ℕ),\n          1 < N →\n            ↑N ^ ↑D.b ≤ ↑cap →\n              ∀ j ∈ D.cells5,\n                D.fifthCellPrimeCorrection N cap j =\n                  ImbalancedChen.actualPrimeBoxOwnCubeMinusSum 4 N cap (↑D.a) (↑D.b) (↑(D.cap5 j))\n                      (ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j ∩\n                        ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryUpperFiveGateForms\n                          (D.fifthParentGateBounds j)) -\n                    ImbalancedChen.actualPrimeBoxOwnCubeMinusSum 4 N cap (↑D.a) (↑D.b) (↑(D.old5 j))\n                      (ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j ∩\n                        ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryUpperFiveGateForms\n                          (D.fifthParentGateBounds j))",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.fifthCorrectionIntegral_eq_integrals",
+      "module": "ImbalancedChen.ActualHistoricalFifthCellIntegral",
+      "source_sha256": "550602f634e27641bf1f0b811e5e201130f48587bd0760192d032b75c0c405de",
+      "source_type": "theorem fifthCorrectionIntegral_eq_integrals (D : HistoricalPrefixCapData)\n    (ha : 0 < D.a) (hab : D.a < D.b) :\n    D.fifthCorrectionIntegral =\n      ∑ j ∈ D.cells5,\n        ∫ t in logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j ∩\n          primeAffineGateRegion ordinaryUpperFiveGateForms (D.fifthParentGateBounds j),\n          (primeOwnCubeGatedProfile (D.cap5 j : ℝ) t -\n            primeOwnCubeGatedProfile (D.old5 j : ℝ) t) * ∏ i, 1 / t i",
+      "source_type_sha256": "4751ad7c97d293d1d186f2758ed88556d9a54f9fc838ba8d65ec84fe5e1209d9",
+      "elaborated_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  0 < D.a →\n    D.a < D.b →\n      D.fifthCorrectionIntegral =\n        ∑ j ∈ D.cells5,\n          ∫ (t : Fin 5 → ℝ) in\n            ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j ∩\n              ImbalancedChen.primeAffineGateRegion ImbalancedChen.ordinaryUpperFiveGateForms\n                (D.fifthParentGateBounds j),\n            (ImbalancedChen.primeOwnCubeGatedProfile (↑(D.cap5 j)) t -\n                ImbalancedChen.primeOwnCubeGatedProfile (↑(D.old5 j)) t) *\n              ∏ i, 1 / t i",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.tendsto_fifthPrimeCorrection",
+      "module": "ImbalancedChen.ActualHistoricalFifthCellIntegral",
+      "source_sha256": "550602f634e27641bf1f0b811e5e201130f48587bd0760192d032b75c0c405de",
+      "source_type": "theorem tendsto_fifthPrimeCorrection (D : HistoricalPrefixCapData)\n    (ha : 0 < D.a) (hab : D.a < D.b) (hold : 0 < D.old)\n    (hcheck : D.levelCheck = true) (cap : ℕ → ℕ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (D.b : ℝ) ≤ (cap N : ℝ)) :\n    Tendsto (fun N : ℕ => D.fifthPrimeCorrection N (cap N))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 D.fifthCorrectionIntegral)",
+      "source_type_sha256": "22c3c5d7da99814604b7571ab0263957b3a4c43358eb5bd36d8ae12124418d73",
+      "elaborated_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  0 < D.a →\n    D.a < D.b →\n      0 < D.old →\n        D.levelCheck = true →\n          ∀ (cap : ℕ → ℕ),\n            (∀ᶠ (N : ℕ) in Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N}, ↑N ^ ↑D.b ≤ ↑(cap N)) →\n              Filter.Tendsto (fun N => D.fifthPrimeCorrection N (cap N))\n                (Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N}) (nhds D.fifthCorrectionIntegral)",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.actualHistoricalFifthSaving_eq_tupleSum_at_cutoff",
+      "module": "ImbalancedChen.ActualHistoricalFifthSavingIntegral",
+      "source_sha256": "bcd7075649dcc6f374ea2318f77a45eb0c260f301a00045bb7ba60f6355da74e",
+      "source_type": "theorem actualHistoricalFifthSaving_eq_tupleSum_at_cutoff\n    (D : HistoricalPrefixCapData) (N cap : ℕ) (z : ℝ) :\n    actualHistoricalFifthSaving\n        (ordinaryParityRosserPolicy false ((N : ℝ) ^ (D.old : ℝ)))\n        (D.level3 (N : ℝ)) (D.level4 (N : ℝ)) (D.level5 (N : ℝ)) N cap z *\n        Real.log (N : ℝ) / singularSeries N =\n      ∑ p ∈ firstExitFrontierTuples 4 (D.upperThirdPolicy (N : ℝ))\n        (roughPrimeUniverse N cap 0 z),\n        (∏ i, 1 / ((p i : ℝ) - 1)) * D.fifthTupleOwnCubeDifference N cap p",
+      "source_type_sha256": "eaa945229ee07d8de2bcc84144729640cfe6c4c6a09ffefc911301d0a03e941d",
+      "elaborated_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N cap : ℕ) (z : ℝ),\n  ImbalancedChen.actualHistoricalFifthSaving (ImbalancedChen.ordinaryParityRosserPolicy false (↑N ^ ↑D.old))\n          (D.level3 ↑N) (D.level4 ↑N) (D.level5 ↑N) N cap z *\n        Real.log ↑N /\n      ImbalancedChen.singularSeries N =\n    ∑\n      p ∈\n        ImbalancedChen.firstExitFrontierTuples 4 (D.upperThirdPolicy ↑N) (ImbalancedChen.roughPrimeUniverse N cap 0 z),\n      (∏ i, 1 / (↑(p i) - 1)) * D.fifthTupleOwnCubeDifference N cap p",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.actualHistoricalFifthSaving_eq_fifthPrimeCorrection",
+      "module": "ImbalancedChen.ActualHistoricalFifthSavingIntegral",
+      "source_sha256": "bcd7075649dcc6f374ea2318f77a45eb0c260f301a00045bb7ba60f6355da74e",
+      "source_type": "theorem actualHistoricalFifthSaving_eq_fifthPrimeCorrection\n    (D : HistoricalPrefixCapData) (N cap : ℕ) :\n    actualHistoricalFifthSaving\n        (ordinaryParityRosserPolicy false ((N : ℝ) ^ (D.old : ℝ)))\n        (D.level3 (N : ℝ)) (D.level4 (N : ℝ)) (D.level5 (N : ℝ))\n        N cap ((N : ℝ) ^ (D.b : ℝ)) *\n        Real.log (N : ℝ) / singularSeries N =\n      D.fifthPrimeCorrection N cap",
+      "source_type_sha256": "2106eebb182ebc7c0d33a514a6975715a1dbbd38540afa5a1162c3252e5427fc",
+      "elaborated_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N cap : ℕ),\n  ImbalancedChen.actualHistoricalFifthSaving (ImbalancedChen.ordinaryParityRosserPolicy false (↑N ^ ↑D.old))\n          (D.level3 ↑N) (D.level4 ↑N) (D.level5 ↑N) N cap (↑N ^ ↑D.b) *\n        Real.log ↑N /\n      ImbalancedChen.singularSeries N =\n    D.fifthPrimeCorrection N cap",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.upperFourthToFifthSaving_eq",
+      "module": "ImbalancedChen.ActualHistoricalFifthSavingIntegral",
+      "source_sha256": "bcd7075649dcc6f374ea2318f77a45eb0c260f301a00045bb7ba60f6355da74e",
+      "source_type": "theorem upperFourthToFifthSaving_eq (D : HistoricalPrefixCapData)\n    (hab : D.a ≤ D.b) (hcheck : D.levelCheck = true)\n    (N cap : ℕ) (hN : 1 < (N : ℝ)) (z : ℝ) :\n    firstExitRetainedPolynomial (D.upperFourthPolicy (N : ℝ))\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) -\n      firstExitRetainedPolynomial (D.upperFifthPolicy (N : ℝ))\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap 0 z) =\n      actualHistoricalFifthSaving\n        (ordinaryParityRosserPolicy false ((N : ℝ) ^ (D.old : ℝ)))\n        (D.level3 (N : ℝ)) (D.level4 (N : ℝ)) (D.level5 (N : ℝ)) N cap z",
+      "source_type_sha256": "b933095620a3b4c9a11d9b1c221c7f2f50b05b892b805e4b7555ee8ed82a0d9b",
+      "elaborated_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a ≤ D.b →\n    D.levelCheck = true →\n      ∀ (N cap : ℕ),\n        1 < ↑N →\n          ∀ (z : ℝ),\n            ImbalancedChen.firstExitRetainedPolynomial (D.upperFourthPolicy ↑N) (fun p => 1 / (↑p - 1)) [] true 1\n                  (ImbalancedChen.roughPrimeUniverse N cap 0 z) -\n                ImbalancedChen.firstExitRetainedPolynomial (D.upperFifthPolicy ↑N) (fun p => 1 / (↑p - 1)) [] true 1\n                  (ImbalancedChen.roughPrimeUniverse N cap 0 z) =\n              ImbalancedChen.actualHistoricalFifthSaving (ImbalancedChen.ordinaryParityRosserPolicy false (↑N ^ ↑D.old))\n                (D.level3 ↑N) (D.level4 ↑N) (D.level5 ↑N) N cap z",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.tendsto_upperFourthToFifthSaving_ceil",
+      "module": "ImbalancedChen.ActualHistoricalFifthSavingIntegral",
+      "source_sha256": "bcd7075649dcc6f374ea2318f77a45eb0c260f301a00045bb7ba60f6355da74e",
+      "source_type": "theorem tendsto_upperFourthToFifthSaving_ceil (D : HistoricalPrefixCapData)\n    (ha : 0 < D.a) (hab : D.a < D.b) (hold : 0 < D.old)\n    (hcheck : D.levelCheck = true) :\n    Tendsto (fun N : ℕ =>\n      (firstExitRetainedPolynomial (D.upperFourthPolicy (N : ℝ))\n          (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n          (roughPrimeUniverse N (Nat.ceil ((N : ℝ) ^ (D.b : ℝ))) 0\n            ((N : ℝ) ^ (D.b : ℝ))) -\n        firstExitRetainedPolynomial (D.upperFifthPolicy (N : ℝ))\n          (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n          (roughPrimeUniverse N (Nat.ceil ((N : ℝ) ^ (D.b : ℝ))) 0\n            ((N : ℝ) ^ (D.b : ℝ)))) *\n        Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 D.fifthCorrectionIntegral)",
+      "source_type_sha256": "a5d21af80c2d41d5a733d85c35fed6f48f12cf0fd952290fcfbec87e414eaea9",
+      "elaborated_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  0 < D.a →\n    D.a < D.b →\n      0 < D.old →\n        D.levelCheck = true →\n          Filter.Tendsto\n            (fun N =>\n              (ImbalancedChen.firstExitRetainedPolynomial (D.upperFourthPolicy ↑N) (fun p => 1 / (↑p - 1)) [] true 1\n                      (ImbalancedChen.roughPrimeUniverse N ⌈↑N ^ ↑D.b⌉₊ 0 (↑N ^ ↑D.b)) -\n                    ImbalancedChen.firstExitRetainedPolynomial (D.upperFifthPolicy ↑N) (fun p => 1 / (↑p - 1)) [] true 1\n                      (ImbalancedChen.roughPrimeUniverse N ⌈↑N ^ ↑D.b⌉₊ 0 (↑N ^ ↑D.b))) *\n                  Real.log ↑N /\n                ImbalancedChen.singularSeries N)\n            (Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N}) (nhds D.fifthCorrectionIntegral)",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "ImbalancedChen.actualPrimeFrontierTuples_ownedCell_cutoff_invariant",
+      "module": "ImbalancedChen.HistoricalFifthCutoffInvariance",
+      "source_sha256": "abe06826e099ec0beb73329c1c887fc5aeca0583efe1ff46c3b92ec91d9cdb3d",
+      "source_type": "theorem actualPrimeFrontierTuples_ownedCell_cutoff_invariant\n    (k : ℕ) (parent : Bool → List ℕ → Bool) (N cap : ℕ) (hN : 1 < N)\n    (a b : ℝ) (hab : a < b) (m : ℕ)\n    (j : Fin (k + 1) → Fin (m + 1)) (z : ℝ) (hz : (N : ℝ) ^ b ≤ z) :\n    (firstExitFrontierTuples k parent (roughPrimeUniverse N cap 0 z)).filter\n        (fun p => actualPrimeTupleLog N p ∈ logPrimeMeshCell a b m j) =\n      (firstExitFrontierTuples k parent\n        (roughPrimeUniverse N cap 0 ((N : ℝ) ^ b))).filter\n        (fun p => actualPrimeTupleLog N p ∈ logPrimeMeshCell a b m j)",
+      "source_type_sha256": "24da2d0a0b307d3c6f6ce010a9e4df08bdda338a91470e739ab4c96248f92444",
+      "elaborated_type": "∀ (k : ℕ) (parent : Bool → List ℕ → Bool) (N cap : ℕ),\n  1 < N →\n    ∀ (a b : ℝ),\n      a < b →\n        ∀ (m : ℕ) (j : Fin (k + 1) → Fin (m + 1)) (z : ℝ),\n          ↑N ^ b ≤ z →\n            {p ∈ ImbalancedChen.firstExitFrontierTuples k parent (ImbalancedChen.roughPrimeUniverse N cap 0 z) |\n                ImbalancedChen.actualPrimeTupleLog N p ∈ ImbalancedChen.logPrimeMeshCell a b m j} =\n              {p ∈\n                  ImbalancedChen.firstExitFrontierTuples k parent (ImbalancedChen.roughPrimeUniverse N cap 0 (↑N ^ b)) |\n                ImbalancedChen.actualPrimeTupleLog N p ∈ ImbalancedChen.logPrimeMeshCell a b m j}",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.fifthOwnCubeDifference_outside",
+      "module": "ImbalancedChen.HistoricalFifthCutoffInvariance",
+      "source_sha256": "abe06826e099ec0beb73329c1c887fc5aeca0583efe1ff46c3b92ec91d9cdb3d",
+      "source_type": "theorem fifthOwnCubeDifference_outside (D : HistoricalPrefixCapData)\n    (N cap : ℕ) {history : List ℕ} (hlen : history.length = 5)\n    (hout : ∀ j ∈ D.cells5, primeHistoryLogCoordinates (N : ℝ) 5 history ∉\n      logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :\n    actualOwnCubeGatedMinusDensity N cap (D.level5 (N : ℝ)) history -\n      actualOwnCubeGatedMinusDensity N cap\n        (fun pre => D.level4 (N : ℝ) (rosserAncestor 4 pre)) history = 0",
+      "source_type_sha256": "baf6f811148453a4bec1c76d76231d1b4b60c8d0716869e6b7f19f71ee3cb45b",
+      "elaborated_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData) (N cap : ℕ) {history : List ℕ},\n  history.length = 5 →\n    (∀ j ∈ D.cells5,\n        ImbalancedChen.primeHistoryLogCoordinates (↑N) 5 history ∉\n          ImbalancedChen.logPrimeMeshCell (↑D.a) (↑D.b) D.m j) →\n      ImbalancedChen.actualOwnCubeGatedMinusDensity N cap (D.level5 ↑N) history -\n          ImbalancedChen.actualOwnCubeGatedMinusDensity N cap\n            (fun pre => D.level4 (↑N) (ImbalancedChen.rosserAncestor 4 pre)) history =\n        0",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.actualHistoricalFifthSaving_eq_fifthPrimeCorrection_of_cutoff_ge",
+      "module": "ImbalancedChen.HistoricalFifthCutoffInvariance",
+      "source_sha256": "abe06826e099ec0beb73329c1c887fc5aeca0583efe1ff46c3b92ec91d9cdb3d",
+      "source_type": "theorem actualHistoricalFifthSaving_eq_fifthPrimeCorrection_of_cutoff_ge\n    (D : HistoricalPrefixCapData) (hab : D.a < D.b)\n    (N cap : ℕ) (hN : 1 < N) (z : ℝ) (hz : (N : ℝ) ^ (D.b : ℝ) ≤ z) :\n    actualHistoricalFifthSaving\n        (ordinaryParityRosserPolicy false ((N : ℝ) ^ (D.old : ℝ)))\n        (D.level3 (N : ℝ)) (D.level4 (N : ℝ)) (D.level5 (N : ℝ)) N cap z *\n        Real.log (N : ℝ) / singularSeries N = D.fifthPrimeCorrection N cap",
+      "source_type_sha256": "6e11f4e675a38e8f4133e24b55dfd7b5a94df1e90888b35bf2a6d8b458f4d933",
+      "elaborated_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  D.a < D.b →\n    ∀ (N cap : ℕ),\n      1 < N →\n        ∀ (z : ℝ),\n          ↑N ^ ↑D.b ≤ z →\n            ImbalancedChen.actualHistoricalFifthSaving (ImbalancedChen.ordinaryParityRosserPolicy false (↑N ^ ↑D.old))\n                    (D.level3 ↑N) (D.level4 ↑N) (D.level5 ↑N) N cap z *\n                  Real.log ↑N /\n                ImbalancedChen.singularSeries N =\n              D.fifthPrimeCorrection N cap",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.tendsto_actualHistoricalFifthSaving_of_cutoff_ge",
+      "module": "ImbalancedChen.HistoricalFifthCutoffInvariance",
+      "source_sha256": "abe06826e099ec0beb73329c1c887fc5aeca0583efe1ff46c3b92ec91d9cdb3d",
+      "source_type": "theorem tendsto_actualHistoricalFifthSaving_of_cutoff_ge (D : HistoricalPrefixCapData)\n    (ha : 0 < D.a) (hab : D.a < D.b) (hold : 0 < D.old)\n    (hcheck : D.levelCheck = true) (cap : ℕ → ℕ) (z : ℕ → ℝ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (D.b : ℝ) ≤ (cap N : ℝ))\n    (hz : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (D.b : ℝ) ≤ z N) :\n    Tendsto (fun N : ℕ =>\n      actualHistoricalFifthSaving\n          (ordinaryParityRosserPolicy false ((N : ℝ) ^ (D.old : ℝ)))\n          (D.level3 (N : ℝ)) (D.level4 (N : ℝ)) (D.level5 (N : ℝ)) N (cap N) (z N) *\n          Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 D.fifthCorrectionIntegral)",
+      "source_type_sha256": "08753a2aa9efe78ffc4edc8ab19ca43dd63c5e209b8258b46a5c30f458ea32a8",
+      "elaborated_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  0 < D.a →\n    D.a < D.b →\n      0 < D.old →\n        D.levelCheck = true →\n          ∀ (cap : ℕ → ℕ) (z : ℕ → ℝ),\n            (∀ᶠ (N : ℕ) in Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N}, ↑N ^ ↑D.b ≤ ↑(cap N)) →\n              (∀ᶠ (N : ℕ) in Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N}, ↑N ^ ↑D.b ≤ z N) →\n                Filter.Tendsto\n                  (fun N =>\n                    ImbalancedChen.actualHistoricalFifthSaving\n                          (ImbalancedChen.ordinaryParityRosserPolicy false (↑N ^ ↑D.old)) (D.level3 ↑N) (D.level4 ↑N)\n                          (D.level5 ↑N) N (cap N) (z N) *\n                        Real.log ↑N /\n                      ImbalancedChen.singularSeries N)\n                  (Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N}) (nhds D.fifthCorrectionIntegral)",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.tendsto_upperFourthToFifthSaving_of_cutoff_ge",
+      "module": "ImbalancedChen.HistoricalFifthCutoffInvariance",
+      "source_sha256": "abe06826e099ec0beb73329c1c887fc5aeca0583efe1ff46c3b92ec91d9cdb3d",
+      "source_type": "theorem tendsto_upperFourthToFifthSaving_of_cutoff_ge (D : HistoricalPrefixCapData)\n    (ha : 0 < D.a) (hab : D.a < D.b) (hold : 0 < D.old)\n    (hcheck : D.levelCheck = true) (cap : ℕ → ℕ) (z : ℕ → ℝ)\n    (hcap : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (D.b : ℝ) ≤ (cap N : ℝ))\n    (hz : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (N : ℝ) ^ (D.b : ℝ) ≤ z N) :\n    Tendsto (fun N : ℕ =>\n      (firstExitRetainedPolynomial (D.upperFourthPolicy (N : ℝ))\n          (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N (cap N) 0 (z N)) -\n        firstExitRetainedPolynomial (D.upperFifthPolicy (N : ℝ))\n          (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1\n          (roughPrimeUniverse N (cap N) 0 (z N))) *\n          Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 D.fifthCorrectionIntegral)",
+      "source_type_sha256": "78a63d41a014a87e9bfce83bdd3475d5d7830c3da2dfaf80d4041fe95f2ef849",
+      "elaborated_type": "∀ (D : ImbalancedChen.HistoricalPrefixCapData),\n  0 < D.a →\n    D.a < D.b →\n      0 < D.old →\n        D.levelCheck = true →\n          ∀ (cap : ℕ → ℕ) (z : ℕ → ℝ),\n            (∀ᶠ (N : ℕ) in Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N}, ↑N ^ ↑D.b ≤ ↑(cap N)) →\n              (∀ᶠ (N : ℕ) in Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N}, ↑N ^ ↑D.b ≤ z N) →\n                Filter.Tendsto\n                  (fun N =>\n                    (ImbalancedChen.firstExitRetainedPolynomial (D.upperFourthPolicy ↑N) (fun p => 1 / (↑p - 1)) [] true\n                            1 (ImbalancedChen.roughPrimeUniverse N (cap N) 0 (z N)) -\n                          ImbalancedChen.firstExitRetainedPolynomial (D.upperFifthPolicy ↑N) (fun p => 1 / (↑p - 1)) []\n                            true 1 (ImbalancedChen.roughPrimeUniverse N (cap N) 0 (z N))) *\n                        Real.log ↑N /\n                      ImbalancedChen.singularSeries N)\n                  (Filter.atTop ⊓ Filter.principal {N | 0 < N ∧ Even N}) (nhds D.fifthCorrectionIntegral)",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    }
+  ]
+}
