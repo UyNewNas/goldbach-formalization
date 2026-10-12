@@ -1,5 +1,27 @@
 # Verification boundary
 
+## Part 0 round 5: P3 quotient supplier received
+
+P3 publication `0ac5ec5f43216215ff37488908a6d4e8d2c96636` now supplies retained,
+independently replayable evidence for
+`ImbalancedChen.ChenQuotientSieveRemainders`: strict trust-level-zero
+compilation, stock replay of the production object, strict audit compilation,
+stock replay of the audit object, 34 complete defining-module declarations and
+4,237 bound import objects. The only transitive axioms are `propext`,
+`Classical.choice`, and `Quot.sound`.
+
+The production source is the exact unchanged blob already imported, built and
+replayed by P0's sealed `d0366ce64272e81faf6166a8a90050f56b328d38`
+root. This batch therefore adds the producer evidence and an identity-checking
+intake receipt, but no Lean source/import/workflow change and no duplicate root
+build claim. It closes one direct-supplier verification gap only. The frozen BV
+direct supplier remains unavailable, and `Part3PrimeAPDistribution` itself has
+not compiled or acquired replay/audit evidence. No new distribution theorem,
+K, c, hLower, hUpper, or unconditional main theorem is claimed.
+
+See [round 5 verification](PART0_ROUND5_VERIFICATION.md) and its
+[self-checking evidence](../verification/parts/p0/round5/p3-chen-quotient/README.md).
+
 ## Part 0 round 4 reception
 
 Post-publication verification is now fixed for integration commit
