@@ -110,7 +110,7 @@ def main() -> None:
             raise RuntimeError("Lake did not retain the supplier setup file")
         for suffix in ("", ".server", ".private"):
             Path(str(object_path) + suffix).unlink(missing_ok=True)
-        run(["lake", "env", "lean", "-DwarningAsError=true", "-DtrustLevel=0",
+        run(["lake", "env", "lean", "-DwarningAsError=true", "-t0",
              "-o", str(object_path), "--setup", str(setup), str(source)], "bv-strict")
         if not object_path.is_file():
             raise RuntimeError("Strict supplier compile produced no object")
@@ -133,7 +133,7 @@ def main() -> None:
         audit_object.parent.mkdir(parents=True, exist_ok=True)
         for suffix in ("", ".server", ".private"):
             Path(str(audit_object) + suffix).unlink(missing_ok=True)
-        audit_log = run(["lake", "env", "lean", "-DwarningAsError=true", "-DtrustLevel=0",
+        audit_log = run(["lake", "env", "lean", "-DwarningAsError=true", "-t0",
                          "-o", str(audit_object), str(AUDIT_SOURCE)], "bv-audit-strict")
         audit_replay = run(["lake", "env", checker, "--verbose", AUDIT_MODULE],
                            "bv-audit-replay")
