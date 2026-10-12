@@ -1,0 +1,69 @@
+Compiler-confirmed InitialSource types from the successful defining-module inventory.
+Includes every declaration defined in the module, with transitive axiom sets.
+
+ImbalancedChen.currentChen_goldbachS1_le_sifted_add_primeFactors
+∀ (N : ℕ) (tau A z : ℝ),
+  N ≠ 0 →
+    0 ≤ tau →
+      A ≤ z →
+        ↑(MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1
+              (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.goldbachDifferenceCarrier N tau) N z) ≤
+          ↑(ImbalancedChen.chenSiftedPrimeSource N A).card + ↑N.primeFactors.card
+Axioms: propext, Classical.choice, Quot.sound
+
+ImbalancedChen.currentChen_initial_sieve_coefficient
+33 / 2 * Real.exp (-Real.eulerMascheroniConstant) *
+    MathlibNt.SieveTheory.SwitchingPrinciple.dimensionOneLowerLinearSieveFactor 4 =
+  33 / 4 * Real.log 3
+Axioms: propext, Classical.choice, Quot.sound
+
+ImbalancedChen.currentChen_singularSeries_eq_liuSingularSeries
+∀ (N : ℕ), ImbalancedChen.singularSeries N = MathlibNt.SieveTheory.SingularSeries.liuSingularSeries N
+Axioms: propext, Classical.choice, Quot.sound
+
+ImbalancedChen.currentChen_twinPrimeConstant_eq_liuUniversalProduct
+ImbalancedChen.twinPrimeConstant = MathlibNt.SieveTheory.SingularSeries.liuUniversalProduct
+Axioms: propext, Classical.choice, Quot.sound
+
+ImbalancedChen.eventually_currentChen_primeFactors_negligible
+∀ (epsilon : ℝ),
+  0 < epsilon → ∀ᶠ (N : ℕ) in Filter.atTop, ↑N.primeFactors.card ≤ epsilon * ImbalancedChen.singularNormalization N
+Axioms: propext, Classical.choice, Quot.sound
+
+ImbalancedChen.currentChen_goldbachS1_le_sifted_add_primeFactors._proof_1_1
+∀ (N : ℕ) (tau A z : ℝ),
+  {n ∈
+            Finset.filter (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.literalHPoint N 1 z)
+              (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.goldbachDifferenceCarrier N tau) |
+          ¬n.Coprime N}.card ≤
+      N.primeFactors.card →
+    {n ∈
+              Finset.filter (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.literalHPoint N 1 z)
+                (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.goldbachDifferenceCarrier N tau) |
+            n.Coprime N}.card ≤
+        (ImbalancedChen.chenSiftedPrimeSource N A).card →
+      {n ∈
+                  Finset.filter (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.literalHPoint N 1 z)
+                    (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.goldbachDifferenceCarrier N tau) |
+                n.Coprime N}.card +
+            {a ∈
+                  Finset.filter (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.literalHPoint N 1 z)
+                    (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.goldbachDifferenceCarrier N tau) |
+                ¬a.Coprime N}.card =
+          (Finset.filter (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.literalHPoint N 1 z)
+              (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.goldbachDifferenceCarrier N tau)).card →
+        ¬(Finset.filter (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.literalHPoint N 1 z)
+                  (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.goldbachDifferenceCarrier N tau)).card ≤
+              (ImbalancedChen.chenSiftedPrimeSource N A).card + N.primeFactors.card →
+          False
+Axioms: propext, Classical.choice, Quot.sound
+
+ImbalancedChen.eventually_currentChen_primeFactors_negligible._proof_1_1
+∀ (N : ℕ), 1 ≤ N → N = 0 → False
+Axioms: propext, Quot.sound
+
+ImbalancedChen.singularSeries.eq_1
+∀ (N : ℕ),
+  ImbalancedChen.singularSeries N =
+    ImbalancedChen.twinPrimeConstant * ∏ p ∈ ImbalancedChen.oddPrimeDivisors N, (↑p - 1) / (↑p - 2)
+Axioms: propext, Classical.choice, Quot.sound

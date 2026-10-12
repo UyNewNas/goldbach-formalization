@@ -1,16 +1,17 @@
 # Part 5 handoff: eleven-term mean ledger and independent candidates
 
 > **Round 2 update:** the actual Buchstab theorem, complete finite eleven-term
-> ledger, and lower-scale module have now passed strict trust-zero frontend
+> ledger, lower-scale module, and actual InitialSource component have now
+> passed strict trust-zero frontend
 > compilation, bundled kernel replay, and the defining-module transitive
 > axiom audit. See [CHEN_P5_ROUND2_HANDOFF.md](CHEN_P5_ROUND2_HANDOFF.md) for
-> their actual receipts and the separately labelled first-row candidates,
+> their actual receipts and the separately labelled first-row mean candidate,
 > and [CHEN_P5_BUCHSTAB_HANDOFF.md](CHEN_P5_BUCHSTAB_HANDOFF.md) for the
 > independent Part 2 delivery. The rest of this document records the fixed
 > first-round status at the commits below; its unexecuted gates are
 > historical and do not supersede the round-2 receipts.
 
-## Fixed identity and delivery status
+## Fixed identity and delivery status (historical first round)
 
 **This is a staged candidate delivery. The complete adopted-mask mean and
 the final `hLower` are still open. No successful Lean elaboration, kernel

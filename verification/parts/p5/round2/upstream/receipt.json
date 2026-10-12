@@ -1,0 +1,343 @@
+{
+  "schema": "chen-p5-round2-fixed-upstream-inspection-v1",
+  "inspection_kind": "Read fixed upstream source, successful receipts and compiler-printed types; these are P0 executions, not additional P5 compilation or replay.",
+  "unchanged_common_baseline": "1a80c1bcce67886f699d097fc37fd245cd3620bf",
+  "p2_source_checkpoint": "b47a8d38ac1d2bcbd9c191df1c0c4da76700af3e",
+  "p0_verified_acceptance_checkpoint": "c9f407efe66240c08c2e8a678330ba7b98b74db5",
+  "p0_source_bridge_path": "ImbalancedChen/CurrentPairedBuchstabBridge.lean",
+  "bridge_source": "import ImbalancedChen.CurrentChenBuchstabRefinement\nimport ImbalancedChen.Certificates.PairedV2\n\n/-!\n# The proved Buchstab barrier on the actual first adopted fibre\n\nPart 2 supplies the exact support and its whole-fibre argument inequality.\nPart 5 supplies the global bound for the actual pinned Buchstab function.\nThese lemmas compose those suppliers without adding an analytic premise.\n\nThe Part 2 integral already has coefficient `K / 80 = (K / 4) * (1 / 20)`.\nThis pointwise bridge does not insert a second Buchstab multiplier, claim\nall adopted rows have passed, or supply their retained arithmetic parent.\n-/\n\nnamespace ImbalancedChen.Certificates.PairedV2\n\ntheorem first_fibre_buchstab_eleven_twentieths {t u z w : ℝ}\n    (hs : firstFibreSupport t u z w) :\n    (11 : ℝ) / 20 ≤\n      LiLiuPrereqBuchstab.buchstab ((1 - t - u - z - w) / z) := by\n  rcases first_fibre_argument hs with ⟨_, _, _, _, _, _, hargument⟩\n  exact ImbalancedChen.currentChen_buchstab_eleven_twentieths hargument\n\ntheorem first_fibre_buchstab_gain {t u z w : ℝ}\n    (hs : firstFibreSupport t u z w) :\n    (1 : ℝ) / 20 ≤\n      LiLiuPrereqBuchstab.buchstab ((1 - t - u - z - w) / z) - (1 : ℝ) / 2 := by\n  have h := first_fibre_buchstab_eleven_twentieths hs\n  linarith\n\nend ImbalancedChen.Certificates.PairedV2\n",
+  "bridge_compiler_types": "ImbalancedChen.Certificates.PairedV2.first_fibre_buchstab_eleven_twentieths\n∀ {t u z w : ℝ},\n  ImbalancedChen.Certificates.PairedV2.firstFibreSupport t u z w →\n    LE.le.{0} (11 / 20)\n      (LiLiuPrereqBuchstab.buchstab\n        (HDiv.hDiv.{0, 0, 0}\n          (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} 1 t) u) z) w) z))\n\nImbalancedChen.Certificates.PairedV2.first_fibre_buchstab_gain\n∀ {t u z w : ℝ},\n  ImbalancedChen.Certificates.PairedV2.firstFibreSupport t u z w →\n    LE.le.{0} (1 / 20)\n      (HSub.hSub.{0, 0, 0}\n        (LiLiuPrereqBuchstab.buchstab\n          (HDiv.hDiv.{0, 0, 0}\n            (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} 1 t) u) z) w) z))\n        (1 / 2))\n",
+  "receipts": [
+    {
+      "batch": "paired-buchstab",
+      "scope": "Apply the proved analytic Buchstab bound on the entire actual first-cell support.",
+      "unclosed_inputs": [
+        "The entire adopted mask and the real arithmetic parent remain separate inputs.",
+        "The integral coefficient K/80 already contains the gain 1/20 times K/4; do not apply that gain twice.",
+        "No full K/c/hLower/hUpper claim."
+      ],
+      "declaration_count": 2,
+      "all_scoped_gates": "passed",
+      "modules": [
+        {
+          "module": "ImbalancedChen.CurrentPairedBuchstabBridge",
+          "source_sha256": "280481d294ebd6c9fa73e74e19b5dbd2efcb2018af6c6a1953d746cee80a7550",
+          "olean_sha256": "c8417cc4c39232255658008db80468d38df39cf68536d865c17f07cd46bd81dd",
+          "owned_declaration_count": 2,
+          "gates": {
+            "strict_compile": {
+              "returncode": 0,
+              "elapsed_seconds": 91.107,
+              "strict": true,
+              "trustLevel": 0,
+              "source_sha256_before": "280481d294ebd6c9fa73e74e19b5dbd2efcb2018af6c6a1953d746cee80a7550",
+              "source_sha256_after": "280481d294ebd6c9fa73e74e19b5dbd2efcb2018af6c6a1953d746cee80a7550",
+              "olean_sha256": "c8417cc4c39232255658008db80468d38df39cf68536d865c17f07cd46bd81dd",
+              "retained_log": "verification/parts/p0/round2/paired-buchstab/compile-ImbalancedChen.CurrentPairedBuchstabBridge.log"
+            },
+            "stock_kernel_replay": {
+              "returncode": 0,
+              "elapsed_seconds": 112.273,
+              "strict": false,
+              "trustLevel": null,
+              "source_sha256_before": "280481d294ebd6c9fa73e74e19b5dbd2efcb2018af6c6a1953d746cee80a7550",
+              "source_sha256_after": "280481d294ebd6c9fa73e74e19b5dbd2efcb2018af6c6a1953d746cee80a7550",
+              "olean_sha256": "c8417cc4c39232255658008db80468d38df39cf68536d865c17f07cd46bd81dd",
+              "retained_log": "verification/parts/p0/round2/paired-buchstab/replay-ImbalancedChen.CurrentPairedBuchstabBridge.log"
+            },
+            "owned_axiom_audit": {
+              "returncode": 0,
+              "elapsed_seconds": 470.368,
+              "strict": true,
+              "trustLevel": 0,
+              "source_sha256_before": "58707245f39bdba0f3f9ada28e2477173ee4ad08e52aab402b384c67fb378d66",
+              "source_sha256_after": "58707245f39bdba0f3f9ada28e2477173ee4ad08e52aab402b384c67fb378d66",
+              "olean_sha256": "05eb04a66a728b6df70e0a0285dc671af00377d5eebbcba74de19a0ce1c1f7b4",
+              "retained_log": "verification/parts/p0/round2/paired-buchstab/compile-verification.parts.p0.PairedBuchstabAudit.log"
+            }
+          }
+        }
+      ],
+      "full_root_build": "pending",
+      "final_hLower_supplier": "not supplied"
+    },
+    {
+      "batch": "p2-first",
+      "scope": "Sound real-log/integral checkers and actual same-mask-v2 first row only.",
+      "unclosed_inputs": [
+        "All 17572 adopted rows: this batch proves only the first row, with independently weaker bounds, not its stored Q160 interval.",
+        "P1 actual parent/mask coverage, legality, support and identification with the full construction.",
+        "P3 actual arithmetic distribution/error and P4-A same-rho density.",
+        "Actual full K, c, hLower and hUpper suppliers."
+      ],
+      "declaration_count": 182,
+      "all_scoped_gates": "passed",
+      "modules": [
+        {
+          "module": "ImbalancedChen.Certificates.RationalLogCertificate",
+          "source_sha256": "4d705f561d4ba07e01dd7b3af1b0a73bcbf28c9dd6d2ddfd4ae288fb84de9d22",
+          "olean_sha256": "4797bc0a53a1062592f29d0176efc6a9fb4c819ddf727ffbd43fe77504eaac3b",
+          "owned_declaration_count": 47,
+          "gates": {
+            "strict_compile": {
+              "returncode": 0,
+              "elapsed_seconds": 25.422,
+              "strict": true,
+              "trustLevel": 0,
+              "source_sha256_before": "4d705f561d4ba07e01dd7b3af1b0a73bcbf28c9dd6d2ddfd4ae288fb84de9d22",
+              "source_sha256_after": "4d705f561d4ba07e01dd7b3af1b0a73bcbf28c9dd6d2ddfd4ae288fb84de9d22",
+              "olean_sha256": "4797bc0a53a1062592f29d0176efc6a9fb4c819ddf727ffbd43fe77504eaac3b",
+              "retained_log": "verification/parts/p0/round2/p2-first/compile-ImbalancedChen.Certificates.RationalLogCertificate.log"
+            },
+            "stock_kernel_replay": {
+              "returncode": 0,
+              "elapsed_seconds": 63.402,
+              "strict": false,
+              "trustLevel": null,
+              "source_sha256_before": "4d705f561d4ba07e01dd7b3af1b0a73bcbf28c9dd6d2ddfd4ae288fb84de9d22",
+              "source_sha256_after": "4d705f561d4ba07e01dd7b3af1b0a73bcbf28c9dd6d2ddfd4ae288fb84de9d22",
+              "olean_sha256": "4797bc0a53a1062592f29d0176efc6a9fb4c819ddf727ffbd43fe77504eaac3b",
+              "retained_log": "verification/parts/p0/round2/p2-first/replay-ImbalancedChen.Certificates.RationalLogCertificate.log"
+            },
+            "owned_axiom_audit": {
+              "returncode": 0,
+              "elapsed_seconds": 269.746,
+              "strict": true,
+              "trustLevel": 0,
+              "source_sha256_before": "9273d183ab9216b5205fe7b6a0b063044337a423b8afa1cffc3e901712e549c3",
+              "source_sha256_after": "9273d183ab9216b5205fe7b6a0b063044337a423b8afa1cffc3e901712e549c3",
+              "olean_sha256": "553e53633905312185ef24d1f9b5bb4b5c9f00aa8ddfbc4021d2edefe1974d54",
+              "retained_log": "verification/parts/p0/round2/p2-first/compile-verification.parts.p0.CertificatesFirstCellAudit.log"
+            }
+          }
+        },
+        {
+          "module": "ImbalancedChen.Certificates.PairedFibreIntegral",
+          "source_sha256": "d8bcdab8e5010d16827f5074db713243adc6a1cd686ab2b69bd3f9b4e41039a4",
+          "olean_sha256": "d974979205e82a178755d8b2bdde4c3aca7da742dde60a563bb80ef6314aa3ba",
+          "owned_declaration_count": 13,
+          "gates": {
+            "strict_compile": {
+              "returncode": 0,
+              "elapsed_seconds": 93.187,
+              "strict": true,
+              "trustLevel": 0,
+              "source_sha256_before": "d8bcdab8e5010d16827f5074db713243adc6a1cd686ab2b69bd3f9b4e41039a4",
+              "source_sha256_after": "d8bcdab8e5010d16827f5074db713243adc6a1cd686ab2b69bd3f9b4e41039a4",
+              "olean_sha256": "d974979205e82a178755d8b2bdde4c3aca7da742dde60a563bb80ef6314aa3ba",
+              "retained_log": "verification/parts/p0/round2/p2-first/compile-ImbalancedChen.Certificates.PairedFibreIntegral.log"
+            },
+            "stock_kernel_replay": {
+              "returncode": 0,
+              "elapsed_seconds": 131.952,
+              "strict": false,
+              "trustLevel": null,
+              "source_sha256_before": "d8bcdab8e5010d16827f5074db713243adc6a1cd686ab2b69bd3f9b4e41039a4",
+              "source_sha256_after": "d8bcdab8e5010d16827f5074db713243adc6a1cd686ab2b69bd3f9b4e41039a4",
+              "olean_sha256": "d974979205e82a178755d8b2bdde4c3aca7da742dde60a563bb80ef6314aa3ba",
+              "retained_log": "verification/parts/p0/round2/p2-first/replay-ImbalancedChen.Certificates.PairedFibreIntegral.log"
+            },
+            "owned_axiom_audit": {
+              "returncode": 0,
+              "elapsed_seconds": 269.746,
+              "strict": true,
+              "trustLevel": 0,
+              "source_sha256_before": "9273d183ab9216b5205fe7b6a0b063044337a423b8afa1cffc3e901712e549c3",
+              "source_sha256_after": "9273d183ab9216b5205fe7b6a0b063044337a423b8afa1cffc3e901712e549c3",
+              "olean_sha256": "553e53633905312185ef24d1f9b5bb4b5c9f00aa8ddfbc4021d2edefe1974d54",
+              "retained_log": "verification/parts/p0/round2/p2-first/compile-verification.parts.p0.CertificatesFirstCellAudit.log"
+            }
+          }
+        },
+        {
+          "module": "ImbalancedChen.Certificates.PairedCertificateChecker",
+          "source_sha256": "454c02ef9db5ea4f50deec917ff00809e5c27f0a480b2bf8f150f01e201d227c",
+          "olean_sha256": "46d84fd7f1625e3f55b20048ea52ae5835720b22f0b50ceee255b8175563f78c",
+          "owned_declaration_count": 58,
+          "gates": {
+            "strict_compile": {
+              "returncode": 0,
+              "elapsed_seconds": 598.927,
+              "strict": true,
+              "trustLevel": 0,
+              "source_sha256_before": "454c02ef9db5ea4f50deec917ff00809e5c27f0a480b2bf8f150f01e201d227c",
+              "source_sha256_after": "454c02ef9db5ea4f50deec917ff00809e5c27f0a480b2bf8f150f01e201d227c",
+              "olean_sha256": "46d84fd7f1625e3f55b20048ea52ae5835720b22f0b50ceee255b8175563f78c",
+              "retained_log": "verification/parts/p0/round2/p2-first/compile-ImbalancedChen.Certificates.PairedCertificateChecker.log"
+            },
+            "stock_kernel_replay": {
+              "returncode": 0,
+              "elapsed_seconds": 79.619,
+              "strict": false,
+              "trustLevel": null,
+              "source_sha256_before": "454c02ef9db5ea4f50deec917ff00809e5c27f0a480b2bf8f150f01e201d227c",
+              "source_sha256_after": "454c02ef9db5ea4f50deec917ff00809e5c27f0a480b2bf8f150f01e201d227c",
+              "olean_sha256": "46d84fd7f1625e3f55b20048ea52ae5835720b22f0b50ceee255b8175563f78c",
+              "retained_log": "verification/parts/p0/round2/p2-first/replay-ImbalancedChen.Certificates.PairedCertificateChecker.log"
+            },
+            "owned_axiom_audit": {
+              "returncode": 0,
+              "elapsed_seconds": 269.746,
+              "strict": true,
+              "trustLevel": 0,
+              "source_sha256_before": "9273d183ab9216b5205fe7b6a0b063044337a423b8afa1cffc3e901712e549c3",
+              "source_sha256_after": "9273d183ab9216b5205fe7b6a0b063044337a423b8afa1cffc3e901712e549c3",
+              "olean_sha256": "553e53633905312185ef24d1f9b5bb4b5c9f00aa8ddfbc4021d2edefe1974d54",
+              "retained_log": "verification/parts/p0/round2/p2-first/compile-verification.parts.p0.CertificatesFirstCellAudit.log"
+            }
+          }
+        },
+        {
+          "module": "ImbalancedChen.Certificates.PairedV2Data",
+          "source_sha256": "a9fa2f53e2adca9b61efdf0ed6992d22b79b7807d10f0921154795cee38faa82",
+          "olean_sha256": "2d8badb8b6ad1b53a465e979cd0ca6e53117f7ce7bfd6e8a326d51bca7d7cf96",
+          "owned_declaration_count": 18,
+          "gates": {
+            "strict_compile": {
+              "returncode": 0,
+              "elapsed_seconds": 191.512,
+              "strict": true,
+              "trustLevel": 0,
+              "source_sha256_before": "a9fa2f53e2adca9b61efdf0ed6992d22b79b7807d10f0921154795cee38faa82",
+              "source_sha256_after": "a9fa2f53e2adca9b61efdf0ed6992d22b79b7807d10f0921154795cee38faa82",
+              "olean_sha256": "2d8badb8b6ad1b53a465e979cd0ca6e53117f7ce7bfd6e8a326d51bca7d7cf96",
+              "retained_log": "verification/parts/p0/round2/p2-first/compile-ImbalancedChen.Certificates.PairedV2Data.log"
+            },
+            "stock_kernel_replay": {
+              "returncode": 0,
+              "elapsed_seconds": 118.478,
+              "strict": false,
+              "trustLevel": null,
+              "source_sha256_before": "a9fa2f53e2adca9b61efdf0ed6992d22b79b7807d10f0921154795cee38faa82",
+              "source_sha256_after": "a9fa2f53e2adca9b61efdf0ed6992d22b79b7807d10f0921154795cee38faa82",
+              "olean_sha256": "2d8badb8b6ad1b53a465e979cd0ca6e53117f7ce7bfd6e8a326d51bca7d7cf96",
+              "retained_log": "verification/parts/p0/round2/p2-first/replay-ImbalancedChen.Certificates.PairedV2Data.log"
+            },
+            "owned_axiom_audit": {
+              "returncode": 0,
+              "elapsed_seconds": 269.746,
+              "strict": true,
+              "trustLevel": 0,
+              "source_sha256_before": "9273d183ab9216b5205fe7b6a0b063044337a423b8afa1cffc3e901712e549c3",
+              "source_sha256_after": "9273d183ab9216b5205fe7b6a0b063044337a423b8afa1cffc3e901712e549c3",
+              "olean_sha256": "553e53633905312185ef24d1f9b5bb4b5c9f00aa8ddfbc4021d2edefe1974d54",
+              "retained_log": "verification/parts/p0/round2/p2-first/compile-verification.parts.p0.CertificatesFirstCellAudit.log"
+            }
+          }
+        },
+        {
+          "module": "ImbalancedChen.Certificates.PairedV2",
+          "source_sha256": "e8b6cdf4c1bbf9382c58b9002704183b3608f15e57f2d0837b5157f93d41eef7",
+          "olean_sha256": "b5ef6a818d102157193e07b7c874f46d6cbeaa7cce5b4b00397ff6b2d4fe3491",
+          "owned_declaration_count": 46,
+          "gates": {
+            "strict_compile": {
+              "returncode": 0,
+              "elapsed_seconds": 128.324,
+              "strict": true,
+              "trustLevel": 0,
+              "source_sha256_before": "e8b6cdf4c1bbf9382c58b9002704183b3608f15e57f2d0837b5157f93d41eef7",
+              "source_sha256_after": "e8b6cdf4c1bbf9382c58b9002704183b3608f15e57f2d0837b5157f93d41eef7",
+              "olean_sha256": "b5ef6a818d102157193e07b7c874f46d6cbeaa7cce5b4b00397ff6b2d4fe3491",
+              "retained_log": "verification/parts/p0/round2/p2-first/compile-ImbalancedChen.Certificates.PairedV2.log"
+            },
+            "stock_kernel_replay": {
+              "returncode": 0,
+              "elapsed_seconds": 140.163,
+              "strict": false,
+              "trustLevel": null,
+              "source_sha256_before": "e8b6cdf4c1bbf9382c58b9002704183b3608f15e57f2d0837b5157f93d41eef7",
+              "source_sha256_after": "e8b6cdf4c1bbf9382c58b9002704183b3608f15e57f2d0837b5157f93d41eef7",
+              "olean_sha256": "b5ef6a818d102157193e07b7c874f46d6cbeaa7cce5b4b00397ff6b2d4fe3491",
+              "retained_log": "verification/parts/p0/round2/p2-first/replay-ImbalancedChen.Certificates.PairedV2.log"
+            },
+            "owned_axiom_audit": {
+              "returncode": 0,
+              "elapsed_seconds": 269.746,
+              "strict": true,
+              "trustLevel": 0,
+              "source_sha256_before": "9273d183ab9216b5205fe7b6a0b063044337a423b8afa1cffc3e901712e549c3",
+              "source_sha256_after": "9273d183ab9216b5205fe7b6a0b063044337a423b8afa1cffc3e901712e549c3",
+              "olean_sha256": "553e53633905312185ef24d1f9b5bb4b5c9f00aa8ddfbc4021d2edefe1974d54",
+              "retained_log": "verification/parts/p0/round2/p2-first/compile-verification.parts.p0.CertificatesFirstCellAudit.log"
+            }
+          }
+        }
+      ],
+      "full_root_build": "pending",
+      "final_hLower_supplier": "not supplied"
+    }
+  ],
+  "source_urls": [
+    "https://github.com/UyNewNas/goldbach-formalization/blob/c9f407efe66240c08c2e8a678330ba7b98b74db5/ImbalancedChen/CurrentPairedBuchstabBridge.lean",
+    "https://github.com/UyNewNas/goldbach-formalization/blob/c9f407efe66240c08c2e8a678330ba7b98b74db5/verification/parts/p0/round2/paired-buchstab/receipt.json",
+    "https://github.com/UyNewNas/goldbach-formalization/blob/c9f407efe66240c08c2e8a678330ba7b98b74db5/verification/parts/p0/round2/paired-buchstab/compiler-readable-types.txt",
+    "https://github.com/UyNewNas/goldbach-formalization/blob/c9f407efe66240c08c2e8a678330ba7b98b74db5/verification/parts/p0/round2/p2-first/receipt.json",
+    "https://github.com/UyNewNas/goldbach-formalization/blob/c9f407efe66240c08c2e8a678330ba7b98b74db5/verification/parts/p0/round2/p2-first/compiler-readable-types.txt",
+    "https://github.com/UyNewNas/goldbach-formalization/blob/70ad4d737a2ff4a77413a5975af2fb41bdfb7d66/verification/parts/p1/HANDOFF.md",
+    "https://github.com/UyNewNas/goldbach-formalization/blob/70ad4d737a2ff4a77413a5975af2fb41bdfb7d66/ImbalancedChen/ActualSelectedPrefixLowerOwnCubeIntegral.lean",
+    "https://github.com/UyNewNas/goldbach-formalization/blob/6d1e5c4710a66f68fd101d0b40b5514bbbba4919/verification/parts/p0/round2/p3-long-slot-candidate/candidate.json"
+  ],
+  "scope_conclusions": [
+    "Actual first-cell checked integral and actual real-variable Buchstab fibre bridge are received.",
+    "The bridge has only real t,u,z,w and firstFibreSupport; it has no N, arithmetic prime tuple, adopted E_N, Upsilon6 or Upsilon11 parameter.",
+    "All 17572 adopted checks and ownership/integral identification remain separate inputs.",
+    "The actual arithmetic parent comparison, signed distribution and same-rho common-K density are not supplied.",
+    "K/80 already contains K/4 times 1/20. No duplicate Buchstab gain or old 12/5 increment is used.",
+    "The upstream fixed acceptance does not replace the user-specified common proof baseline."
+  ],
+  "observed_part_heads": [
+    {
+      "branch": "chatgpt/chen-p0-integration",
+      "sha": "c9f407efe66240c08c2e8a678330ba7b98b74db5"
+    },
+    {
+      "branch": "chatgpt/chen-p0-validation-r2",
+      "sha": "6d1e5c4710a66f68fd101d0b40b5514bbbba4919"
+    },
+    {
+      "branch": "chatgpt/chen-p1-history",
+      "sha": "70ad4d737a2ff4a77413a5975af2fb41bdfb7d66"
+    },
+    {
+      "branch": "chatgpt/chen-p2-certificates",
+      "sha": "b47a8d38ac1d2bcbd9c191df1c0c4da76700af3e"
+    },
+    {
+      "branch": "chatgpt/chen-p3-distribution",
+      "sha": "7d70a2545fd819706e473eb41e4d430ad19119d8"
+    },
+    {
+      "branch": "chatgpt/chen-p4-upper",
+      "sha": "c942b4c51d9d0005f0bd566906a3f0c88eeb1dba"
+    }
+  ],
+  "p2_selected_compiler_types": {
+    "ImbalancedChen.Certificates.PairedIntegralCertificate.sum_check_sound": "ImbalancedChen.Certificates.PairedIntegralCertificate.sum_check_sound\n∀ {ι : Type u_1} (s : Finset.{u_1} ι) (c : ι → ImbalancedChen.Certificates.PairedIntegralCertificate),\n  (∀ (i : ι), Membership.mem.{u_1, u_1} s i → Eq.{1} (c i).check Bool.true) →\n    LE.le.{0} (↑(∑ i ∈ s, (c i).lower))\n        (∑ i ∈ s,\n          ImbalancedChen.Certificates.pairedLocalIntegral ↑(c i).K ↑(c i).a ↑(c i).tl ↑(c i).tr ↑(c i).ul ↑(c i).ur\n            ↑(c i).Z) ∧\n      LE.le.{0}\n        (∑ i ∈ s,\n          ImbalancedChen.Certificates.pairedLocalIntegral ↑(c i).K ↑(c i).a ↑(c i).tl ↑(c i).tr ↑(c i).ul ↑(c i).ur\n            ↑(c i).Z)\n        ↑(∑ i ∈ s, (c i).upper)",
+    "ImbalancedChen.Certificates.PairedV2.firstIntegral_bounds": "ImbalancedChen.Certificates.PairedV2.firstIntegral_bounds\nLE.le.{0} (31703 / 1000000000000) ImbalancedChen.Certificates.PairedV2.firstIntegral ∧\n  LE.le.{0} ImbalancedChen.Certificates.PairedV2.firstIntegral (31704 / 1000000000000)",
+    "ImbalancedChen.Certificates.PairedV2.first_fibre_argument": "ImbalancedChen.Certificates.PairedV2.first_fibre_argument\n∀ {t u z w : ℝ},\n  ImbalancedChen.Certificates.PairedV2.firstFibreSupport t u z w →\n    LT.lt.{0} (417 / 5000) w ∧\n      LT.lt.{0} w z ∧\n        LT.lt.{0} z u ∧\n          LT.lt.{0} u (19 / 125) ∧\n            LT.lt.{0} (19 / 125) t ∧\n              LT.lt.{0} t (59 / 250) ∧\n                LE.le.{0} (7 / 3)\n                  (HDiv.hDiv.{0, 0, 0}\n                    (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} (HSub.hSub.{0, 0, 0} 1 t) u) z) w) z)",
+    "ImbalancedChen.Certificates.PairedV2.first_certificate_checked": "ImbalancedChen.Certificates.PairedV2.first_certificate_checked\nEq.{1} ImbalancedChen.Certificates.PairedV2.firstCertificate.check Bool.true"
+  },
+  "p1": {
+    "checkpoint": "70ad4d737a2ff4a77413a5975af2fb41bdfb7d66",
+    "type_kind": "SOURCE_EXTRACTED_NOT_COMPILER_CONFIRMED",
+    "source_file": "ImbalancedChen/ActualSelectedPrefixLowerOwnCubeIntegral.lean",
+    "declaration": "theorem tendsto_actualSelectedPrefixLowerDensity_ceil_normalized\n    (I : Finset (Fin 4)) (old nu a b : ℚ)\n    (ha : 0 < a) (hab : a < b) (hbo : 2 * b ≤ old)\n    (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1)))\n    (hchecks : ∀ j ∈ J, selectedBoxCapCheck I old nu\n      (qLogPrimeMeshLo a b m j) (qLogPrimeMeshHi a b m j) = true) :\n    Tendsto (fun N : ℕ =>\n      actualSelectedPrefixLowerDensity N (Nat.ceil ((N : ℝ) ^ (b : ℝ)))\n        I old nu a b m J * Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 ((2 * Real.exp (-Real.eulerMascheroniConstant) / (b : ℝ)) *\n        suzukiContinuousLowerFactor ((old : ℝ) / (b : ℝ)) +\n        selectedPrefixLowerRestorationIntegral I old nu a b m J))",
+    "status": "Four new production targets are source candidates at this fixed handoff; no new completed S1 beta supplier closure is supplied.",
+    "remaining": "Actual adopted table, whole-box checks, all history integrals, physical support and source-row identification; no adopted L1 numerical endpoint is supplied."
+  },
+  "p0_validation_candidate": {
+    "checkpoint": "6d1e5c4710a66f68fd101d0b40b5514bbbba4919",
+    "status": "uncompiled repair candidate; not accepted",
+    "gates": {
+      "strict_compile": "pending",
+      "stock_kernel_replay": "pending",
+      "owned_axiom_audit": "pending"
+    },
+    "source_sha256": "67ccc48e6a4befadfd4b5639e2cdb4bd43e443b8f4eaf3086fe5a6c5fbd0023e",
+    "unclosed_inputs": [
+      "Actual rough or prime coefficients and phases are absent.",
+      "This finite integer long-slot lemma does not supply medium/two-prime distribution or same-rho realPhysicalDistributionError."
+    ]
+  }
+}

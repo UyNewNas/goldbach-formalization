@@ -24,6 +24,7 @@ noncomputable section
 
 open Filter
 open scoped BigOperators
+open MathlibNt.SieveTheory.LiLiuOnePlusOneNine
 open MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig
 open MathlibNt.SieveTheory.SwitchingPrinciple (dimensionOneLowerLinearSieveFactor)
 
@@ -38,7 +39,9 @@ theorem currentChen_twinPrimeConstant_eq_liuUniversalProduct :
     intro p hp
     by_contra h
     change 1 + MathlibNt.SieveTheory.SingularSeries.liuBaseDeviation p ≠ 1 at hp
-    exact hp (by simp [MathlibNt.SieveTheory.SingularSeries.liuBaseDeviation, h])
+    change ¬ (Nat.Prime p ∧ 2 < p) at h
+    exact hp (by rw [MathlibNt.SieveTheory.SingularSeries.liuBaseDeviation, if_neg h,
+      add_zero])
   unfold twinPrimeConstant MathlibNt.SieveTheory.SingularSeries.liuUniversalProduct
   rw [← tprod_subtype_eq_of_mulSupport_subset hsupp]
   apply tprod_congr

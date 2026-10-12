@@ -8,7 +8,11 @@
 | First-round proof source | `3857bfe99b6a7adbb0c3c0443b27b99d96a44f86` |
 | First-round handoff | `3b8ab5eb2041af1906ecdb108f5edd2dd61f19aa` |
 | Immediate verified Buchstab delivery to P2 | `db97d0fe03250f4d9a8aea34b23e9c20f67010b8` |
-| P0 acceptance inspected | `30fdb230428e91d7eb5deb8deb5cbe3fdc113ceb` |
+| Verified complete finite ledger and scale checkpoint | `bd83a110ee52626daf9e68535c007eb73a93daca` |
+| P0 first Buchstab acceptance inspected | `30fdb230428e91d7eb5deb8deb5cbe3fdc113ceb` |
+| P0 verified first-cell and Buchstab-bridge acceptance inspected | `c9f407efe66240c08c2e8a678330ba7b98b74db5` |
+| P0 separate uncompiled LongSlot repair inspected | `6d1e5c4710a66f68fd101d0b40b5514bbbba4919` |
+| P1 fixed source-candidate handoff inspected | `70ad4d737a2ff4a77413a5975af2fb41bdfb7d66` |
 | P2 source inspected | `b47a8d38ac1d2bcbd9c191df1c0c4da76700af3e` |
 | P3 second-round source inspected | `7d70a2545fd819706e473eb41e4d430ad19119d8` |
 | P4 latest handoff inspected | `c942b4c51d9d0005f0bd566906a3f0c88eeb1dba` |
@@ -19,12 +23,12 @@ supplied a replacement common proof baseline. Reading later Part 0
 acceptance records does not change the baseline of this branch.
 
 **Validation status:** Buchstab, the complete finite eleven-term ledger,
-and the lower-scale module have each passed strict compilation, bundled
-kernel replay and the transitive axiom audit. Buchstab has already been
-published independently. The new InitialSource component is still being
-checked. The separate first-row eventual mean remains a source candidate
-whose additional supplier closure has not been validated. The complete
-adopted-mask mean and final `hLower` remain open.
+the lower-scale module, and the actual InitialSource component have each
+passed strict compilation, bundled kernel replay and the transitive axiom
+audit. Buchstab and the finite ledger/scale were already published at the
+separate checkpoints above. The separate first-row eventual mean remains
+a source candidate whose additional supplier closure has not been
+validated. The complete adopted-mask mean and final `hLower` remain open.
 
 ## 1. Immediate P2 delivery: complete actual Buchstab tail
 
@@ -167,7 +171,7 @@ Their sum is `4*epsilon`, giving the desired `epsilon` after division.
 This round does not add another theorem assuming the missing complete
 eventual mean. The finite inequalities above remain finite algebra.
 
-## 4. A new actual row estimate with no analytic supplier hypothesis
+## 4. Actual first-row source components and a separate mean candidate
 
 [CurrentChenInitialSource.lean](../ImbalancedChen/CurrentChenInitialSource.lean)
 separates the actual source comparison, singular-series identification,
@@ -177,10 +181,11 @@ prime-factor product bound directly, followed by the usual logarithm
 inequality; it does not depend on P1's history/grid modules or the full
 beta lower-sieve supplier. Their public types are unchanged by the split.
 
-The two source-transfer declarations have the following complete source
-types in the module's `ImbalancedChen` namespace and its declared upstream
-`GoldbachBig` context. Their gate status is recorded separately from the
-eventual mean below:
+The following types are compiler-confirmed in namespace
+`ImbalancedChen`, with the declared upstream `LiLiuOnePlusOneNine` and
+`GoldbachBig` contexts. The complete defining-module inventory is in
+[InitialSource compiler-types.txt](../verification/parts/p5/round2/initial-source/compiler-types.txt).
+The separate eventual mean below remains explicitly source-only:
 
 ```lean
 theorem currentChen_goldbachS1_le_sifted_add_primeFactors
@@ -194,12 +199,16 @@ theorem eventually_currentChen_primeFactors_negligible
       (N.primeFactors.card : ℝ) ≤ epsilon * singularNormalization N
 ```
 
-The remaining three statements identify `twinPrimeConstant` with
-`SingularSeries.liuUniversalProduct`, identify `singularSeries N` with
-`SingularSeries.liuSingularSeries N` for every natural N, and evaluate
-the actual coefficient exactly:
+The other three compiler-confirmed statements identify the actual
+singular series for every natural N and evaluate the actual coefficient:
 
 ```lean
+theorem currentChen_twinPrimeConstant_eq_liuUniversalProduct :
+    twinPrimeConstant = MathlibNt.SieveTheory.SingularSeries.liuUniversalProduct
+
+theorem currentChen_singularSeries_eq_liuSingularSeries (N : ℕ) :
+    singularSeries N = MathlibNt.SieveTheory.SingularSeries.liuSingularSeries N
+
 theorem currentChen_initial_sieve_coefficient :
     (33 / 2 : ℝ) * Real.exp (-Real.eulerMascheroniConstant) *
         dimensionOneLowerLinearSieveFactor 4 =
@@ -240,7 +249,33 @@ verified status is determined by the actual recorded execution, not by
 the fact that the proof body has no displayed analytic hypotheses.
 
 The required ordinary beta supplier has an existing proof in the pinned
-dependency source. Its missing compiled closure is a validation backlog,
+dependency source. Its complete **source-extracted, not compiler-confirmed**
+type, in namespace
+`MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig`, is:
+
+```lean
+theorem goldbachS1_beta_fixed_normalized_lower
+    (s δ : ℝ) (hs4 : 4 ≤ s) (hslt : s < (33 / 8 : ℝ)) (hδ : 0 < δ) :
+    ∀ ε : ℝ, 0 < ε → ε < 1 →
+      ∃ N₀ : ℕ, 4 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → Even N →
+        (((33 / 2 : ℝ) * Real.exp (-Real.eulerMascheroniConstant) * (1 - ε) *
+              dimensionOneLowerLinearSieveFactor s - δ) *
+            SingularSeries.liuSingularSeries N * (N : ℝ) /
+            Real.log (N : ℝ) ^ (2 : ℝ) ≤
+          (goldbachS1 (goldbachDifferenceCarrier N ε) N
+            ((N : ℝ) ^ (4 / 33 : ℝ)) : ℝ))
+```
+
+The source is fixed at goldbach dependency SHA
+`09b97db5764ade1246bfb77206baa1b124760958`, with file SHA256
+`2d6935310615d6626bedee37700cdc935a198dea7e9b15d69d11c6b580887821`.
+The candidate instantiates `s=4`, `δ=epsilon/4`, and
+`tau=min (1/2) (epsilon/(4*((33/4)*log 3)))`. The source truncation
+cost is at most `epsilon/4`; the supplier error is `epsilon/4`;
+the actual noncoprime-source correction is paid by `epsilon/2`.
+Their total is exactly the displayed first-row error budget.
+
+Its missing compiled closure is a validation backlog,
 not a new analytic assumption in the displayed first-row declaration.
 The long independent supplier queue was stopped through its original
 tool session when shared memory approached the actual 8 GiB limit, so
@@ -253,10 +288,22 @@ supplier proof was patched and no full-queue retry was launched.
 
 ## 5. P2 alignment and the missing local comparison
 
-The fixed P2 checkpoint includes all 17,572 raw rows and a generic
-`PairedIntegralCertificate.sum_check_sound`. It still has only the first
-cell's concrete Lean certificate, not all checks for the adopted mask.
-The first cell cannot stand in for E0's 6,091 plus E1's 11,481 cells.
+The original P2 checkpoint `b47a8d38ac1d2bcbd9c191df1c0c4da76700af3e`
+includes all 17,572 raw rows and a generic
+`PairedIntegralCertificate.sum_check_sound`. P0's later fixed acceptance
+`c9f407efe66240c08c2e8a678330ba7b98b74db5` repairs and verifies the five
+P2 first-cell modules (182 actual defining-module declarations), followed
+by the two-declaration `CurrentPairedBuchstabBridge`. Each production
+module has strict trust-zero compilation, original bundled replay and
+a full defining-module axiom audit. This is a newly received successful
+first-cell result; it does not promote the original unmodified P2 branch
+or the complete adopted table to verified status.
+
+The accepted cell is row 0, E0, t-index 422 and u-index 510. It cannot
+stand in for E0's 6,091 plus E1's 11,481 cells. The fixed receipt and
+compiler-output inspection is recorded in
+[upstream/receipt.json](../verification/parts/p5/round2/upstream/receipt.json).
+Those are P0's actual executions, not additional P5 recompilations.
 
 The coordinate dictionary is:
 
@@ -273,9 +320,10 @@ Neither another quarter factor nor the replaced old `12/5` increment
 is added. The withdrawn `1.9728` branch is not used.
 
 The full-mask Lean checks and exact rational sum are still needed.
-P2's complete generic aggregation type at the inspected SHA is the
-following **source-extracted, not compiler-confirmed** type, in namespace
-`ImbalancedChen.Certificates`:
+The complete generic aggregation type below is now **compiler-confirmed
+at P0's repaired acceptance SHA**, in namespace
+`ImbalancedChen.Certificates`; the original P2 source alone did not
+provide that execution evidence:
 
 ```lean
 theorem PairedIntegralCertificate.sum_check_sound {ι : Type*}
@@ -295,6 +343,40 @@ dictionary, not an arbitrary checked subset. The finite sum additionally
 needs the actual ownership/disjointness identification with the adopted
 union integral.
 
+The new bridge composes the accepted actual first-fibre support with
+P5's global Buchstab result. Its two complete compiler-confirmed types,
+in namespace `ImbalancedChen.Certificates.PairedV2`, are:
+
+```lean
+theorem first_fibre_buchstab_eleven_twentieths {t u z w : ℝ}
+    (hs : firstFibreSupport t u z w) :
+    (11 : ℝ) / 20 ≤
+      LiLiuPrereqBuchstab.buchstab ((1 - t - u - z - w) / z)
+
+theorem first_fibre_buchstab_gain {t u z w : ℝ}
+    (hs : firstFibreSupport t u z w) :
+    (1 : ℝ) / 20 ≤
+      LiLiuPrereqBuchstab.buchstab ((1 - t - u - z - w) / z) - (1 : ℝ) / 2
+```
+
+The same acceptance confirms:
+
+```lean
+theorem ImbalancedChen.Certificates.PairedV2.firstIntegral_bounds :
+    (31703 / 1000000000000 : ℝ) ≤
+      ImbalancedChen.Certificates.PairedV2.firstIntegral ∧
+    ImbalancedChen.Certificates.PairedV2.firstIntegral ≤
+      (31704 / 1000000000000 : ℝ)
+```
+
+This is the independently weaker rational enclosure, not the stored
+tighter Q160 interval. The bridge has real variables `t,u,z,w` and
+`firstFibreSupport` as its input; it has no natural target, adopted
+arithmetic mask, prime tuple, U6 or U11 parameter. Its successful
+composition is therefore received at precisely this continuous first-cell
+scope. The bridge receipt explicitly leaves the entire adopted mask
+and actual arithmetic parent as separate inputs.
+
 The actual adopted negative parent must also be constructed and proved
 to dominate the retained local fibre under the appropriate priority,
 square, prime-ceiling and physical-level gates. P2 does not yet define
@@ -307,12 +389,16 @@ sixth-row lower estimate must come from the actual restricted family
 and its policy/integral/distribution proof. The same mask and parent
 ownership must be used for the retained eleventh-row upper estimate.
 
-P0's real strict frontend attempt at P2's pinned
+P0's earlier real strict frontend attempt at the original P2
 `RationalLogCertificate.lean` returned 1, at source SHA256
 `525d4eb7e87932aef7c2ecee816c8f1eb3dee5fcfc679c275444e278b06094c2`:
 line 66 reported `unnecessarySeqFocus`, and line 102 reported a
-`linarith` failure. This is a real source diagnostic, not merely the
-older compiler-startup limitation. P5 does not edit P2's files.
+`linarith` failure. P0 has now repaired those actual diagnostics and
+validated source SHA256
+`4d705f561d4ba07e01dd7b3af1b0a73bcbf28c9dd6d2ddfd4ae288fb84de9d22`
+at `c9f407efe66240c08c2e8a678330ba7b98b74db5`. The original failure
+remains in P0's history receipt; it is not the status of the newly accepted
+repaired source. P5 has not edited or copied P2's production files.
 
 ## 6. Precisely open suppliers and their receivers
 
@@ -326,9 +412,44 @@ older compiler-startup limitation. P5 does not edit P2's files.
 | P4-A/P3 + P5 -> P5 | Insert that same `rho` into the positive switched families and compute their actual labelled masses for rows 7-11, with all multiplicities and boundary corrections |
 | P5 -> P0 | Every oriented actual row estimate (or the joint last two), the complete adopted-mask weight mean at coefficient `4*c`, then final `hLower` |
 
+P1 now has a fixed source handoff at
+`70ad4d737a2ff4a77413a5975af2fb41bdfb7d66`, directly based on the
+unchanged common baseline. Its four new production leaves remain
+**source candidates at that checkpoint**. The following complete
+relevant type is source-extracted, not compiler-confirmed:
+
+```lean
+theorem ImbalancedChen.tendsto_actualSelectedPrefixLowerDensity_ceil_normalized
+    (I : Finset (Fin 4)) (old nu a b : ℚ)
+    (ha : 0 < a) (hab : a < b) (hbo : 2 * b ≤ old)
+    (m : ℕ) (J : Finset (Fin 4 → Fin (m + 1)))
+    (hchecks : ∀ j ∈ J, selectedBoxCapCheck I old nu
+      (qLogPrimeMeshLo a b m j) (qLogPrimeMeshHi a b m j) = true) :
+    Tendsto (fun N : ℕ =>
+      actualSelectedPrefixLowerDensity N (Nat.ceil ((N : ℝ) ^ (b : ℝ)))
+        I old nu a b m J * Real.log (N : ℝ) / singularSeries N)
+      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})
+      (𝓝 ((2 * Real.exp (-Real.eulerMascheroniConstant) / (b : ℝ)) *
+        suzukiContinuousLowerFactor ((old : ℝ) / (b : ℝ)) +
+        selectedPrefixLowerRestorationIntegral I old nu a b m J))
+```
+
+This supplies a candidate ordinary-parent lower-fourth density limit for
+fixed cells and checks. Its normalization is `log N / singularSeries N`;
+the actual prime-source mean still needs its source/density/distribution
+connection in `singularNormalization N` units. The actual adopted table,
+whole-box checks, historical composition and numerical L1 endpoint are
+not instantiated by this type. The P1 handoff provides no new completed
+S1 beta supplier closure for P5's separate InitialMean candidate.
+
 P3's latest source still requires `Part3CurrentLowerRows N Q S3 S4 S5 S6`
 in its current Y3-Y6 remainder theorem. Its `UniformPrimeProductTarget`
 is still a `Prop` target, not a supplied theorem for the adopted `rho`.
+P0's separate `6d1e5c4710a66f68fd101d0b40b5514bbbba4919` adds a
+LongSlot repair candidate with strict compilation, replay and audit all
+pending. It does not supply a newly verified actual signed-distribution
+input. Its exact candidate record is included in the fixed upstream
+inspection receipt.
 P4's latest checkpoint changes only its handoff documentation: the
 full-policy density theorem still has `hIntegral`, `hCertificate` and
 `hgap` inputs, and the final compiled coefficient still needs its own
@@ -370,7 +491,7 @@ Its same actual `rho` must also satisfy the physical majorant, support,
 coefficient and signed-distribution inputs. This density statement is
 not supplied at the inspected P4 checkpoint. Evaluating a raw density
 without the compiled coefficient's reserve would leave a different
-input unproved. Part 4-B's finished counting theorem is not needed.
+input unproved. Part 4-B's `hUpper` is not needed.
 
 For a fixed actual adopted `E : ℕ → (ℕ × ℕ → Prop)`, the missing row
 statements have the precise form, for every `delta > 0`, eventually on
@@ -422,6 +543,38 @@ theorem headers and 16 definitions are unchanged. The complete LowerScale
 source is unchanged and passed on its first strict attempt. Source-header
 comparison evidence is labelled separately from the compiler-printed
 type inventory; the latter is the acceptance type record.
+
+The independent actual-source component has also completed all three gates:
+
+| InitialSource check | Actual result |
+| --- | --- |
+| Strict trust-zero frontend, warnings as errors | Exit 0, 258.283 seconds |
+| Original bundled kernel replay | Exit 0, 210.823 seconds |
+| Independent `InitialSourceAudit` | Exit 0, 680.789 seconds; 8 actual own declarations |
+
+Its source SHA256 is `4b11a63cc976a0866068337c12d616578dace6c80736574311f4cca13f7d8956`;
+its object SHA256 is `8b9ee7b0e4f18ea06057a99f075e87065131e12873221e114b9c5d5c46a8ef39`. Both are identical
+through compilation, replay and audit. The accepted type inventory comes
+from the actual environment. The [InitialSource receipt](../verification/parts/p5/round2/initial-source/receipt.json)
+and archived logs record the completed commands, exact import hashes,
+source-matched cache reuse and all actual dependency compilations.
+
+The initial strict target attempt returned 1 after 428.784 seconds.
+Only two repairs were needed: normalize the product-support nonmembership
+hypothesis to the exact upstream condition before rewriting, and open the
+existing parent namespace of `goldbachDifferenceCarrier`. The five public
+declaration texts are unchanged. The complete failure log and the
+[diagnostic repair record](../verification/parts/p5/round2/initial-source/actual-diagnostic-repair.json)
+are retained. This namespace fix was also applied to the separate
+InitialMean candidate; it does not constitute a compilation of that file.
+
+The first-row mean candidate's current source SHA256 is
+`5358e4dbbda436b335620de19884624df3260386d5ab5e478a85f70599da6137`. Its complete source declaration,
+actual pinned supplier type and resolver-visible validation backlog are
+recorded in [initial-mean-candidate.json](../verification/parts/p5/round2/initial-source/initial-mean-candidate.json).
+This candidate is not included in either successful declaration inventory.
+The source-level redundant-tactic fix and the interrupted supplier
+attempt each retain their own earlier hashes and evidence.
 
 The original Lean 4.33.0-rc1 toolchain and pinned dependencies are used.
 Official frontend compilation explicitly sets trust level zero; new

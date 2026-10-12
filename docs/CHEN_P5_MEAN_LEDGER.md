@@ -47,7 +47,20 @@ transitive axiom audit passed at
 This does not certify the retained fibre quadrature. The current finite
 and scale validation status is recorded in
 [CHEN_P5_ROUND2_HANDOFF.md](CHEN_P5_ROUND2_HANDOFF.md); these components do
-not close the missing analytic rows.
+not close the missing analytic rows. The independently verified
+[CurrentChenInitialSource.lean](../ImbalancedChen/CurrentChenInitialSource.lean)
+now supplies the actual S1 source comparison, exact singular-series
+identifications, fixed-ratio sieve coefficient and negligible prime-factor
+correction. The separate `CurrentChenInitialMean.lean` remains an
+uncompiled candidate, with its supplier validation backlog recorded in
+the round-2 handoff; it is not an adopted endpoint certificate.
+
+The later fixed P0 acceptance
+`c9f407efe66240c08c2e8a678330ba7b98b74db5` also verifies P2's actual
+first-cell certificate and its real-variable Buchstab bridge. This
+first-cell result is received in the round-2 handoff with its complete
+compiler-confirmed types. All 17,572 adopted cells and the actual
+U6/U11 arithmetic parent remain separate requirements.
 
 ## 1. Carrier, quotient semantics, and the unchanged factor four
 
@@ -727,24 +740,31 @@ claims.
 
 ### Verification boundary
 
-The documentation audit read the fixed source, checked the eleven supports
+The first-round documentation audit read the fixed source, checked the eleven supports
 and signs against Lean, identified the adopted source/field chain, and
 performed the exact scalar arithmetic listed above. It did not establish
 the complete actual masked mean. The new row seven through eleven source
 adapters and Buchstab argument received independent static mathematical
 review; that review is not an elaboration or kernel check.
 
-The exact pinned compiler and dependency sources were acquired, but a
-local compiler startup attempt was blocked when Lean's `getAppPath` tried
+In that first round, the exact pinned compiler and dependency sources
+were acquired, but a local compiler startup attempt was blocked when Lean's `getAppPath` tried
 to read `/proc/<pid>/exe`. The environment denied that operation before
 elaboration. This is neither a Lean syntax diagnostic nor a successful
-build. No permission mechanism was bypassed. The modules consequently
-remain candidates pending a successful build and axiom audit.
+build. No permission mechanism was bypassed. That historical startup
+result has now been supplemented by actual round-2 verification:
+Buchstab, MeanLedger, LowerScale and InitialSource have each passed the
+official trust-zero frontend through stock Lake, original bundled
+production-module replay and a full defining-module transitive axiom
+audit. The recorded inventories cover 111 distinct declarations. The
+ordinary first-row eventual mean in InitialMean is still an uncompiled
+candidate. Neither inventory proves the complete adopted-mask mean.
 
 The shared project entry point is unchanged. Its default aggregate build
-does not import the new modules. Part 0 must either integrate the three
-imports in its canonical entry point or explicitly build the three module
-targets and run `verification/parts/p5/ChenP5Audit.lean`. The handoff provides those
+does not import the new modules. Part 0 must either integrate the verified
+leaves in its canonical entry point or explicitly build their module
+targets and run `verification/parts/p5/ChenP5Audit.lean` together with
+`verification/parts/p5/InitialSourceAudit.lean`. The handoff provides those
 explicit commands; merely pushing the new files does not establish that
 the default aggregate CI checks them.
 
