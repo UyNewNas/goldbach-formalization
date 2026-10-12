@@ -1,0 +1,257 @@
+name: Part 2 numerical certificates
+
+on:
+  push:
+    paths:
+      - 'ImbalancedChen/Certificates/**'
+      - 'verification/part2/**'
+      - '.github/workflows/part2-certificates.yml'
+      - 'lean-toolchain'
+      - 'lake-manifest.json'
+      - 'lakefile.toml'
+  pull_request:
+    paths:
+      - 'ImbalancedChen/Certificates/**'
+      - 'verification/part2/**'
+      - '.github/workflows/part2-certificates.yml'
+      - 'lean-toolchain'
+      - 'lake-manifest.json'
+      - 'lakefile.toml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: part2-certificates-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  certificates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      LEAN_NUM_THREADS: 2
+      PART2_MODULES: >-
+        ImbalancedChen.Certificates.PairedFibreIntegral
+        ImbalancedChen.Certificates.RationalLogCertificate
+        ImbalancedChen.Certificates.PairedCertificateChecker
+        ImbalancedChen.Certificates.PairedV2Data
+        ImbalancedChen.Certificates.PairedV2
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out the exact PR head or pushed commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Check out the existing pinned lean-action scripts
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action-p2
+          persist-credentials: false
+      - name: Record exact source provenance and complete owned-module coverage
+        env:
+          EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          test "$(git -C .ci-lean-action-p2 rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          PART2_LOG_DIR="$RUNNER_TEMP/part2-certificates-verification"
+          LEAN_ACTION_DIR="$RUNNER_TEMP/lean-action-part2-f061402b"
+          mkdir -p "$PART2_LOG_DIR"
+          test ! -e "$LEAN_ACTION_DIR"
+          mv .ci-lean-action-p2 "$LEAN_ACTION_DIR"
+          printf 'PART2_LOG_DIR=%s\nLEAN_ACTION_DIR=%s\n' "$PART2_LOG_DIR" "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          export PART2_LOG_DIR
+          python3 - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          from verification.verify_variable_envelope_boxes import lean_code
+
+          expected = os.environ['PART2_MODULES'].split()
+          sources = sorted(Path('ImbalancedChen/Certificates').rglob('*.lean'))
+          actual = [str(p.with_suffix('')).replace('/', '.') for p in sources]
+          if set(actual) != set(expected) or len(expected) != len(set(expected)):
+              raise SystemExit(f'Part 2 module coverage differs: expected={expected}, actual={actual}')
+          if Path('lean-toolchain').read_text().strip() != 'leanprover/lean4:v4.33.0-rc1':
+              raise SystemExit('Unexpected Lean toolchain')
+          manifest = json.loads(Path('lake-manifest.json').read_text())
+          pins = {p['name']: p['rev'] for p in manifest['packages']}
+          if pins['mathlib'] != 'e4c91783ca8e6a7c693ae624ade32fd22d4e43c1':
+              raise SystemExit('Unexpected Mathlib pin')
+          if pins['goldbach'] != '09b97db5764ade1246bfb77206baa1b124760958':
+              raise SystemExit('Unexpected goldbach pin')
+          import re
+          for p in sources:
+              if re.search(r'\b(?:sorry|admit|axiom|unsafe|native_decide)\b', lean_code(p.read_text())):
+                  raise SystemExit(f'Forbidden proof escape in {p}')
+          inputs = sources + sorted(p for p in Path('verification/part2').rglob('*')
+                                    if p.is_file() and '__pycache__' not in p.parts)
+          inputs += [Path(p) for p in ['lean-toolchain', 'lake-manifest.json', 'lakefile.toml',
+                                     '.github/workflows/part2-certificates.yml']]
+          hashes = {str(p): hashlib.sha256(p.read_bytes()).hexdigest() for p in inputs}
+          report = {'head_commit': os.environ['EXPECTED_HEAD'],
+                    'event_commit': os.environ['GITHUB_SHA'], 'modules': expected,
+                    'dependency_pins': pins, 'source_sha256': hashes}
+          out = Path(os.environ['PART2_LOG_DIR'])
+          (out / 'provenance.json').write_text(json.dumps(report, indent=2) + '\n')
+          print(json.dumps(report, indent=2))
+          PY
+      - name: Install Elan and the pinned project toolchain
+        run: |
+          set -euo pipefail
+          "$LEAN_ACTION_DIR/scripts/install_elan.sh" 2>&1 | tee "$PART2_LOG_DIR/install.log"
+      - name: Restore the existing pinned Lake cache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ./.lake
+          key: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}-${{ github.sha }}
+          restore-keys: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}
+      - name: Fetch the Mathlib cache required by actual Part 2 imports
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' > "$PART2_LOG_DIR/cache-imports.log"
+          import os, re
+          from pathlib import Path
+          from verification.verify_variable_envelope_boxes import lean_code
+
+          pending = os.environ['PART2_MODULES'].split()
+          seen, imports = set(), set()
+          while pending:
+              module = pending.pop()
+              if module in seen:
+                  continue
+              seen.add(module)
+              source = Path(module.replace('.', '/') + '.lean')
+              for line in lean_code(source.read_text()).splitlines():
+                  match = re.match(r'\s*import\s+(.+?)\s*$', line)
+                  if not match:
+                      continue
+                  for name in match.group(1).split():
+                      if name == 'Mathlib':
+                          raise SystemExit('Use explicit Mathlib imports for Part 2')
+                      if name.startswith('Mathlib.'):
+                          imports.add(name)
+                      elif Path(name.replace('.', '/') + '.lean').is_file():
+                          pending.append(name)
+          if not imports:
+              raise SystemExit('No targeted Mathlib imports found')
+          print('\n'.join(sorted(imports)))
+          PY
+          mapfile -t imports < "$PART2_LOG_DIR/cache-imports.log"
+          test "${#imports[@]}" -gt 0
+          lake exe cache get "${imports[@]}" 2>&1 | tee "$PART2_LOG_DIR/cache.log"
+      - name: Explicit Part 2 build and strict individual elaboration
+        id: build
+        run: |
+          set -euo pipefail
+          lean --version 2>&1 | tee "$PART2_LOG_DIR/lean-version.log"
+          lake build ImbalancedChen.Certificates.PairedV2 2>&1 | tee "$PART2_LOG_DIR/build.log"
+          read -r -a modules <<< "$PART2_MODULES"
+          for module in "${modules[@]}"; do
+            source="${module//.//}.lean"
+            lake env lean -DwarningAsError=true "$source" 2>&1 | tee "$PART2_LOG_DIR/${module##*.}-strict.log"
+          done
+      - name: Replay every new module with the bundled kernel checker
+        id: replay
+        run: |
+          set -euo pipefail
+          checker="$(elan which leanchecker)"
+          test -x "$checker"
+          printf 'bundled_leanchecker=%s\n' "$checker" | tee "$PART2_LOG_DIR/checker.log"
+          read -r -a modules <<< "$PART2_MODULES"
+          for module in "${modules[@]}"; do
+            lake env leanchecker --verbose "$module" 2>&1 | tee "$PART2_LOG_DIR/${module##*.}-replay.log"
+          done
+      - name: Inventory all Part 2 declarations and their transitive axioms
+        id: audit
+        run: |
+          set -euo pipefail
+          lake env lean -DwarningAsError=true verification/part2/CertificateAudit.lean 2>&1 | tee "$PART2_LOG_DIR/axioms.log"
+          python3 - <<'PY'
+          from collections import Counter
+          import hashlib, json, os
+          from pathlib import Path
+
+          out = Path(os.environ['PART2_LOG_DIR'])
+          modules = os.environ['PART2_MODULES'].split()
+          lines = (out / 'axioms.log').read_text().splitlines()
+          records = [json.loads(line.removeprefix('P2_AUDIT_DECL '))
+                     for line in lines if line.startswith('P2_AUDIT_DECL ')]
+          counts = [json.loads(line.removeprefix('P2_AUDIT_MODULE '))
+                    for line in lines if line.startswith('P2_AUDIT_MODULE ')]
+          totals = [int(line.removeprefix('P2_AUDIT_COUNT '))
+                    for line in lines if line.startswith('P2_AUDIT_COUNT ')]
+          if not records or totals != [len(records)]:
+              raise SystemExit('Missing or inconsistent Lean declaration inventory')
+          if len({r['name'] for r in records}) != len(records):
+              raise SystemExit('Duplicate names in Lean declaration inventory')
+          actual = Counter(r['module'] for r in records)
+          if len(counts) != len(modules) or {c['module'] for c in counts} != set(modules):
+              raise SystemExit('Audit does not cover exactly the required Part 2 modules')
+          for item in counts:
+              if item['count'] <= 0 or actual[item['module']] != item['count']:
+                  raise SystemExit(f'Empty or inconsistent module inventory: {item}')
+          for record in records:
+              if record['module'] not in modules:
+                  raise SystemExit('Unexpected declaration module')
+              if set(record['axioms']) - {'propext', 'Classical.choice', 'Quot.sound'}:
+                  raise SystemExit(f'Forbidden transitive axioms: {record}')
+              if not isinstance(record.get('type'), str) or not record['type']:
+                  raise SystemExit('Missing Lean-printed declaration type')
+          for module in modules:
+              replay = (out / (module.rsplit('.', 1)[1] + '-replay.log')).read_text().splitlines()
+              if 'replaying ' + module not in replay:
+                  raise SystemExit(f'Missing exact module kernel replay evidence: {module}')
+          report = json.loads((out / 'provenance.json').read_text())
+          for name, expected in report['source_sha256'].items():
+              if hashlib.sha256(Path(name).read_bytes()).hexdigest() != expected:
+                  raise SystemExit(f'Source changed during verification: {name}')
+          (out / 'declarations.json').write_text(json.dumps(records, indent=2) + '\n')
+          (out / 'theorem-types.txt').write_text(
+              'head_commit=' + report['head_commit'] + '\n\n' + '\n\n'.join(
+                  '[' + r['module'] + ']\n' + r['name'] + ' :\n' + r['type'] +
+                  '\ntransitive_axioms=' + ','.join(r['axioms'])
+                  for r in records if r['kind'] == 'theorem') + '\n')
+          report.update(status='PASSED', declaration_count=len(records), module_counts=counts)
+          (out / 'report.json').write_text(json.dumps(report, indent=2) + '\n')
+          print(f'PASS: {len(records)} declarations, exact module builds, strict elaboration, '
+                'bundled kernel replays and complete transitive axiom audit.')
+          PY
+      - name: Record required verification outcomes
+        if: ${{ always() }}
+        env:
+          BUILD_OUTCOME: ${{ steps.build.outcome }}
+          REPLAY_OUTCOME: ${{ steps.replay.outcome }}
+          AUDIT_OUTCOME: ${{ steps.audit.outcome }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/part2-certificates-verification"
+          {
+            printf 'build=%s\nreplay=%s\naudit=%s\n' "$BUILD_OUTCOME" "$REPLAY_OUTCOME" "$AUDIT_OUTCOME"
+            printf 'head_commit=%s\n' "$(git rev-parse HEAD)"
+          } | tee "$RUNNER_TEMP/part2-certificates-verification/outcomes.log"
+          {
+            printf '### Part 2 numerical certificate verification\n\n'
+            printf -- '- Source commit: `%s`\n' "$(git rev-parse HEAD)"
+            printf -- '- Explicit build and strict elaboration: **%s**\n' "$BUILD_OUTCOME"
+            printf -- '- Bundled kernel replays: **%s**\n' "$REPLAY_OUTCOME"
+            printf -- '- All declarations and transitive axioms: **%s**\n' "$AUDIT_OUTCOME"
+            printf '\nA failed, cancelled or skipped stage is not successful verification.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
+          test "$BUILD_OUTCOME" = success
+          test "$REPLAY_OUTCOME" = success
+          test "$AUDIT_OUTCOME" = success
+      - name: Retain source hashes, strict build logs, replays and complete declaration inventory
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: part2-certificates-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/part2-certificates-verification/
+          if-no-files-found: warn
+          retention-days: 30
