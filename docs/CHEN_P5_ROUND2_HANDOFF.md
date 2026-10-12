@@ -1,5 +1,7 @@
 # Part 5 round 2: verified independent inputs and remaining mean obligations
 
+> 后续独立检查点：固定依赖源码 `S1Carrier` 已通过严格编译、原装内核重放及完整定义模块公理审计。见 [S1Carrier 小交付](CHEN_P5_S1CARRIER_HANDOFF.md)。下文保留第二轮历史记录；`CurrentChenInitialMean` 仍为未编译候选。
+
 ## Fixed checkpoints and scope
 
 | Item | Complete SHA |

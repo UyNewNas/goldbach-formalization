@@ -1,0 +1,257 @@
+BoundingSieve.mk.congr_simp :
+∀ (support support_1 : Finset ℕ),
+  support = support_1 →
+    ∀ (prodPrimes prodPrimes_1 : ℕ) (e_prodPrimes : prodPrimes = prodPrimes_1)
+      (prodPrimes_squarefree : Squarefree prodPrimes) (weights weights_1 : ℕ → ℝ) (e_weights : weights = weights_1)
+      (weights_nonneg : ∀ (n : ℕ), 0 ≤ weights n) (totalMass totalMass_1 : ℝ),
+      totalMass = totalMass_1 →
+        ∀ (nu nu_1 : ArithmeticFunction ℝ) (e_nu : nu = nu_1) (nu_mult : nu.IsMultiplicative)
+          (nu_pos_of_prime : ∀ (p : ℕ), Nat.Prime p → p ∣ prodPrimes → 0 < nu p)
+          (nu_lt_one_of_prime : ∀ (p : ℕ), Nat.Prime p → p ∣ prodPrimes → nu p < 1),
+          { support := support, prodPrimes := prodPrimes, prodPrimes_squarefree := prodPrimes_squarefree,
+              weights := weights, weights_nonneg := weights_nonneg, totalMass := totalMass, nu := nu,
+              nu_mult := nu_mult, nu_pos_of_prime := nu_pos_of_prime, nu_lt_one_of_prime := nu_lt_one_of_prime } =
+            { support := support_1, prodPrimes := prodPrimes_1, prodPrimes_squarefree := ⋯, weights := weights_1,
+              weights_nonneg := ⋯, totalMass := totalMass_1, nu := nu_1, nu_mult := ⋯, nu_pos_of_prime := ⋯,
+              nu_lt_one_of_prime := ⋯ }
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.BombieriVinogradov.standardPrimeAPError.eq_1 :
+∀ (x q l : ℕ),
+  MathlibNt.SieveTheory.BombieriVinogradov.standardPrimeAPError x q l =
+    ↑(MathlibNt.SieveTheory.BombieriVinogradov.primesInAP x q l) -
+      MathlibNt.SieveTheory.BombieriVinogradov.trueLogarithmicIntegral ↑x / ↑q.totient
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve :
+(N : ℕ) → Even N → ℝ → ℝ → BoundingSieve
+kind: definition
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve_mainSum_eq_totientSum :
+∀ {N : ℕ} (hEven : Even N) (ε z : ℝ) (μ : ℕ → ℝ),
+  BoundingSieve.mainSum μ =
+    ∑ d ∈ (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z).divisors, μ d / ↑d.totient
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve_multSum_eq_primesInAP :
+∀ {N : ℕ} (hEven : Even N) {ε z : ℝ} {d : ℕ},
+  0 ≤ ε →
+    2 ≤ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint N ε →
+      BoundingSieve.multSum d =
+        ↑(MathlibNt.SieveTheory.BombieriVinogradov.primesInAP
+            (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint N ε) d (N % d))
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve_nu_eq_inv_totient :
+∀ {N : ℕ} (hEven : Even N) {ε z : ℝ} {d : ℕ},
+  d ∣ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z →
+    (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve N hEven ε z).nu d = 1 / ↑d.totient
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve_rem_eq_standardPrimeAPError :
+∀ {N : ℕ} (hEven : Even N) {ε z : ℝ},
+  0 ≤ ε →
+    2 ≤ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint N ε →
+      ∀ {d : ℕ},
+        d ∣ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z →
+          BoundingSieve.rem d =
+            MathlibNt.SieveTheory.BombieriVinogradov.standardPrimeAPError
+              (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint N ε) d (N % d)
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve_siftedSum_eq :
+∀ {N : ℕ} (hEven : Even N) (ε z : ℝ),
+  BoundingSieve.siftedSum =
+    ↑(MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1
+        (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.goldbachDifferenceCarrier N ε) N z)
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint :
+ℕ → ℝ → ℕ
+kind: definition
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint_add_one :
+∀ {N : ℕ} {ε : ℝ},
+  2 ≤ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint N ε →
+    MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint N ε + 1 = ⌈(1 - ε) * ↑N⌉₊
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint_le :
+∀ (N : ℕ) {ε : ℝ}, 0 ≤ ε → MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint N ε ≤ N
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes :
+ℕ → ℝ → ℕ
+kind: definition
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes_coprime_N :
+∀ (N : ℕ) (z : ℝ), (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z).Coprime N
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes_ne_zero :
+∀ (N : ℕ) (z : ℝ), MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z ≠ 0
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes_primeFactors :
+∀ (N : ℕ) (z : ℝ),
+  (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z).primeFactors =
+    MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1SiftingPrimes N z
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes_squarefree :
+∀ (N : ℕ) (z : ℝ), Squarefree (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z)
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1SiftingPrimes :
+ℕ → ℝ → Finset ℕ
+kind: definition
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1_coprime_prodPrimes_iff_literalHPoint :
+∀ (N : ℕ) (z : ℝ) (n : ℕ),
+  (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z).Coprime n ↔
+    MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.literalHPoint N 1 z n
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1_dvd_prodPrimes_coprime_N :
+∀ {N d : ℕ} {z : ℝ}, d ∣ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z → d.Coprime N
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1_mod_mem_unitResidues :
+∀ {N d : ℕ} {z : ℝ},
+  d ∣ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z →
+    N % d ∈ AnalyticNumberTheory.Sieve.unitResidues d
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.instDecidableGoldbachS1Carrier :
+(P : Prop) → Decidable P
+kind: definition
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.mem_goldbachPrimeCarrier_iff_prime_le_goldbachS1Endpoint :
+∀ {N p : ℕ} {ε : ℝ},
+  0 ≤ ε →
+    2 ≤ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint N ε →
+      (p ∈ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.goldbachPrimeCarrier N ε ↔
+        Nat.Prime p ∧ p ≤ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint N ε)
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.mem_goldbachS1SiftingPrimes_iff :
+∀ {N : ℕ} {z : ℝ} {p : ℕ},
+  p ∈ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1SiftingPrimes N z ↔
+    p < ⌈z⌉₊ ∧ Nat.Prime p ∧ ¬p ∣ N
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.prime_dvd_goldbachS1ProdPrimes_iff :
+∀ {N : ℕ} {z : ℝ} {p : ℕ},
+  Nat.Prime p → (p ∣ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z ↔ ↑p < z ∧ ¬p ∣ N)
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+_private.MathlibNt.SieveTheory.LiLiuGoldbachS1Carrier.0.MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.S1Carrier_multiples_card_eq_primeCarrier_modEq :
+∀ {N d : ℕ} {ε : ℝ},
+  0 ≤ ε →
+    {n ∈ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.goldbachDifferenceCarrier N ε | d ∣ n}.card =
+      {p ∈ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.goldbachPrimeCarrier N ε | p ≡ N [MOD d]}.card
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+_private.MathlibNt.SieveTheory.LiLiuGoldbachS1Carrier.0.MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.S1Carrier_primeCarrier_modEq_card_eq_primesInAP :
+∀ {N d : ℕ} {ε : ℝ},
+  0 ≤ ε →
+    2 ≤ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint N ε →
+      {p ∈ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.goldbachPrimeCarrier N ε | p ≡ N [MOD d]}.card =
+        MathlibNt.SieveTheory.BombieriVinogradov.primesInAP
+          (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint N ε) d (N % d)
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+_private.MathlibNt.SieveTheory.LiLiuGoldbachS1Carrier.0.MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.S1Carrier_primeFactors_prod_eq_self :
+∀ {S : Finset ℕ}, (∀ p ∈ S, Nat.Prime p) → (S.prod id).primeFactors = S
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve._proof_1 :
+∀ (n : ℕ), 0 ≤ 1
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve._proof_2 :
+∀ (N : ℕ),
+  Even N →
+    ∀ (z : ℝ) (p : ℕ),
+      Nat.Prime p →
+        p ∣ MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z →
+          AnalyticNumberTheory.Sieve.goldbachNu p < 1
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve.eq_1 :
+∀ (N : ℕ) (hEven : Even N) (ε z : ℝ),
+  MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve N hEven ε z =
+    { support := MathlibNt.SieveTheory.LiLiuOnePlusOneNine.goldbachDifferenceCarrier N ε,
+      prodPrimes := MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z,
+      prodPrimes_squarefree := ⋯, weights := fun x => 1,
+      weights_nonneg := MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve._proof_1,
+      totalMass :=
+        MathlibNt.SieveTheory.BombieriVinogradov.trueLogarithmicIntegral
+          ↑(MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint N ε),
+      nu := AnalyticNumberTheory.Sieve.goldbachNu, nu_mult := AnalyticNumberTheory.Sieve.goldbachNu_isMultiplicative,
+      nu_pos_of_prime := ⋯, nu_lt_one_of_prime := ⋯ }
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1BoundingSieve_siftedSum_eq._simp_1_1 :
+∀ (N : ℕ) (z : ℝ) (n : ℕ),
+  (MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1ProdPrimes N z).Coprime n =
+    MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.literalHPoint N 1 z n
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint_add_one._proof_1_1 :
+∀ {N : ℕ} {ε : ℝ}, 2 ≤ ⌈(1 - ε) * ↑N⌉₊ - 1 → ¬3 ≤ ⌈(1 - ε) * ↑N⌉₊ → False
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint_add_one._proof_1_2 :
+∀ {N : ℕ} {ε : ℝ}, 3 ≤ ⌈(1 - ε) * ↑N⌉₊ → ¬⌈(1 - ε) * ↑N⌉₊ - 1 + 1 = ⌈(1 - ε) * ↑N⌉₊ → False
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1Endpoint_le._proof_1_1 :
+∀ (N : ℕ) {ε : ℝ}, ⌈(1 - ε) * ↑N⌉₊ ≤ N → ¬⌈(1 - ε) * ↑N⌉₊ - 1 ≤ N → False
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1SiftingPrimes.eq_1 :
+∀ (N : ℕ) (z : ℝ),
+  MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.goldbachS1SiftingPrimes N z =
+    {p ∈ Finset.range ⌈z⌉₊ | Nat.Prime p ∧ ¬p ∣ N}
+kind: theorem
+transitive axioms: propext, Classical.choice, Quot.sound
+
+_private.MathlibNt.SieveTheory.LiLiuGoldbachS1Carrier.0.MathlibNt.SieveTheory.LiLiuOnePlusOneNine.GoldbachBig.S1Carrier_multiples_card_eq_primeCarrier_modEq._proof_1_1 :
+∀ {N : ℕ} ⦃p q : ℕ⦄, p < N → q < N → N - p = N - q → ¬p = q → False
+kind: theorem
+transitive axioms: propext, Quot.sound
