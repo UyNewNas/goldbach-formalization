@@ -7,6 +7,8 @@ on:
     paths:
       - 'ImbalancedChen/**/*.lean'
       - 'verification/Part3DistributionAudit.lean'
+      - 'verification/parts/p3/Bombieri1965Richert418UnconditionalAudit.lean'
+      - 'verification/verify_part3_bv_supplier.py'
       - 'verification/verify_part3_distribution.py'
       - 'verification/verify_variable_envelope_boxes.py'
       - '.github/workflows/part3-distribution.yml'
@@ -77,6 +79,12 @@ jobs:
         run: |
           set -euo pipefail
           lake exe cache get 2>&1 | tee "$RUNNER_TEMP/part3-distribution-verification/cache.log"
+      - name: Seal the exact unconditional BV supplier
+        run: |
+          set -euo pipefail
+          python3 verification/verify_part3_bv_supplier.py \
+            --expected-head "$EXPECTED_HEAD" \
+            --output-dir "$RUNNER_TEMP/part3-distribution-verification"
       - name: Explicit Part 3 builds, kernel replays and complete axiom inventory
         id: verification
         run: |
