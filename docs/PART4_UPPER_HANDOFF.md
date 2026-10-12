@@ -171,6 +171,23 @@ the missing upper integral premise here. Its independent workflow
 compilation artifact. That snapshot has not been imported or used as an
 accepted replacement baseline.
 
+The later Part 2 snapshot
+`b47a8d38ac1d2bcbd9c191df1c0c4da76700af3e` adds an upper-side candidate:
+
+```lean
+theorem ImbalancedChen.Certificates.AboveMuSecondCoarse.adopted_coarse_lower :
+    (640339 / 15210735000 : ℝ) ≤
+      ImbalancedChen.Certificates.AboveMuSecondCoarse.totalChartIntegral
+```
+
+This is the adopted `above_mu_second_coarse_only` saving, with a negative
+sign in E. Its [fixed handoff](https://github.com/UyNewNas/goldbach-formalization/blob/b47a8d38ac1d2bcbd9c191df1c0c4da76700af3e/docs/part2/HANDOFF.md)
+explicitly retains the other adopted integrals, full policy-to-integral
+dictionary, coverage, signed ledger and both actual reserve bounds as
+unfinished. The new candidate has no successful Lean verification. It is
+useful partial input, but it does not instantiate `hIntegral` or the full
+`hCertificate` in the density assembler.
+
 ### Part 3 to Part 4: the same final physical weight
 
 Supply the signed physical modulus sum for the exact real ordered source,
@@ -191,6 +208,24 @@ The real half-product coprime correction is exactly zero if the displayed
 roughness and active-support gate holds. Otherwise its normalized error
 remains a visible input. A general labelled product family still needs its
 own coprime-mask estimate; it is not covered by this zero-correction claim.
+
+The read-only Part 3 snapshot
+`d5d1fffbf9e74061985da31d82dedaeab02d9659` has a
+[`UniformPrimeProductTarget` definition and a handoff](https://github.com/UyNewNas/goldbach-formalization/blob/d5d1fffbf9e74061985da31d82dedaeab02d9659/docs/part3-distribution/README.md).
+That definition is a pending error conclusion, not a proved supplier.
+The high physical-modulus signed prime-product estimate and the licensed
+rough/smooth construction are still absent, and its new code is also
+uncompiled. Its square-root prime BV and unweighted long-integer-slot
+results cannot replace the required same-rho error theorem.
+
+For its eventual exact-source adapter, fix one `delta` first and pass
+`Q delta` and `rho delta` together. Use two labelled prime slots with the
+literal gates `r <= q`, `T <= r*q`, `r*q <= N` and `q^b < r`. Ordered
+factor uniqueness must identify its signed error with
+`realPhysicalDistributionError`, including squares and with no division
+by two. A proved smooth outer target instead needs the actual weighted
+outer-source transfer described above; a pointwise sandwich does not
+bound each sharp signed discrepancy separately.
 
 ### Part 4 to Part 5 and Part 0
 
@@ -238,6 +273,20 @@ verified proof. Existing full-project checks remain independently visible.
   dependency HEADs and source cleanliness, Python syntax, YAML parsing,
   five shell-block syntax checks and whitespace checks. All 303 baseline
   source blobs remain byte-for-byte identical.
+- After the startup repair, commit
+  `03fea836685ecbce838b9fa272b53b4212d6952f` generated
+  [Part 4 job 114633685373](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38194363333/job/114633685373).
+  It failed with `steps = []`, `runner_id = 0` and zero artifacts, just
+  like the existing core and variable-envelope jobs. The workflow now
+  parses, but no proof stage ran. The API available in this session does
+  not expose the annotation text, so no billing, quota or other cause is
+  asserted.
+- A further local runner attempt at that same commit stopped at the
+  ancestry check because the reconstructed local snapshot lacks the
+  baseline's parent object. No verification gate was disabled. A separate
+  invocation of the unchanged official `lean --version` still failed with
+  `error: failed to locate application`. The hosted workflow requests a
+  full-history checkout; it remains blocked before even that step runs.
 
 Use the final handoff's fixed SHA and its own actual workflow result for
 the latest attempt. The candidate source types below are copied from the
