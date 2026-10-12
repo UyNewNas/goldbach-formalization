@@ -2,7 +2,7 @@
 
 ## 结论与验证状态
 
-本 Part 已写出有完整证明体的 Lean 候选：真实素数 BV 的共同区间／变化余数接口、当前四个下界素数带的 AP 误差池，以及一个长整数因子的实际同余分布与归一化。高物理模数的 restricted signed factorized distribution 仍未闭合，实际完整上／下 policy 的误差供应者也未闭合。
+本 Part 已写出有完整证明体的 Lean 候选：真实素数 BV 的共同区间／变化余数接口、当前四个下界素数带的完整 quotient 余项在实际归一化上的统一估计，以及一个长整数因子的实际同余分布与归一化。高物理模数的 restricted signed factorized distribution 仍未闭合，实际完整上／下 policy 的误差供应者也未闭合。
 
 **目前没有成功执行新文件的 Lean elaboration、kernel replay 或传递公理检查。候选代码不能登记成已核验定理。** 本地原版 Lean 在读取参数前退出；独立 CI 配置用于正常验证全部五个新模块。执行证据单独记在本目录，不能把静态扫描或 workflow 的存在当作证明验证。
 
@@ -131,14 +131,29 @@ E(L,U;a,d)=\#\{L<p\le U:p\equiv a\pmod d\}
 
 `Part3CurrentLowerRows` 保留实际 sieve-product 除子条件和完整物理模数上界。四个误差和用因子 `4` 汇入同一个 primitive AP 池；没有按素数选择器基数乘大误差。
 
-最后的 `part3_quotientRemainder_log_saving_add_centre` 控制的是实际 `BoundingSieve.rem`。它保留
+`part3_quotientRemainder_log_saving_add_centre` 控制的是实际 `BoundingSieve.rem`。这个通用中间界保留
 
 \[
 \bigl[1+4(1+\log\max(1,Q))\bigr] C N(\log N)^{-A}
 +\operatorname{chenSelectedCentreCost}.
 \]
 
-不能把这个结论读成“全部归一化余项已付清”：要用更高 logarithmic accuracy 支付显式对数损失，还须用实际中心修正估计，并由 Part 1 证明编译出的每行满足这里的完整模数条件。该文件没有声称实际完整 lower policy 已实例化。
+对当前四个 selector，文件进一步组合这些输入，写出 `part3_currentLowerRemainder_negligible` 的完整证明体：
+
+```lean
+theorem part3_currentLowerRemainder_negligible :
+    ∃ B : ℝ, 0 ≤ B ∧ ∀ epsilon : ℝ, 0 < epsilon →
+      ∀ᶠ N : ℕ in atTop, ∀ Q : ℕ, Q ≤ panModulusCutoff N B →
+        ∀ hN : Even N,
+        ∀ S3 S4 : ℕ → Finset ℕ, ∀ S5 S6 : (ℕ × ℕ) → Finset ℕ,
+          Part3CurrentLowerRows N Q S3 S4 S5 S6 →
+          part3CurrentLowerRemainderSum N hN S3 S4 S5 S6 ≤
+            epsilon * singularNormalization N
+```
+
+这里 `part3CurrentLowerRemainderSum` 是四个实际 `BoundingSieve.rem` 绝对值的完整二重和，不是假定已经很小的抽象误差变量。固定 BV accuracy 为 `4` 后一次选定 `B,C`，于是 `B` 甚至先于 `epsilon`。同一阈值使 `Q≤sqrt(N)`；四行 AP 部分至多 `36*C*N/log(N)^3`，全部中心修正至多 `(8/log(2)^3)*N^(1/2)*log(N)^3`。两部分分别支付 `epsilon/2`，没有留下次级 AP 项或 centre 项作为新的解析前提。
+
+该组合仍是待 Lean 验证的候选。就数学适用范围而言，剩余实际实例输入是 Part 1 证明其编译出的行满足 `Part3CurrentLowerRows` 的完整模数条件，以及实际需要的外系数已在被控制的界定类内。文件没有声称实际完整 lower policy 已实例化，也没有覆盖其高模数部分。
 
 ## 5. 独立的长整数因子分布
 
@@ -190,7 +205,7 @@ R_{q,a}(m)=\#\{L\le n<U:mn\equiv a\pmod q\}
 | 几何合法类 | 固定 `a_*>0`、rank、正下界 `p_i≥c*N^a_*`、完整乘积 `O(N)`、仅几何 gates、共同 polylog Euler-derivative bounds；每个 high-rank box 有整个 box 上的独立三因子分解许可 | Part 1 → Part 3 |
 | restricted medium theorem | 证明上文完整 `RestrictedMediumObligation`，包括统一辅助 SW 的实际 rough `1`/Möbius 槽和谱返回；不是新增公理 | Part 3 → Parts 4/5 |
 | prime-product 组装 | 把低秩 BV、rough/smooth one-long、two-long 与 medium 分支接到同一个 `UniformPrimeProductTarget`，阈值覆盖全部实际 family | Part 3 → Parts 4/5 |
-| 当前 lower 的合法低秩实例 | 实际 Y3–Y6 支持满足完整 `p*e`／`p1*p2*e` BV cap；支付次级对数损失和 centre cost | Part 1 + Part 3 → Part 5 |
+| 当前 lower 的合法低秩实例 | 实际 Y3–Y6 支持满足完整 `p*e`／`p1*p2*e` BV cap，外系数属于已控制类；新 `part3_currentLowerRemainder_negligible` 候选已在该类内支付次级对数损失和全部 centre cost | Part 1 + Part 3 → Part 5 |
 | 最终误差归一化 | 用同一批已冻结政策与全部误差裕量，给出实际 upper/lower signed error 在 `singularNormalization N` 上趋零 | Part 3 → Parts 4/5 |
 
 最小高模数算术结论是：对于这些**确切实际** `rho_N` 和合法 `W_N,i`，对每个精度 `A>0`，有 `C,N₀` 在所有 `N≥N₀` 及全部 family 成员 `i` 之前，使 `|primeProductSignedError ...|≤C*N/log(N)^A`。现有任何源质量、PNT/Mertens、有限 density identity 或弱 Pan 定理均不能直接充当这个结论的证明。
@@ -212,3 +227,24 @@ python3 verification/verify_part3_distribution.py
 ```
 
 `python3 verification/verify_part3_distribution.py --source-only` 仅产生 `SOURCE_ONLY_NOT_COMPILED`。它既不运行 Lean，也不证明定理成立。
+
+## 9. 已实际执行的验证与阻塞
+
+结构化证据见 [VERIFICATION.json](VERIFICATION.json)。第一份提交 `d5d1fffbf9e74061985da31d82dedaeab02d9659` 已触发 [专用 CI run 38194200272](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38194200272)。GitHub 返回 `failure`，但其唯一 job `114633178850` 的 `runner_id=0`、`runner_name=""`、`steps=[]`；请求 job 日志返回 `404/BlobNotFound`。这不是 Lean 报错，也不是编译通过，不能据此推断 GitHub 的具体调度拒绝原因。
+
+本地下载的官方工具链归档 SHA256 与发行资产相符；原版 `lean --version` 以退出码 `1` 返回 `error: failed to locate application`。追查定位于初始化读取 `/proc/<pid>/exe` 的 `EACCES`，发生在解析候选源码以前。请求以扩大权限运行原版编译器被执行平台的自动审批策略拒绝（`sandbox_approval` 类别关闭）。没有修改编译器、预加载替代实现或规避检查。
+
+真正完成的非 Lean 检查：
+
+| 检查 | 实际结果 |
+|---|---|
+| 基线原有 303 个 Git blob 的内容 SHA | 全部相同，零原文件修改 |
+| Manifest 的全部 11 个实际 dependency checkout SHA | 与 pin 一致 |
+| 本 Part source-only 检查 | 成功，状态明确为 `SOURCE_ONLY_NOT_COMPILED` |
+| Python 与工作流 YAML／5 个 Bash run 块语法 | 通过 |
+| 禁用标记检测的 8 类负例 | 全部拒绝，包含 `debug.skipKernelTC` |
+| 传递声明清单门的 13 个不完整／错误样例 | 全部拒绝；一致样例接受 |
+| CI outcome 门的 6 个错误／不完整样例 | 全部拒绝；同 HEAD 完整样例接受；优化模式下亦拒绝 |
+| 新 Lean 模块 elaboration、bundled kernel replay、传递公理盘点 | **均未成功执行** |
+
+这些验证门测试只检验 Python／工作流不会把不完整输出误报为成功。它们不是对 Lean 候选证明的验证。后续在可运行原版工具链的环境中必须执行第 8 节的完整命令，再决定是否接收这些定理。

@@ -144,6 +144,38 @@ theorem part3_quotientRemainder_log_saving_add_centre
               (C * (N : ℝ) / Real.log (N : ℝ) ^ accuracy) +
                 chenSelectedCentreCost N T b S
 
+theorem part3CurrentLowerRemainderSum_le_primitive_log_add_cost
+    (N Q : ℕ) (hN : Even N) (M : ℝ)
+    (S3 S4 : ℕ → Finset ℕ) (S5 S6 : (ℕ × ℕ) → Finset ℕ)
+    (hrows : Part3CurrentLowerRows N Q S3 S4 S5 S6) :
+    part3CurrentLowerRemainderSum N hN S3 S4 S5 S6 ≤
+      4 * (1 + 4 * (1 + Real.log (max 1 (Q : ℝ)))) *
+        (∑ k ∈ Finset.Icc 1 Q with Nat.Coprime k N,
+          |chenQuotientPrimeAPError N M k|) +
+            part3CurrentLowerCentreCost N S3 S4 S5 S6
+
+theorem part3CurrentLowerCentreCost_le_sqrt_log_cube {N Q : ℕ}
+    (hN : Even N) (hN4 : 4 ≤ N) (hlog : 1 ≤ Real.log (N : ℝ))
+    (hQ : (Q : ℝ) ≤ Real.sqrt (N : ℝ))
+    (S3 S4 : ℕ → Finset ℕ) (S5 S6 : (ℕ × ℕ) → Finset ℕ)
+    (hrows : Part3CurrentLowerRows N Q S3 S4 S5 S6) :
+    part3CurrentLowerCentreCost N S3 S4 S5 S6 ≤
+      (8 / (Real.log 2) ^ 3) * (N : ℝ) ^ (1 / 2 : ℝ) *
+        (Real.log (N : ℝ)) ^ 3
+
+private theorem part3_panModulusCutoff_le_sqrt (N : ℕ) (B : ℝ)
+    (hB : 0 ≤ B) (hlog : 1 ≤ Real.log (N : ℝ)) :
+    (panModulusCutoff N B : ℝ) ≤ Real.sqrt (N : ℝ)
+
+theorem part3_currentLowerRemainder_negligible :
+    ∃ B : ℝ, 0 ≤ B ∧ ∀ epsilon : ℝ, 0 < epsilon →
+      ∀ᶠ N : ℕ in atTop, ∀ Q : ℕ, Q ≤ panModulusCutoff N B →
+        ∀ hN : Even N,
+        ∀ S3 S4 : ℕ → Finset ℕ, ∀ S5 S6 : (ℕ × ℕ) → Finset ℕ,
+          Part3CurrentLowerRows N Q S3 S4 S5 S6 →
+          part3CurrentLowerRemainderSum N hN S3 S4 S5 S6 ≤
+            epsilon * singularNormalization N
+
 end ImbalancedChen
 ```
 
