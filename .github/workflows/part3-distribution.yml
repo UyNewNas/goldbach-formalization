@@ -1,0 +1,122 @@
+name: Part 3 distribution verification
+
+on:
+  push:
+    branches: [chatgpt/chen-p3-distribution]
+  pull_request:
+    paths:
+      - 'ImbalancedChen/**/*.lean'
+      - 'verification/Part3DistributionAudit.lean'
+      - 'verification/verify_part3_distribution.py'
+      - 'verification/verify_variable_envelope_boxes.py'
+      - '.github/workflows/part3-distribution.yml'
+      - 'lean-toolchain'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: part3-distribution-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  distribution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      LEAN_NUM_THREADS: 2
+      EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Check out the exact Part 3 head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Record exact source and preflight frozen pins
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          logdir="$RUNNER_TEMP/part3-distribution-verification"
+          mkdir -p "$logdir"
+          {
+            printf 'head_commit=%s\n' "$(git rev-parse HEAD)"
+            printf 'expected_head=%s\n' "$EXPECTED_HEAD"
+            printf 'run=%s attempt=%s event=%s\n' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT" "$GITHUB_EVENT_NAME"
+          } > "$logdir/provenance.log"
+          python3 verification/verify_part3_distribution.py --source-only --output-dir "$logdir"
+      - name: Check out unchanged pinned lean-action scripts
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Install unchanged pinned toolchain
+        run: |
+          set -euo pipefail
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          test "$(cat lean-toolchain)" = leanprover/lean4:v4.33.0-rc1
+          actiondir="$RUNNER_TEMP/part3-lean-action-f061402b"
+          test ! -e "$actiondir"
+          mv .ci-lean-action "$actiondir"
+          "$actiondir/scripts/install_elan.sh" 2>&1 | tee "$RUNNER_TEMP/part3-distribution-verification/install.log"
+      - name: Restore compatible existing Lake cache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ./.lake
+          key: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}-${{ github.sha }}
+          restore-keys: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}
+      - name: Fetch compatible Mathlib cache
+        run: |
+          set -euo pipefail
+          lake exe cache get 2>&1 | tee "$RUNNER_TEMP/part3-distribution-verification/cache.log"
+      - name: Explicit Part 3 builds, kernel replays and complete axiom inventory
+        id: verification
+        run: |
+          set -euo pipefail
+          python3 verification/verify_part3_distribution.py \
+            --expected-head "$EXPECTED_HEAD" \
+            --output-dir "$RUNNER_TEMP/part3-distribution-verification"
+      - name: Require completed verification of this exact head
+        if: ${{ always() }}
+        env:
+          VERIFICATION_OUTCOME: ${{ steps.verification.outcome }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          out = Path(os.environ['RUNNER_TEMP']) / 'part3-distribution-verification'
+          out.mkdir(parents=True, exist_ok=True)
+          path = out / 'report.json'
+          report = json.loads(path.read_text()) if path.is_file() else {}
+          outcome = {
+              'expected_head': os.environ['EXPECTED_HEAD'],
+              'verification_step': os.environ['VERIFICATION_OUTCOME'],
+              'report_status': report.get('status', 'NOT_RUN'),
+              'verified_head': report.get('head_commit'),
+          }
+          (out / 'required-outcome.json').write_text(json.dumps(outcome, indent=2) + '\n')
+          print(json.dumps(outcome, indent=2))
+          if outcome['verification_step'] != 'success':
+              raise SystemExit('Verification did not complete successfully')
+          if outcome['report_status'] != 'PASSED':
+              raise SystemExit('No complete proof-verification report')
+          if outcome['verified_head'] != outcome['expected_head']:
+              raise SystemExit('Verification belongs to another commit')
+          PY
+      - name: Retain actual verification records
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: part3-distribution-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/part3-distribution-verification/
+          if-no-files-found: warn
+          retention-days: 30
