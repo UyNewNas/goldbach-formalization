@@ -361,15 +361,10 @@ def main() -> None:
         )
         audit_objects = object_snapshot(audit_target)
         records, counts = parse_inventory(audit_log)
-        # --fresh replays imported declarations too. A single replay of the
-        # audit's union of all five import closures has the same coverage as
-        # five separate --fresh calls, without repeating full Mathlib five times.
-        fresh = run([args.lake, "env", str(checker), "--fresh", "--verbose", audit_module],
-                    "all-five-and-imports-fresh-replay.log")
-        if fresh.splitlines().count(f"replaying {audit_module} with --fresh") != 1:
-            raise RuntimeError("Missing aggregate fresh kernel replay evidence")
-        check_object_snapshot(audit_target, audit_objects)
-        report["aggregate_fresh_replay_module"] = audit_module
+        # Save real compiler types before fresh checking; this is not final PASS.
+        report["compiler_inventory_checked_unsealed"] = True
+        report["declaration_count"] = len(records)
+        report["module_counts"] = counts
         report["audit_module_sha256"] = audit_objects
         (run_output / "declarations.json").write_text(
             json.dumps(records, indent=2) + "\n", encoding="utf-8"
@@ -398,6 +393,16 @@ def main() -> None:
                     for record in selected
                 ) + "\n", encoding="utf-8",
             )
+        save_report()
+        # --fresh replays imported declarations too. A single replay of the
+        # audit's union of all five import closures has the same coverage as
+        # five separate --fresh calls, without repeating full Mathlib five times.
+        fresh = run([args.lake, "env", str(checker), "--fresh", "--verbose", audit_module],
+                    "all-five-and-imports-fresh-replay.log", timeout_seconds=7200)
+        if fresh.splitlines().count(f"replaying {audit_module} with --fresh") != 1:
+            raise RuntimeError("Missing aggregate fresh kernel replay evidence")
+        check_object_snapshot(audit_target, audit_objects)
+        report["aggregate_fresh_replay_module"] = audit_module
         for relative, expected_hash in {**hashes, **olean_hashes, **audit_objects}.items():
             if digest(ROOT / relative) != expected_hash:
                 raise RuntimeError(f"Verification input changed during this run: {relative}")

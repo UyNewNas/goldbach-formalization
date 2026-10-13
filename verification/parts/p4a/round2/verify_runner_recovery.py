@@ -73,8 +73,11 @@ def bad_record(field, value):
 
 
 check("runner_ast_parse_and_compile", lambda: require(bool(tree.body)))
-check("runner_exact_previous_sha256", lambda: require(hashlib.sha256(RUNNER.read_bytes()).hexdigest()
-      == "4cccc00cbb5261aedd53d3fda6a8d3d630b751cfa6f788abe29747449bbc3818"))
+check("runner_unsealed_inventory_checkpoint", lambda: require(
+    source.index('report["compiler_inventory_checked_unsealed"] = True') <
+    source.index('fresh = run(') and
+    source.index('(run_output / "declarations.json").write_text(') <
+    source.index('fresh = run(')))
 check("five_module_inventory_accept", lambda: require(ns["parse_inventory"](inventory()) == (records, counts)))
 check("empty_inventory_reject", lambda: rejected(lambda: ns["parse_inventory"]("")))
 check("wrong_total_reject", lambda: rejected(lambda: ns["parse_inventory"](inventory(total=6))))
@@ -154,6 +157,10 @@ calls = [n for n in ast.walk(tree) if isinstance(n, ast.Call)
 check("dependency_build_timeout_5400", lambda: require(any(
     any(isinstance(a, ast.Constant) and a.value == "dependencies-and-targets-build.log" for a in n.args)
     and any(k.arg == "timeout_seconds" and isinstance(k.value, ast.Constant) and k.value.value == 5400 for k in n.keywords)
+    for n in calls)))
+check("fresh_replay_timeout_7200", lambda: require(any(
+    any(isinstance(a, ast.Constant) and a.value == "all-five-and-imports-fresh-replay.log" for a in n.args)
+    and any(k.arg == "timeout_seconds" and isinstance(k.value, ast.Constant) and k.value.value == 7200 for k in n.keywords)
     for n in calls)))
 workflow = WORKFLOW.read_text()
 for field in ("aggregate_fresh_replay_module", "output_part_sets_and_hashes_rechecked", "toolchain_binary_hashes_rechecked"):
