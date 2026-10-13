@@ -1,0 +1,358 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import base64, collections, datetime as dt, gzip, hashlib, json, shutil
+
+ROOT = Path('/workspace/scratch/399183f4923f')
+REPO = ROOT / 'goldbach-formalization'
+RUN = ROOT / 'p5-pointwiseswpayment/runtime'
+DEST = REPO / 'verification/parts/p5/round10/pointwiseswpaymentcore'
+RAW = DEST / 'raw'
+PUBLIC = 'AnalyticNumberTheory.LargeSieve.pointwiseSW_horizontal_le_tail'
+
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def write(path, value):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(value if isinstance(value, str) else json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+
+
+def copy(source, destination):
+    source = Path(source)
+    destination = Path(destination)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source, destination)
+    return {
+        'path': str(destination.relative_to(DEST)),
+        'sha256': sha(destination),
+        'bytes': destination.stat().st_size,
+    }
+
+
+def main():
+    preflight = json.load(open(RUN / 'preflight.json'))
+    result = json.load(open(RUN / 'result.json'))
+    frontier = json.load(open(RUN / 'dependency-frontier.json'))
+    assert result['status'] == 'GATES_PASSED'
+    assert preflight['source']['sha256'] == '3798b1a9798e1a7390ba5d3ba879287e6c1a466b4f91f39a434f3f1bc41b65d2'
+    assert [item['module'] for item in preflight['imports']] == [
+        'MathlibNt.AnalyticNumberTheory.LargeSieve.LogPowerBounds'
+    ]
+    assert preflight['imports'][0]['objects'][0]['sha256'] == 'd52f560c960a917755a67bd10549ccb324c5d97f8296e8519c6b995685899a96'
+
+    commands = []
+    for command in result['commands']:
+        archived = dict(command)
+        raw = Path(command['raw_log'])
+        archived['raw_log'] = copy(raw, RAW / raw.name)['path']
+        assert sha(DEST / archived['raw_log']) == archived['raw_log_sha256']
+        assert archived['returncode'] == 0
+        commands.append(archived)
+
+    audit_log = DEST / next(item['raw_log'] for item in commands if item['action'] == 'audit')
+    declarations = []
+    module_summary = None
+    for line in audit_log.read_text().splitlines():
+        if line.startswith('CHEN_P5_POINTWISESWPAYMENT_AUDIT_DECL '):
+            declarations.append(json.loads(line.split(' ', 1)[1]))
+        elif line.startswith('CHEN_P5_POINTWISESWPAYMENT_AUDIT_MODULE '):
+            module_summary = json.loads(line.split(' ', 1)[1])
+    assert module_summary['count'] == len(declarations) == 1
+    assert module_summary['requested_public_theorem_count'] == 1
+    public = declarations[0]
+    assert public['name'] == PUBLIC and public['requested_public_theorem']
+    assert public['kind'] == 'theorem' and not public['is_unsafe'] and not public['is_axiom']
+    allowed = {'propext', 'Classical.choice', 'Quot.sound'}
+    assert set(public['axioms']) == allowed
+
+    write(DEST / 'declarations.json', declarations)
+    write(
+        DEST / 'declaration-axioms.jsonl',
+        json.dumps(
+            {
+                'name': public['name'],
+                'kind': public['kind'],
+                'is_unsafe': public['is_unsafe'],
+                'is_axiom': public['is_axiom'],
+                'axioms': public['axioms'],
+            },
+            ensure_ascii=False,
+        ) + '\n',
+    )
+    write(DEST / 'public-theorem-types.json', [public])
+    write(DEST / 'compiler-types.txt', public['name'] + ' :\n' + public['type'] + '\n')
+    write(DEST / 'preflight.json', preflight)
+    write(DEST / 'commands-and-results.json', commands)
+    write(DEST / 'dependency-frontier.json', frontier)
+
+    source_snapshot = copy(
+        preflight['source']['path'],
+        DEST / 'source/upstream-DirichLTwistedPointwiseSWPaymentCore.lean.txt',
+    )
+    import_snapshot = copy(
+        preflight['imports'][0]['source']['path'],
+        DEST / 'source/upstream-LargeSieve-LogPowerBounds.lean.txt',
+    )
+    audit_snapshot = copy(
+        REPO / 'verification/parts/p5/DirichLTwistedPointwiseSWPaymentCoreAudit.lean',
+        DEST / 'source/DirichLTwistedPointwiseSWPaymentCoreAudit.lean.txt',
+    )
+    verifier_snapshot = copy(
+        RUN / 'verify_pointwiseswpayment.py',
+        DEST / 'runtime/verify_pointwiseswpayment.py.txt',
+    )
+    scanner_snapshot = copy(RUN / 'scan_frontier.py', DEST / 'runtime/scan_frontier.py.txt')
+    finalizer_snapshot = copy(
+        __file__,
+        DEST / 'runtime/finalize_pointwiseswpayment.py.txt',
+    )
+    driver_snapshot = copy(
+        preflight['driver']['path'],
+        DEST / 'runtime/frontend-driver.lakefile.lean.txt',
+    )
+    shim_source_snapshot = copy(
+        preflight['runtime_compatibility']['source']['path'],
+        DEST / 'runtime/proc_exe_shim.c.txt',
+    )
+    shim_binary = Path(preflight['runtime_compatibility']['shared_object']['path']).read_bytes()
+    shim_transport = DEST / 'runtime/proc_exe_shim.so.b64'
+    shim_transport.parent.mkdir(parents=True, exist_ok=True)
+    shim_transport.write_bytes(base64.b64encode(shim_binary))
+    assert base64.b64decode(shim_transport.read_bytes()) == shim_binary
+    shim_manifest = {
+        'source': preflight['runtime_compatibility']['source'],
+        'shared_object': preflight['runtime_compatibility']['shared_object'],
+        'transport_path': str(shim_transport.relative_to(DEST)),
+        'transport_sha256': sha(shim_transport),
+        'roundtrip_verified': True,
+        'scope': preflight['runtime_compatibility']['scope'],
+    }
+    write(DEST / 'runtime/proc-exe-shim-manifest.json', shim_manifest)
+
+    target_object = Path(result['target_object']['path'])
+    compressed = gzip.compress(target_object.read_bytes(), 9, mtime=0)
+    transport = DEST / 'objects/DirichLTwistedPointwiseSWPaymentCore.olean.gz.b64'
+    transport.parent.mkdir(parents=True, exist_ok=True)
+    transport.write_bytes(base64.b64encode(compressed))
+    assert gzip.decompress(base64.b64decode(transport.read_bytes())) == target_object.read_bytes()
+    object_manifest = {
+        'object': result['target_object'],
+        'transport_path': str(transport.relative_to(DEST)),
+        'transport_sha256': sha(transport),
+        'gzip_sha256': hashlib.sha256(compressed).hexdigest(),
+        'roundtrip_verified': True,
+    }
+    write(DEST / 'objects/manifest.json', object_manifest)
+
+    parent_ci_dir = ROOT / 'root-ci-85cd6814'
+    parent_ci_logs = [
+        copy(parent_ci_dir / name, DEST / 'parent-root-ci' / name)
+        for name in ['provenance.log', 'outcomes.log', 'build.timing.tsv', 'leanchecker.log', 'axiom-audit.log']
+    ]
+    parent_ci = {
+        'commit': '85cd681432d85b880b82add771e81456e66c53d1',
+        'variable_envelope': {
+            'run_id': 38319948455,
+            'url': 'https://github.com/UyNewNas/goldbach-formalization/actions/runs/38319948455',
+            'conclusion': 'success',
+        },
+        'lean_core': {
+            'run_id': 38319948525,
+            'url': 'https://github.com/UyNewNas/goldbach-formalization/actions/runs/38319948525',
+            'conclusion': 'failure',
+            'build': {'conclusion': 'success', 'elapsed_seconds': 5},
+            'leanchecker': {
+                'conclusion': 'failure',
+                'cause': 'GitHub step timed out after its configured 25 minutes',
+                'runner_log_marker': "The action 'Recheck ImbalancedChen with bundled Lean 4.33.0-rc1 leanchecker' has timed out after 25 minutes.",
+            },
+            'axiom_audit': {
+                'conclusion': 'failure',
+                'cause': 'GitHub step timed out after its configured 10 minutes',
+                'runner_log_marker': "The action 'Audit ImbalancedChen root declarations and transitive axioms' has timed out after 10 minutes.",
+            },
+            'artifact_id': 11778994866,
+            'artifact_digest': 'sha256:5475ecafeb22e7f6a1f6ae9860e47ecf7dcb6e265aac20581e217ad1c6c5f63e',
+            'archived_logs': parent_ci_logs,
+        },
+        'configuration_changed_in_this_batch': False,
+    }
+    write(DEST / 'parent-root-ci.json', parent_ci)
+
+    gates = {item['action']: {'result': 'passed', **item} for item in commands}
+    axiom_union = sorted(public['axioms'])
+    audit = {
+        'method': 'Defining-module environment inventory plus Lean.collectAxioms',
+        'source_path': 'verification/parts/p5/DirichLTwistedPointwiseSWPaymentCoreAudit.lean',
+        'source_sha256': sha(REPO / 'verification/parts/p5/DirichLTwistedPointwiseSWPaymentCoreAudit.lean'),
+        'declaration_count': 1,
+        'requested_public_theorem_count': 1,
+        'kind_counts': dict(collections.Counter(item['kind'] for item in declarations)),
+        'generated_private_count': 0,
+        'generated_private_names': [],
+        'private_and_generated_included': True,
+        'unsafe_declarations': [],
+        'own_axiom_declarations': [],
+        'forbidden_axioms': [],
+        'transitive_axiom_union': axiom_union,
+        'types_status': 'COMPILER_CONFIRMED_FROM_ELABORATED_ENVIRONMENT',
+        'explicit_type_and_raw_expression_for_every_declaration': True,
+    }
+    receipt = {
+        'scope': 'Only MathlibNt.AnalyticNumberTheory.LargeSieve.DirichLTwistedPointwiseSWPaymentCore',
+        'status': 'STRICT_REPLAY_FULL_AXIOM_AUDIT_PASSED',
+        'accepted_utc': dt.datetime.now(dt.timezone.utc).isoformat(),
+        'branch': 'chatgpt/chen-p5-lower',
+        'starting_checkpoint': preflight['starting_checkpoint'],
+        'common_baseline': '1a80c1bcce67886f699d097fc37fd245cd3620bf',
+        'acceptance_commit': 'The full enclosing published commit SHA is supplied with this receipt; no self-reference is embedded.',
+        'toolchain': preflight['toolchain'],
+        'dependencies': preflight['packages'],
+        'source': preflight['source'],
+        'source_patch': None,
+        'production_source_changes': [],
+        'compiled_objects': [result['target_object']],
+        'compiled_object_transport_archive': object_manifest,
+        'direct_imports': preflight['imports'],
+        'direct_import_cache_scope': 'The exact accepted round8 source/object identity was restored and reused; it was not recompiled, replayed, or re-audited in this batch.',
+        'runtime_compatibility': {
+            **preflight['runtime_compatibility'],
+            'transport': shim_manifest,
+            'lean_binaries_unmodified': True,
+            'proof_environment_or_kernel_semantics_changed': False,
+        },
+        'gates': gates,
+        'audit': audit,
+        'public_theorems': [{
+            'name': PUBLIC,
+            'type': public['type'],
+            'type_status': 'COMPILER_CONFIRMED_FROM_ELABORATED_ENVIRONMENT',
+        }],
+        'source_snapshots': [source_snapshot, import_snapshot, audit_snapshot],
+        'runtime_snapshots': [
+            verifier_snapshot, scanner_snapshot, finalizer_snapshot,
+            driver_snapshot, shim_source_snapshot,
+        ],
+        'dependency_frontier_snapshot': {
+            'path': 'dependency-frontier.json',
+            'sha256': sha(DEST / 'dependency-frontier.json'),
+        },
+        'parent_root_ci': parent_ci,
+        'root_ci': {
+            'status': 'NOT_YET_AVAILABLE_FOR_THIS_UNPUBLISHED_CHECKPOINT',
+            'separate_from_single_module_acceptance': True,
+            'configuration_or_threshold_changed': False,
+        },
+    }
+    write(DEST / 'receipt.json', receipt)
+
+    next_candidate = frontier['ready_leaves'][0]
+    assert next_candidate['module'] == 'MathlibNt.Analysis.MovingIntervalIntegral'
+    context = {
+        'compiler_confirmed_type': public,
+        'mathematical_reading': 'For nonnegative X, positive epsilon and T, and Q at most T, the horizontal error Q*X/(epsilon*(1+T^2)) is bounded by the tail budget X*(1+L^2)/(epsilon*T).',
+        'actual_consumers': [
+            {
+                'module': 'MathlibNt.AnalyticNumberTheory.LargeSieve.DirichLTwistedNonquadraticPointwiseSiegelWalfisz',
+                'source_line': 540,
+                'use': 'pays the horizontal contour error with L = d⁻¹',
+            },
+            {
+                'module': 'MathlibNt.AnalyticNumberTheory.LargeSieve.DirichLTwistedQuadraticPointwiseSiegelWalfisz',
+                'source_line': 1002,
+                'use': 'pays the horizontal contour error with L = δ⁻¹',
+            },
+        ],
+        'supply_path': [
+            'MathlibNt.AnalyticNumberTheory.LargeSieve.DirichLTwistedPointwiseSWPaymentCore',
+            'DirichLTwistedNonquadraticPointwiseSiegelWalfisz',
+            'LandauSiegelToLowSWSource',
+            'LandauSiegelToStandardBVCanonicalSmoothing',
+            'FourFactorUnconditionalEndpoints',
+            'PanWangDingLowPrimePrefix',
+            'PanWangDingLowMovingPrefix',
+            'PanWangDingLowEndpoint',
+            'Distribution.LiuPan.LiuPanPrimitiveLedgerAssembly',
+            'S1BetaGeometry',
+            'S1BetaPaidLower',
+        ],
+        'fresh_workspace_note': frontier['cache_scope_note'],
+        'recomputed_closure': {
+            'module_count': frontier['closure_module_count'],
+            'missing_object_count': frontier['missing_object_count'],
+            'ready_leaf_count': frontier['ready_leaf_count'],
+        },
+        'not_closed': [
+            'both pointwise Siegel–Walfisz consumer modules',
+            'remaining Liu–Pan primitive-ledger dependency DAG',
+            'S1BetaGeometry',
+            'S1BetaPaidLower',
+            'S1BetaLowerDensity',
+            'S1BetaMainScale',
+            'S1BetaFixedNormalizedLower',
+            'CurrentChenInitialMean',
+            'complete eleven-term mean',
+            'hLower',
+        ],
+        'next_candidate': {
+            **next_candidate,
+            'reason': 'Smallest remaining ready leaf in the freshly restored current Liu–Pan closure; its direct imports are fixed mathlib modules.',
+            'status': 'UNCOMPILED_CANDIDATE',
+        },
+    }
+    write(DEST / 'context.json', context)
+    write(DEST / 'commands.sh', '\n'.join(' '.join(item['command']) for item in commands) + '\n')
+
+    handoff = f'''# Chen Part 5 — Pointwise SW payment core leaf acceptance
+
+## Result
+
+`MathlibNt.AnalyticNumberTheory.LargeSieve.DirichLTwistedPointwiseSWPaymentCore` is accepted as one independent leaf of the real Liu–Pan/S1 supplier chain. Fixed source SHA256: `{preflight['source']['sha256']}`. Strictly compiled object SHA256: `{result['target_object']['sha256']}`.
+
+The official frontend strict compile passed in {gates['compile']['elapsed_seconds']} s; the unmodified stock `leanchecker` binary replay passed in {gates['replay']['elapsed_seconds']} s; the complete defining-module audit passed in {gates['audit']['elapsed_seconds']} s. The compiler enumerated exactly one theorem declaration. There are no private/generated declarations, unsafe declarations, or own axiom declarations. Its transitive axiom set is exactly `propext`, `Classical.choice`, and `Quot.sound`.
+
+## Compiler-confirmed type
+
+```lean
+{PUBLIC} :
+{public['type']}
+```
+
+This is the actual horizontal-contour-error payment. It is directly used by the nonquadratic and quadratic pointwise Siegel–Walfisz modules, with `L := d⁻¹` and `L := δ⁻¹` respectively. It does not itself prove either pointwise Siegel–Walfisz theorem.
+
+The unique direct import is the already accepted `MathlibNt.AnalyticNumberTheory.LargeSieve.LogPowerBounds`, restored from its deterministic round8 transport with exact object SHA256 `{preflight['imports'][0]['objects'][0]['sha256']}`. It was not recompiled, replayed, or re-audited here. No proof source was patched and no production proof file was changed.
+
+## Sandbox runtime compatibility
+
+This fresh sandbox exposed `/proc/self/exe` but not `/proc/<namespace-pid>/exe`, which the fixed Lean runtime uses to locate its executable. The Lean binaries remain byte-for-byte identical to the fixed toolchain. A separately hashed preload shim only retries a failed `readlink` of `/proc/<pid>/exe` as `/proc/self/exe`; it changes no Lean option, declaration, proof term, object, kernel rule, or audit result. Its source, binary transport, and hashes are archived with this receipt.
+
+## Supply status
+
+One actual path from this leaf to the current first-term target is
+
+`PointwiseSWPaymentCore → DirichLTwistedNonquadraticPointwiseSiegelWalfisz → LandauSiegelToLowSWSource → LandauSiegelToStandardBVCanonicalSmoothing → FourFactorUnconditionalEndpoints → PanWangDingLowPrimePrefix → PanWangDingLowMovingPrefix → PanWangDingLowEndpoint → Distribution.LiuPan.LiuPanPrimitiveLedgerAssembly → S1BetaGeometry → S1BetaPaidLower`.
+
+This batch does not accept those downstream modules. In the fresh workspace, all six available P5 object transports were restored exactly, while unrelated transient shared-cache objects were not assumed. The recomputed closure has {frontier['closure_module_count']} source modules, {frontier['missing_object_count']} missing objects, and {frontier['ready_leaf_count']} ready leaves. The smallest remaining ready leaf is the **uncompiled candidate** `{next_candidate['module']}`, source SHA256 `{next_candidate['source_sha256']}`, with {next_candidate['source_lines']} source lines.
+
+`CurrentChenInitialMean`, the complete eleven-term mean, and `hLower` remain open; `(33/4) * Real.log 3` remains only an independent first-term candidate. The final weight scale remains `4c = 49044063/6250000 = 7.84705008` because `W_N ≤ 4*D12(N)+error`.
+
+## Root CI
+
+For parent checkpoint `{parent_ci['commit']}`, Variable envelope verification succeeded. Lean core verification built the full project successfully in 5 seconds, then the root `leanchecker` step hit its configured 25-minute timeout and the root axiom-audit step hit its configured 10-minute timeout. This is reported separately from the passing single-module gates; CI configuration and thresholds were not changed.
+
+Evidence is under `verification/parts/p5/round10/pointwiseswpaymentcore/`. Receiving parts: P5 and P0.
+'''
+    write(REPO / 'docs/CHEN_P5_POINTWISE_SW_PAYMENT_CORE_HANDOFF.md', handoff)
+    print(json.dumps({
+        'status': receipt['status'],
+        'declarations': 1,
+        'axioms': axiom_union,
+        'destination': str(DEST),
+        'next_candidate': context['next_candidate'],
+    }))
+
+
+main()

@@ -1,0 +1,219 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import datetime as dt, hashlib, json, os, subprocess, time
+
+ROOT = Path('/workspace/scratch/399183f4923f')
+REPO = ROOT / 'goldbach-formalization'
+GOLD = REPO / '.lake/packages/goldbach'
+TOOL = ROOT / 'lean-runtime/lean-4.33.0-rc1-linux'
+DRIVER = ROOT / 'lean-runtime/frontend-driver'
+SHIM = ROOT / 'p5-runtime-compat/proc_exe_shim.so'
+SHIM_SOURCE = ROOT / 'p5-runtime-compat/proc_exe_shim.c'
+HERE = ROOT / 'p5-pointwiseswpayment/runtime'
+LOGS = HERE / 'logs'
+OUT = REPO / '.lake/build/lib/lean'
+START = '85cd681432d85b880b82add771e81456e66c53d1'
+START_TREE = 'f5bbcdb0a15f3fee08294e8235907e4b551d4164'
+TARGET = 'MathlibNt.AnalyticNumberTheory.LargeSieve.DirichLTwistedPointwiseSWPaymentCore'
+SOURCE_SHA = '3798b1a9798e1a7390ba5d3ba879287e6c1a466b4f91f39a434f3f1bc41b65d2'
+AUDIT = 'verification.parts.p5.DirichLTwistedPointwiseSWPaymentCoreAudit'
+PINS = {
+    'goldbach': '09b97db5764ade1246bfb77206baa1b124760958',
+    'mathlib': 'e4c91783ca8e6a7c693ae624ade32fd22d4e43c1',
+    'LeanArchitect': '78dd66840d3efe8c824c699fc03381cec817c271',
+    'plausible': 'b1c4a69a7e247ab7df20460212001673d74f08c0',
+    'LeanSearchClient': '0498c7c070c143a3bf7379f4d99a2c63bb9d9715',
+    'importGraph': '18a90119a5d316358fde6c86e0ca24e59212e32c',
+    'proofwidgets': 'b1436dc749e722c9920036b52cdc43b3451d0b69',
+    'aesop': '57d3325be72a842920813bcb40f96a6f7393c185',
+    'Qq': 'ee41917ae11d38479fb8fb24745f7ca4bf0a784d',
+    'batteries': '41bd267b3f6b7252f6676af46d4ffc6783b64de9',
+    'Cli': 'da07ca808b6718cb2aed14dba154e5a08b8f8ecf',
+}
+
+
+def sha(path):
+    digest = hashlib.sha256()
+    with Path(path).open('rb') as handle:
+        for block in iter(lambda: handle.read(1048576), b''):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def record(path):
+    path = Path(path)
+    return {'path': str(path), 'sha256': sha(path), 'bytes': path.stat().st_size}
+
+
+def git(path, *args):
+    return subprocess.check_output(['git', '-C', str(path), *args], text=True).strip()
+
+
+def source(module):
+    return GOLD / (module.replace('.', '/') + '.lean')
+
+
+def output(module):
+    return OUT / (module.replace('.', '/') + '.olean')
+
+
+def save(path, value):
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+
+
+def object_roots():
+    return [OUT] + [REPO / '.lake/packages' / name / '.lake/build/lib/lean' for name in PINS]
+
+
+def source_roots():
+    return [REPO] + [REPO / '.lake/packages' / name for name in PINS]
+
+
+def environment():
+    env = os.environ.copy()
+    env.update({
+        'LEAN_SYSROOT': str(TOOL),
+        'LAKE_HOME': str(TOOL),
+        'LEAN_NUM_THREADS': '1',
+        'LEAN_PATH': ':'.join(map(str, object_roots())),
+        'LEAN_SRC_PATH': ':'.join(map(str, source_roots())),
+        'PATH': str(TOOL / 'bin') + ':' + env.get('PATH', ''),
+        'LD_PRELOAD': str(SHIM),
+    })
+    return env
+
+
+def imports(path):
+    result = []
+    for line in Path(path).read_text().splitlines():
+        if line.startswith('import '):
+            result.extend(line[7:].split())
+    return result
+
+
+def resolve(module, suffix):
+    relative = Path(module.replace('.', '/') + suffix)
+    roots = source_roots() if suffix == '.lean' else object_roots()
+    for root in roots:
+        candidate = root / relative
+        if candidate.is_file():
+            return candidate
+    raise FileNotFoundError(module)
+
+
+def compile_command(module, source_path, object_path):
+    return [
+        str(TOOL / 'bin/lake'), '-d', str(DRIVER), '-f', 'lakefile.lean',
+        'script', 'run', 'compileOne', str(source_path), module, str(object_path), 'strict',
+    ]
+
+
+def run(action, command):
+    LOGS.mkdir(parents=True, exist_ok=True)
+    stamp = dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+    log = LOGS / f'{stamp}-{action}.log'
+    started = time.monotonic()
+    with log.open('wb') as handle:
+        process = subprocess.run(
+            command, cwd=REPO, env=environment(), stdout=handle, stderr=subprocess.STDOUT)
+    item = {
+        'action': action,
+        'command': command,
+        'cwd': str(REPO),
+        'started_utc': stamp,
+        'returncode': process.returncode,
+        'elapsed_seconds': round(time.monotonic() - started, 3),
+        'raw_log': str(log),
+        'raw_log_sha256': sha(log),
+        'trustLevel': 0 if action != 'replay' else None,
+        'warningAsError': action != 'replay',
+        'runtime_compatibility_layer': record(SHIM),
+    }
+    print(json.dumps(item), flush=True)
+    if process.returncode:
+        print(log.read_text(errors='replace')[-10000:])
+        raise SystemExit(process.returncode)
+    return item
+
+
+def main():
+    assert git(REPO, 'rev-parse', 'HEAD') == START
+    assert git(REPO, 'rev-parse', 'HEAD^{tree}') == START_TREE
+    target_source = source(TARGET)
+    assert sha(target_source) == SOURCE_SHA
+    direct_imports = imports(target_source)
+    assert direct_imports == ['MathlibNt.AnalyticNumberTheory.LargeSieve.LogPowerBounds']
+    packages = []
+    for name, revision in PINS.items():
+        package = REPO / '.lake/packages' / name
+        changes = git(package, 'diff', '--name-only', 'HEAD').splitlines()
+        assert git(package, 'rev-parse', 'HEAD') == revision
+        assert not changes
+        packages.append({'package': name, 'revision': revision, 'tracked_changes': changes})
+    direct = [
+        {
+            'module': module,
+            'source': record(resolve(module, '.lean')),
+            'objects': [record(resolve(module, '.olean'))],
+            'cache_provenance': 'restored from accepted round8 deterministic object transport',
+        }
+        for module in direct_imports
+    ]
+    preflight = {
+        'observed_utc': dt.datetime.now(dt.timezone.utc).isoformat(),
+        'starting_checkpoint': START,
+        'starting_tree': START_TREE,
+        'target': TARGET,
+        'source': record(target_source),
+        'imports': direct,
+        'packages': packages,
+        'toolchain': {
+            'toolchain': 'leanprover/lean4:v4.33.0-rc1',
+            'githash': '62eed1db4d67327ec8120be05f1a1b0847d74561',
+            'binaries': {name: record(TOOL / 'bin' / name) for name in ['lean', 'lake', 'leanchecker', 'leantar']},
+        },
+        'driver': record(DRIVER / 'lakefile.lean'),
+        'runtime_compatibility': {
+            'reason': 'Current sandbox exposes /proc/self/exe but not /proc/<namespace-pid>/exe; Lean 4.33 uses the latter to locate its unmodified executable.',
+            'source': record(SHIM_SOURCE),
+            'shared_object': record(SHIM),
+            'scope': 'Only retry a failed readlink of /proc/<pid>/exe as /proc/self/exe; no Lean data, options, declarations, or proof terms are changed.',
+        },
+        'audit_source': record(REPO / 'verification/parts/p5/DirichLTwistedPointwiseSWPaymentCoreAudit.lean'),
+        'target_existing_before': [record(output(TARGET))] if output(TARGET).exists() else [],
+        'scope': 'Only DirichLTwistedPointwiseSWPaymentCore; exact accepted direct-import identity reuse, without dependency replay/audit.',
+    }
+    save(HERE / 'preflight.json', preflight)
+    commands = [
+        run('compile', compile_command(TARGET, target_source, output(TARGET))),
+        run('replay', [str(TOOL / 'bin/leanchecker'), '--verbose', TARGET]),
+        run(
+            'audit',
+            compile_command(
+                AUDIT,
+                REPO / 'verification/parts/p5/DirichLTwistedPointwiseSWPaymentCoreAudit.lean',
+                output(AUDIT),
+            ),
+        ),
+    ]
+    result = {
+        'status': 'GATES_PASSED',
+        'completed_utc': dt.datetime.now(dt.timezone.utc).isoformat(),
+        'preflight_sha256': sha(HERE / 'preflight.json'),
+        'commands': commands,
+        'target_object': record(output(TARGET)),
+        'audit_object': record(output(AUDIT)),
+        'source_after': record(target_source),
+        'imports_after': [
+            {'module': module, 'source': record(resolve(module, '.lean')), 'objects': [record(resolve(module, '.olean'))]}
+            for module in direct_imports
+        ],
+    }
+    assert result['source_after']['sha256'] == SOURCE_SHA
+    save(HERE / 'result.json', result)
+    print(json.dumps({'status': result['status'], 'target_object': result['target_object']}))
+
+
+main()

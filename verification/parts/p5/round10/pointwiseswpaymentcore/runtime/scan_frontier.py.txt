@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import hashlib, json
+
+ROOT = Path('/workspace/scratch/399183f4923f/goldbach-formalization')
+SOURCE_ROOT = ROOT / '.lake/packages/goldbach'
+OBJECT_ROOTS = [ROOT / '.lake/build/lib/lean', SOURCE_ROOT / '.lake/build/lib/lean']
+TARGET = 'MathlibNt.SieveTheory.Distribution.LiuPan.LiuPanPrimitiveLedgerAssembly'
+
+
+def source_path(module):
+    return SOURCE_ROOT / Path(*module.split('.')).with_suffix('.lean')
+
+
+def imports(module):
+    path = source_path(module)
+    if not path.is_file():
+        return []
+    result = []
+    for line in path.read_text().splitlines():
+        stripped = line.strip()
+        if stripped.startswith('import '):
+            result.extend(stripped[7:].split())
+    return result
+
+
+def has_object(module):
+    relative = Path(*module.split('.')).with_suffix('.olean')
+    return any((root / relative).is_file() for root in OBJECT_ROOTS)
+
+
+seen = set()
+stack = [TARGET]
+while stack:
+    module = stack.pop()
+    if module in seen:
+        continue
+    seen.add(module)
+    for dependency in imports(module):
+        if dependency.startswith('MathlibNt.') and source_path(dependency).is_file():
+            stack.append(dependency)
+
+missing = sorted(module for module in seen if not has_object(module))
+ready = []
+for module in missing:
+    direct = [
+        dependency for dependency in imports(module)
+        if dependency.startswith('MathlibNt.') and source_path(dependency).is_file()
+    ]
+    if all(has_object(dependency) for dependency in direct):
+        source = source_path(module)
+        ready.append({
+            'module': module,
+            'source': str(source),
+            'source_sha256': hashlib.sha256(source.read_bytes()).hexdigest(),
+            'source_lines': len(source.read_text().splitlines()),
+            'mathlibnt_direct_imports': direct,
+        })
+ready.sort(key=lambda item: (item['source_lines'], item['module']))
+
+output = {
+    'closure_root': TARGET,
+    'closure_module_count': len(seen),
+    'missing_object_count': len(missing),
+    'ready_leaf_count': len(ready),
+    'object_roots': [str(path) for path in OBJECT_ROOTS],
+    'cache_scope_note': 'Fresh workspace: exact P5 transport objects were restored; unrelated transient shared objects from the preceding workspace were not assumed.',
+    'ready_leaves': ready,
+}
+destination = Path('/workspace/scratch/399183f4923f/p5-pointwiseswpayment/runtime/dependency-frontier.json')
+destination.write_text(json.dumps(output, indent=2) + '\n')
+print(json.dumps({key: output[key] for key in ['closure_module_count', 'missing_object_count', 'ready_leaf_count']}))
