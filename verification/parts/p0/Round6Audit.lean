@@ -25,6 +25,10 @@ set_option pp.fullNames true
 open Lean Elab Command in
 run_cmd do
   let env ← getEnv
+  liftIO do
+    IO.println "P0_ROUND6_PHASE environment_ready"
+    (← IO.getStdout).flush
+  let moduleNames := env.header.moduleNames
   let modules := #[
     `ImbalancedChen.HistoricalUpperFiveCellGeometry,
     `ImbalancedChen.ActualHistoricalFifthCellIntegral,
@@ -32,10 +36,25 @@ run_cmd do
     `ImbalancedChen.HistoricalFifthCutoffInvariance]
   let finalBridge := `ImbalancedChen.current_theorem_1_1_of_manuscript_bounds
   let allowed := #[`propext, `Classical.choice, `Quot.sound]
-  let names := env.constants.fold (init := #[]) fun names name _ =>
-    match env.getModuleIdxFor? name with
-    | some idx => if modules.contains env.header.moduleNames[idx]! then names.push name else names
-    | none => names
+  let mut targetIndices : Array ModuleIdx := #[]
+  for moduleName in modules do
+    let some idx := env.getModuleIdx? moduleName |
+      throwError "Missing imported audited module {moduleName}"
+    targetIndices := targetIndices.push idx
+  liftIO do
+    IO.println "P0_ROUND6_PHASE name_index_inventory_start"
+    (← IO.getStdout).flush
+  -- Traverse only name/index entries for the complete imported ownership census.
+  -- ConstantInfo is queried only after selecting one of the four module indices.
+  -- The index also contains IR/codegen-only names; these have no ConstantInfo
+  -- and are not kernel declarations. All remaining names must match constNames.
+  let names := env.const2ModIdx.fold (init := (#[] : Array Name)) fun names name idx =>
+    if targetIndices.contains idx then
+      if (env.find? name).isSome then names.push name else names
+    else names
+  liftIO do
+    IO.println s!"P0_ROUND6_PHASE name_index_inventory_done {names.size}"
+    (← IO.getStdout).flush
   let mut serializedModules : Array Name := #[]
   let mut serializedTotal := 0
   for idx in List.range env.header.modules.size do
@@ -47,7 +66,7 @@ run_cmd do
       if data.isModule || !imported.importAll || !imported.hasData then
         throwError "Expected complete legacy module data for {imported.module}"
       let owned := names.filter fun name =>
-        (env.getModuleIdxFor? name).map (fun i => env.header.moduleNames[i]!) ==
+        (env.getModuleIdxFor? name).map (fun i => moduleNames[i]!) ==
           some imported.module
       unless owned.size > 0 do
         throwError "Audited module has no declarations: {imported.module}"
@@ -71,8 +90,14 @@ run_cmd do
     throwError "Round 6 serialized total and environment total differ"
   if names.contains finalBridge then
     throwError "Final bridge must not be included in the owned-module census"
+  liftIO do
+    IO.println "P0_ROUND6_PHASE serialized_inventory_exact_match"
+    (← IO.getStdout).flush
   let mut counts : Array (Name × Nat) := modules.map (·, 0)
   for name in (names.push finalBridge).qsort Name.lt do
+    liftIO do
+      IO.println s!"P0_ROUND6_PHASE declaration_start {name}"
+      (← IO.getStdout).flush
     let some info := env.find? name | throwError "Missing inventoried declaration {name}"
     if info.isUnsafe then
       throwError "Unsafe declaration in a P0 batch module: {name}"
@@ -86,7 +111,7 @@ run_cmd do
         throwError "Forbidden transitive axiom {ax} in {name}"
     let some idx := env.getModuleIdxFor? name |
       throwError "Missing defining module for {name}"
-    let moduleName := env.header.moduleNames[idx]!
+    let moduleName := moduleNames[idx]!
     counts := counts.map fun (m, count) => (m, if m == moduleName then count + 1 else count)
     let kind := match info with
       | .thmInfo _ => "theorem"
