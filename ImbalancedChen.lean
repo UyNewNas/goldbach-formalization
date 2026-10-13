@@ -248,3 +248,4 @@ import ImbalancedChen.SymmetricTriangleIntegral
 import ImbalancedChen.HistoricalStoredCapBridgeAudit
 import ImbalancedChen.HistoricalFifthIntegerCutoffAudit
 import ImbalancedChen.HistoricalThreeStageTelescopeAudit
+import ImbalancedChen.HistoricalThreeStageFiniteSumAudit
