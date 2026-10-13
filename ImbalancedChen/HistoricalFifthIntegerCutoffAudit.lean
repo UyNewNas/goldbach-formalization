@@ -4,7 +4,6 @@ set_option warningAsError true
 set_option pp.fullNames true
 set_option pp.universes true
 set_option pp.explicit true
-set_option pp.maxDepth 100000
 
 /-! Enumerate ALL actual defining-module declarations, not source names. -/
 open Lean Elab Command in
