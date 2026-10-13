@@ -34,10 +34,19 @@ open Classical
 /-- One local convolution, with one interval and fixed coefficients shared
 by every term of the modulus sum.  The residue may move with the atom. -/
 structure MediumAtom where
-  U V Q1 Q2 Q3 : ℝ
+  U : ℝ
+  V : ℝ
+  Q1 : ℝ
+  Q2 : ℝ
+  Q3 : ℝ
   residue : ℤ
-  intervalLo intervalHi : ℝ
-  alpha beta gamma1 gamma2 gamma3 : ℕ → ℂ
+  intervalLo : ℝ
+  intervalHi : ℝ
+  alpha : ℕ → ℂ
+  beta : ℕ → ℂ
+  gamma1 : ℕ → ℂ
+  gamma2 : ℕ → ℂ
+  gamma3 : ℕ → ℂ
 
 def MediumAtom.scale (d : MediumAtom) : ℝ := d.U * d.V
 
@@ -57,7 +66,8 @@ def factorCarrier (Q : ℝ) : Finset ℕ :=
 /-- The returned variable has ONE interval and ONE phase, shared by all
 levels. There is deliberately no level-indexed interval or phase field. -/
 structure CommonCompletedVariable where
-  intervalLo intervalHi : ℕ
+  intervalLo : ℕ
+  intervalHi : ℕ
   additivePhase : ℝ
 
 def CommonCompletedVariable.weight (d : CommonCompletedVariable) (m : ℕ) : ℂ :=
@@ -68,7 +78,9 @@ def CommonCompletedVariable.weight (d : CommonCompletedVariable) (m : ℕ) : ℂ
 /-- The ABL transformed coefficient has no spectral-height argument.
 The coprimality of the packet level and moving residue remains required. -/
 structure CoprimePacket where
-  residue level multiplier : ℕ
+  residue : ℕ
+  level : ℕ
+  multiplier : ℕ
   level_pos : 0 < level
   residue_coprime : Nat.Coprime residue level
   beta : ℕ → ℕ → ℂ

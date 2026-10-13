@@ -40,6 +40,7 @@ theorem part3PrimeAPError_eq_standard (Y a d : ℕ) :
     part3PrimeAPError Y a d = standardPrimeAPError Y d (a % d) := by
   simp only [part3PrimeAPError, part3_chenPrimeAPCount_eq_primesInAP,
     standardPrimeAPError, primesInAP, Nat.ModEq, Nat.mod_mod]
+  rfl
 
 theorem part3PrimeAPError_target_eq_chenQuotientPrimeAPError (N d : ℕ) :
     part3PrimeAPError N N d =
@@ -52,8 +53,9 @@ theorem part3_standardPrimeAPMaxError_le_prefix
     standardPrimeAPMaxError Y d ≤ standardPrimeAPPrefixMaxError N d := by
   classical
   unfold standardPrimeAPPrefixMaxError
-  exact Finset.le_max' _ _ (Finset.mem_image.mpr
-    ⟨Y, Finset.mem_range.mpr (Nat.lt_succ_of_le hY), rfl⟩)
+  apply Finset.le_max'
+  exact Finset.mem_image.mpr
+    ⟨Y, Finset.mem_range.mpr (Nat.lt_succ_of_le hY), rfl⟩
 
 /-- The target may move independently of the prime endpoint.  Only its
 literal coprimality with the physical modulus is required. -/
