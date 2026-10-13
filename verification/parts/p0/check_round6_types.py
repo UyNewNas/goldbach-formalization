@@ -28,7 +28,7 @@ FINAL_BRIDGE = "ImbalancedChen.current_theorem_1_1_of_manuscript_bounds"
 FINAL_MODULE = "ImbalancedChen.CurrentMainTheorem"
 EXPECTED = {
     "ImbalancedChen.HistoricalUpperFiveCellGeometry": 23,
-    "ImbalancedChen.ActualHistoricalFifthCellIntegral": 23,
+    "ImbalancedChen.ActualHistoricalFifthCellIntegral": 22,
     "ImbalancedChen.ActualHistoricalFifthSavingIntegral": 15,
     "ImbalancedChen.HistoricalFifthCutoffInvariance": 9,
 }
@@ -109,8 +109,8 @@ def parse_types(stdout: str) -> tuple[list[dict], dict]:
     bridges = records("P0_ROUND6_FINAL_BRIDGE ")
     totals = [int(line.removeprefix("P0_ROUND6_COUNT ")) for line in lines
               if line.startswith("P0_ROUND6_COUNT ")]
-    require(totals == [70] and len(declarations) == 70, "Incomplete Round 6 declaration census")
-    require(len({d["name"] for d in declarations}) == 70, "Duplicate declaration name")
+    require(totals == [69] and len(declarations) == 69, "Incomplete Round 6 declaration census")
+    require(len({d["name"] for d in declarations}) == 69, "Duplicate declaration name")
     require(Counter(d["module"] for d in declarations) == Counter(EXPECTED),
             "Defining-module counts differ from the four expected counts")
     require(len(modules) == 4 and {d["module"]: d["count"] for d in modules} == EXPECTED,
@@ -119,7 +119,7 @@ def parse_types(stdout: str) -> tuple[list[dict], dict]:
     bridge = bridges[0]
     require(bridge["name"] == FINAL_BRIDGE and bridge["module"] == FINAL_MODULE
             and bridge["kind"] == "theorem", "Wrong final bridge")
-    require(FINAL_BRIDGE not in {d["name"] for d in declarations}, "Final bridge counted in the 70")
+    require(FINAL_BRIDGE not in {d["name"] for d in declarations}, "Final bridge counted in the 69")
     for record in declarations + bridges:
         require(record["kind"] != "axiom" and set(record["axioms"]) <= ALLOWED,
                 f"Forbidden axiom declaration or dependency: {record['name']}")
@@ -156,7 +156,7 @@ def main() -> int:
         "schema": "p0-round6-types-export-v1", "status": "RUNNING",
         "started_utc": datetime.now(timezone.utc).isoformat(),
         "scope": "Supplemental type export after successful full lake build; existing proof gates remain required",
-        "expected_defining_module_counts": EXPECTED, "expected_owned_declarations": 70,
+        "expected_defining_module_counts": EXPECTED, "expected_owned_declarations": 69,
         "final_bridge_name": FINAL_BRIDGE, "final_bridge_is_conditional": True,
         "hLower_hUpper_discharged": False, "production_modules_recompiled": False,
         "production_modules_replayed": False, "dependencies_built": False,

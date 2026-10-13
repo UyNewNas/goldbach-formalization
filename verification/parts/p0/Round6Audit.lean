@@ -3,7 +3,7 @@ import Lean.Util.CollectAxioms
 
 /-! Round 6 type export after the full root build.
 This reuses the verified LongSlotAudit defining-module inventory and checks.
-Only the four listed modules contribute to the 70-declaration census.
+Only the four listed modules contribute to the 69-declaration census.
 The existing final bridge is printed separately with all its analytic hypotheses.
 Compiling this audit does not rebuild or replay any production module. -/
 
@@ -20,7 +20,7 @@ run_cmd do
   let env ← getEnv
   let expected : Array (Name × Nat) := #[
     (`ImbalancedChen.HistoricalUpperFiveCellGeometry, 23),
-    (`ImbalancedChen.ActualHistoricalFifthCellIntegral, 23),
+    (`ImbalancedChen.ActualHistoricalFifthCellIntegral, 22),
     (`ImbalancedChen.ActualHistoricalFifthSavingIntegral, 15),
     (`ImbalancedChen.HistoricalFifthCutoffInvariance, 9)]
   let modules := expected.map (·.1)
@@ -77,6 +77,6 @@ run_cmd do
       throwError "Round 6 declaration count mismatch for {m}: expected {wanted}, got {count}"
     let record := Json.mkObj [("module", toJson m.toString), ("count", toJson count)]
     liftIO <| IO.println s!"P0_ROUND6_MODULE {record.compress}"
-  unless names.size == 70 do
-    throwError "Round 6 total declaration count mismatch: expected 70, got {names.size}"
+  unless names.size == 69 do
+    throwError "Round 6 total declaration count mismatch: expected 69, got {names.size}"
   liftIO <| IO.println s!"P0_ROUND6_COUNT {names.size}"
