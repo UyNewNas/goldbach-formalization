@@ -146,7 +146,8 @@ theorem rowKey_adjacent (i : Fin 127) :
     rowKey i.castSucc < rowKey i.succ := by
   fin_cases i <;>
     norm_num [rowKey, rowIndices, Fin.append, Fin.addCases,
-      Prefix64.rowIndices, Batch64To128.rowIndices]
+      Prefix64.rowIndices, Prefix4.rowIndices,
+      Batch4To64.rowIndices, Batch64To128.rowIndices]
 
 theorem rowKey_strictMono : StrictMono rowKey :=
   (Fin.strictMono_iff_lt_succ (f := rowKey)).2 rowKey_adjacent
