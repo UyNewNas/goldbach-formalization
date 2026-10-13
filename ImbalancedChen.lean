@@ -247,3 +247,4 @@ import ImbalancedChen.ChenPairHarmonicFinite
 import ImbalancedChen.SymmetricTriangleIntegral
 import ImbalancedChen.HistoricalStoredCapBridgeAudit
 import ImbalancedChen.HistoricalFifthIntegerCutoffAudit
+import ImbalancedChen.HistoricalThreeStageTelescopeAudit
