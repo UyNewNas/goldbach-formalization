@@ -178,7 +178,7 @@ def main() -> int:
         require(pin_result.returncode == 0, "Existing frozen-pin check failed")
         lake = shutil.which("lake")
         require(lake is not None, "Pinned normal Lake is not on PATH")
-        command = [lake, "env", "lean", "-DwarningAsError=true", "-o", str(audit_object), AUDIT]
+        command = [lake, "env", "lean", "-t0", "-DwarningAsError=true", "-o", str(audit_object), AUDIT]
         environment = os.environ.copy()
         for key in ["LEAN_PATH", "LEAN_SRC_PATH"]:
             environment.pop(key, None)

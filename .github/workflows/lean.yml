@@ -159,6 +159,12 @@ jobs:
         timeout-minutes: 25
         run: |
           "$RUNNER_TEMP/lean-ci/run-stage" round4-types python3 verification/parts/p0/check_round4_types.py --timeout-seconds 1440
+      - name: Export complete round 6 types and the existing conditional main bridge
+        id: round6-types
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 25
+        run: |
+          "$RUNNER_TEMP/lean-ci/run-stage" round6-types python3 verification/parts/p0/check_round6_types.py --timeout-seconds 1440
       - name: Record required verification outcomes
         if: ${{ always() }}
         env:
@@ -168,6 +174,7 @@ jobs:
           ROUND3_TYPES_OUTCOME: ${{ steps.round3-types.outcome }}
           ROUND4_TARGETS_OUTCOME: ${{ steps.round4-targets.outcome }}
           ROUND4_TYPES_OUTCOME: ${{ steps.round4-types.outcome }}
+          ROUND6_TYPES_OUTCOME: ${{ steps.round6-types.outcome }}
         run: |
           mkdir -p "$RUNNER_TEMP/lean-verification-logs"
           {
@@ -177,6 +184,7 @@ jobs:
             printf 'round3-types=%s\n' "$ROUND3_TYPES_OUTCOME"
             printf 'round4-targets=%s\n' "$ROUND4_TARGETS_OUTCOME"
             printf 'round4-types=%s\n' "$ROUND4_TYPES_OUTCOME"
+            printf 'round6-types=%s\n' "$ROUND6_TYPES_OUTCOME"
           } | tee "$RUNNER_TEMP/lean-verification-logs/outcomes.log"
           {
             printf '\n### Required core verification stages\n'
@@ -186,6 +194,7 @@ jobs:
             printf -- '- Complete round 3 and conditional main types: %s\n' "$ROUND3_TYPES_OUTCOME"
             printf -- '- Four explicit round 4 production targets: %s\n' "$ROUND4_TARGETS_OUTCOME"
             printf -- '- Complete round 4 and conditional main types: %s\n' "$ROUND4_TYPES_OUTCOME"
+            printf -- '- Complete round 6 and conditional main types: %s\n' "$ROUND6_TYPES_OUTCOME"
             printf '\nAllowed axioms: propext, Classical.choice, Quot.sound.\n'
             printf 'A skipped or uncompleted stage is not a successful verification.\n'
           } >> "$GITHUB_STEP_SUMMARY"
@@ -195,6 +204,7 @@ jobs:
           test "$ROUND3_TYPES_OUTCOME" = success
           test "$ROUND4_TARGETS_OUTCOME" = success
           test "$ROUND4_TYPES_OUTCOME" = success
+          test "$ROUND6_TYPES_OUTCOME" = success
       - name: Retain stage logs and timings, including failures
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -204,6 +214,7 @@ jobs:
             ${{ runner.temp }}/lean-verification-logs/
             .lake/part0-round3-types/
             .lake/part0-round4-types/
+            .lake/part0-round6-types/
           # Hidden inputs are limited to the two scoped type-export directories.
           include-hidden-files: true
           if-no-files-found: warn
