@@ -120,6 +120,41 @@ theorem supportedDivisorSum_le_of_coefficient_le
   unfold supportedDivisorSum
   exact Finset.sum_le_sum fun d hd => hdom d (Finset.mem_filter.mp hd).1
 
+/-- Extending an arbitrary signed rough coefficient by zeros across a finite
+divisor carrier does not change the actual divisor sum. -/
+theorem supportedDivisorSum_eq_of_subset
+    (Rraw R : Finset ℕ) (raw : ℕ → ℝ) (n : ℕ)
+    (hsub : Rraw ⊆ R)
+    (hzero : ∀ d ∈ R, d ∉ Rraw → raw d = 0) :
+    supportedDivisorSum R raw n = supportedDivisorSum Rraw raw n := by
+  classical
+  unfold supportedDivisorSum
+  symm
+  apply Finset.sum_subset
+  · intro d hd
+    rcases Finset.mem_filter.mp hd with ⟨hdRaw, hdDvd⟩
+    exact Finset.mem_filter.mpr ⟨hsub hdRaw, hdDvd⟩
+  · intro d hdOuter hdInner
+    rcases Finset.mem_filter.mp hdOuter with ⟨hdR, hdDvd⟩
+    have hdNotRaw : d ∉ Rraw := by
+      intro hdRaw
+      exact hdInner (Finset.mem_filter.mpr ⟨hdRaw, hdDvd⟩)
+    exact hzero d hdR hdNotRaw
+
+/-- An outer rough coefficient bounds the original signed divisor sum even
+when its finite physical carrier is larger than the raw carrier. -/
+theorem supportedDivisorSum_le_of_zeroExtension
+    (Rraw R : Finset ℕ) (raw compiled : ℕ → ℝ) (n : ℕ)
+    (hsub : Rraw ⊆ R)
+    (hzero : ∀ d ∈ R, d ∉ Rraw → raw d = 0)
+    (hdom : ∀ d ∈ R, raw d ≤ compiled d) :
+    supportedDivisorSum Rraw raw n ≤ supportedDivisorSum R compiled n := by
+  calc
+    supportedDivisorSum Rraw raw n = supportedDivisorSum R raw n :=
+      (supportedDivisorSum_eq_of_subset Rraw R raw n hsub hzero).symm
+    _ ≤ supportedDivisorSum R compiled n :=
+      supportedDivisorSum_le_of_coefficient_le R raw compiled hdom n
+
 /-- The literal beta-minus/beta-plus attachment of a dominating compiled
 rough coefficient majorizes the full rough indicator on every integer.
 The raw majorant is a visible finite input; the beta bounds are supplied
