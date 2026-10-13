@@ -1,0 +1,13 @@
+# P0 Round 17 — independent receipt gate for P4 signed zero extension
+
+Parent P0 commit: `94c0924b8f3d98e98398ce62aae60869d9bdb019`. Frozen manuscript `ba6ec11d800eccc54406490631895e174de85766`; unchanged shared proof baseline `1a80c1bcce67886f699d097fc37fd245cd3620bf`.
+
+The parent's [core run 38468158581](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38468158581) and [variable-envelope run 38468158594](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38468158594) have both concluded SUCCESS at the exact parent SHA. The core run includes full root build, bundled leanchecker root replay, transitive axioms and the Round3/4/6 type gates. Round6 checks 69 observed declarations, retaining the documented P1 discrepancy regarding a generated equation lemma.
+
+New source accepted in the parent is the **exact** P4 producer Git blob `345858a00ee4eda72a90ba968c73a431397b3848` in `ImbalancedChen/UpperCoefficientPerturbation.lean`. Its direct imported `ActualSmallRoughAttachment.lean` is blob `28c930a8464a16d9acfb2b3580465f11def99acc`. The P4 producer's five-module audit Lean source is copied unchanged from blob `fc851cfb1fc2a90eec435e9c6a268a515f2358d4` to `verification/Part4UpperAudit.lean`.
+
+The core workflow now requires, after the normal root build, explicit `-t0 -M4096 -DwarningAsError=true` source compilation of `ImbalancedChen.UpperCoefficientPerturbation`, bundled `leanchecker --verbose` replay of that new production object, strict compilation of the P4 five-module defining-module inventory, the 75-declaration and five-module producer census, presence of the two zero-extension theorems, and bundled audit replay. The unchanged audit source checks unsafe/axiom exclusion, complete compiler pp.all types, and transitive axioms in `propext, Classical.choice, Quot.sound`. Raw logs, source and object hashes are captured in the existing core CI artifact; an unexecuted gate is not a receipt.
+
+**This handoff is SOURCE_ONLY until the matching new SHA's CI runs.** The producer's independent [CI 38387317409](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38387317409) remains supporting upstream evidence and is not silently substituted for P0 replay.
+
+The two lemmas establish signed finite divisor-sum equality on a zero-extended carrier and coefficientwise upper domination over an enlarged carrier. They require the actual subset, zero-extension, and coefficient-majorization premises to be instantiated. Actual pointwise majorant, density, numerical K, tail-floor and Chen c budget, arithmetic distribution, `hLower` and `hUpper` remain unproved; no unconditional Theorem 1.1 or Corollary 1.2 is claimed.

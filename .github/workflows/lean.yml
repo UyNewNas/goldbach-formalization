@@ -120,6 +120,32 @@ jobs:
             ImbalancedChen.Certificates.PairedV2Batch4To64Data \
             ImbalancedChen.Certificates.PairedV2Batch4To64 \
             ImbalancedChen.Certificates.PairedV2Prefix64
+      - name: Verify P4 zero-extension leaf and complete production-module types
+        id: p4-zeroextension
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 20
+        run: |
+          "$RUNNER_TEMP/lean-ci/run-stage" p4-zeroextension bash -euo pipefail -c '
+            test "$(cat lean-toolchain)" = leanprover/lean4:v4.33.0-rc1
+            python3 verification/parts/p0/check_pins.py
+            test "$(git hash-object ImbalancedChen/UpperCoefficientPerturbation.lean)" = 345858a00ee4eda72a90ba968c73a431397b3848
+            test "$(git hash-object ImbalancedChen/ActualSmallRoughAttachment.lean)" = 28c930a8464a16d9acfb2b3580465f11def99acc
+            git diff --exit-code -- ImbalancedChen/UpperCoefficientPerturbation.lean verification/Part4UpperAudit.lean
+            src=ImbalancedChen/UpperCoefficientPerturbation.lean
+            obj=.lake/build/lib/lean/ImbalancedChen/UpperCoefficientPerturbation.olean
+            lake env lean -t0 -M4096 -DwarningAsError=true -o "$obj" "$src"
+            lake env leanchecker --verbose ImbalancedChen.UpperCoefficientPerturbation
+            audit=.lake/build/lib/lean/verification/Part4UpperAudit.olean
+            mkdir -p "$(dirname "$audit")"
+            log="$RUNNER_TEMP/lean-verification-logs/p4-zeroextension-types.log"
+            lake env lean -t0 -M4096 -DwarningAsError=true -o "$audit" verification/Part4UpperAudit.lean | tee "$log"
+            test "$(grep -c "^PART4_UPPER_AUDIT_DECL " "$log")" -eq 75
+            test "$(grep -c "^PART4_UPPER_AUDIT_MODULE " "$log")" -eq 5
+            grep -Fq "ImbalancedChen.supportedDivisorSum_eq_of_subset" "$log"
+            grep -Fq "ImbalancedChen.supportedDivisorSum_le_of_zeroExtension" "$log"
+            lake env leanchecker --verbose verification.Part4UpperAudit
+            sha256sum "$src" "$obj" verification/Part4UpperAudit.lean "$audit" | tee "$RUNNER_TEMP/lean-verification-logs/p4-zeroextension-sha256.log"
+          '
       - name: Recheck ImbalancedChen with bundled Lean 4.33.0-rc1 leanchecker
         id: leanchecker
         timeout-minutes: 25
@@ -175,6 +201,7 @@ jobs:
           ROUND4_TARGETS_OUTCOME: ${{ steps.round4-targets.outcome }}
           ROUND4_TYPES_OUTCOME: ${{ steps.round4-types.outcome }}
           ROUND6_TYPES_OUTCOME: ${{ steps.round6-types.outcome }}
+          P4_ZEROEXTENSION_OUTCOME: ${{ steps.p4-zeroextension.outcome }}
         run: |
           mkdir -p "$RUNNER_TEMP/lean-verification-logs"
           {
@@ -185,6 +212,7 @@ jobs:
             printf 'round4-targets=%s\n' "$ROUND4_TARGETS_OUTCOME"
             printf 'round4-types=%s\n' "$ROUND4_TYPES_OUTCOME"
             printf 'round6-types=%s\n' "$ROUND6_TYPES_OUTCOME"
+            printf 'p4-zeroextension=%s\n' "$P4_ZEROEXTENSION_OUTCOME"
           } | tee "$RUNNER_TEMP/lean-verification-logs/outcomes.log"
           {
             printf '\n### Required core verification stages\n'
@@ -195,6 +223,7 @@ jobs:
             printf -- '- Four explicit round 4 production targets: %s\n' "$ROUND4_TARGETS_OUTCOME"
             printf -- '- Complete round 4 and conditional main types: %s\n' "$ROUND4_TYPES_OUTCOME"
             printf -- '- Complete round 6 and conditional main types: %s\n' "$ROUND6_TYPES_OUTCOME"
+            printf -- '- Strict P4 production replay and all P4 declaration types: %s\n' "$P4_ZEROEXTENSION_OUTCOME"
             printf '\nAllowed axioms: propext, Classical.choice, Quot.sound.\n'
             printf 'A skipped or uncompleted stage is not a successful verification.\n'
           } >> "$GITHUB_STEP_SUMMARY"
@@ -205,6 +234,7 @@ jobs:
           test "$ROUND4_TARGETS_OUTCOME" = success
           test "$ROUND4_TYPES_OUTCOME" = success
           test "$ROUND6_TYPES_OUTCOME" = success
+          test "$P4_ZEROEXTENSION_OUTCOME" = success
       - name: Retain stage logs and timings, including failures
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
