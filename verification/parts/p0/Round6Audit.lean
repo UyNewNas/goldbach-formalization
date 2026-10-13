@@ -1,4 +1,8 @@
-import ImbalancedChen
+import ImbalancedChen.HistoricalUpperFiveCellGeometry
+import ImbalancedChen.ActualHistoricalFifthCellIntegral
+import ImbalancedChen.ActualHistoricalFifthSavingIntegral
+import ImbalancedChen.HistoricalFifthCutoffInvariance
+import ImbalancedChen.CurrentMainTheorem
 import Lean.Util.CollectAxioms
 
 /-! Round 6 type export after the full root build.
@@ -6,6 +10,8 @@ The census contains every serialized declaration owned by the four listed module
 including private and generated declarations. It is checked against the imported
 environment, rather than an unsupported historical declaration count.
 The existing final bridge is printed separately with all its analytic hypotheses.
+Only these defining modules and their dependencies are loaded into this exporter;
+the completed root build and the separate root replay/axiom gates remain required.
 Compiling this audit does not rebuild or replay any production module. -/
 
 set_option pp.all true
