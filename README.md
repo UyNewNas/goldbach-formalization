@@ -10,7 +10,45 @@ This means the arbitrary-real-exponent lower-limit statement and all three
 common-threshold endpoints, with the analytic premises discharged, not just
 an instance at exponent 0.75. See [the current theorem map](docs/CURRENT_MANUSCRIPT_MAP.md).
 
+External proof reuse is a standing requirement of this goal. Before proving a
+major missing ingredient, search Mathlib and relevant external formalizations;
+prefer a matching completed proof. Record its source, exact revision, license,
+full statement and premises, toolchain and verification evidence. Check the
+selected theorem's transitive proof dependencies for `sorryAx`, custom axioms
+and trust bypasses, and prove the adapter to the manuscript's actual objects.
+The standard axioms `propext`, `Classical.choice` and `Quot.sound` are allowed.
+Reuse must preserve the constants, quantifiers and unconditional completion
+requirement. See [the external reuse record](docs/EXTERNAL_REUSE.md).
+
+The 13 October continuation uses `codex/chen-parts-integration`, starting from
+P0's `59d338b93b2347021237eb51293bb934a316909d`. The six parts retain separate
+owners: P0 integration and validation, P1 historical integrals, P2 numerical
+certificates, P3 distribution, P4 the actual upper bound, and P5 Chen's lower
+bound. Production files have exclusive writers; P0 coordinates shared build
+outputs. The earlier local uncommitted work is preserved in its original
+worktree. The old scheduled automation remains paused.
+
 ## Verification status
+
+### Current integration baseline — 13 October
+
+The received P0 root `59d338b93b2347021237eb51293bb934a316909d` passed
+[core verification](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38349841383)
+and [variable-envelope verification](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38349841389).
+The core run includes the full build, bundled root kernel replay, root
+transitive-axiom audit, and required Round3/Round4 type exports. Its accepted
+sources include the four fifth-history modules, the first 128 adopted integral
+cells, and the five physical upper-sieve interfaces. The upper-count interface
+still requires actual density and distribution suppliers.
+
+The dedicated P0 Round6, Prefix128 and P4 complete-type receipts were not
+part of that core run. This continuation adds the existing Round6 export to
+the required workflow; execution of the new gate remains to be verified.
+New P1–P5 candidate proofs in the integration worktree are undergoing separate
+compilation and audits and are not covered by the baseline's CI success.
+Both final counting bounds, `hLower` and `hUpper`, remain open.
+
+The entries below record earlier checkpoints, not the latest inventory.
 
 ### Part 0 round 4 batch acceptance
 

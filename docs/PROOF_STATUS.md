@@ -1,5 +1,79 @@
 # Verification boundary
 
+## Publication checkpoint — 13 October 2026
+
+Seventeen additional current-source compilation successes are now archived with
+their original receipts and complete logs. See the
+[component progress table](PROGRESS_2026-10-13.md) for the exact verification
+level and remaining work in each part. They are published as development
+components and are not newly imported by the proof root. The two P4 modules
+also have limited module replay and transitive-axiom evidence; complete new
+acceptance remains pending. The 17,572-row strip checks do not yet establish
+the full sum or integral bound. Neither actual `hLower` nor `hUpper` is closed.
+
+The research goal and earlier scheduled task are paused at this publication
+snapshot. The corrected Round6 exporter still lacks a successful actual run:
+its three local attempts hit the memory limit. The archive identity verifier
+does not execute Lean and must not be reported as new proof verification.
+
+## Current integration baseline — 13 October
+
+The latest received proof root is
+`59d338b93b2347021237eb51293bb934a316909d`. Its exact-commit
+[core run 38349841383](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38349841383)
+and [variable-envelope run 38349841389](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38349841389)
+both succeeded. The core build, explicit Round4 targets, original bundled root
+kernel replay, full root transitive-axiom audit and Round3/Round4 type exports
+all completed successfully. This resolves the pending root checks described
+in the Round8 handoff for this exact SHA only.
+
+The received sources now include the four fifth-history modules (70 owned
+declarations), all three Prefix128 additions (481 owned declarations), and
+the five physical upper-sieve interfaces (73 owned declarations). Prefix128
+bounds the finite sum of the first 128 adopted cells, not the full 17,572-row
+certificate. The physical upper-count theorem is conditional on the actual
+majorant, density cap, coprime correction and signed distribution error for
+the same coefficient. The P0-specific complete type exports for these three
+later batches remain distinct outstanding receipts; the baseline CI did not
+execute them. The continuation makes the existing Round6 exporter a required
+workflow stage without removing any older gate.
+
+The first required Round6 run on continuation commit
+`54d3d8fafb3f566f0a93af3d9312ef4008deed4c`
+([core run 38357714966](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38357714966))
+passed the full build, explicit Round4 targets, bundled root replay, root axiom
+audit, and Round3/Round4 type exports. It then failed the new Round6 census:
+`ActualHistoricalFifthCellIntegral` exported 22 declarations against a
+hard-coded expectation of 23. All four source hashes still match the intake
+record, and all 46 explicit public declarations appear in the CI export.
+The old total of 70 is therefore a producer-reported census, not a completed
+export receipt for this continuation. The corrected exporter compares the
+complete serialized declaration inventory, including private/generated names,
+with the exported environment and all 46 frozen public declarations. It also
+rejects partial declarations. Its new actual Lean export remains pending;
+parser fixtures alone do not establish that the serialized census matches.
+
+The active continuation is on `codex/chen-parts-integration`, with six owners
+for integration, historical integrals, certificates, distribution, the upper
+bound and the Chen lower bound. Candidate proofs are not accepted by source
+inspection or by an earlier root's CI. The main theorem still requires actual
+`hLower` and `hUpper`; numerical certificate progress does not supply the
+high-level signed distribution estimates. External suppliers must pass the
+standing [reuse criteria](EXTERNAL_REUSE.md), including their complete selected
+transitive proof closure. The earlier scheduled automation remains paused.
+
+One concrete remaining instance mismatch was identified in the historical
+interface. `HistoricalPrefixCapData.levelCheck` requires every selected third
+cap to be at least `D.old`. The manuscript's third envelope can be smaller
+than the initial `Theta`; for example, the ordered triple `(1/10, 2/25, 3/50)`
+has envelope `59/100 < 299/500`. Thus setting `D.old = Theta` does not supply
+that check. The continuation must distinguish the initial level from the
+third fallback, retain both inherited first-cube gates, and prove the fourth
+and fifth comparisons against their actual inherited levels. The abstract
+checked-table integral results alone do not instantiate this adopted policy.
+
+The dated sections below retain their original historical scope.
+
 ## Part 0 round 5: P3 quotient supplier received
 
 P3 publication `0ac5ec5f43216215ff37488908a6d4e8d2c96636` now supplies retained,
