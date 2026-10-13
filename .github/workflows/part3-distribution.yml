@@ -8,6 +8,8 @@ on:
       - 'ImbalancedChen/**/*.lean'
       - 'verification/Part3DistributionAudit.lean'
       - 'verification/parts/p3/Bombieri1965Richert418UnconditionalAudit.lean'
+      - 'verification/parts/p3/Part3PrimeAPDistributionAudit.lean'
+      - 'verification/verify_part3_prime_ap_local.py'
       - 'verification/verify_part3_bv_supplier.py'
       - 'verification/verify_part3_distribution.py'
       - 'verification/verify_variable_envelope_boxes.py'
@@ -85,6 +87,12 @@ jobs:
           python3 verification/verify_part3_bv_supplier.py \
             --expected-head "$EXPECTED_HEAD" \
             --output-dir "$RUNNER_TEMP/part3-distribution-verification"
+      - name: Accept prime AP leaf with original Lean checker
+        run: |
+          set -euo pipefail
+          python3 verification/verify_part3_prime_ap_local.py \
+            --expected-head "$EXPECTED_HEAD" \
+            --output-dir "$RUNNER_TEMP/part3-distribution-verification/prime-ap-local"
       - name: Explicit Part 3 builds, kernel replays and complete axiom inventory
         id: verification
         run: |
