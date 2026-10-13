@@ -1,5 +1,21 @@
 # Verification boundary
 
+## Publication checkpoint — 13 October 2026
+
+Seventeen additional current-source compilation successes are now archived with
+their original receipts and complete logs. See the
+[component progress table](PROGRESS_2026-10-13.md) for the exact verification
+level and remaining work in each part. They are published as development
+components and are not newly imported by the proof root. The two P4 modules
+also have limited module replay and transitive-axiom evidence; complete new
+acceptance remains pending. The 17,572-row strip checks do not yet establish
+the full sum or integral bound. Neither actual `hLower` nor `hUpper` is closed.
+
+The research goal and earlier scheduled task are paused at this publication
+snapshot. The corrected Round6 exporter still lacks a successful actual run:
+its three local attempts hit the memory limit. The archive identity verifier
+does not execute Lean and must not be reported as new proof verification.
+
 ## Current integration baseline — 13 October
 
 The latest received proof root is
