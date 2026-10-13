@@ -22,6 +22,21 @@ later batches remain distinct outstanding receipts; the baseline CI did not
 execute them. The continuation makes the existing Round6 exporter a required
 workflow stage without removing any older gate.
 
+The first required Round6 run on continuation commit
+`54d3d8fafb3f566f0a93af3d9312ef4008deed4c`
+([core run 38357714966](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38357714966))
+passed the full build, explicit Round4 targets, bundled root replay, root axiom
+audit, and Round3/Round4 type exports. It then failed the new Round6 census:
+`ActualHistoricalFifthCellIntegral` exported 22 declarations against a
+hard-coded expectation of 23. All four source hashes still match the intake
+record, and all 46 explicit public declarations appear in the CI export.
+The old total of 70 is therefore a producer-reported census, not a completed
+export receipt for this continuation. The corrected exporter compares the
+complete serialized declaration inventory, including private/generated names,
+with the exported environment and all 46 frozen public declarations. It also
+rejects partial declarations. Its new actual Lean export remains pending;
+parser fixtures alone do not establish that the serialized census matches.
+
 The active continuation is on `codex/chen-parts-integration`, with six owners
 for integration, historical integrals, certificates, distribution, the upper
 bound and the Chen lower bound. Candidate proofs are not accepted by source
@@ -30,6 +45,16 @@ inspection or by an earlier root's CI. The main theorem still requires actual
 high-level signed distribution estimates. External suppliers must pass the
 standing [reuse criteria](EXTERNAL_REUSE.md), including their complete selected
 transitive proof closure. The earlier scheduled automation remains paused.
+
+One concrete remaining instance mismatch was identified in the historical
+interface. `HistoricalPrefixCapData.levelCheck` requires every selected third
+cap to be at least `D.old`. The manuscript's third envelope can be smaller
+than the initial `Theta`; for example, the ordered triple `(1/10, 2/25, 3/50)`
+has envelope `59/100 < 299/500`. Thus setting `D.old = Theta` does not supply
+that check. The continuation must distinguish the initial level from the
+third fallback, retain both inherited first-cube gates, and prove the fourth
+and fifth comparisons against their actual inherited levels. The abstract
+checked-table integral results alone do not instantiate this adopted policy.
 
 The dated sections below retain their original historical scope.
 
