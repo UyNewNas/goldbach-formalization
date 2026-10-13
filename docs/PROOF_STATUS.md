@@ -1,5 +1,38 @@
 # Verification boundary
 
+## Current integration baseline — 13 October
+
+The latest received proof root is
+`59d338b93b2347021237eb51293bb934a316909d`. Its exact-commit
+[core run 38349841383](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38349841383)
+and [variable-envelope run 38349841389](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38349841389)
+both succeeded. The core build, explicit Round4 targets, original bundled root
+kernel replay, full root transitive-axiom audit and Round3/Round4 type exports
+all completed successfully. This resolves the pending root checks described
+in the Round8 handoff for this exact SHA only.
+
+The received sources now include the four fifth-history modules (70 owned
+declarations), all three Prefix128 additions (481 owned declarations), and
+the five physical upper-sieve interfaces (73 owned declarations). Prefix128
+bounds the finite sum of the first 128 adopted cells, not the full 17,572-row
+certificate. The physical upper-count theorem is conditional on the actual
+majorant, density cap, coprime correction and signed distribution error for
+the same coefficient. The P0-specific complete type exports for these three
+later batches remain distinct outstanding receipts; the baseline CI did not
+execute them. The continuation makes the existing Round6 exporter a required
+workflow stage without removing any older gate.
+
+The active continuation is on `codex/chen-parts-integration`, with six owners
+for integration, historical integrals, certificates, distribution, the upper
+bound and the Chen lower bound. Candidate proofs are not accepted by source
+inspection or by an earlier root's CI. The main theorem still requires actual
+`hLower` and `hUpper`; numerical certificate progress does not supply the
+high-level signed distribution estimates. External suppliers must pass the
+standing [reuse criteria](EXTERNAL_REUSE.md), including their complete selected
+transitive proof closure. The earlier scheduled automation remains paused.
+
+The dated sections below retain their original historical scope.
+
 ## Part 0 round 5: P3 quotient supplier received
 
 P3 publication `0ac5ec5f43216215ff37488908a6d4e8d2c96636` now supplies retained,

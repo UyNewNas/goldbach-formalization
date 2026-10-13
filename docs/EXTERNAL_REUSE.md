@@ -1,5 +1,62 @@
 # External Lean reuse audit
 
+## Standing goal requirement
+
+The user added external proof reuse to the full 1+1.75 goal on 12 October 2026.
+Before a major new proof, search the pinned Mathlib and relevant external
+formalizations, and reuse suitable verified results. Record exact revisions,
+declarations and hypotheses, license/provenance, toolchain and verification
+evidence. An external zero-sorry claim is not sufficient: the selected proof's
+transitive closure must avoid `sorryAx`, custom analytic axioms and trust
+bypasses. The standard Lean axioms remain allowed. Prove all premise and object
+conversions at the actual use site without weakening the manuscript's target.
+
+The project already imports the pinned Mathlib and goldbach library below.
+The 13 October source recheck found goldbach's main still at `09b97db5`; the
+existing ordinary BV, PNT, Mertens and linear-sieve suppliers remain useful,
+but no supplier for the current complete `c` and `K` bounds was established
+by that recheck. The statements below about unintegrated external code and
+older manuscript constants are a historical audit, not the current status.
+
+## 13 October: zero-sorry does not discharge the spectral inputs
+
+Source inspection of
+[`openai/PrimeGaps186@61340d0`](https://github.com/openai/PrimeGaps186/blob/61340d0b74163003b32756bb16e91d9209a5e330/PrimeGaps186.lean)
+found three explicit custom axioms in the production proof module:
+`PrimeGap186.kloosterman3_bound` (line 147),
+`PrimeGap186.kloosterman2_correlation_bound` (line 159), and
+`PrimeGap186.physical_integral_bounds` (line 1055).
+The proof of `infinite_two_prime_translates_of_admissible_card_eq_40`
+(lines 210530–210540) explicitly passes these three assumptions to its
+Selberg-profile supplier. The `dhl_40_2` and `primeGapLiminf_le_186` endpoints
+then use that result. The fetched source matched Git blob
+`a8d0b8a138c7309f85e3967b24c3b502be5a3917`.
+This is fixed-source inspection, not a new build or kernel-axiom audit.
+The whole endpoint is unsuitable as an unconditional supplier for this goal;
+individual finite lemmas remain candidates for separate dependency checks.
+
+The current project's ordinary BV supplier controls the physical modulus
+only up to `panModulusCutoff N B`. The manuscript's restricted medium-modulus
+conditions can allow a product of three factors beyond the square-root
+range, even when each factor is small. Therefore this supplier cannot close
+`RestrictedMediumObligation` by refactoring the modulus. The required stronger
+signed distribution estimate remains open. This is a mismatch between the
+available formalized range and the required range, not a counterexample to
+the manuscript's mathematical estimate.
+
+An additional 13 October public-code search for `Kloosterman`, `Kuznetsov`
+and `weil_bound` did not establish a new analytic supplier. One concrete
+candidate,
+[`RexHannes/twin-prime-proof-search@c52ceed`](https://github.com/RexHannes/twin-prime-proof-search/blob/c52ceed44c8f1f5365ab1c65b630869865eb50e8/Gate1B/SafeExtensions/QK5CharacterInterfaces.lean),
+contains comments rather than declarations: its Pascadi applications and
+concrete character diagonalization remain open, and its abstract finite
+diagonalization requires orthogonality as a hypothesis. It supplies neither
+a Kloosterman bound nor a dispersion theorem for this project. No code from
+this candidate was imported or built. These bounded search and source checks
+are not a claim that no suitable external formalization exists.
+
+## Historical audit
+
 Audit date: 8 October 2026 UTC. Scope: external foundations relevant to the imbalanced-Chen transfer manuscript, including semantic fidelity, theorem assumptions, licensing, dependency pins, and actual CI evidence.
 
 ## Bottom line
