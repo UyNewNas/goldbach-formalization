@@ -1,0 +1,60 @@
+{
+  "schema": "chen-verification-request-v1",
+  "request_id": "p3-20261015T005215Z-repair-compile-audit",
+  "part": "p3",
+  "status": "REQUESTED",
+  "created_at": "2026-10-15T00:55:30Z",
+  "baseline_commit": "1337e2db4712fb4a9f86add073f771f84b66d0c8",
+  "candidate_commit": null,
+  "candidate_kind": "HASH_FROZEN_SHARED_WORKTREE",
+  "candidate_worktree": "/workspace/shared/chen-coordination/p3",
+  "source_files": [
+    {
+      "path": "ImbalancedChen/Part3CurrentLowerDistribution.lean",
+      "sha256": "6cf298b20e3045d6ec360ce0e735b3ac3aa5184edf956c0e4ec7648ef674f64b"
+    },
+    {
+      "path": "ImbalancedChen/Part3RoughAuxiliarySW.lean",
+      "sha256": "d1dd21a3cd6da112f43bc69e7432675379c37df890d08b07384df155589b42e3"
+    }
+  ],
+  "dependency_fingerprint": "/workspace/shared/chen-coordination/p0/automation/parts/p3/runs/20261015T005215Z/dependency-fingerprint.json",
+  "targets": [
+    "ImbalancedChen.Part3CurrentLowerDistribution",
+    "ImbalancedChen.Part3RoughAuxiliarySW"
+  ],
+  "selected_target_types": [
+    {
+      "module": "ImbalancedChen.Part3CurrentLowerDistribution",
+      "source_type": "theorem part3_currentLowerAPError_log_saving (A : ℝ) (hA : 0 < A) :\n    ∃ B : ℝ, 0 ≤ B ∧ ∃ C : ℝ, 0 < C ∧\n      ∀ᶠ N : ℕ in atTop, ∀ Q : ℕ, Q ≤ panModulusCutoff N B →\n        ∀ S3 S4 : ℕ → Finset ℕ, ∀ S5 S6 : (ℕ × ℕ) → Finset ℕ,\n          Part3CurrentLowerRows N Q S3 S4 S5 S6 →\n          part3CurrentLowerAPError N S3 S4 S5 S6 ≤\n            C * (N : ℝ) / Real.log (N : ℝ) ^ A",
+      "compiler_confirmed": false
+    },
+    {
+      "module": "ImbalancedChen.Part3CurrentLowerDistribution",
+      "source_type": "theorem part3_currentLowerRemainder_negligible :\n    ∃ B : ℝ, 0 ≤ B ∧ ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N : ℕ in atTop, ∀ Q : ℕ, Q ≤ panModulusCutoff N B →\n        ∀ hN : Even N,\n        ∀ S3 S4 : ℕ → Finset ℕ, ∀ S5 S6 : (ℕ × ℕ) → Finset ℕ,\n          Part3CurrentLowerRows N Q S3 S4 S5 S6 →\n          part3CurrentLowerRemainderSum N hN S3 S4 S5 S6 ≤\n            epsilon * singularNormalization N",
+      "compiler_confirmed": false
+    },
+    {
+      "module": "ImbalancedChen.Part3RoughAuxiliarySW",
+      "source_type": "theorem auxiliarySWError_sub_one_norm_le\n    (S : Finset ℕ) (α : ℕ → ℂ) (H k q b : ℕ) (z : ℝ)\n    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k) (hq : 0 < q)\n    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1)\n    (hrough : ∀ n ∈ S, α n ≠ 0 → ∀ p : ℕ,\n      p.Prime → p ∣ n → z < (p : ℝ)) :\n    ‖auxiliarySWError S α k q b - auxiliarySWError S α 1 q b‖ ≤\n      2 * (k.divisors.card : ℝ) * (H : ℝ) / z",
+      "compiler_confirmed": false
+    },
+    {
+      "module": "ImbalancedChen.Part3RoughAuxiliarySW",
+      "source_type": "theorem auxiliarySWError_norm_le_large_modulus\n    (S : Finset ℕ) (α : ℕ → ℂ) (H k q b : ℕ)\n    (hS : S ⊆ Finset.Ioc 0 H) (hH : 3 ≤ H) (hq : 0 < q)\n    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1) :\n    ‖auxiliarySWError S α k q b‖ ≤ (H : ℝ) / q + 2 +\n      (H : ℝ) * MathlibNt.SieveTheory.Richert1969.richertReciprocalTotientConstant *\n        Real.log (H : ℝ) / (min q H : ℕ)",
+      "compiler_confirmed": false
+    }
+  ],
+  "requested_stages": [
+    "Exact source and pin/dependency identity preflight.",
+    "Source compilation of the two repaired production modules, -t0 -M4096 -DwarningAsError=true, threads<=2, P0 global one-heavy-process lock.",
+    "Stock bundled Lean kernel replay of exact freshly compiled objects.",
+    "Complete serialized defining-module inventory including private/generated declarations, full compiler types, reject unsafe/partial/unpaid axioms and allow only propext/Classical.choice/Quot.sound.",
+    "Bind all actual imported objects and applicable private/server companions, audit object and raw logs; replay the audit object.",
+    "P0 decides integration/public-root/aggregate gates, without downgrading any existing required gate."
+  ],
+  "missing_objects": "No .lake directory or current build objects in this P3 worktree; legacy artifact retains only historical production/audit leaf objects and import hashes, not a usable complete current dependency cache.",
+  "prior_failure_run": "https://github.com/UyNewNas/goldbach-formalization/actions/runs/38333669069",
+  "new_diagnostic_plan": "Repairs concrete old compile diagnostics with same source theorem statements, then strict compile before any downstream gate. This is not an unchanged retry.",
+  "scope_limit": "SOURCE_ONLY candidate; ordinary physical sqrt cutoff retained; no rough k=1 SW or medium/high signed supplier claimed."
+}

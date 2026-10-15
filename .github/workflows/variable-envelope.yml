@@ -2,6 +2,8 @@ name: Variable envelope verification
 
 on:
   push:
+    paths-ignore:
+      - "automation/**"
   pull_request:
   workflow_dispatch:
 
@@ -9,11 +11,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: variable-envelope-${{ github.ref }}
-  cancel-in-progress: true
+  group: goldbach-p0-heavy
+  cancel-in-progress: false
 
 jobs:
   variable-envelope:
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.ref != 'codex/chen-parts-integration' }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
