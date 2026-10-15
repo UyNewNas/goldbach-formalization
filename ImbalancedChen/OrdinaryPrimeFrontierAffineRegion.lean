@@ -1,6 +1,7 @@
 import ImbalancedChen.FirstExitFrontierTupleReindex
 import ImbalancedChen.RosserShortPrefixAdmissibility
 import ImbalancedChen.ActualPrimeBoxTestFunctions
+import ImbalancedChen.FinitePrimeGeometryCore
 
 /-!
 # The ordinary upper fifth-candidate region
@@ -86,26 +87,6 @@ theorem mem_ordinaryUpperFiveFrontierTuples_iff_of_cutoff_le_cap
   apply and_congr_right
   intro hp
   exact ordinaryUpperFive_parent_valid_iff Q hQ p (fun i => (hp i).1) hs
-
-/-- The two literal cubic inequalities are exactly their logarithmic
-affine inequalities; no rounded power or weak endpoint is substituted. -/
-theorem ordinaryUpperFive_cube_tests_iff_log {N : ℕ} (hN : 1 < N)
-    (old : ℝ) (p : Fin 5 → ℕ) (hpos : ∀ i, 0 < p i) :
-    ((p 0 : ℝ) ^ 3 < (N : ℝ) ^ old ∧
-      (p 0 : ℝ) * p 1 * (p 2 : ℝ) ^ 3 < (N : ℝ) ^ old) ↔
-      3 * actualPrimeTupleLog N p 0 < old ∧
-        actualPrimeTupleLog N p 0 + actualPrimeTupleLog N p 1 +
-          3 * actualPrimeTupleLog N p 2 < old := by
-  have hN' : (1 : ℝ) < N := by exact_mod_cast hN
-  have hN0 : (0 : ℝ) < N := zero_lt_one.trans hN'
-  have hc i := actualPrimeTupleLog_rpow hN p hpos i
-  have hcub (i : Fin 5) : (N : ℝ) ^ (3 * actualPrimeTupleLog N p i) = (p i : ℝ) ^ 3 := by
-    rw [mul_comm, Real.rpow_mul hN0.le, hc]
-    norm_num
-  have hprod : (N : ℝ) ^ (actualPrimeTupleLog N p 0 + actualPrimeTupleLog N p 1 +
-      3 * actualPrimeTupleLog N p 2) = (p 0 : ℝ) * p 1 * (p 2 : ℝ) ^ 3 := by
-    rw [Real.rpow_add hN0, Real.rpow_add hN0, hc, hc, hcub]
-  rw [← hcub 0, ← hprod, Real.rpow_lt_rpow_left_iff hN', Real.rpow_lt_rpow_left_iff hN']
 
 theorem mem_ordinaryUpperFiveFrontierTuples_iff_log
     (N cap : ℕ) (old w z : ℝ) (hN : 1 < N) (hold : 0 < old)

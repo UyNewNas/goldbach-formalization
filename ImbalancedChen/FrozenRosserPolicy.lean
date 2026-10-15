@@ -1,4 +1,5 @@
 import ImbalancedChen.OrdinaryRosserContinuation
+import ImbalancedChen.FinitePrimeGeometryCore
 
 /-!
 # Ordinary Rosser policies with an ancestor-frozen level
@@ -17,11 +18,6 @@ cap selection. Its inherited admissibility obligations remain explicit.
 namespace ImbalancedChen
 
 noncomputable section
-
-/-- Selected histories are reversed: the ancestor consists of their last
-`k` entries, rather than their first `k` entries. -/
-def rosserAncestor {α : Type*} (k : ℕ) (history : List α) : List α :=
-  history.drop (history.length - k)
 
 @[simp] theorem rosserAncestor_length {α : Type*} (k : ℕ) (history : List α) :
     (rosserAncestor k history).length = min k history.length := by
@@ -80,19 +76,9 @@ theorem rosserAncestor_level_append {α : Type*} (k : ℕ)
     Q (rosserAncestor k (later ++ history)) = Q (rosserAncestor k history) := by
   rw [rosserAncestor_append k later history hk]
 
-/-- Freeze the level used by an arbitrary literal continuation policy at
-the actual rank-`k` ancestor. -/
-def ancestorFrozenPolicy {α : Type*} (k : ℕ) (Q : List α → ℝ)
-    (policy : ℝ → Bool → List α → Bool) (positive : Bool) (history : List α) : Bool :=
-  policy (Q (rosserAncestor k history)) positive history
-
 def frozenOrdinaryRosserPolicy (lower : Bool) (k : ℕ) (Q : List ℕ → ℝ) :
     Bool → List ℕ → Bool :=
   ancestorFrozenPolicy k Q (ordinaryRosserRetainedPolicy lower)
-
-def frozenParityRosserPolicy (lower : Bool) (k : ℕ) (Q : List ℕ → ℝ) :
-    Bool → List ℕ → Bool :=
-  ancestorFrozenPolicy k Q (ordinaryParityRosserPolicy lower)
 
 /-- Exact recursive freezing. The future policy reads the same ancestor
 after every actual selection; skipped labels do not alter the history. -/

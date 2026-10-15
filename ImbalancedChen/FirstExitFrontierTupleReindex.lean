@@ -1,6 +1,7 @@
-import ImbalancedChen.FirstExitCandidateGeometry
+import ImbalancedChen.FirstExitOwnCubeSplice
+import ImbalancedChen.FirstExitFrontierInvariants
 import ImbalancedChen.FirstExitValidSelection
-import ImbalancedChen.PrimeHistoryLogCoordinates
+import ImbalancedChen.FinitePrimeGeometryCore
 
 /-!
 # Exact tuple reindexing before a candidate's own admission

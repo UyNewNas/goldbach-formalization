@@ -1,6 +1,7 @@
 import ImbalancedChen.FirstExitValidSelection
 import ImbalancedChen.RosserEndpointBridge
 import ImbalancedChen.ActualPrimePresieveSplit
+import ImbalancedChen.FinitePrimeGeometryCore
 
 /-!
 # Literal ordinary Rosser retention policies
@@ -22,12 +23,6 @@ noncomputable section
 
 open scoped Classical List BigOperators
 open MathlibNt.SieveTheory
-
-/-- Total cutoff and the provider's complete parity-sensitive cubic tests. -/
-def ordinaryRosserPrefixAdmissible (lower : Bool) (R : ℝ) (pre : List ℕ) : Prop :=
-  (pre.prod : ℝ) < R ∧
-    if lower then LiLiuPrereqWF.SmallRosser.LowerAdmissibleSet R pre.toFinset
-    else LiLiuPrereqWF.SmallRosser.UpperAdmissibleSet R pre.toFinset
 
 /-- A constant-level ordinary policy, expressed on the actual selected prefix. -/
 def ordinaryRosserRetainedPolicy (lower : Bool) (R : ℝ)
@@ -286,13 +281,6 @@ theorem firstExitRetainedPolynomial_eq_actualSmallRosserDensity
     intro d hd
     rw [primeFactors_prod_reciprocalTotient (hsquare d hd)]
     ring
-
-/-- The globally parity-safe version: only the selected exit parity checks
-the full prefix predicate. On reachable histories inherited tests are
-already satisfied; the other parity is retained unconditionally. -/
-def ordinaryParityRosserPolicy (lower : Bool) (R : ℝ) : Bool → List ℕ → Bool :=
-  if lower then evenFirstExitPolicy (fun pre => decide (ordinaryRosserPrefixAdmissible true R pre))
-  else oddFirstExitPolicy (fun pre => decide (ordinaryRosserPrefixAdmissible false R pre))
 
 @[simp] theorem ordinaryParityRosserPolicy_upper_even (R : ℝ) (pre : List ℕ) :
     ordinaryParityRosserPolicy false R true pre = true := by

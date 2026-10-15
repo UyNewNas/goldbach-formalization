@@ -1,0 +1,734 @@
+{
+  "baseline": "d41a7bc48b7066cd95c2a9e143a13e494d44b284",
+  "scope": "Source text only; not an elaboration or kernel-equivalence proof.",
+  "declaration_count": 36,
+  "moves": [
+    {
+      "name": "ImbalancedChen.ordinaryRosserPrefixAdmissible",
+      "local_name": "ordinaryRosserPrefixAdmissible",
+      "line": 27,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/OrdinaryRosserFirstExitPolicy.lean",
+      "original_block_sha256": "f4311c1ea1dc8adaa8d27b492e49e0981cb8428d0d9e1dea2d39da88743c6951",
+      "original_declaration_sha256": "36811e86bd27666a0ed2f18b48f33cbac022a5aa4aaa3cac2160f72bd2c4ac8f",
+      "original_block": "/-- Total cutoff and the provider's complete parity-sensitive cubic tests. -/\ndef ordinaryRosserPrefixAdmissible (lower : Bool) (R : ℝ) (pre : List ℕ) : Prop :=\n  (pre.prod : ℝ) < R ∧\n    if lower then LiLiuPrereqWF.SmallRosser.LowerAdmissibleSet R pre.toFinset\n    else LiLiuPrereqWF.SmallRosser.UpperAdmissibleSet R pre.toFinset",
+      "original_declaration": "def ordinaryRosserPrefixAdmissible (lower : Bool) (R : ℝ) (pre : List ℕ) : Prop :=\n  (pre.prod : ℝ) < R ∧\n    if lower then LiLiuPrereqWF.SmallRosser.LowerAdmissibleSet R pre.toFinset\n    else LiLiuPrereqWF.SmallRosser.UpperAdmissibleSet R pre.toFinset",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 31,
+      "new_block_sha256": "f4311c1ea1dc8adaa8d27b492e49e0981cb8428d0d9e1dea2d39da88743c6951",
+      "new_declaration_sha256": "36811e86bd27666a0ed2f18b48f33cbac022a5aa4aaa3cac2160f72bd2c4ac8f",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.ordinaryParityRosserPolicy",
+      "local_name": "ordinaryParityRosserPolicy",
+      "line": 293,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/OrdinaryRosserFirstExitPolicy.lean",
+      "original_block_sha256": "b7d0f60a6df19e91276056936cf87b1a8f340ffb59f769605a0670e74287275a",
+      "original_declaration_sha256": "d2fb96e9216ae0742f685af34bae957662ea901c58333d5419ce9d6e62d5faa6",
+      "original_block": "/-- The globally parity-safe version: only the selected exit parity checks\nthe full prefix predicate. On reachable histories inherited tests are\nalready satisfied; the other parity is retained unconditionally. -/\ndef ordinaryParityRosserPolicy (lower : Bool) (R : ℝ) : Bool → List ℕ → Bool :=\n  if lower then evenFirstExitPolicy (fun pre => decide (ordinaryRosserPrefixAdmissible true R pre))\n  else oddFirstExitPolicy (fun pre => decide (ordinaryRosserPrefixAdmissible false R pre))",
+      "original_declaration": "def ordinaryParityRosserPolicy (lower : Bool) (R : ℝ) : Bool → List ℕ → Bool :=\n  if lower then evenFirstExitPolicy (fun pre => decide (ordinaryRosserPrefixAdmissible true R pre))\n  else oddFirstExitPolicy (fun pre => decide (ordinaryRosserPrefixAdmissible false R pre))",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 39,
+      "new_block_sha256": "b7d0f60a6df19e91276056936cf87b1a8f340ffb59f769605a0670e74287275a",
+      "new_declaration_sha256": "d2fb96e9216ae0742f685af34bae957662ea901c58333d5419ce9d6e62d5faa6",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.rosserAncestor",
+      "local_name": "rosserAncestor",
+      "line": 23,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/FrozenRosserPolicy.lean",
+      "original_block_sha256": "e8067fd2818c2d53a6a351b7e0f8b9fd844a2df7ad50699b9e719f19efd4fa92",
+      "original_declaration_sha256": "d6b549be5290715d72d9cf30ff9f7bf01ea54f050e1da680e40aadcd95bb3044",
+      "original_block": "/-- Selected histories are reversed: the ancestor consists of their last\n`k` entries, rather than their first `k` entries. -/\ndef rosserAncestor {α : Type*} (k : ℕ) (history : List α) : List α :=\n  history.drop (history.length - k)",
+      "original_declaration": "def rosserAncestor {α : Type*} (k : ℕ) (history : List α) : List α :=\n  history.drop (history.length - k)",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 52,
+      "new_block_sha256": "e8067fd2818c2d53a6a351b7e0f8b9fd844a2df7ad50699b9e719f19efd4fa92",
+      "new_declaration_sha256": "d6b549be5290715d72d9cf30ff9f7bf01ea54f050e1da680e40aadcd95bb3044",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.ancestorFrozenPolicy",
+      "local_name": "ancestorFrozenPolicy",
+      "line": 85,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/FrozenRosserPolicy.lean",
+      "original_block_sha256": "44d3dd5fa069fd8c945f47199ef4673718027462e364b8ae4cb3b0d7e1da2206",
+      "original_declaration_sha256": "2781d990a33467537ea0936c506d9105329ebe8d995e33ea307458118f8fa7b6",
+      "original_block": "/-- Freeze the level used by an arbitrary literal continuation policy at\nthe actual rank-`k` ancestor. -/\ndef ancestorFrozenPolicy {α : Type*} (k : ℕ) (Q : List α → ℝ)\n    (policy : ℝ → Bool → List α → Bool) (positive : Bool) (history : List α) : Bool :=\n  policy (Q (rosserAncestor k history)) positive history",
+      "original_declaration": "def ancestorFrozenPolicy {α : Type*} (k : ℕ) (Q : List α → ℝ)\n    (policy : ℝ → Bool → List α → Bool) (positive : Bool) (history : List α) : Bool :=\n  policy (Q (rosserAncestor k history)) positive history",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 57,
+      "new_block_sha256": "44d3dd5fa069fd8c945f47199ef4673718027462e364b8ae4cb3b0d7e1da2206",
+      "new_declaration_sha256": "2781d990a33467537ea0936c506d9105329ebe8d995e33ea307458118f8fa7b6",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.frozenParityRosserPolicy",
+      "local_name": "frozenParityRosserPolicy",
+      "line": 93,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/FrozenRosserPolicy.lean",
+      "original_block_sha256": "dfae07e4b455aef3fc9e7a3f0a35e72d46a6dd00e053f3ca02170e011a844556",
+      "original_declaration_sha256": "dfae07e4b455aef3fc9e7a3f0a35e72d46a6dd00e053f3ca02170e011a844556",
+      "original_block": "def frozenParityRosserPolicy (lower : Bool) (k : ℕ) (Q : List ℕ → ℝ) :\n    Bool → List ℕ → Bool :=\n  ancestorFrozenPolicy k Q (ordinaryParityRosserPolicy lower)",
+      "original_declaration": "def frozenParityRosserPolicy (lower : Bool) (k : ℕ) (Q : List ℕ → ℝ) :\n    Bool → List ℕ → Bool :=\n  ancestorFrozenPolicy k Q (ordinaryParityRosserPolicy lower)",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 61,
+      "new_block_sha256": "dfae07e4b455aef3fc9e7a3f0a35e72d46a6dd00e053f3ca02170e011a844556",
+      "new_declaration_sha256": "dfae07e4b455aef3fc9e7a3f0a35e72d46a6dd00e053f3ca02170e011a844556",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.primeHistoryTuple",
+      "local_name": "primeHistoryTuple",
+      "line": 27,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/PrimeHistoryLogCoordinates.lean",
+      "original_block_sha256": "84dc5b3180a83772b951f3e1363a29f987d5e1a415930e37b18f3dd5e9e903b7",
+      "original_declaration_sha256": "48fbcca51e0f20f2696dfe5dcc2cc357acaef1725876ee16677fc8690f512d09",
+      "original_block": "/-- Total processing-order tuple extracted from a reverse-stored history. -/\ndef primeHistoryTuple (k : ℕ) (history : List ℕ) : Fin k → ℕ :=\n  fun i => history.reverse.getD i.val 0",
+      "original_declaration": "def primeHistoryTuple (k : ℕ) (history : List ℕ) : Fin k → ℕ :=\n  fun i => history.reverse.getD i.val 0",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 74,
+      "new_block_sha256": "84dc5b3180a83772b951f3e1363a29f987d5e1a415930e37b18f3dd5e9e903b7",
+      "new_declaration_sha256": "48fbcca51e0f20f2696dfe5dcc2cc357acaef1725876ee16677fc8690f512d09",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.primeHistoryLogCoordinates",
+      "local_name": "primeHistoryLogCoordinates",
+      "line": 32,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/PrimeHistoryLogCoordinates.lean",
+      "original_block_sha256": "a83592da3699f598442888757a227c46d609222faabf3c36f4c3dc59a1a2dcb7",
+      "original_declaration_sha256": "a3bfbb4779e280da4c22c5c5c016e4464a749205789506a94e9c00718698e14b",
+      "original_block": "/-- Logarithmic coordinates at the real target scale. These are total;\nthe inverse and positivity statements below use their explicit hypotheses. -/\nnoncomputable def primeHistoryLogCoordinates (N : ℝ) (k : ℕ)\n    (history : List ℕ) : Fin k → ℝ :=\n  fun i => Real.log (primeHistoryTuple k history i : ℝ) / Real.log N",
+      "original_declaration": "noncomputable def primeHistoryLogCoordinates (N : ℝ) (k : ℕ)\n    (history : List ℕ) : Fin k → ℝ :=\n  fun i => Real.log (primeHistoryTuple k history i : ℝ) / Real.log N",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 79,
+      "new_block_sha256": "a83592da3699f598442888757a227c46d609222faabf3c36f4c3dc59a1a2dcb7",
+      "new_declaration_sha256": "a3bfbb4779e280da4c22c5c5c016e4464a749205789506a94e9c00718698e14b",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.primeHistoryTuple_ofFn",
+      "local_name": "primeHistoryTuple_ofFn",
+      "line": 37,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/PrimeHistoryLogCoordinates.lean",
+      "original_block_sha256": "5c677eb7cd444d26d6afd8031fe8b491e87d8e2d96780eb7e5e8c3aa1999c8a5",
+      "original_declaration_sha256": "7b725be036419f3a907833c9f6f3d06ae3ae549aa1c81c8527f0647019c70aa0",
+      "original_block": "/-- Correct history length makes the tuple exactly the reversed list. -/\ntheorem primeHistoryTuple_ofFn {k : ℕ} {history : List ℕ}\n    (hlen : history.length = k) :\n    List.ofFn (primeHistoryTuple k history) = history.reverse := by\n  apply List.ext_getElem\n  · simp [hlen]\n  · intro i _ hi\n    simp only [List.getElem_ofFn, primeHistoryTuple]\n    exact List.getD_eq_getElem _ _ hi",
+      "original_declaration": "theorem primeHistoryTuple_ofFn {k : ℕ} {history : List ℕ}\n    (hlen : history.length = k) :\n    List.ofFn (primeHistoryTuple k history) = history.reverse := by\n  apply List.ext_getElem\n  · simp [hlen]\n  · intro i _ hi\n    simp only [List.getElem_ofFn, primeHistoryTuple]\n    exact List.getD_eq_getElem _ _ hi",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 84,
+      "new_block_sha256": "5c677eb7cd444d26d6afd8031fe8b491e87d8e2d96780eb7e5e8c3aa1999c8a5",
+      "new_declaration_sha256": "7b725be036419f3a907833c9f6f3d06ae3ae549aa1c81c8527f0647019c70aa0",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.primeHistoryTuple_reverse_ofFn",
+      "local_name": "primeHistoryTuple_reverse_ofFn",
+      "line": 47,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/PrimeHistoryLogCoordinates.lean",
+      "original_block_sha256": "52d2a6f09114338f47701c6e0128fa7364cc218ac60c50e1d44a9bdf3843c8f0",
+      "original_declaration_sha256": "6d8b88214a50299fb93be1c0b0fa86ca6483fff339437b845cef99dfab743545",
+      "original_block": "/-- The original tree history is recovered without sorting or deduplication. -/\ntheorem primeHistoryTuple_reverse_ofFn {k : ℕ} {history : List ℕ}\n    (hlen : history.length = k) :\n    (List.ofFn (primeHistoryTuple k history)).reverse = history := by\n  rw [primeHistoryTuple_ofFn hlen, List.reverse_reverse]",
+      "original_declaration": "theorem primeHistoryTuple_reverse_ofFn {k : ℕ} {history : List ℕ}\n    (hlen : history.length = k) :\n    (List.ofFn (primeHistoryTuple k history)).reverse = history := by\n  rw [primeHistoryTuple_ofFn hlen, List.reverse_reverse]",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 94,
+      "new_block_sha256": "52d2a6f09114338f47701c6e0128fa7364cc218ac60c50e1d44a9bdf3843c8f0",
+      "new_declaration_sha256": "6d8b88214a50299fb93be1c0b0fa86ca6483fff339437b845cef99dfab743545",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.primeHistoryTuple_reciprocal_mass",
+      "local_name": "primeHistoryTuple_reciprocal_mass",
+      "line": 92,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/PrimeHistoryLogCoordinates.lean",
+      "original_block_sha256": "121cba4fcc2df7d0267285729549293a5afb23eb75684244d1b0d37d0725c506",
+      "original_declaration_sha256": "228aa13b458d733cc4b0dea14eb6511e7f779f840f371170dbc0efd1af54e012",
+      "original_block": "/-- The reciprocal-prime mass is also unchanged by the coordinate dictionary. -/\ntheorem primeHistoryTuple_reciprocal_mass {k : ℕ} {history : List ℕ}\n    (hlen : history.length = k) :\n    (∏ i, 1 / ((primeHistoryTuple k history i : ℝ) - 1)) =\n      (history.map (fun p : ℕ => 1 / ((p : ℝ) - 1))).prod := by\n  rw [← List.prod_ofFn]\n  have hmap := congrArg (List.map (fun p : ℕ => 1 / ((p : ℝ) - 1)))\n    (primeHistoryTuple_ofFn hlen)\n  rw [List.map_ofFn, List.map_reverse] at hmap\n  change (List.ofFn ((fun p : ℕ => 1 / ((p : ℝ) - 1)) ∘\n    primeHistoryTuple k history)).prod = _\n  rw [hmap, List.prod_reverse]",
+      "original_declaration": "theorem primeHistoryTuple_reciprocal_mass {k : ℕ} {history : List ℕ}\n    (hlen : history.length = k) :\n    (∏ i, 1 / ((primeHistoryTuple k history i : ℝ) - 1)) =\n      (history.map (fun p : ℕ => 1 / ((p : ℝ) - 1))).prod := by\n  rw [← List.prod_ofFn]\n  have hmap := congrArg (List.map (fun p : ℕ => 1 / ((p : ℝ) - 1)))\n    (primeHistoryTuple_ofFn hlen)\n  rw [List.map_ofFn, List.map_reverse] at hmap\n  change (List.ofFn ((fun p : ℕ => 1 / ((p : ℝ) - 1)) ∘\n    primeHistoryTuple k history)).prod = _\n  rw [hmap, List.prod_reverse]",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 100,
+      "new_block_sha256": "121cba4fcc2df7d0267285729549293a5afb23eb75684244d1b0d37d0725c506",
+      "new_declaration_sha256": "228aa13b458d733cc4b0dea14eb6511e7f779f840f371170dbc0efd1af54e012",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.primeHistoryTuple_ancestor",
+      "local_name": "primeHistoryTuple_ancestor",
+      "line": 65,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/FirstExitHistoricalLevels.lean",
+      "original_block_sha256": "0f5f33e3f6cd37e53e696682498059591aa6cbf4156cbb02da0187f32768ca15",
+      "original_declaration_sha256": "4694c6bb6f0bcca629cc6ecefc156df262c4e0670663717b0364d8f3d19ef358",
+      "original_block": "/-- An ancestor is the initial processing-order subtuple, even though the\ntree stores all histories in reverse order. -/\ntheorem primeHistoryTuple_ancestor {r k : ℕ} {history : List ℕ}\n    (hlen : history.length = k) (hr : r ≤ k) (i : Fin r) :\n    primeHistoryTuple r (rosserAncestor r history) i =\n      primeHistoryTuple k history (i.castLE hr) := by\n  have hrev : (rosserAncestor r history).reverse = history.reverse.take r := by\n    simp only [rosserAncestor, List.reverse_drop]\n    congr 1\n    omega\n  unfold primeHistoryTuple\n  rw [hrev, List.getD_eq_getElem _ _ (by simp [hlen, hr, i.isLt])]\n  rw [List.getD_eq_getElem _ _ (by simpa [hlen] using lt_of_lt_of_le i.isLt hr)]\n  simp",
+      "original_declaration": "theorem primeHistoryTuple_ancestor {r k : ℕ} {history : List ℕ}\n    (hlen : history.length = k) (hr : r ≤ k) (i : Fin r) :\n    primeHistoryTuple r (rosserAncestor r history) i =\n      primeHistoryTuple k history (i.castLE hr) := by\n  have hrev : (rosserAncestor r history).reverse = history.reverse.take r := by\n    simp only [rosserAncestor, List.reverse_drop]\n    congr 1\n    omega\n  unfold primeHistoryTuple\n  rw [hrev, List.getD_eq_getElem _ _ (by simp [hlen, hr, i.isLt])]\n  rw [List.getD_eq_getElem _ _ (by simpa [hlen] using lt_of_lt_of_le i.isLt hr)]\n  simp",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 122,
+      "new_block_sha256": "0f5f33e3f6cd37e53e696682498059591aa6cbf4156cbb02da0187f32768ca15",
+      "new_declaration_sha256": "4694c6bb6f0bcca629cc6ecefc156df262c4e0670663717b0364d8f3d19ef358",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.primeHistoryLogCoordinates_ancestor",
+      "local_name": "primeHistoryLogCoordinates_ancestor",
+      "line": 78,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/FirstExitHistoricalLevels.lean",
+      "original_block_sha256": "2d4cbcbb56717cbf8b4090336905faf368b8ade3cd57f8b25bf1b3847fd26a88",
+      "original_declaration_sha256": "2d4cbcbb56717cbf8b4090336905faf368b8ade3cd57f8b25bf1b3847fd26a88",
+      "original_block": "theorem primeHistoryLogCoordinates_ancestor (N : ℝ) {r k : ℕ}\n    {history : List ℕ} (hlen : history.length = k) (hr : r ≤ k) (i : Fin r) :\n    primeHistoryLogCoordinates N r (rosserAncestor r history) i =\n      primeHistoryLogCoordinates N k history (i.castLE hr) := by\n  simp only [primeHistoryLogCoordinates, primeHistoryTuple_ancestor hlen hr]",
+      "original_declaration": "theorem primeHistoryLogCoordinates_ancestor (N : ℝ) {r k : ℕ}\n    {history : List ℕ} (hlen : history.length = k) (hr : r ≤ k) (i : Fin r) :\n    primeHistoryLogCoordinates N r (rosserAncestor r history) i =\n      primeHistoryLogCoordinates N k history (i.castLE hr) := by\n  simp only [primeHistoryLogCoordinates, primeHistoryTuple_ancestor hlen hr]",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 135,
+      "new_block_sha256": "2d4cbcbb56717cbf8b4090336905faf368b8ade3cd57f8b25bf1b3847fd26a88",
+      "new_declaration_sha256": "2d4cbcbb56717cbf8b4090336905faf368b8ade3cd57f8b25bf1b3847fd26a88",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.thirdCappedUpperPolicy",
+      "local_name": "thirdCappedUpperPolicy",
+      "line": 86,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/FirstExitHistoricalLevels.lean",
+      "original_block_sha256": "2a37621ec20012089f33aaa4b7129235c8ace30b758505782a19b2bd1988cd3a",
+      "original_declaration_sha256": "521795e1d4a529cb19d5a7b89e3bce5dad181f03b531a722ceb77d5abf9fb490",
+      "original_block": "/-- All tests through rank two belong to `base`; the active third test and\nits subsequent continuation use the level selected by the actual ancestor. -/\ndef thirdCappedUpperPolicy (base : Bool → List ℕ → Bool) (Q3 : List ℕ → ℝ) :\n    Bool → List ℕ → Bool :=\n  firstExitDepthSplicePolicy 2 base (frozenParityRosserPolicy false 3 Q3)",
+      "original_declaration": "def thirdCappedUpperPolicy (base : Bool → List ℕ → Bool) (Q3 : List ℕ → ℝ) :\n    Bool → List ℕ → Bool :=\n  firstExitDepthSplicePolicy 2 base (frozenParityRosserPolicy false 3 Q3)",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 143,
+      "new_block_sha256": "2a37621ec20012089f33aaa4b7129235c8ace30b758505782a19b2bd1988cd3a",
+      "new_declaration_sha256": "521795e1d4a529cb19d5a7b89e3bce5dad181f03b531a722ceb77d5abf9fb490",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.actualPrimeBoxTuples",
+      "local_name": "actualPrimeBoxTuples",
+      "line": 31,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/ActualPrimeBoxMass.lean",
+      "original_block_sha256": "97d5f401c481e005d6ba2ced3980cf8eb80a3bc57b379200f634f778fd7575d8",
+      "original_declaration_sha256": "2f6f1c50d508f021607797e002bd7b76ccdac48b66b6a99be58b2fb347006678",
+      "original_block": "/-- The actual finite carrier of prime tuples in a logarithmic box. -/\ndef actualPrimeBoxTuples (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) :\n    Finset (Fin k → ℕ) :=\n  Fintype.piFinset (fun i =>\n    roughPrimeFinset N (Nat.ceil ((N : ℝ) ^ b i))\n      ((N : ℝ) ^ a i) ((N : ℝ) ^ b i))",
+      "original_declaration": "def actualPrimeBoxTuples (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) :\n    Finset (Fin k → ℕ) :=\n  Fintype.piFinset (fun i =>\n    roughPrimeFinset N (Nat.ceil ((N : ℝ) ^ b i))\n      ((N : ℝ) ^ a i) ((N : ℝ) ^ b i))",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 157,
+      "new_block_sha256": "97d5f401c481e005d6ba2ced3980cf8eb80a3bc57b379200f634f778fd7575d8",
+      "new_declaration_sha256": "2f6f1c50d508f021607797e002bd7b76ccdac48b66b6a99be58b2fb347006678",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.mem_actualPrimeBoxTuples_iff",
+      "local_name": "mem_actualPrimeBoxTuples_iff",
+      "line": 39,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/ActualPrimeBoxMass.lean",
+      "original_block_sha256": "7ab774a4b65e7d89571db87e605bbd9b67db27ac94ac8ed89a71301db63fc966",
+      "original_declaration_sha256": "d3028148d65b9558ad71b1e361f797ef7755d8ac3cff9fdae2e930c925de6f6f",
+      "original_block": "/-- Membership retains primality, the common target exclusion, and both\nexact endpoints. Enumeration caps add no truncation. -/\ntheorem mem_actualPrimeBoxTuples_iff {N k : ℕ} {a b : Fin k → ℝ}\n    {p : Fin k → ℕ} :\n    p ∈ actualPrimeBoxTuples N a b ↔\n      ∀ i, Nat.Prime (p i) ∧ ¬p i ∣ N ∧\n        (N : ℝ) ^ a i ≤ (p i : ℝ) ∧ (p i : ℝ) < (N : ℝ) ^ b i := by\n  simp only [actualPrimeBoxTuples, Fintype.mem_piFinset,\n    mem_roughPrimeFinset_iff_of_cutoff_le_cap (Nat.le_ceil _)]",
+      "original_declaration": "theorem mem_actualPrimeBoxTuples_iff {N k : ℕ} {a b : Fin k → ℝ}\n    {p : Fin k → ℕ} :\n    p ∈ actualPrimeBoxTuples N a b ↔\n      ∀ i, Nat.Prime (p i) ∧ ¬p i ∣ N ∧\n        (N : ℝ) ^ a i ≤ (p i : ℝ) ∧ (p i : ℝ) < (N : ℝ) ^ b i := by\n  simp only [actualPrimeBoxTuples, Fintype.mem_piFinset,\n    mem_roughPrimeFinset_iff_of_cutoff_le_cap (Nat.le_ceil _)]",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 165,
+      "new_block_sha256": "7ab774a4b65e7d89571db87e605bbd9b67db27ac94ac8ed89a71301db63fc966",
+      "new_declaration_sha256": "d3028148d65b9558ad71b1e361f797ef7755d8ac3cff9fdae2e930c925de6f6f",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.actualPrimeTupleLog",
+      "local_name": "actualPrimeTupleLog",
+      "line": 24,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/ActualPrimeBoxTestFunctions.lean",
+      "original_block_sha256": "6b1624ea00b6ecc8c83a441e43f5c50357204c008a7328e663084be3d06babae",
+      "original_declaration_sha256": "26b9b35915ae3611c6de7712fe496a53331ced7b05cf6dc8cd151d63ff639c8d",
+      "original_block": "/-- Logarithmic coordinates of an actual tuple, retaining the target N. -/\ndef actualPrimeTupleLog {k : ℕ} (N : ℕ) (p : Fin k → ℕ) : Fin k → ℝ :=\n  fun i => Real.log (p i : ℝ) / Real.log (N : ℝ)",
+      "original_declaration": "def actualPrimeTupleLog {k : ℕ} (N : ℕ) (p : Fin k → ℕ) : Fin k → ℝ :=\n  fun i => Real.log (p i : ℝ) / Real.log (N : ℝ)",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 183,
+      "new_block_sha256": "6b1624ea00b6ecc8c83a441e43f5c50357204c008a7328e663084be3d06babae",
+      "new_declaration_sha256": "26b9b35915ae3611c6de7712fe496a53331ced7b05cf6dc8cd151d63ff639c8d",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.actualPrimeTupleLog_rpow",
+      "local_name": "actualPrimeTupleLog_rpow",
+      "line": 33,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/ActualPrimeBoxTestFunctions.lean",
+      "original_block_sha256": "46ca985ebb3777dbfd3e0a2508e82747582864d480a90811dddbf67db9bd20bd",
+      "original_declaration_sha256": "46ca985ebb3777dbfd3e0a2508e82747582864d480a90811dddbf67db9bd20bd",
+      "original_block": "theorem actualPrimeTupleLog_rpow {k N : ℕ} (hN : 1 < N)\n    (p : Fin k → ℕ) (hp : ∀ i, 0 < p i) (i : Fin k) :\n    (N : ℝ) ^ (actualPrimeTupleLog N p i) = p i := by\n  have hN' : (1 : ℝ) < N := by exact_mod_cast hN\n  apply (Real.mul_log_eq_log_iff (lt_trans zero_lt_one hN') (by exact_mod_cast hp i)).mp\n  exact div_mul_cancel₀ _ (Real.log_pos hN').ne'",
+      "original_declaration": "theorem actualPrimeTupleLog_rpow {k N : ℕ} (hN : 1 < N)\n    (p : Fin k → ℕ) (hp : ∀ i, 0 < p i) (i : Fin k) :\n    (N : ℝ) ^ (actualPrimeTupleLog N p i) = p i := by\n  have hN' : (1 : ℝ) < N := by exact_mod_cast hN\n  apply (Real.mul_log_eq_log_iff (lt_trans zero_lt_one hN') (by exact_mod_cast hp i)).mp\n  exact div_mul_cancel₀ _ (Real.log_pos hN').ne'",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 186,
+      "new_block_sha256": "46ca985ebb3777dbfd3e0a2508e82747582864d480a90811dddbf67db9bd20bd",
+      "new_declaration_sha256": "46ca985ebb3777dbfd3e0a2508e82747582864d480a90811dddbf67db9bd20bd",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.mem_actualPrimeBoxTuples_log_iff",
+      "local_name": "mem_actualPrimeBoxTuples_log_iff",
+      "line": 42,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/ActualPrimeBoxTestFunctions.lean",
+      "original_block_sha256": "e8393d885208d10635ec20aaa91bf2d4f40061422d618a61bcd321e3ffa9b385",
+      "original_declaration_sha256": "b34c52a38769709edf845be2f667fa1a6fa4f1c7593224897d65a0c0573eecc4",
+      "original_block": "/-- The exact power endpoints are equivalent to half-open logarithmic\ncoordinates. Primality and target exclusion are retained separately. -/\ntheorem mem_actualPrimeBoxTuples_log_iff {k N : ℕ} (hN : 1 < N)\n    (a b : Fin k → ℝ) (p : Fin k → ℕ) :\n    p ∈ actualPrimeBoxTuples N a b ↔\n      (∀ i, Nat.Prime (p i) ∧ ¬p i ∣ N) ∧ actualPrimeTupleLog N p ∈ logPrimeBox a b := by\n  have hN' : (1 : ℝ) < N := by exact_mod_cast hN\n  constructor\n  · intro hp\n    have hi := mem_actualPrimeBoxTuples_iff.mp hp\n    refine ⟨fun i => ⟨(hi i).1, (hi i).2.1⟩, mem_logPrimeBox.mpr (fun i => ?_)⟩\n    have hpow := actualPrimeTupleLog_rpow hN p (fun j => (hi j).1.pos) i\n    exact ⟨(Real.rpow_le_rpow_left_iff hN').mp (hpow.symm ▸ (hi i).2.2.1),\n      (Real.rpow_lt_rpow_left_iff hN').mp (hpow.symm ▸ (hi i).2.2.2)⟩\n  · rintro ⟨hp, hx⟩\n    refine mem_actualPrimeBoxTuples_iff.mpr (fun i => ⟨(hp i).1, (hp i).2, ?_, ?_⟩)\n    · rw [← actualPrimeTupleLog_rpow hN p (fun j => (hp j).1.pos) i]\n      exact (Real.rpow_le_rpow_left_iff hN').mpr (mem_logPrimeBox.mp hx i).1\n    · rw [← actualPrimeTupleLog_rpow hN p (fun j => (hp j).1.pos) i]\n      exact (Real.rpow_lt_rpow_left_iff hN').mpr (mem_logPrimeBox.mp hx i).2",
+      "original_declaration": "theorem mem_actualPrimeBoxTuples_log_iff {k N : ℕ} (hN : 1 < N)\n    (a b : Fin k → ℝ) (p : Fin k → ℕ) :\n    p ∈ actualPrimeBoxTuples N a b ↔\n      (∀ i, Nat.Prime (p i) ∧ ¬p i ∣ N) ∧ actualPrimeTupleLog N p ∈ logPrimeBox a b := by\n  have hN' : (1 : ℝ) < N := by exact_mod_cast hN\n  constructor\n  · intro hp\n    have hi := mem_actualPrimeBoxTuples_iff.mp hp\n    refine ⟨fun i => ⟨(hi i).1, (hi i).2.1⟩, mem_logPrimeBox.mpr (fun i => ?_)⟩\n    have hpow := actualPrimeTupleLog_rpow hN p (fun j => (hi j).1.pos) i\n    exact ⟨(Real.rpow_le_rpow_left_iff hN').mp (hpow.symm ▸ (hi i).2.2.1),\n      (Real.rpow_lt_rpow_left_iff hN').mp (hpow.symm ▸ (hi i).2.2.2)⟩\n  · rintro ⟨hp, hx⟩\n    refine mem_actualPrimeBoxTuples_iff.mpr (fun i => ⟨(hp i).1, (hp i).2, ?_, ?_⟩)\n    · rw [← actualPrimeTupleLog_rpow hN p (fun j => (hp j).1.pos) i]\n      exact (Real.rpow_le_rpow_left_iff hN').mpr (mem_logPrimeBox.mp hx i).1\n    · rw [← actualPrimeTupleLog_rpow hN p (fun j => (hp j).1.pos) i]\n      exact (Real.rpow_lt_rpow_left_iff hN').mpr (mem_logPrimeBox.mp hx i).2",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 195,
+      "new_block_sha256": "e8393d885208d10635ec20aaa91bf2d4f40061422d618a61bcd321e3ffa9b385",
+      "new_declaration_sha256": "b34c52a38769709edf845be2f667fa1a6fa4f1c7593224897d65a0c0573eecc4",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.actualPrimeTupleLog_strictAnti_iff",
+      "local_name": "actualPrimeTupleLog_strictAnti_iff",
+      "line": 51,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/OrdinaryUpperFiveAffineGates.lean",
+      "original_block_sha256": "3c24e8bf49a3974ab36524834e04956ca56c023e07e68d7f6d9d52549363e2e7",
+      "original_declaration_sha256": "5f66d4fc98962aa4961497b360715671cd10012d251e21d269a8438e9942aa23",
+      "original_block": "/-- Strict ordering is preserved in both directions by the actual\ntarget-dependent logarithmic coordinate dictionary. -/\ntheorem actualPrimeTupleLog_strictAnti_iff {d N : ℕ} (hN : 1 < N)\n    (p : Fin d → ℕ) (hp : ∀ i, 0 < p i) :\n    StrictAnti (actualPrimeTupleLog N p) ↔ StrictAnti p := by\n  have hNr : (1 : ℝ) < N := by exact_mod_cast hN\n  have hlt (i j : Fin d) : actualPrimeTupleLog N p i < actualPrimeTupleLog N p j ↔ p i < p j := by\n    rw [← Real.rpow_lt_rpow_left_iff hNr,\n      actualPrimeTupleLog_rpow hN p hp, actualPrimeTupleLog_rpow hN p hp]\n    exact Nat.cast_lt\n  exact ⟨fun h i j hij => (hlt j i).mp (h hij),\n    fun h i j hij => (hlt j i).mpr (h hij)⟩",
+      "original_declaration": "theorem actualPrimeTupleLog_strictAnti_iff {d N : ℕ} (hN : 1 < N)\n    (p : Fin d → ℕ) (hp : ∀ i, 0 < p i) :\n    StrictAnti (actualPrimeTupleLog N p) ↔ StrictAnti p := by\n  have hNr : (1 : ℝ) < N := by exact_mod_cast hN\n  have hlt (i j : Fin d) : actualPrimeTupleLog N p i < actualPrimeTupleLog N p j ↔ p i < p j := by\n    rw [← Real.rpow_lt_rpow_left_iff hNr,\n      actualPrimeTupleLog_rpow hN p hp, actualPrimeTupleLog_rpow hN p hp]\n    exact Nat.cast_lt\n  exact ⟨fun h i j hij => (hlt j i).mp (h hij),\n    fun h i j hij => (hlt j i).mpr (h hij)⟩",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 225,
+      "new_block_sha256": "3c24e8bf49a3974ab36524834e04956ca56c023e07e68d7f6d9d52549363e2e7",
+      "new_declaration_sha256": "5f66d4fc98962aa4961497b360715671cd10012d251e21d269a8438e9942aa23",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.ordinaryUpperFive_cube_tests_iff_log",
+      "local_name": "ordinaryUpperFive_cube_tests_iff_log",
+      "line": 92,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/OrdinaryPrimeFrontierAffineRegion.lean",
+      "original_block_sha256": "40fd4cd923261c80aea3da281c0e673832d012cd07f93ddf9b489ff6da5ab85d",
+      "original_declaration_sha256": "fcb5c5462990fe4d700f5a916a7b855190bf28133ea5032d065619dc713fa51d",
+      "original_block": "/-- The two literal cubic inequalities are exactly their logarithmic\naffine inequalities; no rounded power or weak endpoint is substituted. -/\ntheorem ordinaryUpperFive_cube_tests_iff_log {N : ℕ} (hN : 1 < N)\n    (old : ℝ) (p : Fin 5 → ℕ) (hpos : ∀ i, 0 < p i) :\n    ((p 0 : ℝ) ^ 3 < (N : ℝ) ^ old ∧\n      (p 0 : ℝ) * p 1 * (p 2 : ℝ) ^ 3 < (N : ℝ) ^ old) ↔\n      3 * actualPrimeTupleLog N p 0 < old ∧\n        actualPrimeTupleLog N p 0 + actualPrimeTupleLog N p 1 +\n          3 * actualPrimeTupleLog N p 2 < old := by\n  have hN' : (1 : ℝ) < N := by exact_mod_cast hN\n  have hN0 : (0 : ℝ) < N := zero_lt_one.trans hN'\n  have hc i := actualPrimeTupleLog_rpow hN p hpos i\n  have hcub (i : Fin 5) : (N : ℝ) ^ (3 * actualPrimeTupleLog N p i) = (p i : ℝ) ^ 3 := by\n    rw [mul_comm, Real.rpow_mul hN0.le, hc]\n    norm_num\n  have hprod : (N : ℝ) ^ (actualPrimeTupleLog N p 0 + actualPrimeTupleLog N p 1 +\n      3 * actualPrimeTupleLog N p 2) = (p 0 : ℝ) * p 1 * (p 2 : ℝ) ^ 3 := by\n    rw [Real.rpow_add hN0, Real.rpow_add hN0, hc, hc, hcub]\n  rw [← hcub 0, ← hprod, Real.rpow_lt_rpow_left_iff hN', Real.rpow_lt_rpow_left_iff hN']",
+      "original_declaration": "theorem ordinaryUpperFive_cube_tests_iff_log {N : ℕ} (hN : 1 < N)\n    (old : ℝ) (p : Fin 5 → ℕ) (hpos : ∀ i, 0 < p i) :\n    ((p 0 : ℝ) ^ 3 < (N : ℝ) ^ old ∧\n      (p 0 : ℝ) * p 1 * (p 2 : ℝ) ^ 3 < (N : ℝ) ^ old) ↔\n      3 * actualPrimeTupleLog N p 0 < old ∧\n        actualPrimeTupleLog N p 0 + actualPrimeTupleLog N p 1 +\n          3 * actualPrimeTupleLog N p 2 < old := by\n  have hN' : (1 : ℝ) < N := by exact_mod_cast hN\n  have hN0 : (0 : ℝ) < N := zero_lt_one.trans hN'\n  have hc i := actualPrimeTupleLog_rpow hN p hpos i\n  have hcub (i : Fin 5) : (N : ℝ) ^ (3 * actualPrimeTupleLog N p i) = (p i : ℝ) ^ 3 := by\n    rw [mul_comm, Real.rpow_mul hN0.le, hc]\n    norm_num\n  have hprod : (N : ℝ) ^ (actualPrimeTupleLog N p 0 + actualPrimeTupleLog N p 1 +\n      3 * actualPrimeTupleLog N p 2) = (p 0 : ℝ) * p 1 * (p 2 : ℝ) ^ 3 := by\n    rw [Real.rpow_add hN0, Real.rpow_add hN0, hc, hc, hcub]\n  rw [← hcub 0, ← hprod, Real.rpow_lt_rpow_left_iff hN', Real.rpow_lt_rpow_left_iff hN']",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 246,
+      "new_block_sha256": "40fd4cd923261c80aea3da281c0e673832d012cd07f93ddf9b489ff6da5ab85d",
+      "new_declaration_sha256": "fcb5c5462990fe4d700f5a916a7b855190bf28133ea5032d065619dc713fa51d",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.historicalPrefixProject",
+      "local_name": "historicalPrefixProject",
+      "line": 27,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/HistoricalPrefixCertificate.lean",
+      "original_block_sha256": "92695a4fda87403ce4ab69a9e58a566c335125978ffe629b6bd4c81489c81baa",
+      "original_declaration_sha256": "fc58d69da701ad171b1cd8e0963976a244727dd67e4325ffddef25e09da25cfd",
+      "original_block": "/-- Initial processing-order coordinates, also used for mesh cell labels. -/\ndef historicalPrefixProject {α : Type*} {r d : ℕ} (hrd : r ≤ d)\n    (t : Fin d → α) : Fin r → α :=\n  fun i => t (i.castLE hrd)",
+      "original_declaration": "def historicalPrefixProject {α : Type*} {r d : ℕ} (hrd : r ≤ d)\n    (t : Fin d → α) : Fin r → α :=\n  fun i => t (i.castLE hrd)",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 273,
+      "new_block_sha256": "92695a4fda87403ce4ab69a9e58a566c335125978ffe629b6bd4c81489c81baa",
+      "new_declaration_sha256": "fc58d69da701ad171b1cd8e0963976a244727dd67e4325ffddef25e09da25cfd",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.mem_logPrimeMeshCell_historicalPrefixProject",
+      "local_name": "mem_logPrimeMeshCell_historicalPrefixProject",
+      "line": 39,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/HistoricalPrefixCertificate.lean",
+      "original_block_sha256": "8d670f499f340e8794f9eefb9ca52388f7c29f0534c132150c027ed8a69d1a95",
+      "original_declaration_sha256": "88adfb17b281cba5cacdc769ebaa455c28e8e49c5d5ddfe997433ef09ad075b7",
+      "original_block": "/-- The projected label owns precisely the projected ancestor point. -/\ntheorem mem_logPrimeMeshCell_historicalPrefixProject {r d m : ℕ}\n    (hrd : r ≤ d) {a b : ℝ} {j : Fin d → Fin (m + 1)}\n    {t : Fin d → ℝ} (ht : t ∈ logPrimeMeshCell a b m j) :\n    historicalPrefixProject hrd t ∈\n      logPrimeMeshCell a b m (historicalPrefixProject hrd j) := by\n  apply mem_logPrimeMeshCell.mpr\n  intro i\n  simpa only [historicalPrefixProject, logPrimeMeshLo, logPrimeMeshHi]\n    using mem_logPrimeMeshCell.mp ht (i.castLE hrd)",
+      "original_declaration": "theorem mem_logPrimeMeshCell_historicalPrefixProject {r d m : ℕ}\n    (hrd : r ≤ d) {a b : ℝ} {j : Fin d → Fin (m + 1)}\n    {t : Fin d → ℝ} (ht : t ∈ logPrimeMeshCell a b m j) :\n    historicalPrefixProject hrd t ∈\n      logPrimeMeshCell a b m (historicalPrefixProject hrd j) := by\n  apply mem_logPrimeMeshCell.mpr\n  intro i\n  simpa only [historicalPrefixProject, logPrimeMeshLo, logPrimeMeshHi]\n    using mem_logPrimeMeshCell.mp ht (i.castLE hrd)",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 278,
+      "new_block_sha256": "8d670f499f340e8794f9eefb9ca52388f7c29f0534c132150c027ed8a69d1a95",
+      "new_declaration_sha256": "88adfb17b281cba5cacdc769ebaa455c28e8e49c5d5ddfe997433ef09ad075b7",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.primeHistoryLogCoordinates_eq_historicalPrefixProject",
+      "local_name": "primeHistoryLogCoordinates_eq_historicalPrefixProject",
+      "line": 59,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/HistoricalPrefixCertificate.lean",
+      "original_block_sha256": "01021fd28bf6773dbbf70513eecd348bb5d9c65e0749cdf2d0bb4bdcf60b0196",
+      "original_declaration_sha256": "01021fd28bf6773dbbf70513eecd348bb5d9c65e0749cdf2d0bb4bdcf60b0196",
+      "original_block": "theorem primeHistoryLogCoordinates_eq_historicalPrefixProject (N : ℝ)\n    {r d : ℕ} (hrd : r ≤ d) {history : List ℕ} (hlen : history.length = d) :\n    primeHistoryLogCoordinates N r (rosserAncestor r history) =\n      historicalPrefixProject hrd (primeHistoryLogCoordinates N d history) := by\n  funext i\n  exact primeHistoryLogCoordinates_ancestor N hlen hrd i",
+      "original_declaration": "theorem primeHistoryLogCoordinates_eq_historicalPrefixProject (N : ℝ)\n    {r d : ℕ} (hrd : r ≤ d) {history : List ℕ} (hlen : history.length = d) :\n    primeHistoryLogCoordinates N r (rosserAncestor r history) =\n      historicalPrefixProject hrd (primeHistoryLogCoordinates N d history) := by\n  funext i\n  exact primeHistoryLogCoordinates_ancestor N hlen hrd i",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 288,
+      "new_block_sha256": "01021fd28bf6773dbbf70513eecd348bb5d9c65e0749cdf2d0bb4bdcf60b0196",
+      "new_declaration_sha256": "01021fd28bf6773dbbf70513eecd348bb5d9c65e0749cdf2d0bb4bdcf60b0196",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.historicalPrefixLookup",
+      "local_name": "historicalPrefixLookup",
+      "line": 67,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/HistoricalPrefixCertificate.lean",
+      "original_block_sha256": "3e31ac54630436376abf3b92cfe9792a8a5561e7107e2938a66fea3d3fb22c29",
+      "original_declaration_sha256": "723466a4427d0756d8c219adef3de94d104e136a3bc5a9c8a4ca19b583acc93f",
+      "original_block": "/-- A finite cap lookup with an explicit, possibly inherited, fallback. -/\ndef historicalPrefixLookup {d : ℕ} (a b : ℚ) (m : ℕ)\n    (J : Finset (Fin d → Fin (m + 1)))\n    (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ) (t : Fin d → ℝ) : ℚ :=\n  fallback + ∑ j ∈ J,\n    if t ∈ logPrimeMeshCell (a : ℝ) (b : ℝ) m j then cap j - fallback else 0",
+      "original_declaration": "def historicalPrefixLookup {d : ℕ} (a b : ℚ) (m : ℕ)\n    (J : Finset (Fin d → Fin (m + 1)))\n    (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ) (t : Fin d → ℝ) : ℚ :=\n  fallback + ∑ j ∈ J,\n    if t ∈ logPrimeMeshCell (a : ℝ) (b : ℝ) m j then cap j - fallback else 0",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 296,
+      "new_block_sha256": "3e31ac54630436376abf3b92cfe9792a8a5561e7107e2938a66fea3d3fb22c29",
+      "new_declaration_sha256": "723466a4427d0756d8c219adef3de94d104e136a3bc5a9c8a4ca19b583acc93f",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.historicalPrefixLookup_on_cell",
+      "local_name": "historicalPrefixLookup_on_cell",
+      "line": 73,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/HistoricalPrefixCertificate.lean",
+      "original_block_sha256": "f81f5f8cef8402f7dfaac9926dbb0802f4753ac9f2fa98231b1de4f642c6c9f4",
+      "original_declaration_sha256": "f81f5f8cef8402f7dfaac9926dbb0802f4753ac9f2fa98231b1de4f642c6c9f4",
+      "original_block": "theorem historicalPrefixLookup_on_cell {d : ℕ} (a b : ℚ) (hab : a ≤ b)\n    (m : ℕ) (J : Finset (Fin d → Fin (m + 1)))\n    (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ) (t : Fin d → ℝ)\n    (j : Fin d → Fin (m + 1)) (hj : j ∈ J)\n    (ht : t ∈ logPrimeMeshCell (a : ℝ) (b : ℝ) m j) :\n    historicalPrefixLookup a b m J cap fallback t = cap j := by\n  unfold historicalPrefixLookup\n  rw [Finset.sum_eq_single_of_mem j hj]\n  · rw [if_pos ht]\n    ring\n  · intro q _hq hqj\n    apply if_neg\n    intro hq\n    exact hqj (logPrimeMeshCell_unique (by exact_mod_cast hab) hq ht)",
+      "original_declaration": "theorem historicalPrefixLookup_on_cell {d : ℕ} (a b : ℚ) (hab : a ≤ b)\n    (m : ℕ) (J : Finset (Fin d → Fin (m + 1)))\n    (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ) (t : Fin d → ℝ)\n    (j : Fin d → Fin (m + 1)) (hj : j ∈ J)\n    (ht : t ∈ logPrimeMeshCell (a : ℝ) (b : ℝ) m j) :\n    historicalPrefixLookup a b m J cap fallback t = cap j := by\n  unfold historicalPrefixLookup\n  rw [Finset.sum_eq_single_of_mem j hj]\n  · rw [if_pos ht]\n    ring\n  · intro q _hq hqj\n    apply if_neg\n    intro hq\n    exact hqj (logPrimeMeshCell_unique (by exact_mod_cast hab) hq ht)",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 302,
+      "new_block_sha256": "f81f5f8cef8402f7dfaac9926dbb0802f4753ac9f2fa98231b1de4f642c6c9f4",
+      "new_declaration_sha256": "f81f5f8cef8402f7dfaac9926dbb0802f4753ac9f2fa98231b1de4f642c6c9f4",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.historicalPrefixLookup_outside",
+      "local_name": "historicalPrefixLookup_outside",
+      "line": 88,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/HistoricalPrefixCertificate.lean",
+      "original_block_sha256": "e8b30ee68a6652a12e7cd03e7bc4c441316ad915c51099a5ebd0691f086ccab3",
+      "original_declaration_sha256": "e8b30ee68a6652a12e7cd03e7bc4c441316ad915c51099a5ebd0691f086ccab3",
+      "original_block": "theorem historicalPrefixLookup_outside {d : ℕ} (a b : ℚ) (m : ℕ)\n    (J : Finset (Fin d → Fin (m + 1)))\n    (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ) (t : Fin d → ℝ)\n    (ht : ∀ j ∈ J, t ∉ logPrimeMeshCell (a : ℝ) (b : ℝ) m j) :\n    historicalPrefixLookup a b m J cap fallback t = fallback := by\n  unfold historicalPrefixLookup\n  rw [Finset.sum_eq_zero (fun j hj => if_neg (ht j hj)), add_zero]",
+      "original_declaration": "theorem historicalPrefixLookup_outside {d : ℕ} (a b : ℚ) (m : ℕ)\n    (J : Finset (Fin d → Fin (m + 1)))\n    (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ) (t : Fin d → ℝ)\n    (ht : ∀ j ∈ J, t ∉ logPrimeMeshCell (a : ℝ) (b : ℝ) m j) :\n    historicalPrefixLookup a b m J cap fallback t = fallback := by\n  unfold historicalPrefixLookup\n  rw [Finset.sum_eq_zero (fun j hj => if_neg (ht j hj)), add_zero]",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 317,
+      "new_block_sha256": "e8b30ee68a6652a12e7cd03e7bc4c441316ad915c51099a5ebd0691f086ccab3",
+      "new_declaration_sha256": "e8b30ee68a6652a12e7cd03e7bc4c441316ad915c51099a5ebd0691f086ccab3",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.historicalPrefixLookup_on_any_cell",
+      "local_name": "historicalPrefixLookup_on_any_cell",
+      "line": 98,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/HistoricalPrefixCertificate.lean",
+      "original_block_sha256": "ba1fe79801b961519188eb464952b6157ac04415b5b83dca4dcfc49cce688d3e",
+      "original_declaration_sha256": "b8c506cc0ed7d11aa8da459c24faf07cefb6cefc4cc7b41adaee4424fedd78dd",
+      "original_block": "/-- On every mesh cell, including an unselected one, the effective value\nis the stored cap or the exact inherited fallback. -/\ntheorem historicalPrefixLookup_on_any_cell {d : ℕ} (a b : ℚ) (hab : a ≤ b)\n    (m : ℕ) (J : Finset (Fin d → Fin (m + 1)))\n    (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ) (t : Fin d → ℝ)\n    (j : Fin d → Fin (m + 1))\n    (ht : t ∈ logPrimeMeshCell (a : ℝ) (b : ℝ) m j) :\n    historicalPrefixLookup a b m J cap fallback t =\n      if j ∈ J then cap j else fallback := by\n  by_cases hj : j ∈ J\n  · rw [if_pos hj]\n    exact historicalPrefixLookup_on_cell a b hab m J cap fallback t j hj ht\n  · rw [if_neg hj]\n    apply historicalPrefixLookup_outside\n    intro q hq hqt\n    have heq : q = j := logPrimeMeshCell_unique (by exact_mod_cast hab) hqt ht\n    subst q\n    exact hj hq",
+      "original_declaration": "theorem historicalPrefixLookup_on_any_cell {d : ℕ} (a b : ℚ) (hab : a ≤ b)\n    (m : ℕ) (J : Finset (Fin d → Fin (m + 1)))\n    (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ) (t : Fin d → ℝ)\n    (j : Fin d → Fin (m + 1))\n    (ht : t ∈ logPrimeMeshCell (a : ℝ) (b : ℝ) m j) :\n    historicalPrefixLookup a b m J cap fallback t =\n      if j ∈ J then cap j else fallback := by\n  by_cases hj : j ∈ J\n  · rw [if_pos hj]\n    exact historicalPrefixLookup_on_cell a b hab m J cap fallback t j hj ht\n  · rw [if_neg hj]\n    apply historicalPrefixLookup_outside\n    intro q hq hqt\n    have heq : q = j := logPrimeMeshCell_unique (by exact_mod_cast hab) hqt ht\n    subst q\n    exact hj hq",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 327,
+      "new_block_sha256": "ba1fe79801b961519188eb464952b6157ac04415b5b83dca4dcfc49cce688d3e",
+      "new_declaration_sha256": "b8c506cc0ed7d11aa8da459c24faf07cefb6cefc4cc7b41adaee4424fedd78dd",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData",
+      "local_name": "HistoricalPrefixCapData",
+      "line": 165,
+      "kind": "structure",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/HistoricalPrefixCertificate.lean",
+      "original_block_sha256": "ab730967aeae0658cd800bac7fdb08d7a51a29275d9729a557a5481efa620a57",
+      "original_declaration_sha256": "9a4fcc2b0a8b714a2b4ed3796f4dcfe407bf3a70606a9affbce9ba95a89fd268",
+      "original_block": "/-- Every field is finite data independent of the target or tested\ninteger.  `cap4` and `cap5` are new values only on their adopted cells. -/\nstructure HistoricalPrefixCapData where\n  a : ℚ\n  b : ℚ\n  m : ℕ\n  old : ℚ\n  cells3 : Finset (Fin 3 → Fin (m + 1))\n  cap3 : (Fin 3 → Fin (m + 1)) → ℚ\n  cells4 : Finset (Fin 4 → Fin (m + 1))\n  cap4 : (Fin 4 → Fin (m + 1)) → ℚ\n  cells5 : Finset (Fin 5 → Fin (m + 1))\n  cap5 : (Fin 5 → Fin (m + 1)) → ℚ",
+      "original_declaration": "structure HistoricalPrefixCapData where\n  a : ℚ\n  b : ℚ\n  m : ℕ\n  old : ℚ\n  cells3 : Finset (Fin 3 → Fin (m + 1))\n  cap3 : (Fin 3 → Fin (m + 1)) → ℚ\n  cells4 : Finset (Fin 4 → Fin (m + 1))\n  cap4 : (Fin 4 → Fin (m + 1)) → ℚ\n  cells5 : Finset (Fin 5 → Fin (m + 1))\n  cap5 : (Fin 5 → Fin (m + 1)) → ℚ",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 346,
+      "new_block_sha256": "ab730967aeae0658cd800bac7fdb08d7a51a29275d9729a557a5481efa620a57",
+      "new_declaration_sha256": "9a4fcc2b0a8b714a2b4ed3796f4dcfe407bf3a70606a9affbce9ba95a89fd268",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.cell3",
+      "local_name": "cell3",
+      "line": 179,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen",
+        "HistoricalPrefixCapData"
+      ],
+      "original_path": "ImbalancedChen/HistoricalPrefixCertificate.lean",
+      "original_block_sha256": "c23e100b2270d57726d7e6fcc6e851e41e1d7dfee8a26f3a67cc606109efc06a",
+      "original_declaration_sha256": "c23e100b2270d57726d7e6fcc6e851e41e1d7dfee8a26f3a67cc606109efc06a",
+      "original_block": "def cell3 (D : HistoricalPrefixCapData) (j : Fin 3 → Fin (D.m + 1)) : ℚ :=\n  if j ∈ D.cells3 then D.cap3 j else D.old",
+      "original_declaration": "def cell3 (D : HistoricalPrefixCapData) (j : Fin 3 → Fin (D.m + 1)) : ℚ :=\n  if j ∈ D.cells3 then D.cap3 j else D.old",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 361,
+      "new_block_sha256": "c23e100b2270d57726d7e6fcc6e851e41e1d7dfee8a26f3a67cc606109efc06a",
+      "new_declaration_sha256": "c23e100b2270d57726d7e6fcc6e851e41e1d7dfee8a26f3a67cc606109efc06a",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.exponent3",
+      "local_name": "exponent3",
+      "line": 256,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen",
+        "HistoricalPrefixCapData"
+      ],
+      "original_path": "ImbalancedChen/HistoricalPrefixCertificate.lean",
+      "original_block_sha256": "8d3f5578a4c3978528fe940cf32b6f5232c44300f6daae9ecd3c4f6fded7192d",
+      "original_declaration_sha256": "8d3f5578a4c3978528fe940cf32b6f5232c44300f6daae9ecd3c4f6fded7192d",
+      "original_block": "def exponent3 (D : HistoricalPrefixCapData) (t : Fin 3 → ℝ) : ℚ :=\n  historicalPrefixLookup D.a D.b D.m D.cells3 D.cap3 D.old t",
+      "original_declaration": "def exponent3 (D : HistoricalPrefixCapData) (t : Fin 3 → ℝ) : ℚ :=\n  historicalPrefixLookup D.a D.b D.m D.cells3 D.cap3 D.old t",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 364,
+      "new_block_sha256": "8d3f5578a4c3978528fe940cf32b6f5232c44300f6daae9ecd3c4f6fded7192d",
+      "new_declaration_sha256": "8d3f5578a4c3978528fe940cf32b6f5232c44300f6daae9ecd3c4f6fded7192d",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.exponent3_on_cell",
+      "local_name": "exponent3_on_cell",
+      "line": 267,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen",
+        "HistoricalPrefixCapData"
+      ],
+      "original_path": "ImbalancedChen/HistoricalPrefixCertificate.lean",
+      "original_block_sha256": "40b7b10b99ab385a57c7d40c3b8b9f1a7b56bb7c266f2a781876ccd54fcabead",
+      "original_declaration_sha256": "40b7b10b99ab385a57c7d40c3b8b9f1a7b56bb7c266f2a781876ccd54fcabead",
+      "original_block": "theorem exponent3_on_cell (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)\n    (t : Fin 3 → ℝ) (j : Fin 3 → Fin (D.m + 1))\n    (ht : t ∈ logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :\n    D.exponent3 t = D.cell3 j :=\n  historicalPrefixLookup_on_any_cell D.a D.b hab D.m D.cells3 D.cap3 D.old t j ht",
+      "original_declaration": "theorem exponent3_on_cell (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)\n    (t : Fin 3 → ℝ) (j : Fin 3 → Fin (D.m + 1))\n    (ht : t ∈ logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :\n    D.exponent3 t = D.cell3 j :=\n  historicalPrefixLookup_on_any_cell D.a D.b hab D.m D.cells3 D.cap3 D.old t j ht",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 367,
+      "new_block_sha256": "40b7b10b99ab385a57c7d40c3b8b9f1a7b56bb7c266f2a781876ccd54fcabead",
+      "new_declaration_sha256": "40b7b10b99ab385a57c7d40c3b8b9f1a7b56bb7c266f2a781876ccd54fcabead",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.level3",
+      "local_name": "level3",
+      "line": 379,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen",
+        "HistoricalPrefixCapData"
+      ],
+      "original_path": "ImbalancedChen/HistoricalPrefixCertificate.lean",
+      "original_block_sha256": "1306b927fe84fe4735f0f95fd0a65844d497119a5f0747d54e0e1c49c1c89ef4",
+      "original_declaration_sha256": "67bdb9bd95646f90313ace366000095e623bfe39987f54e62d7c85932d8062b7",
+      "original_block": "/-- The target is introduced only after the finite mesh and cap tables. -/\ndef level3 (D : HistoricalPrefixCapData) (N : ℝ) (history : List ℕ) : ℝ :=\n  N ^ (D.exponent3 (primeHistoryLogCoordinates N 3 history) : ℝ)",
+      "original_declaration": "def level3 (D : HistoricalPrefixCapData) (N : ℝ) (history : List ℕ) : ℝ :=\n  N ^ (D.exponent3 (primeHistoryLogCoordinates N 3 history) : ℝ)",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 374,
+      "new_block_sha256": "1306b927fe84fe4735f0f95fd0a65844d497119a5f0747d54e0e1c49c1c89ef4",
+      "new_declaration_sha256": "67bdb9bd95646f90313ace366000095e623bfe39987f54e62d7c85932d8062b7",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.upperThirdPolicy",
+      "local_name": "upperThirdPolicy",
+      "line": 437,
+      "kind": "def",
+      "namespaces": [
+        "ImbalancedChen",
+        "HistoricalPrefixCapData"
+      ],
+      "original_path": "ImbalancedChen/HistoricalPrefixCertificate.lean",
+      "original_block_sha256": "2f7a91836225f31305f4046874942888cc752b8508f71c0babac334974956701",
+      "original_declaration_sha256": "fc2aee1eed4fe3234686b5e6ad72f29e6275c49cd258a121fc45ba0aac478c26",
+      "original_block": "/-- The concrete upper policy after selecting the third cap, starting\nfrom the ordinary upper policy at the stored original level. -/\ndef upperThirdPolicy (D : HistoricalPrefixCapData) (N : ℝ) : Bool → List ℕ → Bool :=\n  thirdCappedUpperPolicy (ordinaryParityRosserPolicy false (N ^ (D.old : ℝ))) (D.level3 N)",
+      "original_declaration": "def upperThirdPolicy (D : HistoricalPrefixCapData) (N : ℝ) : Bool → List ℕ → Bool :=\n  thirdCappedUpperPolicy (ordinaryParityRosserPolicy false (N ^ (D.old : ℝ))) (D.level3 N)",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 379,
+      "new_block_sha256": "2f7a91836225f31305f4046874942888cc752b8508f71c0babac334974956701",
+      "new_declaration_sha256": "fc2aee1eed4fe3234686b5e6ad72f29e6275c49cd258a121fc45ba0aac478c26",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.level3_on_fifth_cell",
+      "local_name": "level3_on_fifth_cell",
+      "line": 67,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen",
+        "HistoricalPrefixCapData"
+      ],
+      "original_path": "ImbalancedChen/HistoricalUpperFiveCellGeometry.lean",
+      "original_block_sha256": "f6b80f022f888c95b04a0d8223384b05f5d22ea1d1b9e4555970613925428a93",
+      "original_declaration_sha256": "45c6c58e32824404bf88f01ec8b632e9a8c3b5cccc639ab4c681a1cc06eddbfb",
+      "original_block": "/-- A five-prime history fixes its third ancestor's effective level on\nthe projected owner, whether or not that ancestor cell was selected. -/\ntheorem level3_on_fifth_cell (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)\n    (N : ℝ) (history : List ℕ) (hlen : history.length = 5)\n    (j : Fin 5 → Fin (D.m + 1))\n    (ht : primeHistoryLogCoordinates N 5 history ∈\n      logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :\n    D.level3 N (rosserAncestor 3 history) =\n      N ^ (D.cell3 (historicalPrefixProject (by omega : 3 ≤ 5) j) : ℝ) := by\n  unfold level3\n  rw [primeHistoryLogCoordinates_eq_historicalPrefixProject N (by omega : 3 ≤ 5) hlen]\n  rw [D.exponent3_on_cell hab _ _\n    (mem_logPrimeMeshCell_historicalPrefixProject (by omega : 3 ≤ 5) ht)]",
+      "original_declaration": "theorem level3_on_fifth_cell (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)\n    (N : ℝ) (history : List ℕ) (hlen : history.length = 5)\n    (j : Fin 5 → Fin (D.m + 1))\n    (ht : primeHistoryLogCoordinates N 5 history ∈\n      logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :\n    D.level3 N (rosserAncestor 3 history) =\n      N ^ (D.cell3 (historicalPrefixProject (by omega : 3 ≤ 5) j) : ℝ) := by\n  unfold level3\n  rw [primeHistoryLogCoordinates_eq_historicalPrefixProject N (by omega : 3 ≤ 5) hlen]\n  rw [D.exponent3_on_cell hab _ _\n    (mem_logPrimeMeshCell_historicalPrefixProject (by omega : 3 ≤ 5) ht)]",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 398,
+      "new_block_sha256": "f6b80f022f888c95b04a0d8223384b05f5d22ea1d1b9e4555970613925428a93",
+      "new_declaration_sha256": "45c6c58e32824404bf88f01ec8b632e9a8c3b5cccc639ab4c681a1cc06eddbfb",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.HistoricalPrefixCapData.level3_tuple_on_fifth_cell",
+      "local_name": "level3_tuple_on_fifth_cell",
+      "line": 114,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen",
+        "HistoricalPrefixCapData"
+      ],
+      "original_path": "ImbalancedChen/HistoricalUpperFiveCellGeometry.lean",
+      "original_block_sha256": "8d11ee0834dceea9af2396efae19a90b5510010c67884c2157bbe59512a120b9",
+      "original_declaration_sha256": "7018ebea4773cef79bfe287f205b2102af3370f6253014515bfafdf8e4ef7f83",
+      "original_block": "/-- The actual processing-order tuple and the reverse-stored third\nhistory select the same projected owner. -/\ntheorem level3_tuple_on_fifth_cell (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)\n    (N : ℕ) (p : Fin 5 → ℕ) (j : Fin 5 → Fin (D.m + 1))\n    (ht : actualPrimeTupleLog N p ∈\n      logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :\n    D.level3 (N : ℝ) [p 2, p 1, p 0] =\n      (N : ℝ) ^ (D.cell3 (historicalPrefixProject (by omega : 3 ≤ 5) j) : ℝ) := by\n  have hcoords :\n      primeHistoryLogCoordinates (N : ℝ) 5 [p 4, p 3, p 2, p 1, p 0] =\n        actualPrimeTupleLog N p := by\n    funext i\n    fin_cases i <;> rfl\n  have ht' : primeHistoryLogCoordinates (N : ℝ) 5 [p 4, p 3, p 2, p 1, p 0] ∈\n      logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j := by\n    rw [hcoords]\n    exact ht\n  simpa [rosserAncestor] using\n    D.level3_on_fifth_cell hab (N : ℝ) [p 4, p 3, p 2, p 1, p 0] (by simp) j ht'",
+      "original_declaration": "theorem level3_tuple_on_fifth_cell (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)\n    (N : ℕ) (p : Fin 5 → ℕ) (j : Fin 5 → Fin (D.m + 1))\n    (ht : actualPrimeTupleLog N p ∈\n      logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :\n    D.level3 (N : ℝ) [p 2, p 1, p 0] =\n      (N : ℝ) ^ (D.cell3 (historicalPrefixProject (by omega : 3 ≤ 5) j) : ℝ) := by\n  have hcoords :\n      primeHistoryLogCoordinates (N : ℝ) 5 [p 4, p 3, p 2, p 1, p 0] =\n        actualPrimeTupleLog N p := by\n    funext i\n    fin_cases i <;> rfl\n  have ht' : primeHistoryLogCoordinates (N : ℝ) 5 [p 4, p 3, p 2, p 1, p 0] ∈\n      logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j := by\n    rw [hcoords]\n    exact ht\n  simpa [rosserAncestor] using\n    D.level3_on_fifth_cell hab (N : ℝ) [p 4, p 3, p 2, p 1, p 0] (by simp) j ht'",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 412,
+      "new_block_sha256": "8d11ee0834dceea9af2396efae19a90b5510010c67884c2157bbe59512a120b9",
+      "new_declaration_sha256": "7018ebea4773cef79bfe287f205b2102af3370f6253014515bfafdf8e4ef7f83",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    },
+    {
+      "name": "ImbalancedChen.historicalUpperFive_cube_tests_iff_log",
+      "local_name": "historicalUpperFive_cube_tests_iff_log",
+      "line": 195,
+      "kind": "theorem",
+      "namespaces": [
+        "ImbalancedChen"
+      ],
+      "original_path": "ImbalancedChen/HistoricalUpperFiveCellGeometry.lean",
+      "original_block_sha256": "42ff3566f039988560f9237c0fd01b17618217142d7f1878bcb7a2564def1c74",
+      "original_declaration_sha256": "55cdf9fb8ff4d0690f697bca9b471c3cf00dcd50f1ab0899396c29fc8be07dd6",
+      "original_block": "/-- The first and third power tests may use different historical levels.\nBoth logarithmic inequalities retain their strict endpoints. -/\ntheorem historicalUpperFive_cube_tests_iff_log {N : ℕ} (hN : 1 < N)\n    (old third : ℝ) (p : Fin 5 → ℕ) (hpos : ∀ i, 0 < p i) :\n    ((p 0 : ℝ) ^ 3 < (N : ℝ) ^ old ∧\n      (p 0 : ℝ) * p 1 * (p 2 : ℝ) ^ 3 < (N : ℝ) ^ third) ↔\n      3 * actualPrimeTupleLog N p 0 < old ∧\n        actualPrimeTupleLog N p 0 + actualPrimeTupleLog N p 1 +\n          3 * actualPrimeTupleLog N p 2 < third := by\n  have hN' : (1 : ℝ) < N := by exact_mod_cast hN\n  have hN0 : (0 : ℝ) < N := zero_lt_one.trans hN'\n  have hc i := actualPrimeTupleLog_rpow hN p hpos i\n  have hcub (i : Fin 5) :\n      (N : ℝ) ^ (3 * actualPrimeTupleLog N p i) = (p i : ℝ) ^ 3 := by\n    rw [mul_comm, Real.rpow_mul hN0.le, hc]\n    norm_num\n  have hprod :\n      (N : ℝ) ^ (actualPrimeTupleLog N p 0 + actualPrimeTupleLog N p 1 +\n        3 * actualPrimeTupleLog N p 2) = (p 0 : ℝ) * p 1 * (p 2 : ℝ) ^ 3 := by\n    rw [Real.rpow_add hN0, Real.rpow_add hN0, hc, hc, hcub]\n  rw [← hcub 0, ← hprod, Real.rpow_lt_rpow_left_iff hN', Real.rpow_lt_rpow_left_iff hN']",
+      "original_declaration": "theorem historicalUpperFive_cube_tests_iff_log {N : ℕ} (hN : 1 < N)\n    (old third : ℝ) (p : Fin 5 → ℕ) (hpos : ∀ i, 0 < p i) :\n    ((p 0 : ℝ) ^ 3 < (N : ℝ) ^ old ∧\n      (p 0 : ℝ) * p 1 * (p 2 : ℝ) ^ 3 < (N : ℝ) ^ third) ↔\n      3 * actualPrimeTupleLog N p 0 < old ∧\n        actualPrimeTupleLog N p 0 + actualPrimeTupleLog N p 1 +\n          3 * actualPrimeTupleLog N p 2 < third := by\n  have hN' : (1 : ℝ) < N := by exact_mod_cast hN\n  have hN0 : (0 : ℝ) < N := zero_lt_one.trans hN'\n  have hc i := actualPrimeTupleLog_rpow hN p hpos i\n  have hcub (i : Fin 5) :\n      (N : ℝ) ^ (3 * actualPrimeTupleLog N p i) = (p i : ℝ) ^ 3 := by\n    rw [mul_comm, Real.rpow_mul hN0.le, hc]\n    norm_num\n  have hprod :\n      (N : ℝ) ^ (actualPrimeTupleLog N p 0 + actualPrimeTupleLog N p 1 +\n        3 * actualPrimeTupleLog N p 2) = (p 0 : ℝ) * p 1 * (p 2 : ℝ) ^ 3 := by\n    rw [Real.rpow_add hN0, Real.rpow_add hN0, hc, hc, hcub]\n  rw [← hcub 0, ← hprod, Real.rpow_lt_rpow_left_iff hN', Real.rpow_lt_rpow_left_iff hN']",
+      "new_path": "ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "new_line": 435,
+      "new_block_sha256": "42ff3566f039988560f9237c0fd01b17618217142d7f1878bcb7a2564def1c74",
+      "new_declaration_sha256": "55cdf9fb8ff4d0690f697bca9b471c3cf00dcd50f1ab0899396c29fc8be07dd6",
+      "verbatim_declaration_match": true,
+      "verbatim_block_match": true
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import ImbalancedChen.FirstExitFrontierAdmission
 import ImbalancedChen.ActualFrozenOwnCubeDensity
 import ImbalancedChen.PrimeHistoryLogCoordinates
+import ImbalancedChen.FinitePrimeGeometryCore
 
 /-!
 # Exact inherited levels on the same first-exit tree
@@ -59,33 +60,6 @@ theorem firstExitDepthSplicePolicy_absorb_later {α : Type*} (k m : ℕ)
   · simp [firstExitDepthSplicePolicy, hm]
   · have hk : ¬pre.length ≤ k := by omega
     simp [firstExitDepthSplicePolicy, hm, hk]
-
-/-- An ancestor is the initial processing-order subtuple, even though the
-tree stores all histories in reverse order. -/
-theorem primeHistoryTuple_ancestor {r k : ℕ} {history : List ℕ}
-    (hlen : history.length = k) (hr : r ≤ k) (i : Fin r) :
-    primeHistoryTuple r (rosserAncestor r history) i =
-      primeHistoryTuple k history (i.castLE hr) := by
-  have hrev : (rosserAncestor r history).reverse = history.reverse.take r := by
-    simp only [rosserAncestor, List.reverse_drop]
-    congr 1
-    omega
-  unfold primeHistoryTuple
-  rw [hrev, List.getD_eq_getElem _ _ (by simp [hlen, hr, i.isLt])]
-  rw [List.getD_eq_getElem _ _ (by simpa [hlen] using lt_of_lt_of_le i.isLt hr)]
-  simp
-
-theorem primeHistoryLogCoordinates_ancestor (N : ℝ) {r k : ℕ}
-    {history : List ℕ} (hlen : history.length = k) (hr : r ≤ k) (i : Fin r) :
-    primeHistoryLogCoordinates N r (rosserAncestor r history) i =
-      primeHistoryLogCoordinates N k history (i.castLE hr) := by
-  simp only [primeHistoryLogCoordinates, primeHistoryTuple_ancestor hlen hr]
-
-/-- All tests through rank two belong to `base`; the active third test and
-its subsequent continuation use the level selected by the actual ancestor. -/
-def thirdCappedUpperPolicy (base : Bool → List ℕ → Bool) (Q3 : List ℕ → ℝ) :
-    Bool → List ℕ → Bool :=
-  firstExitDepthSplicePolicy 2 base (frozenParityRosserPolicy false 3 Q3)
 
 private theorem evenListLength_eq_decide_even (pre : List ℕ) :
     evenListLength pre = decide (Even pre.length) := by

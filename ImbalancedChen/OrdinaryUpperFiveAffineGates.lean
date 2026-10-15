@@ -1,4 +1,5 @@
 import ImbalancedChen.PrimeOwnCubeAffineGates
+import ImbalancedChen.FinitePrimeGeometryCore
 
 /-!
 # The six affine inequalities of an ordinary upper fifth candidate
@@ -45,19 +46,6 @@ theorem mem_ordinaryUpperFiveGateRegion (old : ℝ) (t : Fin 5 → ℝ) :
   simp only [hanti]
   simp [primeAffineGateRegion, ordinaryUpperFiveGateForms, ordinaryUpperFiveGateBounds,
     Fin.forall_fin_succ, and_assoc]
-
-/-- Strict ordering is preserved in both directions by the actual
-target-dependent logarithmic coordinate dictionary. -/
-theorem actualPrimeTupleLog_strictAnti_iff {d N : ℕ} (hN : 1 < N)
-    (p : Fin d → ℕ) (hp : ∀ i, 0 < p i) :
-    StrictAnti (actualPrimeTupleLog N p) ↔ StrictAnti p := by
-  have hNr : (1 : ℝ) < N := by exact_mod_cast hN
-  have hlt (i j : Fin d) : actualPrimeTupleLog N p i < actualPrimeTupleLog N p j ↔ p i < p j := by
-    rw [← Real.rpow_lt_rpow_left_iff hNr,
-      actualPrimeTupleLog_rpow hN p hp, actualPrimeTupleLog_rpow hN p hp]
-    exact Nat.cast_lt
-  exact ⟨fun h i j hij => (hlt j i).mp (h hij),
-    fun h i j hij => (hlt j i).mpr (h hij)⟩
 
 end
 

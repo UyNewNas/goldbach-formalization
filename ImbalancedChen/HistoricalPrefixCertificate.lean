@@ -1,5 +1,6 @@
 import ImbalancedChen.ActualSelectedPrefixCapSelector
 import ImbalancedChen.FirstExitHistoricalLevels
+import ImbalancedChen.FinitePrimeGeometryCore
 
 /-!
 # Finite inherited cap tables on one historical mesh
@@ -23,28 +24,12 @@ noncomputable section
 
 open scoped Classical BigOperators
 
-/-- Initial processing-order coordinates, also used for mesh cell labels. -/
-def historicalPrefixProject {α : Type*} {r d : ℕ} (hrd : r ≤ d)
-    (t : Fin d → α) : Fin r → α :=
-  fun i => t (i.castLE hrd)
-
 theorem historicalPrefixProject_comp {α : Type*} {r d e : ℕ}
     (hrd : r ≤ d) (hde : d ≤ e) (t : Fin e → α) :
     historicalPrefixProject hrd (historicalPrefixProject hde t) =
       historicalPrefixProject (hrd.trans hde) t := by
   funext i
   rfl
-
-/-- The projected label owns precisely the projected ancestor point. -/
-theorem mem_logPrimeMeshCell_historicalPrefixProject {r d m : ℕ}
-    (hrd : r ≤ d) {a b : ℝ} {j : Fin d → Fin (m + 1)}
-    {t : Fin d → ℝ} (ht : t ∈ logPrimeMeshCell a b m j) :
-    historicalPrefixProject hrd t ∈
-      logPrimeMeshCell a b m (historicalPrefixProject hrd j) := by
-  apply mem_logPrimeMeshCell.mpr
-  intro i
-  simpa only [historicalPrefixProject, logPrimeMeshLo, logPrimeMeshHi]
-    using mem_logPrimeMeshCell.mp ht (i.castLE hrd)
 
 /-- Half-open ownership identifies the ancestor cell uniquely, including
 points on internal grid faces. -/
@@ -55,62 +40,6 @@ theorem historicalPrefixAncestorCell_unique {r d m : ℕ}
     (hq : historicalPrefixProject hrd t ∈ logPrimeMeshCell a b m q) :
     q = historicalPrefixProject hrd j :=
   logPrimeMeshCell_unique hab hq (mem_logPrimeMeshCell_historicalPrefixProject hrd ht)
-
-theorem primeHistoryLogCoordinates_eq_historicalPrefixProject (N : ℝ)
-    {r d : ℕ} (hrd : r ≤ d) {history : List ℕ} (hlen : history.length = d) :
-    primeHistoryLogCoordinates N r (rosserAncestor r history) =
-      historicalPrefixProject hrd (primeHistoryLogCoordinates N d history) := by
-  funext i
-  exact primeHistoryLogCoordinates_ancestor N hlen hrd i
-
-/-- A finite cap lookup with an explicit, possibly inherited, fallback. -/
-def historicalPrefixLookup {d : ℕ} (a b : ℚ) (m : ℕ)
-    (J : Finset (Fin d → Fin (m + 1)))
-    (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ) (t : Fin d → ℝ) : ℚ :=
-  fallback + ∑ j ∈ J,
-    if t ∈ logPrimeMeshCell (a : ℝ) (b : ℝ) m j then cap j - fallback else 0
-
-theorem historicalPrefixLookup_on_cell {d : ℕ} (a b : ℚ) (hab : a ≤ b)
-    (m : ℕ) (J : Finset (Fin d → Fin (m + 1)))
-    (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ) (t : Fin d → ℝ)
-    (j : Fin d → Fin (m + 1)) (hj : j ∈ J)
-    (ht : t ∈ logPrimeMeshCell (a : ℝ) (b : ℝ) m j) :
-    historicalPrefixLookup a b m J cap fallback t = cap j := by
-  unfold historicalPrefixLookup
-  rw [Finset.sum_eq_single_of_mem j hj]
-  · rw [if_pos ht]
-    ring
-  · intro q _hq hqj
-    apply if_neg
-    intro hq
-    exact hqj (logPrimeMeshCell_unique (by exact_mod_cast hab) hq ht)
-
-theorem historicalPrefixLookup_outside {d : ℕ} (a b : ℚ) (m : ℕ)
-    (J : Finset (Fin d → Fin (m + 1)))
-    (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ) (t : Fin d → ℝ)
-    (ht : ∀ j ∈ J, t ∉ logPrimeMeshCell (a : ℝ) (b : ℝ) m j) :
-    historicalPrefixLookup a b m J cap fallback t = fallback := by
-  unfold historicalPrefixLookup
-  rw [Finset.sum_eq_zero (fun j hj => if_neg (ht j hj)), add_zero]
-
-/-- On every mesh cell, including an unselected one, the effective value
-is the stored cap or the exact inherited fallback. -/
-theorem historicalPrefixLookup_on_any_cell {d : ℕ} (a b : ℚ) (hab : a ≤ b)
-    (m : ℕ) (J : Finset (Fin d → Fin (m + 1)))
-    (cap : (Fin d → Fin (m + 1)) → ℚ) (fallback : ℚ) (t : Fin d → ℝ)
-    (j : Fin d → Fin (m + 1))
-    (ht : t ∈ logPrimeMeshCell (a : ℝ) (b : ℝ) m j) :
-    historicalPrefixLookup a b m J cap fallback t =
-      if j ∈ J then cap j else fallback := by
-  by_cases hj : j ∈ J
-  · rw [if_pos hj]
-    exact historicalPrefixLookup_on_cell a b hab m J cap fallback t j hj ht
-  · rw [if_neg hj]
-    apply historicalPrefixLookup_outside
-    intro q hq hqt
-    have heq : q = j := logPrimeMeshCell_unique (by exact_mod_cast hab) hqt ht
-    subst q
-    exact hj hq
 
 /-- Finite cell comparisons imply monotonicity once the inherited value
 has been identified on the selected cell. -/
@@ -160,24 +89,7 @@ theorem historicalPrefixLookup_apply_sub {d : ℕ} (a b : ℚ) (hab : a ≤ b)
     symm
     exact Finset.sum_eq_zero (fun j hj => if_neg (hout j hj))
 
-/-- Every field is finite data independent of the target or tested
-integer.  `cap4` and `cap5` are new values only on their adopted cells. -/
-structure HistoricalPrefixCapData where
-  a : ℚ
-  b : ℚ
-  m : ℕ
-  old : ℚ
-  cells3 : Finset (Fin 3 → Fin (m + 1))
-  cap3 : (Fin 3 → Fin (m + 1)) → ℚ
-  cells4 : Finset (Fin 4 → Fin (m + 1))
-  cap4 : (Fin 4 → Fin (m + 1)) → ℚ
-  cells5 : Finset (Fin 5 → Fin (m + 1))
-  cap5 : (Fin 5 → Fin (m + 1)) → ℚ
-
 namespace HistoricalPrefixCapData
-
-def cell3 (D : HistoricalPrefixCapData) (j : Fin 3 → Fin (D.m + 1)) : ℚ :=
-  if j ∈ D.cells3 then D.cap3 j else D.old
 
 def old4 (D : HistoricalPrefixCapData) (j : Fin 4 → Fin (D.m + 1)) : ℚ :=
   D.cell3 (historicalPrefixProject (by omega : 3 ≤ 4) j)
@@ -253,9 +165,6 @@ theorem levelCheck_of_selectedBoxCapChecks (D : HistoricalPrefixCapData)
     exact (selectedCapLower_old_le (I5 j) (D.old5 j) _).trans
       (selectedBoxCap_between (I5 j) (D.old5 j) (nu5 j) _ _ hcheck).1.le
 
-def exponent3 (D : HistoricalPrefixCapData) (t : Fin 3 → ℝ) : ℚ :=
-  historicalPrefixLookup D.a D.b D.m D.cells3 D.cap3 D.old t
-
 def exponent4 (D : HistoricalPrefixCapData) (t : Fin 4 → ℝ) : ℚ :=
   historicalPrefixLookup D.a D.b D.m D.cells4 D.cap4
     (D.exponent3 (historicalPrefixProject (by omega : 3 ≤ 4) t)) t
@@ -263,12 +172,6 @@ def exponent4 (D : HistoricalPrefixCapData) (t : Fin 4 → ℝ) : ℚ :=
 def exponent5 (D : HistoricalPrefixCapData) (t : Fin 5 → ℝ) : ℚ :=
   historicalPrefixLookup D.a D.b D.m D.cells5 D.cap5
     (D.exponent4 (historicalPrefixProject (by omega : 4 ≤ 5) t)) t
-
-theorem exponent3_on_cell (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)
-    (t : Fin 3 → ℝ) (j : Fin 3 → Fin (D.m + 1))
-    (ht : t ∈ logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :
-    D.exponent3 t = D.cell3 j :=
-  historicalPrefixLookup_on_any_cell D.a D.b hab D.m D.cells3 D.cap3 D.old t j ht
 
 theorem exponent4_on_cell (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)
     (t : Fin 4 → ℝ) (j : Fin 4 → Fin (D.m + 1))
@@ -375,10 +278,6 @@ theorem exponent4_le_exponent5 (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)
   exact D.exponent4_on_cell hab _ _
     (mem_logPrimeMeshCell_historicalPrefixProject (by omega : 4 ≤ 5) ht)
 
-/-- The target is introduced only after the finite mesh and cap tables. -/
-def level3 (D : HistoricalPrefixCapData) (N : ℝ) (history : List ℕ) : ℝ :=
-  N ^ (D.exponent3 (primeHistoryLogCoordinates N 3 history) : ℝ)
-
 def level4 (D : HistoricalPrefixCapData) (N : ℝ) (history : List ℕ) : ℝ :=
   N ^ (D.exponent4 (primeHistoryLogCoordinates N 4 history) : ℝ)
 
@@ -431,11 +330,6 @@ theorem level4_ancestor_le_level5 (D : HistoricalPrefixCapData) (hab : D.a ≤ D
   rw [primeHistoryLogCoordinates_eq_historicalPrefixProject N (by omega : 4 ≤ 5) hlen]
   apply Real.rpow_le_rpow_of_exponent_le hN.le
   exact_mod_cast D.exponent4_le_exponent5 hab hcheck (primeHistoryLogCoordinates N 5 history)
-
-/-- The concrete upper policy after selecting the third cap, starting
-from the ordinary upper policy at the stored original level. -/
-def upperThirdPolicy (D : HistoricalPrefixCapData) (N : ℝ) : Bool → List ℕ → Bool :=
-  thirdCappedUpperPolicy (ordinaryParityRosserPolicy false (N ^ (D.old : ℝ))) (D.level3 N)
 
 def upperFourthPolicy (D : HistoricalPrefixCapData) (N : ℝ) : Bool → List ℕ → Bool :=
   fourthCappedUpperPolicy (ordinaryParityRosserPolicy false (N ^ (D.old : ℝ)))

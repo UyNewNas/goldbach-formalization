@@ -3,6 +3,7 @@ import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Order.Fin.Basic
 import Mathlib.Data.Nat.Totient
 import Mathlib.Data.Nat.GCD.BigOperators
+import ImbalancedChen.FinitePrimeGeometryCore
 
 /-!
 # Actual reciprocal-prime mass on finite logarithmic boxes
@@ -26,23 +27,6 @@ noncomputable section
 
 open scoped BigOperators
 open Filter Topology
-
-/-- The actual finite carrier of prime tuples in a logarithmic box. -/
-def actualPrimeBoxTuples (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) :
-    Finset (Fin k → ℕ) :=
-  Fintype.piFinset (fun i =>
-    roughPrimeFinset N (Nat.ceil ((N : ℝ) ^ b i))
-      ((N : ℝ) ^ a i) ((N : ℝ) ^ b i))
-
-/-- Membership retains primality, the common target exclusion, and both
-exact endpoints. Enumeration caps add no truncation. -/
-theorem mem_actualPrimeBoxTuples_iff {N k : ℕ} {a b : Fin k → ℝ}
-    {p : Fin k → ℕ} :
-    p ∈ actualPrimeBoxTuples N a b ↔
-      ∀ i, Nat.Prime (p i) ∧ ¬p i ∣ N ∧
-        (N : ℝ) ^ a i ≤ (p i : ℝ) ∧ (p i : ℝ) < (N : ℝ) ^ b i := by
-  simp only [actualPrimeBoxTuples, Fintype.mem_piFinset,
-    mem_roughPrimeFinset_iff_of_cutoff_le_cap (Nat.le_ceil _)]
 
 /-- The mass is defined by a sum over actual function tuples. -/
 def actualPrimeBoxMass (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) : ℝ :=

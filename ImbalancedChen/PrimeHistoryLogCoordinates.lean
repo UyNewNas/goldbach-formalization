@@ -3,6 +3,7 @@ import Mathlib.Data.List.GetD
 import Mathlib.Data.List.OfFn
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import ImbalancedChen.FinitePrimeGeometryCore
 
 /-!
 # Exact logarithmic coordinates of a selected prime history
@@ -22,32 +23,6 @@ estimate, or receiver-dependent coefficient is introduced here.
 namespace ImbalancedChen
 
 open scoped BigOperators
-
-/-- Total processing-order tuple extracted from a reverse-stored history. -/
-def primeHistoryTuple (k : ℕ) (history : List ℕ) : Fin k → ℕ :=
-  fun i => history.reverse.getD i.val 0
-
-/-- Logarithmic coordinates at the real target scale. These are total;
-the inverse and positivity statements below use their explicit hypotheses. -/
-noncomputable def primeHistoryLogCoordinates (N : ℝ) (k : ℕ)
-    (history : List ℕ) : Fin k → ℝ :=
-  fun i => Real.log (primeHistoryTuple k history i : ℝ) / Real.log N
-
-/-- Correct history length makes the tuple exactly the reversed list. -/
-theorem primeHistoryTuple_ofFn {k : ℕ} {history : List ℕ}
-    (hlen : history.length = k) :
-    List.ofFn (primeHistoryTuple k history) = history.reverse := by
-  apply List.ext_getElem
-  · simp [hlen]
-  · intro i _ hi
-    simp only [List.getElem_ofFn, primeHistoryTuple]
-    exact List.getD_eq_getElem _ _ hi
-
-/-- The original tree history is recovered without sorting or deduplication. -/
-theorem primeHistoryTuple_reverse_ofFn {k : ℕ} {history : List ℕ}
-    (hlen : history.length = k) :
-    (List.ofFn (primeHistoryTuple k history)).reverse = history := by
-  rw [primeHistoryTuple_ofFn hlen, List.reverse_reverse]
 
 theorem primeHistoryTuple_mem {k : ℕ} {history : List ℕ}
     (hlen : history.length = k) (i : Fin k) :
@@ -87,19 +62,6 @@ theorem primeHistoryTuple_prod {k : ℕ} {history : List ℕ}
     (hlen : history.length = k) :
     (∏ i, primeHistoryTuple k history i) = history.prod := by
   rw [← List.prod_ofFn, primeHistoryTuple_ofFn hlen, List.prod_reverse]
-
-/-- The reciprocal-prime mass is also unchanged by the coordinate dictionary. -/
-theorem primeHistoryTuple_reciprocal_mass {k : ℕ} {history : List ℕ}
-    (hlen : history.length = k) :
-    (∏ i, 1 / ((primeHistoryTuple k history i : ℝ) - 1)) =
-      (history.map (fun p : ℕ => 1 / ((p : ℝ) - 1))).prod := by
-  rw [← List.prod_ofFn]
-  have hmap := congrArg (List.map (fun p : ℕ => 1 / ((p : ℝ) - 1)))
-    (primeHistoryTuple_ofFn hlen)
-  rw [List.map_ofFn, List.map_reverse] at hmap
-  change (List.ofFn ((fun p : ℕ => 1 / ((p : ℝ) - 1)) ∘
-    primeHistoryTuple k history)).prod = _
-  rw [hmap, List.prod_reverse]
 
 /-- A positive selected integer is recovered exactly, not rounded, from
 its coordinate at a base greater than one. -/

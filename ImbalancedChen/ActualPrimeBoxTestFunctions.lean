@@ -2,6 +2,7 @@ import ImbalancedChen.ActualPrimeBoxMass
 import ImbalancedChen.LogPrimeBoxMesh
 import Mathlib.Topology.UniformSpace.HeineCantor
 import Mathlib.MeasureTheory.Integral.Bochner.Set
+import ImbalancedChen.FinitePrimeGeometryCore
 
 /-!
 # Continuous test functions for actual prime tuples
@@ -20,43 +21,11 @@ noncomputable section
 open scoped Classical BigOperators Topology
 open MeasureTheory Filter Set
 
-/-- Logarithmic coordinates of an actual tuple, retaining the target N. -/
-def actualPrimeTupleLog {k : ℕ} (N : ℕ) (p : Fin k → ℕ) : Fin k → ℝ :=
-  fun i => Real.log (p i : ℝ) / Real.log (N : ℝ)
-
 /-- The weighted sum is over the actual finite arithmetic carrier. -/
 def actualPrimeBoxTestSum {k : ℕ} (N : ℕ) (a b : Fin k → ℝ)
     (f : (Fin k → ℝ) → ℝ) : ℝ :=
   ∑ p ∈ actualPrimeBoxTuples N a b,
     (∏ i, 1 / ((p i : ℝ) - 1)) * f (actualPrimeTupleLog N p)
-
-theorem actualPrimeTupleLog_rpow {k N : ℕ} (hN : 1 < N)
-    (p : Fin k → ℕ) (hp : ∀ i, 0 < p i) (i : Fin k) :
-    (N : ℝ) ^ (actualPrimeTupleLog N p i) = p i := by
-  have hN' : (1 : ℝ) < N := by exact_mod_cast hN
-  apply (Real.mul_log_eq_log_iff (lt_trans zero_lt_one hN') (by exact_mod_cast hp i)).mp
-  exact div_mul_cancel₀ _ (Real.log_pos hN').ne'
-
-/-- The exact power endpoints are equivalent to half-open logarithmic
-coordinates. Primality and target exclusion are retained separately. -/
-theorem mem_actualPrimeBoxTuples_log_iff {k N : ℕ} (hN : 1 < N)
-    (a b : Fin k → ℝ) (p : Fin k → ℕ) :
-    p ∈ actualPrimeBoxTuples N a b ↔
-      (∀ i, Nat.Prime (p i) ∧ ¬p i ∣ N) ∧ actualPrimeTupleLog N p ∈ logPrimeBox a b := by
-  have hN' : (1 : ℝ) < N := by exact_mod_cast hN
-  constructor
-  · intro hp
-    have hi := mem_actualPrimeBoxTuples_iff.mp hp
-    refine ⟨fun i => ⟨(hi i).1, (hi i).2.1⟩, mem_logPrimeBox.mpr (fun i => ?_)⟩
-    have hpow := actualPrimeTupleLog_rpow hN p (fun j => (hi j).1.pos) i
-    exact ⟨(Real.rpow_le_rpow_left_iff hN').mp (hpow.symm ▸ (hi i).2.2.1),
-      (Real.rpow_lt_rpow_left_iff hN').mp (hpow.symm ▸ (hi i).2.2.2)⟩
-  · rintro ⟨hp, hx⟩
-    refine mem_actualPrimeBoxTuples_iff.mpr (fun i => ⟨(hp i).1, (hp i).2, ?_, ?_⟩)
-    · rw [← actualPrimeTupleLog_rpow hN p (fun j => (hp j).1.pos) i]
-      exact (Real.rpow_le_rpow_left_iff hN').mpr (mem_logPrimeBox.mp hx i).1
-    · rw [← actualPrimeTupleLog_rpow hN p (fun j => (hp j).1.pos) i]
-      exact (Real.rpow_lt_rpow_left_iff hN').mpr (mem_logPrimeBox.mp hx i).2
 
 private theorem actualPrimeBox_mesh_partition {k N : ℕ} {a b : ℝ}
     (hN : 1 < N) (hab : a < b) (m : ℕ) :

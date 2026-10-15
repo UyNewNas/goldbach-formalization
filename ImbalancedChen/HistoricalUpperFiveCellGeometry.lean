@@ -2,6 +2,7 @@ import ImbalancedChen.HistoricalPrefixCertificate
 import ImbalancedChen.OrdinaryPrimeFrontierAffineRegion
 import ImbalancedChen.OrdinaryUpperFiveAffineGates
 import ImbalancedChen.ActualOwnCubeTupleDictionary
+import ImbalancedChen.FinitePrimeGeometryCore
 
 /-!
 # Actual historical fifth candidates on a common owned cell
@@ -62,20 +63,6 @@ theorem mem_fifthParentGateRegion (D : HistoricalPrefixCapData)
   simp [primeAffineGateRegion, ordinaryUpperFiveGateForms,
     fifthParentGateBounds, Fin.forall_fin_succ, and_assoc]
 
-/-- A five-prime history fixes its third ancestor's effective level on
-the projected owner, whether or not that ancestor cell was selected. -/
-theorem level3_on_fifth_cell (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)
-    (N : ℝ) (history : List ℕ) (hlen : history.length = 5)
-    (j : Fin 5 → Fin (D.m + 1))
-    (ht : primeHistoryLogCoordinates N 5 history ∈
-      logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :
-    D.level3 N (rosserAncestor 3 history) =
-      N ^ (D.cell3 (historicalPrefixProject (by omega : 3 ≤ 5) j) : ℝ) := by
-  unfold level3
-  rw [primeHistoryLogCoordinates_eq_historicalPrefixProject N (by omega : 3 ≤ 5) hlen]
-  rw [D.exponent3_on_cell hab _ _
-    (mem_logPrimeMeshCell_historicalPrefixProject (by omega : 3 ≤ 5) ht)]
-
 /-- The old fifth residual reads the complete effective fourth cell,
 including an unselected fourth cell's inherited third level. -/
 theorem level4_on_fifth_cell (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)
@@ -108,26 +95,6 @@ theorem level5_on_selected_fifth_cell (D : HistoricalPrefixCapData) (hab : D.a �
       logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :
     D.level5 N history = N ^ (D.cap5 j : ℝ) := by
   rw [D.level5_on_fifth_cell hab N history j ht, cell5, if_pos hj]
-
-/-- The actual processing-order tuple and the reverse-stored third
-history select the same projected owner. -/
-theorem level3_tuple_on_fifth_cell (D : HistoricalPrefixCapData) (hab : D.a ≤ D.b)
-    (N : ℕ) (p : Fin 5 → ℕ) (j : Fin 5 → Fin (D.m + 1))
-    (ht : actualPrimeTupleLog N p ∈
-      logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :
-    D.level3 (N : ℝ) [p 2, p 1, p 0] =
-      (N : ℝ) ^ (D.cell3 (historicalPrefixProject (by omega : 3 ≤ 5) j) : ℝ) := by
-  have hcoords :
-      primeHistoryLogCoordinates (N : ℝ) 5 [p 4, p 3, p 2, p 1, p 0] =
-        actualPrimeTupleLog N p := by
-    funext i
-    fin_cases i <;> rfl
-  have ht' : primeHistoryLogCoordinates (N : ℝ) 5 [p 4, p 3, p 2, p 1, p 0] ∈
-      logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j := by
-    rw [hcoords]
-    exact ht
-  simpa [rosserAncestor] using
-    D.level3_on_fifth_cell hab (N : ℝ) [p 4, p 3, p 2, p 1, p 0] (by simp) j ht'
 
 end HistoricalPrefixCapData
 
@@ -189,28 +156,6 @@ private theorem historicalUpperFive_parent_valid_iff
     refine ⟨(historicalUpperFive_singleton_admissible_iff Q (p 0) (hprime 0).pos).mpr
       hfirst, ?_⟩
     exact (hordinary.mpr ⟨hfirst.trans_le hlevel, hthird⟩).2
-
-/-- The first and third power tests may use different historical levels.
-Both logarithmic inequalities retain their strict endpoints. -/
-theorem historicalUpperFive_cube_tests_iff_log {N : ℕ} (hN : 1 < N)
-    (old third : ℝ) (p : Fin 5 → ℕ) (hpos : ∀ i, 0 < p i) :
-    ((p 0 : ℝ) ^ 3 < (N : ℝ) ^ old ∧
-      (p 0 : ℝ) * p 1 * (p 2 : ℝ) ^ 3 < (N : ℝ) ^ third) ↔
-      3 * actualPrimeTupleLog N p 0 < old ∧
-        actualPrimeTupleLog N p 0 + actualPrimeTupleLog N p 1 +
-          3 * actualPrimeTupleLog N p 2 < third := by
-  have hN' : (1 : ℝ) < N := by exact_mod_cast hN
-  have hN0 : (0 : ℝ) < N := zero_lt_one.trans hN'
-  have hc i := actualPrimeTupleLog_rpow hN p hpos i
-  have hcub (i : Fin 5) :
-      (N : ℝ) ^ (3 * actualPrimeTupleLog N p i) = (p i : ℝ) ^ 3 := by
-    rw [mul_comm, Real.rpow_mul hN0.le, hc]
-    norm_num
-  have hprod :
-      (N : ℝ) ^ (actualPrimeTupleLog N p 0 + actualPrimeTupleLog N p 1 +
-        3 * actualPrimeTupleLog N p 2) = (p 0 : ℝ) * p 1 * (p 2 : ℝ) ^ 3 := by
-    rw [Real.rpow_add hN0, Real.rpow_add hN0, hc, hc, hcub]
-  rw [← hcub 0, ← hprod, Real.rpow_lt_rpow_left_iff hN', Real.rpow_lt_rpow_left_iff hN']
 
 /-- The actual third-capped frontier, on a fixed owned fifth cell, has
 the target deletion and the two correct historical cube thresholds.

@@ -1,4 +1,6 @@
-import ImbalancedChen.HistoricalUpperFiveCellGeometry
+import ImbalancedChen.FinitePrimeGeometryCore
+import ImbalancedChen.FirstExitFrontierTupleReindex
+import ImbalancedChen.AffinePrimeGates
 
 /-!
 # Historical fifth-parent geometry when the third level can decrease
