@@ -221,7 +221,7 @@ def sources_and_report():
         proof = (f"theorem block{b:02}_lengths :\n"
                  f"    block{b:02}.map List.length = {values} := by\n"
                  f"  change {symbolic} = _\n"
-                 "  rw [" + ", ".join(f"strip{k}_length" for k, _, _ in group) + "]\n\n")
+                 "  rw [" + ", ".join(f"strip{k}_length" for k, _, _ in group) + "] <;> rfl\n\n")
         sources[path] = (f"import {module(CERT + f'PairedV2NaturalSumsBlock{b:02}.lean')}\n\n"
                          "/-! Reuse the accepted strip length facts, at most sixteen per module. -/\n\n").encode() + options + proof.encode() + f"end {SUM_NS}\n".encode()
     length_imports = [module(partition_name), module(expected_name)] + [module(p) for p in length_block_names]
