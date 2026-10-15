@@ -38,6 +38,11 @@ It does not exchange the arithmetic `N` limit with the buffer limit, supply the
 
 ## Candidates that must not be counted as completed proofs
 
+The six unaccepted source files are preserved in a separate source-only
+commit. Their exact hashes and original failed attempts are listed in
+`verification/proof-continuation/2026-10-15/unaccepted-candidates.json`.
+They are excluded from the 13-module / 266-declaration acceptance count.
+
 * `CurrentChenPairDensity` and `CurrentChenUpsilon5OrdinaryMean` contain the
   proposed actual U5 ordinary mean argument. The new one-sided density route
   avoids the unnecessary two-sided density limit and its `ActualRosserOddBox`
