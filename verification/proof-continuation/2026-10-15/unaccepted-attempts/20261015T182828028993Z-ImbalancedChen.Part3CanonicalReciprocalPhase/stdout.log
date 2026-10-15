@@ -1,0 +1,56 @@
+ImbalancedChen/Part3CanonicalReciprocalPhase.lean:196:2: error: Type mismatch: After simplification, term
+  he
+ has type
+  @Eq (ℝ ⧸ AddSubgroup.zmultiples 1) (↑(↑(ComplexCRT.residue q r N₁ N₂ a) / ↑(q.lcm r)))
+    (↑(↑(ComplexCRT.residue q r N₁ N₂ a) * ↑(wPhaseInverse (v.k₁ * v.k₂) v.D) / ↑v.D -
+            ↑a * ↑(wPhaseInverse (v.n₁ * v.k₁ * v.k₂) (v.d * v.d₁ * v.D)) / ↑(v.d * v.d₁ * v.D)) +
+        ↑(↑a / (↑v.n₁ * ↑v.k₁ * ↑v.k₂ * ↑(v.d * v.d₁ * v.D))) +
+      ↑(↑a * (↑v.d₁ * ↑v.n₁ - ↑v.n₂) * ↑(wPhaseInverse (v.d * v.d₁ * v.D * v.n₂ * v.k₁) (v.n₁ * v.k₂)) /
+          (↑v.n₁ * ↑v.k₂)))
+but is expected to have type
+  @Eq (ℝ ⧸ AddSubgroup.zmultiples 1) (↑(↑(ComplexCRT.residue q r N₁ N₂ a) / ↑(q.lcm r)))
+    (rootPhase v (ComplexCRT.residue q r N₁ N₂ a) a + slowPhase v a + reciprocalPhase v a)
+ImbalancedChen/Part3CanonicalReciprocalPhase.lean:239:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(↑(ComplexCRT.residue (complexFactorModulus l.1) (complexFactorModulus l'.1) l.2 l'.2 d.residue) /
+      ↑((complexFactorModulus l.1).lcm (complexFactorModulus l'.1)))
+in the target expression
+  let v := d.canonicalReciprocalData l l';
+  let b := ComplexCRT.residue (complexFactorModulus l.1) (complexFactorModulus l'.1) l.2 l'.2 d.residue;
+  (fourier h) ↑(↑b / ↑((complexFactorModulus l.1).lcm (complexFactorModulus l'.1))) =
+    (fourier h) (CanonicalReciprocalPhase.rootPhase v b d.residue) *
+        (fourier h) (CanonicalReciprocalPhase.slowPhase v d.residue) *
+      (fourier h) (CanonicalReciprocalPhase.reciprocalPhase v d.residue)
+
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+l l' : (ℕ × ℕ × ℕ) × ℕ
+hl : l ∈ d.complexRowLabels
+hl' : l' ∈ d.complexRowLabels
+hc : ComplexCRT.Compatible (complexFactorModulus l.1) (complexFactorModulus l'.1) l.2 l'.2
+h : ℤ
+⊢ let v := d.canonicalReciprocalData l l';
+  let b := ComplexCRT.residue (complexFactorModulus l.1) (complexFactorModulus l'.1) l.2 l'.2 d.residue;
+  (fourier h) ↑(↑b / ↑((complexFactorModulus l.1).lcm (complexFactorModulus l'.1))) =
+    (fourier h) (CanonicalReciprocalPhase.rootPhase v b d.residue) *
+        (fourier h) (CanonicalReciprocalPhase.slowPhase v d.residue) *
+      (fourier h) (CanonicalReciprocalPhase.reciprocalPhase v d.residue)
+ImbalancedChen/Part3CanonicalReciprocalPhase.lean:299:15: error: don't know how to synthesize implicit argument `L`
+  @tsum_congr ℂ ℤ Complex.instAddCommMonoid PseudoMetricSpace.toUniformSpace.toTopologicalSpace ?m.94
+    (CommonSmoothCutoff.poissonNonzeroFrequency (d.U / ↑((complexFactorModulus l.1).lcm (complexFactorModulus l'.1)))
+      (↑(ComplexCRT.residue (complexFactorModulus l.1) (complexFactorModulus l'.1) l.2 l'.2 d.residue) /
+        ↑((complexFactorModulus l.1).lcm (complexFactorModulus l'.1))))
+    (d.canonicalPoissonFrequency l l') fun h => poissonNonzeroFrequency_eq_canonicalPhases hd hl hl' hc h
+context:
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+l : (ℕ × ℕ × ℕ) × ℕ
+hl : l ∈ d.complexRowLabels
+l' : (ℕ × ℕ × ℕ) × ℕ
+hl' : l' ∈ d.complexRowLabels
+hc : ComplexCRT.Compatible (complexFactorModulus l.1) (complexFactorModulus l'.1) l.2 l'.2
+⊢ SummationFilter ℤ
+ImbalancedChen/Part3CanonicalReciprocalPhase.lean:299:9: error: failed to infer `have` declaration type

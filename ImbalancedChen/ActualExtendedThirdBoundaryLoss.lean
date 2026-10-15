@@ -60,7 +60,10 @@ theorem actualExtendedThirdWallClosedTailMass_uniform_small {ε : ℝ} (hε : 0 
   have hevent := hupper.eventually (Iio_mem_nhds (ENNReal.ofReal_pos.mpr hε))
   have hsmall : Iio (thirdPrefixTailMargin / 4) ∈ 𝓝[>] (0 : ℝ) :=
     nhdsWithin_le_nhds (Iio_mem_nhds (by norm_num [thirdPrefixTailMargin]))
-  obtain ⟨h, hh, hs, hb⟩ := (self_mem_nhdsWithin.and (hsmall.and hevent)).exists
+  have hpos : Ioi (0 : ℝ) ∈ 𝓝[>] (0 : ℝ) := self_mem_nhdsWithin
+  obtain ⟨h, hh, hs, hb⟩ := Filter.Eventually.exists
+    (Filter.Eventually.and (f := 𝓝[>] (0 : ℝ)) hpos
+      (Filter.Eventually.and hsmall hevent))
   exact ⟨h, hh, hs.le, fun e he0 he m physical =>
     (actualExtendedThirdWallClosedTailMass_le physical he0 he hh hs.le).trans hb.le⟩
 

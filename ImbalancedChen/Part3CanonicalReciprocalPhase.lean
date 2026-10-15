@@ -193,7 +193,8 @@ private theorem circle_eq_threePhase
   have he := productCRTResidue_phase_threeFactor hv.d_pos hv.d₁_pos hv.D_pos
     hv.k₁_pos hv.k₂_pos hv.n₁_pos hv.lcm_eq hv.k₁_dvd hv.k₂_dvd hv.k_D
     hp.1 hp.2.1 hp.2.2 hc' a
-  simpa only [← hv.N₁_eq, ← hv.N₂_eq] using he
+  simpa only [rootPhase, slowPhase, reciprocalPhase,
+    CanonicalReciprocalData.WGCDData.D', ← hv.N₁_eq, ← hv.N₂_eq] using he
 
 private theorem fourier_add (h : ℤ) (x y : UnitAddCircle) :
     fourier h (x + y) = fourier h x * fourier h y := by
@@ -236,6 +237,7 @@ theorem MediumAtom.actualCRT_fourier_eq_canonicalPhases
       fourier h (CanonicalReciprocalPhase.rootPhase v b d.residue) *
         fourier h (CanonicalReciprocalPhase.slowPhase v d.residue) *
           fourier h (CanonicalReciprocalPhase.reciprocalPhase v d.residue) := by
+  dsimp only
   rw [MediumAtom.actualCRT_circle_eq_canonicalPhases hd hl hl' hc,
     CanonicalReciprocalPhase.fourier_add, CanonicalReciprocalPhase.fourier_add]
 
@@ -296,7 +298,8 @@ theorem MediumAtom.complexCRTSmoothNonzeroPart_eq_canonicalPhases
   by_cases hc : ComplexCRT.Compatible (complexFactorModulus l.1)
       (complexFactorModulus l'.1) l.2 l'.2
   · simp only [if_pos hc]
-    have he := tsum_congr (fun h ↦ d.poissonNonzeroFrequency_eq_canonicalPhases hd hl hl' hc h)
+    have he := tsum_congr (L := SummationFilter.unconditional ℤ)
+      (fun h ↦ d.poissonNonzeroFrequency_eq_canonicalPhases hd hl hl' hc h)
     rw [he]
   · simp only [if_neg hc]
 

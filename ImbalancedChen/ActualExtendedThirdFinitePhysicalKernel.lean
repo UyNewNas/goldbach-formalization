@@ -86,9 +86,9 @@ theorem actualExtendedThirdFiniteLevel_tail_geometry {e : ℝ} {m : ℕ}
     dsimp [thirdPrefixTailMargin, thirdPrefixTheta, thirdPrefixRho] at *
     linarith
 
-def actualExtendedThirdCapKernel (e λ x y z : ℝ) : ℝ :=
+def actualExtendedThirdCapKernel (e lam x y z : ℝ) : ℝ :=
   4 * (actualExtendedThirdLowerFactor ((thirdPrefixTheta - 2 * e - x - y - z) / z) -
-    actualExtendedThirdLowerFactor ((λ - x - y - z) / z)) / (x * y * z ^ 2)
+    actualExtendedThirdLowerFactor ((lam - x - y - z) / z)) / (x * y * z ^ 2)
 
 def actualExtendedThirdCompactKernelBound (h : ℝ) : ℝ :=
   (4 * (1 / (2 * Real.exp Real.eulerMascheroniConstant))) / h ^ 4
@@ -100,9 +100,9 @@ theorem actualExtendedThirdCompactKernelBound_pos {h : ℝ} (hh : 0 < h) :
 
 /-- The true zero-extended factor is bounded globally, so this compact bound
 does not need a cube-gate or a prior integrability assumption. -/
-theorem actualExtendedThirdCapKernel_abs_le {e λ x y z h : ℝ} (hh : 0 < h)
+theorem actualExtendedThirdCapKernel_abs_le {e lam x y z h : ℝ} (hh : 0 < h)
     (hx : h ≤ x) (hy : h ≤ y) (hz : h ≤ z) :
-    |actualExtendedThirdCapKernel e λ x y z| ≤ actualExtendedThirdCompactKernelBound h := by
+    |actualExtendedThirdCapKernel e lam x y z| ≤ actualExtendedThirdCompactKernelBound h := by
   let M : ℝ := 1 / (2 * Real.exp Real.eulerMascheroniConstant)
   have hM : 0 ≤ M := by dsimp [M]; positivity
   have hx0 : 0 < x := hh.trans_le hx
@@ -116,13 +116,13 @@ theorem actualExtendedThirdCapKernel_abs_le {e λ x y z h : ℝ} (hh : 0 < h)
       h ^ 4 = (h * h) * h ^ 2 := by ring
       _ ≤ (x * y) * z ^ 2 := mul_le_mul hxy hz2 (sq_nonneg _) (by positivity)
   have hdiff : |actualExtendedThirdLowerFactor ((thirdPrefixTheta - 2 * e - x - y - z) / z) -
-      actualExtendedThirdLowerFactor ((λ - x - y - z) / z)| ≤ M := by
+      actualExtendedThirdLowerFactor ((lam - x - y - z) / z)| ≤ M := by
     have ha0 := actualExtendedThirdLowerFactor_nonneg
       ((thirdPrefixTheta - 2 * e - x - y - z) / z)
-    have hb0 := actualExtendedThirdLowerFactor_nonneg ((λ - x - y - z) / z)
+    have hb0 := actualExtendedThirdLowerFactor_nonneg ((lam - x - y - z) / z)
     have ha := actualExtendedThirdLowerFactor_le_normalization
       ((thirdPrefixTheta - 2 * e - x - y - z) / z)
-    have hb := actualExtendedThirdLowerFactor_le_normalization ((λ - x - y - z) / z)
+    have hb := actualExtendedThirdLowerFactor_le_normalization ((lam - x - y - z) / z)
     change _ ≤ M at ha hb
     exact abs_le.mpr ⟨by linarith, by linarith⟩
   unfold actualExtendedThirdCapKernel actualExtendedThirdCompactKernelBound
@@ -181,8 +181,7 @@ theorem actualExtendedThirdFiniteNestedTailMass_le {e h : ℝ} {m : ℕ}
   apply thirdPrefixTailMass_le_eighteen hh hsmall
   intro x y z hz _hzh hzy hyx hx
   have ht : ![x, y, z] ∈ actualExtendedThirdClosedOrder := by
-    simp only [actualExtendedThirdClosedOrder, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.cons_val_two]
+    simp only [actualExtendedThirdClosedOrder]
     exact ⟨hz.le, hzy, hyx⟩
   have hmargin := actualExtendedThirdFiniteLevel_tail_geometry (m := m) he0 he ht
     (by simpa only [Matrix.cons_val_zero] using hx)
@@ -208,7 +207,10 @@ theorem actualExtendedThirdFiniteNestedTailMass_uniform_small {ε : ℝ} (hε : 
   have hevent := hupper.eventually (Iio_mem_nhds (ENNReal.ofReal_pos.mpr hε))
   have hsmall : Iio (thirdPrefixTailMargin / 4) ∈ 𝓝[>] (0 : ℝ) :=
     nhdsWithin_le_nhds (Iio_mem_nhds (by norm_num [thirdPrefixTailMargin]))
-  obtain ⟨h, hh, hs, hb⟩ := (self_mem_nhdsWithin.and (hsmall.and hevent)).exists
+  have hpos : Ioi (0 : ℝ) ∈ 𝓝[>] (0 : ℝ) := self_mem_nhdsWithin
+  obtain ⟨h, hh, hs, hb⟩ := Filter.Eventually.exists
+    (Filter.Eventually.and (f := 𝓝[>] (0 : ℝ)) hpos
+      (Filter.Eventually.and hsmall hevent))
   exact ⟨h, hh, hs.le, fun e he0 he m =>
     (actualExtendedThirdFiniteNestedTailMass_le (m := m) he0 he hh hs.le).trans hb.le⟩
 

@@ -54,10 +54,30 @@ existing root build would therefore not validate them.
 | `Part3CommonPoisson` | Actual common smooth progression to integer lattice, Schwartz Poisson and the full nonzero-frequency remainder, retaining the true complex labels and V/U | Strict compilation; original-object stock kernel replay; complete 31-declaration types, inventory and transitive axiom audit |
 | `Part3FactorFiberDivisor` | Actual physical-modulus factor fibres retain all labels, with a proved tau_3 majorant and explicit logarithmic second-moment costs | Strict compilation; original-object stock kernel replay; complete 30-declaration types, inventory and transitive axiom audit |
 | `Part3RealComponentReduction` | Exact 32 real-component expansion of the actual five complex coefficients; same family-uniform SW constants and explicit square cost | Strict compilation; original-object stock kernel replay; complete 37-declaration types, inventory and transitive axiom audit |
+| `CurrentChenSinglePrimeUpperDensity` | Actual rounded single-prime upper Rosser density with canonical upper factor and fixed Euler normalization | Strict compilation; original-object stock kernel replay; complete 22-declaration types, inventory and transitive axiom audit |
+| `CurrentChenTrueLiNormalization` | Genuine leading-one normalization of the actual logarithmic integral, proved without an asymptotic supplier premise | Strict compilation; original-object stock kernel replay; complete 14-declaration types, inventory and transitive axiom audit |
+| `CurrentChenSinglePrimeHarmonicMean` | Actual single-prime reciprocal-totient sums with moving row profiles have their genuine harmonic integral limits | Strict compilation; original-object stock kernel replay; complete 23-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon34OrdinaryUpperMean` | Literal third- and fourth-row ordinary upper count means with their original cutoffs and complete error budgets | Strict compilation; original-object stock kernel replay; complete 12-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdFirstCubeMargin` | Actual retained robust cap has the displayed positive first-cube margin | Strict compilation; original-object stock kernel replay; complete 6-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdGammaApproximation` | Literal robust Gamma approximates the same eight-branch ideal cap outside the explicitly paid transition and stopping strips | Strict compilation; original-object stock kernel replay; complete 20-declaration types, inventory and transitive axiom audit |
+| `Part3CanonicalReciprocalData` | Canonical finite gcd-factor data constructed from actual compatible CRT row labels, including the true lcm reconstruction and phase-unit gates | Strict compilation; original-object stock kernel replay; complete 108-declaration types, inventory and transitive axiom audit |
+| `Part3CanonicalReciprocalPhase` | Exact three-phase dictionary for the actual signed CRT residue and all integer Poisson frequencies, retaining the slow term, full complex labels and primitive V/U | Strict compilation; original-object stock kernel replay; complete 28-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon9PrimeSource` | Literal ninth source is exactly a prime-triple part plus the actual unit fibres, proved from its genuine square-root rough cutoff | Strict compilation; original-object stock kernel replay; complete 25-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon9UnitBudget` | Actual ninth unit fibres have a concrete 4 N^(92/125) bound and a proved negligible singular-normalized contribution | Strict compilation; original-object stock kernel replay; complete 4-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon9ProductCoefficient` | Literal ordered prime-pair products give a modulus-independent zero-one coefficient on the genuine power interval, retaining the original quotient and unit fibres | Strict compilation; original-object stock kernel replay; complete 30-declaration types, inventory and transitive axiom audit |
+| `Part3CleanBetaLargeGCDMajorant` | Actual large-gcd W splits into a clean-beta divisor majorant and the complete explicit signed-divisor exception | Strict compilation; original-object stock kernel replay; complete 26-declaration types, inventory and transitive axiom audit |
+| `Part3PolynomialResidueDivisorBound` | Genuine divisor subpower bound pays the actual moving polynomial residue in the original scale, retaining clean-pair mass and the exception | Strict compilation; original-object stock kernel replay; complete 14-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdFinitePhysicalKernel` | Literal finite retained-cell lookup, measurable actual clamped kernel, compact bound and uniform canonical nested small-z tail | Strict compilation; original-object stock kernel replay; complete 21-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdStripIntegral` | Actual transition/stopping strips have vanishing compact-kernel mass with the displayed uniform volume and threshold order | Strict compilation; original-object stock kernel replay; complete 17-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdCompactKernelApproximation` | The actual finite kernel uniformly approximates the unbuffered ideal kernel off the exact two strips, paying both level changes and a genuine canonical modulus | Strict compilation; original-object stock kernel replay; complete 9-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdFiniteTailIntegral` | Actual finite physical lookup has a genuine tuple-space Tonelli and closed-order tail bridge to the uniform canonical small-z bound | Strict compilation; original-object stock kernel replay; complete 9-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdBoundaryLoss` | Full actual physical and ideal transition/stopping-strip masses vanish after paying the compact and uniform small-z parts in the displayed threshold order | Strict compilation; original-object stock kernel replay; complete 8-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdKernelL1Convergence` | Whole-domain absolute L1 error of the actual finite lookup against the unbuffered ideal kernel tends to zero with one cutoff before all buffers and meshes | Strict compilation; original-object stock kernel replay; complete 12-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdFunctionalConvergence` | Full-domain integrability of the actual physical and ideal kernels, and uniform convergence of the finite-policy real integral to the literal unbuffered manuscript functional | Strict compilation; original-object stock kernel replay; complete 11-declaration types, inventory and transitive axiom audit |
 
-These 40 modules contain **871 complete owned declarations**, including
+These 60 modules contain **1290 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-871 independent major mathematical theorems.
+1290 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.
@@ -70,15 +90,21 @@ The right-hand side remains the original full-rectangle sixth count;
 the corrected strict inner product domain supplies a conservative lower
 bound. This ordinary integral is distinct from the manuscript's adopted L6.
 
-The third and fourth actual finite upper counts now have their full
-ordinary BV and centre budgets. This finite statement alone does not
-provide their normalized integral upper means or adopted constants.
+The third and fourth ordinary integral upper means are also proved
+with the actual logarithmic integral normalization. This does not close
+the stronger causal contributions or the complete eleven-term ledger.
+
+The actual finite robust correction kernels are integrable on the
+full original closed ordered domain. Their real integrals uniformly
+approximate the literal unbuffered manuscript functional, with the
+small-z tails and both changing boundary strips paid. This analytic
+limit does not prove the same-policy arithmetic count mean.
 
 The stronger causal contributions and the complete lower ledger remain open.
 
 ## Candidates that must not be counted as completed proofs
 
-The 25 unaccepted source candidates are listed with exact source
+The 15 unaccepted source candidates are listed with exact source
 hashes in `verification/proof-continuation/2026-10-15/unaccepted-candidates.json`.
 They are excluded from the accepted module/declaration inventory above.
 Original failed attempts remain failures; replacement sources need their own checks.
@@ -86,28 +112,18 @@ Original failed attempts remain failures; replacement sources need their own che
 * `Part3ReciprocalAPSupplier`: New target not executed; limited external prerequisite bootstrap stopped at a resource failure.
 * `Certificates.PairedV2FullCertificate`: Not executed; requires the full original-strip chain, beyond the frozen baseline pilot.
 * `ActualThirdPrefixTailIntegral`: Broad arithmetic tuple/profile bridge is not compiled; the separate canonical integral core is verified.
-* `ActualExtendedThirdFirstCubeMargin`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdGammaApproximation`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `CurrentChenSinglePrimeUpperDensity`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `CurrentChenTrueLiNormalization`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3CanonicalReciprocalData`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdFinitePhysicalKernel`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdStripIntegral`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `CurrentChenSinglePrimeHarmonicMean`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `CurrentChenUpsilon34OrdinaryUpperMean`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3CanonicalReciprocalPhase`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdFiniteTailIntegral`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdBoundaryLoss`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdLeastWinningIndex`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdActionParameters`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdWholeCellActions`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualTwoCapacityGreedy`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3CleanBetaLargeGCDMajorant`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3PolynomialResidueDivisorBound`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `CurrentChenUpsilon9PrimeSource`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `CurrentChenUpsilon9UnitBudget`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdCompactKernelApproximation`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdKernelL1Convergence`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualDwellSelectedRemainder`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualSelectedSubproductParameters`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3ActualLargeGCDBetaMass`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenUpsilon9CoprimeGateBudget`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualTwoFactorRepairMonomials`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualSelectedPairFactorization`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3SignedDivisorDeletion`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenUpsilon9PanAggregate`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 
 The ordinary lower means above are baseline means. They do not prove the
 manuscript's stronger causal h248 contribution, complete eleven-term lower
@@ -117,7 +133,8 @@ The actual ideal cap, ordered integral, robust cell inequalities, fine-grid
 coverage, Gamma approximation and boundary-strip passage are separate steps.
 Each is accepted only when included in the executed-check table. The actual
 branch/action licenses, full kernel convergence and same-policy arithmetic
-count mean are still required for hUpper.
+count mean each require their own executed checks. Acceptance of one
+component does not supply the others or discharge hUpper.
 
 The complex CRT, finite Fourier, common Poisson and reciprocal-phase steps
 are accepted only when individually listed in the executed-check table.
@@ -142,6 +159,19 @@ In particular, source inspection of the pinned `goldbach` commit
 The selected 129-module `goldbach` source set passed a forbidden-token screen;
 that screen does not constitute kernel replay, a compiled new consumer,
 or the missing current strong distribution theorem.
+
+The same fixed dependency also contains complete unconditional Fouvry C.2
+and scaled-residue distribution endpoints. A fresh source audit follows
+their full types, primitive definitions and 17 pinned source blobs. This
+does not constitute imported-closure replay. Transposing the actual finite
+double sum places the original alpha on the required Siegel-Walfisz side,
+but does not prove the remaining hypotheses: the short-variable exponent
+must be at most 1/10, the modulus coefficient must be well-factorable for
+every level split, its support must lie below the actual C.2 level, and the
+moving residue must stay within a fixed linear multiple of the local scale.
+The current physical carrier and actual three-factor weights have not been
+shown to satisfy these conditions. The full manuscript target is retained;
+the endpoint is not claimed as a proof of the missing strong distribution.
 
 ## Verification scope and resources
 

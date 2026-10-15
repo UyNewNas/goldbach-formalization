@@ -36,7 +36,7 @@ def actualExtendedThirdRobustCandidate (e : ℝ) (m : ℕ)
 theorem actualExtendedThirdRobustCandidate_le_fullGamma (e : ℝ) (m : ℕ)
     (j : ActualExtendedThirdDyadicLabel m) (k : Fin 8) :
     actualExtendedThirdRobustCandidate e m j k ≤ actualExtendedThirdFullGamma e m j := by
-  fin_cases k <;> simp [actualExtendedThirdRobustCandidate, actualExtendedThirdFullGamma, le_max_iff]
+  fin_cases k <;> simp [actualExtendedThirdRobustCandidate, actualExtendedThirdFullGamma]
 
 private theorem fullGamma_le_maximal_candidate {e : ℝ} {m : ℕ}
     {j : ActualExtendedThirdDyadicLabel m} {k : Fin 8}

@@ -202,7 +202,7 @@ theorem MediumAtom.absoluteFactorModulusRow_le_tauFour
       · exact d.absoluteFactorFiber_le_tauThree hd q
       · exact le_rfl
     _ = ∑ q ∈ d.physicalFactorModuli.filter
-        (fun q ↦ Int.ModEq q ((m : ℤ) * n) d.residue), (fouvryTau 3 q : ℝ) := by
+        (fun q : ℕ ↦ Int.ModEq q ((m : ℤ) * n) d.residue), (fouvryTau 3 q : ℝ) := by
       rw [Finset.sum_filter]
     _ ≤ ∑ q ∈ (((m : ℤ) * n - d.residue).natAbs).divisors,
         (fouvryTau 3 q : ℝ) := by
@@ -268,7 +268,7 @@ theorem MediumAtom.commonFactorPairWeight_norm_le (d : MediumAtom) (n₁ n₂ : 
       intro r _
       apply Finset.sum_le_sum
       intro s _
-      rw [norm_mul, norm_mul, norm_star, Complex.norm_real,
+      rw [norm_mul, norm_mul, norm_star, Complex.norm_real, Real.norm_eq_abs,
         abs_of_nonneg (constructedWeight_nonneg d _ _ _ _)]
       exact mul_le_mul_of_nonneg_left (constructedWeight_le_product d _ _ _ _)
         (mul_nonneg (norm_nonneg _) (norm_nonneg _))
@@ -276,16 +276,16 @@ theorem MediumAtom.commonFactorPairWeight_norm_le (d : MediumAtom) (n₁ n₂ : 
       unfold ComplexCRT.productProgressionWeight MediumAtom.absoluteFactorModulusRow
       simp only [Finset.mul_sum]
       simp_rw [Finset.sum_comm (s := d.complexFactorLabels) (t := d.commonSmoothCarrier)]
-      simp only [Finset.mul_sum, Finset.sum_mul]
+      simp only [Finset.sum_mul]
       apply Finset.sum_congr rfl
       intro m _
+      conv_rhs => rw [Finset.sum_comm]
       apply Finset.sum_congr rfl
       intro r _
       apply Finset.sum_congr rfl
       intro s _
-      by_cases h₁ : Int.ModEq (complexFactorModulus r) ((m : ℤ) * n₁) d.residue <;>
-        by_cases h₂ : Int.ModEq (complexFactorModulus s) ((m : ℤ) * n₂) d.residue <;>
-          simp [h₁, h₂, mul_comm, mul_left_comm, mul_assoc]
+      split_ifs <;> simp_all
+      all_goals ring
 
 def MediumAtom.commonLargeBetaGCDDivisorMajorant (d : MediumAtom) (Y : ℝ) : ℝ :=
   ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,
@@ -319,9 +319,9 @@ theorem MediumAtom.commonLargeBetaGCDW_clean_norm_le_divisorMajorant
   · simp only [if_pos hy]
     rw [norm_mul, norm_mul, norm_star]
     by_cases h₁ : d.cleanedBeta n₁ = 0
-    · simp only [h₁, norm_zero, zero_mul]
+    · simp only [h₁, norm_zero, zero_mul, le_refl]
     by_cases h₂ : d.cleanedBeta n₂ = 0
-    · simp only [h₂, norm_zero, mul_zero, zero_mul]
+    · simp only [h₂, norm_zero, mul_zero, zero_mul, le_refl]
     apply mul_le_mul_of_nonneg_left _ (mul_nonneg (norm_nonneg _) (norm_nonneg _))
     apply (d.commonFactorPairWeight_norm_le n₁ n₂).trans
     apply Finset.sum_le_sum
@@ -343,7 +343,7 @@ theorem MediumAtom.commonLargeBetaGCDW_norm_le_majorant_add_exception
       ‖d.commonLargeBetaGCDException Y‖ := by
   rw [d.commonLargeBetaGCDW_eq_clean_add_exception Y]
   exact (norm_add_le _ _).trans
-    (add_le_add_right (d.commonLargeBetaGCDW_clean_norm_le_divisorMajorant hd Y) _)
+    (add_le_add (d.commonLargeBetaGCDW_clean_norm_le_divisorMajorant hd Y) le_rfl)
 
 end
 

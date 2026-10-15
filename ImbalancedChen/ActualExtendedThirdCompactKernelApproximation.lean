@@ -76,10 +76,10 @@ private theorem clamped_arg_mem {h x y z : ℝ} (hh : 0 < h)
 /-- A genuine modulus is constructed from the actual canonical factor. Its
 argument interval depends only on the positive compact cutoff. -/
 theorem actualExtendedThirdCapKernel_uniform_approx {h ε : ℝ} (hh : 0 < h) (hε : 0 < ε) :
-    ∃ η : ℝ, 0 < η ∧ ∀ e λ L x y z : ℝ,
-      0 ≤ e → 2 * e ≤ η → λ ≤ thirdPrefixTheta → L ≤ thirdPrefixTheta →
-      |λ - L| ≤ η → h ≤ x → h ≤ y → h ≤ z →
-        |actualExtendedThirdCapKernel e λ x y z -
+    ∃ η : ℝ, 0 < η ∧ ∀ e lam L x y z : ℝ,
+      0 ≤ e → 2 * e ≤ η → lam ≤ thirdPrefixTheta → L ≤ thirdPrefixTheta →
+      |lam - L| ≤ η → h ≤ x → h ≤ y → h ≤ z →
+        |actualExtendedThirdCapKernel e lam x y z -
           actualExtendedThirdCapKernel 0 L x y z| ≤ ε := by
   let τ : ℝ := ε * h ^ 4 / 16
   have hτ : 0 < τ := by dsimp [τ]; positivity
@@ -89,7 +89,7 @@ theorem actualExtendedThirdCapKernel_uniform_approx {h ε : ℝ} (hh : 0 < h) (h
       continuous_actualExtendedThirdLowerFactor.continuousOn
   obtain ⟨δ, hδ, hclose⟩ := Metric.uniformContinuousOn_iff.mp huc τ hτ
   refine ⟨δ * h / 2, by positivity, ?_⟩
-  intro e λ L x y z he heη hλ hL hλL hx hy hz
+  intro e lam L x y z he heη hlam hL hlamL hx hy hz
   have hx0 : 0 < x := hh.trans_le hx
   have hy0 : 0 < y := hh.trans_le hy
   have hz0 : 0 < z := hh.trans_le hz
@@ -126,9 +126,9 @@ theorem actualExtendedThirdCapKernel_uniform_approx {h ε : ℝ} (hh : 0 < h) (h
     rw [heq, abs_neg, abs_of_nonneg (mul_nonneg (by norm_num) he)]
     exact heη
   have ho := hfactor (thirdPrefixTheta - 2 * e) thirdPrefixTheta (by linarith) le_rfl hold
-  have hn := hfactor λ L hλ hL hλL
+  have hn := hfactor lam L hlam hL hlamL
   let a := actualExtendedThirdLowerFactor ((thirdPrefixTheta - 2 * e - x - y - z) / z)
-  let b := actualExtendedThirdLowerFactor ((λ - x - y - z) / z)
+  let b := actualExtendedThirdLowerFactor ((lam - x - y - z) / z)
   let c := actualExtendedThirdLowerFactor ((thirdPrefixTheta - x - y - z) / z)
   let d := actualExtendedThirdLowerFactor ((L - x - y - z) / z)
   change |a - c| ≤ τ at ho
@@ -160,7 +160,7 @@ theorem actualExtendedThirdCapKernel_uniform_approx {h ε : ℝ} (hh : 0 < h) (h
     _ = ε / 2 := by
       dsimp [τ]
       field_simp [hh.ne']
-      <;> ring
+      ring
     _ ≤ ε := by linarith
 
 /-- The old-cube complement has zero kernel pointwise: clamping at two

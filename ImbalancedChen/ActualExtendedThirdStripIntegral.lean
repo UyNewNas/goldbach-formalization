@@ -52,8 +52,10 @@ private theorem stripRectangle_volume {a δ : ℝ} (hδ : 0 ≤ δ) :
   have hdiff : a - (a - δ) = δ := by ring
   have hrect : volume (stripRectangle a δ) =
       ENNReal.ofReal δ * ENNReal.ofReal thirdPrefixRho * ENNReal.ofReal thirdPrefixRho := by
-    simp [stripRectangle, volume_pi_pi, Fin.prod_univ_succ, Real.volume_Icc,
-      Matrix.cons_val_two, hdiff, mul_assoc]
+    rw [stripRectangle, volume_pi_pi, Fin.prod_univ_three]
+    change volume (Icc (a - δ) a) * volume (Icc 0 thirdPrefixRho) *
+      volume (Icc 0 thirdPrefixRho) = _
+    simp only [Real.volume_Icc, hdiff, sub_zero]
   rw [hrect, ← ENNReal.ofReal_mul hδ, ← ENNReal.ofReal_mul (mul_nonneg hδ hrho)]
   congr 1
   ring
@@ -112,7 +114,7 @@ theorem actualExtendedThirdWallMass_le (physical : Bool) {e h a δ : ℝ} {m : �
         volume (actualExtendedThirdWallStrip h a δ) := by simp
     _ ≤ ENNReal.ofReal (actualExtendedThirdCompactKernelBound h) *
         ENNReal.ofReal (δ * thirdPrefixRho ^ 2) :=
-      mul_le_mul_left' (actualExtendedThirdWallStrip_volume_le hh hδ) _
+      mul_le_mul_right (actualExtendedThirdWallStrip_volume_le hh hδ) _
     _ = ENNReal.ofReal (actualExtendedThirdCompactKernelBound h * (δ * thirdPrefixRho ^ 2)) :=
       (ENNReal.ofReal_mul (actualExtendedThirdCompactKernelBound_pos hh).le).symm
 

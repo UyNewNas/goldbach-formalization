@@ -75,7 +75,10 @@ private theorem compactRectangle_volume :
   have heq : volume compactRectangle =
       ENNReal.ofReal thirdPrefixRho * ENNReal.ofReal thirdPrefixRho *
         ENNReal.ofReal thirdPrefixRho := by
-    simp [compactRectangle, volume_pi_pi, Fin.prod_univ_succ, Real.volume_Icc, mul_assoc]
+    rw [compactRectangle, volume_pi_pi, Fin.prod_univ_three]
+    change volume (Icc 0 thirdPrefixRho) * volume (Icc 0 thirdPrefixRho) *
+      volume (Icc 0 thirdPrefixRho) = _
+    simp only [Real.volume_Icc, sub_zero]
   rw [heq, ← ENNReal.ofReal_mul hr, ← ENNReal.ofReal_mul (mul_nonneg hr hr)]
   congr 1
   ring
@@ -139,8 +142,8 @@ private theorem differenceMass_cover (e h δ : ℝ) (m : ℕ) :
     _ ≤ (actualExtendedThirdKernelDifferenceMassOn e m (S ∪ G) +
         actualExtendedThirdKernelDifferenceMassOn e m M) +
           actualExtendedThirdKernelDifferenceMassOn e m R :=
-      add_le_add_right (lintegral_union_le _ _ _) _
-    _ ≤ _ := add_le_add_right (add_le_add_right (lintegral_union_le _ _ _) _) _
+      add_le_add (lintegral_union_le _ _ _) le_rfl
+    _ ≤ _ := add_le_add (add_le_add (lintegral_union_le _ _ _) le_rfl) le_rfl
 
 /-- Full absolute L1 approximation, with one cutoff preceding all subsequent
 buffers and meshes. Every set and kernel is the literal actual constructor. -/
@@ -212,7 +215,7 @@ theorem actualExtendedThirdKernelDifferenceMass_uniform_small {ε : ℝ} (hε : 
       (actualExtendedThirdCompactGoodRegion h width) ≤ ENNReal.ofReal (ε / 4) := by
     have hv : volume (actualExtendedThirdCompactGoodRegion h width) ≤
         ENNReal.ofReal (thirdPrefixRho ^ 3) :=
-      (measure_mono (Set.diff_subset : actualExtendedThirdCompactGoodRegion h width ⊆
+      (measure_mono (Set.sdiff_subset : actualExtendedThirdCompactGoodRegion h width ⊆
         actualExtendedThirdCompactOrder h)).trans (actualExtendedThirdCompactOrder_volume_le hh)
     calc
       _ ≤ ∫⁻ _t in actualExtendedThirdCompactGoodRegion h width, ENNReal.ofReal ν := by
@@ -225,7 +228,7 @@ theorem actualExtendedThirdKernelDifferenceMass_uniform_small {ε : ℝ} (hε : 
         · intro hn
           exact ht.2 (Or.inr hn)
       _ = ENNReal.ofReal ν * volume (actualExtendedThirdCompactGoodRegion h width) := by simp
-      _ ≤ ENNReal.ofReal ν * ENNReal.ofReal (thirdPrefixRho ^ 3) := mul_le_mul_left' hv _
+      _ ≤ ENNReal.ofReal ν * ENNReal.ofReal (thirdPrefixRho ^ 3) := mul_le_mul_right hv _
       _ = ENNReal.ofReal (ν * thirdPrefixRho ^ 3) := (ENNReal.ofReal_mul hν.le).symm
       _ ≤ ENNReal.ofReal (ε / 4) := by
         apply ENNReal.ofReal_le_ofReal

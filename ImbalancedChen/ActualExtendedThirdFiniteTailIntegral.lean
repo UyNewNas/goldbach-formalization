@@ -61,7 +61,7 @@ theorem actualExtendedThirdFiniteOrderedTailMass_eq_nested (e h : ℝ) (m : ℕ)
     by_cases hz : z ∈ Ioc 0 h <;>
       by_cases hx : x ∈ Ioc z thirdPrefixRho <;>
       by_cases hy : y ∈ Ioc z x <;>
-      simp_all [F, Set.indicator_apply, Matrix.cons_val_two]
+      simp_all [F, Set.indicator_apply]
   calc
     actualExtendedThirdFiniteOrderedTailMass e m h = ∫⁻ t, F t :=
       (lintegral_indicator (measurableSet_actualExtendedThirdOrderedTailRegion h) _).symm
@@ -111,8 +111,7 @@ theorem actualExtendedThirdFiniteKernel_eq_core {e h x y z : ℝ} {m : ℕ}
       thirdPrefixCorrectionKernel (thirdPrefixTheta - 2 * e)
         (actualExtendedThirdFiniteLevel e m ![x, y, z]) x y z := by
   have ht : ![x, y, z] ∈ actualExtendedThirdClosedOrder := by
-    simp only [actualExtendedThirdClosedOrder, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.cons_val_two]
+    simp only [actualExtendedThirdClosedOrder]
     exact ⟨hz.le, hzy, hyx⟩
   have hg := actualExtendedThirdFiniteLevel_tail_geometry (m := m) he0 he ht
     (by simpa only [Matrix.cons_val_zero] using hx)
@@ -147,8 +146,7 @@ theorem actualExtendedThirdFiniteOrderedTailMass_eq_core {e h : ℝ} {m : ℕ}
       thirdPrefixCorrectionKernel (thirdPrefixTheta - 2 * e)
         (actualExtendedThirdFiniteLevel e m ![x, y, z]) x y z else 0)
   have ht : ![x, y, z] ∈ actualExtendedThirdClosedOrder := by
-    simp only [actualExtendedThirdClosedOrder, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.cons_val_two]
+    simp only [actualExtendedThirdClosedOrder]
     exact ⟨hz.1.le, hy.1.le, hy.2⟩
   have hg := actualExtendedThirdFiniteLevel_tail_geometry (m := m) he0 he ht
     (by simpa only [Matrix.cons_val_zero] using hx.2)
@@ -184,6 +182,7 @@ theorem actualExtendedThirdFiniteClosedTailMass_eq_ordered (e h : ℝ) (m : ℕ)
   rw [setLIntegral_congr (actualExtendedThirdClosedOrderRegion_ae_eq h)]
   apply setLIntegral_congr_fun (measurableSet_actualExtendedThirdOrderedTailRegion h)
   intro t ht
+  dsimp only
   rw [abs_of_nonneg (actualExtendedThirdFiniteKernel_nonneg ht.1 ht.2.2.2.2.1.le ht.2.2.2.2.2)]
 
 /-- A single cutoff is fixed before the buffer and grid, for the actual

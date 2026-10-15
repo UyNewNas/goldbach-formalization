@@ -120,8 +120,8 @@ private theorem actual_difference_le_polynomial
     (hn : n ∈ d.betaCarrier) (hm : d.commonSmoothWeight m ≠ 0) :
     ((((m : ℤ) * n - d.residue).natAbs : ℕ) : ℝ) ≤
       7 * d.scale ^ (max 1 (1 + kappa)) := by
-  obtain ⟨hU, _, _, _, _, _, _, ha, _⟩ := hd
   have hx := admissible_one_le_scale hd
+  obtain ⟨hU, hV, _, _, _, _, _, ha, _⟩ := hd
   have hxK : d.scale ≤ d.scale ^ (max 1 (1 + kappa)) := by
     simpa only [Real.rpow_one] using
       Real.rpow_le_rpow_of_exponent_le hx (le_max_left (1 : ℝ) (1 + kappa))
@@ -136,7 +136,7 @@ private theorem actual_difference_le_polynomial
   have hnhi : (n : ℝ) ≤ 2 * d.V :=
     (show (n : ℝ) ≤ (Nat.floor (2 * d.V) : ℝ) by
       exact_mod_cast (Finset.mem_Icc.mp hn).2).trans
-        (Nat.floor_le (by linarith [hd.2.1] : 0 ≤ 2 * d.V))
+        (Nat.floor_le (by linarith : 0 ≤ 2 * d.V))
   have hmn : (m : ℝ) * n ≤ 6 * d.scale := by
     calc
       _ ≤ (3 * d.U) * (2 * d.V) :=
@@ -167,7 +167,7 @@ theorem actual_tauFour_difference_subpower (kappa : ℝ) {epsilon : ℝ}
   have hKpos : 0 < K := lt_of_lt_of_le zero_lt_one hK
   let eta : ℝ := epsilon / (2 * K)
   have heta : 0 < eta := div_pos hepsilon (mul_pos (by norm_num) hKpos)
-  have hKeta : K * eta = epsilon / 2 := by dsimp [eta]; field_simp [hKpos.ne']; ring
+  have hKeta : K * eta = epsilon / 2 := by dsimp [eta]; field_simp [hKpos.ne']
   obtain ⟨D, hD, hbound⟩ := PolynomialResidueDivisorBound.fouvryTau_le_const_rpow
     (k := 4) (by norm_num) heta
   refine ⟨D * (7 : ℝ) ^ eta, by positivity, fun B sigma c0 d hd m n hn hm hb ↦ ?_⟩
@@ -222,10 +222,11 @@ theorem commonLargeBetaGCDDivisorMajorant_subpower (kappa : ℝ) {epsilon : ℝ}
   intro n₂ hn₂
   by_cases hy : Y < (n₁.gcd n₂ : ℝ)
   · simp only [if_pos hy]
+    rw [← Finset.mul_sum]
     by_cases hb₁ : d.cleanedBeta n₁ = 0
-    · simp only [hb₁, norm_zero, zero_mul, mul_zero]
+    · simp only [hb₁, norm_zero, zero_mul, mul_zero, le_refl]
     by_cases hb₂ : d.cleanedBeta n₂ = 0
-    · simp only [hb₂, norm_zero, mul_zero, zero_mul]
+    · simp only [hb₂, norm_zero, mul_zero, zero_mul, le_refl]
     have hinner :
         (∑ m ∈ d.commonSmoothCarrier, d.commonSmoothWeight m *
           (fouvryTau 4 (((m : ℤ) * n₁ - d.residue).natAbs) : ℝ) *
@@ -236,7 +237,7 @@ theorem commonLargeBetaGCDDivisorMajorant_subpower (kappa : ℝ) {epsilon : ℝ}
       apply Finset.sum_le_sum
       intro m _
       by_cases hm : d.commonSmoothWeight m = 0
-      · simp only [hm, zero_mul]
+      · simp only [hm, zero_mul, le_refl]
       have hp :
           (fouvryTau 4 (((m : ℤ) * n₁ - d.residue).natAbs) : ℝ) *
             (fouvryTau 4 (((m : ℤ) * n₂ - d.residue).natAbs) : ℝ) ≤
@@ -279,7 +280,7 @@ theorem commonLargeBetaGCDW_polynomial_residue_raw_bound (kappa : ℝ) {epsilon 
   obtain ⟨C, hC, hbound⟩ := commonLargeBetaGCDDivisorMajorant_subpower kappa hepsilon
   refine ⟨C, hC, fun B sigma c0 d hd Y ↦ ?_⟩
   exact (d.commonLargeBetaGCDW_norm_le_majorant_add_exception hd Y).trans
-    (add_le_add_right (hbound B sigma c0 d hd Y) _)
+    (add_le_add (hbound B sigma c0 d hd Y) le_rfl)
 
 end
 
