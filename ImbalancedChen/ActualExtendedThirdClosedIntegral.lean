@@ -23,12 +23,13 @@ open Filter Topology Set MeasureTheory
 open scoped ENNReal
 
 def actualExtendedThirdOrderWallForm : (Fin 3 → ℝ) →L[ℝ] ℝ :=
-  ContinuousLinearMap.proj 1 - ContinuousLinearMap.proj 2
+  ContinuousLinearMap.proj (R := ℝ) (φ := fun _ : Fin 3 => ℝ) (1 : Fin 3) -
+    ContinuousLinearMap.proj (R := ℝ) (φ := fun _ : Fin 3 => ℝ) (2 : Fin 3)
 
 theorem actualExtendedThirdOrderWallForm_ne_zero : actualExtendedThirdOrderWallForm ≠ 0 := by
   intro hz
   have hh := congrArg (fun L : (Fin 3 → ℝ) →L[ℝ] ℝ => L ![0, 1, 0]) hz
-  norm_num [actualExtendedThirdOrderWallForm] at hh
+  norm_num [actualExtendedThirdOrderWallForm, Matrix.cons_val_two] at hh
 
 theorem actualExtendedThirdOrderWall_volume_zero :
     volume {t : Fin 3 → ℝ | t 1 = t 2} = 0 := by

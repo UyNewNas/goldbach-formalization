@@ -123,10 +123,12 @@ private theorem sixthOrdinary_product_log_lt_iff {N : ℕ} (hN : 2 ≤ N)
   have hpow : (N : ℝ) ^
       (Real.log (p : ℝ) / Real.log (N : ℝ) +
         Real.log (q : ℝ) / Real.log (N : ℝ)) = ((p * q : ℕ) : ℝ) := by
-    rw [Real.rpow_add (zero_lt_one.trans hNr),
-      actualPrimeTupleLog_rpow (by omega) ![p, q]
+    rw [Real.rpow_add (zero_lt_one.trans hNr)]
+    change (N : ℝ) ^ (actualPrimeTupleLog N ![p, q] 0) *
+      (N : ℝ) ^ (actualPrimeTupleLog N ![p, q] 1) = ((p * q : ℕ) : ℝ)
+    rw [actualPrimeTupleLog_rpow (N := N) (by omega) ![p, q]
         (by intro i; fin_cases i <;> assumption) 0,
-      actualPrimeTupleLog_rpow (by omega) ![p, q]
+      actualPrimeTupleLog_rpow (N := N) (by omega) ![p, q]
         (by intro i; fin_cases i <;> assumption) 1]
     exact (Nat.cast_mul p q).symm
   simpa only [hpow] using (Real.rpow_lt_rpow_left_iff hNr :
@@ -147,16 +149,17 @@ theorem mem_currentChenUpsilon6OrdinarySelector_log_iff {N : ℕ} (hN : 2 ≤ N)
       (19 / 125 : ℝ) < currentChenUpsilon6LogCoordinates N t 1 ∧
         currentChenUpsilon6LogCoordinates N t 0 +
           currentChenUpsilon6LogCoordinates N t 1 < (833 / 2500 : ℝ) - eta := by
-    have hqpow := actualPrimeTupleLog_rpow (by omega) ![t.1, t.2]
+    have hqpow := actualPrimeTupleLog_rpow (N := N) (by omega) ![t.1, t.2]
       (by intro i; fin_cases i
           · exact (mem_chenAdditivePrimeCarrier.mp hp).2.1.pos
           · exact (mem_chenAdditivePrimeCarrier.mp hq).2.1.pos) 1
     have hband : (N : ℝ) ^ (19 / 125 : ℝ) < (t.2 : ℝ) ↔
         (19 / 125 : ℝ) < Real.log (t.2 : ℝ) / Real.log (N : ℝ) := by
-      simpa only [actualPrimeTupleLog, Matrix.cons_val_one] using
-        (hqpow ▸ (Real.rpow_lt_rpow_left_iff hNr :
-          (N : ℝ) ^ (19 / 125 : ℝ) <
-            (N : ℝ) ^ (actualPrimeTupleLog N ![t.1, t.2] 1) ↔ _))
+      have hm := (Real.rpow_lt_rpow_left_iff hNr :
+        (N : ℝ) ^ (19 / 125 : ℝ) <
+          (N : ℝ) ^ (actualPrimeTupleLog N ![t.1, t.2] 1) ↔ _)
+      rw [hqpow] at hm
+      simpa only [actualPrimeTupleLog, Matrix.cons_val_one, Matrix.cons_val_zero] using hm
     simpa only [currentChenUpsilon6LogCoordinates, Matrix.cons_val_zero,
       Matrix.cons_val_one, hband] using
         and_congr hband (sixthOrdinary_product_log_lt_iff hN
@@ -252,7 +255,8 @@ theorem currentChenUpsilon6Ordinary_harmonic_eq_actualPrimeBox
         have hq := (mem_chenAdditivePrimeCarrier.mp (Finset.mem_product.mp hc).2).2.1
         have horder : t.1 < t.2 := by exact_mod_cast hpH.trans_le hHq
         rw [chen_prime_pair_totient_cast hp hq horder.ne]
-        simp only [Fin.prod_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one]
+        simp only [Fin.prod_univ_two, Matrix.cons_val_zero, Matrix.cons_val_one,
+          div_eq_mul_inv, mul_inv_rev, one_mul]
         ring
     _ = _ := by
       unfold T actualPrimeBoxTestSum
@@ -373,6 +377,7 @@ theorem tendsto_currentChenUpsilon6Ordinary_harmonic_mean (eta : ℝ) :
         currentChenUpsilon6OrdinaryIntegral eta := by
     apply setIntegral_congr_fun hmeas
     intro x hx
+    dsimp only
     rw [currentChenUpsilon6OrdinaryClippedTest_eq hx.1]
     unfold currentChenUpsilon6OrdinaryKernel currentChenUpsilon6OrdinaryFactor
     simp only [Fin.prod_univ_two]
@@ -588,7 +593,6 @@ theorem eventually_currentChenUpsilon6Ordinary_ge_mean
         _ = ((N : ℝ) / Real.log (N : ℝ)) * V := by
           unfold singularNormalization
           field_simp [hSSp.ne', hlogp.ne']
-          ring
         _ ≤ trueLogarithmicIntegral N * V := mul_le_mul_of_nonneg_right hli hv
         _ = _ := by
           unfold currentChenUpsilon6OrdinaryDensitySum V

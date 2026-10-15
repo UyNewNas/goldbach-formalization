@@ -39,9 +39,15 @@ theorem currentChenUpsilon6OrdinarySelector_subset_original (N : ℕ) (eta : ℝ
     currentChenUpsilon6OrdinarySelector N eta ⊆
       chenY6PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))
         ((N : ℝ) ^ (19 / 125 : ℝ)) ((N : ℝ) ^ (59 / 250 : ℝ)) := by
+  have hsub : ∀ E : ℕ × ℕ → Prop,
+      currentChenUpsilon6RetainedSelector N E eta ⊆
+        chenY6PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))
+          ((N : ℝ) ^ (19 / 125 : ℝ)) ((N : ℝ) ^ (59 / 250 : ℝ)) := by
+    intro E t ht
+    exact (Finset.mem_filter.mp (Finset.mem_filter.mp ht).1).1
   intro t ht
-  exact (Finset.mem_filter.mp (Finset.mem_filter.mp
-    (currentChenUpsilon6OrdinarySelector_subset_retained N eta ht)).1).1
+  exact hsub (fun _ => False)
+    (currentChenUpsilon6OrdinarySelector_subset_retained N eta ht)
 
 theorem currentChenUpsilon6OrdinaryCount_nonneg (N : ℕ) (eta : ℝ) :
     0 ≤ currentChenUpsilon6OrdinaryCount N eta :=

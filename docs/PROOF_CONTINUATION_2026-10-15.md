@@ -14,51 +14,55 @@ existing root build would therefore not validate them.
 
 | Module | Mathematical content | Verification |
 | --- | --- | --- |
+| `CurrentChenUpsilon6KernelBuffer` | Integrability, positivity on the corrected product domain, and the actual logarithmic kernel integral limit as the product buffer tends to zero | Strict compilation; original-object stock kernel replay; complete 24-declaration types, inventory and transitive axiom audit |
 | `CurrentChenPairLevelGeometry` | Actual pair multiplier, integer Rosser level, compact U5 profile, and restricted U6 profile | Strict compilation; original-object stock kernel replay; complete 17-declaration types, inventory and transitive axiom audit |
-| `CurrentChenPairRosser` | Finite lower Rosser estimate for the actual quotient source, with the true `phi(b*d)` main term, full AP/centre errors and physical support `b*d <= Q` | Strict compilation; original-object stock kernel replay; complete 12-declaration audit |
-| `CurrentChenUpsilon6KernelBuffer` | Integrability, positivity on the corrected product domain, and the actual logarithmic kernel integral limit as the product buffer tends to zero | Strict compilation; original-object stock kernel replay; complete 24-declaration audit |
-| `CurrentChenUpsilon6OrdinarySieveKernel` | Identification with the canonical normalized continuous lower sieve factor, and the same buffer limit | Strict compilation; original-object stock kernel replay; complete 17-declaration audit |
-| `Part3CenteredFourier` | Exact centered additive Fourier identities at composite moduli, retaining actual prime labels, weights and the primitive centre | Strict compilation; original-object stock kernel replay; complete 28-declaration audit |
-| `Certificates/PairedV2FullBuchstab` | The actual Buchstab gain bounds the certified fibre kernel with `K/80 = (K/4)*(1/20)` used once | Strict compilation; original-object stock kernel replay; complete 4-declaration audit |
-| `CurrentChenPairHarmonicMean` | The actual fifth prime-pair selector, its strict ordered triangle, true reciprocal-totient weights and varying-profile harmonic integral limit | Strict compilation; original-object stock kernel replay; complete 25-declaration audit |
-| `CurrentChenPairMovingHarmonic` | The same integral at the genuine rounded integer row parameter, with the actual total phi-weight bound paying uniform perturbations | Strict compilation; original-object stock kernel replay; complete 10-declaration audit |
-| `ActualSieveGapTailDecay` | Canonical continuous sieve gap positivity, monotonicity and quadratic tail decay, with the real source DDE supplied | Strict compilation; original-object stock kernel replay; complete 11-declaration audit |
-| `ActualSieveGapTailBounds` | Exact reference value at three, the normalized `3/s^2` bound and the explicit logarithmic tail-envelope limit | Strict compilation; original-object stock kernel replay; complete 12-declaration audit |
-| `Part3ComplexDispersion` | Actual complex-row Cauchy, centered norm-square and double-label identities, retaining the full moduli and primitive centre | Strict compilation; original-object stock kernel replay; complete 30-declaration audit |
-| `ActualThirdPrefixTailIntegralCore` | Canonical correction kernel, finite noncompact triple-integral bounds and tail convergence allowing the cap/selector to vary with the cutoff | Strict compilation; original-object stock kernel replay; complete 59-declaration audit |
-| `CurrentChenUpsilon5FiniteMean` | Actual U5 counts above the same row-dependent Rosser density sum, with full ordinary BV and centre costs paid; a fixed `B` precedes arbitrary `epsilon` | Strict compilation; original-object stock kernel replay; complete 17-declaration audit |
+| `CurrentChenUpsilon6OrdinarySieveKernel` | Identification with the canonical normalized continuous lower sieve factor, and the same buffer limit | Strict compilation; original-object stock kernel replay; complete 17-declaration types, inventory and transitive axiom audit |
+| `CurrentChenPairRosser` | Finite lower Rosser estimate for the actual quotient source, with the true `phi(b*d)` main term, full AP/centre errors and physical support `b*d <= Q` | Strict compilation; original-object stock kernel replay; complete 12-declaration types, inventory and transitive axiom audit |
+| `Part3CenteredFourier` | Exact centered additive Fourier identities at composite moduli, retaining actual prime labels, weights and the primitive centre | Strict compilation; original-object stock kernel replay; complete 28-declaration types, inventory and transitive axiom audit |
+| `Certificates.PairedV2FullBuchstab` | The actual Buchstab gain bounds the certified fibre kernel with `K/80 = (K/4)*(1/20)` used once | Strict compilation; original-object stock kernel replay; complete 4-declaration types, inventory and transitive axiom audit |
+| `CurrentChenPairHarmonicMean` | The actual fifth prime-pair selector, its strict ordered triangle, true reciprocal-totient weights and varying-profile harmonic integral limit | Strict compilation; original-object stock kernel replay; complete 25-declaration types, inventory and transitive axiom audit |
+| `ActualSieveGapTailDecay` | Canonical continuous sieve gap positivity, monotonicity and quadratic tail decay, with the real source DDE supplied | Strict compilation; original-object stock kernel replay; complete 11-declaration types, inventory and transitive axiom audit |
+| `ActualSieveGapTailBounds` | Exact reference value at three, the normalized `3/s^2` bound and the explicit logarithmic tail-envelope limit | Strict compilation; original-object stock kernel replay; complete 12-declaration types, inventory and transitive axiom audit |
+| `Part3ComplexDispersion` | Actual complex-row Cauchy, centered norm-square and double-label identities, retaining the full moduli and primitive centre | Strict compilation; original-object stock kernel replay; complete 30-declaration types, inventory and transitive axiom audit |
+| `CurrentChenPairMovingHarmonic` | The same integral at the genuine rounded integer row parameter, with the actual total phi-weight bound paying uniform perturbations | Strict compilation; original-object stock kernel replay; complete 10-declaration types, inventory and transitive axiom audit |
+| `ActualThirdPrefixTailIntegralCore` | Canonical correction kernel, finite noncompact triple-integral bounds and tail convergence allowing the cap/selector to vary with the cutoff | Strict compilation; original-object stock kernel replay; complete 59-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon5FiniteMean` | Actual U5 counts above the same row-dependent Rosser density sum, with full ordinary BV and centre costs paid; a fixed `B` precedes arbitrary `epsilon` | Strict compilation; original-object stock kernel replay; complete 17-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdIdealCap` | Literal eight-branch/pair-gated ideal cap: measurability and finite vanishing noncompact canonical tail | Strict compilation; original-object stock kernel replay; complete 23-declaration types, inventory and transitive axiom audit |
+| `Part3ComplexCRTConsumer` | Actual complex W becomes a constructed lcm CRT progression, with incompatible/inactive labels and the primitive-centre V/U retained | Strict compilation; original-object stock kernel replay; complete 25-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdOrderedIntegral` | Actual clamped correction kernel: measurability, Fin-3 Tonelli to nested integration, integrability and real integral identification | Strict compilation; original-object stock kernel replay; complete 28-declaration types, inventory and transitive axiom audit |
 | `CurrentChenRosserEndpointDictionary` | Exact actual initial-sieve product, nu=1/phi, Euler product and ceil-level dictionary; uniform genuine Mertens local bound | Strict compilation; original-object stock kernel replay; complete 9-declaration types, inventory and transitive axiom audit |
 | `CurrentChenRosserLowerRectangle` | Uniform canonical AllDepth lower estimate on the actual initial sieve; rounding, sourceSigma and adaptive-depth error paid | Strict compilation; original-object stock kernel replay; complete 3-declaration types, inventory and transitive axiom audit |
 | `CurrentChenFixedEulerNormalization` | Actual target-prime-deleted Euler product at fixed positive power cutoff has the genuine 2 exp(-gamma)/a normalized limit | Strict compilation; original-object stock kernel replay; complete 39-declaration types, inventory and transitive axiom audit |
 | `CurrentChenPairDensity` | Uniform one-sided normalized density bound for every genuine rounded fifth-row level | Strict compilation; original-object stock kernel replay; complete 31-declaration types, inventory and transitive axiom audit |
 | `CurrentChenUpsilon5OrdinaryMean` | Actual fifth-row ordinary count mean with the genuine moving harmonic integral and complete BV/centre payment | Strict compilation; original-object stock kernel replay; complete 10-declaration types, inventory and transitive axiom audit |
-| `Part3ComplexCRTConsumer` | Actual complex W becomes a constructed lcm CRT progression, with incompatible/inactive labels and the primitive-centre V/U retained | Strict compilation; original-object stock kernel replay; complete 25-declaration types, inventory and transitive axiom audit |
-| `ActualExtendedThirdIdealCap` | Literal eight-branch/pair-gated ideal cap: measurability and finite vanishing noncompact canonical tail | Strict compilation; original-object stock kernel replay; complete 23-declaration types, inventory and transitive axiom audit |
-| `ActualExtendedThirdOrderedIntegral` | Actual clamped correction kernel: measurability, Fin-3 Tonelli to nested integration, integrability and real integral identification | Strict compilation; original-object stock kernel replay; complete 28-declaration types, inventory and transitive axiom audit |
 | `CurrentChenInitialRosserRemainder` | Actual initial count above the same Rosser density with complete ordinary BV and centre errors paid | Strict compilation; original-object stock kernel replay; complete 9-declaration types, inventory and transitive axiom audit |
 | `CurrentChenOrdinaryInitialMean` | Actual initial ordinary mean at full Q+1 level for every fixed 0<a<1/4, using canonical f at the genuine ratio 1/(2a) | Strict compilation; original-object stock kernel replay; complete 32-declaration types, inventory and transitive axiom audit |
 | `CurrentChenOrdinaryInitialLedger` | The first two actual current Upsilon rows receive their full ordinary means at the original current cutoffs | Strict compilation; original-object stock kernel replay; complete 2-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon6OrdinarySource` | Literal corrected inner sixth selector and actual quotient counts, with only nonnegative counts dropped and E=False scope retained | Strict compilation; original-object stock kernel replay; complete 13-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon6FiniteMean` | One BV exponent pays all errors for every actual sixth-row subselector chosen after N, retaining the full physical moduli and row coefficients | Strict compilation; original-object stock kernel replay; complete 20-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon6OrdinaryMean` | Actual unmasked sixth-row ordinary mean: fixed-buffer arithmetic limit followed by the proved buffer-removal integral limit | Strict compilation; original-object stock kernel replay; complete 61-declaration types, inventory and transitive axiom audit |
 
-These 24 modules contain **477 complete owned declarations**, including
+These 27 modules contain **571 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-477 independent major mathematical theorems.
+571 independent major mathematical theorems.
 
-The first, second and fifth literal current count means now have complete
-ordinary proofs with no analytic supplier premise. The stronger causal
-contributions and the complete lower ledger remain open.
+The first, second and fifth literal current count means have complete
+ordinary proofs with no analytic supplier premise.
 
-The U6 limit is an analytic integral limit on the literal corrected rectangle.
-It does not exchange the arithmetic `N` limit with the buffer limit, supply the
-`E` mask or the stronger `h248` kernel, or certify the adopted numerical `L6`.
+The sixth actual ordinary count mean is also proved for E=False. Its
+fixed-buffer arithmetic limit precedes the proved removal of the buffer;
+the argument does not interchange these limits. It does not supply the
+stronger causal h248 contribution or certify the adopted numerical L6.
+
+The stronger causal contributions and the complete lower ledger remain open.
 
 ## Candidates that must not be counted as completed proofs
 
-The 12 unaccepted source candidates are listed with exact source
+The 19 unaccepted source candidates are listed with exact source
 hashes in `verification/proof-continuation/2026-10-15/unaccepted-candidates.json`.
 They are excluded from the accepted module/declaration inventory above.
 Original failed attempts remain failures; replacement sources need their own checks.
 
-* `CurrentChenUpsilon6OrdinaryMean`: The full ordinary unmasked mean argument is present as source, including finite payment and fixed-buffer passage; exact-source execution and complete owned audit remain required.
 * `Part3ReciprocalAPSupplier`: New target not executed; limited external prerequisite bootstrap stopped at a resource failure.
 * `Certificates.PairedV2FullCertificate`: Not executed; requires the full original-strip chain, beyond the frozen baseline pilot.
 * `ActualThirdPrefixTailIntegral`: Broad arithmetic tuple/profile bridge is not compiled; the separate canonical integral core is verified.
@@ -68,26 +72,35 @@ Original failed attempts remain failures; replacement sources need their own che
 * `ActualExtendedThirdClosedIntegral`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdPhysicalCell`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdDyadicCoverage`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `CurrentChenUpsilon6OrdinarySource`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `CurrentChenUpsilon6FiniteMean`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenRosserUpperEndpointDictionary`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenRosserUpperRectangle`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenQuotientUpperRosser`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenSinglePrimeUpperFiniteMean`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3RealComponentReduction`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3FactorFiberDivisor`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualExtendedThirdFirstCubeMargin`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualExtendedThirdGammaApproximation`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualExtendedThirdLowerFactorRegularity`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenSinglePrimeUpperDensity`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 
 The ordinary lower means above are baseline means. They do not prove the
 manuscript's stronger causal h248 contribution, complete eleven-term lower
-ledger, or adopted numerical constant. The unaccepted sixth-row code targets
-an ordinary mean only for E=False; its fixed-buffer arithmetic passage and
-buffer removal still need executed proof checks.
+ledger, or adopted numerical constant.
 
-The actual ideal cap, ordered integral and robust cell inequalities are
-separate steps. Physical ownership, the actual branch/action licenses,
-fine-grid coverage, robust Gamma convergence to A, and the same-policy
-arithmetic count mean are still required for hUpper.
+The actual ideal cap, ordered integral, robust cell inequalities, fine-grid
+coverage and Gamma approximation are separate steps. Each is accepted only
+when included in the executed-check table. The actual branch/action licenses,
+boundary-strip passage and same-policy arithmetic count mean are still
+required for hUpper.
 
-The complex CRT and finite Fourier identities do not prove the common
-Poisson completion, reciprocal-phase dictionary, zero-mode cancellation,
-aggregate gcd estimates or strong physical distribution bound. The fixed
-smooth cutoff, when accepted, only pays its displayed smoothing and rapid
-decay statements. The pointwise Buchstab comparison does not pay actual
-arithmetic parent licensing or the full mean-value passage.
+The complex CRT, finite Fourier and common Poisson steps are accepted only
+when individually listed in the executed-check table. They do not prove the
+reciprocal-phase dictionary, zero-mode cancellation, aggregate gcd estimates
+or strong physical distribution bound. The real-component reduction pays a
+finite complex-to-real cost; it is not a real distribution estimate. The
+fibre majorant is tau_3 rather than one, and its logarithmic costs must be
+retained by future estimates. The pointwise Buchstab comparison does not
+pay actual arithmetic parent licensing or the full mean-value passage.
 
 ## External work reused
 
