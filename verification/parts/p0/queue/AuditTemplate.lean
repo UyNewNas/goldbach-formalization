@@ -6,6 +6,7 @@ set_option pp.maxSteps 1000000
 open Lean Elab Command in
 run_cmd do
   let env ← getEnv
+  liftIO <| IO.println s!"P0_QUEUE_IMPORTS {(toJson (env.header.moduleNames.map Name.toString)).compress}"
   let moduleName := `TARGET_NAME
   let some idx := env.getModuleIdx? moduleName | throwError "Missing target module"
   let names := env.const2ModIdx.fold (init := (#[] : Array Name)) fun ns n i =>

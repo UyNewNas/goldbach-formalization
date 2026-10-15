@@ -41,7 +41,7 @@ library. Cache misses are explicit blockers. Reused imported objects are not
 reported as newly rebuilt/replayed proof closure.
 
 P0 alone triggers proof-environment work. Status/source publications use
-`[skip ci]`. A selected `automation/dispatch.json` change schedules one finite PR
+`[skip ci]`. A selected `automation/dispatch.json` change schedules one finite push
 job; automatic duplicate core/VE PR jobs on the controlled branch are suppressed.
 The full core/VE push workflows and all their internal required gates remain
 available for P0's later complete-root acceptance; skipped jobs are not evidence.
@@ -50,3 +50,11 @@ Local process locks are shared across worktrees and inherited by child processes
 
 Neither `hLower` nor `hUpper` is discharged. The manuscript pin, fixed `currentC`
 and `currentK`, quantifier order and final completion criteria are unchanged.
+
+The first PR-only dispatch created no job because PR #4 conflicts with its
+base. No merge was performed. The bounded queue now uses its own branch push
+event; exact cache availability in that scope is an explicit prerequisite.
+
+Compiler commands retain `-t0 -j2 -M4096`. The bundled checker does not implement
+`-M`; its native invocation is recorded as such, with the shared single slot and
+`LEAN_NUM_THREADS=2`. No new operating-system hard memory limit is introduced.

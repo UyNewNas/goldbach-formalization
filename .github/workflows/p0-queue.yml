@@ -1,6 +1,8 @@
 name: P0 finite verification queue
 on:
-  pull_request:
+  push:
+    branches:
+      - 'codex/chen-parts-integration'
     paths:
       - 'automation/dispatch.json'
   workflow_dispatch:
@@ -11,7 +13,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   finite:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.pull_request.head.ref == 'codex/chen-parts-integration' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/codex/chen-parts-integration' }}
     runs-on: ubuntu-latest
     timeout-minutes: 65
     env:
@@ -37,6 +39,7 @@ jobs:
           test "$(cat lean-toolchain)" = leanprover/lean4:v4.33.0-rc1
           .ci-lean-action/scripts/install_elan.sh
       - name: Restore exact successful baseline cache
+        id: baseline-cache
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
         with:
           path: ./.lake
@@ -44,8 +47,13 @@ jobs:
           fail-on-cache-miss: true
       - name: Verify selected finite requests serially
         id: verify
+        env:
+          P0_CACHE_HIT: ${{ steps.baseline-cache.outputs.cache-hit }}
+          P0_CACHE_MATCHED_KEY: ${{ steps.baseline-cache.outputs.cache-matched-key }}
+          CHEN_HEAVY_LOCK_PATH: ${{ runner.temp }}/goldbach-p0-heavy.lock
         run: |
           set -euo pipefail
+          test "$P0_CACHE_HIT" = true
           mkdir -p .lake/p0-queue
           python3 - <<'PY'
           import json,pathlib
@@ -57,7 +65,7 @@ jobs:
           PY
           result=0
           for request in .lake/p0-queue-request-*.json; do
-            flock "$RUNNER_TEMP/goldbach-p0-heavy.lock" python3 verification/parts/p0/queue/run.py "$request" || result=1
+            python3 verification/parts/p0/queue/run.py "$request" || result=1
           done
           exit "$result"
       - name: Preserve all original diagnostics and hashes
