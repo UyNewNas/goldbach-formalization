@@ -90,7 +90,7 @@ def main():
             if staged.is_file():
                 provenance=json.loads(staged.read_text())
                 assert provenance['status']=='STAGED_COMPILED_PREREQUISITES_ONLY'
-                assert provenance['anchor_sha256']==sha(ROOT/'verification/parts/p0/queue/reuse-38674170679.json')
+                assert provenance['anchor_sha256']==sha(ROOT/'verification/parts/p0/queue/reuse-anchors.json')
                 assert provenance['script_sha256']==sha(ROOT/'verification/parts/p0/queue/restore_compiled.py')
                 report['restored_compilation_provenance']=provenance
                 report['reuse_staging_sha256']=sha(staged)
@@ -101,7 +101,7 @@ def main():
         report['pins_sha256']={p:sha(ROOT/p) for p in ['lean-toolchain','lakefile.toml','lake-manifest.json']}
         report['verifier_sha256']={p:sha(ROOT/p) for p in ['verification/parts/p0/queue/run.py','verification/parts/p0/queue/bootstrap.py','verification/parts/p0/queue/AuditTemplate.lean','verification/parts/p0/check_pins.py','verification/verify_variable_envelope_boxes.py','.github/workflows/p0-queue.yml','automation/dispatch.json']}
         if report.get('restored_compilation_provenance'):
-            for p in ['verification/parts/p0/queue/restore_compiled.py','verification/parts/p0/queue/reuse-38674170679.json']:
+            for p in ['verification/parts/p0/queue/restore_compiled.py','verification/parts/p0/queue/reuse-anchors.json']:
                 report['verifier_sha256'][p]=sha(ROOT/p)
         report['request_sha256']=sha(Path(args.request))
         run([str(lean),'--version'],'lean-version',60)

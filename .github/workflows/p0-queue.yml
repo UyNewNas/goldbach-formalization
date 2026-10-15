@@ -46,21 +46,38 @@ jobs:
       - name: Resolve optional exact compiled-object reuse
         id: reuse
         run: |
-          python3 - <<'PY'
+          python3 - <<'PYRESOLVE'
           import json, os
-          artifact=json.load(open('automation/dispatch.json')).get('reuse_artifact_id')
-          assert artifact in [None,11944874041], 'Unapproved artifact identity'
+          ids=json.load(open('automation/dispatch.json')).get('reuse_artifact_ids', [])
+          catalog=json.load(open('verification/parts/p0/queue/reuse-anchors.json'))
+          assert len(ids) <= 3 and len(ids) == len(set(ids))
+          assert all(type(i) is int and str(i) in catalog['artifacts'] for i in ids), 'Unapproved artifact identity'
           with open(os.environ['GITHUB_OUTPUT'],'a') as f:
-            f.write('enabled='+('true' if artifact is not None else 'false')+'\n')
-          PY
-      - name: Download the exact original compiled prerequisite ZIP
+            f.write('enabled='+('true' if ids else 'false')+'\n')
+          PYRESOLVE
+      - name: Download each exact original compiled prerequisite ZIP
         if: ${{ steps.reuse.outputs.enabled == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh api repos/UyNewNas/goldbach-formalization/actions/artifacts/11944874041/zip > .lake/p0-reuse.zip
+        run: |
+          python3 - <<'PYDOWNLOAD'
+          import json, subprocess, pathlib
+          ids=json.load(open('automation/dispatch.json'))['reuse_artifact_ids']
+          catalog=json.load(open('verification/parts/p0/queue/reuse-anchors.json'))
+          for ident in ids:
+            assert type(ident) is int and str(ident) in catalog['artifacts']
+            p=pathlib.Path(f'.lake/p0-reuse-{ident}.zip')
+            with p.open('xb') as f:
+              subprocess.run(['gh','api',f'repos/UyNewNas/goldbach-formalization/actions/artifacts/{ident}/zip'],stdout=f,check=True)
+          PYDOWNLOAD
       - name: Stage only source/object-identical compiled prerequisites
         if: ${{ steps.reuse.outputs.enabled == 'true' }}
-        run: python3 verification/parts/p0/queue/restore_compiled.py .lake/p0-reuse.zip
+        run: |
+          python3 - <<'PYSTAGE'
+          import json, subprocess, sys
+          ids=json.load(open('automation/dispatch.json'))['reuse_artifact_ids']
+          subprocess.run([sys.executable,'verification/parts/p0/queue/restore_compiled.py',*[f'.lake/p0-reuse-{i}.zip' for i in ids]],check=True)
+          PYSTAGE
       - name: Verify selected finite requests serially
         id: verify
         env:
@@ -73,7 +90,7 @@ jobs:
           import json,pathlib
           req=json.load(open('automation/dispatch.json'))
           assert req['owner']=='P0' and req['baseline']=='1337e2db4712fb4a9f86add073f771f84b66d0c8'
-          assert 1 <= len(req['requests']) <= 2
+          assert 1 <= len(req['requests']) <= 3
           for i,r in enumerate(req['requests']):
             pathlib.Path(f'.lake/p0-queue-request-{i}.json').write_text(json.dumps(r))
           PY
