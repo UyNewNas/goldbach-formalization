@@ -1,25 +1,108 @@
-# P1 hourly continuation: unordered third-level geometry
+# P1: actual third coarse rule, one finite increment
 
-Status: WAITING_FOR_P0. Request p1-20261015T005420Z-unordered-third is REQUESTED.
+Status: SOURCE_ONLY, REQUESTED to P0, then WAITING_FOR_P0. No Lean, Lake,
+checker, environment-loaded audit, CI, install, commit, or push was run by P1.
 
-## New finite geometric increment
+## Source and scope
 
-The new 246-line owned leaf `ImbalancedChen/HistoricalUnorderedThirdGeometry.lean` gives the literal rank-four-parent/fifth-candidate dictionary without `levelCheck`, `0 < D.old`, or `D.old <= D.cap3`. Both inherited first-cube gates remain: 3 t0 < initial, 3 t0 < third, and t0+t1+3 t2 < third, together with strict decreasing coordinates. The final theorem identifies the actual target-deleted candidate frontier intersected with the half-open cell with the actual prime box intersected with this seven-row affine region. The fifth own-cube test is still absent from candidate enumeration; old/new residual own-cube gates remain separate downstream.
+- Baseline: `08899a3f44fa61ea6dfe33d4cb557693cbac1590`.
+- Worktree: `/workspace/shared/chen-coordination/p1-coarse-policy`.
+- Exclusive new source: `ImbalancedChen/HistoricalThirdCoarsePolicy.lean`.
+- Frozen source/hash and textual signatures: `source-manifest.json` and
+  `proposed-types.json`; the adjacent `.lean` is an exact snapshot.
+- Frozen specification: manuscript repository
+  `ba6ec11d800eccc54406490631895e174de85766`,
+  `proof-library/source/upper-finite-compact-margin-audit-20261010.txt`,
+  blob `0bf009e7a3de5524dc728029af65e9b29fed1fa1`, lines 38--130.
 
-Frozen source SHA-256: `4d080883f49d635d32080d405d2601f5c1f71d56f25b87d41ea5f84708d12f8b`. Baseline: `1337e2db4712fb4a9f86add073f771f84b66d0c8`. No source outside the P1 ownership patterns, public root, pins, or other worktree was edited. Source is staged in the P1 worktree and frozen with patch in `runs/20261015T005420Z-unordered-third/`. A local commit attempt failed solely because git author identity is unconfigured; no identity setting was changed. P0 can receive the hash-frozen candidate directly.
+This is a concrete, generated finite third-coarse **subpolicy**, not a full
+instantiation of the manuscript upper strategy. It selects wholly ordered
+closed rectangles from the half-open `[0,19/96)^3` mesh, requiring the
+first-label upper stop and width bound. It keeps the inherited policy on
+the other cells. There is no arbitrary user-supplied cap or Gamma property
+field. The partial coverage boundary is explicit and must not be erased
+when integrating this file.
 
-## Checks and exact witnesses
+## New mathematics represented by the source
 
-Only SOURCE_ONLY checks ran: staged whitespace check, literal unsafe-token scan, and exact Python Fraction arithmetic. No Lean, Lake, leanchecker, proof-environment audit, or CI was invoked. No compiler-confirmed type, object, or axiom claim is made. Source theorem signatures and the recursively reachable project-source fingerprint plus unchanged external pins are saved beside the candidate. External source/object binding remains P0's verification work.
+1. `xzGap` and `yzGap` are exact whole-rectangle infima of the complete
+   selected-product gate gaps. `xzGate_iff` and `yzGate_iff` prove the
+   pointwise-for-all-box-points equivalence, by monotonic affine pieces and
+   the actual upper-corner witness. They do not replace `inf v` by `v(upper)`.
+2. `rescue` is `max(qA lx,qB uz)`. Its lower-bound and mixed-corner
+   attainment theorems concern the actual `max(A,W)` rescue. No ungated W
+   action or W licensing at the actual lambda is asserted.
+3. `interval_lower_endpoints` and `interval_lower_iff` identify the exact
+   interval infimum used in the branch expressions, including the mu peak.
+4. `fullGamma` takes the specified six-entry maximum, including each
+   nonleading pair exactly when its complete whole-box gap is at least e.
+   Failed pairs contribute the already-present baseline. `gamma` uses
+   the full rule only if `ux <= mu-4e`; the complete transition region uses
+   `qVLo lx ux`. This is not `ScaledBox.extendedClippedLower`.
+5. `gamma_le_cap`, `fullGamma_le_original` and `gamma_le_endpoint` prove
+   the actual coarse lower bound and the ceiling `Lambda=153/256`.
+   `levelExponent = Gamma-2e`, `initial = Theta-2e`, and
+   `levelExponent_lt_initial` prove the strict descending comparison.
+6. `first_cube_margin`, `first_prime_cube` and
+   `rawLevel_first_cube_on_cell` pay the strict first cube from the genuine
+   Gamma baseline, first stop and interval width. They require
+   `0<e<gamma/100`, `chi<e/10`; the stronger second chi condition from the
+   approximation proof is not needed for these statements. There is no
+   assumption that a third cap exceeds the initial exponent.
+7. `cells` and the rational Gamma list precede omega and N. The lookup
+   stores rational Gamma, then subtracts the common real `2e`, so e is
+   not silently restricted to rational values. `rawLevel` tests the literal
+   `N^omega <= p3`, with equality active. Failure or an unselected cell
+   returns `N^(Theta-2e)`.
+8. `frozenLevel_append` and `frozenActive_append` show that all later
+   prepended selections retain the same rank-three ancestor and rough
+   decision. `policy_through_two`, `policy_even`, `policy_inactive` and
+   `policy_third_iff` give the finite-policy dictionary. The last theorem
+   retains the third level's own first cube and strict third cube.
+9. `initialPolicy` explicitly includes the first coarse-label upper-endpoint
+   stop at rank one; `firstStop_of_triple_cell` binds a selected third cell
+   to that inherited first label. It does not claim a new fifth-parent
+   seven-gate formula for this altered initial policy.
 
-The original eight-branch envelope evaluates exactly to 59/100 at (1/10,2/25,3/50), below 299/500 by 1/125. A separate geometric witness t=(19/100,1/10,2/25,3/50,1/25), initial=299/500, third=11/20 satisfies the old six inequalities but fails the inherited third-level first cube (57/100 > 11/20), while the third cube is 53/100. This demonstrates why the extra row cannot be omitted for unordered levels. It is not a discrete-prime counterexample or an actual manuscript-policy instance.
+## Exact unpaid work
 
-## Reuse and boundary
+- The approximation estimates (C3) and (C5), in particular
+  `0 <= L_endpoint - lambda <= 4e + 6chi`, are not proved and are not
+  inserted as certificate/structure fields.
+- Coverage and small density cost of the omitted order-wall cells, and a
+  sufficiently fine finite mesh covering the needed compact set, remain
+  unproved. This implementation interprets its adopted boxes as wholly
+  ordered rectangles; it does not identify rectangle infima with infima
+  over a larger rectangle's ordered intersection.
+- The W auxiliary level and the other analytic licence reserves from
+  audit lines 95--130 are not paid. The actual density cap stays lambda;
+  no auxiliary level is used to inflate it.
+- The complete proper-parent/fifth-frontier dictionary for this explicit
+  first-stop policy is not yet connected. Only the immediate third test
+  reuses the accepted `historicalUnorderedThird_admissible_iff`.
+- Successor fourth/fifth levels, actual finite-tree-to-integral identities,
+  full numerical K/c, signed distribution, hLower and hUpper remain open.
+- All 56 textual source declarations remain uncompiled. P0 must obtain
+  elaborated complete types, generated/private inventory, original-object
+  replay and full transitive standard-axiom checks under the standing gates.
 
-Read the existing exact-frontier/finite-history sources and the FirstExitAdmittedFrontierTuples original checkpoint receipt. Read-only fetched and inspected old P1 f5a62f9bc862b89d03d5d211379664d8866d689f (HistoricalThreeStageFiniteSum); it is not rewritten or silently merged. P0's legacy d3b486cc supplies HistoricalFifthIntegerCutoff and HistoricalThreeStageTelescope. Existing shared interface definitions and the strong six-row result remain unchanged.
+## Existing suppliers and resource boundary
 
-Actual rough activation and finite selector/table are still uninstantiated; successor comparisons Q3<=Q4 and Q4<=Q5 still need their correct checks. P2's same-policy integral certificate and P3's signed distribution assumptions remain unpaid, as do hLower/hUpper. This leaf is a precise finite geometric repair, not a completed historical integral or main theorem.
+The exact source bytes of `FinitePrimeGeometryCore` and
+`HistoricalUnorderedThirdGeometry` match the leaves accepted by P0 run
+`38671169182` (70 and 36 complete declarations respectively). Receipt SHA256:
+`ca0a40b5300acd7ea46c5287cc4c956a2f35b56bc476c6087ff36c7082893747`.
+That leaf acceptance is reused with its stated imported-dependency scope.
 
-## Next action
+`BufferedFirstCubeGeometry`, `VariableEnvelopeRegularity`,
+`RationalBox`, and `SelectedPrefixRationalMesh` are existing project
+suppliers at this baseline. No new independent acceptance is claimed for
+them; P0's exact closure still controls their imported objects. Textual
+closure has 39 project modules and 21 goldbach modules, no
+`PrimeNumberTheoremAnd`, `Wiener` or `ZetaBounds` node. Mathlib and Lean
+frontiers are opaque fixed-pin boundaries in this static evidence.
 
-P0 verifies the frozen leaf under its single-slot -j2/-M4096 strategy. Stop on a concrete type failure and return the diagnostic; do not repeat an unchanged build. Once this geometry is accepted, attach it to the existing cell-integral supplier and separate successor-only comparisons from the false initial-to-third comparison.
+No public root, existing accepted source, pin, workflow or other part's
+source was edited. Only P0 may validate and publish. After receiving the
+frozen request, the next P1 action is a repair of exact P0 feedback, or a
+new explicitly scoped mathematical increment after acceptance.
