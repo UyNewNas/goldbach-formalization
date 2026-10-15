@@ -25,9 +25,10 @@ on its necessary analytic dependency; no usable published fixed-pin object bundl
 has been found. The independent P2 pilot likewise found `FullCertificateData`
 exceeding that check before the new sum proofs. Its 186 literal definitions were
 then split verbatim into twelve carriers, preserving all 17,572 rows and indices.
-The row/extreme-block pilot is currently
-[run 38672198005](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38672198005);
-its outcome and the full row/sum/integral assembly are not yet accepted.
+The row/extreme-block [pilot 38672198005](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38672198005)
+reached the new light row/list bridge and stopped at an explicit `Fin.sum_univ_succ`
+rewrite error, before either numerical block. A minimal same-type proof repair
+is pending. The full row/sum/integral assembly remains unaccepted.
 
 The current run identities and immutable evidence hashes are recorded in
 `automation/control.json`, `automation/integration.json` and the P0 run records.
