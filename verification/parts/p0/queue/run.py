@@ -26,7 +26,10 @@ def main():
     req=json.loads(Path(args.request).read_text()); run_id=req['run_id']
     assert re.fullmatch(r'[A-Za-z0-9_-]+',run_id)
     out=ROOT/'.lake/p0-queue'/run_id; out.mkdir(parents=True,exist_ok=False)
-    overlay=out/'objects'; overlay.mkdir(); report={'schema':'p0-finite-queue-v1','run_id':run_id,'source_commit':git('rev-parse','HEAD'),'status':'RUNNING','started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'strategy':'Exact baseline cache, serial bounded targets; no full build','unconditional_main':False,'stages':[],'reused_project_cache':{},'dependency_replay_claim':False}
+    fresh=os.environ.get('P0_DEPENDENCY_MODE')=='FRESH_PINNED_TARGET_CLOSURE'
+    overlay=ROOT/'.lake/p0-queue/fresh-objects' if fresh else out/'objects'; overlay.mkdir(parents=True,exist_ok=fresh); fresh_index_path=ROOT/'.lake/p0-queue/fresh-index.json'
+    fresh_index=json.loads(fresh_index_path.read_text()) if fresh_index_path.is_file() else {}
+    report={'schema':'p0-finite-queue-v1','run_id':run_id,'source_commit':git('rev-parse','HEAD'),'status':'RUNNING','started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'strategy':'Fresh pinned target closure' if fresh else 'Exact baseline cache, serial bounded targets; no full build','unconditional_main':False,'stages':[],'reused_project_cache':{},'dependency_replay_claim':False}
     dump(out/'receipt.json',report)
     import fcntl, signal
     lock_path=os.environ.get('CHEN_HEAVY_LOCK_PATH','/workspace/shared/chen-coordination/locks/heavy.lock')
@@ -46,11 +49,11 @@ def main():
         raise RuntimeError('P0 run interrupted by signal '+str(sig))
     signal.signal(signal.SIGTERM,stop);signal.signal(signal.SIGINT,stop)
     env=os.environ.copy(); env.pop('LEAN_PATH',None); env.pop('LEAN_SRC_PATH',None); env['LEAN_NUM_THREADS']='2'
-    def run(cmd,label,timeout=600):
+    def run(cmd,label,timeout=600,cwd=ROOT):
         nonlocal active_proc
         log=out/(label+'.log'); start=time.monotonic()
         with log.open('wb') as f:
-            proc=subprocess.Popen(cmd,cwd=ROOT,env=env,stdout=f,stderr=subprocess.STDOUT,start_new_session=True,pass_fds=(lock_fd,))
+            proc=subprocess.Popen(cmd,cwd=cwd,env=env,stdout=f,stderr=subprocess.STDOUT,start_new_session=True,pass_fds=(lock_fd,))
             active_proc=proc
             report['active_child']={'pid':proc.pid,'command':cmd,'label':label,'started_utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}; dump(out/'receipt.json',report)
             try: code=proc.wait(timeout=timeout)
@@ -77,11 +80,17 @@ def main():
         paths=[overlay,ROOT/'.lake/build/lib/lean']+[p/'.lake/build/lib/lean' for p in roots[1:]]+[sysroot/'lib/lean']
         env['LEAN_PATH']=':'.join(map(str,paths))
         report['cache_provenance']={'base_commit':BASE,'success_run':'https://github.com/UyNewNas/goldbach-formalization/actions/runs/38349841383','cache_hit':os.environ.get('P0_CACHE_HIT'),'matched_key':os.environ.get('P0_CACHE_MATCHED_KEY')}
-        assert report['cache_provenance']['cache_hit']=='true','Cache was not an exact hit'
-        assert report['cache_provenance']['matched_key'].endswith('-'+BASE),'Wrong cache key'
+        if fresh:
+            bootstrap=ROOT/'.lake/p0-queue/bootstrap/receipt.json'
+            receipt=json.loads(bootstrap.read_text())
+            assert receipt['status']=='PASS_OFFICIAL_CACHE_ONLY' and receipt['manifest_sha256']==sha(ROOT/'lake-manifest.json'),'Fresh bootstrap is not verified'
+            report['cache_provenance']={'mode':'FRESH_PINNED_TARGET_CLOSURE','bootstrap_receipt_sha256':sha(bootstrap),'prior_baseline_receipt_reused':False}
+        else:
+            assert report['cache_provenance']['cache_hit']=='true','Cache was not an exact hit'
+            assert report['cache_provenance']['matched_key'].endswith('-'+BASE),'Wrong cache key'
         report['runtime_sha256']={str(p):sha(p) for p in [lean,checker]}
         report['pins_sha256']={p:sha(ROOT/p) for p in ['lean-toolchain','lakefile.toml','lake-manifest.json']}
-        report['verifier_sha256']={p:sha(ROOT/p) for p in ['verification/parts/p0/queue/run.py','verification/parts/p0/queue/AuditTemplate.lean','verification/parts/p0/check_pins.py','verification/verify_variable_envelope_boxes.py','.github/workflows/p0-queue.yml','automation/dispatch.json']}
+        report['verifier_sha256']={p:sha(ROOT/p) for p in ['verification/parts/p0/queue/run.py','verification/parts/p0/queue/bootstrap.py','verification/parts/p0/queue/AuditTemplate.lean','verification/parts/p0/check_pins.py','verification/verify_variable_envelope_boxes.py','.github/workflows/p0-queue.yml','automation/dispatch.json']}
         report['request_sha256']=sha(Path(args.request))
         run([str(lean),'--version'],'lean-version',60)
         seen={}; objects={}; sources={}; active=set()
@@ -123,22 +132,40 @@ def main():
         # All original imported main/private/server files are bound, not only .olean.
         for module,(root,source,obj) in seen.items():
             if obj.exists(): objects.update(parts(obj))
+            prior=overlay/(module.replace('.','/')+'.olean')
+            if fresh and module in fresh_index and prior.exists():objects.update(parts(prior))
         before={'sources':sources,'objects':objects}; dump(out/'inputs-before.json',before)
         compiled=set(); prepared=set()
         def compile_one(module,force=False):
             if module in compiled or (module in prepared and not force):return
             root,source,obj=seen[module]
-            if root!=ROOT:
+            is_fresh_source=fresh and (root==ROOT or root==ROOT/'.lake/packages/goldbach')
+            if root!=ROOT and not is_fresh_source:
                 parts(resolved_object(module,obj));prepared.add(module);return
             deps=imports(source)
             for dep in deps:compile_one(dep)
-            changed=git('diff',BASE,'HEAD','--',str(source.relative_to(ROOT)))!=''
-            changed=changed or any(dep in compiled for dep in deps)
-            if not force and not changed and obj.is_file():
-                report['reused_project_cache'][module]={'baseline':BASE,'source_sha256':sha(source),'object_parts':parts(resolved_object(module,obj))};prepared.add(module);return
-            dest=overlay/(module.replace('.','/')+'.olean'); dest.parent.mkdir(parents=True,exist_ok=True)
-            run([str(lean),'-t0','-j2','-M4096','-DwarningAsError=true','-o',str(dest),str(source.relative_to(ROOT))],'compile-'+module,req.get('compile_timeout_seconds',900))
+            dest=overlay/(module.replace('.','/')+'.olean')
+            if fresh:
+                dep_parts={d:parts(resolved_object(d,overlay/(d.replace('.','/')+'.olean') if (overlay/(d.replace('.','/')+'.olean')).exists() else seen[d][2])) for d in deps}
+                signature={'source_sha256':sha(source),'dependency_objects':dep_parts,'pins':report['pins_sha256'],'lean_sha256':sha(lean),'command_policy':['-t0','-j2','-M4096']}
+                cached=fresh_index.get(module)
+                if not force and cached and cached['inputs']==signature and dest.exists() and parts(dest)==cached['objects']:
+                    report.setdefault('reused_fresh_compilation',{})[module]=cached
+                    prepared.add(module);return
+            else:
+                changed=git('diff',BASE,'HEAD','--',str(source.relative_to(ROOT)))!=''
+                changed=changed or any(dep in compiled for dep in deps)
+                if not force and not changed and obj.is_file():
+                    report['reused_project_cache'][module]={'baseline':BASE,'source_sha256':sha(source),'object_parts':parts(resolved_object(module,obj))};prepared.add(module);return
+            dest.parent.mkdir(parents=True,exist_ok=True)
+            # Prerequisites use the baseline ordinary warning policy; targets are strict.
+            command=[str(lean),'-t0','-j2','-M4096',*(['-DwarningAsError=true'] if force else []),'-o',str(dest),str(source.relative_to(root))]
+            # run() receives an explicit provider cwd, never changes other workspaces.
+            run(command,'compile-'+module,req.get('compile_timeout_seconds',900),cwd=root)
             compiled.add(module); prepared.add(module); report.setdefault('compiled_objects',{})[module]=parts(dest)
+            if fresh:
+                fresh_index[module]={'inputs':signature,'objects':parts(dest),'producer_run_id':run_id,'replayed':False}
+                dump(fresh_index_path,fresh_index)
         for module in req['modules']:
             compile_one(module,force=True)
             run([str(checker),'--verbose',module],'replay-'+module,900)

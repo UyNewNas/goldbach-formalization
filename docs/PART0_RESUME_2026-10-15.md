@@ -58,3 +58,23 @@ event; exact cache availability in that scope is an explicit prerequisite.
 Compiler commands retain `-t0 -j2 -M4096`. The bundled checker does not implement
 `-M`; its native invocation is recorded as such, with the shared single slot and
 `LEAN_NUM_THREADS=2`. No new operating-system hard memory limit is introduced.
+
+## First finite run and revised dependency plan
+
+[Run 38663797841](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38663797841)
+on exact commit `10d8627719ff2d303ca67f0f1c32c6f7b29de299` installed the pinned
+toolchain successfully, then stopped at an exact-cache miss. Both proof requests
+were skipped. This is a terminal setup failure, not a mathematical failure or PASS.
+The retained baseline artifact 11790907699 was inspected: its 74 files contain
+only Round3/4 audit objects, not the production/import object closure needed here.
+
+The changed plan starts from all eleven fixed dependency source commits, uses
+the official Mathlib source-hash cache only for the two targets' actual import
+boundaries, and compiles only required project/Goldbach source closures serially.
+It does not upgrade pins, restore arbitrary old project caches, or build the whole
+root. Fresh objects are marked newly compiled and fingerprinted, never relabelled
+as the old accepted cache. Same-job reuse binds source, direct dependency objects,
+toolchain, pins and command policy. Strict target/replay/full audit gates remain.
+
+A proposed cross-branch reconciliation was not performed; the integration branch
+retains its current ancestry and the other supplier branch remains separate.
