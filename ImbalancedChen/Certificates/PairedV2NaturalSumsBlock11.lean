@@ -71,13 +71,11 @@ theorem block11_lower :
     (block11.map (fun xs => (xs.map Approximation.lower).sum)).sum = 5504904189416703 := by
   change (approximations502.map Approximation.lower).sum + ((approximations503.map Approximation.lower).sum + ((approximations504.map Approximation.lower).sum + ((approximations505.map Approximation.lower).sum + ((approximations506.map Approximation.lower).sum + ((approximations507.map Approximation.lower).sum + ((approximations508.map Approximation.lower).sum + ((approximations509.map Approximation.lower).sum + ((approximations510.map Approximation.lower).sum + ((approximations511.map Approximation.lower).sum + 0))))))))) = 5504904189416703
   rw [strip502_sums.1, strip503_sums.1, strip504_sums.1, strip505_sums.1, strip506_sums.1, strip507_sums.1, strip508_sums.1, strip509_sums.1, strip510_sums.1, strip511_sums.1]
-  decide +kernel
 
 theorem block11_upper :
     (block11.map (fun xs => (xs.map Approximation.upper).sum)).sum = 5504906795003226 := by
   change (approximations502.map Approximation.upper).sum + ((approximations503.map Approximation.upper).sum + ((approximations504.map Approximation.upper).sum + ((approximations505.map Approximation.upper).sum + ((approximations506.map Approximation.upper).sum + ((approximations507.map Approximation.upper).sum + ((approximations508.map Approximation.upper).sum + ((approximations509.map Approximation.upper).sum + ((approximations510.map Approximation.upper).sum + ((approximations511.map Approximation.upper).sum + 0))))))))) = 5504906795003226
   rw [strip502_sums.2, strip503_sums.2, strip504_sums.2, strip505_sums.2, strip506_sums.2, strip507_sums.2, strip508_sums.2, strip509_sums.2, strip510_sums.2, strip511_sums.2]
-  decide +kernel
 
 
 

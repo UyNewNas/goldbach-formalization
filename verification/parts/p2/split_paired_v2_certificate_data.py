@@ -125,7 +125,14 @@ def sources_and_report():
         old_sums = git_input(sums_name)
         old_import = f"import {module(DATA)}\n".encode()
         assert old_sums.startswith(old_import)
-        sums = old_sums.replace(old_import, f"import {module(name)}\n".encode(), 1)
+        repaired_sums = old_sums
+        for projection in (1, 2):
+            rewrite = ("  rw [" + ", ".join(f"strip{k}_sums.{projection}" for k, _, _ in group) + "]\n").encode()
+            redundant = rewrite + b"  decide +kernel\n"
+            assert repaired_sums.count(redundant) == 1
+            repaired_sums = repaired_sums.replace(redundant, rewrite, 1)
+        assert re.findall(rb"\d+", repaired_sums) == re.findall(rb"\d+", old_sums)
+        sums = repaired_sums.replace(old_import, f"import {module(name)}\n".encode(), 1)
         lengths = b"\n/-- Each length is checked separately over its original literal list. -/\n"
         for entry in strip_manifest[group_start:]:
             k = entry["strip"]
@@ -135,7 +142,7 @@ def sources_and_report():
         end = f"end {SUM_NS}\n".encode()
         assert sums.endswith(end)
         sums = sums[:-len(end)] + lengths + end
-        assert sums.replace(lengths, b"", 1).replace(f"import {module(name)}\n".encode(), old_import, 1) == old_sums
+        assert sums.replace(lengths, b"", 1).replace(f"import {module(name)}\n".encode(), old_import, 1) == repaired_sums
         sources[sums_name] = sums
     imports = b"".join(f"import {module(CERT + f'PairedV2FullCertificateDataBlock{b:02}.lean')}\n".encode() for b in range(12))
     original_import, prefix_tail = prefix.split(b"\n", 1)
@@ -151,10 +158,17 @@ def sources_and_report():
     generic_start = old_rows.index(b"theorem sum_getD_eq_map")
     strip_start = old_rows.index(b"theorem strip_sum_eq_map")
     generic = old_rows[generic_start:strip_start]
+    cons_step = b"  | cons x xs ih =>\n"
+    cons_shape = ("    change (∑ j : Fin (xs.length + 1), f ((x :: xs).getD j.val default)) =\n"
+                  "      f x + (xs.map f).sum\n").encode()
+    assert generic.count(cons_step) == 1
+    generic = generic.replace(cons_step, cons_step + cons_shape, 1)
     assembly_rest = old_rows[strip_start:]
     row_imports = old_rows[:old_rows.index(b"\n\n")].replace(
         b"PairedV2FullCertificateData", b"PairedV2FullChecker")
     sources[rows_name] = row_imports + b"\n\n/-! Generic finite list-sum bridge. No certificate-data module is imported. -/\n\n" + options + generic + f"end {SUM_NS}\n".encode()
+    # Exact already-compiled/replayed Rows source from P0 run 38673067254.
+    assert sha(sources[rows_name]) == "56eebe1e99f8dd6d79da3c49d0bcfb39fcc28f4c2468fdff8446a5876314cfbf"
     assembly_name = CERT + "PairedV2NaturalSumRowAssembly.lean"
     assembly_imports = [module(rows_name), module(DATA)] + [module(CERT + f"PairedV2NaturalSumsBlock{b:02}.lean") for b in range(12)]
     length_type = old_rows[declarations_start:generic_start].split(b" := by\n", 1)[0]
@@ -166,7 +180,14 @@ def sources_and_report():
     sources[assembly_name] = ("\n".join(f"import {m}" for m in assembly_imports) + "\n\n/-! Original Row/list interface, assembled from per-strip kernel length facts.\nThe Fin.cases proof selects those facts; it does not decide all row data. -/\n\n").encode() + options + length_proof + assembly_rest
     main_name = CERT + "PairedV2NaturalSums.lean"
     old_main = git_input(main_name)
-    sources[main_name] = old_main.replace(f"import {module(rows_name)}\n".encode(), f"import {module(assembly_name)}\n".encode(), 1)
+    repaired_main = old_main
+    for field in ("lower", "upper"):
+        rewrite = ("  rw [" + ", ".join(f"block{b:02}_{field}" for b in range(12)) + "]\n").encode()
+        redundant = rewrite + b"  decide +kernel\n"
+        assert repaired_main.count(redundant) == 1
+        repaired_main = repaired_main.replace(redundant, rewrite, 1)
+    assert re.findall(rb"\d+", repaired_main) == re.findall(rb"\d+", old_main)
+    sources[main_name] = repaired_main.replace(f"import {module(rows_name)}\n".encode(), f"import {module(assembly_name)}\n".encode(), 1)
     assert old_main != sources[main_name]
 
     assert len(seen) == len(set(seen)) == 17572 and set(seen) == set(pairs)
@@ -185,8 +206,10 @@ def sources_and_report():
         "original_data_sha256": sha(original), "reconstructed_original_data_sha256": sha(prefix + b"".join(d for _, d, _ in defs) + suffix),
         "original_selector_and_approximation_suffix_sha256": sha(suffix),
         "unchanged_files": {p: sha((ROOT / p).read_bytes()) for p in PROTECTED},
-        "old_sum_declarations_preserved_byte_for_byte": True,
-        "original_generic_and_row_list_proof_bodies_preserved_byte_for_byte": True,
+        "old_sum_declaration_types_and_numerals_preserved_byte_for_byte": True,
+        "sum_proof_control_flow_repair": "Only remove26 redundant decide +kernel lines after closing rw steps:24 across12 block totals and2 in final totals. Retain all186 strip decision proofs.",
+        "generic_row_proof_repair": "Add explicit cons-case Fin (xs.length + 1) shape before original rewrite; emitted source hash pinned to P0 strict/replay success.",
+        "original_strip_and_full_row_list_bridge_bodies_preserved_byte_for_byte": True,
         "new_length_proofs": {"individual_rfl_facts": 186, "finite_cases_assembly": True, "new_hypotheses": []},
         "coverage": {"strips": 186, "rows": 17572, "E0": 6091, "E1": 11481,
                      "ordered_strip_range": [326, 511], "exact_once_pairs": True, "data_leaves": 12,

@@ -41,7 +41,6 @@ theorem lower_numerator_sum :
   simp only [blocks, List.flatten_cons, List.flatten_nil, List.map_append,
     List.map_nil, List.sum_append, List.sum_nil]
   rw [block00_lower, block01_lower, block02_lower, block03_lower, block04_lower, block05_lower, block06_lower, block07_lower, block08_lower, block09_lower, block10_lower, block11_lower]
-  decide +kernel
 
 /-- Exact numerator sum over every `FullMask.Row`, at the unchanged 10^20 scale. -/
 theorem upper_numerator_sum :
@@ -50,7 +49,6 @@ theorem upper_numerator_sum :
   simp only [blocks, List.flatten_cons, List.flatten_nil, List.map_append,
     List.map_nil, List.sum_append, List.sum_nil]
   rw [block00_upper, block01_upper, block02_upper, block03_upper, block04_upper, block05_upper, block06_upper, block07_upper, block08_upper, block09_upper, block10_upper, block11_upper]
-  decide +kernel
 
 
 end ImbalancedChen.Certificates.PairedV2.FullMask.NaturalSums

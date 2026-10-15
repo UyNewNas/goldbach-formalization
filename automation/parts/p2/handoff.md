@@ -1,40 +1,40 @@
-# P2 handoff: explicit cons-sum shape repair
+# P2 handoff: remove redundant total-proof endings
 
 State: WAITING_FOR_P0. Request: REQUESTED. Verification: SOURCE_ONLY.
 
-- Request: automation/parts/p2/requests/20261015T024700Z-rows-cons-shape.json
-- Immutable record: automation/parts/p2/runs/20261015T024700Z-rows-cons-shape.json
+- Request: automation/parts/p2/requests/20261015T025800Z-redundant-total-tactics.json
+- Immutable run: automation/parts/p2/runs/20261015T025800Z-redundant-total-tactics.json
 - Worktree: /workspace/shared/chen-coordination/p2-data-split
-- Changed file: ImbalancedChen/Certificates/PairedV2NaturalSumRows.lean
-- Old source SHA-256: c1b98d2c39506cc9af9d89631eccae38b6302cb68cfcc654b791ca514f76db72
-- New source SHA-256: 56eebe1e99f8dd6d79da3c49d0bcfb39fcc28f4c2468fdff8446a5876314cfbf
-- Patch: automation/parts/p2/runs/20261015T024700Z-rows-cons-shape.patch
-- Patch SHA-256: 26a453bf28b54b510b66ec7af0706756cb5004c36e5f2118e643e7634adde01e
-- Effective 35-file snapshot SHA-256: 3619507e12cd13650305bfd7df1d76c1f558e4ef41e6a55df13c0a93b9d429c1
-- Effective dependency fingerprint: e203a81a6d80dda5acef75e83b3f1e0f300e602ea14e5febc2dc578b96df98df
+- Changed files: 13 Lean + 2 generators + 2 current reports + 1 explanation
+- Effective 36-file snapshot SHA-256: aa28da285df64b0f11f169aed73efd1f5b5553843a1d5687e1be11fab45bdc24
+- Patch: automation/parts/p2/runs/20261015T025800Z-redundant-total-tactics.patch
+- Patch SHA-256: 7c5a19f47b7955402ea0ce96f939dc0abd1eab337f23cb782c0bdc26da15dfe4
+- Exact 26-place map: automation/parts/p2/runs/20261015T025800Z-redundant-total-tactics-removals.json
+- Source dependency fingerprint: 6cb56ac9c542dd3c2ecce6113bb056ea4958a22a9a3ccda15b27c3dae3a65c1c
 
-Real run 38672198005, source 8079c9aeb1a3dec6741d80480d8fbb394909369f, reached the light Rows
-module after nine prerequisite compilations. Its strict -t0/-j2/-M4096 compilation
-failed in 2.12 seconds at rw [Fin.sum_univ_succ], exit 1. This is a tactic matching
-diagnostic, not a repeated FullCertificateData memory failure. Block11 and Block10
-were not run after fail-fast. Exact artifact, receipt and log hashes are in the request.
+P0 run 38673067254 strictly compiled and replayed Rows, and compiled DataBlock11.
+Block11 then reported only No goals to be solved at lines 74 and 80, the trailing
+decide tactics after successful rw steps. Block10 was not reached. This is neither
+a new data-memory failure nor a full P2 success. Exact receipts/logs are bound
+in the request, including their limited scope.
 
-The repair adds only two lines: explicitly change the cons-case finite domain to
-Fin (xs.length + 1) and expose the mapped-list sum as f x + (xs.map f).sum before
-the original rewrite. The theorem type, List/getD objects, imports and all other
-proof steps remain unchanged. The other 34 frozen files match their prior hashes.
+The repair removes exactly 26 redundant decide +kernel lines: 24 from twelve
+block totals and two from the final totals. All 412 declaration heads in the 13
+changed Lean files, every numeric token, all 186 strip decision proofs, data,
+length facts, statements and premises are unchanged. The already-passed Rows
+source remains 56eebe1e99f8dd6d79da3c49d0bcfb39fcc28f4c2468fdff8446a5876314cfbf.
 
-Static diff and patch reverse-apply checks pass. No Lean, Lake, checker, audit,
-CI or push was run by P2; the corrected proof remains uncompiled. P0 alone owns
-the retry and every subsequent gate. The 12 data leaves and global sum assembly
-still require actual acceptance. Do not treat successful prerequisites as a pilot
-or global proof success.
+The active split generator now incorporates the already-passed Rows repair
+and these precise total-proof deletions. Deterministic regeneration and --check
+pass against the actual current files; no external Rows overlay is needed. The
+legacy monolithic generator receives the same minimal template corrections but
+is not run over this split layout. Its old result manifests remain historical.
 
-The old generator and manifests intentionally remain frozen. Reproduction is the
-previous split followed by this exact single-file patch. The new request explicitly
-binds the effective source hashes and dependency fingerprint. No other source or
-manifest is silently rewritten.
+Static diff, exact declarations/numerals/data comparisons, generator checks and
+patch reverse-apply check passed. P2 ran no Lean/Lake/checker/audit/CI or push.
+The corrected blocks and final assembly remain SOURCE_ONLY. All pending strict,
+replay, complete inventory/type/axiom and imported-object gates remain required.
 
-Next: P0 checks corrected Rows, then the existing longest-strip/largest-data pilots
-and full gates if successful. All original numerical/coverage/integral limitations
-remain. No new analytic layer is added.
+Next: await P0's selected retry after its P5 slot. No new analytic layer or
+additional unverified proof changes. K/80 scope and all actual integral/common-
+policy/Buchstab/hLower/hUpper gaps remain as before.

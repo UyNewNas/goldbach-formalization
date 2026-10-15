@@ -1,3 +1,4 @@
+import ImbalancedChen.FiniteUpperCarrierCore
 import ImbalancedChen.PhysicalUpperWeightBridge
 import ImbalancedChen.RealHalfProductSource
 import ImbalancedChen.CurvedRegionDiscrepancy
@@ -25,30 +26,6 @@ namespace ImbalancedChen
 noncomputable section
 
 open scoped BigOperators
-
-/-- The actual congruence mass of the arbitrary-real ordered source. -/
-def realHalfProductCongruenceMass (b : ℝ) (N : ℕ) (T : ℝ) (d : ℕ) : ℝ :=
-  (((realHalfProductSource b N T).filter
-    (fun m : ℕ => Nat.ModEq d m N)).card : ℝ)
-
-/-- The same source restricted by the literal coprimality mask. -/
-def realHalfProductCoprimeMass (b : ℝ) (N : ℕ) (T : ℝ) (d : ℕ) : ℝ :=
-  (((realHalfProductSource b N T).filter
-    (fun m : ℕ => Nat.Coprime m d)).card : ℝ)
-
-/-- The exact price of replacing the coprime mass by the total real source. -/
-def realPhysicalCoprimeCorrection
-    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) : ℝ :=
-  ∑ d ∈ Q, rho d *
-    ((realHalfProductCoprimeMass b N T d -
-      ((realHalfProductSource b N T).card : ℝ)) / (Nat.totient d : ℝ))
-
-/-- The signed primitive-residue error for exactly the displayed coefficient. -/
-def realPhysicalDistributionError
-    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) : ℝ :=
-  ∑ d ∈ Q, rho d *
-    (realHalfProductCongruenceMass b N T d -
-      realHalfProductCoprimeMass b N T d / (Nat.totient d : ℝ))
 
 /-- Natural subtraction agrees with the moving residue on the full source,
 including the endpoint with shifted value zero. -/

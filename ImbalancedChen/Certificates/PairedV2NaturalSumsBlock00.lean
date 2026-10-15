@@ -101,13 +101,11 @@ theorem block00_lower :
     (block00.map (fun xs => (xs.map Approximation.lower).sum)).sum = 438326580733439 := by
   change (approximations326.map Approximation.lower).sum + ((approximations327.map Approximation.lower).sum + ((approximations328.map Approximation.lower).sum + ((approximations329.map Approximation.lower).sum + ((approximations330.map Approximation.lower).sum + ((approximations331.map Approximation.lower).sum + ((approximations332.map Approximation.lower).sum + ((approximations333.map Approximation.lower).sum + ((approximations334.map Approximation.lower).sum + ((approximations335.map Approximation.lower).sum + ((approximations336.map Approximation.lower).sum + ((approximations337.map Approximation.lower).sum + ((approximations338.map Approximation.lower).sum + ((approximations339.map Approximation.lower).sum + ((approximations340.map Approximation.lower).sum + ((approximations341.map Approximation.lower).sum + 0))))))))))))))) = 438326580733439
   rw [strip326_sums.1, strip327_sums.1, strip328_sums.1, strip329_sums.1, strip330_sums.1, strip331_sums.1, strip332_sums.1, strip333_sums.1, strip334_sums.1, strip335_sums.1, strip336_sums.1, strip337_sums.1, strip338_sums.1, strip339_sums.1, strip340_sums.1, strip341_sums.1]
-  decide +kernel
 
 theorem block00_upper :
     (block00.map (fun xs => (xs.map Approximation.upper).sum)).sum = 438326873674396 := by
   change (approximations326.map Approximation.upper).sum + ((approximations327.map Approximation.upper).sum + ((approximations328.map Approximation.upper).sum + ((approximations329.map Approximation.upper).sum + ((approximations330.map Approximation.upper).sum + ((approximations331.map Approximation.upper).sum + ((approximations332.map Approximation.upper).sum + ((approximations333.map Approximation.upper).sum + ((approximations334.map Approximation.upper).sum + ((approximations335.map Approximation.upper).sum + ((approximations336.map Approximation.upper).sum + ((approximations337.map Approximation.upper).sum + ((approximations338.map Approximation.upper).sum + ((approximations339.map Approximation.upper).sum + ((approximations340.map Approximation.upper).sum + ((approximations341.map Approximation.upper).sum + 0))))))))))))))) = 438326873674396
   rw [strip326_sums.2, strip327_sums.2, strip328_sums.2, strip329_sums.2, strip330_sums.2, strip331_sums.2, strip332_sums.2, strip333_sums.2, strip334_sums.2, strip335_sums.2, strip336_sums.2, strip337_sums.2, strip338_sums.2, strip339_sums.2, strip340_sums.2, strip341_sums.2]
-  decide +kernel
 
 
 

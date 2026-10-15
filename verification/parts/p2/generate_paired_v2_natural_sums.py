@@ -57,6 +57,8 @@ theorem sum_getD_eq_map (xs : List Approximation) (f : Approximation → ℕ) :
   induction xs with
   | nil => simp
   | cons x xs ih =>
+    change (∑ j : Fin (xs.length + 1), f ((x :: xs).getD j.val default)) =
+      f x + (xs.map f).sum
     rw [Fin.sum_univ_succ]
     change f x + (∑ j : Fin xs.length, f (xs.getD j.val default)) =
       f x + (xs.map f).sum
@@ -135,7 +137,7 @@ def emit_sources(strips):
             expression = " + (".join(terms) + " + 0" + ")" * (len(terms) - 1)
             lines += [f"theorem {name}_{field} :", f"    ({name}.map (fun xs => (xs.map Approximation.{field}).sum)).sum = {total} := by",
                       f"  change {expression} = {total}",
-                      "  rw [" + ", ".join(f"strip{s['t_index']}_sums.{projection}" for s in group) + "]", "  decide +kernel", ""]
+                      "  rw [" + ", ".join(f"strip{s['t_index']}_sums.{projection}" for s in group) + "]", ""]
         lines += [FOOTER]
         emitted[CERT / f"PairedV2NaturalSumsBlock{b:02}.lean"] = "\n".join(lines)
     lines = ["import ImbalancedChen.Certificates.PairedV2NaturalSumRows"]
@@ -153,8 +155,7 @@ def emit_sources(strips):
                   "  rw [sum_rows_eq_list, approximations_partition]",
                   "  simp only [blocks, List.flatten_cons, List.flatten_nil, List.map_append,",
                   "    List.map_nil, List.sum_append, List.sum_nil]",
-                  "  rw [" + ", ".join(f"block{b:02}_{field}" for b in range(len(blocks))) + "]",
-                  "  decide +kernel", ""]
+                  "  rw [" + ", ".join(f"block{b:02}_{field}" for b in range(len(blocks))) + "]", ""]
     lines += [FOOTER]
     emitted[CERT / "PairedV2NaturalSums.lean"] = "\n".join(lines)
     return emitted, blocks

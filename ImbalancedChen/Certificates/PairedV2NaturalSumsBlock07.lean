@@ -101,13 +101,11 @@ theorem block07_lower :
     (block07.map (fun xs => (xs.map Approximation.lower).sum)).sum = 6262628767812937 := by
   change (approximations438.map Approximation.lower).sum + ((approximations439.map Approximation.lower).sum + ((approximations440.map Approximation.lower).sum + ((approximations441.map Approximation.lower).sum + ((approximations442.map Approximation.lower).sum + ((approximations443.map Approximation.lower).sum + ((approximations444.map Approximation.lower).sum + ((approximations445.map Approximation.lower).sum + ((approximations446.map Approximation.lower).sum + ((approximations447.map Approximation.lower).sum + ((approximations448.map Approximation.lower).sum + ((approximations449.map Approximation.lower).sum + ((approximations450.map Approximation.lower).sum + ((approximations451.map Approximation.lower).sum + ((approximations452.map Approximation.lower).sum + ((approximations453.map Approximation.lower).sum + 0))))))))))))))) = 6262628767812937
   rw [strip438_sums.1, strip439_sums.1, strip440_sums.1, strip441_sums.1, strip442_sums.1, strip443_sums.1, strip444_sums.1, strip445_sums.1, strip446_sums.1, strip447_sums.1, strip448_sums.1, strip449_sums.1, strip450_sums.1, strip451_sums.1, strip452_sums.1, strip453_sums.1]
-  decide +kernel
 
 theorem block07_upper :
     (block07.map (fun xs => (xs.map Approximation.upper).sum)).sum = 6262632246912433 := by
   change (approximations438.map Approximation.upper).sum + ((approximations439.map Approximation.upper).sum + ((approximations440.map Approximation.upper).sum + ((approximations441.map Approximation.upper).sum + ((approximations442.map Approximation.upper).sum + ((approximations443.map Approximation.upper).sum + ((approximations444.map Approximation.upper).sum + ((approximations445.map Approximation.upper).sum + ((approximations446.map Approximation.upper).sum + ((approximations447.map Approximation.upper).sum + ((approximations448.map Approximation.upper).sum + ((approximations449.map Approximation.upper).sum + ((approximations450.map Approximation.upper).sum + ((approximations451.map Approximation.upper).sum + ((approximations452.map Approximation.upper).sum + ((approximations453.map Approximation.upper).sum + 0))))))))))))))) = 6262632246912433
   rw [strip438_sums.2, strip439_sums.2, strip440_sums.2, strip441_sums.2, strip442_sums.2, strip443_sums.2, strip444_sums.2, strip445_sums.2, strip446_sums.2, strip447_sums.2, strip448_sums.2, strip449_sums.2, strip450_sums.2, strip451_sums.2, strip452_sums.2, strip453_sums.2]
-  decide +kernel
 
 
 

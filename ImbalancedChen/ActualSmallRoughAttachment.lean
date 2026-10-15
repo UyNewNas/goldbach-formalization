@@ -1,3 +1,4 @@
+import ImbalancedChen.FiniteUpperCarrierCore
 import ImbalancedChen.ActualSmallRosser
 import ImbalancedChen.FixedRoughCoefficients
 import ImbalancedChen.SmallRoughMainTerm
@@ -52,20 +53,6 @@ theorem actualSmallRoughIndicator_mul_interval
   unfold actualSmallRoughIndicator actualIntervalRoughIndicator
   rw [hsplit]
   split <;> split <;> simp_all
-
-/-- The displayed physical modulus support for the actual small/rough pair. -/
-def actualSmallRoughModuli (retainOdd : List ℕ → Bool)
-    (N cap : ℕ) (w z : ℝ) : Finset ℕ :=
-  smallRoughModuli (actualSmallRosserSupport N cap w)
-    (fixedRoughSupport retainOdd N cap w z)
-
-/-- One physical coefficient, independent of the integer at which it is tested. -/
-def actualSmallRoughRho (retainOdd : List ℕ → Bool)
-    (N cap : ℕ) (w z L : ℝ) : ℕ → ℝ :=
-  smallRoughRho (actualSmallRosserSupport N cap w)
-    (fixedRoughSupport retainOdd N cap w z)
-    (fixedRoughCoefficient retainOdd N cap w z)
-    (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)
 
 theorem actualSmallRoughModuli_squarefree
     (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) {q : ℕ}
