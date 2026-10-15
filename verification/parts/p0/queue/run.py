@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """P0-only bounded verification. No dependency installation, pin updates or full build.
 
-The workflow restores the exact successful 59d338 cache. Unchanged imported
-objects are recorded as reused coverage, not newly rebuilt/replayed dependencies.
-New project prerequisites and targets are compiled serially under -j2/-M4096/-t0.
+The workflow uses exact official Mathlib/toolchain objects and freshly compiles
+only the selected project, Goldbach and LeanArchitect dependency closure.
+Fresh prerequisites are not independently replayed/audited. Targets are strict.
 """
 from pathlib import Path
 import argparse, datetime, hashlib, json, os, re, subprocess, sys, time
@@ -85,6 +85,7 @@ def main():
             receipt=json.loads(bootstrap.read_text())
             assert receipt['status']=='PASS_OFFICIAL_CACHE_ONLY' and receipt['manifest_sha256']==sha(ROOT/'lake-manifest.json'),'Fresh bootstrap is not verified'
             report['cache_provenance']={'mode':'FRESH_PINNED_TARGET_CLOSURE','bootstrap_receipt_sha256':sha(bootstrap),'prior_baseline_receipt_reused':False}
+            report['fresh_source_providers']=['project','goldbach','LeanArchitect']
         else:
             assert report['cache_provenance']['cache_hit']=='true','Cache was not an exact hit'
             assert report['cache_provenance']['matched_key'].endswith('-'+BASE),'Wrong cache key'
@@ -139,7 +140,7 @@ def main():
         def compile_one(module,force=False):
             if module in compiled or (module in prepared and not force):return
             root,source,obj=seen[module]
-            is_fresh_source=fresh and (root==ROOT or root==ROOT/'.lake/packages/goldbach')
+            is_fresh_source=fresh and root in (ROOT, ROOT/'.lake/packages/goldbach', ROOT/'.lake/packages/LeanArchitect')
             if root!=ROOT and not is_fresh_source:
                 parts(resolved_object(module,obj));prepared.add(module);return
             deps=imports(source)
