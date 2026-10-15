@@ -49,12 +49,16 @@ theorem coprimeMass_norm_le_twice_U
     {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}
     (hd : MediumAdmissible B sigma kappa c0 d) (q : ℕ) :
     ‖coprimeMass d.alphaCarrier d.alpha q‖ ≤ 2 * d.U := by
-  apply (norm_sum_le _ _).trans
+  unfold coprimeMass
   calc
+    _ ≤ ∑ n ∈ d.alphaCarrier, ‖if n.Coprime q then d.alpha n else 0‖ := norm_sum_le _ _
     _ ≤ ∑ n ∈ d.alphaCarrier, ‖d.alpha n‖ := by
       apply Finset.sum_le_sum
       intro n _
-      by_cases hn : n.Coprime q <;> simp [hn]
+      by_cases hn : n.Coprime q
+      · rw [if_pos hn]
+      · rw [if_neg hn, norm_zero]
+        exact norm_nonneg _
     _ ≤ _ := alpha_l1_le_twice_U hd
 
 /-- Exact grouping of the literal principal row, including the original
@@ -71,13 +75,19 @@ theorem actual_principalRow_eq_grouped (d : MediumAtom) (m : ℕ) :
       if m.Coprime q then coprimeMass d.alphaCarrier d.alpha q else 0 := by
     rw [d.sum_transposedBeta_mul]
     by_cases hm : m.Coprime q
-    · simp only [Nat.coprime_mul_iff_left, hm, true_and, if_true]
+    · rw [if_pos hm]
       unfold coprimeMass
       apply Finset.sum_congr rfl
       intro n _
-      by_cases hn : n.Coprime q <;> simp [hn]
-    · simp only [Nat.coprime_mul_iff_left, hm, false_and, if_false,
-        mul_zero, Finset.sum_const_zero]
+      by_cases hn : n.Coprime q
+      · rw [if_pos (Nat.coprime_mul_iff_left.mpr ⟨hm, hn⟩), if_pos hn, mul_one]
+      · have hmn : ¬(m * n).Coprime q := fun h ↦ hn (Nat.coprime_mul_iff_left.mp h).2
+        rw [if_neg hmn, if_neg hn, mul_zero]
+    · rw [if_neg hm]
+      apply Finset.sum_eq_zero
+      intro n _
+      have hmn : ¬(m * n).Coprime q := fun h ↦ hm (Nat.coprime_mul_iff_left.mp h).1
+      rw [if_neg hmn, mul_zero]
   calc
     _ = ∑ a ∈ d.complexFactorLabels, d.complexFactorGamma a *
         ((∑ n ∈ d.transposedAtom.betaCarrier, d.transposedAtom.beta n *
@@ -90,11 +100,17 @@ theorem actual_principalRow_eq_grouped (d : MediumAtom) (m : ℕ) :
           (if (m * n).Coprime (complexFactorModulus a) then (1 : ℂ) else 0) /
             ((complexFactorModulus a).totient : ℂ)) = _
       simp only [Finset.mul_sum, Finset.sum_div, mul_div_assoc, mul_assoc]
+    _ = ∑ a ∈ d.complexFactorLabels, d.complexFactorGamma a *
+        ((if m.Coprime (complexFactorModulus a) then
+          coprimeMass d.alphaCarrier d.alpha (complexFactorModulus a) else 0) /
+            ((complexFactorModulus a).totient : ℂ)) := by simp only [hmass]
     _ = ∑ q ∈ d.physicalFactorModuli, d.groupedFactorGamma q *
-        ((∑ n ∈ d.transposedAtom.betaCarrier, d.transposedAtom.beta n *
-          (if (m * n).Coprime q then (1 : ℂ) else 0)) / (q.totient : ℂ)) :=
-      d.sum_factorLabels_eq_grouped _
-    _ = _ := by simp only [hmass, mul_div_assoc]
+        ((if m.Coprime q then coprimeMass d.alphaCarrier d.alpha q else 0) /
+          (q.totient : ℂ)) :=
+      d.sum_factorLabels_eq_grouped (fun q : ℕ ↦
+        (if m.Coprime q then coprimeMass d.alphaCarrier d.alpha q else 0) /
+          (q.totient : ℂ))
+    _ = _ := by simp only [mul_div_assoc]
 
 def primitivePairCoefficient (d : MediumAtom) (q r : ℕ) : ℂ :=
   d.groupedFactorGamma q * star (d.groupedFactorGamma r) *
@@ -111,13 +127,20 @@ theorem actual_principalRow_norm_sq_eq (d : MediumAtom) (m : ℕ) :
   intro q _
   apply Finset.sum_congr rfl
   intro r _
-  by_cases hq : m.Coprime q <;> by_cases hr : m.Coprime r
-  all_goals
-    simp only [Nat.coprime_mul_iff_right, hq, hr, and_self, true_and, false_and,
-      and_false, if_true, if_false, mul_zero, zero_div, star_zero, zero_mul,
-      star_div₀, star_mul, star_natCast, primitivePairCoefficient]
-    <;> simp only [div_eq_mul_inv, mul_inv_rev]
-    <;> ring
+  by_cases hq : m.Coprime q
+  · rw [if_pos hq]
+    by_cases hr : m.Coprime r
+    · rw [if_pos hr, if_pos (Nat.coprime_mul_iff_right.mpr ⟨hq, hr⟩),
+        star_div₀, star_mul', star_natCast, mul_one]
+      unfold primitivePairCoefficient
+      simp only [div_eq_mul_inv, mul_inv_rev]
+      ring
+    · have hqr : ¬m.Coprime (q * r) := fun h ↦ hr (Nat.coprime_mul_iff_right.mp h).2
+      rw [if_neg hr, if_neg hqr]
+      simp only [mul_zero, zero_div, star_zero]
+  · have hqr : ¬m.Coprime (q * r) := fun h ↦ hq (Nat.coprime_mul_iff_right.mp h).1
+    rw [if_neg hq, if_neg hqr]
+    simp only [mul_zero, zero_div, zero_mul]
 
 /-- Exact U expansion on the actual common finite carrier and smoothing. -/
 theorem actualU_eq_coprime_sum (d : MediumAtom) :
@@ -139,10 +162,7 @@ theorem actualU_eq_coprime_sum (d : MediumAtom) :
   rw [Complex.ofReal_sum, Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro m _
-  by_cases hm : m.Coprime (q * r)
-  · simp only [hm, if_true, mul_one]
-    ring
-  · simp only [hm, if_false, mul_zero, Complex.ofReal_zero, zero_mul]
+  split_ifs <;> push_cast <;> ring
 
 theorem primitiveZeroMain_eq_grouped (d : MediumAtom) :
     primitiveZeroMain d =

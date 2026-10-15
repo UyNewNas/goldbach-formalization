@@ -10,6 +10,20 @@ Theorem 1.1 and Corollary 1.2 with the original `currentC` and `currentK`.
 The new leaves are not imported into `ImbalancedChen.lean`; a successful
 existing root build would therefore not validate them.
 
+## Core goal and remaining dependencies
+
+| Core dependency | Proved components | Still required for the manuscript theorem |
+| --- | --- | --- |
+| Chen lower ledger | Actual ordinary means for the first six rows; actual ninth upper mean with coefficient eight | Stronger causal contributions, remaining rows, and the complete eleven-term ledger |
+| Strong physical distribution | Exact complex CRT, Fourier, Poisson and transposed covariance identities; accepted residual estimates are listed individually below | The full nonzero-frequency bound on the original physical range, including all remaining gcd regions |
+| Original signed first-exit policy | Full nonlinear kernel integral convergence and actual compact prime harmonic limits | Exact original signed coefficient dictionary, the same-policy arithmetic mean, and its counting error |
+| Final theorem and constants | Existing conditional numerical transfer and individually checked certificate lemmas | Derive the original `hLower` and `hUpper` and connect every required enclosure to the unconditional main theorem |
+
+In particular, the proved ordinary ninth coefficient `8` is larger than
+the required `8452171/1250000`. No change of normalization removes this gap.
+Module and declaration totals below measure checked components, not a
+percentage of the main theorem completed.
+
 ## New mathematical results with executed checks
 
 | Module | Mathematical content | Verification |
@@ -98,10 +112,18 @@ existing root build would therefore not validate them.
 | `Part3SmoothCoprimeError` | Actual finite Moebius inversion and a constructed CRT residue pay uniform smooth coprime and mixed progression errors with the same local Fourier mass and exact totient density | Strict compilation; original-object stock kernel replay; complete 33-declaration types, inventory and transitive axiom audit |
 | `ActualTwoFactorRepairMonomials` | Actual full-vector repair in the below-one capacity case supplies all three original monomial bounds, with explicit positive margins paid by the real selected-pair parameters | Strict compilation; original-object stock kernel replay; complete 4-declaration types, inventory and transitive axiom audit |
 | `CurrentChenUpsilon9OrdinaryUpperMean` | The actual ninth count has a genuine ordinary upper mean with factor eight and its true two-dimensional harmonic integral, with all errors paid after fixing the Pan exponent | Strict compilation; original-object stock kernel replay; complete 12-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdCompactHarmonicProfile` | A continuous positive-clamp profile agrees exactly with the original cell kernel against prime harmonic density on the actual owned ordered region, with every wall retained pointwise | Strict compilation; original-object stock kernel replay; complete 26-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdCompactPrimeHarmonic` | Actual finite prime-box harmonic sums converge to the same retained-cell functional; cutoff, buffer and finite grid are fixed before the arithmetic target to recover the original ideal | Strict compilation; original-object stock kernel replay; complete 7-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon9HarmonicSlices` | The actual mixed affine prime domain has exact moving half-open slices, with genuine compact-cube integrability and measure-preserving Fubini to the same two-dimensional harmonic integral | Strict compilation; original-object stock kernel replay; complete 4-declaration types, inventory and transitive axiom audit |
+| `Part3TransposedPrimitiveU` | The literal transposed U minus its actual primitive main term is an exact finite sum of coprime counting errors with a proved uniform coefficient envelope | Strict compilation; original-object stock kernel replay; complete 10-declaration types, inventory and transitive axiom audit |
+| `Part3PrimitiveZeroReal` | The full original factor-label primitive zero main term is proved Hermitian and real without coefficient assumptions or a changed normalization | Strict compilation; original-object stock kernel replay; complete 3-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon9HarmonicIntegral` | A proved logarithmic antiderivative evaluates the actual inner slice and gives the exact one-dimensional logarithmic dictionary for the original ninth harmonic integral | Strict compilation; original-object stock kernel replay; complete 10-declaration types, inventory and transitive axiom audit |
+| `Part3TransposedPrimitiveUMoment` | The actual U residual pays both original alpha masses, full grouped gamma fibres and tau-six totient moments, then the genuine original beta L2 factor | Strict compilation; original-object stock kernel replay; complete 17-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdOwnedLabelOrder` | Actual Ico-owned ordered cells force weakly ordered labels, invalidate reversed arithmetic atoms and give true floor power-endpoint integer boxes without ceil enlargement | Strict compilation; original-object stock kernel replay; complete 9-declaration types, inventory and transitive axiom audit |
 
-These 84 modules contain **1768 complete owned declarations**, including
+These 92 modules contain **1854 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-1768 independent major mathematical theorems.
+1854 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.
@@ -146,6 +168,11 @@ the smaller coefficient currentK = 8452171/1250000 on the same harmonic
 integral; the ordinary coefficient eight does not supply that estimate.
 The stronger physical distribution level remains necessary.
 
+The same ninth harmonic integral now has a proved moving-slice
+Fubini decomposition and logarithmic antiderivative evaluation. This
+identifies its exact one-dimensional manuscript expression; it does not
+replay or replace a numerical integral enclosure.
+
 A newly constructed compact-cell lookup recovers the same ideal
 functional to every tolerance with a fixed positive third lower endpoint.
 The cutoff is fixed before buffer and mesh. Removal of an entire cell
@@ -165,9 +192,16 @@ The original auxiliary SW family pays that covariance, retaining all
 factor labels, the tau-three fibre bound and original beta L2 logarithms.
 The literal U/V residuals and nonzero frequencies require separate proofs.
 
+The actual finite prime-box harmonic sums also converge to the same
+compact cell functional. Their pointwise strict/weak affine sandwich
+retains prime atoms on ownership and ordering walls. Cutoff, buffer and
+finite mesh are chosen before the arithmetic target, recovering the
+original ideal to every tolerance. The signed first-exit arithmetic
+density and original policy identification remain separate.
+
 ## Candidates that must not be counted as completed proofs
 
-The 28 unaccepted source candidates are listed with exact source
+The 26 unaccepted source candidates are listed with exact source
 hashes in `verification/proof-continuation/2026-10-15/unaccepted-candidates.json`.
 They are excluded from the accepted module/declaration inventory above.
 Original failed attempts remain failures; replacement sources need their own checks.
@@ -184,22 +218,20 @@ Original failed attempts remain failures; replacement sources need their own che
 * `ActualFrozenSlotCoefficientRegrouping`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualFrozenSelectedPairAssignment`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualPrimeSlotSquarefreeSymmetry`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdCompactHarmonicProfile`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdCompactPrimeHarmonic`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3PrimitiveZeroReal`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3TransposedPrimitiveU`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3TransposedPrimitiveUMoment`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `Part3TransposedPrimitiveUPayment`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `Part3TransposedPrimitiveV`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `Part3TransposedPrimitiveVMoment`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `Part3TransposedPrimitiveVPayment`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `Part3PairedAlphaDeletion`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `CurrentChenUpsilon9HarmonicSlices`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `CurrentChenUpsilon9HarmonicIntegral`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `Part3TransposedZeroPayment`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `Part3TransposedZeroUVPayment`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `Part3TransposedGCDPoissonMask`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdOwnedLabelOrder`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualExtendedThirdDistinctPrimeHarmonic`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualExtendedThirdDistinctProductHarmonic`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenUpsilon8PrimeSource`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenUpsilon8ProductPan`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualPrimeMultiLabelNormalization`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3TransposedLargeGCDFourier`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 
 The ordinary lower means above are baseline means. They do not prove the
 manuscript's stronger causal h248 contribution, complete eleven-term lower

@@ -114,12 +114,16 @@ theorem actualU_finite_envelope_le
         4 * d.U ^ 2 * (w q * w r) :=
       Finset.sum_le_sum (fun q _ ↦ Finset.sum_le_sum (fun r _ ↦ hpoint q r))
     _ = 4 * d.U ^ 2 * (∑ q ∈ d.physicalFactorModuli, w q) ^ 2 := by
-      simp only [pow_two, Finset.sum_mul_sum, Finset.mul_sum]
+      have hsum : (∑ q ∈ d.physicalFactorModuli, w q) ^ 2 =
+          ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli, w q * w r := by
+        rw [pow_two, Finset.sum_mul_sum]
+      rw [hsum]
+      simp only [Finset.mul_sum]
     _ ≤ 4 * d.U ^ 2 * ((1 + Real.log d.physicalFactorCap) ^ 12) ^ 2 :=
       mul_le_mul_of_nonneg_left
         (pow_le_pow_left₀ (Finset.sum_nonneg (fun q _ ↦ hw q))
           (sum_gamma_tau_div_totient_le hd) 2) (by positivity)
-    _ = _ := by rw [← pow_mul]; norm_num
+    _ = _ := by rw [← pow_mul]
 
 /-- U minus P0 has a proved global logarithmic envelope on the full domain. -/
 theorem actualU_sub_primitive_bound :

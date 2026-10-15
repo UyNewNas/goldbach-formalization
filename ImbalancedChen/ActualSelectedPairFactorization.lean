@@ -58,7 +58,10 @@ theorem selectedPair_monomials {x δ θ α A a b c : ℝ}
     rw [Real.log_mul (by positivity) (by positivity),
       Real.log_mul (by positivity) hbpos.ne']
     simp only [Real.log_pow]
-    nlinarith
+    have hfirst : (2 : ℝ) * Real.log A + Real.log b + (2 : ℝ) * Real.log c ≤
+        (1 - 4 * δ) * Real.log x := by
+      nlinarith only [hlogcap, hloglower]
+    simpa only [Nat.cast_ofNat] using hfirst
   · apply Real.le_rpow_of_log_le hxpos
     rw [Real.log_mul (by positivity) (by positivity),
       Real.log_mul (by positivity) (by positivity),

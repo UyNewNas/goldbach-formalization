@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T21:16:50.2721364Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_INDEPENDENT_UMOMENT_FIRST_DIAGNOSTIC_PROOF_REBIND_APPROVED_PENDING_RUNTIME",
+  "candidate": {
+    "source_declaration_count": 7,
+    "sha256": "10ee3c1507a8074abea88c430cfcd79ec1e6256c0df414462dd43652c0eae310",
+    "definition_count": 0,
+    "all_complete_headers": [
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUMoment.card_divisors_mul_le",
+        "kind": "theorem",
+        "start_line": 28,
+        "complete_source_header": "theorem card_divisors_mul_le (q r : ℕ) :\n    (q * r).divisors.card ≤ q.divisors.card * r.divisors.card"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUMoment.sum_gamma_tau_div_totient_le",
+        "kind": "theorem",
+        "start_line": 40,
+        "complete_source_header": "theorem sum_gamma_tau_div_totient_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli,\n      ‖d.groupedFactorGamma q‖ * (q.divisors.card : ℝ) / (q.totient : ℝ)) ≤\n        (1 + Real.log d.physicalFactorCap) ^ 12"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUMoment.sum_gamma_norm_le",
+        "kind": "theorem",
+        "start_line": 64,
+        "complete_source_header": "theorem sum_gamma_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ‖d.groupedFactorGamma q‖) ≤\n      d.physicalFactorCap * (1 + Real.log d.physicalFactorCap) ^ 2"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUMoment.actualU_finite_envelope_le",
+        "kind": "theorem",
+        "start_line": 78,
+        "complete_source_header": "theorem actualU_finite_envelope_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖primitivePairCoefficient d q r‖ * ((q * r).divisors.card : ℝ)) ≤\n        4 * d.U ^ 2 * (1 + Real.log d.physicalFactorCap) ^ 24"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUMoment.actualU_sub_primitive_bound",
+        "kind": "theorem",
+        "start_line": 129,
+        "complete_source_header": "theorem actualU_sub_primitive_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n          C * d.U ^ 2 * (1 + Real.log d.physicalFactorCap) ^ 24"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUMoment.actual_betaL2_mul_U_error_bound",
+        "kind": "theorem",
+        "start_line": 146,
+        "complete_source_header": "theorem actual_betaL2_mul_U_error_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            C * d.V * d.U ^ 2 *\n              (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n                (1 + Real.log d.physicalFactorCap) ^ 24"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUMoment.U_sq_lt_scale_rpow",
+        "kind": "theorem",
+        "start_line": 170,
+        "complete_source_header": "theorem U_sq_lt_scale_rpow\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.U ^ 2 < d.scale ^ (1 - 8 * sigma)"
+      }
+    ],
+    "complete_source_and_all_proofs_reviewed": "import ImbalancedChen.Part3TransposedPrimitiveU\n\n/-!\n# Divisor moment payment for the actual transposed U error\n\nThe paired coefficient is original alpha and is one-bounded on its actual\ninterval. Its two coprime masses cost at most 4 U squared. The three-factor\ngamma fiber costs tau_3; the coprime counting error adds tau_2 on each side.\nThe existing tau_6/totient mean therefore pays log exponent 24. The original\nbeta L2 factor is then paid by its owned fixed-order divisor square moment.\n\nAll envelopes below are conclusions derived from the actual data. No error\nbudget, integral normalization, extra coefficient premise or stronger medium\ngeometry is supplied by the caller.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset\nopen scoped BigOperators Pointwise\nopen TransposedZeroCovariance TransposedPrimitiveU\nopen MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n\nnamespace TransposedPrimitiveUMoment\n\ntheorem card_divisors_mul_le (q r : ℕ) :\n    (q * r).divisors.card ≤ q.divisors.card * r.divisors.card := by\n  have he : (q * r).divisors = q.divisors * r.divisors := by\n    ext k\n    simp_rw [Finset.mem_mul, Nat.mem_divisors, Nat.dvd_mul, mul_ne_zero_iff,\n      ← exists_and_left, ← exists_and_right]\n    simp only [and_assoc, and_comm, and_left_comm]\n  rw [he]\n  exact Finset.card_mul_le\n\n/-- The three original gamma fibers and the ordinary divisor gate are paid\nby an already reachable fixed-order totient moment. -/\ntheorem sum_gamma_tau_div_totient_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli,\n      ‖d.groupedFactorGamma q‖ * (q.divisors.card : ℝ) / (q.totient : ℝ)) ≤\n        (1 + Real.log d.physicalFactorCap) ^ 12 := by\n  calc\n    _ ≤ ∑ q ∈ d.physicalFactorModuli, (fouvryTau 6 q : ℝ) / q.totient := by\n      apply Finset.sum_le_sum\n      intro q _\n      apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg _)\n      calc\n        _ ≤ (fouvryTau 3 q : ℝ) * (q.divisors.card : ℝ) :=\n          mul_le_mul_of_nonneg_right (d.groupedFactorGamma_norm_le_tauThree hd q)\n            (Nat.cast_nonneg _)\n        _ ≤ _ := by\n          rw [← fouvryTau_two]\n          exact_mod_cast fouvryTau_mul_le 3 2 q\n    _ ≤ ∑ q ∈ Finset.Ioc 0 (Nat.floor d.physicalFactorCap),\n        (fouvryTau 6 q : ℝ) / q.totient :=\n      Finset.sum_le_sum_of_subset_of_nonneg (d.physicalFactorModuli_subset_cap hd)\n        (fun _ _ _ ↦ by positivity)\n    _ ≤ _ := sum_fouvryTau_div_totient_le_real 6 (d.one_le_physicalFactorCap hd)\n\ntheorem sum_gamma_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ‖d.groupedFactorGamma q‖) ≤\n      d.physicalFactorCap * (1 + Real.log d.physicalFactorCap) ^ 2 := by\n  calc\n    _ ≤ ∑ q ∈ d.physicalFactorModuli, (fouvryTau 3 q : ℝ) :=\n      Finset.sum_le_sum (fun q _ ↦ d.groupedFactorGamma_norm_le_tauThree hd q)\n    _ ≤ ∑ q ∈ Finset.Ioc 0 (Nat.floor d.physicalFactorCap), (fouvryTau 3 q : ℝ) :=\n      Finset.sum_le_sum_of_subset_of_nonneg (d.physicalFactorModuli_subset_cap hd)\n        (fun _ _ _ ↦ Nat.cast_nonneg _)\n    _ ≤ _ := sum_fouvryTau_le_real (by norm_num : 1 ≤ (3 : ℕ))\n      (d.one_le_physicalFactorCap hd)\n\ntheorem actualU_finite_envelope_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖primitivePairCoefficient d q r‖ * ((q * r).divisors.card : ℝ)) ≤\n        4 * d.U ^ 2 * (1 + Real.log d.physicalFactorCap) ^ 24 := by\n  have hU : 0 ≤ d.U := by linarith [hd.1]\n  let w : ℕ → ℝ := fun q ↦\n    ‖d.groupedFactorGamma q‖ * (q.divisors.card : ℝ) / (q.totient : ℝ)\n  have hw (q : ℕ) : 0 ≤ w q := by dsimp [w]; positivity\n  have hpoint (q r : ℕ) :\n      ‖primitivePairCoefficient d q r‖ * ((q * r).divisors.card : ℝ) ≤\n        4 * d.U ^ 2 * (w q * w r) := by\n    have hc : ‖primitivePairCoefficient d q r‖ ≤\n        ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ *\n          (2 * d.U) * (2 * d.U) / ((q.totient : ℝ) * (r.totient : ℝ)) := by\n      simp only [primitivePairCoefficient, norm_div, norm_mul, norm_star,\n        Complex.norm_natCast]\n      apply div_le_div_of_nonneg_right _ (by positivity)\n      gcongr\n      · exact coprimeMass_norm_le_twice_U hd q\n      · exact coprimeMass_norm_le_twice_U hd r\n    have hdiv : ((q * r).divisors.card : ℝ) ≤\n        (q.divisors.card : ℝ) * (r.divisors.card : ℝ) := by\n      exact_mod_cast card_divisors_mul_le q r\n    calc\n      _ ≤ (‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ *\n          (2 * d.U) * (2 * d.U) / ((q.totient : ℝ) * (r.totient : ℝ))) *\n            ((q.divisors.card : ℝ) * (r.divisors.card : ℝ)) :=\n        mul_le_mul hc hdiv (Nat.cast_nonneg _) (by positivity)\n      _ = _ := by\n        dsimp [w]\n        simp only [div_eq_mul_inv, mul_inv_rev]\n        ring\n  calc\n    _ ≤ ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        4 * d.U ^ 2 * (w q * w r) :=\n      Finset.sum_le_sum (fun q _ ↦ Finset.sum_le_sum (fun r _ ↦ hpoint q r))\n    _ = 4 * d.U ^ 2 * (∑ q ∈ d.physicalFactorModuli, w q) ^ 2 := by\n      have hsum : (∑ q ∈ d.physicalFactorModuli, w q) ^ 2 =\n          ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli, w q * w r := by\n        rw [pow_two, Finset.sum_mul_sum]\n      rw [hsum]\n      simp only [Finset.mul_sum]\n    _ ≤ 4 * d.U ^ 2 * ((1 + Real.log d.physicalFactorCap) ^ 12) ^ 2 :=\n      mul_le_mul_of_nonneg_left\n        (pow_le_pow_left₀ (Finset.sum_nonneg (fun q _ ↦ hw q))\n          (sum_gamma_tau_div_totient_le hd) 2) (by positivity)\n    _ = _ := by rw [← pow_mul]\n\n/-- U minus P0 has a proved global logarithmic envelope on the full domain. -/\ntheorem actualU_sub_primitive_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n          C * d.U ^ 2 * (1 + Real.log d.physicalFactorCap) ^ 24 := by\n  obtain ⟨C, hC, hbound⟩ := actualU_sub_primitive_finite_bound\n  refine ⟨4 * C, by positivity, fun B sigma kappa c0 d hd ↦ ?_⟩\n  calc\n    _ ≤ C * ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        ‖primitivePairCoefficient d q r‖ * ((q * r).divisors.card : ℝ) :=\n      hbound B sigma kappa c0 d hd\n    _ ≤ C * (4 * d.U ^ 2 * (1 + Real.log d.physicalFactorCap) ^ 24) :=\n      mul_le_mul_of_nonneg_left (actualU_finite_envelope_le hd) hC.le\n    _ = _ := by ring\n\n/-- The original beta L2 factor is actually paid, with its full log cost. -/\ntheorem actual_betaL2_mul_U_error_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            C * d.V * d.U ^ 2 *\n              (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n                (1 + Real.log d.physicalFactorCap) ^ 24 := by\n  obtain ⟨C, hC, hbound⟩ := actualU_sub_primitive_bound\n  refine ⟨2 * C, by positivity, fun B sigma kappa c0 d hd ↦ ?_⟩\n  have hlogV : 0 ≤ 1 + Real.log (2 * d.V) := by\n    have := Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])\n    linarith\n  calc\n    _ ≤ (2 * d.V * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) *\n        (C * d.U ^ 2 * (1 + Real.log d.physicalFactorCap) ^ 24) :=\n      mul_le_mul (mediumAdmissible_beta_norm_sq_sum_le hd)\n        (hbound B sigma kappa c0 d hd) (norm_nonneg _)\n          (by have := hd.2.1; positivity)\n    _ = _ := by ring\n\n/-- The existing medium monomial, with Q2,Q3 at least one, already bounds\nthe original U squared. This is derived, not a stronger caller gate. -/\ntheorem U_sq_lt_scale_rpow\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.U ^ 2 < d.scale ^ (1 - 8 * sigma) := by\n  obtain ⟨hU, _, _, hQ2, hQ3, _, _, _, _, hgeom, _⟩ := hd\n  have hQ3sq : 1 ≤ d.Q3 ^ 2 := by nlinarith\n  calc\n    _ = d.U ^ 2 * 1 * 1 := by ring\n    _ ≤ d.U ^ 2 * d.Q2 * d.Q3 ^ 2 := by gcongr\n    _ < _ := hgeom\n\nend TransposedPrimitiveUMoment\n\nend\n\nend ImbalancedChen.Part3\n",
+    "path": "ImbalancedChen/Part3TransposedPrimitiveUMoment.lean"
+  },
+  "baseline": {
+    "all_seven_complete_header_comparisons": [
+      {
+        "complete_header_exact_equal": true,
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUMoment.card_divisors_mul_le"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUMoment.sum_gamma_tau_div_totient_le"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUMoment.sum_gamma_norm_le"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUMoment.actualU_finite_envelope_le"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUMoment.actualU_sub_primitive_bound"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUMoment.actual_betaL2_mul_U_error_bound"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUMoment.U_sq_lt_scale_rpow"
+      }
+    ],
+    "sha256": "513cf44888ce1c6538902e5d33245f5b94303b1bd9bfa6adb1a1772c5002802d",
+    "zero_definitions_unchanged": true,
+    "imports_exact_equal": true,
+    "snapshot": "20261016-UMoment-first-diag-original-513c.lean.txt",
+    "all_other_proof_text_exact_equal_beyond_two_checked_spots": true
+  },
+  "owner_report": {
+    "sha256": "2f848acf1f9f8ca722a9237419922121195ce29ab4627b87d021fbaa46431f95",
+    "path": "20261016-transposed-primitive-U-moment-first-diag-owner-rebind.json"
+  },
+  "actual_failed_stdout": {
+    "sha256": "3e1a9dfcce75387bf72481a58c9c71dabba7dc017daad4688cbc57c347d1a536",
+    "path": ".lake/proof-continuation/runs/20261015T211343977975Z-ImbalancedChen.Part3TransposedPrimitiveUMoment/stdout.log",
+    "diagnostics": [
+      "The original simp distributed the fixed scalar before matching sum_mul_sum, leaving differently ordered nested-sum/product expressions.",
+      "sum_mul_sum was unused in that failed simp list.",
+      "norm_num ran after rw[←pow_mul] had already closed the numerical exponent equality."
+    ],
+    "complete_text": "ImbalancedChen/Part3TransposedPrimitiveUMoment.lean:116:65: error: unsolved goals\nB : ℕ\nsigma kappa c0 : ℝ\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\nhU : 0 ≤ d.U\nw : ℕ → ℝ := fun q => ‖d.groupedFactorGamma q‖ * ↑(#q.divisors) / ↑q.totient\nhw : ∀ (q : ℕ), 0 ≤ w q\nhpoint : ∀ (q r : ℕ), ‖primitivePairCoefficient d q r‖ * ↑(#(q * r).divisors) ≤ 4 * d.U ^ 2 * (w q * w r)\n⊢ ∑ x ∈ d.physicalFactorModuli, ∑ x_1 ∈ d.physicalFactorModuli, 4 * (d.U * d.U) * (w x * w x_1) =\n    ∑ i ∈ d.physicalFactorModuli, 4 * (d.U * d.U) * ((∑ q ∈ d.physicalFactorModuli, w q) * w i)\nImbalancedChen/Part3TransposedPrimitiveUMoment.lean:122:32: error: No goals to be solved\nImbalancedChen/Part3TransposedPrimitiveUMoment.lean:117:26: error: This simp argument is unused:\n  Finset.sum_mul_sum\n\nHint: Omit it from the simp argument list.\n  [apply] simp only [pow_two, Finset.mul_sum]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n"
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedPrimitiveU"
+  ],
+  "current_parent": {
+    "sha256": "3c1f2c0c17ddcf5d3dfd674376c1f45fb4aea1cde72408c3b1fba11971df3fbb",
+    "module": "ImbalancedChen.Part3TransposedPrimitiveU",
+    "matches_reported_owned_revision": true,
+    "reviewer_modified": false
+  },
+  "sourceDAG_rebind_delta": {
+    "local_module_delta": 0,
+    "imports_changed": false,
+    "foreign_module_delta": 0,
+    "full_tree_rescanned": false
+  },
+  "proof_and_API_review": [
+    "The new local hsum explicitly states (sum_q wq)^2 = sum_q sum_r wq*wr. After pow_two, the fixed source Finset.sum_mul_sum matches exactly the product of the two finite sums. No scalar distribution occurs until hsum is proved.",
+    "Rewriting hsum in the desired 4U^2 identity leaves only distribution of that fixed scalar through the two sums, which simp only[Finset.mul_sum] performs in the correct order. Every physical q,r and the actual w=normGamma*tau/totient are unchanged.",
+    "Deleting the trailing norm_num follows the actual NoGoals diagnostic: ←pow_mul already identifies the natural exponent 12*2 with 24. No exponent or estimate is changed.",
+    "The other six proofs and all remaining parts of actualU_finite_envelope_le are byte-identical. Actual two coprime masses still cost 4U^2; tau_3*tau_2 is bounded by tau_6, yielding log12 per side and log24 after the square.",
+    "The universal constants remain before B,sigma,kappa,c0,d. The literal actual U-P0 residual, original beta L2 cost, and derived U^2<X^(1-8sigma) medium gate remain unchanged; no new premise or threshold appears."
+  ],
+  "fixed_API": {
+    "sha256": "472cd5000412d8ec35c8b9ee919b2aeedbf0a830033a55009aad436595923809",
+    "sum_mul_sum_source_line": 62,
+    "sum_mul_sum_interface": "Finset.sum_mul_sum(s)(t)(f)(g):(sum_i in s f i)*(sum_j in t g j)=sum_i in s sum_j in t f i*g j",
+    "actual_sum_and_weight_types": "Real-valued w on exactly d.physicalFactorModuli; all hsum expressions are typed explicitly in source.",
+    "pow_mul_source": "Mathlib/Algebra/Group/Defs.lean:740, a^(m*n)=(a^m)^n",
+    "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Ring\\Finset.lean"
+  },
+  "bidirectional_byte_reconstruction": {
+    "all_checks_pass": true,
+    "in_memory_only": true,
+    "forward_old_to_current": {
+      "reconstructed_sha256": "10ee3c1507a8074abea88c430cfcd79ec1e6256c0df414462dd43652c0eae310",
+      "byte_for_byte_equal_current": true
+    },
+    "inverse_current_to_exact_old": {
+      "reconstructed_sha256": "513cf44888ce1c6538902e5d33245f5b94303b1bd9bfa6adb1a1772c5002802d",
+      "byte_for_byte_equal_exact_old_snapshot": true
+    },
+    "replacement": {
+      "old_removed_bytes_base64": "c2ltcCBvbmx5IFtwb3dfdHdvLCBGaW5zZXQuc3VtX211bF9zdW0sIEZpbnNldC5tdWxfc3VtXQogICAgXyDiiaQgNCAqIGQuVSBeIDIgKiAoKDEgKyBSZWFsLmxvZyBkLnBoeXNpY2FsRmFjdG9yQ2FwKSBeIDEyKSBeIDIgOj0KICAgICAgbXVsX2xlX211bF9vZl9ub25uZWdfbGVmdAogICAgICAgIChwb3dfbGVfcG93X2xlZnTigoAgKEZpbnNldC5zdW1fbm9ubmVnIChmdW4gcSBfIOKGpiBodyBxKSkKICAgICAgICAgIChzdW1fZ2FtbWFfdGF1X2Rpdl90b3RpZW50X2xlIGhkKSAyKSAoYnkgcG9zaXRpdml0eSkKICAgIF8gPSBfIDo9IGJ5IHJ3IFvihpAgcG93X211bF07IG5vcm1fbnVt",
+      "new_inserted_byte_count": 509,
+      "new_inserted_bytes_base64": "aGF2ZSBoc3VtIDogKOKIkSBxIOKIiCBkLnBoeXNpY2FsRmFjdG9yTW9kdWxpLCB3IHEpIF4gMiA9CiAgICAgICAgICDiiJEgcSDiiIggZC5waHlzaWNhbEZhY3Rvck1vZHVsaSwg4oiRIHIg4oiIIGQucGh5c2ljYWxGYWN0b3JNb2R1bGksIHcgcSAqIHcgciA6PSBieQogICAgICAgIHJ3IFtwb3dfdHdvLCBGaW5zZXQuc3VtX211bF9zdW1dCiAgICAgIHJ3IFtoc3VtXQogICAgICBzaW1wIG9ubHkgW0ZpbnNldC5tdWxfc3VtXQogICAgXyDiiaQgNCAqIGQuVSBeIDIgKiAoKDEgKyBSZWFsLmxvZyBkLnBoeXNpY2FsRmFjdG9yQ2FwKSBeIDEyKSBeIDIgOj0KICAgICAgbXVsX2xlX211bF9vZl9ub25uZWdfbGVmdAogICAgICAgIChwb3dfbGVfcG93X2xlZnTigoAgKEZpbnNldC5zdW1fbm9ubmVnIChmdW4gcSBfIOKGpiBodyBxKSkKICAgICAgICAgIChzdW1fZ2FtbWFfdGF1X2Rpdl90b3RpZW50X2xlIGhkKSAyKSAoYnkgcG9zaXRpdml0eSkKICAgIF8gPSBfIDo9IGJ5IHJ3IFvihpAgcG93X211bF0=",
+      "old_removed_byte_count": 333,
+      "byte_offset_zero_based": 5392,
+      "unchanged_suffix_byte_count": 2796
+    }
+  },
+  "source_checks": {
+    "issues_identified": [],
+    "no_placeholder_or_axiom": true,
+    "no_linter_or_resource_limit_change": true
+  },
+  "evidence_boundary": {
+    "runtime_pass_claimed": false,
+    "dependencies_modified": false,
+    "source_only": true,
+    "owned_U_or_P0_modified": false,
+    "lake_invoked": false,
+    "written_artifacts_only": [
+      ".lake/proof-continuation/source-reviews/20261016-transposed-primitive-U-moment-first-diag-independent-rebind.json"
+    ],
+    "lean_invoked": false,
+    "source_modified": false,
+    "build_invoked": false,
+    "axiom_audit_performed": false,
+    "kernel_replay_performed": false,
+    "pins_or_checkers_modified": false,
+    "bootstrap_invoked": false
+  },
+  "remaining_gate": "Only runtime owner may perform the specifically authorized bounded validation of exact10ee. No compilation or ownership is inferred by this report."
+}

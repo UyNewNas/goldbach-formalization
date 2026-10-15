@@ -66,6 +66,9 @@ theorem actual_progressionRow_eq_grouped (d : MediumAtom) (m : ℕ) :
           then (1 : ℂ) else 0)) = progressionMass d m q := by
     rw [d.sum_transposedBeta_mul]
     simp only [progressionMass, Int.ModEq, Nat.cast_mul, mul_ite, mul_one, mul_zero]
+    apply Finset.sum_congr rfl
+    intro n _
+    split_ifs <;> rfl
   calc
     _ = ∑ a ∈ d.complexFactorLabels, d.complexFactorGamma a *
         ∑ n ∈ d.transposedAtom.betaCarrier, d.transposedAtom.beta n *
@@ -78,11 +81,10 @@ theorem actual_progressionRow_eq_grouped (d : MediumAtom) (m : ℕ) :
           (if (((m * n : ℕ) : ℤ) % (complexFactorModulus a : ℤ) =
             d.residue % (complexFactorModulus a : ℤ)) then (1 : ℂ) else 0)) = _
       simp only [Finset.mul_sum, mul_assoc]
-    _ = ∑ q ∈ d.physicalFactorModuli, d.groupedFactorGamma q *
-        ∑ n ∈ d.transposedAtom.betaCarrier, d.transposedAtom.beta n *
-          (if (((m * n : ℕ) : ℤ) % (q : ℤ) = d.residue % (q : ℤ))
-            then (1 : ℂ) else 0) := d.sum_factorLabels_eq_grouped _
-    _ = _ := by simp only [hmass]
+    _ = ∑ a ∈ d.complexFactorLabels,
+        d.complexFactorGamma a * progressionMass d m (complexFactorModulus a) := by
+      simp only [hmass]
+    _ = _ := d.sum_factorLabels_eq_grouped (fun q : ℕ ↦ progressionMass d m q)
 
 def mixedPairCoefficient (d : MediumAtom) (q r : ℕ) : ℂ :=
   d.groupedFactorGamma q * star (d.groupedFactorGamma r) *
@@ -114,18 +116,27 @@ theorem actual_row_product_eq_pair (d : MediumAtom) (m : ℕ) :
   apply Finset.sum_congr rfl
   intro r _
   by_cases hm : m.Coprime r
-  · simp only [hm, if_true, true_and, star_div₀, star_mul, star_natCast]
+  · rw [if_pos hm, star_div₀, star_mul', star_natCast]
     unfold progressionMass
     simp only [Finset.mul_sum, Finset.sum_mul]
     apply Finset.sum_congr rfl
     intro n _
     by_cases hc : Int.ModEq q ((m : ℤ) * n) d.residue
-    · simp only [hc, if_true, mul_one, mixedPairCoefficient]
-      simp only [div_eq_mul_inv, mul_inv_rev]
+    · rw [if_pos hc, if_pos ⟨hm, hc⟩]
+      unfold mixedPairCoefficient
+      simp only [div_eq_mul_inv]
       ring
-    · simp only [hc, if_false, mul_zero, zero_mul]
-  · simp only [hm, if_false, false_and, mul_zero, zero_div, star_zero, zero_mul,
-      Finset.sum_const_zero]
+    · rw [if_neg hc, if_neg (fun h ↦ hc h.2)]
+      ring
+  · rw [if_neg hm]
+    have hsum : (∑ n ∈ d.alphaCarrier, d.alpha n *
+        (if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue
+          then (1 : ℂ) else 0)) = 0 := by
+      apply Finset.sum_eq_zero
+      intro n _
+      rw [if_neg (fun h ↦ hm h.1), mul_zero]
+    rw [hsum]
+    simp only [mul_zero, zero_div, star_zero]
 
 /-- The pair sum is the full complex row product, not its real surrogate. -/
 theorem actualMixedTerm_eq_row_sum (d : MediumAtom) :
@@ -149,10 +160,7 @@ theorem actualMixedTerm_eq_row_sum (d : MediumAtom) :
   intro n _
   apply Finset.sum_congr rfl
   intro m _
-  by_cases hc : m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue
-  · simp only [hc, if_true, mul_one]
-    ring
-  · simp only [hc, if_false, mul_zero, Complex.ofReal_zero, zero_mul]
+  split_ifs <;> push_cast <;> ring
 
 theorem actualV_eq_re (d : MediumAtom) :
     d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier
@@ -260,7 +268,7 @@ theorem mixedProgressionMass_sub_main_uniform_bound :
       apply Finset.sum_le_sum
       intro n _
       by_cases hn : n.Coprime q
-      · simp only [hn, if_true]
+      · rw [if_pos hn]
         rw [← mul_sub, ← Complex.ofReal_sub, norm_mul, Complex.norm_real,
           Real.norm_eq_abs]
         have he := hbound d.V (lt_of_lt_of_le zero_lt_one hV)
@@ -283,8 +291,9 @@ theorem mixedProgressionMass_sub_main_uniform_bound :
           apply if_neg
           intro hm
           exact hn (CommonSmoothCutoff.coprime_of_product_congruent ha hm.2).2
-        simp only [hn, if_false, hz, Complex.ofReal_zero, mul_zero, zero_mul,
+        simp only [if_neg hn, hz, Complex.ofReal_zero, mul_zero, zero_mul,
           sub_zero, norm_zero]
+        exact le_rfl
     _ = _ := by simp only [Finset.mul_sum, Finset.sum_mul]
 
 /-- The finite actual V envelope is a conclusion, not an assumed budget.
@@ -315,6 +324,7 @@ theorem actualV_sub_primitive_finite_bound :
       intro r hr
       by_cases hG : d.groupedFactorGamma q = 0
       · simp only [mixedPairCoefficient, hG, zero_mul, zero_div, norm_zero, mul_zero]
+        exact le_rfl
       · have hq0 := (Finset.mem_Ioc.mp (d.physicalFactorModuli_subset_cap hd hq)).1
         have hr0 := (Finset.mem_Ioc.mp (d.physicalFactorModuli_subset_cap hd hr)).1.ne'
         rw [norm_mul]

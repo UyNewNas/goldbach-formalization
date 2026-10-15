@@ -143,7 +143,7 @@ theorem betaCarrier_progression_card_le
     obtain ⟨hm, hap⟩ := mem_filter.mp hm
     exact mem_filter.mpr ⟨mem_Icc.mpr ⟨Nat.zero_le _, (mem_Icc.mp hm).2⟩, hap⟩
   calc
-    _ ≤ (Nat.floor (2 * d.V) / q + 1 : ℕ) := by
+    _ ≤ ((Nat.floor (2 * d.V) / q + 1 : ℕ) : ℝ) := by
       exact_mod_cast (Finset.card_le_card hsub).trans
         (card_product_modEq_le (Nat.floor (2 * d.V)) q n d.residue hn)
     _ ≤ (Nat.floor (2 * d.V) : ℝ) / q + 1 := by
@@ -240,10 +240,12 @@ private theorem betaKernelMass_norm_le
         Int.ModEq q ((m : ℤ) * n) d.residue := by
       simp only [Int.ModEq, Nat.cast_mul, mul_comm]
     unfold complexPrimitiveKernel
-    simp only [mul_sub, mul_div_assoc, mul_ite, mul_one, mul_zero]
+    simp only [mul_sub, mul_ite, mul_one, mul_zero]
     congr 1
-    exact if_congr he rfl rfl
-  simp_rw [hterm, Finset.sum_sub_distrib, Finset.sum_div]
+    · exact if_congr he rfl rfl
+    · by_cases hc : (n * m).Coprime q <;> simp [hc]
+  simp_rw [hterm]
+  rw [Finset.sum_sub_distrib, ← Finset.sum_div]
   have hp := (norm_sum_ite_le_card d.betaCarrier d.beta
     (fun m : ℕ ↦ Int.ModEq q ((m : ℤ) * n) d.residue) hbeta).trans
       (mul_le_mul_of_nonneg_left (betaCarrier_progression_card_le hV hq hn) hA)
@@ -386,7 +388,8 @@ theorem divisorAlphaMass_subpower (kappa : ℝ) {epsilon : ℝ}
   refine ⟨C, hC, fun B sigma c0 d hc0 hd ↦ ?_⟩
   have ha := mediumAdmissible_residue_ne_zero hc0 hd
   have hx := one_le_scale hd
-  obtain ⟨_, _, _, _, _, _, _, hres, _⟩ := hd
+  have hdKeep := hd
+  obtain ⟨_, _, _, _, _, _, _, hres, _⟩ := hdKeep
   have haK : (d.residue.natAbs : ℝ) ≤ d.scale ^ K :=
     hres.trans (Real.rpow_le_rpow_of_exponent_le hx (le_max_right 1 (1 + kappa)))
   calc
@@ -435,7 +438,8 @@ theorem actual_geometry_bounds
       d.physicalFactorCap ≤ 8 * d.scale ^ (1 - 10 * sigma) := by
   have hx1 := one_le_scale hd
   have hx : 0 < d.scale := zero_lt_one.trans_le hx1
-  obtain ⟨hU, hV, hQ1, _, _, _, _, _, hg1, _⟩ := hd
+  have hdKeep := hd
+  obtain ⟨hU, hV, hQ1, _, _, _, _, _, hg1, _⟩ := hdKeep
   have hlow : d.scale ^ sigma ≤ d.U := by
     apply le_of_lt
     calc
@@ -490,7 +494,7 @@ private theorem eventually_cap_log_cost_le (sigma : ℝ) (hsigma : 0 < sigma) :
   intro B kappa c0 d hd hx
   have hscale := one_le_scale hd
   have hscale0 : 0 < d.scale := zero_lt_one.trans_le hscale
-  have hlog : 1 ≤ Real.log d.scale := hx2 ((le_max_right x1 x2).trans
+  have hlog : 1 ≤ Real.log d.scale := hx2 d.scale ((le_max_right x1 x2).trans
     ((le_max_right 2 (max x1 x2)).trans hx))
   have hcapX : d.physicalFactorCap ≤ 8 * d.scale :=
     (actual_geometry_bounds hd).2.2.trans (mul_le_mul_of_nonneg_left
@@ -506,8 +510,8 @@ private theorem eventually_cap_log_cost_le (sigma : ℝ) (hsigma : 0 < sigma) :
   calc
     _ ≤ (D * Real.log d.scale) ^ 6 :=
       pow_le_pow_left₀ (by linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]) hlogCap 6
-    _ = D ^ 6 * Real.log d.scale ^ (6 : ℝ) := by rw [mul_pow, Real.rpow_natCast]
-    _ ≤ _ := hx1 ((le_max_left x1 x2).trans ((le_max_right 2 (max x1 x2)).trans hx))
+    _ = D ^ 6 * Real.log d.scale ^ (6 : ℝ) := by rw [mul_pow]
+    _ ≤ _ := hx1 d.scale ((le_max_left x1 x2).trans ((le_max_right 2 (max x1 x2)).trans hx))
 
 /-- The finite progression budget has a genuine power saving on the
 original complete convolution scale. No SW estimate enters this proof. -/
@@ -538,6 +542,7 @@ theorem signedError_sub_cleanAlpha_power_bound (B : ℕ) (sigma kappa c0 : ℝ)
     (actual_geometry_bounds hd).2.2.trans (mul_le_mul_of_nonneg_left
       (Real.rpow_le_rpow_of_exponent_le hscale (by linarith : 1 - 10 * sigma ≤ 1 - sigma))
       (by norm_num))
+  have hV0 : 0 ≤ d.V := by linarith [hd.2.1]
   have hbracket :
       2 * d.V * (1 + Real.log d.physicalFactorCap) ^ 3 +
         d.physicalFactorCap * (1 + Real.log d.physicalFactorCap) ^ 2 +
@@ -588,14 +593,14 @@ theorem signedError_sub_cleanAlpha_log_payment (B : ℕ) (sigma kappa c0 A : ℝ
     (Real.tendsto_log_atTop.eventually_ge_atTop (1 : ℝ))
   refine ⟨max x1 (max x2 x3), hx1.trans_le (le_max_left _ _), fun d hd hx ↦ ?_⟩
   have hscale0 : 0 < d.scale := zero_lt_one.trans_le (one_le_scale hd)
-  have hlog : 1 ≤ Real.log d.scale := hx3 ((le_max_right x2 x3).trans
+  have hlog : 1 ≤ Real.log d.scale := hx3 d.scale ((le_max_right x2 x3).trans
     ((le_max_right x1 (max x2 x3)).trans hx))
   apply (hbound d hd ((le_max_left _ _).trans hx)).trans
   apply (le_div_iff₀ (Real.rpow_pos_of_pos (by linarith : 0 < Real.log d.scale) A)).mpr
   calc
     _ = (C * Real.log d.scale ^ A) * d.scale ^ (1 - sigma / 2) := by ring
     _ ≤ d.scale ^ (sigma / 2) * d.scale ^ (1 - sigma / 2) :=
-      mul_le_mul_of_nonneg_right (hx2 ((le_max_left x2 x3).trans
+      mul_le_mul_of_nonneg_right (hx2 d.scale ((le_max_left x2 x3).trans
         ((le_max_right x1 (max x2 x3)).trans hx))) (by positivity)
     _ = _ := by rw [← Real.rpow_add hscale0,
       show sigma / 2 + (1 - sigma / 2) = 1 by ring, Real.rpow_one]
@@ -705,7 +710,7 @@ theorem uniformAuxiliarySW_cleanedAlphaAtom {ι : Type*}
   have hxOrig : x1 ≤ (F i).scale := (le_max_left _ _).trans hx
   have hscale0 : 0 < (F i).scale := zero_lt_one.trans_le (one_le_scale (hadmissible i))
   have hU : 0 ≤ (F i).U := by linarith [(hadmissible i).1]
-  have hlog : 1 ≤ Real.log (F i).scale := hx3 ((le_max_right x2 x3).trans
+  have hlog : 1 ≤ Real.log (F i).scale := hx3 (F i).scale ((le_max_right x2 x3).trans
     ((le_max_right x1 (max x2 x3)).trans hx))
   have hchange : ‖(F i).auxSWError k q b - (F i).cleanedAlphaAtom.auxSWError k q b‖ ≤
       (F i).U / Real.log (F i).scale ^ A := by
@@ -717,7 +722,7 @@ theorem uniformAuxiliarySW_cleanedAlphaAtom {ι : Type*}
           (hmass B sigma c0 (F i) hc0 (hadmissible i)) (by norm_num)) (by positivity)
       _ = (2 * D * Real.log (F i).scale ^ A) * (F i).scale ^ (sigma / 2) := by ring
       _ ≤ (F i).scale ^ (sigma / 2) * (F i).scale ^ (sigma / 2) :=
-        mul_le_mul_of_nonneg_right (hx2 ((le_max_left x2 x3).trans
+        mul_le_mul_of_nonneg_right (hx2 (F i).scale ((le_max_left x2 x3).trans
           ((le_max_right x1 (max x2 x3)).trans hx))) (by positivity)
       _ = (F i).scale ^ sigma := by rw [← Real.rpow_add hscale0,
         show sigma / 2 + sigma / 2 = sigma by ring]
@@ -736,8 +741,8 @@ theorem uniformAuxiliarySW_cleanedAlphaAtom {ι : Type*}
       (hbound i hxOrig k q b hk hq hb) hchange
     _ ≤ C * (F i).U * (k.divisors.card : ℝ) ^ C0 / Real.log (F i).scale ^ A +
         ((F i).U * (k.divisors.card : ℝ) ^ C0) / Real.log (F i).scale ^ A :=
-      add_le_add_left (div_le_div_of_nonneg_right (le_mul_of_one_le_right hU htau)
-        (by positivity)) _
+      add_le_add le_rfl (div_le_div_of_nonneg_right (le_mul_of_one_le_right hU htau)
+        (Real.rpow_nonneg (by linarith : 0 ≤ Real.log (F i).scale) A))
     _ = _ := by ring
 
 /-- Once distribution is proved for the cleaned paired coefficient, the

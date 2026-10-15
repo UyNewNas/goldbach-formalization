@@ -1,0 +1,81 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_ACTUAL_U8_PRIME_SOURCE_REVIEW_NO_MATHEMATICAL_BLOCKER",
+  "reviewer": "/root, independent of lower_resume author",
+  "candidate": {
+    "module": "ImbalancedChen.CurrentChenUpsilon8PrimeSource",
+    "sha256": "71fea921e7484f5e9fb64606d163e116f9c0b48eca341e5ea1091d494d07b93b",
+    "declarations": 7,
+    "definitions": 2
+  },
+  "all_complete_headers_and_definitions": [
+    {
+      "name": "currentChenUpsilon8_second_cube_ge",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem currentChenUpsilon8_second_cube_ge {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n      ((N : ℝ) ^ (1 / 3 : ℝ))) :\n    (N : ℝ) ≤ (t.2 : ℝ) ^ 3"
+    },
+    {
+      "name": "currentChenUpsilon8_quotient_prime_or_one",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem currentChenUpsilon8_quotient_prime_or_one {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n      ((N : ℝ) ^ (1 / 3 : ℝ))) {q : ℕ}\n    (hq : q ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)) :\n    q = 1 ∨ Nat.Prime q"
+    },
+    {
+      "name": "currentChenUpsilon8PrimeTriples",
+      "kind": "def",
+      "private": false,
+      "complete_source_header": "def currentChenUpsilon8PrimeTriples (N : ℕ) : Finset (Σ _ : ℕ × ℕ, ℕ)",
+      "complete_definition": "def currentChenUpsilon8PrimeTriples (N : ℕ) : Finset (Σ _ : ℕ × ℕ, ℕ) :=\n  (chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n    ((N : ℝ) ^ (1 / 3 : ℝ))).sigma fun t =>\n      (chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)).filter Nat.Prime"
+    },
+    {
+      "name": "currentChenUpsilon8UnitFibres",
+      "kind": "def",
+      "private": false,
+      "complete_source_header": "def currentChenUpsilon8UnitFibres (N : ℕ) : Finset (ℕ × ℕ)",
+      "complete_definition": "def currentChenUpsilon8UnitFibres (N : ℕ) : Finset (ℕ × ℕ) :=\n  (chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n    ((N : ℝ) ^ (1 / 3 : ℝ))).filter fun t =>\n      1 ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)"
+    },
+    {
+      "name": "mem_currentChenUpsilon8PrimeTriples_iff",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem mem_currentChenUpsilon8PrimeTriples_iff {N p₁ p₂ q : ℕ} :\n    (⟨(p₁, p₂), q⟩ : Σ _ : ℕ × ℕ, ℕ) ∈ currentChenUpsilon8PrimeTriples N ↔\n      p₁ ∈ chenAdditivePrimeCarrier N ∧ p₂ ∈ chenAdditivePrimeCarrier N ∧\n      (N : ℝ) ^ (417 / 5000 : ℝ) ≤ (p₁ : ℝ) ∧\n      (p₁ : ℝ) < (N : ℝ) ^ (1 / 3 : ℝ) ∧\n      (N : ℝ) ^ (1 / 3 : ℝ) ≤ (p₂ : ℝ) ∧\n      (p₂ : ℝ) < Real.sqrt ((N : ℝ) / (p₁ : ℝ)) ∧\n      Nat.Prime q ∧ p₁ * p₂ * q < N ∧\n      N - p₁ * p₂ * q ∈ chenAdditivePrimeCarrier N ∧ (p₂ : ℝ) ≤ q"
+    },
+    {
+      "name": "currentChenUpsilon8_row_card_partition",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem currentChenUpsilon8_row_card_partition {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n      ((N : ℝ) ^ (1 / 3 : ℝ))) :\n    let F := chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)\n    F.card = (F.filter Nat.Prime).card + if 1 ∈ F then 1 else 0"
+    },
+    {
+      "name": "currentChenUpsilon8_eq_primeTriples_add_unitFibres",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem currentChenUpsilon8_eq_primeTriples_add_unitFibres (N : ℕ) :\n    currentChenUpsilon8 N =\n      ((currentChenUpsilon8PrimeTriples N).card : ℝ) +\n        ((currentChenUpsilon8UnitFibres N).card : ℝ)"
+    }
+  ],
+  "all_proof_bodies_read": true,
+  "independent_semantic_findings": [
+    "The original Y8 second band has p2>=N^(1/3), so p2^3>=N including the nonnegative-base rpow endpoint.",
+    "An actual quotient witness has b*q<N, q>0, and p1>1 from primality. A composite nonunit q has prime minFac with minFac^2<=q; actual roughness at p2 gives p2^2<=q. Hence N<=p2^3<p1*p2^3<=b*q<N, contradiction. No supplied factorization or squarefree premise.",
+    "The actual triple dictionary retains both original target-prime labels, all actual outer endpoints, genuine product<N, the same target prime N-product, and inclusive q>=p2.",
+    "The exact nonprime complement is singleton one iff the actual row contains one. Thus the count partition retains all unit fibres and original pair multiplicities.",
+    "The final literal U8 equality is exact finite reindexing, not a bound or asymptotic surrogate.",
+    "The sole owned U9PrimeSource import supplies truly generic witness and prime-membership theorems; no Pan estimate, mean-value or coefficient constant is a caller premise."
+  ],
+  "complete_type_boundary": "The row-card theorem includes its full let F:=actual source statement, up to the actual := by boundary.",
+  "parent_source_binding": "51d36a5e2ac2e9230293a7b54231bf63a80f7344b4c6e8f32c80352c920022d4",
+  "relative_source_delta": {
+    "new_local": [
+      "ImbalancedChen.CurrentChenUpsilon8PrimeSource"
+    ],
+    "new_foreign": [],
+    "method": "Only existing owned U9PrimeSource direct parent; no full object/closure claim."
+  },
+  "issues_identified": [],
+  "evidence_boundary": {
+    "source_only": true,
+    "compiler_or_kernel_or_axiom_audit_run": false,
+    "source_edited": false,
+    "elaboration_and_linter_acceptance_claimed": false
+  }
+}

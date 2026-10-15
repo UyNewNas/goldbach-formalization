@@ -25,6 +25,8 @@ private theorem hasDerivAt_currentChenUpsilon9HarmonicPrimitive {x y : ℝ}
   have hd := ((Real.hasDerivAt_log hy.ne').sub hlog).div_const (x * (1 - x))
   apply hd.congr_deriv
   field_simp [hx.ne', (sub_pos.mpr hx1).ne', hy.ne', hgap.ne']
+  change (1 - x - y - -y) * (1 - x - y) = (1 - x) * (1 - x - y)
+  ring
 
 /-- Actual evaluation of the inner slice, including the degenerate
 endpoint case d=(1-x)/2.  All logarithm arguments are positive. -/

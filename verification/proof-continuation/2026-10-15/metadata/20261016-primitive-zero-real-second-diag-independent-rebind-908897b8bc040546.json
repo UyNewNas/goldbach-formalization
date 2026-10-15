@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T21:08:23.1919451Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_INDEPENDENT_SECOND_RUNTIME_DIAGNOSTIC_PROOF_REPAIR_APPROVED_PENDING_RUNTIME",
+  "candidate": {
+    "all_complete_headers": [
+      {
+        "name": "ImbalancedChen.Part3.TransposedZeroCovariance.star_sum_pair_eq_of_hermitian",
+        "kind": "theorem",
+        "start_line": 21,
+        "complete_source_header": "theorem star_sum_pair_eq_of_hermitian {ι : Type*} (S : Finset ι)\n    (f : ι → ι → ℂ)\n    (hf : ∀ a ∈ S, ∀ b ∈ S, star (f a b) = f b a) :\n    star (∑ a ∈ S, ∑ b ∈ S, f a b) = ∑ a ∈ S, ∑ b ∈ S, f a b"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedZeroCovariance.primitiveZeroMain_star",
+        "kind": "theorem",
+        "start_line": 35,
+        "complete_source_header": "theorem primitiveZeroMain_star (d : MediumAtom) :\n    star (primitiveZeroMain d) = primitiveZeroMain d"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedZeroCovariance.primitiveZeroMain_ofReal_re",
+        "kind": "theorem",
+        "start_line": 49,
+        "complete_source_header": "theorem primitiveZeroMain_ofReal_re (d : MediumAtom) :\n    ((primitiveZeroMain d).re : ℂ) = primitiveZeroMain d"
+      }
+    ],
+    "frozen_hash_matches": true,
+    "definition_count": 0,
+    "path": "ImbalancedChen/Part3PrimitiveZeroReal.lean",
+    "complete_source_proof_bodies_reviewed": "import ImbalancedChen.Part3TransposedZeroCovariance\n\n/-!\n# Reality of the actual primitive zero main term\n\nThe actual complex factor coefficients and coprime masses form a Hermitian\npair. The totient density is real and symmetric under exchanging the two\ncomplete physical labels. Finite Fubini therefore makes primitiveZeroMain\nself-conjugate without changing any carrier or imposing coefficient bounds.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical\nopen scoped BigOperators\n\nnamespace TransposedZeroCovariance\n\ntheorem star_sum_pair_eq_of_hermitian {ι : Type*} (S : Finset ι)\n    (f : ι → ι → ℂ)\n    (hf : ∀ a ∈ S, ∀ b ∈ S, star (f a b) = f b a) :\n    star (∑ a ∈ S, ∑ b ∈ S, f a b) = ∑ a ∈ S, ∑ b ∈ S, f a b := by\n  simp only [star_sum]\n  calc\n    _ = ∑ a ∈ S, ∑ b ∈ S, f b a := by\n      apply Finset.sum_congr rfl\n      intro a ha\n      apply Finset.sum_congr rfl\n      intro b hb\n      exact hf a ha b hb\n    _ = _ := Finset.sum_comm\n\ntheorem primitiveZeroMain_star (d : MediumAtom) :\n    star (primitiveZeroMain d) = primitiveZeroMain d := by\n  unfold primitiveZeroMain\n  rw [star_mul']\n  have hs : star ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) =\n      ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) := by\n    simp only [Complex.star_def, Complex.conj_ofReal]\n  rw [hs]\n  apply congrArg (fun z : ℂ ↦ ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) * z)\n  apply star_sum_pair_eq_of_hermitian\n  intro a _ b _\n  simp only [star_mul, star_div₀, star_star, star_natCast,\n    mul_comm, mul_left_comm, mul_assoc]\n\ntheorem primitiveZeroMain_ofReal_re (d : MediumAtom) :\n    ((primitiveZeroMain d).re : ℂ) = primitiveZeroMain d := by\n  apply Complex.conj_eq_iff_re.mp\n  simpa only [Complex.star_def] using primitiveZeroMain_star d\n\nend TransposedZeroCovariance\n\nend\n\nend ImbalancedChen.Part3\n",
+    "sha256": "ef3396f5130f06a4a8068a3bd5e070bb91c7f260a60a3ff524c67c6e8dfd9741",
+    "declaration_count": 3
+  },
+  "baseline": {
+    "imports_exact_equal": true,
+    "exact_old_snapshot": "20261016-P0Real-second-diag-original-8fae.lean.txt",
+    "previous_independent_report_sha256": "52e2f92396dbfb12fb61abb0452f8cbc3e6eeb4616efc370111f259c814bc814",
+    "definition_count_exact_equal": true,
+    "previous_independent_report": "20261016-primitive-zero-real-first-diag-independent-rebind.json",
+    "sha256": "8faee595518d1e2c11866b9cdf34995edb4804151e779fdfd9408a9b900de4a0",
+    "complete_header_comparisons": [
+      {
+        "name": "ImbalancedChen.Part3.TransposedZeroCovariance.star_sum_pair_eq_of_hermitian",
+        "complete_header_exact_equal": true
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedZeroCovariance.primitiveZeroMain_star",
+        "complete_header_exact_equal": true
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedZeroCovariance.primitiveZeroMain_ofReal_re",
+        "complete_header_exact_equal": true
+      }
+    ]
+  },
+  "actual_diagnostic": {
+    "stdout_sha256": "542d8a3c88839ce9ea2868274e53d8a96dbf21d335eb75a7d67b6bd7b4371446",
+    "full_stdout": "ImbalancedChen/Part3PrimitiveZeroReal.lean:47:4: error: This simp argument is unused:\n  Nat.mul_comm\n\nHint: Omit it from the simp argument list.\n  [apply] simp only [star_mul, star_div₀, star_star, star_natCast, mul_comm, mul_left_comm, mul_assoc]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n",
+    "diagnostic_count": 1,
+    "path": ".lake/proof-continuation/runs/20261015T210616342142Z-ImbalancedChen.Part3PrimitiveZeroReal/stdout.log",
+    "actual_suggested_simp_list": "[star_mul, star_div₀, star_star, star_natCast, mul_comm, mul_left_comm, mul_assoc]",
+    "only_error": "unused simp argument Nat.mul_comm at line 47"
+  },
+  "exact_change": {
+    "all_other_source_characters_exact_equal": true,
+    "imports_unchanged": true,
+    "occurrence_count": 1,
+    "proof_only": true,
+    "only_removed_text": "Nat.mul_comm, ",
+    "no_math_or_hypothesis_change": true,
+    "three_theorem_headers_unchanged": true,
+    "no_definition_changed": true
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedZeroCovariance"
+  ],
+  "direct_dependency": {
+    "current_hash_matches_expected": true,
+    "module": "ImbalancedChen.Part3TransposedZeroCovariance",
+    "direct_imports": [
+      "ImbalancedChen.Part3TransposedDispersion"
+    ],
+    "sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2"
+  },
+  "sourceDAG_rebind_delta": {
+    "basis": "Exact proof-only rebind of the previously independently reviewed leaf; its original +1 local/0 foreign addition is unchanged.",
+    "new_foreign_modules": [],
+    "local_module_delta": 0,
+    "full_tree_rescanned": false,
+    "foreign_module_delta": 0
+  },
+  "mathematical_review": [
+    "The generic finite Hermitian pair-sum theorem is byte-identical to the baseline and retains arbitrary finite carrier S and f with its original Hermitian hypothesis.",
+    "primitiveZeroMain_star retains commutative star_mul_prime and fixed-real-scalar congrArg from the first repair. Its full original factor-label Hermitian summand, real symmetric totient density, and local scalar are unchanged. Only the diagnostic-confirmed redundant Nat.mul_comm simp entry is removed. The remaining generic mul_comm/mul_left_comm/mul_assoc proof list is precisely the actual stdout suggestion.",
+    "primitiveZeroMain_ofReal_re is byte-identical to the baseline. No admissibility, coefficient, positivity, carrier, division, residue, or normalization condition is added."
+  ],
+  "bidirectional_byte_reconstruction": {
+    "inverse_current_to_exact_old": {
+      "algorithm": "current[0:offset] ++ removed ++ current[offset+inserted_count:]",
+      "byte_for_byte_equal_exact_old_snapshot": true,
+      "reconstructed_sha256": "8faee595518d1e2c11866b9cdf34995edb4804151e779fdfd9408a9b900de4a0"
+    },
+    "all_checks_pass": true,
+    "forward_old_to_current": {
+      "algorithm": "old[0:offset] ++ inserted ++ old[offset+removed_count:]",
+      "byte_for_byte_equal_current": true,
+      "reconstructed_sha256": "ef3396f5130f06a4a8068a3bd5e070bb91c7f260a60a3ff524c67c6e8dfd9741"
+    },
+    "replacement": {
+      "new_inserted_byte_count": 0,
+      "old_removed_byte_count": 14,
+      "byte_offset_zero_based": 1572,
+      "new_inserted_bytes_base64": "",
+      "old_removed_bytes_base64": "TmF0Lm11bF9jb21tLCA=",
+      "unchanged_suffix_byte_count": 315
+    },
+    "reconstruction_in_memory_only": true
+  },
+  "source_checks": {
+    "issues_identified": [],
+    "no_sorry_admit_axiom_opaque_native_decide": true,
+    "no_linter_disable_or_resource_limit_change": true
+  },
+  "evidence_boundary": {
+    "previous_reports_modified": false,
+    "lean_invoked": false,
+    "bootstrap_invoked": false,
+    "pins_modified": false,
+    "owned_U_modified": false,
+    "kernel_replay_performed": false,
+    "lake_invoked": false,
+    "dependencies_modified": false,
+    "source_modified": false,
+    "axiom_audit_performed": false,
+    "written_artifacts_only": [
+      ".lake/proof-continuation/source-reviews/20261016-primitive-zero-real-second-diag-independent-rebind.json"
+    ],
+    "build_invoked": false,
+    "runtime_elaboration_result": "NOT_EXECUTED_BY_REVIEWER",
+    "source_only": true
+  },
+  "remaining_gate": "Runtime owner reruns and any required strict/kernel/axiom checks must bind exactly ef3396; this source-only review does not claim a new runtime PASS."
+}

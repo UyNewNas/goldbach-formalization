@@ -111,7 +111,7 @@ theorem currentChenUpsilon9HarmonicIntegral_eq_nested :
         exact integral_indicator measurableSet_Ico
       · rw [indicator_of_notMem hx]
         simp_rw [hpoint, indicator_of_notMem hx]
-        exact integral_zero
+        exact integral_zero ℝ ℝ
     _ = _ := integral_indicator measurableSet_Ico
 
 end

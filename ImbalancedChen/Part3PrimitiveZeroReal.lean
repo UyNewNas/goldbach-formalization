@@ -35,16 +35,16 @@ theorem star_sum_pair_eq_of_hermitian {ι : Type*} (S : Finset ι)
 theorem primitiveZeroMain_star (d : MediumAtom) :
     star (primitiveZeroMain d) = primitiveZeroMain d := by
   unfold primitiveZeroMain
-  rw [star_mul]
+  rw [star_mul']
   have hs : star ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) =
       ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) := by
     simp only [Complex.star_def, Complex.conj_ofReal]
   rw [hs]
-  congr 1
+  apply congrArg (fun z : ℂ ↦ ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) * z)
   apply star_sum_pair_eq_of_hermitian
   intro a _ b _
   simp only [star_mul, star_div₀, star_star, star_natCast,
-    Nat.mul_comm, mul_comm, mul_left_comm, mul_assoc]
+    mul_comm, mul_left_comm, mul_assoc]
 
 theorem primitiveZeroMain_ofReal_re (d : MediumAtom) :
     ((primitiveZeroMain d).re : ℂ) = primitiveZeroMain d := by
