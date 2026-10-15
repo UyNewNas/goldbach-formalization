@@ -37,7 +37,8 @@ theorem tendsto_actualExtendedThirdDyadicStep :
     Tendsto actualExtendedThirdDyadicStep atTop (𝓝 0) := by
   have hp := tendsto_pow_atTop_nhds_zero_of_lt_one
     (show 0 ≤ (2 : ℝ)⁻¹ by norm_num) (show (2 : ℝ)⁻¹ < 1 by norm_num)
-  simpa only [actualExtendedThirdDyadicStep, div_eq_mul_inv, inv_pow, mul_zero] using
+  change Tendsto (fun m : ℕ => thirdPrefixRho / (2 : ℝ) ^ m) atTop (𝓝 0)
+  simpa only [div_eq_mul_inv, inv_pow, mul_zero] using
     hp.const_mul thirdPrefixRho
 
 theorem actualExtendedThirdDyadicHi_eq_lo_add_step (m : ℕ)
@@ -88,7 +89,7 @@ theorem actualExtendedThirdDyadicHi_le_point_add_step {m : ℕ}
     (ht : t ∈ actualExtendedThirdPhysicalCell m j) (i : Fin 3) :
     actualExtendedThirdDyadicHi m j i ≤ t i + actualExtendedThirdDyadicStep m := by
   rw [actualExtendedThirdDyadicHi_eq_lo_add_step]
-  exact add_le_add_right (ht.1 i (mem_univ _)).1 _
+  linarith [(ht.1 i (mem_univ _)).1]
 
 /-- Every closed ordered portion has diameter at most one mesh width in the
 actual `Fin 3` sup metric, including cells meeting either ordering wall. -/

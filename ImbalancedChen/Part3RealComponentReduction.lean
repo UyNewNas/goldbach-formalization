@@ -67,7 +67,8 @@ theorem complexRealComponent_ite (b : Bool) (P : Prop) [Decidable P] (z : ℂ) :
 
 theorem complexRealComponent_reconstruct (z : ℂ) :
     (∑ b : Bool, complexRealComponentPhase b * complexRealComponent b z) = z := by
-  simpa [complexRealComponentPhase, complexRealComponent, mul_comm] using Complex.re_add_im z
+  simpa [complexRealComponentPhase, complexRealComponent, mul_comm, add_comm] using
+    Complex.re_add_im z
 
 @[simp] theorem complexRealComponentPhase_norm (b : Bool) :
     ‖complexRealComponentPhase b‖ = 1 := by
@@ -106,6 +107,9 @@ def MediumAtom.realComponentAtom (d : MediumAtom) (eta : MediumRealChoice) : Med
 
 @[simp] theorem MediumAtom.realComponentAtom_scale (d : MediumAtom) (eta : MediumRealChoice) :
     (d.realComponentAtom eta).scale = d.scale := rfl
+
+@[simp] theorem MediumAtom.realComponentAtom_residue (d : MediumAtom) (eta : MediumRealChoice) :
+    (d.realComponentAtom eta).residue = d.residue := rfl
 
 @[simp] theorem MediumAtom.realComponentAtom_alphaCarrier (d : MediumAtom) (eta : MediumRealChoice) :
     (d.realComponentAtom eta).alphaCarrier = d.alphaCarrier := rfl
@@ -230,7 +234,8 @@ theorem MediumAtom.signedError_eq_realComponents (d : MediumAtom) :
       intro n _
       apply Finset.sum_congr rfl
       intro l _
-      simp only [realComponentAtom_fiveCoefficients, mul_assoc]
+      simp only [realComponentAtom_fiveCoefficients, MediumAtom.realComponentAtom_residue,
+        mul_assoc]
 
 theorem MediumAtom.signedError_norm_le_realComponents (d : MediumAtom) :
     ‖d.signedError‖ ≤ ∑ eta : MediumRealChoice, ‖(d.realComponentAtom eta).signedError‖ := by
@@ -252,7 +257,7 @@ theorem MediumAtom.signedError_norm_sq_le_realComponents (d : MediumAtom) :
       simpa only [one_mul] using Finset.sum_mul_sq_le_sq_mul_sq
         (Finset.univ : Finset MediumRealChoice) (fun _ => (1 : ℝ))
         (fun eta => ‖(d.realComponentAtom eta).signedError‖)
-    _ = _ := by simp [mediumRealChoice_card]
+    _ = _ := by simp
 
 end
 

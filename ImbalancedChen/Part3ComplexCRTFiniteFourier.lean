@@ -54,7 +54,8 @@ theorem finiteProgressionWeight_eq_fullFourier (S : Finset ℕ) (w : ℕ → ℝ
     rw [sum_residueAdditiveCoefficient_mul]
     have heq : (n : ZMod L) = (b : ZMod L) ↔ Int.ModEq L (n : ℤ) b := by
       simpa only [Int.cast_natCast] using ZMod.intCast_eq_intCast_iff (n : ℤ) b L
-    rw [heq, ← mul_assoc, inv_mul_cancel₀ hL, one_mul]
+    simp only [heq]
+    rw [← mul_assoc, inv_mul_cancel₀ hL, one_mul]
   calc
     _ = ∑ n ∈ S, (w n : ℂ) *
         (if Int.ModEq L (n : ℤ) b then (1 : ℂ) else 0) := by
@@ -110,7 +111,9 @@ theorem finiteProgressionNonzeroFourier_modulus_one (S : Finset ℕ)
     ext h
     have hh : h = 0 := Subsingleton.elim _ _
     simp [hh]
-  simp [finiteProgressionNonzeroFourier, he]
+  unfold finiteProgressionNonzeroFourier
+  rw [he]
+  simp only [Finset.sum_empty, mul_zero]
 
 private theorem actual_pair_lcm_ne_zero
     {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}
@@ -174,8 +177,8 @@ theorem MediumAtom.complexDispersionW_eq_finiteZero_add_nonzero
           (ComplexCRT.constructedProgressionWeight S w d.residue
             (complexFactorModulus l.val.1) (complexFactorModulus l'.val.1)
               l.val.2 l'.val.2 : ℂ) := by
-      rw [MediumAtom.complexDispersionW_eq_constructedCRT hd]
-      simp only [Finset.sum_attach]
+      simpa only [Finset.sum_attach] using
+        (MediumAtom.complexDispersionW_eq_constructedCRT hd S w)
     _ = _ := by
       rw [← Finset.sum_add_distrib]
       apply Finset.sum_congr rfl
@@ -183,10 +186,9 @@ theorem MediumAtom.complexDispersionW_eq_finiteZero_add_nonzero
       rw [← Finset.sum_add_distrib]
       apply Finset.sum_congr rfl
       intro l' _
-      letI : NeZero ((complexFactorModulus l.val.1).lcm
+      let : NeZero ((complexFactorModulus l.val.1).lcm
           (complexFactorModulus l'.val.1)) :=
         ⟨actual_pair_lcm_ne_zero hd l.property l'.property⟩
-      dsimp only
       unfold ComplexCRT.constructedProgressionWeight
       by_cases hc : ComplexCRT.Compatible (complexFactorModulus l.val.1)
           (complexFactorModulus l'.val.1) l.val.2 l'.val.2

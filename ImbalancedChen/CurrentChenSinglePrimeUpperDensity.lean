@@ -57,7 +57,7 @@ private theorem singleUpper_factor_le_left {s : ℝ} (hs : (3 / 2 : ℝ) ≤ s) 
     suzukiContinuousUpperFactor s ≤ suzukiContinuousUpperFactor (3 / 2) := by
   have hs1 : 1 < s := by linarith only [hs]
   unfold suzukiContinuousUpperFactor suzukiProposition118SourceTPlus
-  apply add_le_add_left
+  apply add_le_add (le_refl (1 : ℝ))
   apply (summable_suzukiProposition118SourceTPlus_of_sourceContract
     jr1965Section13HatSourceContract hs1).tsum_le_tsum
   · intro k
