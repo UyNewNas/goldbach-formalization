@@ -17,7 +17,7 @@ def sha(path):
 def main():
     archive = Path(sys.argv[1]).resolve()
     incoming = ROOT / '.lake/p0-reuse-input'
-    anchor_path = ROOT / 'verification/parts/p0/queue/reuse-38668314242.json'
+    anchor_path = ROOT / 'verification/parts/p0/queue/reuse-38674170679.json'
     anchor = json.loads(anchor_path.read_text())
     assert sha(archive) == anchor['artifact_sha256'], 'Wrong original artifact ZIP'
     assert not incoming.exists(), 'Refusing an existing extraction directory'
