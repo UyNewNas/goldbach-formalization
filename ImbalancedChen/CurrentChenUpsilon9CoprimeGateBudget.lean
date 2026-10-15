@@ -46,7 +46,9 @@ theorem currentChenUpsilon9_li_le_linear {x : ℝ} (hx : 2 ≤ x) :
         simp only [intervalIntegral.integral_const, smul_eq_mul]
         ring
   unfold liuLogarithmicIntegral
-  linarith
+  calc
+    _ ≤ 2 / Real.log 2 + (x - 2) / Real.log 2 := add_le_add (le_refl _) hint
+    _ = _ := by ring
 
 /-- A prime-divisible positive-modulus sum loses a factor `phi p`.
 The cofactor need not be coprime to p: totient is supermultiplicative. -/
@@ -71,7 +73,7 @@ theorem currentChenUpsilon9_dvd_reciprocalTotient_sum_le
     intro d hd e he hde
     calc
       d = p * (d / p) := (Nat.mul_div_cancel' (hT d hd).2).symm
-      _ = p * (e / p) := by rw [hde]
+      _ = p * (e / p) := congrArg (fun m : ℕ => p * m) hde
       _ = e := Nat.mul_div_cancel' (hT e he).2
   have hquot : T.image (fun d => d / p) ⊆ Finset.Icc 1 Q := by
     intro m hm
@@ -149,7 +151,7 @@ theorem currentChenUpsilon9_noncoprime_reciprocalTotient_sum_le
       positivity
     · have hd : t.1 ∣ d ∨ t.2 ∣ d := by
         by_contra hn
-        push_neg at hn
+        push Not at hn
         exact hc (Nat.coprime_mul_iff_left.mpr
           ⟨hp₁.coprime_iff_not_dvd.mpr hn.1, hp₂.coprime_iff_not_dvd.mpr hn.2⟩)
       rw [if_neg hc]
@@ -162,11 +164,19 @@ theorem currentChenUpsilon9_noncoprime_reciprocalTotient_sum_le
         linarith
   have hbudget₁ := currentChenUpsilon9_dvd_reciprocalTotient_sum_le S Q t.1 hp₁ hS
   have hbudget₂ := currentChenUpsilon9_dvd_reciprocalTotient_sum_le S Q t.2 hp₂ hS
-  have hsum := (Finset.sum_le_sum hpoint).trans (by
-    rw [Finset.sum_add_distrib]
-    exact add_le_add hbudget₁ hbudget₂)
+  have hsum := Finset.sum_le_sum hpoint
+  rw [Finset.sum_add_distrib] at hsum
+  have hsumBudget := hsum.trans (add_le_add hbudget₁ hbudget₂)
   have hinv := mul_le_mul_of_nonneg_right (add_le_add hinv₁ hinv₂) hlog
-  nlinarith only [hsum, hinv]
+  calc
+    _ ≤ (4 / ((t.1 : ℝ) - 1)) * (1 + Real.log (max 1 (Q : ℝ))) +
+        (4 / ((t.2 : ℝ) - 1)) * (1 + Real.log (max 1 (Q : ℝ))) := hsumBudget
+    _ = 4 * ((1 / ((t.1 : ℝ) - 1) + 1 / ((t.2 : ℝ) - 1)) *
+        (1 + Real.log (max 1 (Q : ℝ)))) := by ring
+    _ ≤ 4 * ((2 / (N : ℝ) ^ (19 / 125 : ℝ) + 2 / (N : ℝ) ^ (19 / 125 : ℝ)) *
+        (1 + Real.log (max 1 (Q : ℝ)))) :=
+      mul_le_mul_of_nonneg_left hinv (by norm_num)
+    _ = _ := by ring
 
 /-- The literal ungated li main mass of the same actual product image. -/
 def currentChenUpsilon9LiMainMass (N : ℕ) : ℝ :=
@@ -235,8 +245,7 @@ theorem currentChenUpsilon9_abs_coprimeGateError_le_mass
     rw [Finset.mul_sum]
     apply Finset.sum_congr rfl
     intro d _
-    by_cases hc : Nat.Coprime a d <;> simp only [hc, if_true, if_false, zero_div, mul_zero]
-    ring
+    split_ifs <;> ring
   rw [hswap] at habs
   apply habs.trans
   rw [currentChenUpsilon9LiMainMass, Finset.mul_sum]
@@ -346,7 +355,10 @@ theorem eventually_currentChenUpsilon9_abs_coprimeGateError_le_singularNormaliza
     _ ≤ (64 / Real.log 2) * (N : ℝ) ^ (106 / 125 : ℝ) *
         (1 + Real.log (N : ℝ)) ^ 2 := hfinite.trans hmass
     _ ≤ (256 / Real.log 2) * (N : ℝ) ^ (106 / 125 : ℝ) * Real.log (N : ℝ) ^ 2 := by
-      nlinarith only [hcost]
+      calc
+        _ ≤ (64 / Real.log 2) * (N : ℝ) ^ (106 / 125 : ℝ) *
+            (4 * Real.log (N : ℝ) ^ 2) := hcost
+        _ = _ := by ring
     _ ≤ _ := hpower
 
 end

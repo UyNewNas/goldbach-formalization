@@ -42,10 +42,8 @@ def currentChenUpsilon9PanError (N d : ℕ) : ℝ :=
 
 private theorem currentChenUpsilon9_primesInAPBelow_target_mod (N a d : ℕ) :
     primesInAPBelow N a d (N % d) = primesInAPBelow N a d N := by
-  unfold primesInAPBelow
-  congr 1
-  ext q
-  simp only [Finset.mem_filter, Nat.ModEq, Nat.mod_mod]
+  simp only [primesInAPBelow, Nat.ModEq, Nat.mod_mod]
+  rfl
 
 /-- A non-coprime multiplier has no physical AP witness at a primitive
 target residue.  This proves the gate rather than dropping it. -/
@@ -82,7 +80,7 @@ theorem currentChenUpsilon9_prefixAPCount_eq_main_sub_defect_add_error
             else 0) := by
         apply Finset.sum_congr rfl
         intro a _
-        by_cases hc : Nat.Coprime a d <;> simp only [hc, if_true, if_false, mul_zero]
+        split_ifs <;> ring
       _ = _ := currentChenUpsilon9ProductCoefficient_sum hN _
   have hpoint : ∀ a ∈ currentChenUpsilon9PrefixProducts N,
       (if Nat.Coprime a d then
@@ -94,7 +92,7 @@ theorem currentChenUpsilon9_prefixAPCount_eq_main_sub_defect_add_error
               (Nat.totient d : ℝ) := by
     intro a _
     by_cases hc : Nat.Coprime a d
-    · simp only [hc, if_true, sub_zero, liuScaledAPError,
+    · rw [if_pos hc, if_pos hc, sub_zero, liuScaledAPError,
         currentChenUpsilon9_primesInAPBelow_target_mod]
     · simp only [hc, if_false, sub_self, zero_div, sub_zero]
       exact (currentChenUpsilon9_primesInAPBelow_eq_zero_of_not_coprime hNd hc).symm
@@ -105,11 +103,11 @@ theorem currentChenUpsilon9_prefixAPCount_eq_main_sub_defect_add_error
     rw [herror]
     calc
       _ = ∑ a ∈ currentChenUpsilon9PrefixProducts N,
-          (primesInAPBelow N a d N : ℝ) -
+          ((primesInAPBelow N a d N : ℝ) -
             (liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ)) -
               (if Nat.Coprime a d then 0 else
                 liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ)))) /
-                  (Nat.totient d : ℝ) := Finset.sum_congr rfl hpoint
+                  (Nat.totient d : ℝ)) := Finset.sum_congr rfl hpoint
       _ = _ := by
         simp only [currentChenUpsilon9PrefixAPCount, currentChenUpsilon9LiMainMass,
           currentChenUpsilon9CoprimeMainDefect, Finset.sum_sub_distrib, Finset.sum_div, sub_div]
@@ -205,7 +203,8 @@ private theorem currentChenUpsilon9_abs_panError_le_MaxL {N d : ℕ}
   unfold liuMainPanCoprimeIntervalMaxL
   dsimp only
   rw [dif_pos hnonempty]
-  exact Finset.le_max' _ _ (Finset.mem_image.mpr ⟨N % d, hres, rfl⟩)
+  apply Finset.le_max'
+  exact Finset.mem_image.mpr ⟨N % d, hres, rfl⟩
 
 /-- The actual signed error is bounded by the full residue-maximum sum
 without multiplying by the number of selected moduli or factor labels. -/

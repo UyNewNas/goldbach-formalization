@@ -101,16 +101,16 @@ def actualExtendedThirdRescueParameter (e : ℝ) (m : ℕ) (j : ActualExtendedTh
     (t : Fin 3 → ℝ) : ℝ :=
   max (actualExtendedThirdBaseParameter e m j) (v (t 0) + e / 8)
 
-private theorem rescue_split {e λ θ a W : ℝ} (he : 0 < e)
-    (hθlo : 1 / 2 ≤ θ) (hθhi : θ < 5 / 8) (hλ : λ + e ≤ θ)
+private theorem rescue_split {e lam θ a W : ℝ} (he : 0 < e)
+    (hθlo : 1 / 2 ≤ θ) (hθhi : θ < 5 / 8) (hlevel : lam + e ≤ θ)
     (hp : θ + e ≤ max a W) (hW : W ≤ cap) :
-    (W - a ≤ e / 4 ∧ 1 / 2 ≤ θ ∧ θ < 5 / 8 ∧ λ + e ≤ θ ∧ θ + 3 * e / 4 ≤ a) ∨
+    (W - a ≤ e / 4 ∧ 1 / 2 ≤ θ ∧ θ < 5 / 8 ∧ lam + e ≤ θ ∧ θ + 3 * e / 4 ≤ a) ∨
       (e / 4 < W - a ∧ 1 / 2 ≤ max θ (a + e / 8) ∧ max θ (a + e / 8) < 5 / 8 ∧
-        λ + e ≤ max θ (a + e / 8) ∧ a + e / 8 ≤ max θ (a + e / 8) ∧
+        lam + e ≤ max θ (a + e / 8) ∧ a + e / 8 ≤ max θ (a + e / 8) ∧
           max θ (a + e / 8) + e / 8 ≤ W) := by
   by_cases hclose : W - a ≤ e / 4
   · have hm : max a W ≤ a + e / 4 := max_le (by linarith) (by linarith)
-    exact Or.inl ⟨hclose, hθlo, hθhi, hλ, by linarith⟩
+    exact Or.inl ⟨hclose, hθlo, hθhi, hlevel, by linarith⟩
   · have hgap : e / 4 < W - a := lt_of_not_ge hclose
     have haW : a ≤ W := by linarith
     rw [max_eq_right haW] at hp
@@ -119,7 +119,7 @@ private theorem rescue_split {e λ θ a W : ℝ} (he : 0 < e)
       dsimp [cap] at hW
       linarith
     exact Or.inr ⟨hgap, hθlo.trans (le_max_left _ _), hrange,
-      hλ.trans (le_max_left _ _), le_max_right _ _, by linarith⟩
+      hlevel.trans (le_max_left _ _), le_max_right _ _, by linarith⟩
 
 /-- This deterministic split applies to either genuine rescued-W entry.
 At the equality threshold the baseline action is selected. Every value and
@@ -149,8 +149,8 @@ theorem actualExtendedThirdSelectedRescue_action {e : ℝ} {m : ℕ}
     · exact actualExtendedThirdSelectedBase_pointwise 5 hk ht
   have hW : (if swapped then wInner (t 0) (t 2) (t 1) else wInner (t 0) (t 1) (t 2)) ≤ cap := by
     cases swapped
-    · exact wInner_le_cap ht.2.1
-    · exact wInner_le_cap (ht.2.1.trans ht.2.2.1)
+    · exact wInner_le_cap (a := t 0) ht.2.1
+    · exact wInner_le_cap (a := t 0) (ht.2.1.trans ht.2.2.1)
   exact rescue_split he0 hr.1 hr.2 hl hp hW
 
 def actualExtendedThirdPairParameter (e : ℝ) (m : ℕ) (j : ActualExtendedThirdDyadicLabel m)
@@ -158,15 +158,15 @@ def actualExtendedThirdPairParameter (e : ℝ) (m : ℕ) (j : ActualExtendedThir
   max (actualExtendedThirdBaseParameter e m j)
     ((if yz then 2 * t 0 + t 1 + t 2 else t 0 + 2 * t 1 + t 2) + e / 2)
 
-private theorem pair_parameter {e λ θ a g : ℝ} (he : 0 < e)
-    (hθlo : 1 / 2 ≤ θ) (hλ : λ + e ≤ θ) (ha : θ + e ≤ a)
+private theorem pair_parameter {e lam θ a g : ℝ} (he : 0 < e)
+    (hθlo : 1 / 2 ≤ θ) (hlevel : lam + e ≤ θ) (ha : θ + e ≤ a)
     (hg : e ≤ a - g) (hcap : a ≤ cap) :
     1 / 2 ≤ max θ (g + e / 2) ∧ max θ (g + e / 2) < 5 / 8 ∧
-      λ + e ≤ max θ (g + e / 2) ∧ g + e / 2 ≤ max θ (g + e / 2) ∧
+      lam + e ≤ max θ (g + e / 2) ∧ g + e / 2 ≤ max θ (g + e / 2) ∧
         max θ (g + e / 2) + e / 2 ≤ a := by
   have hu : max θ (g + e / 2) ≤ a - e / 2 := max_le (by linarith) (by linarith)
   have hhi : max θ (g + e / 2) < 5 / 8 := by dsimp [cap] at hcap; linarith
-  exact ⟨hθlo.trans (le_max_left _ _), hhi, hλ.trans (le_max_left _ _),
+  exact ⟨hθlo.trans (le_max_left _ _), hhi, hlevel.trans (le_max_left _ _),
     le_max_right _ _, by linarith⟩
 
 theorem actualExtendedThirdSelectedPair_action {e : ℝ} {m : ℕ}

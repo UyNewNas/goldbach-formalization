@@ -208,7 +208,8 @@ theorem MediumAtom.commonLargeBetaGCDCleanMass_le
       (2 * d.V) ^ 2 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *
         Real.sqrt ((1 + Real.log (2 * d.V)) / Y) := by
   have hbound := ActualLargeGCDBetaMass.sum_abs_largeGCDPairs_le
-    (k := 2 ^ B) (by positivity) (show 1 ≤ 2 * d.V by linarith [hd.2.1]) hY
+    (k := 2 ^ B) (by exact Nat.one_le_iff_ne_zero.mpr (pow_ne_zero B (by norm_num)))
+    (show 1 ≤ 2 * d.V by linarith [hd.2.1]) hY
     d.betaCarrier (d.betaCarrier_subset_twiceV hd.2.1) (fun n ↦ ‖d.cleanedBeta n‖)
     (fun n hn ↦ by simpa only [abs_norm] using d.cleanedBeta_norm_le_tauPow hd hn)
   simpa only [MediumAtom.commonLargeBetaGCDCleanMass, ActualLargeGCDBetaMass.largeGCDPairs,

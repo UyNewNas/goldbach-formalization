@@ -1,0 +1,152 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_SEMANTIC_REVIEW_AFTER_MINIMAL_API_REPAIR",
+  "review_date": "2026-10-16",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "target": "ImbalancedChen/ActualPrimeTupleNormalization.lean",
+  "source_sha256": "ee2f0f12ef232b770dcc7136d8ce74f27fc830cad73ab78641fe18f1cabc5db0",
+  "declarations": [
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "actualPrimeTupleCoefficient",
+      "signature": "def actualPrimeTupleCoefficient (T : Finset (List \u2115)) (n : \u2115) : \u2115",
+      "line": 26
+    },
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "actualNormalizedPrimeTupleCoefficient",
+      "signature": "def actualNormalizedPrimeTupleCoefficient (T : Finset (List \u2115)) (m n : \u2115) : \u211d",
+      "line": 30
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualPrimeTupleCoefficient_le_factorial",
+      "signature": "theorem actualPrimeTupleCoefficient_le_factorial (T : Finset (List \u2115)) (m n : \u2115)\n    (hlen : \u2200 ps \u2208 T, ps.length = m)\n    (hprime : \u2200 ps \u2208 T, \u2200 p \u2208 ps, Nat.Prime p) :\n    actualPrimeTupleCoefficient T n \u2264 m.factorial",
+      "line": 35
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualNormalizedPrimeTupleCoefficient_mem_Icc",
+      "signature": "theorem actualNormalizedPrimeTupleCoefficient_mem_Icc\n    (T : Finset (List \u2115)) (m n : \u2115)\n    (hlen : \u2200 ps \u2208 T, ps.length = m)\n    (hprime : \u2200 ps \u2208 T, \u2200 p \u2208 ps, Nat.Prime p) :\n    actualNormalizedPrimeTupleCoefficient T m n \u2208 Set.Icc (0 : \u211d) 1",
+      "line": 60
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualNormalizedPrimeTupleCoefficient_abs_le_one",
+      "signature": "theorem actualNormalizedPrimeTupleCoefficient_abs_le_one\n    (T : Finset (List \u2115)) (m n : \u2115)\n    (hlen : \u2200 ps \u2208 T, ps.length = m)\n    (hprime : \u2200 ps \u2208 T, \u2200 p \u2208 ps, Nat.Prime p) :\n    |actualNormalizedPrimeTupleCoefficient T m n| \u2264 1",
+      "line": 70
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "factorial_mul_actualNormalizedPrimeTupleCoefficient",
+      "signature": "theorem factorial_mul_actualNormalizedPrimeTupleCoefficient\n    (T : Finset (List \u2115)) (m n : \u2115) :\n    (m.factorial : \u211d) * actualNormalizedPrimeTupleCoefficient T m n =\n      (actualPrimeTupleCoefficient T n : \u211d)",
+      "line": 80
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualPrimeTuple_threeGroup_scalar_identity",
+      "signature": "theorem actualPrimeTuple_threeGroup_scalar_identity\n    (c : \u211d) (T\u2081 T\u2082 T\u2083 : Finset (List \u2115)) (m\u2081 m\u2082 m\u2083 n\u2081 n\u2082 n\u2083 : \u2115) :\n    c * (actualPrimeTupleCoefficient T\u2081 n\u2081 : \u211d) *\n        (actualPrimeTupleCoefficient T\u2082 n\u2082 : \u211d) * (actualPrimeTupleCoefficient T\u2083 n\u2083 : \u211d) =\n      (c * (m\u2081.factorial : \u211d) * (m\u2082.factorial : \u211d) * (m\u2083.factorial : \u211d)) *\n        actualNormalizedPrimeTupleCoefficient T\u2081 m\u2081 n\u2081 *\n        actualNormalizedPrimeTupleCoefficient T\u2082 m\u2082 n\u2082 *\n        actualNormalizedPrimeTupleCoefficient T\u2083 m\u2083 n\u2083",
+      "line": 92
+    }
+  ],
+  "direct_dependency": {
+    "module": "ImbalancedChen.ActualSelectedPairFactorization",
+    "sha256": "92636fed625d1e42d5f93492d567f8c88e37a48b3177b26904cb2f36d7d1a65f"
+  },
+  "minimal_api_repair": {
+    "old_sha256": "b3836f95dce0a4652901ef20e5f1b7468aa19ec4e1e1f621d28f81ff36c5d90e",
+    "new_sha256": "ee2f0f12ef232b770dcc7136d8ce74f27fc830cad73ab78641fe18f1cabc5db0",
+    "exact_only_change": "mul_div_cancel\u2080 _ hfact -> mul_div_cancel_right\u2080 _ hfact",
+    "imports_and_all_signatures_unchanged": true,
+    "old_issue": "The calc target is (coefficient*m!)/m!=coefficient. The old lemma cancels b*(a/b), which is not definitionally the same association. The replacement has the exact target shape.",
+    "current_status": "Static signature mismatch repaired; no Lean elaboration success is claimed."
+  },
+  "mathematical_findings": [
+    {
+      "scope": "literal coefficient",
+      "detail": "The unnormalized coefficient is the cardinal of the actual product fiber in the supplied finite ordered-prime-list carrier T. It does not replace that coefficient by a squarefree indicator or change any interval label."
+    },
+    {
+      "scope": "fiber factorial upper bound",
+      "detail": "For a nonempty product fiber choose its original representative ps. Every other qs in that same fiber consists of primes and has the same product, so Nat.primeFactorsList_unique gives qs.Perm ps. The fiber is therefore a subset of ps.permutations.toFinset. Its cardinal is at most the length of the full permutations list, exactly ps.length! = m!. Repeated prime factors may duplicate entries of the permutations list; this only strengthens the upper bound."
+    },
+    {
+      "scope": "edge cases and hypotheses",
+      "detail": "The uniqueness API itself proves the product is nonzero from all-prime entries; it does not demand an omitted n>0 hypothesis. Empty fibers have coefficient zero. The argument includes m=0, n=0 and n=1; no Nodup, Squarefree, disjoint boxes or separated interval labels are required."
+    },
+    {
+      "scope": "all-integer one-bound",
+      "detail": "m! is strictly positive for every natural m. Dividing the nonnegative literal cardinal by m! gives a value in [0,1] for every natural n, hence absolute bound one. The only structural premises are that every tuple in T has exactly m entries and all those entries are prime."
+    },
+    {
+      "scope": "factorial restoration",
+      "detail": "For arbitrary T,m,n, multiplying the normalized coefficient by m! recovers the unnormalized coefficient. This identity needs no length or primality assumption, only the automatic nonzero factorial."
+    },
+    {
+      "scope": "three-group scalar identity",
+      "detail": "The scalar c is arbitrary real, so signed coefficients and an already present repeated-label symmetry factor are preserved. Each of the three group factorials is moved into c exactly once, and three restored-coefficient identities plus commutative ring algebra prove the displayed equality. No extra factorial normalization is introduced."
+    }
+  ],
+  "fixed_mathlib_source_api_checks": [
+    {
+      "path": "Mathlib/Data/Nat/Factors.lean",
+      "sha256": "3e64e2c8ba907c05209966a7bba8754cf2ab33f328a3010667ffe58c95e0bca3",
+      "name": "Nat.primeFactorsList_unique",
+      "line": 168,
+      "signature_summary": "prod l=n and all entries prime => l.Perm n.primeFactorsList; no separate n>0 premise"
+    },
+    {
+      "path": "Mathlib/Data/List/Permutation.lean",
+      "sha256": "b01b977ee7dc7e23721282e365293f2daa26971fd6c2f717bc410fb9885e04ec",
+      "name": "List.mem_permutations",
+      "line": 314,
+      "signature_summary": "s belongs to t.permutations iff s.Perm t"
+    },
+    {
+      "path": "Mathlib/Data/List/Permutation.lean",
+      "sha256": "b01b977ee7dc7e23721282e365293f2daa26971fd6c2f717bc410fb9885e04ec",
+      "name": "List.length_permutations",
+      "line": 287,
+      "signature_summary": "length(l.permutations)=factorial(length l), including duplicate entries"
+    },
+    {
+      "path": "Mathlib/Algebra/GroupWithZero/Defs.lean",
+      "sha256": "ebd4c4b8ed5e63d9ab41920c182f9c3dde99f8c979b4da118544c73f22b30cc5",
+      "name": "mul_div_cancel_right\u2080",
+      "line": 208,
+      "signature_summary": "a*b/b=a from b!=0"
+    },
+    {
+      "path": "Mathlib/Algebra/GroupWithZero/Units/Basic.lean",
+      "sha256": "70d9819b0015e85972be567f2864a0516302a566f12fda8f67c243bff5d16bca",
+      "name": "mul_div_cancel\u2080",
+      "line": 458,
+      "signature_summary": "b*(a/b)=a from b!=0; this was the mismatched lemma in old source"
+    }
+  ],
+  "issues_remaining_in_current_target": [],
+  "remaining_caller_obligations": [
+    "When applied to an actual fixed slot assignment, prove that the supplied T is the original group tuple carrier, with its actual fixed length and prime-entry property.",
+    "If original source labels carry multiplicity beyond the list of prime values, preserve it in the outer scalar or carrier reindexing; passing a value-image Finset without an injection/exact counting theorem can discard it.",
+    "Prove the original multi-group sum is the product/grouping of these actual group coefficient carriers. This generic scalar identity alone does not establish a Cartesian decomposition.",
+    "No distribution theorem, arithmetic mean, boxwise stable allocation or final hUpper statement follows from this normalization module."
+  ],
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "lean_source_modified_by_reviewer": false,
+    "bytecode_writes_disabled": true,
+    "object_acceptance_claimed": false,
+    "kernel_replay_claimed": false,
+    "axiom_audit_claimed": false,
+    "full_imported_closure_validation_claimed": false
+  }
+}

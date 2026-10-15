@@ -1,0 +1,345 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T20:01:51.923862+00:00",
+  "reviewer": "/root/dispersion_resume/reuse_endpoint_audit",
+  "status": "SOURCE_ONLY_DRAFT_COVARIANCE_AND_ACTUAL_SW_PREFIX_SEMANTIC_REVIEW_PASS",
+  "candidate": {
+    "path": "ImbalancedChen/Part3TransposedZeroCovariance.lean",
+    "actual_captured_source_sha256": "5cbeae92328160b4384c96e5921b2a594b17da53bbfd890801aa125bacbbc969",
+    "saved_source_snapshot": ".lake/proof-continuation/source-reviews/drafts/Part3TransposedZeroCovariance.5cbeae92328160b4384c96e5921b2a594b17da53bbfd890801aa125bacbbc969.lean",
+    "saved_source_snapshot_sha256": "5cbeae92328160b4384c96e5921b2a594b17da53bbfd890801aa125bacbbc969",
+    "reviewed_prefix_sha256": "7d786e3dd4dc1d19eb65e42ddbf0f4334a6beccd0d294088e301a026bca9c014",
+    "reviewed_declaration_count": 20,
+    "reviewed_last_declaration": "actual_covariance_SW_bound",
+    "unreviewed_later_appended_declarations": [
+      "sum_transposedBeta_star_mul",
+      "sum_transposedBeta_pairs",
+      "factor_pair_sum_eq_grouped",
+      "actual_rawZero_eq_compatibleMass",
+      "primitiveZeroMain",
+      "actual_rawZero_sub_primitive_eq_covariance",
+      "one_le_tau_succ",
+      "tau_div_le_succ",
+      "actual_weighted_lcm_sum_le",
+      "covariance_sum_norm_le",
+      "actual_rawZero_sub_primitive_SW_bound",
+      "actual_centered_identity_with_primitive"
+    ],
+    "scope_limit": "The source continued growing while this read-only audit was active. Only the first 20 declarations through actual_covariance_SW_bound are independently reviewed here; no semantic pass is given to the later raw-zero/primitive consumers."
+  },
+  "all_20_complete_reviewed_source_headers": [
+    {
+      "name": "reducedResidues",
+      "kind": "def",
+      "private": false,
+      "line": 32,
+      "complete_source_header": "def reducedResidues (delta : ℕ) : Finset ℕ"
+    },
+    {
+      "name": "card_reducedResidues",
+      "kind": "theorem",
+      "private": false,
+      "line": 35,
+      "complete_source_header": "theorem card_reducedResidues (delta : ℕ) :\n    (reducedResidues delta).card = delta.totient"
+    },
+    {
+      "name": "coprimeMass",
+      "kind": "def",
+      "private": false,
+      "line": 39,
+      "complete_source_header": "def coprimeMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) (q : ℕ) : R"
+    },
+    {
+      "name": "residueMass",
+      "kind": "def",
+      "private": false,
+      "line": 43,
+      "complete_source_header": "def residueMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) (q delta b : ℕ) : R"
+    },
+    {
+      "name": "sum_reduced_indicator",
+      "kind": "theorem",
+      "private": true,
+      "line": 47,
+      "complete_source_header": "private theorem sum_reduced_indicator {R : Type*} [AddCommMonoid R]\n    {delta n : ℕ} (hdelta : 0 < delta) (hn : n.Coprime delta) (z : R) :\n    (∑ b ∈ reducedResidues delta, if Nat.ModEq delta n b then z else 0) = z"
+    },
+    {
+      "name": "sum_residueMass",
+      "kind": "theorem",
+      "private": false,
+      "line": 65,
+      "complete_source_header": "theorem sum_residueMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) {q delta : ℕ}\n    (hdelta : 0 < delta) (hdq : delta ∣ q) :\n    (∑ b ∈ reducedResidues delta, residueMass N beta q delta b) =\n      coprimeMass N beta q"
+    },
+    {
+      "name": "pair_indicator",
+      "kind": "theorem",
+      "private": true,
+      "line": 81,
+      "complete_source_header": "private theorem pair_indicator {q r n₁ n₂ : ℕ} (hq : 0 < q) (z₁ z₂ : ℂ) :\n    (∑ b ∈ reducedResidues (q.gcd r),\n      (if n₁.Coprime q ∧ Nat.ModEq (q.gcd r) n₁ b then z₁ else 0) *\n        star (if n₂.Coprime r ∧ Nat.ModEq (q.gcd r) n₂ b then z₂ else 0)) =\n      if ComplexCRT.Compatible q r n₁ n₂ then z₁ * star z₂ else 0"
+    },
+    {
+      "name": "compatibleMass",
+      "kind": "def",
+      "private": false,
+      "line": 115,
+      "complete_source_header": "def compatibleMass (N : Finset ℕ) (beta : ℕ → ℂ) (q r : ℕ) : ℂ"
+    },
+    {
+      "name": "compatibleMass_eq_residue_products",
+      "kind": "theorem",
+      "private": false,
+      "line": 119,
+      "complete_source_header": "theorem compatibleMass_eq_residue_products (N : Finset ℕ) (beta : ℕ → ℂ)\n    {q r : ℕ} (hq : 0 < q) :\n    compatibleMass N beta q r =\n      ∑ b ∈ reducedResidues (q.gcd r),\n        residueMass N beta q (q.gcd r) b * star (residueMass N beta r (q.gcd r) b)"
+    },
+    {
+      "name": "covariance",
+      "kind": "def",
+      "private": false,
+      "line": 134,
+      "complete_source_header": "def covariance (N : Finset ℕ) (beta : ℕ → ℂ) (q r : ℕ) : ℂ"
+    },
+    {
+      "name": "covariance_identity",
+      "kind": "theorem",
+      "private": false,
+      "line": 140,
+      "complete_source_header": "theorem covariance_identity (N : Finset ℕ) (beta : ℕ → ℂ) {q r : ℕ} (hq : 0 < q) :\n    compatibleMass N beta q r -\n      coprimeMass N beta q * star (coprimeMass N beta r) / ((q.gcd r).totient : ℂ) =\n        covariance N beta q r"
+    },
+    {
+      "name": "totient_pair_density_eq_lcm",
+      "kind": "theorem",
+      "private": false,
+      "line": 157,
+      "complete_source_header": "theorem totient_pair_density_eq_lcm {q r : ℕ} (hq : q ≠ 0) (hr : r ≠ 0) :\n    ((q * r).totient : ℂ) /\n      ((q.totient : ℂ) * (r.totient : ℂ) * (q * r : ℕ)) =\n        1 / ((q.lcm r : ℂ) * ((q.gcd r).totient : ℂ))"
+    },
+    {
+      "name": "residueMass_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 180,
+      "complete_source_header": "private theorem residueMass_norm_le (N : Finset ℕ) (beta : ℕ → ℂ) (q delta b : ℕ) :\n    ‖residueMass N beta q delta b‖ ≤ residueMass N (fun n ↦ ‖beta n‖) q delta b"
+    },
+    {
+      "name": "coprimeMass_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 187,
+      "complete_source_header": "private theorem coprimeMass_norm_le (N : Finset ℕ) (beta : ℕ → ℂ) (q : ℕ) :\n    ‖coprimeMass N beta q‖ ≤ ∑ n ∈ N, ‖beta n‖"
+    },
+    {
+      "name": "coprimeMass_of_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 194,
+      "complete_source_header": "private theorem coprimeMass_of_norm_le (N : Finset ℕ) (beta : ℕ → ℂ) (q : ℕ) :\n    coprimeMass N (fun n ↦ ‖beta n‖) q ≤ ∑ n ∈ N, ‖beta n‖"
+    },
+    {
+      "name": "sum_norm_centered_mass_le",
+      "kind": "theorem",
+      "private": false,
+      "line": 200,
+      "complete_source_header": "theorem sum_norm_centered_mass_le (N : Finset ℕ) (beta : ℕ → ℂ)\n    {q delta : ℕ} (hdelta : 0 < delta) (hdq : delta ∣ q) :\n    (∑ b ∈ reducedResidues delta,\n      ‖residueMass N beta q delta b - coprimeMass N beta q / (delta.totient : ℂ)‖) ≤\n        2 * ∑ n ∈ N, ‖beta n‖"
+    },
+    {
+      "name": "covariance_norm_le_lone",
+      "kind": "theorem",
+      "private": false,
+      "line": 222,
+      "complete_source_header": "theorem covariance_norm_le_lone (N : Finset ℕ) (beta : ℕ → ℂ)\n    {q r : ℕ} (hq : 0 < q) {E : ℝ} (hE : 0 ≤ E)\n    (hAP : ∀ b ∈ reducedResidues (q.gcd r),\n      ‖residueMass N beta q (q.gcd r) b -\n        coprimeMass N beta q / ((q.gcd r).totient : ℂ)‖ ≤ E) :\n    ‖covariance N beta q r‖ ≤ 2 * E * ∑ n ∈ N, ‖beta n‖"
+    },
+    {
+      "name": "actual_centered_mass_eq_auxSWError",
+      "kind": "theorem",
+      "private": false,
+      "line": 247,
+      "complete_source_header": "theorem actual_centered_mass_eq_auxSWError (d : MediumAtom) {q delta b : ℕ}\n    (hdq : delta ∣ q) (hb : b.Coprime delta) :\n    residueMass d.alphaCarrier d.alpha q delta b -\n      coprimeMass d.alphaCarrier d.alpha q / (delta.totient : ℂ) =\n        d.auxSWError (q / delta) delta b"
+    },
+    {
+      "name": "alpha_l1_le_twice_U",
+      "kind": "theorem",
+      "private": true,
+      "line": 269,
+      "complete_source_header": "private theorem alpha_l1_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ n ∈ d.alphaCarrier, ‖d.alpha n‖) ≤ 2 * d.U"
+    },
+    {
+      "name": "actual_covariance_SW_bound",
+      "kind": "theorem",
+      "private": false,
+      "line": 292,
+      "complete_source_header": "theorem actual_covariance_SW_bound {ι : Type*} (F : ι → MediumAtom)\n    (B C0 : ℕ) (sigma kappa c0 A : ℝ) (hA : 0 < A)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n      ∀ i, x0 ≤ (F i).scale → ∀ q r : ℕ, 0 < q →\n        ‖covariance (F i).alphaCarrier (F i).alpha q r‖ ≤\n          C * (F i).U ^ 2 * (fouvryTau (2 ^ C0) (q / q.gcd r) : ℝ) /\n            Real.log (F i).scale ^ A"
+    }
+  ],
+  "all_five_reviewed_primitive_definitions": [
+    {
+      "name": "reducedResidues",
+      "kind": "def",
+      "private": false,
+      "line": 32,
+      "complete_source_header": "def reducedResidues (delta : ℕ) : Finset ℕ",
+      "source_block": "def reducedResidues (delta : ℕ) : Finset ℕ :=\n  (Finset.range delta).filter (fun b ↦ b.Coprime delta)\n\n"
+    },
+    {
+      "name": "coprimeMass",
+      "kind": "def",
+      "private": false,
+      "line": 39,
+      "complete_source_header": "def coprimeMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) (q : ℕ) : R",
+      "source_block": "def coprimeMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) (q : ℕ) : R :=\n  ∑ n ∈ N, if n.Coprime q then beta n else 0\n\n"
+    },
+    {
+      "name": "residueMass",
+      "kind": "def",
+      "private": false,
+      "line": 43,
+      "complete_source_header": "def residueMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) (q delta b : ℕ) : R",
+      "source_block": "def residueMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) (q delta b : ℕ) : R :=\n  ∑ n ∈ N, if n.Coprime q ∧ Nat.ModEq delta n b then beta n else 0\n\n"
+    },
+    {
+      "name": "compatibleMass",
+      "kind": "def",
+      "private": false,
+      "line": 115,
+      "complete_source_header": "def compatibleMass (N : Finset ℕ) (beta : ℕ → ℂ) (q r : ℕ) : ℂ",
+      "source_block": "def compatibleMass (N : Finset ℕ) (beta : ℕ → ℂ) (q r : ℕ) : ℂ :=\n  ∑ n₁ ∈ N, ∑ n₂ ∈ N,\n    if ComplexCRT.Compatible q r n₁ n₂ then beta n₁ * star (beta n₂) else 0\n\n"
+    },
+    {
+      "name": "covariance",
+      "kind": "def",
+      "private": false,
+      "line": 134,
+      "complete_source_header": "def covariance (N : Finset ℕ) (beta : ℕ → ℂ) (q r : ℕ) : ℂ",
+      "source_block": "def covariance (N : Finset ℕ) (beta : ℕ → ℂ) (q r : ℕ) : ℂ :=\n  ∑ b ∈ reducedResidues (q.gcd r),\n    (residueMass N beta q (q.gcd r) b - coprimeMass N beta q / ((q.gcd r).totient : ℂ)) *\n      star (residueMass N beta r (q.gcd r) b -\n        coprimeMass N beta r / ((q.gcd r).totient : ℂ))\n\n"
+    }
+  ],
+  "semantic_review": [
+    {
+      "scope": "Reduced classes and Hermitian covariance",
+      "finding": "The generic additive residue partition keeps the exact coprime sieve q. On positive q, gcd(q,r)>0 even when r=0. The complex compatibility sum partitions into residueMass(q,b)*star(residueMass(r,b)); centering uses exact sums of residue masses and the cardinal phi(gcd). Thus covariance_identity subtracts Cq*star(Cr)/phi(gcd), with no missing conjugation or extraneous phi factor."
+    },
+    {
+      "scope": "Totient pair density",
+      "finding": "Positive q,r supply nonzero totients/lcm. The exact gcd*lcm=q*r and totient_gcd_mul_totient_mul identities give the displayed complex denominator. This is finite arithmetic, not an identification with literal smoothed U or V."
+    },
+    {
+      "scope": "Centered L1 and one-sided norm bound",
+      "finding": "For positive delta dividing q, residue-class norm masses sum to at most original L1; the constant mean contributes at most the same L1 after cardinal phi(delta) cancels its nonzero denominator. Therefore sum of centered norms<=2L1 and norm covariance<=2*E*L1 from only the q-side AP bound. Norm-star removes conjugation without splitting real components."
+    },
+    {
+      "scope": "Exact actual_centered_mass_eq_auxSWError",
+      "finding": "For delta|q and b coprime delta, AP delta n b forces n coprime delta. Therefore coprimality to q equals coprimality to q/delta on that class. The mean sieve in original auxSWError is (q/delta)*delta=q. The proof keeps original alphaCarrier, complex alpha and signed original atom fields. This algebraic statement does not need q or delta positive; later SW application supplies positivity."
+    },
+    {
+      "scope": "Actual SW quantifiers and fixed divisor order",
+      "finding": "Original UniformAuxiliarySW at the same real A>0 supplies C,x0 before every i and q,r. q>0 implies gcd>0 and quotient>0. divisor-card^C0<=tau_(2^C0) holds including C0=0. Actual alpha L1<=2U gives the displayed new C=4*old C times U^2, with the same threshold and denominator log(original scale)^A. No family-dependent constant, short-variable restriction, beta-SW hypothesis or analytic covariance budget is added."
+    }
+  ],
+  "source_visible_API_review": {
+    "issues_found": [],
+    "checked": [
+      "star_sum, star_natCast and star_div0 names/signatures were inspected in pinned Mathlib Algebra/Star sources.",
+      "The complex finite covariance proof expands conjugation of sums, differences and natural totient division, then uses exact nonzero-totient field algebra.",
+      "The actual SW dictionary compares two explicit fixed arithmetic predicates with if_congr, and does not reuse the earlier generic-predicate helper which triggered native/Classical instance mismatches.",
+      "The bound uses positive q to obtain positive quotient via Nat.div_pos and Nat.le_of_dvd, then passes original SW arguments in sieve/AP order."
+    ],
+    "limit": "Source inspection only; no guarantee of elaboration, implicit-instance matching, tactic completion or linter success."
+  },
+  "weighted_wrapper_exact_proposed_statement": "For original hd:MediumAdmissible B sigma kappa c0 d and k:Nat, (sum q in d.physicalFactorModuli, sum r in d.physicalFactorModuli, (norm(d.groupedFactorGamma q)*norm(d.groupedFactorGamma r)/(q.lcm r:Real))*(fouvryTau k (q/q.gcd r):Real)) <= (1+Real.log d.physicalFactorCap)^(2*(3*(k+1))^2+1).",
+  "weighted_wrapper_minimal_proof_route": [
+    "Let Q=d.physicalFactorModuli, L=d.physicalFactorCap, w(q)=norm(Gq)*(tau_(k+1)(q):Real). Every w(q) is nonnegative.",
+    "Use d.one_le_physicalFactorCap hd and d.physicalFactorModuli_subset_cap hd. For q in Q, (Finset.mem_Ioc.mp ((d.physicalFactorModuli_subset_cap hd) hq)).1 gives q>0; no new physical-positivity lemma or transpose admissibility is needed.",
+    "Locally prove/adapt the two short finite arithmetic types below: tau_k(q/gcd(q,r))<=tau_(k+1)(q), and 1<=tau_(k+1)(r) for r>0. Both are a single divisor term in fouvryTau_succ.",
+    "Then norm(Gr)<=w(r). Pointwise, rearrange (norm(Gq)*norm(Gr)/lcm)*tau_quotient into ((norm(Gq)*tau_quotient)*norm(Gr))/lcm. Apply mul_le_mul to bound numerator by w(q)*w(r), and div_le_div_of_nonneg_right with Nat.cast_nonneg for lcm. Convert the nonnegative quotient to abs(wq*wr/lcm).",
+    "For q in Q, abs(wq)=wq <=tau_3(q)*tau_(k+1)(q)<=tau_(3*(k+1))(q). The first step is mul_le_mul_of_nonneg_right of d.groupedFactorGamma_norm_le_tauThree hd q; the second is exact_mod_cast fouvryTau_mul_le 3 (k+1) q.",
+    "Apply the already imported qualified MathlibNt.AnalyticNumberTheory.LargeSieve.LcmWeightBounds.sum_abs_lcm_weight_le_log with j=3*(k+1), L, Q, w and that pointwise bound. Its resulting exponent is exactly 2*(3*(k+1))^2+1."
+  ],
+  "weighted_wrapper_supporting_full_types": {
+    "current_FactorFiber_path": "ImbalancedChen/Part3FactorFiberDivisor.lean",
+    "current_FactorFiber_sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+    "current_public_types": [
+      {
+        "name": "MediumAtom.groupedFactorGamma_norm_le_tauThree",
+        "kind": "theorem",
+        "private": false,
+        "line": 158,
+        "complete_source_header": "theorem MediumAtom.groupedFactorGamma_norm_le_tauThree\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (q : ℕ) :\n    ‖d.groupedFactorGamma q‖ ≤ (fouvryTau 3 q : ℝ)"
+      },
+      {
+        "name": "MediumAtom.one_le_physicalFactorCap",
+        "kind": "theorem",
+        "private": false,
+        "line": 172,
+        "complete_source_header": "theorem MediumAtom.one_le_physicalFactorCap\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.physicalFactorCap"
+      },
+      {
+        "name": "MediumAtom.physicalFactorModuli_subset_cap",
+        "kind": "theorem",
+        "private": false,
+        "line": 181,
+        "complete_source_header": "theorem MediumAtom.physicalFactorModuli_subset_cap\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.physicalFactorModuli ⊆ Finset.Ioc 0 (Nat.floor d.physicalFactorCap)"
+      }
+    ],
+    "current_lcm_source_path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LcmWeightBounds.lean",
+    "current_lcm_source_sha256": "6be009d9f4d15468db14dca03434e22259f1d26fe137005f888c76227c1d74ea",
+    "current_public_lcm_type": [
+      {
+        "name": "sum_abs_lcm_weight_le_log",
+        "kind": "theorem",
+        "private": false,
+        "line": 107,
+        "complete_source_header": "theorem sum_abs_lcm_weight_le_log (j : ℕ) {L : ℝ} (hL : 1 ≤ L)\n    (Q : Finset ℕ) (hQ : Q ⊆ Ioc 0 ⌊L⌋₊) (c : ℕ → ℝ)\n    (hc : ∀ q ∈ Q, |c q| ≤ (fouvryTau j q : ℝ)) :\n    (∑ q ∈ Q, ∑ r ∈ Q, |c q * c r / (q.lcm r : ℝ)|) ≤\n      (1 + Real.log L) ^ (2 * j ^ 2 + 1)"
+      }
+    ],
+    "two_local_arithmetic_extractions": [
+      {
+        "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmallDelta.lean",
+        "sha256": "08d4ab419a64dd4bbadc975fcac8036b6ac60fa301da02791275e2e862f803b4",
+        "declaration": {
+          "name": "fouvryTau_div_le_succ",
+          "kind": "theorem",
+          "private": false,
+          "line": 83,
+          "complete_source_header": "theorem fouvryTau_div_le_succ (κ : ℕ) {q δ : ℕ} (hq : q ≠ 0) (hdq : δ ∣ q) :\n    fouvryTau κ (q / δ) ≤ fouvryTau (κ + 1) q"
+        }
+      },
+      {
+        "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryZeroModeBound.lean",
+        "sha256": "ac3c405cbfabd7c4bb8e2e0575d8f5b4f2671d5291602c643319ffa0a67add85",
+        "declaration": {
+          "name": "one_le_fouvryTau_succ",
+          "kind": "theorem",
+          "private": false,
+          "line": 18,
+          "complete_source_header": "theorem one_le_fouvryTau_succ (κ : ℕ) {q : ℕ} (hq : q ≠ 0) :\n    1 ≤ fouvryTau (κ + 1) q"
+        }
+      }
+    ],
+    "fixed_goldbach_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+    "source_pin_blob_checks_reference": {
+      "path": ".lake/proof-continuation/source-reviews/20261016-actual-complex-zero-covariance-minimal-reuse-scope.json",
+      "sha256": "3771b6f457de1e7d1cae0c70c4215059e9545ea556c53ebf2b831dbd9cc2eb8b"
+    }
+  },
+  "light_import_roots": {
+    "sole_direct_import": "ImbalancedChen.Part3TransposedDispersion",
+    "actual_parent_source_sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+    "new_foreign_direct_roots": [],
+    "method": "Read candidate import header and match parent Transposed2814 bytes; the prior fresh-v2 closure report already binds the reachable LcmWeightBounds path. No new all-project or recursive census was run for this source-only adapter review."
+  },
+  "not_claimed": [
+    "No review of the later appended raw-zero/primitive main consumers in this captured source.",
+    "No proof or acceptance of the proposed weighted wrapper has been produced by this reviewer.",
+    "No zeroMain=literal U/V, nonzero-frequency estimate or RestrictedMediumObligation endpoint."
+  ],
+  "evidence_boundary": {
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "compiler_or_checker_invoked": false,
+    "mathematical_source_modified": false,
+    "review_artifact_snapshot_written": true,
+    "object_content_or_object_graph_examined": false,
+    "elaborated_type_export_performed": false,
+    "axiom_audit_performed": false,
+    "acceptance_mutated": false,
+    "scope": "SOURCE_ONLY scoped draft review and exact finite wrapper proof plan. No linter, object, elaborated type, axiom, kernel or build acceptance."
+  }
+}

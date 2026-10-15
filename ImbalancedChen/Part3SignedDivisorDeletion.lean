@@ -49,10 +49,12 @@ theorem MediumAtom.signedError_eq_clean_add_divisorBeta (d : MediumAtom) :
     d.signedError = d.cleanedBetaAtom.signedError + d.divisorBetaAtom.signedError := by
   conv_lhs =>
     unfold MediumAtom.signedError MediumAtom.discrepancy
-    simp_rw [d.beta_eq_clean_add_divisorBeta]
+    simp only [d.beta_eq_clean_add_divisorBeta]
   simp only [MediumAtom.signedError, MediumAtom.discrepancy,
     MediumAtom.cleanedBetaAtom, MediumAtom.divisorBetaAtom,
+    MediumAtom.alphaCarrier, MediumAtom.betaCarrier,
     mul_add, add_mul, Finset.sum_add_distrib]
+  rfl
 
 theorem MediumAtom.signedError_sub_clean_eq_divisorBeta (d : MediumAtom) :
     d.signedError - d.cleanedBetaAtom.signedError = d.divisorBetaAtom.signedError := by
@@ -223,9 +225,10 @@ theorem MediumAtom.signedError_sub_clean_norm_le_finite
         ∑ n ∈ d.betaCarrier, ‖d.divisorBeta n‖ := hb
     _ ≤ 2 * (2 * d.U) * d.physicalFactorCap *
         ∑ n ∈ d.betaCarrier, ‖d.divisorBeta n‖ := by
-      gcongr
-      · exact card_alphaCarrier_le hd
-      · exact card_complexFactorLabels_le hd
+      apply mul_le_mul_of_nonneg_right _ (by positivity)
+      exact mul_le_mul
+        (mul_le_mul_of_nonneg_left (card_alphaCarrier_le hd) (by norm_num))
+        (card_complexFactorLabels_le hd) (Nat.cast_nonneg _) (by linarith [hd.1])
     _ = _ := by ring
 
 /-- Finite divisor inclusion, on the original signed residue. -/
@@ -275,6 +278,7 @@ theorem MediumAtom.U_mul_physicalFactorCap_le
         mul_lt_mul_of_pos_right hg1 (by positivity)
       _ = _ := by ring
   have hprod : d.U * d.Q1 * d.Q2 * d.Q3 ≤ d.scale ^ (1 - 9 * sigma) := by
+    apply le_of_lt
     calc
       _ ≤ d.U * d.Q1 * d.Q2 * d.Q3 ^ 2 :=
         mul_le_mul_of_nonneg_left hQ3sq (by positivity)
@@ -301,7 +305,7 @@ theorem divisorBetaMass_subpower (B : ℕ) (kappa : ℝ) {epsilon : ℝ}
   have heta : 0 < eta := div_pos hepsilon hKpos
   have hKeta : K * eta = epsilon := by dsimp [eta]; field_simp [hKpos.ne']
   obtain ⟨C, hC, hbound⟩ := PolynomialResidueDivisorBound.fouvryTau_le_const_rpow
-    (k := 2 ^ B + 1) (by omega) heta
+    (k := 2 ^ B + 1) (by exact Nat.succ_le_succ (Nat.zero_le (2 ^ B))) heta
   refine ⟨C, hC, fun sigma c0 d hc0 hd ↦ ?_⟩
   have ha := mediumAdmissible_residue_ne_zero hc0 hd
   have hx := one_le_scale hd
@@ -335,9 +339,9 @@ theorem signedError_sub_clean_power_bound (B : ℕ) (sigma kappa c0 : ℝ)
     _ = 4 * (d.U * d.physicalFactorCap) *
         ∑ n ∈ d.betaCarrier, ‖d.divisorBeta n‖ := by ring
     _ ≤ 4 * (8 * d.scale ^ (1 - 9 * sigma)) * (C * d.scale ^ sigma) := by
-      gcongr
-      · exact d.U_mul_physicalFactorCap_le hd
-      · exact hmass sigma c0 d hc0 hd
+      exact mul_le_mul
+        (mul_le_mul_of_nonneg_left (d.U_mul_physicalFactorCap_le hd) (by norm_num))
+        (hmass sigma c0 d hc0 hd) (by positivity) (by positivity)
     _ = (32 * C) * (d.scale ^ (1 - 9 * sigma) * d.scale ^ sigma) := by ring
     _ = _ := by
       rw [← Real.rpow_add hx, show 1 - 9 * sigma + sigma = 1 - 8 * sigma by ring]
@@ -445,7 +449,11 @@ theorem MediumAtom.commonLargeBetaGCDException_cleanedBetaAtom_eq_zero
   · rcases h with h | h
     · simp [MediumAtom.cleanedBetaAtom, MediumAtom.cleanedBeta, h]
     · simp [MediumAtom.cleanedBetaAtom, MediumAtom.cleanedBeta, h]
-  · simp only [MediumAtom.cleanedBetaAtom, if_neg h, ite_self]
+  · have hclean : ¬((n₁ : ℤ) ∣ d.cleanedBetaAtom.residue ∨
+        (n₂ : ℤ) ∣ d.cleanedBetaAtom.residue) := by
+      change ¬((n₁ : ℤ) ∣ d.residue ∨ (n₂ : ℤ) ∣ d.residue)
+      exact h
+    simp only [if_neg hclean, ite_self]
 
 /-- The first gcd exclusion for the same cleaned W is now free of the
 original union exception, at the original U,V and polynomial residue scale. -/
@@ -460,7 +468,11 @@ theorem commonLargeBetaGCDW_cleaned_polynomial_residue_bound (kappa : ℝ) {epsi
   obtain ⟨C, hC, hbound⟩ := commonLargeBetaGCDW_polynomial_residue_largeGCD_bound kappa hepsilon
   refine ⟨C, hC, fun B sigma c0 d hd Y hY ↦ ?_⟩
   have hb := hbound B sigma c0 d.cleanedBetaAtom (mediumAdmissible_cleanedBetaAtom hd) Y hY
-  simpa only [d.commonLargeBetaGCDException_cleanedBetaAtom_eq_zero Y, norm_zero, add_zero] using hb
+  have hU : d.cleanedBetaAtom.U = d.U := rfl
+  have hV : d.cleanedBetaAtom.V = d.V := rfl
+  have hscale : d.cleanedBetaAtom.scale = d.scale := rfl
+  simpa only [d.commonLargeBetaGCDException_cleanedBetaAtom_eq_zero Y,
+    norm_zero, add_zero, hU, hV, hscale] using hb
 
 end
 

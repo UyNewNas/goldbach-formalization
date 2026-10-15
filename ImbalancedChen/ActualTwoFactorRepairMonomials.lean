@@ -20,7 +20,7 @@ namespace ImbalancedChen
 
 noncomputable section
 
-private theorem twoFactorRepair_monomials {x δ θ α A B a b : ℝ}
+theorem twoFactorRepair_monomials {x δ θ α A B a b : ℝ}
     (hx : 1 < x) (hδ : δ ≤ 1 / 12) (hθ : θ ≤ 5 / 8)
     (hApos : 0 < A) (hBpos : 0 < B) (hapos : 0 < a) (hbpos : 0 < b)
     (hAB : A * B = x ^ (θ - 2 * δ))

@@ -33,8 +33,9 @@ theorem actualDwell_original_tail_square {D : ℝ} (front tail : List ℕ)
   have hs := hfull (front.length + i) (by simp only [List.length_append]; omega)
   have htake : (front ++ tail).take (front.length + i) = front ++ tail.take i := by
     rw [List.take_append, List.take_of_length_le (by omega), Nat.add_sub_cancel_left]
-  have hget : (front ++ tail)[front.length + i] = tail[i] := by
-    rw [List.getElem_append_right (by omega), Nat.add_sub_cancel_left]
+  have hget : (front ++ tail)[front.length + i]'(by
+      simp only [List.length_append]; omega) = tail[i] := by
+    simpa only [Nat.add_comm] using (List.getElem_append_right' front hi).symm
   simpa only [htake, hget, List.map_append, List.prod_append,
     actualNatList_cast_prod] using hs
 
@@ -62,7 +63,7 @@ private theorem actualDwell_selected_one_start_budget {D : ℝ}
   apply (le_div_iff₀ hbpos).mpr
   cases i with
   | zero => simpa only [List.take_zero, List.map_nil, List.prod_nil,
-      List.getElem_cons_zero, one_mul, mul_comm] using hstart
+      List.getElem_cons_zero, one_mul, mul_one, mul_comm] using hstart
   | succ i =>
       have hit : i < tail.length := by simpa only [List.length_cons, Nat.succ_lt_succ_iff] using hi
       have hs := actualDwell_original_tail_square front tail hfull i hit

@@ -85,7 +85,8 @@ theorem actualNatList_cast_prod (input : List ℕ) :
     (input.map (fun p : ℕ => (p : ℝ))).prod = (input.prod : ℝ) := by
   induction input with
   | nil => simp
-  | cons p input ih => simp [ih, Nat.cast_mul]
+  | cons p input ih =>
+      rw [List.map_cons, List.prod_cons, List.prod_cons, Nat.cast_mul, ih]
 
 /-- The two complementary natural factors are products of the allocated
 original subsequences; no real product is rounded to an integer. -/

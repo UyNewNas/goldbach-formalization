@@ -143,7 +143,7 @@ theorem actualExtendedThirdSelectedPair_arithmeticInputs {e κ δ : ℝ} {m : �
       x ^ (2 * θ - 1) ≤ (actualSelectedPairProduct yz p : ℝ) ∧
       (actualSelectedPairProduct yz p : ℝ) ≤
         x ^ actualSelectedSubproductUpper (1 + 3 * κ) θ := by
-  obtain ⟨_, _, hλ, hcell⟩ := actualExtendedThirdSelectedPair_wholeCell
+  obtain ⟨_, _, hlevel, hcell⟩ := actualExtendedThirdSelectedPair_wholeCell
     he0 he hmesh hfull ht yz hk
   obtain ⟨hgate, hend⟩ := hcell _ hs
   have hpert := actualSelectedSubproductV_residue_margin he0.le hκ hend

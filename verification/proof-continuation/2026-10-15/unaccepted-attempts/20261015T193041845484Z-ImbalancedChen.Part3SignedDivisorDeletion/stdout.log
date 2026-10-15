@@ -1,0 +1,66 @@
+ImbalancedChen/Part3SignedDivisorDeletion.lean:49:85: error: unsolved goals
+d : MediumAtom
+⊢ ∑ x ∈ factorCarrier d.Q1,
+        ∑ x_1 ∈ factorCarrier d.Q2,
+          ∑ x_2 ∈ factorCarrier d.Q3,
+            d.gamma1 x * d.gamma2 x_1 * d.gamma3 x_2 *
+              ∑ x_3 ∈ d.alphaCarrier,
+                ∑ x_4 ∈ d.betaCarrier,
+                  d.alpha x_3 * d.cleanedBeta x_4 *
+                    ((if ↑(x_3 * x_4) % ↑(x * x_1 * x_2) = d.residue % ↑(x * x_1 * x_2) then 1 else 0) -
+                      (if (x_3 * x_4).Coprime (x * x_1 * x_2) then 1 else 0) / ↑(x * x_1 * x_2).totient) +
+      ∑ x ∈ factorCarrier d.Q1,
+        ∑ x_1 ∈ factorCarrier d.Q2,
+          ∑ x_2 ∈ factorCarrier d.Q3,
+            d.gamma1 x * d.gamma2 x_1 * d.gamma3 x_2 *
+              ∑ x_3 ∈ d.alphaCarrier,
+                ∑ x_4 ∈ d.betaCarrier,
+                  d.alpha x_3 * d.divisorBeta x_4 *
+                    ((if ↑(x_3 * x_4) % ↑(x * x_1 * x_2) = d.residue % ↑(x * x_1 * x_2) then 1 else 0) -
+                      (if (x_3 * x_4).Coprime (x * x_1 * x_2) then 1 else 0) / ↑(x * x_1 * x_2).totient) =
+    ∑ q1 ∈ factorCarrier d.Q1,
+        ∑ q2 ∈ factorCarrier d.Q2,
+          ∑ q3 ∈ factorCarrier d.Q3,
+            d.gamma1 q1 * d.gamma2 q2 * d.gamma3 q3 *
+              ∑
+                n ∈
+                  { U := d.U, V := d.V, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue,
+                      intervalLo := d.intervalLo, intervalHi := d.intervalHi, alpha := d.alpha, beta := d.cleanedBeta,
+                      gamma1 := d.gamma1, gamma2 := d.gamma2, gamma3 := d.gamma3 }.alphaCarrier,
+                ∑
+                  m ∈
+                    { U := d.U, V := d.V, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue,
+                        intervalLo := d.intervalLo, intervalHi := d.intervalHi, alpha := d.alpha, beta := d.cleanedBeta,
+                        gamma1 := d.gamma1, gamma2 := d.gamma2, gamma3 := d.gamma3 }.betaCarrier,
+                  d.alpha n * d.cleanedBeta m *
+                    ((if ↑(n * m) % ↑(q1 * q2 * q3) = d.residue % ↑(q1 * q2 * q3) then 1 else 0) -
+                      (if (n * m).Coprime (q1 * q2 * q3) then 1 else 0) / ↑(q1 * q2 * q3).totient) +
+      ∑ q1 ∈ factorCarrier d.Q1,
+        ∑ q2 ∈ factorCarrier d.Q2,
+          ∑ q3 ∈ factorCarrier d.Q3,
+            d.gamma1 q1 * d.gamma2 q2 * d.gamma3 q3 *
+              ∑
+                n ∈
+                  { U := d.U, V := d.V, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue,
+                      intervalLo := d.intervalLo, intervalHi := d.intervalHi, alpha := d.alpha, beta := d.divisorBeta,
+                      gamma1 := d.gamma1, gamma2 := d.gamma2, gamma3 := d.gamma3 }.alphaCarrier,
+                ∑
+                  m ∈
+                    { U := d.U, V := d.V, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue,
+                        intervalLo := d.intervalLo, intervalHi := d.intervalHi, alpha := d.alpha, beta := d.divisorBeta,
+                        gamma1 := d.gamma1, gamma2 := d.gamma2, gamma3 := d.gamma3 }.betaCarrier,
+                  d.alpha n * d.divisorBeta m *
+                    ((if ↑(n * m) % ↑(q1 * q2 * q3) = d.residue % ↑(q1 * q2 * q3) then 1 else 0) -
+                      (if (n * m).Coprime (q1 * q2 * q3) then 1 else 0) / ↑(q1 * q2 * q3).totient)
+ImbalancedChen/Part3SignedDivisorDeletion.lean:451:4: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `implicit` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    instDecidableOr
+  has type
+    Decidable (↑n₁ ∣ d.cleanedBetaAtom.residue ∨ ↑n₂ ∣ d.cleanedBetaAtom.residue)
+  but is expected to have type
+    Decidable (↑n₁ ∣ d.residue ∨ ↑n₂ ∣ d.residue)
+  in the application
+    @ite ℂ (↑n₁ ∣ d.residue ∨ ↑n₂ ∣ d.residue) instDecidableOr

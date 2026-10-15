@@ -30,7 +30,7 @@ def actualSelectedPairFactors (D A : ℝ) (yz : Bool) (p : Fin 3 → ℕ)
     let ab := actualTwoCapacityFactors A (p 0 :: p 1 :: p 2 :: tail)
     (ab.1, ab.2, 1)
 
-private theorem selectedPair_monomials {x δ θ α A a b c : ℝ}
+theorem selectedPair_monomials {x δ θ α A a b c : ℝ}
     (hx : 1 < x) (hApos : 0 < A) (hapos : 0 < a) (hbpos : 0 < b) (hcpos : 0 < c)
     (hcap : A * b * c ≤ x ^ (θ - 2 * δ))
     (hblower : x ^ (2 * θ - 1) ≤ b)

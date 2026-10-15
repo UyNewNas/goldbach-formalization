@@ -1,0 +1,116 @@
+{
+  "status": "FULL_SOURCE_ONLY_INDEPENDENT_SEMANTICS_NO_TARGET_ISSUES_FOUND",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "review_date": "2026-10-16",
+  "candidate": "ImbalancedChen.ActualFrozenSelectedPairAssignment",
+  "source_sha256": "06fc195db72eac879bd165a8691387f8e9651b96f0e93436d3e4a024bcb03e52",
+  "direct_imports": [
+    "ImbalancedChen.ActualFrozenSlotCoefficientRegrouping"
+  ],
+  "source_snapshot_dependencies": [
+    {
+      "file": "ImbalancedChen/ActualFrozenSlotCoefficientRegrouping.lean",
+      "sha256": "96ff0b5e60372b085eef73995d4d583edb7d4d29e7eb2854168fa504e0a9725c"
+    },
+    {
+      "file": "ImbalancedChen/ActualFrozenSelectedPairSlots.lean",
+      "sha256": "e62e68a31cf286a14e327ef768eb962a8724afa883f1fec8dbfbfee66a232af2"
+    },
+    {
+      "file": "ImbalancedChen/ActualRoughVectorEndpointBudget.lean",
+      "sha256": "7bb4f5b5113fcfb03ff77813d953c110f8c86a1e02a27c6c702e1799f3d8d4fb"
+    }
+  ],
+  "complete_declarations": [
+    {
+      "name": "actualFrozenSelectedPairAssignment",
+      "kind": "def",
+      "visibility": "public",
+      "line": 21,
+      "complete_signature": "def actualFrozenSelectedPairAssignment {n : ℕ} (D A : ℝ) (yz : Bool)\n    (upper : Fin n → ℕ) (p : Fin 3 → Fin n) (tail : List (Fin n)) : Fin n → Fin 3",
+      "independent_assessment": "The actual word records membership in the already computed frozen upper slots: group0 first, then group1, else group2. No caller word or different allocation is used."
+    },
+    {
+      "name": "actualFrozenSelectedPairAssignment_fibres",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 28,
+      "complete_signature": "theorem actualFrozenSelectedPairAssignment_fibres {n : ℕ} (D A : ℝ) (yz : Bool)\n    (upper : Fin n → ℕ) (p : Fin 3 → Fin n) (tail : List (Fin n))\n    (hnodup : (p 0 :: p 1 :: p 2 :: tail).Nodup)\n    (hcover : ∀ i, i ∈ p 0 :: p 1 :: p 2 :: tail) (i : Fin n) :\n    let slots := actualFrozenSelectedPairSlots D A yz upper p tail\n    (actualFrozenSelectedPairAssignment D A yz upper p tail i = 0 ↔ i ∈ slots.1) ∧\n      (actualFrozenSelectedPairAssignment D A yz upper p tail i = 1 ↔ i ∈ slots.2.1) ∧\n      (actualFrozenSelectedPairAssignment D A yz upper p tail i = 2 ↔ i ∈ slots.2.2)",
+      "independent_assessment": "Original label Nodup transfers through the exact original slot permutation and gives all pairwise group disjointness. Original hcover gives exhaustive membership. The resulting three iff statements identify the membership fibres exactly, even though no list-order equality is asserted."
+    },
+    {
+      "name": "actualFrozenSelectedPairAssignment_card",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 59,
+      "complete_signature": "theorem actualFrozenSelectedPairAssignment_card (n : ℕ) :\n    Fintype.card (Fin n → Fin 3) = 3 ^ n",
+      "independent_assessment": "Entire Fin n -> Fin 3 word space has exactly 3^n elements, including n=0. No arithmetic or support premise is required."
+    },
+    {
+      "name": "actualFrozenSelectedPairAssignment_uniform_card",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 64,
+      "complete_signature": "theorem actualFrozenSelectedPairAssignment_uniform_card {n : ℕ} {x ρ level : ℝ}\n    (hx : 1 < x) (hρ : 0 < ρ) (hlevel : level ≤ 5 / 8)\n    (actual : Fin n → ℕ) (p : Fin 3 → Fin n) (tail : List (Fin n))\n    (hslots : (p 0 :: p 1 :: p 2 :: tail).Perm (List.finRange n))\n    (hpositive : ∀ i ∈ p 0 :: p 1 :: p 2 :: tail, 0 < actual i)\n    (hrough : ∀ i ∈ p 0 :: p 1 :: p 2 :: tail, x ^ ρ ≤ (actual i : ℝ))\n    (hfull : actualDwellSupport (x ^ level) ((p 0 :: p 1 :: p 2 :: tail).map actual)) :\n    Fintype.card (Fin n → Fin 3) ≤ 3 ^ actualRoughVectorRankBound ρ",
+      "independent_assessment": "For any actual original vector with positive entries, x^rho roughness, original full Dwell support at level<=5/8, and labelled vector Perm(finRange n), the previously proved rough vector length bound gives n<=R(rho). Then Nat.pow_le_pow_right with 3>0 gives uniform 3^R. No remaining-vector budget or supplied allocation is used."
+    },
+    {
+      "name": "actualFrozenSelectedPairAssignment_sum_partition",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 85,
+      "complete_signature": "theorem actualFrozenSelectedPairAssignment_sum_partition {ι M : Type*}\n    [DecidableEq ι] [AddCommMonoid M] {n : ℕ} (J : Finset ι)\n    (D A : ι → ℝ) (yz : ι → Bool) (upper : ι → Fin n → ℕ)\n    (p : ι → Fin 3 → Fin n) (tail : ι → List (Fin n)) (F : ι → M) :\n    (∑ word : Fin n → Fin 3,\n      ∑ j ∈ J.filter (fun j =>\n        actualFrozenSelectedPairAssignment (D j) (A j) (yz j) (upper j) (p j) (tail j) = word), F j) =\n      ∑ j ∈ J, F j",
+      "independent_assessment": "Exact finite partition of the original whole-box family J by its computed words, for arbitrary AddCommMonoid-valued F. Both original signed scalar and test can stay inside F(j); no coordinate tuple fibre is cut, no term is dropped, and no sign or nonnegativity premise is added."
+    }
+  ],
+  "fixed_api_checks": [
+    {
+      "name": "List.nodup_append",
+      "file": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/List/Pairwise.lean",
+      "sha256": "0dbf6798e805477e651b1ff6fe472f5fb14beb37d6883167d36a81cba9c122ed",
+      "line": 294,
+      "signature": "(l1++l2).Nodup iff l1.Nodup and l2.Nodup and forall a in l1, forall b in l2, a!=b",
+      "assessment": "hne1/hne2 are used with exactly a, membership, b, membership, equality, matching the fixed five-argument disjointness witness."
+    },
+    {
+      "name": "List.Perm.nodup_iff and mem_iff",
+      "assessment": "Original permutation is slots.concat Perm original; .nodup_iff.mpr transfers original Nodup to slots, while .mem_iff.mpr transfers original cover to the slot concatenation. Directions are correct."
+    },
+    {
+      "name": "actualRoughPrimeVector_length_le",
+      "file": "ImbalancedChen/ActualRoughVectorEndpointBudget.lean",
+      "assessment": "Original positive, nonempty mapped vector, x>1,rho>0,level<=5/8, roughness and original full Dwell support pay its exact hypotheses. Map length and original Perm(finRange n) give n<=R."
+    },
+    {
+      "name": "Nat.pow_le_pow_right",
+      "file": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/Nat/Basic.lean",
+      "sha256": "92edcd298633bc57f70cf6c9cea73a3b6f984b91b3c8cc8fcc72f57bada0ee36",
+      "line": 808,
+      "signature": "n>0 -> i<=j -> n^i<=n^j",
+      "assessment": "The source supplies 0<3 and the derived n<=R, matching the fixed interface."
+    },
+    {
+      "name": "Fintype.card function / Finset.sum_filter / sum_comm",
+      "assessment": "Fintype cardinal gives3^n; the finite partition sums each original j under exactly its computed word once. Signed real F is allowed through AddCommMonoid Real."
+    }
+  ],
+  "issues": [],
+  "important_scope_boundaries": [
+    "The word fibre theorem identifies label membership only. It does not say each original group list equals a canonical sorted or finRange-filtered list in order. Future common-carrier transport can use original Nodup plus fibre membership to prove a Perm, then product-only regrouping invariance.",
+    "The word budget is uniform for each original arity n paid by a genuine original support/roughness witness. Unsupported empty-source boxes or variable arities must be accounted for in the actual family dictionary.",
+    "Whole-box family partition is exact for arbitrary F but does not identify an arbitrary original first-exit coefficient with a full Cartesian coordinate box. The source order, squarefree/diagonal mask and scalar dictionary remain separate.",
+    "No grouped arithmetic mean, small-factor attachment or final hUpper/final theorem is proved by this finite assignment leaf."
+  ],
+  "proper_dag": "Owner tail is producing the fresh current source DAG; this independent semantic report does not claim an independently accepted imported closure.",
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "frozen_lean_modified": false,
+    "python_bytecode_generated": false,
+    "imported_object_acceptance": false,
+    "kernel_replay_or_axiom_acceptance": false,
+    "runtime_pass_claim": false
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "status": "FULL_SOURCE_ONLY_INDEPENDENT_SEMANTICS_AFTER_EXACT_SUM_PRODUCT_API_REPAIR",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "review_date": "2026-10-16",
+  "candidate": "ImbalancedChen.ActualFrozenSlotCoefficientRegrouping",
+  "source_sha256": "96ff0b5e60372b085eef73995d4d583edb7d4d29e7eb2854168fa504e0a9725c",
+  "direct_imports": [
+    "ImbalancedChen.ActualFrozenSelectedPairSlots"
+  ],
+  "declarations": [
+    {
+      "kind": "def",
+      "name": "actualPrimeSlotBox",
+      "visibility": "public",
+      "line": 26,
+      "signature": "def actualPrimeSlotBox {ι : Type*} (B : ι → Finset ℕ) : List ι → Finset (List ℕ)\n  | [] => {[]}\n  | i :: input => ((B i).product (actualPrimeSlotBox B input)).image\n      (fun pq => pq.1 :: pq.2)\n\ntheorem actualPrimeSlotBox_sum_cons {ι : Type*} (B : ι → Finset ℕ)\n    (i : ι) (input : List ι) (F : List ℕ → ℝ) :\n    (∑ ps ∈ actualPrimeSlotBox B (i :: input), F ps) =\n      ∑ q ∈ B i, ∑ ps ∈ actualPrimeSlotBox B input, F (q :: ps)",
+      "assessment": "Recursive cons image of the full Cartesian coordinate product. Cons is globally injective, so the image preserves the entire ordered tuple with no merging of assignments, even when slot labels repeat or prime sets overlap."
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeSlotBox_sum_cons",
+      "visibility": "public",
+      "line": 31,
+      "signature": "theorem actualPrimeSlotBox_sum_cons {ι : Type*} (B : ι → Finset ℕ)\n    (i : ι) (input : List ι) (F : List ℕ → ℝ) :\n    (∑ ps ∈ actualPrimeSlotBox B (i :: input), F ps) =\n      ∑ q ∈ B i, ∑ ps ∈ actualPrimeSlotBox B input, F (q :: ps)",
+      "assessment": "sum_image uses explicit InjOn cons proved by head/tail injection and Prod.ext. Fixed sum_product requires all three explicit parameters; current proof supplies them."
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeSlotBox_length",
+      "visibility": "public",
+      "line": 42,
+      "signature": "theorem actualPrimeSlotBox_length {ι : Type*} (B : ι → Finset ℕ) (input : List ι) :\n    ∀ ps ∈ actualPrimeSlotBox B input, ps.length = input.length",
+      "assessment": "Every generated list has exactly the original slot-list length, including the zero-slot singleton [[]]."
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeSlotBox_prime",
+      "visibility": "public",
+      "line": 52,
+      "signature": "theorem actualPrimeSlotBox_prime {ι : Type*} (B : ι → Finset ℕ) (input : List ι)\n    (hprime : ∀ i ∈ input, ∀ q ∈ B i, Nat.Prime q) :\n    ∀ ps ∈ actualPrimeSlotBox B input, ∀ q ∈ ps, Nat.Prime q",
+      "assessment": "If every original coordinate finset contains primes, every generated tuple consists of primes; no Nodup or disjointness is introduced."
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeSlotBox_prod_le_upper",
+      "visibility": "public",
+      "line": 68,
+      "signature": "theorem actualPrimeSlotBox_prod_le_upper {ι : Type*} (B : ι → Finset ℕ)\n    (upper : ι → ℕ) (input : List ι)\n    (hsize : ∀ i ∈ input, ∀ q ∈ B i, q ≤ upper i) :\n    ∀ ps ∈ actualPrimeSlotBox B input, ps.prod ≤ (input.map upper).prod",
+      "assessment": "Pointwise q<=upper_i gives each tuple product <= product of the corresponding group endpoints by induction and Nat multiplication monotonicity. No prime or positivity assumption is necessary."
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeSlotBox_product_sum_perm",
+      "visibility": "public",
+      "line": 84,
+      "signature": "theorem actualPrimeSlotBox_product_sum_perm {ι : Type*} (B : ι → Finset ℕ)\n    {input₁ input₂ : List ι} (hperm : input₁.Perm input₂) (F : ℕ → ℝ) :\n    (∑ ps ∈ actualPrimeSlotBox B input₁, F ps.prod) =\n      ∑ ps ∈ actualPrimeSlotBox B input₂, F ps.prod",
+      "assessment": "A permutation of labelled slot lists preserves the sum of F(tuple.prod). Cons case factors off q, swap case commutes the two independent sums and uses commutativity/associativity of Nat multiplication, trans composes. Does not claim invariance for arbitrary slot-dependent tuple functions."
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeSlotBox_product_sum_append",
+      "visibility": "public",
+      "line": 110,
+      "signature": "theorem actualPrimeSlotBox_product_sum_append {ι : Type*} (B : ι → Finset ℕ)\n    (left right : List ι) (F : ℕ → ℝ) :\n    (∑ ps ∈ actualPrimeSlotBox B (left ++ right), F ps.prod) =\n      ∑ ps ∈ actualPrimeSlotBox B left, ∑ qs ∈ actualPrimeSlotBox B right,\n        F (ps.prod * qs.prod)",
+      "assessment": "The full concatenated Cartesian box sum factors exactly as a double sum over the two full group boxes. The integrand sees only the product, so no boundary order condition or tuple-decision fibre is used."
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeTuple_sum_by_product",
+      "visibility": "public",
+      "line": 124,
+      "signature": "theorem actualPrimeTuple_sum_by_product (T : Finset (List ℕ)) (F : ℕ → ℝ) :\n    (∑ ps ∈ T, F ps.prod) =\n      ∑ n ∈ T.image List.prod, (actualPrimeTupleCoefficient T n : ℝ) * F n",
+      "assessment": "Exact grouping over the product image counts every tuple in its full fibre by actualPrimeTupleCoefficient. Fixed sum_fiberwise_of_maps_to has fibre sum equal to original sum, so the reverse rewrite is correct."
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeTuple_threeGroup_sum_normalized",
+      "visibility": "public",
+      "line": 143,
+      "signature": "theorem actualPrimeTuple_threeGroup_sum_normalized\n    (T₁ T₂ T₃ : Finset (List ℕ)) (m₁ m₂ m₃ : ℕ) (c : ℝ) (H : ℕ → ℝ) :\n    (∑ ps ∈ T₁, ∑ qs ∈ T₂, ∑ rs ∈ T₃, c * H (ps.prod * qs.prod * rs.prod)) =\n      ∑ a ∈ T₁.image List.prod, ∑ b ∈ T₂.image List.prod, ∑ d ∈ T₃.image List.prod,\n        (c * (m₁.factorial : ℝ) * (m₂.factorial : ℝ) * (m₃.factorial : ℝ)) *\n          actualNormalizedPrimeTupleCoefficient T₁ m₁ a *\n          actualNormalizedPrimeTupleCoefficient T₂ m₂ b *\n          actualNormalizedPrimeTupleCoefficient T₃ m₃ d * H (a * b * d)",
+      "assessment": "Unconditional exact three-group identity for arbitrary finite tuple carriers, group sizes, signed c, and H. Grouping each finite sum produces the three raw fibre coefficients; the existing scalar identity moves precisely the three factorials into c once. No coefficient bound or primeness is an input to this identity."
+    },
+    {
+      "kind": "theorem",
+      "name": "actualFrozenSelectedPair_signed_regroup",
+      "visibility": "public",
+      "line": 167,
+      "signature": "theorem actualFrozenSelectedPair_signed_regroup {ι : Type*}\n    (D A : ℝ) (yz : Bool) (upper : ι → ℕ) (p : Fin 3 → ι) (tail : List ι)\n    (B : ι → Finset ℕ) (c : ℝ) (H : ℕ → ℝ) :\n    let slots",
+      "assessment": "Uses the exact same frozen selected-pair slot permutation as the endpoint-target theorem, then append decomposition and the three-group identity. Original signed scalar and any reciprocal repeated-label factorial already inside it remain untouched."
+    },
+    {
+      "kind": "theorem",
+      "name": "actualFrozenSelectedPair_group_support",
+      "visibility": "public",
+      "line": 193,
+      "signature": "theorem actualFrozenSelectedPair_group_support {ι : Type*}\n    (D A : ℝ) (yz : Bool) (upper : ι → ℕ) (p : Fin 3 → ι) (tail : List ι)\n    (B : ι → Finset ℕ)\n    (hsize : ∀ i ∈ p 0 :: p 1 :: p 2 :: tail, ∀ q ∈ B i, q ≤ upper i) :\n    let slots",
+      "assessment": "All three product-image carriers obey exactly the corresponding frozen upper factors under coordinate endpoint bounds on the original list. Membership in each slot list is transferred through the same original Perm, not an assignment fibre."
+    },
+    {
+      "kind": "theorem",
+      "name": "actualPrimeSlotBox_normalized_abs_le_one",
+      "visibility": "public",
+      "line": 218,
+      "signature": "theorem actualPrimeSlotBox_normalized_abs_le_one {ι : Type*}\n    (B : ι → Finset ℕ) (input : List ι)\n    (hprime : ∀ i ∈ input, ∀ q ∈ B i, Nat.Prime q) (n : ℕ) :\n    |actualNormalizedPrimeTupleCoefficient (actualPrimeSlotBox B input) input.length n| ≤ 1",
+      "assessment": "Prime membership plus fixed slot count pays the existing factorial fibre bound on all n. Repeated primes, overlapping coordinate sets and off-support n remain covered by the one-bound theorem."
+    }
+  ],
+  "source_snapshot_dependencies": [
+    {
+      "file": "ImbalancedChen/ActualFrozenSelectedPairSlots.lean",
+      "sha256": "e62e68a31cf286a14e327ef768eb962a8724afa883f1fec8dbfbfee66a232af2"
+    },
+    {
+      "file": "ImbalancedChen/ActualPrimeTupleNormalization.lean",
+      "sha256": "ee2f0f12ef232b770dcc7136d8ce74f27fc830cad73ab78641fe18f1cabc5db0"
+    },
+    {
+      "file": "ImbalancedChen/ActualDwellSelectedRemainder.lean",
+      "sha256": "6915d9df1dade16830b1190b44dafe30a0caab6487bd45dcb8252fb33f8e21c2"
+    }
+  ],
+  "old_finding_and_rebind": {
+    "old_source_sha256": "e2b7d95c612787d9bf0415c5261b749806f14de48036498f4619188944e443f9",
+    "new_source_sha256": "96ff0b5e60372b085eef73995d4d583edb7d4d29e7eb2854168fa504e0a9725c",
+    "exact_single_replacement": {
+      "from": "exact Finset.sum_product",
+      "to": "exact Finset.sum_product _ _ _",
+      "count": 1
+    },
+    "inverse_recovers_exact_old_sha": true,
+    "all_12_signatures_imports_definitions_unchanged": true,
+    "finding": "The old naked Finset.sum_product was a forall with three explicit arguments s,t,f; exact requires their application to obtain the equality goal.",
+    "resolution": "Current proof supplies _ _ _, inferred from the actual product-finset sum target. No mathematics or public statement was changed."
+  },
+  "fixed_mathlib_api": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/BigOperators/Group/Finset/Sigma.lean",
+      "sha256": "795e36343a20dfc70b670f0b03c4c4e92a119e04d2d33904dd4438f78a30c764",
+      "line": 80,
+      "interface": "to_additive generated sum_product (s : Finset gamma) (t : Finset alpha) (f : gamma*alpha -> beta) : sum x in s.product t, f x = sum x in s, sum y in t, f(x,y)"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean",
+      "sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "line": 95,
+      "interface": "sum_image : Set.InjOn g s -> sum x in s.image g, f x = sum x in s, f(g x)"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean",
+      "sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "line": 256,
+      "interface": "to_additive generated sum_fiberwise_of_maps_to (h : forall i in s, g i in t) (f : iota -> M) : sum j in t, sum i in s.filter(g i=j), f i = sum i in s, f i",
+      "use": "Reverse direction expands original tuple sum into exact product fibres."
+    }
+  ],
+  "mathematical_conclusions": [
+    "Full ordered-coordinate Cartesian carriers preserve overlap and repeated-label multiplicity; product fibres count all collisions rather than quotienting them away.",
+    "Permutation invariance applies exactly to functions of the total product; fixed scalar c may contain the original sign and repeated-label reciprocal factorial.",
+    "The same computed upper slot partition is used in endpoint support, original box reordering, the three group boxes and normalized convolution coefficients.",
+    "Only one normalization by each group slot-count factorial is made, with all three restored exactly once in the same signed scalar.",
+    "All resulting normalized group coefficients are one-bounded globally from prime membership and fixed length, without pairwise distinctness."
+  ],
+  "issues_remaining_in_current_target": [],
+  "important_remaining_application_gates": [
+    "The theorem starts with the specifically defined full Cartesian actualPrimeSlotBox sum. A separate exact source dictionary must identify the original first-exit/prime-vector signed coefficient with this sum.",
+    "When coordinate prime sets overlap, these full boxes include repeated-prime diagonals and may include tuples violating the original strict prime order. A constant repeated-label factorial alone does not erase such diagonal or order-mask contributions. They must be accounted for by the original product-only H or a proved source identity, zero contribution, separated boxes, or a separately paid reserve.",
+    "If the original remainder/discrepancy test depends on slot data beyond the full modulus product, this product-only H theorem cannot be applied until an exact reduction to H(prod) is proved.",
+    "Prime-plus-Nodup coprimality is not automatically asserted on every overlapping Cartesian tuple; a later use requiring squarefree/coprime moduli must retain its actual mask or prove it separately.",
+    "Connecting the fixed group endpoint targets to the selected original fine boxes still needs actual endpoint membership, inflation/rough-rank support witnesses and all rounding budgets.",
+    "Actual grouped arithmetic means, original coefficient-family finite summation and small-factor attachment remain separate."
+  ],
+  "proper_dag": "Owner tail is preparing fresh v5 source DAG for exact current candidate; no owner or historical graph is used as independent imported-object acceptance.",
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "frozen_lean_modified": false,
+    "python_bytecode_generated": false,
+    "imported_object_acceptance": false,
+    "kernel_replay": false,
+    "axiom_audit": false,
+    "lean_pass_claim": false
+  }
+}
