@@ -50,7 +50,7 @@ jobs:
           import json, os
           ids=json.load(open('automation/dispatch.json')).get('reuse_artifact_ids', [])
           catalog=json.load(open('verification/parts/p0/queue/reuse-anchors.json'))
-          assert len(ids) <= 3 and len(ids) == len(set(ids))
+          assert len(ids) <= 6 and len(ids) == len(set(ids))
           assert all(type(i) is int and str(i) in catalog['artifacts'] for i in ids), 'Unapproved artifact identity'
           with open(os.environ['GITHUB_OUTPUT'],'a') as f:
             f.write('enabled='+('true' if ids else 'false')+'\n')

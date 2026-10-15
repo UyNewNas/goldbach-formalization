@@ -232,7 +232,7 @@ def sources_and_report():
                     "      simp only [blocks, List.flatten_cons, List.flatten_nil,\n"
                     "        List.map_append, List.map_nil]\n"
                     "    _ = expectedLengths := by\n"
-                    "      rw [" + ", ".join(f"block{b:02}_lengths" for b in range(12)) + "]\n\n")
+                    "      (rw [" + ", ".join(f"block{b:02}_lengths" for b in range(12)) + "]; rfl)\n\n")
     length_proof = length_type + b" := by\n" + (
         "  have hlist :\n"
         "      (List.ofFn approximations).map List.length =\n"

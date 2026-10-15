@@ -29,7 +29,7 @@ theorem blocks_lengths : blocks.flatten.map List.length = expectedLengths := by
       simp only [blocks, List.flatten_cons, List.flatten_nil,
         List.map_append, List.map_nil]
     _ = expectedLengths := by
-      rw [block00_lengths, block01_lengths, block02_lengths, block03_lengths, block04_lengths, block05_lengths, block06_lengths, block07_lengths, block08_lengths, block09_lengths, block10_lengths, block11_lengths]
+      (rw [block00_lengths, block01_lengths, block02_lengths, block03_lengths, block04_lengths, block05_lengths, block06_lengths, block07_lengths, block08_lengths, block09_lengths, block10_lengths, block11_lengths]; rfl)
 
 theorem approximation_lengths : ∀ i : Fin 186,
     (approximations i).length = 512 - firstU i := by

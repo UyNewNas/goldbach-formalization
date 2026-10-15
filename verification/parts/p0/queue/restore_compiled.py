@@ -44,7 +44,7 @@ def main():
     catalog = json.loads(catalog_path.read_text())
     dispatch = json.loads((ROOT / 'automation/dispatch.json').read_text())
     ids = dispatch.get('reuse_artifact_ids', [])
-    assert 1 <= len(ids) <= 3 and len(ids) == len(set(ids)), 'Invalid fixed artifact selection'
+    assert 1 <= len(ids) <= 6 and len(ids) == len(set(ids)), 'Invalid fixed artifact selection'
     assert len(sys.argv[1:]) == len(ids), 'Missing original artifact archive'
     anchors = [catalog['artifacts'][str(i)] for i in ids]
     bootstrap = json.loads((ROOT / '.lake/p0-queue/bootstrap/receipt.json').read_text())

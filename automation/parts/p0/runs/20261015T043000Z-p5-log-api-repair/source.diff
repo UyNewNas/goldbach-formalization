@@ -1,0 +1,91 @@
+--- /workspace/shared/chen-coordination/p5-buffer-boundary-evidence/CurrentChenUpsilon6LogDomain.lean	2026-10-15 13:15:17.069109883 +0900
++++ /workspace/shared/chen-coordination/p5-buffer-boundary/ImbalancedChen/CurrentChenUpsilon6LogDomain.lean	2026-10-15 13:30:26.560262948 +0900
+@@ -103,7 +103,7 @@
+           Real.log (p.2 : ℝ) / Real.log (N : ℝ)) ≤
+             (N : ℝ) ^ ((1 / 2 : ℝ) - 2 * (417 / 5000 : ℝ) - eta) ↔ _)
+     simp only [currentChenUpsilon6LogDomain, mem_inter_iff,
+-      mem_currentChenUpsilon6LogRectangle, mem_setOf_eq,
++      mem_currentChenUpsilon6LogRectangle, mem_ofPred_eq,
+       currentChenUpsilon6LogCoordinates, Matrix.cons_val_zero, Matrix.cons_val_one,
+       hlo, hhi, hlo', hhi', hgate]
+   constructor
+@@ -144,12 +144,13 @@
+ 
+ private theorem currentChenUpsilon6_density_eq_prod (x : Fin 2 → ℝ) :
+     1 / (x 0 * x 1) = ∏ i : Fin 2, 1 / x i := by
+-  simp [Fin.prod_univ_succ, one_div_mul_one_div]
++  simp [Fin.prod_univ_succ]
+ 
+ /-- Concrete integrability; no integrability assumption is left to callers. -/
+ theorem integrableOn_currentChenUpsilon6LogRectangle :
+     IntegrableOn (fun x : Fin 2 → ℝ => 1 / (x 0 * x 1))
+       currentChenUpsilon6LogRectangle := by
++  unfold currentChenUpsilon6LogRectangle
+   simpa only [← currentChenUpsilon6_density_eq_prod] using
+     (integrableOn_logPrimeBox_one_div
+       ![(417 / 5000 : ℝ), 19 / 125] ![(19 / 125 : ℝ), 59 / 250]
+@@ -167,7 +168,8 @@
+   constructor <;> linarith
+ 
+ private def currentChenUpsilon6ProductForm : (Fin 2 → ℝ) →L[ℝ] ℝ :=
+-  ContinuousLinearMap.proj 0 + ContinuousLinearMap.proj 1
++  (ContinuousLinearMap.proj (0 : Fin 2) : (Fin 2 → ℝ) →L[ℝ] ℝ) +
++    (ContinuousLinearMap.proj (1 : Fin 2) : (Fin 2 → ℝ) →L[ℝ] ℝ)
+ 
+ private theorem currentChenUpsilon6ProductForm_ne_zero :
+     currentChenUpsilon6ProductForm ≠ 0 := by
+@@ -178,8 +180,9 @@
+ /-- A concrete product wall is null, at every buffer value as well as zero. -/
+ theorem currentChenUpsilon6_productWall_volume_zero (c : ℝ) :
+     volume {x : Fin 2 → ℝ | x 0 + x 1 = c} = 0 := by
+-  exact affinePrimeWall_volume_zero currentChenUpsilon6ProductForm
+-    currentChenUpsilon6ProductForm_ne_zero c
++  simpa [currentChenUpsilon6ProductForm] using
++    affinePrimeWall_volume_zero currentChenUpsilon6ProductForm
++      currentChenUpsilon6ProductForm_ne_zero c
+ 
+ theorem currentChenUpsilon6_coordinateWall_volume_zero (i : Fin 2) (c : ℝ) :
+     volume {x : Fin 2 → ℝ | x i = c} = 0 := by
+@@ -224,7 +227,9 @@
+   filter_upwards [ae_currentChenUpsilon6_coordinate_ne 0 (19 / 125),
+     ae_currentChenUpsilon6_coordinate_ne 1 (59 / 250)] with x hx hy
+   apply propext
+-  simp only [mem_setOf_eq, mem_currentChenUpsilon6LogRectangle]
++  change ((417 / 5000 : ℝ) ≤ x 0 ∧ x 0 ≤ 19 / 125 ∧
++    (19 / 125 : ℝ) ≤ x 1 ∧ x 1 ≤ 59 / 250) ↔ x ∈ currentChenUpsilon6LogRectangle
++  rw [mem_currentChenUpsilon6LogRectangle]
+   constructor
+   · rintro ⟨ha, hh, hh', hd⟩
+     exact ⟨ha, (lt_or_eq_of_le hh).resolve_right hx,
+@@ -270,6 +275,7 @@
+   have hgt : (833 / 2500 : ℝ) - eta < x 0 + x 1 := by
+     by_contra h
+     exact hnot ⟨hx, le_of_not_gt h⟩
++  change x 0 + x 1 ≤ (833 / 2500 : ℝ) - 0 at hx0
+   exact ⟨hx, hgt.le, by simpa only [sub_zero] using hx0⟩
+ 
+ /-- Dominated convergence on the concrete positive rectangle. The
+@@ -290,10 +296,11 @@
+     (Eventually.of_forall (fun eta =>
+       (integrableOn_currentChenUpsilon6LogRectangle.indicator
+         (measurableSet_currentChenUpsilon6_stripGate eta)).aestronglyMeasurable))
+-    (Eventually.of_forall (fun eta => Eventually.of_forall (fun x => by
+-      by_cases hx : (833 / 2500 : ℝ) - eta ≤ x 0 + x 1 ∧ x 0 + x 1 ≤ 833 / 2500
+-      · simp only [indicator_of_mem hx, le_refl]
+-      · simp only [indicator_of_notMem hx, norm_zero, norm_nonneg])))
++    (Eventually.of_forall (fun eta => Eventually.of_forall (fun x =>
++      norm_indicator_le_norm_self
++        (s := {y : Fin 2 → ℝ | (833 / 2500 : ℝ) - eta ≤ y 0 + y 1 ∧
++          y 0 + y 1 ≤ 833 / 2500})
++        (fun y : Fin 2 → ℝ => 1 / (y 0 * y 1)) x)))
+     integrableOn_currentChenUpsilon6LogRectangle.norm
+     (show ∀ᵐ x : Fin 2 → ℝ ∂volume.restrict currentChenUpsilon6LogRectangle,
+       Tendsto (fun eta : ℝ =>
+@@ -305,6 +312,7 @@
+       rcases lt_or_gt_of_ne hx with hlt | hgt
+       · apply tendsto_const_nhds.congr'
+         filter_upwards [Iio_mem_nhds (sub_pos.mpr hlt)] with eta heta
++        change eta < (833 / 2500 : ℝ) - (x 0 + x 1) at heta
+         have hn : x ∉ {x : Fin 2 → ℝ | (833 / 2500 : ℝ) - eta ≤ x 0 + x 1 ∧
+             x 0 + x 1 ≤ 833 / 2500} := by
+           intro hg

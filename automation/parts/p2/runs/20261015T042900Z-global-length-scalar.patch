@@ -1,0 +1,57 @@
+diff --git a/ImbalancedChen/Certificates/PairedV2NaturalSumLengths.lean b/ImbalancedChen/Certificates/PairedV2NaturalSumLengths.lean
+--- a/ImbalancedChen/Certificates/PairedV2NaturalSumLengths.lean
++++ b/ImbalancedChen/Certificates/PairedV2NaturalSumLengths.lean
+@@ -29,7 +29,7 @@
+       simp only [blocks, List.flatten_cons, List.flatten_nil,
+         List.map_append, List.map_nil]
+     _ = expectedLengths := by
+-      rw [block00_lengths, block01_lengths, block02_lengths, block03_lengths, block04_lengths, block05_lengths, block06_lengths, block07_lengths, block08_lengths, block09_lengths, block10_lengths, block11_lengths]
++      (rw [block00_lengths, block01_lengths, block02_lengths, block03_lengths, block04_lengths, block05_lengths, block06_lengths, block07_lengths, block08_lengths, block09_lengths, block10_lengths, block11_lengths]; rfl)
+ 
+ theorem approximation_lengths : ∀ i : Fin 186,
+     (approximations i).length = 512 - firstU i := by
+diff --git a/verification/parts/p2/data-split-dependencies.json b/verification/parts/p2/data-split-dependencies.json
+--- a/verification/parts/p2/data-split-dependencies.json
++++ b/verification/parts/p2/data-split-dependencies.json
+@@ -25,7 +25,7 @@
+     "ImbalancedChen/Certificates/PairedV2Geometry.lean": "68b17d29089e7a761428ff92957a7f8fbe9a4b3bff8105846717162867359238",
+     "ImbalancedChen/Certificates/PairedV2GlobalGeometry.lean": "ec651c71d31cf41c30804afe91bdc84b9ad081be4723386f1cd5cd33a704c6cc",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumExpectedLengths.lean": "770f2090dd4d0e81abb3a6be67ff694f22b4ffaa8dc11961f1d4ba4d03d6805f",
+-    "ImbalancedChen/Certificates/PairedV2NaturalSumLengths.lean": "415ae6257b4c57001b9d33951527ed472c4daa8095430346cb8d969a1864decb",
++    "ImbalancedChen/Certificates/PairedV2NaturalSumLengths.lean": "efd087d42102e3b2a178789de762d89f6bb4b335aae4f1c2dccd8cedae438dee",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumLengthsBlock00.lean": "e0034d3307f0085bf1d3c184461da477211442c498528bdcf6ded7940b6981eb",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumLengthsBlock01.lean": "2b5ceb1150443dd66c521d31d4b9a007c3508d19119912a3a3cb46d0f49ceb59",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumLengthsBlock02.lean": "8f05592a4c80fdae0ae94d321c88c89f51e7dc26f65c641c37701ffc2d5d7129",
+@@ -73,7 +73,7 @@
+     "Mathlib.Tactic.FieldSimp",
+     "Mathlib.Tactic.Ring"
+   ],
+-  "fingerprint_sha256": "b85e947ef2acf0dc67855355d1946d0f466b31f1e3f6b88ebd471571cd7e4a30",
++  "fingerprint_sha256": "54691f2f87426d5e4ce7a8fcc1a3b782dfbc30dccaebbaffbf33b89c854d43a7",
+   "external_pins": [
+     {
+       "url": "https://github.com/subfish-zhou/goldbach-lean.git",
+diff --git a/verification/parts/p2/data-split-source-manifest.json b/verification/parts/p2/data-split-source-manifest.json
+--- a/verification/parts/p2/data-split-source-manifest.json
++++ b/verification/parts/p2/data-split-source-manifest.json
+@@ -4089,7 +4089,7 @@
+     "ImbalancedChen/Certificates/PairedV2FullCertificateDataBlock10.lean": "455eaa2e9e1a583b81496752f6f898c7178818139a26304bb27ddf9981acb733",
+     "ImbalancedChen/Certificates/PairedV2FullCertificateDataBlock11.lean": "668735e4c309c044f8fe6d5c972cce5515f88d98b5bc8e2f6d1604a1eb395ed4",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumExpectedLengths.lean": "770f2090dd4d0e81abb3a6be67ff694f22b4ffaa8dc11961f1d4ba4d03d6805f",
+-    "ImbalancedChen/Certificates/PairedV2NaturalSumLengths.lean": "415ae6257b4c57001b9d33951527ed472c4daa8095430346cb8d969a1864decb",
++    "ImbalancedChen/Certificates/PairedV2NaturalSumLengths.lean": "efd087d42102e3b2a178789de762d89f6bb4b335aae4f1c2dccd8cedae438dee",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumLengthsBlock00.lean": "e0034d3307f0085bf1d3c184461da477211442c498528bdcf6ded7940b6981eb",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumLengthsBlock01.lean": "2b5ceb1150443dd66c521d31d4b9a007c3508d19119912a3a3cb46d0f49ceb59",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumLengthsBlock02.lean": "8f05592a4c80fdae0ae94d321c88c89f51e7dc26f65c641c37701ffc2d5d7129",
+diff --git a/verification/parts/p2/split_paired_v2_certificate_data.py b/verification/parts/p2/split_paired_v2_certificate_data.py
+--- a/verification/parts/p2/split_paired_v2_certificate_data.py
++++ b/verification/parts/p2/split_paired_v2_certificate_data.py
+@@ -232,7 +232,7 @@
+                     "      simp only [blocks, List.flatten_cons, List.flatten_nil,\n"
+                     "        List.map_append, List.map_nil]\n"
+                     "    _ = expectedLengths := by\n"
+-                    "      rw [" + ", ".join(f"block{b:02}_lengths" for b in range(12)) + "]\n\n")
++                    "      (rw [" + ", ".join(f"block{b:02}_lengths" for b in range(12)) + "]; rfl)\n\n")
+     length_proof = length_type + b" := by\n" + (
+         "  have hlist :\n"
+         "      (List.ofFn approximations).map List.length =\n"
