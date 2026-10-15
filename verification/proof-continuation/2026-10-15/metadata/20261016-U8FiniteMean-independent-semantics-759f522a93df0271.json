@@ -1,0 +1,718 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_COMPLETE_U8_FINITE_MEAN_SEMANTICS_AND_RELATIVE_PROJECT_DAG_NOT_LEAN_PASS",
+  "reviewer": "/root/tail_resume/greedy_review; non-author",
+  "created_utc": "2026-10-15T23:06:10.725682+00:00",
+  "module": "ImbalancedChen.CurrentChenUpsilon8FiniteMean",
+  "source_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenUpsilon8FiniteMean.lean",
+  "source_sha256": "da4d9c59126cc173e38182e4bcc060a6ad082b103906b7c17c8cbed363e2172b",
+  "complete_declaration_count": 16,
+  "definition_count": 3,
+  "proof_count": 13,
+  "whole_source_read": true,
+  "type_extraction": "Complete theorem types through actual := by, all forall/exists/statement-let clauses preserved; full definition bodies. Candidate proofs all recorded.",
+  "all_complete_declarations": [
+    {
+      "name": "currentChenUpsilon8PrefixAPCount",
+      "kind": "def",
+      "private": false,
+      "line": 38,
+      "complete_header": "def currentChenUpsilon8PrefixAPCount (N d : ℕ) : ℝ",
+      "complete_definition": "def currentChenUpsilon8PrefixAPCount (N d : ℕ) : ℝ :=\n  ∑ a ∈ currentChenUpsilon8PrefixProducts N, (primesInAPBelow N a d N : ℝ)",
+      "independent_mathematical_and_API_assessment": "Exact native closed AP count on the original U8 product image; no relabelling as U9 products."
+    },
+    {
+      "name": "currentChenUpsilon8PanError",
+      "kind": "def",
+      "private": false,
+      "line": 42,
+      "complete_header": "def currentChenUpsilon8PanError (N d : ℕ) : ℝ",
+      "complete_definition": "def currentChenUpsilon8PanError (N d : ℕ) : ℝ :=\n  liuMainPanCoprimeIntervalSum (liuLogarithmicIntegral (2 / Real.log 2))\n    N (currentChenUpsilon8PanLower N) (currentChenUpsilon8PanUpper N)\n    d (N % d) (currentChenUpsilon8ProductCoefficient N)",
+      "independent_mathematical_and_API_assessment": "Actual U8 zero-one coefficient on its own Ioc Pan window with literal Coprime a d gate and N mod d residue."
+    },
+    {
+      "name": "currentChenUpsilon8_primesInAPBelow_target_mod",
+      "kind": "theorem",
+      "private": true,
+      "line": 47,
+      "complete_header": "private theorem currentChenUpsilon8_primesInAPBelow_target_mod (N a d : ℕ) :\n    primesInAPBelow N a d (N % d) = primesInAPBelow N a d N",
+      "complete_proof": "simp only [primesInAPBelow, Nat.ModEq, Nat.mod_mod]\n  rfl",
+      "independent_mathematical_and_API_assessment": "Product congruence at N mod d equals product congruence at N, with the same finite closed AP carrier."
+    },
+    {
+      "name": "currentChenUpsilon8_prefixAPCount_eq_main_sub_defect_add_error",
+      "kind": "theorem",
+      "private": false,
+      "line": 53,
+      "complete_header": "theorem currentChenUpsilon8_prefixAPCount_eq_main_sub_defect_add_error\n    {N d : ℕ} (hN : (1 : ℝ) ≤ N) (hNd : Nat.Coprime N d) :\n    currentChenUpsilon8PrefixAPCount N d =\n      (currentChenUpsilon8LiMainMass N - currentChenUpsilon8CoprimeMainDefect N d) /\n        (Nat.totient d : ℝ) + currentChenUpsilon8PanError N d",
+      "complete_proof": "have herror : currentChenUpsilon8PanError N d =\n      ∑ a ∈ currentChenUpsilon8PrefixProducts N,\n        if Nat.Coprime a d then\n          liuScaledAPError (liuLogarithmicIntegral (2 / Real.log 2)) N a d (N % d)\n        else 0 := by\n    unfold currentChenUpsilon8PanError liuMainPanCoprimeIntervalSum\n    calc\n      _ = ∑ a ∈ Finset.Ioc (currentChenUpsilon8PanLower N) (currentChenUpsilon8PanUpper N),\n          currentChenUpsilon8ProductCoefficient N a *\n            (if Nat.Coprime a d then\n              liuScaledAPError (liuLogarithmicIntegral (2 / Real.log 2)) N a d (N % d)\n            else 0) := by\n        apply Finset.sum_congr rfl\n        intro a _\n        split_ifs <;> ring\n      _ = _ := currentChenUpsilon8ProductCoefficient_sum hN _\n  have hpoint : ∀ a ∈ currentChenUpsilon8PrefixProducts N,\n      (if Nat.Coprime a d then\n        liuScaledAPError (liuLogarithmicIntegral (2 / Real.log 2)) N a d (N % d)\n      else 0) = (primesInAPBelow N a d N : ℝ) -\n        (liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ)) -\n          (if Nat.Coprime a d then 0 else\n            liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ)))) /\n              (Nat.totient d : ℝ) := by\n    intro a _\n    by_cases hc : Nat.Coprime a d\n    · rw [if_pos hc, if_pos hc, sub_zero, liuScaledAPError,\n        currentChenUpsilon8_primesInAPBelow_target_mod]\n    · simp only [hc, if_false, sub_self, zero_div, sub_zero]\n      exact (currentChenUpsilon9_primesInAPBelow_eq_zero_of_not_coprime hNd hc).symm\n  have hidentity : currentChenUpsilon8PanError N d =\n      currentChenUpsilon8PrefixAPCount N d -\n        (currentChenUpsilon8LiMainMass N - currentChenUpsilon8CoprimeMainDefect N d) /\n          (Nat.totient d : ℝ) := by\n    rw [herror]\n    calc\n      _ = ∑ a ∈ currentChenUpsilon8PrefixProducts N,\n          ((primesInAPBelow N a d N : ℝ) -\n            (liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ)) -\n              (if Nat.Coprime a d then 0 else\n                liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ)))) /\n                  (Nat.totient d : ℝ)) := Finset.sum_congr rfl hpoint\n      _ = _ := by\n        simp only [currentChenUpsilon8PrefixAPCount, currentChenUpsilon8LiMainMass,\n          currentChenUpsilon8CoprimeMainDefect, Finset.sum_sub_distrib, Finset.sum_div, sub_div]\n  linarith only [hidentity]",
+      "independent_mathematical_and_API_assessment": "Coefficient_sum reindexes the same U8 zero-one source. Coprime branch is AP-li/phi; noncoprime branch uses actual zero AP from Coprime N d and retains the full li defect. Exact summed identity is AP=(Li8-Defect8)/phi+Error8."
+    },
+    {
+      "name": "currentChenUpsilon8_upper_sum_eq_active",
+      "kind": "theorem",
+      "private": true,
+      "line": 105,
+      "complete_header": "private theorem currentChenUpsilon8_upper_sum_eq_active\n    (B : ℝ) (N cap : ℕ) (z : ℝ) (G : ℕ → ℝ) :\n    (∑ d ∈ actualSmallRosserSupport N cap z,\n      actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d * G d) =\n      ∑ d ∈ currentChenUpsilon9PanActive B N cap z,\n        actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d * G d",
+      "complete_proof": "rw [currentChenUpsilon9PanActive, Finset.sum_filter]\n  apply Finset.sum_congr rfl\n  intro d _\n  by_cases hd : d ≤ panModulusCutoff N B\n  · simp only [hd, if_true]\n  · have hz : actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d = 0 := by\n      by_contra hn\n      have hactive := (actualSmallRosserPlus_active hn).2.1\n      have hdlt : d < panModulusCutoff N B + 1 := by exact_mod_cast hactive\n      omega\n    simp only [hd, if_false, hz, zero_mul]",
+      "independent_mathematical_and_API_assessment": "Strict L=Q+1 and actual nonzero upper support d<L imply integer d<=Q. Arbitrary signed G survives exact zero-extension outside active; no positive-lambda assumption or sum inequality."
+    },
+    {
+      "name": "currentChenUpsilon8PanRosserError",
+      "kind": "def",
+      "private": false,
+      "line": 124,
+      "complete_header": "def currentChenUpsilon8PanRosserError (B : ℝ) (N cap : ℕ) (z : ℝ) : ℝ",
+      "complete_definition": "def currentChenUpsilon8PanRosserError (B : ℝ) (N cap : ℕ) (z : ℝ) : ℝ :=\n  ∑ d ∈ actualSmallRosserSupport N cap z,\n    actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d *\n      currentChenUpsilon8PanError N d",
+      "independent_mathematical_and_API_assessment": "Complete signed actual upper lambda on full divisor support multiplies the actual U8 Pan error; same lambda is used in density and defect."
+    },
+    {
+      "name": "currentChenUpsilon8PanRosserError_eq_active",
+      "kind": "theorem",
+      "private": false,
+      "line": 130,
+      "complete_header": "theorem currentChenUpsilon8PanRosserError_eq_active (B : ℝ) (N cap : ℕ) (z : ℝ) :\n    currentChenUpsilon8PanRosserError B N cap z =\n      ∑ d ∈ currentChenUpsilon9PanActive B N cap z,\n        actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d *\n          currentChenUpsilon8PanError N d",
+      "complete_proof": "exact currentChenUpsilon8_upper_sum_eq_active B N cap z _",
+      "independent_mathematical_and_API_assessment": "Exact arbitrary-G fullsupport-to-active identity with unchanged error and coefficient; no omitted-modulus multiplicity factor."
+    },
+    {
+      "name": "currentChenUpsilon8_abs_panError_le_MaxL",
+      "kind": "theorem",
+      "private": true,
+      "line": 137,
+      "complete_header": "private theorem currentChenUpsilon8_abs_panError_le_MaxL {N d : ℕ}\n    (hd : 0 < d) (hNd : Nat.Coprime N d) :\n    |currentChenUpsilon8PanError N d| ≤\n      liuMainPanCoprimeIntervalMaxL (liuLogarithmicIntegral (2 / Real.log 2))\n        N (currentChenUpsilon8PanLower N) (currentChenUpsilon8PanUpper N) d\n        (currentChenUpsilon8ProductCoefficient N)",
+      "complete_proof": "have hres : N % d ∈ unitResidues d := by\n    change N % d ∈ finiteReducedResidues d\n    exact (mod_mem_finiteReducedResidues_iff N d hd).mpr hNd\n  have hnonempty : (unitResidues d).Nonempty := ⟨N % d, hres⟩\n  unfold liuMainPanCoprimeIntervalMaxL\n  dsimp only\n  rw [dif_pos hnonempty]\n  apply Finset.le_max'\n  exact Finset.mem_image.mpr ⟨N % d, hres, rfl⟩",
+      "independent_mathematical_and_API_assessment": "Actual d>0 and Coprime N d put N mod d in canonical unit residues. d=1 includes class0. The native MaxL image and actual le_max' API bound this same absolute U8 error."
+    },
+    {
+      "name": "currentChenUpsilon8_abs_panRosserError_le_MaxL_sum",
+      "kind": "theorem",
+      "private": false,
+      "line": 154,
+      "complete_header": "theorem currentChenUpsilon8_abs_panRosserError_le_MaxL_sum\n    (B : ℝ) (N cap : ℕ) (z : ℝ) :\n    |currentChenUpsilon8PanRosserError B N cap z| ≤\n      ∑ d ∈ Finset.Icc 1 (panModulusCutoff N B),\n        liuMainPanCoprimeIntervalMaxL (liuLogarithmicIntegral (2 / Real.log 2))\n          N (currentChenUpsilon8PanLower N) (currentChenUpsilon8PanUpper N) d\n          (currentChenUpsilon8ProductCoefficient N)",
+      "complete_proof": "have hpoint : |currentChenUpsilon8PanRosserError B N cap z| ≤\n      ∑ d ∈ currentChenUpsilon9PanActive B N cap z,\n        liuMainPanCoprimeIntervalMaxL (liuLogarithmicIntegral (2 / Real.log 2))\n          N (currentChenUpsilon8PanLower N) (currentChenUpsilon8PanUpper N) d\n          (currentChenUpsilon8ProductCoefficient N) := by\n    rw [currentChenUpsilon8PanRosserError_eq_active]\n    apply (Finset.abs_sum_le_sum_abs _ _).trans\n    apply Finset.sum_le_sum\n    intro d hd\n    have hds := (Finset.mem_filter.mp hd).1\n    have hdp := Nat.pos_of_mem_divisors hds\n    have hNd := (actualSmallRosserSupport_coprime_target N cap z hds).symm\n    rw [abs_mul]\n    exact (mul_le_of_le_one_left (abs_nonneg _)\n      (actualSmallRosserPlus_abs_le_one N cap z _ d)).trans\n        (currentChenUpsilon8_abs_panError_le_MaxL hdp hNd)\n  apply hpoint.trans\n  exact Finset.sum_le_sum_of_subset_of_nonneg\n    (currentChenUpsilon9PanActive_subset B N cap z)\n    (fun d _ _ => liuMainPanCoprimeIntervalMaxL_nonneg _ _ _ _ _ _)",
+      "independent_mathematical_and_API_assessment": "Triangle inequality and |lambda|<=1 give one MaxL per active modulus; extension to Icc1Q uses proved MaxL nonnegativity only. No number-of-source-labels or number-of-moduli factor."
+    },
+    {
+      "name": "exists_currentChenUpsilon8_panRosserError_budget",
+      "kind": "theorem",
+      "private": false,
+      "line": 183,
+      "complete_header": "theorem exists_currentChenUpsilon8_panRosserError_budget :\n    ∃ B : ℝ, 0 ≤ B ∧ ∀ ε : ℝ, 0 < ε →\n      ∀ᶠ N : ℕ in atTop, ∀ cap : ℕ, ∀ z : ℝ,\n        |currentChenUpsilon8PanRosserError B N cap z| ≤\n          ε * singularNormalization N",
+      "complete_proof": "obtain ⟨C, _hC, B, hB, N₀, hagg⟩ :=\n    exists_currentChenUpsilon8_sameCoefficient_pan_majorant 3 (by norm_num)\n  refine ⟨B, hB, ?_⟩\n  intro ε hε\n  have hlarge : ∀ᶠ N : ℕ in atTop,\n      C / (ε * twinPrimeConstant) ≤ Real.log (N : ℝ) :=\n    (Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually\n      (eventually_ge_atTop _)\n  have hlog : ∀ᶠ N : ℕ in atTop, (1 : ℝ) ≤ Real.log (N : ℝ) :=\n    (Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually (eventually_ge_atTop 1)\n  filter_upwards [eventually_ge_atTop N₀, hlarge, hlog]\n    with N hN₀ hlarge hlog\n  intro cap z\n  have hlogpos : 0 < Real.log (N : ℝ) := zero_lt_one.trans_le hlog\n  have hdist := hagg N hN₀\n  rw [Real.rpow_ofNat] at hdist\n  have hcoeff : C / Real.log (N : ℝ) ≤ ε * twinPrimeConstant := by\n    apply (div_le_iff₀ hlogpos).mpr\n    have h := (div_le_iff₀ (mul_pos hε twinPrimeConstant_pos)).mp hlarge\n    nlinarith only [h]\n  have hpaid : C * (N : ℝ) / Real.log (N : ℝ) ^ (3 : ℕ) ≤\n      ε * singularNormalization N := by\n    calc\n      _ = (C / Real.log (N : ℝ)) *\n          ((N : ℝ) / Real.log (N : ℝ) ^ (2 : ℕ)) := by\n        field_simp [hlogpos.ne']\n      _ ≤ (ε * twinPrimeConstant) * ((N : ℝ) / Real.log (N : ℝ) ^ (2 : ℕ)) :=\n        mul_le_mul_of_nonneg_right hcoeff (by positivity)\n      _ = ε * (twinPrimeConstant * (N : ℝ) / Real.log (N : ℝ) ^ (2 : ℕ)) := by ring\n      _ ≤ _ := mul_le_mul_of_nonneg_left (singularNormalization_lower N) hε.le\n  exact ((currentChenUpsilon8_abs_panRosserError_le_MaxL_sum B N cap z).trans hdist).trans hpaid",
+      "independent_mathematical_and_API_assessment": "Owned actual U8 majorant at fixed U=3 selects C,B,N0 before epsilon. Log growth pays C*N/log^3 from epsilon*twinPrimeConstant*N/log^2<=epsilon*H. Threshold precedes all cap,z; no caller Pan supplier."
+    },
+    {
+      "name": "currentChenUpsilon8_product_sum_upperDivisorSum",
+      "kind": "theorem",
+      "private": false,
+      "line": 221,
+      "complete_header": "theorem currentChenUpsilon8_product_sum_upperDivisorSum\n    (N cap : ℕ) (z L : ℝ) :\n    (∑ a ∈ currentChenUpsilon8PrefixProducts N,\n      ∑ q ∈ currentChenUpsilon9PrefixPrimeFibre N a,\n        supportedDivisorSum (actualSmallRosserSupport N cap z)\n          (actualSmallRosserPlus N cap z L) (N - a * q)) =\n      ∑ d ∈ actualSmallRosserSupport N cap z,\n        actualSmallRosserPlus N cap z L d * currentChenUpsilon8PrefixAPCount N d",
+      "complete_proof": "simp_rw [currentChenUpsilon9_prefix_sum_upperDivisorSum]\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro d _\n  rw [currentChenUpsilon8PrefixAPCount, Finset.mul_sum]",
+      "independent_mathematical_and_API_assessment": "Generic fibre Fubini is applied separately at each original U8 multiplier, retaining closed aq<=N including receiver0. Finite sums commute with the full signed coefficient."
+    },
+    {
+      "name": "currentChenUpsilon8_upper_AP_sum_eq_main_errors",
+      "kind": "theorem",
+      "private": false,
+      "line": 236,
+      "complete_header": "theorem currentChenUpsilon8_upper_AP_sum_eq_main_errors\n    (B : ℝ) {N : ℕ} (hN : (1 : ℝ) ≤ N) (cap : ℕ) (z : ℝ) :\n    (∑ d ∈ actualSmallRosserSupport N cap z,\n      actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d *\n        currentChenUpsilon8PrefixAPCount N d) =\n      currentChenUpsilon8LiMainMass N * currentChenUpsilon9SwitchedUpperDensity B N cap z -\n        currentChenUpsilon8CoprimeGateError N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ)\n          (currentChenUpsilon9PanActive B N cap z) +\n        currentChenUpsilon8PanRosserError B N cap z",
+      "complete_proof": "have hgate : currentChenUpsilon8CoprimeGateError N cap z\n      ((panModulusCutoff N B + 1 : ℕ) : ℝ) (actualSmallRosserSupport N cap z) =\n      currentChenUpsilon8CoprimeGateError N cap z\n        ((panModulusCutoff N B + 1 : ℕ) : ℝ) (currentChenUpsilon9PanActive B N cap z) :=\n    currentChenUpsilon8_upper_sum_eq_active B N cap z _\n  rw [← hgate]\n  calc\n    _ = ∑ d ∈ actualSmallRosserSupport N cap z,\n        ((currentChenUpsilon8LiMainMass N *\n          (actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d /\n            (Nat.totient d : ℝ)) -\n          actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d *\n            (currentChenUpsilon8CoprimeMainDefect N d / (Nat.totient d : ℝ))) +\n          actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d *\n            currentChenUpsilon8PanError N d) := by\n      apply Finset.sum_congr rfl\n      intro d hd\n      rw [currentChenUpsilon8_prefixAPCount_eq_main_sub_defect_add_error hN\n        (actualSmallRosserSupport_coprime_target N cap z hd).symm]\n      ring\n    _ = _ := by\n      simp only [currentChenUpsilon9SwitchedUpperDensity, currentChenUpsilon8CoprimeGateError,\n        currentChenUpsilon8PanRosserError, Finset.sum_add_distrib, Finset.sum_sub_distrib,\n        Finset.mul_sum]",
+      "independent_mathematical_and_API_assessment": "Exact AP identity with same signed lambda yields Li8*explicitDensity9 - actualGate8 + actualPan8. Gate fullsupport-to-active restriction is equality. Density9 is only a source-independent explicit divisor sum here."
+    },
+    {
+      "name": "currentChenUpsilon8_le_upper_density_main_add_errors",
+      "kind": "theorem",
+      "private": false,
+      "line": 271,
+      "complete_header": "theorem currentChenUpsilon8_le_upper_density_main_add_errors\n    (B : ℝ) {N : ℕ} (hN : (1 : ℝ) ≤ N) (cap : ℕ) (z : ℝ)\n    (hL : 1 < ((panModulusCutoff N B + 1 : ℕ) : ℝ))\n    (hzL : z ≤ ((panModulusCutoff N B + 1 : ℕ) : ℝ)) :\n    currentChenUpsilon8 N ≤\n      currentChenUpsilon8LiMainMass N * currentChenUpsilon9SwitchedUpperDensity B N cap z -\n        currentChenUpsilon8CoprimeGateError N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ)\n          (currentChenUpsilon9PanActive B N cap z) +\n        currentChenUpsilon8PanRosserError B N cap z +\n        ((currentChenUpsilon8PrefixProducts N).card : ℝ) * (Nat.ceil z : ℝ) +\n        ((currentChenUpsilon8UnitFibres N).card : ℝ)",
+      "complete_proof": "have hsource := currentChenUpsilon8_le_switched_prime_fibres_add_unitFibres N\n  have hrows : (∑ a ∈ currentChenUpsilon8PrefixProducts N,\n      ((currentChenUpsilon9SwitchedPrimeFibre N a).card : ℝ)) ≤\n      (∑ a ∈ currentChenUpsilon8PrefixProducts N,\n        ∑ q ∈ currentChenUpsilon9PrefixPrimeFibre N a,\n          supportedDivisorSum (actualSmallRosserSupport N cap z)\n            (actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ)) (N - a * q)) +\n        ((currentChenUpsilon8PrefixProducts N).card : ℝ) * (Nat.ceil z : ℝ) := by\n    have h := Finset.sum_le_sum (s := currentChenUpsilon8PrefixProducts N)\n      (fun a ha => currentChenUpsilon9_switchedPrimeFibre_card_le_upperDivisorSum_add_cap\n        N a cap (currentChenUpsilon8PrefixProducts_data ha).1 z\n          ((panModulusCutoff N B + 1 : ℕ) : ℝ) hL hzL)\n    simpa only [Finset.sum_add_distrib, Finset.sum_const, nsmul_eq_mul] using h\n  rw [currentChenUpsilon8_product_sum_upperDivisorSum,\n    currentChenUpsilon8_upper_AP_sum_eq_main_errors B hN cap z] at hrows\n  linarith only [hsource, hrows]",
+      "independent_mathematical_and_API_assessment": "Owned806 bounds the original U8 source by generic strict switched fibres plus literal units with original selector gates/N exclusions. Positive actual a enables the generic receiver sieve; extension to closed carrier uses nonnegative complete divisor sum at every added receiver, including0. No individual lambda comparison."
+    },
+    {
+      "name": "currentChenUpsilon8_small_prime_cost_le_power",
+      "kind": "theorem",
+      "private": false,
+      "line": 301,
+      "complete_header": "theorem currentChenUpsilon8_small_prime_cost_le_power {N : ℕ} (hN : (1 : ℝ) ≤ N) :\n    ((currentChenUpsilon8PrefixProducts N).card : ℝ) *\n      (Nat.ceil ((N : ℝ) ^ (1 / 5 : ℝ)) : ℝ) ≤\n        2 * (N : ℝ) ^ (13 / 15 : ℝ)",
+      "complete_proof": "have hNnat : 1 ≤ N := by exact_mod_cast hN\n  have hNp : (0 : ℝ) < N := zero_lt_one.trans_le hN\n  have hcard : ((currentChenUpsilon8PrefixProducts N).card : ℝ) ≤\n      (N : ℝ) ^ (2 / 3 : ℝ) :=\n    (Nat.cast_le.mpr (currentChenUpsilon8_prefixProducts_card_le_panUpper hNnat)).trans\n      (currentChenUpsilon8_panUpper_le_two_thirds hN)\n  have hsmallOne : 1 ≤ (N : ℝ) ^ (1 / 5 : ℝ) := Real.one_le_rpow hN (by norm_num)\n  have hsmallCeil : (Nat.ceil ((N : ℝ) ^ (1 / 5 : ℝ)) : ℝ) ≤\n      2 * (N : ℝ) ^ (1 / 5 : ℝ) := by\n    have h := Nat.ceil_lt_add_one (Real.rpow_nonneg hNp.le (1 / 5 : ℝ))\n    linarith only [h, hsmallOne]\n  calc\n    _ ≤ (N : ℝ) ^ (2 / 3 : ℝ) * (2 * (N : ℝ) ^ (1 / 5 : ℝ)) :=\n      mul_le_mul hcard hsmallCeil (Nat.cast_nonneg _) (Real.rpow_nonneg hNp.le _)\n    _ = _ := by\n      rw [show (13 / 15 : ℝ) = 2 / 3 + 1 / 5 by norm_num, Real.rpow_add hNp]\n      ring",
+      "independent_mathematical_and_API_assessment": "Actual product-image card<=actual PanUpper<=N^(2/3), and ceil(N^(1/5))<N^(1/5)+1<=2*N^(1/5), yield exact coefficient2 and exponent13/15 using nonnegative multiplication. No repeated-label factor."
+    },
+    {
+      "name": "eventually_currentChenUpsilon8_panLevel_sieveCutoff",
+      "kind": "theorem",
+      "private": true,
+      "line": 323,
+      "complete_header": "private theorem eventually_currentChenUpsilon8_panLevel_sieveCutoff\n    (B : ℝ) (hB : 0 ≤ B) :\n    ∀ᶠ N : ℕ in atTop,\n      1 < ((panModulusCutoff N B + 1 : ℕ) : ℝ) ∧\n      (N : ℝ) ^ (1 / 5 : ℝ) ≤ ((panModulusCutoff N B + 1 : ℕ) : ℝ) ∧\n      panModulusCutoff N B ≤ N",
+      "complete_proof": "filter_upwards [eventually_pan_conductor_bounds B hB,\n    eventually_pan_log_rpow_le_rpow B (3 / 10) (by norm_num),\n    eventually_ge_atTop (1 : ℕ)] with N hb hlogPower hN\n  have hNr : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  have hNp : (0 : ℝ) < N := zero_lt_one.trans_le hNr\n  have hlogpos : 0 < Real.log (N : ℝ) := zero_lt_one.trans_le hb.1\n  have hden : 0 < Real.log (N : ℝ) ^ B := Real.rpow_pos_of_pos hlogpos _\n  have hQ : 1 ≤ panModulusCutoff N B := hb.2.1.trans hb.2.2.1\n  have hlevel : 1 < ((panModulusCutoff N B + 1 : ℕ) : ℝ) := by\n    exact_mod_cast (show 1 < panModulusCutoff N B + 1 by omega)\n  have hcut : (N : ℝ) ^ (1 / 5 : ℝ) ≤\n      (N : ℝ) ^ (1 / 2 : ℝ) / Real.log (N : ℝ) ^ B := by\n    apply (le_div_iff₀ hden).mpr\n    calc\n      _ ≤ (N : ℝ) ^ (1 / 5 : ℝ) * (N : ℝ) ^ (3 / 10 : ℝ) :=\n        mul_le_mul_of_nonneg_left hlogPower (Real.rpow_nonneg hNp.le _)\n      _ = _ := by\n        rw [← Real.rpow_add hNp, show (1 / 5 : ℝ) + 3 / 10 = 1 / 2 by norm_num]\n  have hfloor : (N : ℝ) ^ (1 / 2 : ℝ) / Real.log (N : ℝ) ^ B <\n      ((panModulusCutoff N B + 1 : ℕ) : ℝ) := by\n    simpa only [panModulusCutoff, Nat.cast_add, Nat.cast_one] using\n      Nat.lt_floor_add_one ((N : ℝ) ^ (1 / 2 : ℝ) / Real.log (N : ℝ) ^ B)\n  exact ⟨hlevel, hcut.trans hfloor.le, hb.2.2.2.2⟩",
+      "independent_mathematical_and_API_assessment": "For fixed B>=0 conductor bounds give Q>=1,Q<=N. Proved log(N)^B<=N^(3/10) yields N^(1/5)<=N^.5/log^B<Q+1, using actual Nat.floor cutoff and lt_floor_add_one. Threshold precedes cap."
+    },
+    {
+      "name": "exists_currentChenUpsilon8_le_switched_density_main",
+      "kind": "theorem",
+      "private": false,
+      "line": 354,
+      "complete_header": "theorem exists_currentChenUpsilon8_le_switched_density_main :\n    ∃ B : ℝ, 0 ≤ B ∧ ∀ ε : ℝ, 0 < ε →\n      ∀ᶠ N : ℕ in atTop, ∀ cap : ℕ,\n        currentChenUpsilon8 N ≤\n          currentChenUpsilon8LiMainMass N *\n            currentChenUpsilon9SwitchedUpperDensity B N cap ((N : ℝ) ^ (1 / 5 : ℝ)) +\n              ε * singularNormalization N",
+      "complete_proof": "obtain ⟨B, hB, hPan⟩ := exists_currentChenUpsilon8_panRosserError_budget\n  refine ⟨B, hB, ?_⟩\n  intro ε hε\n  let δ : ℝ := ε / 4\n  have hδ : 0 < δ := by dsimp [δ]; positivity\n  filter_upwards [hPan δ hδ,\n    eventually_currentChenUpsilon8_abs_coprimeGateError_le_singularNormalization δ hδ,\n    eventually_powerLog_le_singularNormalization 2 (13 / 15) 0 (by norm_num) δ hδ,\n    eventually_currentChenUpsilon8_sourceErrors_le_singularNormalization δ hδ,\n    eventually_currentChenUpsilon8_panLevel_sieveCutoff B hB,\n    eventually_ge_atTop (1 : ℕ)] with N hPanN hGateN hSmallN hSourceN hlevel hN\n  intro cap\n  have hNr : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  let z : ℝ := (N : ℝ) ^ (1 / 5 : ℝ)\n  let L : ℝ := ((panModulusCutoff N B + 1 : ℕ) : ℝ)\n  let S := currentChenUpsilon9PanActive B N cap z\n  have hS : S ⊆ Finset.Icc 1 N := by\n    intro d hd\n    have h := Finset.mem_Icc.mp (currentChenUpsilon9PanActive_subset B N cap z hd)\n    exact Finset.mem_Icc.mpr ⟨h.1, h.2.trans hlevel.2.2⟩\n  have hGate := hGateN cap z L S hS\n  dsimp only [L, S] at hGate\n  have hPanCost := hPanN cap z\n  have hSmall : ((currentChenUpsilon8PrefixProducts N).card : ℝ) * (Nat.ceil z : ℝ) ≤\n      δ * singularNormalization N := by\n    apply (currentChenUpsilon8_small_prime_cost_le_power hNr).trans\n    simpa only [pow_zero, mul_one] using hSmallN\n  have hUnit : ((currentChenUpsilon8UnitFibres N).card : ℝ) ≤\n      δ * singularNormalization N := by\n    have hSmallNonneg : (0 : ℝ) ≤\n        ((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) := Nat.cast_nonneg _\n    linarith only [hSourceN, hSmallNonneg]\n  have hfinite := currentChenUpsilon8_le_upper_density_main_add_errors B hNr cap z\n    hlevel.1 hlevel.2.1\n  have hPanHi := (abs_le.mp hPanCost).2\n  have hGateLo := (abs_le.mp hGate).1\n  have htotal : 4 * (δ * singularNormalization N) = ε * singularNormalization N := by\n    dsimp [δ]\n    ring\n  change currentChenUpsilon8 N ≤\n    currentChenUpsilon8LiMainMass N * currentChenUpsilon9SwitchedUpperDensity B N cap z +\n      ε * singularNormalization N\n  nlinarith only [hfinite, hPanHi, hGateLo, hSmall, hUnit, htotal]",
+      "independent_mathematical_and_API_assessment": "B is fixed by U=3 before epsilon. delta=epsilon/4 selects Pan, signed-gate, power/ceiling, actual small+unit and conductor thresholds before cap. Active S subset Icc1N follows from Q<=N. Nonnegative actual small-source cardinal extracts unit cost; upper Pan/lower gate and two remaining errors total epsilon*H. Final actualU8<=Li8*same full signed explicit density9+epsilon*H has no count/density/distribution/true-li/harmonic/adopted-constant premise."
+    }
+  ],
+  "header": {
+    "module_header": false,
+    "prelude": false,
+    "imports": [
+      {
+        "module": "Init",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": false,
+        "explicit_visibility": null,
+        "implicit": true
+      },
+      {
+        "module": "Init",
+        "is_meta": true,
+        "import_all": false,
+        "is_exported": false,
+        "explicit_visibility": null,
+        "implicit": true
+      },
+      {
+        "module": "ImbalancedChen.CurrentChenUpsilon8CoprimeGateBudget",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": true,
+        "explicit_visibility": null,
+        "implicit": false
+      },
+      {
+        "module": "ImbalancedChen.CurrentChenUpsilon8SourceErrorBudget",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": true,
+        "explicit_visibility": null,
+        "implicit": false
+      },
+      {
+        "module": "ImbalancedChen.CurrentChenUpsilon9FiniteMean",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": true,
+        "explicit_visibility": null,
+        "implicit": false
+      }
+    ],
+    "parser_findings": []
+  },
+  "direct_owned_parent_bindings": [
+    {
+      "module": "ImbalancedChen.CurrentChenUpsilon8CoprimeGateBudget",
+      "source_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenUpsilon8CoprimeGateBudget.lean",
+      "source_sha256": "c4f5a801eadd6128f088b99cd8128602aeba1d0d8fa2a24906cd3e9cd387e761",
+      "object_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\CurrentChenUpsilon8CoprimeGateBudget.olean",
+      "object_sha256": "cb431fd9f6abf239bb8d2f487e67467e0ebda4199da1f72721ab7a81fd258ef4",
+      "existing_strict_cache": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\cache\\ImbalancedChen.CurrentChenUpsilon8CoprimeGateBudget.json",
+        "sha256": "0a0b3401a3258ca2d505bd1c0539863785083a34c0c09d51d7ac56ea13985d50",
+        "status": "PASS"
+      },
+      "existing_owned_audit": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261015T225351728783Z\\receipt.json",
+        "sha256": "78aba0d83691468a5f138ce06724772119c5092227ce8d67cbe64d42dbeae9e9",
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+        "inputs_before_after_equal": true
+      },
+      "scope": "Existing current receipts read/hash-checked only; no audit or full imported-closure replay performed by reviewer."
+    },
+    {
+      "module": "ImbalancedChen.CurrentChenUpsilon8SourceErrorBudget",
+      "source_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenUpsilon8SourceErrorBudget.lean",
+      "source_sha256": "9d6cb563579a743fd2d5bdcbef19714391d221648ffa3c1bf7b6a2b483b2d52e",
+      "object_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\CurrentChenUpsilon8SourceErrorBudget.olean",
+      "object_sha256": "a3914944db278d92b7f5d3e3c68d8bfdbaa750a333f849fbfba47cb10405fb8c",
+      "existing_strict_cache": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\cache\\ImbalancedChen.CurrentChenUpsilon8SourceErrorBudget.json",
+        "sha256": "8c69f7405d64d91d4b37c1d670c9e0d5d180bc46c47467b41a5682b1ef463ca9",
+        "status": "PASS"
+      },
+      "existing_owned_audit": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261015T225351728783Z\\receipt.json",
+        "sha256": "78aba0d83691468a5f138ce06724772119c5092227ce8d67cbe64d42dbeae9e9",
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+        "inputs_before_after_equal": true
+      },
+      "scope": "Existing current receipts read/hash-checked only; no audit or full imported-closure replay performed by reviewer."
+    },
+    {
+      "module": "ImbalancedChen.CurrentChenUpsilon9FiniteMean",
+      "source_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenUpsilon9FiniteMean.lean",
+      "source_sha256": "5cb35f5ff5e3421ec9b2b662b8c60d99ce407e6e4d7a6620c183ae89976981ec",
+      "object_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\CurrentChenUpsilon9FiniteMean.olean",
+      "object_sha256": "31b8a43010a98cdadb66ae9a7db8e47d563750ab739f704256484b71242c17b9",
+      "existing_strict_cache": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\cache\\ImbalancedChen.CurrentChenUpsilon9FiniteMean.json",
+        "sha256": "5e2931cd5dd250850011ab06cf8aaaba1c94ae6171bf802d918cf207066b7dd9",
+        "status": "PASS"
+      },
+      "existing_owned_audit": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261015T194819268649Z\\receipt.json",
+        "sha256": "f142ad8cb72932423da35ec187b0c764d50f9a2952b96658238a5f8624d5c187",
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+        "inputs_before_after_equal": true
+      },
+      "scope": "Existing current receipts read/hash-checked only; no audit or full imported-closure replay performed by reviewer."
+    }
+  ],
+  "complete_public_project_APIs_used": [
+    {
+      "module": "ImbalancedChen.CurrentChenUpsilon8ProductPan",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenUpsilon8ProductPan.lean",
+      "sha256": "80621797c21adc263fc702e07a13c0b0b543a40f34ca2658a7fa281e1af12b11",
+      "positive_path": [
+        "ImbalancedChen.CurrentChenUpsilon8FiniteMean",
+        "ImbalancedChen.CurrentChenUpsilon8CoprimeGateBudget",
+        "ImbalancedChen.CurrentChenUpsilon8ProductPan"
+      ],
+      "complete_public_interfaces": [
+        {
+          "name": "currentChenUpsilon8PrefixProducts",
+          "kind": "def",
+          "line": 34,
+          "complete_header": "def currentChenUpsilon8PrefixProducts (N : ℕ) : Finset ℕ",
+          "complete_definition": "def currentChenUpsilon8PrefixProducts (N : ℕ) : Finset ℕ :=\n  (chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n    ((N : ℝ) ^ (1 / 3 : ℝ))).image (fun t => t.1 * t.2)"
+        },
+        {
+          "name": "currentChenUpsilon8ProductCoefficient",
+          "kind": "def",
+          "line": 38,
+          "complete_header": "def currentChenUpsilon8ProductCoefficient (N a : ℕ) : ℝ",
+          "complete_definition": "def currentChenUpsilon8ProductCoefficient (N a : ℕ) : ℝ :=\n  if a ∈ currentChenUpsilon8PrefixProducts N then 1 else 0"
+        },
+        {
+          "name": "currentChenUpsilon8PrefixProducts_data",
+          "kind": "theorem",
+          "line": 47,
+          "complete_header": "theorem currentChenUpsilon8PrefixProducts_data {N a : ℕ}\n    (ha : a ∈ currentChenUpsilon8PrefixProducts N) :\n    0 < a ∧ Nat.Coprime a N"
+        },
+        {
+          "name": "currentChenUpsilon8ProductCoefficient_sum",
+          "kind": "theorem",
+          "line": 127,
+          "complete_header": "theorem currentChenUpsilon8ProductCoefficient_sum {N : ℕ}\n    (hN : (1 : ℝ) ≤ N) (G : ℕ → ℝ) :\n    (∑ a ∈ Finset.Ioc (currentChenUpsilon8PanLower N) (currentChenUpsilon8PanUpper N),\n      currentChenUpsilon8ProductCoefficient N a * G a) =\n        ∑ a ∈ currentChenUpsilon8PrefixProducts N, G a"
+        },
+        {
+          "name": "currentChenUpsilon8_le_switched_prime_fibres_add_unitFibres",
+          "kind": "theorem",
+          "line": 148,
+          "complete_header": "theorem currentChenUpsilon8_le_switched_prime_fibres_add_unitFibres (N : ℕ) :\n    currentChenUpsilon8 N ≤\n      (∑ a ∈ currentChenUpsilon8PrefixProducts N,\n        ((currentChenUpsilon9SwitchedPrimeFibre N a).card : ℝ)) +\n          ((currentChenUpsilon8UnitFibres N).card : ℝ)"
+        },
+        {
+          "name": "currentChenUpsilon8_panUpper_le_two_thirds",
+          "kind": "theorem",
+          "line": 183,
+          "complete_header": "theorem currentChenUpsilon8_panUpper_le_two_thirds {N : ℕ} (hN : (1 : ℝ) ≤ N) :\n    (currentChenUpsilon8PanUpper N : ℝ) ≤ (N : ℝ) ^ (2 / 3 : ℝ)"
+        },
+        {
+          "name": "exists_currentChenUpsilon8_sameCoefficient_pan_majorant",
+          "kind": "theorem",
+          "line": 246,
+          "complete_header": "theorem exists_currentChenUpsilon8_sameCoefficient_pan_majorant\n    (U : ℝ) (hU : 0 < U) :\n    ∃ C : ℝ, 0 < C ∧ ∃ B : ℝ, 0 ≤ B ∧ ∃ N₀ : ℕ, ∀ N ≥ N₀,\n      (∑ d ∈ Finset.Icc 1 (panModulusCutoff N B),\n        liuMainPanCoprimeIntervalMaxL (liuLogarithmicIntegral (2 / Real.log 2))\n          N (currentChenUpsilon8PanLower N) (currentChenUpsilon8PanUpper N) d\n            (currentChenUpsilon8ProductCoefficient N)) ≤\n        C * (N : ℝ) / Real.log (N : ℝ) ^ U"
+        }
+      ]
+    },
+    {
+      "module": "ImbalancedChen.CurrentChenUpsilon9FiniteMean",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenUpsilon9FiniteMean.lean",
+      "sha256": "5cb35f5ff5e3421ec9b2b662b8c60d99ce407e6e4d7a6620c183ae89976981ec",
+      "positive_path": [
+        "ImbalancedChen.CurrentChenUpsilon8FiniteMean",
+        "ImbalancedChen.CurrentChenUpsilon9FiniteMean"
+      ],
+      "complete_public_interfaces": [
+        {
+          "name": "currentChenUpsilon9PrefixPrimeFibre",
+          "kind": "def",
+          "line": 33,
+          "complete_header": "def currentChenUpsilon9PrefixPrimeFibre (N a : ℕ) : Finset ℕ",
+          "complete_definition": "def currentChenUpsilon9PrefixPrimeFibre (N a : ℕ) : Finset ℕ :=\n  (Finset.range (N + 1)).filter fun q => Nat.Prime q ∧ a * q ≤ N"
+        },
+        {
+          "name": "currentChenUpsilon9_prefix_sum_upperDivisorSum",
+          "kind": "theorem",
+          "line": 53,
+          "complete_header": "theorem currentChenUpsilon9_prefix_sum_upperDivisorSum\n    (N a cap : ℕ) (z L : ℝ) :\n    (∑ q ∈ currentChenUpsilon9PrefixPrimeFibre N a,\n      supportedDivisorSum (actualSmallRosserSupport N cap z)\n        (actualSmallRosserPlus N cap z L) (N - a * q)) =\n      ∑ d ∈ actualSmallRosserSupport N cap z,\n        actualSmallRosserPlus N cap z L d * (primesInAPBelow N a d N : ℝ)"
+        },
+        {
+          "name": "currentChenUpsilon9_switchedPrimeFibre_card_le_upperDivisorSum_add_cap",
+          "kind": "theorem",
+          "line": 93,
+          "complete_header": "theorem currentChenUpsilon9_switchedPrimeFibre_card_le_upperDivisorSum_add_cap\n    (N a cap : ℕ) (ha : 0 < a) (z L : ℝ) (hL : 1 < L) (hzL : z ≤ L) :\n    ((currentChenUpsilon9SwitchedPrimeFibre N a).card : ℝ) ≤\n      (∑ q ∈ currentChenUpsilon9PrefixPrimeFibre N a,\n        supportedDivisorSum (actualSmallRosserSupport N cap z)\n          (actualSmallRosserPlus N cap z L) (N - a * q)) + (Nat.ceil z : ℝ)"
+        },
+        {
+          "name": "currentChenUpsilon9SwitchedUpperDensity",
+          "kind": "def",
+          "line": 184,
+          "complete_header": "def currentChenUpsilon9SwitchedUpperDensity (B : ℝ) (N cap : ℕ) (z : ℝ) : ℝ",
+          "complete_definition": "def currentChenUpsilon9SwitchedUpperDensity (B : ℝ) (N cap : ℕ) (z : ℝ) : ℝ :=\n  ∑ d ∈ actualSmallRosserSupport N cap z,\n    actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d /\n      (Nat.totient d : ℝ)"
+        }
+      ]
+    },
+    {
+      "module": "ImbalancedChen.CurrentChenUpsilon9PanAggregate",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenUpsilon9PanAggregate.lean",
+      "sha256": "96ee69812a2197d283e187369fe3076fdf41c8567b5261f7423db381fa20d5f8",
+      "positive_path": [
+        "ImbalancedChen.CurrentChenUpsilon8FiniteMean",
+        "ImbalancedChen.CurrentChenUpsilon9FiniteMean",
+        "ImbalancedChen.CurrentChenUpsilon9PanAggregate"
+      ],
+      "complete_public_interfaces": [
+        {
+          "name": "currentChenUpsilon9_primesInAPBelow_eq_zero_of_not_coprime",
+          "kind": "theorem",
+          "line": 50,
+          "complete_header": "theorem currentChenUpsilon9_primesInAPBelow_eq_zero_of_not_coprime\n    {N a d : ℕ} (hNd : Nat.Coprime N d) (had : ¬ Nat.Coprime a d) :\n    (primesInAPBelow N a d N : ℝ) = 0"
+        },
+        {
+          "name": "currentChenUpsilon9PanActive",
+          "kind": "def",
+          "line": 159,
+          "complete_header": "def currentChenUpsilon9PanActive (B : ℝ) (N cap : ℕ) (z : ℝ) : Finset ℕ",
+          "complete_definition": "def currentChenUpsilon9PanActive (B : ℝ) (N cap : ℕ) (z : ℝ) : Finset ℕ :=\n  (actualSmallRosserSupport N cap z).filter (fun d => d ≤ panModulusCutoff N B)"
+        },
+        {
+          "name": "currentChenUpsilon9PanActive_subset",
+          "kind": "theorem",
+          "line": 187,
+          "complete_header": "theorem currentChenUpsilon9PanActive_subset (B : ℝ) (N cap : ℕ) (z : ℝ) :\n    currentChenUpsilon9PanActive B N cap z ⊆ Finset.Icc 1 (panModulusCutoff N B)"
+        }
+      ]
+    },
+    {
+      "module": "ImbalancedChen.CurrentChenUpsilon8CoprimeGateBudget",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenUpsilon8CoprimeGateBudget.lean",
+      "sha256": "c4f5a801eadd6128f088b99cd8128602aeba1d0d8fa2a24906cd3e9cd387e761",
+      "positive_path": [
+        "ImbalancedChen.CurrentChenUpsilon8FiniteMean",
+        "ImbalancedChen.CurrentChenUpsilon8CoprimeGateBudget"
+      ],
+      "complete_public_interfaces": [
+        {
+          "name": "currentChenUpsilon8LiMainMass",
+          "kind": "def",
+          "line": 102,
+          "complete_header": "def currentChenUpsilon8LiMainMass (N : ℕ) : ℝ",
+          "complete_definition": "def currentChenUpsilon8LiMainMass (N : ℕ) : ℝ :=\n  ∑ a ∈ currentChenUpsilon8PrefixProducts N,\n    liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ))"
+        },
+        {
+          "name": "currentChenUpsilon8CoprimeMainDefect",
+          "kind": "def",
+          "line": 108,
+          "complete_header": "def currentChenUpsilon8CoprimeMainDefect (N d : ℕ) : ℝ",
+          "complete_definition": "def currentChenUpsilon8CoprimeMainDefect (N d : ℕ) : ℝ :=\n  ∑ a ∈ currentChenUpsilon8PrefixProducts N,\n    if Nat.Coprime a d then 0 else\n      liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ))"
+        },
+        {
+          "name": "currentChenUpsilon8CoprimeGateError",
+          "kind": "def",
+          "line": 113,
+          "complete_header": "def currentChenUpsilon8CoprimeGateError (N cap : ℕ) (z L : ℝ) (S : Finset ℕ) : ℝ",
+          "complete_definition": "def currentChenUpsilon8CoprimeGateError (N cap : ℕ) (z L : ℝ) (S : Finset ℕ) : ℝ :=\n  ∑ d ∈ S, actualSmallRosserPlus N cap z L d *\n    (currentChenUpsilon8CoprimeMainDefect N d / (Nat.totient d : ℝ))"
+        },
+        {
+          "name": "eventually_currentChenUpsilon8_abs_coprimeGateError_le_singularNormalization",
+          "kind": "theorem",
+          "line": 230,
+          "complete_header": "theorem eventually_currentChenUpsilon8_abs_coprimeGateError_le_singularNormalization\n    (ε : ℝ) (hε : 0 < ε) :\n    ∀ᶠ N : ℕ in atTop, ∀ cap : ℕ, ∀ z L : ℝ, ∀ S : Finset ℕ,\n      S ⊆ Finset.Icc 1 N →\n      |currentChenUpsilon8CoprimeGateError N cap z L S| ≤\n        ε * singularNormalization N"
+        }
+      ]
+    },
+    {
+      "module": "ImbalancedChen.CurrentChenUpsilon8SourceErrorBudget",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenUpsilon8SourceErrorBudget.lean",
+      "sha256": "9d6cb563579a743fd2d5bdcbef19714391d221648ffa3c1bf7b6a2b483b2d52e",
+      "positive_path": [
+        "ImbalancedChen.CurrentChenUpsilon8FiniteMean",
+        "ImbalancedChen.CurrentChenUpsilon8SourceErrorBudget"
+      ],
+      "complete_public_interfaces": [
+        {
+          "name": "currentChenUpsilon8_prefixProducts_card_le_panUpper",
+          "kind": "theorem",
+          "line": 43,
+          "complete_header": "theorem currentChenUpsilon8_prefixProducts_card_le_panUpper {N : ℕ} (hN : 1 ≤ N) :\n    (currentChenUpsilon8PrefixProducts N).card ≤ currentChenUpsilon8PanUpper N"
+        },
+        {
+          "name": "eventually_currentChenUpsilon8_sourceErrors_le_singularNormalization",
+          "kind": "theorem",
+          "line": 163,
+          "complete_header": "theorem eventually_currentChenUpsilon8_sourceErrors_le_singularNormalization\n    (ε : ℝ) (hε : 0 < ε) :\n    ∀ᶠ N : ℕ in atTop,\n      ((currentChenUpsilon8SmallGoldbachPrimeTriples N).card : ℝ) +\n        ((currentChenUpsilon8UnitFibres N).card : ℝ) ≤ ε * singularNormalization N"
+        }
+      ]
+    },
+    {
+      "module": "ImbalancedChen.ActualSmallRosser",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualSmallRosser.lean",
+      "sha256": "0dbcd4e45ededb9edfb601d8249cc554b3e53291985c09557ed2a9f5d4fb2cdf",
+      "positive_path": [
+        "ImbalancedChen.CurrentChenUpsilon8FiniteMean",
+        "ImbalancedChen.CurrentChenUpsilon9FiniteMean",
+        "ImbalancedChen.CurrentChenUpsilon9PanAggregate",
+        "ImbalancedChen.CurrentChenUpsilon9CoprimeGateBudget",
+        "ImbalancedChen.ActualSmallRosser"
+      ],
+      "complete_public_interfaces": [
+        {
+          "name": "actualSmallRosserPlus_abs_le_one",
+          "kind": "theorem",
+          "line": 123,
+          "complete_header": "theorem actualSmallRosserPlus_abs_le_one (N cap : ℕ) (w L : ℝ) (d : ℕ) :\n    |actualSmallRosserPlus N cap w L d| ≤ 1"
+        },
+        {
+          "name": "actualSmallRosserPlus_active",
+          "kind": "theorem",
+          "line": 133,
+          "complete_header": "theorem actualSmallRosserPlus_active {N cap d : ℕ} {w L : ℝ}\n    (hd : actualSmallRosserPlus N cap w L d ≠ 0) :\n    d ∈ actualSmallRosserSupport N cap w ∧ (d : ℝ) < L ∧ SmallPrimeSupportedAt w d"
+        },
+        {
+          "name": "actualSmallRosserSupport_coprime_target",
+          "kind": "theorem",
+          "line": 94,
+          "complete_header": "theorem actualSmallRosserSupport_coprime_target (N cap : ℕ) (w : ℝ) {d : ℕ}\n    (hd : d ∈ actualSmallRosserSupport N cap w) : d.Coprime N"
+        }
+      ]
+    },
+    {
+      "module": "ImbalancedChen.CoprimeRecentering",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CoprimeRecentering.lean",
+      "sha256": "45c28d97bd10eccaa99498b2309fb03c9d8efbdd5040e12d7ba33c3702b418c5",
+      "positive_path": [
+        "ImbalancedChen.CurrentChenUpsilon8FiniteMean",
+        "ImbalancedChen.CurrentChenUpsilon9FiniteMean",
+        "ImbalancedChen.CurrentChenUpsilon9UnitBudget",
+        "ImbalancedChen.CurrentChenUpsilon9PrimeSource",
+        "ImbalancedChen.CurrentChenMeanLedger",
+        "ImbalancedChen.ChenQuotientPrimeSource",
+        "ImbalancedChen.ChenInitialPrimeSource",
+        "ImbalancedChen.CoprimeRecentering"
+      ],
+      "complete_public_interfaces": [
+        {
+          "name": "mod_mem_finiteReducedResidues_iff",
+          "kind": "theorem",
+          "line": 45,
+          "complete_header": "theorem mod_mem_finiteReducedResidues_iff (m d : ℕ) (hd : 0 < d) :\n    m % d ∈ finiteReducedResidues d ↔ Nat.Coprime m d"
+        }
+      ]
+    },
+    {
+      "module": "ImbalancedChen.PowerErrorBudget",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\PowerErrorBudget.lean",
+      "sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+      "positive_path": [
+        "ImbalancedChen.CurrentChenUpsilon8FiniteMean",
+        "ImbalancedChen.CurrentChenUpsilon9FiniteMean",
+        "ImbalancedChen.CurrentChenUpsilon9UnitBudget",
+        "ImbalancedChen.PowerErrorBudget"
+      ],
+      "complete_public_interfaces": [
+        {
+          "name": "eventually_powerLog_le_singularNormalization",
+          "kind": "theorem",
+          "line": 52,
+          "complete_header": "theorem eventually_powerLog_le_singularNormalization\n    (c theta : ℝ) (k : ℕ) (htheta : theta < 1) :\n    ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N : ℕ in atTop,\n        c * (N : ℝ) ^ theta * (Real.log (N : ℝ)) ^ k ≤\n          epsilon * singularNormalization N"
+        }
+      ]
+    },
+    {
+      "module": "ImbalancedChen.SingularSeries",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\SingularSeries.lean",
+      "sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+      "positive_path": [
+        "ImbalancedChen.CurrentChenUpsilon8FiniteMean",
+        "ImbalancedChen.CurrentChenUpsilon9FiniteMean",
+        "ImbalancedChen.CurrentChenUpsilon9UnitBudget",
+        "ImbalancedChen.PowerErrorBudget",
+        "ImbalancedChen.SingularSeries"
+      ],
+      "complete_public_interfaces": [
+        {
+          "name": "singularNormalization",
+          "kind": "def",
+          "line": 124,
+          "complete_header": "noncomputable def singularNormalization (N : ℕ) : ℝ",
+          "complete_definition": "noncomputable def singularNormalization (N : ℕ) : ℝ :=\n  singularSeries N * (N : ℝ) / (Real.log (N : ℝ)) ^ 2"
+        },
+        {
+          "name": "singularNormalization_lower",
+          "kind": "theorem",
+          "line": 127,
+          "complete_header": "theorem singularNormalization_lower (N : ℕ) :\n    twinPrimeConstant * (N : ℝ) / (Real.log (N : ℝ)) ^ 2 ≤\n      singularNormalization N"
+        }
+      ]
+    }
+  ],
+  "fixed_native_primary_APIs": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/AnalyticNumberTheory/Sieve/WeightedPan.lean",
+      "sha256": "f1d751775234d103b0601a26173449de676c274c9d592ffb7b338fcb969630c2",
+      "exact_native_headers": [
+        {
+          "name": "primesInAPBelow",
+          "line": 445,
+          "complete_header": "def primesInAPBelow (y a q l : ℕ) : ℕ"
+        },
+        {
+          "name": "unitResidues",
+          "line": 529,
+          "complete_header": "def unitResidues (q : ℕ) : Finset ℕ"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/Liu/Weights/LiuWeight.lean",
+      "sha256": "5c8b914420de7128b82b9dec31cc433da74d750fb21440a1f35be7a4e048d863",
+      "exact_native_headers": [
+        {
+          "name": "liuScaledAPError",
+          "line": 412,
+          "complete_header": "noncomputable def liuScaledAPError\n   (main : ℝ → ℝ) (Y a d l : ℕ) : ℝ"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/Liu/LogarithmicIntegral/LiuTrueLiPan.lean",
+      "sha256": "ea30dadff4a9e5bfd836aaa0da857004ad9ef4a48ed5bc0d19e1d9697d8b664e",
+      "exact_native_headers": [
+        {
+          "name": "liuMainPanCoprimeIntervalSum",
+          "line": 46,
+          "complete_header": "noncomputable def liuMainPanCoprimeIntervalSum\n    (main : ℝ → ℝ) (Y A₁ A₂ q l : ℕ) (f : ℕ → ℝ) : ℝ"
+        },
+        {
+          "name": "panModulusCutoff",
+          "line": 91,
+          "complete_header": "noncomputable def panModulusCutoff (N : ℕ) (B : ℝ) : ℕ"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/Distribution/LiuPan/LiuPanWangDingSource.lean",
+      "sha256": "45fb1c98a6017482d436cabdb6f21bcfffd6859da3d236a02576c041c18a0e86",
+      "exact_native_headers": [
+        {
+          "name": "liuMainPanCoprimeIntervalMaxL",
+          "line": 261,
+          "complete_header": "noncomputable def liuMainPanCoprimeIntervalMaxL\n    (main : ℝ → ℝ) (Y A₁ A₂ q : ℕ) (f : ℕ → ℝ) : ℝ"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/Distribution/LiuPan/LiuPanActualErrorEnvelope.lean",
+      "sha256": "e0966e779e86f97a3f0037fc5a33d9672551e0347dde2359fb623d642a73e7a5",
+      "exact_native_headers": [
+        {
+          "name": "liuMainPanCoprimeIntervalMaxL_nonneg",
+          "line": 66,
+          "complete_header": "theorem liuMainPanCoprimeIntervalMaxL_nonneg\n    (main : ℝ → ℝ) (N A₁ A₂ q : ℕ) (f : ℕ → ℝ) :\n    0 ≤ liuMainPanCoprimeIntervalMaxL main N A₁ A₂ q f"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/Distribution/LiuPan/LiuPanPrimitiveLedgerAssembly.lean",
+      "sha256": "5757f8a8079ab77252b30ed0ea258fb05407c1225dd68f9528bf5c76e6673896",
+      "exact_native_headers": [
+        {
+          "name": "eventually_pan_log_rpow_le_rpow",
+          "line": 52,
+          "complete_header": "theorem eventually_pan_log_rpow_le_rpow (t r : ℝ) (hr : 0 < r) :\n    ∀ᶠ N : ℕ in atTop, Real.log (N : ℝ) ^ t ≤ (N : ℝ) ^ r"
+        },
+        {
+          "name": "eventually_pan_conductor_bounds",
+          "line": 60,
+          "complete_header": "theorem eventually_pan_conductor_bounds (B : ℝ) (hB : 0 ≤ B) :\n    ∀ᶠ N : ℕ in atTop,\n      1 ≤ Real.log (N : ℝ) ∧ 1 ≤ ⌊lowConductor N B⌋₊ ∧\n      ⌊lowConductor N B⌋₊ ≤ panModulusCutoff N B ∧\n      (panModulusCutoff N B : ℝ) ≤ Real.sqrt N ∧ panModulusCutoff N B ≤ N"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/LiLiuPanBoundedAggregate.lean",
+      "sha256": "87f7f80dbc1808505d85160e0bdb89a08a3304f1558b8ad625d5e63a66c6c753",
+      "exact_native_headers": [
+        {
+          "name": "liuMainPanCoprimeIntervalMaxL_boundedAggregate_log_saving",
+          "line": 91,
+          "complete_header": "theorem liuMainPanCoprimeIntervalMaxL_boundedAggregate_log_saving\n    (U : ℝ) (hU : 0 < U) :\n    ∃ C : ℝ, 0 < C ∧ ∃ B : ℝ, 0 ≤ B ∧ ∃ N₀ : ℕ,\n      ∀ N ≥ N₀, ∀ A₁ A₂ : ℕ, ∀ f : ℕ → ℝ,\n        (A₂ : ℝ) ≤ (N : ℝ) ^ (2 / 3 : ℝ) →\n        Real.log (N : ℝ) ^ (2 * B) ≤ A₁ →\n        (∀ a, |f a| ≤ 1) →\n        ∑ d ∈ Icc 1 (panModulusCutoff N B),\n          liuMainPanCoprimeIntervalMaxL (liuLogarithmicIntegral (2 / Real.log 2))\n            N A₁ A₂ d f ≤\n          C * (N : ℝ) / Real.log (N : ℝ) ^ U"
+        }
+      ]
+    }
+  ],
+  "native_mathlib_API": {
+    "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Finset/Max.lean",
+    "sha256": "6a67c04a5ad263999707cf927121c15edf11bd66f7b5b48652c0e0e660a0d58c",
+    "line": 214,
+    "signature": "Finset.le_max' (x)(H2:x∈s): x<=s.max' ⟨x,H2⟩",
+    "assessment": "apply supplies the actual target max expression; actual image membership pays the argument, consistent with the native MaxL nonneg proof."
+  },
+  "fixed_provider_readonly_check": {
+    "goldbach_HEAD": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib_HEAD": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "both_tracked_diff_HEAD_exit": 0,
+    "scope": "Actual native primary files read/hash-checked, git HEAD and tracked cleanliness read only; no build or imported closure proof replay."
+  },
+  "critical_boundaries": {
+    "same_literal_U8_zero_one_source_coefficient": true,
+    "same_full_signed_lambda_every_term": true,
+    "true_multiplier_coprimality_defect_preserved": true,
+    "strict_Q_plus_one_to_d_le_Q_exact": true,
+    "strict_to_closed_AP_uses_whole_divisor_sum_nonneg": true,
+    "receiver_zero_kept": true,
+    "small_prime_loss": "Actual card(product image)*ceil(N^1/5)<=2*N^13/15",
+    "literal_unit_loss": "Extracted from genuine combined small+unit budget by nonnegative small-prime cardinal",
+    "B_quantifier": "Exists B>=0 fixed at U=3 before every epsilon>0",
+    "threshold_order": "For each epsilon eventual N before every cap; intermediate Pan before cap,z and gate before cap,z,L,S",
+    "final_main": "Actual Li8 times source-independent explicit full signed density9; no assumed value8 or density bound",
+    "no_EvenN_premise": true
+  },
+  "relative_DAG_report": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261016-U8FiniteMean-independent-relative-dag.json",
+    "sha256": "f52afaac0042751305c89fa37605dbe6a9d67914f2a5e8100203f2da81d04826",
+    "project_count": 49,
+    "parent_union_count": 48,
+    "only_new_project": [
+      "ImbalancedChen.CurrentChenUpsilon8FiniteMean"
+    ],
+    "new_foreign_roots": 0,
+    "not_full_foreign_closure_replay": true
+  },
+  "owner_corrected_report_reference": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261016-U8FiniteMean-owner-semantics-api-corrected.json",
+    "sha256": "8cae4d80745281c20a6b3258dd58227c577526088532170c0ad970b583306091",
+    "scope": "Separate author API-excerpt correction; no source changes. Independent source/APIs read above, old author evidence retained."
+  },
+  "pins": {
+    "lake-manifest.json": {
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "bytes_equal_HEAD": true
+    },
+    "lean-toolchain": {
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "bytes_equal_HEAD": true
+    },
+    "lakefile.toml": {
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "bytes_equal_HEAD": true
+    }
+  },
+  "source_options": [],
+  "forbidden_admit_axiom_scan": [],
+  "findings": [],
+  "determined_mathematical_or_fixed_API_blocker": false,
+  "remaining_gates": [
+    "Actual exact da4d strict compilation and complete owned audit; source review is not elaboration PASS.",
+    "A quantitative bound for the explicit full signed density and an actual U8 true-li/harmonic main-mass estimate remain needed for a numerical ordinary U8 mean.",
+    "No adopted K, final Chen constant, distribution endpoint or independent foreign imported-closure acceptance is concluded here."
+  ],
+  "lean_invoked": false,
+  "lake_build_checker_invoked": false,
+  "source_checker_pin_modified": false,
+  "bytecode_written": false,
+  "Lean_PASS_or_imported_closure_acceptance_claimed": false
+}

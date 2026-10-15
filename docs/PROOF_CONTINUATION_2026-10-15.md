@@ -149,10 +149,24 @@ original admissibility is not replaced by unproved transposed admissibility.
 | `Part3TransposedPrimitiveV` | The literal real V is the real part of the full actual mixed sum; P0 reality, active primitive residues and true mixed progression errors give its finite residual envelope | Strict compilation; original-object stock kernel replay; complete 16-declaration types, inventory and transitive axiom audit |
 | `ActualPrimeTupleNormalization` | True prime-tuple product fibre multiplicity is at most the factorial; normalization gives one-bounded grouped coefficients and restores the original scalar exactly once | Strict compilation; original-object stock kernel replay; complete 8-declaration types, inventory and transitive axiom audit |
 | `ActualExtendedThirdDistinctProductHarmonic` | Unique factorization and actual strict order give an injective original prefix-product carrier; arbitrary signed triple tests and the exact reciprocal totient transfer to the same product harmonic sum and original ideal | Strict compilation; original-object stock kernel replay; complete 24-declaration types, inventory and transitive axiom audit |
+| `FiniteUpperCarrierCore` | The same literal small-rough coefficient extends by zero to a covering rough carrier with exact preservation of its divisor sum, density, signed real-source coprime correction and distribution discrepancy | Strict compilation; original-object stock kernel replay; complete 20-declaration types, inventory and transitive axiom audit |
+| `Part3TransposedLargeGCDFourier` | The original alpha cleanup and same-mask raw-zero subtraction give a genuine bound and every logarithmic payment for the paired large-gcd Fourier remainder after the original beta L2 factor; other gcd coordinates and the small remainder stay open | Strict compilation; original-object stock kernel replay; complete 17-declaration types, inventory and transitive axiom audit |
+| `Part3TransposedModulusGCDZero` | The actual small-paired-gcd and large-physical-gcd mask retains compatibility before norm bounds and pays its genuine raw zero with original beta L2; whole W and the full nonzero part are separate | Strict compilation; original-object stock kernel replay; complete 35-declaration types, inventory and transitive axiom audit |
+| `Part3TransposedPrimitiveVMoment` | The actual V residual pays the honest U-squared times cap logarithmic cost, retaining the original beta L2 moment and every physical modulus | Strict compilation; original-object stock kernel replay; complete 4-declaration types, inventory and transitive axiom audit |
+| `ActualFrozenCapacitySlots` | One endpoint-vector greedy assignment freezes all original labelled slots on the full box, with natural product, capacity, coprimality and signed partition identities | Strict compilation; original-object stock kernel replay; complete 15-declaration types, inventory and transitive axiom audit |
+| `Part3TransposedCanonicalReciprocalPhase` | The actual transposed CRT phase is exactly its canonical root, slow and reciprocal factors with the original signed residue, true physical lcm and every integer frequency retained; no slow-phase deletion or reciprocal energy estimate is assumed | Strict compilation; original-object stock kernel replay; complete 19-declaration types, inventory and transitive axiom audit |
+| `ActualRoughVectorEndpointBudget` | Original rough-prime support pays the finite vector length and upper-endpoint inflation budget before the full-vector factorization | Strict compilation; original-object stock kernel replay; complete 11-declaration types, inventory and transitive axiom audit |
+| `Part3TransposedModulusProgression` | The actual compatible physical gcd retains its own product progression before the full complex rows are bounded, giving a genuine whole-W divisor witness majorant with original smoothing and signed residue | Strict compilation; original-object stock kernel replay; complete 23-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon8SourceErrorBudget` | The literal eighth count splits exactly into large and small Goldbach-prime triples and unit fibres; actual injectivity and original product cutoffs pay both errors and prove their normalized limit is zero | Strict compilation; original-object stock kernel replay; complete 18-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon8CoprimeGateBudget` | The actual eighth product image pays its full non-coprime divisor mass using both genuine prime factors and totient supermultiplicativity; the original signed Rosser gate error has an internally derived negligible normalized cost uniform before cap, levels and positive moduli | Strict compilation; original-object stock kernel replay; complete 13-declaration types, inventory and transitive axiom audit |
+| `Part3TransposedZeroPayment` | The original auxiliary SW exponent pays both actual fixed logarithm costs and the local Fourier mass, giving every requested decay for the actual beta L2 times raw-zero discrepancy | Strict compilation; original-object stock kernel replay; complete 2-declaration types, inventory and transitive axiom audit |
+| `Part3TransposedPrimitiveVPayment` | Original medium geometry and fixed logarithm absorption pay the literal V residual and the combined U/V error after the actual beta L2 factor | Strict compilation; original-object stock kernel replay; complete 3-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorDispersion` | The original signed entrance has a genuine joint Cauchy in beta and its first physical factor, retaining the full primitive first-factor carrier, honest extra Q1 outside factor, identical p in both CRT labels, same original-V cutoff, full physical lcm and complete signed Poisson series; the newly summed centered energy and its analytic payments remain open | Strict compilation; original-object stock kernel replay; complete 46-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon8FiniteMean` | One genuine actual eighth count bound retains its original product image, true li mass and same signed full upper density; the actual Pan aggregate, coprimality defect, literal units and small-prime loss are all paid with B fixed before epsilon and the threshold before every cap, while its leading harmonic mean remains open | Strict compilation; original-object stock kernel replay; complete 29-declaration types, inventory and transitive axiom audit |
 
-These 102 modules contain **2056 complete owned declarations**, including
+These 116 modules contain **2311 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-2056 independent major mathematical theorems.
+2311 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.
@@ -235,6 +249,36 @@ aggregate majorant. This is a finite source and distribution step; the
 original unit and small-prime losses, signed sieve errors and full eighth
 ordinary mean require their own subsequent proofs.
 
+The literal eighth count has an exact large-prime, small-prime and
+unit-fibre partition. Genuine source injectivity gives power bounds for
+both discarded parts and a zero singular-normalized error limit. The full
+eighth ordinary upper mean is a separate assembly and harmonic step.
+
+The actual eighth non-coprime main-term gate is paid with both
+genuine prime factors and the reciprocal-totient divisor estimate, without
+assuming coprimality of the remaining cofactor. The original signed upper
+Rosser coefficient is retained. Its negligible-error threshold precedes
+every cap, level and selected positive-modulus set through N; this does
+not supply the eighth leading mean or a density constant.
+
+The literal eighth count is now bounded by its actual li main mass
+times the same complete signed upper density, plus every positive multiple
+of the original singular normalization. The genuine Pan exponent is fixed
+before the tolerance, and the arithmetic threshold precedes every cap.
+All four Pan, gate, small-prime and unit errors are paid internally. The
+leading-one li transport and actual eighth harmonic limit remain separate.
+
+A separate, genuine joint Cauchy in the original beta and first
+physical factor keeps that same factor p on both squared-row labels. The
+full primitive p carrier, same-C0 auxiliary SW family, original V cutoff,
+signed residue, full lcm and every integer Poisson frequency are literal.
+The outside factor has the honest extra Q1; the new summed centered energy
+must be bounded at scale V U^2 / Q1. Old independent-first-factor zero/U/V,
+gcd-region and reciprocal estimates do not automatically pay this energy.
+In particular gcd(p v1,p v2)=p gcd(v1,v2), so the old small full-gcd region
+cannot simply be transferred to a residual-gcd partition. Slow phases,
+the new energy and the complete restricted medium bound remain open.
+
 Deleting actual original-alpha divisors of the moving signed residue
 has a proved finite error and every logarithmic payment, with the same
 auxiliary-SW constants preserved. The cleaned atom retains the original
@@ -248,9 +292,20 @@ the same recovered triple test. Its harmonic limit is the same original
 functional, with all fixed cutoffs preceding N. No new factorial is
 inserted and the signed first-exit counting dictionary remains separate.
 
+The actual paired large-gcd Fourier remainder is paid after the
+original beta L2 factor, including the same-mask raw-zero subtraction and
+the signed-residue cleanup. This covers that gcd region only; the other
+regions and the full physical distribution endpoint remain open.
+
+Both literal primitive-center residuals U-P0 and V-P0 are paid after
+the actual original beta L2 factor, with every requested real logarithmic
+decay. The honest V estimate keeps two alpha masses and the full physical
+cap; original medium geometry pays them. Nonzero frequencies and the
+complete physical distribution endpoint remain open.
+
 ## Candidates that must not be counted as completed proofs
 
-The 31 unaccepted source candidates are listed with exact source
+The 25 unaccepted source candidates are listed with exact source
 hashes in `verification/proof-continuation/2026-10-15/unaccepted-candidates.json`.
 They are excluded from the accepted module/declaration inventory above.
 Original failed attempts remain failures; replacement sources need their own checks.
@@ -259,33 +314,27 @@ Original failed attempts remain failures; replacement sources need their own che
 * `Certificates.PairedV2FullCertificate`: Not executed; requires the full original-strip chain, beyond the frozen baseline pilot.
 * `ActualThirdPrefixTailIntegral`: Broad arithmetic tuple/profile bridge is not compiled; the separate canonical integral core is verified.
 * `Part3PairedUpperEndpointSW`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualFrozenCapacitySlots`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualRoughVectorEndpointBudget`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualFrozenSelectedPairSlots`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualFrozenSlotCoefficientRegrouping`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualFrozenSelectedPairAssignment`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualPrimeSlotSquarefreeSymmetry`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3TransposedPrimitiveVMoment`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3TransposedPrimitiveVPayment`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3TransposedZeroPayment`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `Part3TransposedZeroUVPayment`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualPrimeMultiLabelNormalization`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3TransposedLargeGCDFourier`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactResidualProfile`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualPrimeDisjointLabelProducts`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualPrimeFineLabelSortedSelector`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualPrimeFineWordMultiplicity`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualPrimeFineWordSlotRegrouping`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3TransposedModulusGCDZero`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualRosserOddBox`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualPrimeBoxEulerLower`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualRosserEvenBox`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3TransposedModulusProgression`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `Part3TransposedDifferenceMoment`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactUpperRho`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactFrontier`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `FiniteUpperCarrierCore`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactPolicySaving`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualExtendedThirdInitialCutoff`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3SharedFirstFactorPairCount`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3SharedFirstFactorLargePairedGCDW`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 
 The ordinary lower means above are baseline means. They do not prove the
 manuscript's stronger causal h248 contribution, complete eleven-term lower

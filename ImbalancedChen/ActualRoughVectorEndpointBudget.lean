@@ -60,7 +60,7 @@ theorem actualRoughPrimeVector_length_le {x ρ lam0 : ℝ}
   have hpow : x ^ (ρ * (input.length : ℝ)) ≤ x ^ (5 / 8 : ℝ) := by
     rw [Real.rpow_mul hxpos.le, Real.rpow_natCast]
     apply le_trans ?_ (hprod.trans (Real.rpow_le_rpow_of_exponent_le hx.le hlevel))
-    simpa only [List.map_const, List.prod_replicate, actualNatList_cast_prod] using hlower
+    simpa only [List.map_const', List.prod_replicate, actualNatList_cast_prod] using hlower
   have hlen : ρ * (input.length : ℝ) ≤ 5 / 8 := (Real.rpow_le_rpow_left_iff hx).mp hpow
   unfold actualRoughVectorRankBound
   apply (Nat.le_floor_iff (div_nonneg (by norm_num : (0 : ℝ) ≤ 5 / 8) hρ.le)).mpr
@@ -80,8 +80,8 @@ private theorem mapped_upper_prod_le_inflation {α : Type*} (x τ : ℝ) (hx : 0
       have hi := hsize i (by simp)
       have ht := ih (fun j hj => hsize j (List.mem_cons_of_mem i hj))
       have hprod0 : 0 ≤ (input.map (fun j => (upper j : ℝ))).prod := by
-        rw [← List.map_map (f := upper) (g := fun p : ℕ => (p : ℝ)), actualNatList_cast_prod]
-        exact Nat.cast_nonneg _
+        simpa only [← actualNatList_cast_prod (input.map upper), List.map_map, Function.comp_def]
+          using (Nat.cast_nonneg (α := ℝ) (input.map upper).prod)
       have h := mul_le_mul hi ht hprod0
         (mul_nonneg (Real.rpow_nonneg hx.le τ) (Nat.cast_nonneg _))
       simpa only [List.map_cons, List.prod_cons, List.length_cons, pow_succ,
@@ -100,15 +100,15 @@ theorem actualDwellSupport_upper_inflation {α : Type*} {x τ lam0 lam1 : ℝ} {
   intro i hi
   have hi' : i < input.length := by simpa only [List.length_map] using hi
   have hs := hfull i (by simpa only [List.length_map] using hi')
-  simp only [List.take_map, List.map_map, List.getElem_map, Function.comp_def] at hs ⊢
+  simp only [← List.map_take, List.map_map, List.getElem_map, Function.comp_def] at hs ⊢
   have hpre := mapped_upper_prod_le_inflation x τ hxpos actual upper (input.take i)
     (fun j hj => hsize j (List.mem_of_mem_take hj))
   rw [List.length_take, Nat.min_eq_left hi'.le] at hpre
   have hq := hsize input[i] (List.getElem_mem hi')
   have hq2 := pow_le_pow_left₀ (Nat.cast_nonneg (upper input[i])) hq 2
   have hactual0 : 0 ≤ ((input.take i).map (fun j => (actual j : ℝ))).prod := by
-    rw [← List.map_map (f := actual) (g := fun p : ℕ => (p : ℝ)), actualNatList_cast_prod]
-    exact Nat.cast_nonneg _
+    simpa only [← actualNatList_cast_prod ((input.take i).map actual), List.map_map, Function.comp_def]
+      using (Nat.cast_nonneg (α := ℝ) ((input.take i).map actual).prod)
   calc
     _ ≤ ((x ^ τ) ^ i * ((input.take i).map (fun j => (actual j : ℝ))).prod) *
         (x ^ τ * (actual input[i] : ℝ)) ^ 2 :=
@@ -151,7 +151,7 @@ theorem actualExtendedThirdSelectedPair_upperSupport
   have hlen : input.length ≤ actualRoughVectorRankBound ρ := by
     have h := actualRoughPrimeVector_length_le hx hρ
       (show actualExtendedThirdPhysicalLevel e m j ≤ 5 / 8 by linarith)
-      (input.map actual) (by simpa only [List.map_eq_nil_iff] using hne)
+      (input.map actual) (by intro heq; exact hne (List.map_eq_nil_iff.mp heq))
       (by simpa only [List.forall_mem_map] using hpositive)
       (by simpa only [List.forall_mem_map] using hrough) hsupport
     simpa only [List.length_map] using h

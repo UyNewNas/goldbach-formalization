@@ -49,6 +49,7 @@ private theorem difference_row_le (N : Finset ℕ) (K n : ℕ)
       intro a ha b hb he
       have ha' := (Finset.mem_filter.mp ha).2
       have hb' := (Finset.mem_filter.mp hb).2
+      change n - a = n - b at he
       omega
     calc
       _ = ∑ v ∈ L.image (fun m ↦ n - m), (fouvryTau 2 v : ℝ) := by
@@ -64,6 +65,7 @@ private theorem difference_row_le (N : Finset ℕ) (K n : ℕ)
       intro a ha b hb he
       have ha' := (Finset.mem_filter.mp ha).2
       have hb' := (Finset.mem_filter.mp hb).2
+      change a - n = b - n at he
       omega
     calc
       _ = ∑ v ∈ R.image (fun m ↦ m - n), (fouvryTau 2 v : ℝ) := by
@@ -222,7 +224,9 @@ theorem cleanedAlpha_largeModulusW_bound (kappa : ℝ) {epsilon : ℝ}
       kappa hepsilon
   refine ⟨C, hC, fun B sigma c0 d hd Y D hD ↦ ?_⟩
   exact (hbound B sigma c0 d hd Y D hD).trans
-    (mul_le_mul_of_nonneg_left (cleanedAlpha_pairDivisorBudget_le hd Y hD) (by positivity))
+    (mul_le_mul_of_nonneg_left (cleanedAlpha_pairDivisorBudget_le hd Y hD)
+      (mul_nonneg hC.le (Real.rpow_nonneg
+        (mul_nonneg (zero_le_one.trans hd.1) (zero_le_one.trans hd.2.1)) epsilon)))
 
 theorem betaL2_mul_cleanedAlpha_largeModulusW_bound (kappa : ℝ) {epsilon : ℝ}
     (hepsilon : 0 < epsilon) :
@@ -287,12 +291,15 @@ private theorem both_lengths_lower_bound
     congr 1
     ring
   have hUupper : d.U ≤ d.scale ^ (1 - sigma) := by nlinarith [hU2', hsquare]
-  refine ⟨hU, (mul_le_mul_left hp).mp ?_⟩
-  calc
-    _ = d.scale := by rw [← Real.rpow_add hx,
-      show (1 - sigma) + sigma = 1 by ring, Real.rpow_one]
-    _ = d.U * d.V := rfl
-    _ ≤ _ := mul_le_mul_of_nonneg_right hUupper hV0
+  refine ⟨hU, ?_⟩
+  have hmul : d.scale ^ (1 - sigma) * d.scale ^ sigma ≤
+      d.scale ^ (1 - sigma) * d.V := by
+    calc
+      _ = d.scale := by rw [← Real.rpow_add hx,
+        show (1 - sigma) + sigma = 1 by ring, Real.rpow_one]
+      _ = d.U * d.V := rfl
+      _ ≤ _ := mul_le_mul_of_nonneg_right hUupper hV0
+  nlinarith
 
 private theorem log_bound_from_scale {x z : ℝ} (hx : 0 < x) (hlog : 1 ≤ Real.log x)
     (hz : 0 < z) (hzx : z ≤ 8 * x) :
@@ -407,7 +414,7 @@ theorem betaL2_mul_cleanedAlpha_largeModulusW_log_payment
       mul_le_mul (mul_le_mul_of_nonneg_left hBetaLog hCoefficient) hBracket
         (by positivity) (by positivity)
     _ = d.scale ^ 2 * (E * d.scale ^ (z / 2) * Real.log d.scale ^ N / d.scale ^ z) := by
-      have hQN : Q ^ p * Q = Q ^ N := by rw [← pow_succ]; rfl
+      have hQN : Q ^ p * Q = Q ^ N := by rw [← pow_succ]
       calc
         _ = d.scale ^ 2 * (100 * C * d.scale ^ (z / 2) * (Q ^ p * Q) / d.scale ^ z) := by ring
         _ = _ := by rw [hQN]; dsimp only [E, Q]; rw [mul_pow]; ring

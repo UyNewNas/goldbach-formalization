@@ -67,7 +67,7 @@ theorem actual_log_cost_le_log_pow (p s : ℕ)
     _ ≤ (D * Real.log d.scale) ^ p * (D * Real.log d.scale) ^ s :=
       mul_le_mul (pow_le_pow_left₀ hV0 hlogV p) (pow_le_pow_left₀ hcap0 hlogCap s)
         (pow_nonneg hcap0 s) (by positivity)
-    _ = _ := by rw [← pow_add, mul_pow]; rfl
+    _ = _ := by rw [← pow_add, mul_pow]
 
 /-- The actual beta moment times the complete raw-zero discrepancy is paid
 at every requested logarithmic order, uniformly before the family member. -/
@@ -97,7 +97,7 @@ theorem actual_betaL2_mul_rawZero_log_payment {ι : Type*} (F : ι → MediumAto
   refine ⟨max xSW xLog, lt_of_lt_of_le hxSW (le_max_left _ _), fun i hx ↦ ?_⟩
   let x : ℝ := (F i).scale
   let L : ℝ := Real.log x
-  have hL : max 1 K ≤ L := hxLog ((le_max_right _ _).trans hx)
+  have hL : max 1 K ≤ L := hxLog (F i).scale ((le_max_right _ _).trans hx)
   have hL1 : 1 ≤ L := (le_max_left _ _).trans hL
   have hLpos : 0 < L := zero_lt_one.trans_le hL1
   have hKsq : K ≤ L ^ 2 := by
@@ -128,7 +128,7 @@ theorem actual_betaL2_mul_rawZero_log_payment {ι : Type*} (F : ι → MediumAto
           (mul_le_mul_of_nonneg_right hKsq (sq_nonneg x)) (by positivity)
       _ = x ^ 2 * L ^ R := by
         dsimp [R]
-        simp only [Real.rpow_add hLpos, Real.rpow_natCast]
+        simp only [Real.rpow_add hLpos, Real.rpow_natCast, Real.rpow_two]
         ring
   exact (hbound i ((le_max_left _ _).trans hx)).trans hpay
 

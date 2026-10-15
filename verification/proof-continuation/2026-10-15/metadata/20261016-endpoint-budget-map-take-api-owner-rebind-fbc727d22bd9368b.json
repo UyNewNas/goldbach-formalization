@@ -1,0 +1,87 @@
+{
+  "status": "SOURCE_ONLY_ROOT_AUTHORIZED_KNOWN_SAME_API_PROACTIVE_EXACT_REBIND",
+  "reviewer": "/root/tail_resume (source owner)",
+  "created_utc": "2026-10-15T22:30:24.318444+00:00",
+  "candidate": "ImbalancedChen.ActualRoughVectorEndpointBudget",
+  "old_source_sha256": "7bb4f5b5113fcfb03ff77813d953c110f8c86a1e02a27c6c702e1799f3d8d4fb",
+  "new_source_sha256": "dffaaf435cd81cdd7ad48242c25ad94ca50b86f0642fcb51fb2aef7aba16bd24",
+  "old_snapshot": ".lake/proof-continuation/source-reviews/20261016-endpoint-budget-7bb4-before-map-take-api.lean",
+  "forward_byte_exact": true,
+  "inverse_byte_exact": true,
+  "only_change": {
+    "old": "List.take_map",
+    "new": "← List.map_take"
+  },
+  "root_specific_authorization": "Budget103 actual same take(map)->map(take) context may receive this sole fixed API replacement after complete current source read and fixed API verification. Do not infer authorization for any other proof/API change.",
+  "known_actual_diagnostic": {
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "path": ".lake/proof-continuation/runs/20261015T222623804829Z-ImbalancedChen.ActualFrozenCapacitySlots/stdout.log",
+    "sha256": "edbe88eb79ef57580a606eab1152ed8ff167fb795efc83d669f31d3cf6af86c0",
+    "scope": "Actual Capacity Unknown List.take_map at33, exact same mapped-prefix support context. This is not a compiler failure or PASS for Budget."
+  },
+  "fixed_api": {
+    "path": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/List/TakeDrop.lean",
+    "sha256": "16c0418c733f7ef8f331cd6bf6848ca343bda50766494292e80c438755942ac5",
+    "line": 248,
+    "declaration": "@[simp] theorem map_take {f : α → β} : ∀ {l : List α} {i : Nat}, (l.take i).map f = (l.map f).take i",
+    "application": "Reverse rewriting of both hs on input.map actual and the target on input.map upper yields the identical labelled take prefix before composing maps and getElem. No endpoint budget or support hypothesis is weakened."
+  },
+  "complete_declaration_count": 6,
+  "definition_count": 1,
+  "complete_declarations": [
+    {
+      "name": "actualRoughVectorRankBound",
+      "kind": "def",
+      "private": false,
+      "complete_source_header": "def actualRoughVectorRankBound (ρ : ℝ) : ℕ",
+      "complete_definition": "def actualRoughVectorRankBound (ρ : ℝ) : ℕ := ⌊(5 / 8 : ℝ) / ρ⌋₊"
+    },
+    {
+      "name": "actualDwellSupport_prod_le",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualDwellSupport_prod_le {D : ℝ} (input : List ℕ) (hne : input ≠ [])\n    (hpositive : ∀ p ∈ input, 0 < p) (hfull : actualDwellSupport D input) :\n    (input.prod : ℝ) ≤ D"
+    },
+    {
+      "name": "actualRoughPrimeVector_length_le",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualRoughPrimeVector_length_le {x ρ lam0 : ℝ}\n    (hx : 1 < x) (hρ : 0 < ρ) (hlevel : lam0 ≤ 5 / 8)\n    (input : List ℕ) (hne : input ≠ [])\n    (hpositive : ∀ p ∈ input, 0 < p)\n    (hrough : ∀ p ∈ input, x ^ ρ ≤ (p : ℝ))\n    (hfull : actualDwellSupport (x ^ lam0) input) :\n    input.length ≤ actualRoughVectorRankBound ρ"
+    },
+    {
+      "name": "mapped_upper_prod_le_inflation",
+      "kind": "theorem",
+      "private": true,
+      "complete_source_header": "private theorem mapped_upper_prod_le_inflation {α : Type*} (x τ : ℝ) (hx : 0 < x)\n    (actual upper : α → ℕ) (input : List α)\n    (hsize : ∀ i ∈ input, (upper i : ℝ) ≤ x ^ τ * (actual i : ℝ)) :\n    (input.map (fun i => (upper i : ℝ))).prod ≤\n      (x ^ τ) ^ input.length * (input.map (fun i => (actual i : ℝ))).prod"
+    },
+    {
+      "name": "actualDwellSupport_upper_inflation",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualDwellSupport_upper_inflation {α : Type*} {x τ lam0 lam1 : ℝ} {R : ℕ}\n    (hx : 1 < x) (hτ : 0 ≤ τ) (actual upper : α → ℕ) (input : List α)\n    (hlen : input.length ≤ R)\n    (hsize : ∀ i ∈ input, (upper i : ℝ) ≤ x ^ τ * (actual i : ℝ))\n    (hfull : actualDwellSupport (x ^ lam0) (input.map actual))\n    (hbudget : lam0 + τ * (R + 1) ≤ lam1) :\n    actualDwellSupport (x ^ lam1) (input.map upper)"
+    },
+    {
+      "name": "actualExtendedThirdSelectedPair_upperSupport",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualExtendedThirdSelectedPair_upperSupport\n    {α : Type*} {e δ ρ τ x : ℝ} {m : ℕ} {j : ActualExtendedThirdDyadicLabel m}\n    (he0 : 0 < e) (he : e ≤ 1 / 384) (hδ : δ ≤ e / 32)\n    (hρ : 0 < ρ) (hτ : 0 ≤ τ)\n    (hwidth : τ * (actualRoughVectorRankBound ρ + 1) ≤ e / 2)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ VariableEnvelope.mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (hx : 1 < x) (actual upper : α → ℕ) (input : List α) (hne : input ≠ [])\n    (hpositive : ∀ i ∈ input, 0 < actual i)\n    (hrough : ∀ i ∈ input, x ^ ρ ≤ (actual i : ℝ))\n    (hsize : ∀ i ∈ input, (upper i : ℝ) ≤ x ^ τ * (actual i : ℝ))\n    (hsupport : actualDwellSupport (x ^ actualExtendedThirdPhysicalLevel e m j)\n      (input.map actual)) :\n    actualDwellSupport (x ^ (actualExtendedThirdPairParameter e m j t yz - 2 * δ))\n      (input.map upper)"
+    }
+  ],
+  "all_complete_headers_and_definitions_identical": true,
+  "imports_identical": true,
+  "direct_parent": {
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "current_source_sha256": "40b5e534d7fbd180c69cc33e2ae75d1c9a854712f4832f19c5b6ebc3fc251007",
+    "status_at_author_review": "40b5 repaired source candidate pending actual retry and full owned audit; not accepted by this report"
+  },
+  "whole_source_read": true,
+  "any_other_source_change": false,
+  "resource_profile_change": false,
+  "imports_definitions_types_quantifiers_thresholds_pins_changed": false,
+  "runtime_gate": "Do not compile this source before Capacity actual full owned acceptance and source-cache checks. No bootstrap or closure acceptance inferred.",
+  "old_reports_preserved": true,
+  "lean_invoked": false,
+  "lake_invoked": false,
+  "owned_sources_modified": false,
+  "acceptance_claimed": false
+}

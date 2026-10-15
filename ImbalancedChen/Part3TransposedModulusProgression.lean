@@ -122,7 +122,10 @@ theorem transposed_sum_weight_witness_le
       rw [Finset.sum_const, nsmul_eq_mul, mul_comm, fouvryTau_two]
       exact mul_le_mul_of_nonneg_left
         (show (S.card : ℝ) ≤ (((n₁ : ℤ) - n₂).natAbs.divisors.card : ℝ) by
-          exact_mod_cast Finset.card_filter_le _ _)
+          have hcard : S.card ≤ ((n₁ : ℤ) - n₂).natAbs.divisors.card := by
+            dsimp only [S]
+            exact Finset.card_filter_le _ _
+          exact_mod_cast hcard)
         (by positivity)
 
 private theorem constructedWeight_nonneg (d : MediumAtom) (q r n₁ n₂ : ℕ) :
@@ -279,7 +282,7 @@ private theorem absoluteRow_le_tauFour_of_not_dvd
       (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ) := by
   have hgood : (unitBetaAtom d).cleanedBeta n ≠ 0 := by
     change (if (n : ℤ) ∣ d.residue then (0 : ℂ) else 1) ≠ 0
-    simp only [if_neg hn, one_ne_zero]
+    simpa only [if_neg hn] using (one_ne_zero : (1 : ℂ) ≠ 0)
   exact (unitBetaAtom d).absoluteFactorModulusRow_le_tauFour
     (unitBetaAtom_admissible hd) m n hgood
 

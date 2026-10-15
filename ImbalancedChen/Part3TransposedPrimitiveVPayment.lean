@@ -76,7 +76,7 @@ theorem actual_betaL2_mul_V_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)
     (eventually_const_rpow_two_le_logBudget C A hC.le (by linarith : 0 < 8 * sigma))
   refine ⟨max x1 x2, lt_of_lt_of_le hx1 (le_max_left _ _), fun d hd hx ↦ ?_⟩
   exact (hbound d hd ((le_max_left _ _).trans hx)).trans
-    (hx2 ((le_max_right _ _).trans hx))
+    (hx2 d.scale ((le_max_right _ _).trans hx))
 
 /-- Both literal primitive-center remainders are genuinely paid after the
 actual original-beta moment. The full centered identity can use this bound

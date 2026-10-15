@@ -30,7 +30,7 @@ private theorem prefixSquareBound_map {α : Type*} (upper : α → ℕ)
     PrefixSquareBound (fun i => (upper i : ℝ)) D input := by
   intro i hi
   have h := hfull i (by simpa only [List.length_map] using hi)
-  simpa only [List.take_map, List.map_map, List.getElem_map, Function.comp_def] using h
+  simpa only [← List.map_take, List.map_map, List.getElem_map, Function.comp_def] using h
 
 /-- Mapping slot labels after the run gives exactly the run on their
 upper values. Repeated upper values do not merge their original slots. -/

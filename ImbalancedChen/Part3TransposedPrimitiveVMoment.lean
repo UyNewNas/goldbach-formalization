@@ -30,11 +30,15 @@ theorem coprimeNormMass_le_twice_U
     {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}
     (hd : MediumAdmissible B sigma kappa c0 d) (q : ℕ) :
     coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q ≤ 2 * d.U := by
+  unfold coprimeMass
   calc
     _ ≤ ∑ n ∈ d.alphaCarrier, ‖d.alpha n‖ := by
       apply Finset.sum_le_sum
       intro n _
-      by_cases hn : n.Coprime q <;> simp [hn]
+      by_cases hn : n.Coprime q
+      · rw [if_pos hn]
+      · rw [if_neg hn]
+        exact norm_nonneg _
     _ ≤ _ := alpha_l1_le_twice_U hd
 
 theorem actualV_finite_envelope_le
@@ -50,9 +54,13 @@ theorem actualV_finite_envelope_le
   have hcap : 0 ≤ d.physicalFactorCap := zero_le_one.trans (d.one_le_physicalFactorCap hd)
   have hmass (q : ℕ) :
       0 ≤ coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q := by
+    unfold coprimeMass
     apply Finset.sum_nonneg
     intro n _
-    by_cases hn : n.Coprime q <;> simp [hn]
+    by_cases hn : n.Coprime q
+    · rw [if_pos hn]
+      exact norm_nonneg _
+    · rw [if_neg hn]
   let w : ℕ → ℝ := fun r ↦
     ‖d.groupedFactorGamma r‖ * (r.divisors.card : ℝ) / (r.totient : ℝ)
   have hw (r : ℕ) : 0 ≤ w r := by dsimp [w]; positivity
