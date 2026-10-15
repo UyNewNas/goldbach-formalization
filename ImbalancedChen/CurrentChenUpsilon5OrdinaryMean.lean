@@ -159,7 +159,6 @@ theorem eventually_currentChenUpsilon5_ge_ordinary_mean
         _ = ((N : ℝ) / Real.log (N : ℝ)) * V := by
           unfold singularNormalization
           field_simp [hSSp.ne', hlogp.ne']
-          <;> ring
         _ ≤ trueLogarithmicIntegral N * V := mul_le_mul_of_nonneg_right hli hv
         _ = _ := by
           unfold currentChenUpsilon5OrdinaryDensitySum V

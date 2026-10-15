@@ -3,10 +3,9 @@ import ImbalancedChen.CurrentChenPairDensity
 import ImbalancedChen.CurrentChenUpsilon6OrdinarySieveKernel
 import ImbalancedChen.ChenPairHarmonicFinite
 import ImbalancedChen.ActualPrimePolyhedralTestFunctions
-import ImbalancedChen.CurrentChenInitialSource
+import ImbalancedChen.CurrentChenUpsilon6FiniteMean
 import ImbalancedChen.Part3CurrentLowerDistribution
 import ImbalancedChen.MovingWeightTransport
-import MathlibNt.SieveTheory.Arithmetic.LiuLogScaleAbsorption
 
 /-!
 # Ordinary arithmetic on the corrected sixth product domain
@@ -36,50 +35,11 @@ open Classical
 open MathlibNt.SieveTheory.BombieriVinogradov (trueLogarithmicIntegral)
 open MathlibNt.SieveTheory.LiuWeight (panModulusCutoff)
 
-/-- An actual inner selector. Both extra walls are strict, so the generic
-strict affine-gate theorem applies without asserting a finite wall count
-to be zero. The retained source outside these walls is unchanged. -/
-def currentChenUpsilon6OrdinarySelector (N : ℕ) (eta : ℝ) : Finset (ℕ × ℕ) :=
-  (currentChenUpsilon6RetainedSelector N (fun _ => False) eta).filter
-    (fun t => (N : ℝ) ^ (19 / 125 : ℝ) < (t.2 : ℝ) ∧
-      ((t.1 * t.2 : ℕ) : ℝ) < (N : ℝ) ^ ((833 / 2500 : ℝ) - eta))
-
-/-- The arithmetic object is a sum of the original actual sifted quotient
-cards, with the same pair labels and the same real sieve cutoff. -/
-def currentChenUpsilon6OrdinaryCount (N : ℕ) (eta : ℝ) : ℝ :=
-  ∑ t ∈ currentChenUpsilon6OrdinarySelector N eta,
-    ((chenSiftedQuotientPrimeSource N (t.1 * t.2)
-      ((N : ℝ) ^ (417 / 5000 : ℝ))).card : ℝ)
-
-theorem currentChenUpsilon6OrdinarySelector_subset_retained (N : ℕ) (eta : ℝ) :
-    currentChenUpsilon6OrdinarySelector N eta ⊆
-      currentChenUpsilon6RetainedSelector N (fun _ => False) eta :=
-  Finset.filter_subset _ _
-
-theorem currentChenUpsilon6OrdinarySelector_subset_original (N : ℕ) (eta : ℝ) :
-    currentChenUpsilon6OrdinarySelector N eta ⊆
-      chenY6PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))
-        ((N : ℝ) ^ (19 / 125 : ℝ)) ((N : ℝ) ^ (59 / 250 : ℝ)) := by
-  intro t ht
-  exact (Finset.mem_filter.mp (Finset.mem_filter.mp
-    (currentChenUpsilon6OrdinarySelector_subset_retained N eta ht)).1).1
-
-theorem currentChenUpsilon6OrdinaryCount_nonneg (N : ℕ) (eta : ℝ) :
-    0 ≤ currentChenUpsilon6OrdinaryCount N eta :=
-  Finset.sum_nonneg (fun _ _ => Nat.cast_nonneg _)
-
-/-- Only nonnegative actual counts are dropped. This is not a claim that
-the finite arithmetic wall contribution vanishes. -/
-theorem currentChenUpsilon6OrdinaryCount_le_retained (N : ℕ) (eta : ℝ) :
-    currentChenUpsilon6OrdinaryCount N eta ≤
-      currentChenUpsilon6Retained N (fun _ => False) eta :=
-  Finset.sum_le_sum_of_subset_of_nonneg
-    (currentChenUpsilon6OrdinarySelector_subset_retained N eta)
-    (fun _ _ _ => Nat.cast_nonneg _)
-
 def currentChenUpsilon6OrdinaryForms : Fin 3 → (Fin 2 → ℝ) →L[ℝ] ℝ :=
-  ![ContinuousLinearMap.proj 0, -ContinuousLinearMap.proj 1,
-    ContinuousLinearMap.proj 0 + ContinuousLinearMap.proj 1]
+  ![(ContinuousLinearMap.proj (0 : Fin 2) : (Fin 2 → ℝ) →L[ℝ] ℝ),
+    -(ContinuousLinearMap.proj (1 : Fin 2) : (Fin 2 → ℝ) →L[ℝ] ℝ),
+    (ContinuousLinearMap.proj (0 : Fin 2) : (Fin 2 → ℝ) →L[ℝ] ℝ) +
+      (ContinuousLinearMap.proj (1 : Fin 2) : (Fin 2 → ℝ) →L[ℝ] ℝ)]
 
 def currentChenUpsilon6OrdinaryCaps (eta : ℝ) : Fin 3 → ℝ :=
   ![(19 / 125 : ℝ), -(19 / 125 : ℝ), (833 / 2500 : ℝ) - eta]
@@ -168,7 +128,7 @@ private theorem sixthOrdinary_product_log_lt_iff {N : ℕ} (hN : 2 ≤ N)
         (by intro i; fin_cases i <;> assumption) 0,
       actualPrimeTupleLog_rpow (by omega) ![p, q]
         (by intro i; fin_cases i <;> assumption) 1]
-    exact Nat.cast_mul p q
+    exact (Nat.cast_mul p q).symm
   simpa only [hpow] using (Real.rpow_lt_rpow_left_iff hNr :
     (N : ℝ) ^ (Real.log (p : ℝ) / Real.log (N : ℝ) +
       Real.log (q : ℝ) / Real.log (N : ℝ)) < (N : ℝ) ^ c ↔ _)
@@ -556,6 +516,142 @@ theorem eventually_currentChenUpsilon6Ordinary_normalized_density_lower
   change currentChenUpsilon6OrdinaryIntegral eta - epsilon ≤ ∑ t ∈ T N, w N t * f N t
   linarith only [hsum, hmasscost, hnearN]
 
+/-- At each fixed positive buffer, the actual strict sixth subcount has its
+ordinary kernel lower mean. Physical BV support and every error are paid.
+This does not assert a causal improvement or a mean for a deletion mask. -/
+theorem eventually_currentChenUpsilon6Ordinary_ge_mean
+    (eta : ℝ) (heta : 0 < eta) (epsilon : ℝ) (hepsilon : 0 < epsilon) :
+    ∀ᶠ N : ℕ in atTop, Even N →
+      ((currentChenUpsilon6OrdinaryIntegral eta) - epsilon) * singularNormalization N ≤
+        currentChenUpsilon6OrdinaryCount N eta := by
+  by_cases hI : 0 < (currentChenUpsilon6OrdinaryIntegral eta)
+  · obtain ⟨B, _hB, hpaid⟩ := eventually_currentChenUpsilon6Ordinary_ge_density_sum
+    let delta : ℝ := min (epsilon / 2) ((currentChenUpsilon6OrdinaryIntegral eta) / 2)
+    have hdeltap : 0 < delta := lt_min (half_pos hepsilon) (half_pos hI)
+    have hdeltae : delta ≤ epsilon / 2 := min_le_left _ _
+    have hdeltaI : delta ≤ (currentChenUpsilon6OrdinaryIntegral eta) / 2 := min_le_right _ _
+    have hnear : ∀ᶠ N : ℕ in atTop, Even N →
+        (currentChenUpsilon6OrdinaryIntegral eta) - delta <
+          ∑ t ∈ currentChenUpsilon6OrdinarySelector N eta,
+            (1 / (Nat.totient (t.1 * t.2) : ℝ)) *
+              (actualSmallRosserMinusDensity N (Nat.ceil ((N : ℝ) ^ (417 / 5000 : ℝ)))
+                ((N : ℝ) ^ (417 / 5000 : ℝ))
+                  (chenQuotientRosserD B N (t.1 * t.2) : ℝ) *
+                    Real.log (N : ℝ) / singularSeries N) := by
+      filter_upwards [eventually_currentChenUpsilon6Ordinary_normalized_density_lower
+        B eta (delta / 2) heta (half_pos hdeltap)] with N hlower
+      intro hEven
+      have h := hlower hEven
+      linarith only [h, hdeltap]
+    filter_upwards [hnear, hpaid eta (epsilon / 2) (half_pos hepsilon),
+      eventually_ge_atTop (2 : ℕ)] with N hnearN hpaidN hN
+    intro hEven
+    have hN1 : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)
+    have hNp : (0 : ℝ) < N := zero_lt_one.trans hN1
+    have hlogp := Real.log_pos hN1
+    have hSSp := singularSeries_pos N
+    have hH : 0 ≤ singularNormalization N :=
+      div_nonneg (mul_nonneg hSSp.le hNp.le) (sq_nonneg _)
+    let V : ℝ := ∑ t ∈ currentChenUpsilon6OrdinarySelector N eta,
+        actualSmallRosserMinusDensity N (Nat.ceil ((N : ℝ) ^ (417 / 5000 : ℝ)))
+          ((N : ℝ) ^ (417 / 5000 : ℝ)) (chenQuotientRosserD B N (t.1 * t.2) : ℝ) /
+            (Nat.totient (t.1 * t.2) : ℝ)
+    have hvnorm : (currentChenUpsilon6OrdinaryIntegral eta) - delta ≤
+        V * Real.log (N : ℝ) / singularSeries N := by
+      have h := (hnearN hEven).le
+      have heq : (∑ t ∈ currentChenUpsilon6OrdinarySelector N eta,
+          (1 / (Nat.totient (t.1 * t.2) : ℝ)) *
+            (actualSmallRosserMinusDensity N (Nat.ceil ((N : ℝ) ^ (417 / 5000 : ℝ)))
+              ((N : ℝ) ^ (417 / 5000 : ℝ))
+                (chenQuotientRosserD B N (t.1 * t.2) : ℝ) *
+                  Real.log (N : ℝ) / singularSeries N)) =
+            V * Real.log (N : ℝ) / singularSeries N := by
+        dsimp [V]
+        rw [Finset.sum_mul, Finset.sum_div]
+        apply Finset.sum_congr rfl
+        intro t ht
+        ring
+      rwa [heq] at h
+    have hv : 0 ≤ V := by
+      have hn : 0 < V * Real.log (N : ℝ) / singularSeries N :=
+        (show 0 < (currentChenUpsilon6OrdinaryIntegral eta) - delta by linarith).trans_le hvnorm
+      have hm := (div_pos_iff_of_pos_right hSSp).mp hn
+      exact ((mul_pos_iff_of_pos_right hlogp).mp hm).le
+    have hli : (N : ℝ) / Real.log (N : ℝ) ≤ trueLogarithmicIntegral N :=
+      MathlibNt.SieveTheory.LiuWeight.div_log_le_liuLogarithmicIntegral
+        (by exact_mod_cast hN)
+    have hmain : ((currentChenUpsilon6OrdinaryIntegral eta) - delta) *
+        singularNormalization N ≤ currentChenUpsilon6OrdinaryDensitySum B N (currentChenUpsilon6OrdinarySelector N eta) := by
+      calc
+        _ ≤ (V * Real.log (N : ℝ) / singularSeries N) * singularNormalization N :=
+          mul_le_mul_of_nonneg_right hvnorm hH
+        _ = ((N : ℝ) / Real.log (N : ℝ)) * V := by
+          unfold singularNormalization
+          field_simp [hSSp.ne', hlogp.ne']
+          ring
+        _ ≤ trueLogarithmicIntegral N * V := mul_le_mul_of_nonneg_right hli hv
+        _ = _ := by
+          unfold currentChenUpsilon6OrdinaryDensitySum V
+          rw [Finset.mul_sum]
+          apply Finset.sum_congr rfl
+          intro t ht
+          ring
+    have hfinite := hpaidN hEven
+    have hbudget := mul_le_mul_of_nonneg_right hdeltae hH
+    nlinarith only [hmain, hfinite, hbudget]
+  · apply Eventually.of_forall
+    intro N hEven
+    have hH : 0 ≤ singularNormalization N :=
+      div_nonneg (mul_nonneg (singularSeries_pos N).le (Nat.cast_nonneg N)) (sq_nonneg _)
+    have hc : (currentChenUpsilon6OrdinaryIntegral eta) - epsilon ≤ 0 := by linarith
+    have hnonneg : 0 ≤ currentChenUpsilon6OrdinaryCount N eta := by
+      unfold currentChenUpsilon6OrdinaryCount
+      exact Finset.sum_nonneg (fun P hP => Nat.cast_nonneg _)
+    exact (mul_nonpos_of_nonpos_of_nonneg hc hH).trans hnonneg
+
+
+/-- The strict inner count is a valid lower bound for the actual unmasked
+sixth row; only nonnegative original arithmetic contributions are dropped. -/
+theorem eventually_currentChenUpsilon6_false_ge_fixed_buffer_ordinary_mean
+    (eta : ℝ) (heta : 0 < eta) (epsilon : ℝ) (hepsilon : 0 < epsilon) :
+    ∀ᶠ N : ℕ in atTop, Even N →
+      (currentChenUpsilon6OrdinaryIntegral eta - epsilon) * singularNormalization N ≤
+        currentChenUpsilon6 N (fun _ => False) := by
+  filter_upwards [eventually_currentChenUpsilon6Ordinary_ge_mean eta heta epsilon hepsilon]
+    with N hN
+  intro hEven
+  exact (hN hEven).trans
+    (currentChenUpsilon6OrdinaryCount_le_currentChenUpsilon6_false N eta)
+
+/-- First choose a fixed positive buffer using the proved kernel limit;
+then take N sufficiently large for that fixed buffer. No exchange of the
+arithmetic limit with the buffer limit or mask estimate is assumed. -/
+theorem eventually_currentChenUpsilon6_false_ge_ordinary_mean
+    (epsilon : ℝ) (hepsilon : 0 < epsilon) :
+    ∀ᶠ N : ℕ in atTop, Even N →
+      (currentChenUpsilon6OrdinaryIntegral 0 - epsilon) * singularNormalization N ≤
+        currentChenUpsilon6 N (fun _ => False) := by
+  have hlimit : Tendsto currentChenUpsilon6OrdinaryIntegral (𝓝[>] (0 : ℝ))
+      (𝓝 (currentChenUpsilon6OrdinaryIntegral 0)) :=
+    tendsto_integral_currentChenUpsilon6OrdinaryKernel_buffer.mono_left nhdsWithin_le_nhds
+  have hnear : ∀ᶠ eta : ℝ in 𝓝[>] (0 : ℝ),
+      0 < eta ∧ currentChenUpsilon6OrdinaryIntegral 0 - epsilon / 2 <
+        currentChenUpsilon6OrdinaryIntegral eta := by
+    filter_upwards [self_mem_nhdsWithin,
+      hlimit.eventually (Ioi_mem_nhds
+        (by linarith : currentChenUpsilon6OrdinaryIntegral 0 - epsilon / 2 <
+          currentChenUpsilon6OrdinaryIntegral 0))] with eta heta hI
+    exact ⟨heta, hI⟩
+  obtain ⟨eta, heta, hI⟩ := hnear.exists
+  filter_upwards [eventually_currentChenUpsilon6_false_ge_fixed_buffer_ordinary_mean
+    eta heta (epsilon / 2) (half_pos hepsilon)] with N hN
+  intro hEven
+  have hH : 0 ≤ singularNormalization N :=
+    div_nonneg (mul_nonneg (singularSeries_pos N).le (Nat.cast_nonneg N)) (sq_nonneg _)
+  exact (mul_le_mul_of_nonneg_right
+    (show currentChenUpsilon6OrdinaryIntegral 0 - epsilon ≤
+      currentChenUpsilon6OrdinaryIntegral eta - epsilon / 2 by linarith only [hI]) hH).trans
+        (hN hEven)
 end
 
 end ImbalancedChen

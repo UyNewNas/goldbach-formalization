@@ -1,6 +1,5 @@
 import ImbalancedChen.CurrentChenInitialRosser
-import ImbalancedChen.CurrentChenInitialSource
-import MathlibNt.SieveTheory.Arithmetic.LiuLogScaleAbsorption
+import ImbalancedChen.PowerErrorBudget
 
 /-!
 # Paid ordinary-BV remainder for the actual initial Rosser sieve
@@ -85,17 +84,39 @@ theorem eventually_currentChen_initialRosser_density_lower :
     part3_abs_sum_mul_primeAPError_log_saving 3 (by norm_num)
   refine ⟨B, hB, ?_⟩
   intro epsilon hepsilon
+  have hlarge : ∀ᶠ N : ℕ in atTop,
+      2 * C / (epsilon * twinPrimeConstant) ≤ Real.log (N : ℝ) :=
+    (Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually
+      (eventually_ge_atTop _)
   filter_upwards [hBV, eventually_one_le_nat_log, eventually_ge_atTop (2 : ℕ),
-    MathlibNt.SieveTheory.LiuWeight.eventually_inverse_log_remainder_le_liuSingularSeries
-      C (epsilon / 2) (half_pos hepsilon),
+    hlarge,
     eventually_powerLog_le_singularNormalization (17 / Real.log 2) (1 / 2) 2
       (by norm_num) (epsilon / 2) (half_pos hepsilon)]
-    with N hBVN hlog hN hAPbudget hCentreBudget
+    with N hBVN hlog hN hlargeN hCentreBudget
   intro Q hQ cap z L hzcap hL hzL hLQ
   let S := currentChenInitialRosserActive N cap z L
   have hS := currentChenInitialRosserActive_subset N cap Q z L hLQ
   have hSI : S ⊆ Finset.Icc 1 Q :=
     hS.trans (chenInitialPrimitiveModuli_subset N Q)
+  have hlogpos : 0 < Real.log (N : ℝ) := zero_lt_one.trans_le hlog
+  have hlogprod : 2 * C ≤ Real.log (N : ℝ) * (epsilon * twinPrimeConstant) :=
+    (div_le_iff₀ (mul_pos hepsilon twinPrimeConstant_pos)).mp hlargeN
+  have hcoefficient : C / Real.log (N : ℝ) ≤
+      (epsilon / 2) * twinPrimeConstant :=
+    (div_le_iff₀ hlogpos).mpr (by nlinarith only [hlogprod])
+  have hAPbudget : C * (N : ℝ) / Real.log (N : ℝ) ^ (3 : ℕ) ≤
+      (epsilon / 2) * singularNormalization N := by
+    calc
+      _ = (C / Real.log (N : ℝ)) *
+          ((N : ℝ) / Real.log (N : ℝ) ^ (2 : ℕ)) := by
+        field_simp [ne_of_gt hlogpos]
+      _ ≤ ((epsilon / 2) * twinPrimeConstant) *
+          ((N : ℝ) / Real.log (N : ℝ) ^ (2 : ℕ)) :=
+        mul_le_mul_of_nonneg_right hcoefficient (by positivity)
+      _ = (epsilon / 2) *
+          (twinPrimeConstant * (N : ℝ) / Real.log (N : ℝ) ^ (2 : ℕ)) := by ring
+      _ ≤ (epsilon / 2) * singularNormalization N :=
+        mul_le_mul_of_nonneg_left (singularNormalization_lower N) (half_pos hepsilon).le
   have hAP : |∑ d ∈ actualSmallRosserSupport N cap z,
       actualSmallRosserMinus N cap z L d * part3PrimeAPError N N d| ≤
         (epsilon / 2) * singularNormalization N := by
@@ -105,9 +126,7 @@ theorem eventually_currentChen_initialRosser_density_lower :
       (actualSmallRosserMinus N cap z L)
       (fun d _ => actualSmallRosserMinus_abs_le_one N cap z L d)
     rw [Real.rpow_ofNat] at hdist
-    rw [← currentChen_singularSeries_eq_liuSingularSeries N] at hAPbudget
-    exact hdist.trans (by
-      simpa only [singularNormalization, mul_div_assoc, mul_assoc] using hAPbudget)
+    exact hdist.trans hAPbudget
   have hQsqrt : (Q : ℝ) ≤ Real.sqrt (N : ℝ) := by
     have hden : 1 ≤ Real.log (N : ℝ) ^ B := Real.one_le_rpow hlog hB
     have hfloor : (panModulusCutoff N B : ℝ) ≤

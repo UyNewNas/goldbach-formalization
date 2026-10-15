@@ -27,10 +27,25 @@ existing root build would therefore not validate them.
 | `Part3ComplexDispersion` | Actual complex-row Cauchy, centered norm-square and double-label identities, retaining the full moduli and primitive centre | Strict compilation; original-object stock kernel replay; complete 30-declaration audit |
 | `ActualThirdPrefixTailIntegralCore` | Canonical correction kernel, finite noncompact triple-integral bounds and tail convergence allowing the cap/selector to vary with the cutoff | Strict compilation; original-object stock kernel replay; complete 59-declaration audit |
 | `CurrentChenUpsilon5FiniteMean` | Actual U5 counts above the same row-dependent Rosser density sum, with full ordinary BV and centre costs paid; a fixed `B` precedes arbitrary `epsilon` | Strict compilation; original-object stock kernel replay; complete 17-declaration audit |
+| `CurrentChenRosserEndpointDictionary` | Exact actual initial-sieve product, nu=1/phi, Euler product and ceil-level dictionary; uniform genuine Mertens local bound | Strict compilation; original-object stock kernel replay; complete 9-declaration types, inventory and transitive axiom audit |
+| `CurrentChenRosserLowerRectangle` | Uniform canonical AllDepth lower estimate on the actual initial sieve; rounding, sourceSigma and adaptive-depth error paid | Strict compilation; original-object stock kernel replay; complete 3-declaration types, inventory and transitive axiom audit |
+| `CurrentChenFixedEulerNormalization` | Actual target-prime-deleted Euler product at fixed positive power cutoff has the genuine 2 exp(-gamma)/a normalized limit | Strict compilation; original-object stock kernel replay; complete 39-declaration types, inventory and transitive axiom audit |
+| `CurrentChenPairDensity` | Uniform one-sided normalized density bound for every genuine rounded fifth-row level | Strict compilation; original-object stock kernel replay; complete 31-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon5OrdinaryMean` | Actual fifth-row ordinary count mean with the genuine moving harmonic integral and complete BV/centre payment | Strict compilation; original-object stock kernel replay; complete 10-declaration types, inventory and transitive axiom audit |
+| `Part3ComplexCRTConsumer` | Actual complex W becomes a constructed lcm CRT progression, with incompatible/inactive labels and the primitive-centre V/U retained | Strict compilation; original-object stock kernel replay; complete 25-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdIdealCap` | Literal eight-branch/pair-gated ideal cap: measurability and finite vanishing noncompact canonical tail | Strict compilation; original-object stock kernel replay; complete 23-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdOrderedIntegral` | Actual clamped correction kernel: measurability, Fin-3 Tonelli to nested integration, integrability and real integral identification | Strict compilation; original-object stock kernel replay; complete 28-declaration types, inventory and transitive axiom audit |
+| `CurrentChenInitialRosserRemainder` | Actual initial count above the same Rosser density with complete ordinary BV and centre errors paid | Strict compilation; original-object stock kernel replay; complete 9-declaration types, inventory and transitive axiom audit |
+| `CurrentChenOrdinaryInitialMean` | Actual initial ordinary mean at full Q+1 level for every fixed 0<a<1/4, using canonical f at the genuine ratio 1/(2a) | Strict compilation; original-object stock kernel replay; complete 32-declaration types, inventory and transitive axiom audit |
+| `CurrentChenOrdinaryInitialLedger` | The first two actual current Upsilon rows receive their full ordinary means at the original current cutoffs | Strict compilation; original-object stock kernel replay; complete 2-declaration types, inventory and transitive axiom audit |
 
-These thirteen modules contain **266 complete owned declarations**, including
+These 24 modules contain **477 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-266 independent major mathematical theorems.
+477 independent major mathematical theorems.
+
+The first, second and fifth literal current count means now have complete
+ordinary proofs with no analytic supplier premise. The stronger causal
+contributions and the complete lower ledger remain open.
 
 The U6 limit is an analytic integral limit on the literal corrected rectangle.
 It does not exchange the arithmetic `N` limit with the buffer limit, supply the
@@ -38,47 +53,41 @@ It does not exchange the arithmetic `N` limit with the buffer limit, supply the
 
 ## Candidates that must not be counted as completed proofs
 
-The six unaccepted source files are preserved in a separate source-only
-commit. Their exact hashes and original failed attempts are listed in
-`verification/proof-continuation/2026-10-15/unaccepted-candidates.json`.
-They are excluded from the 13-module / 266-declaration acceptance count.
+The 12 unaccepted source candidates are listed with exact source
+hashes in `verification/proof-continuation/2026-10-15/unaccepted-candidates.json`.
+They are excluded from the accepted module/declaration inventory above.
+Original failed attempts remain failures; replacement sources need their own checks.
 
-* `CurrentChenPairDensity` and `CurrentChenUpsilon5OrdinaryMean` contain the
-  proposed actual U5 ordinary mean argument. The new one-sided density route
-  avoids the unnecessary two-sided density limit and its `ActualRosserOddBox`
-  import. Independent source review confirmed the uniform thresholds,
-  nonnegative factors, epsilon budget, true total phi-weight bound and final
-  count statement. The density's combined imports still failed the 6144 MiB Lean
-  resource check at about 6.31 GiB RSS, before target elaboration. The final
-  integral-normalized count mean remains unexecuted; its finite BV/centre
-  payment is verified separately above. A source review is not execution evidence.
-* `CurrentChenUpsilon6OrdinaryMean` is an unfinished source candidate through
-  the fixed-positive-buffer selector/harmonic/normalized-main-sum layer.
-  The final actual quotient-count Rosser/BV payment is not written or checked.
-* `Part3ReciprocalAPSupplier` specializes fixed upstream reciprocal-phase
-  estimates to the actual full modulus and gamma gates. Its new target has
-  not been compiled: the limited bootstrap stopped at an external prerequisite
-  resource failure. Ordinary BV does not thereby reach the stronger
-  physical distribution cap.
-* `ActualThirdPrefixTailIntegral` retains the broad arithmetic tuple/profile
-  bridge. The canonical integral core is verified separately, but this
-  wrapper, the actual adopted extended selector and its measurable/Fubini/
-  mean assembly remain unverified obligations.
-* `Certificates/PairedV2FullCertificate` connects the actual natural numerator
-  sums to the full analytic integral. It still requires the complete original
-  strip verification chain. Dot's pilot is not all-strip acceptance.
+* `CurrentChenUpsilon6OrdinaryMean`: The full ordinary unmasked mean argument is present as source, including finite payment and fixed-buffer passage; exact-source execution and complete owned audit remain required.
+* `Part3ReciprocalAPSupplier`: New target not executed; limited external prerequisite bootstrap stopped at a resource failure.
+* `Certificates.PairedV2FullCertificate`: Not executed; requires the full original-strip chain, beyond the frozen baseline pilot.
+* `ActualThirdPrefixTailIntegral`: Broad arithmetic tuple/profile bridge is not compiled; the separate canonical integral core is verified.
+* `Part3ComplexCRTFiniteFourier`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3CommonSmoothCutoff`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3CommonPoisson`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualExtendedThirdClosedIntegral`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualExtendedThirdPhysicalCell`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualExtendedThirdDyadicCoverage`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenUpsilon6OrdinarySource`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenUpsilon6FiniteMean`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 
-The finite Fourier and complex-dispersion identities do not supply the
-common completion, reciprocal-phase dictionary or aggregate gcd estimate
-needed for the analytic distribution bound. The Buchstab kernel comparison does not pay arithmetic parent
-licensing or the mean-value passage.
+The ordinary lower means above are baseline means. They do not prove the
+manuscript's stronger causal h248 contribution, complete eleven-term lower
+ledger, or adopted numerical constant. The unaccepted sixth-row code targets
+an ordinary mean only for E=False; its fixed-buffer arithmetic passage and
+buffer removal still need executed proof checks.
 
-The scalar tail and integral candidates have been split at an actual import
-boundary: `ActualThirdPrefixTailIntegralCore` keeps the canonical kernel,
-noncompact integral bounds and cap-tail convergence; the original broad
-module retains only the arithmetic tuple/profile bridge. This removes the
-large density/transport imports from the core, without proving the remaining
-adopted-selector or arithmetic-mean identification.
+The actual ideal cap, ordered integral and robust cell inequalities are
+separate steps. Physical ownership, the actual branch/action licenses,
+fine-grid coverage, robust Gamma convergence to A, and the same-policy
+arithmetic count mean are still required for hUpper.
+
+The complex CRT and finite Fourier identities do not prove the common
+Poisson completion, reciprocal-phase dictionary, zero-mode cancellation,
+aggregate gcd estimates or strong physical distribution bound. The fixed
+smooth cutoff, when accepted, only pays its displayed smoothing and rapid
+decay statements. The pointwise Buchstab comparison does not pay actual
+arithmetic parent licensing or the full mean-value passage.
 
 ## External work reused
 
@@ -120,12 +129,20 @@ not an operating-system hard cap. Resource failures remain failures.
 No dependency pin, proof checker, analytic axiom or theorem premise was
 weakened to obtain a pass.
 
+The new initial-sieve density route removes the unrelated B8/aggregate
+Mathlib path while retaining the same actual product, nu=1/phi and ceil L.
+Its full advisory source-DAG comparison removes 4851 foreign modules.
+The initial remainder route similarly removes 4841 foreign modules and
+pays its AP budget directly with singularNormalization_lower. These are
+source-import analyses, not independent external-object replay claims.
+
 The finite U5 payment initially exceeded the budget through an unrelated
 normalization import. Replacing that import by the existing explicit
 `singularNormalization_lower` bound and a concrete logarithmic threshold
 preserved the complete BV-paid count statement. Its final strict source
 run peaked at about 4.49 GiB, compared with the earlier 6.36 GiB failure.
-All approved compiler/checker processes had terminated at this checkpoint.
+The compiler/checker owner serializes all heavy work through slot zero;
+source and proof work continue independently between those jobs.
 
 Exact successful receipts, logs, type exports and source/object hashes are
 archived under `verification/proof-continuation/2026-10-15/`. Imported cache
@@ -135,8 +152,8 @@ development-only even when their exact source/object hashes match.
 
 ## Next mathematical obligations
 
-1. Compile and replay the actual U5 mean chain, resolving its old import
-   resource obstruction without changing the required analytic statement.
+1. Complete the remaining actual ordinary/causal lower means with their
+   genuine row coefficients and physical remainder budgets.
 2. Pay the actual strong distribution/dispersion obligations with the full
    prime source, moduli, weights, primitive centre and errors retained.
 3. Complete the adopted-selector density, tail and coefficient assembly for
