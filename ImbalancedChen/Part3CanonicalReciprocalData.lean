@@ -287,7 +287,7 @@ end WGCDData.Valid
 end CanonicalReciprocalData
 
 /-- The actual original full-modulus and beta labels determine the data once. -/
-def MediumAtom.canonicalReciprocalData (d : MediumAtom)
+def MediumAtom.canonicalReciprocalData (_d : MediumAtom)
     (l l' : (ℕ × ℕ × ℕ) × ℕ) : CanonicalReciprocalData.WGCDData :=
   CanonicalReciprocalData.wGCDData
     (complexFactorModulus l.1) (complexFactorModulus l'.1) l.2 l'.2

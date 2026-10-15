@@ -177,8 +177,21 @@ theorem MediumAtom.complexDispersionW_eq_finiteZero_add_nonzero
           (ComplexCRT.constructedProgressionWeight S w d.residue
             (complexFactorModulus l.val.1) (complexFactorModulus l'.val.1)
               l.val.2 l'.val.2 : ℂ) := by
-      simpa only [Finset.sum_attach] using
-        (MediumAtom.complexDispersionW_eq_constructedCRT hd S w)
+      rw [MediumAtom.complexDispersionW_eq_constructedCRT hd S w]
+      let F (l l' : (ℕ × ℕ × ℕ) × ℕ) : ℂ :=
+        d.complexBetaCoefficient l * star (d.complexBetaCoefficient l') *
+          (ComplexCRT.constructedProgressionWeight S w d.residue
+            (complexFactorModulus l.1) (complexFactorModulus l'.1) l.2 l'.2 : ℂ)
+      change (∑ l ∈ d.complexRowLabels, ∑ l' ∈ d.complexRowLabels, F l l') =
+        ∑ l ∈ d.complexRowLabels.attach, ∑ l' ∈ d.complexRowLabels.attach, F l.val l'.val
+      symm
+      calc
+        _ = ∑ l ∈ d.complexRowLabels.attach, ∑ l' ∈ d.complexRowLabels, F l.val l' := by
+          apply Finset.sum_congr rfl
+          intro l _
+          exact Finset.sum_attach d.complexRowLabels (F l.val)
+        _ = _ := Finset.sum_attach d.complexRowLabels
+          (fun l ↦ ∑ l' ∈ d.complexRowLabels, F l l')
     _ = _ := by
       rw [← Finset.sum_add_distrib]
       apply Finset.sum_congr rfl
@@ -195,7 +208,7 @@ theorem MediumAtom.complexDispersionW_eq_finiteZero_add_nonzero
       · simp only [hc, if_true]
         rw [finiteProgressionWeight_eq_mass_add_nonzero]
         ring
-      · simp only [hc, if_false, mul_zero, add_zero]
+      · simp only [hc, if_false, Complex.ofReal_zero, mul_zero, add_zero]
 
 /-- Primitive-centre V/U remain displayed. No zero-mode cancellation is
 assumed, and the final finite frequencies still use the same S and w. -/

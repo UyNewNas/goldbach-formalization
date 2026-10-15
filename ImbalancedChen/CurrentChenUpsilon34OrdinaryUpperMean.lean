@@ -149,7 +149,6 @@ theorem eventually_currentChenSinglePrime_le_ordinary_upper_mean
             singularNormalization N := by
           unfold singularNormalization
           field_simp [hSSp.ne', hlogp.ne']
-          <;> ring
         _ ≤ ((1 + delta) * (I + delta)) * singularNormalization N :=
           mul_le_mul_of_nonneg_right
             (mul_le_mul_of_nonneg_left hvnorm (by positivity)) hH

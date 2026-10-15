@@ -183,19 +183,19 @@ private theorem fullGamma_ge_base (e : ℝ) (m : ℕ)
     (j : ActualExtendedThirdDyadicLabel m) (k : Fin 6) :
     actualExtendedThirdCellInf m j (actualExtendedThirdRobustBaseBranch k) ≤
       actualExtendedThirdFullGamma e m j := by
-  fin_cases k <;> simp [actualExtendedThirdFullGamma, le_max_iff]
+  fin_cases k <;> simp [actualExtendedThirdFullGamma]
 
 private theorem fullGamma_ge_pairXZ {e : ℝ} {m : ℕ}
     {j : ActualExtendedThirdDyadicLabel m}
     (hg : e ≤ actualExtendedThirdCellInf m j actualExtendedThirdGateXZ) :
     actualExtendedThirdCellInf m j actualExtendedThirdPairXZ ≤ actualExtendedThirdFullGamma e m j := by
-  simp [actualExtendedThirdFullGamma, hg, le_max_iff]
+  simp [actualExtendedThirdFullGamma, hg]
 
 private theorem fullGamma_ge_pairYZ {e : ℝ} {m : ℕ}
     {j : ActualExtendedThirdDyadicLabel m}
     (hg : e ≤ actualExtendedThirdCellInf m j actualExtendedThirdGateYZ) :
     actualExtendedThirdCellInf m j actualExtendedThirdPairYZ ≤ actualExtendedThirdFullGamma e m j := by
-  simp [actualExtendedThirdFullGamma, hg, le_max_iff]
+  simp [actualExtendedThirdFullGamma, hg]
 
 /-- Actual robust full caps approximate the true six-branch value uniformly
 over every closed ordered portion, including portions meeting ordering walls. -/
@@ -209,7 +209,7 @@ theorem actualExtendedThirdFullGamma_error {e : ℝ} {m : ℕ}
         (9 / 2 : ℝ) * actualExtendedThirdDyadicStep m := by
   have ho : Ordered (t 0) (t 1) (t 2) :=
     ⟨ht.2.1, ht.2.2.1, ht.2.2.2, (ht.1 0 (mem_univ _)).2.trans hmu⟩
-  have hle := actualExtendedThirdFullGamma_le_original ht ho
+  have hle := actualExtendedThirdFullGamma_le_original (e := e) ht ho
   rw [original_eq_six ho] at hle
   have hχ := (actualExtendedThirdDyadicStep_pos m).le
   have hbase := (actualExtendedThirdBaselineInf_lower ht).trans (fullGamma_ge_base e m j 0)

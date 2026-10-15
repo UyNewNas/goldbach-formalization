@@ -100,7 +100,8 @@ theorem MediumAtom.complexCenteredRow_eq_groupedFactorGamma (d : MediumAtom) (n 
       rw [MediumAtom.complexCenteredRow_eq_sum]
       simp only [MediumAtom.complexRowLabels, Finset.sum_product,
         MediumAtom.complexRowContribution, Finset.mul_sum, mul_assoc]
-    _ = _ := d.sum_factorLabels_eq_grouped _
+    _ = _ := d.sum_factorLabels_eq_grouped
+      (fun q : ℕ ↦ ∑ m ∈ d.betaCarrier, d.beta m * complexPrimitiveKernel d.residue q n m)
 
 private theorem factorCarrier_bounds {Q : ℝ} (hQ : 1 ≤ Q) {q : ℕ}
     (hq : q ∈ factorCarrier Q) : 0 < q ∧ (q : ℝ) ≤ 2 * Q := by
@@ -134,7 +135,7 @@ theorem MediumAtom.card_physicalFactorFiber_le_tauThree
     apply Finset.mem_sigma.mpr
     refine ⟨Nat.mem_divisorsAntidiagonal.mpr ⟨?_, ?_⟩,
       Nat.mem_divisorsAntidiagonal.mpr ⟨rfl, (Nat.mul_pos hp2 hp3).ne'⟩⟩
-    · simpa only [complexFactorModulus, mul_assoc] using hq
+    · simpa only [FactorFiber.tripleToConvolution, complexFactorModulus, mul_assoc] using hq
     · rw [← hq]
       exact (Nat.mul_pos (Nat.mul_pos hp1 hp2) hp3).ne'
   · exact FactorFiber.tripleToConvolution_injective.injOn
@@ -147,7 +148,9 @@ private theorem complexFactorGamma_norm_le_one
   obtain ⟨hr1, hr2, hr3⟩ := factorLabel_mem hr
   rw [MediumAtom.complexFactorGamma, norm_mul, norm_mul]
   calc
-    _ ≤ 1 * 1 * 1 := by gcongr; exact (h1 _ hr1).1; exact (h2 _ hr2).1; exact (h3 _ hr3).1
+    ‖d.gamma1 r.1‖ * ‖d.gamma2 r.2.1‖ * ‖d.gamma3 r.2.2‖ ≤ 1 * 1 * 1 :=
+      mul_le_mul (mul_le_mul (h1 _ hr1).1 (h2 _ hr2).1 (norm_nonneg _) zero_le_one)
+        (h3 _ hr3).1 (norm_nonneg _) (by norm_num)
     _ = 1 := by norm_num
 
 /-- The actual grouped complex coefficient has order three, with no

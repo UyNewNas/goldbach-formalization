@@ -45,10 +45,19 @@ existing root build would therefore not validate them.
 | `CurrentChenSinglePrimeUpperFiniteMean` | One ordinary BV budget pays every actual third-row subselector and the genuine fourth-row finite upper count | Strict compilation; original-object stock kernel replay; complete 26-declaration types, inventory and transitive axiom audit |
 | `CurrentChenRosserUpperEndpointDictionary` | Exact actual upper Rosser weight, reciprocal-totient coefficient, product and ceil-level dictionary | Strict compilation; original-object stock kernel replay; complete 2-declaration types, inventory and transitive axiom audit |
 | `CurrentChenRosserUpperRectangle` | Uniform genuine canonical AllDepth upper factor for every s>1, with all actual level and adaptive-depth errors paid | Strict compilation; original-object stock kernel replay; complete 9-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdClosedIntegral` | Actual affine diagonal null wall pays the closed ordered domain; old-cube equality is paid by the clamped lower factor | Strict compilation; original-object stock kernel replay; complete 20-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdPhysicalCell` | Literal closed ordered robust Gamma cells: retention/transition walls, two whole-cell pair gates, ideal domination and uniform small-z margin | Strict compilation; original-object stock kernel replay; complete 42-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdDyadicCoverage` | Actual dyadic ownership, unique retained coverage away from the displayed stopping strip and uniform fine-grid bounds | Strict compilation; original-object stock kernel replay; complete 23-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdLowerFactorRegularity` | The same canonical clamped lower factor is globally continuous, nonnegative and bounded by 1/(2 exp(gamma)) | Strict compilation; original-object stock kernel replay; complete 5-declaration types, inventory and transitive axiom audit |
+| `Part3ComplexCRTFiniteFourier` | Same common finite source split into the actual mass/lcm zero mode and complete nonzero Fourier term, retaining V/U | Strict compilation; original-object stock kernel replay; complete 17-declaration types, inventory and transitive axiom audit |
+| `Part3CommonSmoothCutoff` | One genuine smooth bump, Schwartz Fourier decay and its actual medium-atom common smooth Cauchy consumer | Strict compilation; original-object stock kernel replay; complete 46-declaration types, inventory and transitive axiom audit |
+| `Part3CommonPoisson` | Actual common smooth progression to integer lattice, Schwartz Poisson and the full nonzero-frequency remainder, retaining the true complex labels and V/U | Strict compilation; original-object stock kernel replay; complete 31-declaration types, inventory and transitive axiom audit |
+| `Part3FactorFiberDivisor` | Actual physical-modulus factor fibres retain all labels, with a proved tau_3 majorant and explicit logarithmic second-moment costs | Strict compilation; original-object stock kernel replay; complete 30-declaration types, inventory and transitive axiom audit |
+| `Part3RealComponentReduction` | Exact 32 real-component expansion of the actual five complex coefficients; same family-uniform SW constants and explicit square cost | Strict compilation; original-object stock kernel replay; complete 37-declaration types, inventory and transitive axiom audit |
 
-These 31 modules contain **620 complete owned declarations**, including
+These 40 modules contain **871 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-620 independent major mathematical theorems.
+871 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.
@@ -77,17 +86,8 @@ Original failed attempts remain failures; replacement sources need their own che
 * `Part3ReciprocalAPSupplier`: New target not executed; limited external prerequisite bootstrap stopped at a resource failure.
 * `Certificates.PairedV2FullCertificate`: Not executed; requires the full original-strip chain, beyond the frozen baseline pilot.
 * `ActualThirdPrefixTailIntegral`: Broad arithmetic tuple/profile bridge is not compiled; the separate canonical integral core is verified.
-* `Part3ComplexCRTFiniteFourier`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3CommonSmoothCutoff`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3CommonPoisson`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdClosedIntegral`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdPhysicalCell`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdDyadicCoverage`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3RealComponentReduction`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3FactorFiberDivisor`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdFirstCubeMargin`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdGammaApproximation`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdLowerFactorRegularity`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `CurrentChenSinglePrimeUpperDensity`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `CurrentChenTrueLiNormalization`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `Part3CanonicalReciprocalData`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
@@ -99,6 +99,15 @@ Original failed attempts remain failures; replacement sources need their own che
 * `ActualExtendedThirdFiniteTailIntegral`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdBoundaryLoss`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdLeastWinningIndex`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualExtendedThirdActionParameters`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualExtendedThirdWholeCellActions`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualTwoCapacityGreedy`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3CleanBetaLargeGCDMajorant`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3PolynomialResidueDivisorBound`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenUpsilon9PrimeSource`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenUpsilon9UnitBudget`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualExtendedThirdCompactKernelApproximation`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualExtendedThirdKernelL1Convergence`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 
 The ordinary lower means above are baseline means. They do not prove the
 manuscript's stronger causal h248 contribution, complete eleven-term lower
