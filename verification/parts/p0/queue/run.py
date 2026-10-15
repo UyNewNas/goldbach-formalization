@@ -86,12 +86,23 @@ def main():
             assert receipt['status']=='PASS_OFFICIAL_CACHE_ONLY' and receipt['manifest_sha256']==sha(ROOT/'lake-manifest.json'),'Fresh bootstrap is not verified'
             report['cache_provenance']={'mode':'FRESH_PINNED_TARGET_CLOSURE','bootstrap_receipt_sha256':sha(bootstrap),'prior_baseline_receipt_reused':False}
             report['fresh_source_providers']=['project','goldbach','LeanArchitect']
+            staged=ROOT/'.lake/p0-queue/reuse-staging.json'
+            if staged.is_file():
+                provenance=json.loads(staged.read_text())
+                assert provenance['status']=='STAGED_COMPILED_PREREQUISITES_ONLY'
+                assert provenance['anchor_sha256']==sha(ROOT/'verification/parts/p0/queue/reuse-38668314242.json')
+                assert provenance['script_sha256']==sha(ROOT/'verification/parts/p0/queue/restore_compiled.py')
+                report['restored_compilation_provenance']=provenance
+                report['reuse_staging_sha256']=sha(staged)
         else:
             assert report['cache_provenance']['cache_hit']=='true','Cache was not an exact hit'
             assert report['cache_provenance']['matched_key'].endswith('-'+BASE),'Wrong cache key'
         report['runtime_sha256']={str(p):sha(p) for p in [lean,checker]}
         report['pins_sha256']={p:sha(ROOT/p) for p in ['lean-toolchain','lakefile.toml','lake-manifest.json']}
         report['verifier_sha256']={p:sha(ROOT/p) for p in ['verification/parts/p0/queue/run.py','verification/parts/p0/queue/bootstrap.py','verification/parts/p0/queue/AuditTemplate.lean','verification/parts/p0/check_pins.py','verification/verify_variable_envelope_boxes.py','.github/workflows/p0-queue.yml','automation/dispatch.json']}
+        if report.get('restored_compilation_provenance'):
+            for p in ['verification/parts/p0/queue/restore_compiled.py','verification/parts/p0/queue/reuse-38668314242.json']:
+                report['verifier_sha256'][p]=sha(ROOT/p)
         report['request_sha256']=sha(Path(args.request))
         run([str(lean),'--version'],'lean-version',60)
         seen={}; objects={}; sources={}; active=set()
@@ -138,6 +149,9 @@ def main():
         before={'sources':sources,'objects':objects}; dump(out/'inputs-before.json',before)
         compiled=set(); prepared=set()
         def compile_one(module,force=False):
+            # A target may first occur as another target's prerequisite.
+            # Its first compilation must still use the strict target policy.
+            force=force or module in req['modules']
             if module in compiled or (module in prepared and not force):return
             root,source,obj=seen[module]
             is_fresh_source=fresh and root in (ROOT, ROOT/'.lake/packages/goldbach', ROOT/'.lake/packages/LeanArchitect')
@@ -151,7 +165,8 @@ def main():
                 signature={'source_sha256':sha(source),'dependency_objects':dep_parts,'pins':report['pins_sha256'],'lean_sha256':sha(lean),'command_policy':['-t0','-j2','-M4096']}
                 cached=fresh_index.get(module)
                 if not force and cached and cached['inputs']==signature and dest.exists() and parts(dest)==cached['objects']:
-                    report.setdefault('reused_fresh_compilation',{})[module]=cached
+                    kind='reused_compiled_artifact' if cached.get('producer_ci') else 'reused_fresh_compilation'
+                    report.setdefault(kind,{})[module]=cached
                     prepared.add(module);return
             else:
                 changed=git('diff',BASE,'HEAD','--',str(source.relative_to(ROOT)))!=''
@@ -206,6 +221,8 @@ def main():
         assert all(sha(Path(p))==h for group in ['compiled_objects','audit_objects'] for bundle in report.get(group,{}).values() for p,h in bundle.items()),'New proof object changed'
         assert all(sha(ROOT/p)==h for p,h in report.get('generated_audit_sha256',{}).items()),'Audit source changed'
         assert sha(Path(args.request))==report['request_sha256'],'Request changed'
+        if report.get('reuse_staging_sha256'):
+            assert sha(ROOT/'.lake/p0-queue/reuse-staging.json')==report['reuse_staging_sha256'],'Reuse receipt changed'
         report['status']='PASS_SCOPED_LEAVES'; report['verification_level']='FULLY_AUDITED_LEAF_ONLY';report['dependency_acceptance']='Fresh source prerequisites are COMPILED but not separately inventoried/replayed; target actual transitive axiom whitelist and target defining-module census are checked. Official Mathlib and toolchain cached dependencies remain trusted.' if fresh else 'Reused exact baseline dependencies, not newly rebuilt/replayed.'
     except BaseException as e:
         report['status']='FAILED';report['failure']=str(e);print(str(e),file=sys.stderr)

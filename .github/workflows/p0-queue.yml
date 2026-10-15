@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+  actions: read
 concurrency:
   group: goldbach-p0-heavy
   cancel-in-progress: false
@@ -42,6 +43,24 @@ jobs:
         env:
           CHEN_HEAVY_LOCK_PATH: ${{ runner.temp }}/goldbach-p0-heavy.lock
         run: python3 verification/parts/p0/queue/bootstrap.py
+      - name: Resolve optional exact compiled-object reuse
+        id: reuse
+        run: |
+          python3 - <<'PY'
+          import json, os
+          artifact=json.load(open('automation/dispatch.json')).get('reuse_artifact_id')
+          assert artifact in [None,11942119049], 'Unapproved artifact identity'
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+            f.write('enabled='+('true' if artifact is not None else 'false')+'\n')
+          PY
+      - name: Download the exact original compiled prerequisite ZIP
+        if: ${{ steps.reuse.outputs.enabled == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api repos/UyNewNas/goldbach-formalization/actions/artifacts/11942119049/zip > .lake/p0-reuse.zip
+      - name: Stage only source/object-identical compiled prerequisites
+        if: ${{ steps.reuse.outputs.enabled == 'true' }}
+        run: python3 verification/parts/p0/queue/restore_compiled.py .lake/p0-reuse.zip
       - name: Verify selected finite requests serially
         id: verify
         env:
