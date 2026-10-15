@@ -104,6 +104,10 @@ os.execv(cmd[0],cmd)
         assert mathlib,'No Mathlib target boundary found'
         report['target_source_walk']=seen;report['mathlib_cache_roots']=sorted(mathlib);save()
         run([str(realroot/'bin/lake'),'--no-cache','exe','cache','get',*sorted(mathlib)],'official-mathlib-cache',timeout=1800)
+        cache_exe=ROOT/'.lake/packages/mathlib/.lake/build/bin/cache'
+        assert cache_exe.is_file(),'Official cache executable not found at expected pinned package path'
+        report['runtime_sha256'][str(cache_exe)]=sha(cache_exe)
+        report['official_cache_tool_source_commit']=report['pins']['mathlib']
         run([sys.executable,'verification/parts/p0/check_pins.py'],'pins-after',timeout=60)
         assert sha(ROOT/'lake-manifest.json')==report['manifest_sha256'],'Manifest changed'
         assert sha(Path(__file__))==report['script_sha256'],'Bootstrap changed'

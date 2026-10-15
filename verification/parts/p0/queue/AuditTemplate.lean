@@ -1,6 +1,11 @@
 import TARGET_IMPORT
 import Lean.Util.CollectAxioms
 set_option pp.all true
+set_option pp.proofs true
+set_option pp.deepTerms true
+set_option pp.universes true
+set_option pp.explicit true
+set_option pp.fullNames true
 set_option pp.privateNames true
 set_option pp.maxSteps 1000000
 open Lean Elab Command in
