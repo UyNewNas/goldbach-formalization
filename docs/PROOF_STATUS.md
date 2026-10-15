@@ -1,5 +1,38 @@
 # Verification boundary
 
+## Resumed development — 15 October 2026
+
+Hourly work resumed from the stronger `1337e2d` publication checkpoint on
+`codex/chen-parts-integration`. The frozen manuscript and `currentC/currentK`
+remain unchanged. Development candidates do not establish the unconditional goal.
+
+[Run 38671169182](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38671169182),
+source `097b14d0c83c286d4ebcbbf319e5562cb37523e8`, accepted only these two leaves:
+`FinitePrimeGeometryCore` (70 complete defining-module declarations) and
+`HistoricalUnorderedThirdGeometry` (36). Both passed strict `-t0 -j2 -M4096`
+compilation, original-object kernel replay, complete serialized/environment census,
+full types and transitive three-axiom checks, and audit-object replay. The core
+moves 36 existing declarations verbatim out of broad analytic imports; the actual
+seven-gate geometry keeps both inherited first-cube gates when the third level
+can decrease. The run reused 43 source/object-identical compiled prerequisites
+and compiled five modules. Imported prerequisites are not thereby independently
+audited. Old heavy carriers and whole-root compatibility have not been revalidated.
+
+The first source bootstrap exposed a missing pinned Architect provider; after
+repair, the broad P1/P3 dependencies `Wiener`/`ZetaBounds` hit the unchanged Lean
+memory check. P1's finite extraction removes those imports. P3 remains blocked
+on its necessary analytic dependency; no usable published fixed-pin object bundle
+has been found. The independent P2 pilot likewise found `FullCertificateData`
+exceeding that check before the new sum proofs. Its 186 literal definitions were
+then split verbatim into twelve carriers, preserving all 17,572 rows and indices.
+The row/extreme-block pilot is currently
+[run 38672198005](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38672198005);
+its outcome and the full row/sum/integral assembly are not yet accepted.
+
+The current run identities and immutable evidence hashes are recorded in
+`automation/control.json`, `automation/integration.json` and the P0 run records.
+Neither actual `hLower` nor `hUpper`, nor the full same-policy `K,c` bounds, is closed.
+
 ## Publication checkpoint — 13 October 2026
 
 Seventeen additional current-source compilation successes are now archived with
@@ -11,8 +44,8 @@ also have limited module replay and transitive-axiom evidence; complete new
 acceptance remains pending. The 17,572-row strip checks do not yet establish
 the full sum or integral bound. Neither actual `hLower` nor `hUpper` is closed.
 
-The research goal and earlier scheduled task are paused at this publication
-snapshot. The corrected Round6 exporter still lacks a successful actual run:
+The research goal and earlier scheduled task were paused at this publication
+snapshot; that pause was superseded by the 15 October resumption above. The corrected Round6 exporter still lacks a successful actual run:
 its three local attempts hit the memory limit. The archive identity verifier
 does not execute Lean and must not be reported as new proof verification.
 

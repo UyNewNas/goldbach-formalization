@@ -26,7 +26,11 @@ owners: P0 integration and validation, P1 historical integrals, P2 numerical
 certificates, P3 distribution, P4 the actual upper bound, and P5 Chen's lower
 bound. Production files have exclusive writers; P0 coordinates shared build
 outputs. The earlier local uncommitted work is preserved in its original
-worktree. The old scheduled automation remains paused.
+worktree. The former schedule was superseded by the owner-authorized hourly
+resumption on 15 October from checkpoint `1337e2d`. P0 alone runs validation.
+See [the resumed status and exact evidence](docs/PROOF_STATUS.md#resumed-development--15-october-2026).
+The finite core and actual seven-gate leaf have scoped full audit acceptance;
+the overall theorem and actual lower/upper premises remain unfinished.
 
 ## Verification status
 
