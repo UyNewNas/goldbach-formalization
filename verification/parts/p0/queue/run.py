@@ -205,7 +205,7 @@ def main():
         assert all(sha(Path(p))==h for group in ['compiled_objects','audit_objects'] for bundle in report.get(group,{}).values() for p,h in bundle.items()),'New proof object changed'
         assert all(sha(ROOT/p)==h for p,h in report.get('generated_audit_sha256',{}).items()),'Audit source changed'
         assert sha(Path(args.request))==report['request_sha256'],'Request changed'
-        report['status']='PASS_SCOPED_LEAVES'; report['verification_level']='FULLY_AUDITED_LEAF_WITH_REUSED_DEPENDENCIES'
+        report['status']='PASS_SCOPED_LEAVES'; report['verification_level']='FULLY_AUDITED_LEAF_ONLY';report['dependency_acceptance']='Fresh source prerequisites are COMPILED but not separately inventoried/replayed; target actual transitive axiom whitelist and target defining-module census are checked. Official Mathlib and toolchain cached dependencies remain trusted.' if fresh else 'Reused exact baseline dependencies, not newly rebuilt/replayed.'
     except BaseException as e:
         report['status']='FAILED';report['failure']=str(e);print(str(e),file=sys.stderr)
     finally:

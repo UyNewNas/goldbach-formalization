@@ -1,0 +1,142 @@
+{
+  "run_id": "20261015T005215Z",
+  "part": "p3",
+  "status": "WAITING_FOR_P0",
+  "baseline_commit": "1337e2db4712fb4a9f86add073f771f84b66d0c8",
+  "candidate_commit": null,
+  "candidate_kind": "HASH_FROZEN_SHARED_WORKTREE",
+  "candidate_worktree": "/workspace/shared/chen-coordination/p3",
+  "candidate_branch": "codex/chen-resume-p3",
+  "candidate_files": {
+    "ImbalancedChen.Part3CurrentLowerDistribution": {
+      "source_sha256": "6cf298b20e3045d6ec360ce0e735b3ac3aa5184edf956c0e4ec7648ef674f64b",
+      "legacy_source_sha256": "a78bb4051c70e17d2b954d3c043af40754dfb1b37b0e42c60dd117c75a5c107d",
+      "source_headers_equal": true,
+      "source_header_count": 11,
+      "validation": "SOURCE_ONLY"
+    },
+    "ImbalancedChen.Part3RoughAuxiliarySW": {
+      "source_sha256": "d1dd21a3cd6da112f43bc69e7432675379c37df890d08b07384df155589b42e3",
+      "legacy_source_sha256": "d1ff2dc2e0ce6f9f5e18eb2b01da4ae10dfb42c23d2d49f1bb241f8c7796a9f8",
+      "source_headers_equal": true,
+      "source_header_count": 19,
+      "validation": "SOURCE_ONLY"
+    }
+  },
+  "goal_types": [
+    {
+      "module": "ImbalancedChen.Part3CurrentLowerDistribution",
+      "source_type": "theorem part3_currentLowerAPError_log_saving (A : ℝ) (hA : 0 < A) :\n    ∃ B : ℝ, 0 ≤ B ∧ ∃ C : ℝ, 0 < C ∧\n      ∀ᶠ N : ℕ in atTop, ∀ Q : ℕ, Q ≤ panModulusCutoff N B →\n        ∀ S3 S4 : ℕ → Finset ℕ, ∀ S5 S6 : (ℕ × ℕ) → Finset ℕ,\n          Part3CurrentLowerRows N Q S3 S4 S5 S6 →\n          part3CurrentLowerAPError N S3 S4 S5 S6 ≤\n            C * (N : ℝ) / Real.log (N : ℝ) ^ A",
+      "compiler_confirmed": false
+    },
+    {
+      "module": "ImbalancedChen.Part3CurrentLowerDistribution",
+      "source_type": "theorem part3_currentLowerRemainder_negligible :\n    ∃ B : ℝ, 0 ≤ B ∧ ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N : ℕ in atTop, ∀ Q : ℕ, Q ≤ panModulusCutoff N B →\n        ∀ hN : Even N,\n        ∀ S3 S4 : ℕ → Finset ℕ, ∀ S5 S6 : (ℕ × ℕ) → Finset ℕ,\n          Part3CurrentLowerRows N Q S3 S4 S5 S6 →\n          part3CurrentLowerRemainderSum N hN S3 S4 S5 S6 ≤\n            epsilon * singularNormalization N",
+      "compiler_confirmed": false
+    },
+    {
+      "module": "ImbalancedChen.Part3RoughAuxiliarySW",
+      "source_type": "theorem auxiliarySWError_sub_one_norm_le\n    (S : Finset ℕ) (α : ℕ → ℂ) (H k q b : ℕ) (z : ℝ)\n    (hS : S ⊆ Finset.Ioc 0 H) (hz : 0 < z) (hk : 0 < k) (hq : 0 < q)\n    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1)\n    (hrough : ∀ n ∈ S, α n ≠ 0 → ∀ p : ℕ,\n      p.Prime → p ∣ n → z < (p : ℝ)) :\n    ‖auxiliarySWError S α k q b - auxiliarySWError S α 1 q b‖ ≤\n      2 * (k.divisors.card : ℝ) * (H : ℝ) / z",
+      "compiler_confirmed": false
+    },
+    {
+      "module": "ImbalancedChen.Part3RoughAuxiliarySW",
+      "source_type": "theorem auxiliarySWError_norm_le_large_modulus\n    (S : Finset ℕ) (α : ℕ → ℂ) (H k q b : ℕ)\n    (hS : S ⊆ Finset.Ioc 0 H) (hH : 3 ≤ H) (hq : 0 < q)\n    (hα : ∀ n ∈ S, ‖α n‖ ≤ 1) :\n    ‖auxiliarySWError S α k q b‖ ≤ (H : ℝ) / q + 2 +\n      (H : ℝ) * MathlibNt.SieveTheory.Richert1969.richertReciprocalTotientConstant *\n        Real.log (H : ℝ) / (min q H : ℕ)",
+      "compiler_confirmed": false
+    }
+  ],
+  "source_headers": "/workspace/shared/chen-coordination/p0/automation/parts/p3/runs/20261015T005215Z/source-headers.json",
+  "dependency_fingerprint": "/workspace/shared/chen-coordination/p0/automation/parts/p3/runs/20261015T005215Z/dependency-fingerprint.json",
+  "local_dependency_files": 72,
+  "external_import_names": 63,
+  "dependency_delta": "All 70 unchanged local dependency sources match 688f495 exactly; only the two candidate sources differ. External deps are unmaterialized here and pinned by lake-manifest.json.",
+  "unpaid_premises": [
+    "Actual current lower policy must supply Part3CurrentLowerRows on the complete physical modulus <= panModulusCutoff N B.",
+    "Rough small-modulus k=1 uniform Siegel-Walfisz for the actual family remains unproved.",
+    "Higher-range signed convolution / prime-product distribution remains unproved; ordinary sqrt BV does not cover approximately 0.598 physical level.",
+    "Actual hLower/hUpper, same-rho policy matching and moving-parameter consumers remain open."
+  ],
+  "external_reuse": [
+    {
+      "source": "subfish-zhou/goldbach-lean",
+      "commit": "09b97db5764ade1246bfb77206baa1b124760958",
+      "license": "Apache-2.0, as documented in existing EXTERNAL_REUSE.md; no upstream source copied.",
+      "declaration": "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry.primeSW_reciprocal_totient",
+      "url": "https://github.com/subfish-zhou/goldbach-lean/blob/09b97db5764ade1246bfb77206baa1b124760958/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuFouvryPrimeSWLarge.lean",
+      "type": "{N d : ℕ} → 3 ≤ N → 0 < d → (1 : ℝ) / d.totient ≤ richertReciprocalTotientConstant * Real.log N / (min d N : ℕ)",
+      "decision": "Reuse exact finite totient envelope for H>=3 and all positive q, including q>H; no SW theorem or high-level estimate inferred. New transitive closure audit remains P0-owned."
+    }
+  ],
+  "legacy_evidence": {
+    "commit": "688f495a56d29ad250bd0719ef2cb8c18d5f722c",
+    "run_url": "https://github.com/UyNewNas/goldbach-formalization/actions/runs/38333669069",
+    "job_id": 115088838960,
+    "artifact_id": 11783434290,
+    "artifact_sha256": "fa51c79b8d32b9fc89912db44217fbeed6a8c79b0b3af5257c2fb9dc93940ca7",
+    "overall_status": "FAILED",
+    "separate_successes": [
+      {
+        "module": "ImbalancedChen.Part3PrimeAPDistribution",
+        "declarations": 16,
+        "threads": 2,
+        "t0": true,
+        "warnings_as_errors": true,
+        "M4096": false,
+        "production_replay": true,
+        "audit_replay": true,
+        "all_serialized_own_declarations_checked": true,
+        "complete_import_companions_bound": false
+      },
+      {
+        "module": "MathlibNt.AnalyticNumberTheory.BombieriVinogradov.Bombieri1965Richert418Unconditional",
+        "declarations": 4,
+        "threads": 2,
+        "t0": true,
+        "warnings_as_errors": true,
+        "M4096": false,
+        "production_replay": true,
+        "audit_replay": true,
+        "types_are_named_propositions": true,
+        "complete_import_companions_bound": false
+      }
+    ],
+    "reuse_level": "Historical exact-source component evidence only; not current baseline full acceptance."
+  },
+  "verification": {
+    "current_source": "SOURCE_ONLY",
+    "lean_commands_started": 0,
+    "lake_commands_started": 0,
+    "checker_commands_started": 0,
+    "CI_dispatched": false,
+    "static_header_equality": {
+      "CurrentLower": 11,
+      "RoughAuxiliarySW": 19
+    },
+    "source_diff_whitespace": "PASS",
+    "archived_object_hashes": "4/4 match historical receipts; identity check only",
+    "compiled": "NOT_RUN",
+    "kernel_replay": "NOT_RUN",
+    "complete_inventory_and_import_object_audit": "NOT_RUN",
+    "integrated": "NOT_DONE"
+  },
+  "failure_diagnosis": {
+    "CurrentLower": [
+      "line148 add_le_add_right uses left-fixed addition in pinned API, incompatible with fixed right centre cost; use add_le_add proof le_rfl.",
+      "line265 simplification leaves 2-1; use explicit linear arithmetic.",
+      "lines374/385 field_simp closes equality; remove extra ring producing No goals."
+    ],
+    "RoughAuxiliarySW": [
+      "line76 coprime mean iff/conditional reduction leaves unsolved branch; split literal conditionals and close cases.",
+      "lines139-159 inferred real-valued P contaminates divisibility and natural floor division; explicitly fix T/P as Finset Nat and binder p as Nat.",
+      "line221 addition direction mismatch; use add_le_add le_rfl proof.",
+      "line323 Nat.cast_div_le inferred wrong field and addition direction; give real inequality and add_le_add.",
+      "lines344/359 general simp leaves if/norm conditions; explicitly use coefficient bound in positive branch."
+    ]
+  },
+  "requests": [
+    "p3-20261015T005215Z-repair-compile-audit"
+  ],
+  "next_action": "P0 schedules exact-source compile first, returns raw diagnostics, then original-object kernel replay and full declarations/types/axioms/import-companion audit without removing gates. Repair only concrete new diagnostics after response.",
+  "wake_condition": "P0 request receipt or raw exact-candidate compile/audit result; no unchanged rerun by P3.",
+  "completion_condition": "P0 accepts all actual P4/P5 distribution consumers over their genuine physical ranges; this repair alone does not complete P3."
+}

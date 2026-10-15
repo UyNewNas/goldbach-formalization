@@ -48,11 +48,11 @@ def main():
             assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=target,text=True).strip()==p['rev']
         run([sys.executable,'verification/parts/p0/check_pins.py'],'pins-before',timeout=60)
         reallean=Path(subprocess.check_output(['elan','which','lean'],text=True).strip());realroot=reallean.parent.parent
-        shadow=out/'toolchain';shadow.mkdir();(shadow/'bin').mkdir()
+        shadow=Path(os.environ['RUNNER_TEMP'])/'p0-pinned-shadow-toolchain';shadow.mkdir();(shadow/'bin').mkdir()
         for p in realroot.iterdir():
             if p.name!='bin':(shadow/p.name).symlink_to(p,target_is_directory=p.is_dir())
         for p in (realroot/'bin').iterdir():
-            if p.name!='lean':(shadow/'bin'/p.name).symlink_to(p,target_is_directory=p.is_dir())
+            if p.name not in ['lean','leanir','clang','leanc','llvm-ar']:(shadow/'bin'/p.name).symlink_to(p,target_is_directory=p.is_dir())
         wrapper=shadow/'bin/lean'
         wrapper.write_text('''#!/usr/bin/env python3
 import fcntl,json,os,sys,time
@@ -63,14 +63,31 @@ for a in sys.argv[1:]:
     if a.startswith('-j') or a.startswith('-M'):continue
     args.append(a)
 fd=os.open(os.environ['P0_COMPILER_SLOT'],os.O_CREAT|os.O_WRONLY,0o600)
-fcntl.flock(fd,fcntl.LOCK_EX);os.set_inheritable(fd,True)
+if os.environ.get('P0_COMPILER_SLOT_HELD')!='1':fcntl.flock(fd,fcntl.LOCK_EX)
+os.set_inheritable(fd,True);os.environ['P0_COMPILER_SLOT_HELD']='1'
 cmd=[os.environ['P0_REAL_LEAN'],'-t0','-j2','-M4096',*args]
 with open(os.environ['P0_COMPILER_LOG'],'a') as f:f.write(json.dumps({'pid':os.getpid(),'command':cmd})+'\\n')
 os.execv(cmd[0],cmd)
 ''');wrapper.chmod(0o755)
+        (out/'lean-wrapper.py').write_text(wrapper.read_text())
+        for tool in ['leanir','clang','leanc','llvm-ar']:
+            native=shadow/'bin'/tool
+            native.write_text('''#!/usr/bin/env python3
+import fcntl,json,os,sys
+fd=os.open(os.environ['P0_COMPILER_SLOT'],os.O_CREAT|os.O_WRONLY,0o600)
+if os.environ.get('P0_COMPILER_SLOT_HELD')!='1':fcntl.flock(fd,fcntl.LOCK_EX)
+os.set_inheritable(fd,True);os.environ['P0_COMPILER_SLOT_HELD']='1'
+cmd=[str(__import__('pathlib').Path(os.environ['P0_REAL_LEAN']).parent/sys.argv[0].split('/')[-1]),*sys.argv[1:]]
+with open(os.environ['P0_COMPILER_LOG'],'a') as f:f.write(json.dumps({'pid':os.getpid(),'command':cmd})+'\\n')
+os.execv(cmd[0],cmd)
+''');native.chmod(0o755)
+            (out/(tool+'-wrapper.py')).write_text(native.read_text())
         env.update(LEAN_SYSROOT=str(shadow),LAKE_OVERRIDE_LEAN='true',LAKE_NO_CACHE='true',LAKE_ARTIFACT_CACHE='false',P0_REAL_LEAN=str(reallean),P0_COMPILER_SLOT=str(out/'compiler.lock'),P0_COMPILER_LOG=str(out/'compiler-commands.jsonl'))
         env['PATH']=str(shadow/'bin')+':'+env['PATH']
         report['runtime_sha256']={str(reallean):sha(reallean),str(realroot/'bin/lake'):sha(realroot/'bin/lake'),str(wrapper):sha(wrapper)}
+        for tool in ['leanir','clang','leanc','llvm-ar']:
+            report['runtime_sha256'][str(realroot/'bin'/tool)]=sha(realroot/'bin'/tool)
+            report['runtime_sha256'][str(shadow/'bin'/tool)]=sha(shadow/'bin'/tool)
         roots=[ROOT]+[ROOT/'.lake/packages'/p['name'] for p in packages]
         todo=[m for r in json.loads((ROOT/'automation/dispatch.json').read_text())['requests'] for m in r['modules']]+['Lean.Util.CollectAxioms']; seen={}; mathlib=set()
         while todo:
@@ -90,8 +107,9 @@ os.execv(cmd[0],cmd)
         run([sys.executable,'verification/parts/p0/check_pins.py'],'pins-after',timeout=60)
         assert sha(ROOT/'lake-manifest.json')==report['manifest_sha256'],'Manifest changed'
         assert sha(Path(__file__))==report['script_sha256'],'Bootstrap changed'
+        assert all(sha(Path(p))==h for p,h in report['runtime_sha256'].items()),'Runtime or wrapper changed'
         assert all(sha(ROOT/v['path'])==v['sha256'] for v in seen.values()),'Source changed'
-        report['status']='PASS_OFFICIAL_CACHE_ONLY';report['goldbach_or_project_proof_compiled']=False
+        report['status']='PASS_OFFICIAL_CACHE_ONLY';report['goldbach_or_project_proof_compiled']=False;report['dependency_acceptance']='Official Mathlib cached dependencies only; fresh project/Goldbach compilation and target audits are separate later stages'
     except BaseException as e:report.update(status='FAILED',failure=str(e));print(str(e),file=sys.stderr)
     finally:report['finished_utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();save()
     return 0 if report['status']=='PASS_OFFICIAL_CACHE_ONLY' else 1
