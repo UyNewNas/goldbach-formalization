@@ -1,26 +1,49 @@
 {
   "owner": "P0",
   "baseline": "1337e2db4712fb4a9f86add073f771f84b66d0c8",
-  "requested_at": "2026-10-15T04:11:00Z",
   "strategy": "FRESH_PINNED_TARGET_CLOSURE",
-  "reuse_artifact_id": 11944874041,
-  "trigger_reason": "Changed proof sequencing only, retain all lint/werror/resource gates. Independent request first completes ExpectedLengths audit; second audits corrected LengthsBlock11/10. Never repeat accepted numerical leaves as targets.",
+  "reuse_artifact_ids": [
+    11944874041,
+    11946041638,
+    11947029143
+  ],
   "source_request": "automation/parts/p2/requests/20261015T040800Z-length-sequence-lint.json",
+  "trigger_reason": "Three independent requests run serially within the original single-host heavy lock, compiler limits and job budget: new P2 lengths/full-selector audit; exact layered aggregate; independent P5 actual log-domain/boundary supplier. Each receipt remains scoped and any failure makes the overall job fail. All prior accepted numerical and pilot length leaves are exact prerequisites, never targets.",
   "requests": [
     {
-      "run_id": "20261015-p2-expected-lengths-audit",
+      "run_id": "20261015-p2-remaining-lengths-full-data",
       "modules": [
-        "ImbalancedChen.Certificates.PairedV2NaturalSumExpectedLengths"
+        "ImbalancedChen.Certificates.PairedV2NaturalSumLengthsBlock00",
+        "ImbalancedChen.Certificates.PairedV2NaturalSumLengthsBlock01",
+        "ImbalancedChen.Certificates.PairedV2NaturalSumLengthsBlock02",
+        "ImbalancedChen.Certificates.PairedV2NaturalSumLengthsBlock03",
+        "ImbalancedChen.Certificates.PairedV2NaturalSumLengthsBlock04",
+        "ImbalancedChen.Certificates.PairedV2NaturalSumLengthsBlock05",
+        "ImbalancedChen.Certificates.PairedV2NaturalSumLengthsBlock06",
+        "ImbalancedChen.Certificates.PairedV2NaturalSumLengthsBlock07",
+        "ImbalancedChen.Certificates.PairedV2NaturalSumLengthsBlock08",
+        "ImbalancedChen.Certificates.PairedV2NaturalSumLengthsBlock09",
+        "ImbalancedChen.Certificates.PairedV2FullCertificateData"
       ],
       "compile_timeout_seconds": 600
     },
     {
-      "run_id": "20261015-p2-length-sequence-pilot",
+      "run_id": "20261015-p2-layered-final-assembly",
       "modules": [
-        "ImbalancedChen.Certificates.PairedV2NaturalSumLengthsBlock11",
-        "ImbalancedChen.Certificates.PairedV2NaturalSumLengthsBlock10"
+        "ImbalancedChen.Certificates.PairedV2NaturalSumPartition",
+        "ImbalancedChen.Certificates.PairedV2NaturalSumLengths",
+        "ImbalancedChen.Certificates.PairedV2NaturalSumRowAssembly",
+        "ImbalancedChen.Certificates.PairedV2NaturalSums"
+      ],
+      "compile_timeout_seconds": 600
+    },
+    {
+      "run_id": "20261015-p5-actual-log-boundary",
+      "modules": [
+        "ImbalancedChen.CurrentChenUpsilon6LogDomain"
       ],
       "compile_timeout_seconds": 600
     }
-  ]
+  ],
+  "requested_at": "2026-10-15T04:20:00Z"
 }
