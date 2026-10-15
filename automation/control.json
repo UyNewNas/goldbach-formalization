@@ -1,6 +1,6 @@
 {
   "schema": "chen-parts-control-v1",
-  "updated_at": "2026-10-15T04:43:10Z",
+  "updated_at": "2026-10-15T04:48:15Z",
   "lifecycle": "ACTIVE",
   "authorization": "Owner explicitly resumed hourly P0\u2013P5 work on 2026-10-15",
   "coordinator": "P0",
@@ -85,7 +85,7 @@
     "resumed_at": "2026-10-15T00:45:59Z",
     "instruction": "Resume from this control branch and exact prior receipts. Do not duplicate a still-live round or running CI.",
     "active_round": "20261015T035000Z-hourly-continuation",
-    "next": "No live run. P5 LogDomain accepted, keep frozen. Continue only P2/P1 new diffs; preserve previously accepted leaves."
+    "next": "No duplicate heavy job. Parent coordinating cancellation or pending replacement; preserve six fixed anchors and source candidates. Resume dispatch-only publishing after recovery."
   },
   "last_execution": {
     "run_id": 38671169182,
@@ -163,7 +163,30 @@
     "reused_compiled_prerequisites": 38,
     "compiled_modules": 7
   },
-  "active_execution": null,
+  "active_execution": {
+    "status": "ORCHESTRATION_RECOVERY_REQUIRED",
+    "source_commit": "be40fe2e33b708cc15e138acb2fcfbfc4d63e9e3",
+    "checked_at": "2026-10-15T04:48:15Z",
+    "intended_run": {
+      "run_id": 38683263976,
+      "status": "CANCELLED_BEFORE_JOB",
+      "reason": "Shared concurrency pending slot replaced by unintended core push workflow"
+    },
+    "unintended_running": {
+      "run_id": 38683263849,
+      "job_id": 116252313059,
+      "workflow": "Variable envelope verification",
+      "status": "IN_PROGRESS",
+      "last_stage": "Mathlib cache"
+    },
+    "unintended_pending": {
+      "run_id": 38683263937,
+      "workflow": "Lean core verification",
+      "status": "PENDING_NO_JOB"
+    },
+    "cause": "P0 incorrectly combined source changes and dispatch in one non-skip commit; normal push workflows were also triggered. No target acceptance claimed.",
+    "next": "No duplicate heavy job. Parent coordinating cancellation or pending replacement; preserve six fixed anchors and source candidates. Resume dispatch-only publishing after recovery."
+  },
   "last_p2_layered_execution": {
     "run_id": 38678712025,
     "attempt": 1,
