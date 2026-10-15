@@ -20,10 +20,11 @@ existing root build would therefore not validate them.
 | `CurrentChenUpsilon6OrdinarySieveKernel` | Identification with the canonical normalized continuous lower sieve factor, and the same buffer limit | Strict compilation; original-object stock kernel replay; complete 17-declaration audit |
 | `Part3CenteredFourier` | Exact centered additive Fourier identities at composite moduli, retaining actual prime labels, weights and the primitive centre | Strict compilation; original-object stock kernel replay; complete 28-declaration audit |
 | `Certificates/PairedV2FullBuchstab` | The actual Buchstab gain bounds the certified fibre kernel with `K/80 = (K/4)*(1/20)` used once | Strict compilation; original-object stock kernel replay; complete 4-declaration audit |
+| `CurrentChenPairHarmonicMean` | The actual fifth prime-pair selector, its strict ordered triangle, true reciprocal-totient weights and varying-profile harmonic integral limit | Strict compilation; original-object stock kernel replay; complete 25-declaration audit |
 
-These six modules contain **102 complete owned declarations**, including
+These seven modules contain **127 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-102 independent major mathematical theorems.
+127 independent major mathematical theorems.
 
 The U6 limit is an analytic integral limit on the literal corrected rectangle.
 It does not exchange the arithmetic `N` limit with the buffer limit, supply the
@@ -31,17 +32,25 @@ It does not exchange the arithmetic `N` limit with the buffer limit, supply the
 
 ## Candidates that must not be counted as completed proofs
 
-* `CurrentChenPairDensity`, `CurrentChenPairHarmonicMean`, and
-  `CurrentChenUpsilon5OrdinaryMean` contain the proposed actual U5 ordinary
-  mean argument. Independent source review found no semantic objection, but
-  the new targets have not yet been reached by compilation. The necessary
-  old `ActualRosserOddBox` import failed the resource check at the permitted
-  budget. A source review is not execution evidence.
+* `CurrentChenPairDensity` and `CurrentChenUpsilon5OrdinaryMean` contain the
+  proposed actual U5 ordinary mean argument. The new one-sided density route
+  avoids the unnecessary two-sided density limit and its `ActualRosserOddBox`
+  import. Independent source review confirmed the uniform thresholds,
+  nonnegative factors, epsilon budget, true total phi-weight bound and final
+  count statement. The new combined imports still failed the 6144 MiB Lean
+  resource check at about 6.31 GiB RSS, before target elaboration. The count
+  mean remains unexecuted. A source review is not execution evidence.
+* `CurrentChenUpsilon6OrdinaryMean` is an unfinished source candidate through
+  the fixed-positive-buffer selector/harmonic/normalized-main-sum layer.
+  The final actual quotient-count Rosser/BV payment is not written or checked.
 * `Part3ReciprocalAPSupplier` specializes fixed upstream reciprocal-phase
   estimates to the actual full modulus and gamma gates. Its new target has
   not been compiled: 111 external prerequisite objects remain missing after
   the limited bootstrap. Ordinary BV does not thereby reach the stronger
   physical distribution cap.
+* `Part3ComplexDispersion` is a source candidate for finite complex Cauchy,
+  centered norm-square and double-label identities. It does not supply the
+  common completion, reciprocal-phase dictionary or aggregate gcd estimate.
 * `ActualSieveGapTailDecay`, `ActualSieveGapTailBounds`, and
   `ActualThirdPrefixTailIntegral` propose canonical sieve gap decay and
   noncompact tail estimates. The actual adopted extended selector and its
