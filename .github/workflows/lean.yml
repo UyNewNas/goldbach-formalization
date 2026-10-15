@@ -2,21 +2,109 @@ name: Lean core verification
 on:
   push:
     # Integration pushes are scheduled by P0's explicit finite queue.
-    # Full verification remains available through workflow_dispatch.
+    # Full verification remains available through manual/PR/reusable calls.
     branches-ignore:
       - 'codex/chen-parts-integration'
     paths-ignore:
       - "automation/**"
   pull_request:
   workflow_dispatch:
+  workflow_call:
 permissions:
   contents: read
-concurrency:
-  group: goldbach-p0-heavy
-  cancel-in-progress: false
 jobs:
+  pr-admission:
+    runs-on: ubuntu-latest
+    outputs:
+      skip-heavy: ${{ steps.dispatch.outputs.skip-heavy }}
+    steps:
+      - name: Inspect only the exact integration PR synchronize head
+        id: checkout
+        if: ${{ github.event_name == 'pull_request' && github.event.action == 'synchronize' && github.event.pull_request.head.ref == 'codex/chen-parts-integration' && github.event.pull_request.head.repo.id == github.event.repository.id }}
+        continue-on-error: true
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - name: Decide duplicate-dispatch scheduling without claiming verification
+        id: dispatch
+        if: ${{ always() }}
+        env:
+          CHECKOUT_OUTCOME: ${{ steps.checkout.outcome }}
+        run: |
+          if [[ "$CHECKOUT_OUTCOME" == success ]]; then
+            python3 -I - <<'PYADMISSION'
+          import json, os, re, subprocess
+          from pathlib import Path
+
+          def pr_dispatch_decision(event_name: str, event: dict, git_output=None) -> dict:
+              """Skip only a proven single-dispatch synchronize delta, never PR three-dot.
+
+              Every missing field, checkout mismatch, multi/merge commit, mixed diff, or
+              Git failure conservatively preserves the original heavy verification jobs.
+              This is scheduling evidence only, never a successful proof-gate result.
+              """
+              def require(ok, message):
+                  if not ok:
+                      raise RuntimeError(message)
+              run = {'skip_heavy': False, 'status': 'RUN_ORIGINAL_HEAVY_GATES'}
+              try:
+                  require(event_name == 'pull_request' and event.get('action') == 'synchronize',
+                          'Not a PR synchronize event')
+                  head = event['pull_request']['head']
+                  require(head['ref'] == 'codex/chen-parts-integration', 'Different PR source branch')
+                  # A same-named fork branch cannot dispatch this repository's queue.
+                  repository_id = event['repository']['id']
+                  require(type(repository_id) is int and repository_id > 0 and
+                          type(head['repo']['id']) is int and head['repo']['id'] == repository_id,
+                          'Missing or different PR head repository')
+                  before, after = event['before'], event['after']
+                  require(all(isinstance(value, str) and re.fullmatch(r'[0-9a-f]{40}', value)
+                              for value in (before, after, head['sha'])), 'Missing or invalid event commit')
+                  require(head['sha'] == after, 'PR head differs from event.after')
+                  if git_output is None:
+                      git_output = lambda *args: subprocess.check_output(['git', *args])
+                  require(git_output('rev-parse', 'HEAD').decode().strip() == after,
+                          'Checkout differs from exact PR event head')
+                  parents = git_output('rev-list', '--parents', '-n', '1', 'HEAD').decode().split()
+                  require(parents == [after, before], 'Not exactly one non-merge commit since event.before')
+                  changed = git_output('diff', '--no-renames', '--name-only', '-z', before, after)
+                  require(changed.endswith(b'\0'), 'Incomplete changed-path output')
+                  paths = changed.decode().split('\0')[:-1]
+                  require(paths in (['automation/dispatch.json'], ['automation/root-dispatch.json']),
+                          'Delta is not exactly one recognized dispatch file')
+                  return {'skip_heavy': True, 'status': 'SKIP_DUPLICATE_DISPATCH_ONLY',
+                          'reason': 'Verified one pure ' + paths[0] + ' synchronize commit',
+                          'before': before, 'after': after, 'changed_paths': paths}
+              except Exception as error:
+                  return {**run, 'reason': str(error)}
+
+
+          try:
+              event = json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text())
+              decision = pr_dispatch_decision(os.environ.get('GITHUB_EVENT_NAME', ''), event)
+          except Exception as error:
+              decision = {'skip_heavy': False, 'status': 'RUN_ORIGINAL_HEAVY_GATES', 'reason': str(error)}
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write('skip-heavy=' + str(decision['skip_heavy']).lower() + '\n')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
+              out.write('PR dispatch scheduling: ' + decision['status'] + '. ' + decision['reason'] + '.\n')
+              if decision['skip_heavy']:
+                  out.write('Original heavy proof jobs are visibly skipped for this duplicate dispatch; this is not proof acceptance.\n')
+          print(json.dumps(decision))
+          PYADMISSION
+          else
+            printf 'skip-heavy=false\n' >> "$GITHUB_OUTPUT"
+            printf 'No verified single-dispatch synchronize delta; preserving original heavy gates.\n' >> "$GITHUB_STEP_SUMMARY"
+          fi
   lean:
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.ref != 'codex/chen-parts-integration' }}
+    needs: pr-admission
+    # Admission failure/missing evidence always preserves full verification.
+    if: ${{ !cancelled() && (needs.pr-admission.result != 'success' || needs.pr-admission.outputs.skip-heavy != 'true') }}
+    concurrency:
+      group: goldbach-p0-heavy
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 150
     env:
@@ -89,6 +177,12 @@ jobs:
       - name: Install Elan and the pinned project toolchain
         run: |
           "$RUNNER_TEMP/lean-ci/run-stage" install-elan "$LEAN_ACTION_DIR/scripts/install_elan.sh"
+      - name: Guard the pinned toolchain for all source compiler children
+        run: |
+          python3 verification/parts/p0/ci_runtime_guard.py setup --evidence "$RUNNER_TEMP/lean-verification-logs/runtime"
+      - name: Verify guarded runtime hashes and environment
+        run: |
+          python3 verification/parts/p0/ci_runtime_guard.py audit
       - name: Configure lean-action with the existing inputs
         id: config
         env:
@@ -107,6 +201,9 @@ jobs:
       - name: Get the existing Mathlib cache
         run: |
           "$RUNNER_TEMP/lean-ci/run-stage" mathlib-cache lake exe cache get
+      - name: Verify the effective Lake and Lean child environment
+        run: |
+          python3 verification/parts/p0/ci_runtime_guard.py audit --probe
       - name: Build the full project
         id: build
         timeout-minutes: 90
@@ -172,9 +269,15 @@ jobs:
         timeout-minutes: 25
         run: |
           "$RUNNER_TEMP/lean-ci/run-stage" round6-types python3 verification/parts/p0/check_round6_types.py --timeout-seconds 1440
+      - name: Audit actual compiler commands and unchanged runtime
+        id: runtime-audit
+        if: ${{ always() }}
+        run: |
+          python3 verification/parts/p0/ci_runtime_guard.py audit --probe --require-source
       - name: Record required verification outcomes
         if: ${{ always() }}
         env:
+          RUNTIME_OUTCOME: ${{ steps.runtime-audit.outcome }}
           BUILD_OUTCOME: ${{ steps.build.outcome }}
           LEANCHECKER_OUTCOME: ${{ steps.leanchecker.outcome }}
           AXIOM_AUDIT_OUTCOME: ${{ steps.axiom-audit.outcome }}
@@ -185,6 +288,7 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/lean-verification-logs"
           {
+            printf 'runtime-audit=%s\n' "$RUNTIME_OUTCOME"
             printf 'build=%s\n' "$BUILD_OUTCOME"
             printf 'leanchecker=%s\n' "$LEANCHECKER_OUTCOME"
             printf 'axiom-audit=%s\n' "$AXIOM_AUDIT_OUTCOME"
@@ -205,6 +309,7 @@ jobs:
             printf '\nAllowed axioms: propext, Classical.choice, Quot.sound.\n'
             printf 'A skipped or uncompleted stage is not a successful verification.\n'
           } >> "$GITHUB_STEP_SUMMARY"
+          test "$RUNTIME_OUTCOME" = success
           test "$BUILD_OUTCOME" = success
           test "$LEANCHECKER_OUTCOME" = success
           test "$AXIOM_AUDIT_OUTCOME" = success

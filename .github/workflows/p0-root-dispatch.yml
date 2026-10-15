@@ -1,0 +1,42 @@
+name: P0 full root dispatch
+on:
+  push:
+    branches:
+      - 'codex/chen-parts-integration'
+    paths:
+      - 'automation/root-dispatch.json'
+permissions:
+  contents: read
+# No caller concurrency: the original workflow alone owns goldbach-p0-heavy.
+# Admission is read-only and lightweight; it never runs Lean/Lake/checker.
+jobs:
+  admission:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - name: Admit one pure root-dispatch commit
+        env:
+          EXPECTED_HEAD: ${{ github.sha }}
+          EXPECTED_BEFORE: ${{ github.event.before }}
+        run: |
+          python3 -I - <<'PY'
+          import json, os, pathlib, re, subprocess, sys
+          def git(*args):
+              return subprocess.check_output(['git', *args], text=True).strip()
+          head, before = os.environ['EXPECTED_HEAD'], os.environ['EXPECTED_BEFORE']
+          assert re.fullmatch(r'[0-9a-f]{40}', head) and re.fullmatch(r'[0-9a-f]{40}', before)
+          assert git('rev-parse', 'HEAD') == head, 'Wrong checked-out event head'
+          assert git('rev-list', '--parents', '-n', '1', 'HEAD').split() == [head, before], 'Expected exactly one non-merge commit after event.before'
+          paths = subprocess.check_output(['git', 'diff', '--no-renames', '--name-only', '-z', before, head]).decode().split('\0')[:-1]
+          assert paths == ['automation/root-dispatch.json'], 'Root dispatch must be the only changed path'
+          output = pathlib.Path(os.environ['RUNNER_TEMP']) / 'root-dispatch-paths.json'
+          output.write_text(json.dumps(paths))
+          subprocess.run([sys.executable, 'verification/parts/p0/queue/check_publication.py', '--message', git('show', '-s', '--format=%B', head), '--paths-json', str(output)], check=True)
+          PY
+  full-root:
+    needs: admission
+    uses: ./.github/workflows/lean.yml

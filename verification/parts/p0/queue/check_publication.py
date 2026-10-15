@@ -4,15 +4,35 @@
 Feed the exact parent-to-candidate changed-path list from GitHub compare or
 an equivalent Git diff. This does not perform any GitHub write or proof run.
 """
-import argparse, json
+import argparse
+import json
 from pathlib import Path
-p = argparse.ArgumentParser()
-p.add_argument('--message', required=True)
-p.add_argument('--paths-json', required=True)
-a = p.parse_args()
-paths = json.loads(Path(a.paths_json).read_text())
-assert isinstance(paths, list) and all(isinstance(x, str) for x in paths)
-assert len(paths) == len(set(paths)), 'Duplicate changed path'
-if '[skip ci]' not in a.message.lower():
-    assert paths == ['automation/dispatch.json'], 'Trigger commits may change only automation/dispatch.json; publish all source/config/status changes first with [skip ci]'
-print(json.dumps({'status': 'PASS_PUBLICATION_PATH_SCOPE_ONLY', 'skip_ci': '[skip ci]' in a.message.lower(), 'changed_paths': paths}))
+
+TRIGGERS = {'automation/dispatch.json', 'automation/root-dispatch.json'}
+
+
+def check(message, paths):
+    if not isinstance(paths, list) or not all(isinstance(x, str) for x in paths):
+        raise ValueError('Changed paths must be a string list')
+    if len(paths) != len(set(paths)):
+        raise ValueError('Duplicate changed path')
+    skip = '[skip ci]' in message.lower()
+    # A dispatch must never share a commit with the other dispatch or any
+    # source/config/status path, even when the message suppresses CI.
+    if TRIGGERS.intersection(paths) and (len(paths) != 1 or paths[0] not in TRIGGERS):
+        raise ValueError('Dispatch commits must change exactly one dispatch file')
+    if not skip and (len(paths) != 1 or paths[0] not in TRIGGERS):
+        raise ValueError('Trigger commits may change only automation/dispatch.json OR automation/root-dispatch.json; publish source/config/status separately with [skip ci]')
+    return {'status': 'PASS_PUBLICATION_PATH_SCOPE_ONLY', 'skip_ci': skip, 'changed_paths': paths}
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--message', required=True)
+    parser.add_argument('--paths-json', required=True)
+    args = parser.parse_args()
+    print(json.dumps(check(args.message, json.loads(Path(args.paths_json).read_text()))))
+
+
+if __name__ == '__main__':
+    main()
