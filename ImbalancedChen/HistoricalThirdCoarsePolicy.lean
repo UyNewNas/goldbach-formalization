@@ -91,13 +91,13 @@ It is not permission to apply W without its original gate. -/
 def rescue (b : RationalBox) : ℚ := max (qA b.lx) (qB b.uz)
 
 theorem rescue_le {b : RationalBox} {x y z : ℝ} (h : b.InBox x y z) :
-    (rescue b : ℝ) ≤ max (A x) (B z) := by
+    (rescue b : ℝ) ≤ max (A x) (VariableEnvelope.B z) := by
   simp only [rescue, Rat.cast_max, cast_qA, cast_qB]
-  apply max_le_max <;> dsimp [A, B] <;> linarith [h.1, h.2.2.2.2.2]
+  apply max_le_max <;> dsimp [A, VariableEnvelope.B] <;> linarith [h.1, h.2.2.2.2.2]
 
 theorem rescue_attained (b : RationalBox) (hw : b.WellFormed) :
     b.InBox b.lx b.ly b.uz ∧
-      max (A b.lx) (B b.uz) = (rescue b : ℝ) := by
+      max (A b.lx) (VariableEnvelope.B b.uz) = (rescue b : ℝ) := by
   refine ⟨⟨le_rfl, by exact_mod_cast hw.1, le_rfl,
     by exact_mod_cast hw.2.1, by exact_mod_cast hw.2.2, le_rfl⟩, ?_⟩
   simp only [rescue, Rat.cast_max, cast_qA, cast_qB]
@@ -170,9 +170,9 @@ theorem fullGamma_le_cap (e : ℝ) (b : RationalBox)
   have huz : (0 : ℝ) ≤ b.uz := by exact_mod_cast hz.trans hw.2.2
   have hr : (rescue b : ℝ) ≤ cap := by
     simp only [rescue, Rat.cast_max, cast_qA, cast_qB]
-    apply max_le <;> dsimp [A, B, mu, cap] at * <;> linarith
+    apply max_le <;> dsimp [A, VariableEnvelope.B, mu, cap] at * <;> linarith
   unfold fullGamma
-  simp only [Rat.cast_max, apply_ite, max_le_iff]
+  simp only [Rat.cast_max, max_le_iff]
   refine ⟨h0, hxy, hxyz, hr, ?_, ?_⟩
   · split_ifs <;> assumption
   · split_ifs <;> assumption
@@ -212,7 +212,7 @@ theorem fullGamma_le_original (e : ℝ) (b : RationalBox) {x y z : ℝ}
     exact max_le hs0 (B_le_six x y z)
   rw [original_eq_six ho]
   unfold fullGamma
-  simp only [Rat.cast_max, apply_ite, max_le_iff]
+  simp only [Rat.cast_max, max_le_iff]
   refine ⟨h0.trans hs0, hxy.trans hsxy, hxyz.trans hsxyz, hr, ?_, ?_⟩
   · split_ifs
     · exact hxz.trans hsxz
@@ -308,10 +308,12 @@ theorem inBox_of_cell {m : ℕ} {j : Cell m} {t : Fin 3 → ℝ}
     (box m j).InBox (t 0) (t 1) (t 2) := by
   have hl (i : Fin 3) : (qLogPrimeMeshLo 0 (19 / 96) m j i : ℝ) ≤ t i := by
     rw [congrFun (cast_qLogPrimeMeshLo 0 (19 / 96) m j) i]
-    exact (mem_logPrimeMeshCell.mp ht i).1
+    simpa only [Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using
+      (mem_logPrimeMeshCell.mp ht i).1
   have hu (i : Fin 3) : t i ≤ (qLogPrimeMeshHi 0 (19 / 96) m j i : ℝ) := by
     rw [congrFun (cast_qLogPrimeMeshHi 0 (19 / 96) m j) i]
-    exact (mem_logPrimeMeshCell.mp ht i).2.le
+    simpa only [Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using
+      (mem_logPrimeMeshCell.mp ht i).2.le
   exact ⟨hl 0, hu 0, hl 1, hu 1, hl 2, hu 2⟩
 
 /-- The finite lookup stores Gamma; the common 2e loss is subtracted once.
@@ -324,15 +326,20 @@ theorem exponent_on_cell (e chi : ℝ) (m : ℕ) (t : Fin 3 → ℝ)
     (j : Cell m) (hj : j ∈ cells e chi m)
     (ht : t ∈ logPrimeMeshCell 0 (19 / 96) m j) :
     exponent e chi m t = levelExponent e (box m j) := by
+  have ht' : t ∈ logPrimeMeshCell ((0 : ℚ) : ℝ) ((19 / 96 : ℚ) : ℝ) m j := by
+    simpa only [Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using ht
   unfold exponent levelExponent
   rw [historicalPrefixLookup_on_cell 0 (19 / 96) (by norm_num) m
-    (cells e chi m) _ (299 / 500) t j hj ht]
+    (cells e chi m) _ (299 / 500) t j hj ht']
 
 theorem exponent_outside (e chi : ℝ) (m : ℕ) (t : Fin 3 → ℝ)
     (ht : ∀ j ∈ cells e chi m, t ∉ logPrimeMeshCell 0 (19 / 96) m j) :
     exponent e chi m t = initial e := by
+  have ht' : ∀ j ∈ cells e chi m,
+      t ∉ logPrimeMeshCell ((0 : ℚ) : ℝ) ((19 / 96 : ℚ) : ℝ) m j := by
+    simpa only [Rat.cast_zero, Rat.cast_div, Rat.cast_ofNat] using ht
   unfold exponent
-  rw [historicalPrefixLookup_outside 0 (19 / 96) m (cells e chi m) _ _ t ht]
+  rw [historicalPrefixLookup_outside 0 (19 / 96) m (cells e chi m) _ _ t ht']
   norm_num [initial, extendedDistributionCap]
 
 /-- Literal natural-prime rough test at rank three, with equality active. -/

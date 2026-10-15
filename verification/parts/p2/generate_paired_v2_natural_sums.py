@@ -157,7 +157,7 @@ def emit_sources(strips):
                   "  rw [sum_rows_eq_list, approximations_partition]",
                   "  simp only [blocks, List.flatten_cons, List.flatten_nil, List.map_append,",
                   "    List.map_nil, List.sum_append, List.sum_nil]",
-                  "  rw [" + ", ".join(f"block{b:02}_{field}" for b in range(len(blocks))) + "]", ""]
+                  "  (rw [" + ", ".join(f"block{b:02}_{field}" for b in range(len(blocks))) + "]; rfl)", ""]
     lines += [FOOTER]
     emitted[CERT / "PairedV2NaturalSums.lean"] = "\n".join(lines)
     return emitted, blocks

@@ -3,6 +3,23 @@
 Status: SOURCE_ONLY, REQUESTED to P0, then WAITING_FOR_P0. No Lean, Lake,
 checker, environment-loaded audit, CI, install, commit, or push was run by P1.
 
+## Repair after the first strict attempt
+
+P0 run `38682333676`, source `75096929`, rejected source `ca213f74` at
+strict compilation in 2.872 seconds, with no memory-limit failure. The complete
+original log and receipt are retained under `failures/38682333676`.
+
+The new source is `86424459ed1208c11b400c56e1127c9fb39f2d137773eb2505c735361accbc50`.
+It fixes every reported root error in one source change: fully qualify the
+intended real `VariableEnvelope.B` in the two rescue signatures and relevant
+unfolds; leave each conditional inside its own max leaf instead of applying
+the overbroad `apply_ite` rewrite; explicitly normalize rational zero and
+19/96 at the four real mesh bridges. The remaining original diagnostics were
+cascades from these failures. `repair-static-checks.json` confirms all 56
+declaration names, all definitions/abbreviations, and every other signature
+are text-identical. No hypothesis or verification gate was weakened.
+The replacement source is uncompiled and must be rechecked by P0.
+
 ## Source and scope
 
 - Baseline: `08899a3f44fa61ea6dfe33d4cb557693cbac1590`.

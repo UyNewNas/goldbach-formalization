@@ -1,0 +1,97 @@
+diff --git a/ImbalancedChen/Certificates/PairedV2NaturalSums.lean b/ImbalancedChen/Certificates/PairedV2NaturalSums.lean
+--- a/ImbalancedChen/Certificates/PairedV2NaturalSums.lean
++++ b/ImbalancedChen/Certificates/PairedV2NaturalSums.lean
+@@ -32,7 +32,7 @@
+   rw [sum_rows_eq_list, approximations_partition]
+   simp only [blocks, List.flatten_cons, List.flatten_nil, List.map_append,
+     List.map_nil, List.sum_append, List.sum_nil]
+-  rw [block00_lower, block01_lower, block02_lower, block03_lower, block04_lower, block05_lower, block06_lower, block07_lower, block08_lower, block09_lower, block10_lower, block11_lower]
++  (rw [block00_lower, block01_lower, block02_lower, block03_lower, block04_lower, block05_lower, block06_lower, block07_lower, block08_lower, block09_lower, block10_lower, block11_lower]; rfl)
+ 
+ /-- Exact numerator sum over every `FullMask.Row`, at the unchanged 10^20 scale. -/
+ theorem upper_numerator_sum :
+@@ -40,7 +40,7 @@
+   rw [sum_rows_eq_list, approximations_partition]
+   simp only [blocks, List.flatten_cons, List.flatten_nil, List.map_append,
+     List.map_nil, List.sum_append, List.sum_nil]
+-  rw [block00_upper, block01_upper, block02_upper, block03_upper, block04_upper, block05_upper, block06_upper, block07_upper, block08_upper, block09_upper, block10_upper, block11_upper]
++  (rw [block00_upper, block01_upper, block02_upper, block03_upper, block04_upper, block05_upper, block06_upper, block07_upper, block08_upper, block09_upper, block10_upper, block11_upper]; rfl)
+ 
+ 
+ end ImbalancedChen.Certificates.PairedV2.FullMask.NaturalSums
+diff --git a/verification/parts/p2/data-split-dependencies.json b/verification/parts/p2/data-split-dependencies.json
+--- a/verification/parts/p2/data-split-dependencies.json
++++ b/verification/parts/p2/data-split-dependencies.json
+@@ -41,7 +41,7 @@
+     "ImbalancedChen/Certificates/PairedV2NaturalSumPartition.lean": "ff68c685d046a4f8ca9ea8f92565b27e6d33cb6ddb6bfbb5d0d8ea9716c59bfa",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumRowAssembly.lean": "643840208830b0c07ec82a22c8af020eda19f58fe11893333ddcf0038e56ec6f",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumRows.lean": "56eebe1e99f8dd6d79da3c49d0bcfb39fcc28f4c2468fdff8446a5876314cfbf",
+-    "ImbalancedChen/Certificates/PairedV2NaturalSums.lean": "1edb4200e6a69bb0add25ee2179a1c675a41760006b21ab243f581128eddd37d",
++    "ImbalancedChen/Certificates/PairedV2NaturalSums.lean": "cc4b90800cd12a583d3d382c3f3349130ac033d54d1d74bebe0c2e1f13258842",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumsBlock00.lean": "a873d8f01c79a0df428cb22da2237189f443adc02bf580c2c503147f41804da7",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumsBlock01.lean": "1633c13af23b40e23134eb70ad14c3f26cd65af8f0a18f848db40c537382cfdf",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumsBlock02.lean": "d06a9686f071e5f2b8a40b4d215688f30d18829816cff6721454cd00c29fe1ba",
+@@ -73,7 +73,7 @@
+     "Mathlib.Tactic.FieldSimp",
+     "Mathlib.Tactic.Ring"
+   ],
+-  "fingerprint_sha256": "54691f2f87426d5e4ce7a8fcc1a3b782dfbc30dccaebbaffbf33b89c854d43a7",
++  "fingerprint_sha256": "94dec203150c255dee2e5af659cb80ee1dadb648400a9aac7c414be8ed1de7b5",
+   "external_pins": [
+     {
+       "url": "https://github.com/subfish-zhou/goldbach-lean.git",
+diff --git a/verification/parts/p2/data-split-source-manifest.json b/verification/parts/p2/data-split-source-manifest.json
+--- a/verification/parts/p2/data-split-source-manifest.json
++++ b/verification/parts/p2/data-split-source-manifest.json
+@@ -18,7 +18,7 @@
+     "ImbalancedChen.lean": "6fedf631c85f7f04ba5b04d2852521e6089e52472e522ed0eaee8ed65ccd89bf"
+   },
+   "old_sum_declaration_types_and_numerals_preserved_byte_for_byte": true,
+-  "sum_proof_control_flow_repair": "Only remove26 redundant decide +kernel lines after closing rw steps:24 across12 block totals and2 in final totals. Retain all186 strip decision proofs.",
++  "sum_proof_control_flow_repair": "Remove26 original trailing decide +kernel lines. Retain all24 accepted block-total rewrites and186 strip decision proofs; the2 final-total rewrites now use (rw [...]; rfl) to close only the twelve-scalar Nat addition goals.",
+   "generic_row_proof_repair": "Add explicit cons-case Fin (xs.length + 1) shape before original rewrite; emitted source hash pinned to P0 strict/replay success.",
+   "original_row_list_bridge_types_preserved_byte_for_byte": true,
+   "row_list_proof_repairs": "Reverse rewrite the dependent Fin length before the unchanged generic theorem; explicitly specialize ofFn_comp' to the complete row-sum function.",
+@@ -4105,7 +4105,7 @@
+     "ImbalancedChen/Certificates/PairedV2NaturalSumPartition.lean": "ff68c685d046a4f8ca9ea8f92565b27e6d33cb6ddb6bfbb5d0d8ea9716c59bfa",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumRowAssembly.lean": "643840208830b0c07ec82a22c8af020eda19f58fe11893333ddcf0038e56ec6f",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumRows.lean": "56eebe1e99f8dd6d79da3c49d0bcfb39fcc28f4c2468fdff8446a5876314cfbf",
+-    "ImbalancedChen/Certificates/PairedV2NaturalSums.lean": "1edb4200e6a69bb0add25ee2179a1c675a41760006b21ab243f581128eddd37d",
++    "ImbalancedChen/Certificates/PairedV2NaturalSums.lean": "cc4b90800cd12a583d3d382c3f3349130ac033d54d1d74bebe0c2e1f13258842",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumsBlock00.lean": "a873d8f01c79a0df428cb22da2237189f443adc02bf580c2c503147f41804da7",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumsBlock01.lean": "1633c13af23b40e23134eb70ad14c3f26cd65af8f0a18f848db40c537382cfdf",
+     "ImbalancedChen/Certificates/PairedV2NaturalSumsBlock02.lean": "d06a9686f071e5f2b8a40b4d215688f30d18829816cff6721454cd00c29fe1ba",
+diff --git a/verification/parts/p2/generate_paired_v2_natural_sums.py b/verification/parts/p2/generate_paired_v2_natural_sums.py
+--- a/verification/parts/p2/generate_paired_v2_natural_sums.py
++++ b/verification/parts/p2/generate_paired_v2_natural_sums.py
+@@ -157,7 +157,7 @@
+                   "  rw [sum_rows_eq_list, approximations_partition]",
+                   "  simp only [blocks, List.flatten_cons, List.flatten_nil, List.map_append,",
+                   "    List.map_nil, List.sum_append, List.sum_nil]",
+-                  "  rw [" + ", ".join(f"block{b:02}_{field}" for b in range(len(blocks))) + "]", ""]
++                  "  (rw [" + ", ".join(f"block{b:02}_{field}" for b in range(len(blocks))) + "]; rfl)", ""]
+     lines += [FOOTER]
+     emitted[CERT / "PairedV2NaturalSums.lean"] = "\n".join(lines)
+     return emitted, blocks
+diff --git a/verification/parts/p2/split_paired_v2_certificate_data.py b/verification/parts/p2/split_paired_v2_certificate_data.py
+--- a/verification/parts/p2/split_paired_v2_certificate_data.py
++++ b/verification/parts/p2/split_paired_v2_certificate_data.py
+@@ -192,7 +192,8 @@
+         rewrite = ("  rw [" + ", ".join(f"block{b:02}_{field}" for b in range(12)) + "]\n").encode()
+         redundant = rewrite + b"  decide +kernel\n"
+         assert repaired_main.count(redundant) == 1
+-        repaired_main = repaired_main.replace(redundant, rewrite, 1)
++        scalar_reduction = b"  (" + rewrite[2:-1] + b"; rfl)\n"
++        repaired_main = repaired_main.replace(redundant, scalar_reduction, 1)
+     assert re.findall(rb"\d+", repaired_main) == re.findall(rb"\d+", old_main)
+     partition_start = repaired_main.index(b"/-- All 186 strips in their original order")
+     partition_stop = repaired_main.index(b"/-- Exact numerator sum over every `FullMask.Row`")
+@@ -263,7 +264,7 @@
+         "original_selector_and_approximation_suffix_sha256": sha(suffix),
+         "unchanged_files": {p: sha((ROOT / p).read_bytes()) for p in PROTECTED},
+         "old_sum_declaration_types_and_numerals_preserved_byte_for_byte": True,
+-        "sum_proof_control_flow_repair": "Only remove26 redundant decide +kernel lines after closing rw steps:24 across12 block totals and2 in final totals. Retain all186 strip decision proofs.",
++        "sum_proof_control_flow_repair": "Remove26 original trailing decide +kernel lines. Retain all24 accepted block-total rewrites and186 strip decision proofs; the2 final-total rewrites now use (rw [...]; rfl) to close only the twelve-scalar Nat addition goals.",
+         "generic_row_proof_repair": "Add explicit cons-case Fin (xs.length + 1) shape before original rewrite; emitted source hash pinned to P0 strict/replay success.",
+         "original_row_list_bridge_types_preserved_byte_for_byte": True,
+         "row_list_proof_repairs": "Reverse rewrite the dependent Fin length before the unchanged generic theorem; explicitly specialize ofFn_comp' to the complete row-sum function.",

@@ -192,7 +192,8 @@ def sources_and_report():
         rewrite = ("  rw [" + ", ".join(f"block{b:02}_{field}" for b in range(12)) + "]\n").encode()
         redundant = rewrite + b"  decide +kernel\n"
         assert repaired_main.count(redundant) == 1
-        repaired_main = repaired_main.replace(redundant, rewrite, 1)
+        scalar_reduction = b"  (" + rewrite[2:-1] + b"; rfl)\n"
+        repaired_main = repaired_main.replace(redundant, scalar_reduction, 1)
     assert re.findall(rb"\d+", repaired_main) == re.findall(rb"\d+", old_main)
     partition_start = repaired_main.index(b"/-- All 186 strips in their original order")
     partition_stop = repaired_main.index(b"/-- Exact numerator sum over every `FullMask.Row`")
@@ -263,7 +264,7 @@ def sources_and_report():
         "original_selector_and_approximation_suffix_sha256": sha(suffix),
         "unchanged_files": {p: sha((ROOT / p).read_bytes()) for p in PROTECTED},
         "old_sum_declaration_types_and_numerals_preserved_byte_for_byte": True,
-        "sum_proof_control_flow_repair": "Only remove26 redundant decide +kernel lines after closing rw steps:24 across12 block totals and2 in final totals. Retain all186 strip decision proofs.",
+        "sum_proof_control_flow_repair": "Remove26 original trailing decide +kernel lines. Retain all24 accepted block-total rewrites and186 strip decision proofs; the2 final-total rewrites now use (rw [...]; rfl) to close only the twelve-scalar Nat addition goals.",
         "generic_row_proof_repair": "Add explicit cons-case Fin (xs.length + 1) shape before original rewrite; emitted source hash pinned to P0 strict/replay success.",
         "original_row_list_bridge_types_preserved_byte_for_byte": True,
         "row_list_proof_repairs": "Reverse rewrite the dependent Fin length before the unchanged generic theorem; explicitly specialize ofFn_comp' to the complete row-sum function.",
