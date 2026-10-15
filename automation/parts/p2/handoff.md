@@ -1,41 +1,49 @@
-# P2 handoff: exhaustive natural sums
+# P2 handoff: lossless certificate-data carrier split
 
 State: WAITING_FOR_P0. Request: REQUESTED. Verification: SOURCE_ONLY.
 
-- Baseline: 1337e2db4712fb4a9f86add073f771f84b66d0c8
-- Worktree: /workspace/shared/chen-coordination/p2
-- Branch: codex/chen-resume-p2
-- Frozen Git tree: 08c799ce466e299cd2753dee70a8135f10ac3cfa
-- Selected-file snapshot SHA-256: 6e22cdc372cfbc0b0bcf1a082c7d8ae48dd4cd8b7238df7336ef58f0a803dffd
-- Dependency fingerprint: 8891a87fb8ac6cd4c344e1f34da40ba4b13160b8d619bc6c95b2bf2d549ef0f5
-- Request: automation/parts/p2/requests/20261015T005700Z-natural-sums.json
-- Immutable run: automation/parts/p2/runs/20261015T005700Z-natural-sums.json
+- Request: automation/parts/p2/requests/20261015T022700Z-data-split.json
+- Immutable run: automation/parts/p2/runs/20261015T022700Z-data-split.json
+- Baseline: d41a7bc48b7066cd95c2a9e143a13e494d44b284
+- Worktree: /workspace/shared/chen-coordination/p2-data-split
+- Branch: codex/chen-p2-data-split
+- Selected 35-file snapshot SHA-256: 9a8b51a20ca9519b0e6fdcb07619d4e87144f1e7e875061c8dc75fd810a5eb6e
+- Frozen patch: automation/parts/p2/runs/20261015T022700Z-data-split.patch
+- Patch SHA-256: 952df6bf61213321764984a2af00199e92bb4cb7c7b269ccfa70beaeda211325
+- Source dependency fingerprint: 0047dfcfd7c850631a2f8480dfdf4549b925ba83575492c9c48bb2a3b5268fc9
 
-Fourteen Lean sources provide the proposed full finite natural-sum layer: one
-Row/List bridge, twelve independent 16-strip-or-smaller blocks, and complete
-assembly. All 17,572 rows and 186 strips remain present exactly once. Static
-checks preserve E0=6,091 and E1=11,481 and the unchanged 10^20 denominator.
-Natural totals are 55858378943374979 and 55858409959907296.
+Prior pilot 38669650232 failed twice in the same FullCertificateData dependency
+with -M4096 interpreter memory_exception, exit -6. Neither new target was reached.
+The artifact identity and both raw receipt/log hashes are recorded in the
+candidate's verification/parts/p2/data-split-prior-failure.json.
 
-P0 should first check NaturalSumRows and NaturalSumsBlock11, then all remaining
-blocks and NaturalSums, followed by complete replay/type/axiom/import-object
-acceptance. No Lean/Lake/checker/audit/CI was run by P2. A 191-row last-strip
-resource success alone would not establish global completion.
+All 186 original approximations326..511 declarations are moved byte-for-byte to
+12 data leaves; every original tuple value and its order remains unchanged.
+The full data selector/approximation definitions remain byte-identical in a
+4,978-byte compatibility entry. E0=6,091; E1=11,481; total 17,572 exact-once pairs.
+The largest data leaf has 2,757 rows. FullMask, FullChecker, FullStripCertificates,
+pins, raw JSON, root imports and numeric constants are unchanged.
 
-The deterministic generator, detailed provenance/coverage manifests and API
-reuse notes are in verification/parts/p2/. All 18 selected files are staged.
-Commit creation failed because Git author identity was absent; no identity
-or Git configuration was invented. The Git tree and hashes freeze the input
-without claiming a commit exists. P0 can publish with its authorized identity.
+The generic Rows module imports no data. Each sum block imports only its own
+data leaf and retains every old numerical proof body. 186 new per-strip rfl
+length facts are connected by a real dependent Fin.cases proof in RowAssembly.
+The original row/list bridge bodies and final sum proofs are preserved.
+No Python equality is presented as a kernel bridge; all proof gates are unpaid.
 
-Old local Rows/Sums/Full drafts and the old sum-failure raw logs were not
-available in this fresh workspace, confirmed by P0. Existing all-strip checker
-data and receipts were preserved, not rerun or relabelled as full acceptance.
+Detailed mapping, source hashes, deterministic producer, import closure and
+static review are in verification/parts/p2/DATA_SPLIT.md and linked reports.
+No Lean/Lake/checker/audit/CI/push ran. Patch reverse-apply check and static
+coverage/identity/source checks passed. No commit or accepted object is claimed.
+The older candidate generator/manifests remain unchanged as historical inputs.
 
-The actual integral layer remains pending. Existing fibre normalization is
-K/80 and must not be described as complete K. Future fifth-region adapters
-must keep both inherited first-cube gates from P1's new SOURCE_ONLY geometry;
-that candidate is not imported or assumed accepted by this finite layer.
+P0 should check light Rows, Block11 and largest-data Block10 first, then all
+remaining blocks, the compatibility entry, RowAssembly and NaturalSums.
+Preserve all strict/replay/type/inventory/axiom/import-object gates and fixed
+-j2/-M4096. Do not repeat unchanged full-row checks or claim a pilot is global
+acceptance. 186-deep elaboration and aggregate import memory remain untested.
 
-Next action: await P0's terminal diagnostic/acceptance. No further unverified
-analytic layers will be added in this round.
+Natural totals remain 55,858,378,943,374,979 and 55,858,409,959,907,296 at 10^20.
+These belong to existing K/80-normalized adopted fibres, not complete K.
+Full integral/cast/Buchstab/common-policy bounds and hLower/hUpper remain open.
+
+Next: await P0 diagnostic/acceptance; no further unverified analytic layer.

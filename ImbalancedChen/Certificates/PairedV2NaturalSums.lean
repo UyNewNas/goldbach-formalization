@@ -1,4 +1,4 @@
-import ImbalancedChen.Certificates.PairedV2NaturalSumRows
+import ImbalancedChen.Certificates.PairedV2NaturalSumRowAssembly
 import ImbalancedChen.Certificates.PairedV2NaturalSumsBlock00
 import ImbalancedChen.Certificates.PairedV2NaturalSumsBlock01
 import ImbalancedChen.Certificates.PairedV2NaturalSumsBlock02

@@ -1,4 +1,11 @@
-# P2 natural-sum candidate, 15 October 2026
+# P2 current source-only handoff
+
+The current memory-failure repair is the lossless data split described in
+[DATA_SPLIT.md](DATA_SPLIT.md). Use `split_paired_v2_certificate_data.py --check`
+for the current frozen candidate. The prior candidate notes and producer below
+are retained for provenance; the older producer targets the monolithic layout.
+
+# Prior natural-sum candidate, 15 October 2026
 
 Verification level: **SOURCE_ONLY**. No Lean, Lake, checker, environment audit or
 CI was started by P2. The static producer check is not a formal proof receipt.

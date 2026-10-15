@@ -1,4 +1,4 @@
-import ImbalancedChen.Certificates.PairedV2FullCertificateData
+import ImbalancedChen.Certificates.PairedV2FullCertificateDataBlock02
 
 /-! Exhaustive natural-number endpoint sums, generated from unchanged witnesses.
 The source generator is untrusted. Acceptance requires P0's Lean/kernel gates.
@@ -109,5 +109,71 @@ theorem block02_upper :
   rw [strip358_sums.2, strip359_sums.2, strip360_sums.2, strip361_sums.2, strip362_sums.2, strip363_sums.2, strip364_sums.2, strip365_sums.2, strip366_sums.2, strip367_sums.2, strip368_sums.2, strip369_sums.2, strip370_sums.2, strip371_sums.2, strip372_sums.2, strip373_sums.2]
   decide +kernel
 
+
+
+/-- Each length is checked separately over its original literal list. -/
+theorem strip358_length :
+    approximations358.length = 512 - firstU (⟨32, by decide⟩ : Fin 186) := by
+  rfl
+
+theorem strip359_length :
+    approximations359.length = 512 - firstU (⟨33, by decide⟩ : Fin 186) := by
+  rfl
+
+theorem strip360_length :
+    approximations360.length = 512 - firstU (⟨34, by decide⟩ : Fin 186) := by
+  rfl
+
+theorem strip361_length :
+    approximations361.length = 512 - firstU (⟨35, by decide⟩ : Fin 186) := by
+  rfl
+
+theorem strip362_length :
+    approximations362.length = 512 - firstU (⟨36, by decide⟩ : Fin 186) := by
+  rfl
+
+theorem strip363_length :
+    approximations363.length = 512 - firstU (⟨37, by decide⟩ : Fin 186) := by
+  rfl
+
+theorem strip364_length :
+    approximations364.length = 512 - firstU (⟨38, by decide⟩ : Fin 186) := by
+  rfl
+
+theorem strip365_length :
+    approximations365.length = 512 - firstU (⟨39, by decide⟩ : Fin 186) := by
+  rfl
+
+theorem strip366_length :
+    approximations366.length = 512 - firstU (⟨40, by decide⟩ : Fin 186) := by
+  rfl
+
+theorem strip367_length :
+    approximations367.length = 512 - firstU (⟨41, by decide⟩ : Fin 186) := by
+  rfl
+
+theorem strip368_length :
+    approximations368.length = 512 - firstU (⟨42, by decide⟩ : Fin 186) := by
+  rfl
+
+theorem strip369_length :
+    approximations369.length = 512 - firstU (⟨43, by decide⟩ : Fin 186) := by
+  rfl
+
+theorem strip370_length :
+    approximations370.length = 512 - firstU (⟨44, by decide⟩ : Fin 186) := by
+  rfl
+
+theorem strip371_length :
+    approximations371.length = 512 - firstU (⟨45, by decide⟩ : Fin 186) := by
+  rfl
+
+theorem strip372_length :
+    approximations372.length = 512 - firstU (⟨46, by decide⟩ : Fin 186) := by
+  rfl
+
+theorem strip373_length :
+    approximations373.length = 512 - firstU (⟨47, by decide⟩ : Fin 186) := by
+  rfl
 
 end ImbalancedChen.Certificates.PairedV2.FullMask.NaturalSums
