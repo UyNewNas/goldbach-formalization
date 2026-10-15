@@ -3341,3 +3341,8 @@ Frozen source SHA-256 values:
 | `RosserTripleMeshIntegral` | `d604a69c3e9ecec37b8e32c64fd5b960f3efddf70ff3954623a58afae2dcd1a3` |
 | `RosserTripleLayerIdentity` | `a04f4b7c28a24e586207d5d8af2ca3bea1f31792886f4ed99a6f472c4338e1c0` |
 | `ActualRosserTripleLayerLower` | `810df71dae891618530951b1c1fb77859c0e5e7c48c72c336b7275be3f605d37` |
+
+
+### 2026-10-15 02:52 UTC — split P2 pilot, exact changed-condition result
+
+Run [38673067254](https://github.com/UyNewNas/goldbach-formalization/actions/runs/38673067254), source `dbf27664c27e22f97dda5c2e74fc7555d46ab92d`, failed after meaningful partial progress. The corrected light Rows leaf passed strict compile (2.018 s) and original-object replay (3.821 s); DataBlock11 passed dependency compile (3.022 s) under the unchanged `-t0 -j2 -M4096` gate. The numerical Block11 stopped on two `No goals to be solved` errors (lines 74 and 80); Block10 and all complete target audits were not run. This is PARTIAL_COMPILE_REPLAY_ONLY, not an accepted full leaf or global numerator theorem. Original artifact `11944836783`, ZIP SHA256 `bddd2af5cb3c643a14f5d54924149812ad02517fe7e399f9024567f3a2fa774f`. P2 source-only repair remains queued; the independent P5 buffered-product leaf is the next sole execution slot.
