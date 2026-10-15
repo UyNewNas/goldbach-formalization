@@ -97,6 +97,7 @@ theorem transposedDispersionW_eq_betaPairs
   intro a _
   apply Finset.sum_congr rfl
   intro b _
+  rw [show d.transposedAtom.residue = d.residue from rfl]
   ring
 
 /-- The masked whole W is a literal part of the actual transposed W. -/
@@ -146,7 +147,8 @@ theorem transposed_factorPair_eq_zero_add_nonzero
       (lt_of_lt_of_le zero_lt_one hd.2.1) d.transposedAtom.commonSmoothCarrier
       (fun m hm ↦ d.transposedSmoothWeight_support_subset hd.2.1 hm) hD
       (ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue)
-    simp only [MediumAtom.commonSmoothWeight, MediumAtom.transposedAtom] at he ⊢
+    simp only [MediumAtom.commonSmoothWeight, MediumAtom.transposedAtom,
+      MediumAtom.complexFactorGamma] at he ⊢
     rw [he, Complex.ofReal_add]
     ring
   · simp only [hc, if_false, Complex.ofReal_zero, mul_zero, add_zero]
@@ -247,11 +249,12 @@ private theorem lcm_weight_sum_le
     (d.physicalFactorModuli_subset_cap hd) (fun q ↦ ‖d.groupedFactorGamma q‖)
     (fun q _ ↦ by simpa only [abs_norm] using d.groupedFactorGamma_norm_le_tauThree hd q)
   convert hh using 1
-  apply Finset.sum_congr rfl
-  intro q _
-  apply Finset.sum_congr rfl
-  intro r _
-  exact (abs_of_nonneg (by positivity)).symm
+  · apply Finset.sum_congr rfl
+    intro q _
+    apply Finset.sum_congr rfl
+    intro r _
+    exact (abs_of_nonneg (by positivity)).symm
+  · norm_num
 
 /-- The complete original complex factor convolution is grouped exactly
 before its norm. No multiplicity-one or modulus coprimality is assumed. -/
@@ -281,7 +284,8 @@ theorem transposed_factorPairZero_norm_le
       intro r _
       by_cases hc : ComplexCRT.Compatible q r n₁ n₂
       · simp only [if_pos hc, norm_mul, norm_star, Complex.norm_real, Real.norm_eq_abs,
-          abs_mul, abs_div, abs_of_nonneg (Nat.cast_nonneg (q.lcm r))]
+          abs_mul, abs_div, abs_of_nonneg
+            (show (0 : ℝ) ≤ (q.lcm r : ℝ) from Nat.cast_nonneg (q.lcm r))]
         exact le_of_eq (by ring)
       · simp only [if_neg hc, Complex.ofReal_zero, mul_zero, norm_zero]
         positivity

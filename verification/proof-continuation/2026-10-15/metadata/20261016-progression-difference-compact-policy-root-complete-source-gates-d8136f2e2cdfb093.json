@@ -1,0 +1,600 @@
+{
+  "status": "SOURCE_ONLY_ROOT_COMPLETE_SOURCE_AND_MATHEMATICAL_GATE_REVIEW_NOT_COMPILE_ACCEPTANCE",
+  "reviewer": "/root (non-author of these four mathematical sources)",
+  "created_at_utc": "2026-10-15T22:02:47.570237+00:00",
+  "modules": [
+    {
+      "path": "ImbalancedChen/Part3TransposedModulusProgression.lean",
+      "source_sha256": "b9300cf15133a7ebcb9eb1efee9e8b86889425c1d1a4d860188bc7a5f28f1a53",
+      "source_declarations": 18,
+      "definitions": 2,
+      "complete_declarations_read": [
+        {
+          "name": "LargeModulusWitness",
+          "kind": "def",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "def LargeModulusWitness (D : ℝ) (a : ℤ) (n₁ n₂ m : ℕ) : Prop",
+          "complete_definition": "def LargeModulusWitness (D : ℝ) (a : ℤ) (n₁ n₂ m : ℕ) : Prop :=\r\n  n₁ = n₂ ∨ ∃ delta ∈ ((n₁ : ℤ) - n₂).natAbs.divisors,\r\n    D < (delta : ℝ) ∧ n₁.Coprime delta ∧ Int.ModEq delta ((m : ℤ) * n₁) a"
+        },
+        {
+          "name": "witness_of_compatible",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem witness_of_compatible {D : ℝ} {a : ℤ} {q r n₁ n₂ m : ℕ}\r\n    (hc : ComplexCRT.Compatible q r n₁ n₂) (hD : D < (q.gcd r : ℝ))\r\n    (hm : Int.ModEq q ((m : ℤ) * n₁) a) :\r\n    LargeModulusWitness D a n₁ n₂ m",
+          "entire_proof_source_block_sha256": "4293a0c46f6e631678be2877399abeffa3670bbe9c7ae97a0bf591b02c412c2d"
+        },
+        {
+          "name": "transposed_sum_weight_product_modEq_le",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem transposed_sum_weight_product_modEq_le\r\n    {d : MediumAtom} (hV : 1 ≤ d.V) {delta n : ℕ}\r\n    (hdelta : 0 < delta) (hn : n.Coprime delta) (a : ℤ) :\r\n    (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n      if Int.ModEq delta ((m : ℤ) * n) a then\r\n        d.transposedAtom.commonSmoothWeight m else 0) ≤ 4 * d.V / delta + 1",
+          "entire_proof_source_block_sha256": "beedfdc52e8c7cfdb1730881b260331aa3b4ca4654e34f8249548b765dc5a12d"
+        },
+        {
+          "name": "transposed_sum_weight_witness_le",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem transposed_sum_weight_witness_le\r\n    {d : MediumAtom} (hV : 1 ≤ d.V) {D : ℝ} (hD : 0 < D)\r\n    (n₁ n₂ : ℕ) (hne : n₁ ≠ n₂) :\r\n    (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n      if LargeModulusWitness D d.residue n₁ n₂ m then\r\n        d.transposedAtom.commonSmoothWeight m else 0) ≤\r\n      (4 * d.V / D + 1) * (fouvryTau 2 ((n₁ : ℤ) - n₂).natAbs : ℝ)",
+          "entire_proof_source_block_sha256": "aad105dc658ffe7a264fcf26866399f7c2fcac1b262a96f417954d213bf5ecee"
+        },
+        {
+          "name": "constructedWeight_nonneg",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem constructedWeight_nonneg (d : MediumAtom) (q r n₁ n₂ : ℕ) :\r\n    0 ≤ ComplexCRT.constructedProgressionWeight d.commonSmoothCarrier d.commonSmoothWeight\r\n      d.residue q r n₁ n₂",
+          "entire_proof_source_block_sha256": "efecd8d5002f93acab86d7dc68b97e354e28d9b65f94a928f4955d503cf5db27"
+        },
+        {
+          "name": "constructedLargeWeight_le_witness",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem constructedLargeWeight_le_witness (d : MediumAtom) (D : ℝ)\r\n    (q r n₁ n₂ : ℕ) :\r\n    (if D < (q.gcd r : ℝ) then\r\n      ComplexCRT.constructedProgressionWeight d.commonSmoothCarrier d.commonSmoothWeight\r\n        d.residue q r n₁ n₂ else 0) ≤\r\n      ∑ m ∈ d.commonSmoothCarrier,\r\n        if Int.ModEq q ((m : ℤ) * n₁) d.residue ∧\r\n            Int.ModEq r ((m : ℤ) * n₂) d.residue then\r\n          d.commonSmoothWeight m *\r\n            (if LargeModulusWitness D d.residue n₁ n₂ m then 1 else 0) else 0",
+          "entire_proof_source_block_sha256": "45ddb3576921df022a8cfabbf12cbeb67278894c96582e0a25d3a0846ff492a4"
+        },
+        {
+          "name": "commonLargeModulusWeight_norm_le_witness",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem commonLargeModulusWeight_norm_le_witness (d : MediumAtom) (D : ℝ) (n₁ n₂ : ℕ) :\r\n    ‖d.commonLargeModulusGCDWeight D n₁ n₂‖ ≤\r\n      ∑ m ∈ d.commonSmoothCarrier, d.commonSmoothWeight m *\r\n        d.absoluteFactorModulusRow m n₁ * d.absoluteFactorModulusRow m n₂ *\r\n          (if LargeModulusWitness D d.residue n₁ n₂ m then 1 else 0)",
+          "entire_proof_source_block_sha256": "12e7368c245f8690d5723fd84e3332c6ba963aa020b54360b6bab6f8b8033ff9"
+        },
+        {
+          "name": "transposed_smallBeta_largeModulusW_norm_le_witness",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem transposed_smallBeta_largeModulusW_norm_le_witness\r\n    (d : MediumAtom) (Y D : ℝ) :\r\n    ‖d.transposedAtom.commonSmallBetaLargeModulusGCDW Y D‖ ≤\r\n      ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\r\n        if Y < (n₁.gcd n₂ : ℝ) then 0 else\r\n          ‖d.transposedAtom.beta n₁‖ * ‖d.transposedAtom.beta n₂‖ *\r\n            ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n              d.transposedAtom.commonSmoothWeight m *\r\n                d.transposedAtom.absoluteFactorModulusRow m n₁ *\r\n                  d.transposedAtom.absoluteFactorModulusRow m n₂ *\r\n                    (if LargeModulusWitness D d.residue n₁ n₂ m then 1 else 0)",
+          "entire_proof_source_block_sha256": "d5529e9c5a87c96c606b8732b6386aa7d649efc009ce8254ab4b4ac13c21ebc9"
+        },
+        {
+          "name": "unitBetaAtom",
+          "kind": "def",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private def unitBetaAtom (d : MediumAtom) : MediumAtom",
+          "complete_definition": "private def unitBetaAtom (d : MediumAtom) : MediumAtom :=\r\n  { d with beta := fun _ ↦ 1 }"
+        },
+        {
+          "name": "unitBetaAtom_admissible",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem unitBetaAtom_admissible\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) :\r\n    MediumAdmissible 0 sigma kappa c0 (unitBetaAtom d)",
+          "entire_proof_source_block_sha256": "cef9239731ab59a4540050ca8e1b2f1f29daba232d4abffbcff18a3f36b3119c"
+        },
+        {
+          "name": "absoluteRow_le_tauFour_of_not_dvd",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem absoluteRow_le_tauFour_of_not_dvd\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (m n : ℕ)\r\n    (hn : ¬(n : ℤ) ∣ d.residue) :\r\n    d.absoluteFactorModulusRow m n ≤\r\n      (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ)",
+          "entire_proof_source_block_sha256": "709583030c336b89c2e7063bb82c272eeeba1eb2c5b19b69a8d4bcbd50b3af5f"
+        },
+        {
+          "name": "one_le_scale",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem one_le_scale\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale",
+          "entire_proof_source_block_sha256": "91bc271e8d28146420e0e5d3993b9f18235d89bd82697e5ba835ffebba9a0b91"
+        },
+        {
+          "name": "actual_difference_le_polynomial",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem actual_difference_le_polynomial\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) {m n : ℕ}\r\n    (hn : n ∈ d.transposedAtom.betaCarrier)\r\n    (hm : d.transposedAtom.commonSmoothWeight m ≠ 0) :\r\n    (((m : ℤ) * n - d.residue).natAbs : ℝ) ≤\r\n      7 * d.scale ^ (max 1 (1 + kappa))",
+          "entire_proof_source_block_sha256": "b21021e4551d833524038e370ea598ac9145714676b9fd5c6b6982733835ffc6"
+        },
+        {
+          "name": "tauFour_difference_subpower",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem tauFour_difference_subpower (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ m n : ℕ,\r\n        n ∈ d.transposedAtom.betaCarrier → d.transposedAtom.commonSmoothWeight m ≠ 0 →\r\n          ¬(n : ℤ) ∣ d.residue →\r\n            (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ) ≤\r\n              C * d.scale ^ (epsilon / 2)",
+          "entire_proof_source_block_sha256": "268acf7d249e7d54102cb1fffe1890a744c90b91ebb4b0291169dbdb9a4d385c"
+        },
+        {
+          "name": "transposed_smoothWeight_sum_le",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem transposed_smoothWeight_sum_le\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) :\r\n    (∑ m ∈ d.transposedAtom.commonSmoothCarrier, d.transposedAtom.commonSmoothWeight m) ≤\r\n      5 * d.V",
+          "entire_proof_source_block_sha256": "debf5be637fc584c3aaf6f20a3651fdab9c6f103a06592d7ca30ffee60ee1aed"
+        },
+        {
+          "name": "transposed_largeModulusWeight_divisor_bound",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem transposed_largeModulusWeight_divisor_bound (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ D : ℝ, 0 < D → ∀ n₁ n₂ : ℕ,\r\n        n₁ ∈ d.transposedAtom.betaCarrier → n₂ ∈ d.transposedAtom.betaCarrier →\r\n          ¬(n₁ : ℤ) ∣ d.residue → ¬(n₂ : ℤ) ∣ d.residue →\r\n            ‖d.transposedAtom.commonLargeModulusGCDWeight D n₁ n₂‖ ≤\r\n              C * d.scale ^ epsilon *\r\n                (if n₁ = n₂ then 5 * d.V else\r\n                  (4 * d.V / D + 1) * (fouvryTau 2 ((n₁ : ℤ) - n₂).natAbs : ℝ))",
+          "entire_proof_source_block_sha256": "9ed1c966038f42f2b1c9ddfdd85c2b4966a84a4d8c46e1b7d69469d3eea7873b"
+        },
+        {
+          "name": "cleanedAlpha_transposed_smallBeta_largeModulusW_divisor_bound",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem cleanedAlpha_transposed_smallBeta_largeModulusW_divisor_bound\r\n    (kappa : ℝ) {epsilon : ℝ} (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ Y D : ℝ, 0 < D →\r\n        ‖d.cleanedAlphaAtom.transposedAtom.commonSmallBetaLargeModulusGCDW Y D‖ ≤\r\n          C * d.scale ^ epsilon *\r\n            ∑ n₁ ∈ d.cleanedAlphaAtom.transposedAtom.betaCarrier,\r\n              ∑ n₂ ∈ d.cleanedAlphaAtom.transposedAtom.betaCarrier,\r\n                if Y < (n₁.gcd n₂ : ℝ) then 0 else\r\n                  ‖d.cleanedAlphaAtom.transposedAtom.beta n₁‖ *\r\n                    ‖d.cleanedAlphaAtom.transposedAtom.beta n₂‖ *\r\n                      (if n₁ = n₂ then 5 * d.V else\r\n                        (4 * d.V / D + 1) * (fouvryTau 2 ((n₁ : ℤ) - n₂).natAbs : ℝ))",
+          "entire_proof_source_block_sha256": "d4b75d414b4fe6f031f439da5e8be23206ef0990eb6e23c8d8dd58913149e107"
+        },
+        {
+          "name": "betaL2_mul_largeModulusNonzero_le_witness_add_log_payment",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem betaL2_mul_largeModulusNonzero_le_witness_add_log_payment\r\n    (B : ℕ) (sigma kappa c0 A delta : ℝ) (hsigma : 0 < sigma) (hdelta : 0 < delta) :\r\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\r\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale → ∀ Y : ℝ,\r\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\r\n          ‖d.transposedAtom.commonSmallBetaModulusGCDNonzeroPart Y (d.scale ^ delta) true‖ ≤\r\n            (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\r\n              (∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\r\n                if Y < (n₁.gcd n₂ : ℝ) then 0 else\r\n                  ‖d.transposedAtom.beta n₁‖ * ‖d.transposedAtom.beta n₂‖ *\r\n                    ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\r\n                      d.transposedAtom.commonSmoothWeight m *\r\n                        d.transposedAtom.absoluteFactorModulusRow m n₁ *\r\n                          d.transposedAtom.absoluteFactorModulusRow m n₂ *\r\n                            (if LargeModulusWitness (d.scale ^ delta) d.residue n₁ n₂ m\r\n                              then 1 else 0)) +\r\n              d.scale ^ 2 / Real.log d.scale ^ A",
+          "entire_proof_source_block_sha256": "a775a247a43bb582f043145142658ff33205bb6e08812cdc957f75d475b533f6"
+        }
+      ],
+      "direct_parents_current_source_only": [
+        {
+          "module": "ImbalancedChen.Part3TransposedModulusGCDZero",
+          "path": "ImbalancedChen/Part3TransposedModulusGCDZero.lean",
+          "current_source_sha256": "6d79ab1c6d41c00f1a7f06d59bb683e36004dfbbf71794746fe85c90f20b9eb5",
+          "object_acceptance_inferred": false
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen/Part3TransposedDifferenceMoment.lean",
+      "source_sha256": "248f6371a93df223c875908e12263db6b20f95a18df758f892f4c0a4b5485908",
+      "source_declarations": 14,
+      "definitions": 0,
+      "complete_declarations_read": [
+        {
+          "name": "natAbs_difference_of_le",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem natAbs_difference_of_le {a b : ℕ} (h : b ≤ a) :\r\n    ((a : ℤ) - b).natAbs = a - b",
+          "entire_proof_source_block_sha256": "c67e84fa155632a659a4c5d3a77d3e47d9f2b6ff56ad0bc79300d556213250e6"
+        },
+        {
+          "name": "difference_row_le",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem difference_row_le (N : Finset ℕ) (K n : ℕ)\r\n    (hN : ∀ m ∈ N, m ≤ K) (hn : n ≤ K) :\r\n    (∑ m ∈ N, if n = m then 0 else\r\n      (fouvryTau 2 ((n : ℤ) - m).natAbs : ℝ)) ≤\r\n      2 * ∑ v ∈ Ioc 0 K, (fouvryTau 2 v : ℝ)",
+          "entire_proof_source_block_sha256": "98ebe19bde765565cab4b5795c235cd82928ed3ce70ced9a6dafe564d8ff6ec1"
+        },
+        {
+          "name": "transposed_betaCarrier_card_le",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem transposed_betaCarrier_card_le {d : MediumAtom} (hU : 1 ≤ d.U) :\r\n    (d.transposedAtom.betaCarrier.card : ℝ) ≤ 2 * d.U",
+          "entire_proof_source_block_sha256": "ddf9afe46662f73ce333262ac8bfe5b8ef61b81e0292cd90dd1c00a2ef910405"
+        },
+        {
+          "name": "transposed_offDiagonal_tauTwo_sum_le",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem transposed_offDiagonal_tauTwo_sum_le {d : MediumAtom} (hU : 1 ≤ d.U) :\r\n    (∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\r\n      if n₁ = n₂ then 0 else (fouvryTau 2 ((n₁ : ℤ) - n₂).natAbs : ℝ)) ≤\r\n        8 * d.U ^ 2 * (1 + Real.log (2 * d.U))",
+          "entire_proof_source_block_sha256": "2f507d244c518b8a1fe9eebc0767b981f9594fa2f0ba01d16cdee5c76aa5cde2"
+        },
+        {
+          "name": "transposed_diagonal_weight_sum_le",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem transposed_diagonal_weight_sum_le {d : MediumAtom}\r\n    (hU : 1 ≤ d.U) (hV : 0 ≤ d.V) :\r\n    (∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\r\n      if n₁ = n₂ then 5 * d.V else 0) ≤ 10 * d.scale",
+          "entire_proof_source_block_sha256": "b24b4a4fadde11c73f6b590c1807e5069d6b826ff13530ee0a7156c40218c81e"
+        },
+        {
+          "name": "cleanedAlpha_transposed_beta_norm_le_one",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem cleanedAlpha_transposed_beta_norm_le_one\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\r\n    ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ ≤ 1",
+          "entire_proof_source_block_sha256": "5dd022e4cc1a29d310891a63eac285ba35f139036539b253b82e9f8b095b8ba3"
+        },
+        {
+          "name": "cleanedAlpha_pairDivisorBudget_le",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem cleanedAlpha_pairDivisorBudget_le\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) {D : ℝ} (hD : 0 < D) :\r\n    (∑ n₁ ∈ d.cleanedAlphaAtom.transposedAtom.betaCarrier,\r\n      ∑ n₂ ∈ d.cleanedAlphaAtom.transposedAtom.betaCarrier,\r\n        if Y < (n₁.gcd n₂ : ℝ) then 0 else\r\n          ‖d.cleanedAlphaAtom.transposedAtom.beta n₁‖ *\r\n            ‖d.cleanedAlphaAtom.transposedAtom.beta n₂‖ *\r\n              (if n₁ = n₂ then 5 * d.V else\r\n                (4 * d.V / D + 1) * (fouvryTau 2 ((n₁ : ℤ) - n₂).natAbs : ℝ))) ≤\r\n      10 * d.scale + 8 * d.U ^ 2 * (4 * d.V / D + 1) * (1 + Real.log (2 * d.U))",
+          "entire_proof_source_block_sha256": "b08bce093d98728a2ed97697648975cc2703152bf7f6f35a4d777a0f1c11d121"
+        },
+        {
+          "name": "cleanedAlpha_largeModulusW_bound",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem cleanedAlpha_largeModulusW_bound (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ Y D : ℝ, 0 < D →\r\n        ‖d.cleanedAlphaAtom.transposedAtom.commonSmallBetaLargeModulusGCDW Y D‖ ≤\r\n          C * d.scale ^ epsilon *\r\n            (10 * d.scale + 8 * d.U ^ 2 * (4 * d.V / D + 1) * (1 + Real.log (2 * d.U)))",
+          "entire_proof_source_block_sha256": "a713d8827e577c920134404d48090205caaf653886223023a5585efc60404641"
+        },
+        {
+          "name": "betaL2_mul_cleanedAlpha_largeModulusW_bound",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem betaL2_mul_cleanedAlpha_largeModulusW_bound (kappa : ℝ) {epsilon : ℝ}\r\n    (hepsilon : 0 < epsilon) :\r\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\r\n      MediumAdmissible B sigma kappa c0 d → ∀ Y D : ℝ, 0 < D →\r\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\r\n          ‖d.cleanedAlphaAtom.transposedAtom.commonSmallBetaLargeModulusGCDW Y D‖ ≤\r\n            C * d.scale ^ epsilon * d.scale ^ 2 *\r\n              (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\r\n                (20 / d.U + 64 * (1 + Real.log (2 * d.U)) / D +\r\n                  16 * (1 + Real.log (2 * d.U)) / d.V)",
+          "entire_proof_source_block_sha256": "5ca064a70920a097dceed664e5e3f60a3b98cbaebfcadbb926b34e67307961de"
+        },
+        {
+          "name": "one_le_scale",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem one_le_scale\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale",
+          "entire_proof_source_block_sha256": "ae8363d2c60989220412561fca006af641f7ca777f7e640796b034c5948ffc2c"
+        },
+        {
+          "name": "both_lengths_lower_bound",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem both_lengths_lower_bound\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\r\n    d.scale ^ sigma ≤ d.U ∧ d.scale ^ sigma ≤ d.V",
+          "entire_proof_source_block_sha256": "bdcf237af4407f2a89973d28cb03ba322523d78d2e509356dc5735238457db5e"
+        },
+        {
+          "name": "log_bound_from_scale",
+          "kind": "theorem",
+          "private": true,
+          "complete_type_before_actual_proof_separator": "private theorem log_bound_from_scale {x z : ℝ} (hx : 0 < x) (hlog : 1 ≤ Real.log x)\r\n    (hz : 0 < z) (hzx : z ≤ 8 * x) :\r\n    1 + Real.log z ≤ (2 + Real.log 8) * Real.log x",
+          "entire_proof_source_block_sha256": "ba40855f865066d433ebc6848f46080a719c203039c9d2eec77e10ba2c18c2e7"
+        },
+        {
+          "name": "betaL2_mul_cleanedAlpha_largeModulusW_log_payment",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem betaL2_mul_cleanedAlpha_largeModulusW_log_payment\r\n    (B : ℕ) (sigma kappa c0 A delta : ℝ) (hsigma : 0 < sigma) (hdelta : 0 < delta) :\r\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\r\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale → ∀ Y : ℝ,\r\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\r\n          ‖d.cleanedAlphaAtom.transposedAtom.commonSmallBetaLargeModulusGCDW Y (d.scale ^ delta)‖ ≤\r\n            d.scale ^ 2 / Real.log d.scale ^ A",
+          "entire_proof_source_block_sha256": "308e825c45a4b93dbecdea72d564a98e0d9a4d411139331ef7a939eaee346906"
+        },
+        {
+          "name": "betaL2_mul_cleanedAlpha_largeModulusNonzero_log_payment",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem betaL2_mul_cleanedAlpha_largeModulusNonzero_log_payment\r\n    (B : ℕ) (sigma kappa c0 A delta : ℝ) (hsigma : 0 < sigma) (hdelta : 0 < delta) :\r\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\r\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale → ∀ Y : ℝ,\r\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\r\n          ‖d.cleanedAlphaAtom.transposedAtom.commonSmallBetaModulusGCDNonzeroPart\r\n            Y (d.scale ^ delta) true‖ ≤ 2 * d.scale ^ 2 / Real.log d.scale ^ A",
+          "entire_proof_source_block_sha256": "cc9bb253bb9350b0df2a359bfc90378e7e871016321403c3e5d82e1b55c86653"
+        }
+      ],
+      "direct_parents_current_source_only": [
+        {
+          "module": "ImbalancedChen.Part3TransposedModulusProgression",
+          "path": "ImbalancedChen/Part3TransposedModulusProgression.lean",
+          "current_source_sha256": "b9300cf15133a7ebcb9eb1efee9e8b86889425c1d1a4d860188bc7a5f28f1a53",
+          "object_acceptance_inferred": false
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen/ActualExtendedThirdCompactUpperRho.lean",
+      "source_sha256": "5cef3131cb204fbca47d2b704905dbce9c838b4627f9b446caa4edb597afe8f5",
+      "source_declarations": 27,
+      "definitions": 7,
+      "complete_declarations_read": [
+        {
+          "name": "actualExtendedThirdCompactFirstStop",
+          "kind": "def",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "def actualExtendedThirdCompactFirstStop (e : ℝ) (m N : ℕ) (history : List ℕ) : Prop",
+          "complete_definition": "def actualExtendedThirdCompactFirstStop (e : ℝ) (m N : ℕ) (history : List ℕ) : Prop :=\n  ∃ i : Fin (2 ^ m),\n    actualExtendedThirdDyadicLo m (fun _ => i) 0 ≤\n        primeHistoryLogCoordinates (N : ℝ) 1 history 0 ∧\n      primeHistoryLogCoordinates (N : ℝ) 1 history 0 <\n        actualExtendedThirdDyadicHi m (fun _ => i) 0 ∧\n      actualExtendedThirdDyadicHi m (fun _ => i) 0 ≤ thirdPrefixRho - 4 * e"
+        },
+        {
+          "name": "actualExtendedThirdCompactInitialPolicy",
+          "kind": "def",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "def actualExtendedThirdCompactInitialPolicy (e : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool",
+          "complete_definition": "def actualExtendedThirdCompactInitialPolicy (e : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool :=\n  oddFirstExitPolicy fun history => decide\n    (ordinaryRosserPrefixAdmissible false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e)) history ∧\n      (history.length = 1 → actualExtendedThirdCompactFirstStop e m N history))"
+        },
+        {
+          "name": "actualExtendedThirdCompactRawLevel",
+          "kind": "def",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "def actualExtendedThirdCompactRawLevel (e h : ℝ) (m N : ℕ) (history : List ℕ) : ℝ",
+          "complete_definition": "def actualExtendedThirdCompactRawLevel (e h : ℝ) (m N : ℕ) (history : List ℕ) : ℝ :=\n  (N : ℝ) ^ actualExtendedThirdCompactCellLevel e h m\n    (primeHistoryLogCoordinates (N : ℝ) 3 history)"
+        },
+        {
+          "name": "actualExtendedThirdCompactActive",
+          "kind": "def",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "def actualExtendedThirdCompactActive (e h : ℝ) (m N : ℕ) (history : List ℕ) : Prop",
+          "complete_definition": "def actualExtendedThirdCompactActive (e h : ℝ) (m N : ℕ) (history : List ℕ) : Prop :=\n  ∃ j ∈ actualExtendedThirdCompactCells e h m,\n    primeHistoryLogCoordinates (N : ℝ) 3 history ∈ actualExtendedThirdOwnedCell m j"
+        },
+        {
+          "name": "actualExtendedThirdCompactUpperPolicy",
+          "kind": "def",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "def actualExtendedThirdCompactUpperPolicy (e h : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool",
+          "complete_definition": "def actualExtendedThirdCompactUpperPolicy (e h : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool :=\n  thirdCappedUpperPolicy (actualExtendedThirdCompactInitialPolicy e m N)\n    (actualExtendedThirdCompactRawLevel e h m N)"
+        },
+        {
+          "name": "actualExtendedThirdCompactRawLevel_on_cell",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactRawLevel_on_cell {e h : ℝ} {m N : ℕ}\n    {history : List ℕ} {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 history ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactRawLevel e h m N history =\n      (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j",
+          "entire_proof_source_block_sha256": "0c088d19482889fcc654cb37a2649c21031eed1bcd940fae24989a2c23e9dd33"
+        },
+        {
+          "name": "actualExtendedThirdCompactRawLevel_inactive",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactRawLevel_inactive {e h : ℝ} {m N : ℕ}\n    {history : List ℕ} (ha : ¬actualExtendedThirdCompactActive e h m N history) :\n    actualExtendedThirdCompactRawLevel e h m N history =\n      (N : ℝ) ^ (thirdPrefixTheta - 2 * e)",
+          "entire_proof_source_block_sha256": "b50a6f6a5db7594d5024f7210c124df8d2d0d397ab33917b3c3e6286b3767dc9"
+        },
+        {
+          "name": "actualExtendedThirdCompactUpperPolicy_through_two",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactUpperPolicy_through_two (e h : ℝ) (m N : ℕ)\n    (positive : Bool) (history : List ℕ) (hlen : history.length ≤ 2) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      actualExtendedThirdCompactInitialPolicy e m N positive history",
+          "entire_proof_source_block_sha256": "d379ce8fabbc1a640d3d970cb465d6997d592e13e81127231d915a175ee52b37"
+        },
+        {
+          "name": "actualExtendedThirdCompactUpperPolicy_even",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactUpperPolicy_even (e h : ℝ) (m N : ℕ)\n    (history : List ℕ) : actualExtendedThirdCompactUpperPolicy e h m N true history = true",
+          "entire_proof_source_block_sha256": "e101ce59fae1c285f3bc17bad00dc1543e1d2ee5d84b6154caa61330d71d9d8d"
+        },
+        {
+          "name": "actualExtendedThirdCompactUpperPolicy_inactive",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactUpperPolicy_inactive (e h : ℝ) (m N : ℕ)\n    (positive : Bool) (history : List ℕ)\n    (ha : ¬actualExtendedThirdCompactActive e h m N (rosserAncestor 3 history)) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      actualExtendedThirdCompactInitialPolicy e m N positive history",
+          "entire_proof_source_block_sha256": "25f19e5ac16f09b891c489fabbdab00ac6d3918432d864cca784dfac0c34e12f"
+        },
+        {
+          "name": "actualExtendedThirdCompactUpperPolicy_on_cell",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactUpperPolicy_on_cell {e h : ℝ} {m N : ℕ}\n    (positive : Bool) (history : List ℕ) (hlen : 3 ≤ history.length)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 (rosserAncestor 3 history) ∈\n      actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      ordinaryParityRosserPolicy false ((N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j)\n        positive history",
+          "entire_proof_source_block_sha256": "352fac43e417f3e9141c0263ee0c3b10107b804dae19ee80184901f520536ccd"
+        },
+        {
+          "name": "actualExtendedThirdCompactFrozenLevel_append",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactFrozenLevel_append (e h : ℝ) (m N : ℕ)\n    (later history : List ℕ) (hlen : 3 ≤ history.length) :\n    actualExtendedThirdCompactRawLevel e h m N (rosserAncestor 3 (later ++ history)) =\n      actualExtendedThirdCompactRawLevel e h m N (rosserAncestor 3 history)",
+          "entire_proof_source_block_sha256": "9e1a8c4312664afba188585d5b190154d348b67e795b45f860f50f25e43c19e6"
+        },
+        {
+          "name": "actualExtendedThirdCompactUpperPolicy_empty_cells",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactUpperPolicy_empty_cells (e h : ℝ) (m N : ℕ)\n    (hempty : actualExtendedThirdCompactCells e h m = ∅) :\n    actualExtendedThirdCompactUpperPolicy e h m N = actualExtendedThirdCompactInitialPolicy e m N",
+          "entire_proof_source_block_sha256": "f96f5cdf8ee40f540417ccebdfb30ece64090e7c5a172b48a60ff7a096bdb529"
+        },
+        {
+          "name": "actualExtendedThirdCompactFirstStop_of_cell",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactFirstStop_of_cell {e h : ℝ} {m N : ℕ}\n    (p0 p1 p2 : ℕ) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactFirstStop e m N [p0]",
+          "entire_proof_source_block_sha256": "2ea873c750d8b0feabede6bce57afba886047413566aaf2b958d9452eb5aa998"
+        },
+        {
+          "name": "actualExtendedThirdCompactInitialPolicy_first_iff",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactInitialPolicy_first_iff (e : ℝ) (m N p : ℕ)\n    (hp : 0 < p) :\n    actualExtendedThirdCompactInitialPolicy e m N false [p] = true ↔\n      (p : ℝ) ^ 3 < (N : ℝ) ^ (thirdPrefixTheta - 2 * e) ∧\n        actualExtendedThirdCompactFirstStop e m N [p]",
+          "entire_proof_source_block_sha256": "1211fdd316f3031a6bee809f9f11545e92cd1fbfc6e121447e83b905eccac276"
+        },
+        {
+          "name": "actualExtendedThirdCompactCell_prime_firstCube",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactCell_prime_firstCube {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp0 : 0 < p0) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    (p0 : ℝ) ^ 3 < (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j",
+          "entire_proof_source_block_sha256": "a66a5f60b9b94b5b007b646334a925f0edf0f47270edd3361d39933914d31edd"
+        },
+        {
+          "name": "actualExtendedThirdCompactInitialPolicy_first_of_cell",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactInitialPolicy_first_of_cell {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp0 : 0 < p0) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactInitialPolicy e m N false [p0] = true",
+          "entire_proof_source_block_sha256": "eca1df0626f4eee2b0ddccbec4497eda85fb4f1b6f17ca4ad1da0495644d5823"
+        },
+        {
+          "name": "actualExtendedThirdCompactUpperPolicy_third_iff",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactUpperPolicy_third_iff {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp2 : 0 < p2) (hp21 : p2 < p1) (hp10 : p1 < p0)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactUpperPolicy e h m N false [p2, p1, p0] = true ↔\n      (p0 : ℝ) * p1 * p2 ^ 3 < (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j",
+          "entire_proof_source_block_sha256": "75fbc93ccfd9ec96beb37018d7ae72f2c7be15fa3a47aa7c932c98cdd2207b67"
+        },
+        {
+          "name": "actualExtendedThirdCompactModuli",
+          "kind": "def",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "def actualExtendedThirdCompactModuli (e h : ℝ) (m N cap : ℕ) (w z : ℝ) : Finset ℕ",
+          "complete_definition": "def actualExtendedThirdCompactModuli (e h : ℝ) (m N cap : ℕ) (w z : ℝ) : Finset ℕ :=\n  actualSmallRoughModuli (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z"
+        },
+        {
+          "name": "actualExtendedThirdCompactRho",
+          "kind": "def",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "def actualExtendedThirdCompactRho (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) : ℕ → ℝ",
+          "complete_definition": "def actualExtendedThirdCompactRho (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) : ℕ → ℝ :=\n  actualSmallRoughRho (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z L"
+        },
+        {
+          "name": "actualExtendedThirdCompactRho_eq_firstExitAttachment",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactRho_eq_firstExitAttachment\n    (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) :\n    actualExtendedThirdCompactRho e h m N cap w z L =\n      smallRoughRho (actualSmallRosserSupport N cap w)\n        (firstExitRetainedModuli (actualExtendedThirdCompactUpperPolicy e h m N)\n          (roughPrimeUniverse N cap w z))\n        (fun d => (firstExitRetainedCoefficient (actualExtendedThirdCompactUpperPolicy e h m N)\n          (roughPrimeUniverse N cap w z) d : ℝ))\n        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)",
+          "entire_proof_source_block_sha256": "dfe756b6864fcc86f8e9d39e0861dc364b09a4bb2fdda66fa9de7792c46e4aec"
+        },
+        {
+          "name": "actualExtendedThirdCompactRoughDensity_eq_policy",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactRoughDensity_eq_policy\n    (e h : ℝ) (m N cap : ℕ) (w z : ℝ) :\n    reciprocalTotientDensity\n        (fixedRoughSupport (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z)\n        (fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z) =\n      firstExitRetainedPolynomial (actualExtendedThirdCompactUpperPolicy e h m N)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap w z)",
+          "entire_proof_source_block_sha256": "b90aed32dc6e49fed01a015f74ac2d60c80e51d07717c8b71abbfbc84eb0a70e"
+        },
+        {
+          "name": "actualExtendedThirdCompactRho_majorant",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactRho_majorant (e h : ℝ) (m N cap : ℕ) (w z L : ℝ)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z) (hzcap : z ≤ (cap : ℝ)) (n : ℤ) :\n    actualSmallRoughIndicator N z n ≤\n      physicalDivisorSum (actualExtendedThirdCompactModuli e h m N cap w z)\n        (actualExtendedThirdCompactRho e h m N cap w z L) n.natAbs",
+          "entire_proof_source_block_sha256": "a9938970caaa938ec49a927c7b929e2ab514cbcf1293c62ec3204c04e13bd82a"
+        },
+        {
+          "name": "actualExtendedThirdCompactRho_abs_le_one",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactRho_abs_le_one (e h : ℝ) (m N cap : ℕ)\n    (w z L : ℝ) (q : ℕ) : |actualExtendedThirdCompactRho e h m N cap w z L q| ≤ 1",
+          "entire_proof_source_block_sha256": "852d2518a49008188e0fa5bc94c2dfe745e54cec5562611f1a3e6e9a7ed32f3f"
+        },
+        {
+          "name": "actualExtendedThirdCompactModuli_squarefree",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactModuli_squarefree (e h : ℝ) (m N cap : ℕ)\n    (w z : ℝ) {q : ℕ} (hq : q ∈ actualExtendedThirdCompactModuli e h m N cap w z) :\n    Squarefree q",
+          "entire_proof_source_block_sha256": "b887ff5122be8097eff36b0d72f2e6dbd22ea8963cab2f3b62ad3b1dc14ed7ca"
+        },
+        {
+          "name": "actualExtendedThirdCompactModuli_coprime_target",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactModuli_coprime_target (e h : ℝ) (m N cap : ℕ)\n    (w z : ℝ) {q : ℕ} (hq : q ∈ actualExtendedThirdCompactModuli e h m N cap w z) :\n    q.Coprime N",
+          "entire_proof_source_block_sha256": "04de614471a831f8b5bb7b0cd51a08376ae7e6b14e146c60b0ed5b69b8fdab6a"
+        },
+        {
+          "name": "actualExtendedThirdCompactRho_empty_cells",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactRho_empty_cells (e h : ℝ) (m N cap : ℕ) (w z L : ℝ)\n    (hempty : actualExtendedThirdCompactCells e h m = ∅) :\n    actualExtendedThirdCompactRho e h m N cap w z L =\n      actualSmallRoughRho (actualExtendedThirdCompactInitialPolicy e m N false) N cap w z L",
+          "entire_proof_source_block_sha256": "b07af29645796ac1e741b61828cdb0c3cb0bddbf885d87da6b7db80859df2d39"
+        }
+      ],
+      "direct_parents_current_source_only": [
+        {
+          "module": "ImbalancedChen.ActualExtendedThirdCompactCellCutoff",
+          "path": "ImbalancedChen/ActualExtendedThirdCompactCellCutoff.lean",
+          "current_source_sha256": "edb8876bd5881b7087e85062e64b05a1a7b0c5c1ed465825c5925dbbed059428",
+          "object_acceptance_inferred": false
+        },
+        {
+          "module": "ImbalancedChen.ActualExtendedThirdFirstCubeMargin",
+          "path": "ImbalancedChen/ActualExtendedThirdFirstCubeMargin.lean",
+          "current_source_sha256": "290bd48ab1ca9b3994c02c3208849ae81dcb3ab24607b92c8c8dc52d1f67786a",
+          "object_acceptance_inferred": false
+        },
+        {
+          "module": "ImbalancedChen.ActualUpperPolicyDensity",
+          "path": "ImbalancedChen/ActualUpperPolicyDensity.lean",
+          "current_source_sha256": "16d81ee162d9ed2a5efad703c9a900b2c5ada622b2613472f70eaef4cbd02ae6",
+          "object_acceptance_inferred": false
+        },
+        {
+          "module": "ImbalancedChen.HistoricalUnorderedThirdGeometry",
+          "path": "ImbalancedChen/HistoricalUnorderedThirdGeometry.lean",
+          "current_source_sha256": "4ffa5f89e52a26f621f2e896d2fa4dd3c26508b887967eac696994ef4c54b129",
+          "object_acceptance_inferred": false
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen/ActualExtendedThirdCompactFrontier.lean",
+      "source_sha256": "8e15c650d9e5e0b7f72aa16589a4dbf2049687558482d096f48f7fee1635dbe7",
+      "source_declarations": 9,
+      "definitions": 1,
+      "complete_declarations_read": [
+        {
+          "name": "actualExtendedThirdCompactOwnedCell_primeRegion",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactOwnedCell_primeRegion {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) {t : Fin 3 → ℝ}\n    (ht : t ∈ actualExtendedThirdOwnedCell m j) :\n    t ∈ actualExtendedThirdCompactCellPrimeRegion m j",
+          "entire_proof_source_block_sha256": "b2ed96fc5a6973865923460d2c480f4a93d666e9fee9fa41cec787c078d7866e"
+        },
+        {
+          "name": "actualExtendedThirdCompactOwnedCell_log_bounds",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactOwnedCell_log_bounds {e h : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) {t : Fin 3 → ℝ}\n    (ht : t ∈ actualExtendedThirdOwnedCell m j) (i : Fin 3) :\n    h ≤ t i ∧ t i < thirdPrefixRho",
+          "entire_proof_source_block_sha256": "b8cd3761df16e5255b3d8628eedb2a9c5a04115888e99d5c4c2b383230def3a0"
+        },
+        {
+          "name": "actualExtendedThirdCompactHistoryLog",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactHistoryLog (N : ℕ) (p : Fin 3 → ℕ) :\n    primeHistoryLogCoordinates (N : ℝ) 3 [p 2, p 1, p 0] = actualPrimeTupleLog N p",
+          "entire_proof_source_block_sha256": "7e0855563990e73b44ff117ea98db1c0b0b6aa428a5d1bdba46d6264701cd576"
+        },
+        {
+          "name": "actualExtendedThirdCompactParent_valid_iff",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactParent_valid_iff (e h : ℝ) (m N : ℕ)\n    (p : Fin 3 → ℕ) :\n    FirstExitValidSelection (actualExtendedThirdCompactUpperPolicy e h m N)\n        [] true (List.ofFn p).dropLast ↔\n      actualExtendedThirdCompactInitialPolicy e m N false [p 0] = true",
+          "entire_proof_source_block_sha256": "862863afadcd87f08c29a43f3deeb828306b83ab625a2d2eb75044fe1156ef22"
+        },
+        {
+          "name": "actualExtendedThirdCompactParent_valid_of_cell",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactParent_valid_of_cell {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p : Fin 3 → ℕ) (hp0 : 0 < p 0) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j) :\n    FirstExitValidSelection (actualExtendedThirdCompactUpperPolicy e h m N)\n      [] true (List.ofFn p).dropLast",
+          "entire_proof_source_block_sha256": "b1fb564b10bd92f8fa7e97e8b3eb803ac0198200d5c104391c14445e35ba300b"
+        },
+        {
+          "name": "actualExtendedThirdCompactFrontier_cell_filter",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactFrontier_cell_filter {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (hh : 0 < h) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (w : ℝ)\n    (hw : w ≤ (N : ℝ) ^ h) (hcap : (N : ℝ) ^ thirdPrefixRho ≤ (cap : ℝ))\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    (firstExitFrontierTuples 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n        (roughPrimeUniverse N cap w ((N : ℝ) ^ thirdPrefixRho))).filter\n        (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j) =\n      actualExtendedThirdDistinctCellPrimeTuples N h m j",
+          "entire_proof_source_block_sha256": "d8ba92634425925050bb81f708ac38b579335dc7679e1f2533f2176eb994c075"
+        },
+        {
+          "name": "actualExtendedThirdCompactFrontierCellSum",
+          "kind": "def",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "def actualExtendedThirdCompactFrontierCellSum (e h : ℝ) (m N cap : ℕ) (w : ℝ)\n    (j : ActualExtendedThirdDyadicLabel m) (G : (Fin 3 → ℕ) → ℝ) : ℝ",
+          "complete_definition": "def actualExtendedThirdCompactFrontierCellSum (e h : ℝ) (m N cap : ℕ) (w : ℝ)\n    (j : ActualExtendedThirdDyadicLabel m) (G : (Fin 3 → ℕ) → ℝ) : ℝ :=\n  ((firstExitFrontierCandidates 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n    (fun q : ℕ => 1 / ((q : ℝ) - 1))\n    (roughPrimeUniverse N cap w ((N : ℝ) ^ thirdPrefixRho))).map (fun candidate =>\n      (candidate.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n        (if primeHistoryLogCoordinates (N : ℝ) 3 candidate.selectedPrefix ∈\n            actualExtendedThirdOwnedCell m j then\n          G (primeHistoryTuple 3 candidate.selectedPrefix) else 0))).sum"
+        },
+        {
+          "name": "actualExtendedThirdCompactFrontierCellSum_eq_tuple_sum",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactFrontierCellSum_eq_tuple_sum {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (hh : 0 < h) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (w : ℝ)\n    (hw : w ≤ (N : ℝ) ^ h) (hcap : (N : ℝ) ^ thirdPrefixRho ≤ (cap : ℝ))\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (G : (Fin 3 → ℕ) → ℝ) :\n    actualExtendedThirdCompactFrontierCellSum e h m N cap w j G =\n      ∑ p ∈ actualExtendedThirdDistinctCellPrimeTuples N h m j,\n        (∏ i : Fin 3, 1 / ((p i : ℝ) - 1)) * G p",
+          "entire_proof_source_block_sha256": "1ae39a9d4332b760b840f6ec79dc7102f13c9e27e6237ed694c8df966905a83a"
+        },
+        {
+          "name": "actualExtendedThirdCompactFrontierCellSum_eq_product_sum",
+          "kind": "theorem",
+          "private": false,
+          "complete_type_before_actual_proof_separator": "theorem actualExtendedThirdCompactFrontierCellSum_eq_product_sum {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (hh : 0 < h) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (w : ℝ)\n    (hw : w ≤ (N : ℝ) ^ h) (hcap : (N : ℝ) ^ thirdPrefixRho ≤ (cap : ℝ))\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (G : (Fin 3 → ℕ) → ℝ) :\n    actualExtendedThirdCompactFrontierCellSum e h m N cap w j G =\n      ∑ n ∈ actualExtendedThirdDistinctCellPrimeProducts N h m j,\n        1 / (Nat.totient n : ℝ) * G (actualExtendedThirdDistinctCellProductTuple N h m j n)",
+          "entire_proof_source_block_sha256": "59f82c3a13c6da5c4a0dcd701c425fc590adee4a9d817b2969f75e91503f3dc2"
+        }
+      ],
+      "direct_parents_current_source_only": [
+        {
+          "module": "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+          "path": "ImbalancedChen/ActualExtendedThirdCompactUpperRho.lean",
+          "current_source_sha256": "5cef3131cb204fbca47d2b704905dbce9c838b4627f9b446caa4edb597afe8f5",
+          "object_acceptance_inferred": false
+        },
+        {
+          "module": "ImbalancedChen.ActualExtendedThirdDistinctProductHarmonic",
+          "path": "ImbalancedChen/ActualExtendedThirdDistinctProductHarmonic.lean",
+          "current_source_sha256": "9fd24ba39eaae25f0ac8b3bfececf8644330ec1cac64ddd9bd70e04e4ce3d94c",
+          "object_acceptance_inferred": false
+        }
+      ]
+    }
+  ],
+  "mathematical_assessment": {
+    "Part3TransposedModulusProgression": "The true compatible factor pair gives a divisor of nonzero paired difference on the off-diagonal and its same product progression before either absolute modulus row is enlarged. Actual V-smoothing gives <=4V/delta+1; the diagonal retains 5V. A genuine admissible beta=1 atom supplies the beta-independent tau4 row bound. Nondivisor support from actual alpha cleanup makes each difference nonzero, and fixed moving-residue polynomial bound pays the two true row subpowers. The Y mask and all original factor labels, residue and complex weights are preserved; the last theorem is only a same-mask witness reduction, not a paid complete nonzero estimate.",
+    "Part3TransposedDifferenceMoment": "Two actual difference injections bound the off-diagonal tau2 moment by8U^2(1+log2U); diagonal cost is10X separately. Original beta L2 gives exactly20/U+64HU/D+16HU/V. Original medium monomials supply U,V>=X^sigma without an extra balance, nu or kappa gate. At D=X^delta, fixed z=min(sigma,delta), epsilon=z/2 and p+1 logarithm cost are absorbed beyond a scalar threshold preceding actual atoms and Y. Whole W plus SAME-mask raw zero pays the entire full signed nonzero part only in this physical large-gcd region.",
+    "ActualExtendedThirdCompactUpperRho": "Initial rule is the concrete dyadic first-stop policy with old theta-2e, not asserted equal to the untruncated ordinary rule. At adopted cells the literal third-capped policy fixes the same third ancestor; inactive restores the entire initial rule. Positive first prime pays total-product gate via p<=p^3; actual retained-cell cap supplies first cube and inherited initial admission. Full physical rho is actualSmallRoughRho of this policy; actual attachment, retained density polynomial, coefficient one-bound, majorant, squarefree and target coprimality are finite identities only.",
+    "ActualExtendedThirdCompactFrontier": "Actual proper rank-two prefix requires only initial singleton admission and the automatic even second admission. Same adopted cell pays the first admission internally, leaving third own cube absent from the candidate frontier. True physical cap N^rho<=cap and w<=N^h retain the actual original rough prime universe, same target exclusions and endpoint atoms. Strict prime-cell filter is proved equal, and arbitrary signed G transfers exactly to its unique product with one reciprocal totient, no factorial. Does not identify the full rho difference."
+  },
+  "known_parent_proof_only_rebind": {
+    "module": "ImbalancedChen.ActualExtendedThirdDistinctProductHarmonic",
+    "old_actual_failed_sha256": "75f52840ccf119eafa31e6ba1376c4fcf1946bef0c814ef23bbe41aad6aa6064",
+    "current_sha256": "9fd24ba39eaae25f0ac8b3bfececf8644330ec1cac64ddd9bd70e04e4ce3d94c",
+    "owner_report": {
+      "path": ".lake/proof-continuation/source-reviews/20261016-ActualExtendedThirdDistinctProductHarmonic-first-diagnostic-root-owner-rebind.json",
+      "sha256": "e5cba609b9aec13bc0835b1e94a4fc83b7295fdda2c7477ef78a116ebec46548"
+    },
+    "all15_types_5defs_imports_math_exactly_unchanged": true,
+    "independent_diagnostic_rebind_still_required": true
+  },
+  "strict_runtime_gates": "Only after full non-author report/current source binding and each actual direct-parent object/owned gate has been checked by the sole runtime owner; this report does not install objects or authorize a broad prerequisite chain. Fixed M6144/RSS6656/j2, unchanged pins and frozen checkers. Actual source/API diagnostics require full exact owner and non-author rebinds.",
+  "boundaries": [
+    "No Lean, Lake, cache install, bootstrap or kernel tool invoked by root.",
+    "Current source closure/header/DAG facts do not imply actual imported closure replay or owned acceptance.",
+    "Both-small Fourier/root/slow-phase estimate remains open.",
+    "Full same-policy signed rho density saving, original counting error, hUpper/hLower and Theorem1.1/Cor1.2 remain open."
+  ],
+  "pins_fresh_sha256": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  }
+}

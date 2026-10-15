@@ -49,7 +49,7 @@ theorem actualPrimeTupleCoefficient_le_factorial (T : Finset (List ℕ)) (m n : 
         apply Finset.card_le_card
         intro qs hqs
         exact List.mem_toFinset.mpr (List.mem_permutations.mpr (hperm qs hqs))
-      _ ≤ ps.permutations.length := List.toFinset_card_le
+      _ ≤ ps.permutations.length := List.toFinset_card_le ps.permutations
       _ = m.factorial := by rw [List.length_permutations, hlen ps hpsT]
   · simp only [actualPrimeTupleCoefficient,
       Finset.not_nonempty_iff_eq_empty.mp hne, Finset.card_empty]

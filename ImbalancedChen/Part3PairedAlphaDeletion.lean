@@ -148,10 +148,12 @@ theorem betaCarrier_progression_card_le
         (card_product_modEq_le (Nat.floor (2 * d.V)) q n d.residue hn)
     _ ≤ (Nat.floor (2 * d.V) : ℝ) / q + 1 := by
       push_cast
-      exact add_le_add_right Nat.cast_div_le 1
-    _ ≤ _ := add_le_add_right
+      have hh : ((Nat.floor (2 * d.V) / q : ℕ) : ℝ) ≤
+          (Nat.floor (2 * d.V) : ℝ) / (q : ℝ) := Nat.cast_div_le
+      exact add_le_add hh le_rfl
+    _ ≤ _ := add_le_add
       (div_le_div_of_nonneg_right (Nat.floor_le (by linarith : 0 ≤ 2 * d.V))
-        (by exact_mod_cast hq.le)) 1
+        (show (0 : ℝ) ≤ (q : ℝ) by exact_mod_cast hq.le)) le_rfl
 
 private theorem active_factor_coprime_residue
     {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}
@@ -243,7 +245,9 @@ private theorem betaKernelMass_norm_le
     simp only [mul_sub, mul_ite, mul_one, mul_zero]
     congr 1
     · exact if_congr he rfl rfl
-    · by_cases hc : (n * m).Coprime q <;> simp [hc]
+    · calc
+        _ = (d.beta m * (if (n * m).Coprime q then 1 else 0)) / (q.totient : ℂ) := by ring
+        _ = _ := by rw [mul_ite, mul_one, mul_zero]
   simp_rw [hterm]
   rw [Finset.sum_sub_distrib, ← Finset.sum_div]
   have hp := (norm_sum_ite_le_card d.betaCarrier d.beta
@@ -510,7 +514,10 @@ private theorem eventually_cap_log_cost_le (sigma : ℝ) (hsigma : 0 < sigma) :
   calc
     _ ≤ (D * Real.log d.scale) ^ 6 :=
       pow_le_pow_left₀ (by linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]) hlogCap 6
-    _ = D ^ 6 * Real.log d.scale ^ (6 : ℝ) := by rw [mul_pow]
+    _ = D ^ 6 * Real.log d.scale ^ (6 : ℝ) := by
+      rw [mul_pow]
+      apply congrArg (fun y : ℝ ↦ D ^ 6 * y)
+      simpa only [Nat.cast_ofNat] using (Real.rpow_natCast (Real.log d.scale) 6).symm
     _ ≤ _ := hx1 d.scale ((le_max_left x1 x2).trans ((le_max_right 2 (max x1 x2)).trans hx))
 
 /-- The finite progression budget has a genuine power saving on the
@@ -543,6 +550,7 @@ theorem signedError_sub_cleanAlpha_power_bound (B : ℕ) (sigma kappa c0 : ℝ)
       (Real.rpow_le_rpow_of_exponent_le hscale (by linarith : 1 - 10 * sigma ≤ 1 - sigma))
       (by norm_num))
   have hV0 : 0 ≤ d.V := by linarith [hd.2.1]
+  have hCap0 : 0 ≤ d.physicalFactorCap := zero_le_one.trans (d.one_le_physicalFactorCap hd)
   have hbracket :
       2 * d.V * (1 + Real.log d.physicalFactorCap) ^ 3 +
         d.physicalFactorCap * (1 + Real.log d.physicalFactorCap) ^ 2 +

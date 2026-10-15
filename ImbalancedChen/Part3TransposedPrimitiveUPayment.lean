@@ -49,9 +49,10 @@ theorem physicalFactorCap_le_eight_scale
       le_mul_of_one_le_left (by linarith [d.one_le_physicalFactorCap hd]) hd.1
     _ ≤ 8 * d.scale ^ (1 - 9 * sigma) := d.U_mul_physicalFactorCap_le hd
     _ ≤ _ := mul_le_mul_of_nonneg_left
-      (by simpa only [Real.rpow_one] using
-        Real.rpow_le_rpow_of_exponent_le (one_le_scale hd)
-          (show 1 - 9 * sigma ≤ 1 by linarith)) (by norm_num)
+      (by
+        simpa only [Real.rpow_one] using
+          Real.rpow_le_rpow_of_exponent_le (one_le_scale hd)
+            (show 1 - 9 * sigma ≤ 1 by linarith)) (by norm_num)
 
 theorem U_le_scale_half
     {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}
@@ -98,7 +99,7 @@ theorem eventually_actual_log_cost_le_rpow (p s : ℕ) (sigma : ℝ)
   intro B kappa c0 d hd hx
   have hx0 : 0 < d.scale := zero_lt_one.trans_le (one_le_scale hd)
   have hlog : 1 ≤ Real.log d.scale :=
-    hx2 ((le_max_right x1 x2).trans ((le_max_right 2 (max x1 x2)).trans hx))
+    hx2 d.scale ((le_max_right x1 x2).trans ((le_max_right 2 (max x1 x2)).trans hx))
   have hbase (y : ℝ) (hy : 0 < y) (hyX : y ≤ 8 * d.scale) :
       1 + Real.log y ≤ D * Real.log d.scale := by
     have hh := Real.log_le_log hy hyX
@@ -123,7 +124,9 @@ theorem eventually_actual_log_cost_le_rpow (p s : ℕ) (sigma : ℝ)
         (pow_nonneg hcap0 s) (by positivity)
     _ = D ^ (p + s) * Real.log d.scale ^ ((p + s : ℕ) : ℝ) := by
       rw [← pow_add, mul_pow, Real.rpow_natCast]
-    _ ≤ _ := hx1 ((le_max_left x1 x2).trans ((le_max_right 2 (max x1 x2)).trans hx))
+    _ ≤ _ := by
+      simpa only [Nat.cast_add] using
+        hx1 d.scale ((le_max_left x1 x2).trans ((le_max_right 2 (max x1 x2)).trans hx))
 
 theorem eventually_const_rpow_two_le_logBudget (C A : ℝ) (hC : 0 ≤ C)
     {delta : ℝ} (hdelta : 0 < delta) :
@@ -192,7 +195,8 @@ theorem actual_betaL2_mul_U_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)
       (by norm_num : (0 : ℝ) < 1 / 4))
   refine ⟨max x1 x2, lt_of_lt_of_le hx1 (le_max_left _ _), fun d hd hx ↦ ?_⟩
   apply (hbound d hd ((le_max_left _ _).trans hx)).trans
-  convert hx2 ((le_max_right _ _).trans hx) using 1 <;> norm_num
+  simpa only [show (2 : ℝ) - 1 / 4 = 7 / 4 by norm_num] using
+    hx2 d.scale ((le_max_right _ _).trans hx)
 
 end TransposedPrimitiveUPayment
 

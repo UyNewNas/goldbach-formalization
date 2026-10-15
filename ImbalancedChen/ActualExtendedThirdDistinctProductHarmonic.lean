@@ -57,14 +57,14 @@ theorem actualExtendedThirdDistinctCellPrimeTuples_product_injOn {N : ℕ}
   have hqprime (i : Fin 3) : Nat.Prime (q i) := (mem_actualPrimeBoxTuples_iff.mp hqbox i).1
   have hpl : ∀ a ∈ [p 0, p 1, p 2], Nat.Prime a := by
     intro a ha
-    simp only [List.mem_cons, List.mem_singleton] at ha
+    simp only [List.mem_cons, List.not_mem_nil, or_false] at ha
     rcases ha with rfl | rfl | rfl
     · exact hpprime 0
     · exact hpprime 1
     · exact hpprime 2
   have hql : ∀ a ∈ [q 0, q 1, q 2], Nat.Prime a := by
     intro a ha
-    simp only [List.mem_cons, List.mem_singleton] at ha
+    simp only [List.mem_cons, List.not_mem_nil, or_false] at ha
     rcases ha with rfl | rfl | rfl
     · exact hqprime 0
     · exact hqprime 1
@@ -139,7 +139,9 @@ theorem actualExtendedThirdDistinctCellProductHarmonicSum_eq {N : ℕ} (hN : 1 <
     actualExtendedThirdDistinctCellProductHarmonicSum N e h m j =
       actualExtendedThirdDistinctCellPrimeSum N e h m j := by
   rw [actualExtendedThirdDistinctCellProductHarmonicSum,
-    ← actualExtendedThirdDistinctCellPrimeTuples_totient_sum hN]
+    ← actualExtendedThirdDistinctCellPrimeTuples_totient_sum hN h m j
+      (fun p => actualExtendedThirdCompactHarmonicProfile e h
+        (actualExtendedThirdPhysicalLevel e m j) (actualPrimeTupleLog N p))]
   rw [actualExtendedThirdDistinctCellPrimeSum, actualPrimeBoxTestSum,
     actualExtendedThirdDistinctCellPrimeTuples, Finset.sum_filter]
   apply Finset.sum_congr rfl

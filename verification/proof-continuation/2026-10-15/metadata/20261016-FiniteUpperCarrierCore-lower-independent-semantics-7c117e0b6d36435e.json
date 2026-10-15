@@ -1,0 +1,404 @@
+{
+  "schema": "independent-complete-source-semantic-review-v1",
+  "status": "SOURCE_ONLY_FULL_NONAUTHOR_REVIEW_NO_CONFIRMED_MATH_OR_FIXED_API_BLOCKER",
+  "reviewer": "/root/lower_resume (not author of the legacy FiniteUpperCarrierCore source)",
+  "reviewed_at_utc": "2026-10-15T22:06:56.786096+00:00",
+  "project_head_at_review": "6d8f6c9ce343316e1afa8fe36847ec259d8d155f",
+  "candidate": {
+    "module": "ImbalancedChen.FiniteUpperCarrierCore",
+    "path": "ImbalancedChen/FiniteUpperCarrierCore.lean",
+    "sha256": "5bb08b49bf20551e996afbafd92a90ce6aa17941424fa55485d9fa9f69ce98b7",
+    "declaration_count": 18,
+    "definition_count": 7,
+    "type_extraction": "Theorems use the actual := by proof marker; definitions use top-level assignment outside parentheses/braces. No first-:= truncation.",
+    "all_complete_types_definitions_and_proofs": [
+      {
+        "name": "actualSmallRoughModuli",
+        "kind": "def",
+        "private": false,
+        "start_line": 19,
+        "complete_source_header": "def actualSmallRoughModuli (retainOdd : List ℕ → Bool)\n    (N cap : ℕ) (w z : ℝ) : Finset ℕ",
+        "complete_definition": "def actualSmallRoughModuli (retainOdd : List ℕ → Bool)\n    (N cap : ℕ) (w z : ℝ) : Finset ℕ :=\nsmallRoughModuli (actualSmallRosserSupport N cap w)\n    (fixedRoughSupport retainOdd N cap w z)",
+        "independent_semantic_and_proof_review": "The actual displayed modulus carrier is the multiplication image of the actual small Rosser support and literal fixed retained rough support. No factor multiplicity or analytic property is asserted."
+      },
+      {
+        "name": "actualSmallRoughRho",
+        "kind": "def",
+        "private": false,
+        "start_line": 25,
+        "complete_source_header": "def actualSmallRoughRho (retainOdd : List ℕ → Bool)\n    (N cap : ℕ) (w z L : ℝ) : ℕ → ℝ",
+        "complete_definition": "def actualSmallRoughRho (retainOdd : List ℕ → Bool)\n    (N cap : ℕ) (w z L : ℝ) : ℕ → ℝ :=\nsmallRoughRho (actualSmallRosserSupport N cap w)\n    (fixedRoughSupport retainOdd N cap w z)\n    (fixedRoughCoefficient retainOdd N cap w z)\n    (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)\n\nopen scoped BigOperators",
+        "independent_semantic_and_proof_review": "One physical coefficient is the finite fibre sum of the sign-sensitive small/rough pair coefficient, fixed independently of the tested integer. The actual lower and upper small Rosser coefficients are the same functions throughout."
+      },
+      {
+        "name": "realHalfProductCongruenceMass",
+        "kind": "def",
+        "private": false,
+        "start_line": 35,
+        "complete_source_header": "def realHalfProductCongruenceMass (b : ℝ) (N : ℕ) (T : ℝ) (d : ℕ) : ℝ",
+        "complete_definition": "def realHalfProductCongruenceMass (b : ℝ) (N : ℕ) (T : ℝ) (d : ℕ) : ℝ :=\n(((realHalfProductSource b N T).filter\n    (fun m : ℕ => Nat.ModEq d m N)).card : ℝ)",
+        "independent_semantic_and_proof_review": "Exactly the current arbitrary-real ordered half-product source filtered by Nat.ModEq d m N. The source keeps its inclusive upper product endpoint and strict ordered-bad power boundary. This definition is a finite count, not a distribution estimate."
+      },
+      {
+        "name": "realHalfProductCoprimeMass",
+        "kind": "def",
+        "private": false,
+        "start_line": 40,
+        "complete_source_header": "def realHalfProductCoprimeMass (b : ℝ) (N : ℕ) (T : ℝ) (d : ℕ) : ℝ",
+        "complete_definition": "def realHalfProductCoprimeMass (b : ℝ) (N : ℕ) (T : ℝ) (d : ℕ) : ℝ :=\n(((realHalfProductSource b N T).filter\n    (fun m : ℕ => Nat.Coprime m d)).card : ℝ)",
+        "independent_semantic_and_proof_review": "Exactly the same real source with Nat.Coprime m d. The primitive gate is retained, not equated to total source mass."
+      },
+      {
+        "name": "realPhysicalCoprimeCorrection",
+        "kind": "def",
+        "private": false,
+        "start_line": 45,
+        "complete_source_header": "def realPhysicalCoprimeCorrection\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) : ℝ",
+        "complete_definition": "def realPhysicalCoprimeCorrection\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) : ℝ :=\n∑ d ∈ Q, rho d *\n    ((realHalfProductCoprimeMass b N T d -\n      ((realHalfProductSource b N T).card : ℝ)) / (Nat.totient d : ℝ))",
+        "independent_semantic_and_proof_review": "The exact signed cost of replacing the coprime source mass by the total source mass, with the same rho and displayed modulus carrier. It remains a visible term."
+      },
+      {
+        "name": "realPhysicalDistributionError",
+        "kind": "def",
+        "private": false,
+        "start_line": 52,
+        "complete_source_header": "def realPhysicalDistributionError\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) : ℝ",
+        "complete_definition": "def realPhysicalDistributionError\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) : ℝ :=\n∑ d ∈ Q, rho d *\n    (realHalfProductCongruenceMass b N T d -\n      realHalfProductCoprimeMass b N T d / (Nat.totient d : ℝ))",
+        "independent_semantic_and_proof_review": "The full signed primitive-residue error using exactly the same fixed rho. It is not changed into a sum of absolute discrepancies or an assumed small budget."
+      },
+      {
+        "name": "smallRoughModuli_subset_of_rough_subset",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 59,
+        "complete_source_header": "theorem smallRoughModuli_subset_of_rough_subset\n    (small : Finset ℕ) {raw rough : Finset ℕ} (hsub : raw ⊆ rough) :\n    smallRoughModuli small raw ⊆ smallRoughModuli small rough",
+        "complete_proof_body_after_by": "intro q hq\n  rcases Finset.mem_image.mp hq with ⟨x, hx, rfl⟩\n  exact Finset.mem_image.mpr ⟨x,\n    Finset.mem_product.mpr\n      ⟨(Finset.mem_product.mp hx).1, hsub (Finset.mem_product.mp hx).2⟩, rfl⟩",
+        "independent_semantic_and_proof_review": "Literal raw-to-rough support inclusion is transported through the same product-image map. This does not need cutoff separation, unique product decomposition or a coprimality assumption."
+      },
+      {
+        "name": "smallRoughRho_eq_of_rough_enlargement",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 70,
+        "complete_source_header": "theorem smallRoughRho_eq_of_rough_enlargement\n    (small : Finset ℕ) {raw rough : Finset ℕ} (hsub : raw ⊆ rough)\n    (c betaMinus betaPlus : ℕ → ℝ)\n    (hzero : ∀ d ∈ rough, d ∉ raw → c d = 0) :\n    smallRoughRho small rough c betaMinus betaPlus =\n      smallRoughRho small raw c betaMinus betaPlus",
+        "complete_proof_body_after_by": "classical\n  funext q\n  unfold smallRoughRho\n  symm\n  apply Finset.sum_subset\n  · intro x hx\n    rcases Finset.mem_filter.mp hx with ⟨hx, hprod⟩\n    exact Finset.mem_filter.mpr ⟨Finset.mem_product.mpr\n      ⟨(Finset.mem_product.mp hx).1, hsub (Finset.mem_product.mp hx).2⟩, hprod⟩\n  · intro x hx hnot\n    rcases Finset.mem_filter.mp hx with ⟨hx, hprod⟩\n    have hraw : x.2 ∉ raw := by\n      intro hd\n      exact hnot (Finset.mem_filter.mpr ⟨Finset.mem_product.mpr\n        ⟨(Finset.mem_product.mp hx).1, hd⟩, hprod⟩)\n    simp only [smallRoughPairCoefficient, signAttachedCoefficient,\n      hzero x.2 (Finset.mem_product.mp hx).2 hraw, zero_mul]",
+        "independent_semantic_and_proof_review": "Unfold the finite fibre sum, include each raw pair into the enlarged pair carrier, and show every new pair has second coordinate outside raw. Its rough coefficient is zero, hence signAttachedCoefficient=c*chosenBeta is zero regardless of either beta or sign branch. Equality holds as a full function at every modulus, including zero, without assuming any sign on rho."
+      },
+      {
+        "name": "sum_smallRoughRho_mul_eq_of_rough_enlargement",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 96,
+        "complete_source_header": "theorem sum_smallRoughRho_mul_eq_of_rough_enlargement\n    (small : Finset ℕ) {raw rough : Finset ℕ} (hsub : raw ⊆ rough)\n    (c betaMinus betaPlus : ℕ → ℝ)\n    (hzero : ∀ d ∈ rough, d ∉ raw → c d = 0) (F : ℕ → ℝ) :\n    (∑ q ∈ smallRoughModuli small rough,\n      smallRoughRho small rough c betaMinus betaPlus q * F q) =\n        ∑ q ∈ smallRoughModuli small raw,\n          smallRoughRho small raw c betaMinus betaPlus q * F q",
+        "complete_proof_body_after_by": "rw [smallRoughRho_eq_of_rough_enlargement small hsub c betaMinus betaPlus hzero]\n  symm\n  apply Finset.sum_subset (smallRoughModuli_subset_of_rough_subset small hsub)\n  intro q _hq hnot\n  rw [smallRoughRho_eq_zero_of_not_mem small raw c betaMinus betaPlus hnot, zero_mul]",
+        "independent_semantic_and_proof_review": "First substitute full-function equality. Every extra physical modulus is outside the raw product support and the raw fibre sum is zero there. Finset.sum_subset therefore preserves every arbitrary SIGNED linear test F exactly; no absolute error is introduced."
+      },
+      {
+        "name": "fixedRoughCoefficient_eq_zero_of_not_mem",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 111,
+        "complete_source_header": "theorem fixedRoughCoefficient_eq_zero_of_not_mem\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) {d : ℕ}\n    (hd : d ∉ fixedRoughSupport retainOdd N cap w z) :\n    fixedRoughCoefficient retainOdd N cap w z d = 0",
+        "complete_proof_body_after_by": "rw [fixedRoughCoefficient,\n    oddFirstExitRetainedCoefficient_eq_zero_of_not_mem\n      retainOdd (fun _ => 1) (roughPrimeUniverse N cap w z) d hd,\n    Int.cast_zero]",
+        "independent_semantic_and_proof_review": "Unfold the literal retained-tree coefficient and use its proved off-support-zero theorem at h=1. The fixed rough support is definitionally the very same retained modulus set; Int.cast_zero gives real zero."
+      },
+      {
+        "name": "actualUpperCommonRoughSupport",
+        "kind": "def",
+        "private": false,
+        "start_line": 122,
+        "complete_source_header": "def actualUpperCommonRoughSupport\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (compilerSupport : Finset ℕ) : Finset ℕ",
+        "complete_definition": "def actualUpperCommonRoughSupport\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (compilerSupport : Finset ℕ) : Finset ℕ :=\nfixedRoughSupport retainOdd N cap w z ∪ compilerSupport",
+        "independent_semantic_and_proof_review": "The common rough carrier is the actual raw retained support union compilerSupport. This definition leaves the raw policy, target-prime deletions and cutoffs unchanged."
+      },
+      {
+        "name": "actualUpperCommonRoughSupport_roughPrimeSupportedAt",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 127,
+        "complete_source_header": "theorem actualUpperCommonRoughSupport_roughPrimeSupportedAt\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (compilerSupport : Finset ℕ)\n    (hcompiler : ∀ d ∈ compilerSupport, RoughPrimeSupportedAt w d)\n    {d : ℕ} (hd : d ∈ actualUpperCommonRoughSupport\n      retainOdd N cap w z compilerSupport) : RoughPrimeSupportedAt w d",
+        "complete_proof_body_after_by": "rcases Finset.mem_union.mp hd with hraw | hcompiled\n  · exact fixedRoughSupport_roughPrimeSupportedAt retainOdd N cap w z hraw\n  · exact hcompiler d hcompiled",
+        "independent_semantic_and_proof_review": "Split membership in the explicit union. Raw support has the proved actual rough-prime support property; compiler-only elements require only the explicit finite hcompiler support hypothesis. That is not an analytic distribution or target-density supplier."
+      },
+      {
+        "name": "actualSmallRoughRho_eq_on_common_carrier",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 139,
+        "complete_source_header": "theorem actualSmallRoughRho_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough) :\n    smallRoughRho (actualSmallRosserSupport N cap w) rough\n        (fixedRoughCoefficient retainOdd N cap w z)\n        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L) =\n      actualSmallRoughRho retainOdd N cap w z L",
+        "complete_proof_body_after_by": "exact smallRoughRho_eq_of_rough_enlargement _ hcover _ _ _\n    (fun _ _ hd => fixedRoughCoefficient_eq_zero_of_not_mem retainOdd N cap w z hd)",
+        "independent_semantic_and_proof_review": "Specialize the generic finite rough enlargement identity to the actual raw retained coefficient using its actual zero extension. Only hcover is assumed; it is a finite set inclusion, not a density bound."
+      },
+      {
+        "name": "sum_actualSmallRoughRho_mul_eq_on_common_carrier",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 151,
+        "complete_source_header": "theorem sum_actualSmallRoughRho_mul_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough)\n    (F : ℕ → ℝ) :\n    (∑ q ∈ smallRoughModuli (actualSmallRosserSupport N cap w) rough,\n      smallRoughRho (actualSmallRosserSupport N cap w) rough\n        (fixedRoughCoefficient retainOdd N cap w z)\n        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L) q * F q) =\n      ∑ q ∈ actualSmallRoughModuli retainOdd N cap w z,\n        actualSmallRoughRho retainOdd N cap w z L q * F q",
+        "complete_proof_body_after_by": "exact sum_smallRoughRho_mul_eq_of_rough_enlargement _ hcover _ _ _\n    (fun _ _ hd => fixedRoughCoefficient_eq_zero_of_not_mem retainOdd N cap w z hd) F",
+        "independent_semantic_and_proof_review": "The generic signed functional identity applies to the exact actual small/rough supports and coefficient for every signed F. It retains the actual pair-indexed finite fibre sum."
+      },
+      {
+        "name": "actualSmallRoughRho_divisorSum_eq_on_common_carrier",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 165,
+        "complete_source_header": "theorem actualSmallRoughRho_divisorSum_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough)\n    (n : ℕ) :\n    physicalDivisorSum (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n        (smallRoughRho (actualSmallRosserSupport N cap w) rough\n          (fixedRoughCoefficient retainOdd N cap w z)\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) n =\n      physicalDivisorSum (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) n",
+        "complete_proof_body_after_by": "simpa only [physicalDivisorSum, mul_ite, mul_one, mul_zero] using\n    sum_actualSmallRoughRho_mul_eq_on_common_carrier retainOdd N cap w z L rough hcover\n      (fun q => if q ∣ n then 1 else 0)",
+        "independent_semantic_and_proof_review": "Choose F(q)=1 when q divides n, else 0. Finite rewriting recovers the identical physical divisor sum, including n=0, without a positivity or density premise."
+      },
+      {
+        "name": "actualSmallRoughRho_density_eq_on_common_carrier",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 181,
+        "complete_source_header": "theorem actualSmallRoughRho_density_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough) :\n    physicalDensitySum (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n        (smallRoughRho (actualSmallRosserSupport N cap w) rough\n          (fixedRoughCoefficient retainOdd N cap w z)\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) =\n      physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L)",
+        "complete_proof_body_after_by": "simpa only [physicalDensitySum, div_eq_mul_inv] using\n    sum_actualSmallRoughRho_mul_eq_on_common_carrier retainOdd N cap w z L rough hcover\n      (fun q => (Nat.totient q : ℝ)⁻¹)",
+        "independent_semantic_and_proof_review": "Choose F(q)=1/phi(q); total real division remains valid even at q=0. The same raw reciprocal-totient density is equal on both carriers; no numeric density estimate is asserted."
+      },
+      {
+        "name": "actualSmallRoughRho_coprimeCorrection_eq_on_common_carrier",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 195,
+        "complete_source_header": "theorem actualSmallRoughRho_coprimeCorrection_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L b T : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough) :\n    realPhysicalCoprimeCorrection b N T\n        (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n        (smallRoughRho (actualSmallRosserSupport N cap w) rough\n          (fixedRoughCoefficient retainOdd N cap w z)\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) =\n      realPhysicalCoprimeCorrection b N T (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L)",
+        "complete_proof_body_after_by": "exact sum_actualSmallRoughRho_mul_eq_on_common_carrier retainOdd N cap w z L rough\n    hcover (fun q => (realHalfProductCoprimeMass b N T q -\n      ((realHalfProductSource b N T).card : ℝ)) / (Nat.totient q : ℝ))",
+        "independent_semantic_and_proof_review": "Choose the exact real-source coprime-minus-total mass test divided by phi(q). Thus the primitive correction is unchanged as a signed whole; the coprime gate is not dropped."
+      },
+      {
+        "name": "actualSmallRoughRho_distribution_eq_on_common_carrier",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 211,
+        "complete_source_header": "theorem actualSmallRoughRho_distribution_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L b T : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough) :\n    realPhysicalDistributionError b N T\n        (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n        (smallRoughRho (actualSmallRosserSupport N cap w) rough\n          (fixedRoughCoefficient retainOdd N cap w z)\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) =\n      realPhysicalDistributionError b N T (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L)",
+        "complete_proof_body_after_by": "exact sum_actualSmallRoughRho_mul_eq_on_common_carrier retainOdd N cap w z L rough\n    hcover (fun q => realHalfProductCongruenceMass b N T q -\n      realHalfProductCoprimeMass b N T q / (Nat.totient q : ℝ))",
+        "independent_semantic_and_proof_review": "Choose the exact congruence-minus-coprime/phi test. The full signed distribution error on the same real half-product source is unchanged. This is not payment of that error or of any physical gcd Fourier region."
+      }
+    ],
+    "full_current_source_text": "import ImbalancedChen.ActualSmallRosser\nimport ImbalancedChen.FixedRoughCoefficients\nimport ImbalancedChen.RealHalfProductSource\n\n/-!\n# Finite identities for the actual upper coefficient on a common carrier\n\nThe original actual coefficient and real-source signed functionals are defined\nhere together with their exact finite carrier identities. Their names, types\nand bodies are unchanged. The analytic target-density bound remains in\nActualUpperCommonCarrier with its original reserve and asymptotic dependencies.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\n/-- The displayed physical modulus support for the actual small/rough pair. -/\ndef actualSmallRoughModuli (retainOdd : List ℕ → Bool)\n    (N cap : ℕ) (w z : ℝ) : Finset ℕ :=\n  smallRoughModuli (actualSmallRosserSupport N cap w)\n    (fixedRoughSupport retainOdd N cap w z)\n\n/-- One physical coefficient, independent of the integer at which it is tested. -/\ndef actualSmallRoughRho (retainOdd : List ℕ → Bool)\n    (N cap : ℕ) (w z L : ℝ) : ℕ → ℝ :=\n  smallRoughRho (actualSmallRosserSupport N cap w)\n    (fixedRoughSupport retainOdd N cap w z)\n    (fixedRoughCoefficient retainOdd N cap w z)\n    (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)\n\nopen scoped BigOperators\n\n/-- The actual congruence mass of the arbitrary-real ordered source. -/\ndef realHalfProductCongruenceMass (b : ℝ) (N : ℕ) (T : ℝ) (d : ℕ) : ℝ :=\n  (((realHalfProductSource b N T).filter\n    (fun m : ℕ => Nat.ModEq d m N)).card : ℝ)\n\n/-- The same source restricted by the literal coprimality mask. -/\ndef realHalfProductCoprimeMass (b : ℝ) (N : ℕ) (T : ℝ) (d : ℕ) : ℝ :=\n  (((realHalfProductSource b N T).filter\n    (fun m : ℕ => Nat.Coprime m d)).card : ℝ)\n\n/-- The exact price of replacing the coprime mass by the total real source. -/\ndef realPhysicalCoprimeCorrection\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) : ℝ :=\n  ∑ d ∈ Q, rho d *\n    ((realHalfProductCoprimeMass b N T d -\n      ((realHalfProductSource b N T).card : ℝ)) / (Nat.totient d : ℝ))\n\n/-- The signed primitive-residue error for exactly the displayed coefficient. -/\ndef realPhysicalDistributionError\n    (b : ℝ) (N : ℕ) (T : ℝ) (Q : Finset ℕ) (rho : ℕ → ℝ) : ℝ :=\n  ∑ d ∈ Q, rho d *\n    (realHalfProductCongruenceMass b N T d -\n      realHalfProductCoprimeMass b N T d / (Nat.totient d : ℝ))\n\n/-- Enlarging the displayed rough support enlarges its product carrier. -/\ntheorem smallRoughModuli_subset_of_rough_subset\n    (small : Finset ℕ) {raw rough : Finset ℕ} (hsub : raw ⊆ rough) :\n    smallRoughModuli small raw ⊆ smallRoughModuli small rough := by\n  intro q hq\n  rcases Finset.mem_image.mp hq with ⟨x, hx, rfl⟩\n  exact Finset.mem_image.mpr ⟨x,\n    Finset.mem_product.mpr\n      ⟨(Finset.mem_product.mp hx).1, hsub (Finset.mem_product.mp hx).2⟩, rfl⟩\n\n/-- Zero extension preserves the whole physical function, not only its\ndensity. Cutoff separation is not needed for this finite fibre identity. -/\ntheorem smallRoughRho_eq_of_rough_enlargement\n    (small : Finset ℕ) {raw rough : Finset ℕ} (hsub : raw ⊆ rough)\n    (c betaMinus betaPlus : ℕ → ℝ)\n    (hzero : ∀ d ∈ rough, d ∉ raw → c d = 0) :\n    smallRoughRho small rough c betaMinus betaPlus =\n      smallRoughRho small raw c betaMinus betaPlus := by\n  classical\n  funext q\n  unfold smallRoughRho\n  symm\n  apply Finset.sum_subset\n  · intro x hx\n    rcases Finset.mem_filter.mp hx with ⟨hx, hprod⟩\n    exact Finset.mem_filter.mpr ⟨Finset.mem_product.mpr\n      ⟨(Finset.mem_product.mp hx).1, hsub (Finset.mem_product.mp hx).2⟩, hprod⟩\n  · intro x hx hnot\n    rcases Finset.mem_filter.mp hx with ⟨hx, hprod⟩\n    have hraw : x.2 ∉ raw := by\n      intro hd\n      exact hnot (Finset.mem_filter.mpr ⟨Finset.mem_product.mpr\n        ⟨(Finset.mem_product.mp hx).1, hd⟩, hprod⟩)\n    simp only [smallRoughPairCoefficient, signAttachedCoefficient,\n      hzero x.2 (Finset.mem_product.mp hx).2 hraw, zero_mul]\n\n/-- Every signed linear functional has exactly the same raw value after\ncarrier enlargement. In particular, no absolute discrepancy is introduced. -/\ntheorem sum_smallRoughRho_mul_eq_of_rough_enlargement\n    (small : Finset ℕ) {raw rough : Finset ℕ} (hsub : raw ⊆ rough)\n    (c betaMinus betaPlus : ℕ → ℝ)\n    (hzero : ∀ d ∈ rough, d ∉ raw → c d = 0) (F : ℕ → ℝ) :\n    (∑ q ∈ smallRoughModuli small rough,\n      smallRoughRho small rough c betaMinus betaPlus q * F q) =\n        ∑ q ∈ smallRoughModuli small raw,\n          smallRoughRho small raw c betaMinus betaPlus q * F q := by\n  rw [smallRoughRho_eq_of_rough_enlargement small hsub c betaMinus betaPlus hzero]\n  symm\n  apply Finset.sum_subset (smallRoughModuli_subset_of_rough_subset small hsub)\n  intro q _hq hnot\n  rw [smallRoughRho_eq_zero_of_not_mem small raw c betaMinus betaPlus hnot, zero_mul]\n\n/-- The actual retained coefficient has its stated finite support. -/\ntheorem fixedRoughCoefficient_eq_zero_of_not_mem\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) {d : ℕ}\n    (hd : d ∉ fixedRoughSupport retainOdd N cap w z) :\n    fixedRoughCoefficient retainOdd N cap w z d = 0 := by\n  rw [fixedRoughCoefficient,\n    oddFirstExitRetainedCoefficient_eq_zero_of_not_mem\n      retainOdd (fun _ => 1) (roughPrimeUniverse N cap w z) d hd,\n    Int.cast_zero]\n\n/-- One explicit common carrier contains the raw and compiler supports.\nThe raw policy, target-prime deletions and real cutoffs are unchanged. -/\ndef actualUpperCommonRoughSupport\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (compilerSupport : Finset ℕ) : Finset ℕ :=\n  fixedRoughSupport retainOdd N cap w z ∪ compilerSupport\n\ntheorem actualUpperCommonRoughSupport_roughPrimeSupportedAt\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (compilerSupport : Finset ℕ)\n    (hcompiler : ∀ d ∈ compilerSupport, RoughPrimeSupportedAt w d)\n    {d : ℕ} (hd : d ∈ actualUpperCommonRoughSupport\n      retainOdd N cap w z compilerSupport) : RoughPrimeSupportedAt w d := by\n  rcases Finset.mem_union.mp hd with hraw | hcompiled\n  · exact fixedRoughSupport_roughPrimeSupportedAt retainOdd N cap w z hraw\n  · exact hcompiler d hcompiled\n\n/-- The raw physical coefficient on any covering rough carrier is\nliterally the actual retained-tree attachment, at every natural modulus. -/\ntheorem actualSmallRoughRho_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough) :\n    smallRoughRho (actualSmallRosserSupport N cap w) rough\n        (fixedRoughCoefficient retainOdd N cap w z)\n        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L) =\n      actualSmallRoughRho retainOdd N cap w z L := by\n  exact smallRoughRho_eq_of_rough_enlargement _ hcover _ _ _\n    (fun _ _ hd => fixedRoughCoefficient_eq_zero_of_not_mem retainOdd N cap w z hd)\n\n/-- All raw arithmetic uses transfer together to a common finite carrier.\nThis identity is uniform in the signed test function. -/\ntheorem sum_actualSmallRoughRho_mul_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough)\n    (F : ℕ → ℝ) :\n    (∑ q ∈ smallRoughModuli (actualSmallRosserSupport N cap w) rough,\n      smallRoughRho (actualSmallRosserSupport N cap w) rough\n        (fixedRoughCoefficient retainOdd N cap w z)\n        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L) q * F q) =\n      ∑ q ∈ actualSmallRoughModuli retainOdd N cap w z,\n        actualSmallRoughRho retainOdd N cap w z L q * F q := by\n  exact sum_smallRoughRho_mul_eq_of_rough_enlargement _ hcover _ _ _\n    (fun _ _ hd => fixedRoughCoefficient_eq_zero_of_not_mem retainOdd N cap w z hd) F\n\n/-- The pointwise raw majorant is unchanged, including at test integer zero. -/\ntheorem actualSmallRoughRho_divisorSum_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough)\n    (n : ℕ) :\n    physicalDivisorSum (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n        (smallRoughRho (actualSmallRosserSupport N cap w) rough\n          (fixedRoughCoefficient retainOdd N cap w z)\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) n =\n      physicalDivisorSum (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) n := by\n  simpa only [physicalDivisorSum, mul_ite, mul_one, mul_zero] using\n    sum_actualSmallRoughRho_mul_eq_on_common_carrier retainOdd N cap w z L rough hcover\n      (fun q => if q ∣ n then 1 else 0)\n\n/-- The actual raw density can be used on the compiler's common carrier\nwithout changing its value or adding a new density premise. -/\ntheorem actualSmallRoughRho_density_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough) :\n    physicalDensitySum (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n        (smallRoughRho (actualSmallRosserSupport N cap w) rough\n          (fixedRoughCoefficient retainOdd N cap w z)\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) =\n      physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) := by\n  simpa only [physicalDensitySum, div_eq_mul_inv] using\n    sum_actualSmallRoughRho_mul_eq_on_common_carrier retainOdd N cap w z L rough hcover\n      (fun q => (Nat.totient q : ℝ)⁻¹)\n\n/-- The real-source coprime correction uses the identical extended raw rho. -/\ntheorem actualSmallRoughRho_coprimeCorrection_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L b T : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough) :\n    realPhysicalCoprimeCorrection b N T\n        (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n        (smallRoughRho (actualSmallRosserSupport N cap w) rough\n          (fixedRoughCoefficient retainOdd N cap w z)\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) =\n      realPhysicalCoprimeCorrection b N T (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) := by\n  exact sum_actualSmallRoughRho_mul_eq_on_common_carrier retainOdd N cap w z L rough\n    hcover (fun q => (realHalfProductCoprimeMass b N T q -\n      ((realHalfProductSource b N T).card : ℝ)) / (Nat.totient q : ℝ))\n\n/-- The full signed real-source discrepancy, rather than an absolute sum,\nis preserved under the same raw carrier enlargement. -/\ntheorem actualSmallRoughRho_distribution_eq_on_common_carrier\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z L b T : ℝ)\n    (rough : Finset ℕ) (hcover : fixedRoughSupport retainOdd N cap w z ⊆ rough) :\n    realPhysicalDistributionError b N T\n        (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n        (smallRoughRho (actualSmallRosserSupport N cap w) rough\n          (fixedRoughCoefficient retainOdd N cap w z)\n          (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) =\n      realPhysicalDistributionError b N T (actualSmallRoughModuli retainOdd N cap w z)\n        (actualSmallRoughRho retainOdd N cap w z L) := by\n  exact sum_actualSmallRoughRho_mul_eq_on_common_carrier retainOdd N cap w z L rough\n    hcover (fun q => realHalfProductCongruenceMass b N T q -\n      realHalfProductCoprimeMass b N T q / (Nat.totient q : ℝ))\n\nend\n\nend ImbalancedChen\n"
+  },
+  "direct_parents": [
+    {
+      "module": "ImbalancedChen.ActualSmallRosser",
+      "path": "ImbalancedChen/ActualSmallRosser.lean",
+      "sha256": "0dbcd4e45ededb9edfb601d8249cc554b3e53291985c09557ed2a9f5d4fb2cdf",
+      "direct_imports": [
+        "ImbalancedChen.RoughPrimeUniverse",
+        "ImbalancedChen.SmallRoughAttachment",
+        "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser",
+        "Mathlib.Data.Nat.GCD.BigOperators",
+        "Mathlib.Data.Int.Basic"
+      ],
+      "scope": "Relevant actual definitions and theorems read; no kernel or whole transitive source-closure replay inferred."
+    },
+    {
+      "module": "ImbalancedChen.FixedRoughCoefficients",
+      "path": "ImbalancedChen/FixedRoughCoefficients.lean",
+      "sha256": "24bc451c0234f867cb85539b0d93d37e02c68e6f8d0bf6cf82f081e75e3d892b",
+      "direct_imports": [
+        "ImbalancedChen.RoughPrimeUniverse",
+        "ImbalancedChen.SmallRoughAttachment",
+        "Mathlib.Tactic"
+      ],
+      "scope": "Relevant actual definitions and theorems read; no kernel or whole transitive source-closure replay inferred."
+    },
+    {
+      "module": "ImbalancedChen.RealHalfProductSource",
+      "path": "ImbalancedChen/RealHalfProductSource.lean",
+      "sha256": "0c3211cb72d8f27eb380f57fe5d751f8fc3179cb646c683c1449d450c71c55e7",
+      "direct_imports": [
+        "ImbalancedChen.CurrentMainTheorem",
+        "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+        "Mathlib.Algebra.Order.Floor.Semiring",
+        "Mathlib.Data.Finset.Prod",
+        "Lean.Elab.Tactic.NormCast",
+        "Lean.Elab.Tactic.Omega"
+      ],
+      "scope": "Relevant actual definitions and theorems read; no kernel or whole transitive source-closure replay inferred."
+    }
+  ],
+  "actual_local_definition_and_consumer_evidence": [
+    {
+      "path": "ImbalancedChen/SmallRoughAttachment.lean",
+      "sha256": "8f69bb4f62110e54aeb69c371d4767253d8520d9d904e3dc97e578beaedfccba",
+      "lines": [
+        72,
+        145
+      ],
+      "role": "Actual product carrier, sign-sensitive pair coefficient, finite fibre sum and proved off-support zero",
+      "literal_source_excerpt": "\n/-- All displayed small/rough pairs. -/\ndef smallRoughPairs (small rough : Finset ℕ) : Finset (ℕ × ℕ) :=\n  small ×ˢ rough\n\n/-- Their multiplicity-free physical modulus support. -/\ndef smallRoughModuli (small rough : Finset ℕ) : Finset ℕ :=\n  (smallRoughPairs small rough).image fun x => x.1 * x.2\n\n/-- On cutoff-separated supports, multiplication is injective on the entire\ndisplayed pair support. -/\ntheorem smallRough_mul_injOn\n    {w : ℝ} {small rough : Finset ℕ}\n    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)\n    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d) :\n    Set.InjOn (fun x : ℕ × ℕ => x.1 * x.2) (smallRoughPairs small rough) := by\n  intro d hd e he hprod\n  change d ∈ small ×ˢ rough at hd\n  change e ∈ small ×ˢ rough at he\n  rw [Finset.mem_product] at hd he\n  exact smallRough_factorization_unique\n    (hsmall d.1 hd.1) (hrough d.2 hd.2)\n    (hsmall e.1 he.1) (hrough e.2 he.2) hprod\n\n/-- The sign-sensitive coefficient attached to one small/rough pair. -/\ndef smallRoughPairCoefficient\n    (roughCoeff betaMinus betaPlus : ℕ → ℝ) (x : ℕ × ℕ) : ℝ :=\n  signAttachedCoefficient (roughCoeff x.2)\n    (betaMinus x.1) (betaPlus x.1)\n\n/-- One physical coefficient function.  It is defined as the finite fibre\nsum so it is total off the displayed support; uniqueness below proves that\nevery occupied fibre has exactly one term. -/\ndef smallRoughRho\n    (small rough : Finset ℕ)\n    (roughCoeff betaMinus betaPlus : ℕ → ℝ) (q : ℕ) : ℝ :=\n  ∑ x ∈ smallRoughPairs small rough with x.1 * x.2 = q,\n    smallRoughPairCoefficient roughCoeff betaMinus betaPlus x\n\n/-- At an occupied product, the physical coefficient is exactly the one\npair coefficient, with no multiplicity factor. -/\ntheorem smallRoughRho_mul\n    {w : ℝ} {small rough : Finset ℕ}\n    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)\n    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)\n    (roughCoeff betaMinus betaPlus : ℕ → ℝ)\n    {a b : ℕ} (ha : a ∈ small) (hb : b ∈ rough) :\n    smallRoughRho small rough roughCoeff betaMinus betaPlus (a * b) =\n      smallRoughPairCoefficient roughCoeff betaMinus betaPlus (a, b) := by\n  classical\n  have hab : (a, b) ∈ smallRoughPairs small rough := by\n    simp [smallRoughPairs, ha, hb]\n  unfold smallRoughRho\n  rw [Finset.sum_eq_single (a, b)]\n  · intro x hx hne\n    rw [Finset.mem_filter] at hx\n    exact (hne ((smallRough_mul_injOn hsmall hrough) hx.1 hab hx.2)).elim\n  · intro hnot\n    exact (hnot (Finset.mem_filter.mpr ⟨hab, rfl⟩)).elim\n\n/-- The physical coefficient vanishes away from the product support. -/\ntheorem smallRoughRho_eq_zero_of_not_mem\n    (small rough : Finset ℕ)\n    (roughCoeff betaMinus betaPlus : ℕ → ℝ)\n    {q : ℕ} (hq : q ∉ smallRoughModuli small rough) :\n    smallRoughRho small rough roughCoeff betaMinus betaPlus q = 0 := by\n  classical\n  unfold smallRoughRho\n  apply Finset.sum_eq_zero\n  intro x hx\n  rw [Finset.mem_filter] at hx\n  exfalso\n  exact hq (Finset.mem_image.mpr ⟨x, hx.1, hx.2⟩)\n"
+    },
+    {
+      "path": "ImbalancedChen/SignSensitiveAttachment.lean",
+      "sha256": "d34b8483983bf4243479bee70cd4bcd07fbf286abafe982021ca4625a3ab63bc",
+      "lines": [
+        103,
+        110
+      ],
+      "role": "signAttachedCoefficient = c * if c>=0 then betaPlus else betaMinus, so c=0 pays every added pair",
+      "literal_source_excerpt": "/-- One coefficient of the pair-indexed small/rough attachment. -/\ndef signAttachedCoefficient\n    (c betaMinus betaPlus : ℝ) : ℝ :=\n  c * if 0 ≤ c then betaPlus else betaMinus\n\n/-- Once the small and rough coefficients are separately one-bounded, every\ncoefficient in their sign-sensitive product is one-bounded.  The later\nunique-decomposition theorem may therefore transport this estimate to the"
+    },
+    {
+      "path": "ImbalancedChen/FixedRoughCoefficients.lean",
+      "sha256": "24bc451c0234f867cb85539b0d93d37e02c68e6f8d0bf6cf82f081e75e3d892b",
+      "lines": [
+        53,
+        68
+      ],
+      "role": "Literal fixed raw retained support and coefficient",
+      "literal_source_excerpt": "      oddFirstExitRetainedCoefficient retainOdd h₂ carrier d := by\n  unfold oddFirstExitRetainedCoefficient\n  rw [oddFirstExitRetainedModuli_independent retainOdd h₁ h₂ carrier]\n\n/-- The fixed rough support, before any integer is evaluated. -/\ndef fixedRoughSupport (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) : Finset ℕ :=\n  oddFirstExitRetainedModuli retainOdd (fun _ => 1) (roughPrimeUniverse N cap w z)\n\n/-- Möbius on the fixed retained support and zero off it. -/\ndef fixedRoughCoefficient (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (d : ℕ) : ℝ :=\n  (oddFirstExitRetainedCoefficient retainOdd (fun _ => 1)\n    (roughPrimeUniverse N cap w z) d : ℝ)\n\ntheorem fixedRoughSupport_squarefree\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) {d : ℕ}"
+    },
+    {
+      "path": "ImbalancedChen/FixedRoughCoefficients.lean",
+      "sha256": "24bc451c0234f867cb85539b0d93d37e02c68e6f8d0bf6cf82f081e75e3d892b",
+      "lines": [
+        91,
+        105
+      ],
+      "role": "Proved actual raw rough-prime support property",
+      "literal_source_excerpt": "  refine ⟨(fixedRoughSupport_squarefree retainOdd N cap w z hd).ne_zero, ?_⟩\n  intro p hp\n  exact mem_roughPrimeUniverse_lower\n    (fixedRoughSupport_primeFactors_mem retainOdd N cap w z hd hp)\n\ntheorem fixedRoughSupport_coprime_target\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) {d : ℕ}\n    (hd : d ∈ fixedRoughSupport retainOdd N cap w z) : d.Coprime N := by\n  rw [← Nat.prod_primeFactors_of_squarefree\n    (fixedRoughSupport_squarefree retainOdd N cap w z hd), Nat.coprime_prod_left_iff]\n  intro p hp\n  have hpc := fixedRoughSupport_primeFactors_mem retainOdd N cap w z hd hp\n  exact (mem_roughPrimeUniverse_prime hpc).coprime_iff_not_dvd.mpr\n    (mem_roughPrimeUniverse_not_dvd hpc)\n"
+    },
+    {
+      "path": "ImbalancedChen/RetainedModuli.lean",
+      "sha256": "ec5df61712426350f0a93f36501ce2f2ca4bf49c9ee13c611920342e67386274",
+      "lines": [
+        89,
+        105
+      ],
+      "role": "Möbius on actual retained support and exact coefficient zero outside",
+      "literal_source_excerpt": "/-- The integer coefficient attached to a natural modulus: Möbius on the\nretained support and zero outside it. -/\ndef oddFirstExitRetainedCoefficient\n    (retainOdd : List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (d : ℕ) : ℤ :=\n  if d ∈ oddFirstExitRetainedModuli retainOdd h carrier then\n    ArithmeticFunction.moebius d\n  else 0\n\n@[simp] theorem oddFirstExitRetainedCoefficient_eq_zero_of_not_mem\n    (retainOdd : List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (d : ℕ)\n    (hd : d ∉ oddFirstExitRetainedModuli retainOdd h carrier) :\n    oddFirstExitRetainedCoefficient retainOdd h carrier d = 0 := by\n  simp [oddFirstExitRetainedCoefficient, hd]\n\n/-- The retained unit modulus has coefficient `mu(1) = 1`. -/"
+    },
+    {
+      "path": "ImbalancedChen/PhysicalUpperWeightBridge.lean",
+      "sha256": "7c179a6733bd163f5b8e8410a718effa609baa8a10b64b266caa36bf656e77a3",
+      "lines": [
+        22,
+        27
+      ],
+      "role": "Literal physical divisor-sum definition",
+      "literal_source_excerpt": "open scoped BigOperators\n\n/-- The divisor sum of one finitely supported physical coefficient. -/\ndef physicalDivisorSum (Q : Finset ℕ) (rho : ℕ → ℝ) (n : ℕ) : ℝ :=\n  ∑ q ∈ Q, if q ∣ n then rho q else 0\n"
+    },
+    {
+      "path": "ImbalancedChen/PhysicalUpperWeightBridge.lean",
+      "sha256": "7c179a6733bd163f5b8e8410a718effa609baa8a10b64b266caa36bf656e77a3",
+      "lines": [
+        45,
+        50
+      ],
+      "role": "Literal physical reciprocal-totient density",
+      "literal_source_excerpt": "\n/-- The reciprocal-totient density of the displayed physical coefficient. -/\ndef physicalDensitySum (Q : Finset ℕ) (rho : ℕ → ℝ) : ℝ :=\n  ∑ q ∈ Q, rho q / (Nat.totient q : ℝ)\n\n/-- The exact price for replacing the modulus-dependent coprime source mass"
+    },
+    {
+      "path": "ImbalancedChen/RealHalfProductSource.lean",
+      "sha256": "0c3211cb72d8f27eb380f57fe5d751f8fc3179cb646c683c1449d450c71c55e7",
+      "lines": [
+        125,
+        146
+      ],
+      "role": "Actual arbitrary-real ordered source with inclusive product upper endpoint",
+      "literal_source_excerpt": "upper endpoint and literal strict power boundary. -/\ndef realHalfProductSource (b : ℝ) (N : ℕ) (T : ℝ) : Finset ℕ := by\n  classical\n  exact (Finset.range (N + 1)).filter fun m =>\n    T ≤ (m : ℝ) ∧ RealOrderedBadReceiver b m\n\n@[simp] theorem mem_realHalfProductSource {b T : ℝ} {N m : ℕ} :\n    m ∈ realHalfProductSource b N T ↔\n      m ≤ N ∧ T ≤ (m : ℝ) ∧ RealOrderedBadReceiver b m := by\n  classical\n  simp only [realHalfProductSource, Finset.mem_filter, Finset.mem_range,\n    Nat.lt_succ_iff]\n\ntheorem realHalfProductSource_pos {b T : ℝ} {N m : ℕ}\n    (hm : m ∈ realHalfProductSource b N T) : 0 < m := by\n  obtain ⟨_, _, r, q, hr, hq, hmul, _, _⟩ := mem_realHalfProductSource.mp hm\n  rw [hmul]\n  exact Nat.mul_pos hr.pos hq.pos\n\n/-- The retained actual receiver set is exactly the source filtered by the\noriginal additive-prime condition. -/\ntheorem retainedRealBadReceivers_eq_realHalfProductSource_filter"
+    },
+    {
+      "path": "ImbalancedChen/ActualUpperCommonCarrier.lean",
+      "sha256": "1f74775aaff610321d9bcbbd681dea9104dcfcc511fbdc85c0d435876133c8bd",
+      "lines": [
+        22,
+        63
+      ],
+      "role": "Actual downstream compiler target-density bound still charges coefficient error and invokes separate reserve; this core only supplies exact raw carrier identification",
+      "literal_source_excerpt": "\n/-- The proved compiler reserve now compares the compiled density on a\ncommon carrier with the literal raw density on its own retained support.\nThe coefficient-error mass is still charged on the whole common carrier,\nincluding compiler-only moduli. No sharp error estimate is assumed or\nasserted here, and the scale retains its exact factor `1 / nu`. -/\ntheorem exists_actualUpperCommonCarrier_target_density_difference_bound :\n    ∃ B : ℝ, 0 < B ∧ ∀ nu : ℝ, 0 < nu →\n      ∀ epsilon : ℝ, 0 < epsilon → epsilon < 1 / 8 →\n        ∃ N₀ : ℕ, 2 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → Even N →\n          ∀ cap : ℕ, (N : ℝ) ^ (nu * epsilon ^ 2) ≤ (cap : ℝ) →\n            ∀ (retainOdd : List ℕ → Bool) (z : ℝ) (rough : Finset ℕ),\n              fixedRoughSupport retainOdd N cap ((N : ℝ) ^ (nu * epsilon ^ 2)) z ⊆ rough →\n              (∀ d ∈ rough, RoughPrimeSupportedAt ((N : ℝ) ^ (nu * epsilon ^ 2)) d) →\n                ∀ compiled : ℕ → ℝ,\n                  let w := (N : ℝ) ^ (nu * epsilon ^ 2)\n                  let L := (N : ℝ) ^ (nu * epsilon)\n                  let raw := fixedRoughCoefficient retainOdd N cap w z\n                  |physicalDensitySum (smallRoughModuli (actualSmallRosserSupport N cap w) rough)\n                      (smallRoughRho (actualSmallRosserSupport N cap w) rough compiled\n                        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)) -\n                    physicalDensitySum (actualSmallRoughModuli retainOdd N cap w z)\n                      (actualSmallRoughRho retainOdd N cap w z L)| ≤\n                    ((B / (nu * epsilon ^ 2)) *\n                      reciprocalTotientDensity rough (fun d => |compiled d - raw d|)) *\n                        (singularSeries N / Real.log (N : ℝ)) := by\n  obtain ⟨B, hB, hsupply⟩ := exists_actualCompiledRho_target_density_difference_bound\n  refine ⟨B, hB, ?_⟩\n  intro nu hnu epsilon hepsilon hepsilon8\n  obtain ⟨N₀, hN₀, hsupply⟩ := hsupply nu hnu epsilon hepsilon hepsilon8\n  refine ⟨N₀, hN₀, ?_⟩\n  intro N hN hEven cap hcap retainOdd z rough hcover hrough compiled\n  have h := hsupply N hN hEven cap hcap rough hrough compiled\n    (fixedRoughCoefficient retainOdd N cap ((N : ℝ) ^ (nu * epsilon ^ 2)) z)\n  dsimp only at h ⊢\n  rw [actualSmallRoughRho_density_eq_on_common_carrier retainOdd N cap\n    ((N : ℝ) ^ (nu * epsilon ^ 2)) z ((N : ℝ) ^ (nu * epsilon)) rough hcover] at h\n  exact h\n\nend\n\nend ImbalancedChen"
+    }
+  ],
+  "literal_fixed_API_evidence": [
+    {
+      "path": "Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean",
+      "provider": "mathlib",
+      "file_sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "lines": [
+        185,
+        201
+      ],
+      "role": "Finset.sum_subset is the additive form of prod_subset: a subset plus exactly zero on added indices, with no sign condition",
+      "literal_fixed_source_excerpt": "    (∏ x ∈ s₂ \\ s₁, f x) * ∏ x ∈ s₁, f x = ∏ x ∈ s₂, f x := by\n  rw [← prod_union sdiff_disjoint, sdiff_union_of_subset h]\n\n@[to_additive]\ntheorem prod_subset_one_on_sdiff [DecidableEq ι] (h : s₁ ⊆ s₂) (hg : ∀ x ∈ s₂ \\ s₁, g x = 1)\n    (hfg : ∀ x ∈ s₁, f x = g x) : ∏ i ∈ s₁, f i = ∏ i ∈ s₂, g i := by\n  rw [← prod_sdiff h, prod_eq_one hg, one_mul]\n  exact prod_congr rfl hfg\n\n@[to_additive]\ntheorem prod_subset (h : s₁ ⊆ s₂) (hf : ∀ x ∈ s₂, x ∉ s₁ → f x = 1) :\n    ∏ x ∈ s₁, f x = ∏ x ∈ s₂, f x :=\n  haveI := Classical.decEq ι\n  prod_subset_one_on_sdiff h (by simpa) fun _ _ => rfl\n\n@[to_additive (attr := simp)]\ntheorem prod_disjSum (s : Finset ι) (t : Finset κ) (f : ι ⊕ κ → M) :"
+    },
+    {
+      "path": "Mathlib/Data/Finset/Prod.lean",
+      "provider": "mathlib",
+      "file_sha256": "185b6e0ce45995cd047b41a905c143c79971524b538cb8dda95346b290283a8c",
+      "lines": [
+        55,
+        65
+      ],
+      "role": "Finset.mem_product constructor/projections",
+      "literal_fixed_source_excerpt": "\n@[simp]\ntheorem product_val : (s ×ˢ t).1 = s.1 ×ˢ t.1 :=\n  rfl\n\n@[simp, grind =]\ntheorem mem_product {p : α × β} : p ∈ s ×ˢ t ↔ p.1 ∈ s ∧ p.2 ∈ t :=\n  Multiset.mem_product\n\ntheorem mk_mem_product (ha : a ∈ s) (hb : b ∈ t) : (a, b) ∈ s ×ˢ t :=\n  mem_product.2 ⟨ha, hb⟩"
+    },
+    {
+      "path": "Mathlib/Data/Finset/Image.lean",
+      "provider": "mathlib",
+      "file_sha256": "d7b7e2a714868a3998939bac8f909bbf5b6b0c6895a11fdb8891e39c3ebe326d",
+      "lines": [
+        288,
+        300
+      ],
+      "role": "Finset.mem_image and its equation orientation",
+      "literal_fixed_source_excerpt": "theorem image_empty (f : α → β) : (∅ : Finset α).image f = ∅ :=\n  rfl\n\nvariable {f g : α → β} {s : Finset α} {t : Finset β} {a : α} {b c : β}\n\n@[simp, grind =]\ntheorem mem_image : b ∈ s.image f ↔ ∃ a ∈ s, f a = b := by\n  simp only [mem_def, image_val, mem_dedup, Multiset.mem_map]\n\ntheorem mem_image_of_mem (f : α → β) {a} (h : a ∈ s) : f a ∈ s.image f :=\n  mem_image.2 ⟨_, h, rfl⟩\n\nlemma forall_mem_image {p : β → Prop} : (∀ y ∈ s.image f, p y) ↔ ∀ ⦃x⦄, x ∈ s → p (f x) := by simp"
+    },
+    {
+      "path": "Mathlib/Data/Finset/Filter.lean",
+      "provider": "mathlib",
+      "file_sha256": "c777e9b830557d7b4f903a0fa81c27bec2d89f546dd4ae146122f4bb4882a06d",
+      "lines": [
+        123,
+        130
+      ],
+      "role": "Finset.mem_filter iff membership and predicate",
+      "literal_fixed_source_excerpt": "\nvariable {p}\n\n@[simp, grind =]\ntheorem mem_filter {s : Finset α} {a : α} : a ∈ s.filter p ↔ a ∈ s ∧ p a :=\n  Multiset.mem_filter\n\ntheorem mem_of_mem_filter {s : Finset α} (x : α) (h : x ∈ s.filter p) : x ∈ s :="
+    }
+  ],
+  "exact_archived_config_pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "fresh_provider_HEAD_tracked_clean_checks": [
+    {
+      "name": "goldbach",
+      "manifest_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+      "actual_HEAD": "09b97db5764ade1246bfb77206baa1b124760958",
+      "git_diff_HEAD_tracked_exit_code": 0
+    },
+    {
+      "name": "mathlib",
+      "manifest_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "actual_HEAD": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "git_diff_HEAD_tracked_exit_code": 0
+    }
+  ],
+  "source_forbidden_or_option_hits": [],
+  "mathematical_boundary": {
+    "analytic_supplier_assumed_or_used_by_this_leaf": false,
+    "actual_hLower_or_hUpper_used_as_premise": false,
+    "finite_hypotheses": "Arbitrary raw subset rough plus off-raw coefficient zero in generic statements; actual specialization proves zero by the retained-tree definition. The explicit compiler support condition is finite rough-prime geometry only.",
+    "real_source_bridge_note": "RealHalfProductSource imports CurrentMainTheorem infrastructure, but the reviewed leaf uses only its literal finite carrier, not any main-theorem assumption or derived hLower/hUpper conclusion.",
+    "actual_target_connection": "ActualUpperCommonCarrier directly imports this leaf. Its compiler-density reserve theorem rewrites by this exact actual raw-density equality, preserving a separate explicit coefficient-error charge. Pointwise majorants, raw density, primitive correction and signed distribution error are tied to one unchanged raw physical rho.",
+    "not_proved": [
+      "No actual compiler coefficient-error smallness bound",
+      "No distribution estimate or signed Fourier payment",
+      "No final actual upper density budget or full hUpper/hLower"
+    ]
+  },
+  "findings": [],
+  "acceptance_boundary": {
+    "source_only": true,
+    "lean_lake_build_invoked": false,
+    "source_modified": false,
+    "objects_installed_or_rebound": false,
+    "foreign_bootstrap": false,
+    "old_reuse_objects_installed": false,
+    "pins_limits_or_imports_changed": false,
+    "whole_chain_or_foreign_closure_scanned": false,
+    "strict_or_owned_or_cache_acceptance": false,
+    "transitive_axiom_replay": false,
+    "note": "This is the explicitly requested ready-parent legacy source review only. Current object absence/source binding still requires the sole runtime owner and a concrete root gate; no compile/install of the eleven old reuse objects or wider chain is authorized or attempted."
+  }
+}

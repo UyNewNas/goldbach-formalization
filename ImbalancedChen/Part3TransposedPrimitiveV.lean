@@ -65,10 +65,16 @@ theorem actual_progressionRow_eq_grouped (d : MediumAtom) (m : ℕ) :
         (if (((m * n : ℕ) : ℤ) % (q : ℤ) = d.residue % (q : ℤ))
           then (1 : ℂ) else 0)) = progressionMass d m q := by
     rw [d.sum_transposedBeta_mul]
-    simp only [progressionMass, Int.ModEq, Nat.cast_mul, mul_ite, mul_one, mul_zero]
+    unfold progressionMass
     apply Finset.sum_congr rfl
     intro n _
-    split_ifs <;> rfl
+    by_cases hc : Int.ModEq q ((m : ℤ) * n) d.residue
+    · have hc' : (((m * n : ℕ) : ℤ) % (q : ℤ) = d.residue % (q : ℤ)) := by
+        simpa only [Int.ModEq, Nat.cast_mul] using hc
+      rw [if_pos hc', if_pos hc, mul_one]
+    · have hc' : ¬(((m * n : ℕ) : ℤ) % (q : ℤ) = d.residue % (q : ℤ)) := by
+        simpa only [Int.ModEq, Nat.cast_mul] using hc
+      rw [if_neg hc', if_neg hc, mul_zero]
   calc
     _ = ∑ a ∈ d.complexFactorLabels, d.complexFactorGamma a *
         ∑ n ∈ d.transposedAtom.betaCarrier, d.transposedAtom.beta n *
@@ -282,7 +288,9 @@ theorem mixedProgressionMass_sub_main_uniform_bound :
         calc
           _ ≤ ‖d.alpha n‖ * (C * (r.divisors.card : ℝ)) :=
             mul_le_mul_of_nonneg_left he (norm_nonneg _)
-          _ = _ := by ring
+          _ = _ := by
+            rw [if_pos hn]
+            ring
       · have hz : (∑ m ∈ d.transposedAtom.commonSmoothCarrier,
             if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue
               then d.transposedAtom.commonSmoothWeight m else 0 : ℝ) = 0 := by

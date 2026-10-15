@@ -59,7 +59,7 @@ private theorem absoluteRow_le_tauFour_of_not_dvd
       (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ) := by
   have hgood : (unitBetaAtom d).cleanedBeta n ≠ 0 := by
     change (if (n : ℤ) ∣ d.residue then (0 : ℂ) else 1) ≠ 0
-    simp only [if_neg hn, one_ne_zero]
+    simpa only [if_neg hn] using (one_ne_zero : (1 : ℂ) ≠ 0)
   exact (unitBetaAtom d).absoluteFactorModulusRow_le_tauFour
     (unitBetaAtom_admissible hd) m n hgood
 
@@ -360,7 +360,7 @@ theorem betaL2_mul_cleanedAlpha_largeNonzero_log_payment
     fun d hd hx ↦ ?_⟩
   have hxScale := one_le_scale hd
   have hx0 : 0 < d.scale := zero_lt_one.trans_le hxScale
-  have hlog : 1 ≤ Real.log d.scale := hx2 ((le_max_right x1 x2).trans
+  have hlog : 1 ≤ Real.log d.scale := hx2 d.scale ((le_max_right x1 x2).trans
     ((le_max_right 2 (max x1 x2)).trans hx))
   have hlog0 : 0 < Real.log d.scale := by linarith
   let Q : ℝ := D * Real.log d.scale
@@ -420,7 +420,7 @@ theorem betaL2_mul_cleanedAlpha_largeNonzero_log_payment
         rw [Real.rpow_add hlog0, Real.rpow_natCast]
         ring
       _ ≤ d.scale ^ (delta / 8) * d.scale ^ (3 * delta / 8) :=
-        mul_le_mul_of_nonneg_left (hx1 ((le_max_left x1 x2).trans
+        mul_le_mul_of_nonneg_left (hx1 d.scale ((le_max_left x1 x2).trans
           ((le_max_right 2 (max x1 x2)).trans hx))) (by positivity)
       _ = _ := by rw [← Real.rpow_add hx0,
         show delta / 8 + 3 * delta / 8 = delta / 2 by ring, one_mul]

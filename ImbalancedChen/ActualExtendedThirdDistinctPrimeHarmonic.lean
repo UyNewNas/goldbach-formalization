@@ -146,8 +146,10 @@ theorem tendsto_actualExtendedThirdDistinctCellPrimeSum {e h : ℝ} {m : ℕ}
         (actualExtendedThirdDyadic_bounds m j 2).2.2)
   have hab : h / 2 < thirdPrefixRho + 1 := by linarith
   let f := actualExtendedThirdCompactHarmonicProfile e h (actualExtendedThirdPhysicalLevel e m j)
-  have hf := (continuous_actualExtendedThirdCompactHarmonicProfile hh e
-    (actualExtendedThirdPhysicalLevel e m j)).continuousOn
+  have hf : ContinuousOn f
+      (Set.univ.pi (fun _ : Fin 3 => Set.Icc (h / 2) (thirdPrefixRho + 1))) :=
+    (continuous_actualExtendedThirdCompactHarmonicProfile hh e
+      (actualExtendedThirdPhysicalLevel e m j)).continuousOn
   have hsand := actualExtendedThirdDistinctCellPrimeRegion_sandwich hh hj
   have hlim := tendsto_actualPrimeBoxTestSum_cube_affineSandwich (half_pos hh) hab
     actualExtendedThirdCompactCellForms (actualExtendedThirdCompactCellBounds m j)

@@ -1,0 +1,38 @@
+{
+  "status": "SOURCE_ONLY_API_VISIBILITY_CORRECTION_NO_MATH_SOURCE_CHANGE",
+  "reviewer": "/root/dispersion_resume",
+  "reviewed_at_utc": "2026-10-15T22:05:52.343237+00:00",
+  "prior_report": ".lake\\proof-continuation\\source-reviews\\20261016-both-small-reciprocal-actual-parameter-audit.json",
+  "prior_sha256": "727deca541343c39a17030b2242a867525b902058df8c753a1485fb8066dcc74",
+  "source": "ImbalancedChen\\Part3CanonicalReciprocalPhase.lean",
+  "source_sha256": "212392dfcf1bec5da8ff92b40b16332f68c5b1644c39a5d24eddf7abb7ea76e5",
+  "private_complete_headers": [
+    {
+      "name": "productCRTResidue_phase_threeFactor",
+      "visibility": "private",
+      "line": 97,
+      "complete_header": "private theorem productCRTResidue_phase_threeFactor\n    {q r d d₁ D k₁ k₂ n₁ n₂ : ℕ}\n    (hd : 0 < d) (hd₁ : 0 < d₁) (hDpos : 0 < D)\n    (hk₁ : 0 < k₁) (hk₂ : 0 < k₂) (hn₁ : 0 < n₁)\n    (hL : q.lcm r = D * k₁ * k₂) (hk₁q : k₁ ∣ q) (hk₂r : k₂ ∣ r)\n    (hD : (k₁ * k₂).Coprime D)\n    (hD' : (n₁ * k₁ * k₂).Coprime (d * d₁ * D))\n    (hk : k₁.Coprime (n₁ * k₂)) (hn₂ : n₂.Coprime (n₁ * k₂))\n    (hc : ComplexCRT.Compatible q r (d * d₁ * n₁) (d * n₂)) (a : ℤ) :\n    let D' := d * d₁ * D\n    let b := ComplexCRT.residue q r (d * d₁ * n₁) (d * n₂) a\n    (((b : ℝ) / (q.lcm r) : ℝ) : UnitAddCircle) =\n      (((b : ℝ) * wPhaseInverse (k₁ * k₂) D / D -\n        (a : ℝ) * wPhaseInverse (n₁ * k₁ * k₂) D' / D' : ℝ) : UnitAddCircle) +\n      (((a : ℝ) / ((n₁ : ℝ) * k₁ * k₂ * D') : ℝ) : UnitAddCircle) +\n      (((a : ℝ) * ((d₁ : ℝ) * n₁ - n₂) *\n        wPhaseInverse (D' * n₂ * k₁) (n₁ * k₂) / ((n₁ : ℝ) * k₂) : ℝ) :\n          UnitAddCircle)"
+    },
+    {
+      "name": "circle_eq_threePhase",
+      "visibility": "private",
+      "line": 184,
+      "complete_header": "private theorem circle_eq_threePhase\n    {v : CanonicalReciprocalData.WGCDData} {q r N₁ N₂ : ℕ}\n    (hv : v.Valid q r N₁ N₂) (hc : ComplexCRT.Compatible q r N₁ N₂) (a : ℤ) :\n    (((ComplexCRT.residue q r N₁ N₂ a : ℝ) / (q.lcm r) : ℝ) : UnitAddCircle) =\n      rootPhase v (ComplexCRT.residue q r N₁ N₂ a) a + slowPhase v a +\n        reciprocalPhase v a"
+    },
+    {
+      "name": "fourier_add",
+      "visibility": "private",
+      "line": 199,
+      "complete_header": "private theorem fourier_add (h : ℤ) (x y : UnitAddCircle) :\n    fourier h (x + y) = fourier h x * fourier h y"
+    }
+  ],
+  "correction": "The prior exact_actual_dictionary.generic_API field incorrectly described circle_eq_threePhase as an available generic API. It is private. Its complete header was included verbatim in that report but the prose availability claim is withdrawn. Public actual atom wrappers require MediumAdmissible; applying them to the transposed atom is not authorized by original hd.",
+  "valid_route": "A new consumer must extract/reprove the purely finite private circle/three-congruence arithmetic under actual WGCDData.Valid+Compatible+positive indices, or prove a new equivalent public positive-data bridge. Do not use private mangled declaration names or manufacture transposedAdmissible; keep the accepted Phase immutable. The proof source is local and already audited, so no new foreign module is needed, but extraction is still new mathematical source work and has not been performed here.",
+  "unchanged_conclusions": [
+    "Actual denominator identity, generalized moving phase bound and 5kappa<=sigma/20 remain correct real-inequality analyses",
+    "Full frequency/floor tail route retains all integer h and actual labels",
+    "Complete C2 nu/level/WF gaps and u1/4,level29/50 scalar obstruction remain unchanged",
+    "This addendum does not claim actual strong distribution or any new owned object"
+  ],
+  "history": "Prior report bytes preserved exactly; this new filename supplies the correction."
+}
