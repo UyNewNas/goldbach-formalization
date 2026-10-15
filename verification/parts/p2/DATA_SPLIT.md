@@ -1,5 +1,11 @@
 # P2 lossless certificate-data split
 
+> Subsequent independent source increment: [STRIP_SPLIT.md](STRIP_SPLIT.md)
+> migrates the previously protected strip-check carrier to exact original-source
+> reconstruction plus deterministic core/leaf/wrapper protection. The43 current
+> generated sum/data/bridge Lean files remain byte-identical. The historical
+> scope and receipts described below are not upgraded by this source work.
+
 State: **WAITING_FOR_P0**. Request: **REQUESTED**. Verification: **SOURCE_ONLY**.
 Input commit: `d41a7bc48b7066cd95c2a9e143a13e494d44b284`.
 

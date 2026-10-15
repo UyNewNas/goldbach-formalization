@@ -64,8 +64,18 @@ def parse_definitions(raw: bytes):
 def sources_and_report():
     original = git_input(DATA)
     assert sha(original) == PINS[DATA]
+    strip_protection = None
     for path in PROTECTED:
-        assert (ROOT / path).read_bytes() == git_input(path), f"protected input changed: {path}"
+        if path == CERT + "PairedV2StripCertificates.lean":
+            # Preserve the original source protection jointly: each old declaration,
+            # whole-file reconstruction, and exact new core/leaves/wrapper.
+            import sys
+            sys.dont_write_bytecode = True
+            from split_paired_v2_strip_certificates import verify_current_sources
+            strip_protection = verify_current_sources(expected_original=git_input(path))
+        else:
+            assert (ROOT / path).read_bytes() == git_input(path), f"protected input changed: {path}"
+    assert strip_protection is not None
     for path, expected in PINS.items():
         raw = original if path == DATA else (ROOT / path).read_bytes()
         assert sha(raw) == expected, f"frozen input changed: {path}"
@@ -262,7 +272,9 @@ def sources_and_report():
         "baseline_commit": BASE, "static_scope": "Byte-identical named declarations, literal tuple order and values, complete provenance-grid coverage, unchanged selectors and protected sources. No Lean/kernel acceptance.",
         "original_data_sha256": sha(original), "reconstructed_original_data_sha256": sha(prefix + b"".join(d for _, d, _ in defs) + suffix),
         "original_selector_and_approximation_suffix_sha256": sha(suffix),
-        "unchanged_files": {p: sha((ROOT / p).read_bytes()) for p in PROTECTED},
+        "unchanged_files": {p: sha((ROOT / p).read_bytes()) for p in PROTECTED
+                            if p != CERT + "PairedV2StripCertificates.lean"},
+        "strip_certificate_joint_protection": strip_protection,
         "old_sum_declaration_types_and_numerals_preserved_byte_for_byte": True,
         "sum_proof_control_flow_repair": "Remove26 original trailing decide +kernel lines. Retain all24 accepted block-total rewrites and186 strip decision proofs; the2 final-total rewrites now use (rw [...]; rfl) to close only the twelve-scalar Nat addition goals.",
         "generic_row_proof_repair": "Add explicit cons-case Fin (xs.length + 1) shape before original rewrite; emitted source hash pinned to P0 strict/replay success.",

@@ -1,5 +1,12 @@
 # P2 current source-only handoff
 
+The independently authorized strip-check split is described in
+[STRIP_SPLIT.md](STRIP_SPLIT.md). Its14 new/changed Lean files preserve all186
+original checks and use bounded Fin.addCases composition. All43 existing
+data/sum/bridge generated sources remain byte-identical, without promoting their
+individual acceptance levels. Run both current producers with --check as listed
+there; neither command executes Lean or any checker.
+
 The current memory-failure repair is the lossless data split described in
 [DATA_SPLIT.md](DATA_SPLIT.md). Use `split_paired_v2_certificate_data.py --check`
 for the current frozen candidate. The prior candidate notes and producer below
