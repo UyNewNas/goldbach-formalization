@@ -1,40 +1,40 @@
-# P2 handoff: remove redundant total-proof endings
+# P2 handoff: bounded layered length and Row assembly
 
 State: WAITING_FOR_P0. Request: REQUESTED. Verification: SOURCE_ONLY.
 
-- Request: automation/parts/p2/requests/20261015T025800Z-redundant-total-tactics.json
-- Immutable run: automation/parts/p2/runs/20261015T025800Z-redundant-total-tactics.json
+- Request: automation/parts/p2/requests/20261015T033500Z-layered-length-assembly.json
+- Immutable run: automation/parts/p2/runs/20261015T033500Z-layered-length-assembly.json
 - Worktree: /workspace/shared/chen-coordination/p2-data-split
-- Changed files: 13 Lean + 2 generators + 2 current reports + 1 explanation
-- Effective 36-file snapshot SHA-256: aa28da285df64b0f11f169aed73efd1f5b5553843a1d5687e1be11fab45bdc24
-- Patch: automation/parts/p2/runs/20261015T025800Z-redundant-total-tactics.patch
-- Patch SHA-256: 7c5a19f47b7955402ea0ce96f939dc0abd1eab337f23cb782c0bdc26da15dfe4
-- Exact 26-place map: automation/parts/p2/runs/20261015T025800Z-redundant-total-tactics-removals.json
-- Source dependency fingerprint: 6cb56ac9c542dd3c2ecce6113bb056ea4958a22a9a3ccda15b27c3dae3a65c1c
+- Changed: 15 new Lean bridges, 2 existing Lean consumers, 2 generators, 2 current reports, 1 explanation.
+- Effective 51-file snapshot SHA-256: bf31f98240a1f0e3e1be9c8c457493f87ba3914d84a94ef28e742c0099f74bd0
+- Patch: automation/parts/p2/runs/20261015T033500Z-layered-length-assembly.patch
+- Patch SHA-256: a36c25969c05957019e99e41b2aad9447772be7266cda7e79f713a24c720c771
+- Static evidence: automation/parts/p2/runs/20261015T033500Z-layered-length-assembly-static.json
+- Static evidence SHA-256: 261af49d3f37256e5961ebdcec38980d4e7c99f36b4938a55203b69737a5b5f0
+- Dependency fingerprint: 442a3882867b7ae0a0f87f70f861dd54060995fed655bc8902c331b156ee9f9e
 
-P0 run 38673067254 strictly compiled and replayed Rows, and compiled DataBlock11.
-Block11 then reported only No goals to be solved at lines 74 and 80, the trailing
-decide tactics after successful rw steps. Block10 was not reached. This is neither
-a new data-memory failure nor a full P2 success. Exact receipts/logs are bound
-in the request, including their limited scope.
+Run38675247085 accepted ten remaining numerical blocks; with prior Block10/11,
+all12 numerical blocks passed. FullData strict compile and replay succeeded.
+RowAssembly failed at the186-deep Fin.cases proof (kernel memory) plus two
+independent type/list tactics. The exact archive, receipts and log are hash-bound
+in the request. No full P2 acceptance is inferred.
 
-The repair removes exactly 26 redundant decide +kernel lines: 24 from twelve
-block totals and two from the final totals. All 412 declaration heads in the 13
-changed Lean files, every numeric token, all 186 strip decision proofs, data,
-length facts, statements and premises are unchanged. The already-passed Rows
-source remains 56eebe1e99f8dd6d79da3c49d0bcfb39fcc28f4c2468fdff8446a5876314cfbf.
+The new graph replaces dependent cases with12 small length-list proofs using
+existing strip facts, one scalar firstU length table, the original partition
+moved verbatim, and symbolic map/flatten assembly followed by ofFn injectivity.
+The actual Row and selectors/data remain unchanged. No length hypothesis is
+added. Two Row/List transport tactics are repaired at the fixed API.
 
-The active split generator now incorporates the already-passed Rows repair
-and these precise total-proof deletions. Deterministic regeneration and --check
-pass against the actual current files; no external Rows overlay is needed. The
-legacy monolithic generator receives the same minimal template corrections but
-is not run over this split layout. Its old result manifests remain historical.
+All26 already-passed sources remain byte-identical. The seven original statement
+headers are unchanged and unique. Both final sum proofs are byte-identical.
+The deterministic active producer emits43 sources and both current reports;
+--check, static values/maps,52-node acyclic closure, Python ASTs, whitespace and
+reverse patch checks passed. No external Rows overlay is required.
 
-Static diff, exact declarations/numerals/data comparisons, generator checks and
-patch reverse-apply check passed. P2 ran no Lean/Lake/checker/audit/CI or push.
-The corrected blocks and final assembly remain SOURCE_ONLY. All pending strict,
-replay, complete inventory/type/axiom and imported-object gates remain required.
-
-Next: await P0's selected retry after its P5 slot. No new analytic layer or
-additional unverified proof changes. K/80 scope and all actual integral/common-
-policy/Buchstab/hLower/hUpper gaps remain as before.
+No Lean/Lake/checker/audit/CI/push was run by P2. All new bridge proofs remain
+SOURCE_ONLY. P0 alone checks ExpectedLengths and LengthsBlock11/10 first, then
+remaining10 length modules, Partition, Lengths, RowAssembly and NaturalSums,
+including moved defining-module inventories and exact imported-object binding.
+The partition proof and aggregate memory are untested risks at fixed4096MB.
+K/80 finite numerator scope is unchanged; actual integrals, full budgets and
+hLower/hUpper remain open. Candidate now frozen; await P0's actual diagnostic.

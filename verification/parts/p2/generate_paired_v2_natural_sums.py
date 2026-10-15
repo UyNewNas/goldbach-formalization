@@ -69,14 +69,16 @@ theorem strip_sum_eq_map (i : Fin 186) (f : Approximation → ℕ) :
       ((approximations i).map f).sum := by
   change (∑ j : Fin (512 - firstU i),
     f ((approximations i).getD j.val default)) = _
-  simpa only [approximation_lengths i] using sum_getD_eq_map (approximations i) f
+  rw [← approximation_lengths i]
+  exact sum_getD_eq_map (approximations i) f
 
 theorem sum_rows_eq_list (f : Approximation → ℕ) :
     (∑ r : Row, f (approximation r)) =
       ((List.ofFn approximations).map (fun xs => (xs.map f).sum)).sum := by
   rw [Fintype.sum_sigma]
   simp_rw [strip_sum_eq_map]
-  rw [← List.sum_ofFn, List.ofFn_comp']
+  rw [← List.sum_ofFn,
+    List.ofFn_comp' approximations (fun xs => (xs.map f).sum)]
 
 end ImbalancedChen.Certificates.PairedV2.FullMask.NaturalSums
 """

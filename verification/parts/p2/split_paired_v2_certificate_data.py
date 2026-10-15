@@ -170,14 +170,21 @@ def sources_and_report():
     # Exact already-compiled/replayed Rows source from P0 run 38673067254.
     assert sha(sources[rows_name]) == "56eebe1e99f8dd6d79da3c49d0bcfb39fcc28f4c2468fdff8446a5876314cfbf"
     assembly_name = CERT + "PairedV2NaturalSumRowAssembly.lean"
-    assembly_imports = [module(rows_name), module(DATA)] + [module(CERT + f"PairedV2NaturalSumsBlock{b:02}.lean") for b in range(12)]
+    lengths_name = CERT + "PairedV2NaturalSumLengths.lean"
+    partition_name = CERT + "PairedV2NaturalSumPartition.lean"
+    expected_name = CERT + "PairedV2NaturalSumExpectedLengths.lean"
+    assembly_imports = [module(rows_name), module(lengths_name)]
     length_type = old_rows[declarations_start:generic_start].split(b" := by\n", 1)[0]
-    length_proof = length_type + b" :=\n"
-    length_proof += b"  Fin.cases (motive := fun i : Fin 186 =>\n    (approximations i).length = 512 - firstU i) strip326_length (\n"
-    for k in range(327, 512):
-        length_proof += f"  Fin.cases strip{k}_length (\n".encode()
-    length_proof += b"    fun i : Fin 0 => Fin.elim0 i" + b")" * 186 + b"\n\n"
-    sources[assembly_name] = ("\n".join(f"import {m}" for m in assembly_imports) + "\n\n/-! Original Row/list interface, assembled from per-strip kernel length facts.\nThe Fin.cases proof selects those facts; it does not decide all row data. -/\n\n").encode() + options + length_proof + assembly_rest
+    old_transport = b"  simpa only [approximation_lengths i] using sum_getD_eq_map (approximations i) f\n"
+    new_transport = b"  rw [\xe2\x86\x90 approximation_lengths i]\n  exact sum_getD_eq_map (approximations i) f\n"
+    assert assembly_rest.count(old_transport) == 1
+    assembly_rest = assembly_rest.replace(old_transport, new_transport, 1)
+    old_ofFn = "  rw [← List.sum_ofFn, List.ofFn_comp']\n".encode()
+    new_ofFn = ("  rw [← List.sum_ofFn,\n"
+                "    List.ofFn_comp' approximations (fun xs => (xs.map f).sum)]\n").encode()
+    assert assembly_rest.count(old_ofFn) == 1
+    assembly_rest = assembly_rest.replace(old_ofFn, new_ofFn, 1)
+    sources[assembly_name] = ("\n".join(f"import {m}" for m in assembly_imports) + "\n\n/-! Original Row/list statements using the separately assembled length theorem.\nNo dependent 186-case proof or full-witness length reduction occurs here. -/\n\n").encode() + options + assembly_rest
     main_name = CERT + "PairedV2NaturalSums.lean"
     old_main = git_input(main_name)
     repaired_main = old_main
@@ -187,8 +194,57 @@ def sources_and_report():
         assert repaired_main.count(redundant) == 1
         repaired_main = repaired_main.replace(redundant, rewrite, 1)
     assert re.findall(rb"\d+", repaired_main) == re.findall(rb"\d+", old_main)
+    partition_start = repaired_main.index(b"/-- All 186 strips in their original order")
+    partition_stop = repaired_main.index(b"/-- Exact numerator sum over every `FullMask.Row`")
+    partition_body = repaired_main[partition_start:partition_stop]
+    partition_imports = [module(DATA), "Mathlib.Data.List.OfFn"] + [module(CERT + f"PairedV2NaturalSumsBlock{b:02}.lean") for b in range(12)]
+    sources[partition_name] = ("\n".join(f"import {m}" for m in partition_imports) + "\n\n/-! Original ordered partition, moved verbatim before the length/Row bridges. -/\n\n").encode() + options + partition_body + f"end {SUM_NS}\n".encode()
+    repaired_main = repaired_main[:partition_start] + repaired_main[partition_stop:]
     sources[main_name] = repaired_main.replace(f"import {module(rows_name)}\n".encode(), f"import {module(assembly_name)}\n".encode(), 1)
     assert old_main != sources[main_name]
+
+    expected = "[" + ", ".join(str(s["row_count"]) for s in strip_manifest) + "]"
+    expected_body = ("/-- The unchanged firstU selector's 186 small natural row counts. -/\n"
+                     "def expectedLengths : List ℕ :=\n  " + expected + "\n\n"
+                     "theorem firstU_lengths_list :\n"
+                     "    List.ofFn (fun i : Fin 186 => 512 - firstU i) = expectedLengths := by\n"
+                     "  rfl\n\n")
+    sources[expected_name] = (f"import {module(MASK)}\nimport Mathlib.Data.List.OfFn\n\n"
+                             "/-! Small scalar-selector certificate; no full certificate-data leaf. -/\n\n").encode() + options + expected_body.encode() + f"end {SUM_NS}\n".encode()
+    length_block_names = []
+    for b, group in enumerate(groups):
+        path = CERT + f"PairedV2NaturalSumLengthsBlock{b:02}.lean"
+        length_block_names.append(path)
+        entries = strip_manifest[b * 16:b * 16 + len(group)]
+        values = "[" + ", ".join(str(s["row_count"]) for s in entries) + "]"
+        symbolic = "[" + ", ".join(f"approximations{k}.length" for k, _, _ in group) + "]"
+        proof = (f"theorem block{b:02}_lengths :\n"
+                 f"    block{b:02}.map List.length = {values} := by\n"
+                 f"  change {symbolic} = _\n"
+                 "  rw [" + ", ".join(f"strip{k}_length" for k, _, _ in group) + "]\n\n")
+        sources[path] = (f"import {module(CERT + f'PairedV2NaturalSumsBlock{b:02}.lean')}\n\n"
+                         "/-! Reuse the accepted strip length facts, at most sixteen per module. -/\n\n").encode() + options + proof.encode() + f"end {SUM_NS}\n".encode()
+    length_imports = [module(partition_name), module(expected_name)] + [module(p) for p in length_block_names]
+    symbolic_append = " ++ (".join(f"block{b:02}.map List.length" for b in range(12)) + " ++ []" + ")" * 11
+    blocks_proof = ("theorem blocks_lengths : blocks.flatten.map List.length = expectedLengths := by\n"
+                    "  calc\n"
+                    f"    blocks.flatten.map List.length = {symbolic_append} := by\n"
+                    "      simp only [blocks, List.flatten_cons, List.flatten_nil,\n"
+                    "        List.map_append, List.map_nil]\n"
+                    "    _ = expectedLengths := by\n"
+                    "      rw [" + ", ".join(f"block{b:02}_lengths" for b in range(12)) + "]\n\n")
+    length_proof = length_type + b" := by\n" + (
+        "  have hlist :\n"
+        "      (List.ofFn approximations).map List.length =\n"
+        "        List.ofFn (fun i : Fin 186 => 512 - firstU i) :=\n"
+        "    (congrArg (List.map List.length) approximations_partition).trans\n"
+        "      (blocks_lengths.trans firstU_lengths_list.symm)\n"
+        "  have hfn : (fun i : Fin 186 => (approximations i).length) =\n"
+        "      (fun i : Fin 186 => 512 - firstU i) :=\n"
+        "    List.ofFn_injective\n"
+        "      ((List.ofFn_comp' approximations List.length).trans hlist)\n"
+        "  exact fun i => congrFun hfn i\n\n").encode()
+    sources[lengths_name] = ("\n".join(f"import {m}" for m in length_imports) + "\n\n/-! Layered length assembly over symbolic blocks and small Nat tables.\nNo monolithic dependent cases and no whole-data numerical decision. -/\n\n").encode() + options + blocks_proof.encode() + length_proof + f"end {SUM_NS}\n".encode()
 
     assert len(seen) == len(set(seen)) == 17572 and set(seen) == set(pairs)
     assert sum(s["E0_rows"] for s in strip_manifest) == 6091
@@ -209,8 +265,10 @@ def sources_and_report():
         "old_sum_declaration_types_and_numerals_preserved_byte_for_byte": True,
         "sum_proof_control_flow_repair": "Only remove26 redundant decide +kernel lines after closing rw steps:24 across12 block totals and2 in final totals. Retain all186 strip decision proofs.",
         "generic_row_proof_repair": "Add explicit cons-case Fin (xs.length + 1) shape before original rewrite; emitted source hash pinned to P0 strict/replay success.",
-        "original_strip_and_full_row_list_bridge_bodies_preserved_byte_for_byte": True,
-        "new_length_proofs": {"individual_rfl_facts": 186, "finite_cases_assembly": True, "new_hypotheses": []},
+        "original_row_list_bridge_types_preserved_byte_for_byte": True,
+        "row_list_proof_repairs": "Reverse rewrite the dependent Fin length before the unchanged generic theorem; explicitly specialize ofFn_comp' to the complete row-sum function.",
+        "original_partition_declarations_moved_verbatim": ["blocks", "approximations_partition"],
+        "new_length_proofs": {"unchanged_individual_rfl_facts": 186, "small_length_blocks": 12, "max_facts_per_length_block": 16, "scalar_firstU_table_size": 186, "finite_cases_assembly": False, "proof": "Exact original partition; symbolic append/map; twelve kernel length-list equalities; ofFn_comp', ofFn_injective, congrFun.", "new_hypotheses": []},
         "coverage": {"strips": 186, "rows": 17572, "E0": 6091, "E1": 11481,
                      "ordered_strip_range": [326, 511], "exact_once_pairs": True, "data_leaves": 12,
                      "max_strips_per_leaf": 16, "max_rows_per_strip": 191,

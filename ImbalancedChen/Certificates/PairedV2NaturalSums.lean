@@ -26,14 +26,6 @@ set_option maxRecDepth 100000
 set_option maxHeartbeats 0
 
 
-/-- All 186 strips in their original order, grouped only for proof assembly. -/
-def blocks : List (List (List Approximation)) :=
-  [block00, block01, block02, block03, block04, block05, block06, block07, block08, block09, block10, block11]
-
-/-- Definitional identity, with no numerical or source-ordinal sampling. -/
-theorem approximations_partition : List.ofFn approximations = blocks.flatten := by
-  rfl
-
 /-- Exact numerator sum over every `FullMask.Row`, at the unchanged 10^20 scale. -/
 theorem lower_numerator_sum :
     (∑ r : Row, (approximation r).lower) = 55858378943374979 := by

@@ -3,6 +3,24 @@
 State: **WAITING_FOR_P0**. Request: **REQUESTED**. Verification: **SOURCE_ONLY**.
 Input commit: `d41a7bc48b7066cd95c2a9e143a13e494d44b284`.
 
+## Current length/coverage assembly repair
+
+P0 run `38675247085`, source `f5a53bd7306c9fd640e9ac16cb9d7fca17f80278`,
+accepted the ten remaining numerical blocks under its full leaf gates. Together
+with its earlier Block10/11 receipts, all twelve numerical blocks are covered.
+The same run strictly compiled and replayed the compatibility FullData entry.
+Its next target, RowAssembly, failed with kernel memory consumption in the
+186-deep dependent Fin.cases proof and two separate row/list tactic diagnostics.
+The original archive SHA-256 is
+`cbb800d620990f72e53d9442019b261de0d44bdb9ca440c0b78884c1bbb548a4`.
+
+The current candidate leaves all 26 already-passed carrier/numerical/Rows source
+files unchanged and replaces only the unaccepted length/coverage assembly.
+Fifteen new small modules provide a scalar firstU length table, twelve block
+length tables, the original partition declarations, and a layered length proof.
+The actual Row, approximation selector, data and all existing statement types
+remain unchanged. New bridge compilation and full acceptance are still unpaid.
+
 ## Subsequent diagnostic-driven proof repairs
 
 P0 run `38673067254`, source `dbf27664c27e22f97dda5c2e74fc7555d46ab92d`,
@@ -19,8 +37,8 @@ decision proofs, every declaration type, all numerals and data, the rewrites,
 all length proofs and the already-passed Rows file. The current split producer
 incorporates both this control-flow repair and the earlier two-line Rows shape
 repair, so regeneration no longer needs an external Rows overlay. Its `--check`
-verifies the actual corrected source hashes. Corrected blocks and final assembly
-remain SOURCE_ONLY until P0 runs their gates; no success is inferred for them.
+verifies the actual corrected source hashes. Those numerical blocks subsequently
+passed as recorded above; the new bridge and final assembly remain SOURCE_ONLY.
 
 ## Concrete failure addressed
 
@@ -67,12 +85,26 @@ two-line cons-domain shape repair. It imports `FullChecker` instead of the
 full certificate data. Its closure excludes FullCertificateData and the twelve
 large data leaves; existing small mask/geometry data dependencies remain.
 
-Each numerical block now also proposes a separate `stripN_length` theorem:
+Each numerical block provides a separate `stripN_length` theorem:
 the original literal list length equals `512 - firstU` at its original Fin 186
-ordinal, proved by `rfl`. Each fact reduces just one list spine. A new
-`PairedV2NaturalSumRowAssembly` combines all 186 facts using the actual
-dependent `Fin.cases` eliminator, ending in `fun i : Fin 0 => Fin.elim0 i`.
-It does not run a monolithic `decide` over all 17,572 rows.
+ordinal, proved by `rfl`. These existing facts and their source bytes are retained.
+The failed dependent Fin.cases assembly is removed. Its replacement is:
+
+1. `PairedV2NaturalSumExpectedLengths` proves the original firstU selector gives
+   the exact 186-entry Nat table. It imports no full certificate-data leaf.
+2. `PairedV2NaturalSumLengthsBlock00` through `11` each import only their
+   corresponding passed numerical block and assemble at most sixteen existing
+   strip length facts into a literal Nat list equality.
+3. `PairedV2NaturalSumPartition` carries the original `blocks` definition and
+   `approximations_partition` theorem, moved verbatim to avoid import cycles.
+4. `PairedV2NaturalSumLengths` first proves the flatten/map structure with twelve
+   symbolic block-length lists, then rewrites those twelve lists to pure Nat
+   tables. It composes the original partition using `congrArg`, equality `trans`,
+   explicit `List.ofFn_comp'`, `List.ofFn_injective` and `congrFun`.
+
+No global rewrite is asked to reflexively reduce all 17,572 witness lengths.
+No list-length hypothesis is added. Python tables remain untrusted until the
+displayed kernel proofs and complete P0 gates succeed.
 
 The exact full theorem type is retained:
 
@@ -81,11 +113,12 @@ approximation_lengths : ∀ i : Fin 186,
   (approximations i).length = 512 - firstU i
 ```
 
-The existing `strip_sum_eq_map` and `sum_rows_eq_list` statements/proofs move
-verbatim into that assembly. Their names remain unchanged. The final
-`PairedV2NaturalSums` import is redirected to it; `approximations_partition`
-remains unchanged, while its two total proofs lose only the redundant trailing
-tactic. This is a source candidate for
+The existing `strip_sum_eq_map` and `sum_rows_eq_list` statements and names
+remain unchanged. Their proofs now reverse-rewrite the Fin bound before applying
+the already-passed generic theorem, and explicitly pass the complete composite
+row-sum function to `List.ofFn_comp'`, respectively. The final sum proofs are
+unchanged from the previous corrected candidate. The original partition has
+only moved modules. This is a source candidate for
 the actual kernel bridge. P0 must check it; source or Python equality alone
 does not establish the bridge.
 
@@ -109,12 +142,12 @@ discharged by this increment.
 python3 verification/parts/p2/split_paired_v2_certificate_data.py --check
 ```
 
-Without `--check`, this deterministic static producer regenerates the 28
+Without `--check`, this deterministic static producer regenerates the 43
 selected Lean sources and two reports from the frozen Git input. It uses only
 Python and `git show`, never Lean or any checker. It verifies protected bytes,
 declaration and tuple identity, once-only E0/E1 provenance coverage, preservation
 of strip proofs and the exact total-proof repair, source dependency hashes, and that each sum block
-reaches exactly one data leaf. Its reported project closure has 37 modules plus
+reaches exactly one data leaf. Its reported project closure has 52 modules plus
 10 external Mathlib import-frontier modules. External recursive object binding
 is deliberately unpaid; pinned package revisions are recorded.
 
@@ -124,33 +157,36 @@ receive the same minimal corrections so it cannot regenerate these known
 tactic bugs. Do not run that older producer over this split candidate. Its two
 original manifests and `data-split-static-review.json` remain historical records
 of the earlier frozen candidates; the current split manifests and latest P0
-request identify the corrected sources and the exact 26-line removal map.
+request identify the corrected sources, earlier 26-line removal map and current
+unconditional length/coverage proof graph. The legacy producer remains a
+historical monolithic layout; it is not used to reproduce the new bridge.
 
-The dependent eliminator design was checked against Lean `v4.33.0-rc1`:
+The current APIs were checked at fixed Mathlib revision
+`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`:
 
-- [Fin.cases](https://raw.githubusercontent.com/leanprover/lean4/v4.33.0-rc1/src/Init/Data/Fin/Lemmas.lean)
-  has motive `Fin (n+1) → Sort _`, a zero case and a dependent successor case.
-- [Fin.elim0](https://raw.githubusercontent.com/leanprover/lean4/v4.33.0-rc1/src/Init/Data/Fin/Basic.lean)
-  has type `Fin 0 → α`; the explicit terminal lambda is needed for the dependent
-  motive. The frozen goldbach `MixedEtaGeometry.lean` uses this same pattern.
+- [List.OfFn](https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/Data/List/OfFn.lean)
+  provides `ofFn_comp' (f) (g)` in the function-composition-to-map direction and
+  `ofFn_injective` for functions on the same Fin domain.
+- [BigOperators.Fin](https://github.com/leanprover-community/mathlib4/blob/e4c91783ca8e6a7c693ae624ade32fd22d4e43c1/Mathlib/Algebra/BigOperators/Fin.lean)
+  provides `List.sum_ofFn`, used with the complete row-sum function.
 
 These are API/source checks. They do not supply compilation, same-object replay,
 complete declaration/type export or transitive-axiom/import-object acceptance.
 
 ## P0 acceptance order and stop conditions
 
-1. Compile the light `PairedV2NaturalSumRows`, then `PairedV2NaturalSumsBlock11`
-   (longest strip) and `PairedV2NaturalSumsBlock10` (largest data leaf), under the
+1. Reuse exact already-passed source/object bindings under P0's existing rules.
+   Check ExpectedLengths, LengthsBlock11 and LengthsBlock10 first under the
    existing single-heavy-slot `-j2 -M4096` policy. Stop on an actual diagnostic.
-2. If those pass, compile every remaining block 00–09, the compatibility data
-   selector, `PairedV2NaturalSumRowAssembly`, and `PairedV2NaturalSums`. No strip
-   or budget may be skipped; passing the pilot is not global completion.
+2. Check the remaining ten length-list modules, then Partition, Lengths,
+   RowAssembly and NaturalSums. Every strip and every block remains required.
+   A scalar-table or one-block success is not global completion.
 3. Bind the exact moved defining-module declarations and all imported objects,
    obtain required strict/type/inventory/axiom/replay gates, and let P0 record
    acceptance. Existing compatible compiled prerequisites may be reused only
    under P0's exact fingerprint/object rules.
 
-The 186-deep elaboration, old row/list tactics and aggregate import memory
-remain genuine untested risks. Preserve the first exact failure and stop for
+The new partition/length/list proofs and aggregate import memory remain
+genuine untested risks. Preserve the first exact failure and stop for
 diagnosis rather than changing limits, pins, constants, witnesses or trust.
 This round ends at the frozen REQUESTED handoff; no new analytic layer is added.
