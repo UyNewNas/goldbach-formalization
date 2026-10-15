@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T20:32:40.355087+00:00",
+  "reviewer": "/root/primitive_center",
+  "status": "SOURCE_ONLY_SELF_REVIEW_ACTUAL_TRANSPOSED_V_AND_UV_LOG_PAYMENT",
+  "candidate": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3TransposedPrimitiveVPayment.lean",
+    "sha256": "6ed4c389c3338dd898043d2bbe5b34c7a914b38817b0307341ff4fb3c98ad0b1",
+    "source_declaration_count": 3
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedPrimitiveVMoment",
+    "ImbalancedChen.Part3TransposedPrimitiveUPayment"
+  ],
+  "direct_dependency_snapshots": [
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveVMoment",
+      "sha256": "ba56d4bb9fc697e9cec44866e1db053c037b583acb2bb9633c0918e90c2da867"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "sha256": "9ecef420fe8a489d392a46561840d03117f2b218b53d70d81bd28f3ed0b86d7d"
+    }
+  ],
+  "all_complete_source_headers": [
+    {
+      "name": "actual_betaL2_mul_V_error_power_bound",
+      "kind": "theorem",
+      "private": false,
+      "line": 28,
+      "complete_source_header": "theorem actual_betaL2_mul_V_error_power_bound (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            C * d.scale ^ (2 - 8 * sigma)"
+    },
+    {
+      "name": "actual_betaL2_mul_V_error_log_payment",
+      "kind": "theorem",
+      "private": false,
+      "line": 65,
+      "complete_source_header": "theorem actual_betaL2_mul_V_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A"
+    },
+    {
+      "name": "actual_betaL2_mul_UV_error_log_payment",
+      "kind": "theorem",
+      "private": false,
+      "line": 84,
+      "complete_source_header": "theorem actual_betaL2_mul_UV_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ +\n          2 * ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n            d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖) ≤\n              3 * (d.scale ^ 2 / (Real.log d.scale) ^ A)"
+    }
+  ],
+  "definition_count": 0,
+  "semantic_review": {
+    "scope": "Fixed original B,sigma,kappa,c0,A before every actual atom, with sigma>0 from the existing RestrictedMediumObligation gate.",
+    "honest_V_cost": "Original-alpha two masses cost U^2; no U factor is removed.",
+    "power_payment": [
+      "Actual original-beta L2 times V-P0 <= C VU^2 cap Lbeta^eB Lcap^14",
+      "VU^2 cap = X*(Ucap)",
+      "Owned Ucap<=8X^(1-9sigma), with its actual constant 8 retained",
+      "Generic proved actual log cost <=X^sigma",
+      "Thus <=8C X^(2-8sigma), a paid power gap 8sigma>0",
+      "Proved little-o log absorption pays X^2/logX^A with a single threshold before all atoms"
+    ],
+    "combined_UV_endpoint": "betaL2*(norm(literalU-P0)+2*norm(literalV-P0)) <=3*(X^2/logX^A), with both primitive centers and every original carrier retained.",
+    "no_extra_budget_coefficient_or_geometry_premise": true,
+    "no_restricted_domain_or_mass_substitution": true,
+    "forbidden_scan": true
+  },
+  "sourceDAG_delta": {
+    "relative_to": "staged parent union containing VMoment ba56 and UPayment 9ece",
+    "local_added_modules": [
+      "ImbalancedChen.Part3TransposedPrimitiveVPayment"
+    ],
+    "foreign_added_modules": [],
+    "scope_limit": "Only two local imports; no fresh full closure/cache or Lean acceptance claimed. Prerequisites require independent runtime ownership."
+  },
+  "lean_validation": "NOT RUN; runtime owner only"
+}

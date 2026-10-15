@@ -144,7 +144,6 @@ theorem eventually_currentChenUpsilon9_liMainMass_le_logTotientMass
         (1 / (1 - Real.log (a : ℝ) / Real.log (N : ℝ)))) := by
       rw [hlogquot]
       field_simp [hNp.ne', hap.ne', hlog.ne', hgap.ne']
-      all_goals ring
     _ ≤ _ := mul_le_mul_of_nonneg_left
       (mul_le_mul_of_nonneg_right hweight (one_div_nonneg.mpr hgap.le)) (by linarith only [hη])
 

@@ -49,7 +49,9 @@ theorem twoFactorRepair_monomials {x δ θ α A B a b : ℝ}
   refine ⟨?_, ?_, ?_⟩
   · apply Real.le_rpow_of_log_le hxpos
     rw [Real.log_mul (pow_ne_zero 2 hApos.ne') hbpos.ne', Real.log_pow]
-    nlinarith
+    have hfirst : (2 : ℝ) * Real.log A + Real.log b ≤ (1 - 3 * δ) * Real.log x := by
+      nlinarith only [hlogAB, hlogA, hlogb, hθL, hδL]
+    simpa only [Nat.cast_ofNat] using hfirst
   · apply Real.le_rpow_of_log_le hxpos
     rw [Real.log_mul (by positivity) (by positivity),
       Real.log_mul (by positivity) hapos.ne',

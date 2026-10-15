@@ -219,7 +219,7 @@ theorem currentChenUpsilon9LogTotientMass_eq_actualPrimeBox {N : â„•} (hN : 2 â‰
           chen_prime_pair_totient_cast hp hq horder.ne,
           Nat.cast_mul, Real.log_mul (by exact_mod_cast hp.ne_zero) (by exact_mod_cast hq.ne_zero)]
         simp only [actualPrimeTupleLog, Fin.prod_univ_two, Matrix.cons_val_zero,
-          Matrix.cons_val_one, add_div, div_eq_mul_inv, mul_inv_rev, one_mul]
+          Matrix.cons_val_one, div_eq_mul_inv, mul_inv_rev, one_mul]
         ring
     _ = _ := by
       unfold T actualPrimeBoxTestSum

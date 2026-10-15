@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T20:29:39.442277+00:00",
+  "reviewer": "/root",
+  "author": "/root/primitive_center",
+  "status": "SOURCE_ONLY_INDEPENDENT_SEMANTIC_REVIEW_NO_VISIBLE_MATHEMATICAL_BLOCKER",
+  "candidate": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3TransposedPrimitiveUMoment.lean",
+    "sha256": "513cf44888ce1c6538902e5d33245f5b94303b1bd9bfa6adb1a1772c5002802d",
+    "source_declaration_count": 7,
+    "definition_count": 0
+  },
+  "all_complete_source_headers_and_definitions": [
+    {
+      "name": "card_divisors_mul_le",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem card_divisors_mul_le (q r : ℕ) :\n    (q * r).divisors.card ≤ q.divisors.card * r.divisors.card"
+    },
+    {
+      "name": "sum_gamma_tau_div_totient_le",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem sum_gamma_tau_div_totient_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli,\n      ‖d.groupedFactorGamma q‖ * (q.divisors.card : ℝ) / (q.totient : ℝ)) ≤\n        (1 + Real.log d.physicalFactorCap) ^ 12"
+    },
+    {
+      "name": "sum_gamma_norm_le",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem sum_gamma_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ‖d.groupedFactorGamma q‖) ≤\n      d.physicalFactorCap * (1 + Real.log d.physicalFactorCap) ^ 2"
+    },
+    {
+      "name": "actualU_finite_envelope_le",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualU_finite_envelope_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖primitivePairCoefficient d q r‖ * ((q * r).divisors.card : ℝ)) ≤\n        4 * d.U ^ 2 * (1 + Real.log d.physicalFactorCap) ^ 24"
+    },
+    {
+      "name": "actualU_sub_primitive_bound",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualU_sub_primitive_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n          C * d.U ^ 2 * (1 + Real.log d.physicalFactorCap) ^ 24"
+    },
+    {
+      "name": "actual_betaL2_mul_U_error_bound",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actual_betaL2_mul_U_error_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            C * d.V * d.U ^ 2 *\n              (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n                (1 + Real.log d.physicalFactorCap) ^ 24"
+    },
+    {
+      "name": "U_sq_lt_scale_rpow",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem U_sq_lt_scale_rpow\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.U ^ 2 < d.scale ^ (1 - 8 * sigma)"
+    }
+  ],
+  "all_proof_bodies_read": true,
+  "independent_semantic_findings": [
+    "For positive q,r, every divisor of q*r factors as a divisor of q times a divisor of r. For a zero factor the relevant divisor sets are empty. The stated pointwise product-cardinality inequality is valid without positivity assumptions.",
+    "The true grouped factor gamma is bounded by tau_3, not by one. Its product with the ordinary divisor coefficient tau_2 is bounded by tau_6; the existing real totient-weighted moment pays exponent 12.",
+    "Both literal alpha coprime masses cost 2U, so the finite U error costs 4 U^2 times the square of that moment, exactly log exponent 24. This coefficient envelope is derived as a conclusion.",
+    "The already proved uniform smooth coprime error supplies a single constant before B, sigma, kappa, c0 and d. Multiplying by the true original beta L2 costs 2V and the full fixed-B divisor-square logarithm.",
+    "U^2 < X^(1-8sigma) is actually derived from the existing U^2*Q2*Q3^2 medium gate and Q2,Q3>=1. No new size gate is assumed. Log absorption and the full dispersion/nonzero endpoint are not claimed."
+  ],
+  "source_API_bindings_read": {
+    "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Gcd.lean": "672c96102205b59a47742be74c959ed780ba319713baaa8a2eeede2cdc46cbea",
+    "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Group\\Pointwise\\Finset\\Basic.lean": "68b39fff5b1b4d4b01e5b84b49d0cf441f098eaa9d3fe0481d5bd6be298163fd",
+    "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvryDivisorMean.lean": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+    "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Complex\\Basic.lean": "e279bd6369e83ebf6716e17a8f38c81c812020753472cac5e7ae2a501790b760"
+  },
+  "source_API_notes": [
+    "Init/Data/Nat/Gcd.lean:385: Nat.dvd_mul is the exact existential divisor-factorization equivalence used by the finite product-set proof.",
+    "Finset Pointwise Basic:348: card_mul_le is the finite image2 cardinal bound.",
+    "LiLiuPrereqFouvryDivisorMean:37,104,257: tau_2 equals divisor count, tau_k*tau_l<=tau_(k*l), and the totient mean has exponent 2*k.",
+    "Complex.Basic:493: conj z=z iff (z.re:Complex)=z, in the exact direction needed for P0 reality."
+  ],
+  "parent_source_bindings": {
+    "ImbalancedChen.Part3TransposedPrimitiveU": "170c1fe16a9f5ed1a930cdca8ff590a1ed8c0789b34369669fd1ee604dc8e701"
+  },
+  "sourceDAG_delta": {
+    "method": "Direct imports checked against the staged local parent union, no full census rerun.",
+    "new_local_modules": [
+      "ImbalancedChen.Part3TransposedPrimitiveUMoment"
+    ],
+    "new_foreign_modules": []
+  },
+  "issues_identified": [],
+  "evidence_boundary": {
+    "source_only": true,
+    "compiler_run": false,
+    "kernel_run": false,
+    "object_type_axiom_linter_acceptance": false,
+    "complete_distribution_or_main_theorem_claimed": false
+  }
+}

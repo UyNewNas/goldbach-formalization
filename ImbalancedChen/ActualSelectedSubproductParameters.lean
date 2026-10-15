@@ -36,7 +36,7 @@ def actualSelectedSubproductUpper (α θ : ℝ) : ℝ :=
 theorem actualSelectedSubproductV_one (s : ℝ) :
     actualSelectedSubproductV 1 s = v s := by
   unfold actualSelectedSubproductV v A C
-  congr 2 <;> ring
+  congr 2; ring
 
 /-- Exact inversion of the manuscript's critical interval, retaining both
 upper constraints.  This is valid for every real residue exponent. -/
@@ -108,13 +108,17 @@ private theorem actualSelectedPairGate_rpow (x : ℝ) (hx : 1 < x)
   have hxpos : 0 < x := zero_lt_one.trans hx
   have hpow := rpow_actualSelectedPrimeCoordinates x hx p hp
   cases yz
-  · change ((p 0 * p 2 : ℕ) : ℝ) * (p 1 : ℝ) ^ 2 = _
+  · change ((p 0 * p 2 : ℕ) : ℝ) * (p 1 : ℝ) ^ 2 =
+      x ^ (actualSelectedPrimeCoordinates x p 0 +
+        2 * actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2)
     rw [Nat.cast_mul, ← hpow 0, ← hpow 1, ← hpow 2,
       ← Real.rpow_mul_natCast hxpos.le, ← Real.rpow_add hxpos,
       ← Real.rpow_add hxpos]
     congr 1
     ring
-  · change ((p 1 * p 2 : ℕ) : ℝ) * (p 0 : ℝ) ^ 2 = _
+  · change ((p 1 * p 2 : ℕ) : ℝ) * (p 0 : ℝ) ^ 2 =
+      x ^ (2 * actualSelectedPrimeCoordinates x p 0 +
+        actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2)
     rw [Nat.cast_mul, ← hpow 0, ← hpow 1, ← hpow 2,
       ← Real.rpow_mul_natCast hxpos.le, ← Real.rpow_add hxpos,
       ← Real.rpow_add hxpos]

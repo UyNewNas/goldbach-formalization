@@ -1,0 +1,101 @@
+ImbalancedChen/Part3TransposedZeroCovariance.lean:366:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ r ∈ d.complexFactorLabels, d.complexFactorGamma r * ?F (complexFactorModulus r)
+in the target expression
+  ∑ x ∈ d.complexFactorLabels,
+      d.complexFactorGamma x *
+        ∑ i ∈ d.complexFactorLabels,
+          star (d.complexFactorGamma i) * f (complexFactorModulus x) (complexFactorModulus i) =
+    ∑ x ∈ d.physicalFactorModuli,
+      d.groupedFactorGamma x * ∑ i ∈ d.physicalFactorModuli, star (d.groupedFactorGamma i) * f x i
+
+d : MediumAtom
+f : ℕ → ℕ → ℂ
+hstar :
+  ∀ (g : ℕ → ℂ),
+    ∑ a ∈ d.complexFactorLabels, star (d.complexFactorGamma a) * g (complexFactorModulus a) =
+      ∑ q ∈ d.physicalFactorModuli, star (d.groupedFactorGamma q) * g q
+⊢ ∑ x ∈ d.complexFactorLabels,
+      d.complexFactorGamma x *
+        ∑ i ∈ d.complexFactorLabels,
+          star (d.complexFactorGamma i) * f (complexFactorModulus x) (complexFactorModulus i) =
+    ∑ x ∈ d.physicalFactorModuli,
+      d.groupedFactorGamma x * ∑ i ∈ d.physicalFactorModuli, star (d.groupedFactorGamma i) * f x i
+ImbalancedChen/Part3TransposedZeroCovariance.lean:401:15: error(lean.invalidField): Invalid field `sum_transposedBeta_pairs`: The environment does not contain `ImbalancedChen.Part3.MediumAtom.sum_transposedBeta_pairs`, so it is not possible to project the field `sum_transposedBeta_pairs` from an expression
+  d
+of type `MediumAtom`
+ImbalancedChen/Part3TransposedZeroCovariance.lean:380:79: error: unsolved goals
+d : MediumAtom
+a : ℕ × ℕ × ℕ
+a✝¹ : a ∈ d.complexFactorLabels
+b : ℕ × ℕ × ℕ
+a✝ : b ∈ d.complexFactorLabels
+q : ℕ := complexFactorModulus a
+r : ℕ := complexFactorModulus b
+⊢ ∑ n₁ ∈ d.transposedAtom.betaCarrier,
+      ∑ n₂ ∈ d.transposedAtom.betaCarrier,
+        d.complexFactorGamma a * d.transposedAtom.beta n₁ *
+            (star (d.transposedAtom.beta n₂) * star (d.complexFactorGamma b)) *
+          ↑(if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then
+              d.V / ↑((complexFactorModulus a).lcm (complexFactorModulus b)) * CommonSmoothCutoff.cutoffMass
+            else 0) =
+    ↑(d.V * CommonSmoothCutoff.cutoffMass) *
+      (d.complexFactorGamma a * star (d.complexFactorGamma b) *
+          compatibleMass d.alphaCarrier d.alpha (complexFactorModulus a) (complexFactorModulus b) /
+        ↑((complexFactorModulus a).lcm (complexFactorModulus b)))
+ImbalancedChen/Part3TransposedZeroCovariance.lean:394:29: error: This simp argument is unused:
+  Finset.sum_div
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Finset.mul_sum]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/Part3TransposedZeroCovariance.lean:487:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ a ∈ MediumAtom.complexFactorLabels ?d,
+    ∑ b ∈ MediumAtom.complexFactorLabels ?d,
+      MediumAtom.complexFactorGamma ?d a * star (MediumAtom.complexFactorGamma ?d b) *
+        ?f (complexFactorModulus a) (complexFactorModulus b)
+in the target expression
+  ↑(d.V * CommonSmoothCutoff.cutoffMass) *
+      ∑ a ∈ d.complexFactorLabels,
+        ∑ b ∈ d.complexFactorLabels,
+          d.complexFactorGamma a * star (d.complexFactorGamma b) *
+            (covariance d.alphaCarrier d.alpha (complexFactorModulus a) (complexFactorModulus b) /
+              ↑((complexFactorModulus a).lcm (complexFactorModulus b))) =
+    ↑(d.V * CommonSmoothCutoff.cutoffMass) *
+      ∑ q ∈ d.physicalFactorModuli,
+        ∑ r ∈ d.physicalFactorModuli,
+          d.groupedFactorGamma q * star (d.groupedFactorGamma r) * covariance d.alphaCarrier d.alpha q r / ↑(q.lcm r)
+
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+hpos : ∀ {a : ℕ × ℕ × ℕ}, a ∈ d.complexFactorLabels → 0 < complexFactorModulus a
+hfinite :
+  ∑ a ∈ d.complexFactorLabels,
+      (∑ b ∈ d.complexFactorLabels,
+          d.complexFactorGamma a * star (d.complexFactorGamma b) *
+              compatibleMass d.alphaCarrier d.alpha (complexFactorModulus a) (complexFactorModulus b) /
+            ↑((complexFactorModulus a).lcm (complexFactorModulus b)) -
+        ∑ b ∈ d.complexFactorLabels,
+          d.complexFactorGamma a * star (d.complexFactorGamma b) *
+                coprimeMass d.alphaCarrier d.alpha (complexFactorModulus a) *
+              star (coprimeMass d.alphaCarrier d.alpha (complexFactorModulus b)) *
+            (↑(complexFactorModulus a * complexFactorModulus b).totient /
+              (↑(complexFactorModulus a).totient * ↑(complexFactorModulus b).totient *
+                ↑(complexFactorModulus a * complexFactorModulus b)))) =
+    ∑ a ∈ d.complexFactorLabels,
+      ∑ b ∈ d.complexFactorLabels,
+        d.complexFactorGamma a * star (d.complexFactorGamma b) *
+          (covariance d.alphaCarrier d.alpha (complexFactorModulus a) (complexFactorModulus b) /
+            ↑((complexFactorModulus a).lcm (complexFactorModulus b)))
+⊢ ↑(d.V * CommonSmoothCutoff.cutoffMass) *
+      ∑ a ∈ d.complexFactorLabels,
+        ∑ b ∈ d.complexFactorLabels,
+          d.complexFactorGamma a * star (d.complexFactorGamma b) *
+            (covariance d.alphaCarrier d.alpha (complexFactorModulus a) (complexFactorModulus b) /
+              ↑((complexFactorModulus a).lcm (complexFactorModulus b))) =
+    ↑(d.V * CommonSmoothCutoff.cutoffMass) *
+      ∑ q ∈ d.physicalFactorModuli,
+        ∑ r ∈ d.physicalFactorModuli,
+          d.groupedFactorGamma q * star (d.groupedFactorGamma r) * covariance d.alphaCarrier d.alpha q r / ↑(q.lcm r)

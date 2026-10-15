@@ -1,0 +1,608 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T20:20:11.8344705Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_SCOPE_AND_FINITE_MATHEMATICS_APPROVED_PENDING_RUNTIME",
+  "candidate": {
+    "path": "ImbalancedChen\\Part3SmoothCoprimeError.lean",
+    "sha256": "dabf4c7f1a84ae97e4a4a9d64be65bb368bd7150502c37a894e4fd743142c87e",
+    "expected_sha256": "dabf4c7f1a84ae97e4a4a9d64be65bb368bd7150502c37a894e4fd743142c87e",
+    "frozen_hash_matches": true,
+    "declaration_count": 16,
+    "definition_count": 1,
+    "all_complete_headers_and_definition_bodies": [
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.sum_moebius_divisors",
+        "kind": "theorem",
+        "start_line": 27,
+        "signature_last_line": 29,
+        "complete_source_header": "theorem sum_moebius_divisors (n : ℕ) :\n    (∑ d ∈ n.divisors, (ArithmeticFunction.moebius d : ℝ)) =\n      if n = 1 then 1 else 0",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.coprime_indicator_eq_moebius",
+        "kind": "theorem",
+        "start_line": 35,
+        "signature_last_line": 37,
+        "complete_source_header": "theorem coprime_indicator_eq_moebius {q : ℕ} (hq : q ≠ 0) (m : ℕ) :\n    (if m.Coprime q then (1 : ℝ) else 0) =\n      ∑ d ∈ q.divisors, if d ∣ m then (ArithmeticFunction.moebius d : ℝ) else 0",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.coprime_weight_eq_moebius",
+        "kind": "theorem",
+        "start_line": 45,
+        "signature_last_line": 49,
+        "complete_source_header": "theorem coprime_weight_eq_moebius\n    (S : Finset ℕ) (w : ℕ → ℝ) {q : ℕ} (hq : q ≠ 0) :\n    (∑ m ∈ S, if m.Coprime q then w m else 0) =\n      ∑ d ∈ q.divisors, (ArithmeticFunction.moebius d : ℝ) *\n        ∑ m ∈ S, if d ∣ m then w m else 0",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.coprimePrefix",
+        "kind": "def",
+        "start_line": 68,
+        "signature_last_line": 68,
+        "complete_source_header": "def coprimePrefix (H q : ℕ) : ℝ",
+        "private": false,
+        "complete_source_definition": "def coprimePrefix (H q : ℕ) : ℝ :=\n  ∑ m ∈ Ioc 0 H, if m.Coprime q then 1 else 0"
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.coprimePrefix_eq_divisor_sum",
+        "kind": "theorem",
+        "start_line": 71,
+        "signature_last_line": 73,
+        "complete_source_header": "theorem coprimePrefix_eq_divisor_sum (H : ℕ) {q : ℕ} (hq : q ≠ 0) :\n    coprimePrefix H q =\n      ∑ d ∈ q.divisors, (ArithmeticFunction.moebius d : ℝ) * (H / d : ℕ)",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.coprimePrefix_period",
+        "kind": "theorem",
+        "start_line": 80,
+        "signature_last_line": 81,
+        "complete_source_header": "theorem coprimePrefix_period (q : ℕ) :\n    coprimePrefix q q = (q.totient : ℝ)",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.moebius_density",
+        "kind": "theorem",
+        "start_line": 91,
+        "signature_last_line": 93,
+        "complete_source_header": "theorem moebius_density {q : ℕ} (hq : q ≠ 0) :\n    (∑ d ∈ q.divisors, (ArithmeticFunction.moebius d : ℝ) / (d : ℝ)) =\n      (q.totient : ℝ) / (q : ℝ)",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.scaledDyadicCutoff_finset_coprime_uniform_error",
+        "kind": "theorem",
+        "start_line": 101,
+        "signature_last_line": 106,
+        "complete_source_header": "theorem scaledDyadicCutoff_finset_coprime_uniform_error :\n    ∃ C : ℝ, 0 < C ∧ ∀ M : ℝ, 0 < M → ∀ S : Finset ℕ,\n      (∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ S) →\n      ∀ q : ℕ, q ≠ 0 →\n      |(∑ m ∈ S, if m.Coprime q then scaledDyadicCutoff M m else 0) -\n          (M * cutoffMass) * (q.totient : ℝ) / q| ≤ C * q.divisors.card",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.coprime_of_product_congruent",
+        "kind": "theorem",
+        "start_line": 132,
+        "signature_last_line": 134,
+        "complete_source_header": "theorem coprime_of_product_congruent {a : ℤ} {q m n : ℕ}\n    (ha : Int.gcd a q = 1) (h : Int.ModEq q ((m : ℤ) * n) a) :\n    m.Coprime q ∧ n.Coprime q",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.exists_progression_for_divisor_congruence",
+        "kind": "theorem",
+        "start_line": 141,
+        "signature_last_line": 144,
+        "complete_source_header": "theorem exists_progression_for_divisor_congruence {q d n : ℕ}\n    (hd : d.Coprime q) (hn : n.Coprime q) (a : ℤ) :\n    ∃ b : ℤ, ∀ m : ℕ,\n      (d ∣ m ∧ Int.ModEq q ((m : ℤ) * n) a) ↔ Int.ModEq (q * d : ℕ) (m : ℤ) b",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.scaledDyadicCutoff_finset_divisor_progression_uniform_error",
+        "kind": "theorem",
+        "start_line": 172,
+        "signature_last_line": 178,
+        "complete_source_header": "theorem scaledDyadicCutoff_finset_divisor_progression_uniform_error :\n    ∃ C : ℝ, 0 < C ∧ ∀ M : ℝ, 0 < M → ∀ S : Finset ℕ,\n      (∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ S) →\n      ∀ q d n : ℕ, 0 < q → 0 < d → d.Coprime q → n.Coprime q → ∀ a : ℤ,\n      |(∑ m ∈ S,\n          if d ∣ m ∧ Int.ModEq q ((m : ℤ) * n) a then scaledDyadicCutoff M m else 0) -\n        (M * cutoffMass / q) / d| ≤ C",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.coprime_product_progression_weight_eq_moebius",
+        "kind": "theorem",
+        "start_line": 192,
+        "signature_last_line": 197,
+        "complete_source_header": "theorem coprime_product_progression_weight_eq_moebius\n    (S : Finset ℕ) (w : ℕ → ℝ) {q r n : ℕ} (hr : r ≠ 0)\n    {a : ℤ} (ha : Int.gcd a q = 1) :\n    (∑ m ∈ S, if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) a then w m else 0) =\n      ∑ d ∈ r.divisors.filter (fun d ↦ d.Coprime q), (ArithmeticFunction.moebius d : ℝ) *\n        ∑ m ∈ S, if d ∣ m ∧ Int.ModEq q ((m : ℤ) * n) a then w m else 0",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.scaledDyadicCutoff_finset_coprime_progression_uniform_error",
+        "kind": "theorem",
+        "start_line": 223,
+        "signature_last_line": 231,
+        "complete_source_header": "theorem scaledDyadicCutoff_finset_coprime_progression_uniform_error :\n    ∃ C : ℝ, 0 < C ∧ ∀ M : ℝ, 0 < M → ∀ S : Finset ℕ,\n      (∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ S) →\n      ∀ q r n : ℕ, 0 < q → r ≠ 0 → n.Coprime q → ∀ a : ℤ, Int.gcd a q = 1 →\n      |(∑ m ∈ S, if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) a\n          then scaledDyadicCutoff M m else 0) -\n        (M * cutoffMass / q) *\n          ∑ d ∈ r.divisors.filter (fun d ↦ d.Coprime q),\n            (ArithmeticFunction.moebius d : ℝ) / d| ≤ C * r.divisors.card",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.totient_real_prod",
+        "kind": "theorem",
+        "start_line": 265,
+        "signature_last_line": 266,
+        "complete_source_header": "private theorem totient_real_prod (n : ℕ) :\n    (n.totient : ℝ) = n * ∏ p ∈ n.primeFactors, (1 - (p : ℝ)⁻¹)",
+        "private": true
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.restricted_moebius_density_prod",
+        "kind": "theorem",
+        "start_line": 271,
+        "signature_last_line": 274,
+        "complete_source_header": "theorem restricted_moebius_density_prod (q : ℕ) {r : ℕ} (hr : r ≠ 0) :\n    (∑ d ∈ r.divisors.filter (fun d ↦ d.Coprime q),\n      (ArithmeticFunction.moebius d : ℝ) / d) =\n        ∏ p ∈ r.primeFactors.filter (fun p ↦ p.Coprime q), (1 - (p : ℝ)⁻¹)",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.CommonSmoothCutoff.restricted_moebius_density",
+        "kind": "theorem",
+        "start_line": 317,
+        "signature_last_line": 320,
+        "complete_source_header": "theorem restricted_moebius_density {q r : ℕ} (hq : q ≠ 0) (hr : r ≠ 0) :\n    (∑ d ∈ r.divisors.filter (fun d ↦ d.Coprime q),\n      (ArithmeticFunction.moebius d : ℝ) / d) / q =\n        ((q * r).totient : ℝ) / ((q.totient : ℝ) * (q * r : ℕ))",
+        "private": false
+      }
+    ]
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3SmoothProgressionError",
+    "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+    "Mathlib.Data.Nat.Factorization.Basic"
+  ],
+  "sourceDAG_delta": {
+    "basis": "Current parent union containing CommonPoisson and staged SmoothProgressionError. The two explicit Mathlib imports are already positively reachable through CommonPoisson. Only the two supplied positive paths were read; no full closure rescan.",
+    "added_local_modules": [
+      "ImbalancedChen.Part3SmoothCoprimeError"
+    ],
+    "local_module_delta": 1,
+    "added_foreign_modules": [],
+    "foreign_module_delta": 0,
+    "independently_rehashed_and_read_positive_paths": [
+      {
+        "target": "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+        "nodes": [
+          {
+            "module": "ImbalancedChen.Part3CommonPoisson",
+            "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonPoisson.lean",
+            "sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "ImbalancedChen.Part3CommonSmoothCutoff",
+              "ImbalancedChen.Part3ComplexCRTConsumer",
+              "Mathlib.Analysis.Fourier.PoissonSummation"
+            ],
+            "next_import": "ImbalancedChen.Part3CommonSmoothCutoff",
+            "edge_confirmed": true
+          },
+          {
+            "module": "ImbalancedChen.Part3CommonSmoothCutoff",
+            "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonSmoothCutoff.lean",
+            "sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "ImbalancedChen.Part3ComplexDispersion",
+              "Mathlib.Analysis.Calculus.BumpFunction.InnerProduct",
+              "Mathlib.Analysis.Distribution.SchwartzSpace.Fourier",
+              "Mathlib.MeasureTheory.Measure.Lebesgue.Integral"
+            ],
+            "next_import": "ImbalancedChen.Part3ComplexDispersion",
+            "edge_confirmed": true
+          },
+          {
+            "module": "ImbalancedChen.Part3ComplexDispersion",
+            "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ComplexDispersion.lean",
+            "sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "ImbalancedChen.Part3DistributionTargets",
+              "Mathlib.Analysis.Complex.Basic",
+              "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+              "Mathlib.Algebra.Star.BigOperators"
+            ],
+            "next_import": "ImbalancedChen.Part3DistributionTargets",
+            "edge_confirmed": true
+          },
+          {
+            "module": "ImbalancedChen.Part3DistributionTargets",
+            "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3DistributionTargets.lean",
+            "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "ImbalancedChen.RestrictedResidueScale",
+              "Mathlib.Analysis.Complex.Exponential"
+            ],
+            "next_import": "ImbalancedChen.RestrictedResidueScale",
+            "edge_confirmed": true
+          },
+          {
+            "module": "ImbalancedChen.RestrictedResidueScale",
+            "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/RestrictedResidueScale.lean",
+            "sha256": "3c58f54f875a46886c28bc224fdf4952d6b53a72ae6f6f2b8debaf7e71c01d0f",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "ImbalancedChen.PanProductGridRanges"
+            ],
+            "next_import": "ImbalancedChen.PanProductGridRanges",
+            "edge_confirmed": true
+          },
+          {
+            "module": "ImbalancedChen.PanProductGridRanges",
+            "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/PanProductGridRanges.lean",
+            "sha256": "88b2c972243ba1e33e89a08b6759c16512620751b7c25206dfa4d767bf79466a",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "ImbalancedChen.PanProductGrid",
+              "ImbalancedChen.RealHalfProductMassSplit"
+            ],
+            "next_import": "ImbalancedChen.PanProductGrid",
+            "edge_confirmed": true
+          },
+          {
+            "module": "ImbalancedChen.PanProductGrid",
+            "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/PanProductGrid.lean",
+            "sha256": "e37bb4d2aa855c86e1601566e9ea6649092ac625c434d8a30476208057fab743",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "ImbalancedChen.PanProductAggregateBudget",
+              "ImbalancedChen.SelectedGridRanges"
+            ],
+            "next_import": "ImbalancedChen.PanProductAggregateBudget",
+            "edge_confirmed": true
+          },
+          {
+            "module": "ImbalancedChen.PanProductAggregateBudget",
+            "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/PanProductAggregateBudget.lean",
+            "sha256": "13b512d4c51a00b217ea72b3033ec50bd48d76c10812184a20d1bc838ef04140",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "ImbalancedChen.PanProductLiuBridge"
+            ],
+            "next_import": "ImbalancedChen.PanProductLiuBridge",
+            "edge_confirmed": true
+          },
+          {
+            "module": "ImbalancedChen.PanProductLiuBridge",
+            "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/PanProductLiuBridge.lean",
+            "sha256": "dd239cb5a36898abe49cdb23d60cc1e3e86dede36bd849c41013f18a99ee2d61",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "ImbalancedChen.PanProductResidueBudget",
+              "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate"
+            ],
+            "next_import": "ImbalancedChen.PanProductResidueBudget",
+            "edge_confirmed": true
+          },
+          {
+            "module": "ImbalancedChen.PanProductResidueBudget",
+            "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/PanProductResidueBudget.lean",
+            "sha256": "4b5dcf30d8aebee0779f6dc3e4f1188a6797f9cd5215f71737b8369a79a9fbaf",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "ImbalancedChen.PanProductStrips",
+              "ImbalancedChen.ResidueSelectorBudget"
+            ],
+            "next_import": "ImbalancedChen.PanProductStrips",
+            "edge_confirmed": true
+          },
+          {
+            "module": "ImbalancedChen.PanProductStrips",
+            "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/PanProductStrips.lean",
+            "sha256": "eb97d23050e3ec624cde24ef779acc67d7ded44283dc60097edc2d715429863b",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "ImbalancedChen.HalfProductPanFinite",
+              "ImbalancedChen.PrimeRectanglePrefixes"
+            ],
+            "next_import": "ImbalancedChen.HalfProductPanFinite",
+            "edge_confirmed": true
+          },
+          {
+            "module": "ImbalancedChen.HalfProductPanFinite",
+            "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/HalfProductPanFinite.lean",
+            "sha256": "f392c7642bd00e418c91000a3ed6ef7c4c30194808e974999d4a39699d2b62de",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "ImbalancedChen.FiniteSieveModel",
+              "ImbalancedChen.HalfProductMassFibres"
+            ],
+            "next_import": "ImbalancedChen.FiniteSieveModel",
+            "edge_confirmed": true
+          },
+          {
+            "module": "ImbalancedChen.FiniteSieveModel",
+            "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/FiniteSieveModel.lean",
+            "sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "ImbalancedChen.SieveSourceCoprimality",
+              "Mathlib.NumberTheory.SelbergSieve",
+              "Mathlib.Data.Nat.Totient",
+              "Mathlib.Data.Nat.Squarefree",
+              "Mathlib.Tactic.NormNum",
+              "Lean.Elab.Tactic.NormCast",
+              "Lean.Elab.Tactic.Omega"
+            ],
+            "next_import": "Mathlib.NumberTheory.SelbergSieve",
+            "edge_confirmed": true
+          },
+          {
+            "module": "Mathlib.NumberTheory.SelbergSieve",
+            "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/SelbergSieve.lean",
+            "sha256": "c777b65cd016161757778c68aac2cdebb89c32e45a78c5483392fa22682cdc7a",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "Mathlib.Data.Real.Basic",
+              "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+              "Mathlib.Tactic.FieldSimp"
+            ],
+            "next_import": "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+            "edge_confirmed": true
+          },
+          {
+            "module": "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+            "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/ArithmeticFunction/Moebius.lean",
+            "sha256": "3d739a22865bed810b05ccdec05f16c18000d9c0737b4a12fee7494713d06e23",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "Mathlib.Algebra.Order.Ring.Abs",
+              "Mathlib.NumberTheory.ArithmeticFunction.Misc"
+            ],
+            "next_import": null,
+            "edge_confirmed": true
+          }
+        ],
+        "all_hashes_match": true,
+        "all_edges_confirmed": true
+      },
+      {
+        "target": "Mathlib.Data.Nat.Factorization.Basic",
+        "nodes": [
+          {
+            "module": "ImbalancedChen.Part3CommonPoisson",
+            "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonPoisson.lean",
+            "sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "ImbalancedChen.Part3CommonSmoothCutoff",
+              "ImbalancedChen.Part3ComplexCRTConsumer",
+              "Mathlib.Analysis.Fourier.PoissonSummation"
+            ],
+            "next_import": "Mathlib.Analysis.Fourier.PoissonSummation",
+            "edge_confirmed": true
+          },
+          {
+            "module": "Mathlib.Analysis.Fourier.PoissonSummation",
+            "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/Fourier/PoissonSummation.lean",
+            "sha256": "6d28aec09e89b574b7f9c03badd38793901a2609feceeb061efac7d884258cbd",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "Mathlib.Analysis.Fourier.AddCircle",
+              "Mathlib.Analysis.Fourier.FourierTransform",
+              "Mathlib.Analysis.PSeries",
+              "Mathlib.Analysis.Distribution.SchwartzSpace.Fourier",
+              "Mathlib.MeasureTheory.Measure.Lebesgue.Integral",
+              "Mathlib.Topology.ContinuousMap.Periodic"
+            ],
+            "next_import": "Mathlib.Analysis.Fourier.AddCircle",
+            "edge_confirmed": true
+          },
+          {
+            "module": "Mathlib.Analysis.Fourier.AddCircle",
+            "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/Fourier/AddCircle.lean",
+            "sha256": "87fe0972a4370b6fdd14c327855f4e7ab98edf37e9e2ebb5182ab0f676bc16b2",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "Mathlib.Analysis.SpecialFunctions.ExpDeriv",
+              "Mathlib.Analysis.SpecialFunctions.Complex.Circle",
+              "Mathlib.Analysis.InnerProductSpace.l2Space",
+              "Mathlib.MeasureTheory.Function.ContinuousMapDense",
+              "Mathlib.MeasureTheory.Function.L2Space",
+              "Mathlib.MeasureTheory.Group.Integral",
+              "Mathlib.MeasureTheory.Integral.IntervalIntegral.Periodic",
+              "Mathlib.Topology.ContinuousMap.StoneWeierstrass",
+              "Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts"
+            ],
+            "next_import": "Mathlib.Analysis.SpecialFunctions.Complex.Circle",
+            "edge_confirmed": true
+          },
+          {
+            "module": "Mathlib.Analysis.SpecialFunctions.Complex.Circle",
+            "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/SpecialFunctions/Complex/Circle.lean",
+            "sha256": "d9a0411670e53da4c2eb0ba1b9a1ff3a7ce45505b7d52ba237b46b62a1d1b55b",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "Mathlib.Analysis.Complex.Circle",
+              "Mathlib.Analysis.SpecialFunctions.Complex.Log",
+              "Mathlib.Topology.Covering.AddCircle",
+              "Mathlib.Analysis.Convex.PathConnected"
+            ],
+            "next_import": "Mathlib.Topology.Covering.AddCircle",
+            "edge_confirmed": true
+          },
+          {
+            "module": "Mathlib.Topology.Covering.AddCircle",
+            "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Topology/Covering/AddCircle.lean",
+            "sha256": "21e214b64c40eeb73dd1fb3b9e3047c59693aad10b590deef864a2bfd4837f25",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "Mathlib.Algebra.Algebra.Defs",
+              "Mathlib.Topology.Covering.Quotient",
+              "Mathlib.Topology.Instances.AddCircle.Defs"
+            ],
+            "next_import": "Mathlib.Topology.Instances.AddCircle.Defs",
+            "edge_confirmed": true
+          },
+          {
+            "module": "Mathlib.Topology.Instances.AddCircle.Defs",
+            "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Topology/Instances/AddCircle/Defs.lean",
+            "sha256": "cdd9dfc19117b6722603563e12940d71dd10e3eca5402d9f23e2f4fb0c06c639",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "Mathlib.Algebra.Order.ToIntervalMod",
+              "Mathlib.Algebra.Ring.AddAut",
+              "Mathlib.Data.Nat.Totient",
+              "Mathlib.GroupTheory.Divisible",
+              "Mathlib.Topology.Algebra.IsUniformGroup.Basic",
+              "Mathlib.Topology.Algebra.Order.Field",
+              "Mathlib.Topology.OpenPartialHomeomorph.Defs",
+              "Mathlib.Algebra.Order.Interval.Set.Group",
+              "Mathlib.GroupTheory.QuotientGroup.ModEq"
+            ],
+            "next_import": "Mathlib.Data.Nat.Totient",
+            "edge_confirmed": true
+          },
+          {
+            "module": "Mathlib.Data.Nat.Totient",
+            "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Nat/Totient.lean",
+            "sha256": "943c40005c794e014241782a406445e6dcc2a88f369f8388188ba37a58ee82ea",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "Mathlib.Algebra.BigOperators.Ring.Finset",
+              "Mathlib.Algebra.CharP.Two",
+              "Mathlib.Algebra.Order.AbsoluteValue.Basic",
+              "Mathlib.Algebra.Order.BigOperators.Group.LocallyFinite",
+              "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+              "Mathlib.Data.Nat.Cast.Field",
+              "Mathlib.Data.Nat.Factorization.Basic",
+              "Mathlib.Data.Nat.Factorization.Induction",
+              "Mathlib.Data.Nat.Periodic"
+            ],
+            "next_import": "Mathlib.Data.Nat.Factorization.Basic",
+            "edge_confirmed": true
+          },
+          {
+            "module": "Mathlib.Data.Nat.Factorization.Basic",
+            "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Nat/Factorization/Basic.lean",
+            "sha256": "f55d16777a1c7e9b48769ec98f75238b81fb2bb9d4fd79215d76885509aa9059",
+            "matches_self_review_hash": true,
+            "complete_direct_imports": [
+              "Mathlib.Algebra.Order.Interval.Finset.SuccPred",
+              "Mathlib.Data.Nat.Factorization.Defs",
+              "Mathlib.Order.Interval.Finset.Nat"
+            ],
+            "next_import": null,
+            "edge_confirmed": true
+          }
+        ],
+        "all_hashes_match": true,
+        "all_edges_confirmed": true
+      }
+    ],
+    "all_positive_path_nodes_and_edges_match": true
+  },
+  "quantifier_and_domain_audit": [
+    "Both arithmetic error endpoints quantify one positive C before every M>0, support-containing finite S, positive modulus, multiplier, and signed residue. No q<=M, r<=M, dyadic shortening, coefficient norm, error envelope, or residual-payment premise.",
+    "Coprime uniform error applies to every natural q!=0 and pays exactly C*card(divisors q), on the original finite carrier S.",
+    "Mixed divisor progression uniform error applies to every q,d>0 with d.Coprime q and n.Coprime q, and every signed integer a; it does not require a reduced residue at that construction stage.",
+    "Mixed coprime progression uniform error additionally uses Int.gcd a q=1, exactly the primitive arithmetic gate needed to exclude divisors sharing a prime with q. Its remainder is C*card(divisors r) for every r!=0.",
+    "restricted_moebius_density has only q,r!=0; prime powers and nonsquarefree moduli remain included. The filtered divisor sum is an exact finite Mobius identity, not a restriction on the consumer modulus carrier.",
+    "All analytic normalizations are the existing local cutoffMass and local scaledDyadicCutoff; no external integral normalization enters."
+  ],
+  "finite_mathematics_audit": [
+    {
+      "site": "sum_moebius_divisors and coprime_indicator_eq_moebius",
+      "assessment": "The arithmetic-function zeta*Mobius identity gives the divisor sum. Divisors of q that also divide m are exactly divisors of gcd(m,q); q!=0 guarantees the divisor-set nonzero convention is valid, including m=0. The resulting indicator is exact."
+    },
+    {
+      "site": "coprime_weight_eq_moebius",
+      "assessment": "Multiplies the exact indicator by arbitrary real w(m), then applies finite distributivity and Fubini. Signed weights are preserved until the final norm bounds."
+    },
+    {
+      "site": "coprimePrefix definition, divisor sum, period, and moebius_density",
+      "assessment": "The sole definition is the exact count of coprime natural points in Ioc(0,H). Multiples are counted by floor(H/d); the full period is phi(q). Substituting H=q and exact divisibility gives the ordinary Mobius density phi(q)/q, with no asymptotic counting assumption."
+    },
+    {
+      "site": "scaledDyadicCutoff_finset_coprime_uniform_error",
+      "assessment": "Subtracts the exact Mobius zero mode and sums the proven local O(1) multiple-progression remainders. Every divisor is positive, |mu(d)|<=1, and triangle inequality yields C*card(divisors q)."
+    },
+    {
+      "site": "coprime_of_product_congruent",
+      "assessment": "Congruent integers have the same gcd with the modulus. A product congruent to a primitive signed residue is therefore coprime to q; the natural coprime-product equivalence supplies both factors."
+    },
+    {
+      "site": "exists_progression_for_divisor_congruence",
+      "assessment": "An inverse y of d*n modulo q constructs b=d*y*a, so b is 0 modulo d and b*n is a modulo q. An inverse of n cancels the product congruence. Coprime CRT combines m=b mod q and m=b mod d into m=b mod q*d. This is an actual residue construction."
+    },
+    {
+      "site": "scaledDyadicCutoff_finset_divisor_progression_uniform_error",
+      "assessment": "The constructed equivalence rewrites the actual finite sum to one progression modulo q*d; the local uniform error applies since q*d>0. (M*cutoffMass/q)/d is algebraically identical to (M/(q*d))*cutoffMass."
+    },
+    {
+      "site": "coprime_product_progression_weight_eq_moebius",
+      "assessment": "Applies exact Mobius inversion with the product congruence retained. If d shares a factor with q, any d|m in the congruence contradicts the proved m.Coprime q; those summands are exactly zero. No physical modulus or paired carrier is dropped."
+    },
+    {
+      "site": "scaledDyadicCutoff_finset_coprime_progression_uniform_error",
+      "assessment": "Subtracts the restricted Mobius main term and uses the actual divisor-progression O(1) error. |mu|<=1 and card(filter)<=card(divisors r) give the stated uniform bound with no budget premise."
+    },
+    {
+      "site": "totient_real_prod and restricted_moebius_density_prod",
+      "assessment": "The totient product is the standard rational formula mapped to reals. The product k of primes dividing r and coprime to q is squarefree, coprime to q, and divides r. Every squarefree contributing divisor divides k; all omitted nonsquarefree divisors have Mobius zero. Thus the filtered sum equals the full Mobius density of k and the displayed finite prime product."
+    },
+    {
+      "site": "restricted_moebius_density",
+      "assessment": "The relevant primes are primeFactors(r) minus primeFactors(q). The prime product of q times that complement is the prime product of q*r. Nonzero q,r and phi(q)>0 justify exact field identities, yielding phi(q*r)/(phi(q)*(q*r))."
+    }
+  ],
+  "provider_reference_audit": {
+    "goldbach_head_read_via_git": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "current_donor_hashes": [
+      {
+        "module": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryMainTerm.lean",
+        "sha256": "79c9a114bc0418dfef28c8996ea0240fc4791d6404b3da2218c92f146c73d554",
+        "matches_self_review_exact_pin_hash": true
+      },
+      {
+        "module": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryCoprimeCount.lean",
+        "sha256": "58d55fb7bd508b2bd8dc413775a8a08d6418425c99b83ff371e53de16cbbcf30",
+        "matches_self_review_exact_pin_hash": true
+      },
+      {
+        "module": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryDispersion.lean",
+        "sha256": "3937deeacd7077cd44582408bf7b3a155f3f299a2e89bb2893e0dff35457e3cb",
+        "matches_self_review_exact_pin_hash": true
+      },
+      {
+        "module": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryArithmeticPoisson.lean",
+        "sha256": "77b57886ffe1f40e80f3e53de860323fff67d0705cabf342afeacd1ddc1dd72c",
+        "matches_self_review_exact_pin_hash": true
+      },
+      {
+        "module": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmoothMainTerm.lean",
+        "sha256": "c182f2d581a2dd3fd68111c383f68284e990d9922bf1760ff61a6c2daeb891e6",
+        "matches_self_review_exact_pin_hash": true
+      }
+    ],
+    "all_current_donors_match_owner_exact_pin_hashes": true,
+    "reference_role": "Read-only proof templates only; no donor smoothing-chain import added.",
+    "independent_exact_pin_blob_reextraction": false
+  },
+  "source_checks": {
+    "all_sixteen_complete_headers_captured": true,
+    "one_definition_captured": true,
+    "private_theorem_count": 1,
+    "contains_sorry_or_admit": false,
+    "contains_axiom_or_opaque": false,
+    "contains_native_decide": false,
+    "source_file_unchanged_after_read": true
+  },
+  "issues_identified": [],
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "bootstrap_invoked": false,
+    "build_invoked": false,
+    "kernel_replay_performed": false,
+    "axiom_audit_performed": false,
+    "runtime_elaboration_result": "NOT_EXECUTED_BY_REVIEWER",
+    "frozen_lean_modified": false,
+    "full_source_tree_rescanned": false,
+    "written_artifacts_only": [
+      ".lake/proof-continuation/source-reviews/20261016-smooth-coprime-error-independent-scope.json"
+    ]
+  },
+  "remaining_gates": [
+    "Owner-controlled elaboration of the exact frozen source.",
+    "Any separately required kernel replay, axiom audit, and import/source acceptance; source-only review is not runtime acceptance."
+  ]
+}
