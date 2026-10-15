@@ -1,0 +1,150 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_ACTUAL_COMPACT_FRONTIER_SEMANTICS_NOT_LEAN_PASS",
+  "reviewer": "/root/tail_resume/greedy_review; non-author",
+  "module": "ImbalancedChen.ActualExtendedThirdCompactFrontier",
+  "source_sha256": "8e15c650d9e5e0b7f72aa16589a4dbf2049687558482d096f48f7fee1635dbe7",
+  "source": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdCompactFrontier.lean",
+  "complete_declarations": [
+    {
+      "name": "actualExtendedThirdCompactOwnedCell_primeRegion",
+      "kind": "theorem",
+      "line": 26,
+      "complete_signature": "theorem actualExtendedThirdCompactOwnedCell_primeRegion {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) {t : Fin 3 → ℝ}\n    (ht : t ∈ actualExtendedThirdOwnedCell m j) :\n    t ∈ actualExtendedThirdCompactCellPrimeRegion m j"
+    },
+    {
+      "name": "actualExtendedThirdCompactOwnedCell_log_bounds",
+      "kind": "theorem",
+      "line": 39,
+      "complete_signature": "theorem actualExtendedThirdCompactOwnedCell_log_bounds {e h : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) {t : Fin 3 → ℝ}\n    (ht : t ∈ actualExtendedThirdOwnedCell m j) (i : Fin 3) :\n    h ≤ t i ∧ t i < thirdPrefixRho"
+    },
+    {
+      "name": "actualExtendedThirdCompactHistoryLog",
+      "kind": "theorem",
+      "line": 53,
+      "complete_signature": "theorem actualExtendedThirdCompactHistoryLog (N : ℕ) (p : Fin 3 → ℕ) :\n    primeHistoryLogCoordinates (N : ℝ) 3 [p 2, p 1, p 0] = actualPrimeTupleLog N p"
+    },
+    {
+      "name": "actualExtendedThirdCompactParent_valid_iff",
+      "kind": "theorem",
+      "line": 60,
+      "complete_signature": "theorem actualExtendedThirdCompactParent_valid_iff (e h : ℝ) (m N : ℕ)\n    (p : Fin 3 → ℕ) :\n    FirstExitValidSelection (actualExtendedThirdCompactUpperPolicy e h m N)\n        [] true (List.ofFn p).dropLast ↔\n      actualExtendedThirdCompactInitialPolicy e m N false [p 0] = true"
+    },
+    {
+      "name": "actualExtendedThirdCompactParent_valid_of_cell",
+      "kind": "theorem",
+      "line": 75,
+      "complete_signature": "theorem actualExtendedThirdCompactParent_valid_of_cell {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p : Fin 3 → ℕ) (hp0 : 0 < p 0) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j) :\n    FirstExitValidSelection (actualExtendedThirdCompactUpperPolicy e h m N)\n      [] true (List.ofFn p).dropLast"
+    },
+    {
+      "name": "actualExtendedThirdCompactFrontier_cell_filter",
+      "kind": "theorem",
+      "line": 89,
+      "complete_signature": "theorem actualExtendedThirdCompactFrontier_cell_filter {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (hh : 0 < h) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (w : ℝ)\n    (hw : w ≤ (N : ℝ) ^ h) (hcap : (N : ℝ) ^ thirdPrefixRho ≤ (cap : ℝ))\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    (firstExitFrontierTuples 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n        (roughPrimeUniverse N cap w ((N : ℝ) ^ thirdPrefixRho))).filter\n        (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j) =\n      actualExtendedThirdDistinctCellPrimeTuples N h m j"
+    },
+    {
+      "name": "actualExtendedThirdCompactFrontierCellSum",
+      "kind": "def",
+      "line": 147,
+      "complete_signature": "def actualExtendedThirdCompactFrontierCellSum (e h : ℝ) (m N cap : ℕ) (w : ℝ)\n    (j : ActualExtendedThirdDyadicLabel m) (G : (Fin 3 → ℕ) → ℝ) : ℝ",
+      "complete_definition": "def actualExtendedThirdCompactFrontierCellSum (e h : ℝ) (m N cap : ℕ) (w : ℝ)\n    (j : ActualExtendedThirdDyadicLabel m) (G : (Fin 3 → ℕ) → ℝ) : ℝ :=\n  ((firstExitFrontierCandidates 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n    (fun q : ℕ => 1 / ((q : ℝ) - 1))\n    (roughPrimeUniverse N cap w ((N : ℝ) ^ thirdPrefixRho))).map (fun candidate =>\n      (candidate.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n        (if primeHistoryLogCoordinates (N : ℝ) 3 candidate.selectedPrefix ∈\n            actualExtendedThirdOwnedCell m j then\n          G (primeHistoryTuple 3 candidate.selectedPrefix) else 0))).sum"
+    },
+    {
+      "name": "actualExtendedThirdCompactFrontierCellSum_eq_tuple_sum",
+      "kind": "theorem",
+      "line": 157,
+      "complete_signature": "theorem actualExtendedThirdCompactFrontierCellSum_eq_tuple_sum {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (hh : 0 < h) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (w : ℝ)\n    (hw : w ≤ (N : ℝ) ^ h) (hcap : (N : ℝ) ^ thirdPrefixRho ≤ (cap : ℝ))\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (G : (Fin 3 → ℕ) → ℝ) :\n    actualExtendedThirdCompactFrontierCellSum e h m N cap w j G =\n      ∑ p ∈ actualExtendedThirdDistinctCellPrimeTuples N h m j,\n        (∏ i : Fin 3, 1 / ((p i : ℝ) - 1)) * G p"
+    },
+    {
+      "name": "actualExtendedThirdCompactFrontierCellSum_eq_product_sum",
+      "kind": "theorem",
+      "line": 183,
+      "complete_signature": "theorem actualExtendedThirdCompactFrontierCellSum_eq_product_sum {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (hh : 0 < h) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (w : ℝ)\n    (hw : w ≤ (N : ℝ) ^ h) (hcap : (N : ℝ) ^ thirdPrefixRho ≤ (cap : ℝ))\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (G : (Fin 3 → ℕ) → ℝ) :\n    actualExtendedThirdCompactFrontierCellSum e h m N cap w j G =\n      ∑ n ∈ actualExtendedThirdDistinctCellPrimeProducts N h m j,\n        1 / (Nat.totient n : ℝ) * G (actualExtendedThirdDistinctCellProductTuple N h m j n)"
+    }
+  ],
+  "theorem_count": 8,
+  "definition_count": 1,
+  "direct_project_parents": [
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdCompactUpperRho.lean",
+      "source_sha256": "5cef3131cb204fbca47d2b704905dbce9c838b4627f9b446caa4edb597afe8f5",
+      "acceptance": "source binding; not independently inferred owned"
+    },
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdDistinctProductHarmonic",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdDistinctProductHarmonic.lean",
+      "source_sha256": "75f52840ccf119eafa31e6ba1376c4fcf1946bef0c814ef23bbe41aad6aa6064",
+      "acceptance": "source binding; not independently inferred owned"
+    }
+  ],
+  "relative_DAG": "Only these two project imports plus implicit Init; fresh self relative to exact parent-source union, zero new direct foreign imports. No full properDAG sweep or independent imported-closure proof replay claimed.",
+  "math_and_premise_audit": [
+    "Actual compact adoption supplies h<=every logarithmic coordinate<rho, from the actual h cutoff on third lower endpoint, owned half-open box and weak coordinate order. The analytic cube[h/2,rho+1) is used only as an auxiliary carrier containing these same actual atoms.",
+    "Actual history log is proved equal to processing-order tuple log; the stored history is reversed [p2,p1,p0].",
+    "FirstExitValidSelection of the proper two-prime prefix has exactly the initial singleton admission; its second admission is even-retained. The third candidate own old/new cube test is absent, as required for a rank-two candidate frontier.",
+    "On an adopted same owned cell the new5cef theorem internally pays initial singleton admission from the actual first-cube cap and same dyadic first stop. The caller does not supply prefix admissibility or an arbitrary retained-candidate licence.",
+    "Exact frontier-cell equality retains the real rough enumeration cap: N^rho<=cap and w<=N^h. No analytic cube upper rho+1 is substituted for that physical cap. All prime coordinates keep primality, exclusion of divisors of the same N, original rough lower cutoff and strict upper cutoff.",
+    "Forward frontier membership yields strict descending actual primes, hence strict logarithmic order gates, while keeping every original owned-cell endpoint. Backward root strict-cell membership plus actual samecell bounds supplies all physical rough carrier conditions and the actual proper-prefix validity.",
+    "The actual original firstExitFrontierCandidates list is reindexed using its existing exact weighted tuple provider and the actual rough-universe Nodup theorem. An arbitrary signed original triple test G is preserved, with no absolute-value replacement.",
+    "The root actual strictly ordered product image is injective and recovers its canonical original triple. Hence the same arbitrary G becomes G(recoveredtuple), and the actual reciprocal prime factors give exactly1/phi(n). No factorial or Cartesian replacement is introduced."
+  ],
+  "fixed_project_API_checks": [
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\FirstExitFrontierTupleReindex.lean",
+      "sha256": "c42a94ac4802e8114667a4f3282e316746fd9b8beef9dce363440aee33f74452",
+      "API_read": "weighted_sum_eq_tuple_sum242-256: carrier Nodup and arbitrary tuple f; mem_actualPrimeFrontierTuples_iff_of_cutoff_le_cap293-303: actual strict order, sameN exclusions, real rough endpoints, and valid proper prefix"
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\FirstExitValidSelection.lean",
+      "sha256": "40327d64b355ee84c652ad11f1d1697610c8edb29b1bdc354e34e35bc5d2417f",
+      "API_read": "18-22: recurse by processing order and test !positive on reverse-stored prefix"
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\FinitePrimeGeometryCore.lean",
+      "sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+      "API_read": "186-191 actual logarithmic inverse;225-233 strictAnti equivalence"
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdCompactHarmonicProfile.lean",
+      "sha256": "34f7cceee29e4cc1f029f0dff33042319297875efc58f78609bdb55cbe301620",
+      "API_read": "48-50 actual ownedcell intersectclosedorder;126-144 actual adoptedcells cube containment"
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdDistinctProductHarmonic.lean",
+      "sha256": "75f52840ccf119eafa31e6ba1376c4fcf1946bef0c814ef23bbe41aad6aa6064",
+      "API_read": "115-128 actual unique strictly ordered products, exact totient weight, arbitrary G retained"
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdCompactUpperRho.lean",
+      "sha256": "5cef3131cb204fbca47d2b704905dbce9c838b4627f9b446caa4edb597afe8f5",
+      "API_read": "new27decl actualfirstadmission supplied by samecell firstcube and samefirststop"
+    }
+  ],
+  "findings": [],
+  "runtime_API_risks": [
+    "List.ofFn Fin3 normalization, Bool policy simp and fixed projection arithmetic have not been elaborated in this source-only review. Actual runtime execution remains authoritative."
+  ],
+  "remaining_gates": [
+    "Actual strict proof/API compilation and owned closure acceptance of this leaf and pending direct parents.",
+    "Identify the full original signed rho difference or saving with these candidate contributions; this file proves candidate carrier/sum identities only.",
+    "Pay actual density/harmonic profile identity, physical counting remainder, distribution endpoint and final signed mean. No such caller premise or conclusion appears here."
+  ],
+  "pins": {
+    "lake-manifest.json": {
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "bytes_equal_HEAD": true
+    },
+    "lean-toolchain": {
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "bytes_equal_HEAD": true
+    },
+    "lakefile.toml": {
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "bytes_equal_HEAD": true
+    }
+  },
+  "lean_invoked": false,
+  "build_invoked": false,
+  "frozen_source_or_checkers_modified": false,
+  "acceptance": "SOURCE_ONLY; no proof execution PASS or independent imported-closure acceptance."
+}

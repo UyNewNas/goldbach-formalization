@@ -1,0 +1,672 @@
+{
+  "schema": "independent-frontier-full-source-review-v1",
+  "status": "SOURCE_ONLY_FULL_INDEPENDENT_REVIEW_NO_CONFIRMED_MATH_OR_FIXED_API_BLOCKER",
+  "reviewer": "/root/lower_resume (not the author of these three historical Rosser leaves)",
+  "reviewed_at_utc": "2026-10-15T21:47:51.667200+00:00",
+  "scope": "One of the three explicitly authorized current project frontier sources behind ActualPrimeBoxOwnCubeResidual dd140 and ActualExtendedThirdCompactResidualProfile 051. No whole-closure/foreign source walk performed.",
+  "candidate": {
+    "module": "ImbalancedChen.ActualRosserEvenBox",
+    "path": "ImbalancedChen/ActualRosserEvenBox.lean",
+    "sha256": "55287bfc6e22bfe8bb7f5d00a8698f4030c4c1cea23468c4edb72bea30a2bf52",
+    "imports": [
+      "ImbalancedChen.ActualLowerRosserBoundaryExpansion",
+      "ImbalancedChen.ActualPrimeBoxMass",
+      "Mathlib.Algebra.BigOperators.Fin",
+      "Mathlib.Data.List.FinRange",
+      "Mathlib.Order.WellFounded"
+    ],
+    "declaration_count": 9,
+    "definition_count": 2,
+    "all_complete_types_definitions_and_proofs": [
+      {
+        "name": "actualRosserEvenTail",
+        "kind": "def",
+        "private": false,
+        "line": 25,
+        "complete_header": "def actualRosserEvenTail {k : ℕ} (p : Fin (2 * k + 2) → ℕ) : Finset ℕ",
+        "complete_proof_or_definition_body": "Finset.univ.image (fun i : Fin (2 * k + 1) => p i.castSucc)",
+        "complete_definition": "def actualRosserEvenTail {k : ℕ} (p : Fin (2 * k + 2) → ℕ) : Finset ℕ :=\nFinset.univ.image (fun i : Fin (2 * k + 1) => p i.castSucc)"
+      },
+      {
+        "name": "actualRosserEvenBoundaryMap",
+        "kind": "def",
+        "private": false,
+        "line": 29,
+        "complete_header": "def actualRosserEvenBoundaryMap {k : ℕ} (p : Fin (2 * k + 2) → ℕ) :\n    Sigma (fun _ : ℕ => Finset ℕ)",
+        "complete_proof_or_definition_body": "⟨p (Fin.last (2 * k + 1)), actualRosserEvenTail p⟩",
+        "complete_definition": "def actualRosserEvenBoundaryMap {k : ℕ} (p : Fin (2 * k + 2) → ℕ) :\n    Sigma (fun _ : ℕ => Finset ℕ) :=\n⟨p (Fin.last (2 * k + 1)), actualRosserEvenTail p⟩"
+      },
+      {
+        "name": "actualRosserEvenTail_card",
+        "kind": "theorem",
+        "private": false,
+        "line": 34,
+        "complete_header": "theorem actualRosserEvenTail_card {k : ℕ} {p : Fin (2 * k + 2) → ℕ}\n    (hp : Function.Injective p) : (actualRosserEvenTail p).card = 2 * k + 1",
+        "complete_proof_or_definition_body": "by\n  rw [actualRosserEvenTail, Finset.card_image_of_injective]\n  · simp\n  · exact hp.comp (Fin.castSucc_injective (2 * k + 1))"
+      },
+      {
+        "name": "actualRosserEvenTail_prod",
+        "kind": "theorem",
+        "private": false,
+        "line": 41,
+        "complete_header": "theorem actualRosserEvenTail_prod {k : ℕ} {p : Fin (2 * k + 2) → ℕ}\n    (hp : Function.Injective p) (g : ℕ → ℝ) :\n    (∏ r ∈ actualRosserEvenTail p, g r) = ∏ i : Fin (2 * k + 1), g (p i.castSucc)",
+        "complete_proof_or_definition_body": "by\n  rw [actualRosserEvenTail, Finset.prod_image]\n  exact fun _ _ _ _ h => Fin.castSucc_injective (2 * k + 1) (hp h)"
+      },
+      {
+        "name": "actualRosserEvenTail_range",
+        "kind": "theorem",
+        "private": false,
+        "line": 47,
+        "complete_header": "theorem actualRosserEvenTail_range {k : ℕ} (p : Fin (2 * k + 2) → ℕ) :\n    Set.range p = (↑(actualRosserEvenTail p) : Set ℕ) ∪ {p (Fin.last (2 * k + 1))}",
+        "complete_proof_or_definition_body": "by\n  ext r\n  constructor\n  · rintro ⟨i, rfl⟩\n    rcases Fin.eq_castSucc_or_eq_last i with ⟨j, rfl⟩ | rfl\n    · exact Or.inl (Finset.mem_image.mpr ⟨j, Finset.mem_univ _, rfl⟩)\n    · exact Or.inr rfl\n  · rintro (hr | hr)\n    · obtain ⟨i, _, rfl⟩ := Finset.mem_image.mp hr\n      exact ⟨i.castSucc, rfl⟩\n    · exact ⟨Fin.last (2 * k + 1), hr.symm⟩"
+      },
+      {
+        "name": "actualRosserEvenBoundaryMap_injOn_strictAnti",
+        "kind": "theorem",
+        "private": false,
+        "line": 62,
+        "complete_header": "theorem actualRosserEvenBoundaryMap_injOn_strictAnti {k : ℕ}\n    (T : Finset (Fin (2 * k + 2) → ℕ)) (hT : ∀ p ∈ T, StrictAnti p) :\n    Set.InjOn (actualRosserEvenBoundaryMap (k",
+        "complete_proof_or_definition_body": "k)) (T : Set (Fin (2 * k + 2) → ℕ)) := by\n  intro p hp r hr heq\n  have hq : p (Fin.last (2 * k + 1)) = r (Fin.last (2 * k + 1)) := congrArg Sigma.fst heq\n  have hs : actualRosserEvenTail p = actualRosserEvenTail r :=\n    congrArg (fun z : Sigma (fun _ : ℕ => Finset ℕ) => z.2) heq\n  apply ((hT p hp).range_inj (hT r hr)).mp\n  rw [actualRosserEvenTail_range p, actualRosserEvenTail_range r, hs, hq]"
+      },
+      {
+        "name": "actualRosserEvenTail_rank_eq",
+        "kind": "theorem",
+        "private": false,
+        "line": 74,
+        "complete_header": "theorem actualRosserEvenTail_rank_eq {k l : ℕ}\n    {p : Fin (2 * k + 2) → ℕ} {r : Fin (2 * l + 2) → ℕ}\n    (hp : Function.Injective p) (hr : Function.Injective r)\n    (heq : actualRosserEvenTail p = actualRosserEvenTail r) : k = l",
+        "complete_proof_or_definition_body": "by\n  have hc := congrArg Finset.card heq\n  rw [actualRosserEvenTail_card hp, actualRosserEvenTail_card hr] at hc\n  omega"
+      },
+      {
+        "name": "even_box_upper_le",
+        "kind": "theorem",
+        "private": true,
+        "line": 82,
+        "complete_header": "private theorem even_box_upper_le {k : ℕ} {a b : Fin (2 * k + 2) → ℝ} {u : ℝ}\n    (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k + 1), b i.succ ≤ a i.castSucc) (hbu : b 0 ≤ u) :\n    ∀ i, b i ≤ u",
+        "complete_proof_or_definition_body": "by\n  have hb : Antitone b := Fin.antitone_iff_succ_le.mpr\n    (fun i => (hsep i).trans (hab i.castSucc).le)\n  exact fun i => (hb (Fin.zero_le i)).trans hbu"
+      },
+      {
+        "name": "actualRosserEvenBox_mem_boundary",
+        "kind": "theorem",
+        "private": false,
+        "line": 93,
+        "complete_header": "theorem actualRosserEvenBox_mem_boundary\n    (k N cap : ℕ) (hN : 1 < N) (a b : Fin (2 * k + 2) → ℝ) (u beta : ℝ)\n    (_hbeta : 0 < beta) (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k + 1), b i.succ ≤ a i.castSucc)\n    (hbu : b 0 ≤ u)\n    (hprod : (∑ i : Fin (2 * k + 1), b i.castSucc) ≤ beta)\n    (hprefix : ∀ i : Fin (2 * k + 1), Odd i.val →\n      (∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc) + 3 * b i.castSucc ≤ beta)\n    (hshell : beta ≤ (∑ i : Fin (2 * k + 1), a i.castSucc) +\n      3 * a (Fin.last (2 * k + 1)))\n    (hcap : (N : ℝ) ^ u ≤ (cap : ℝ))\n    {p : Fin (2 * k + 2) → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b) :\n    p (Fin.last (2 * k + 1)) ∈ actualSmallPrimeFinset N cap ((N : ℝ) ^ u) ∧\n      actualRosserEvenTail p ∈ actualLowerRosserBoundarySets N cap\n        ((N : ℝ) ^ u) ((N : ℝ) ^ beta) (p (Fin.last (2 * k + 1))) ∧\n      (actualRosserEvenTail p).card = 2 * k + 1",
+        "complete_proof_or_definition_body": "by\n  have hNreal : (1 : ℝ) < N := by exact_mod_cast hN\n  have hNpos : (0 : ℝ) < N := zero_lt_one.trans hNreal\n  have hm := mem_actualPrimeBoxTuples_iff.mp hp\n  have hanti := actualPrimeBoxTuples_strictAnti (by omega : 1 ≤ N) hsep hp\n  have hP (i : Fin (2 * k + 2)) :\n      p i ∈ actualSmallPrimeFinset N cap ((N : ℝ) ^ u) := by\n    rw [mem_actualSmallPrimeFinset_iff_of_cutoff_le_cap hcap]\n    exact ⟨(hm i).1, (hm i).2.1, (hm i).2.2.2.trans_le\n      (Real.rpow_le_rpow_of_exponent_le hNreal.le (even_box_upper_le hab hsep hbu i))⟩\n  have hpPos (i : Fin (2 * k + 2)) : (0 : ℝ) < p i := by\n    exact_mod_cast (hm i).1.pos\n  have hprodLE (S : Finset (Fin (2 * k + 1))) :\n      (∏ i ∈ S, (p i.castSucc : ℝ)) ≤\n        (N : ℝ) ^ (∑ i ∈ S, b i.castSucc) := by\n    rw [Real.rpow_sum_of_pos hNpos]\n    exact Finset.prod_le_prod (fun i _ => (hpPos _).le)\n      (fun i _ => (hm i.castSucc).2.2.2.le)\n  have htotalReal : (∏ i : Fin (2 * k + 1), (p i.castSucc : ℝ)) < (N : ℝ) ^ beta := by\n    calc\n      (∏ i : Fin (2 * k + 1), (p i.castSucc : ℝ)) <\n          ∏ i : Fin (2 * k + 1), (N : ℝ) ^ b i.castSucc := by\n        exact Finset.prod_lt_prod_of_nonempty (fun i _ => hpPos _)\n          (fun i _ => (hm i.castSucc).2.2.2)\n          ⟨⟨0, by omega⟩, Finset.mem_univ _⟩\n      _ = (N : ℝ) ^ (∑ i : Fin (2 * k + 1), b i.castSucc) :=\n        (Real.rpow_sum_of_pos hNpos _ _).symm\n      _ ≤ (N : ℝ) ^ beta := Real.rpow_le_rpow_of_exponent_le hNreal.le hprod\n  have hprefixReal (i : Fin (2 * k + 1)) (hi : Odd i.val) :\n      (∏ j : Fin (2 * k + 1) with j.val < i.val, (p j.castSucc : ℝ)) *\n          (p i.castSucc : ℝ) ^ 3 < (N : ℝ) ^ beta := by\n    have hcube : (p i.castSucc : ℝ) ^ 3 < ((N : ℝ) ^ b i.castSucc) ^ 3 :=\n      pow_lt_pow_left₀ (hm i.castSucc).2.2.2 (hpPos _).le (by decide)\n    calc\n      _ ≤ ((N : ℝ) ^ (∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc)) *\n          (p i.castSucc : ℝ) ^ 3 :=\n        mul_le_mul_of_nonneg_right (hprodLE _) (by positivity)\n      _ < ((N : ℝ) ^ (∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc)) *\n          ((N : ℝ) ^ b i.castSucc) ^ 3 :=\n        mul_lt_mul_of_pos_left hcube (Real.rpow_pos_of_pos hNpos _)\n      _ = (N : ℝ) ^ ((∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc) +\n          3 * b i.castSucc) := by\n        rw [Real.rpow_add hNpos, show 3 * b i.castSucc = b i.castSucc * (3 : ℕ) by ring,\n          Real.rpow_mul_natCast hNpos.le]\n      _ ≤ (N : ℝ) ^ beta := Real.rpow_le_rpow_of_exponent_le hNreal.le (hprefix i hi)\n  have hshellReal : (N : ℝ) ^ beta ≤\n      (∏ i : Fin (2 * k + 1), (p i.castSucc : ℝ)) * (p (Fin.last (2 * k + 1)) : ℝ) ^ 3 := by\n    calc\n      (N : ℝ) ^ beta ≤ (N : ℝ) ^ ((∑ i : Fin (2 * k + 1), a i.castSucc) +\n          3 * a (Fin.last (2 * k + 1))) :=\n        Real.rpow_le_rpow_of_exponent_le hNreal.le hshell\n      _ = (∏ i : Fin (2 * k + 1), (N : ℝ) ^ a i.castSucc) *\n          ((N : ℝ) ^ a (Fin.last (2 * k + 1))) ^ 3 := by\n        rw [Real.rpow_add hNpos, Real.rpow_sum_of_pos hNpos,\n          show 3 * a (Fin.last (2 * k + 1)) = a (Fin.last (2 * k + 1)) * (3 : ℕ) by ring,\n          Real.rpow_mul_natCast hNpos.le]\n      _ ≤ _ := mul_le_mul\n        (Finset.prod_le_prod (fun _ _ => (Real.rpow_pos_of_pos hNpos _).le)\n          (fun i _ => (hm i.castSucc).2.2.1))\n        (pow_le_pow_left₀ (Real.rpow_nonneg hNpos.le _)\n          (hm (Fin.last (2 * k + 1))).2.2.1 3) (by positivity) (by positivity)\n  let l := List.ofFn (fun i : Fin (2 * k + 1) => p i.castSucc)\n  have hlinj : Function.Injective (fun i : Fin (2 * k + 1) => p i.castSucc) :=\n    hanti.injective.comp (Fin.castSucc_injective (2 * k + 1))\n  have hlsorted : l.SortedGT := by\n    apply List.sortedGT_iff_pairwise.mpr\n    exact List.pairwise_ofFn.mpr (fun _ _ hij => hanti (Fin.castSucc_lt_castSucc_iff.mpr hij))\n  have hlfinset : l.toFinset = actualRosserEvenTail p := by\n    ext r\n    simp only [l, List.mem_toFinset, List.mem_ofFn, actualRosserEvenTail,\n      Finset.mem_image, Finset.mem_univ, true_and]\n  have hsort : (actualRosserEvenTail p).sort (· ≥ ·) = l := by\n    rw [← hlfinset]\n    exact (List.toFinset_sort (r := (· ≥ ·)) (List.nodup_ofFn.mpr hlinj)).mpr\n      hlsorted.sortedGE.pairwise\n  have hchain : LinearSieve.LowerRosserBoundaryChain (Nat.ceil ((N : ℝ) ^ beta))\n      (p (Fin.last (2 * k + 1))) l := by\n    refine ⟨hlsorted, ?_, ?_, ?_, ?_⟩\n    · simp [l]\n    · apply Nat.lt_ceil.mpr\n      simpa only [l, List.prod_ofFn, Nat.cast_prod] using htotalReal\n    · intro i hi\n      have hil : i.val < 2 * k + 1 := by simpa [l] using i.isLt\n      apply Nat.lt_ceil.mpr\n      simp only [l, List.prod_take_ofFn, List.get_ofFn,\n        Nat.cast_mul, Nat.cast_pow, Nat.cast_prod]\n      convert hprefixReal ⟨i.val, hil⟩ (Nat.odd_iff.mpr (Nat.not_even_iff.mp hi)) using 1\n      all_goals rfl\n    · apply Nat.ceil_le.mpr\n      simpa only [l, List.prod_ofFn, Nat.cast_prod, Nat.cast_mul, Nat.cast_pow] using hshellReal\n  have hqnot : p (Fin.last (2 * k + 1)) ∉ actualRosserEvenTail p := by\n    intro hq\n    obtain ⟨i, _, hi⟩ := Finset.mem_image.mp hq\n    exact (Fin.castSucc_ne_last i) (hanti.injective hi)\n  have hqmin : ∀ r ∈ actualRosserEvenTail p, p (Fin.last (2 * k + 1)) ≤ r := by\n    intro r hr\n    obtain ⟨i, _, rfl⟩ := Finset.mem_image.mp hr\n    exact (hanti i.castSucc_lt_last).le\n  have hboundary : LinearSieve.LowerRosserBoundarySet (Nat.ceil ((N : ℝ) ^ beta))\n      (p (Fin.last (2 * k + 1))) (actualRosserEvenTail p) := by\n    apply (LinearSieve.lowerRosserBoundarySet_iff_sorted_chain hqnot\n      (hm (Fin.last (2 * k + 1))).1 hqmin).mpr\n    rwa [hsort]\n  refine ⟨hP _, Finset.mem_filter.mpr ⟨Finset.mem_powerset.mpr ?_, hboundary⟩,\n    actualRosserEvenTail_card hanti.injective⟩\n  intro r hr\n  obtain ⟨i, _, rfl⟩ := Finset.mem_image.mp hr\n  exact Finset.mem_filter.mpr ⟨hP _, hanti i.castSucc_lt_last⟩"
+      }
+    ],
+    "full_current_raw_source": "import ImbalancedChen.ActualLowerRosserBoundaryExpansion\nimport ImbalancedChen.ActualPrimeBoxMass\nimport Mathlib.Algebra.BigOperators.Fin\nimport Mathlib.Data.List.FinRange\nimport Mathlib.Order.WellFounded\n\n/-!\n# Fixed even prime boxes in the actual lower Rosser boundary\n\nA decreasing tuple of length `2*k+2` is sent to its least prime and the\nfinset of the other `2*k+1` primes. Odd-index cubic tests and the terminal\ncrossing are proved at the literal natural level `ceil (N ^ beta)`.\nThe lowest rank is a genuine two-prime box with a singleton boundary tail;\nit has no internal cubic test. Tail cardinality separates different ranks.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen scoped Classical BigOperators\nopen MathlibNt.SieveTheory\n\n/-- The primes preceding the terminal least coordinate. -/\ndef actualRosserEvenTail {k : ℕ} (p : Fin (2 * k + 2) → ℕ) : Finset ℕ :=\n  Finset.univ.image (fun i : Fin (2 * k + 1) => p i.castSucc)\n\n/-- The actual terminal-prime/boundary-tail map. -/\ndef actualRosserEvenBoundaryMap {k : ℕ} (p : Fin (2 * k + 2) → ℕ) :\n    Sigma (fun _ : ℕ => Finset ℕ) :=\n  ⟨p (Fin.last (2 * k + 1)), actualRosserEvenTail p⟩\n\n/-- Distinct tuple labels preserve the exact tail rank. -/\ntheorem actualRosserEvenTail_card {k : ℕ} {p : Fin (2 * k + 2) → ℕ}\n    (hp : Function.Injective p) : (actualRosserEvenTail p).card = 2 * k + 1 := by\n  rw [actualRosserEvenTail, Finset.card_image_of_injective]\n  · simp\n  · exact hp.comp (Fin.castSucc_injective (2 * k + 1))\n\n/-- Product weights on the actual tail have no multiplicities. -/\ntheorem actualRosserEvenTail_prod {k : ℕ} {p : Fin (2 * k + 2) → ℕ}\n    (hp : Function.Injective p) (g : ℕ → ℝ) :\n    (∏ r ∈ actualRosserEvenTail p, g r) = ∏ i : Fin (2 * k + 1), g (p i.castSucc) := by\n  rw [actualRosserEvenTail, Finset.prod_image]\n  exact fun _ _ _ _ h => Fin.castSucc_injective (2 * k + 1) (hp h)\n\ntheorem actualRosserEvenTail_range {k : ℕ} (p : Fin (2 * k + 2) → ℕ) :\n    Set.range p = (↑(actualRosserEvenTail p) : Set ℕ) ∪ {p (Fin.last (2 * k + 1))} := by\n  ext r\n  constructor\n  · rintro ⟨i, rfl⟩\n    rcases Fin.eq_castSucc_or_eq_last i with ⟨j, rfl⟩ | rfl\n    · exact Or.inl (Finset.mem_image.mpr ⟨j, Finset.mem_univ _, rfl⟩)\n    · exact Or.inr rfl\n  · rintro (hr | hr)\n    · obtain ⟨i, _, rfl⟩ := Finset.mem_image.mp hr\n      exact ⟨i.castSucc, rfl⟩\n    · exact ⟨Fin.last (2 * k + 1), hr.symm⟩\n\n/-- The map is injective on every collection of decreasing tuples of one\nfixed rank, including the singleton-tail rank. -/\ntheorem actualRosserEvenBoundaryMap_injOn_strictAnti {k : ℕ}\n    (T : Finset (Fin (2 * k + 2) → ℕ)) (hT : ∀ p ∈ T, StrictAnti p) :\n    Set.InjOn (actualRosserEvenBoundaryMap (k := k)) (T : Set (Fin (2 * k + 2) → ℕ)) := by\n  intro p hp r hr heq\n  have hq : p (Fin.last (2 * k + 1)) = r (Fin.last (2 * k + 1)) := congrArg Sigma.fst heq\n  have hs : actualRosserEvenTail p = actualRosserEvenTail r :=\n    congrArg (fun z : Sigma (fun _ : ℕ => Finset ℕ) => z.2) heq\n  apply ((hT p hp).range_inj (hT r hr)).mp\n  rw [actualRosserEvenTail_range p, actualRosserEvenTail_range r, hs, hq]\n\n/-- Equal actual boundary tails from injective tuples force equal ranks.\nThis is the disjointness certificate needed before combining different layers. -/\ntheorem actualRosserEvenTail_rank_eq {k l : ℕ}\n    {p : Fin (2 * k + 2) → ℕ} {r : Fin (2 * l + 2) → ℕ}\n    (hp : Function.Injective p) (hr : Function.Injective r)\n    (heq : actualRosserEvenTail p = actualRosserEvenTail r) : k = l := by\n  have hc := congrArg Finset.card heq\n  rw [actualRosserEvenTail_card hp, actualRosserEvenTail_card hr] at hc\n  omega\n\nprivate theorem even_box_upper_le {k : ℕ} {a b : Fin (2 * k + 2) → ℝ} {u : ℝ}\n    (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k + 1), b i.succ ≤ a i.castSucc) (hbu : b 0 ≤ u) :\n    ∀ i, b i ≤ u := by\n  have hb : Antitone b := Fin.antitone_iff_succ_le.mpr\n    (fun i => (hsep i).trans (hab i.castSucc).le)\n  exact fun i => (hb (Fin.zero_le i)).trans hbu\n\n/-- All prefix tests and the terminal crossing are verified at the same\nliteral `ceil (N ^ beta)` used by the actual small Rosser coefficient.\nOnly finite geometric inequalities are assumed; no density estimate is used. -/\ntheorem actualRosserEvenBox_mem_boundary\n    (k N cap : ℕ) (hN : 1 < N) (a b : Fin (2 * k + 2) → ℝ) (u beta : ℝ)\n    (_hbeta : 0 < beta) (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k + 1), b i.succ ≤ a i.castSucc)\n    (hbu : b 0 ≤ u)\n    (hprod : (∑ i : Fin (2 * k + 1), b i.castSucc) ≤ beta)\n    (hprefix : ∀ i : Fin (2 * k + 1), Odd i.val →\n      (∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc) + 3 * b i.castSucc ≤ beta)\n    (hshell : beta ≤ (∑ i : Fin (2 * k + 1), a i.castSucc) +\n      3 * a (Fin.last (2 * k + 1)))\n    (hcap : (N : ℝ) ^ u ≤ (cap : ℝ))\n    {p : Fin (2 * k + 2) → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b) :\n    p (Fin.last (2 * k + 1)) ∈ actualSmallPrimeFinset N cap ((N : ℝ) ^ u) ∧\n      actualRosserEvenTail p ∈ actualLowerRosserBoundarySets N cap\n        ((N : ℝ) ^ u) ((N : ℝ) ^ beta) (p (Fin.last (2 * k + 1))) ∧\n      (actualRosserEvenTail p).card = 2 * k + 1 := by\n  have hNreal : (1 : ℝ) < N := by exact_mod_cast hN\n  have hNpos : (0 : ℝ) < N := zero_lt_one.trans hNreal\n  have hm := mem_actualPrimeBoxTuples_iff.mp hp\n  have hanti := actualPrimeBoxTuples_strictAnti (by omega : 1 ≤ N) hsep hp\n  have hP (i : Fin (2 * k + 2)) :\n      p i ∈ actualSmallPrimeFinset N cap ((N : ℝ) ^ u) := by\n    rw [mem_actualSmallPrimeFinset_iff_of_cutoff_le_cap hcap]\n    exact ⟨(hm i).1, (hm i).2.1, (hm i).2.2.2.trans_le\n      (Real.rpow_le_rpow_of_exponent_le hNreal.le (even_box_upper_le hab hsep hbu i))⟩\n  have hpPos (i : Fin (2 * k + 2)) : (0 : ℝ) < p i := by\n    exact_mod_cast (hm i).1.pos\n  have hprodLE (S : Finset (Fin (2 * k + 1))) :\n      (∏ i ∈ S, (p i.castSucc : ℝ)) ≤\n        (N : ℝ) ^ (∑ i ∈ S, b i.castSucc) := by\n    rw [Real.rpow_sum_of_pos hNpos]\n    exact Finset.prod_le_prod (fun i _ => (hpPos _).le)\n      (fun i _ => (hm i.castSucc).2.2.2.le)\n  have htotalReal : (∏ i : Fin (2 * k + 1), (p i.castSucc : ℝ)) < (N : ℝ) ^ beta := by\n    calc\n      (∏ i : Fin (2 * k + 1), (p i.castSucc : ℝ)) <\n          ∏ i : Fin (2 * k + 1), (N : ℝ) ^ b i.castSucc := by\n        exact Finset.prod_lt_prod_of_nonempty (fun i _ => hpPos _)\n          (fun i _ => (hm i.castSucc).2.2.2)\n          ⟨⟨0, by omega⟩, Finset.mem_univ _⟩\n      _ = (N : ℝ) ^ (∑ i : Fin (2 * k + 1), b i.castSucc) :=\n        (Real.rpow_sum_of_pos hNpos _ _).symm\n      _ ≤ (N : ℝ) ^ beta := Real.rpow_le_rpow_of_exponent_le hNreal.le hprod\n  have hprefixReal (i : Fin (2 * k + 1)) (hi : Odd i.val) :\n      (∏ j : Fin (2 * k + 1) with j.val < i.val, (p j.castSucc : ℝ)) *\n          (p i.castSucc : ℝ) ^ 3 < (N : ℝ) ^ beta := by\n    have hcube : (p i.castSucc : ℝ) ^ 3 < ((N : ℝ) ^ b i.castSucc) ^ 3 :=\n      pow_lt_pow_left₀ (hm i.castSucc).2.2.2 (hpPos _).le (by decide)\n    calc\n      _ ≤ ((N : ℝ) ^ (∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc)) *\n          (p i.castSucc : ℝ) ^ 3 :=\n        mul_le_mul_of_nonneg_right (hprodLE _) (by positivity)\n      _ < ((N : ℝ) ^ (∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc)) *\n          ((N : ℝ) ^ b i.castSucc) ^ 3 :=\n        mul_lt_mul_of_pos_left hcube (Real.rpow_pos_of_pos hNpos _)\n      _ = (N : ℝ) ^ ((∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc) +\n          3 * b i.castSucc) := by\n        rw [Real.rpow_add hNpos, show 3 * b i.castSucc = b i.castSucc * (3 : ℕ) by ring,\n          Real.rpow_mul_natCast hNpos.le]\n      _ ≤ (N : ℝ) ^ beta := Real.rpow_le_rpow_of_exponent_le hNreal.le (hprefix i hi)\n  have hshellReal : (N : ℝ) ^ beta ≤\n      (∏ i : Fin (2 * k + 1), (p i.castSucc : ℝ)) * (p (Fin.last (2 * k + 1)) : ℝ) ^ 3 := by\n    calc\n      (N : ℝ) ^ beta ≤ (N : ℝ) ^ ((∑ i : Fin (2 * k + 1), a i.castSucc) +\n          3 * a (Fin.last (2 * k + 1))) :=\n        Real.rpow_le_rpow_of_exponent_le hNreal.le hshell\n      _ = (∏ i : Fin (2 * k + 1), (N : ℝ) ^ a i.castSucc) *\n          ((N : ℝ) ^ a (Fin.last (2 * k + 1))) ^ 3 := by\n        rw [Real.rpow_add hNpos, Real.rpow_sum_of_pos hNpos,\n          show 3 * a (Fin.last (2 * k + 1)) = a (Fin.last (2 * k + 1)) * (3 : ℕ) by ring,\n          Real.rpow_mul_natCast hNpos.le]\n      _ ≤ _ := mul_le_mul\n        (Finset.prod_le_prod (fun _ _ => (Real.rpow_pos_of_pos hNpos _).le)\n          (fun i _ => (hm i.castSucc).2.2.1))\n        (pow_le_pow_left₀ (Real.rpow_nonneg hNpos.le _)\n          (hm (Fin.last (2 * k + 1))).2.2.1 3) (by positivity) (by positivity)\n  let l := List.ofFn (fun i : Fin (2 * k + 1) => p i.castSucc)\n  have hlinj : Function.Injective (fun i : Fin (2 * k + 1) => p i.castSucc) :=\n    hanti.injective.comp (Fin.castSucc_injective (2 * k + 1))\n  have hlsorted : l.SortedGT := by\n    apply List.sortedGT_iff_pairwise.mpr\n    exact List.pairwise_ofFn.mpr (fun _ _ hij => hanti (Fin.castSucc_lt_castSucc_iff.mpr hij))\n  have hlfinset : l.toFinset = actualRosserEvenTail p := by\n    ext r\n    simp only [l, List.mem_toFinset, List.mem_ofFn, actualRosserEvenTail,\n      Finset.mem_image, Finset.mem_univ, true_and]\n  have hsort : (actualRosserEvenTail p).sort (· ≥ ·) = l := by\n    rw [← hlfinset]\n    exact (List.toFinset_sort (r := (· ≥ ·)) (List.nodup_ofFn.mpr hlinj)).mpr\n      hlsorted.sortedGE.pairwise\n  have hchain : LinearSieve.LowerRosserBoundaryChain (Nat.ceil ((N : ℝ) ^ beta))\n      (p (Fin.last (2 * k + 1))) l := by\n    refine ⟨hlsorted, ?_, ?_, ?_, ?_⟩\n    · simp [l]\n    · apply Nat.lt_ceil.mpr\n      simpa only [l, List.prod_ofFn, Nat.cast_prod] using htotalReal\n    · intro i hi\n      have hil : i.val < 2 * k + 1 := by simpa [l] using i.isLt\n      apply Nat.lt_ceil.mpr\n      simp only [l, List.prod_take_ofFn, List.get_ofFn,\n        Nat.cast_mul, Nat.cast_pow, Nat.cast_prod]\n      convert hprefixReal ⟨i.val, hil⟩ (Nat.odd_iff.mpr (Nat.not_even_iff.mp hi)) using 1\n      all_goals rfl\n    · apply Nat.ceil_le.mpr\n      simpa only [l, List.prod_ofFn, Nat.cast_prod, Nat.cast_mul, Nat.cast_pow] using hshellReal\n  have hqnot : p (Fin.last (2 * k + 1)) ∉ actualRosserEvenTail p := by\n    intro hq\n    obtain ⟨i, _, hi⟩ := Finset.mem_image.mp hq\n    exact (Fin.castSucc_ne_last i) (hanti.injective hi)\n  have hqmin : ∀ r ∈ actualRosserEvenTail p, p (Fin.last (2 * k + 1)) ≤ r := by\n    intro r hr\n    obtain ⟨i, _, rfl⟩ := Finset.mem_image.mp hr\n    exact (hanti i.castSucc_lt_last).le\n  have hboundary : LinearSieve.LowerRosserBoundarySet (Nat.ceil ((N : ℝ) ^ beta))\n      (p (Fin.last (2 * k + 1))) (actualRosserEvenTail p) := by\n    apply (LinearSieve.lowerRosserBoundarySet_iff_sorted_chain hqnot\n      (hm (Fin.last (2 * k + 1))).1 hqmin).mpr\n    rwa [hsort]\n  refine ⟨hP _, Finset.mem_filter.mpr ⟨Finset.mem_powerset.mpr ?_, hboundary⟩,\n    actualRosserEvenTail_card hanti.injective⟩\n  intro r hr\n  obtain ⟨i, _, rfl⟩ := Finset.mem_image.mp hr\n  exact Finset.mem_filter.mpr ⟨hP _, hanti i.castSucc_lt_last⟩\n\nend\n\nend ImbalancedChen\n"
+  },
+  "direct_parents": [
+    {
+      "path": "ImbalancedChen/ActualLowerRosserBoundaryExpansion.lean",
+      "sha256": "9b012143bf99e7e411bc002c2adb90aee7ea06db6add34b405c495b4f4c32d56",
+      "imports": [
+        "ImbalancedChen.ActualRosserBoundaryExpansion"
+      ],
+      "review_of_relevant_parent_semantics": "Exact actual minus-density/Euler ratio =1-sum of nonnegative native lower boundary terms; finite recurrence and signs are proved internally. Full direct parent source read.",
+      "all_complete_parent_headers_and_definition_bodies": [
+        {
+          "name": "lowerRosserSetDensityRatio_eq_one_sub_sum_boundary",
+          "kind": "theorem",
+          "private": false,
+          "line": 22,
+          "complete_header": "theorem lowerRosserSetDensityRatio_eq_one_sub_sum_boundary\n    (nu : ℕ → ℝ) {D : ℕ} (P : Finset ℕ) (hD : 1 < D)\n    (hprime : ∀ p ∈ P, p.Prime) (hpD : ∀ p ∈ P, p < D)\n    (hfactor : ∀ p ∈ P, 1 - nu p ≠ 0) :\n    LinearSieve.lowerRosserSetDensitySum nu D P / ∏ p ∈ P, (1 - nu p) =\n      1 - ∑ q ∈ P,\n        (nu q / (1 - nu q)) *\n          ((∑ s ∈ (P.filter (fun p => q < p)).powerset.filter\n                (LinearSieve.LowerRosserBoundarySet D q),\n              ∏ p ∈ s, nu p) /\n            ∏ p ∈ P.filter (fun p => q < p), (1 - nu p))",
+          "complete_proof_or_definition_body": "by\n  induction P using Finset.induction_on_min with\n  | empty =>\n      simp [LinearSieve.lowerRosserSetDensitySum, LinearSieve.lowerRosserSetWeight,\n        LinearSieve.LowerRosserAdmissibleSet, hD]\n  | @insert q P hqmin ih =>\n      have hq : q ∉ P := by\n        intro hqP\n        have := hqmin q hqP\n        omega\n      have htail : (insert q P).filter (fun p => q < p) = P := by\n        ext p\n        simp only [Finset.mem_filter, Finset.mem_insert]\n        constructor\n        · rintro ⟨rfl | hp, hlt⟩\n          · omega\n          · exact hp\n        · intro hp\n          exact ⟨Or.inr hp, hqmin p hp⟩\n      have hfilter (r : ℕ) (hr : r ∈ P) :\n          (insert q P).filter (fun p => r < p) = P.filter (fun p => r < p) := by\n        ext p\n        simp only [Finset.mem_filter, Finset.mem_insert]\n        constructor\n        · rintro ⟨rfl | hp, hlt⟩\n          · have := hqmin r hr\n            omega\n          · exact ⟨hp, hlt⟩\n        · rintro ⟨hp, hlt⟩\n          exact ⟨Or.inr hp, hlt⟩\n      have hrec := LinearSieve.lowerRosserSetDensityRatio_insert_min nu hq\n        (hprime q (Finset.mem_insert_self q P))\n        (hpD q (Finset.mem_insert_self q P))\n        (fun p hp => Nat.le_of_lt (hqmin p hp))\n        (hfactor q (Finset.mem_insert_self q P))\n        (Finset.prod_ne_zero_iff.mpr (fun p hp =>\n          hfactor p (Finset.mem_insert_of_mem hp)))\n      rw [hrec]\n      rw [ih (fun p hp => hprime p (Finset.mem_insert_of_mem hp))\n        (fun p hp => hpD p (Finset.mem_insert_of_mem hp))\n        (fun p hp => hfactor p (Finset.mem_insert_of_mem hp))]\n      rw [Finset.sum_insert hq, htail]\n      have hsum :\n          (∑ r ∈ P,\n            nu r / (1 - nu r) *\n              ((∑ s ∈ ((insert q P).filter (fun p => r < p)).powerset.filter\n                    (LinearSieve.LowerRosserBoundarySet D r),\n                  ∏ p ∈ s, nu p) /\n                ∏ p ∈ (insert q P).filter (fun p => r < p), (1 - nu p))) =\n          ∑ r ∈ P,\n            nu r / (1 - nu r) *\n              ((∑ s ∈ (P.filter (fun p => r < p)).powerset.filter\n                    (LinearSieve.LowerRosserBoundarySet D r),\n                  ∏ p ∈ s, nu p) /\n                ∏ p ∈ P.filter (fun p => r < p), (1 - nu p)) := by\n        apply Finset.sum_congr rfl\n        intro r hr\n        rw [hfilter r hr]\n      rw [hsum]\n      ring"
+        },
+        {
+          "name": "actualSmallRosserMinusDensity_eq_setDensitySum",
+          "kind": "theorem",
+          "private": false,
+          "line": 94,
+          "complete_header": "theorem actualSmallRosserMinusDensity_eq_setDensitySum\n    (N cap : ℕ) (hEven : Even N) (y R : ℝ) (hcap : y ≤ (cap : ℝ)) :\n    actualSmallRosserMinusDensity N cap y R =\n      LinearSieve.lowerRosserSetDensitySum (fun p : ℕ => 1 / ((p : ℝ) - 1))\n        (Nat.ceil R) (actualSmallPrimeFinset N cap y)",
+          "complete_proof_or_definition_body": "by\n  rw [actualSmallRosserMinusDensity_eq_b8_mainSum_natCeil N cap hEven y R hcap,\n    LinearSieve.mainSum_lowerRosserWeight_eq_setDensitySum]\n  unfold LinearSieve.lowerRosserSetDensitySum\n  change (∑ s ∈ (goldbachB10ProdPrimes N y).primeFactors.powerset,\n    LinearSieve.lowerRosserSetWeight (Nat.ceil R) s *\n      ∏ p ∈ s, (goldbachB8PlusBoundingSieve N hEven y).nu p) = _\n  rw [goldbachB10ProdPrimes_primeFactors,\n    ← actualSmallPrimeFinset_eq_goldbachB10SiftingPrimes N cap y hcap]\n  apply Finset.sum_congr rfl\n  intro s hs\n  congr 1\n  apply Finset.prod_congr rfl\n  intro p hp\n  have hprime := actualSmallPrimeFinset_prime N cap y p\n    (Finset.mem_powerset.mp hs hp)\n  rw [goldbachB8PlusBoundingSieve_nu_eq_inv_totient,\n    Nat.totient_prime hprime, Nat.cast_sub hprime.one_le, Nat.cast_one]"
+        },
+        {
+          "name": "actualLowerRosserBoundarySets",
+          "kind": "def",
+          "private": false,
+          "line": 118,
+          "complete_header": "def actualLowerRosserBoundarySets (N cap : ℕ) (y R : ℝ) (q : ℕ) :\n    Finset (Finset ℕ)",
+          "complete_proof_or_definition_body": "((actualSmallPrimeFinset N cap y).filter (fun p => q < p)).powerset.filter\n    (LinearSieve.LowerRosserBoundarySet (Nat.ceil R) q)",
+          "complete_definition": "def actualLowerRosserBoundarySets (N cap : ℕ) (y R : ℝ) (q : ℕ) :\n    Finset (Finset ℕ) :=\n((actualSmallPrimeFinset N cap y).filter (fun p => q < p)).powerset.filter\n    (LinearSieve.LowerRosserBoundarySet (Nat.ceil R) q)"
+        },
+        {
+          "name": "actualLowerRosserBoundaryTerm",
+          "kind": "def",
+          "private": false,
+          "line": 124,
+          "complete_header": "def actualLowerRosserBoundaryTerm (N cap : ℕ) (y : ℝ) (q : ℕ) (s : Finset ℕ) : ℝ",
+          "complete_proof_or_definition_body": "actualUpperRosserBoundaryTerm N cap y q s",
+          "complete_definition": "def actualLowerRosserBoundaryTerm (N cap : ℕ) (y : ℝ) (q : ℕ) (s : Finset ℕ) : ℝ :=\nactualUpperRosserBoundaryTerm N cap y q s"
+        },
+        {
+          "name": "actualLowerRosserBoundaryTerm_nonneg",
+          "kind": "theorem",
+          "private": false,
+          "line": 127,
+          "complete_header": "theorem actualLowerRosserBoundaryTerm_nonneg\n    (N cap : ℕ) (hEven : Even N) (y : ℝ) {q : ℕ} {s : Finset ℕ}\n    (hq : q ∈ actualSmallPrimeFinset N cap y)\n    (hs : s ⊆ actualSmallPrimeFinset N cap y) :\n    0 ≤ actualLowerRosserBoundaryTerm N cap y q s",
+          "complete_proof_or_definition_body": "actualUpperRosserBoundaryTerm_nonneg N cap hEven y hq hs"
+        },
+        {
+          "name": "actualSmallRosserMinusDensity_ratio_eq_one_sub_boundary",
+          "kind": "theorem",
+          "private": false,
+          "line": 136,
+          "complete_header": "theorem actualSmallRosserMinusDensity_ratio_eq_one_sub_boundary\n    (N cap : ℕ) (hEven : Even N) (y R : ℝ)\n    (hcap : y ≤ (cap : ℝ)) (hR : 1 < R)\n    (hlevel : ∀ p ∈ actualSmallPrimeFinset N cap y, (p : ℝ) < R) :\n    actualSmallRosserMinusDensity N cap y R / actualSmallEulerProduct N cap y =\n      1 - ∑ q ∈ actualSmallPrimeFinset N cap y,\n        ∑ s ∈ actualLowerRosserBoundarySets N cap y R q,\n          actualLowerRosserBoundaryTerm N cap y q s",
+          "complete_proof_or_definition_body": "by\n  rw [actualSmallRosserMinusDensity_eq_setDensitySum N cap hEven y R hcap]\n  change LinearSieve.lowerRosserSetDensitySum (fun p : ℕ => 1 / ((p : ℝ) - 1))\n      (Nat.ceil R) (actualSmallPrimeFinset N cap y) /\n      (∏ p ∈ actualSmallPrimeFinset N cap y, (1 - 1 / ((p : ℝ) - 1))) = _\n  rw [lowerRosserSetDensityRatio_eq_one_sub_sum_boundary\n    (fun p : ℕ => 1 / ((p : ℝ) - 1)) (actualSmallPrimeFinset N cap y)\n    (Nat.lt_ceil.mpr (by simpa only [Nat.cast_one] using hR))\n    (actualSmallPrimeFinset_prime N cap y)\n    (fun p hp => Nat.lt_ceil.mpr (hlevel p hp))\n    (fun p hp => ne_of_gt (actualSmallPrimeFinset_euler_factor_pos hEven hp))]\n  apply congrArg (fun x : ℝ => 1 - x)\n  apply Finset.sum_congr rfl\n  intro q hq\n  change ((1 / ((q : ℝ) - 1)) / (1 - 1 / ((q : ℝ) - 1))) *\n      ((∑ s ∈ actualLowerRosserBoundarySets N cap y R q,\n          ∏ p ∈ s, 1 / ((p : ℝ) - 1)) /\n        (∏ p ∈ (actualSmallPrimeFinset N cap y).filter (fun p => q < p),\n          (1 - 1 / ((p : ℝ) - 1)))) = _\n  rw [Finset.sum_div, Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro s _hs\n  exact actualSmallEulerProduct_boundary_term N cap hEven y hq\n    (∏ p ∈ s, 1 / ((p : ℝ) - 1))"
+        },
+        {
+          "name": "actualSmallRosserMinusDensity_ratio_le_selected_boundary",
+          "kind": "theorem",
+          "private": false,
+          "line": 170,
+          "complete_header": "theorem actualSmallRosserMinusDensity_ratio_le_selected_boundary\n    (N cap : ℕ) (hEven : Even N) (y R : ℝ)\n    (hcap : y ≤ (cap : ℝ)) (hR : 1 < R)\n    (hlevel : ∀ p ∈ actualSmallPrimeFinset N cap y, (p : ℝ) < R)\n    (Q : Finset ℕ) (T : ℕ → Finset (Finset ℕ))\n    (hQ : Q ⊆ actualSmallPrimeFinset N cap y)\n    (hT : ∀ q ∈ Q, T q ⊆ actualLowerRosserBoundarySets N cap y R q) :\n    actualSmallRosserMinusDensity N cap y R / actualSmallEulerProduct N cap y ≤\n      1 - ∑ q ∈ Q, ∑ s ∈ T q, actualLowerRosserBoundaryTerm N cap y q s",
+          "complete_proof_or_definition_body": "by\n  rw [actualSmallRosserMinusDensity_ratio_eq_one_sub_boundary\n    N cap hEven y R hcap hR hlevel]\n  apply sub_le_sub_left\n  have hterm (q : ℕ) (hq : q ∈ actualSmallPrimeFinset N cap y)\n      (s : Finset ℕ) (hs : s ∈ actualLowerRosserBoundarySets N cap y R q) :\n      0 ≤ actualLowerRosserBoundaryTerm N cap y q s := by\n    apply actualLowerRosserBoundaryTerm_nonneg N cap hEven y hq\n    exact (Finset.mem_powerset.mp (Finset.mem_filter.mp hs).1).trans\n      (Finset.filter_subset _ _)\n  calc\n    (∑ q ∈ Q, ∑ s ∈ T q, actualLowerRosserBoundaryTerm N cap y q s) ≤\n        ∑ q ∈ Q, ∑ s ∈ actualLowerRosserBoundarySets N cap y R q,\n          actualLowerRosserBoundaryTerm N cap y q s := by\n      apply Finset.sum_le_sum\n      intro q hq\n      exact Finset.sum_le_sum_of_subset_of_nonneg (hT q hq)\n        (fun s hs _ => hterm q (hQ hq) s hs)\n    _ ≤ ∑ q ∈ actualSmallPrimeFinset N cap y,\n        ∑ s ∈ actualLowerRosserBoundarySets N cap y R q,\n          actualLowerRosserBoundaryTerm N cap y q s :=\n      Finset.sum_le_sum_of_subset_of_nonneg hQ\n        (fun q hq _ => Finset.sum_nonneg (fun s hs => hterm q hq s hs))"
+        },
+        {
+          "name": "actualSmallRosserMinusDensity_ratio_le_of_selected_boundary_loss",
+          "kind": "theorem",
+          "private": false,
+          "line": 204,
+          "complete_header": "theorem actualSmallRosserMinusDensity_ratio_le_of_selected_boundary_loss\n    (N cap : ℕ) (hEven : Even N) (y R : ℝ)\n    (hcap : y ≤ (cap : ℝ)) (hR : 1 < R)\n    (hlevel : ∀ p ∈ actualSmallPrimeFinset N cap y, (p : ℝ) < R)\n    (Q : Finset ℕ) (T : ℕ → Finset (Finset ℕ))\n    (hQ : Q ⊆ actualSmallPrimeFinset N cap y)\n    (hT : ∀ q ∈ Q, T q ⊆ actualLowerRosserBoundarySets N cap y R q)\n    (L : ℝ)\n    (hL : L ≤ ∑ q ∈ Q, ∑ s ∈ T q, actualLowerRosserBoundaryTerm N cap y q s) :\n    actualSmallRosserMinusDensity N cap y R / actualSmallEulerProduct N cap y ≤ 1 - L",
+          "complete_proof_or_definition_body": "(actualSmallRosserMinusDensity_ratio_le_selected_boundary\n    N cap hEven y R hcap hR hlevel Q T hQ hT).trans (sub_le_sub_left hL 1)"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen/ActualPrimeBoxMass.lean",
+      "sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+      "imports": [
+        "ImbalancedChen.ActualPrimeReciprocalMass",
+        "Mathlib.Algebra.BigOperators.Ring.Finset",
+        "Mathlib.Order.Fin.Basic",
+        "Mathlib.Data.Nat.Totient",
+        "Mathlib.Data.Nat.GCD.BigOperators",
+        "ImbalancedChen.FinitePrimeGeometryCore"
+      ],
+      "review_of_relevant_parent_semantics": "Literal Fintype.piFinset actual prime tuples; mass factorizes by finite distributivity, nonnegative weights, proved actual reciprocal-prime limit, strict separated-box order and injectivity/totient identities. Full direct parent source read.",
+      "all_complete_parent_headers_and_definition_bodies": [
+        {
+          "name": "actualPrimeBoxMass",
+          "kind": "def",
+          "private": false,
+          "line": 32,
+          "complete_header": "def actualPrimeBoxMass (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) : ℝ",
+          "complete_proof_or_definition_body": "∑ p ∈ actualPrimeBoxTuples N a b, ∏ i, 1 / ((p i : ℝ) - 1)",
+          "complete_definition": "def actualPrimeBoxMass (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) : ℝ :=\n∑ p ∈ actualPrimeBoxTuples N a b, ∏ i, 1 / ((p i : ℝ) - 1)"
+        },
+        {
+          "name": "actualPrimeBoxWeight_nonneg",
+          "kind": "theorem",
+          "private": false,
+          "line": 36,
+          "complete_header": "theorem actualPrimeBoxWeight_nonneg {N k : ℕ} {a b : Fin k → ℝ}\n    {p : Fin k → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b) :\n    0 ≤ ∏ i, 1 / ((p i : ℝ) - 1)",
+          "complete_proof_or_definition_body": "by\n  apply Finset.prod_nonneg\n  intro i _\n  have hpi : (1 : ℝ) < p i := by\n    exact_mod_cast (mem_actualPrimeBoxTuples_iff.mp hp i).1.one_lt\n  exact le_of_lt (one_div_pos.mpr (sub_pos.mpr hpi))"
+        },
+        {
+          "name": "actualPrimeBoxMass_nonneg",
+          "kind": "theorem",
+          "private": false,
+          "line": 46,
+          "complete_header": "theorem actualPrimeBoxMass_nonneg (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) :\n    0 ≤ actualPrimeBoxMass N a b",
+          "complete_proof_or_definition_body": "by\n  exact Finset.sum_nonneg (fun _ hp => actualPrimeBoxWeight_nonneg hp)"
+        },
+        {
+          "name": "actualPrimeBoxMass_eq_prod",
+          "kind": "theorem",
+          "private": false,
+          "line": 51,
+          "complete_header": "theorem actualPrimeBoxMass_eq_prod (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) :\n    actualPrimeBoxMass N a b = ∏ i, actualPrimeReciprocalMass N (a i) (b i)",
+          "complete_proof_or_definition_body": "by\n  classical\n  exact (Finset.prod_univ_sum\n    (fun i => roughPrimeFinset N (Nat.ceil ((N : ℝ) ^ b i))\n      ((N : ℝ) ^ a i) ((N : ℝ) ^ b i))\n    (fun _ p => 1 / ((p : ℝ) - 1))).symm"
+        },
+        {
+          "name": "tendsto_actualPrimeBoxMass",
+          "kind": "theorem",
+          "private": false,
+          "line": 61,
+          "complete_header": "theorem tendsto_actualPrimeBoxMass {k : ℕ} (a b : Fin k → ℝ)\n    (ha : ∀ i, 0 < a i) (hab : ∀ i, a i < b i) :\n    Tendsto (fun N : ℕ => actualPrimeBoxMass N a b) atTop\n      (𝓝 (∏ i, Real.log (b i / a i)))",
+          "complete_proof_or_definition_body": "by\n  simp only [actualPrimeBoxMass_eq_prod]\n  exact tendsto_finsetProd Finset.univ (fun i _ =>\n    tendsto_actualPrimeReciprocalMass (ha i) (hab i))"
+        },
+        {
+          "name": "actualPrimeBoxTuples_strictAnti",
+          "kind": "theorem",
+          "private": false,
+          "line": 71,
+          "complete_header": "theorem actualPrimeBoxTuples_strictAnti {N k : ℕ} {a b : Fin (k + 1) → ℝ}\n    {p : Fin (k + 1) → ℕ} (hN : 1 ≤ N)\n    (hsep : ∀ i : Fin k, b i.succ ≤ a i.castSucc)\n    (hp : p ∈ actualPrimeBoxTuples N a b) : StrictAnti p",
+          "complete_proof_or_definition_body": "by\n  apply Fin.strictAnti_iff_succ_lt.mpr\n  intro i\n  have hp' := mem_actualPrimeBoxTuples_iff.mp hp\n  have hN' : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  have hexp := Real.rpow_le_rpow_of_exponent_le hN' (hsep i)\n  have hlt := (hp' i.succ).2.2.2.trans_le\n    (hexp.trans (hp' i.castSucc).2.2.1)\n  exact_mod_cast hlt"
+        },
+        {
+          "name": "actualPrimeBoxTuples_injective",
+          "kind": "theorem",
+          "private": false,
+          "line": 85,
+          "complete_header": "theorem actualPrimeBoxTuples_injective {N k : ℕ} {a b : Fin (k + 1) → ℝ}\n    {p : Fin (k + 1) → ℕ} (hN : 1 ≤ N)\n    (hsep : ∀ i : Fin k, b i.succ ≤ a i.castSucc)\n    (hp : p ∈ actualPrimeBoxTuples N a b) : Function.Injective p",
+          "complete_proof_or_definition_body": "(actualPrimeBoxTuples_strictAnti hN hsep hp).injective"
+        },
+        {
+          "name": "totient_primeTuple_cast",
+          "kind": "theorem",
+          "private": true,
+          "line": 91,
+          "complete_header": "private theorem totient_primeTuple_cast {k : ℕ} (p : Fin k → ℕ)\n    (hprime : ∀ i, Nat.Prime (p i)) (hinj : Function.Injective p)\n    (s : Finset (Fin k)) :\n    (Nat.totient (∏ i ∈ s, p i) : ℝ) = ∏ i ∈ s, ((p i : ℝ) - 1)",
+          "complete_proof_or_definition_body": "by\n  classical\n  induction s using Finset.induction_on with\n  | empty => simp\n  | @insert i s hi ih =>\n    have hcop : (p i).Coprime (∏ j ∈ s, p j) := by\n      apply Nat.coprime_prod_right_iff.mpr\n      intro j hj\n      apply (Nat.coprime_primes (hprime i) (hprime j)).mpr\n      intro heq\n      have hij := hinj heq\n      exact hi (hij ▸ hj)\n    rw [Finset.prod_insert hi, Nat.totient_mul hcop, Nat.cast_mul,\n      ih, Finset.prod_insert hi, Nat.totient_prime (hprime i)]\n    rw [Nat.cast_sub (hprime i).one_lt.le, Nat.cast_one]"
+        },
+        {
+          "name": "actualPrimeBoxTuple_reciprocalTotient",
+          "kind": "theorem",
+          "private": false,
+          "line": 112,
+          "complete_header": "theorem actualPrimeBoxTuple_reciprocalTotient {N k : ℕ} {a b : Fin k → ℝ}\n    {p : Fin k → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b)\n    (hinj : Function.Injective p) :\n    1 / (Nat.totient (∏ i, p i) : ℝ) = ∏ i, 1 / ((p i : ℝ) - 1)",
+          "complete_proof_or_definition_body": "by\n  classical\n  rw [totient_primeTuple_cast p (fun i => (mem_actualPrimeBoxTuples_iff.mp hp i).1)\n    hinj Finset.univ, Finset.prod_div_distrib]\n  simp"
+        },
+        {
+          "name": "actualPrimeBoxTuple_product_coprime_target",
+          "kind": "theorem",
+          "private": false,
+          "line": 122,
+          "complete_header": "theorem actualPrimeBoxTuple_product_coprime_target {N k : ℕ}\n    {a b : Fin k → ℝ} {p : Fin k → ℕ}\n    (hp : p ∈ actualPrimeBoxTuples N a b) : (∏ i, p i).Coprime N",
+          "complete_proof_or_definition_body": "by\n  rw [Nat.coprime_fintype_prod_left_iff]\n  intro i\n  have hi := mem_actualPrimeBoxTuples_iff.mp hp i\n  exact hi.1.coprime_iff_not_dvd.mpr hi.2.1"
+        },
+        {
+          "name": "actualPrimeBoxTotientMass",
+          "kind": "def",
+          "private": false,
+          "line": 132,
+          "complete_header": "def actualPrimeBoxTotientMass (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) : ℝ",
+          "complete_proof_or_definition_body": "∑ p ∈ actualPrimeBoxTuples N a b, 1 / (Nat.totient (∏ i, p i) : ℝ)",
+          "complete_definition": "def actualPrimeBoxTotientMass (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) : ℝ :=\n∑ p ∈ actualPrimeBoxTuples N a b, 1 / (Nat.totient (∏ i, p i) : ℝ)"
+        },
+        {
+          "name": "actualPrimeBoxTotientMass_eq_mass",
+          "kind": "theorem",
+          "private": false,
+          "line": 137,
+          "complete_header": "theorem actualPrimeBoxTotientMass_eq_mass {N k : ℕ} {a b : Fin (k + 1) → ℝ}\n    (hN : 1 ≤ N) (hsep : ∀ i : Fin k, b i.succ ≤ a i.castSucc) :\n    actualPrimeBoxTotientMass N a b = actualPrimeBoxMass N a b",
+          "complete_proof_or_definition_body": "by\n  classical\n  apply Finset.sum_congr rfl\n  intro p hp\n  exact actualPrimeBoxTuple_reciprocalTotient hp\n    (actualPrimeBoxTuples_injective hN hsep hp)"
+        },
+        {
+          "name": "tendsto_actualPrimeBoxTotientMass",
+          "kind": "theorem",
+          "private": false,
+          "line": 148,
+          "complete_header": "theorem tendsto_actualPrimeBoxTotientMass {k : ℕ} (a b : Fin (k + 1) → ℝ)\n    (ha : ∀ i, 0 < a i) (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin k, b i.succ ≤ a i.castSucc) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTotientMass N a b) atTop\n      (𝓝 (∏ i, Real.log (b i / a i)))",
+          "complete_proof_or_definition_body": "by\n  apply (tendsto_actualPrimeBoxMass a b ha hab).congr'\n  filter_upwards [eventually_ge_atTop (1 : ℕ)] with N hN\n  exact (actualPrimeBoxTotientMass_eq_mass hN hsep).symm"
+        }
+      ]
+    },
+    {
+      "path": "Mathlib/Algebra/BigOperators/Fin.lean",
+      "sha256": "4fe78cba9cdeac4eb8badbdd6359b055031900906fb94f3e51aba6d81451dbd5",
+      "imports": [
+        "Mathlib.Algebra.BigOperators.Ring.Finset",
+        "Mathlib.Algebra.Group.Action.Pi",
+        "Mathlib.Data.Fintype.BigOperators",
+        "Mathlib.Data.Fintype.Fin",
+        "Mathlib.Logic.Equiv.Fin.Basic"
+      ],
+      "provider": "mathlib",
+      "review_scope": "Relevant imported APIs and precise argument conventions checked; not a review of every declaration in this whole Mathlib module."
+    },
+    {
+      "path": "Mathlib/Data/List/FinRange.lean",
+      "sha256": "183289a22060dd4ef447d2effcb6cce76599dab3029efd0d61a0526207ea68e3",
+      "imports": [
+        "Mathlib.Data.List.OfFn",
+        "Batteries.Data.List.Perm",
+        "Mathlib.Data.List.Nodup"
+      ],
+      "provider": "mathlib",
+      "review_scope": "Relevant imported APIs and precise argument conventions checked; not a review of every declaration in this whole Mathlib module."
+    },
+    {
+      "path": "Mathlib/Order/WellFounded.lean",
+      "sha256": "51e96625f2ea719cc9575cf623a1d4169cda879fd06a12e8f003b0b2cae0f039",
+      "imports": [
+        "Mathlib.Data.Set.Function",
+        "Mathlib.Order.Bounds.Defs"
+      ],
+      "provider": "mathlib",
+      "review_scope": "Relevant imported APIs and precise argument conventions checked; not a review of every declaration in this whole Mathlib module."
+    }
+  ],
+  "fixed_provider_HEAD_and_tracked_source_checks": [
+    {
+      "name": "goldbach",
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach",
+      "expected_rev": "09b97db5764ade1246bfb77206baa1b124760958",
+      "actual_head": "09b97db5764ade1246bfb77206baa1b124760958",
+      "git_diff_HEAD_tracked_exit_code": 0,
+      "head_matches_pin": true,
+      "tracked_source_clean": true,
+      "untracked_objects_not_used_as_acceptance": true
+    },
+    {
+      "name": "mathlib",
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib",
+      "expected_rev": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "actual_head": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "git_diff_HEAD_tracked_exit_code": 0,
+      "head_matches_pin": true,
+      "tracked_source_clean": true,
+      "untracked_objects_not_used_as_acceptance": true
+    }
+  ],
+  "exact_config_pin_bytes": [
+    {
+      "path": "lean-toolchain",
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "archived_pin_path": "verification/proof-continuation/2026-10-15/pins/lean-toolchain",
+      "archived_sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "exact_bytes_match": true
+    },
+    {
+      "path": "lakefile.toml",
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "archived_pin_path": "verification/proof-continuation/2026-10-15/pins/lakefile.toml",
+      "archived_sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "exact_bytes_match": true
+    },
+    {
+      "path": "lake-manifest.json",
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "archived_pin_path": "verification/proof-continuation/2026-10-15/pins/lake-manifest.json",
+      "archived_sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "exact_bytes_match": true
+    }
+  ],
+  "project_head_at_review": "6d8f6c9ce343316e1afa8fe36847ec259d8d155f",
+  "literal_fixed_APIs_read": [
+    {
+      "provider": "goldbach",
+      "path": "MathlibNt/SieveTheory/LinearSieve/RosserChains.lean",
+      "file_sha256": "5db7add095b645da430b7bc751e05dcc9a0e1b03ad2bf0d7403236d39254cdea",
+      "lines": [
+        183,
+        216
+      ],
+      "role": "LowerRosserBoundaryChain and lowerRosserBoundarySet_iff_sorted_chain",
+      "literal_fixed_source_excerpt": "def LowerRosserBoundaryChain (D q : ℕ) (l : List ℕ) : Prop :=\n  l.SortedGT ∧ ¬Even l.length ∧ l.prod < D ∧\n    (∀ i : Fin l.length, ¬Even i.val →\n      (l.take i.val).prod * (l.get i) ^ 3 < D) ∧\n    D ≤ l.prod * q ^ 3\n\n/-- A lower boundary subset is equivalent to its canonical strictly decreasing,\nodd-length boundary chain. -/\ntheorem lowerRosserBoundarySet_iff_sorted_chain\n    {D q : ℕ} {s : Finset ℕ} (hqs : q ∉ s) (hqprime : q.Prime)\n    (hqmin : ∀ p ∈ s, q ≤ p) :\n    LowerRosserBoundarySet D q s ↔\n      LowerRosserBoundaryChain D q (s.sort (· ≥ ·)) := by\n  rw [lowerRosserBoundarySet_iff_cube_le hqs hqprime hqmin]\n  have hprod : (s.sort (· ≥ ·)).prod = s.prod id := by\n    simpa using\n      (List.prod_toFinset id (Finset.sort_nodup s (· ≥ ·))).symm\n  constructor\n  · rintro ⟨hodd, hprodD, hadm, hcube⟩\n    refine ⟨Finset.sortedGT_sort s, ?_, ?_, ?_, ?_⟩\n    · simpa using hodd\n    · simpa [hprod] using hprodD\n    · intro i hi\n      exact lowerRosserAdmissibleSet_iff_sorted_prefix_cube_lt.mp hadm\n        i.val i.isLt hi\n    · simpa [hprod] using hcube\n  · rintro ⟨hsorted, hodd, hprodD, hadm, hcube⟩\n    refine ⟨?_, ?_, ?_, ?_⟩\n    · simpa using hodd\n    · simpa [hprod] using hprodD\n    · apply lowerRosserAdmissibleSet_iff_sorted_prefix_cube_lt.mpr\n      intro i hi hiOdd\n      exact hadm ⟨i, hi⟩ hiOdd\n    · simpa [hprod] using hcube"
+    },
+    {
+      "provider": "goldbach",
+      "path": "MathlibNt/SieveTheory/LinearSieve/RosserChains.lean",
+      "file_sha256": "5db7add095b645da430b7bc751e05dcc9a0e1b03ad2bf0d7403236d39254cdea",
+      "lines": [
+        221,
+        227
+      ],
+      "role": "UpperRosserBoundaryChain",
+      "literal_fixed_source_excerpt": "def UpperRosserBoundaryChain (D q : ℕ) (l : List ℕ) : Prop :=\n  l.SortedGT ∧ Even l.length ∧ l.prod < D ∧\n    (∀ i : Fin l.length, Even i.val →\n      (l.take i.val).prod * (l.get i) ^ 3 < D) ∧\n    D ≤ l.prod * q ^ 3\n\nprivate theorem lt_ceilDiv_iff_mul_lt_nat"
+    },
+    {
+      "provider": "goldbach",
+      "path": "MathlibNt/SieveTheory/LinearSieve/UpperRosserDensity.lean",
+      "file_sha256": "88e00c301201dcaa3f27c038dc82724a33adebdd48b18528659926c3c066205d",
+      "lines": [
+        280,
+        311
+      ],
+      "role": "upperRosserBoundarySet_iff_sorted_chain",
+      "literal_fixed_source_excerpt": "/-- A boundary subset is equivalently its canonical decreasing Rosser chain.\nThe statement retains all alternating-prefix inequalities, rather than\nincorrectly truncating boundary tails to cardinality zero or two. -/\ntheorem upperRosserBoundarySet_iff_sorted_chain\n    {D q : ℕ} {s : Finset ℕ} (hqs : q ∉ s) (hqprime : q.Prime)\n    (hqmin : ∀ p ∈ s, q ≤ p) :\n    UpperRosserBoundarySet D q s ↔\n      UpperRosserBoundaryChain D q (s.sort (· ≥ ·)) := by\n  rw [upperRosserBoundarySet_iff_cube_le hqs hqprime hqmin]\n  have hprod : (s.sort (· ≥ ·)).prod = s.prod id := by\n    simpa using\n      (List.prod_toFinset id (Finset.sort_nodup s (· ≥ ·))).symm\n  constructor\n  · rintro ⟨heven, hprodD, hadm, hcube⟩\n    refine ⟨Finset.sortedGT_sort s, ?_, ?_, ?_, ?_⟩\n    · simpa using heven\n    · simpa [hprod] using hprodD\n    · intro i hi\n      exact upperRosserAdmissibleSet_iff_sorted_prefix_cube_lt.mp hadm\n        i.val i.isLt hi\n    · simpa [hprod] using hcube\n  · rintro ⟨hsorted, heven, hprodD, hadm, hcube⟩\n    refine ⟨?_, ?_, ?_, ?_⟩\n    · simpa using heven\n    · simpa [hprod] using hprodD\n    · apply upperRosserAdmissibleSet_iff_sorted_prefix_cube_lt.mpr\n      intro i hi hiEven\n      exact hadm ⟨i, hi⟩ hiEven\n    · simpa [hprod] using hcube\n\n/-- Canonical decreasing-list representatives of all boundary subsets of `P`.\nUnlike a powerset, this carrier exposes the chain length and indexed prefixes"
+    },
+    {
+      "provider": "mathlib",
+      "path": "Mathlib/Algebra/Order/BigOperators/GroupWithZero/Finset.lean",
+      "file_sha256": "3be238a809840f7dff49a99a02fd83fd5fc93d3efd5f8f34354c5e5c4e796e7d",
+      "lines": [
+        145,
+        157
+      ],
+      "role": "Finset.prod_lt_prod_of_nonempty argument order",
+      "literal_fixed_source_excerpt": "  refine mul_lt_mul_of_pos_of_nonneg' hilt ?_ ?_ ?_\n  · exact prod_le_prod (fun j hj => le_of_lt (hf j (mem_of_mem_erase hj)))\n      (fun _ hj ↦ hfg _ <| mem_of_mem_erase hj)\n  · exact prod_pos fun j hj => hf j (mem_of_mem_erase hj)\n  · exact (hf i hi).le.trans hilt.le\n\nlemma prod_lt_prod_of_nonempty (hf : ∀ i ∈ s, 0 < f i) (hfg : ∀ i ∈ s, f i < g i)\n    (h_ne : s.Nonempty) :\n    ∏ i ∈ s, f i < ∏ i ∈ s, g i := by\n  apply prod_lt_prod hf fun i hi => le_of_lt (hfg i hi)\n  obtain ⟨i, hi⟩ := h_ne\n  exact ⟨i, hi, hfg i hi⟩\n"
+    },
+    {
+      "provider": "mathlib",
+      "path": "Mathlib/Algebra/BigOperators/Fin.lean",
+      "file_sha256": "4fe78cba9cdeac4eb8badbdd6359b055031900906fb94f3e51aba6d81451dbd5",
+      "lines": [
+        720,
+        736
+      ],
+      "role": "List.prod_take_ofFn",
+      "literal_fixed_source_excerpt": "\nnamespace List\n\nsection CommMonoid\n\nvariable [CommMonoid M]\n\n@[to_additive]\ntheorem prod_take_ofFn {n : ℕ} (f : Fin n → M) (i : ℕ) :\n    ((ofFn f).take i).prod = ∏ j with j.val < i, f j := by\n  induction i with\n  | zero =>\n    simp\n  | succ i IH =>\n    by_cases h : i < n\n    · have : i < length (ofFn f) := by rwa [length_ofFn]\n      rw [prod_take_succ _ _ this]"
+    },
+    {
+      "provider": "mathlib",
+      "path": "Mathlib/Data/List/OfFn.lean",
+      "file_sha256": "e14a87415ad8baf04439924697192e596e5d4730506ed54448c3d8b4b6fb1be2",
+      "lines": [
+        32,
+        41
+      ],
+      "role": "List.get_ofFn",
+      "literal_fixed_source_excerpt": "\nopen Nat\n\nnamespace List\n\ntheorem get_ofFn {n} (f : Fin n → α) (i) : get (ofFn f) i = f (Fin.cast (by simp) i) := by\n  simp; congr\n\n/-- Useful if `rw [← map_ofFn]` complains that `g ∘ f` is not the same as `fun i => g (f i)`. -/\ntheorem ofFn_comp' {β : Type*} {n : ℕ} (f : Fin n → α) (g : α → β) :"
+    },
+    {
+      "provider": "mathlib",
+      "path": "Mathlib/Data/List/OfFn.lean",
+      "file_sha256": "e14a87415ad8baf04439924697192e596e5d4730506ed54448c3d8b4b6fb1be2",
+      "lines": [
+        116,
+        126
+      ],
+      "role": "List.pairwise_ofFn",
+      "literal_fixed_source_excerpt": "    Nat.add_mul_mod_self_right, Nat.mod_eq_of_lt (Fin.is_lt _)]\n\n@[simp]\ntheorem pairwise_ofFn {R : α → α → Prop} {n} {f : Fin n → α} :\n    (ofFn f).Pairwise R ↔ ∀ ⦃i j⦄, i < j → R (f i) (f j) := by\n  simp only [pairwise_iff_getElem, length_ofFn, List.getElem_ofFn,\n    Fin.forall_iff,\n    Fin.mk_lt_mk, forall_comm (α := (_ : Prop)) (β := ℕ)]\n\nlemma getLast_ofFn_succ {n : ℕ} (f : Fin n.succ → α) :\n    (ofFn f).getLast (mt ofFn_eq_nil_iff.1 (Nat.succ_ne_zero _)) = f (Fin.last _) :="
+    },
+    {
+      "provider": "mathlib",
+      "path": "Mathlib/Data/Finset/Sort.lean",
+      "file_sha256": "fcd03de4b5224d42fb39593bb8c90027a11d0d0c59fe12de2e9f506c546bfe9d",
+      "lines": [
+        87,
+        96
+      ],
+      "role": "List.toFinset_sort",
+      "literal_fixed_source_excerpt": "  rw [← Multiset.coe_eq_coe]\n  simp only [coe_toList, sort_eq]\n\ntheorem _root_.List.toFinset_sort [DecidableEq α] {l : List α} (hl : l.Nodup) :\n    sort l.toFinset r = l ↔ l.Pairwise r := by\n  refine ⟨?_, ((sort_perm_toList _ r).trans (List.toFinset_toList hl)).eq_of_pairwise'\n    (pairwise_sort _ _)⟩\n  intro h\n  rw [← h]\n  exact pairwise_sort _ r"
+    },
+    {
+      "provider": "mathlib",
+      "path": "Mathlib/Order/WellFounded.lean",
+      "file_sha256": "51e96625f2ea719cc9575cf623a1d4169cda879fd06a12e8f003b0b2cae0f039",
+      "lines": [
+        231,
+        243
+      ],
+      "role": "StrictAnti.range_inj",
+      "literal_fixed_source_excerpt": "  fun _ hf _ hg ↦ Set.range_injOn_strictMono (β := βᵒᵈ) hf.dual hg.dual\n\ntheorem StrictMono.range_inj [WellFoundedLT β] {f g : β → γ}\n    (hf : StrictMono f) (hg : StrictMono g) : Set.range f = Set.range g ↔ f = g :=\n  Set.range_injOn_strictMono.eq_iff hf hg\n\ntheorem StrictAnti.range_inj [WellFoundedGT β] {f g : β → γ}\n    (hf : StrictAnti f) (hg : StrictAnti g) : Set.range f = Set.range g ↔ f = g :=\n  Set.range_injOn_strictAnti.eq_iff hf hg\n\n/-- A strictly monotone function `f` on a well-order satisfies `x ≤ f x` for all `x`. -/\ntheorem StrictMono.id_le [WellFoundedLT β] {f : β → β} (hf : StrictMono f) : id ≤ f := by\n  rw [Pi.le_def]"
+    },
+    {
+      "provider": "mathlib",
+      "path": "Mathlib/Order/Fin/Basic.lean",
+      "file_sha256": "519b74f94e86a484932efa28de74d3b14bb41e1a56a128a675ba1f93e5a6a90e",
+      "lines": [
+        155,
+        167
+      ],
+      "role": "Fin.antitone_iff_succ_le",
+      "literal_fixed_source_excerpt": "\n/-- A function `f` on `Fin (n + 1)` is strictly antitone if and only if `f (i + 1) < f i`\nfor all `i`. -/\nlemma strictAnti_iff_succ_lt : StrictAnti f ↔ ∀ i : Fin n, f i.succ < f (castSucc i) :=\n  liftFun_iff_succ (· > ·)\n\n/-- A function `f` on `Fin (n + 1)` is antitone if and only if `f (i + 1) ≤ f i` for all `i`. -/\nlemma antitone_iff_succ_le : Antitone f ↔ ∀ i : Fin n, f i.succ ≤ f (castSucc i) :=\n  antitone_iff_forall_lt.trans <| liftFun_iff_succ (· ≥ ·)\n\nlemma orderHom_injective_iff {α : Type*} [PartialOrder α] {n : ℕ} (f : Fin (n + 1) →o α) :\n    Function.Injective f ↔ ∀ (i : Fin n), f i.castSucc ≠ f i.succ := by\n  constructor"
+    },
+    {
+      "provider": "mathlib",
+      "path": "Mathlib/Algebra/Group/Nat/Even.lean",
+      "file_sha256": "b75211b2ca5efe205eebea240d51fed40efa3eb730043e0f2958746b6883e8a9",
+      "lines": [
+        34,
+        43
+      ],
+      "role": "Nat.not_even_iff",
+      "literal_fixed_source_excerpt": "/-- `IsSquare` can be decided on `ℕ` by checking against the square root. -/\ninstance : DecidablePred (IsSquare : ℕ → Prop) :=\n  fun m ↦ decidable_of_iff' (Nat.sqrt m * Nat.sqrt m = m) <| by\n    simp_rw [← Nat.exists_mul_self m, IsSquare, eq_comm]\n\nlemma not_even_iff : ¬ Even n ↔ n % 2 = 1 := by grind\n\n@[simp] lemma two_dvd_ne_zero : ¬2 ∣ n ↔ n % 2 = 1 := by grind\n\n@[simp] lemma not_even_one : ¬Even 1 := by grind"
+    },
+    {
+      "provider": "mathlib",
+      "path": "Mathlib/Algebra/Ring/Parity.lean",
+      "file_sha256": "c710e4b51d5ffc9df4e2cc16bad357ab152b1ae5ff05e8fb68a1e3812e6a3b68",
+      "lines": [
+        252,
+        271
+      ],
+      "role": "Nat.odd_iff",
+      "literal_fixed_source_excerpt": "\nend Ring\n\nnamespace Nat\nvariable {m n : ℕ}\n\n@[grind =]\nlemma odd_iff : Odd n ↔ n % 2 = 1 :=\n  ⟨fun ⟨m, hm⟩ ↦ by lia, fun h ↦ ⟨n / 2, by lia⟩⟩\n\ninstance : DecidablePred (Odd : ℕ → Prop) := fun _ ↦ decidable_of_iff _ odd_iff.symm\n\nlemma not_odd_iff : ¬Odd n ↔ n % 2 = 0 := by grind\n\n@[simp, grind =] lemma not_odd_iff_even : ¬Odd n ↔ Even n := by grind\n@[simp] lemma not_even_iff_odd : ¬Even n ↔ Odd n := by grind\n\n@[simp] lemma not_odd_zero : ¬Odd 0 := by grind\n\nlemma _root_.Odd.not_two_dvd_nat (h : Odd n) : ¬(2 ∣ n) := by grind"
+    },
+    {
+      "provider": "mathlib",
+      "path": "Mathlib/Algebra/Order/Floor/Defs.lean",
+      "file_sha256": "ef3992f6bfb518f784f1e8482cd71cf0d00a9b4332678dc99a8e028ca09972ad",
+      "lines": [
+        146,
+        164
+      ],
+      "role": "Nat.ceil_le and Nat.lt_ceil",
+      "literal_fixed_source_excerpt": "theorem gc_ceil_coe : GaloisConnection (ceil : α → ℕ) (↑) :=\n  FloorSemiring.gc_ceil\n\n@[simp]\ntheorem ceil_le : ⌈a⌉₊ ≤ n ↔ a ≤ n :=\n  gc_ceil_coe _ _\n\nend OrderedSemiring\n\nsection LinearOrderedSemiring\n\nvariable [Semiring α] [LinearOrder α] [FloorSemiring α] {a b : α} {n : ℕ}\n\ntheorem lt_ceil : n < ⌈a⌉₊ ↔ (n : α) < a :=\n  lt_iff_lt_of_le_iff_le ceil_le\n\n@[simp]\ntheorem ceil_pos : 0 < ⌈a⌉₊ ↔ 0 < a := by rw [lt_ceil, cast_zero]\n"
+    }
+  ],
+  "mathematical_review": {
+    "key": "even",
+    "claims": [
+      "The actual tuple carrier retains the same target-prime exclusions and strict upper endpoints. Separated boxes make the tuple strictly decreasing; its singleton-tail k=0 case is genuine and needs no internal odd-index test.",
+      "Tail cardinality is 2*k+1; exact product, range, injOn and cross-rank results match the odd-tail native lower boundary. No caller injection certificate is substituted for the main finite proof.",
+      "The nonempty tail gives the strict active product. Odd-index exponent tests give each native lower chain prefix; native uses not-Even, and fixed Nat.not_even_iff plus Nat.odd_iff converts it to Odd.",
+      "The weak terminal shell and all strict active/prefix inequalities transfer to the same literal ceil(N^beta). The least-prime/tail distinction and strict order are paid before invoking lowerRosserBoundarySet_iff_sorted_chain.",
+      "The _hbeta argument is explicitly stronger than necessary in this nonempty-tail proof. It is not a hidden result being assumed and is not weakened or removed by this review."
+    ],
+    "connection": "ActualRosserEvenBoxFamily maps disjoint actual even-prime boxes into nonnegative terms of the exact actual LOWER Rosser boundary LOSS expansion. Because actualMinus/V=1-total_loss, selected positive losses yield an UPPER bound for the actual lower density. This is the even layer needed alongside odd layers for the downstream actual residual-density limit, OwnCube and Residual051.",
+    "supplier": "No analytic estimate is assumed or called in this leaf. It proves a finite lower-boundary inclusion. Euler weighted mass is supplied downstream by the separately proved EulerLower threshold.",
+    "checks": [
+      "All tail identities for odd tail length including singleton",
+      "Strict actual ordering and injection",
+      "Odd versus native not-Even prefix convention",
+      "Total/prefix strictness, terminal weak inequality, exact ceil",
+      "Correct LOSS sign in downstream actual lower-density estimate"
+    ],
+    "unexecuted_tactic_risk": "Line 195 all_goals rfl follows convert in the dependent Fin/list index conversion. Whether convert leaves equality goals, and whether strict lint treats that line as unused, requires actual elaboration. No diagnostic has been produced or inferred here; this is not a confirmed API or mathematical blocker."
+  },
+  "actual_target_dependency_path": {
+    "direction": "target imports current frontier through each adjacent literal project import",
+    "path": [
+      {
+        "path": "ImbalancedChen/ActualExtendedThirdCompactResidualProfile.lean",
+        "sha256": "051eea02eb58e1e277adb38f43ecf3306db5d3f05cf1f3be6e98645ebd8bc251",
+        "imports": [
+          "ImbalancedChen.ActualExtendedThirdDistinctPrimeHarmonic",
+          "ImbalancedChen.ActualPrimeBoxOwnCubeResidual"
+        ]
+      },
+      {
+        "path": "ImbalancedChen/ActualPrimeBoxOwnCubeResidual.lean",
+        "sha256": "dd140158236b1d012384e790cf9e62f6bd24f02494f554bae7402c96f4bfd559",
+        "imports": [
+          "ImbalancedChen.ActualPrimeBoxInitialSavingIntegral",
+          "ImbalancedChen.ActualRosserResidualDensity",
+          "ImbalancedChen.RosserContinuousSourceUniformity"
+        ]
+      },
+      {
+        "path": "ImbalancedChen/ActualRosserResidualDensity.lean",
+        "sha256": "1bf3036c8c2e60114035696dbb1216fc66316fc3f8796435fe784410b1f45843",
+        "imports": [
+          "ImbalancedChen.ActualRosserCompactNormalization"
+        ]
+      },
+      {
+        "path": "ImbalancedChen/ActualRosserCompactNormalization.lean",
+        "sha256": "939cb980af37f45bcf5eacf7e5ea452c520263f3fe75f5d0a788e9302a7a55e4",
+        "imports": [
+          "ImbalancedChen.ActualRosserCompactLimits",
+          "ImbalancedChen.ActualCompactEulerNormalization",
+          "Mathlib.Topology.MetricSpace.Algebra"
+        ]
+      },
+      {
+        "path": "ImbalancedChen/ActualRosserCompactLimits.lean",
+        "sha256": "bf9f82418f7688521b6c9b1d9c05e85f7dcb2324a8165b2addb5b8ef21445784",
+        "imports": [
+          "ImbalancedChen.ActualRosserCompactAnalyticBounds",
+          "ImbalancedChen.ActualRosserCompactBoxBounds",
+          "ImbalancedChen.RosserCompactParameterBounds"
+        ]
+      },
+      {
+        "path": "ImbalancedChen/ActualRosserCompactBoxBounds.lean",
+        "sha256": "9fb2cef7df6ed61973e0de44a2b83b2f8a9e6bfd4b876aa012b5e787135e5e85",
+        "imports": [
+          "ImbalancedChen.ActualRosserLocalBoxThreshold",
+          "ImbalancedChen.RosserContinuousSourceUniformity",
+          "ImbalancedChen.CompactLocalThreshold"
+        ]
+      },
+      {
+        "path": "ImbalancedChen/ActualRosserLocalBoxThreshold.lean",
+        "sha256": "93a7fd775ec67b0e9e3e639b50a0569a4f1281b24e6526a2ef3176b50d9224f5",
+        "imports": [
+          "ImbalancedChen.RosserBoxFamilyMargins",
+          "ImbalancedChen.RosserTopStrictFiniteApproximation",
+          "ImbalancedChen.ActualRosserBoxUnionUniformity"
+        ]
+      },
+      {
+        "path": "ImbalancedChen/ActualRosserBoxUnionUniformity.lean",
+        "sha256": "b25222f420e371185f8150ea2e86ced1b7902b8c0acfa172548ffb42172ea32f",
+        "imports": [
+          "ImbalancedChen.ActualPrimeBoxOuterUniformity",
+          "ImbalancedChen.ActualRosserOddBoxUnion",
+          "ImbalancedChen.ActualRosserEvenBoxUnion"
+        ]
+      },
+      {
+        "path": "ImbalancedChen/ActualRosserEvenBoxUnion.lean",
+        "sha256": "a71813f545f0f6ca5f259b44002e93aae1fb103676f9ba2a4bc28bcd46079d89",
+        "imports": [
+          "ImbalancedChen.ActualRosserEvenBoxFamily"
+        ]
+      },
+      {
+        "path": "ImbalancedChen/ActualRosserEvenBoxFamily.lean",
+        "sha256": "6c705afd258edaa92e159cab13dd311040cbdc1f368f1c57a949beb04f53a65f",
+        "imports": [
+          "ImbalancedChen.ActualRosserEvenBox",
+          "ImbalancedChen.ActualRosserTripleBoxFamily"
+        ]
+      },
+      {
+        "path": "ImbalancedChen/ActualRosserEvenBox.lean",
+        "sha256": "55287bfc6e22bfe8bb7f5d00a8698f4030c4c1cea23468c4edb72bea30a2bf52",
+        "imports": [
+          "ImbalancedChen.ActualLowerRosserBoundaryExpansion",
+          "ImbalancedChen.ActualPrimeBoxMass",
+          "Mathlib.Algebra.BigOperators.Fin",
+          "Mathlib.Data.List.FinRange",
+          "Mathlib.Order.WellFounded"
+        ]
+      }
+    ],
+    "scope": "Headers and current SHA only for intermediate path nodes; not a full source/kernel/closure audit of those intermediates."
+  },
+  "source_token_scan": {
+    "ImbalancedChen/ActualRosserEvenBox.lean": {
+      "sha256": "55287bfc6e22bfe8bb7f5d00a8698f4030c4c1cea23468c4edb72bea30a2bf52",
+      "uncommented_forbidden_or_option_hits": []
+    },
+    "ImbalancedChen/ActualLowerRosserBoundaryExpansion.lean": {
+      "sha256": "9b012143bf99e7e411bc002c2adb90aee7ea06db6add34b405c495b4f4c32d56",
+      "uncommented_forbidden_or_option_hits": []
+    },
+    "ImbalancedChen/ActualPrimeBoxMass.lean": {
+      "sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+      "uncommented_forbidden_or_option_hits": []
+    }
+  },
+  "hidden_supplier_review": "All complete candidate headers, definitions and proof bodies were read, as were the listed project direct parents. No sorry/admit/axiom/unsafe/native_decide or option override was found in these current sources. EulerLower explicit proved analytic dependencies are named above. Parent transitive axioms and unrelated imported closures were not kernel-replayed by this source-only review.",
+  "findings": [],
+  "acceptance_boundary": {
+    "lean_executed": false,
+    "lake_executed": false,
+    "source_modified": false,
+    "objects_installed_or_rebound": false,
+    "foreign_bootstrap": false,
+    "cache_acceptance": false,
+    "owned_acceptance": false,
+    "full_transitive_axiom_audit": false,
+    "runtime_source_object_mismatch_resolved": false,
+    "full_hLower_or_hUpper_proved": false,
+    "note": "This independent source review cannot certify or repair the runtime-observed source/object mismatch. Every actual object/source gate, strict elaboration/lint, serialized/env inventory, complete owned types and transitive axiom check remains the sole runtime owner task."
+  }
+}

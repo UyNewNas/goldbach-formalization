@@ -1,0 +1,128 @@
+{
+  "status": "SOURCE_ONLY_ACTUAL_FIRST_PROOF_API_DIAGNOSTIC_REBIND_PENDING_INDEPENDENT",
+  "candidate": "ImbalancedChen\\Part3TransposedLargeGCDFourier.lean",
+  "old_sha256": "f60d8ff2c601f2228fd16871e6c96080557b9eb746420a7e969da84a9a4c9224",
+  "new_sha256": "af26666f0ce87b5aaf1ad87f7f1c6d46f8678ab0d1ef5dad25d728953fb3ea40",
+  "old_snapshot": ".lake\\proof-continuation\\source-reviews\\drafts\\Part3TransposedLargeGCDFourier.f60d8ff2c601f2228fd16871e6c96080557b9eb746420a7e969da84a9a4c9224.lean",
+  "failed_stdout": ".lake\\proof-continuation\\runs\\20261015T220028607365Z-ImbalancedChen.Part3TransposedLargeGCDFourier\\stdout.log",
+  "failed_stdout_sha256": "68eebe05d446b6b17c302c8325a03cab4b7e89b7bf9e0900e6f2fd6284bfd069",
+  "edits": [
+    {
+      "old": "simp only [if_neg hn, one_ne_zero]",
+      "new": "simpa only [if_neg hn] using (one_ne_zero : (1 : ℂ) ≠ 0)",
+      "occurrences": 1
+    },
+    {
+      "old": ":= hx2 ((le_max_right x1 x2).trans",
+      "new": ":= hx2 d.scale ((le_max_right x1 x2).trans",
+      "occurrences": 1
+    },
+    {
+      "old": "(hx1 ((le_max_left x1 x2).trans",
+      "new": "(hx1 d.scale ((le_max_left x1 x2).trans",
+      "occurrences": 1
+    }
+  ],
+  "forward_and_reverse_exact_bytes": true,
+  "all_complete_headers_and_definitions_unchanged": [
+    {
+      "name": "unitBetaAtom",
+      "kind": "def",
+      "private": true,
+      "complete_header": "private def unitBetaAtom (d : MediumAtom) : MediumAtom",
+      "complete_definition": "private def unitBetaAtom (d : MediumAtom) : MediumAtom :=\n  { d with beta := fun _ ↦ 1 }"
+    },
+    {
+      "name": "unitBetaAtom_admissible",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem unitBetaAtom_admissible\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    MediumAdmissible 0 sigma kappa c0 (unitBetaAtom d)"
+    },
+    {
+      "name": "absoluteRow_le_tauFour_of_not_dvd",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem absoluteRow_le_tauFour_of_not_dvd\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (m n : ℕ)\n    (hn : ¬(n : ℤ) ∣ d.residue) :\n    d.absoluteFactorModulusRow m n ≤\n      (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ)"
+    },
+    {
+      "name": "one_le_scale",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem one_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale"
+    },
+    {
+      "name": "actual_difference_le_polynomial",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem actual_difference_le_polynomial\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {m n : ℕ}\n    (hn : n ∈ d.transposedAtom.betaCarrier)\n    (hm : d.transposedAtom.commonSmoothWeight m ≠ 0) :\n    (((m : ℤ) * n - d.residue).natAbs : ℝ) ≤\n      7 * d.scale ^ (max 1 (1 + kappa))"
+    },
+    {
+      "name": "tauFour_difference_subpower",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem tauFour_difference_subpower (kappa : ℝ) {epsilon : ℝ}\n    (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ m n : ℕ,\n        n ∈ d.transposedAtom.betaCarrier → d.transposedAtom.commonSmoothWeight m ≠ 0 →\n          ¬(n : ℤ) ∣ d.residue →\n            (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ) ≤\n              C * d.scale ^ (epsilon / 2)"
+    },
+    {
+      "name": "transposed_smoothWeight_sum_le",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem transposed_smoothWeight_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ m ∈ d.transposedAtom.commonSmoothCarrier, d.transposedAtom.commonSmoothWeight m) ≤\n      5 * d.V"
+    },
+    {
+      "name": "transposed_factorPair_norm_subpower",
+      "kind": "theorem",
+      "private": false,
+      "complete_header": "theorem transposed_factorPair_norm_subpower (kappa : ℝ) {epsilon : ℝ}\n    (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ n₁ n₂ : ℕ,\n        n₁ ∈ d.transposedAtom.betaCarrier → n₂ ∈ d.transposedAtom.betaCarrier →\n          ¬(n₁ : ℤ) ∣ d.residue → ¬(n₂ : ℤ) ∣ d.residue →\n            ‖d.transposedAtom.commonFactorPairWeight n₁ n₂‖ ≤\n              C * d.V * d.scale ^ epsilon"
+    },
+    {
+      "name": "cleanedAlpha_transposed_largeW_bound",
+      "kind": "theorem",
+      "private": false,
+      "complete_header": "theorem cleanedAlpha_transposed_largeW_bound (kappa : ℝ) {epsilon : ℝ}\n    (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ Y : ℝ,\n        ‖d.cleanedAlphaAtom.transposedAtom.commonLargeBetaGCDW Y‖ ≤\n          C * d.V * d.scale ^ epsilon * d.cleanedAlphaAtom.transposedLargePairMass Y"
+    },
+    {
+      "name": "cleanedAlpha_transposed_largeNonzero_bound",
+      "kind": "theorem",
+      "private": false,
+      "complete_header": "theorem cleanedAlpha_transposed_largeNonzero_bound (kappa : ℝ) {epsilon : ℝ}\n    (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ Y : ℝ, 0 < Y →\n        ‖d.cleanedAlphaAtom.transposedAtom.commonLargeBetaGCDNonzeroPart Y‖ ≤\n          (C * d.V * d.scale ^ epsilon +\n            |d.V * CommonSmoothCutoff.cutoffMass| * (1 + Real.log d.physicalFactorCap) ^ 19) *\n              ((2 * d.U) ^ 2 * Real.sqrt ((1 + Real.log (2 * d.U)) / Y))"
+    },
+    {
+      "name": "betaL2_mul_cleanedAlpha_largeNonzero_bound",
+      "kind": "theorem",
+      "private": false,
+      "complete_header": "theorem betaL2_mul_cleanedAlpha_largeNonzero_bound (kappa : ℝ) {epsilon : ℝ}\n    (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ Y : ℝ, 0 < Y →\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n          ‖d.cleanedAlphaAtom.transposedAtom.commonLargeBetaGCDNonzeroPart Y‖ ≤\n            8 * (C * d.scale ^ epsilon +\n              |CommonSmoothCutoff.cutoffMass| * (1 + Real.log d.physicalFactorCap) ^ 19) *\n                d.scale ^ 2 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n                  Real.sqrt ((1 + Real.log (2 * d.U)) / Y)"
+    },
+    {
+      "name": "log_bound_from_scale",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem log_bound_from_scale {x z : ℝ} (hx : 0 < x) (hlog : 1 ≤ Real.log x)\n    (hz : 0 < z) (hzx : z ≤ 8 * x) :\n    1 + Real.log z ≤ (2 + Real.log 8) * Real.log x"
+    },
+    {
+      "name": "actual_log_bounds",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem actual_log_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    (hlog : 1 ≤ Real.log d.scale) :\n    1 + Real.log (2 * d.U) ≤ (2 + Real.log 8) * Real.log d.scale ∧\n    1 + Real.log (2 * d.V) ≤ (2 + Real.log 8) * Real.log d.scale ∧\n    1 + Real.log d.physicalFactorCap ≤ (2 + Real.log 8) * Real.log d.scale"
+    },
+    {
+      "name": "betaL2_mul_cleanedAlpha_largeNonzero_log_payment",
+      "kind": "theorem",
+      "private": false,
+      "complete_header": "theorem betaL2_mul_cleanedAlpha_largeNonzero_log_payment\n    (B : ℕ) (sigma kappa c0 A delta : ℝ) (hsigma : 0 < sigma) (hdelta : 0 < delta) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n          ‖d.cleanedAlphaAtom.transposedAtom.commonLargeBetaGCDNonzeroPart (d.scale ^ delta)‖ ≤\n            d.scale ^ 2 / Real.log d.scale ^ A"
+    }
+  ],
+  "imports_unchanged": [
+    "import ImbalancedChen.Part3PairedAlphaDeletion",
+    "import ImbalancedChen.Part3TransposedGCDPoissonMask"
+  ],
+  "pins_unchanged": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "owned_parents_frozen": {
+    "Part3PairedAlphaDeletion": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+    "Part3TransposedGCDPoissonMask": "9d41c0858ea52223240405a003fdab49b3fbc9bcf6f8dd84c0a32a96a5295584"
+  },
+  "math_scope": "Only supply original complex nonzero-one proof and explicit real scale arguments to the already chosen uniform thresholds. Constants/threshold formula/definitions/quantifiers/actual original betaL2 and all complex masks unchanged. No Lean run, no accepted source touched."
+}

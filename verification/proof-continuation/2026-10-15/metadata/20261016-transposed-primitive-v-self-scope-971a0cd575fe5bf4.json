@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T20:27:42.7101604Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_DRAFT_SELF_REVIEW_NO_RUNTIME_SUBMISSION",
+  "candidate": {
+    "path": "ImbalancedChen\\Part3TransposedPrimitiveV.lean",
+    "sha256": "4997547026b632817a1f39aa6387939aae3b0a2a34f95d2739cc91bd617d4da4",
+    "declaration_count": 14,
+    "definition_count": 4,
+    "all_complete_headers_and_definition_bodies": [
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveV.active_grouped_residue_gcd",
+        "kind": "theorem",
+        "start_line": 31,
+        "signature_last_line": 34,
+        "complete_source_header": "theorem active_grouped_residue_gcd\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {q : ℕ}\n    (hG : d.groupedFactorGamma q ≠ 0) : Int.gcd d.residue q = 1",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveV.progressionMass",
+        "kind": "def",
+        "start_line": 55,
+        "signature_last_line": 55,
+        "complete_source_header": "def progressionMass (d : MediumAtom) (m q : ℕ) : ℂ",
+        "private": false,
+        "complete_source_definition": "def progressionMass (d : MediumAtom) (m q : ℕ) : ℂ :=\n  ∑ n ∈ d.alphaCarrier,\n    if Int.ModEq q ((m : ℤ) * n) d.residue then d.alpha n else 0"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveV.actual_progressionRow_eq_grouped",
+        "kind": "theorem",
+        "start_line": 60,
+        "signature_last_line": 62,
+        "complete_source_header": "theorem actual_progressionRow_eq_grouped (d : MediumAtom) (m : ℕ) :\n    d.transposedAtom.complexProgressionRow m =\n      ∑ q ∈ d.physicalFactorModuli, d.groupedFactorGamma q * progressionMass d m q",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveV.mixedPairCoefficient",
+        "kind": "def",
+        "start_line": 87,
+        "signature_last_line": 87,
+        "complete_source_header": "def mixedPairCoefficient (d : MediumAtom) (q r : ℕ) : ℂ",
+        "private": false,
+        "complete_source_definition": "def mixedPairCoefficient (d : MediumAtom) (q r : ℕ) : ℂ :=\n  d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\n    star (coprimeMass d.alphaCarrier d.alpha r) / (r.totient : ℂ)"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveV.mixedProgressionMass",
+        "kind": "def",
+        "start_line": 91,
+        "signature_last_line": 91,
+        "complete_source_header": "def mixedProgressionMass (d : MediumAtom) (q r : ℕ) : ℂ",
+        "private": false,
+        "complete_source_definition": "def mixedProgressionMass (d : MediumAtom) (q r : ℕ) : ℂ :=\n  ∑ n ∈ d.alphaCarrier, d.alpha n *\n    ((∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n      if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n        then d.transposedAtom.commonSmoothWeight m else 0 : ℝ) : ℂ)"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveV.actualMixedTerm",
+        "kind": "def",
+        "start_line": 97,
+        "signature_last_line": 97,
+        "complete_source_header": "def actualMixedTerm (d : MediumAtom) : ℂ",
+        "private": false,
+        "complete_source_definition": "def actualMixedTerm (d : MediumAtom) : ℂ :=\n  ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n    mixedPairCoefficient d q r * mixedProgressionMass d q r"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveV.actual_row_product_eq_pair",
+        "kind": "theorem",
+        "start_line": 101,
+        "signature_last_line": 108,
+        "complete_source_header": "theorem actual_row_product_eq_pair (d : MediumAtom) (m : ℕ) :\n    d.transposedAtom.complexProgressionRow m *\n        star (d.transposedAtom.complexPrincipalRow m) =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        mixedPairCoefficient d q r *\n          ∑ n ∈ d.alphaCarrier, d.alpha n *\n            (if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n              then (1 : ℂ) else 0)",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveV.actualMixedTerm_eq_row_sum",
+        "kind": "theorem",
+        "start_line": 131,
+        "signature_last_line": 136,
+        "complete_source_header": "theorem actualMixedTerm_eq_row_sum (d : MediumAtom) :\n    actualMixedTerm d =\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        (d.transposedAtom.commonSmoothWeight m : ℂ) *\n          (d.transposedAtom.complexProgressionRow m *\n            star (d.transposedAtom.complexPrincipalRow m))",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveV.actualV_eq_re",
+        "kind": "theorem",
+        "start_line": 157,
+        "signature_last_line": 159,
+        "complete_source_header": "theorem actualV_eq_re (d : MediumAtom) :\n    d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight = (actualMixedTerm d).re",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveV.actualV_sub_primitive_norm_le",
+        "kind": "theorem",
+        "start_line": 167,
+        "signature_last_line": 170,
+        "complete_source_header": "theorem actualV_sub_primitive_norm_le (d : MediumAtom) :\n    ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        ‖actualMixedTerm d - primitiveZeroMain d‖",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveV.primitiveZeroMain_eq_mixed_main",
+        "kind": "theorem",
+        "start_line": 180,
+        "signature_last_line": 189,
+        "complete_source_header": "theorem primitiveZeroMain_eq_mixed_main\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        mixedPairCoefficient d q r *\n          (coprimeMass d.alphaCarrier d.alpha q *\n            (((d.V * CommonSmoothCutoff.cutoffMass / q) *\n              ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n                (ArithmeticFunction.moebius e : ℝ) / e : ℝ) : ℂ))",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveV.actualMixedTerm_sub_primitive_eq",
+        "kind": "theorem",
+        "start_line": 212,
+        "signature_last_line": 221,
+        "complete_source_header": "theorem actualMixedTerm_sub_primitive_eq\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    actualMixedTerm d - primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        mixedPairCoefficient d q r *\n          (mixedProgressionMass d q r - coprimeMass d.alphaCarrier d.alpha q *\n            (((d.V * CommonSmoothCutoff.cutoffMass / q) *\n              ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n                (ArithmeticFunction.moebius e : ℝ) / e : ℝ) : ℂ))",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveV.mixedProgressionMass_sub_main_uniform_bound",
+        "kind": "theorem",
+        "start_line": 232,
+        "signature_last_line": 240,
+        "complete_source_header": "theorem mixedProgressionMass_sub_main_uniform_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ d : MediumAtom, 1 ≤ d.V → ∀ q r : ℕ,\n      0 < q → r ≠ 0 → Int.gcd d.residue q = 1 →\n      ‖mixedProgressionMass d q r - coprimeMass d.alphaCarrier d.alpha q *\n        (((d.V * CommonSmoothCutoff.cutoffMass / q) *\n          ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n            (ArithmeticFunction.moebius e : ℝ) / e : ℝ) : ℂ)‖ ≤\n        C * coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n          (r.divisors.card : ℝ)",
+        "private": false
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveV.actualV_sub_primitive_finite_bound",
+        "kind": "theorem",
+        "start_line": 292,
+        "signature_last_line": 300,
+        "complete_source_header": "theorem actualV_sub_primitive_finite_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        C * ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n          ‖mixedPairCoefficient d q r‖ *\n            coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n              (r.divisors.card : ℝ)",
+        "private": false
+      }
+    ],
+    "full_source": "import ImbalancedChen.Part3TransposedPrimitiveU\nimport ImbalancedChen.Part3PrimitiveZeroReal\n\n/-!\n# The literal transposed mixed term minus the actual primitive zero main term\n\nThe full complex mixed sum retains every physical modulus and every\noriginal alpha integer. The actual real dispersion V is its real part.\nThe primitive zero main term is proved real, so taking that real part\ncannot increase the norm of the difference.\n\nPrimitive residues are used only when a grouped factor coefficient is\nnonzero. That gate is proved from the original active gamma factors;\ninactive grouped coefficients contribute zero on the unchanged carrier.\nThe finite error envelope is paid by the actual local mixed progression\nbound, with its constant preceding every atom and arithmetic parameter.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset\nopen scoped BigOperators\nopen TransposedZeroCovariance TransposedPrimitiveU\n\nnamespace TransposedPrimitiveV\n\n/-- A nonzero grouped coefficient has an original active factor label,\nand hence inherits the original primitive-residue gate. -/\ntheorem active_grouped_residue_gcd\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {q : ℕ}\n    (hG : d.groupedFactorGamma q ≠ 0) : Int.gcd d.residue q = 1 := by\n  by_contra hbad\n  apply hG\n  unfold MediumAtom.groupedFactorGamma\n  apply Finset.sum_eq_zero\n  intro a ha\n  obtain ⟨ha, hqa⟩ := Finset.mem_filter.mp ha\n  by_contra hgamma\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, h1, h2, h3⟩ := hd\n  obtain ⟨ha1, ha23⟩ := Finset.mem_product.mp ha\n  obtain ⟨ha2, ha3⟩ := Finset.mem_product.mp ha23\n  have hg : d.gamma1 a.1 * d.gamma2 a.2.1 * d.gamma3 a.2.2 ≠ 0 := hgamma\n  obtain ⟨hg12, hg3⟩ := mul_ne_zero_iff.mp hg\n  obtain ⟨hg1, hg2⟩ := mul_ne_zero_iff.mp hg12\n  have hcop : (complexFactorModulus a).Coprime d.residue.natAbs :=\n    (((h1 a.1 ha1).2 hg1).mul_left ((h2 a.2.1 ha2).2 hg2)).mul_left\n      ((h3 a.2.2 ha3).2 hg3)\n  have hgcd : Int.gcd d.residue (complexFactorModulus a) = 1 := by\n    simpa only [Int.gcd, Int.natAbs_natCast, Nat.gcd_comm] using hcop.gcd_eq_one\n  exact hbad (hqa ▸ hgcd)\n\ndef progressionMass (d : MediumAtom) (m q : ℕ) : ℂ :=\n  ∑ n ∈ d.alphaCarrier,\n    if Int.ModEq q ((m : ℤ) * n) d.residue then d.alpha n else 0\n\n/-- Exact progression-row grouping before any primitive-residue assumption. -/\ntheorem actual_progressionRow_eq_grouped (d : MediumAtom) (m : ℕ) :\n    d.transposedAtom.complexProgressionRow m =\n      ∑ q ∈ d.physicalFactorModuli, d.groupedFactorGamma q * progressionMass d m q := by\n  have hmass (q : ℕ) :\n      (∑ n ∈ d.transposedAtom.betaCarrier, d.transposedAtom.beta n *\n        (if (((m * n : ℕ) : ℤ) % (q : ℤ) = d.residue % (q : ℤ))\n          then (1 : ℂ) else 0)) = progressionMass d m q := by\n    rw [d.sum_transposedBeta_mul]\n    simp only [progressionMass, Int.ModEq, Nat.cast_mul, mul_ite, mul_one, mul_zero]\n  calc\n    _ = ∑ a ∈ d.complexFactorLabels, d.complexFactorGamma a *\n        ∑ n ∈ d.transposedAtom.betaCarrier, d.transposedAtom.beta n *\n          (if (((m * n : ℕ) : ℤ) % (complexFactorModulus a : ℤ) =\n            d.residue % (complexFactorModulus a : ℤ)) then (1 : ℂ) else 0) := by\n      unfold MediumAtom.complexProgressionRow MediumAtom.complexRowLabels\n      simp only [Finset.sum_product]\n      change (∑ a ∈ d.complexFactorLabels, ∑ n ∈ d.transposedAtom.betaCarrier,\n        d.complexFactorGamma a * d.transposedAtom.beta n *\n          (if (((m * n : ℕ) : ℤ) % (complexFactorModulus a : ℤ) =\n            d.residue % (complexFactorModulus a : ℤ)) then (1 : ℂ) else 0)) = _\n      simp only [Finset.mul_sum, mul_assoc]\n    _ = ∑ q ∈ d.physicalFactorModuli, d.groupedFactorGamma q *\n        ∑ n ∈ d.transposedAtom.betaCarrier, d.transposedAtom.beta n *\n          (if (((m * n : ℕ) : ℤ) % (q : ℤ) = d.residue % (q : ℤ))\n            then (1 : ℂ) else 0) := d.sum_factorLabels_eq_grouped _\n    _ = _ := by simp only [hmass]\n\ndef mixedPairCoefficient (d : MediumAtom) (q r : ℕ) : ℂ :=\n  d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\n    star (coprimeMass d.alphaCarrier d.alpha r) / (r.totient : ℂ)\n\ndef mixedProgressionMass (d : MediumAtom) (q r : ℕ) : ℂ :=\n  ∑ n ∈ d.alphaCarrier, d.alpha n *\n    ((∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n      if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n        then d.transposedAtom.commonSmoothWeight m else 0 : ℝ) : ℂ)\n\ndef actualMixedTerm (d : MediumAtom) : ℂ :=\n  ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n    mixedPairCoefficient d q r * mixedProgressionMass d q r\n\ntheorem actual_row_product_eq_pair (d : MediumAtom) (m : ℕ) :\n    d.transposedAtom.complexProgressionRow m *\n        star (d.transposedAtom.complexPrincipalRow m) =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        mixedPairCoefficient d q r *\n          ∑ n ∈ d.alphaCarrier, d.alpha n *\n            (if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n              then (1 : ℂ) else 0) := by\n  rw [actual_progressionRow_eq_grouped, actual_principalRow_eq_grouped,\n    star_sum, Finset.sum_mul]\n  apply Finset.sum_congr rfl\n  intro q _\n  rw [Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro r _\n  by_cases hm : m.Coprime r\n  · simp only [hm, if_true, true_and, star_div₀, star_mul, star_natCast]\n    unfold progressionMass\n    simp only [Finset.mul_sum, Finset.sum_mul]\n    apply Finset.sum_congr rfl\n    intro n _\n    by_cases hc : Int.ModEq q ((m : ℤ) * n) d.residue\n    · simp only [hc, if_true, mul_one, mixedPairCoefficient]\n      simp only [div_eq_mul_inv, mul_inv_rev]\n      ring\n    · simp only [hc, if_false, mul_zero, zero_mul]\n  · simp only [hm, if_false, false_and, mul_zero, zero_div, star_zero, zero_mul,\n      Finset.sum_const_zero]\n\n/-- The pair sum is the full complex row product, not its real surrogate. -/\ntheorem actualMixedTerm_eq_row_sum (d : MediumAtom) :\n    actualMixedTerm d =\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        (d.transposedAtom.commonSmoothWeight m : ℂ) *\n          (d.transposedAtom.complexProgressionRow m *\n            star (d.transposedAtom.complexPrincipalRow m)) := by\n  symm\n  simp_rw [actual_row_product_eq_pair, Finset.mul_sum]\n  unfold actualMixedTerm mixedProgressionMass\n  simp only [Complex.ofReal_sum, Finset.mul_sum]\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro q _\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro r _\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro n _\n  apply Finset.sum_congr rfl\n  intro m _\n  by_cases hc : m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n  · simp only [hc, if_true, mul_one]\n    ring\n  · simp only [hc, if_false, mul_zero, Complex.ofReal_zero, zero_mul]\n\ntheorem actualV_eq_re (d : MediumAtom) :\n    d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight = (actualMixedTerm d).re := by\n  rw [actualMixedTerm_eq_row_sum]\n  unfold MediumAtom.complexDispersionV\n  simp only [Complex.re_sum, Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,\n    zero_mul, sub_zero]\n\n/-- The actual V difference is controlled by the complex mixed difference\nbecause the literal primitive zero main term has already been proved real. -/\ntheorem actualV_sub_primitive_norm_le (d : MediumAtom) :\n    ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        ‖actualMixedTerm d - primitiveZeroMain d‖ := by\n  calc\n    _ = ‖((actualMixedTerm d).re : ℂ) - ((primitiveZeroMain d).re : ℂ)‖ := by\n      rw [actualV_eq_re, primitiveZeroMain_ofReal_re]\n    _ = |(actualMixedTerm d - primitiveZeroMain d).re| := by\n      rw [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs, Complex.sub_re]\n    _ ≤ _ := Complex.abs_re_le_norm _\n\n/-- The mixed arithmetic zero mode is exactly the actual primitive main\nterm. This identity approximates neither the literal U nor the literal V. -/\ntheorem primitiveZeroMain_eq_mixed_main\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        mixedPairCoefficient d q r *\n          (coprimeMass d.alphaCarrier d.alpha q *\n            (((d.V * CommonSmoothCutoff.cutoffMass / q) *\n              ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n                (ArithmeticFunction.moebius e : ℝ) / e : ℝ) : ℂ)) := by\n  rw [primitiveZeroMain_eq_grouped]\n  apply Finset.sum_congr rfl\n  intro q hq\n  apply Finset.sum_congr rfl\n  intro r hr\n  have hq0 : q ≠ 0 :=\n    (Finset.mem_Ioc.mp (d.physicalFactorModuli_subset_cap hd hq)).1.ne'\n  have hr0 : r ≠ 0 :=\n    (Finset.mem_Ioc.mp (d.physicalFactorModuli_subset_cap hd hr)).1.ne'\n  have hdensity := CommonSmoothCutoff.restricted_moebius_density hq0 hr0\n  have hz : (d.V * CommonSmoothCutoff.cutoffMass / q) *\n        (∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n          (ArithmeticFunction.moebius e : ℝ) / e) =\n      (d.V * CommonSmoothCutoff.cutoffMass) *\n        (((q * r).totient : ℝ) / ((q.totient : ℝ) * (q * r : ℕ))) := by\n    rw [div_mul_eq_mul_div, mul_div_assoc, hdensity]\n  rw [hz]\n  unfold mixedPairCoefficient primitivePairCoefficient\n  push_cast\n  simp only [div_eq_mul_inv, mul_inv_rev]\n  ring\n\ntheorem actualMixedTerm_sub_primitive_eq\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    actualMixedTerm d - primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        mixedPairCoefficient d q r *\n          (mixedProgressionMass d q r - coprimeMass d.alphaCarrier d.alpha q *\n            (((d.V * CommonSmoothCutoff.cutoffMass / q) *\n              ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n                (ArithmeticFunction.moebius e : ℝ) / e : ℝ) : ℂ)) := by\n  rw [actualMixedTerm, primitiveZeroMain_eq_mixed_main hd, ← Finset.sum_sub_distrib]\n  apply Finset.sum_congr rfl\n  intro q _\n  rw [← Finset.sum_sub_distrib]\n  apply Finset.sum_congr rfl\n  intro r _\n  rw [mul_sub]\n\n/-- The actual alpha-weighted complex mixed error. Its universal constant\nis inherited from the proved local mixed progression error. -/\ntheorem mixedProgressionMass_sub_main_uniform_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ d : MediumAtom, 1 ≤ d.V → ∀ q r : ℕ,\n      0 < q → r ≠ 0 → Int.gcd d.residue q = 1 →\n      ‖mixedProgressionMass d q r - coprimeMass d.alphaCarrier d.alpha q *\n        (((d.V * CommonSmoothCutoff.cutoffMass / q) *\n          ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n            (ArithmeticFunction.moebius e : ℝ) / e : ℝ) : ℂ)‖ ≤\n        C * coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n          (r.divisors.card : ℝ) := by\n  obtain ⟨C, hC, hbound⟩ :=\n    CommonSmoothCutoff.scaledDyadicCutoff_finset_coprime_progression_uniform_error\n  refine ⟨C, hC, fun d hV q r hq hr ha ↦ ?_⟩\n  let z : ℝ := (d.V * CommonSmoothCutoff.cutoffMass / q) *\n    ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n      (ArithmeticFunction.moebius e : ℝ) / e\n  unfold mixedProgressionMass coprimeMass\n  change ‖(∑ n ∈ d.alphaCarrier, d.alpha n *\n      ((∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n          then d.transposedAtom.commonSmoothWeight m else 0 : ℝ) : ℂ)) -\n      (∑ n ∈ d.alphaCarrier, if n.Coprime q then d.alpha n else 0) * (z : ℂ)‖ ≤\n    C * (∑ n ∈ d.alphaCarrier, if n.Coprime q then ‖d.alpha n‖ else 0) *\n      (r.divisors.card : ℝ)\n  rw [Finset.sum_mul, ← Finset.sum_sub_distrib]\n  calc\n    _ ≤ ∑ n ∈ d.alphaCarrier,\n        C * (if n.Coprime q then ‖d.alpha n‖ else 0) * (r.divisors.card : ℝ) := by\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro n _\n      by_cases hn : n.Coprime q\n      · simp only [hn, if_true]\n        rw [← mul_sub, ← Complex.ofReal_sub, norm_mul, Complex.norm_real,\n          Real.norm_eq_abs]\n        have he := hbound d.V (lt_of_lt_of_le zero_lt_one hV)\n          d.transposedAtom.commonSmoothCarrier\n          (fun m hm ↦ MediumAtom.transposedSmoothWeight_support_subset hV hm)\n          q r n hq hr hn d.residue ha\n        change |(∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n          if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n            then d.transposedAtom.commonSmoothWeight m else 0) - z| ≤\n          C * (r.divisors.card : ℝ) at he\n        calc\n          _ ≤ ‖d.alpha n‖ * (C * (r.divisors.card : ℝ)) :=\n            mul_le_mul_of_nonneg_left he (norm_nonneg _)\n          _ = _ := by ring\n      · have hz : (∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n            if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n              then d.transposedAtom.commonSmoothWeight m else 0 : ℝ) = 0 := by\n          apply Finset.sum_eq_zero\n          intro m _\n          apply if_neg\n          intro hm\n          exact hn (CommonSmoothCutoff.coprime_of_product_congruent ha hm.2).2\n        simp only [hn, if_false, hz, Complex.ofReal_zero, mul_zero, zero_mul,\n          sub_zero, norm_zero]\n    _ = _ := by simp only [Finset.mul_sum, Finset.sum_mul]\n\n/-- The finite actual V envelope is a conclusion, not an assumed budget.\nOnly active q coefficients use a primitive-residue gate. -/\ntheorem actualV_sub_primitive_finite_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        C * ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n          ‖mixedPairCoefficient d q r‖ *\n            coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n              (r.divisors.card : ℝ) := by\n  obtain ⟨C, hC, hbound⟩ := mixedProgressionMass_sub_main_uniform_bound\n  refine ⟨C, hC, fun B sigma kappa c0 d hd ↦ ?_⟩\n  apply (actualV_sub_primitive_norm_le d).trans\n  rw [actualMixedTerm_sub_primitive_eq hd]\n  calc\n    _ ≤ ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        C * (‖mixedPairCoefficient d q r‖ *\n          coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n            (r.divisors.card : ℝ)) := by\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro q hq\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro r hr\n      by_cases hG : d.groupedFactorGamma q = 0\n      · simp only [mixedPairCoefficient, hG, zero_mul, zero_div, norm_zero, mul_zero]\n      · have hq0 := (Finset.mem_Ioc.mp (d.physicalFactorModuli_subset_cap hd hq)).1\n        have hr0 := (Finset.mem_Ioc.mp (d.physicalFactorModuli_subset_cap hd hr)).1.ne'\n        rw [norm_mul]\n        calc\n          _ ≤ ‖mixedPairCoefficient d q r‖ *\n              (C * coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n                (r.divisors.card : ℝ)) :=\n            mul_le_mul_of_nonneg_left (hbound d hd.2.1 q r hq0 hr0\n              (active_grouped_residue_gcd hd hG)) (norm_nonneg _)\n          _ = _ := by ring\n    _ = _ := by simp only [Finset.mul_sum]\n\nend TransposedPrimitiveV\n\nend\n\nend ImbalancedChen.Part3\n"
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedPrimitiveU",
+    "ImbalancedChen.Part3PrimitiveZeroReal"
+  ],
+  "direct_dependencies": [
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveU",
+      "sha256": "170c1fe16a9f5ed1a930cdca8ff590a1ed8c0789b34369669fd1ee604dc8e701"
+    },
+    {
+      "module": "ImbalancedChen.Part3PrimitiveZeroReal",
+      "sha256": "bdc6a0b30068c1b842555baf94911f151a31eab37250985c05ef6fc3f631c36b"
+    }
+  ],
+  "sourceDAG_delta": {
+    "basis": "Relative to parent staged union containing TransposedPrimitiveU, PrimitiveZeroReal and their transitive sources. No foreign direct imports added.",
+    "added_local_modules": [
+      "ImbalancedChen.Part3TransposedPrimitiveV"
+    ],
+    "local_module_delta": 1,
+    "added_foreign_modules": [],
+    "foreign_module_delta": 0,
+    "full_tree_rescanned": false
+  },
+  "complete_definition_review": [
+    "progressionMass is the original alpha interval sum in the literal signed product progression, with complex alpha unchanged.",
+    "mixedPairCoefficient is G(q)*star(G(r))*star(coprimeMass(alpha,r))/phi(r); it preserves complex conjugation and signs.",
+    "mixedProgressionMass is the actual original-alpha-weighted sum of the real common cutoff over m coprime to r and m*n congruent to the original signed residue modulo q.",
+    "actualMixedTerm is the double sum of those actual coefficients and masses over the full original physicalFactorModuli twice."
+  ],
+  "finite_mathematics_review": [
+    {
+      "site": "active_grouped_residue_gcd",
+      "assessment": "If the grouped coefficient were nonzero at a nonprimitive q, each original factor-label contribution in its exact fiber would have to vanish: a nonzero product forces each gamma nonzero, the three original admissibility gates give coprimality with the signed residue, and multiplication gives gcd(residue,q)=1. The contradiction proves the active gate without requiring every physical q to be primitive."
+    },
+    {
+      "site": "actual_progressionRow_eq_grouped",
+      "assessment": "Extends the transposed beta back to the original alpha interval using the existing exact sum_transposedBeta_mul. Natural product casts give the literal signed Int.ModEq predicate. Exact factor grouping retains every label and every physical modulus before any norm."
+    },
+    {
+      "site": "actual_row_product_eq_pair and actualMixedTerm_eq_row_sum",
+      "assessment": "The full complex progression row is multiplied by the conjugate of the literal principal row. Cases on m.Coprime r expose the actual coefficient. Finite distributivity and three Fubini swaps move the one fixed common cutoff inside the alpha sum, producing exactly actualMixedTerm; no reduced-residue assumption is used."
+    },
+    {
+      "site": "actualV_eq_re and actualV_sub_primitive_norm_le",
+      "assessment": "Actual real dispersion V is exactly the real part of the full complex mixed term. The separately proved actual primitiveZeroMain_ofReal_re identifies the real zero main term. Absolute real part is bounded by complex norm, so the actual cast-V minus P0 norm is bounded by the complex T minus P0 norm."
+    },
+    {
+      "site": "primitiveZeroMain_eq_mixed_main",
+      "assessment": "All actual physical moduli are positive by the original admissibility support. The already proved local restricted Mobius density converts the mixed main density exactly to phi(q*r)/(phi(q)*q*r), which agrees with primitiveZeroMain_eq_grouped and the literal primitivePairCoefficient. No literal U=P0 or V=P0 equality is claimed."
+    },
+    {
+      "site": "actualMixedTerm_sub_primitive_eq",
+      "assessment": "Subtracts two exact full double sums and factors each common complex mixedPairCoefficient. The residual remains the actual finite mixed progression mass minus its proved arithmetic zero mode."
+    },
+    {
+      "site": "mixedProgressionMass_sub_main_uniform_bound",
+      "assessment": "The universal local mixed progression constant is chosen before d,q,r. The inherited scale gate 1<=V supplies the same actual common carrier and a positive scale. For n coprime to q, apply the real mixed bound and multiply by norm(alpha n). For n not coprime, a primitive product congruence is impossible, so the entire progression contribution and coprime main coefficient are both exactly zero. Finite triangle inequality gives C*coprimeMass(norm alpha,q)*tau(r)."
+    },
+    {
+      "site": "actualV_sub_primitive_finite_bound",
+      "assessment": "Uses only the original MediumAdmissible premise. Every physical q,r remains in the same double sum. If G(q)=0, the actual mixedPairCoefficient is zero; otherwise derive the original active primitive gate and apply the proved mixed progression error. The resulting finite coefficient envelope is a conclusion, not a premise."
+    }
+  ],
+  "quantifier_audit": {
+    "final_constant_scope": "There exists one C>0 before B,sigma,kappa,c0,d, and only MediumAdmissible B sigma kappa c0 d is assumed by the final finite envelope theorem.",
+    "generic_helper_scale": "The internal generic mixed-error helper explicitly requires 1<=d.V; the final theorem supplies exactly hd.2.1, so no new scale restriction or budget is added.",
+    "moduli": "All actual q,r in d.physicalFactorModuli, twice, with no filtering or replacement.",
+    "residue": "Original signed integer d.residue is retained in every Int.ModEq and arithmetic gate.",
+    "coefficient_bounds": "No one-bound or reality premise is imposed on grouped Gamma, original beta, or the transposed atom.",
+    "normalization": "Only the local CommonSmoothCutoff.cutoffMass and actual scale d.V.",
+    "unestimated_terms": "No W nonzero estimate or final restricted-medium conclusion is asserted."
+  },
+  "global_moment_route_only": "The finite envelope is at most 4*U^2*(sum_q norm(Gq))*(sum_r norm(Gr)*tau(r)/phi(r)); existing UMoment draft interfaces therefore give 4*U^2*cap*(1+log cap)^14. This route is explanatory only and is not a theorem claimed by this leaf.",
+  "source_checks": {
+    "fourteen_complete_headers_captured": true,
+    "four_definitions_captured": true,
+    "exact_two_local_imports": true,
+    "no_sorry_admit_axiom_opaque_native_decide": true,
+    "no_owned_source_modified": true,
+    "issues_identified": []
+  },
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "bootstrap_invoked": false,
+    "build_invoked": false,
+    "runtime_request_submitted": false,
+    "runtime_elaboration_result": "NOT_RUN",
+    "kernel_replay_performed": false,
+    "axiom_audit_performed": false,
+    "owned_sources_modified": false,
+    "dependencies_modified": false,
+    "written_artifacts_only": [
+      "ImbalancedChen/Part3TransposedPrimitiveV.lean",
+      ".lake/proof-continuation/source-reviews/20261016-transposed-primitive-v-self-scope.json"
+    ]
+  },
+  "remaining_gates": [
+    "Parent independent source review and freezing.",
+    "Ownership/acceptance of exact dependency revisions.",
+    "Owner-controlled runtime elaboration; any separately required kernel replay and axiom audit."
+  ]
+}

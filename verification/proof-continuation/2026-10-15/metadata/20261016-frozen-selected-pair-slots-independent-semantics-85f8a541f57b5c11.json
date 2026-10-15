@@ -1,0 +1,194 @@
+{
+  "status": "FULL_SOURCE_ONLY_INDEPENDENT_SEMANTICS_AFTER_EXACT_PROOF_REPAIRS_NO_CURRENT_FINDINGS",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "review_date": "2026-10-16",
+  "candidate": "ImbalancedChen.ActualFrozenSelectedPairSlots",
+  "source_sha256": "e62e68a31cf286a14e327ef768eb962a8724afa883f1fec8dbfbfee66a232af2",
+  "explicit_imports": [
+    "ImbalancedChen.ActualRoughVectorEndpointBudget"
+  ],
+  "current_source_dependency_hashes": [
+    {
+      "file": "ImbalancedChen/ActualRoughVectorEndpointBudget.lean",
+      "sha256": "7bb4f5b5113fcfb03ff77813d953c110f8c86a1e02a27c6c702e1799f3d8d4fb"
+    },
+    {
+      "file": "ImbalancedChen/ActualFrozenCapacitySlots.lean",
+      "sha256": "37ca1336b0aec630518c03288fe00cf2dade688c7d5cbd16053ac84a651f1e6a"
+    },
+    {
+      "file": "ImbalancedChen/ActualSelectedPairFactorization.lean",
+      "sha256": "fb6aa43a36f7a5c7b0d4f0a63261cc4f9728ff7b221143c16b4e217443f2de7c"
+    },
+    {
+      "file": "ImbalancedChen/ActualTwoFactorRepairMonomials.lean",
+      "sha256": "0cc308bae28411e0ac14e4f5231aeeab31624bb6ae6cc6e58e0f6138868f0925"
+    },
+    {
+      "file": "ImbalancedChen/ActualDwellSelectedRemainder.lean",
+      "sha256": "6915d9df1dade16830b1190b44dafe30a0caab6487bd45dcb8252fb33f8e21c2"
+    }
+  ],
+  "declarations": [
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualTwoCapacityGreedy_partition",
+      "line": 28,
+      "signature": "theorem actualTwoCapacityGreedy_partition {α : Type*} (weight : α → ℝ)\n    (A : ℝ) (input : List α) :\n    BoxPartition (actualTwoCapacityGreedy weight A input).1\n      (actualTwoCapacityGreedy weight A input).2 input",
+      "independent_semantic_assessment": "Unconditional occurrence partition. Reverse induction follows the actual append-fit branch; no support, positivity, finite alphabet, or capacity license is assumed."
+    },
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "actualFrozenSelectedPairSlots",
+      "line": 42,
+      "signature": "def actualFrozenSelectedPairSlots {α : Type*} (D A : ℝ) (yz : Bool)\n    (upper : α → ℕ) (p : Fin 3 → α) (tail : List α) : List α × List α × List α",
+      "independent_semantic_assessment": "Capacity case, residual input, full-original repair and greedy decisions depend only on D,A,upper and the original labelled vector. Equal numerical upper values do not collapse occurrences."
+    },
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "actualFrozenSelectedPairFactors",
+      "line": 53,
+      "signature": "def actualFrozenSelectedPairFactors {α : Type*} (D A : ℝ) (yz : Bool)\n    (upper actual : α → ℕ) (p : Fin 3 → α) (tail : List α) : ℕ × ℕ × ℕ",
+      "independent_semantic_assessment": "Actual factors are products of actual values on exactly those same three computed slot lists. No individual-tuple greedy action is run."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualFrozenSelectedPairSlots_perm",
+      "line": 60,
+      "signature": "theorem actualFrozenSelectedPairSlots_perm {α : Type*} (D A : ℝ) (yz : Bool)\n    (upper : α → ℕ) (p : Fin 3 → α) (tail : List α) :\n    let slots",
+      "independent_semantic_assessment": "The three slot lists concatenate to a permutation of original p0,p1,p2,tail. At C>=1 the fixed selected pair and remaining-prime-plus-tail partition give the original vector by explicit swaps; at C<1 full-original greedy gives both factors and empty third list."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualFrozenSelectedPairFactors_prod",
+      "line": 85,
+      "signature": "theorem actualFrozenSelectedPairFactors_prod {α : Type*} (D A : ℝ) (yz : Bool)\n    (upper actual : α → ℕ) (p : Fin 3 → α) (tail : List α) :\n    let abc",
+      "independent_semantic_assessment": "Mapping the slot permutation gives exact original product, allowing repeated labels or values; no injectivity or primality premise is needed."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualFrozenSelectedPairFactors_le_upper",
+      "line": 95,
+      "signature": "theorem actualFrozenSelectedPairFactors_le_upper {α : Type*} (D A : ℝ) (yz : Bool)\n    (upper actual : α → ℕ) (p : Fin 3 → α) (tail : List α)\n    (hsize : ∀ i ∈ p 0 :: p 1 :: p 2 :: tail, actual i ≤ upper i) :\n    let abc",
+      "independent_semantic_assessment": "All three factor products are bounded by corresponding upper group products under actual_i<=upper_i on the original vector. Every group label is in the original list via Perm.mem_iff; Nat nonnegativity pays product monotonicity."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualFrozenSelectedPairFactors_at_upper",
+      "line": 115,
+      "signature": "theorem actualFrozenSelectedPairFactors_at_upper {α : Type*} (D A : ℝ) (yz : Bool)\n    (upper : α → ℕ) (p : Fin 3 → α) (tail : List α) :\n    actualFrozenSelectedPairFactors D A yz upper upper p tail =\n      actualSelectedPairFactors D A yz (fun i => upper (p i)) (tail.map upper)",
+      "independent_semantic_assessment": "At the upper vector the result equals the existing literal numerical selected-pair action. Explicit hmap input.map upper, remaining/full List.map_cons bridges, and selected-pair product identity align both capacity branches."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualFrozenSelectedPairFactors_coprime",
+      "line": 147,
+      "signature": "theorem actualFrozenSelectedPairFactors_coprime {α : Type*} (D A : ℝ) (yz : Bool)\n    (upper actual : α → ℕ) (p : Fin 3 → α) (tail : List α)\n    (hprime : ∀ q ∈ (p 0 :: p 1 :: p 2 :: tail).map actual, Nat.Prime q)\n    (hnodup : ((p 0 :: p 1 :: p 2 :: tail).map actual).Nodup) :\n    let abc",
+      "independent_semantic_assessment": "Pairwise three-factor coprimality requires and retains original mapped vector Prime plus Nodup. Exact full product and prime-vector squarefreeness pay all three conditions; disjoint geometric labels alone are not assumed to imply it."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualSelectedPairFactors_targets_of_fullSupport",
+      "line": 160,
+      "signature": "theorem actualSelectedPairFactors_targets_of_fullSupport {x δ θ α A : ℝ} {yz : Bool}\n    (hx : 1 < x) (hδ0 : 0 < δ) (hδ : δ < 1 / 100000)\n    (hθlo : 1 / 2 ≤ θ) (hθhi : θ ≤ 5 / 8)\n    (hAlower : x ^ δ ≤ A) (hAupper : A ≤ x ^ (1 / 3 - δ / 2))\n    (p : Fin 3 → ℕ) (tail : List ℕ)\n    (hpositive : ∀ q ∈ p 0 :: p 1 :: p 2 :: tail, 0 < q)\n    (hfull : actualDwellSupport (x ^ (θ - 2 * δ)) (p 0 :: p 1 :: p 2 :: tail))\n    (hgate : (actualSelectedPairProduct yz p : ℝ) *\n      (actualSelectedPairRemainingPrime yz p : ℝ) ^ 2 ≤ x ^ (θ - 2 * δ))\n    (hblower : x ^ (2 * θ - 1) ≤ (actualSelectedPairProduct yz p : ℝ))\n    (hbupper : (actualSelectedPairProduct yz p : ℝ) ≤ x ^ actualSelectedSubproductUpper α θ) :\n    let abc",
+      "independent_semantic_assessment": "The numerical adapter consumes original full support at theta-2delta, original A range, positivity, selected square gate and critical interval. It chooses its own C branch. C>=1 reuses actual selected-remainder allocation and public selectedPair_monomials; C<1 reuses full-original repair targets with c=1."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualExtendedThirdSelectedPair_endpointBounds",
+      "line": 235,
+      "signature": "theorem actualExtendedThirdSelectedPair_endpointBounds {e κ δ x : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hκ : κ ≤ e / 4) (hδ : δ ≤ e / 32)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ VariableEnvelope.mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (hx : 1 < x) (p : Fin 3 → ℕ) (hp : ∀ i, 0 < p i)\n    (hs : actualSelectedPrimeCoordinates x p ∈ actualExtendedThirdPhysicalCell m j) :\n    let θ",
+      "independent_semantic_assessment": "Actual logarithms of the three endpoint integers must belong to the same physical cell and use the same theta. Whole-cell e/4 gate plus delta<=e/32 gives strict start-square gate; kappa<=e/4 pays alpha=1+3kappa perturbation and critical lower/upper endpoints. No full or remaining support is assumed by this geometric theorem."
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualExtendedThirdSelectedPair_frozenUpperTargets",
+      "line": 297,
+      "signature": "theorem actualExtendedThirdSelectedPair_frozenUpperTargets\n    {α : Type*} {e κ δ ρ τ x A : ℝ} {m : ℕ} {j : ActualExtendedThirdDyadicLabel m}\n    (he0 : 0 < e) (he : e ≤ 1 / 384) (hκ : κ ≤ e / 4)\n    (hδ0 : 0 < δ) (hδ : δ < 1 / 100000) (hδfine : δ ≤ e / 32)\n    (hρ : 0 < ρ) (hτ : 0 ≤ τ)\n    (hwidth : τ * (actualRoughVectorRankBound ρ + 1) ≤ e / 2)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ VariableEnvelope.mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (hx : 1 < x) (actual upper : α → ℕ) (p : Fin 3 → α) (tail : List α)\n    (hpositive : ∀ i ∈ p 0 :: p 1 :: p 2 :: tail, 0 < actual i)\n    (hrough : ∀ i ∈ p 0 :: p 1 :: p 2 :: tail, x ^ ρ ≤ (actual i : ℝ))\n    (hbelow : ∀ i ∈ p 0 :: p 1 :: p 2 :: tail, actual i ≤ upper i)\n    (hinflate : ∀ i ∈ p 0 :: p 1 :: p 2 :: tail, (upper i : ℝ) ≤ x ^ τ * (actual i : ℝ))\n    (hs : actualSelectedPrimeCoordinates x (fun i => upper (p i)) ∈\n      actualExtendedThirdPhysicalCell m j)\n    (hsupport : actualDwellSupport (x ^ actualExtendedThirdPhysicalLevel e m j)\n      ((p 0 :: p 1 :: p 2 :: tail).map actual))\n    (hAlower : x ^ δ ≤ A) (hAupper : A ≤ x ^ (1 / 3 - δ / 2)) :\n    let θ",
+      "independent_semantic_assessment": "Final endpoint targets derive full upper support from original lambda support using rho>0 rough rank and tau*(R+1)<=e/2 inflation. Upper positivity comes from original positivity and actual<=upper. The same-cell endpoint coordinate condition pays the extra gate and critical interval internally. Conclusion is the upper group factors targets at the same theta and alpha=1+3kappa; no assignment or remainder budget is a caller premise."
+    }
+  ],
+  "prior_candidate_proof_findings": {
+    "old_sha256": "e73cacedf70679fd7d1b0ca514af56e10559ce771fd3beff21ac8f2b2b41fba8",
+    "exact_inverse_recovers_old_sha": true,
+    "imports_all_11_signatures_and_definitions_unchanged": true,
+    "definite_finding": {
+      "location": "actualFrozenSelectedPairSlots_perm old lines 76-78",
+      "detail": "All three explicit Perm.swap arguments used the reverse fixed constructor orientation. Fixed Init declares swap(x,y,l): Perm(y::x::l)(x::y::l). Both old branch terms had wrong endpoints, and the old true trans chain had mismatching middle lists.",
+      "resolution": "Owner exchanged each pair of swap arguments. False now gives p0,p2,p1 -> p0,p1,p2; true gives p1,p2,p0 -> p1,p0,p2 -> p0,p1,p2."
+    },
+    "static_simp_shape_risk": {
+      "location": "actualFrozenSelectedPairFactors_at_upper old lines 119-122",
+      "detail": "Old simp proof relied on recognizing a numeric cons-vector as one complete map input to greedy_map. This was a source-shape elaboration risk, not a claimed observed Lean error.",
+      "resolution": "Owner supplied explicit generic hmap plus hrest/hfull and List.map_cons bridges. Reviewed current shape matches the fixed map theorem directly."
+    }
+  },
+  "fixed_api_checks": [
+    {
+      "name": "BoxPartition.nil/left/right and BoxPartition.perm",
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/LiLiuPrereqWFBoxAllocation.lean",
+      "sha256": "14af34dd06b596798da0558822d60f437687615a2faed8c6ab082ebbc03a4db9",
+      "assessment": "left/right append one occurrence to the matching output list and original input; perm returns (left++right).Perm input. Correct direction and exact original occurrence accounting."
+    },
+    {
+      "name": "List.Perm.swap",
+      "path": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/List/Basic.lean",
+      "sha256": "6fe2c8b4db30895cfc240e96d49119a8fb9997c6074e294ba62352a7f9adba72",
+      "signature": "swap (x y : alpha) (l : List alpha) : Perm (y::x::l) (x::y::l)"
+    },
+    {
+      "name": "List.perm_append_comm; Perm.append_left/right; Perm.map; Perm.mem_iff",
+      "path": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/List/Perm.lean",
+      "sha256": "c778ecb634cad13616e994adb18f7028a0ea3c229e747a0fee02e033108a8d39",
+      "assessment": "Current hmove uses append_comm on ac1/selected then append_right ac2; append_assoc aligns it with selected++(ac1++ac2). The original permutation direction pays .mem_iff.mp at every bound."
+    },
+    {
+      "name": "List.prod_map_le_prod_map₀",
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Order/BigOperators/GroupWithZero/List.lean",
+      "sha256": "93dd065687bc4cf18d3fdab010880177865ed2713d31ebe45ef68941a0f78f4c",
+      "assessment": "First argument is actual function, second upper, then lower nonnegativity and pointwise <= on the same group list. Naturals satisfy both required order/multiplication classes."
+    },
+    {
+      "name": "actualTwoCapacityGreedy_map and at_upper explicit bridges",
+      "assessment": "The current proof first rewrites actualTwoCapacityFactors A (input.map upper) using the fixed map theorem, then specializes and normalizes List.map_cons. The selected two-entry mapped product is computed separately, avoiding converse map synthesis."
+    },
+    {
+      "name": "selectedPair_monomials / full_vector_repair_targets",
+      "assessment": "Selected helper has exactly a<=A and A*b*c<=x^(theta-2delta), with b critical bounds; actual allocation pays them. Repaired helper returns the desired exponents directly for original full vector and c=1. Strong selected slack is weakened using delta>0."
+    },
+    {
+      "name": "Real.rpow_add / rpow_mul_natCast / computed log recovery",
+      "assessment": "hselected and hstart use positive x and positive endpoint primes. Square start exponents are p0+2p1+p2 for xz, and 2p0+p1+p2 for yz. Remaining exponent association is resolved by ring, with no approximate log substitution."
+    }
+  ],
+  "issues_remaining_in_current_target": [],
+  "scope_boundaries": [
+    "The fixed upper allocation is an auxiliary whole-box assignment. It agrees with the pre-existing numerical action at the upper tuple only; it does not claim equality with every actual tuple's individually rerun greedy action.",
+    "The final theorem proves endpoint group targets; actual tuple factors have separate exact product and coordinatewise bounds. It does not silently assert arbitrary quotient-containing expressions are monotone without positivity/algebra.",
+    "A caller still supplies original policy support, original roughness/width bounds, actual<=upper, and actual endpoint log coordinates in the same closed physical cell. These must be established for the original fine boxes, including rounding and any nonempty-source witness. They are not a caller assignment or remainder-square license.",
+    "Original signed coefficient regrouping, factorial normalization, the actual grouped Cartesian carriers, distribution mean and small-factor attachment remain separate. Individual decision fibres are never called Cartesian."
+  ],
+  "proper_dag": "Owner tail is generating fresh v3 source DAG. This semantic report does not substitute historical or owner source closure for independent imported-object acceptance.",
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "frozen_lean_modified": false,
+    "python_bytecode_generated": false,
+    "imported_object_acceptance": false,
+    "kernel_or_axiom_acceptance": false,
+    "runtime_pass_claim": false
+  }
+}

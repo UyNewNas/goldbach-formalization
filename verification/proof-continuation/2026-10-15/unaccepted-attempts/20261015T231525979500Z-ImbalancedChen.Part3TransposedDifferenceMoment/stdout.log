@@ -1,0 +1,67 @@
+ImbalancedChen/Part3TransposedDifferenceMoment.lean:417:58: error: No goals to be solved
+ImbalancedChen/Part3TransposedDifferenceMoment.lean:420:17: error: unsolved goals
+B : ℕ
+sigma kappa c0 A delta : ℝ
+hsigma : 0 < sigma
+hdelta : 0 < delta
+z : ℝ := min sigma delta
+hz : 0 < z
+C : ℝ
+hC : 0 < C
+hbound :
+  ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),
+    MediumAdmissible B sigma kappa c0 d →
+      ∀ (Y D : ℝ),
+        0 < D →
+          (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *
+              ‖d.cleanedAlphaAtom.transposedAtom.commonSmallBetaLargeModulusGCDW Y D‖ ≤
+            C * d.scale ^ (z / 2) * d.scale ^ 2 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *
+              (20 / d.U + 64 * (1 + Real.log (2 * d.U)) / D + 16 * (1 + Real.log (2 * d.U)) / d.V)
+p : ℕ := (2 ^ B) ^ 2 - 1
+N : ℕ := p + 1
+L : ℝ := 2 + Real.log 8
+E : ℝ := 100 * C * L ^ N
+hL : 1 ≤ L
+hE : 0 ≤ E
+hevent : ∀ᶠ (x : ℝ) in atTop, E * Real.log x ^ (A + ↑N) ≤ x ^ (z / 2)
+x1 : ℝ
+hx1 : ∀ (b : ℝ), x1 ≤ b → E * Real.log b ^ (A + ↑N) ≤ b ^ (z / 2)
+x2 : ℝ
+hx2 : ∀ (b : ℝ), x2 ≤ b → 1 ≤ Real.log b
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+hx : max 2 (max x1 x2) ≤ d.scale
+Y : ℝ
+hxScale : 1 ≤ d.scale
+hx0 : 0 < d.scale
+hU0 : 0 < d.U
+hV0 : 0 < d.V
+hlog : 1 ≤ Real.log d.scale
+hlog0 : 0 < Real.log d.scale
+hPow : 0 < d.scale ^ z
+hD : 0 < d.scale ^ delta
+hUl : d.scale ^ sigma ≤ d.U
+hVl : d.scale ^ sigma ≤ d.V
+hzU : d.scale ^ z ≤ d.U
+hzV : d.scale ^ z ≤ d.V
+hzD : d.scale ^ z ≤ d.scale ^ delta
+Q : ℝ := L * Real.log d.scale
+hQ : 1 ≤ Q
+hQ0 : 0 ≤ Q
+hUx : d.U ≤ d.scale
+hVx : d.V ≤ d.scale
+hU : 1 + Real.log (2 * d.U) ≤ Q
+hV : 1 + Real.log (2 * d.V) ≤ Q
+hHU : 0 ≤ 1 + Real.log (2 * d.U)
+hHV : 0 ≤ 1 + Real.log (2 * d.V)
+hUD : (1 + Real.log (2 * d.U)) / d.scale ^ delta ≤ Q / d.scale ^ z
+hUV : (1 + Real.log (2 * d.U)) / d.V ≤ Q / d.scale ^ z
+hBracket :
+  20 / d.U + 64 * (1 + Real.log (2 * d.U)) / d.scale ^ delta + 16 * (1 + Real.log (2 * d.U)) / d.V ≤
+    100 * Q / d.scale ^ z
+hPay : E * d.scale ^ (z / 2) * Real.log d.scale ^ N / d.scale ^ z ≤ 1 / Real.log d.scale ^ A
+hBetaLog : (1 + Real.log (2 * d.V)) ^ p ≤ Q ^ p
+hCoefficient : 0 ≤ C * d.scale ^ (z / 2) * d.scale ^ 2
+hQN : Q ^ p * Q = Q ^ N
+⊢ d.scale ^ 2 * (100 * C * d.scale ^ (z / 2) * (L ^ N * Real.log d.scale ^ N) / d.scale ^ z) =
+    d.scale ^ 2 * (100 * C * L ^ N * d.scale ^ (z / 2) * Real.log d.scale ^ N / d.scale ^ z)

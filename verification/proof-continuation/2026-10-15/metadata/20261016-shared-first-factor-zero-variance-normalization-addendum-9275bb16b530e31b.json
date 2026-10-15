@@ -1,0 +1,123 @@
+{
+  "status": "SOURCE_ONLY_NORMALIZATION_CLARIFICATION_NOT_A_NEW_ANALYTIC_SUPPLIER",
+  "created_utc": "2026-10-15T23:16:42.686349+00:00",
+  "reviewer": "/root/dispersion_resume/reuse_endpoint_audit",
+  "prior_report": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261016-weighted-auxiliary-sw-AP-variance-fixed-provider-independent-scope.json",
+    "sha256": "67f7f3a3fcb093d02233aeea05228df9561b559edd1852e63b1ce54e57cd32f8",
+    "preserved_unchanged": true
+  },
+  "assurance": "No Lean/lake/compiler/checker/runtime or source edits. Mathematical normalization independently checked from actual covariance and zero-term definitions plus fixed primitive LS/Parseval types. No new formal theorem, new premise, generic supplier wrapper, or target acceptance claim. The algebra below is not a Lean-certified implementation.",
+  "clarification": "The special-prime expression (U/Q+Q)*alphaL2 in67f7 describes the unweighted centered AP-variance sum. It must not be used as the actual rawzero-minus-P0 budget without the additional actual reciprocal lcm. The raw zero term has two inverse powers of p relative to the primitive-LS character weight. This narrower normalization does not change the absence-of-identified-matching-composite-auxiliary-BDH-supplier conclusion.",
+  "source_bindings": [
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3TransposedZeroCovariance.lean",
+      "sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2",
+      "excerpts": [
+        {
+          "lines": [
+            32,
+            45
+          ],
+          "source": "def reducedResidues (delta : ℕ) : Finset ℕ :=\n  (Finset.range delta).filter (fun b ↦ b.Coprime delta)\n\ntheorem card_reducedResidues (delta : ℕ) :\n    (reducedResidues delta).card = delta.totient := by\n  simp only [reducedResidues, Nat.totient_eq_card_coprime, Nat.coprime_comm]\n\ndef coprimeMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) (q : ℕ) : R :=\n  ∑ n ∈ N, if n.Coprime q then beta n else 0\n\ndef residueMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) (q delta b : ℕ) : R :=\n  ∑ n ∈ N, if n.Coprime q ∧ Nat.ModEq delta n b then beta n else 0"
+        },
+        {
+          "lines": [
+            134,
+            143
+          ],
+          "source": "def covariance (N : Finset ℕ) (beta : ℕ → ℂ) (q r : ℕ) : ℂ :=\n  ∑ b ∈ reducedResidues (q.gcd r),\n    (residueMass N beta q (q.gcd r) b - coprimeMass N beta q / ((q.gcd r).totient : ℂ)) *\n      star (residueMass N beta r (q.gcd r) b -\n        coprimeMass N beta r / ((q.gcd r).totient : ℂ))\n\ntheorem covariance_identity (N : Finset ℕ) (beta : ℕ → ℂ) {q r : ℕ} (hq : 0 < q) :\n    compatibleMass N beta q r -\n      coprimeMass N beta q * star (coprimeMass N beta r) / ((q.gcd r).totient : ℂ) =\n        covariance N beta q r := by"
+        },
+        {
+          "lines": [
+            375,
+            382
+          ],
+          "source": "theorem actual_rawZero_eq_compatibleMass (d : MediumAtom) :\n    d.transposedAtom.complexCRTSmoothZeroPart =\n      ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) *\n        ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n          d.complexFactorGamma a * star (d.complexFactorGamma b) *\n            compatibleMass d.alphaCarrier d.alpha\n              (complexFactorModulus a) (complexFactorModulus b) /\n                ((complexFactorModulus a).lcm (complexFactorModulus b) : ℂ) := by"
+        },
+        {
+          "lines": [
+            453,
+            460
+          ],
+          "source": "theorem actual_rawZero_sub_primitive_eq_covariance\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain d =\n      ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) *\n        ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n          d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\n            covariance d.alphaCarrier d.alpha q r / (q.lcm r : ℂ) := by"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3SharedFirstFactorDispersion.lean",
+      "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "excerpts": [
+        {
+          "lines": [
+            29,
+            40
+          ],
+          "source": "def MediumAtom.q1SliceAtom (d : MediumAtom) (p : ℕ) : MediumAtom :=\n  { d with gamma1 := fun q ↦ if q = p then 1 else 0 }\n\ndef MediumAtom.primitiveFirstFactorCarrier (d : MediumAtom) : Finset ℕ :=\n  (factorCarrier d.Q1).filter (fun p ↦ p.Coprime d.residue.natAbs)\n\ndef MediumAtom.sharedFirstFactorRows (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ) :=\n  (factorCarrier d.Q2 ×ˢ factorCarrier d.Q3) ×ˢ d.transposedAtom.betaCarrier\n\ndef MediumAtom.sharedFirstFactorCoefficient (d : MediumAtom)\n    (l : (ℕ × ℕ) × ℕ) : ℂ :=\n  d.gamma2 l.1.1 * d.gamma3 l.1.2 * d.transposedAtom.beta l.2"
+        },
+        {
+          "lines": [
+            282,
+            286
+          ],
+          "source": "theorem MediumAtom.gamma1L2_primitive_eq\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) =\n      ∑ p ∈ factorCarrier d.Q1, ‖d.gamma1 p‖ ^ 2 := by"
+        },
+        {
+          "lines": [
+            296,
+            307
+          ],
+          "source": "theorem MediumAtom.signedError_norm_sq_le_sharedFirstFactorMomentDispersion\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      (4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) *\n        ∑ p ∈ d.primitiveFirstFactorCarrier,\n          ((d.q1SliceAtom p).transposedAtom.complexDispersionW\n              d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight -\n            2 * (d.q1SliceAtom p).transposedAtom.complexDispersionV\n              d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight +\n            (d.q1SliceAtom p).transposedAtom.complexDispersionU\n              d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight) := by"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/AnalyticNumberTheory/LargeSieve/BombieriDavenport.lean",
+      "sha256": "5fd263929dcbe95e7c59eb6812bcf36cbc24f8c88af12d8e4e49415408a356b6",
+      "excerpts": [
+        {
+          "lines": [
+            498,
+            501
+          ],
+          "source": "lemma charParseval_units {q : ℕ} [NeZero q] (T : ZMod q → ℂ) :\n    (∑ χ : DirichletCharacter ℂ q, ‖∑ x : ZMod q, star (χ x) * T x‖ ^ 2) =\n      (q.totient : ℝ) * ∑ x : ZMod q, (if IsUnit x then ‖T x‖ ^ 2 else 0) := by\n  have hC : (∑ χ : DirichletCharacter ℂ q, (‖∑ x : ZMod q, star (χ x) * T x‖ ^ 2 : ℂ)) ="
+        }
+      ],
+      "pin": "09b97db5764ade1246bfb77206baa1b124760958",
+      "bytes_equal_fixed_git_blob": true
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/BombieriDavenport.lean",
+      "sha256": "5eef5c96d39f9404237c70a6e3d66c58a9cceeca46228d0eb4b8f3adf5d910ba",
+      "excerpts": [
+        {
+          "lines": [
+            259,
+            269
+          ],
+          "source": "theorem weighted_primitive_bombieri_davenport_explicit (b : ℤ → ℂ) (M : ℤ)\n    (N Q : ℕ) (hQ : 0 < Q) :\n    (∑ q ∈ Finset.Icc 1 Q,\n      ((q : ℝ) / (q.totient : ℝ)) *\n        ∑ χ : PrimitiveCharacter q,\n          ‖∑ n ∈ Finset.Icc (M + 1) (M + N),\n            b n * χ.1 (n : ZMod q)‖ ^ 2) ≤\n      ((N : ℝ) +\n        (2 * (Nat.ceil (Real.log ((Q : ℝ) ^ 2) / Real.log 2) : ℝ) + 12) *\n          (Q : ℝ) ^ 2) *\n        ∑ n ∈ Finset.Icc (M + 1) (M + N), ‖b n‖ ^ 2 := by"
+        }
+      ],
+      "pin": "09b97db5764ade1246bfb77206baa1b124760958",
+      "bytes_equal_fixed_git_blob": true
+    }
+  ],
+  "prime_diagonal_dictionary": {
+    "scope": "Illustrative prime p>=2, fixed tails v1=v2=1, gamma tails supported at1, h1=h2=1. This is not an allowed restriction of the general actual target. p in actual primitiveFirstFactorCarrier is merely coprime |a| and can be composite.",
+    "centered_class_error": "E_p(b)=sum_{n in original alphaCarrier,n==b(mod p)}alpha(n) - sum_{n in alphaCarrier,(n,p)=1}alpha(n)/phi(p), for reduced b. Exact primitive center is retained.",
+    "variance": "covariance(alpha,p,p)=sum_{b reduced modp}|E_p(b)|^2 = (1/phi(p))*sum_{chi modp,chi!=1}|S(chi)|^2. Principal-subtracted Parseval follows finite all-character unit Parseval; for prime p the nonprincipal characters are primitive. That specialization/dictionary is hand-checked, not an existing newly proved Lean endpoint.",
+    "actual_zero_contribution": "Z=V*localCutoffMass*sum_{p~Q} [1/(p*phi(p))]*sum_{chi!=1}|S(chi)|^2. Here1/p is the actual lcm(p,p)^(-1), independent of the1/phi(p) from Parseval.",
+    "relative_to_LS_weight": "(V*localCutoffMass/(p*phi(p)))/(p/phi(p)) = V*localCutoffMass/p^2. Thus p>=Q gives |Z| <= V*|localCutoffMass|/Q^2 * [N+(2ceil(log(Qmax^2)/log2)+12)Qmax^2] * alphaL2, using actual integer support length N and cutoff Qmax. N is at most the chosen upper-endpoint interval length, typically about2U; Qmax about2Q.",
+    "contrast_of_objects": "The AP variance sum without its lcm factor instead has coefficient1/p relative to primitive LS, hence (U/Q+Q)*alphaL2 up to endpoint constants/logs. Multiplying this whole upper bound by a coarse uniformV without preserving1/p would lose the second inversep.",
+    "outer_normalized_scale": "With the existing outside factor of order VQ, alphaL2 of order U times its fixed divisor-moment logarithm, and X=UV, the squared-budget scale from this prime diagonal lane is X^2*(1/Q+Q/U) up to localCutoffMass, fixed logs and dyadic constants. No arbitrary-real-A log payment is asserted."
+  },
+  "general_shared_tail_dictionary": {
+    "variables": "Physical moduli q=p*v1,r=p*v2, d=gcd(v1,v2)>0, Lres=lcm(v1,v2)>0; delta=gcd(q,r)=p*d and lcm(q,r)=p*Lres for arbitrary positive p,v1,v2. No p-coprime-tail assumption is needed for these integer identities.",
+    "auxiliary_sieves": "h1=v1/d and h2=v2/d. On reduced residue classes modulo p*d, original physical coprime masks reduce to these exact auxiliary sieves. They are independent of p for fixed tails.",
+    "covariance_character_form": "The two centered class masses have complex cross Parseval (1/phi(p*d))*sum_nonprincipal S_h1(chi)*conj(S_h2(chi)); Cauchy or the half-squares bound can majorize the cross product. Both original masks and center totals must remain exact.",
+    "raw_weight": "Actual zero covariance weight including local mass is V*localCutoffMass/(p*Lres*phi(p*d)). Relative to the character square weight (p*d)/phi(p*d), its scalar is V*localCutoffMass/(p^2*d*Lres). The second inverse p survives before any conductor regrouping.",
+    "not_yet_a_supplier": "For composite p*d, all nonprincipal characters are not all primitive. The established primitive LS cannot replace the entire all-character cross variance without proved conductor/auxiliary-mask/weight handling. The earlier explicit bad-support correction and any analytic-supply premises remain visible; none is declared paid here.",
+    "aggregation_limit": "This computation is per shared p and fixed physical tail pair, with the original gamma2/gamma3 labels and conjugations. It does not estimate their final sum, dyadic conductor windows, varying d, literal U/V residuals, full W frequencies, or moving-residue slow phase."
+  },
+  "actionable_consequence": "A future honest high-conductor ledger should start from the V/(p^2*d*Lres) coefficient rather than discard one inverse p. Existing no-matching-endpoint finding must not be strengthened into a nonpayment/impossibility claim based on the coarser normalization."
+}

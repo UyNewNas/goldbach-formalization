@@ -1,0 +1,951 @@
+{
+  "status": "ROOT_NONAUTHOR_COMPLETE_SOURCE_AND_TWO_PUBLIC_TYPE_CORRECTIONS_REVIEW_PASS_PENDING_RUNTIME",
+  "reviewer": "/root (not source author)",
+  "created_utc": "2026-10-15T23:03:56.857010+00:00",
+  "candidate": "ImbalancedChen/Part3SharedFirstFactorDispersion.lean",
+  "old_failed_source_sha256": "3b26f71ad633e904c2f8b5967a51d46ba84bd4b17c70bf578724a415e4a838ef",
+  "new_source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+  "full_current_source": "import ImbalancedChen.Part3TransposedDispersion\n\n/-!\n# Actual Cauchy in original beta and the first physical factor\n\nThe first factor remains outside the squared row. Its full primitive\ndyadic carrier is used, so no coefficient-dependent subset becomes an\narbitrary weight in the later first-factor sum. The original gamma1 is\nretained at the signed entrance and in its actual outside L2 factor.\n\nEach point-mass slice is a genuine atom with the original U,V,Q1,Q2,Q3,\nsigned residue, alpha, beta and alpha interval. Only gamma1 is replaced\nby the indicator of the first factor. Original admissibility supplies\nits primitive gate. No admissibility is asserted for a transposed atom.\n\nThe new outside factor is betaL2 times gamma1L2, bounded by 4VQ1 times\nthe actual beta divisor-moment logarithm. The literal slice W-2V+U and\ncomplete Poisson series are retained. This leaf supplies no energy,\nzero-mode payment, or migration of the old independent-first-factor W.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset Filter\nopen scoped BigOperators Topology\n\ndef MediumAtom.q1SliceAtom (d : MediumAtom) (p : ℕ) : MediumAtom :=\n  { d with gamma1 := fun q ↦ if q = p then 1 else 0 }\n\ndef MediumAtom.primitiveFirstFactorCarrier (d : MediumAtom) : Finset ℕ :=\n  (factorCarrier d.Q1).filter (fun p ↦ p.Coprime d.residue.natAbs)\n\ndef MediumAtom.sharedFirstFactorRows (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ) :=\n  (factorCarrier d.Q2 ×ˢ factorCarrier d.Q3) ×ˢ d.transposedAtom.betaCarrier\n\ndef MediumAtom.sharedFirstFactorCoefficient (d : MediumAtom)\n    (l : (ℕ × ℕ) × ℕ) : ℂ :=\n  d.gamma2 l.1.1 * d.gamma3 l.1.2 * d.transposedAtom.beta l.2\n\nnamespace SharedFirstFactorDispersion\n\nprivate theorem gamma1_gate\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) :\n    ‖d.gamma1 p‖ ≤ 1 ∧ (d.gamma1 p ≠ 0 → p.Coprime d.residue.natAbs) := by\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, hg, _, _⟩ := hd\n  exact hg p hp\n\nprivate theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {p : ℕ}\n    (hp : p ∈ factorCarrier Q) : 0 < p := by\n  have hlo := (Finset.mem_Icc.mp hp).1\n  have hceil : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  omega\n\nprivate theorem card_factorCarrier_le {Q : ℝ} (hQ : 1 ≤ Q) :\n    ((factorCarrier Q).card : ℝ) ≤ 2 * Q := by\n  have hsub : factorCarrier Q ⊆ Ioc 0 (Nat.floor (2 * Q)) := by\n    intro n hn\n    obtain ⟨hlo, hhi⟩ := Finset.mem_Icc.mp hn\n    have hceil : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n    exact Finset.mem_Ioc.mpr ⟨by omega, hhi⟩\n  have hcard := Finset.card_le_card hsub\n  simp only [Nat.card_Ioc, Nat.sub_zero] at hcard\n  exact (show ((factorCarrier Q).card : ℝ) ≤ (Nat.floor (2 * Q) : ℝ) by\n    exact_mod_cast hcard).trans (Nat.floor_le (by linarith))\n\nend SharedFirstFactorDispersion\n\n@[simp] theorem MediumAtom.q1SliceAtom_scale (d : MediumAtom) (p : ℕ) :\n    (d.q1SliceAtom p).scale = d.scale := rfl\n\n@[simp] theorem MediumAtom.q1SliceAtom_auxSWError (d : MediumAtom)\n    (p k q b : ℕ) : (d.q1SliceAtom p).auxSWError k q b = d.auxSWError k q b := rfl\n\n/-- The same C0 and the same uniform family constants work for every slice. -/\ntheorem uniformAuxiliarySW_q1SliceFamily {ι : Type*} (F : ι → MediumAtom)\n    {C0 : ℕ} (hSW : UniformAuxiliarySW F C0) :\n    UniformAuxiliarySW (fun ip : ι × ℕ ↦ (F ip.1).q1SliceAtom ip.2) C0 := by\n  intro A hA\n  obtain ⟨C, hC, x0, hx0, hbound⟩ := hSW A hA\n  refine ⟨C, hC, x0, hx0, ?_⟩\n  intro ip hx k q b hk hq hb\n  exact hbound ip.1 hx k q b hk hq hb\n\n/-- A slice has original geometry; its new point mass is primitive. -/\ntheorem mediumAdmissible_q1SliceAtom\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    MediumAdmissible B sigma kappa c0 (d.q1SliceAtom p) := by\n  obtain ⟨_hp, hpa⟩ := Finset.mem_filter.mp hp\n  obtain ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    hAlpha, hRough, hBeta, _hGamma1, hGamma2, hGamma3⟩ := hd\n  refine ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    hAlpha, hRough, hBeta, ?_, hGamma2, hGamma3⟩\n  intro q _\n  change ‖(if q = p then (1 : ℂ) else 0)‖ ≤ 1 ∧\n    ((if q = p then (1 : ℂ) else 0) ≠ 0 → q.Coprime d.residue.natAbs)\n  by_cases hqp : q = p\n  · subst q\n    constructor\n    · simpa only [ite_true, norm_one] using (le_refl (1 : ℝ))\n    · exact fun _ ↦ hpa\n  · constructor\n    · simpa only [if_neg hqp, norm_zero] using (zero_le_one : (0 : ℝ) ≤ 1)\n    · intro hn\n      exact (hn (if_neg hqp)).elim\n\ntheorem MediumAtom.q1SliceAtom_signedError (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) :\n    (d.q1SliceAtom p).signedError =\n      ∑ q2 ∈ factorCarrier d.Q2, ∑ q3 ∈ factorCarrier d.Q3,\n        d.gamma2 q2 * d.gamma3 q3 * d.discrepancy (p * q2 * q3) := by\n  change (∑ q ∈ factorCarrier d.Q1, ∑ q2 ∈ factorCarrier d.Q2,\n    ∑ q3 ∈ factorCarrier d.Q3,\n      (if q = p then (1 : ℂ) else 0) * d.gamma2 q2 * d.gamma3 q3 *\n        d.discrepancy (q * q2 * q3)) = _\n  rw [Finset.sum_eq_single p]\n  · simp only [ite_true, one_mul]\n  · intro q _ hqp\n    simp only [if_neg hqp, zero_mul, Finset.sum_const_zero]\n  · intro hnot\n    exact (hnot hp).elim\n\n/-- Exact signed deletion of the nonprimitive first-factor labels only. -/\ntheorem MediumAtom.signedError_eq_q1Slice_sum\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.signedError = ∑ p ∈ d.primitiveFirstFactorCarrier,\n      d.gamma1 p * (d.q1SliceAtom p).signedError := by\n  have hfull : d.signedError = ∑ p ∈ factorCarrier d.Q1,\n      d.gamma1 p * (d.q1SliceAtom p).signedError := by\n    change (∑ p ∈ factorCarrier d.Q1, ∑ q2 ∈ factorCarrier d.Q2,\n      ∑ q3 ∈ factorCarrier d.Q3,\n        d.gamma1 p * d.gamma2 q2 * d.gamma3 q3 * d.discrepancy (p * q2 * q3)) = _\n    apply Finset.sum_congr rfl\n    intro p hp\n    rw [MediumAtom.q1SliceAtom_signedError d hp]\n    simp only [Finset.mul_sum]\n    apply Finset.sum_congr rfl\n    intro q2 _\n    apply Finset.sum_congr rfl\n    intro q3 _\n    ring\n  rw [hfull]\n  symm\n  apply Finset.sum_subset (Finset.filter_subset _ _)\n  intro p hp hnot\n  have hgamma : d.gamma1 p = 0 := by\n    by_contra hn\n    exact hnot (Finset.mem_filter.mpr\n      ⟨hp, (SharedFirstFactorDispersion.gamma1_gate hd hp).2 hn⟩)\n  simp only [hgamma, zero_mul]\n\nprivate theorem q1Slice_signedError_eq_rows (d : MediumAtom) (p : ℕ) :\n    (d.q1SliceAtom p).signedError = ∑ m ∈ d.betaCarrier,\n      d.beta m * (d.q1SliceAtom p).transposedAtom.complexCenteredRow m := by\n  have h := (d.q1SliceAtom p).transposedAtom.signedError_eq_complexCenteredRows\n  rw [MediumAtom.transposedAtom_signedError, MediumAtom.transposedAtom_alphaCarrier] at h\n  exact h\n\n/-- The original beta and gamma1 are jointly outside the same squared row. -/\ntheorem MediumAtom.signedError_eq_sharedFirstFactorRows\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.signedError = ∑ p ∈ d.primitiveFirstFactorCarrier, ∑ m ∈ d.betaCarrier,\n      (d.gamma1 p * d.beta m) *\n        (d.q1SliceAtom p).transposedAtom.complexCenteredRow m := by\n  rw [d.signedError_eq_q1Slice_sum hd]\n  apply Finset.sum_congr rfl\n  intro p _\n  rw [q1Slice_signedError_eq_rows, Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro m _\n  ring\n\ntheorem MediumAtom.signedError_norm_sq_le_sharedFirstFactorRows\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          ∑ p ∈ d.primitiveFirstFactorCarrier, ∑ m ∈ d.betaCarrier,\n            ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 := by\n  rw [d.signedError_eq_sharedFirstFactorRows hd]\n  calc\n    _ ≤ (∑ z ∈ d.primitiveFirstFactorCarrier ×ˢ d.betaCarrier,\n          ‖d.gamma1 z.1 * d.beta z.2‖ ^ 2) *\n        ∑ z ∈ d.primitiveFirstFactorCarrier ×ˢ d.betaCarrier,\n          ‖(d.q1SliceAtom z.1).transposedAtom.complexCenteredRow z.2‖ ^ 2 := by\n      simpa only [Finset.sum_product] using\n        complex_finset_cauchy_norm_sq (d.primitiveFirstFactorCarrier ×ˢ d.betaCarrier)\n          (fun z ↦ d.gamma1 z.1 * d.beta z.2)\n          (fun z ↦ (d.q1SliceAtom z.1).transposedAtom.complexCenteredRow z.2)\n    _ = _ := by\n      simp only [Finset.sum_product, norm_mul, mul_pow,\n        ← Finset.mul_sum, ← Finset.sum_mul]\n      ring\n\nprivate theorem q1Slice_rows_le_commonSmooth (d : MediumAtom) (hV : 1 ≤ d.V) (p : ℕ) :\n    (∑ m ∈ d.betaCarrier,\n      ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2) ≤\n        ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n          d.transposedAtom.commonSmoothWeight m *\n            ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 := by\n  have hsub : d.betaCarrier ⊆ d.transposedAtom.commonSmoothCarrier := by\n    intro m hm\n    apply d.transposedSmoothWeight_support_subset hV\n    rw [d.transposedSmoothWeight_eq_one_on_beta hV hm]\n    norm_num\n  calc\n    _ = ∑ m ∈ d.betaCarrier, d.transposedAtom.commonSmoothWeight m *\n        ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 := by\n      apply Finset.sum_congr rfl\n      intro m hm\n      rw [d.transposedSmoothWeight_eq_one_on_beta hV hm, one_mul]\n    _ ≤ _ := Finset.sum_le_sum_of_subset_of_nonneg hsub\n      (fun m _ _ ↦ mul_nonneg (d.transposedAtom.commonSmoothWeight_nonneg m) (sq_nonneg _))\n\n/-- One original-V cutoff, chosen before the first factor and every row. -/\ntheorem MediumAtom.signedError_norm_sq_le_sharedFirstFactorSmoothRows\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          ∑ p ∈ d.primitiveFirstFactorCarrier,\n            ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n              d.transposedAtom.commonSmoothWeight m *\n                ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 := by\n  apply (d.signedError_norm_sq_le_sharedFirstFactorRows hd).trans\n  apply mul_le_mul_of_nonneg_left _ (by positivity)\n  exact Finset.sum_le_sum (fun p _ ↦ q1Slice_rows_le_commonSmooth d hd.2.1 p)\n\ntheorem MediumAtom.sharedFirstFactorSmoothRows_eq_dispersion (d : MediumAtom) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        d.transposedAtom.commonSmoothWeight m *\n          ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ((d.q1SliceAtom p).transposedAtom.complexDispersionW\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight -\n          2 * (d.q1SliceAtom p).transposedAtom.complexDispersionV\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight +\n          (d.q1SliceAtom p).transposedAtom.complexDispersionU\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight) := by\n  apply Finset.sum_congr rfl\n  intro p _\n  exact MediumAtom.complex_dispersion_identity _ _ _\n\n/-- The honest additional Q1 outside cost is explicit. -/\ntheorem MediumAtom.sharedFirstFactor_outside_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤\n        4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) := by\n  have hgamma : (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤ 2 * d.Q1 := by\n    calc\n      _ ≤ ∑ _p ∈ d.primitiveFirstFactorCarrier, (1 : ℝ) := by\n        apply Finset.sum_le_sum\n        intro p hp\n        have hh := (SharedFirstFactorDispersion.gamma1_gate hd (Finset.mem_filter.mp hp).1).1\n        simpa only [one_pow] using\n          (sq_le_sq₀ (norm_nonneg (d.gamma1 p)) (by norm_num : (0 : ℝ) ≤ 1)).2 hh\n      _ = (d.primitiveFirstFactorCarrier.card : ℝ) := by simp\n      _ ≤ ((factorCarrier d.Q1).card : ℝ) := by\n        exact_mod_cast Finset.card_le_card (Finset.filter_subset _ _)\n      _ ≤ _ := SharedFirstFactorDispersion.card_factorCarrier_le hd.2.2.1\n  have hbeta := mediumAdmissible_beta_norm_sq_sum_le hd\n  have hbetaNonneg : 0 ≤ 2 * d.V *\n      (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) :=\n    (Finset.sum_nonneg (fun _ _ ↦ sq_nonneg _)).trans hbeta\n  calc\n    _ ≤ (2 * d.V * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) * (2 * d.Q1) :=\n      mul_le_mul hbeta hgamma (by positivity) hbetaNonneg\n    _ = _ := by ring\n\ntheorem MediumAtom.gamma1L2_primitive_eq\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) =\n      ∑ p ∈ factorCarrier d.Q1, ‖d.gamma1 p‖ ^ 2 := by\n  apply Finset.sum_subset (Finset.filter_subset _ _)\n  intro p hp hnot\n  have hgamma : d.gamma1 p = 0 := by\n    by_contra hn\n    exact hnot (Finset.mem_filter.mpr\n      ⟨hp, (SharedFirstFactorDispersion.gamma1_gate hd hp).2 hn⟩)\n  simp only [hgamma, norm_zero, zero_pow (by decide : 2 ≠ 0)]\n\n/-- This is a reduction to a new energy; it does not supply that energy. -/\ntheorem MediumAtom.signedError_norm_sq_le_sharedFirstFactorMomentDispersion\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      (4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) *\n        ∑ p ∈ d.primitiveFirstFactorCarrier,\n          ((d.q1SliceAtom p).transposedAtom.complexDispersionW\n              d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight -\n            2 * (d.q1SliceAtom p).transposedAtom.complexDispersionV\n              d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight +\n            (d.q1SliceAtom p).transposedAtom.complexDispersionU\n              d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight) := by\n  have h := d.signedError_norm_sq_le_sharedFirstFactorSmoothRows hd\n  rw [d.sharedFirstFactorSmoothRows_eq_dispersion] at h\n  apply h.trans\n  apply mul_le_mul_of_nonneg_right (d.sharedFirstFactor_outside_le hd)\n  rw [← d.sharedFirstFactorSmoothRows_eq_dispersion]\n  exact Finset.sum_nonneg (fun p _ ↦ Finset.sum_nonneg (fun m _ ↦\n    mul_nonneg (d.transposedAtom.commonSmoothWeight_nonneg m) (sq_nonneg _)))\n\nnamespace SharedFirstFactorDispersion\n\nprivate theorem slice_rows (d : MediumAtom) (p : ℕ) :\n    (d.q1SliceAtom p).transposedAtom.complexRowLabels =\n      d.transposedAtom.complexRowLabels := rfl\n\nprivate theorem slice_coefficient (d : MediumAtom) (p : ℕ)\n    (l : (ℕ × ℕ × ℕ) × ℕ) :\n    (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l =\n      (if l.1.1 = p then (1 : ℂ) else 0) *\n        d.gamma2 l.1.2.1 * d.gamma3 l.1.2.2 * d.transposedAtom.beta l.2 := rfl\n\n/-- The private reindexer is applied below to the literal constructed CRT kernel. -/\nprivate theorem sum_slice_coefficient (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (f : ((ℕ × ℕ × ℕ) × ℕ) → ℂ) :\n    (∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n      (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l * f l) =\n      ∑ l ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * f ((p, l.1.1, l.1.2), l.2) := by\n  rw [slice_rows]\n  simp only [MediumAtom.complexRowLabels, MediumAtom.complexFactorLabels,\n    MediumAtom.sharedFirstFactorRows, Finset.sum_product]\n  change (∑ q ∈ factorCarrier d.Q1, ∑ q2 ∈ factorCarrier d.Q2,\n    ∑ q3 ∈ factorCarrier d.Q3, ∑ n ∈ d.transposedAtom.betaCarrier,\n      (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient ((q, q2, q3), n) *\n        f ((q, q2, q3), n)) = _\n  rw [Finset.sum_eq_single p]\n  · simp only [slice_coefficient, ite_true, one_mul,\n      MediumAtom.sharedFirstFactorCoefficient]\n  · intro q _ hqp\n    simp only [slice_coefficient, if_neg hqp, zero_mul, Finset.sum_const_zero]\n  · intro hnot\n    exact (hnot hp).elim\n\nprivate theorem sum_star_slice_coefficient (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (f : ((ℕ × ℕ × ℕ) × ℕ) → ℂ) :\n    (∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n      star ((d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l) * f l) =\n      ∑ l ∈ d.sharedFirstFactorRows,\n        star (d.sharedFirstFactorCoefficient l) * f ((p, l.1.1, l.1.2), l.2) := by\n  calc\n    _ = star (∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n        (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l * star (f l)) := by\n      simp only [star_sum, star_mul', star_star]\n    _ = star (∑ l ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * star (f ((p, l.1.1, l.1.2), l.2))) :=\n      congrArg star (sum_slice_coefficient d hp (fun l ↦ star (f l)))\n    _ = _ := by simp only [star_sum, star_mul', star_star]\n\nprivate theorem pair_sum_slice_coefficient (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (K : ((ℕ × ℕ × ℕ) × ℕ) → ((ℕ × ℕ × ℕ) × ℕ) → ℂ) :\n    (∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n      ∑ l' ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n        (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l *\n          star ((d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l') * K l l') =\n      ∑ l ∈ d.sharedFirstFactorRows, ∑ l' ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * star (d.sharedFirstFactorCoefficient l') *\n          K ((p, l.1.1, l.1.2), l.2) ((p, l'.1.1, l'.1.2), l'.2) := by\n  calc\n    _ = ∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n        (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l *\n          ∑ l' ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n            star ((d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l') * K l l' := by\n      simp only [Finset.mul_sum, mul_assoc]\n    _ = ∑ l ∈ d.sharedFirstFactorRows, d.sharedFirstFactorCoefficient l *\n        ∑ l' ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n          star ((d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l') *\n            K ((p, l.1.1, l.1.2), l.2) l' :=\n      sum_slice_coefficient d hp _\n    _ = _ := by\n      apply Finset.sum_congr rfl\n      intro l _\n      rw [sum_star_slice_coefficient d hp, Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro l' _\n      ring\n\nend SharedFirstFactorDispersion\n\n/-- Both physical moduli have the identical original first factor. -/\ntheorem sharedFirstFactor_gcd (p v1 v2 : ℕ) :\n    (p * v1).gcd (p * v2) = p * v1.gcd v2 := Nat.gcd_mul_left p v1 v2\n\ntheorem sharedFirstFactor_lcm (p v1 v2 : ℕ) :\n    (p * v1).lcm (p * v2) = p * v1.lcm v2 := Nat.lcm_mul_left p v1 v2\n\ntheorem sharedFirstFactor_compatible_iff (p v1 v2 n1 n2 : ℕ) :\n    ComplexCRT.Compatible (p * v1) (p * v2) n1 n2 ↔\n      n1.Coprime (p * v1) ∧ n2.Coprime (p * v2) ∧\n        Nat.ModEq (p * v1.gcd v2) n1 n2 := by\n  rw [ComplexCRT.Compatible, sharedFirstFactor_gcd]\n\n/-- The reduced labels have no independent second copy of the first factor. -/\ntheorem MediumAtom.q1SliceDispersionW_eq_sharedCRT\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) (S : Finset ℕ) (w : ℕ → ℝ) :\n    ((d.q1SliceAtom p).transposedAtom.complexDispersionW S w : ℂ) =\n      ∑ l ∈ d.sharedFirstFactorRows, ∑ l' ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * star (d.sharedFirstFactorCoefficient l') *\n          (ComplexCRT.constructedProgressionWeight S w d.residue\n            (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2)) l.2 l'.2 : ℂ) := by\n  have h := (d.q1SliceAtom p).transposedDispersionW_eq_constructedCRT\n    (mediumAdmissible_q1SliceAtom hd hp) S w\n  apply h.trans\n  rw [show (d.q1SliceAtom p).residue = d.residue from rfl]\n  simpa only [complexFactorModulus, Nat.mul_assoc] using\n    SharedFirstFactorDispersion.pair_sum_slice_coefficient d (Finset.mem_filter.mp hp).1\n      (fun l l' ↦ (ComplexCRT.constructedProgressionWeight S w d.residue\n        (complexFactorModulus l.1) (complexFactorModulus l'.1) l.2 l'.2 : ℂ))\n\nnamespace SharedFirstFactorDispersion\n\nprivate theorem reduced_modulus_pos\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {l : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) : 0 < l.1.1 * l.1.2 := by\n  have hf := (Finset.mem_product.mp hl).1\n  exact Nat.mul_pos (factor_pos hd.2.2.2.1 (Finset.mem_product.mp hf).1)\n    (factor_pos hd.2.2.2.2.1 (Finset.mem_product.mp hf).2)\n\nprivate theorem shared_progression_poisson\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows)\n    (hl' : l' ∈ d.sharedFirstFactorRows) :\n    (ComplexCRT.constructedProgressionWeight d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight d.residue\n      (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2)) l.2 l'.2 : ℂ) =\n      ((if ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n          (p * (l'.1.1 * l'.1.2)) l.2 l'.2 then\n        (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) *\n          CommonSmoothCutoff.cutoffMass +\n            (∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency\n              (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ))\n              ((ComplexCRT.residue (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2))\n                l.2 l'.2 d.residue : ℝ) /\n                  ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) h).re\n      else 0 : ℝ) : ℂ) := by\n  have hpos : 0 < p := factor_pos hd.2.2.1 (Finset.mem_filter.mp hp).1\n  have hL : 0 < (p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) :=\n    Nat.pos_of_ne_zero (Nat.lcm_ne_zero\n      (Nat.mul_pos hpos (reduced_modulus_pos hd hl)).ne'\n      (Nat.mul_pos hpos (reduced_modulus_pos hd hl')).ne')\n  unfold ComplexCRT.constructedProgressionWeight\n  by_cases hc : ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n      (p * (l'.1.1 * l'.1.2)) l.2 l'.2\n  · simp only [if_pos hc]\n    have he := CommonSmoothCutoff.scaledDyadicCutoff_finset_progression_eq_main_add_fourier\n      (M := d.transposedAtom.U) (lt_of_lt_of_le zero_lt_one hd.2.1)\n      d.transposedAtom.commonSmoothCarrier\n      (fun m hm ↦ d.transposedSmoothWeight_support_subset hd.2.1 hm) hL\n      (ComplexCRT.residue (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2))\n        l.2 l'.2 d.residue)\n    simpa only [MediumAtom.commonSmoothWeight,\n      show d.transposedAtom.U = d.V from rfl] using\n      congrArg (fun x : ℝ ↦ (x : ℂ)) he\n  · simp only [if_neg hc]\n\nprivate theorem factor_le_twice {Q : ℝ} (hQ : 1 ≤ Q) {p : ℕ}\n    (hp : p ∈ factorCarrier Q) : (p : ℝ) ≤ 2 * Q :=\n  (Nat.cast_le.mpr (Finset.mem_Icc.mp hp).2).trans (Nat.floor_le (by linarith))\n\nprivate theorem reduced_modulus_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {l : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) :\n    ((l.1.1 * l.1.2 : ℕ) : ℝ) ≤ 4 * d.Q2 * d.Q3 := by\n  have hf := (Finset.mem_product.mp hl).1\n  have h2 := factor_le_twice hd.2.2.2.1 (Finset.mem_product.mp hf).1\n  have h3 := factor_le_twice hd.2.2.2.2.1 (Finset.mem_product.mp hf).2\n  rw [Nat.cast_mul]\n  calc\n    _ ≤ (2 * d.Q2) * (2 * d.Q3) :=\n      mul_le_mul h2 h3 (Nat.cast_nonneg _) (by linarith [hd.2.2.2.1])\n    _ = _ := by ring\n\nend SharedFirstFactorDispersion\n\n/-- Full original-V Poisson, with a single shared p and every integer h. -/\ntheorem MediumAtom.q1SliceDispersionW_eq_sharedPoisson\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    ((d.q1SliceAtom p).transposedAtom.complexDispersionW\n      d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) =\n      ∑ l ∈ d.sharedFirstFactorRows, ∑ l' ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * star (d.sharedFirstFactorCoefficient l') *\n          ((if ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n              (p * (l'.1.1 * l'.1.2)) l.2 l'.2 then\n            (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) *\n              CommonSmoothCutoff.cutoffMass +\n                (∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency\n                  (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ))\n                  ((ComplexCRT.residue (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2))\n                    l.2 l'.2 d.residue : ℝ) /\n                      ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) h).re\n          else 0 : ℝ) : ℂ) := by\n  rw [d.q1SliceDispersionW_eq_sharedCRT hd hp]\n  apply Finset.sum_congr rfl\n  intro l hl\n  apply Finset.sum_congr rfl\n  intro l' hl'\n  rw [SharedFirstFactorDispersion.shared_progression_poisson hd hp hl hl']\n\n/-- Literal centers and the full nonzero part are summed on the same p carrier. -/\ntheorem MediumAtom.sharedFirstFactor_centered_identity\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ((∑ p ∈ d.primitiveFirstFactorCarrier,\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        d.transposedAtom.commonSmoothWeight m *\n          ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 : ℝ) : ℂ) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        (((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n          2 * ((d.q1SliceAtom p).transposedAtom.complexDispersionV\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) +\n          ((d.q1SliceAtom p).transposedAtom.complexDispersionU\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ)) +\n          (d.q1SliceAtom p).transposedAtom.complexCRTSmoothNonzeroPart) := by\n  rw [Complex.ofReal_sum]\n  apply Finset.sum_congr rfl\n  intro p hp\n  exact (d.q1SliceAtom p).transposed_dispersion_identity_with_commonPoisson\n    (mediumAdmissible_q1SliceAtom hd hp)\n\n/-- The shared first factor enters the physical lcm once, not squared. -/\ntheorem MediumAtom.sharedFirstFactor_lcm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows)\n    (hl' : l' ∈ d.sharedFirstFactorRows) :\n    (((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℕ) : ℝ) ≤\n      32 * d.Q1 * d.Q2 ^ 2 * d.Q3 ^ 2 := by\n  have hpbound := SharedFirstFactorDispersion.factor_le_twice hd.2.2.1\n    (Finset.mem_filter.mp hp).1\n  have h1 := SharedFirstFactorDispersion.reduced_modulus_le hd hl\n  have h2 := SharedFirstFactorDispersion.reduced_modulus_le hd hl'\n  have hdiv : (l.1.1 * l.1.2).lcm (l'.1.1 * l'.1.2) ≤\n      (l.1.1 * l.1.2) * (l'.1.1 * l'.1.2) :=\n    Nat.le_of_dvd (Nat.mul_pos (SharedFirstFactorDispersion.reduced_modulus_pos hd hl)\n      (SharedFirstFactorDispersion.reduced_modulus_pos hd hl')) (Nat.lcm_dvd_mul _ _)\n  have hQ20 : 0 ≤ d.Q2 := by linarith [hd.2.2.2.1]\n  have hQ30 : 0 ≤ d.Q3 := by linarith [hd.2.2.2.2.1]\n  rw [sharedFirstFactor_lcm, Nat.cast_mul]\n  calc\n    _ ≤ (p : ℝ) * (((l.1.1 * l.1.2 : ℕ) : ℝ) *\n        ((l'.1.1 * l'.1.2 : ℕ) : ℝ)) :=\n      mul_le_mul_of_nonneg_left (by exact_mod_cast hdiv) (Nat.cast_nonneg _)\n    _ ≤ (2 * d.Q1) * ((4 * d.Q2 * d.Q3) * (4 * d.Q2 * d.Q3)) :=\n      mul_le_mul hpbound\n        (mul_le_mul h1 h2 (Nat.cast_nonneg _) (by positivity))\n        (by positivity) (by linarith [hd.2.2.1])\n    _ = _ := by ring\n\n/-- A support-frequency gate is transported without deleting either sign. -/\ntheorem MediumAtom.sharedFirstFactor_frequency_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows)\n    (hl' : l' ∈ d.sharedFirstFactorRows) {Z : ℝ} (hZ : 0 ≤ Z) (h : ℤ)\n    (hh : |(h : ℝ)| ≤\n      (((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ) * Z) / d.V) :\n    |(h : ℝ)| ≤ 32 * d.Q1 * d.Q2 ^ 2 * d.Q3 ^ 2 * Z / d.V := by\n  exact hh.trans (div_le_div_of_nonneg_right\n    (mul_le_mul_of_nonneg_right (d.sharedFirstFactor_lcm_le hd hp hl hl') hZ)\n    (by linarith [hd.2.1]))\n\nend\n\nend ImbalancedChen.Part3\n",
+  "complete_declarations": [
+    {
+      "name": "MediumAtom.q1SliceAtom",
+      "kind": "def",
+      "complete_header": "def MediumAtom.q1SliceAtom (d : MediumAtom) (p : ℕ) : MediumAtom",
+      "full_source_block": "def MediumAtom.q1SliceAtom (d : MediumAtom) (p : ℕ) : MediumAtom :=\n  { d with gamma1 := fun q ↦ if q = p then 1 else 0 }\n\n"
+    },
+    {
+      "name": "MediumAtom.primitiveFirstFactorCarrier",
+      "kind": "def",
+      "complete_header": "def MediumAtom.primitiveFirstFactorCarrier (d : MediumAtom) : Finset ℕ",
+      "full_source_block": "def MediumAtom.primitiveFirstFactorCarrier (d : MediumAtom) : Finset ℕ :=\n  (factorCarrier d.Q1).filter (fun p ↦ p.Coprime d.residue.natAbs)\n\n"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactorRows",
+      "kind": "def",
+      "complete_header": "def MediumAtom.sharedFirstFactorRows (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ)",
+      "full_source_block": "def MediumAtom.sharedFirstFactorRows (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ) :=\n  (factorCarrier d.Q2 ×ˢ factorCarrier d.Q3) ×ˢ d.transposedAtom.betaCarrier\n\n"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactorCoefficient",
+      "kind": "def",
+      "complete_header": "def MediumAtom.sharedFirstFactorCoefficient (d : MediumAtom)\n    (l : (ℕ × ℕ) × ℕ) : ℂ",
+      "full_source_block": "def MediumAtom.sharedFirstFactorCoefficient (d : MediumAtom)\n    (l : (ℕ × ℕ) × ℕ) : ℂ :=\n  d.gamma2 l.1.1 * d.gamma3 l.1.2 * d.transposedAtom.beta l.2\n\nnamespace SharedFirstFactorDispersion\n\n"
+    },
+    {
+      "name": "gamma1_gate",
+      "kind": "theorem",
+      "complete_header": "private theorem gamma1_gate\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) :\n    ‖d.gamma1 p‖ ≤ 1 ∧ (d.gamma1 p ≠ 0 → p.Coprime d.residue.natAbs)",
+      "full_source_block": "private theorem gamma1_gate\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) :\n    ‖d.gamma1 p‖ ≤ 1 ∧ (d.gamma1 p ≠ 0 → p.Coprime d.residue.natAbs) := by\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, hg, _, _⟩ := hd\n  exact hg p hp\n\n"
+    },
+    {
+      "name": "factor_pos",
+      "kind": "theorem",
+      "complete_header": "private theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {p : ℕ}\n    (hp : p ∈ factorCarrier Q) : 0 < p",
+      "full_source_block": "private theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {p : ℕ}\n    (hp : p ∈ factorCarrier Q) : 0 < p := by\n  have hlo := (Finset.mem_Icc.mp hp).1\n  have hceil : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  omega\n\n"
+    },
+    {
+      "name": "card_factorCarrier_le",
+      "kind": "theorem",
+      "complete_header": "private theorem card_factorCarrier_le {Q : ℝ} (hQ : 1 ≤ Q) :\n    ((factorCarrier Q).card : ℝ) ≤ 2 * Q",
+      "full_source_block": "private theorem card_factorCarrier_le {Q : ℝ} (hQ : 1 ≤ Q) :\n    ((factorCarrier Q).card : ℝ) ≤ 2 * Q := by\n  have hsub : factorCarrier Q ⊆ Ioc 0 (Nat.floor (2 * Q)) := by\n    intro n hn\n    obtain ⟨hlo, hhi⟩ := Finset.mem_Icc.mp hn\n    have hceil : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n    exact Finset.mem_Ioc.mpr ⟨by omega, hhi⟩\n  have hcard := Finset.card_le_card hsub\n  simp only [Nat.card_Ioc, Nat.sub_zero] at hcard\n  exact (show ((factorCarrier Q).card : ℝ) ≤ (Nat.floor (2 * Q) : ℝ) by\n    exact_mod_cast hcard).trans (Nat.floor_le (by linarith))\n\nend SharedFirstFactorDispersion\n\n"
+    },
+    {
+      "name": "MediumAtom.q1SliceAtom_scale",
+      "kind": "theorem",
+      "complete_header": "@[simp] theorem MediumAtom.q1SliceAtom_scale (d : MediumAtom) (p : ℕ) :\n    (d.q1SliceAtom p).scale = d.scale",
+      "full_source_block": "@[simp] theorem MediumAtom.q1SliceAtom_scale (d : MediumAtom) (p : ℕ) :\n    (d.q1SliceAtom p).scale = d.scale := rfl\n\n"
+    },
+    {
+      "name": "MediumAtom.q1SliceAtom_auxSWError",
+      "kind": "theorem",
+      "complete_header": "@[simp] theorem MediumAtom.q1SliceAtom_auxSWError (d : MediumAtom)\n    (p k q b : ℕ) : (d.q1SliceAtom p).auxSWError k q b = d.auxSWError k q b",
+      "full_source_block": "@[simp] theorem MediumAtom.q1SliceAtom_auxSWError (d : MediumAtom)\n    (p k q b : ℕ) : (d.q1SliceAtom p).auxSWError k q b = d.auxSWError k q b := rfl\n\n/-- The same C0 and the same uniform family constants work for every slice. -/\n"
+    },
+    {
+      "name": "uniformAuxiliarySW_q1SliceFamily",
+      "kind": "theorem",
+      "complete_header": "theorem uniformAuxiliarySW_q1SliceFamily {ι : Type*} (F : ι → MediumAtom)\n    {C0 : ℕ} (hSW : UniformAuxiliarySW F C0) :\n    UniformAuxiliarySW (fun ip : ι × ℕ ↦ (F ip.1).q1SliceAtom ip.2) C0",
+      "full_source_block": "theorem uniformAuxiliarySW_q1SliceFamily {ι : Type*} (F : ι → MediumAtom)\n    {C0 : ℕ} (hSW : UniformAuxiliarySW F C0) :\n    UniformAuxiliarySW (fun ip : ι × ℕ ↦ (F ip.1).q1SliceAtom ip.2) C0 := by\n  intro A hA\n  obtain ⟨C, hC, x0, hx0, hbound⟩ := hSW A hA\n  refine ⟨C, hC, x0, hx0, ?_⟩\n  intro ip hx k q b hk hq hb\n  exact hbound ip.1 hx k q b hk hq hb\n\n/-- A slice has original geometry; its new point mass is primitive. -/\n"
+    },
+    {
+      "name": "mediumAdmissible_q1SliceAtom",
+      "kind": "theorem",
+      "complete_header": "theorem mediumAdmissible_q1SliceAtom\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    MediumAdmissible B sigma kappa c0 (d.q1SliceAtom p)",
+      "full_source_block": "theorem mediumAdmissible_q1SliceAtom\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    MediumAdmissible B sigma kappa c0 (d.q1SliceAtom p) := by\n  obtain ⟨_hp, hpa⟩ := Finset.mem_filter.mp hp\n  obtain ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    hAlpha, hRough, hBeta, _hGamma1, hGamma2, hGamma3⟩ := hd\n  refine ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    hAlpha, hRough, hBeta, ?_, hGamma2, hGamma3⟩\n  intro q _\n  change ‖(if q = p then (1 : ℂ) else 0)‖ ≤ 1 ∧\n    ((if q = p then (1 : ℂ) else 0) ≠ 0 → q.Coprime d.residue.natAbs)\n  by_cases hqp : q = p\n  · subst q\n    constructor\n    · simpa only [ite_true, norm_one] using (le_refl (1 : ℝ))\n    · exact fun _ ↦ hpa\n  · constructor\n    · simpa only [if_neg hqp, norm_zero] using (zero_le_one : (0 : ℝ) ≤ 1)\n    · intro hn\n      exact (hn (if_neg hqp)).elim\n\n"
+    },
+    {
+      "name": "MediumAtom.q1SliceAtom_signedError",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.q1SliceAtom_signedError (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) :\n    (d.q1SliceAtom p).signedError =\n      ∑ q2 ∈ factorCarrier d.Q2, ∑ q3 ∈ factorCarrier d.Q3,\n        d.gamma2 q2 * d.gamma3 q3 * d.discrepancy (p * q2 * q3)",
+      "full_source_block": "theorem MediumAtom.q1SliceAtom_signedError (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) :\n    (d.q1SliceAtom p).signedError =\n      ∑ q2 ∈ factorCarrier d.Q2, ∑ q3 ∈ factorCarrier d.Q3,\n        d.gamma2 q2 * d.gamma3 q3 * d.discrepancy (p * q2 * q3) := by\n  change (∑ q ∈ factorCarrier d.Q1, ∑ q2 ∈ factorCarrier d.Q2,\n    ∑ q3 ∈ factorCarrier d.Q3,\n      (if q = p then (1 : ℂ) else 0) * d.gamma2 q2 * d.gamma3 q3 *\n        d.discrepancy (q * q2 * q3)) = _\n  rw [Finset.sum_eq_single p]\n  · simp only [ite_true, one_mul]\n  · intro q _ hqp\n    simp only [if_neg hqp, zero_mul, Finset.sum_const_zero]\n  · intro hnot\n    exact (hnot hp).elim\n\n/-- Exact signed deletion of the nonprimitive first-factor labels only. -/\n"
+    },
+    {
+      "name": "MediumAtom.signedError_eq_q1Slice_sum",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.signedError_eq_q1Slice_sum\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.signedError = ∑ p ∈ d.primitiveFirstFactorCarrier,\n      d.gamma1 p * (d.q1SliceAtom p).signedError",
+      "full_source_block": "theorem MediumAtom.signedError_eq_q1Slice_sum\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.signedError = ∑ p ∈ d.primitiveFirstFactorCarrier,\n      d.gamma1 p * (d.q1SliceAtom p).signedError := by\n  have hfull : d.signedError = ∑ p ∈ factorCarrier d.Q1,\n      d.gamma1 p * (d.q1SliceAtom p).signedError := by\n    change (∑ p ∈ factorCarrier d.Q1, ∑ q2 ∈ factorCarrier d.Q2,\n      ∑ q3 ∈ factorCarrier d.Q3,\n        d.gamma1 p * d.gamma2 q2 * d.gamma3 q3 * d.discrepancy (p * q2 * q3)) = _\n    apply Finset.sum_congr rfl\n    intro p hp\n    rw [MediumAtom.q1SliceAtom_signedError d hp]\n    simp only [Finset.mul_sum]\n    apply Finset.sum_congr rfl\n    intro q2 _\n    apply Finset.sum_congr rfl\n    intro q3 _\n    ring\n  rw [hfull]\n  symm\n  apply Finset.sum_subset (Finset.filter_subset _ _)\n  intro p hp hnot\n  have hgamma : d.gamma1 p = 0 := by\n    by_contra hn\n    exact hnot (Finset.mem_filter.mpr\n      ⟨hp, (SharedFirstFactorDispersion.gamma1_gate hd hp).2 hn⟩)\n  simp only [hgamma, zero_mul]\n\n"
+    },
+    {
+      "name": "q1Slice_signedError_eq_rows",
+      "kind": "theorem",
+      "complete_header": "private theorem q1Slice_signedError_eq_rows (d : MediumAtom) (p : ℕ) :\n    (d.q1SliceAtom p).signedError = ∑ m ∈ d.betaCarrier,\n      d.beta m * (d.q1SliceAtom p).transposedAtom.complexCenteredRow m",
+      "full_source_block": "private theorem q1Slice_signedError_eq_rows (d : MediumAtom) (p : ℕ) :\n    (d.q1SliceAtom p).signedError = ∑ m ∈ d.betaCarrier,\n      d.beta m * (d.q1SliceAtom p).transposedAtom.complexCenteredRow m := by\n  have h := (d.q1SliceAtom p).transposedAtom.signedError_eq_complexCenteredRows\n  rw [MediumAtom.transposedAtom_signedError, MediumAtom.transposedAtom_alphaCarrier] at h\n  exact h\n\n/-- The original beta and gamma1 are jointly outside the same squared row. -/\n"
+    },
+    {
+      "name": "MediumAtom.signedError_eq_sharedFirstFactorRows",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.signedError_eq_sharedFirstFactorRows\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.signedError = ∑ p ∈ d.primitiveFirstFactorCarrier, ∑ m ∈ d.betaCarrier,\n      (d.gamma1 p * d.beta m) *\n        (d.q1SliceAtom p).transposedAtom.complexCenteredRow m",
+      "full_source_block": "theorem MediumAtom.signedError_eq_sharedFirstFactorRows\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.signedError = ∑ p ∈ d.primitiveFirstFactorCarrier, ∑ m ∈ d.betaCarrier,\n      (d.gamma1 p * d.beta m) *\n        (d.q1SliceAtom p).transposedAtom.complexCenteredRow m := by\n  rw [d.signedError_eq_q1Slice_sum hd]\n  apply Finset.sum_congr rfl\n  intro p _\n  rw [q1Slice_signedError_eq_rows, Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro m _\n  ring\n\n"
+    },
+    {
+      "name": "MediumAtom.signedError_norm_sq_le_sharedFirstFactorRows",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.signedError_norm_sq_le_sharedFirstFactorRows\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          ∑ p ∈ d.primitiveFirstFactorCarrier, ∑ m ∈ d.betaCarrier,\n            ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2",
+      "full_source_block": "theorem MediumAtom.signedError_norm_sq_le_sharedFirstFactorRows\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          ∑ p ∈ d.primitiveFirstFactorCarrier, ∑ m ∈ d.betaCarrier,\n            ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 := by\n  rw [d.signedError_eq_sharedFirstFactorRows hd]\n  calc\n    _ ≤ (∑ z ∈ d.primitiveFirstFactorCarrier ×ˢ d.betaCarrier,\n          ‖d.gamma1 z.1 * d.beta z.2‖ ^ 2) *\n        ∑ z ∈ d.primitiveFirstFactorCarrier ×ˢ d.betaCarrier,\n          ‖(d.q1SliceAtom z.1).transposedAtom.complexCenteredRow z.2‖ ^ 2 := by\n      simpa only [Finset.sum_product] using\n        complex_finset_cauchy_norm_sq (d.primitiveFirstFactorCarrier ×ˢ d.betaCarrier)\n          (fun z ↦ d.gamma1 z.1 * d.beta z.2)\n          (fun z ↦ (d.q1SliceAtom z.1).transposedAtom.complexCenteredRow z.2)\n    _ = _ := by\n      simp only [Finset.sum_product, norm_mul, mul_pow,\n        ← Finset.mul_sum, ← Finset.sum_mul]\n      ring\n\n"
+    },
+    {
+      "name": "q1Slice_rows_le_commonSmooth",
+      "kind": "theorem",
+      "complete_header": "private theorem q1Slice_rows_le_commonSmooth (d : MediumAtom) (hV : 1 ≤ d.V) (p : ℕ) :\n    (∑ m ∈ d.betaCarrier,\n      ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2) ≤\n        ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n          d.transposedAtom.commonSmoothWeight m *\n            ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2",
+      "full_source_block": "private theorem q1Slice_rows_le_commonSmooth (d : MediumAtom) (hV : 1 ≤ d.V) (p : ℕ) :\n    (∑ m ∈ d.betaCarrier,\n      ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2) ≤\n        ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n          d.transposedAtom.commonSmoothWeight m *\n            ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 := by\n  have hsub : d.betaCarrier ⊆ d.transposedAtom.commonSmoothCarrier := by\n    intro m hm\n    apply d.transposedSmoothWeight_support_subset hV\n    rw [d.transposedSmoothWeight_eq_one_on_beta hV hm]\n    norm_num\n  calc\n    _ = ∑ m ∈ d.betaCarrier, d.transposedAtom.commonSmoothWeight m *\n        ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 := by\n      apply Finset.sum_congr rfl\n      intro m hm\n      rw [d.transposedSmoothWeight_eq_one_on_beta hV hm, one_mul]\n    _ ≤ _ := Finset.sum_le_sum_of_subset_of_nonneg hsub\n      (fun m _ _ ↦ mul_nonneg (d.transposedAtom.commonSmoothWeight_nonneg m) (sq_nonneg _))\n\n/-- One original-V cutoff, chosen before the first factor and every row. -/\n"
+    },
+    {
+      "name": "MediumAtom.signedError_norm_sq_le_sharedFirstFactorSmoothRows",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.signedError_norm_sq_le_sharedFirstFactorSmoothRows\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          ∑ p ∈ d.primitiveFirstFactorCarrier,\n            ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n              d.transposedAtom.commonSmoothWeight m *\n                ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2",
+      "full_source_block": "theorem MediumAtom.signedError_norm_sq_le_sharedFirstFactorSmoothRows\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          ∑ p ∈ d.primitiveFirstFactorCarrier,\n            ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n              d.transposedAtom.commonSmoothWeight m *\n                ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 := by\n  apply (d.signedError_norm_sq_le_sharedFirstFactorRows hd).trans\n  apply mul_le_mul_of_nonneg_left _ (by positivity)\n  exact Finset.sum_le_sum (fun p _ ↦ q1Slice_rows_le_commonSmooth d hd.2.1 p)\n\n"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactorSmoothRows_eq_dispersion",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.sharedFirstFactorSmoothRows_eq_dispersion (d : MediumAtom) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        d.transposedAtom.commonSmoothWeight m *\n          ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ((d.q1SliceAtom p).transposedAtom.complexDispersionW\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight -\n          2 * (d.q1SliceAtom p).transposedAtom.complexDispersionV\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight +\n          (d.q1SliceAtom p).transposedAtom.complexDispersionU\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight)",
+      "full_source_block": "theorem MediumAtom.sharedFirstFactorSmoothRows_eq_dispersion (d : MediumAtom) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        d.transposedAtom.commonSmoothWeight m *\n          ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ((d.q1SliceAtom p).transposedAtom.complexDispersionW\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight -\n          2 * (d.q1SliceAtom p).transposedAtom.complexDispersionV\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight +\n          (d.q1SliceAtom p).transposedAtom.complexDispersionU\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight) := by\n  apply Finset.sum_congr rfl\n  intro p _\n  exact MediumAtom.complex_dispersion_identity _ _ _\n\n/-- The honest additional Q1 outside cost is explicit. -/\n"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactor_outside_le",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.sharedFirstFactor_outside_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤\n        4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)",
+      "full_source_block": "theorem MediumAtom.sharedFirstFactor_outside_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤\n        4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) := by\n  have hgamma : (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤ 2 * d.Q1 := by\n    calc\n      _ ≤ ∑ _p ∈ d.primitiveFirstFactorCarrier, (1 : ℝ) := by\n        apply Finset.sum_le_sum\n        intro p hp\n        have hh := (SharedFirstFactorDispersion.gamma1_gate hd (Finset.mem_filter.mp hp).1).1\n        simpa only [one_pow] using\n          (sq_le_sq₀ (norm_nonneg (d.gamma1 p)) (by norm_num : (0 : ℝ) ≤ 1)).2 hh\n      _ = (d.primitiveFirstFactorCarrier.card : ℝ) := by simp\n      _ ≤ ((factorCarrier d.Q1).card : ℝ) := by\n        exact_mod_cast Finset.card_le_card (Finset.filter_subset _ _)\n      _ ≤ _ := SharedFirstFactorDispersion.card_factorCarrier_le hd.2.2.1\n  have hbeta := mediumAdmissible_beta_norm_sq_sum_le hd\n  have hbetaNonneg : 0 ≤ 2 * d.V *\n      (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) :=\n    (Finset.sum_nonneg (fun _ _ ↦ sq_nonneg _)).trans hbeta\n  calc\n    _ ≤ (2 * d.V * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) * (2 * d.Q1) :=\n      mul_le_mul hbeta hgamma (by positivity) hbetaNonneg\n    _ = _ := by ring\n\n"
+    },
+    {
+      "name": "MediumAtom.gamma1L2_primitive_eq",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.gamma1L2_primitive_eq\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) =\n      ∑ p ∈ factorCarrier d.Q1, ‖d.gamma1 p‖ ^ 2",
+      "full_source_block": "theorem MediumAtom.gamma1L2_primitive_eq\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) =\n      ∑ p ∈ factorCarrier d.Q1, ‖d.gamma1 p‖ ^ 2 := by\n  apply Finset.sum_subset (Finset.filter_subset _ _)\n  intro p hp hnot\n  have hgamma : d.gamma1 p = 0 := by\n    by_contra hn\n    exact hnot (Finset.mem_filter.mpr\n      ⟨hp, (SharedFirstFactorDispersion.gamma1_gate hd hp).2 hn⟩)\n  simp only [hgamma, norm_zero, zero_pow (by decide : 2 ≠ 0)]\n\n/-- This is a reduction to a new energy; it does not supply that energy. -/\n"
+    },
+    {
+      "name": "MediumAtom.signedError_norm_sq_le_sharedFirstFactorMomentDispersion",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.signedError_norm_sq_le_sharedFirstFactorMomentDispersion\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      (4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) *\n        ∑ p ∈ d.primitiveFirstFactorCarrier,\n          ((d.q1SliceAtom p).transposedAtom.complexDispersionW\n              d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight -\n            2 * (d.q1SliceAtom p).transposedAtom.complexDispersionV\n              d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight +\n            (d.q1SliceAtom p).transposedAtom.complexDispersionU\n              d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight)",
+      "full_source_block": "theorem MediumAtom.signedError_norm_sq_le_sharedFirstFactorMomentDispersion\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      (4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) *\n        ∑ p ∈ d.primitiveFirstFactorCarrier,\n          ((d.q1SliceAtom p).transposedAtom.complexDispersionW\n              d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight -\n            2 * (d.q1SliceAtom p).transposedAtom.complexDispersionV\n              d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight +\n            (d.q1SliceAtom p).transposedAtom.complexDispersionU\n              d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight) := by\n  have h := d.signedError_norm_sq_le_sharedFirstFactorSmoothRows hd\n  rw [d.sharedFirstFactorSmoothRows_eq_dispersion] at h\n  apply h.trans\n  apply mul_le_mul_of_nonneg_right (d.sharedFirstFactor_outside_le hd)\n  rw [← d.sharedFirstFactorSmoothRows_eq_dispersion]\n  exact Finset.sum_nonneg (fun p _ ↦ Finset.sum_nonneg (fun m _ ↦\n    mul_nonneg (d.transposedAtom.commonSmoothWeight_nonneg m) (sq_nonneg _)))\n\nnamespace SharedFirstFactorDispersion\n\n"
+    },
+    {
+      "name": "slice_rows",
+      "kind": "theorem",
+      "complete_header": "private theorem slice_rows (d : MediumAtom) (p : ℕ) :\n    (d.q1SliceAtom p).transposedAtom.complexRowLabels =\n      d.transposedAtom.complexRowLabels",
+      "full_source_block": "private theorem slice_rows (d : MediumAtom) (p : ℕ) :\n    (d.q1SliceAtom p).transposedAtom.complexRowLabels =\n      d.transposedAtom.complexRowLabels := rfl\n\n"
+    },
+    {
+      "name": "slice_coefficient",
+      "kind": "theorem",
+      "complete_header": "private theorem slice_coefficient (d : MediumAtom) (p : ℕ)\n    (l : (ℕ × ℕ × ℕ) × ℕ) :\n    (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l =\n      (if l.1.1 = p then (1 : ℂ) else 0) *\n        d.gamma2 l.1.2.1 * d.gamma3 l.1.2.2 * d.transposedAtom.beta l.2",
+      "full_source_block": "private theorem slice_coefficient (d : MediumAtom) (p : ℕ)\n    (l : (ℕ × ℕ × ℕ) × ℕ) :\n    (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l =\n      (if l.1.1 = p then (1 : ℂ) else 0) *\n        d.gamma2 l.1.2.1 * d.gamma3 l.1.2.2 * d.transposedAtom.beta l.2 := rfl\n\n/-- The private reindexer is applied below to the literal constructed CRT kernel. -/\n"
+    },
+    {
+      "name": "sum_slice_coefficient",
+      "kind": "theorem",
+      "complete_header": "private theorem sum_slice_coefficient (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (f : ((ℕ × ℕ × ℕ) × ℕ) → ℂ) :\n    (∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n      (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l * f l) =\n      ∑ l ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * f ((p, l.1.1, l.1.2), l.2)",
+      "full_source_block": "private theorem sum_slice_coefficient (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (f : ((ℕ × ℕ × ℕ) × ℕ) → ℂ) :\n    (∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n      (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l * f l) =\n      ∑ l ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * f ((p, l.1.1, l.1.2), l.2) := by\n  rw [slice_rows]\n  simp only [MediumAtom.complexRowLabels, MediumAtom.complexFactorLabels,\n    MediumAtom.sharedFirstFactorRows, Finset.sum_product]\n  change (∑ q ∈ factorCarrier d.Q1, ∑ q2 ∈ factorCarrier d.Q2,\n    ∑ q3 ∈ factorCarrier d.Q3, ∑ n ∈ d.transposedAtom.betaCarrier,\n      (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient ((q, q2, q3), n) *\n        f ((q, q2, q3), n)) = _\n  rw [Finset.sum_eq_single p]\n  · simp only [slice_coefficient, ite_true, one_mul,\n      MediumAtom.sharedFirstFactorCoefficient]\n  · intro q _ hqp\n    simp only [slice_coefficient, if_neg hqp, zero_mul, Finset.sum_const_zero]\n  · intro hnot\n    exact (hnot hp).elim\n\n"
+    },
+    {
+      "name": "sum_star_slice_coefficient",
+      "kind": "theorem",
+      "complete_header": "private theorem sum_star_slice_coefficient (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (f : ((ℕ × ℕ × ℕ) × ℕ) → ℂ) :\n    (∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n      star ((d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l) * f l) =\n      ∑ l ∈ d.sharedFirstFactorRows,\n        star (d.sharedFirstFactorCoefficient l) * f ((p, l.1.1, l.1.2), l.2)",
+      "full_source_block": "private theorem sum_star_slice_coefficient (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (f : ((ℕ × ℕ × ℕ) × ℕ) → ℂ) :\n    (∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n      star ((d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l) * f l) =\n      ∑ l ∈ d.sharedFirstFactorRows,\n        star (d.sharedFirstFactorCoefficient l) * f ((p, l.1.1, l.1.2), l.2) := by\n  calc\n    _ = star (∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n        (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l * star (f l)) := by\n      simp only [star_sum, star_mul', star_star]\n    _ = star (∑ l ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * star (f ((p, l.1.1, l.1.2), l.2))) :=\n      congrArg star (sum_slice_coefficient d hp (fun l ↦ star (f l)))\n    _ = _ := by simp only [star_sum, star_mul', star_star]\n\n"
+    },
+    {
+      "name": "pair_sum_slice_coefficient",
+      "kind": "theorem",
+      "complete_header": "private theorem pair_sum_slice_coefficient (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (K : ((ℕ × ℕ × ℕ) × ℕ) → ((ℕ × ℕ × ℕ) × ℕ) → ℂ) :\n    (∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n      ∑ l' ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n        (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l *\n          star ((d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l') * K l l') =\n      ∑ l ∈ d.sharedFirstFactorRows, ∑ l' ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * star (d.sharedFirstFactorCoefficient l') *\n          K ((p, l.1.1, l.1.2), l.2) ((p, l'.1.1, l'.1.2), l'.2)",
+      "full_source_block": "private theorem pair_sum_slice_coefficient (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (K : ((ℕ × ℕ × ℕ) × ℕ) → ((ℕ × ℕ × ℕ) × ℕ) → ℂ) :\n    (∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n      ∑ l' ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n        (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l *\n          star ((d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l') * K l l') =\n      ∑ l ∈ d.sharedFirstFactorRows, ∑ l' ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * star (d.sharedFirstFactorCoefficient l') *\n          K ((p, l.1.1, l.1.2), l.2) ((p, l'.1.1, l'.1.2), l'.2) := by\n  calc\n    _ = ∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n        (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l *\n          ∑ l' ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n            star ((d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l') * K l l' := by\n      simp only [Finset.mul_sum, mul_assoc]\n    _ = ∑ l ∈ d.sharedFirstFactorRows, d.sharedFirstFactorCoefficient l *\n        ∑ l' ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n          star ((d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l') *\n            K ((p, l.1.1, l.1.2), l.2) l' :=\n      sum_slice_coefficient d hp _\n    _ = _ := by\n      apply Finset.sum_congr rfl\n      intro l _\n      rw [sum_star_slice_coefficient d hp, Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro l' _\n      ring\n\nend SharedFirstFactorDispersion\n\n/-- Both physical moduli have the identical original first factor. -/\n"
+    },
+    {
+      "name": "sharedFirstFactor_gcd",
+      "kind": "theorem",
+      "complete_header": "theorem sharedFirstFactor_gcd (p v1 v2 : ℕ) :\n    (p * v1).gcd (p * v2) = p * v1.gcd v2",
+      "full_source_block": "theorem sharedFirstFactor_gcd (p v1 v2 : ℕ) :\n    (p * v1).gcd (p * v2) = p * v1.gcd v2 := Nat.gcd_mul_left p v1 v2\n\n"
+    },
+    {
+      "name": "sharedFirstFactor_lcm",
+      "kind": "theorem",
+      "complete_header": "theorem sharedFirstFactor_lcm (p v1 v2 : ℕ) :\n    (p * v1).lcm (p * v2) = p * v1.lcm v2",
+      "full_source_block": "theorem sharedFirstFactor_lcm (p v1 v2 : ℕ) :\n    (p * v1).lcm (p * v2) = p * v1.lcm v2 := Nat.lcm_mul_left p v1 v2\n\n"
+    },
+    {
+      "name": "sharedFirstFactor_compatible_iff",
+      "kind": "theorem",
+      "complete_header": "theorem sharedFirstFactor_compatible_iff (p v1 v2 n1 n2 : ℕ) :\n    ComplexCRT.Compatible (p * v1) (p * v2) n1 n2 ↔\n      n1.Coprime (p * v1) ∧ n2.Coprime (p * v2) ∧\n        Nat.ModEq (p * v1.gcd v2) n1 n2",
+      "full_source_block": "theorem sharedFirstFactor_compatible_iff (p v1 v2 n1 n2 : ℕ) :\n    ComplexCRT.Compatible (p * v1) (p * v2) n1 n2 ↔\n      n1.Coprime (p * v1) ∧ n2.Coprime (p * v2) ∧\n        Nat.ModEq (p * v1.gcd v2) n1 n2 := by\n  rw [ComplexCRT.Compatible, sharedFirstFactor_gcd]\n\n/-- The reduced labels have no independent second copy of the first factor. -/\n"
+    },
+    {
+      "name": "MediumAtom.q1SliceDispersionW_eq_sharedCRT",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.q1SliceDispersionW_eq_sharedCRT\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) (S : Finset ℕ) (w : ℕ → ℝ) :\n    ((d.q1SliceAtom p).transposedAtom.complexDispersionW S w : ℂ) =\n      ∑ l ∈ d.sharedFirstFactorRows, ∑ l' ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * star (d.sharedFirstFactorCoefficient l') *\n          (ComplexCRT.constructedProgressionWeight S w d.residue\n            (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2)) l.2 l'.2 : ℂ)",
+      "full_source_block": "theorem MediumAtom.q1SliceDispersionW_eq_sharedCRT\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) (S : Finset ℕ) (w : ℕ → ℝ) :\n    ((d.q1SliceAtom p).transposedAtom.complexDispersionW S w : ℂ) =\n      ∑ l ∈ d.sharedFirstFactorRows, ∑ l' ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * star (d.sharedFirstFactorCoefficient l') *\n          (ComplexCRT.constructedProgressionWeight S w d.residue\n            (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2)) l.2 l'.2 : ℂ) := by\n  have h := (d.q1SliceAtom p).transposedDispersionW_eq_constructedCRT\n    (mediumAdmissible_q1SliceAtom hd hp) S w\n  apply h.trans\n  rw [show (d.q1SliceAtom p).residue = d.residue from rfl]\n  simpa only [complexFactorModulus, Nat.mul_assoc] using\n    SharedFirstFactorDispersion.pair_sum_slice_coefficient d (Finset.mem_filter.mp hp).1\n      (fun l l' ↦ (ComplexCRT.constructedProgressionWeight S w d.residue\n        (complexFactorModulus l.1) (complexFactorModulus l'.1) l.2 l'.2 : ℂ))\n\nnamespace SharedFirstFactorDispersion\n\n"
+    },
+    {
+      "name": "reduced_modulus_pos",
+      "kind": "theorem",
+      "complete_header": "private theorem reduced_modulus_pos\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {l : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) : 0 < l.1.1 * l.1.2",
+      "full_source_block": "private theorem reduced_modulus_pos\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {l : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) : 0 < l.1.1 * l.1.2 := by\n  have hf := (Finset.mem_product.mp hl).1\n  exact Nat.mul_pos (factor_pos hd.2.2.2.1 (Finset.mem_product.mp hf).1)\n    (factor_pos hd.2.2.2.2.1 (Finset.mem_product.mp hf).2)\n\n"
+    },
+    {
+      "name": "shared_progression_poisson",
+      "kind": "theorem",
+      "complete_header": "private theorem shared_progression_poisson\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows)\n    (hl' : l' ∈ d.sharedFirstFactorRows) :\n    (ComplexCRT.constructedProgressionWeight d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight d.residue\n      (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2)) l.2 l'.2 : ℂ) =\n      ((if ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n          (p * (l'.1.1 * l'.1.2)) l.2 l'.2 then\n        (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) *\n          CommonSmoothCutoff.cutoffMass +\n            (∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency\n              (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ))\n              ((ComplexCRT.residue (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2))\n                l.2 l'.2 d.residue : ℝ) /\n                  ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) h).re\n      else 0 : ℝ) : ℂ)",
+      "full_source_block": "private theorem shared_progression_poisson\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows)\n    (hl' : l' ∈ d.sharedFirstFactorRows) :\n    (ComplexCRT.constructedProgressionWeight d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight d.residue\n      (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2)) l.2 l'.2 : ℂ) =\n      ((if ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n          (p * (l'.1.1 * l'.1.2)) l.2 l'.2 then\n        (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) *\n          CommonSmoothCutoff.cutoffMass +\n            (∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency\n              (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ))\n              ((ComplexCRT.residue (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2))\n                l.2 l'.2 d.residue : ℝ) /\n                  ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) h).re\n      else 0 : ℝ) : ℂ) := by\n  have hpos : 0 < p := factor_pos hd.2.2.1 (Finset.mem_filter.mp hp).1\n  have hL : 0 < (p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) :=\n    Nat.pos_of_ne_zero (Nat.lcm_ne_zero\n      (Nat.mul_pos hpos (reduced_modulus_pos hd hl)).ne'\n      (Nat.mul_pos hpos (reduced_modulus_pos hd hl')).ne')\n  unfold ComplexCRT.constructedProgressionWeight\n  by_cases hc : ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n      (p * (l'.1.1 * l'.1.2)) l.2 l'.2\n  · simp only [if_pos hc]\n    have he := CommonSmoothCutoff.scaledDyadicCutoff_finset_progression_eq_main_add_fourier\n      (M := d.transposedAtom.U) (lt_of_lt_of_le zero_lt_one hd.2.1)\n      d.transposedAtom.commonSmoothCarrier\n      (fun m hm ↦ d.transposedSmoothWeight_support_subset hd.2.1 hm) hL\n      (ComplexCRT.residue (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2))\n        l.2 l'.2 d.residue)\n    simpa only [MediumAtom.commonSmoothWeight,\n      show d.transposedAtom.U = d.V from rfl] using\n      congrArg (fun x : ℝ ↦ (x : ℂ)) he\n  · simp only [if_neg hc]\n\n"
+    },
+    {
+      "name": "factor_le_twice",
+      "kind": "theorem",
+      "complete_header": "private theorem factor_le_twice {Q : ℝ} (hQ : 1 ≤ Q) {p : ℕ}\n    (hp : p ∈ factorCarrier Q) : (p : ℝ) ≤ 2 * Q",
+      "full_source_block": "private theorem factor_le_twice {Q : ℝ} (hQ : 1 ≤ Q) {p : ℕ}\n    (hp : p ∈ factorCarrier Q) : (p : ℝ) ≤ 2 * Q :=\n  (Nat.cast_le.mpr (Finset.mem_Icc.mp hp).2).trans (Nat.floor_le (by linarith))\n\n"
+    },
+    {
+      "name": "reduced_modulus_le",
+      "kind": "theorem",
+      "complete_header": "private theorem reduced_modulus_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {l : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) :\n    ((l.1.1 * l.1.2 : ℕ) : ℝ) ≤ 4 * d.Q2 * d.Q3",
+      "full_source_block": "private theorem reduced_modulus_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {l : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) :\n    ((l.1.1 * l.1.2 : ℕ) : ℝ) ≤ 4 * d.Q2 * d.Q3 := by\n  have hf := (Finset.mem_product.mp hl).1\n  have h2 := factor_le_twice hd.2.2.2.1 (Finset.mem_product.mp hf).1\n  have h3 := factor_le_twice hd.2.2.2.2.1 (Finset.mem_product.mp hf).2\n  rw [Nat.cast_mul]\n  calc\n    _ ≤ (2 * d.Q2) * (2 * d.Q3) :=\n      mul_le_mul h2 h3 (Nat.cast_nonneg _) (by linarith [hd.2.2.2.1])\n    _ = _ := by ring\n\nend SharedFirstFactorDispersion\n\n/-- Full original-V Poisson, with a single shared p and every integer h. -/\n"
+    },
+    {
+      "name": "MediumAtom.q1SliceDispersionW_eq_sharedPoisson",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.q1SliceDispersionW_eq_sharedPoisson\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    ((d.q1SliceAtom p).transposedAtom.complexDispersionW\n      d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) =\n      ∑ l ∈ d.sharedFirstFactorRows, ∑ l' ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * star (d.sharedFirstFactorCoefficient l') *\n          ((if ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n              (p * (l'.1.1 * l'.1.2)) l.2 l'.2 then\n            (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) *\n              CommonSmoothCutoff.cutoffMass +\n                (∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency\n                  (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ))\n                  ((ComplexCRT.residue (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2))\n                    l.2 l'.2 d.residue : ℝ) /\n                      ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) h).re\n          else 0 : ℝ) : ℂ)",
+      "full_source_block": "theorem MediumAtom.q1SliceDispersionW_eq_sharedPoisson\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    ((d.q1SliceAtom p).transposedAtom.complexDispersionW\n      d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) =\n      ∑ l ∈ d.sharedFirstFactorRows, ∑ l' ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * star (d.sharedFirstFactorCoefficient l') *\n          ((if ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n              (p * (l'.1.1 * l'.1.2)) l.2 l'.2 then\n            (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) *\n              CommonSmoothCutoff.cutoffMass +\n                (∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency\n                  (d.V / ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ))\n                  ((ComplexCRT.residue (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2))\n                    l.2 l'.2 d.residue : ℝ) /\n                      ((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ)) h).re\n          else 0 : ℝ) : ℂ) := by\n  rw [d.q1SliceDispersionW_eq_sharedCRT hd hp]\n  apply Finset.sum_congr rfl\n  intro l hl\n  apply Finset.sum_congr rfl\n  intro l' hl'\n  rw [SharedFirstFactorDispersion.shared_progression_poisson hd hp hl hl']\n\n/-- Literal centers and the full nonzero part are summed on the same p carrier. -/\n"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactor_centered_identity",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.sharedFirstFactor_centered_identity\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ((∑ p ∈ d.primitiveFirstFactorCarrier,\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        d.transposedAtom.commonSmoothWeight m *\n          ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 : ℝ) : ℂ) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        (((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n          2 * ((d.q1SliceAtom p).transposedAtom.complexDispersionV\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) +\n          ((d.q1SliceAtom p).transposedAtom.complexDispersionU\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ)) +\n          (d.q1SliceAtom p).transposedAtom.complexCRTSmoothNonzeroPart)",
+      "full_source_block": "theorem MediumAtom.sharedFirstFactor_centered_identity\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ((∑ p ∈ d.primitiveFirstFactorCarrier,\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        d.transposedAtom.commonSmoothWeight m *\n          ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 : ℝ) : ℂ) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        (((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n          2 * ((d.q1SliceAtom p).transposedAtom.complexDispersionV\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) +\n          ((d.q1SliceAtom p).transposedAtom.complexDispersionU\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ)) +\n          (d.q1SliceAtom p).transposedAtom.complexCRTSmoothNonzeroPart) := by\n  rw [Complex.ofReal_sum]\n  apply Finset.sum_congr rfl\n  intro p hp\n  exact (d.q1SliceAtom p).transposed_dispersion_identity_with_commonPoisson\n    (mediumAdmissible_q1SliceAtom hd hp)\n\n/-- The shared first factor enters the physical lcm once, not squared. -/\n"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactor_lcm_le",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.sharedFirstFactor_lcm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows)\n    (hl' : l' ∈ d.sharedFirstFactorRows) :\n    (((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℕ) : ℝ) ≤\n      32 * d.Q1 * d.Q2 ^ 2 * d.Q3 ^ 2",
+      "full_source_block": "theorem MediumAtom.sharedFirstFactor_lcm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows)\n    (hl' : l' ∈ d.sharedFirstFactorRows) :\n    (((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℕ) : ℝ) ≤\n      32 * d.Q1 * d.Q2 ^ 2 * d.Q3 ^ 2 := by\n  have hpbound := SharedFirstFactorDispersion.factor_le_twice hd.2.2.1\n    (Finset.mem_filter.mp hp).1\n  have h1 := SharedFirstFactorDispersion.reduced_modulus_le hd hl\n  have h2 := SharedFirstFactorDispersion.reduced_modulus_le hd hl'\n  have hdiv : (l.1.1 * l.1.2).lcm (l'.1.1 * l'.1.2) ≤\n      (l.1.1 * l.1.2) * (l'.1.1 * l'.1.2) :=\n    Nat.le_of_dvd (Nat.mul_pos (SharedFirstFactorDispersion.reduced_modulus_pos hd hl)\n      (SharedFirstFactorDispersion.reduced_modulus_pos hd hl')) (Nat.lcm_dvd_mul _ _)\n  have hQ20 : 0 ≤ d.Q2 := by linarith [hd.2.2.2.1]\n  have hQ30 : 0 ≤ d.Q3 := by linarith [hd.2.2.2.2.1]\n  rw [sharedFirstFactor_lcm, Nat.cast_mul]\n  calc\n    _ ≤ (p : ℝ) * (((l.1.1 * l.1.2 : ℕ) : ℝ) *\n        ((l'.1.1 * l'.1.2 : ℕ) : ℝ)) :=\n      mul_le_mul_of_nonneg_left (by exact_mod_cast hdiv) (Nat.cast_nonneg _)\n    _ ≤ (2 * d.Q1) * ((4 * d.Q2 * d.Q3) * (4 * d.Q2 * d.Q3)) :=\n      mul_le_mul hpbound\n        (mul_le_mul h1 h2 (Nat.cast_nonneg _) (by positivity))\n        (by positivity) (by linarith [hd.2.2.1])\n    _ = _ := by ring\n\n/-- A support-frequency gate is transported without deleting either sign. -/\n"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactor_frequency_le",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.sharedFirstFactor_frequency_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows)\n    (hl' : l' ∈ d.sharedFirstFactorRows) {Z : ℝ} (hZ : 0 ≤ Z) (h : ℤ)\n    (hh : |(h : ℝ)| ≤\n      (((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ) * Z) / d.V) :\n    |(h : ℝ)| ≤ 32 * d.Q1 * d.Q2 ^ 2 * d.Q3 ^ 2 * Z / d.V",
+      "full_source_block": "theorem MediumAtom.sharedFirstFactor_frequency_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows)\n    (hl' : l' ∈ d.sharedFirstFactorRows) {Z : ℝ} (hZ : 0 ≤ Z) (h : ℤ)\n    (hh : |(h : ℝ)| ≤\n      (((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)) : ℝ) * Z) / d.V) :\n    |(h : ℝ)| ≤ 32 * d.Q1 * d.Q2 ^ 2 * d.Q3 ^ 2 * Z / d.V := by\n  exact hh.trans (div_le_div_of_nonneg_right\n    (mul_le_mul_of_nonneg_right (d.sharedFirstFactor_lcm_le hd hp hl hl') hZ)\n    (by linarith [hd.2.1]))\n\nend\n\nend ImbalancedChen.Part3\n"
+    }
+  ],
+  "declaration_count": 39,
+  "definition_count": 4,
+  "exactly_two_type_changes": [
+    {
+      "name": "MediumAtom.sharedFirstFactorSmoothRows_eq_dispersion",
+      "old_complete_header": "theorem MediumAtom.sharedFirstFactorSmoothRows_eq_dispersion (d : MediumAtom) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        d.transposedAtom.commonSmoothWeight m *\n          ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        (d.q1SliceAtom p).transposedAtom.complexDispersionW\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight -\n          2 * (d.q1SliceAtom p).transposedAtom.complexDispersionV\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight +\n          (d.q1SliceAtom p).transposedAtom.complexDispersionU\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight",
+      "new_complete_header": "theorem MediumAtom.sharedFirstFactorSmoothRows_eq_dispersion (d : MediumAtom) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        d.transposedAtom.commonSmoothWeight m *\n          ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ((d.q1SliceAtom p).transposedAtom.complexDispersionW\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight -\n          2 * (d.q1SliceAtom p).transposedAtom.complexDispersionV\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight +\n          (d.q1SliceAtom p).transposedAtom.complexDispersionU\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight)"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactor_centered_identity",
+      "old_complete_header": "theorem MediumAtom.sharedFirstFactor_centered_identity\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ((∑ p ∈ d.primitiveFirstFactorCarrier,\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        d.transposedAtom.commonSmoothWeight m *\n          ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 : ℝ) : ℂ) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n          2 * ((d.q1SliceAtom p).transposedAtom.complexDispersionV\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) +\n          ((d.q1SliceAtom p).transposedAtom.complexDispersionU\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ)) +\n          (d.q1SliceAtom p).transposedAtom.complexCRTSmoothNonzeroPart",
+      "new_complete_header": "theorem MediumAtom.sharedFirstFactor_centered_identity\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ((∑ p ∈ d.primitiveFirstFactorCarrier,\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        d.transposedAtom.commonSmoothWeight m *\n          ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 : ℝ) : ℂ) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        (((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n          2 * ((d.q1SliceAtom p).transposedAtom.complexDispersionV\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) +\n          ((d.q1SliceAtom p).transposedAtom.complexDispersionU\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ)) +\n          (d.q1SliceAtom p).transposedAtom.complexCRTSmoothNonzeroPart)"
+    }
+  ],
+  "other37_headers_and_four_definitions_unchanged": true,
+  "root_full_actual_failed_stdout": {
+    "path": ".lake/proof-continuation/runs/20261015T225559125030Z-ImbalancedChen.Part3SharedFirstFactorDispersion/stdout.log",
+    "sha256": "816eb581135b34ba39d2bfcd95559e7b1a04069d3a8e157e5e594e9692dce29f",
+    "complete_text": "ImbalancedChen/Part3SharedFirstFactorDispersion.lean:105:6: error: Type mismatch: After simplification, term\n  le_refl 1\n has type\n  1 ≤ 1\nbut is expected to have type\n  ‖if True then 1 else 0‖ ≤ 1\nImbalancedChen/Part3SharedFirstFactorDispersion.lean:122:2: error: unsolved goals\nd : MediumAtom\np : ℕ\nhp : p ∈ factorCarrier d.Q1\n⊢ ∑ x ∈ factorCarrier d.Q2,\n      ∑ x_1 ∈ factorCarrier d.Q3, (if True then 1 else 0) * d.gamma2 x * d.gamma3 x_1 * d.discrepancy (p * x * x_1) =\n    ∑ q2 ∈ factorCarrier d.Q2, ∑ q3 ∈ factorCarrier d.Q3, d.gamma2 q2 * d.gamma3 q3 * d.discrepancy (p * q2 * q3)\nImbalancedChen/Part3SharedFirstFactorDispersion.lean:122:15: error: This simp argument is unused:\n  if_pos rfl\n\nHint: Omit it from the simp argument list.\n  [apply] simp only [one_mul]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\nImbalancedChen/Part3SharedFirstFactorDispersion.lean:122:27: error: This simp argument is unused:\n  one_mul\n\nHint: Omit it from the simp argument list.\n  [apply] simp only [if_pos rfl]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\nImbalancedChen/Part3SharedFirstFactorDispersion.lean:250:2: error: Tactic `apply` failed: could not unify the conclusion of `sum_congr rfl`\n  Finset.sum ?m.74 ?m.71 = Finset.sum ?m.74 ?m.72\nwith the goal\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        d.transposedAtom.commonSmoothWeight m * ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 =\n    ∑ p ∈ d.primitiveFirstFactorCarrier,\n          (d.q1SliceAtom p).transposedAtom.complexDispersionW d.transposedAtom.commonSmoothCarrier\n            d.transposedAtom.commonSmoothWeight -\n        2 *\n          (d.q1SliceAtom p).transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n            d.transposedAtom.commonSmoothWeight +\n      (d.q1SliceAtom p).transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight\n\nNote: The full type of `sum_congr rfl` is\n  (∀ x ∈ ?m.74, ?m.71 x = ?m.72 x) → Finset.sum ?m.74 ?m.71 = Finset.sum ?m.74 ?m.72\n\np : ℕ\nd : MediumAtom\n⊢ ∑ p ∈ d.primitiveFirstFactorCarrier,\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        d.transposedAtom.commonSmoothWeight m * ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 =\n    ∑ p ∈ d.primitiveFirstFactorCarrier,\n          (d.q1SliceAtom p).transposedAtom.complexDispersionW d.transposedAtom.commonSmoothCarrier\n            d.transposedAtom.commonSmoothWeight -\n        2 *\n          (d.q1SliceAtom p).transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n            d.transposedAtom.commonSmoothWeight +\n      (d.q1SliceAtom p).transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight\nImbalancedChen/Part3SharedFirstFactorDispersion.lean:311:2: error: Tactic `apply` failed: could not unify the conclusion of `mul_le_mul_of_nonneg_right (sharedFirstFactor_outside_le hd)`\n  ((∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) * ∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) * ?m.125 ≤\n    4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) * ?m.125\nwith the goal\n  ((∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) * ∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n      (∑ p ∈ d.primitiveFirstFactorCarrier,\n            (d.q1SliceAtom p).transposedAtom.complexDispersionW d.transposedAtom.commonSmoothCarrier\n              d.transposedAtom.commonSmoothWeight -\n          2 *\n            (d.q1SliceAtom ?m.111).transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n              d.transposedAtom.commonSmoothWeight +\n        (d.q1SliceAtom ?m.111).transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight) ≤\n    4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ((d.q1SliceAtom p).transposedAtom.complexDispersionW d.transposedAtom.commonSmoothCarrier\n              d.transposedAtom.commonSmoothWeight -\n            2 *\n              (d.q1SliceAtom p).transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n                d.transposedAtom.commonSmoothWeight +\n          (d.q1SliceAtom p).transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n            d.transposedAtom.commonSmoothWeight)\n\nNote: The full type of `mul_le_mul_of_nonneg_right (sharedFirstFactor_outside_le hd)` is\n  0 ≤ ?m.125 →\n    ((∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) * ∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) * ?m.125 ≤\n      4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) * ?m.125\n\nB : ℕ\nsigma kappa c0 : ℝ\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\nh✝ :\n  ‖d.signedError‖ ^ 2 ≤\n    ((∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) * ∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n          d.transposedAtom.commonSmoothWeight m * ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2\nh :\n  ‖d.signedError‖ ^ 2 ≤\n    ((∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) * ∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n      (∑ p ∈ d.primitiveFirstFactorCarrier,\n            (d.q1SliceAtom p).transposedAtom.complexDispersionW d.transposedAtom.commonSmoothCarrier\n              d.transposedAtom.commonSmoothWeight -\n          2 *\n            (d.q1SliceAtom ?m.111).transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n              d.transposedAtom.commonSmoothWeight +\n        (d.q1SliceAtom ?m.111).transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight)\n⊢ ((∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) * ∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n      (∑ p ∈ d.primitiveFirstFactorCarrier,\n            (d.q1SliceAtom p).transposedAtom.complexDispersionW d.transposedAtom.commonSmoothCarrier\n              d.transposedAtom.commonSmoothWeight -\n          2 *\n            (d.q1SliceAtom ?m.111).transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n              d.transposedAtom.commonSmoothWeight +\n        (d.q1SliceAtom ?m.111).transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight) ≤\n    4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ((d.q1SliceAtom p).transposedAtom.complexDispersionW d.transposedAtom.commonSmoothCarrier\n              d.transposedAtom.commonSmoothWeight -\n            2 *\n              (d.q1SliceAtom p).transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n                d.transposedAtom.commonSmoothWeight +\n          (d.q1SliceAtom p).transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n            d.transposedAtom.commonSmoothWeight)\nImbalancedChen/Part3SharedFirstFactorDispersion.lean:344:2: error: unsolved goals\nd : MediumAtom\np : ℕ\nhp : p ∈ factorCarrier d.Q1\nf : (ℕ × ℕ × ℕ) × ℕ → ℂ\n⊢ ∑ x ∈ factorCarrier d.Q2,\n      ∑ x_1 ∈ factorCarrier d.Q3,\n        ∑ x_2 ∈ d.transposedAtom.betaCarrier,\n          (if True then 1 else 0) * d.gamma2 x * d.gamma3 x_1 * d.transposedAtom.beta x_2 * f ((p, x, x_1), x_2) =\n    ∑ x ∈ factorCarrier d.Q2,\n      ∑ x_1 ∈ factorCarrier d.Q3,\n        ∑ x_2 ∈ d.transposedAtom.betaCarrier,\n          d.gamma2 x * d.gamma3 x_1 * d.transposedAtom.beta x_2 * f ((p, x, x_1), x_2)\nImbalancedChen/Part3SharedFirstFactorDispersion.lean:344:34: error: This simp argument is unused:\n  if_pos rfl\n\nHint: Omit it from the simp argument list.\n  [apply] simp only [slice_coefficient, one_mul, MediumAtom.sharedFirstFactorCoefficient]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\nImbalancedChen/Part3SharedFirstFactorDispersion.lean:344:46: error: This simp argument is unused:\n  one_mul\n\nHint: Omit it from the simp argument list.\n  [apply] simp only [slice_coefficient, if_pos rfl, MediumAtom.sharedFirstFactorCoefficient]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\nImbalancedChen/Part3SharedFirstFactorDispersion.lean:424:2: error: Type mismatch: After simplification, term\n  SharedFirstFactorDispersion.pair_sum_slice_coefficient d (mem_filter.mp hp).left fun l l' =>\n    ↑(ComplexCRT.constructedProgressionWeight S w d.residue (complexFactorModulus l.1) (complexFactorModulus l'.1) l.2\n        l'.2)\n has type\n  @Eq ℂ\n    (∑ x ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n      ∑ x_1 ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n        (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient x *\n            star ((d.q1SliceAtom p).transposedAtom.complexBetaCoefficient x_1) *\n          ↑(ComplexCRT.constructedProgressionWeight S w d.residue (x.1.1 * (x.1.2.1 * x.1.2.2))\n              (x_1.1.1 * (x_1.1.2.1 * x_1.1.2.2)) x.2 x_1.2))\n    (∑ x ∈ d.sharedFirstFactorRows,\n      ∑ x_1 ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient x * star (d.sharedFirstFactorCoefficient x_1) *\n          ↑(ComplexCRT.constructedProgressionWeight S w d.residue (p * (x.1.1 * x.1.2)) (p * (x_1.1.1 * x_1.1.2)) x.2\n              x_1.2))\nbut is expected to have type\n  @Eq ℂ\n    (∑ x ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n      ∑ x_1 ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n        (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient x *\n            star ((d.q1SliceAtom p).transposedAtom.complexBetaCoefficient x_1) *\n          ↑(ComplexCRT.constructedProgressionWeight S w (d.q1SliceAtom p).residue (x.1.1 * (x.1.2.1 * x.1.2.2))\n              (x_1.1.1 * (x_1.1.2.1 * x_1.1.2.2)) x.2 x_1.2))\n    (∑ l ∈ d.sharedFirstFactorRows,\n      ∑ l' ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * star (d.sharedFirstFactorCoefficient l') *\n          ↑(ComplexCRT.constructedProgressionWeight S w d.residue (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2)) l.2\n              l'.2))\nImbalancedChen/Part3SharedFirstFactorDispersion.lean:473:4: error: Type mismatch: After simplification, term\n  congrArg (fun x => ↑x) he\n has type\n  @Eq ℂ\n    ↑(∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        if\n            ↑m ≡ ComplexCRT.residue (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2)) l.2 l'.2 d.residue [ZMOD\n              ↑((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)))] then\n          CommonSmoothCutoff.scaledDyadicCutoff d.transposedAtom.U ↑m\n        else 0)\n    ↑(d.transposedAtom.U / ↑((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2))) * CommonSmoothCutoff.cutoffMass +\n        (∑' (h : ℤ),\n            CommonSmoothCutoff.poissonNonzeroFrequency\n              (d.transposedAtom.U / ↑((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2))))\n              (↑(ComplexCRT.residue (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2)) l.2 l'.2 d.residue) /\n                ↑((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2))))\n              h).re)\nbut is expected to have type\n  @Eq ℂ\n    ↑(∑ n ∈ d.transposedAtom.commonSmoothCarrier,\n        if\n            ↑n ≡ ComplexCRT.residue (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2)) l.2 l'.2 d.residue [ZMOD\n              ↑((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2)))] then\n          CommonSmoothCutoff.scaledDyadicCutoff d.transposedAtom.U ↑n\n        else 0)\n    ↑(d.V / ↑((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2))) * CommonSmoothCutoff.cutoffMass +\n        (∑' (h : ℤ),\n            CommonSmoothCutoff.poissonNonzeroFrequency (d.V / ↑((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2))))\n              (↑(ComplexCRT.residue (p * (l.1.1 * l.1.2)) (p * (l'.1.1 * l'.1.2)) l.2 l'.2 d.residue) /\n                ↑((p * (l.1.1 * l.1.2)).lcm (p * (l'.1.1 * l'.1.2))))\n              h).re)\nImbalancedChen/Part3SharedFirstFactorDispersion.lean:539:2: error: Tactic `apply` failed: could not unify the conclusion of `sum_congr rfl`\n  Finset.sum ?m.82 ?m.79 = Finset.sum ?m.82 ?m.80\nwith the goal\n  ∑ i ∈ d.primitiveFirstFactorCarrier,\n      ↑(∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n          d.transposedAtom.commonSmoothWeight m * ‖(d.q1SliceAtom i).transposedAtom.complexCenteredRow m‖ ^ 2) =\n    ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n            2 *\n              ↑((d.q1SliceAtom p).transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n                  d.transposedAtom.commonSmoothWeight) +\n          ↑((d.q1SliceAtom p).transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n              d.transposedAtom.commonSmoothWeight)) +\n      (d.q1SliceAtom p).transposedAtom.complexCRTSmoothNonzeroPart\n\nNote: The full type of `sum_congr rfl` is\n  (∀ x ∈ ?m.82, ?m.79 x = ?m.80 x) → Finset.sum ?m.82 ?m.79 = Finset.sum ?m.82 ?m.80\n\np B : ℕ\nsigma kappa c0 : ℝ\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\n⊢ ∑ i ∈ d.primitiveFirstFactorCarrier,\n      ↑(∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n          d.transposedAtom.commonSmoothWeight m * ‖(d.q1SliceAtom i).transposedAtom.complexCenteredRow m‖ ^ 2) =\n    ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n            2 *\n              ↑((d.q1SliceAtom p).transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n                  d.transposedAtom.commonSmoothWeight) +\n          ↑((d.q1SliceAtom p).transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n              d.transposedAtom.commonSmoothWeight)) +\n      (d.q1SliceAtom p).transposedAtom.complexCRTSmoothNonzeroPart\n"
+  },
+  "literal_patch": [
+    {
+      "old_start_byte": 4522,
+      "new_start_byte": 4522,
+      "old": "    · simpa only [if_pos rfl, norm_one] using (le_refl (1 : ℝ))\n",
+      "new": "    · simpa only [ite_true, norm_one] using (le_refl (1 : ℝ))\n"
+    },
+    {
+      "old_start_byte": 5293,
+      "new_start_byte": 5291,
+      "old": "  · simp only [if_pos rfl, one_mul]\n",
+      "new": "  · simp only [ite_true, one_mul]\n"
+    },
+    {
+      "old_start_byte": 11045,
+      "new_start_byte": 11041,
+      "old": "        (d.q1SliceAtom p).transposedAtom.complexDispersionW\n",
+      "new": "        ((d.q1SliceAtom p).transposedAtom.complexDispersionW\n"
+    },
+    {
+      "old_start_byte": 11407,
+      "new_start_byte": 11404,
+      "old": "            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight := by\n",
+      "new": "            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight) := by\n"
+    },
+    {
+      "old_start_byte": 16374,
+      "new_start_byte": 16372,
+      "old": "  · simp only [slice_coefficient, if_pos rfl, one_mul,\n",
+      "new": "  · simp only [slice_coefficient, ite_true, one_mul,\n"
+    },
+    {
+      "old_start_byte": 20525,
+      "new_start_byte": 20521,
+      "old": "",
+      "new": "  rw [show (d.q1SliceAtom p).residue = d.residue from rfl]\n"
+    },
+    {
+      "old_start_byte": 23251,
+      "new_start_byte": 23306,
+      "old": "    simpa only [MediumAtom.commonSmoothWeight] using\n",
+      "new": "    simpa only [MediumAtom.commonSmoothWeight,\n      show d.transposedAtom.U = d.V from rfl] using\n"
+    },
+    {
+      "old_start_byte": 26207,
+      "new_start_byte": 26308,
+      "old": "        ((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n",
+      "new": "        (((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n"
+    },
+    {
+      "old_start_byte": 26595,
+      "new_start_byte": 26697,
+      "old": "          (d.q1SliceAtom p).transposedAtom.complexCRTSmoothNonzeroPart := by\n",
+      "new": "          (d.q1SliceAtom p).transposedAtom.complexCRTSmoothNonzeroPart) := by\n"
+    }
+  ],
+  "independent_forward_inverse_exact_bytes": true,
+  "owner_report": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261016-shared-first-factor-dispersion-first-diagnostic-two-type-self-scope.json",
+    "sha256": "a240ad9da900dd78ad408899b8e1c365f4d8f5741242928e8c979d1c6749892a"
+  },
+  "parent": {
+    "ImbalancedChen/Part3TransposedDispersion.lean": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786"
+  },
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "relative_DAG": {
+    "local_closure_count": 54,
+    "parent_union_local_count": 53,
+    "added_local": [
+      "ImbalancedChen.Part3SharedFirstFactorDispersion"
+    ],
+    "added_foreign": [],
+    "local_nodes": {
+      "ImbalancedChen.Part3SharedFirstFactorDispersion": {
+        "path": "ImbalancedChen/Part3SharedFirstFactorDispersion.lean",
+        "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+        "imports": [
+          "ImbalancedChen.Part3TransposedDispersion"
+        ]
+      },
+      "ImbalancedChen.Part3TransposedDispersion": {
+        "path": "ImbalancedChen/Part3TransposedDispersion.lean",
+        "sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+        "imports": [
+          "ImbalancedChen.Part3CommonPoisson",
+          "ImbalancedChen.Part3FactorFiberDivisor"
+        ]
+      },
+      "ImbalancedChen.Part3CommonPoisson": {
+        "path": "ImbalancedChen/Part3CommonPoisson.lean",
+        "sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+        "imports": [
+          "ImbalancedChen.Part3CommonSmoothCutoff",
+          "ImbalancedChen.Part3ComplexCRTConsumer",
+          "Mathlib.Analysis.Fourier.PoissonSummation"
+        ]
+      },
+      "ImbalancedChen.Part3CommonSmoothCutoff": {
+        "path": "ImbalancedChen/Part3CommonSmoothCutoff.lean",
+        "sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+        "imports": [
+          "ImbalancedChen.Part3ComplexDispersion",
+          "Mathlib.Analysis.Calculus.BumpFunction.InnerProduct",
+          "Mathlib.Analysis.Distribution.SchwartzSpace.Fourier",
+          "Mathlib.MeasureTheory.Measure.Lebesgue.Integral"
+        ]
+      },
+      "ImbalancedChen.Part3ComplexDispersion": {
+        "path": "ImbalancedChen/Part3ComplexDispersion.lean",
+        "sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+        "imports": [
+          "ImbalancedChen.Part3DistributionTargets",
+          "Mathlib.Analysis.Complex.Basic",
+          "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+          "Mathlib.Algebra.Star.BigOperators"
+        ]
+      },
+      "ImbalancedChen.Part3DistributionTargets": {
+        "path": "ImbalancedChen/Part3DistributionTargets.lean",
+        "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+        "imports": [
+          "ImbalancedChen.RestrictedResidueScale",
+          "Mathlib.Analysis.Complex.Exponential"
+        ]
+      },
+      "ImbalancedChen.RestrictedResidueScale": {
+        "path": "ImbalancedChen/RestrictedResidueScale.lean",
+        "sha256": "3c58f54f875a46886c28bc224fdf4952d6b53a72ae6f6f2b8debaf7e71c01d0f",
+        "imports": [
+          "ImbalancedChen.PanProductGridRanges"
+        ]
+      },
+      "ImbalancedChen.PanProductGridRanges": {
+        "path": "ImbalancedChen/PanProductGridRanges.lean",
+        "sha256": "88b2c972243ba1e33e89a08b6759c16512620751b7c25206dfa4d767bf79466a",
+        "imports": [
+          "ImbalancedChen.PanProductGrid",
+          "ImbalancedChen.RealHalfProductMassSplit"
+        ]
+      },
+      "ImbalancedChen.PanProductGrid": {
+        "path": "ImbalancedChen/PanProductGrid.lean",
+        "sha256": "e37bb4d2aa855c86e1601566e9ea6649092ac625c434d8a30476208057fab743",
+        "imports": [
+          "ImbalancedChen.PanProductAggregateBudget",
+          "ImbalancedChen.SelectedGridRanges"
+        ]
+      },
+      "ImbalancedChen.PanProductAggregateBudget": {
+        "path": "ImbalancedChen/PanProductAggregateBudget.lean",
+        "sha256": "13b512d4c51a00b217ea72b3033ec50bd48d76c10812184a20d1bc838ef04140",
+        "imports": [
+          "ImbalancedChen.PanProductLiuBridge"
+        ]
+      },
+      "ImbalancedChen.PanProductLiuBridge": {
+        "path": "ImbalancedChen/PanProductLiuBridge.lean",
+        "sha256": "dd239cb5a36898abe49cdb23d60cc1e3e86dede36bd849c41013f18a99ee2d61",
+        "imports": [
+          "ImbalancedChen.PanProductResidueBudget",
+          "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate"
+        ]
+      },
+      "ImbalancedChen.PanProductResidueBudget": {
+        "path": "ImbalancedChen/PanProductResidueBudget.lean",
+        "sha256": "4b5dcf30d8aebee0779f6dc3e4f1188a6797f9cd5215f71737b8369a79a9fbaf",
+        "imports": [
+          "ImbalancedChen.PanProductStrips",
+          "ImbalancedChen.ResidueSelectorBudget"
+        ]
+      },
+      "ImbalancedChen.PanProductStrips": {
+        "path": "ImbalancedChen/PanProductStrips.lean",
+        "sha256": "eb97d23050e3ec624cde24ef779acc67d7ded44283dc60097edc2d715429863b",
+        "imports": [
+          "ImbalancedChen.HalfProductPanFinite",
+          "ImbalancedChen.PrimeRectanglePrefixes"
+        ]
+      },
+      "ImbalancedChen.HalfProductPanFinite": {
+        "path": "ImbalancedChen/HalfProductPanFinite.lean",
+        "sha256": "f392c7642bd00e418c91000a3ed6ef7c4c30194808e974999d4a39699d2b62de",
+        "imports": [
+          "ImbalancedChen.FiniteSieveModel",
+          "ImbalancedChen.HalfProductMassFibres"
+        ]
+      },
+      "ImbalancedChen.FiniteSieveModel": {
+        "path": "ImbalancedChen/FiniteSieveModel.lean",
+        "sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+        "imports": [
+          "ImbalancedChen.SieveSourceCoprimality",
+          "Mathlib.NumberTheory.SelbergSieve",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.Data.Nat.Squarefree",
+          "Mathlib.Tactic.NormNum",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.SieveSourceCoprimality": {
+        "path": "ImbalancedChen/SieveSourceCoprimality.lean",
+        "sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+        "imports": [
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Data.Nat.GCD.BigOperators",
+          "Mathlib.Data.Nat.ModEq",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.HalfProductSource": {
+        "path": "ImbalancedChen/HalfProductSource.lean",
+        "sha256": "dc6e261ddfdc9a66e966a4ec5c2a129d3f4b7583501c5c82364f2aa4a8af194e",
+        "imports": [
+          "ImbalancedChen.BadSourceLocalization",
+          "Mathlib.Data.Finset.Prod"
+        ]
+      },
+      "ImbalancedChen.BadSourceLocalization": {
+        "path": "ImbalancedChen/BadSourceLocalization.lean",
+        "sha256": "0e88326b03a4c20a472014b506d7533495d86801909af4d455de5fcfae6695a7",
+        "imports": [
+          "ImbalancedChen.HalfProductGeometry",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.HalfProductGeometry": {
+        "path": "ImbalancedChen/HalfProductGeometry.lean",
+        "sha256": "d04e31ea73a853c4fa37e881ef30a748b7f83b8a0e930e0cc2ae231dbb629db1",
+        "imports": [
+          "ImbalancedChen.OrderedBad",
+          "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+          "Mathlib.Tactic.Convert",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.OrderedBad": {
+        "path": "ImbalancedChen/OrderedBad.lean",
+        "sha256": "a38031995175bd2f847eefd498c929e941400c9cffdf6f78e3e06bd2100764da",
+        "imports": [
+          "ImbalancedChen.RationalPowers"
+        ]
+      },
+      "ImbalancedChen.RationalPowers": {
+        "path": "ImbalancedChen/RationalPowers.lean",
+        "sha256": "40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06",
+        "imports": [
+          "ImbalancedChen.Counting",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+        ]
+      },
+      "ImbalancedChen.Counting": {
+        "path": "ImbalancedChen/Counting.lean",
+        "sha256": "8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa",
+        "imports": [
+          "Mathlib.Data.Finset.Card",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Real.Basic",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.HalfProductMassFibres": {
+        "path": "ImbalancedChen/HalfProductMassFibres.lean",
+        "sha256": "f83e431ffdd975af44ae54eaadbae3ce6d609ed265d433dbbd05b4f6fc0f77c7",
+        "imports": [
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+          "Mathlib.Data.Nat.Sqrt",
+          "Mathlib.NumberTheory.PrimeCounting"
+        ]
+      },
+      "ImbalancedChen.PrimeRectanglePrefixes": {
+        "path": "ImbalancedChen/PrimeRectanglePrefixes.lean",
+        "sha256": "d74bfbac6032d4de701f13ddf78308d2a584916e144aab5326a1ba4441586b5e",
+        "imports": [
+          "ImbalancedChen.RectangleDiscrepancyAssembly",
+          "ImbalancedChen.SelectedGridRanges",
+          "ImbalancedChen.CoprimeRecentering"
+        ]
+      },
+      "ImbalancedChen.RectangleDiscrepancyAssembly": {
+        "path": "ImbalancedChen/RectangleDiscrepancyAssembly.lean",
+        "sha256": "5af6880e6c3f2c00a846cfccd8842e08f80ed8eb314cfdaa972904c2f987e861",
+        "imports": [
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.TotientReciprocalBudget"
+        ]
+      },
+      "ImbalancedChen.ActualGridEnvelopes": {
+        "path": "ImbalancedChen/ActualGridEnvelopes.lean",
+        "sha256": "f2171599b210583ee28b316da48b114c74f8742b564d0c1d3a30aaf073aaf528",
+        "imports": [
+          "ImbalancedChen.MultiplicativeGridPartition",
+          "ImbalancedChen.BoundaryGlobalCaps"
+        ]
+      },
+      "ImbalancedChen.MultiplicativeGridPartition": {
+        "path": "ImbalancedChen/MultiplicativeGridPartition.lean",
+        "sha256": "9be180c5c070d8855c9e1fa1acaf30ccda7f87d7ec45410670e2d527a6b18598",
+        "imports": [
+          "ImbalancedChen.BoundaryCellContainment",
+          "Mathlib.Analysis.SpecialFunctions.Log.Base",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Prod",
+          "Mathlib.Order.Interval.Finset.Nat"
+        ]
+      },
+      "ImbalancedChen.BoundaryCellContainment": {
+        "path": "ImbalancedChen/BoundaryCellContainment.lean",
+        "sha256": "12a74397730d07769c95cb7e1ab6adc4a3b570daedc49dbc65c0c0defd7ba80d",
+        "imports": [
+          "ImbalancedChen.BoundaryGridBudget",
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.BoundaryGridBudget": {
+        "path": "ImbalancedChen/BoundaryGridBudget.lean",
+        "sha256": "a36da7f8fc558d406e5e00b9790389438846198caa610540da8145471a419245",
+        "imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Finset.Max",
+          "Mathlib.Order.Interval.Finset.Nat",
+          "Mathlib.NumberTheory.Harmonic.Bounds",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.CurvedRegionDiscrepancy": {
+        "path": "ImbalancedChen/CurvedRegionDiscrepancy.lean",
+        "sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+        "imports": [
+          "ImbalancedChen.FiniteSieveModel",
+          "Mathlib.Algebra.BigOperators.Ring.Finset",
+          "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.BoundaryGlobalCaps": {
+        "path": "ImbalancedChen/BoundaryGlobalCaps.lean",
+        "sha256": "95eb4934caa7aa8ed308a7094ae46a4d14d6336e2470ee2b58a88ce0b379caae",
+        "imports": [
+          "ImbalancedChen.BoundaryCellContainment",
+          "Mathlib.Analysis.Real.Sqrt"
+        ]
+      },
+      "ImbalancedChen.TotientReciprocalBudget": {
+        "path": "ImbalancedChen/TotientReciprocalBudget.lean",
+        "sha256": "aa80ff2ad79f77405951f1e56e993a851a1b32ad46c970e7914adb94bdb2db86",
+        "imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.NumberTheory.ArithmeticFunction.Misc",
+          "Mathlib.NumberTheory.Harmonic.Bounds",
+          "Mathlib.Algebra.BigOperators.Intervals",
+          "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Positivity",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.SelectedGridRanges": {
+        "path": "ImbalancedChen/SelectedGridRanges.lean",
+        "sha256": "45909866dd099095795a0abbaba05c3ffe0250a569c694ce57640292b4a3a847",
+        "imports": [
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.HalfProductGeometry",
+          "ImbalancedChen.ActualSieveGate"
+        ]
+      },
+      "ImbalancedChen.ActualSieveGate": {
+        "path": "ImbalancedChen/ActualSieveGate.lean",
+        "sha256": "ccfecae8cbaa1dcf1685238e1db0764aa64ec15744502651623f56d9cfa4831a",
+        "imports": [
+          "ImbalancedChen.LogCutoffError",
+          "ImbalancedChen.PowerErrorBudget",
+          "ImbalancedChen.SieveSourceCoprimality",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.LogCutoffError": {
+        "path": "ImbalancedChen/LogCutoffError.lean",
+        "sha256": "202d60ddffa0cbf6a0cc3259af4ec3654e4227a5e16523a2db71ba30d1dfcd49",
+        "imports": [
+          "ImbalancedChen.SingularSeries",
+          "ImbalancedChen.BadSourceLocalization",
+          "Mathlib.Topology.Algebra.Order.Field",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.SingularSeries": {
+        "path": "ImbalancedChen/SingularSeries.lean",
+        "sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "imports": [
+          "ImbalancedChen.NormalizationGrowth",
+          "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+          "Mathlib.Analysis.PSeries",
+          "Mathlib.Data.Nat.PrimeFin",
+          "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.NormalizationGrowth": {
+        "path": "ImbalancedChen/NormalizationGrowth.lean",
+        "sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+        "imports": [
+          "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+          "Mathlib.Algebra.Ring.Parity",
+          "Mathlib.Order.Filter.AtTopBot.Archimedean",
+          "Mathlib.Order.Filter.AtTopBot.Field"
+        ]
+      },
+      "ImbalancedChen.PowerErrorBudget": {
+        "path": "ImbalancedChen/PowerErrorBudget.lean",
+        "sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+        "imports": [
+          "ImbalancedChen.SingularSeries",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.CoprimeRecentering": {
+        "path": "ImbalancedChen/CoprimeRecentering.lean",
+        "sha256": "45c28d97bd10eccaa99498b2309fb03c9d8efbdd5040e12d7ba33c3702b418c5",
+        "imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.Tactic.FieldSimp"
+        ]
+      },
+      "ImbalancedChen.ResidueSelectorBudget": {
+        "path": "ImbalancedChen/ResidueSelectorBudget.lean",
+        "sha256": "03715ddc6bae19040f6d30511548a954d08428629a3a7d2e2884a4b8ce5b8e69",
+        "imports": [
+          "ImbalancedChen.PrimeRectanglePrefixes"
+        ]
+      },
+      "ImbalancedChen.RealHalfProductMassSplit": {
+        "path": "ImbalancedChen/RealHalfProductMassSplit.lean",
+        "sha256": "6516890accb0179098fca79f98791adeddad569a858fc69710b87a8d3b92a3ca",
+        "imports": [
+          "ImbalancedChen.RealHalfProductMass",
+          "ImbalancedChen.PowerErrorBudget"
+        ]
+      },
+      "ImbalancedChen.RealHalfProductMass": {
+        "path": "ImbalancedChen/RealHalfProductMass.lean",
+        "sha256": "90c809c15ce26cd1f4785b5117e2d8a5dcfdc5720480bc690d198d95f33601f3",
+        "imports": [
+          "ImbalancedChen.RealHalfProductSource",
+          "ImbalancedChen.HalfProductMassLimit"
+        ]
+      },
+      "ImbalancedChen.RealHalfProductSource": {
+        "path": "ImbalancedChen/RealHalfProductSource.lean",
+        "sha256": "0c3211cb72d8f27eb380f57fe5d751f8fc3179cb646c683c1449d450c71c55e7",
+        "imports": [
+          "ImbalancedChen.CurrentMainTheorem",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Prod",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.CurrentMainTheorem": {
+        "path": "ImbalancedChen/CurrentMainTheorem.lean",
+        "sha256": "68a2a3aad8ccdc73ed8e5076e31b9984bc659c307d71150920a71b5fc98f067d",
+        "imports": [
+          "ImbalancedChen.CurrentNumericalTransfer",
+          "ImbalancedChen.OrderedBad",
+          "Mathlib.Topology.Instances.EReal.Lemmas"
+        ]
+      },
+      "ImbalancedChen.CurrentNumericalTransfer": {
+        "path": "ImbalancedChen/CurrentNumericalTransfer.lean",
+        "sha256": "acc924036cb6ca73ef660c632d5577462ba5c69b8b5600aef63255264c3a270a",
+        "imports": [
+          "ImbalancedChen.AsymptoticTransfer",
+          "ImbalancedChen.RationalPowers",
+          "ImbalancedChen.SingularSeries",
+          "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Linarith"
+        ]
+      },
+      "ImbalancedChen.AsymptoticTransfer": {
+        "path": "ImbalancedChen/AsymptoticTransfer.lean",
+        "sha256": "ece82cd26ee1030d708e6055395bdb5a6a4cf8b1d8c6072a67a9a59cd36bc560",
+        "imports": [
+          "ImbalancedChen.Counting",
+          "ImbalancedChen.Multiplicity",
+          "Mathlib.Order.Filter.AtTopBot.Basic"
+        ]
+      },
+      "ImbalancedChen.Multiplicity": {
+        "path": "ImbalancedChen/Multiplicity.lean",
+        "sha256": "9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6",
+        "imports": [
+          "ImbalancedChen.Counting",
+          "Mathlib.NumberTheory.AlmostPrime",
+          "Mathlib.Tactic.SplitIfs"
+        ]
+      },
+      "ImbalancedChen.HalfProductMassLimit": {
+        "path": "ImbalancedChen/HalfProductMassLimit.lean",
+        "sha256": "1dbb92a59abc74034d49f52428071aae3ccd9cc05beda8f75f4e693c08f3a4ab",
+        "imports": [
+          "ImbalancedChen.HalfProductMassError",
+          "ImbalancedChen.MassLogIntegral",
+          "Mathlib.Topology.MetricSpace.Pseudo.Defs"
+        ]
+      },
+      "ImbalancedChen.HalfProductMassError": {
+        "path": "ImbalancedChen/HalfProductMassError.lean",
+        "sha256": "1109367deda15f8255ae1a987ecf3b82225ddfad6c335fd890d7c989d5434ad9",
+        "imports": [
+          "ImbalancedChen.HalfProductMassSplit",
+          "ImbalancedChen.UniformPrimeTail",
+          "ImbalancedChen.LogCutoffError"
+        ]
+      },
+      "ImbalancedChen.HalfProductMassSplit": {
+        "path": "ImbalancedChen/HalfProductMassSplit.lean",
+        "sha256": "ba78734851c6114c76234f5b607efc1a15bcac377692e11e361cd4c02032dc16",
+        "imports": [
+          "ImbalancedChen.HalfProductMassFibres"
+        ]
+      },
+      "ImbalancedChen.UniformPrimeTail": {
+        "path": "ImbalancedChen/UniformPrimeTail.lean",
+        "sha256": "786ed7d70f3f3e89161a9e025d2c8bb0b06db6cddae7200c3fc1c0ca009ebbbf",
+        "imports": [
+          "Mathlib.Analysis.Asymptotics.Defs",
+          "Mathlib.Analysis.Real.Sqrt",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.NumberTheory.PrimeCounting",
+          "Mathlib.Order.Filter.AtTopBot.Archimedean",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.MassLogIntegral": {
+        "path": "ImbalancedChen/MassLogIntegral.lean",
+        "sha256": "bf42c021072fc939bdb5f9d5bc9771fa3d5ed1dd69dd5265bda8418f76a01821",
+        "imports": [
+          "ImbalancedChen.HalfProductGeometry"
+        ]
+      },
+      "ImbalancedChen.Part3ComplexCRTConsumer": {
+        "path": "ImbalancedChen/Part3ComplexCRTConsumer.lean",
+        "sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+        "imports": [
+          "ImbalancedChen.Part3ComplexDispersion",
+          "Mathlib.Data.Int.ModEq",
+          "Mathlib.Data.Nat.ModEq"
+        ]
+      },
+      "ImbalancedChen.Part3FactorFiberDivisor": {
+        "path": "ImbalancedChen/Part3FactorFiberDivisor.lean",
+        "sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+        "imports": [
+          "ImbalancedChen.Part3ComplexDispersion",
+          "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean"
+        ]
+      }
+    },
+    "foreign_frontier": [
+      "Lean.Elab.Tactic.NormCast",
+      "Lean.Elab.Tactic.Omega",
+      "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+      "Mathlib.Algebra.BigOperators.Intervals",
+      "Mathlib.Algebra.BigOperators.Ring.Finset",
+      "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+      "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+      "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+      "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+      "Mathlib.Algebra.Order.Floor.Semiring",
+      "Mathlib.Algebra.Ring.Parity",
+      "Mathlib.Algebra.Star.BigOperators",
+      "Mathlib.Analysis.Asymptotics.Defs",
+      "Mathlib.Analysis.Calculus.BumpFunction.InnerProduct",
+      "Mathlib.Analysis.Complex.Basic",
+      "Mathlib.Analysis.Complex.Exponential",
+      "Mathlib.Analysis.Distribution.SchwartzSpace.Fourier",
+      "Mathlib.Analysis.Fourier.PoissonSummation",
+      "Mathlib.Analysis.PSeries",
+      "Mathlib.Analysis.Real.Sqrt",
+      "Mathlib.Analysis.SpecialFunctions.Log.Base",
+      "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+      "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+      "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+      "Mathlib.Data.Finset.Card",
+      "Mathlib.Data.Finset.Max",
+      "Mathlib.Data.Finset.Prod",
+      "Mathlib.Data.Int.ModEq",
+      "Mathlib.Data.Nat.GCD.BigOperators",
+      "Mathlib.Data.Nat.ModEq",
+      "Mathlib.Data.Nat.Prime.Basic",
+      "Mathlib.Data.Nat.PrimeFin",
+      "Mathlib.Data.Nat.Sqrt",
+      "Mathlib.Data.Nat.Squarefree",
+      "Mathlib.Data.Nat.Totient",
+      "Mathlib.Data.Real.Basic",
+      "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+      "Mathlib.MeasureTheory.Measure.Lebesgue.Integral",
+      "Mathlib.NumberTheory.AlmostPrime",
+      "Mathlib.NumberTheory.ArithmeticFunction.Misc",
+      "Mathlib.NumberTheory.Harmonic.Bounds",
+      "Mathlib.NumberTheory.PrimeCounting",
+      "Mathlib.NumberTheory.SelbergSieve",
+      "Mathlib.Order.Filter.AtTopBot.Archimedean",
+      "Mathlib.Order.Filter.AtTopBot.Basic",
+      "Mathlib.Order.Filter.AtTopBot.Field",
+      "Mathlib.Order.Interval.Finset.Nat",
+      "Mathlib.Tactic.Convert",
+      "Mathlib.Tactic.FieldSimp",
+      "Mathlib.Tactic.Linarith",
+      "Mathlib.Tactic.NormNum",
+      "Mathlib.Tactic.Positivity",
+      "Mathlib.Tactic.Ring",
+      "Mathlib.Tactic.SplitIfs",
+      "Mathlib.Topology.Algebra.Order.Field",
+      "Mathlib.Topology.Instances.EReal.Lemmas",
+      "Mathlib.Topology.MetricSpace.Pseudo.Defs",
+      "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean",
+      "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate"
+    ]
+  },
+  "semantic_review": [
+    "The actual first diagnostic exposed two wrong source types: subtraction/addition escaped the sum and autoImplicit introduced an outer p. New root mathematical scope corrects exactly these two public types, not a proof-only rebind.",
+    "Every W_p,V_p,U_p term is now inside one same-p summand, and every rawZero_p,V_p,U_p,nonzero_p term is inside one same-p summand. Parentheses encompass the complete actual complex/real summands with no outside p-dependent term.",
+    "The final moment-dispersion inequality already had full summand parentheses and remains unchanged, including honest4VQ1 outside and the full original beta logarithm.",
+    "ite_true fixes three reflexive conditions; the residue and scale changes are explicit rfl projection rewrites preserving CRT decidable instances. All four definitions,37other complete types, original SW C0/admissibility/physical lcm/signed residue/localmass/all integer h remain unchanged.",
+    "The new summed centered energy at scale VU²/Q1, slow-phase and zero/UV/tail payments and hUpper are open. Old static reviews missed the two scopes; preserved old FAILED evidence is not upgraded."
+  ],
+  "runtime_gate": "Exactly new6d864 only after sole2814 truly owned and fresh recursive caches exact/self-only/no missing external: one fair M6144/RSS6656/j2 strict and full original owned audit. Independently inspect both complete elaborated public types after compilation for no unintended outer p. No old3b26 rerun or resource/bootstrap/newimport changes.",
+  "historical_failed_preserved": true,
+  "findings": [],
+  "no_Lean_invoked": true,
+  "not_kernel_accepted": true,
+  "source_extractor_note": "Literal complete source headers include namespace dots; these are not claimed to be Lean elaborated types."
+}

@@ -1,0 +1,87 @@
+ImbalancedChen/Part3TransposedDispersion.lean:51:13: error: Application type mismatch: The argument
+  Finset.Icc ⌈d.V⌉₊ ⌊2 * d.V⌋₊
+has type
+  Finset ℕ
+but is expected to have type
+  Finset ℝ
+in the application
+  {k ∈ Finset.Icc ⌈d.V⌉₊ ⌊2 * d.V⌋₊ | -1 < k ∧ k ≤ ↑⌊2 * d.V⌋₊}
+ImbalancedChen/Part3TransposedDispersion.lean:51:9: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Membership ℕ (Finset ℝ)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+ImbalancedChen/Part3TransposedDispersion.lean:143:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ n ∈ (transposedAtom ?d).betaCarrier, if ?p n then (transposedAtom ?d).beta n else 0
+in the target expression
+  (∑ n ∈ d.transposedAtom.betaCarrier, if n ≡ b [MOD q] ∧ n.Coprime k then d.transposedAtom.beta n else 0) -
+      (∑ n ∈ d.transposedAtom.betaCarrier, if n.Coprime (k * q) then d.transposedAtom.beta n else 0) / ↑q.totient =
+    (∑ n ∈ d.alphaCarrier, if n ≡ b [MOD q] ∧ n.Coprime k then d.alpha n else 0) -
+      (∑ n ∈ d.alphaCarrier, if n.Coprime (k * q) then d.alpha n else 0) / ↑q.totient
+
+d : MediumAtom
+k q b : ℕ
+⊢ (∑ n ∈ d.transposedAtom.betaCarrier, if n ≡ b [MOD q] ∧ n.Coprime k then d.transposedAtom.beta n else 0) -
+      (∑ n ∈ d.transposedAtom.betaCarrier, if n.Coprime (k * q) then d.transposedAtom.beta n else 0) / ↑q.totient =
+    (∑ n ∈ d.alphaCarrier, if n ≡ b [MOD q] ∧ n.Coprime k then d.alpha n else 0) -
+      (∑ n ∈ d.alphaCarrier, if n.Coprime (k * q) then d.alpha n else 0) / ↑q.totient
+ImbalancedChen/Part3TransposedDispersion.lean:152:2: error: Type mismatch: After simplification, term
+  hSW
+ has type
+  UniformAuxiliarySW F C0
+but is expected to have type
+  ∀ (A : ℝ),
+    0 < A →
+      ∃ C,
+        0 < C ∧
+          ∃ x0,
+            1 < x0 ∧
+              ∀ (i : ι),
+                x0 ≤ (F i).scale →
+                  ∀ (k q b : ℕ),
+                    1 ≤ k →
+                      1 ≤ q →
+                        b.Coprime q →
+                          ‖(F i).auxSWError k q b‖ ≤ C * (F i).U * ↑k.divisors.card ^ C0 / Real.log (F i).scale ^ A
+ImbalancedChen/Part3TransposedDispersion.lean:187:57: error: linarith failed to find a contradiction
+d : MediumAtom
+hV : 1 ≤ d.V
+n : ℕ
+hn : n ∈ d.betaCarrier
+hnlo : ⌈d.V⌉₊ ≤ n
+hnhi : n ≤ ⌊2 * d.V⌋₊
+hlo : d.V ≤ ↑n
+hhi : ↑n ≤ 2 * d.V
+a✝ : d.transposedAtom.U ≤ 0
+⊢ False
+failed
+ImbalancedChen/Part3TransposedDispersion.lean:300:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ComplexCRT.productProgressionWeight S w d.residue (complexFactorModulus l.1) (complexFactorModulus l'.1) ?m.131 ?m.132
+in the target expression
+  d.transposedAtom.complexBetaCoefficient l * star (d.transposedAtom.complexBetaCoefficient l') *
+      ↑(ComplexCRT.productProgressionWeight S w d.transposedAtom.residue (complexFactorModulus l.1)
+          (complexFactorModulus l'.1) l.2 l'.2) =
+    d.transposedAtom.complexBetaCoefficient l * star (d.transposedAtom.complexBetaCoefficient l') *
+      ↑(ComplexCRT.constructedProgressionWeight S w d.residue (complexFactorModulus l.1) (complexFactorModulus l'.1) l.2
+          l'.2)
+
+case neg
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+S : Finset ℕ
+w : ℕ → ℝ
+l : (ℕ × ℕ × ℕ) × ℕ
+hl : l ∈ d.transposedAtom.complexRowLabels
+l' : (ℕ × ℕ × ℕ) × ℕ
+hl' : l' ∈ d.transposedAtom.complexRowLabels
+hf : l.1 ∈ d.complexFactorLabels
+hf' : l'.1 ∈ d.complexFactorLabels
+hg : ¬d.complexFactorGamma l.1 = 0
+hg' : ¬d.complexFactorGamma l'.1 = 0
+⊢ d.transposedAtom.complexBetaCoefficient l * star (d.transposedAtom.complexBetaCoefficient l') *
+      ↑(ComplexCRT.productProgressionWeight S w d.transposedAtom.residue (complexFactorModulus l.1)
+          (complexFactorModulus l'.1) l.2 l'.2) =
+    d.transposedAtom.complexBetaCoefficient l * star (d.transposedAtom.complexBetaCoefficient l') *
+      ↑(ComplexCRT.constructedProgressionWeight S w d.residue (complexFactorModulus l.1) (complexFactorModulus l'.1) l.2
+          l'.2)

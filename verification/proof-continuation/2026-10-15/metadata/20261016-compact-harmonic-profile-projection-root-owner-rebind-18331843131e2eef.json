@@ -1,0 +1,77 @@
+{
+  "status": "SOURCE_ONLY_OWNER_ACTUAL_API_DIAGNOSTIC_REPAIR",
+  "reviewer": "/root, source and repair author",
+  "old_source_sha256": "6ddab3e9d272569f3c41974b7cec71cae03b7ec5b8d608a8afb90a95f5fb4632",
+  "candidate_sha256": "4aeac70bd0292b7e4c4b9ba1c0b5778ed77fdeb070a9a96815a3851e66965f7a",
+  "all_twelve_complete_headers_unchanged": [
+    {
+      "kind": "def",
+      "name": "actualExtendedThirdCompactHarmonicProfile",
+      "complete_header": "def actualExtendedThirdCompactHarmonicProfile (e h lam : ℝ) (t : Fin 3 → ℝ) : ℝ"
+    },
+    {
+      "kind": "theorem",
+      "name": "continuous_actualExtendedThirdCompactHarmonicProfile",
+      "complete_header": "theorem continuous_actualExtendedThirdCompactHarmonicProfile {h : ℝ}\n    (hh : 0 < h) (e lam : ℝ) :\n    Continuous (actualExtendedThirdCompactHarmonicProfile e h lam)"
+    },
+    {
+      "kind": "def",
+      "name": "actualExtendedThirdCompactCellPrimeRegion",
+      "complete_header": "def actualExtendedThirdCompactCellPrimeRegion (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : Set (Fin 3 → ℝ)"
+    },
+    {
+      "kind": "theorem",
+      "name": "measurableSet_actualExtendedThirdCompactCellPrimeRegion",
+      "complete_header": "theorem measurableSet_actualExtendedThirdCompactCellPrimeRegion (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) :\n    MeasurableSet (actualExtendedThirdCompactCellPrimeRegion m j)"
+    },
+    {
+      "kind": "def",
+      "name": "actualExtendedThirdCompactOrderForms",
+      "complete_header": "def actualExtendedThirdCompactOrderForms : Fin 2 → (Fin 3 → ℝ) →L[ℝ] ℝ"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualExtendedThirdCompactOrderForms_ne_zero",
+      "complete_header": "theorem actualExtendedThirdCompactOrderForms_ne_zero :\n    ∀ i, actualExtendedThirdCompactOrderForms i ≠ 0"
+    },
+    {
+      "kind": "def",
+      "name": "actualExtendedThirdCompactCellForms",
+      "complete_header": "def actualExtendedThirdCompactCellForms : Fin (3 + (3 + 2)) → (Fin 3 → ℝ) →L[ℝ] ℝ"
+    },
+    {
+      "kind": "def",
+      "name": "actualExtendedThirdCompactCellBounds",
+      "complete_header": "def actualExtendedThirdCompactCellBounds (m : ℕ) (j : ActualExtendedThirdDyadicLabel m) :\n    Fin (3 + (3 + 2)) → ℝ"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualExtendedThirdCompactCellForms_ne_zero",
+      "complete_header": "theorem actualExtendedThirdCompactCellForms_ne_zero :\n    ∀ i, actualExtendedThirdCompactCellForms i ≠ 0"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualExtendedThirdCompactCellPrimeRegion_sandwich",
+      "complete_header": "theorem actualExtendedThirdCompactCellPrimeRegion_sandwich {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    primeAffineGateRegion actualExtendedThirdCompactCellForms\n        (actualExtendedThirdCompactCellBounds m j) ⊆ actualExtendedThirdCompactCellPrimeRegion m j ∧\n      ∀ t ∈ actualExtendedThirdCompactCellPrimeRegion m j, ∀ i,\n        actualExtendedThirdCompactCellForms i t ≤ actualExtendedThirdCompactCellBounds m j i"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualExtendedThirdCompactCellPrimeRegion_subset_cube",
+      "complete_header": "theorem actualExtendedThirdCompactCellPrimeRegion_subset_cube {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    actualExtendedThirdCompactCellPrimeRegion m j ⊆\n      logPrimeBox (fun _ : Fin 3 => h / 2) (fun _ => thirdPrefixRho + 1)"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualExtendedThirdCompactHarmonicProfile_density",
+      "complete_header": "theorem actualExtendedThirdCompactHarmonicProfile_density {e h lam : ℝ}\n    (hh : 0 < h) {t : Fin 3 → ℝ}\n    (ht : t ∈ actualExtendedThirdClosedOrderRegion thirdPrefixRho) (hz : h ≤ t 2) :\n    actualExtendedThirdCompactHarmonicProfile e h lam t * (∏ i : Fin 3, 1 / t i) =\n      actualExtendedThirdCapKernel e lam (t 0) (t 1) (t 2)"
+    }
+  ],
+  "explicit_definition_annotation_change": "The four proj terms in actualExtendedThirdCompactOrderForms now explicitly use R=Real and phi=(fun _:Fin3=>Real), fixing actual stuck metavariables. Both original coordinate differences and the overall Fin2 type are unchanged. The other four definitions are unchanged.",
+  "proof_only_changes": [
+    "Replace weak-wall branch simp through deprecated sub_apply by definitional change and the exact respective order fact.",
+    "Delete ring after field_simp which already closed the scalar rational identity."
+  ],
+  "full_source_diff": "--- \n+++ \n@@ -56,8 +56,10 @@\n     (measurableSet_actualExtendedThirdClosedOrderRegion thirdPrefixRho)\n \n def actualExtendedThirdCompactOrderForms : Fin 2 → (Fin 3 → ℝ) →L[ℝ] ℝ :=\n-  ![ContinuousLinearMap.proj 1 - ContinuousLinearMap.proj 0,\n-    ContinuousLinearMap.proj 2 - ContinuousLinearMap.proj 1]\n+  ![ContinuousLinearMap.proj (R := ℝ) (φ := fun _ : Fin 3 => ℝ) 1 -\n+      ContinuousLinearMap.proj (R := ℝ) (φ := fun _ : Fin 3 => ℝ) 0,\n+    ContinuousLinearMap.proj (R := ℝ) (φ := fun _ : Fin 3 => ℝ) 2 -\n+      ContinuousLinearMap.proj (R := ℝ) (φ := fun _ : Fin 3 => ℝ) 1]\n \n theorem actualExtendedThirdCompactOrderForms_ne_zero :\n     ∀ i, actualExtendedThirdCompactOrderForms i ≠ 0 := by\n@@ -111,10 +113,11 @@\n     refine ⟨fun i => (ht.1.1 i (mem_univ _)).1,\n       fun i => (ht.1.1 i (mem_univ _)).2.le, ?_⟩\n     intro i\n-    fin_cases i <;>\n-      simp only [actualExtendedThirdCompactOrderForms, Matrix.cons_val_zero,\n-        Matrix.cons_val_one, ContinuousLinearMap.sub_apply, ContinuousLinearMap.proj_apply] <;>\n-      linarith [ht.2.2.2.1, ht.2.2.2.2.1]\n+    fin_cases i\n+    · change t 1 - t 0 ≤ 0\n+      linarith only [ht.2.2.2.2.1]\n+    · change t 2 - t 1 ≤ 0\n+      linarith only [ht.2.2.2.1]\n \n theorem actualExtendedThirdCompactCellPrimeRegion_subset_cube {e h : ℝ} {m : ℕ}\n     (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n@@ -150,7 +153,6 @@\n       (4 * A / t 2) * (∏ i : Fin 3, 1 / t i) = 4 * A / (t 0 * t 1 * t 2 ^ 2) := by\n     rw [Fin.prod_univ_three]\n     field_simp [hx0, hy0, hz0]\n-    <;> ring\n   unfold actualExtendedThirdCompactHarmonicProfile actualExtendedThirdCapKernel\n   simp only [max_eq_right (by linarith : h / 2 ≤ t 2)]\n   exact hfield _\n",
+  "actual_failed_log": ".lake/proof-continuation/runs/20261015T203410324116Z-ImbalancedChen.ActualExtendedThirdCompactHarmonicProfile/stdout.log",
+  "source_binder_import_threshold_mathematics_changes": false,
+  "lean_or_kernel_or_acceptance_claimed": false
+}

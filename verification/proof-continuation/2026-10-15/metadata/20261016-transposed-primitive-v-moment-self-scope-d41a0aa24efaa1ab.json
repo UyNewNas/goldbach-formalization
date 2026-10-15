@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T20:31:37.8756207Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_DRAFT_SELF_REVIEW_NO_RUNTIME_SUBMISSION",
+  "candidate": {
+    "path": "ImbalancedChen\\Part3TransposedPrimitiveVMoment.lean",
+    "sha256": "ba56d4bb9fc697e9cec44866e1db053c037b583acb2bb9633c0918e90c2da867",
+    "declaration_count": 4,
+    "definition_count": 0,
+    "all_complete_headers": [
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveVMoment.coprimeNormMass_le_twice_U",
+        "kind": "theorem",
+        "start_line": 29,
+        "signature_last_line": 32,
+        "complete_source_header": "theorem coprimeNormMass_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (q : ℕ) :\n    coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q ≤ 2 * d.U"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveVMoment.actualV_finite_envelope_le",
+        "kind": "theorem",
+        "start_line": 40,
+        "signature_last_line": 48,
+        "complete_source_header": "theorem actualV_finite_envelope_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖mixedPairCoefficient d q r‖ *\n        coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n          (r.divisors.card : ℝ)) ≤\n      4 * d.U ^ 2 * d.physicalFactorCap *\n        (1 + Real.log d.physicalFactorCap) ^ 14"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveVMoment.actualV_sub_primitive_bound",
+        "kind": "theorem",
+        "start_line": 99,
+        "signature_last_line": 105,
+        "complete_source_header": "theorem actualV_sub_primitive_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        C * d.U ^ 2 * d.physicalFactorCap *\n          (1 + Real.log d.physicalFactorCap) ^ 14"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveVMoment.actual_betaL2_mul_V_error_bound",
+        "kind": "theorem",
+        "start_line": 120,
+        "signature_last_line": 128,
+        "complete_source_header": "theorem actual_betaL2_mul_V_error_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        C * d.V * d.U ^ 2 * d.physicalFactorCap *\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n            (1 + Real.log d.physicalFactorCap) ^ 14"
+      }
+    ],
+    "full_source": "import ImbalancedChen.Part3TransposedPrimitiveV\nimport ImbalancedChen.Part3TransposedPrimitiveUMoment\n\n/-!\n# Divisor moment payment for the actual transposed V error\n\nThe actual complex mixed coefficient has one original-alpha coprime mass,\nand the actual progression error has one coprime mass of alpha norms.\nTogether they cost at most 4 U squared. The unweighted gamma sum costs\ncap times log(cap) squared, and its tau/totient weighted sum costs twelve\nlogarithms. Thus the actual V error costs U squared times cap and fourteen\nlogarithms. The original beta L2 factor is then paid by its proved moment.\n\nEvery displayed envelope is derived from the actual full finite sum.\nNo coefficient, residual-error, or logarithmic budget is assumed.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset\nopen scoped BigOperators\nopen TransposedZeroCovariance TransposedPrimitiveU TransposedPrimitiveV\nopen TransposedPrimitiveUMoment\n\nnamespace TransposedPrimitiveVMoment\n\ntheorem coprimeNormMass_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (q : ℕ) :\n    coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q ≤ 2 * d.U := by\n  calc\n    _ ≤ ∑ n ∈ d.alphaCarrier, ‖d.alpha n‖ := by\n      apply Finset.sum_le_sum\n      intro n _\n      by_cases hn : n.Coprime q <;> simp [hn]\n    _ ≤ _ := alpha_l1_le_twice_U hd\n\ntheorem actualV_finite_envelope_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖mixedPairCoefficient d q r‖ *\n        coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n          (r.divisors.card : ℝ)) ≤\n      4 * d.U ^ 2 * d.physicalFactorCap *\n        (1 + Real.log d.physicalFactorCap) ^ 14 := by\n  have hU : 0 ≤ d.U := by linarith [hd.1]\n  have hcap : 0 ≤ d.physicalFactorCap := zero_le_one.trans (d.one_le_physicalFactorCap hd)\n  have hmass (q : ℕ) :\n      0 ≤ coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q := by\n    apply Finset.sum_nonneg\n    intro n _\n    by_cases hn : n.Coprime q <;> simp [hn]\n  let w : ℕ → ℝ := fun r ↦\n    ‖d.groupedFactorGamma r‖ * (r.divisors.card : ℝ) / (r.totient : ℝ)\n  have hw (r : ℕ) : 0 ≤ w r := by dsimp [w]; positivity\n  have hpoint (q r : ℕ) :\n      ‖mixedPairCoefficient d q r‖ *\n          coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n            (r.divisors.card : ℝ) ≤\n        4 * d.U ^ 2 * (‖d.groupedFactorGamma q‖ * w r) := by\n    have hc : ‖mixedPairCoefficient d q r‖ ≤\n        ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ *\n          (2 * d.U) / (r.totient : ℝ) := by\n      simp only [mixedPairCoefficient, norm_div, norm_mul, norm_star,\n        Complex.norm_natCast]\n      apply div_le_div_of_nonneg_right _ (Nat.cast_nonneg _)\n      exact mul_le_mul_of_nonneg_left (coprimeMass_norm_le_twice_U hd r) (by positivity)\n    calc\n      _ ≤ (‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ *\n            (2 * d.U) / (r.totient : ℝ)) * (2 * d.U) *\n              (r.divisors.card : ℝ) :=\n        mul_le_mul_of_nonneg_right\n          (mul_le_mul hc (coprimeNormMass_le_twice_U hd q) (hmass q) (by positivity))\n          (Nat.cast_nonneg _)\n      _ = _ := by dsimp [w]; ring\n  calc\n    _ ≤ ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        4 * d.U ^ 2 * (‖d.groupedFactorGamma q‖ * w r) :=\n      Finset.sum_le_sum (fun q _ ↦ Finset.sum_le_sum (fun r _ ↦ hpoint q r))\n    _ = 4 * d.U ^ 2 *\n        ((∑ q ∈ d.physicalFactorModuli, ‖d.groupedFactorGamma q‖) *\n          ∑ r ∈ d.physicalFactorModuli, w r) := by\n      rw [Finset.sum_mul_sum]\n      simp only [Finset.mul_sum]\n    _ ≤ 4 * d.U ^ 2 *\n        ((d.physicalFactorCap * (1 + Real.log d.physicalFactorCap) ^ 2) *\n          (1 + Real.log d.physicalFactorCap) ^ 12) := by\n      apply mul_le_mul_of_nonneg_left _ (by positivity)\n      exact mul_le_mul (sum_gamma_norm_le hd) (sum_gamma_tau_div_totient_le hd)\n        (Finset.sum_nonneg (fun r _ ↦ hw r)) (by positivity)\n    _ = _ := by\n      rw [show 14 = 2 + 12 from rfl, pow_add]\n      ring\n\n/-- The honest global V error retains U squared and one modulus cap. -/\ntheorem actualV_sub_primitive_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        C * d.U ^ 2 * d.physicalFactorCap *\n          (1 + Real.log d.physicalFactorCap) ^ 14 := by\n  obtain ⟨C, hC, hbound⟩ := actualV_sub_primitive_finite_bound\n  refine ⟨4 * C, by positivity, fun B sigma kappa c0 d hd ↦ ?_⟩\n  calc\n    _ ≤ C * ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        ‖mixedPairCoefficient d q r‖ *\n          coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n            (r.divisors.card : ℝ) := hbound B sigma kappa c0 d hd\n    _ ≤ C * (4 * d.U ^ 2 * d.physicalFactorCap *\n        (1 + Real.log d.physicalFactorCap) ^ 14) :=\n      mul_le_mul_of_nonneg_left (actualV_finite_envelope_le hd) hC.le\n    _ = _ := by ring\n\n/-- The full original beta divisor-square moment multiplies the actual V\nerror, with the true U squared and one modulus cap still visible. -/\ntheorem actual_betaL2_mul_V_error_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        C * d.V * d.U ^ 2 * d.physicalFactorCap *\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n            (1 + Real.log d.physicalFactorCap) ^ 14 := by\n  obtain ⟨C, hC, hbound⟩ := actualV_sub_primitive_bound\n  refine ⟨2 * C, by positivity, fun B sigma kappa c0 d hd ↦ ?_⟩\n  have hlogV : 0 ≤ 1 + Real.log (2 * d.V) := by\n    have := Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])\n    linarith\n  calc\n    _ ≤ (2 * d.V * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) *\n        (C * d.U ^ 2 * d.physicalFactorCap *\n          (1 + Real.log d.physicalFactorCap) ^ 14) :=\n      mul_le_mul (mediumAdmissible_beta_norm_sq_sum_le hd)\n        (hbound B sigma kappa c0 d hd) (norm_nonneg _)\n          (by have := hd.2.1; positivity)\n    _ = _ := by ring\n\nend TransposedPrimitiveVMoment\n\nend\n\nend ImbalancedChen.Part3\n"
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedPrimitiveV",
+    "ImbalancedChen.Part3TransposedPrimitiveUMoment"
+  ],
+  "direct_dependencies": [
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveV",
+      "sha256": "4997547026b632817a1f39aa6387939aae3b0a2a34f95d2739cc91bd617d4da4",
+      "expected": "4997547026b632817a1f39aa6387939aae3b0a2a34f95d2739cc91bd617d4da4"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUMoment",
+      "sha256": "513cf44888ce1c6538902e5d33245f5b94303b1bd9bfa6adb1a1772c5002802d",
+      "expected": "513cf44888ce1c6538902e5d33245f5b94303b1bd9bfa6adb1a1772c5002802d"
+    }
+  ],
+  "sourceDAG_delta": {
+    "basis": "Relative to the parent staged union containing both direct dependencies and their source closures. Only two local imports; no foreign direct import or extra supplier.",
+    "added_local_modules": [
+      "ImbalancedChen.Part3TransposedPrimitiveVMoment"
+    ],
+    "local_module_delta": 1,
+    "added_foreign_modules": [],
+    "foreign_module_delta": 0,
+    "full_tree_rescanned": false
+  },
+  "mathematical_self_review": [
+    {
+      "site": "coprimeNormMass_le_twice_U",
+      "assessment": "The coprime sum of alpha norms is bounded termwise by the full original-alpha L1 sum, which the existing alpha one-bound and exact carrier count bound by 2*U."
+    },
+    {
+      "site": "actualV_finite_envelope_le hpoint",
+      "assessment": "The actual mixed coefficient has norm norm(Gq)*norm(Gr)*norm(Cr)/phi(r). The complex coprime mass norm(Cr) is <=2*U, and the distinct coprime mass of alpha norms at q is also <=2*U. Their product yields exactly 4*U^2, leaving norm(Gq) times norm(Gr)*tau(r)/phi(r). Every bound is nonnegative and retains both original physical modulus carriers."
+    },
+    {
+      "site": "actualV_finite_envelope_le summed payment",
+      "assessment": "Finite double-sum factorization gives 4*U^2*(sum norm(Gq))*(sum norm(Gr)*tau(r)/phi(r)). The existing UMoment interfaces pay cap*(1+log cap)^2 and (1+log cap)^12, giving exactly 4*U^2*cap*(1+log cap)^14."
+    },
+    {
+      "site": "actualV_sub_primitive_bound",
+      "assessment": "The proved finite actual V-minus-P0 envelope is combined with the proved moment envelope. Multiplying the universal cutoff constant by 4 gives one universal C before all B,sigma,kappa,c0,d; only MediumAdmissible is a premise."
+    },
+    {
+      "site": "actual_betaL2_mul_V_error_bound",
+      "assessment": "The actual original-beta L2 factor is bounded by the owned fixed-order divisor square moment at length 2*V. This multiplies the actual V error, giving C*V*U^2*cap*(1+log(2V))^((2^B)^2-1)*(1+log cap)^14. The true U squared and cap remain present; no stronger C*U*cap bound is asserted."
+    }
+  ],
+  "quantifier_and_scope_audit": {
+    "all_four_theorem_headers_read": true,
+    "no_definitions": true,
+    "global_error_constants_precede_all_atom_parameters": true,
+    "final_betaL2_constant_scope": "There exists C>0 before every B,sigma,kappa,c0,d; only MediumAdmissible B sigma kappa c0 d is required.",
+    "full_original_physical_carriers": true,
+    "original_complex_coefficients_retained": true,
+    "no_residual_or_log_budget_premise": true,
+    "no_stronger_medium_geometry": true,
+    "no_new_SW_assumption": true,
+    "normalization": "Inherited actual local cutoffMass only."
+  },
+  "source_checks": {
+    "four_theorems_zero_defs": true,
+    "dependency_hashes_match_frozen": true,
+    "no_sorry_admit_axiom_opaque_native_decide": true,
+    "only_two_local_imports": true,
+    "issues_identified": []
+  },
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "bootstrap_invoked": false,
+    "build_invoked": false,
+    "runtime_request_submitted": false,
+    "runtime_elaboration_result": "NOT_RUN",
+    "kernel_replay_performed": false,
+    "axiom_audit_performed": false,
+    "owned_sources_modified": false,
+    "dependencies_modified": false,
+    "written_artifacts_only": [
+      "ImbalancedChen/Part3TransposedPrimitiveVMoment.lean",
+      ".lake/proof-continuation/source-reviews/20261016-transposed-primitive-v-moment-self-scope.json"
+    ]
+  },
+  "remaining_gates": [
+    "Parent independent source review and freezing.",
+    "Ownership/acceptance of the exact V and UMoment dependencies.",
+    "Owner-controlled runtime elaboration; any separately required kernel replay and axiom audit."
+  ]
+}

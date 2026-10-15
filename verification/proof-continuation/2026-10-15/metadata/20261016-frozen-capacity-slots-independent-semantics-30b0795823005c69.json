@@ -1,0 +1,168 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_SEMANTIC_REVIEW_NO_TARGET_ISSUES_FOUND",
+  "review_date": "2026-10-16",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "target": "ImbalancedChen/ActualFrozenCapacitySlots.lean",
+  "source_sha256": "37ca1336b0aec630518c03288fe00cf2dade688c7d5cbd16053ac84a651f1e6a",
+  "direct_dependencies": [
+    {
+      "module": "ImbalancedChen.ActualPrimeTupleNormalization",
+      "sha256": "ee2f0f12ef232b770dcc7136d8ce74f27fc830cad73ab78641fe18f1cabc5db0"
+    },
+    {
+      "module": "Mathlib.Data.List.FinRange",
+      "sha256": "183289a22060dd4ef447d2effcb6cce76599dab3029efd0d61a0526207ea68e3"
+    }
+  ],
+  "declarations": [
+    {
+      "visibility": "private",
+      "kind": "theorem",
+      "name": "prefixSquareBound_map",
+      "line": 27,
+      "signature": "private theorem prefixSquareBound_map {\u03b1 : Type*} (upper : \u03b1 \u2192 \u2115)\n    (D : \u211d) (input : List \u03b1)\n    (hfull : actualDwellSupport D (input.map upper)) :\n    PrefixSquareBound (fun i => (upper i : \u211d)) D input"
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualTwoCapacityGreedy_map",
+      "line": 37,
+      "signature": "theorem actualTwoCapacityGreedy_map {\u03b1 \u03b2 : Type*} (f : \u03b1 \u2192 \u03b2) (weight : \u03b2 \u2192 \u211d)\n    (A : \u211d) (input : List \u03b1) :\n    actualTwoCapacityGreedy weight A (input.map f) =\n      ((actualTwoCapacityGreedy (fun i => weight (f i)) A input).1.map f,\n        (actualTwoCapacityGreedy (fun i => weight (f i)) A input).2.map f)"
+    },
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "actualFrozenCapacityFactors",
+      "line": 52,
+      "signature": "def actualFrozenCapacityFactors {\u03b1 : Type*} (A : \u211d) (upper actual : \u03b1 \u2192 \u2115)\n    (input : List \u03b1) : \u2115 \u00d7 \u2115"
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualFrozenCapacityFactors_at_upper",
+      "line": 57,
+      "signature": "theorem actualFrozenCapacityFactors_at_upper {\u03b1 : Type*} (A : \u211d) (upper : \u03b1 \u2192 \u2115)\n    (input : List \u03b1) :\n    actualFrozenCapacityFactors A upper upper input =\n      actualTwoCapacityFactors A (input.map upper)"
+    },
+    {
+      "visibility": "private",
+      "kind": "theorem",
+      "name": "mapped_prod_le_upper_prod",
+      "line": 64,
+      "signature": "private theorem mapped_prod_le_upper_prod {\u03b1 : Type*} (upper actual : \u03b1 \u2192 \u2115)\n    (input : List \u03b1) (hsize : \u2200 i \u2208 input, actual i \u2264 upper i) :\n    (((input.map actual).prod : \u2115) : \u211d) \u2264 (input.map (fun i => (upper i : \u211d))).prod"
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualFrozenCapacityFactors_correct",
+      "line": 74,
+      "signature": "theorem actualFrozenCapacityFactors_correct {\u03b1 : Type*} {A B : \u211d}\n    (hA : 1 \u2264 A) (hB : 1 \u2264 B) (upper actual : \u03b1 \u2192 \u2115) (input : List \u03b1)\n    (hfull : actualDwellSupport (A * B) (input.map upper))\n    (hsize : \u2200 i \u2208 input, actual i \u2264 upper i) :\n    (actualFrozenCapacityFactors A upper actual input).1 *\n        (actualFrozenCapacityFactors A upper actual input).2 = (input.map actual).prod \u2227\n      ((actualFrozenCapacityFactors A upper actual input).1 : \u211d) \u2264 A \u2227\n      ((actualFrozenCapacityFactors A upper actual input).2 : \u211d) \u2264 B"
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualFrozenCapacityFactors_coprime",
+      "line": 94,
+      "signature": "theorem actualFrozenCapacityFactors_coprime {\u03b1 : Type*} {A B : \u211d}\n    (hA : 1 \u2264 A) (hB : 1 \u2264 B) (upper actual : \u03b1 \u2192 \u2115) (input : List \u03b1)\n    (hfull : actualDwellSupport (A * B) (input.map upper))\n    (hsize : \u2200 i \u2208 input, actual i \u2264 upper i)\n    (hprime : \u2200 p \u2208 input.map actual, Nat.Prime p) (hnodup : (input.map actual).Nodup) :\n    Nat.Coprime (actualFrozenCapacityFactors A upper actual input).1\n      (actualFrozenCapacityFactors A upper actual input).2"
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualFrozenCapacityFactors_on_box",
+      "line": 108,
+      "signature": "theorem actualFrozenCapacityFactors_on_box {n : \u2115} {A B : \u211d}\n    (hA : 1 \u2264 A) (hB : 1 \u2264 B) (upper : Fin n \u2192 \u2115)\n    (hfull : actualDwellSupport (A * B) (List.ofFn upper)) :\n    \u2200 actual : Fin n \u2192 \u2115, (\u2200 i, actual i \u2264 upper i) \u2192\n      (actualFrozenCapacityFactors A upper actual (List.finRange n)).1 *\n          (actualFrozenCapacityFactors A upper actual (List.finRange n)).2 =\n          (List.ofFn actual).prod \u2227\n        ((actualFrozenCapacityFactors A upper actual (List.finRange n)).1 : \u211d) \u2264 A \u2227\n        ((actualFrozenCapacityFactors A upper actual (List.finRange n)).2 : \u211d) \u2264 B"
+    },
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "actualFrozenCapacityAssignment",
+      "line": 124,
+      "signature": "def actualFrozenCapacityAssignment {n : \u2115} (A : \u211d) (upper : Fin n \u2192 \u2115) : Fin n \u2192 Bool"
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualFrozenCapacityAssignment_card",
+      "line": 127,
+      "signature": "theorem actualFrozenCapacityAssignment_card (n : \u2115) :\n    Fintype.card (Fin n \u2192 Bool) = 2 ^ n"
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "actualFrozenCapacityAssignment_sum_partition",
+      "line": 133,
+      "signature": "theorem actualFrozenCapacityAssignment_sum_partition {\u03b9 M : Type*}\n    [DecidableEq \u03b9] [AddCommMonoid M] {n : \u2115} (J : Finset \u03b9)\n    (A : \u211d) (upper : \u03b9 \u2192 Fin n \u2192 \u2115) (F : \u03b9 \u2192 M) :\n    (\u2211 mask : Fin n \u2192 Bool,\n      \u2211 j \u2208 J.filter (fun j => actualFrozenCapacityAssignment A (upper j) = mask), F j) =\n      \u2211 j \u2208 J, F j"
+    }
+  ],
+  "mathematical_findings": [
+    {
+      "scope": "original slot map adapter",
+      "detail": "The full upper support premise is on input.map upper. The adapter transfers each indexed original take/get square test to upper weights on the original label list. It neither removes slots nor substitutes a remaining allocation predicate."
+    },
+    {
+      "scope": "mapping commutes with deterministic greedy",
+      "detail": "Snoc induction rewrites both actual greedy appends and uses the induction equality. Nested map composition makes the two prefer-left tests identical, including equality. Both branch products are then related by map_append. Repeated upper values preserve their distinct original labels; no set image merges occurrences."
+    },
+    {
+      "scope": "same fixed allocation for all tuples",
+      "detail": "actualFrozenCapacityFactors runs greedy only on upper weights and A. The actual tuple appears solely in mapping the resulting two label lists to natural values. At upper it agrees exactly with actualTwoCapacityFactors A (input.map upper). The auxiliary action generally differs from the earlier per-tuple actualSelectedPairFactors; the header states this limitation."
+    },
+    {
+      "scope": "product and capacity correctness",
+      "detail": "The actual original complete product identity follows from the occurrence-preserving BoxPartition permutation after mapping actual values. Each bin product is at most its corresponding upper bin product by nonnegative coordinatewise product monotonicity; the same original endpoint-greedy capacity theorem bounds those upper bin products. Actual values may be zero for this numerical statement, and the empty vector is included because capacities are at least one."
+    },
+    {
+      "scope": "coprimality",
+      "detail": "Original prime labels and Nodup are required for the mapped actual prime vector. Its original product is squarefree, and the just-proved exact bin product identity yields coprimality through Nat.coprime_of_squarefree_mul. A partition of repeated occurrences alone is not used as a coprimality argument."
+    },
+    {
+      "scope": "finite whole-box representation",
+      "detail": "The Fin n wrapper uses the actual original List.finRange and List.ofFn_eq_map; every actual coordinate vector below the same fixed natural upper vector receives the same two bin label lists and capacities. No tuple-specific decisions are rerun."
+    },
+    {
+      "scope": "original box-family partition",
+      "detail": "The Bool word records original label membership in the fixed left bin. Fin n->Bool has cardinal 2^n. The finite-sum identity groups original box labels j in J by their computed word, and sums back to the unchanged original family for every AddCommMonoid-valued F. Thus real or complex signed scalars are preserved. It partitions whole boxes, not tuple fibers, and does not assert those fibers are Cartesian."
+    }
+  ],
+  "fixed_source_api_checks": [
+    {
+      "name": "List.ofFn_eq_map",
+      "path": "Mathlib/Data/List/FinRange.lean",
+      "line": 44,
+      "signature": "List.ofFn f = (List.finRange n).map f",
+      "sha256": "183289a22060dd4ef447d2effcb6cce76599dab3029efd0d61a0526207ea68e3"
+    },
+    {
+      "name": "List.prod_map_le_prod_map\u2080",
+      "path": "Mathlib/Algebra/Order/BigOperators/GroupWithZero/List.lean",
+      "line": 41,
+      "signature": "Nonnegative lower mapped entries and coordinatewise mapped comparison imply product comparison.",
+      "sha256": "93dd065687bc4cf18d3fdab010880177865ed2713d31ebe45ef68941a0f78f4c"
+    }
+  ],
+  "rewriting_checks": [
+    "List.take_map and getElem_map preserve the same original index; proof bounds differ only by length_map and proof irrelevance.",
+    "The local label/ac products are ordinary reducible let/projection expressions; no supplied allocation or unproved permutation is hidden.",
+    "Finset.sum_filter followed by sum_comm leaves one unique matching Bool word per original j; the final sum of indicators is exactly F j, with no positivity needed."
+  ],
+  "remaining_caller_obligations": [
+    "Pay the full original upper-vector PrefixSquareBound from the original actual D-well source via the pending uniform-length and endpoint-inflation bridge.",
+    "upper is natural-valued here. An actual interval construction must prove its chosen natural endpoint bounds the prime coordinates and satisfies the paid upper-vector estimate.",
+    "For selected-pair allocation derive the concrete inherited remaining-vector budget through the original selected-mask dictionary before using this two-bin core.",
+    "Prove any later original group-carrier and coefficient regrouping equalities; the exact family partition alone does not supply a Cartesian coefficient factorization.",
+    "No complete selected-pair triple monomial theorem, distribution estimate, same-policy arithmetic mean or final hUpper is established in this module."
+  ],
+  "issues_found": [],
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "lean_source_modified_by_reviewer": false,
+    "bytecode_writes_disabled": true,
+    "object_acceptance_claimed": false,
+    "kernel_replay_claimed": false,
+    "axiom_audit_claimed": false,
+    "full_imported_closure_validation_claimed": false,
+    "tactic_elaboration_success_claimed": false
+  }
+}

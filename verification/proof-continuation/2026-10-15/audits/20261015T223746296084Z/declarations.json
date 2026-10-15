@@ -1,0 +1,194 @@
+[
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "name": "ImbalancedChen.actualFrozenCapacityAssignment",
+    "partial": false,
+    "type": "{n : Nat} \u2192 (A : Real) \u2192 (upper : Fin n \u2192 Nat) \u2192 Fin n \u2192 Bool",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "name": "ImbalancedChen.actualFrozenCapacityAssignment_card",
+    "partial": false,
+    "type": "\u2200 (n : Nat),\n  @Eq.{1} Nat\n    (@Fintype.card.{0} (Fin n \u2192 Bool)\n      (@Pi.instFintype.{0, 0} (Fin n) (fun (a : Fin n) => Bool) (instDecidableEqFin n) (Fin.fintype n)\n        fun (a : Fin n) => Bool.fintype))\n    (@HPow.hPow.{0, 0, 0} Nat Nat Nat\n      (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))\n      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) n)",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "name": "ImbalancedChen.actualFrozenCapacityAssignment_sum_partition",
+    "partial": false,
+    "type": "\u2200 {\u03b9 : Type u_1} {M : Type u_2} [DecidableEq.{u_1 + 1} \u03b9] [inst : AddCommMonoid.{u_2} M] {n : Nat} (J : Finset.{u_1} \u03b9)\n  (A : Real) (upper : \u03b9 \u2192 Fin n \u2192 Nat) (F : \u03b9 \u2192 M),\n  @Eq.{u_2 + 1} M\n    (@Finset.sum.{0, u_2} (Fin n \u2192 Bool) M inst\n      (@Finset.univ.{0} (Fin n \u2192 Bool)\n        (@Pi.instFintype.{0, 0} (Fin n) (fun (a : Fin n) => Bool) (instDecidableEqFin n) (Fin.fintype n)\n          fun (a : Fin n) => Bool.fintype))\n      fun (mask : Fin n \u2192 Bool) =>\n      @Finset.sum.{u_1, u_2} \u03b9 M inst\n        (@Finset.filter.{u_1} \u03b9\n          (fun (j : \u03b9) => @Eq.{1} (Fin n \u2192 Bool) (@ImbalancedChen.actualFrozenCapacityAssignment n A (upper j)) mask)\n          (fun (a : \u03b9) =>\n            @Fintype.decidablePiFintype.{0, 0} (Fin n) (fun (a : Fin n) => Bool)\n              (fun (a : Fin n) => instDecidableEqBool) (Fin.fintype n)\n              (@ImbalancedChen.actualFrozenCapacityAssignment n A (upper a)) mask)\n          J)\n        fun (j : \u03b9) => F j)\n    (@Finset.sum.{u_1, u_2} \u03b9 M inst J fun (j : \u03b9) => F j)",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "name": "ImbalancedChen.actualFrozenCapacityFactors",
+    "partial": false,
+    "type": "{\u03b1 : Type u_1} \u2192 (A : Real) \u2192 (upper actual : \u03b1 \u2192 Nat) \u2192 (input : List.{u_1} \u03b1) \u2192 Prod.{0, 0} Nat Nat",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "name": "ImbalancedChen.actualFrozenCapacityFactors_at_upper",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} (A : Real) (upper : \u03b1 \u2192 Nat) (input : List.{u_1} \u03b1),\n  @Eq.{1} (Prod.{0, 0} Nat Nat) (@ImbalancedChen.actualFrozenCapacityFactors.{u_1} \u03b1 A upper upper input)\n    (ImbalancedChen.actualTwoCapacityFactors A (@List.map.{u_1, 0} \u03b1 Nat upper input))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "name": "ImbalancedChen.actualFrozenCapacityFactors_coprime",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} {A B : Real}\n  (hA : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) A)\n  (hB : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) B)\n  (upper actual : \u03b1 \u2192 Nat) (input : List.{u_1} \u03b1)\n  (hfull :\n    ImbalancedChen.actualDwellSupport (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) A B)\n      (@List.map.{u_1, 0} \u03b1 Nat upper input))\n  (hsize :\n    \u2200 (i : \u03b1),\n      @Membership.mem.{u_1, u_1} \u03b1 (List.{u_1} \u03b1) (@List.instMembership.{u_1} \u03b1) input i \u2192\n        @LE.le.{0} Nat instLENat (actual i) (upper i))\n  (hprime :\n    \u2200 (p : Nat),\n      @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat) (@List.map.{u_1, 0} \u03b1 Nat actual input)\n          p \u2192\n        Nat.Prime p)\n  (hnodup : @List.Nodup.{0} Nat (@List.map.{u_1, 0} \u03b1 Nat actual input)),\n  Nat.Coprime (@Prod.fst.{0, 0} Nat Nat (@ImbalancedChen.actualFrozenCapacityFactors.{u_1} \u03b1 A upper actual input))\n    (@Prod.snd.{0, 0} Nat Nat (@ImbalancedChen.actualFrozenCapacityFactors.{u_1} \u03b1 A upper actual input))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "name": "ImbalancedChen.actualFrozenCapacityFactors_correct",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} {A B : Real}\n  (hA : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) A)\n  (hB : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) B)\n  (upper actual : \u03b1 \u2192 Nat) (input : List.{u_1} \u03b1)\n  (hfull :\n    ImbalancedChen.actualDwellSupport (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) A B)\n      (@List.map.{u_1, 0} \u03b1 Nat upper input))\n  (hsize :\n    \u2200 (i : \u03b1),\n      @Membership.mem.{u_1, u_1} \u03b1 (List.{u_1} \u03b1) (@List.instMembership.{u_1} \u03b1) input i \u2192\n        @LE.le.{0} Nat instLENat (actual i) (upper i)),\n  And\n    (@Eq.{1} Nat\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n        (@Prod.fst.{0, 0} Nat Nat (@ImbalancedChen.actualFrozenCapacityFactors.{u_1} \u03b1 A upper actual input))\n        (@Prod.snd.{0, 0} Nat Nat (@ImbalancedChen.actualFrozenCapacityFactors.{u_1} \u03b1 A upper actual input)))\n      (@List.prod.{0} Nat instMulNat Nat.instOne (@List.map.{u_1, 0} \u03b1 Nat actual input)))\n    (And\n      (@LE.le.{0} Real Real.instLE\n        (@Nat.cast.{0} Real Real.instNatCast\n          (@Prod.fst.{0, 0} Nat Nat (@ImbalancedChen.actualFrozenCapacityFactors.{u_1} \u03b1 A upper actual input)))\n        A)\n      (@LE.le.{0} Real Real.instLE\n        (@Nat.cast.{0} Real Real.instNatCast\n          (@Prod.snd.{0, 0} Nat Nat (@ImbalancedChen.actualFrozenCapacityFactors.{u_1} \u03b1 A upper actual input)))\n        B))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "name": "ImbalancedChen.actualFrozenCapacityFactors_on_box",
+    "partial": false,
+    "type": "\u2200 {n : Nat} {A B : Real}\n  (hA : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) A)\n  (hB : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) B)\n  (upper : Fin n \u2192 Nat)\n  (hfull :\n    ImbalancedChen.actualDwellSupport (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) A B)\n      (@List.ofFn.{0} Nat n upper))\n  (actual : Fin n \u2192 Nat),\n  (\u2200 (i : Fin n), @LE.le.{0} Nat instLENat (actual i) (upper i)) \u2192\n    And\n      (@Eq.{1} Nat\n        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n          (@Prod.fst.{0, 0} Nat Nat\n            (@ImbalancedChen.actualFrozenCapacityFactors.{0} (Fin n) A upper actual (List.finRange n)))\n          (@Prod.snd.{0, 0} Nat Nat\n            (@ImbalancedChen.actualFrozenCapacityFactors.{0} (Fin n) A upper actual (List.finRange n))))\n        (@List.prod.{0} Nat instMulNat Nat.instOne (@List.ofFn.{0} Nat n actual)))\n      (And\n        (@LE.le.{0} Real Real.instLE\n          (@Nat.cast.{0} Real Real.instNatCast\n            (@Prod.fst.{0, 0} Nat Nat\n              (@ImbalancedChen.actualFrozenCapacityFactors.{0} (Fin n) A upper actual (List.finRange n))))\n          A)\n        (@LE.le.{0} Real Real.instLE\n          (@Nat.cast.{0} Real Real.instNatCast\n            (@Prod.snd.{0, 0} Nat Nat\n              (@ImbalancedChen.actualFrozenCapacityFactors.{0} (Fin n) A upper actual (List.finRange n))))\n          B))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "name": "ImbalancedChen.actualTwoCapacityGreedy_map",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} {\u03b2 : Type u_2} (f : \u03b1 \u2192 \u03b2) (weight : \u03b2 \u2192 Real) (A : Real) (input : List.{u_1} \u03b1),\n  @Eq.{u_2 + 1} (Prod.{u_2, u_2} (List.{u_2} \u03b2) (List.{u_2} \u03b2))\n    (@ImbalancedChen.actualTwoCapacityGreedy.{u_2} \u03b2 weight A (@List.map.{u_1, u_2} \u03b1 \u03b2 f input))\n    (@Prod.mk.{u_2, u_2} (List.{u_2} \u03b2) (List.{u_2} \u03b2)\n      (@List.map.{u_1, u_2} \u03b1 \u03b2 f\n        (@Prod.fst.{u_1, u_1} (List.{u_1} \u03b1) (List.{u_1} \u03b1)\n          (@ImbalancedChen.actualTwoCapacityGreedy.{u_1} \u03b1 (fun (i : \u03b1) => weight (f i)) A input)))\n      (@List.map.{u_1, u_2} \u03b1 \u03b2 f\n        (@Prod.snd.{u_1, u_1} (List.{u_1} \u03b1) (List.{u_1} \u03b1)\n          (@ImbalancedChen.actualTwoCapacityGreedy.{u_1} \u03b1 (fun (i : \u03b1) => weight (f i)) A input))))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "name": "_private.ImbalancedChen.ActualFrozenCapacitySlots.0.ImbalancedChen.mapped_prod_le_upper_prod",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} (upper actual : \u03b1 \u2192 Nat) (input : List.{u_1} \u03b1)\n  (hsize :\n    \u2200 (i : \u03b1),\n      @Membership.mem.{u_1, u_1} \u03b1 (List.{u_1} \u03b1) (@List.instMembership.{u_1} \u03b1) input i \u2192\n        @LE.le.{0} Nat instLENat (actual i) (upper i)),\n  @LE.le.{0} Real Real.instLE\n    (@Nat.cast.{0} Real Real.instNatCast\n      (@List.prod.{0} Nat instMulNat Nat.instOne (@List.map.{u_1, 0} \u03b1 Nat actual input)))\n    (@List.prod.{0} Real Real.instMul Real.instOne\n      (@List.map.{u_1, 0} \u03b1 Real (fun (i : \u03b1) => @Nat.cast.{0} Real Real.instNatCast (upper i)) input))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "name": "_private.ImbalancedChen.ActualFrozenCapacitySlots.0.ImbalancedChen.prefixSquareBound_map",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} (upper : \u03b1 \u2192 Nat) (D : Real) (input : List.{u_1} \u03b1)\n  (hfull : ImbalancedChen.actualDwellSupport D (@List.map.{u_1, 0} \u03b1 Nat upper input)),\n  @MathlibNt.SieveTheory.LiLiuPrereqWFBoxAllocation.PrefixSquareBound.{u_1} \u03b1\n    (fun (i : \u03b1) => @Nat.cast.{0} Real Real.instNatCast (upper i)) D input",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "name": "ImbalancedChen.actualFrozenCapacityAssignment._proof_1",
+    "partial": false,
+    "type": "\u2200 {n : Nat}, @LawfulBEq.{0} (Fin n) (@instBEqOfDecidableEq.{0} (Fin n) (instDecidableEqFin n))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "name": "ImbalancedChen.actualFrozenCapacityFactors.eq_1",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} (A : Real) (upper actual : \u03b1 \u2192 Nat) (input : List.{u_1} \u03b1),\n  @Eq.{1} (Prod.{0, 0} Nat Nat) (@ImbalancedChen.actualFrozenCapacityFactors.{u_1} \u03b1 A upper actual input)\n    (@Prod.mk.{0, 0} Nat Nat\n      (@List.prod.{0} Nat instMulNat Nat.instOne\n        (@List.map.{u_1, 0} \u03b1 Nat actual\n          (@Prod.fst.{u_1, u_1} (List.{u_1} \u03b1) (List.{u_1} \u03b1)\n            (@ImbalancedChen.actualTwoCapacityGreedy.{u_1} \u03b1\n              (fun (i : \u03b1) => @Nat.cast.{0} Real Real.instNatCast (upper i)) A input))))\n      (@List.prod.{0} Nat instMulNat Nat.instOne\n        (@List.map.{u_1, 0} \u03b1 Nat actual\n          (@Prod.snd.{u_1, u_1} (List.{u_1} \u03b1) (List.{u_1} \u03b1)\n            (@ImbalancedChen.actualTwoCapacityGreedy.{u_1} \u03b1\n              (fun (i : \u03b1) => @Nat.cast.{0} Real Real.instNatCast (upper i)) A input)))))",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "name": "ImbalancedChen.actualFrozenCapacityFactors_on_box._simp_1_1",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u} {n : Nat} {f : Fin n \u2192 \u03b1},\n  @Eq.{u + 1} (List.{u} \u03b1) (@List.map.{0, u} (Fin n) \u03b1 f (List.finRange n)) (@List.ofFn.{u} \u03b1 n f)",
+    "unsafe": false
+  },
+  {
+    "axiom": false,
+    "axioms": [
+      "propext"
+    ],
+    "module": "ImbalancedChen.ActualFrozenCapacitySlots",
+    "name": "_private.ImbalancedChen.ActualFrozenCapacitySlots.0.ImbalancedChen.prefixSquareBound_map._simp_1_1",
+    "partial": false,
+    "type": "\u2200 {\u03b1 : Type u_1} {\u03b2 : Type u_2} {f : \u03b1 \u2192 \u03b2} {l : List.{u_1} \u03b1} {i : Nat},\n  @Eq.{u_2 + 1} (List.{u_2} \u03b2) (@List.take.{u_2} \u03b2 i (@List.map.{u_1, u_2} \u03b1 \u03b2 f l))\n    (@List.map.{u_1, u_2} \u03b1 \u03b2 f (@List.take.{u_1} \u03b1 i l))",
+    "unsafe": false
+  }
+]

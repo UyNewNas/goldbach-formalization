@@ -1,0 +1,195 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_EXACT_THREE_PROOF_EDIT_REBIND",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "review_date": "2026-10-16",
+  "candidate": "ImbalancedChen.ActualSelectedSubproductParameters",
+  "old_source_sha256": "5b2338db289c220df3f9ff86d94d1d7801d7f05b68f87992f54946ec4e6cbea5",
+  "source_sha256": "47b90be7778b9a518e0c92a065195d34b2468c623137fdade76adf857cb4d747",
+  "old_snapshot": ".lake/proof-continuation/source-reviews/20261016-selected-params-5b23-before-bool-repair.lean",
+  "forward_inverse_exact_bytes": true,
+  "complete_declaration_count": 13,
+  "theorem_count": 8,
+  "definition_count": 5,
+  "complete_types_imports_all_five_definition_bodies_thresholds_quantifiers_unchanged": true,
+  "complete_declarations": [
+    {
+      "name": "actualSelectedSubproductV",
+      "kind": "def",
+      "visibility": "public",
+      "complete_signature": "def actualSelectedSubproductV (α s : ℝ) : ℝ",
+      "complete_source_until_next_declaration": "def actualSelectedSubproductV (α s : ℝ) : ℝ :=\n  min ((1 + s) / 2) (min ((32 - 34 * s) / 39)\n    (1 - 7 * α / 64 - 3 * s / 2))\n\n/-- The two original upper bounds for the selected logarithmic product. -/"
+    },
+    {
+      "name": "actualSelectedSubproductUpper",
+      "kind": "def",
+      "visibility": "public",
+      "complete_signature": "def actualSelectedSubproductUpper (α θ : ℝ) : ℝ",
+      "complete_source_until_next_declaration": "def actualSelectedSubproductUpper (α θ : ℝ) : ℝ :=\n  min ((32 - 39 * θ) / 34) ((2 - 2 * θ - 7 * α / 32) / 3)"
+    },
+    {
+      "name": "actualSelectedSubproductV_one",
+      "kind": "theorem",
+      "visibility": "public",
+      "complete_signature": "theorem actualSelectedSubproductV_one (s : ℝ) :\n    actualSelectedSubproductV 1 s = v s"
+    },
+    {
+      "name": "actualSelectedSubproduct_critical_iff",
+      "kind": "theorem",
+      "visibility": "public",
+      "complete_signature": "theorem actualSelectedSubproduct_critical_iff (α θ s : ℝ) :\n    θ ≤ actualSelectedSubproductV α s ↔\n      2 * θ - 1 ≤ s ∧ s ≤ actualSelectedSubproductUpper α θ"
+    },
+    {
+      "name": "actualSelectedSubproductV_residue_margin",
+      "kind": "theorem",
+      "visibility": "public",
+      "complete_signature": "theorem actualSelectedSubproductV_residue_margin {e κ θ s : ℝ}\n    (he : 0 ≤ e) (hκ : κ ≤ e / 4) (hθ : θ + e / 4 ≤ v s) :\n    θ + e / 8 ≤ actualSelectedSubproductV (1 + 3 * κ) s"
+    },
+    {
+      "name": "actualSelectedPrimeCoordinates",
+      "kind": "def",
+      "visibility": "public",
+      "complete_signature": "def actualSelectedPrimeCoordinates (x : ℝ) (p : Fin 3 → ℕ) : Fin 3 → ℝ",
+      "complete_source_until_next_declaration": "def actualSelectedPrimeCoordinates (x : ℝ) (p : Fin 3 → ℕ) : Fin 3 → ℝ :=\n  fun i => Real.log (p i : ℝ) / Real.log x"
+    },
+    {
+      "name": "rpow_actualSelectedPrimeCoordinates",
+      "kind": "theorem",
+      "visibility": "public",
+      "complete_signature": "theorem rpow_actualSelectedPrimeCoordinates (x : ℝ) (hx : 1 < x)\n    (p : Fin 3 → ℕ) (hp : ∀ i, 0 < p i) (i : Fin 3) :\n    x ^ actualSelectedPrimeCoordinates x p i = (p i : ℝ)"
+    },
+    {
+      "name": "actualSelectedPairProduct",
+      "kind": "def",
+      "visibility": "public",
+      "complete_signature": "def actualSelectedPairProduct (yz : Bool) (p : Fin 3 → ℕ) : ℕ",
+      "complete_source_until_next_declaration": "def actualSelectedPairProduct (yz : Bool) (p : Fin 3 → ℕ) : ℕ :=\n  if yz then p 1 * p 2 else p 0 * p 2"
+    },
+    {
+      "name": "actualSelectedPairRemainingPrime",
+      "kind": "def",
+      "visibility": "public",
+      "complete_signature": "def actualSelectedPairRemainingPrime (yz : Bool) (p : Fin 3 → ℕ) : ℕ",
+      "complete_source_until_next_declaration": "def actualSelectedPairRemainingPrime (yz : Bool) (p : Fin 3 → ℕ) : ℕ :=\n  if yz then p 0 else p 1"
+    },
+    {
+      "name": "actualSelectedPairProduct_rpow",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_signature": "private theorem actualSelectedPairProduct_rpow (x : ℝ) (hx : 1 < x)\n    (p : Fin 3 → ℕ) (hp : ∀ i, 0 < p i) (yz : Bool) :\n    x ^ (if yz then actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2\n      else actualSelectedPrimeCoordinates x p 0 + actualSelectedPrimeCoordinates x p 2) =\n      (actualSelectedPairProduct yz p : ℝ)"
+    },
+    {
+      "name": "actualSelectedPairGate_rpow",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_signature": "private theorem actualSelectedPairGate_rpow (x : ℝ) (hx : 1 < x)\n    (p : Fin 3 → ℕ) (hp : ∀ i, 0 < p i) (yz : Bool) :\n    (actualSelectedPairProduct yz p : ℝ) *\n        (actualSelectedPairRemainingPrime yz p : ℝ) ^ 2 =\n      x ^ (if yz then 2 * actualSelectedPrimeCoordinates x p 0 +\n          actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2\n        else actualSelectedPrimeCoordinates x p 0 +\n          2 * actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2)"
+    },
+    {
+      "name": "actualExtendedThirdSelectedPair_arithmeticInputs",
+      "kind": "theorem",
+      "visibility": "public",
+      "complete_signature": "theorem actualExtendedThirdSelectedPair_arithmeticInputs {e κ δ : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hκ : κ ≤ e / 4) (hδ : δ ≤ e / 32)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (x : ℝ) (hx : 1 < x) (p : Fin 3 → ℕ) (hp : ∀ i, 0 < p i)\n    (hs : actualSelectedPrimeCoordinates x p ∈ actualExtendedThirdPhysicalCell m j)\n    (tail : List ℕ)\n    (hsupport : actualDwellSupport (x ^ actualExtendedThirdPhysicalLevel e m j)\n      (p 0 :: p 1 :: p 2 :: tail)) :\n    let θ := actualExtendedThirdPairParameter e m j t yz\n    actualDwellSupport (x ^ (θ - 2 * δ)) (p 0 :: p 1 :: p 2 :: tail) ∧\n      (actualSelectedPairProduct yz p : ℝ) *\n        (actualSelectedPairRemainingPrime yz p : ℝ) ^ 2 < x ^ (θ - 2 * δ) ∧\n      x ^ (2 * θ - 1) ≤ (actualSelectedPairProduct yz p : ℝ) ∧\n      (actualSelectedPairProduct yz p : ℝ) ≤\n        x ^ actualSelectedSubproductUpper (1 + 3 * κ) θ"
+    },
+    {
+      "name": "actualExtendedThirdSelectedPair_allocate",
+      "kind": "theorem",
+      "visibility": "public",
+      "complete_signature": "theorem actualExtendedThirdSelectedPair_allocate {e κ δ A : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hκ : κ ≤ e / 4) (hδ : δ ≤ e / 32)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (x : ℝ) (hx : 1 < x) (p : Fin 3 → ℕ) (hp : ∀ i, 0 < p i)\n    (hs : actualSelectedPrimeCoordinates x p ∈ actualExtendedThirdPhysicalCell m j)\n    (tail : List ℕ)\n    (hsupport : actualDwellSupport (x ^ actualExtendedThirdPhysicalLevel e m j)\n      (p 0 :: p 1 :: p 2 :: tail)) (hA : 1 ≤ A)\n    (hC : 1 ≤ x ^ (actualExtendedThirdPairParameter e m j t yz - 2 * δ) /\n      (A * (actualSelectedPairProduct yz p : ℝ))) :\n    let θ := actualExtendedThirdPairParameter e m j t yz\n    let b₀ := actualSelectedPairProduct yz p\n    let ac := actualTwoCapacityFactors A (actualSelectedPairRemainingPrime yz p :: tail)\n    ac.1 * b₀ * ac.2 = (p 0 :: p 1 :: p 2 :: tail).prod ∧\n      (ac.1 : ℝ) ≤ A ∧ (ac.2 : ℝ) ≤ x ^ (θ - 2 * δ) / (A * b₀)"
+    }
+  ],
+  "imports": [
+    "import ImbalancedChen.ActualExtendedThirdWholeCellActions",
+    "import ImbalancedChen.ActualDwellSelectedRemainder"
+  ],
+  "exact_changes": [
+    {
+      "old": "  congr 2 <;> ring",
+      "new": "  congr 2; ring"
+    },
+    {
+      "old": "  · change ((p 0 * p 2 : ℕ) : ℝ) * (p 1 : ℝ) ^ 2 = _",
+      "new": "  · change ((p 0 * p 2 : ℕ) : ℝ) * (p 1 : ℝ) ^ 2 =\n      x ^ (actualSelectedPrimeCoordinates x p 0 +\n        2 * actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2)"
+    },
+    {
+      "old": "  · change ((p 1 * p 2 : ℕ) : ℝ) * (p 0 : ℝ) ^ 2 = _",
+      "new": "  · change ((p 1 * p 2 : ℕ) : ℝ) * (p 0 : ℝ) ^ 2 =\n      x ^ (2 * actualSelectedPrimeCoordinates x p 0 +\n        actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2)"
+    }
+  ],
+  "all_changes_inside_original_theorem_proofs": true,
+  "actual_previous_diagnostic": {
+    "path": ".lake/proof-continuation/runs/20261015T200807219184Z-ImbalancedChen.ActualSelectedSubproductParameters/stdout.log",
+    "sha256": "a30bb2c5db8a0d24ab78a06da60a3b1b91dadd216719eee8fe0b478112af6005",
+    "actual_full_log_read": true,
+    "error_count": 3,
+    "errors": [
+      "39:10 unnecessarySeqFocus at congr 2 <;> ring",
+      "111:2 false branch exponent equality still contains if false=true",
+      "117:2 true branch exponent equality still contains if True"
+    ],
+    "failed_predecessor_preserved": true
+  },
+  "static_assessment": [
+    {
+      "site": "actualSelectedSubproductV_one",
+      "assessment": "The semicolon sequence matches the actual unnecessarySeqFocus diagnostic; ring and the theorem statement are unchanged. No linter option is disabled."
+    },
+    {
+      "site": "actualSelectedPairGate_rpow false branch",
+      "assessment": "The explicit target spells out selected p0*p2 and remaining p1, exponent t0+2*t1+t2. Bool false reduction is definitionally the original target. Original rpow rewrites and ring remain byte-identical."
+    },
+    {
+      "site": "actualSelectedPairGate_rpow true branch",
+      "assessment": "The explicit target spells out selected p1*p2 and remaining p0, exponent 2*t0+t1+t2. Bool true reduction is definitionally the original target. Original rpow rewrites and ring remain byte-identical."
+    }
+  ],
+  "pin_files": [
+    {
+      "path": "lake-manifest.json",
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "HEAD_sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "bytes_equal_HEAD": true
+    },
+    {
+      "path": "lean-toolchain",
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "HEAD_sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "bytes_equal_HEAD": true
+    },
+    {
+      "path": "lakefile.toml",
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "HEAD_sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "bytes_equal_HEAD": true
+    }
+  ],
+  "direct_dependencies": [
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdWholeCellActions",
+      "source_sha256": "88a90dfae47e617a2d2576048dd9334ddf454d23c8c6e8b9d005498093204332",
+      "unmodified_by_reviewer": true
+    },
+    {
+      "module": "ImbalancedChen.ActualDwellSelectedRemainder",
+      "source_sha256": "6915d9df1dade16830b1190b44dafe30a0caab6487bd45dcb8252fb33f8e21c2",
+      "unmodified_by_reviewer": true
+    }
+  ],
+  "prior_complete_type_review": {
+    "path": ".lake/proof-continuation/source-reviews/20261016-tail-independent-complete-types-addendum.json",
+    "sha256": "e98d05a10c4a7d26b4f04f85c5fdb515643ea0c5902602ebfb5d6344f2174092",
+    "all_13_prior_complete_signatures_match": true
+  },
+  "issues": [],
+  "remaining_gate": "Exact 47b90be7 requires separately owned actual bounded Lean elaboration. Static matching of diagnostic repairs is not Lean PASS or imported-closure acceptance.",
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "frozen_lean_modified": false,
+    "pins_modified": false,
+    "python_bytecode_generated": false,
+    "fresh_full_source_dag_recomputed": false,
+    "kernel_replay_or_axiom_acceptance": false,
+    "runtime_pass_claim": false
+  }
+}

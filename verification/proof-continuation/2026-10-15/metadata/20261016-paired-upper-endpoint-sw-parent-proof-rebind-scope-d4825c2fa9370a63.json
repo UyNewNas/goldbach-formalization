@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T19:17:37.057188+00:00",
+  "reviewer": "/root/dispersion_resume/reuse_endpoint_audit",
+  "status": "SOURCE_ONLY_UNCHANGED_SW_PARENT_PROOF_REBIND_PASS",
+  "candidate": {
+    "path": "ImbalancedChen/Part3PairedUpperEndpointSW.lean",
+    "sha256": "4d3989b6388f9735ff957ca6e1f83efab3a4c2c146c01324f7631ee229bdc5d2",
+    "source_declaration_count": 6,
+    "direct_imports": [
+      "ImbalancedChen.Part3TransposedDispersion"
+    ],
+    "freeze_status": "Parent supplied as draft, not runtime-frozen at review time."
+  },
+  "all_complete_source_headers": [
+    {
+      "name": "alpha_card_le_twice_U",
+      "kind": "theorem",
+      "private": true,
+      "line": 24,
+      "complete_source_header": "private theorem alpha_card_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : (d.alphaCarrier.card : ℝ) ≤ 2 * d.U"
+    },
+    {
+      "name": "alpha_sum_ite_norm_le_card",
+      "kind": "theorem",
+      "private": true,
+      "line": 38,
+      "complete_source_header": "private theorem alpha_sum_ite_norm_le_card\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (p : ℕ → Prop) :\n    ‖∑ n ∈ d.alphaCarrier, if p n then d.alpha n else 0‖ ≤ (d.alphaCarrier.card : ℝ)"
+    },
+    {
+      "name": "auxSWError_norm_le_four_U",
+      "kind": "theorem",
+      "private": false,
+      "line": 55,
+      "complete_source_header": "theorem auxSWError_norm_le_four_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (k q b : ℕ) :\n    ‖d.auxSWError k q b‖ ≤ 4 * d.U"
+    },
+    {
+      "name": "aux_tau_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 81,
+      "complete_source_header": "private theorem aux_tau_bound (C0 : ℕ) {k : ℕ} (hk : 1 ≤ k) :\n    (k.divisors.card : ℝ) ^ C0 ≤ (fouvryTau (2 ^ C0) k : ℝ)"
+    },
+    {
+      "name": "one_le_aux_tau",
+      "kind": "theorem",
+      "private": true,
+      "line": 86,
+      "complete_source_header": "private theorem one_le_aux_tau (C0 : ℕ) {k : ℕ} (hk : 1 ≤ k) :\n    (1 : ℝ) ≤ fouvryTau (2 ^ C0) k"
+    },
+    {
+      "name": "uniformAuxiliarySW_transposedPaired_upperEndpoint",
+      "kind": "theorem",
+      "private": false,
+      "line": 99,
+      "complete_source_header": "theorem uniformAuxiliarySW_transposedPaired_upperEndpoint\n    {ι : Type*} (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 : ℝ)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∀ N : ℕ, ∃ C : ℝ, 0 < C ∧ ∀ i : ι, ∀ k q b : ℕ,\n      1 ≤ k → 1 ≤ q → Nat.Coprime b q →\n      ‖(F i).transposedPairedSWError k q b‖ ≤\n        C * (2 * (F i).U) * (fouvryTau (2 ^ C0) k : ℝ) /\n          Real.log (4 * (F i).U) ^ N"
+    }
+  ],
+  "premise_scope": {
+    "supplied": "One fixed family F, fixed B,C0,sigma,kappa,c0, all atoms original MediumAdmissible, and exactly the pre-existing UniformAuxiliarySW F C0.",
+    "new_analytic_supply_premises": [],
+    "quantifier_order": "forall natural N, exists real C>0, forall family i, forall natural k,q,b, k>=1 and q>=1 and Coprime b q imply the stated global upper-endpoint norm bound. No atom-scale threshold remains in the result.",
+    "target": "Complex transposedPairedSWError bounded by C*(2*old U)*tau_(2^C0)(k)/log(4*old U)^N."
+  },
+  "semantic_checks": [
+    {
+      "scope": "Literal finite small-scale bound",
+      "finding": "Original U>=1 puts alphaCarrier inside Ioc(0,floor(2U)), hence card(alphaCarrier)<=2U. Original alpha norm<=1 bounds each conditional sum by that card. The totient denominator either vanishes under total division or is a natural at least one; the primitive mean has norm<=card as well. Thus auxSWError norm<=4U for all k,q,b, with no SW use or residue restriction."
+    },
+    {
+      "scope": "Fixed auxiliary order conversion",
+      "finding": "For k>=1, divisors(k) is nonempty. The pinned fouvryTau_two and fouvryTau_pow_le give divisor(k)^C0<=tau_(2^C0)(k), and the latter is >=1. The argument retains C0=0 and k=1."
+    },
+    {
+      "scope": "Large-scale payment",
+      "finding": "Apply existing SW at real exponent N+1, with K=max(x0,exp(1)). When K<=X, log X>=1 and U<=X follow from original V>=1. Then log(4U)<=log4+logX<=4logX, so log(4U)^N<=4^N*logX^(N+1). The resulting C*4^N coefficient is increased to the global C prime, with the harmless factor 2 of T=2U preserved."
+    },
+    {
+      "scope": "Small-scale payment",
+      "finding": "When X<K, U<=X<=K, so log(4U)^N<=log(4K)^N. The literal finite 4U bound is at most [2*log(4K)^N]*(2U)*tau_(2^C0)(k)/log(4U)^N. This absorbs every small-scale atom in one family constant."
+    },
+    {
+      "scope": "Uniform positive constant and denominators",
+      "finding": "C prime=C*4^N+2*log(4K)^N+1 is positive and independent of i,k,q,b. U>=1 and K>1 make both logarithms positive, including N=0. The output has no threshold or new analytic premise and is stronger than a bare restatement of supplied SW."
+    },
+    {
+      "scope": "Actual paired dictionary",
+      "finding": "The final proof rewrites the exact transposedPairedSWError to original auxSWError. Thus all original interval points, signed moving residue, original atom fields and full physical labels remain attached to the paired coefficient. No old same-W dispersion identity or beta SW premise is substituted."
+    }
+  ],
+  "provider_relation": {
+    "previous_source_only_pin_report": ".lake/proof-continuation/source-reviews/20261016-zero-mode-primitive-centre-reuse-scope.json",
+    "pinned_definitions_reproduced_from_prior_source_extraction": [
+      {
+        "name": "betaCoprimeAPDiscrepancy",
+        "kind": "def",
+        "line": 270,
+        "complete_source_header": "def betaCoprimeAPDiscrepancy (N : Finset ℕ) (β : ℕ → ℝ) (d h b : ℕ) : ℝ",
+        "primitive_source_definition": "def betaCoprimeAPDiscrepancy (N : Finset ℕ) (β : ℕ → ℝ) (d h b : ℕ) : ℝ :=\n  (∑ n ∈ N, if n.Coprime h ∧ Nat.ModEq d n b then β n else 0) -\n    coprimeMass N β (d * h) / (d.totient : ℝ)"
+      },
+      {
+        "name": "BetaCoprimeSWFamily",
+        "kind": "def",
+        "line": 24,
+        "complete_source_header": "def BetaCoprimeSWFamily {ι : Type*} (κ : ℕ) (T : ι → ℝ)\n    (N : ι → Finset ℕ) (β : ι → ℕ → ℝ) : Prop",
+        "primitive_source_definition": "def BetaCoprimeSWFamily {ι : Type*} (κ : ℕ) (T : ι → ℝ)\n    (N : ι → Finset ℕ) (β : ι → ℕ → ℝ) : Prop :=\n  ∀ B : ℕ, ∃ C : ℝ, 0 < C ∧\n    ∀ i : ι, ∀ d h : ℕ, 0 < d → 0 < h → ∀ b : ℕ, b.Coprime d →\n      |betaCoprimeAPDiscrepancy (N i) (β i) d h b| ≤\n        C * T i * (fouvryTau κ h : ℝ) / Real.log (2 * T i) ^ B"
+      }
+    ],
+    "feasible_adapter": "At T=2U and paired coefficient equal zero-padded original alpha, the complex norm bound dominates each real component of the provider AP-minus-coprime-mean discrepancy, after matching the two predicate orders and commuting k*q. This file supplies the real global constant and log/auxiliary-order conversion. It does not declare the provider BetaCoprimeSWFamily object itself.",
+    "remaining_finite_dictionary": "Construct real or imaginary component BetaCoprimeSWFamily with N equal transposed betaCarrier (or original interval carrier), prove projection through sums and division by real totient, and reorder AP/coprime predicates. These are finite identities, not extra analytic supply."
+  },
+  "source_visible_lean_review": {
+    "issues_found": [],
+    "checks": [
+      "The alpha coefficient destructuring selects conjunct 13 of original MediumAdmissible, and beta/gamma assumptions are not repurposed.",
+      "Complex.norm_natCast and Real.log_le_sub_one_of_pos names/signatures were inspected in pinned Mathlib source.",
+      "The large-scale division uses strictly positive log powers; both coefficient enlargements multiply only nonnegative U and divisor values.",
+      "The small-scale inequality uses tau>=1 and handles N=0.",
+      "No obvious unused local binder, incorrect sum order, or source-level proof target mismatch was identified. This is not Lean/linter acceptance."
+    ]
+  },
+  "import_scope": {
+    "only_direct_import": "ImbalancedChen.Part3TransposedDispersion",
+    "direct_import_current_sha256": "4215da6db38f3efb2eb694ed89cebd7ebb573b2871da938c0bf303cc8fab67e1",
+    "matching_source_review": ".lake/proof-continuation/source-reviews/20261016-transposed-dispersion-first-diagnostic-rebind-scope.json",
+    "matching_source_review_sha256": "f31f7d8ec4f840a8aa9bb843a584cf8c6f9bd0cbea03ed8c653f997b6db72517",
+    "new_foreign_direct_roots": [],
+    "new_direct_import_relative_to_reviewed_Transposed": false,
+    "method": "Read candidate direct import and verify unchanged reviewed parent-root bytes. No walker or full-DAG census performed.",
+    "no_ActualLargeMass_dependency_added": true
+  },
+  "not_supplied": [
+    "No provider import or actual BetaCoprimeSWFamily declaration is added.",
+    "No zero-mode/primitive V,U dictionary or numerical payment is proved in this file.",
+    "No nonzero-frequency, gcd-coordinate, energy or RestrictedMediumObligation estimate is supplied."
+  ],
+  "evidence_boundary": {
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "heavy_runtime_invoked": false,
+    "object_files_used_as_evidence": false,
+    "compiled_type_export_performed": false,
+    "axiom_audit_performed": false,
+    "acceptance_mutated": false,
+    "mathematical_source_modified_by_reviewer": false,
+    "claim": "SOURCE_ONLY semantic and complete source-header review; no object, elaborated type, axiom, kernel, linter or build acceptance."
+  },
+  "rebind": {
+    "prior_review": ".lake/proof-continuation/source-reviews/20261016-paired-upper-endpoint-sw-draft-scope.json",
+    "prior_review_sha256": "87da5fb72345265bb5ada3306501c62f47c11656f0368c01d17349cefe162df9",
+    "SW_source_bytes_unchanged": true,
+    "all_six_headers_unchanged": true,
+    "only_parent_source_change": "TransposedDispersion 93a117 -> 4215da; exact five proof-only reverse rebind above.",
+    "SW_statement_proof_and_import_lines_changed": false,
+    "new_foreign_direct_roots": [],
+    "claim_limit": "Source dependency metadata rebind only; no runtime/type acceptance."
+  }
+}

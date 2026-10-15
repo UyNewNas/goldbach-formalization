@@ -1,0 +1,162 @@
+{
+  "status": "SOURCE_ONLY_AUTHOR_ACTUAL_SORTED_FINE_LABEL_SELECTOR_CANDIDATE_NOT_COMPILED",
+  "reviewer": "/root/tail_resume/greedy_review; source author, not independent review",
+  "module": "ImbalancedChen.ActualPrimeFineLabelSortedSelector",
+  "source": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualPrimeFineLabelSortedSelector.lean",
+  "source_sha256": "2f6ef63e58b72f090d8d2a8ddc96aaaa19571ab1bcf49c860ef37c3f9d391cab",
+  "complete_declarations": [
+    {
+      "name": "actualPrimeSlotBox_replicate_sort",
+      "kind": "theorem",
+      "line": 24,
+      "complete_signature": "theorem actualPrimeSlotBox_replicate_sort {ι : Type*} (B : ι → Finset ℕ)\n    (i : ι) (m : ℕ) (ps : List ℕ)\n    (hps : ps ∈ actualPrimeSlotBox B (List.replicate m i)) :\n    ps.mergeSort (· ≥ ·) ∈ actualPrimeSlotBox B (List.replicate m i) ∧\n      (ps.mergeSort (· ≥ ·)).Perm ps ∧ (ps.mergeSort (· ≥ ·)).SortedGE"
+    },
+    {
+      "name": "actualPrimeFineLabelFinset_prime_lt",
+      "kind": "theorem",
+      "line": 37,
+      "complete_signature": "theorem actualPrimeFineLabelFinset_prime_lt {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) {i j p q : ℕ} (hji : j < i)\n    (hp : p ∈ actualPrimeFineLabelFinset N τ i)\n    (hq : q ∈ actualPrimeFineLabelFinset N τ j) : q < p"
+    },
+    {
+      "name": "actualPrimeFineLabelBlocks_sort",
+      "kind": "theorem",
+      "line": 53,
+      "complete_signature": "theorem actualPrimeFineLabelBlocks_sort {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) :\n    ∀ blocks : List (ℕ × ℕ), blocks.Pairwise (fun b c => c.1 < b.1) →\n      ∀ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks),\n      ∃ qs ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks), qs.Perm ps ∧ qs.SortedGE"
+    },
+    {
+      "name": "actualPrimeFineLabelSortedTuples",
+      "kind": "def",
+      "line": 100,
+      "complete_signature": "def actualPrimeFineLabelSortedTuples (N : ℕ) (τ : ℝ) (blocks : List (ℕ × ℕ)) :\n    Finset (List ℕ)",
+      "complete_definition": "def actualPrimeFineLabelSortedTuples (N : ℕ) (τ : ℝ) (blocks : List (ℕ × ℕ)) :\n    Finset (List ℕ) :=\n  (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n    (actualPrimeLabelBlocksWord blocks)).filter List.SortedGT"
+    },
+    {
+      "name": "actualPrimeFineLabelSortedProducts",
+      "kind": "def",
+      "line": 105,
+      "complete_signature": "def actualPrimeFineLabelSortedProducts (N : ℕ) (τ : ℝ) (blocks : List (ℕ × ℕ)) :\n    Finset ℕ",
+      "complete_definition": "def actualPrimeFineLabelSortedProducts (N : ℕ) (τ : ℝ) (blocks : List (ℕ × ℕ)) :\n    Finset ℕ :=\n  (actualPrimeFineLabelSortedTuples N τ blocks).image List.prod"
+    },
+    {
+      "name": "actualPrimeFineLabelSortedIndicator",
+      "kind": "def",
+      "line": 109,
+      "complete_signature": "def actualPrimeFineLabelSortedIndicator (N : ℕ) (τ : ℝ) (blocks : List (ℕ × ℕ))\n    (n : ℕ) : ℝ",
+      "complete_definition": "def actualPrimeFineLabelSortedIndicator (N : ℕ) (τ : ℝ) (blocks : List (ℕ × ℕ))\n    (n : ℕ) : ℝ :=\n  if n ∈ actualPrimeFineLabelSortedProducts N τ blocks then 1 else 0"
+    },
+    {
+      "name": "mem_actualPrimeFineLabelSortedProducts_iff",
+      "kind": "theorem",
+      "line": 113,
+      "complete_signature": "theorem mem_actualPrimeFineLabelSortedProducts_iff {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ))\n    (horder : blocks.Pairwise (fun b c => c.1 < b.1)) (n : ℕ) :\n    n ∈ actualPrimeFineLabelSortedProducts N τ blocks ↔\n      Squarefree n ∧ n ∈ (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n        (actualPrimeLabelBlocksWord blocks)).image List.prod"
+    },
+    {
+      "name": "actualPrimeFineLabelSortedTuples_product_injective",
+      "kind": "theorem",
+      "line": 140,
+      "complete_signature": "theorem actualPrimeFineLabelSortedTuples_product_injective (N : ℕ) (τ : ℝ)\n    (blocks : List (ℕ × ℕ)) :\n    ∀ ps ∈ actualPrimeFineLabelSortedTuples N τ blocks,\n      ∀ qs ∈ actualPrimeFineLabelSortedTuples N τ blocks,\n        ps.prod = qs.prod → ps = qs"
+    },
+    {
+      "name": "actualPrimeFineLabelSorted_moebius_fibre",
+      "kind": "theorem",
+      "line": 158,
+      "complete_signature": "theorem actualPrimeFineLabelSorted_moebius_fibre {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ))\n    (horder : blocks.Pairwise (fun b c => c.1 < b.1)) (r n : ℕ) :\n    ((ArithmeticFunction.moebius (r * n) : ℝ) * actualPrimeTupleCoefficient\n        (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n          (actualPrimeLabelBlocksWord blocks)) n) /\n        (actualPrimeLabelBlocksFactorial blocks : ℝ) =\n      (ArithmeticFunction.moebius (r * n) : ℝ) *\n        actualPrimeFineLabelSortedIndicator N τ blocks n"
+    },
+    {
+      "name": "actualPrimeFineLabelSorted_literal_multiplicity",
+      "kind": "theorem",
+      "line": 183,
+      "complete_signature": "theorem actualPrimeFineLabelSorted_literal_multiplicity {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ))\n    (horder : blocks.Pairwise (fun b c => c.1 < b.1)) (n : ℕ) :\n    (if Squarefree n then (actualPrimeTupleCoefficient\n        (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n          (actualPrimeLabelBlocksWord blocks)) n : ℝ) else 0) =\n      (actualPrimeLabelBlocksFactorial blocks : ℝ) *\n        actualPrimeFineLabelSortedIndicator N τ blocks n"
+    },
+    {
+      "name": "actualPrimeFineLabelSorted_original_scalar",
+      "kind": "theorem",
+      "line": 208,
+      "complete_signature": "theorem actualPrimeFineLabelSorted_original_scalar {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (blocks : List (ℕ × ℕ))\n    (horder : blocks.Pairwise (fun b c => c.1 < b.1)) (r : ℕ) (c : ℝ) (H : ℕ → ℝ) :\n    (c / (actualPrimeLabelBlocksFactorial blocks : ℝ)) *\n        (∑ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ)\n          (actualPrimeLabelBlocksWord blocks),\n          (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) =\n      c * ∑ n ∈ actualPrimeFineLabelSortedProducts N τ blocks,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n"
+    }
+  ],
+  "theorem_count": 8,
+  "definition_count": 3,
+  "source_lines": 235,
+  "direct_project_parent": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualPrimeDisjointLabelProducts.lean",
+    "sha256": "30c9cc4ae1f639481f981b73f9b910d0d09edfd45d5c020cb55fa10c808e2906",
+    "acceptance": "source candidate, not asserted owned"
+  },
+  "new_direct_foreign_imports": [],
+  "relative_import_scope": "Only30c project parent and implicit Init. All used List.Sort and Moebius APIs are already imported by the actual parent chain; no full properDAG or imported-closure replay claimed.",
+  "mathematics": [
+    "The fine blocks are listed in strictly decreasing distinct labels (j,m_j), giving the original weakly decreasing repeated-label word. Empty blocks are allowed; each 0! remains1.",
+    "Merge sorting is applied within each original repeated-label block, preserving length, membership in exactly that prime interval, and full product.",
+    "The original half-open intervals themselves imply every prime in a higher label is larger than every prime in a lower label. Induction concatenates the sorted blocks into one weakly decreasing representative in the same original slot box; no caller sorting-membership licence is accepted.",
+    "If the actual full product is squarefree, unique prime factorization proves the original vector Nodup. The sorted representative is then strictly decreasing. Conversely a strictly decreasing prime vector has a squarefree product.",
+    "Exact equivalence: sorted product image = original full product image restricted to Squarefree. No equal-prime diagonal is deleted by a factorial or by null-wall reasoning.",
+    "Any two actual strictly decreasing prime vectors with the same product are equal, proved by prime factorization plus sorted permutation uniqueness.",
+    "Literal coefficient identity: 1_squarefree(n) * T_J(n) = M_J * A_J(n), where T_J is the actual original labelled-slot fibre card, M_J=product block multiplicity factorials, A_J is the indicator of the actual sorted strictly decreasing prime-box products.",
+    "The mu(r*n)-weighted fibre identity retains complete original Mobius weight, including repeated primes, cross-block factors and the fixed external factor r.",
+    "The original scalar c/M_J times the original full Cartesian tuple mu sum equals c times exactly the sorted-squarefree product sum with the same H(n). The scalar c is restored once and may already carry original signs."
+  ],
+  "fixed_api_read_checks": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/List/Sort.lean",
+      "sha256": "a65c7f1e0ebe02f1fd8fa923d06df360db27bab16c0f1f8a9eff729c2ea5ed48",
+      "lines": "624-639,685-686",
+      "api": "SortedGE.sortedGT_of_nodup; Perm.eq_of_sortedGE with sorted proofs before permutation; sortedGE_mergeSort"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/List/Sort/Lemmas.lean",
+      "lines": "280-296",
+      "api": "mergeSort_perm, its length_eq and mem_iff preserve the original repeated-label block"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/List/Pairwise.lean",
+      "lines": "38-41,156-158",
+      "api": "Pairwise.imp and pairwise_append match block induction"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/ArithmeticFunction/Moebius.lean",
+      "sha256": "3d739a22865bed810b05ccdec05f16c18000d9c0737b4a12fee7494713d06e23",
+      "lines": "69-73",
+      "api": "moebius_ne_zero_iff_squarefree justifies cancellation only in squarefree branch"
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualPrimeSlotSquarefreeSymmetry.lean",
+      "sha256": "e3f4e00e2dfc3face13688da430c2b499155fa5e592ef14cfefc9028c2b590c8",
+      "api": "actualPrimeVector_nodup_of_squarefree; actualPrimeVector_squarefree is inherited from Dwell; no new squarefree premise in final literal multiplicity identity"
+    }
+  ],
+  "manuscript_reference": {
+    "repository": "../chen-imbalanced-semiprimes",
+    "commit": "ba6ec11d800eccc54406490631895e174de85766",
+    "path": "proof-library/source/imbalanced-chen-transfer.tex",
+    "lines": "1086-1118",
+    "scope": "This leaf proves the actual sorted squarefree selector identity for the supplied decreasing fine-label block word, with the literal original M_J and full mu weight."
+  },
+  "remaining_gates": [
+    "Canonical decomposition of every arbitrary original weak-label J into its distinct decreasing blocks and identification of original interval-index multiplicity notation with the constructed word. For the supplied block word all multiplicities are literal by construction; no arbitrary-J decomposition theorem is asserted.",
+    "Carry the original retained J family and its same-policy whole-box slot assignment into the scalar sum. This leaf transports only H of the full product; it does not permute arbitrary coordinate-dependent weights.",
+    "Combine with the existing exact three-group convolution normalization and restore its group factorials once. No new group or distribution theorem is asserted here.",
+    "Actual 6144 proof/API execution and full owned acceptance of pending source candidates. Fixed API source reads do not imply successful elaboration.",
+    "No original arithmetic counting remainder, dispersion endpoint, signed mean, numerical integral value, or final Chen constant follows from this finite dictionary alone."
+  ],
+  "pins": {
+    "lake-manifest.json": {
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "bytes_equal_HEAD": true
+    },
+    "lean-toolchain": {
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "bytes_equal_HEAD": true
+    },
+    "lakefile.toml": {
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "bytes_equal_HEAD": true
+    }
+  },
+  "public_name_collision_scan": "All11 public names searched against other current project Lean files; no duplicates.",
+  "lean_invoked": false,
+  "build_invoked": false,
+  "checker_or_pins_modified": false,
+  "frozen_parent_modified": false,
+  "candidate_freeze": "2f6ef63e58b72f090d8d2a8ddc96aaaa19571ab1bcf49c860ef37c3f9d391cab; no further edits without explicit independent finding or actual diagnostic."
+}

@@ -1,0 +1,138 @@
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+ImbalancedChen/Part3TransposedGCDPoissonMask.lean:85:59: error: unsolved goals
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+n₁ : ℕ
+a✝³ : n₁ ∈ d.transposedAtom.betaCarrier
+n₂ : ℕ
+a✝² : n₂ ∈ d.transposedAtom.betaCarrier
+a : ℕ × ℕ × ℕ
+a✝¹ : a ∈ d.transposedAtom.complexFactorLabels
+b : ℕ × ℕ × ℕ
+a✝ : b ∈ d.transposedAtom.complexFactorLabels
+⊢ d.transposedAtom.complexFactorGamma a * d.transposedAtom.beta n₁ * star (d.transposedAtom.beta n₂) *
+        star (d.transposedAtom.complexFactorGamma b) *
+      ↑(ComplexCRT.constructedProgressionWeight d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight
+          d.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂) =
+    d.transposedAtom.complexFactorGamma a * d.transposedAtom.beta n₁ * star (d.transposedAtom.beta n₂) *
+        star (d.transposedAtom.complexFactorGamma b) *
+      ↑(ComplexCRT.constructedProgressionWeight d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight
+          d.transposedAtom.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂)
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+ImbalancedChen/Part3TransposedGCDPoissonMask.lean:141:2: error: unsolved goals
+case pos
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+n₁ n₂ : ℕ
+a : ℕ × ℕ × ℕ
+ha : a ∈ d.transposedAtom.complexFactorLabels
+b : ℕ × ℕ × ℕ
+hb : b ∈ d.transposedAtom.complexFactorLabels
+hc : ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂
+hD : 0 < (complexFactorModulus a).lcm (complexFactorModulus b)
+he :
+  (∑
+      m ∈
+        { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+            intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta, beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0,
+            gamma1 := d.gamma1, gamma2 := d.gamma2, gamma3 := d.gamma3 }.commonSmoothCarrier,
+      if
+          ↑m ≡ ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue [ZMOD
+            ↑((complexFactorModulus a).lcm (complexFactorModulus b))] then
+        CommonSmoothCutoff.scaledDyadicCutoff d.V ↑m
+      else 0) =
+    d.V / ↑((complexFactorModulus a).lcm (complexFactorModulus b)) * CommonSmoothCutoff.cutoffMass +
+      (∑' (h : ℤ),
+          CommonSmoothCutoff.poissonNonzeroFrequency (d.V / ↑((complexFactorModulus a).lcm (complexFactorModulus b)))
+            (↑(ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue) /
+              ↑((complexFactorModulus a).lcm (complexFactorModulus b)))
+            h).re
+⊢ d.complexFactorGamma a * star (d.complexFactorGamma b) *
+        ↑(d.V * (↑((complexFactorModulus a).lcm (complexFactorModulus b)))⁻¹ * CommonSmoothCutoff.cutoffMass) +
+      d.complexFactorGamma a * star (d.complexFactorGamma b) *
+        ↑(∑' (h : ℤ),
+              CommonSmoothCutoff.poissonNonzeroFrequency
+                (d.V * (↑((complexFactorModulus a).lcm (complexFactorModulus b)))⁻¹)
+                ((↑((complexFactorModulus a).lcm (complexFactorModulus b)))⁻¹ *
+                  ↑(ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue))
+                h).re =
+    ↑(d.V * (↑((complexFactorModulus a).lcm (complexFactorModulus b)))⁻¹ * CommonSmoothCutoff.cutoffMass) *
+          { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                intervalHi := ↑⌊d.V * 2⌋₊, alpha := d.beta,
+                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                gamma3 := d.gamma3 }.complexFactorGamma
+            a *
+        star
+          ({ U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                intervalHi := ↑⌊d.V * 2⌋₊, alpha := d.beta,
+                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                gamma3 := d.gamma3 }.complexFactorGamma
+            b) +
+      ↑(∑' (h : ℤ),
+                CommonSmoothCutoff.poissonNonzeroFrequency
+                  (d.V * (↑((complexFactorModulus a).lcm (complexFactorModulus b)))⁻¹)
+                  ((↑((complexFactorModulus a).lcm (complexFactorModulus b)))⁻¹ *
+                    ↑(ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue))
+                  h).re *
+          { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                intervalHi := ↑⌊d.V * 2⌋₊, alpha := d.beta,
+                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                gamma3 := d.gamma3 }.complexFactorGamma
+            a *
+        star
+          ({ U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,
+                intervalHi := ↑⌊d.V * 2⌋₊, alpha := d.beta,
+                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,
+                gamma3 := d.gamma3 }.complexFactorGamma
+            b)
+ImbalancedChen/Part3TransposedGCDPoissonMask.lean:244:51: error: unsolved goals
+case e'_4
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+hh :
+  ∑ q ∈ d.physicalFactorModuli,
+      ∑ r ∈ d.physicalFactorModuli, |‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ / ↑(q.lcm r)| ≤
+    (1 + Real.log d.physicalFactorCap) ^ (2 * 3 ^ 2 + 1)
+⊢ (1 + Real.log d.physicalFactorCap) ^ 19 = (1 + Real.log d.physicalFactorCap) ^ (2 * 3 ^ 2 + 1)
+ImbalancedChen/Part3TransposedGCDPoissonMask.lean:284:42: error: Application type mismatch: The argument
+  Nat.cast_nonneg (q.lcm r)
+has type
+  @OfNat.ofNat ?m.258 0 (@Zero.toOfNat0 ?m.258 instMulZeroClassOfSemiring.toZero) ≤ ↑(q.lcm r)
+but is expected to have type
+  @OfNat.ofNat ?m.253 0 (@Zero.toOfNat0 ?m.253 SubtractionMonoid.toSubNegZeroMonoid.toNegZeroClass.toZero) ≤ ?m.256
+in the application
+  abs_of_nonneg (Nat.cast_nonneg (q.lcm r))
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+ImbalancedChen/Part3TransposedGCDPoissonMask.lean:285:24: error: unsolved goals
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+n₁ n₂ q : ℕ
+a✝¹ : q ∈ d.physicalFactorModuli
+r : ℕ
+a✝ : r ∈ d.physicalFactorModuli
+hc : ComplexCRT.Compatible q r n₁ n₂
+⊢ ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ * |d.V| * |↑(q.lcm r)|⁻¹ * |CommonSmoothCutoff.cutoffMass| =
+    ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ * |d.V| * |CommonSmoothCutoff.cutoffMass| * (↑(q.lcm r))⁻¹

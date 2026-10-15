@@ -1,0 +1,217 @@
+{
+  "status": "FULL_SOURCE_ONLY_ROOT_INDEPENDENT_SEMANTICS_AND_COMPLETE_TYPE_METADATA_CORRECTION_PENDING_ACTUAL_RUNTIME",
+  "reviewer": "/root (independent of lower review)",
+  "reviewed_at_utc": "2026-10-15T21:49:16.595363+00:00",
+  "reason": "Historical lower reports used first := and consequently truncated Odd/Even boundary-map injOn theorem headers at the named argument (k := k). Full source and mathematical reviews were intact. This addendum reads each complete theorem through its actual := by separator, keeping all named arguments and correcting only reported metadata boundaries, with exact unchanged Lean source bytes.",
+  "modules": [
+    {
+      "path": "ImbalancedChen/ActualRosserOddBox.lean",
+      "sha256": "2beffd8af22239e3a5428713c614e8e37bcbb300b16c950ff254d2c9ba031888",
+      "declaration_count": 9,
+      "definition_count": 2,
+      "all_complete_headers_and_definitions": [
+        {
+          "name": "actualRosserOddTail",
+          "kind": "def",
+          "private": false,
+          "complete_source_header": "def actualRosserOddTail {k : ℕ} (p : Fin (2 * k + 1) → ℕ) : Finset ℕ",
+          "complete_definition": "def actualRosserOddTail {k : ℕ} (p : Fin (2 * k + 1) → ℕ) : Finset ℕ :=\n  Finset.univ.image (fun i : Fin (2 * k) => p i.castSucc)"
+        },
+        {
+          "name": "actualRosserOddBoundaryMap",
+          "kind": "def",
+          "private": false,
+          "complete_source_header": "def actualRosserOddBoundaryMap {k : ℕ} (p : Fin (2 * k + 1) → ℕ) :\n    Sigma (fun _ : ℕ => Finset ℕ)",
+          "complete_definition": "def actualRosserOddBoundaryMap {k : ℕ} (p : Fin (2 * k + 1) → ℕ) :\n    Sigma (fun _ : ℕ => Finset ℕ) :=\n  ⟨p (Fin.last (2 * k)), actualRosserOddTail p⟩"
+        },
+        {
+          "name": "actualRosserOddTail_card",
+          "kind": "theorem",
+          "private": false,
+          "complete_source_header": "theorem actualRosserOddTail_card {k : ℕ} {p : Fin (2 * k + 1) → ℕ}\n    (hp : Function.Injective p) : (actualRosserOddTail p).card = 2 * k"
+        },
+        {
+          "name": "actualRosserOddTail_prod",
+          "kind": "theorem",
+          "private": false,
+          "complete_source_header": "theorem actualRosserOddTail_prod {k : ℕ} {p : Fin (2 * k + 1) → ℕ}\n    (hp : Function.Injective p) (g : ℕ → ℝ) :\n    (∏ r ∈ actualRosserOddTail p, g r) = ∏ i : Fin (2 * k), g (p i.castSucc)"
+        },
+        {
+          "name": "actualRosserOddTail_range",
+          "kind": "theorem",
+          "private": false,
+          "complete_source_header": "theorem actualRosserOddTail_range {k : ℕ} (p : Fin (2 * k + 1) → ℕ) :\n    Set.range p = (↑(actualRosserOddTail p) : Set ℕ) ∪ {p (Fin.last (2 * k))}"
+        },
+        {
+          "name": "actualRosserOddBoundaryMap_injOn_strictAnti",
+          "kind": "theorem",
+          "private": false,
+          "complete_source_header": "theorem actualRosserOddBoundaryMap_injOn_strictAnti {k : ℕ}\n    (T : Finset (Fin (2 * k + 1) → ℕ)) (hT : ∀ p ∈ T, StrictAnti p) :\n    Set.InjOn (actualRosserOddBoundaryMap (k := k)) (T : Set (Fin (2 * k + 1) → ℕ))"
+        },
+        {
+          "name": "actualRosserOddTail_rank_eq",
+          "kind": "theorem",
+          "private": false,
+          "complete_source_header": "theorem actualRosserOddTail_rank_eq {k l : ℕ}\n    {p : Fin (2 * k + 1) → ℕ} {r : Fin (2 * l + 1) → ℕ}\n    (hp : Function.Injective p) (hr : Function.Injective r)\n    (heq : actualRosserOddTail p = actualRosserOddTail r) : k = l"
+        },
+        {
+          "name": "odd_box_upper_le",
+          "kind": "theorem",
+          "private": true,
+          "complete_source_header": "private theorem odd_box_upper_le {k : ℕ} {a b : Fin (2 * k + 1) → ℝ} {u : ℝ}\n    (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k), b i.succ ≤ a i.castSucc) (hbu : b 0 ≤ u) :\n    ∀ i, b i ≤ u"
+        },
+        {
+          "name": "actualRosserOddBox_mem_boundary",
+          "kind": "theorem",
+          "private": false,
+          "complete_source_header": "theorem actualRosserOddBox_mem_boundary\n    (k N cap : ℕ) (hN : 1 < N) (a b : Fin (2 * k + 1) → ℝ) (u beta : ℝ)\n    (hbeta : 0 < beta) (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k), b i.succ ≤ a i.castSucc)\n    (hbu : b 0 ≤ u)\n    (hprod : (∑ i : Fin (2 * k), b i.castSucc) ≤ beta)\n    (hprefix : ∀ i : Fin (2 * k), Even i.val →\n      (∑ j : Fin (2 * k) with j.val < i.val, b j.castSucc) + 3 * b i.castSucc ≤ beta)\n    (hshell : beta ≤ (∑ i : Fin (2 * k), a i.castSucc) +\n      3 * a (Fin.last (2 * k)))\n    (hcap : (N : ℝ) ^ u ≤ (cap : ℝ))\n    {p : Fin (2 * k + 1) → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b) :\n    p (Fin.last (2 * k)) ∈ actualSmallPrimeFinset N cap ((N : ℝ) ^ u) ∧\n      actualRosserOddTail p ∈ actualUpperRosserBoundarySets N cap\n        ((N : ℝ) ^ u) ((N : ℝ) ^ beta) (p (Fin.last (2 * k))) ∧\n      (actualRosserOddTail p).card = 2 * k"
+        }
+      ],
+      "prior_independent_review": {
+        "path": ".lake/proof-continuation/source-reviews/20261016-ActualRosserOddBox-lower-independent-semantics.json",
+        "sha256": "6347903eb31a09f95f7717260802f7a486c3b7647fc1393d2c752c1d22605c0e",
+        "historical_bytes_preserved": true
+      },
+      "root_all_proofs_and_source_read": true,
+      "root_mathematical_review": [
+        "Strictly decreasing actual prime tuples give injective boundary maps with exact even tail rank, including k=0 empty tail.",
+        "All finite products and each even-index cubic test are strictly below the same real N^beta, hence below Nat.ceil(N^beta); positive beta pays the empty-tail total product.",
+        "The terminal weak real crossing gives ceil(N^beta)<=integer crossing product. Same actual cap coverage, target exclusions and true smallest prime give actual upper boundary membership."
+      ],
+      "issues_found": []
+    },
+    {
+      "path": "ImbalancedChen/ActualPrimeBoxEulerLower.lean",
+      "sha256": "adc0657ea574d58a0364423062c556119a06380b6edcdb31d6175ca3f99083cb",
+      "declaration_count": 4,
+      "definition_count": 1,
+      "all_complete_headers_and_definitions": [
+        {
+          "name": "actualSmallEulerProduct_antitone_cutoff",
+          "kind": "theorem",
+          "private": false,
+          "complete_source_header": "theorem actualSmallEulerProduct_antitone_cutoff\n    (N cap : ℕ) (hEven : Even N) (x y : ℝ)\n    (hxy : x ≤ y) (hycap : y ≤ (cap : ℝ)) :\n    actualSmallEulerProduct N cap y ≤ actualSmallEulerProduct N cap x"
+        },
+        {
+          "name": "actualPrimeBoxEulerMass",
+          "kind": "def",
+          "private": false,
+          "complete_source_header": "def actualPrimeBoxEulerMass {k : ℕ} (N cap : ℕ) (a b : Fin k → ℝ)\n    (u : ℝ) (j : Fin k) : ℝ",
+          "complete_definition": "def actualPrimeBoxEulerMass {k : ℕ} (N cap : ℕ) (a b : Fin k → ℝ)\n    (u : ℝ) (j : Fin k) : ℝ :=\n  ∑ p ∈ actualPrimeBoxTuples N a b,\n    (∏ i, 1 / ((p i : ℝ) - 1)) *\n      (actualSmallEulerProduct N cap (p j : ℝ) /\n        actualSmallEulerProduct N cap ((N : ℝ) ^ u))"
+        },
+        {
+          "name": "actualPrimeBoxEulerMass_ge_endpoint_ratio",
+          "kind": "theorem",
+          "private": false,
+          "complete_source_header": "theorem actualPrimeBoxEulerMass_ge_endpoint_ratio\n    {k : ℕ} (N cap : ℕ) (hN : 1 < N) (hEven : Even N)\n    (a b : Fin k → ℝ) (u : ℝ) (j : Fin k)\n    (hbu : b j ≤ u) (hcap : (N : ℝ) ^ u ≤ (cap : ℝ)) :\n    (actualSmallEulerProduct N cap ((N : ℝ) ^ b j) /\n        actualSmallEulerProduct N cap ((N : ℝ) ^ u)) *\n      actualPrimeBoxMass N a b ≤ actualPrimeBoxEulerMass N cap a b u j"
+        },
+        {
+          "name": "exists_actualPrimeBoxEulerMass_lower_threshold",
+          "kind": "theorem",
+          "private": false,
+          "complete_source_header": "theorem exists_actualPrimeBoxEulerMass_lower_threshold\n    {k : ℕ} (a b : Fin k → ℝ) (ha : ∀ i, 0 < a i) (hab : ∀ i, a i < b i)\n    (u : ℝ) (hu : 0 < u) (j : Fin k) (hbu : b j ≤ u)\n    (eta : ℝ) (heta : 0 < eta) :\n    ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n      ∀ cap : ℕ, (N : ℝ) ^ u ≤ (cap : ℝ) →\n        (u / b j) * (∏ i, Real.log (b i / a i)) - eta ≤\n          actualPrimeBoxEulerMass N cap a b u j"
+        }
+      ],
+      "prior_independent_review": {
+        "path": ".lake/proof-continuation/source-reviews/20261016-ActualPrimeBoxEulerLower-lower-independent-semantics.json",
+        "sha256": "5c650c363c7f4c6c77debdaec11f115982d767e564d16eaae801eb87188a768b",
+        "historical_bytes_preserved": true
+      },
+      "root_all_proofs_and_source_read": true,
+      "root_mathematical_review": [
+        "The actual covered Euler product is antitone in its strict real cutoff by the same finite sieve density and ceil monotonicity.",
+        "Every actual box weight is nonnegative and the coordinate Euler ratio is bounded below by its true upper endpoint ratio; denominator positivity is proved for the actual even target.",
+        "The actual prime reciprocal mass limit and genuine Euler ratio limit supply the lower threshold. N0 is fixed before every later even N and every cap covering N^u. No externally supplied convergence or Euler error hypothesis."
+      ],
+      "issues_found": []
+    },
+    {
+      "path": "ImbalancedChen/ActualRosserEvenBox.lean",
+      "sha256": "55287bfc6e22bfe8bb7f5d00a8698f4030c4c1cea23468c4edb72bea30a2bf52",
+      "declaration_count": 9,
+      "definition_count": 2,
+      "all_complete_headers_and_definitions": [
+        {
+          "name": "actualRosserEvenTail",
+          "kind": "def",
+          "private": false,
+          "complete_source_header": "def actualRosserEvenTail {k : ℕ} (p : Fin (2 * k + 2) → ℕ) : Finset ℕ",
+          "complete_definition": "def actualRosserEvenTail {k : ℕ} (p : Fin (2 * k + 2) → ℕ) : Finset ℕ :=\n  Finset.univ.image (fun i : Fin (2 * k + 1) => p i.castSucc)"
+        },
+        {
+          "name": "actualRosserEvenBoundaryMap",
+          "kind": "def",
+          "private": false,
+          "complete_source_header": "def actualRosserEvenBoundaryMap {k : ℕ} (p : Fin (2 * k + 2) → ℕ) :\n    Sigma (fun _ : ℕ => Finset ℕ)",
+          "complete_definition": "def actualRosserEvenBoundaryMap {k : ℕ} (p : Fin (2 * k + 2) → ℕ) :\n    Sigma (fun _ : ℕ => Finset ℕ) :=\n  ⟨p (Fin.last (2 * k + 1)), actualRosserEvenTail p⟩"
+        },
+        {
+          "name": "actualRosserEvenTail_card",
+          "kind": "theorem",
+          "private": false,
+          "complete_source_header": "theorem actualRosserEvenTail_card {k : ℕ} {p : Fin (2 * k + 2) → ℕ}\n    (hp : Function.Injective p) : (actualRosserEvenTail p).card = 2 * k + 1"
+        },
+        {
+          "name": "actualRosserEvenTail_prod",
+          "kind": "theorem",
+          "private": false,
+          "complete_source_header": "theorem actualRosserEvenTail_prod {k : ℕ} {p : Fin (2 * k + 2) → ℕ}\n    (hp : Function.Injective p) (g : ℕ → ℝ) :\n    (∏ r ∈ actualRosserEvenTail p, g r) = ∏ i : Fin (2 * k + 1), g (p i.castSucc)"
+        },
+        {
+          "name": "actualRosserEvenTail_range",
+          "kind": "theorem",
+          "private": false,
+          "complete_source_header": "theorem actualRosserEvenTail_range {k : ℕ} (p : Fin (2 * k + 2) → ℕ) :\n    Set.range p = (↑(actualRosserEvenTail p) : Set ℕ) ∪ {p (Fin.last (2 * k + 1))}"
+        },
+        {
+          "name": "actualRosserEvenBoundaryMap_injOn_strictAnti",
+          "kind": "theorem",
+          "private": false,
+          "complete_source_header": "theorem actualRosserEvenBoundaryMap_injOn_strictAnti {k : ℕ}\n    (T : Finset (Fin (2 * k + 2) → ℕ)) (hT : ∀ p ∈ T, StrictAnti p) :\n    Set.InjOn (actualRosserEvenBoundaryMap (k := k)) (T : Set (Fin (2 * k + 2) → ℕ))"
+        },
+        {
+          "name": "actualRosserEvenTail_rank_eq",
+          "kind": "theorem",
+          "private": false,
+          "complete_source_header": "theorem actualRosserEvenTail_rank_eq {k l : ℕ}\n    {p : Fin (2 * k + 2) → ℕ} {r : Fin (2 * l + 2) → ℕ}\n    (hp : Function.Injective p) (hr : Function.Injective r)\n    (heq : actualRosserEvenTail p = actualRosserEvenTail r) : k = l"
+        },
+        {
+          "name": "even_box_upper_le",
+          "kind": "theorem",
+          "private": true,
+          "complete_source_header": "private theorem even_box_upper_le {k : ℕ} {a b : Fin (2 * k + 2) → ℝ} {u : ℝ}\n    (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k + 1), b i.succ ≤ a i.castSucc) (hbu : b 0 ≤ u) :\n    ∀ i, b i ≤ u"
+        },
+        {
+          "name": "actualRosserEvenBox_mem_boundary",
+          "kind": "theorem",
+          "private": false,
+          "complete_source_header": "theorem actualRosserEvenBox_mem_boundary\n    (k N cap : ℕ) (hN : 1 < N) (a b : Fin (2 * k + 2) → ℝ) (u beta : ℝ)\n    (_hbeta : 0 < beta) (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k + 1), b i.succ ≤ a i.castSucc)\n    (hbu : b 0 ≤ u)\n    (hprod : (∑ i : Fin (2 * k + 1), b i.castSucc) ≤ beta)\n    (hprefix : ∀ i : Fin (2 * k + 1), Odd i.val →\n      (∑ j : Fin (2 * k + 1) with j.val < i.val, b j.castSucc) + 3 * b i.castSucc ≤ beta)\n    (hshell : beta ≤ (∑ i : Fin (2 * k + 1), a i.castSucc) +\n      3 * a (Fin.last (2 * k + 1)))\n    (hcap : (N : ℝ) ^ u ≤ (cap : ℝ))\n    {p : Fin (2 * k + 2) → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b) :\n    p (Fin.last (2 * k + 1)) ∈ actualSmallPrimeFinset N cap ((N : ℝ) ^ u) ∧\n      actualRosserEvenTail p ∈ actualLowerRosserBoundarySets N cap\n        ((N : ℝ) ^ u) ((N : ℝ) ^ beta) (p (Fin.last (2 * k + 1))) ∧\n      (actualRosserEvenTail p).card = 2 * k + 1"
+        }
+      ],
+      "prior_independent_review": {
+        "path": ".lake/proof-continuation/source-reviews/20261016-ActualRosserEvenBox-lower-independent-semantics.json",
+        "sha256": "ff3f12d343dbc0233bac90bc72a55630fef001c7272c15dada05ca5feee4bfff",
+        "historical_bytes_preserved": true
+      },
+      "root_all_proofs_and_source_read": true,
+      "root_mathematical_review": [
+        "The analogous actual tail rank is 2k+1 and includes the singleton-tail lowest layer. StrictAnti and range equality give injection; equal tail cardinalities separate ranks.",
+        "Original odd-index cubic tests and strict total product transport to the actual natural ceiling. The lower boundary native non-even index condition is converted to Odd before using its genuine original premise.",
+        "The terminal weak crossing, exact sorted-chain membership, true target-prime exclusions and original ambient cutoff are all preserved; no signed density estimate is assumed."
+      ],
+      "issues_found": []
+    }
+  ],
+  "historical_reports_unchanged": true,
+  "mathematical_or_source_change": false,
+  "dependency_scope": "These are the three read-only verified actual frontiers on the existing OwnCubeResidual chain. The other 24 conservatively blocked descendants and five uninstalled exact reuse candidates have no new authorization or acceptance from this source review.",
+  "evidence_boundary": {
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "objects_installed": false,
+    "project_or_foreign_bootstrap_invoked": false,
+    "pins_changed": false,
+    "runtime_or_kernel_or_axiom_acceptance_claimed": false,
+    "full_imported_closure_acceptance_claimed": false
+  }
+}

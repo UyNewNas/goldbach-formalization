@@ -1,0 +1,144 @@
+{
+  "status": "SOURCE_ONLY_EXACT_PROOF_REBIND_AFTER_REAL_D331_FAILURE_NO_LEAN_RETEST",
+  "reviewer": "independent /root/tail_resume/greedy_review",
+  "review_date": "2026-10-16",
+  "candidate": "ImbalancedChen.CurrentChenUpsilon9PanAggregate",
+  "source_sha256": "96ee69812a2197d283e187369fe3076fdf41c8567b5261f7423db381fa20d5f8",
+  "prior_report": {
+    "path": ".lake/proof-continuation/source-reviews/20261016-U9Pan-independent-proof-repair-rebind-d331a602.json",
+    "sha256": "4e973c9673a5db1845a8a1621974b49adf2d623e6a565c1fd4146dba206a205a",
+    "source_sha256": "d331a602c75a1b9d9aa2ecd0af69bb47dd32d49ca03658aeee6997e5d879fed4",
+    "historical_result": "PROOF_FAILED, only target_mod simplifier post-goal remained"
+  },
+  "exact_change": {
+    "from": "  simp only [primesInAPBelow, Nat.ModEq, Nat.mod_mod]",
+    "to": "  simp only [primesInAPBelow, Nat.ModEq, Nat.mod_mod]\n  rfl",
+    "count": 1,
+    "reverse_reproduces_exact_old_sha": true,
+    "change_kind": "Append rfl after old target_mod simp only; every other byte unchanged"
+  },
+  "declarations": [
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "currentChenUpsilon9PrefixAPCount",
+      "signature": "def currentChenUpsilon9PrefixAPCount (N d : ℕ) : ℝ",
+      "line": 33
+    },
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "currentChenUpsilon9PanError",
+      "signature": "def currentChenUpsilon9PanError (N d : ℕ) : ℝ",
+      "line": 38
+    },
+    {
+      "visibility": "private",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9_primesInAPBelow_target_mod",
+      "signature": "private theorem currentChenUpsilon9_primesInAPBelow_target_mod (N a d : ℕ) :\n    primesInAPBelow N a d (N % d) = primesInAPBelow N a d N",
+      "line": 43
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9_primesInAPBelow_eq_zero_of_not_coprime",
+      "signature": "theorem currentChenUpsilon9_primesInAPBelow_eq_zero_of_not_coprime\n    {N a d : ℕ} (hNd : Nat.Coprime N d) (had : ¬ Nat.Coprime a d) :\n    (primesInAPBelow N a d N : ℝ) = 0",
+      "line": 50
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9_prefixAPCount_eq_main_sub_defect_add_error",
+      "signature": "theorem currentChenUpsilon9_prefixAPCount_eq_main_sub_defect_add_error\n    {N d : ℕ} (hN : (1 : ℝ) ≤ N) (hNd : Nat.Coprime N d) :\n    currentChenUpsilon9PrefixAPCount N d =\n      (currentChenUpsilon9LiMainMass N - currentChenUpsilon9CoprimeMainDefect N d) /\n        (Nat.totient d : ℝ) + currentChenUpsilon9PanError N d",
+      "line": 64
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9_panUpper_le_two_thirds",
+      "signature": "theorem currentChenUpsilon9_panUpper_le_two_thirds {N : ℕ} (hN : (1 : ℝ) ≤ N) :\n    (currentChenUpsilon9PanUpper N : ℝ) ≤ (N : ℝ) ^ (2 / 3 : ℝ)",
+      "line": 118
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "eventually_currentChenUpsilon9_panLower_log_gate",
+      "signature": "theorem eventually_currentChenUpsilon9_panLower_log_gate (B : ℝ) :\n    ∀ᶠ N : ℕ in atTop,\n      Real.log (N : ℝ) ^ (2 * B) ≤ (currentChenUpsilon9PanLower N : ℝ)",
+      "line": 132
+    },
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "currentChenUpsilon9PanActive",
+      "signature": "def currentChenUpsilon9PanActive (B : ℝ) (N cap : ℕ) (z : ℝ) : Finset ℕ",
+      "line": 159
+    },
+    {
+      "visibility": "public",
+      "kind": "def",
+      "name": "currentChenUpsilon9PanRosserError",
+      "signature": "def currentChenUpsilon9PanRosserError (B : ℝ) (N cap : ℕ) (z : ℝ) : ℝ",
+      "line": 162
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9PanRosserError_eq_active",
+      "signature": "theorem currentChenUpsilon9PanRosserError_eq_active (B : ℝ) (N cap : ℕ) (z : ℝ) :\n    currentChenUpsilon9PanRosserError B N cap z =\n      ∑ d ∈ currentChenUpsilon9PanActive B N cap z,\n        actualSmallRosserPlus N cap z ((panModulusCutoff N B + 1 : ℕ) : ℝ) d *\n          currentChenUpsilon9PanError N d",
+      "line": 169
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9PanActive_subset",
+      "signature": "theorem currentChenUpsilon9PanActive_subset (B : ℝ) (N cap : ℕ) (z : ℝ) :\n    currentChenUpsilon9PanActive B N cap z ⊆ Finset.Icc 1 (panModulusCutoff N B)",
+      "line": 187
+    },
+    {
+      "visibility": "private",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9_abs_panError_le_MaxL",
+      "signature": "private theorem currentChenUpsilon9_abs_panError_le_MaxL {N d : ℕ}\n    (hd : 0 < d) (hNd : Nat.Coprime N d) :\n    |currentChenUpsilon9PanError N d| ≤\n      liuMainPanCoprimeIntervalMaxL (liuLogarithmicIntegral (2 / Real.log 2))\n        N (currentChenUpsilon9PanLower N) (currentChenUpsilon9PanUpper N) d\n        (currentChenUpsilon9ProductCoefficient N)",
+      "line": 193
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "currentChenUpsilon9_abs_panRosserError_le_MaxL_sum",
+      "signature": "theorem currentChenUpsilon9_abs_panRosserError_le_MaxL_sum\n    (B : ℝ) (N cap : ℕ) (z : ℝ) :\n    |currentChenUpsilon9PanRosserError B N cap z| ≤\n      ∑ d ∈ Finset.Icc 1 (panModulusCutoff N B),\n        liuMainPanCoprimeIntervalMaxL (liuLogarithmicIntegral (2 / Real.log 2))\n          N (currentChenUpsilon9PanLower N) (currentChenUpsilon9PanUpper N) d\n          (currentChenUpsilon9ProductCoefficient N)",
+      "line": 211
+    },
+    {
+      "visibility": "public",
+      "kind": "theorem",
+      "name": "exists_currentChenUpsilon9_panRosserError_budget",
+      "signature": "theorem exists_currentChenUpsilon9_panRosserError_budget :\n    ∃ B : ℝ, 0 ≤ B ∧ ∀ ε : ℝ, 0 < ε →\n      ∀ᶠ N : ℕ in atTop, ∀ cap : ℕ, ∀ z : ℝ,\n        |currentChenUpsilon9PanRosserError B N cap z| ≤\n          ε * singularNormalization N",
+      "line": 241
+    }
+  ],
+  "imports_and_all_14_signatures_and_definitions_unchanged": true,
+  "reviewed_runtime_log": {
+    "path": ".lake/proof-continuation/runs/20261015T191945431833Z-ImbalancedChen.CurrentChenUpsilon9PanAggregate/stdout.log",
+    "sha256": "55693971c405e2ed5407b032c4e79ec22df46468a437e02d977e4da83a7bd400",
+    "text": "ImbalancedChen/CurrentChenUpsilon9PanAggregate.lean:44:63: error: unsolved goals\nN a d : ℕ\n⊢ {x ∈ Finset.range (N + 1) | Nat.Prime x ∧ a * x ≤ N ∧ a * x % d = N % d}.card =\n    {x ∈ Finset.range (N + 1) | Nat.Prime x ∧ a * x ≤ N ∧ a * x % d = N % d}.card\n",
+    "reviewer_read_only": true
+  },
+  "static_assessment": "The real d331 diagnostic is the filtered-cardinality equality after rewriting Nat.ModEq and Nat.mod_mod. Appended rfl explicitly closes the remaining definitional equality. All other diagnostics from old 8256 disappeared in the supplied real d331 run. This is evidence about the old run plus static exact-rebind only; no new 96ee run is claimed.",
+  "new_source_findings": [],
+  "remaining": [
+    "The exact 96ee6981 candidate still needs the separately authorized runtime elaboration.",
+    "No fresh imported-object closure, kernel replay, or axiom acceptance follows from this source proof rebind.",
+    "Semantic premises and later arithmetic-main-term gates remain as recorded in the prior full independent report."
+  ],
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "frozen_source_modified": false,
+    "python_bytecode_generated": false,
+    "object_or_imported_closure_acceptance": false,
+    "new_candidate_runtime_result": "NOT_EXECUTED_BY_REVIEWER"
+  }
+}

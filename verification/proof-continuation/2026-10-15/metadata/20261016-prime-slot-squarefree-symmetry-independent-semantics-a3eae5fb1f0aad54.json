@@ -1,0 +1,137 @@
+{
+  "status": "FULL_SOURCE_ONLY_INDEPENDENT_SEMANTICS_NO_TARGET_ISSUES_FOUND",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "review_date": "2026-10-16",
+  "candidate": "ImbalancedChen.ActualPrimeSlotSquarefreeSymmetry",
+  "source_sha256": "e3f4e00e2dfc3face13688da430c2b499155fa5e592ef14cfefc9028c2b590c8",
+  "direct_imports": [
+    "ImbalancedChen.ActualFrozenSlotCoefficientRegrouping",
+    "Mathlib.NumberTheory.ArithmeticFunction.Moebius"
+  ],
+  "complete_declarations": [
+    {
+      "name": "actualPrimeVector_nodup_of_squarefree",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 27,
+      "complete_signature": "theorem actualPrimeVector_nodup_of_squarefree (input : List ℕ)\n    (hprime : ∀ p ∈ input, Nat.Prime p) (hsquarefree : Squarefree input.prod) :\n    input.Nodup",
+      "independent_assessment": "Prime list unique factorization gives input Perm primeFactorsList(prod). Actual squarefree product is nonzero and fixed squarefree iff primeFactorsList Nodup gives the converse input.Nodup, including input=[]."
+    },
+    {
+      "name": "actualPrimeVector_moebius_eq_zero_of_not_nodup",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 36,
+      "complete_signature": "theorem actualPrimeVector_moebius_eq_zero_of_not_nodup (input : List ℕ)\n    (hprime : ∀ p ∈ input, Nat.Prime p) (hnodup : ¬input.Nodup) :\n    ArithmeticFunction.moebius input.prod = 0",
+      "independent_assessment": "If a prime vector repeats a prime, its product is not squarefree by the just-proved converse, so its literal full-product Moebius coefficient is zero. The coefficient is not redefined."
+    },
+    {
+      "name": "actualPrimeVector_moebius_eq_sign",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 43,
+      "complete_signature": "theorem actualPrimeVector_moebius_eq_sign (input : List ℕ)\n    (hprime : ∀ p ∈ input, Nat.Prime p) (hnodup : input.Nodup) :\n    ArithmeticFunction.moebius input.prod = (-1 : ℤ) ^ input.length",
+      "independent_assessment": "Prime+Nodup gives squarefree full product, so literal integer Moebius is (-1)^cardFactors(prod). Unique factorization length identifies the exponent with original input.length."
+    },
+    {
+      "name": "actualPrimeTuple_moebius_sum_eq_distinct_sign",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 54,
+      "complete_signature": "theorem actualPrimeTuple_moebius_sum_eq_distinct_sign\n    (T : Finset (List ℕ)) (m : ℕ)\n    (hlen : ∀ ps ∈ T, ps.length = m)\n    (hprime : ∀ ps ∈ T, ∀ p ∈ ps, Nat.Prime p) (H : ℕ → ℝ) :\n    (∑ ps ∈ T, (ArithmeticFunction.moebius ps.prod : ℝ) * H ps.prod) =\n      ∑ ps ∈ T.filter List.Nodup, (-1 : ℝ) ^ m * H ps.prod",
+      "independent_assessment": "Exact signed full-carrier identity: repeated-prime tuples vanish pointwise by literal mu(fullprod), while distinct tuples retain (-1)^m using the original fixed arity. H can have either sign and no absolute-value cancellation or majorant premise is used."
+    },
+    {
+      "name": "mem_actualPrimeSlotBox_replicate",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 73,
+      "complete_signature": "theorem mem_actualPrimeSlotBox_replicate (B : Finset ℕ) (m : ℕ) (ps : List ℕ) :\n    ps ∈ actualPrimeSlotBox (fun _ : Unit => B) (List.replicate m ()) ↔\n      ps.length = m ∧ ∀ q ∈ ps, q ∈ B",
+      "independent_assessment": "A full Cartesian power of one and the same label prime set consists exactly of length-m lists all of whose entries lie in B. It allows repeated values and does not quotient by permutations."
+    },
+    {
+      "name": "actualPrimeSlotBox_replicate_coefficient",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 99,
+      "complete_signature": "theorem actualPrimeSlotBox_replicate_coefficient (B : Finset ℕ) (ps : List ℕ)\n    (hBprime : ∀ q ∈ B, Nat.Prime q) (hps : ∀ q ∈ ps, q ∈ B) (hnodup : ps.Nodup) :\n    actualPrimeTupleCoefficient\n        (actualPrimeSlotBox (fun _ : Unit => B) (List.replicate ps.length ())) ps.prod =\n      ps.length.factorial",
+      "independent_assessment": "For a distinct-prime representative ps from B, its entire product fibre in the repeated-label Cartesian block is exactly ps.permutations.toFinset. Prime-factor uniqueness gives the forward inclusion, product and membership invariance give reverse inclusion, and Nodup ps makes the permutation list Nodup, hence fibre card=length!=m!."
+    },
+    {
+      "name": "actualPrimeSlotBox_replicate_normalized_eq_one",
+      "kind": "theorem",
+      "visibility": "public",
+      "line": 129,
+      "complete_signature": "theorem actualPrimeSlotBox_replicate_normalized_eq_one (B : Finset ℕ) (ps : List ℕ)\n    (hBprime : ∀ q ∈ B, Nat.Prime q) (hps : ∀ q ∈ ps, q ∈ B) (hnodup : ps.Nodup) :\n    actualNormalizedPrimeTupleCoefficient\n        (actualPrimeSlotBox (fun _ : Unit => B) (List.replicate ps.length ())) ps.length ps.prod = 1",
+      "independent_assessment": "The existing normalized coefficient divides precisely by the original block length factorial, so it equals one at this actual squarefree product. Factorial nonzero pays cancellation; later three-group factorials are not mixed into this original same-label block identity."
+    }
+  ],
+  "fixed_mathlib_api_checks": [
+    {
+      "file": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/ArithmeticFunction/Moebius.lean",
+      "sha256": "3d739a22865bed810b05ccdec05f16c18000d9c0737b4a12fee7494713d06e23",
+      "interfaces": [
+        "moebius_apply_of_squarefree {n} (h : Squarefree n) : mu n=(-1)^cardFactors n",
+        "moebius_eq_zero_of_not_squarefree {n} (h : not Squarefree n) : mu n=0"
+      ],
+      "assessment": "Both apply to the actual full original product, with squarefree/not-squarefree paid by original prime data and Nodup or its negation."
+    },
+    {
+      "file": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/ArithmeticFunction/Misc.lean",
+      "sha256": "412a3138bf47267bf94f01cdafc1234d8d7a85626db7e2f0001d1a1ad40bc3c3",
+      "interface": "cardFactors_apply {n} : cardFactors n = n.primeFactorsList.length",
+      "assessment": "The reverse hperm.length_eq rewrite gives exactly input.length; no count of distinct factors is confused with multiplicity."
+    },
+    {
+      "file": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Nat/Squarefree.lean",
+      "sha256": "8f08cb2715e1d8cc5bb31bc44bb499fe9fd7d5c827009924230d757bac5958a5",
+      "interface": "squarefree_iff_nodup_primeFactorsList (h0:n!=0) : Squarefree n iff n.primeFactorsList.Nodup",
+      "assessment": "Squarefree.ne_zero supplies h0. Unique factorization Perm direction input->primeFactorsList makes nodup_iff.mpr the correct transfer."
+    },
+    {
+      "file": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/List/Permutation.lean",
+      "sha256": "b01b977ee7dc7e23721282e365293f2daa26971fd6c2f717bc410fb9885e04ec",
+      "interface": "nodup_permutations (s : List alpha) (hs : Nodup s) : Nodup s.permutations; length_permutations",
+      "assessment": "Current call supplies both explicit ps and hnodup. Together with the exact product fibre equality, it gives full m! cardinality."
+    },
+    {
+      "file": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Finset/Card.lean",
+      "sha256": "174ec68882bf10567b17c3f4d278d6647cef92574dadfa8f7f0821b949967c8f",
+      "interface": "List.toFinset_card_of_nodup {l} (h:l.Nodup) : l.toFinset.card=l.length",
+      "assessment": "The current h is exactly nodup_permutations ps hnodup; no upper bound is substituted for exact cardinality."
+    }
+  ],
+  "source_snapshot_dependencies": [
+    {
+      "file": "ImbalancedChen/ActualFrozenSlotCoefficientRegrouping.lean",
+      "sha256": "96ff0b5e60372b085eef73995d4d583edb7d4d29e7eb2854168fa504e0a9725c"
+    },
+    {
+      "file": "ImbalancedChen/ActualPrimeTupleNormalization.lean",
+      "sha256": "ee2f0f12ef232b770dcc7136d8ce74f27fc830cad73ab78641fe18f1cabc5db0"
+    },
+    {
+      "file": "ImbalancedChen/ActualDwellSelectedRemainder.lean",
+      "sha256": "6915d9df1dade16830b1190b44dafe30a0caab6487bd45dcb8252fb33f8e21c2"
+    }
+  ],
+  "issues": [],
+  "scope_boundaries": [
+    "The signed diagonal identity applies to a carrier whose actual original coefficient is literal mu(full rough product), not a newly chosen or redefined mask. Connecting the real source to this coefficient is still an exact source-dictionary obligation.",
+    "The exact factorial identity concerns one repeated label whose coordinate sets are all the same B. It does not identify several different overlapping labels with a product of block factorials, nor remove their order constraints.",
+    "No arbitrary tuple-dependent weight is permuted: H depends on full product only. Original sign, slot arity, and same-label reciprocal factorial must match the actual source before applying the finite identity.",
+    "This resolves finite diagonal/orbit primitives only. Full ordered fine-label block/source coefficient regrouping, arithmetic means, small attachment and final theorem remain separate."
+  ],
+  "proper_dag": "Source-only semantic review. Owner tail may run a fresh header DAG for the extra explicit Moebius import; no imported closure acceptance is inferred.",
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "frozen_lean_modified": false,
+    "python_bytecode_generated": false,
+    "imported_object_acceptance": false,
+    "kernel_replay_or_axiom_acceptance": false,
+    "runtime_pass_claim": false
+  }
+}

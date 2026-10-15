@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T18:35:34.111145+00:00",
+  "reviewer": "/root/dispersion_resume/reuse_endpoint_audit",
+  "status": "SOURCE_ONLY_TACTIC_SEQUENCE_REBIND_PASS",
+  "candidate": {
+    "path": "ImbalancedChen/Part3CleanBetaLargeGCDMajorant.lean",
+    "sha256": "e9f57814f8a4057c5193d2955ea30ba965ff3071959828a57ec9c2b1bc6b59d1"
+  },
+  "reviewed_baseline": {
+    "git_ref": "HEAD:ImbalancedChen/Part3CleanBetaLargeGCDMajorant.lean",
+    "sha256": "e860bbe5099130a51c56b35862303ed196fbbd0200e534e091fce5c9dee76164",
+    "prior_semantics_report": ".lake/proof-continuation/source-reviews/20261015-polynomial-residue-subpower-scope.json",
+    "prior_report_sha256": "41091dad9f66afa0fbd557f1541d63d0620d953521e85d97711a919fcbf538b7",
+    "prior_import_snapshot": ".lake/proof-continuation/source-reviews/20261015T102747415821Z-Part3CleanBetaLargeGCDMajorant/source-review.json",
+    "prior_import_snapshot_sha256": "7af69d6a12a357d6ab00129695e8f2c257d5867178c84236429fadcfa1d9da56"
+  },
+  "static_declaration_comparison": {
+    "method": "Read-only lexical extraction of each source def/theorem header through its := separator; not an elaborated Lean declaration inventory.",
+    "declaration_count": 23,
+    "all_declaration_headers_byte_equal": true,
+    "all_def_bodies_byte_equal": true,
+    "imports_identical": true,
+    "imports": [
+      "ImbalancedChen.Part3CommonSmoothCutoff",
+      "ImbalancedChen.Part3FactorFiberDivisor",
+      "ImbalancedChen.Part3ComplexCRTConsumer"
+    ],
+    "changed_theorem_proof_bodies": [
+      "MediumAtom.absoluteFactorModulusRow_le_tauFour",
+      "MediumAtom.commonFactorPairWeight_norm_le",
+      "MediumAtom.commonLargeBetaGCDW_clean_norm_le_divisorMajorant",
+      "MediumAtom.commonLargeBetaGCDW_norm_le_majorant_add_exception"
+    ]
+  },
+  "proof_repair_checks": [
+    {
+      "lines": [
+        204,
+        206
+      ],
+      "finding": "Annotating the filter binder q:Nat retains exactly the original physicalFactorModuli filter and Int.ModEq predicate; it does not enlarge or shrink the support."
+    },
+    {
+      "lines": [
+        271,
+        273
+      ],
+      "finding": "Real.norm_eq_abs converts the real constructed weight norm after Complex.norm_real, so the existing proved nonnegativity can discharge its absolute value. The actual constructed CRT weight and upper product weight are unchanged."
+    },
+    {
+      "lines": [
+        277,
+        287
+      ],
+      "finding": "The left double-factor/product-weight sum has order m,r,s after commuting m outward. Expanding the right product of absolute rows with mul_sum/sum_mul gives m,s,r. The new conv_rhs sum_comm after fixing m restores m,r,s before termwise comparison. Hence modulus r still tests m*n1 and modulus s still tests m*n2. The final conditional expansion and ring step express the exact indicator-product identity; no label exchange, lost mask, or absolute-value replacement is inserted."
+    },
+    {
+      "lines": [
+        319,
+        324
+      ],
+      "finding": "Adding le_refl closes the exact zero<=zero branches when either original cleaned beta coefficient is zero; it adds no mathematical assumption."
+    },
+    {
+      "lines": [
+        337,
+        345
+      ],
+      "finding": "add_le_add bound le_rfl preserves the desired right-hand exception norm on both sides of the triangle inequality, correcting the previous wrong-side addition API usage."
+    }
+  ],
+  "unchanged_semantic_scope": [
+    "Same arbitrary complex gamma factors and literal full physical modulus labels.",
+    "Same common smooth support and weight in both modulus rows.",
+    "Same strict beta mask Y<gcd(n1,n2).",
+    "Both actual nonzero-difference gates are paid from cleaned beta nonzero before applying tau4.",
+    "Original signed-divisor exception remains as its norm in the final bound."
+  ],
+  "source_import_scope": "No direct imports changed. This rebind does not rerun a full source-DAG census and makes no new closure-acceptance claim.",
+  "visible_lean_source_issues_found": [],
+  "claim_limits": [
+    "SOURCE_ONLY independent exact-byte reconstruction and tactic-sequencing rebind.",
+    "No Lean/lake invocation, compilation, object comparison, replay, elaborated type export, transitive axiom audit or acceptance mutation by this reviewer.",
+    "This report does not infer strict runtime acceptance from source equivalence.",
+    "Prior source-review artifacts are preserved unchanged."
+  ],
+  "tactic_sequence_rebind": {
+    "previous_source_sha256": "9f89ffd6e4ec4f6f426a2ba974e50de7fb2deba1aee5c177b125fbb6d1003e9c",
+    "previous_review_path": ".lake/proof-continuation/source-reviews/20261016-clean-beta-majorant-proof-repair-scope.json",
+    "previous_review_sha256": "23be5dac9dffa1658e3424af86832e359627901347c8a8889901731a25087e07",
+    "exact_one_occurrence_reconstruction_verified": true,
+    "old_text": "split_ifs <;> simp_all <;> ring",
+    "new_text": "split_ifs <;> (simp_all; ring)",
+    "source_line": 287,
+    "all_23_source_declaration_headers_unchanged": true,
+    "all_defs_imports_and_other_proof_bytes_unchanged": true,
+    "semantics": "Each split_ifs branch still simplifies its local assumptions and closes the remaining polynomial identity by ring. Parenthesizing the simp_all; ring sequence makes the sequencing explicit; there is no statement, premise, label, mask, coefficient, or inequality change."
+  }
+}

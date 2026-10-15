@@ -1,0 +1,734 @@
+{
+  "status": "SOURCE_ONLY_COMPLETE_TYPE_METADATA_CORRECTION_ADDENDUM",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "review_date": "2026-10-16",
+  "reason": "Old generic extraction used first := for theorems and truncated statements containing let assignments; the equational actualPrimeSlotBox definition also had no := and was overcaptured. This report corrects complete-type metadata from freshly read exact source snapshots, preserving all old reports as historical evidence. It does not change a Lean source or claim an elaborated type.",
+  "corrected_boundaries": [
+    "Theorem metadata ends only at actual := by proof separator and includes every statement let assignment plus the entire proposition.",
+    "Definition metadata ends at actual := or, for recursive equation-style definitions, the first equation clause; no next declaration is captured."
+  ],
+  "current_source_snapshots": [
+    {
+      "file": "ImbalancedChen/ActualDwellSelectedRemainder.lean",
+      "source_sha256": "6915d9df1dade16830b1190b44dafe30a0caab6487bd45dcb8252fb33f8e21c2",
+      "declaration_count": 14,
+      "complete_declarations": [
+        {
+          "name": "actualDwell_original_tail_square",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 28,
+          "signature_end_line": 32,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualDwell_original_tail_square {D : ℝ} (front tail : List ℕ)\n    (hfull : actualDwellSupport D (front ++ tail))\n    (i : ℕ) (hi : i < tail.length) :\n    (front.prod : ℝ) * ((tail.take i).map (fun p : ℕ => (p : ℝ))).prod *\n      (tail[i] : ℝ) ^ 2 ≤ D"
+        },
+        {
+          "name": "actualDwell_selected_prefix_budget",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 43,
+          "signature_end_line": 45,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualDwell_selected_prefix_budget {D : ℝ} (front tail : List ℕ)\n    (hfront : 0 < front.prod) (hfull : actualDwellSupport D (front ++ tail)) :\n    actualDwellSupport (D / front.prod) tail"
+        },
+        {
+          "name": "actualDwell_selected_one_start_budget",
+          "kind": "theorem",
+          "visibility": "private",
+          "line": 55,
+          "signature_end_line": 60,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "private theorem actualDwell_selected_one_start_budget {D : ℝ}\n    (front tail : List ℕ) (b₀ q : ℕ) (hb : 0 < b₀)\n    (hprod : front.prod = b₀ * q)\n    (hfull : actualDwellSupport D (front ++ tail))\n    (hstart : (b₀ : ℝ) * (q : ℝ) ^ 2 ≤ D) :\n    actualDwellSupport (D / b₀) (q :: tail)"
+        },
+        {
+          "name": "actualDwell_selected_p2_budget",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 74,
+          "signature_end_line": 77,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualDwell_selected_p2_budget {D : ℝ} (p₁ p₂ : ℕ) (tail : List ℕ)\n    (hp₂ : 0 < p₂) (hfull : actualDwellSupport D (p₁ :: p₂ :: tail))\n    (hgate : (p₁ : ℝ) ^ 2 * p₂ ≤ D) :\n    actualDwellSupport (D / p₂) (p₁ :: tail)"
+        },
+        {
+          "name": "actualDwell_selected_p1p3_budget",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 83,
+          "signature_end_line": 87,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualDwell_selected_p1p3_budget {D : ℝ} (p₁ p₂ p₃ : ℕ)\n    (tail : List ℕ) (hp₁ : 0 < p₁) (hp₃ : 0 < p₃)\n    (hfull : actualDwellSupport D (p₁ :: p₂ :: p₃ :: tail))\n    (hgate : (p₁ : ℝ) * (p₂ : ℝ) ^ 2 * p₃ ≤ D) :\n    actualDwellSupport (D / (p₁ * p₃ : ℕ)) (p₂ :: tail)"
+        },
+        {
+          "name": "actualDwell_selected_p2p3_budget",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 95,
+          "signature_end_line": 99,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualDwell_selected_p2p3_budget {D : ℝ} (p₁ p₂ p₃ : ℕ)\n    (tail : List ℕ) (hp₂ : 0 < p₂) (hp₃ : 0 < p₃)\n    (hfull : actualDwellSupport D (p₁ :: p₂ :: p₃ :: tail))\n    (hgate : (p₁ : ℝ) ^ 2 * p₂ * p₃ ≤ D) :\n    actualDwellSupport (D / (p₂ * p₃ : ℕ)) (p₁ :: tail)"
+        },
+        {
+          "name": "actualSelectedRemainder_allocate",
+          "kind": "theorem",
+          "visibility": "private",
+          "line": 109,
+          "signature_end_line": 116,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "private theorem actualSelectedRemainder_allocate {D A : ℝ} (hA : 1 ≤ A)\n    (b₀ : ℕ) (hb : 0 < b₀) (remainder : List ℕ)\n    (hC : 1 ≤ D / (A * b₀))\n    (hbudget : actualDwellSupport (D / b₀) remainder) :\n    (actualTwoCapacityFactors A remainder).1 * (actualTwoCapacityFactors A remainder).2 =\n      remainder.prod ∧\n      ((actualTwoCapacityFactors A remainder).1 : ℝ) ≤ A ∧\n      ((actualTwoCapacityFactors A remainder).2 : ℝ) ≤ D / (A * b₀)"
+        },
+        {
+          "name": "actualDwell_selected_prefix_allocate",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 125,
+          "signature_end_line": 132,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualDwell_selected_prefix_allocate {D A : ℝ} (hA : 1 ≤ A)\n    (front tail : List ℕ) (hfront : 0 < front.prod)\n    (hfull : actualDwellSupport D (front ++ tail))\n    (hC : 1 ≤ D / (A * front.prod)) :\n    (actualTwoCapacityFactors A tail).1 * front.prod *\n        (actualTwoCapacityFactors A tail).2 = (front ++ tail).prod ∧\n      ((actualTwoCapacityFactors A tail).1 : ℝ) ≤ A ∧\n      ((actualTwoCapacityFactors A tail).2 : ℝ) ≤ D / (A * front.prod)"
+        },
+        {
+          "name": "actualSelectedOneStart_allocate",
+          "kind": "theorem",
+          "visibility": "private",
+          "line": 141,
+          "signature_end_line": 150,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "private theorem actualSelectedOneStart_allocate {D A : ℝ} (hA : 1 ≤ A)\n    (front tail : List ℕ) (b₀ q : ℕ) (hb : 0 < b₀)\n    (hprod : front.prod = b₀ * q)\n    (hfull : actualDwellSupport D (front ++ tail))\n    (hstart : (b₀ : ℝ) * (q : ℝ) ^ 2 ≤ D)\n    (hC : 1 ≤ D / (A * b₀)) :\n    (actualTwoCapacityFactors A (q :: tail)).1 * b₀ *\n        (actualTwoCapacityFactors A (q :: tail)).2 = (front ++ tail).prod ∧\n      ((actualTwoCapacityFactors A (q :: tail)).1 : ℝ) ≤ A ∧\n      ((actualTwoCapacityFactors A (q :: tail)).2 : ℝ) ≤ D / (A * b₀)"
+        },
+        {
+          "name": "actualDwell_selected_p2_allocate",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 160,
+          "signature_end_line": 167,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualDwell_selected_p2_allocate {D A : ℝ} (hA : 1 ≤ A)\n    (p₁ p₂ : ℕ) (tail : List ℕ) (hp₂ : 0 < p₂)\n    (hfull : actualDwellSupport D (p₁ :: p₂ :: tail))\n    (hgate : (p₁ : ℝ) ^ 2 * p₂ ≤ D) (hC : 1 ≤ D / (A * p₂)) :\n    (actualTwoCapacityFactors A (p₁ :: tail)).1 * p₂ *\n        (actualTwoCapacityFactors A (p₁ :: tail)).2 = (p₁ :: p₂ :: tail).prod ∧\n      ((actualTwoCapacityFactors A (p₁ :: tail)).1 : ℝ) ≤ A ∧\n      ((actualTwoCapacityFactors A (p₁ :: tail)).2 : ℝ) ≤ D / (A * p₂)"
+        },
+        {
+          "name": "actualDwell_selected_p1p3_allocate",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 174,
+          "signature_end_line": 182,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualDwell_selected_p1p3_allocate {D A : ℝ} (hA : 1 ≤ A)\n    (p₁ p₂ p₃ : ℕ) (tail : List ℕ) (hp₁ : 0 < p₁) (hp₃ : 0 < p₃)\n    (hfull : actualDwellSupport D (p₁ :: p₂ :: p₃ :: tail))\n    (hgate : (p₁ : ℝ) * (p₂ : ℝ) ^ 2 * p₃ ≤ D)\n    (hC : 1 ≤ D / (A * (p₁ * p₃ : ℕ))) :\n    (actualTwoCapacityFactors A (p₂ :: tail)).1 * (p₁ * p₃) *\n        (actualTwoCapacityFactors A (p₂ :: tail)).2 = (p₁ :: p₂ :: p₃ :: tail).prod ∧\n      ((actualTwoCapacityFactors A (p₂ :: tail)).1 : ℝ) ≤ A ∧\n      ((actualTwoCapacityFactors A (p₂ :: tail)).2 : ℝ) ≤ D / (A * (p₁ * p₃ : ℕ))"
+        },
+        {
+          "name": "actualDwell_selected_p2p3_allocate",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 191,
+          "signature_end_line": 199,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualDwell_selected_p2p3_allocate {D A : ℝ} (hA : 1 ≤ A)\n    (p₁ p₂ p₃ : ℕ) (tail : List ℕ) (hp₂ : 0 < p₂) (hp₃ : 0 < p₃)\n    (hfull : actualDwellSupport D (p₁ :: p₂ :: p₃ :: tail))\n    (hgate : (p₁ : ℝ) ^ 2 * p₂ * p₃ ≤ D)\n    (hC : 1 ≤ D / (A * (p₂ * p₃ : ℕ))) :\n    (actualTwoCapacityFactors A (p₁ :: tail)).1 * (p₂ * p₃) *\n        (actualTwoCapacityFactors A (p₁ :: tail)).2 = (p₁ :: p₂ :: p₃ :: tail).prod ∧\n      ((actualTwoCapacityFactors A (p₁ :: tail)).1 : ℝ) ≤ A ∧\n      ((actualTwoCapacityFactors A (p₁ :: tail)).2 : ℝ) ≤ D / (A * (p₂ * p₃ : ℕ))"
+        },
+        {
+          "name": "actualPrimeVector_squarefree",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 210,
+          "signature_end_line": 212,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualPrimeVector_squarefree (input : List ℕ)\n    (hprime : ∀ p ∈ input, Nat.Prime p) (hnodup : input.Nodup) :\n    Squarefree input.prod"
+        },
+        {
+          "name": "actualPrimeVector_threeFactors_coprime",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 230,
+          "signature_end_line": 233,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualPrimeVector_threeFactors_coprime (input : List ℕ)\n    (hprime : ∀ p ∈ input, Nat.Prime p) (hnodup : input.Nodup)\n    (a b c : ℕ) (hprod : a * b * c = input.prod) :\n    Nat.Coprime a b ∧ Nat.Coprime a c ∧ Nat.Coprime b c"
+        }
+      ]
+    },
+    {
+      "file": "ImbalancedChen/ActualFrozenSelectedPairSlots.lean",
+      "source_sha256": "e62e68a31cf286a14e327ef768eb962a8724afa883f1fec8dbfbfee66a232af2",
+      "declaration_count": 11,
+      "complete_declarations": [
+        {
+          "name": "actualTwoCapacityGreedy_partition",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 28,
+          "signature_end_line": 31,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualTwoCapacityGreedy_partition {α : Type*} (weight : α → ℝ)\n    (A : ℝ) (input : List α) :\n    BoxPartition (actualTwoCapacityGreedy weight A input).1\n      (actualTwoCapacityGreedy weight A input).2 input"
+        },
+        {
+          "name": "actualFrozenSelectedPairSlots",
+          "kind": "def",
+          "visibility": "public",
+          "line": 42,
+          "signature_end_line": 43,
+          "extraction_boundary": "actual definition := separator",
+          "complete_signature": "def actualFrozenSelectedPairSlots {α : Type*} (D A : ℝ) (yz : Bool)\n    (upper : α → ℕ) (p : Fin 3 → α) (tail : List α) : List α × List α × List α"
+        },
+        {
+          "name": "actualFrozenSelectedPairFactors",
+          "kind": "def",
+          "visibility": "public",
+          "line": 53,
+          "signature_end_line": 54,
+          "extraction_boundary": "actual definition := separator",
+          "complete_signature": "def actualFrozenSelectedPairFactors {α : Type*} (D A : ℝ) (yz : Bool)\n    (upper actual : α → ℕ) (p : Fin 3 → α) (tail : List α) : ℕ × ℕ × ℕ"
+        },
+        {
+          "name": "actualFrozenSelectedPairSlots_perm",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 60,
+          "signature_end_line": 63,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualFrozenSelectedPairSlots_perm {α : Type*} (D A : ℝ) (yz : Bool)\n    (upper : α → ℕ) (p : Fin 3 → α) (tail : List α) :\n    let slots := actualFrozenSelectedPairSlots D A yz upper p tail\n    (slots.1 ++ slots.2.1 ++ slots.2.2).Perm (p 0 :: p 1 :: p 2 :: tail)"
+        },
+        {
+          "name": "actualFrozenSelectedPairFactors_prod",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 85,
+          "signature_end_line": 88,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualFrozenSelectedPairFactors_prod {α : Type*} (D A : ℝ) (yz : Bool)\n    (upper actual : α → ℕ) (p : Fin 3 → α) (tail : List α) :\n    let abc := actualFrozenSelectedPairFactors D A yz upper actual p tail\n    abc.1 * abc.2.1 * abc.2.2 = ((p 0 :: p 1 :: p 2 :: tail).map actual).prod"
+        },
+        {
+          "name": "actualFrozenSelectedPairFactors_le_upper",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 95,
+          "signature_end_line": 100,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualFrozenSelectedPairFactors_le_upper {α : Type*} (D A : ℝ) (yz : Bool)\n    (upper actual : α → ℕ) (p : Fin 3 → α) (tail : List α)\n    (hsize : ∀ i ∈ p 0 :: p 1 :: p 2 :: tail, actual i ≤ upper i) :\n    let abc := actualFrozenSelectedPairFactors D A yz upper actual p tail\n    let ABC := actualFrozenSelectedPairFactors D A yz upper upper p tail\n    abc.1 ≤ ABC.1 ∧ abc.2.1 ≤ ABC.2.1 ∧ abc.2.2 ≤ ABC.2.2"
+        },
+        {
+          "name": "actualFrozenSelectedPairFactors_at_upper",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 115,
+          "signature_end_line": 118,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualFrozenSelectedPairFactors_at_upper {α : Type*} (D A : ℝ) (yz : Bool)\n    (upper : α → ℕ) (p : Fin 3 → α) (tail : List α) :\n    actualFrozenSelectedPairFactors D A yz upper upper p tail =\n      actualSelectedPairFactors D A yz (fun i => upper (p i)) (tail.map upper)"
+        },
+        {
+          "name": "actualFrozenSelectedPairFactors_coprime",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 147,
+          "signature_end_line": 153,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualFrozenSelectedPairFactors_coprime {α : Type*} (D A : ℝ) (yz : Bool)\n    (upper actual : α → ℕ) (p : Fin 3 → α) (tail : List α)\n    (hprime : ∀ q ∈ (p 0 :: p 1 :: p 2 :: tail).map actual, Nat.Prime q)\n    (hnodup : ((p 0 :: p 1 :: p 2 :: tail).map actual).Nodup) :\n    let abc := actualFrozenSelectedPairFactors D A yz upper actual p tail\n    Nat.Coprime abc.1 abc.2.1 ∧ Nat.Coprime abc.1 abc.2.2 ∧\n      Nat.Coprime abc.2.1 abc.2.2"
+        },
+        {
+          "name": "actualSelectedPairFactors_targets_of_fullSupport",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 160,
+          "signature_end_line": 177,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualSelectedPairFactors_targets_of_fullSupport {x δ θ α A : ℝ} {yz : Bool}\n    (hx : 1 < x) (hδ0 : 0 < δ) (hδ : δ < 1 / 100000)\n    (hθlo : 1 / 2 ≤ θ) (hθhi : θ ≤ 5 / 8)\n    (hAlower : x ^ δ ≤ A) (hAupper : A ≤ x ^ (1 / 3 - δ / 2))\n    (p : Fin 3 → ℕ) (tail : List ℕ)\n    (hpositive : ∀ q ∈ p 0 :: p 1 :: p 2 :: tail, 0 < q)\n    (hfull : actualDwellSupport (x ^ (θ - 2 * δ)) (p 0 :: p 1 :: p 2 :: tail))\n    (hgate : (actualSelectedPairProduct yz p : ℝ) *\n      (actualSelectedPairRemainingPrime yz p : ℝ) ^ 2 ≤ x ^ (θ - 2 * δ))\n    (hblower : x ^ (2 * θ - 1) ≤ (actualSelectedPairProduct yz p : ℝ))\n    (hbupper : (actualSelectedPairProduct yz p : ℝ) ≤ x ^ actualSelectedSubproductUpper α θ) :\n    let abc := actualSelectedPairFactors (x ^ (θ - 2 * δ)) A yz p tail\n    (abc.1 : ℝ) ≤ A ∧\n      A ^ 2 * (abc.2.1 : ℝ) * (abc.2.2 : ℝ) ^ 2 ≤ x ^ (1 - 3 * δ) ∧\n      x ^ (7 * α / 32) * A * (abc.1 : ℝ) * (abc.2.1 : ℝ) ^ 5 *\n        (abc.2.2 : ℝ) ^ 2 ≤ x ^ (2 - 3 * δ) ∧\n      (A * (abc.2.2 : ℝ) / (abc.2.1 : ℝ)) ^ (7 / 16 : ℝ) * A * (abc.1 : ℝ) *\n        (abc.2.1 : ℝ) ^ 5 * (abc.2.2 : ℝ) ^ 2 ≤ x ^ (2 - 2 * δ)"
+        },
+        {
+          "name": "actualExtendedThirdSelectedPair_endpointBounds",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 235,
+          "signature_end_line": 249,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualExtendedThirdSelectedPair_endpointBounds {e κ δ x : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hκ : κ ≤ e / 4) (hδ : δ ≤ e / 32)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ VariableEnvelope.mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (hx : 1 < x) (p : Fin 3 → ℕ) (hp : ∀ i, 0 < p i)\n    (hs : actualSelectedPrimeCoordinates x p ∈ actualExtendedThirdPhysicalCell m j) :\n    let θ := actualExtendedThirdPairParameter e m j t yz\n    (actualSelectedPairProduct yz p : ℝ) *\n        (actualSelectedPairRemainingPrime yz p : ℝ) ^ 2 < x ^ (θ - 2 * δ) ∧\n      x ^ (2 * θ - 1) ≤ (actualSelectedPairProduct yz p : ℝ) ∧\n      (actualSelectedPairProduct yz p : ℝ) ≤\n        x ^ actualSelectedSubproductUpper (1 + 3 * κ) θ"
+        },
+        {
+          "name": "actualExtendedThirdSelectedPair_frozenUpperTargets",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 297,
+          "signature_end_line": 324,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualExtendedThirdSelectedPair_frozenUpperTargets\n    {α : Type*} {e κ δ ρ τ x A : ℝ} {m : ℕ} {j : ActualExtendedThirdDyadicLabel m}\n    (he0 : 0 < e) (he : e ≤ 1 / 384) (hκ : κ ≤ e / 4)\n    (hδ0 : 0 < δ) (hδ : δ < 1 / 100000) (hδfine : δ ≤ e / 32)\n    (hρ : 0 < ρ) (hτ : 0 ≤ τ)\n    (hwidth : τ * (actualRoughVectorRankBound ρ + 1) ≤ e / 2)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ VariableEnvelope.mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (hx : 1 < x) (actual upper : α → ℕ) (p : Fin 3 → α) (tail : List α)\n    (hpositive : ∀ i ∈ p 0 :: p 1 :: p 2 :: tail, 0 < actual i)\n    (hrough : ∀ i ∈ p 0 :: p 1 :: p 2 :: tail, x ^ ρ ≤ (actual i : ℝ))\n    (hbelow : ∀ i ∈ p 0 :: p 1 :: p 2 :: tail, actual i ≤ upper i)\n    (hinflate : ∀ i ∈ p 0 :: p 1 :: p 2 :: tail, (upper i : ℝ) ≤ x ^ τ * (actual i : ℝ))\n    (hs : actualSelectedPrimeCoordinates x (fun i => upper (p i)) ∈\n      actualExtendedThirdPhysicalCell m j)\n    (hsupport : actualDwellSupport (x ^ actualExtendedThirdPhysicalLevel e m j)\n      ((p 0 :: p 1 :: p 2 :: tail).map actual))\n    (hAlower : x ^ δ ≤ A) (hAupper : A ≤ x ^ (1 / 3 - δ / 2)) :\n    let θ := actualExtendedThirdPairParameter e m j t yz\n    let abc := actualFrozenSelectedPairFactors (x ^ (θ - 2 * δ)) A yz upper upper p tail\n    (abc.1 : ℝ) ≤ A ∧\n      A ^ 2 * (abc.2.1 : ℝ) * (abc.2.2 : ℝ) ^ 2 ≤ x ^ (1 - 3 * δ) ∧\n      x ^ (7 * (1 + 3 * κ) / 32) * A * (abc.1 : ℝ) * (abc.2.1 : ℝ) ^ 5 *\n        (abc.2.2 : ℝ) ^ 2 ≤ x ^ (2 - 3 * δ) ∧\n      (A * (abc.2.2 : ℝ) / (abc.2.1 : ℝ)) ^ (7 / 16 : ℝ) * A * (abc.1 : ℝ) *\n        (abc.2.1 : ℝ) ^ 5 * (abc.2.2 : ℝ) ^ 2 ≤ x ^ (2 - 2 * δ)"
+        }
+      ]
+    },
+    {
+      "file": "ImbalancedChen/ActualFrozenSlotCoefficientRegrouping.lean",
+      "source_sha256": "96ff0b5e60372b085eef73995d4d583edb7d4d29e7eb2854168fa504e0a9725c",
+      "declaration_count": 12,
+      "complete_declarations": [
+        {
+          "name": "actualPrimeSlotBox",
+          "kind": "def",
+          "visibility": "public",
+          "line": 26,
+          "signature_end_line": 27,
+          "extraction_boundary": "start of recursive equation clauses",
+          "complete_signature": "def actualPrimeSlotBox {ι : Type*} (B : ι → Finset ℕ) : List ι → Finset (List ℕ)"
+        },
+        {
+          "name": "actualPrimeSlotBox_sum_cons",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 31,
+          "signature_end_line": 34,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualPrimeSlotBox_sum_cons {ι : Type*} (B : ι → Finset ℕ)\n    (i : ι) (input : List ι) (F : List ℕ → ℝ) :\n    (∑ ps ∈ actualPrimeSlotBox B (i :: input), F ps) =\n      ∑ q ∈ B i, ∑ ps ∈ actualPrimeSlotBox B input, F (q :: ps)"
+        },
+        {
+          "name": "actualPrimeSlotBox_length",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 42,
+          "signature_end_line": 43,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualPrimeSlotBox_length {ι : Type*} (B : ι → Finset ℕ) (input : List ι) :\n    ∀ ps ∈ actualPrimeSlotBox B input, ps.length = input.length"
+        },
+        {
+          "name": "actualPrimeSlotBox_prime",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 52,
+          "signature_end_line": 54,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualPrimeSlotBox_prime {ι : Type*} (B : ι → Finset ℕ) (input : List ι)\n    (hprime : ∀ i ∈ input, ∀ q ∈ B i, Nat.Prime q) :\n    ∀ ps ∈ actualPrimeSlotBox B input, ∀ q ∈ ps, Nat.Prime q"
+        },
+        {
+          "name": "actualPrimeSlotBox_prod_le_upper",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 68,
+          "signature_end_line": 71,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualPrimeSlotBox_prod_le_upper {ι : Type*} (B : ι → Finset ℕ)\n    (upper : ι → ℕ) (input : List ι)\n    (hsize : ∀ i ∈ input, ∀ q ∈ B i, q ≤ upper i) :\n    ∀ ps ∈ actualPrimeSlotBox B input, ps.prod ≤ (input.map upper).prod"
+        },
+        {
+          "name": "actualPrimeSlotBox_product_sum_perm",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 84,
+          "signature_end_line": 87,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualPrimeSlotBox_product_sum_perm {ι : Type*} (B : ι → Finset ℕ)\n    {input₁ input₂ : List ι} (hperm : input₁.Perm input₂) (F : ℕ → ℝ) :\n    (∑ ps ∈ actualPrimeSlotBox B input₁, F ps.prod) =\n      ∑ ps ∈ actualPrimeSlotBox B input₂, F ps.prod"
+        },
+        {
+          "name": "actualPrimeSlotBox_product_sum_append",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 110,
+          "signature_end_line": 114,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualPrimeSlotBox_product_sum_append {ι : Type*} (B : ι → Finset ℕ)\n    (left right : List ι) (F : ℕ → ℝ) :\n    (∑ ps ∈ actualPrimeSlotBox B (left ++ right), F ps.prod) =\n      ∑ ps ∈ actualPrimeSlotBox B left, ∑ qs ∈ actualPrimeSlotBox B right,\n        F (ps.prod * qs.prod)"
+        },
+        {
+          "name": "actualPrimeTuple_sum_by_product",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 124,
+          "signature_end_line": 126,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualPrimeTuple_sum_by_product (T : Finset (List ℕ)) (F : ℕ → ℝ) :\n    (∑ ps ∈ T, F ps.prod) =\n      ∑ n ∈ T.image List.prod, (actualPrimeTupleCoefficient T n : ℝ) * F n"
+        },
+        {
+          "name": "actualPrimeTuple_threeGroup_sum_normalized",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 143,
+          "signature_end_line": 150,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualPrimeTuple_threeGroup_sum_normalized\n    (T₁ T₂ T₃ : Finset (List ℕ)) (m₁ m₂ m₃ : ℕ) (c : ℝ) (H : ℕ → ℝ) :\n    (∑ ps ∈ T₁, ∑ qs ∈ T₂, ∑ rs ∈ T₃, c * H (ps.prod * qs.prod * rs.prod)) =\n      ∑ a ∈ T₁.image List.prod, ∑ b ∈ T₂.image List.prod, ∑ d ∈ T₃.image List.prod,\n        (c * (m₁.factorial : ℝ) * (m₂.factorial : ℝ) * (m₃.factorial : ℝ)) *\n          actualNormalizedPrimeTupleCoefficient T₁ m₁ a *\n          actualNormalizedPrimeTupleCoefficient T₂ m₂ b *\n          actualNormalizedPrimeTupleCoefficient T₃ m₃ d * H (a * b * d)"
+        },
+        {
+          "name": "actualFrozenSelectedPair_signed_regroup",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 167,
+          "signature_end_line": 180,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualFrozenSelectedPair_signed_regroup {ι : Type*}\n    (D A : ℝ) (yz : Bool) (upper : ι → ℕ) (p : Fin 3 → ι) (tail : List ι)\n    (B : ι → Finset ℕ) (c : ℝ) (H : ℕ → ℝ) :\n    let slots := actualFrozenSelectedPairSlots D A yz upper p tail\n    let T₁ := actualPrimeSlotBox B slots.1\n    let T₂ := actualPrimeSlotBox B slots.2.1\n    let T₃ := actualPrimeSlotBox B slots.2.2\n    (∑ ps ∈ actualPrimeSlotBox B (p 0 :: p 1 :: p 2 :: tail), c * H ps.prod) =\n      ∑ a ∈ T₁.image List.prod, ∑ b ∈ T₂.image List.prod, ∑ d ∈ T₃.image List.prod,\n        (c * (slots.1.length.factorial : ℝ) * (slots.2.1.length.factorial : ℝ) *\n          (slots.2.2.length.factorial : ℝ)) *\n          actualNormalizedPrimeTupleCoefficient T₁ slots.1.length a *\n          actualNormalizedPrimeTupleCoefficient T₂ slots.2.1.length b *\n          actualNormalizedPrimeTupleCoefficient T₃ slots.2.2.length d * H (a * b * d)"
+        },
+        {
+          "name": "actualFrozenSelectedPair_group_support",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 193,
+          "signature_end_line": 201,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualFrozenSelectedPair_group_support {ι : Type*}\n    (D A : ℝ) (yz : Bool) (upper : ι → ℕ) (p : Fin 3 → ι) (tail : List ι)\n    (B : ι → Finset ℕ)\n    (hsize : ∀ i ∈ p 0 :: p 1 :: p 2 :: tail, ∀ q ∈ B i, q ≤ upper i) :\n    let slots := actualFrozenSelectedPairSlots D A yz upper p tail\n    let abc := actualFrozenSelectedPairFactors D A yz upper upper p tail\n    (∀ a ∈ (actualPrimeSlotBox B slots.1).image List.prod, a ≤ abc.1) ∧\n      (∀ b ∈ (actualPrimeSlotBox B slots.2.1).image List.prod, b ≤ abc.2.1) ∧\n      (∀ d ∈ (actualPrimeSlotBox B slots.2.2).image List.prod, d ≤ abc.2.2)"
+        },
+        {
+          "name": "actualPrimeSlotBox_normalized_abs_le_one",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 218,
+          "signature_end_line": 221,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualPrimeSlotBox_normalized_abs_le_one {ι : Type*}\n    (B : ι → Finset ℕ) (input : List ι)\n    (hprime : ∀ i ∈ input, ∀ q ∈ B i, Nat.Prime q) (n : ℕ) :\n    |actualNormalizedPrimeTupleCoefficient (actualPrimeSlotBox B input) input.length n| ≤ 1"
+        }
+      ]
+    },
+    {
+      "file": "ImbalancedChen/ActualTwoFactorRepairMonomials.lean",
+      "source_sha256": "0cc308bae28411e0ac14e4f5231aeeab31624bb6ae6cc6e58e0f6138868f0925",
+      "declaration_count": 4,
+      "complete_declarations": [
+        {
+          "name": "twoFactorRepair_monomials",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 23,
+          "signature_end_line": 32,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem twoFactorRepair_monomials {x δ θ α A B a b : ℝ}\n    (hx : 1 < x) (hδ : δ ≤ 1 / 12) (hθ : θ ≤ 5 / 8)\n    (hApos : 0 < A) (hBpos : 0 < B) (hapos : 0 < a) (hbpos : 0 < b)\n    (hAB : A * B = x ^ (θ - 2 * δ))\n    (hAupper : A ≤ x ^ (1 / 3 - δ / 2))\n    (hBupper : B ≤ x ^ actualSelectedSubproductUpper α θ)\n    (ha : a ≤ A) (hb : b ≤ B) :\n    A ^ 2 * b ≤ x ^ (1 - 3 * δ) ∧\n      x ^ (7 * α / 32) * A * a * b ^ 5 ≤ x ^ (2 - 4 * δ) ∧\n      (A / b) ^ (7 / 16 : ℝ) * A * a * b ^ 5 ≤ x ^ (2 - 39 * δ / 8)"
+        },
+        {
+          "name": "actualDwell_full_vector_repair_monomials",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 69,
+          "signature_end_line": 84,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualDwell_full_vector_repair_monomials {x δ θ α A : ℝ}\n    (hx : 1 < x) (hδ0 : 0 < δ) (hδ : δ < 1 / 100000)\n    (hθlo : 1 / 2 ≤ θ) (hθhi : θ ≤ 5 / 8)\n    (hAlower : x ^ δ ≤ A) (hAupper : A ≤ x ^ (1 / 3 - δ / 2))\n    (input : List ℕ) (hpositive : ∀ p ∈ input, 0 < p)\n    (hfull : actualDwellSupport (x ^ (θ - 2 * δ)) input)\n    (b₀ : ℕ) (hb₀ : 0 < b₀)\n    (hb₀upper : (b₀ : ℝ) ≤ x ^ actualSelectedSubproductUpper α θ)\n    (hsmall : x ^ (θ - 2 * δ) / (A * b₀) < 1) :\n    let ab := actualTwoCapacityFactors A input\n    ab.1 * ab.2 = input.prod ∧ (ab.1 : ℝ) ≤ A ∧\n      (ab.2 : ℝ) ≤ x ^ (θ - 2 * δ) / A ∧\n      A ^ 2 * (ab.2 : ℝ) ≤ x ^ (1 - 3 * δ) ∧\n      x ^ (7 * α / 32) * A * (ab.1 : ℝ) * (ab.2 : ℝ) ^ 5 ≤ x ^ (2 - 4 * δ) ∧\n      (A / (ab.2 : ℝ)) ^ (7 / 16 : ℝ) * A * (ab.1 : ℝ) * (ab.2 : ℝ) ^ 5 ≤\n        x ^ (2 - 39 * δ / 8)"
+        },
+        {
+          "name": "actualDwell_full_vector_repair_targets",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 112,
+          "signature_end_line": 126,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualDwell_full_vector_repair_targets {x δ θ α A : ℝ}\n    (hx : 1 < x) (hδ0 : 0 < δ) (hδ : δ < 1 / 100000)\n    (hθlo : 1 / 2 ≤ θ) (hθhi : θ ≤ 5 / 8)\n    (hAlower : x ^ δ ≤ A) (hAupper : A ≤ x ^ (1 / 3 - δ / 2))\n    (input : List ℕ) (hpositive : ∀ p ∈ input, 0 < p)\n    (hfull : actualDwellSupport (x ^ (θ - 2 * δ)) input)\n    (b₀ : ℕ) (hb₀ : 0 < b₀)\n    (hb₀upper : (b₀ : ℝ) ≤ x ^ actualSelectedSubproductUpper α θ)\n    (hsmall : x ^ (θ - 2 * δ) / (A * b₀) < 1) :\n    let ab := actualTwoCapacityFactors A input\n    ab.1 * ab.2 = input.prod ∧ (ab.1 : ℝ) ≤ A ∧\n      A ^ 2 * (ab.2 : ℝ) ≤ x ^ (1 - 3 * δ) ∧\n      x ^ (7 * α / 32) * A * (ab.1 : ℝ) * (ab.2 : ℝ) ^ 5 ≤ x ^ (2 - 3 * δ) ∧\n      (A / (ab.2 : ℝ)) ^ (7 / 16 : ℝ) * A * (ab.1 : ℝ) * (ab.2 : ℝ) ^ 5 ≤\n        x ^ (2 - 2 * δ)"
+        },
+        {
+          "name": "actualExtendedThirdSelectedPair_smallCapacity_targets",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 137,
+          "signature_end_line": 158,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualExtendedThirdSelectedPair_smallCapacity_targets {e κ δ A : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hκ : κ ≤ e / 4) (hδ0 : 0 < δ) (hδ : δ < 1 / 100000) (hδfine : δ ≤ e / 32)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ VariableEnvelope.mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (x : ℝ) (hx : 1 < x) (p : Fin 3 → ℕ)\n    (hs : actualSelectedPrimeCoordinates x p ∈ actualExtendedThirdPhysicalCell m j)\n    (tail : List ℕ) (hpositive : ∀ q ∈ p 0 :: p 1 :: p 2 :: tail, 0 < q)\n    (hsupport : actualDwellSupport (x ^ actualExtendedThirdPhysicalLevel e m j)\n      (p 0 :: p 1 :: p 2 :: tail))\n    (hAlower : x ^ δ ≤ A) (hAupper : A ≤ x ^ (1 / 3 - δ / 2))\n    (hsmall : x ^ (actualExtendedThirdPairParameter e m j t yz - 2 * δ) /\n      (A * (actualSelectedPairProduct yz p : ℝ)) < 1) :\n    let ab := actualTwoCapacityFactors A (p 0 :: p 1 :: p 2 :: tail)\n    ab.1 * ab.2 = (p 0 :: p 1 :: p 2 :: tail).prod ∧ (ab.1 : ℝ) ≤ A ∧\n      A ^ 2 * (ab.2 : ℝ) ≤ x ^ (1 - 3 * δ) ∧\n      x ^ (7 * (1 + 3 * κ) / 32) * A * (ab.1 : ℝ) * (ab.2 : ℝ) ^ 5 ≤\n        x ^ (2 - 3 * δ) ∧\n      (A / (ab.2 : ℝ)) ^ (7 / 16 : ℝ) * A * (ab.1 : ℝ) * (ab.2 : ℝ) ^ 5 ≤\n        x ^ (2 - 2 * δ)"
+        }
+      ]
+    },
+    {
+      "file": "ImbalancedChen/ActualSelectedPairFactorization.lean",
+      "source_sha256": "fb6aa43a36f7a5c7b0d4f0a63261cc4f9728ff7b221143c16b4e217443f2de7c",
+      "declaration_count": 3,
+      "complete_declarations": [
+        {
+          "name": "actualSelectedPairFactors",
+          "kind": "def",
+          "visibility": "public",
+          "line": 24,
+          "signature_end_line": 25,
+          "extraction_boundary": "actual definition := separator",
+          "complete_signature": "def actualSelectedPairFactors (D A : ℝ) (yz : Bool) (p : Fin 3 → ℕ)\n    (tail : List ℕ) : ℕ × ℕ × ℕ"
+        },
+        {
+          "name": "selectedPair_monomials",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 33,
+          "signature_end_line": 41,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem selectedPair_monomials {x δ θ α A a b c : ℝ}\n    (hx : 1 < x) (hApos : 0 < A) (hapos : 0 < a) (hbpos : 0 < b) (hcpos : 0 < c)\n    (hcap : A * b * c ≤ x ^ (θ - 2 * δ))\n    (hblower : x ^ (2 * θ - 1) ≤ b)\n    (hbupper : b ≤ x ^ actualSelectedSubproductUpper α θ) (ha : a ≤ A) :\n    A ^ 2 * b * c ^ 2 ≤ x ^ (1 - 4 * δ) ∧\n      x ^ (7 * α / 32) * A * a * b ^ 5 * c ^ 2 ≤ x ^ (2 - 4 * δ) ∧\n      (A * c / b) ^ (7 / 16 : ℝ) * A * a * b ^ 5 * c ^ 2 ≤\n        x ^ (2 - 39 * δ / 8)"
+        },
+        {
+          "name": "actualExtendedThirdSelectedPair_factorization",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 83,
+          "signature_end_line": 103,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualExtendedThirdSelectedPair_factorization {e κ δ A : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hκ : κ ≤ e / 4) (hδ0 : 0 < δ) (hδ : δ < 1 / 100000) (hδfine : δ ≤ e / 32)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ VariableEnvelope.mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (x : ℝ) (hx : 1 < x) (p : Fin 3 → ℕ)\n    (hs : actualSelectedPrimeCoordinates x p ∈ actualExtendedThirdPhysicalCell m j)\n    (tail : List ℕ) (hpositive : ∀ q ∈ p 0 :: p 1 :: p 2 :: tail, 0 < q)\n    (hsupport : actualDwellSupport (x ^ actualExtendedThirdPhysicalLevel e m j)\n      (p 0 :: p 1 :: p 2 :: tail))\n    (hAlower : x ^ δ ≤ A) (hAupper : A ≤ x ^ (1 / 3 - δ / 2)) :\n    let θ := actualExtendedThirdPairParameter e m j t yz\n    let abc := actualSelectedPairFactors (x ^ (θ - 2 * δ)) A yz p tail\n    abc.1 * abc.2.1 * abc.2.2 = (p 0 :: p 1 :: p 2 :: tail).prod ∧ (abc.1 : ℝ) ≤ A ∧\n      A ^ 2 * (abc.2.1 : ℝ) * (abc.2.2 : ℝ) ^ 2 ≤ x ^ (1 - 3 * δ) ∧\n      x ^ (7 * (1 + 3 * κ) / 32) * A * (abc.1 : ℝ) *\n        (abc.2.1 : ℝ) ^ 5 * (abc.2.2 : ℝ) ^ 2 ≤ x ^ (2 - 3 * δ) ∧\n      (A * (abc.2.2 : ℝ) / (abc.2.1 : ℝ)) ^ (7 / 16 : ℝ) * A * (abc.1 : ℝ) *\n        (abc.2.1 : ℝ) ^ 5 * (abc.2.2 : ℝ) ^ 2 ≤ x ^ (2 - 2 * δ)"
+        }
+      ]
+    },
+    {
+      "file": "ImbalancedChen/ActualRoughVectorEndpointBudget.lean",
+      "source_sha256": "7bb4f5b5113fcfb03ff77813d953c110f8c86a1e02a27c6c702e1799f3d8d4fb",
+      "declaration_count": 6,
+      "complete_declarations": [
+        {
+          "name": "actualRoughVectorRankBound",
+          "kind": "def",
+          "visibility": "public",
+          "line": 25,
+          "signature_end_line": 25,
+          "extraction_boundary": "actual definition := separator",
+          "complete_signature": "def actualRoughVectorRankBound (ρ : ℝ) : ℕ"
+        },
+        {
+          "name": "actualDwellSupport_prod_le",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 27,
+          "signature_end_line": 29,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualDwellSupport_prod_le {D : ℝ} (input : List ℕ) (hne : input ≠ [])\n    (hpositive : ∀ p ∈ input, 0 < p) (hfull : actualDwellSupport D input) :\n    (input.prod : ℝ) ≤ D"
+        },
+        {
+          "name": "actualRoughPrimeVector_length_le",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 48,
+          "signature_end_line": 54,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualRoughPrimeVector_length_le {x ρ lam0 : ℝ}\n    (hx : 1 < x) (hρ : 0 < ρ) (hlevel : lam0 ≤ 5 / 8)\n    (input : List ℕ) (hne : input ≠ [])\n    (hpositive : ∀ p ∈ input, 0 < p)\n    (hrough : ∀ p ∈ input, x ^ ρ ≤ (p : ℝ))\n    (hfull : actualDwellSupport (x ^ lam0) input) :\n    input.length ≤ actualRoughVectorRankBound ρ"
+        },
+        {
+          "name": "mapped_upper_prod_le_inflation",
+          "kind": "theorem",
+          "visibility": "private",
+          "line": 70,
+          "signature_end_line": 74,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "private theorem mapped_upper_prod_le_inflation {α : Type*} (x τ : ℝ) (hx : 0 < x)\n    (actual upper : α → ℕ) (input : List α)\n    (hsize : ∀ i ∈ input, (upper i : ℝ) ≤ x ^ τ * (actual i : ℝ)) :\n    (input.map (fun i => (upper i : ℝ))).prod ≤\n      (x ^ τ) ^ input.length * (input.map (fun i => (actual i : ℝ))).prod"
+        },
+        {
+          "name": "actualDwellSupport_upper_inflation",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 92,
+          "signature_end_line": 98,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualDwellSupport_upper_inflation {α : Type*} {x τ lam0 lam1 : ℝ} {R : ℕ}\n    (hx : 1 < x) (hτ : 0 ≤ τ) (actual upper : α → ℕ) (input : List α)\n    (hlen : input.length ≤ R)\n    (hsize : ∀ i ∈ input, (upper i : ℝ) ≤ x ^ τ * (actual i : ℝ))\n    (hfull : actualDwellSupport (x ^ lam0) (input.map actual))\n    (hbudget : lam0 + τ * (R + 1) ≤ lam1) :\n    actualDwellSupport (x ^ lam1) (input.map upper)"
+        },
+        {
+          "name": "actualExtendedThirdSelectedPair_upperSupport",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 132,
+          "signature_end_line": 148,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualExtendedThirdSelectedPair_upperSupport\n    {α : Type*} {e δ ρ τ x : ℝ} {m : ℕ} {j : ActualExtendedThirdDyadicLabel m}\n    (he0 : 0 < e) (he : e ≤ 1 / 384) (hδ : δ ≤ e / 32)\n    (hρ : 0 < ρ) (hτ : 0 ≤ τ)\n    (hwidth : τ * (actualRoughVectorRankBound ρ + 1) ≤ e / 2)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ VariableEnvelope.mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (hx : 1 < x) (actual upper : α → ℕ) (input : List α) (hne : input ≠ [])\n    (hpositive : ∀ i ∈ input, 0 < actual i)\n    (hrough : ∀ i ∈ input, x ^ ρ ≤ (actual i : ℝ))\n    (hsize : ∀ i ∈ input, (upper i : ℝ) ≤ x ^ τ * (actual i : ℝ))\n    (hsupport : actualDwellSupport (x ^ actualExtendedThirdPhysicalLevel e m j)\n      (input.map actual)) :\n    actualDwellSupport (x ^ (actualExtendedThirdPairParameter e m j t yz - 2 * δ))\n      (input.map upper)"
+        }
+      ]
+    },
+    {
+      "file": "ImbalancedChen/ActualSelectedSubproductParameters.lean",
+      "source_sha256": "5b2338db289c220df3f9ff86d94d1d7801d7f05b68f87992f54946ec4e6cbea5",
+      "declaration_count": 13,
+      "complete_declarations": [
+        {
+          "name": "actualSelectedSubproductV",
+          "kind": "def",
+          "visibility": "public",
+          "line": 28,
+          "signature_end_line": 28,
+          "extraction_boundary": "actual definition := separator",
+          "complete_signature": "def actualSelectedSubproductV (α s : ℝ) : ℝ"
+        },
+        {
+          "name": "actualSelectedSubproductUpper",
+          "kind": "def",
+          "visibility": "public",
+          "line": 33,
+          "signature_end_line": 33,
+          "extraction_boundary": "actual definition := separator",
+          "complete_signature": "def actualSelectedSubproductUpper (α θ : ℝ) : ℝ"
+        },
+        {
+          "name": "actualSelectedSubproductV_one",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 36,
+          "signature_end_line": 37,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualSelectedSubproductV_one (s : ℝ) :\n    actualSelectedSubproductV 1 s = v s"
+        },
+        {
+          "name": "actualSelectedSubproduct_critical_iff",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 43,
+          "signature_end_line": 45,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualSelectedSubproduct_critical_iff (α θ s : ℝ) :\n    θ ≤ actualSelectedSubproductV α s ↔\n      2 * θ - 1 ≤ s ∧ s ≤ actualSelectedSubproductUpper α θ"
+        },
+        {
+          "name": "actualSelectedSubproductV_residue_margin",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 56,
+          "signature_end_line": 58,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualSelectedSubproductV_residue_margin {e κ θ s : ℝ}\n    (he : 0 ≤ e) (hκ : κ ≤ e / 4) (hθ : θ + e / 4 ≤ v s) :\n    θ + e / 8 ≤ actualSelectedSubproductV (1 + 3 * κ) s"
+        },
+        {
+          "name": "actualSelectedPrimeCoordinates",
+          "kind": "def",
+          "visibility": "public",
+          "line": 74,
+          "signature_end_line": 74,
+          "extraction_boundary": "actual definition := separator",
+          "complete_signature": "def actualSelectedPrimeCoordinates (x : ℝ) (p : Fin 3 → ℕ) : Fin 3 → ℝ"
+        },
+        {
+          "name": "rpow_actualSelectedPrimeCoordinates",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 77,
+          "signature_end_line": 79,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem rpow_actualSelectedPrimeCoordinates (x : ℝ) (hx : 1 < x)\n    (p : Fin 3 → ℕ) (hp : ∀ i, 0 < p i) (i : Fin 3) :\n    x ^ actualSelectedPrimeCoordinates x p i = (p i : ℝ)"
+        },
+        {
+          "name": "actualSelectedPairProduct",
+          "kind": "def",
+          "visibility": "public",
+          "line": 86,
+          "signature_end_line": 86,
+          "extraction_boundary": "actual definition := separator",
+          "complete_signature": "def actualSelectedPairProduct (yz : Bool) (p : Fin 3 → ℕ) : ℕ"
+        },
+        {
+          "name": "actualSelectedPairRemainingPrime",
+          "kind": "def",
+          "visibility": "public",
+          "line": 89,
+          "signature_end_line": 89,
+          "extraction_boundary": "actual definition := separator",
+          "complete_signature": "def actualSelectedPairRemainingPrime (yz : Bool) (p : Fin 3 → ℕ) : ℕ"
+        },
+        {
+          "name": "actualSelectedPairProduct_rpow",
+          "kind": "theorem",
+          "visibility": "private",
+          "line": 92,
+          "signature_end_line": 96,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "private theorem actualSelectedPairProduct_rpow (x : ℝ) (hx : 1 < x)\n    (p : Fin 3 → ℕ) (hp : ∀ i, 0 < p i) (yz : Bool) :\n    x ^ (if yz then actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2\n      else actualSelectedPrimeCoordinates x p 0 + actualSelectedPrimeCoordinates x p 2) =\n      (actualSelectedPairProduct yz p : ℝ)"
+        },
+        {
+          "name": "actualSelectedPairGate_rpow",
+          "kind": "theorem",
+          "visibility": "private",
+          "line": 100,
+          "signature_end_line": 107,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "private theorem actualSelectedPairGate_rpow (x : ℝ) (hx : 1 < x)\n    (p : Fin 3 → ℕ) (hp : ∀ i, 0 < p i) (yz : Bool) :\n    (actualSelectedPairProduct yz p : ℝ) *\n        (actualSelectedPairRemainingPrime yz p : ℝ) ^ 2 =\n      x ^ (if yz then 2 * actualSelectedPrimeCoordinates x p 0 +\n          actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2\n        else actualSelectedPrimeCoordinates x p 0 +\n          2 * actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2)"
+        },
+        {
+          "name": "actualExtendedThirdSelectedPair_arithmeticInputs",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 127,
+          "signature_end_line": 145,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualExtendedThirdSelectedPair_arithmeticInputs {e κ δ : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hκ : κ ≤ e / 4) (hδ : δ ≤ e / 32)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (x : ℝ) (hx : 1 < x) (p : Fin 3 → ℕ) (hp : ∀ i, 0 < p i)\n    (hs : actualSelectedPrimeCoordinates x p ∈ actualExtendedThirdPhysicalCell m j)\n    (tail : List ℕ)\n    (hsupport : actualDwellSupport (x ^ actualExtendedThirdPhysicalLevel e m j)\n      (p 0 :: p 1 :: p 2 :: tail)) :\n    let θ := actualExtendedThirdPairParameter e m j t yz\n    actualDwellSupport (x ^ (θ - 2 * δ)) (p 0 :: p 1 :: p 2 :: tail) ∧\n      (actualSelectedPairProduct yz p : ℝ) *\n        (actualSelectedPairRemainingPrime yz p : ℝ) ^ 2 < x ^ (θ - 2 * δ) ∧\n      x ^ (2 * θ - 1) ≤ (actualSelectedPairProduct yz p : ℝ) ∧\n      (actualSelectedPairProduct yz p : ℝ) ≤\n        x ^ actualSelectedSubproductUpper (1 + 3 * κ) θ"
+        },
+        {
+          "name": "actualExtendedThirdSelectedPair_allocate",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 170,
+          "signature_end_line": 188,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualExtendedThirdSelectedPair_allocate {e κ δ A : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hκ : κ ≤ e / 4) (hδ : δ ≤ e / 32)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (x : ℝ) (hx : 1 < x) (p : Fin 3 → ℕ) (hp : ∀ i, 0 < p i)\n    (hs : actualSelectedPrimeCoordinates x p ∈ actualExtendedThirdPhysicalCell m j)\n    (tail : List ℕ)\n    (hsupport : actualDwellSupport (x ^ actualExtendedThirdPhysicalLevel e m j)\n      (p 0 :: p 1 :: p 2 :: tail)) (hA : 1 ≤ A)\n    (hC : 1 ≤ x ^ (actualExtendedThirdPairParameter e m j t yz - 2 * δ) /\n      (A * (actualSelectedPairProduct yz p : ℝ))) :\n    let θ := actualExtendedThirdPairParameter e m j t yz\n    let b₀ := actualSelectedPairProduct yz p\n    let ac := actualTwoCapacityFactors A (actualSelectedPairRemainingPrime yz p :: tail)\n    ac.1 * b₀ * ac.2 = (p 0 :: p 1 :: p 2 :: tail).prod ∧\n      (ac.1 : ℝ) ≤ A ∧ (ac.2 : ℝ) ≤ x ^ (θ - 2 * δ) / (A * b₀)"
+        }
+      ]
+    },
+    {
+      "file": "ImbalancedChen/ActualPrimeTupleNormalization.lean",
+      "source_sha256": "ee2f0f12ef232b770dcc7136d8ce74f27fc830cad73ab78641fe18f1cabc5db0",
+      "declaration_count": 7,
+      "complete_declarations": [
+        {
+          "name": "actualPrimeTupleCoefficient",
+          "kind": "def",
+          "visibility": "public",
+          "line": 26,
+          "signature_end_line": 26,
+          "extraction_boundary": "actual definition := separator",
+          "complete_signature": "def actualPrimeTupleCoefficient (T : Finset (List ℕ)) (n : ℕ) : ℕ"
+        },
+        {
+          "name": "actualNormalizedPrimeTupleCoefficient",
+          "kind": "def",
+          "visibility": "public",
+          "line": 30,
+          "signature_end_line": 30,
+          "extraction_boundary": "actual definition := separator",
+          "complete_signature": "def actualNormalizedPrimeTupleCoefficient (T : Finset (List ℕ)) (m n : ℕ) : ℝ"
+        },
+        {
+          "name": "actualPrimeTupleCoefficient_le_factorial",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 35,
+          "signature_end_line": 38,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualPrimeTupleCoefficient_le_factorial (T : Finset (List ℕ)) (m n : ℕ)\n    (hlen : ∀ ps ∈ T, ps.length = m)\n    (hprime : ∀ ps ∈ T, ∀ p ∈ ps, Nat.Prime p) :\n    actualPrimeTupleCoefficient T n ≤ m.factorial"
+        },
+        {
+          "name": "actualNormalizedPrimeTupleCoefficient_mem_Icc",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 60,
+          "signature_end_line": 64,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualNormalizedPrimeTupleCoefficient_mem_Icc\n    (T : Finset (List ℕ)) (m n : ℕ)\n    (hlen : ∀ ps ∈ T, ps.length = m)\n    (hprime : ∀ ps ∈ T, ∀ p ∈ ps, Nat.Prime p) :\n    actualNormalizedPrimeTupleCoefficient T m n ∈ Set.Icc (0 : ℝ) 1"
+        },
+        {
+          "name": "actualNormalizedPrimeTupleCoefficient_abs_le_one",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 70,
+          "signature_end_line": 74,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualNormalizedPrimeTupleCoefficient_abs_le_one\n    (T : Finset (List ℕ)) (m n : ℕ)\n    (hlen : ∀ ps ∈ T, ps.length = m)\n    (hprime : ∀ ps ∈ T, ∀ p ∈ ps, Nat.Prime p) :\n    |actualNormalizedPrimeTupleCoefficient T m n| ≤ 1"
+        },
+        {
+          "name": "factorial_mul_actualNormalizedPrimeTupleCoefficient",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 80,
+          "signature_end_line": 83,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem factorial_mul_actualNormalizedPrimeTupleCoefficient\n    (T : Finset (List ℕ)) (m n : ℕ) :\n    (m.factorial : ℝ) * actualNormalizedPrimeTupleCoefficient T m n =\n      (actualPrimeTupleCoefficient T n : ℝ)"
+        },
+        {
+          "name": "actualPrimeTuple_threeGroup_scalar_identity",
+          "kind": "theorem",
+          "visibility": "public",
+          "line": 92,
+          "signature_end_line": 99,
+          "extraction_boundary": "actual := by proof separator, preserving statement let assignments",
+          "complete_signature": "theorem actualPrimeTuple_threeGroup_scalar_identity\n    (c : ℝ) (T₁ T₂ T₃ : Finset (List ℕ)) (m₁ m₂ m₃ n₁ n₂ n₃ : ℕ) :\n    c * (actualPrimeTupleCoefficient T₁ n₁ : ℝ) *\n        (actualPrimeTupleCoefficient T₂ n₂ : ℝ) * (actualPrimeTupleCoefficient T₃ n₃ : ℝ) =\n      (c * (m₁.factorial : ℝ) * (m₂.factorial : ℝ) * (m₃.factorial : ℝ)) *\n        actualNormalizedPrimeTupleCoefficient T₁ m₁ n₁ *\n        actualNormalizedPrimeTupleCoefficient T₂ m₂ n₂ *\n        actualNormalizedPrimeTupleCoefficient T₃ m₃ n₃"
+        }
+      ]
+    }
+  ],
+  "historical_reports_preserved": [
+    {
+      "path": ".lake/proof-continuation/source-reviews/20261016-dwell-api-independent-rebind.json",
+      "sha256": "f11542bd3e7eae94e76e3c217940620cc10e82ca90e819fe42346017015e02b0"
+    },
+    {
+      "path": ".lake/proof-continuation/source-reviews/20261016-dwell-dependent-getelem-independent-rebind.json",
+      "sha256": "1824d0903ecf3f8ec77ebf4bf95e3fed5602beb47d5f943aa73fa0316700e7a0"
+    },
+    {
+      "path": ".lake/proof-continuation/source-reviews/20261016-frozen-selected-pair-slots-independent-semantics.json",
+      "sha256": "85f8a541f57b5c111c6967a3fdedbea96838fb70de4abe6de016410973736a74"
+    },
+    {
+      "path": ".lake/proof-continuation/source-reviews/20261016-frozen-slot-coefficient-regrouping-independent-semantics.json",
+      "sha256": "c9fe10924fb67be9ff49b9ce562f0791596e6f7494ed1278a8dee8a855e287ac"
+    },
+    {
+      "path": ".lake/proof-continuation/source-reviews/20261016-tail-api-and-public-helper-independent-rebind.json",
+      "sha256": "79822cd6cdacdcc1dd6d3b3bae492fb7fcdfdb8535ab3b1a21539a327f141f81"
+    }
+  ],
+  "what_changes": "Only completeness/correct boundary of reported source declaration signatures. Prior source semantic assessments and exact documented byte diffs remain as evidence at their originally frozen hashes; this addendum does not rebind any imported closure. Current Dwell is bound separately to 6915; the exact dependent-index proof-repair report remains authoritative for its source diff.",
+  "wholecell_corrected_separately": {
+    "path": ".lake/proof-continuation/source-reviews/20261016-wholecell-api-independent-rebind-complete-types.json",
+    "sha256": "cf590516c1868b1a8663b867130fc552ae8c67d5fd03123b3d52445b14251a68"
+  },
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_or_build_invoked": false,
+    "frozen_lean_modified": false,
+    "python_bytecode_generated": false,
+    "elaborated_type_or_imported_object_acceptance": false,
+    "runtime_pass_claim": false
+  }
+}
