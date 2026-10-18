@@ -417,7 +417,7 @@ theorem cleanedAlpha_sharedLargePairedGCDW_bound (kappa : ℝ) {epsilon : ℝ}
           · simp only [h₁, zero_mul, norm_zero]
             split_ifs <;> first | exact hA | exact le_rfl
           by_cases h₂ : d.cleanedAlphaAtom.transposedAtom.beta n₂ = 0
-          · simp only [h₂, star_zero, mul_zero, norm_zero]
+          · simp only [h₂, star_zero, mul_zero, zero_mul, norm_zero]
             split_ifs <;> first | exact hA | exact le_rfl
           have hb := hfactor B sigma c0 d hd p hp n₁ n₂ hn₁ hn₂
             (d.cleanedAlpha_transposedBeta_ne_zero_not_dvd h₁)
@@ -448,7 +448,7 @@ theorem cleanedAlpha_sharedLargePairedGCDW_bound (kappa : ℝ) {epsilon : ℝ}
               Y < (n₁.gcd n₂ : ℝ)) := fun h ↦ hy h.2.2.2
           simp only [if_neg hy, if_neg hnot, norm_zero, le_refl]
       _ = _ := by
-        rw [← sum_product, ← sum_filter]
+        rw [← sum_product', ← sum_filter]
         simp only [sharedPrimitiveLargeGCDPairs, sum_const, nsmul_eq_mul]
         ring
   have hRect : ∀ p ∈ d.primitiveFirstFactorCarrier,

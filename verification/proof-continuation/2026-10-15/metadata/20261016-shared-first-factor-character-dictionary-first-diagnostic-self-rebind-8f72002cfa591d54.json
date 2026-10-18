@@ -1,0 +1,431 @@
+{
+  "schema_version": 1,
+  "status": "SOURCE_ONLY_ACTUAL_FIRST_PROOF_API_LINT_DIAGNOSTIC_REBIND_PENDING_ROOT_INDEPENDENT",
+  "author": "/root/dispersion_resume",
+  "reviewed_at_utc": "2026-10-16T00:01:06.176510+00:00",
+  "source": "ImbalancedChen\\Part3SharedFirstFactorCharacterDictionary.lean",
+  "old_sha256": "37f563d0e3e64e9d7a2d7bc505ce6e2a05294034f453db2f9317434759a596bc",
+  "new_sha256": "d3dcfeeea8f707b8d3d8902753b217eeac303255934398e33c0ff2fb496f8a47",
+  "old_snapshot": ".lake\\proof-continuation\\source-reviews\\drafts\\Part3SharedFirstFactorCharacterDictionary.37f563d0e3e64e9d7a2d7bc505ce6e2a05294034f453db2f9317434759a596bc.lean",
+  "failed_stdout": ".lake\\proof-continuation\\runs\\20261015T235512096556Z-ImbalancedChen.Part3SharedFirstFactorCharacterDictionary\\stdout.log",
+  "failed_stdout_sha256": "2d34a3ce7c78300df95879afb5beee1dec87d81580915ecca6611d64ca15dca9",
+  "failed_receipt_sha256": "142a200d6f313f1cb0c2cdcda01c6132ff410bdc6b9c4a4943c8a0dc66c72b70",
+  "literal_edits": [
+    {
+      "old": "  letI : NeZero delta :=",
+      "new": "  let : NeZero delta :="
+    },
+    {
+      "old": "  letI : HasEnoughRootsOfUnity ℂ (Monoid.exponent (ZMod delta)ˣ) := by",
+      "new": "  let : HasEnoughRootsOfUnity ℂ (Monoid.exponent (ZMod delta)ˣ) := by"
+    },
+    {
+      "old": "    letI : NeZero (Monoid.exponent (ZMod delta)ˣ) :=",
+      "new": "    let : NeZero (Monoid.exponent (ZMod delta)ˣ) :="
+    },
+    {
+      "old": "  simp only [star_sum, Finset.sum_mul_sum, Finset.mul_sum]",
+      "new": "  simp only [star_sum, Finset.sum_mul, Finset.mul_sum]"
+    },
+    {
+      "old": "      field_simp\n      ring\n    _ = _ := (eq_sub_of_add_eq he).symm",
+      "new": "      field_simp\n    _ = _ := (eq_sub_of_add_eq he).symm"
+    },
+    {
+      "old": "  simp_rw [mul_assoc, ← Finset.mul_sum]\n  rw [sum_slice_factor d hp]\n  apply Finset.sum_congr rfl\n  intro u _\n  rw [sum_star_slice_factor d hp]",
+      "new": "  calc\n    _ = ∑ a ∈ (d.q1SliceAtom p).complexFactorLabels,\n        (d.q1SliceAtom p).complexFactorGamma a *\n          ∑ b ∈ (d.q1SliceAtom p).complexFactorLabels,\n            star ((d.q1SliceAtom p).complexFactorGamma b) *\n              f (complexFactorModulus a) (complexFactorModulus b) := by\n      simp only [Finset.mul_sum, mul_assoc]\n    _ = ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        (d.gamma2 u.1 * d.gamma3 u.2) *\n          ∑ b ∈ (d.q1SliceAtom p).complexFactorLabels,\n            star ((d.q1SliceAtom p).complexFactorGamma b) *\n              f (p * (u.1 * u.2)) (complexFactorModulus b) :=\n      sum_slice_factor d hp (fun q ↦\n        ∑ b ∈ (d.q1SliceAtom p).complexFactorLabels,\n          star ((d.q1SliceAtom p).complexFactorGamma b) * f q (complexFactorModulus b))\n    _ = _ := by\n      apply Finset.sum_congr rfl\n      intro u _\n      rw [sum_star_slice_factor d hp (fun r ↦ f (p * (u.1 * u.2)) r),\n        Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro v _\n      ring"
+    },
+    {
+      "old": "  rw [SharedFirstFactorCharacterDictionary.pair_sum_slice_factor d\n    (Finset.mem_filter.mp hp).1]\n  simp only [sharedFirstFactor_lcm]",
+      "new": "  have he := congrArg (fun z : ℂ ↦\n    ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) * z)\n    (SharedFirstFactorCharacterDictionary.pair_sum_slice_factor d\n      (Finset.mem_filter.mp hp).1 (fun q r ↦\n        covariance d.alphaCarrier d.alpha q r / (q.lcm r : ℂ)))\n  simpa only [sharedFirstFactor_lcm] using he"
+    },
+    {
+      "old": "  rw [d.q1SliceZero_sub_primitive_eq_factorCovariance hd hp]\n  simp only [Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro u hu\n  apply Finset.sum_congr rfl",
+      "new": "  rw [d.q1SliceZero_sub_primitive_eq_factorCovariance hd hp]\n  rw [Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro u hu\n  rw [Finset.mul_sum]\n  apply Finset.sum_congr rfl"
+    },
+    {
+      "old": "  field_simp [hp', hD', hL', hphi]\n  ring",
+      "new": "  field_simp [hp', hD', hL', hphi]"
+    }
+  ],
+  "offset_byte_patches": [
+    {
+      "old_start": 1901,
+      "old_end": 1902,
+      "new_start": 1901,
+      "new_end": 1901,
+      "old_bytes_hex": "49",
+      "new_bytes_hex": ""
+    },
+    {
+      "old_start": 2085,
+      "old_end": 2086,
+      "new_start": 2084,
+      "new_end": 2084,
+      "old_bytes_hex": "49",
+      "new_bytes_hex": ""
+    },
+    {
+      "old_start": 2161,
+      "old_end": 2162,
+      "new_start": 2159,
+      "new_end": 2159,
+      "old_bytes_hex": "49",
+      "new_bytes_hex": ""
+    },
+    {
+      "old_start": 6035,
+      "old_end": 6039,
+      "new_start": 6032,
+      "new_end": 6032,
+      "old_bytes_hex": "5f73756d",
+      "new_bytes_hex": ""
+    },
+    {
+      "old_start": 9267,
+      "old_end": 9278,
+      "new_start": 9260,
+      "new_end": 9260,
+      "old_bytes_hex": "202072696e670a20202020",
+      "new_bytes_hex": ""
+    },
+    {
+      "old_start": 12076,
+      "old_end": 12076,
+      "new_start": 12058,
+      "new_end": 12366,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "63616c630a202020205f203d20e28891206120e288882028642e7131536c69636541746f6d2070292e636f6d706c6578466163746f724c6162656c732c0a202020202020202028642e7131536c69636541746f6d2070292e636f6d706c6578466163746f7247616d6d612061202a0a20202020202020202020e28891206220e288882028642e7131536c69636541746f6d2070292e636f6d706c6578466163746f724c6162656c732c0a20202020202020202020202073746172202828642e7131536c69636541746f6d2070292e636f6d706c6578466163746f7247616d6d61206229202a0a2020202020202020202020202020662028636f6d706c6578466163746f724d6f64756c75732061292028636f6d706c6578466163746f724d6f64756c7573206229203a3d2062790a202020202020"
+    },
+    {
+      "old_start": 12080,
+      "old_end": 12083,
+      "new_start": 12370,
+      "new_end": 12375,
+      "old_bytes_hex": "5f7277",
+      "new_bytes_hex": "206f6e6c79"
+    },
+    {
+      "old_start": 12085,
+      "old_end": 12100,
+      "new_start": 12377,
+      "new_end": 12377,
+      "old_bytes_hex": "6d756c5f6173736f632c20e2869020",
+      "new_bytes_hex": ""
+    },
+    {
+      "old_start": 12114,
+      "old_end": 12114,
+      "new_start": 12391,
+      "new_end": 12402,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "2c206d756c5f6173736f63"
+    },
+    {
+      "old_start": 12118,
+      "old_end": 12118,
+      "new_start": 12406,
+      "new_end": 12427,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "20205f203d20e28891207520e2888820666163746f"
+    },
+    {
+      "old_start": 12119,
+      "old_end": 12120,
+      "new_start": 12428,
+      "new_end": 12435,
+      "old_bytes_hex": "77",
+      "new_bytes_hex": "43617272696572"
+    },
+    {
+      "old_start": 12121,
+      "old_end": 12122,
+      "new_start": 12436,
+      "new_end": 12693,
+      "old_bytes_hex": "5b",
+      "new_bytes_hex": "642e513220c397cba220666163746f724361727269657220642e51332c0a202020202020202028642e67616d6d613220752e31202a20642e67616d6d613320752e3229202a0a20202020202020202020e28891206220e288882028642e7131536c69636541746f6d2070292e636f6d706c6578466163746f724c6162656c732c0a20202020202020202020202073746172202828642e7131536c69636541746f6d2070292e636f6d706c6578466163746f7247616d6d61206229202a0a202020202020202020202020202066202870202a2028752e31202a20752e3229292028636f6d706c6578466163746f724d6f64756c7573206229203a3d0a202020202020"
+    },
+    {
+      "old_start": 12143,
+      "old_end": 12144,
+      "new_start": 12714,
+      "new_end": 12725,
+      "old_bytes_hex": "5d",
+      "new_bytes_hex": "202866756e207120e286a6"
+    },
+    {
+      "old_start": 12145,
+      "old_end": 12145,
+      "new_start": 12726,
+      "new_end": 12891,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "2020202020202020e28891206220e288882028642e7131536c69636541746f6d2070292e636f6d706c6578466163746f724c6162656c732c0a2020202020202020202073746172202828642e7131536c69636541746f6d2070292e636f6d706c6578466163746f7247616d6d61206229202a206620712028636f6d706c6578466163746f724d6f64756c7573206229290a202020205f203d205f203a3d2062790a20202020"
+    },
+    {
+      "old_start": 12176,
+      "old_end": 12176,
+      "new_start": 12922,
+      "new_end": 12926,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "20202020"
+    },
+    {
+      "old_start": 12186,
+      "old_end": 12186,
+      "new_start": 12936,
+      "new_end": 12940,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "20202020"
+    },
+    {
+      "old_start": 12218,
+      "old_end": 12218,
+      "new_start": 12972,
+      "new_end": 13030,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "202866756e207220e286a62066202870202a2028752e31202a20752e3229292072292c0a202020202020202046696e7365742e6d756c5f73756d"
+    },
+    {
+      "old_start": 12219,
+      "old_end": 12219,
+      "new_start": 13031,
+      "new_end": 13091,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "0a2020202020206170706c792046696e7365742e73756d5f636f6e67722072666c0a202020202020696e74726f2076205f0a20202020202072696e67"
+    },
+    {
+      "old_start": 15129,
+      "old_end": 15129,
+      "new_start": 16001,
+      "new_end": 16016,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "68617665206865203a3d20636f6e67"
+    },
+    {
+      "old_start": 15130,
+      "old_end": 15131,
+      "new_start": 16017,
+      "new_end": 16020,
+      "old_bytes_hex": "77",
+      "new_bytes_hex": "417267"
+    },
+    {
+      "old_start": 15132,
+      "old_end": 15133,
+      "new_start": 16021,
+      "new_end": 16104,
+      "old_bytes_hex": "5b",
+      "new_bytes_hex": "2866756e207a203a20e2848220e286a60a202020202828642e56202a20436f6d6d6f6e536d6f6f74684375746f66662e6375746f66664d617373203a20e2849d29203a20e2848229202a207a290a2020202028"
+    },
+    {
+      "old_start": 15198,
+      "old_end": 15198,
+      "new_start": 16169,
+      "new_end": 16171,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "2020"
+    },
+    {
+      "old_start": 15225,
+      "old_end": 15226,
+      "new_start": 16198,
+      "new_end": 16277,
+      "old_bytes_hex": "5d",
+      "new_bytes_hex": "202866756e2071207220e286a60a2020202020202020636f76617269616e636520642e616c7068614361727269657220642e616c70686120712072202f2028712e6c636d2072203a20e28482292929"
+    },
+    {
+      "old_start": 15233,
+      "old_end": 15233,
+      "new_start": 16284,
+      "new_end": 16285,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "61"
+    },
+    {
+      "old_start": 15262,
+      "old_end": 15262,
+      "new_start": 16314,
+      "new_end": 16323,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "207573696e67206865"
+    },
+    {
+      "old_start": 16795,
+      "old_end": 16804,
+      "new_start": 17856,
+      "new_end": 17858,
+      "old_bytes_hex": "73696d70206f6e6c79",
+      "new_bytes_hex": "7277"
+    },
+    {
+      "old_start": 16863,
+      "old_end": 16863,
+      "new_start": 17917,
+      "new_end": 17939,
+      "old_bytes_hex": "",
+      "new_bytes_hex": "0a20207277205b46696e7365742e6d756c5f73756d5d"
+    },
+    {
+      "old_start": 18137,
+      "old_end": 18144,
+      "new_start": 19213,
+      "new_end": 19213,
+      "old_bytes_hex": "0a202072696e67",
+      "new_bytes_hex": ""
+    }
+  ],
+  "literal_forward_and_reverse_exact_bytes": true,
+  "offset_forward_and_reverse_exact_bytes": true,
+  "original_line_endings_preserved": "LF",
+  "declaration_count": 18,
+  "definition_count": 1,
+  "all_eighteen_complete_headers_unchanged": true,
+  "auxiliaryCharacterSum_complete_primitive_definition_unchanged": true,
+  "all_complete_declarations": [
+    {
+      "name": "auxiliaryCharacterSum",
+      "kind": "def",
+      "complete_header": "def auxiliaryCharacterSum (N : Finset ℕ) (alpha : ℕ → ℂ) (k delta : ℕ)\n    (chi : DirichletCharacter ℂ delta) : ℂ",
+      "complete_definition": "def auxiliaryCharacterSum (N : Finset ℕ) (alpha : ℕ → ℂ) (k delta : ℕ)\n    (chi : DirichletCharacter ℂ delta) : ℂ :=\n  ∑ n ∈ N, if n.Coprime k then alpha n * star (chi (n : ZMod delta)) else 0",
+      "full_source_span": "def auxiliaryCharacterSum (N : Finset ℕ) (alpha : ℕ → ℂ) (k delta : ℕ)\n    (chi : DirichletCharacter ℂ delta) : ℂ :=\n  ∑ n ∈ N, if n.Coprime k then alpha n * star (chi (n : ZMod delta)) else 0"
+    },
+    {
+      "name": "character_star_inverse",
+      "kind": "theorem",
+      "complete_header": "private theorem character_star_inverse {delta : ℕ} [NeZero delta]\n    (chi : DirichletCharacter ℂ delta) {a : ZMod delta} (ha : IsUnit a) :\n    star (chi a) = chi a⁻¹",
+      "complete_definition": null,
+      "full_source_span": "private theorem character_star_inverse {delta : ℕ} [NeZero delta]\n    (chi : DirichletCharacter ℂ delta) {a : ZMod delta} (ha : IsUnit a) :\n    star (chi a) = chi a⁻¹ := by\n  obtain ⟨u, rfl⟩ := ha\n  rw [MulChar.star_apply', MulChar.inv_apply, Ring.inverse_unit, ZMod.inv_coe_unit]\n\n/- This is the finite orthogonality argument in the fixed Multiplicative\nprovider, using the already reachable mathlib inverse-character API. -/"
+    },
+    {
+      "name": "character_orthogonality",
+      "kind": "theorem",
+      "complete_header": "private theorem character_orthogonality {delta : ℕ} (hdelta : 0 < delta)\n    (a b : ZMod delta) :\n    (∑ chi : DirichletCharacter ℂ delta, star (chi a) * chi b) =\n      if IsUnit a ∧ IsUnit b ∧ a = b then (delta.totient : ℂ) else 0",
+      "complete_definition": null,
+      "full_source_span": "private theorem character_orthogonality {delta : ℕ} (hdelta : 0 < delta)\n    (a b : ZMod delta) :\n    (∑ chi : DirichletCharacter ℂ delta, star (chi a) * chi b) =\n      if IsUnit a ∧ IsUnit b ∧ a = b then (delta.totient : ℂ) else 0 := by\n  let : NeZero delta := ⟨hdelta.ne'⟩\n  have hexp : Monoid.exponent (ZMod delta)ˣ ≠ 0 := Monoid.exponent_ne_zero.mpr\n    (Monoid.ExponentExists.of_finite (G := (ZMod delta)ˣ))\n  let : HasEnoughRootsOfUnity ℂ (Monoid.exponent (ZMod delta)ˣ) := by\n    let : NeZero (Monoid.exponent (ZMod delta)ˣ) := ⟨hexp⟩\n    refine { prim := ?_, cyc := ?_ }\n    · exact ⟨Complex.exp (2 * Real.pi * Complex.I /\n        (Monoid.exponent (ZMod delta)ˣ : ℂ)),\n        Complex.isPrimitiveRoot_exp (Monoid.exponent (ZMod delta)ˣ) hexp⟩\n    · infer_instance\n  by_cases ha : IsUnit a\n  · by_cases hb : IsUnit b\n    · calc\n        _ = ∑ chi : DirichletCharacter ℂ delta, chi a⁻¹ * chi b := by\n          apply Finset.sum_congr rfl\n          intro chi _\n          rw [character_star_inverse chi ha]\n        _ = if a = b then (delta.totient : ℂ) else 0 :=\n          DirichletCharacter.sum_char_inv_mul_char_eq ℂ ha b\n        _ = _ := by simp only [ha, hb, true_and]\n    · rw [if_neg (fun h ↦ hb h.2.1)]\n      apply Finset.sum_eq_zero\n      intro chi _\n      rw [chi.map_nonunit hb, mul_zero]\n  · rw [if_neg (fun h ↦ ha h.1)]\n    apply Finset.sum_eq_zero\n    intro chi _\n    rw [chi.map_nonunit ha, star_zero, zero_mul]"
+    },
+    {
+      "name": "character_orthogonality_nat",
+      "kind": "theorem",
+      "complete_header": "private theorem character_orthogonality_nat {delta : ℕ} (hdelta : 0 < delta)\n    (n m : ℕ) :\n    (∑ chi : DirichletCharacter ℂ delta,\n      star (chi (n : ZMod delta)) * chi (m : ZMod delta)) =\n      if n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m then\n        (delta.totient : ℂ) else 0",
+      "complete_definition": null,
+      "full_source_span": "private theorem character_orthogonality_nat {delta : ℕ} (hdelta : 0 < delta)\n    (n m : ℕ) :\n    (∑ chi : DirichletCharacter ℂ delta,\n      star (chi (n : ZMod delta)) * chi (m : ZMod delta)) =\n      if n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m then\n        (delta.totient : ℂ) else 0 := by\n  simpa only [ZMod.isUnit_iff_coprime, ZMod.natCast_eq_natCast_iff] using\n    character_orthogonality hdelta (n : ZMod delta) (m : ZMod delta)"
+    },
+    {
+      "name": "coprime_quotient",
+      "kind": "theorem",
+      "complete_header": "private theorem coprime_quotient {delta q n : ℕ} (hdq : delta ∣ q) :\n    n.Coprime q ↔ n.Coprime (q / delta) ∧ n.Coprime delta",
+      "complete_definition": null,
+      "full_source_span": "private theorem coprime_quotient {delta q n : ℕ} (hdq : delta ∣ q) :\n    n.Coprime q ↔ n.Coprime (q / delta) ∧ n.Coprime delta := by\n  constructor\n  · intro h\n    exact ⟨h.of_dvd_right (Nat.div_dvd_of_dvd hdq), h.of_dvd_right hdq⟩\n  · rintro ⟨hk, hd⟩\n    have h := hd.mul_right hk\n    rwa [Nat.mul_div_cancel' hdq] at h\n\n/-- The principal coefficient is the original full coprime mass. -/"
+    },
+    {
+      "name": "auxiliaryCharacterSum_principal",
+      "kind": "theorem",
+      "complete_header": "theorem auxiliaryCharacterSum_principal (N : Finset ℕ) (alpha : ℕ → ℂ)\n    {q delta : ℕ} (hdq : delta ∣ q) :\n    auxiliaryCharacterSum N alpha (q / delta) delta 1 = coprimeMass N alpha q",
+      "complete_definition": null,
+      "full_source_span": "theorem auxiliaryCharacterSum_principal (N : Finset ℕ) (alpha : ℕ → ℂ)\n    {q delta : ℕ} (hdq : delta ∣ q) :\n    auxiliaryCharacterSum N alpha (q / delta) delta 1 = coprimeMass N alpha q := by\n  unfold auxiliaryCharacterSum coprimeMass\n  apply Finset.sum_congr rfl\n  intro n _\n  by_cases hnq : n.Coprime q\n  · obtain ⟨hnk, hnd⟩ := (coprime_quotient hdq).mp hnq\n    rw [if_pos hnk, MulChar.one_apply ((ZMod.isUnit_iff_coprime n delta).mpr hnd),\n      star_one, mul_one, if_pos hnq]\n  · by_cases hnk : n.Coprime (q / delta)\n    · have hnd : ¬IsUnit (n : ZMod delta) := by\n        intro hu\n        exact hnq ((coprime_quotient hdq).mpr\n          ⟨hnk, (ZMod.isUnit_iff_coprime n delta).mp hu⟩)\n      rw [if_pos hnk, MulChar.map_nonunit _ hnd, star_zero, mul_zero, if_neg hnq]\n    · rw [if_neg hnk, if_neg hnq]\n\n/-- In the shared dictionary the principal mass has the full modulus\np*v, while the coefficient still has the quotient sieve v/gcd(v,w). -/"
+    },
+    {
+      "name": "auxiliaryCharacterSum_shared_principal",
+      "kind": "theorem",
+      "complete_header": "theorem auxiliaryCharacterSum_shared_principal (N : Finset ℕ) (alpha : ℕ → ℂ)\n    {p : ℕ} (hp : 0 < p) (v w : ℕ) :\n    auxiliaryCharacterSum N alpha (v / v.gcd w) (p * v.gcd w) 1 =\n      coprimeMass N alpha (p * v)",
+      "complete_definition": null,
+      "full_source_span": "theorem auxiliaryCharacterSum_shared_principal (N : Finset ℕ) (alpha : ℕ → ℂ)\n    {p : ℕ} (hp : 0 < p) (v w : ℕ) :\n    auxiliaryCharacterSum N alpha (v / v.gcd w) (p * v.gcd w) 1 =\n      coprimeMass N alpha (p * v) := by\n  have hd : p * v.gcd w ∣ p * v := by\n    obtain ⟨k, hk⟩ := Nat.gcd_dvd_left v w\n    refine ⟨k, ?_⟩\n    calc\n      p * v = p * (v.gcd w * k) := congrArg (fun t : ℕ ↦ p * t) hk\n      _ = p * v.gcd w * k := by ring\n  simpa only [Nat.mul_div_mul_left _ _ hp] using\n    auxiliaryCharacterSum_principal N alpha hd"
+    },
+    {
+      "name": "sum_all_character_products",
+      "kind": "theorem",
+      "complete_header": "private theorem sum_all_character_products (N : Finset ℕ) (alpha : ℕ → ℂ)\n    {q r : ℕ} (hq : 0 < q) :\n    (∑ chi : DirichletCharacter ℂ (q.gcd r),\n      auxiliaryCharacterSum N alpha (q / q.gcd r) (q.gcd r) chi *\n        star (auxiliaryCharacterSum N alpha (r / q.gcd r) (q.gcd r) chi)) =\n      ((q.gcd r).totient : ℂ) * compatibleMass N alpha q r",
+      "complete_definition": null,
+      "full_source_span": "private theorem sum_all_character_products (N : Finset ℕ) (alpha : ℕ → ℂ)\n    {q r : ℕ} (hq : 0 < q) :\n    (∑ chi : DirichletCharacter ℂ (q.gcd r),\n      auxiliaryCharacterSum N alpha (q / q.gcd r) (q.gcd r) chi *\n        star (auxiliaryCharacterSum N alpha (r / q.gcd r) (q.gcd r) chi)) =\n      ((q.gcd r).totient : ℂ) * compatibleMass N alpha q r := by\n  have hdelta := Nat.gcd_pos_of_pos_left r hq\n  unfold auxiliaryCharacterSum compatibleMass\n  simp only [star_sum, Finset.sum_mul, Finset.mul_sum]\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro n _\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro m _\n  by_cases hnk : n.Coprime (q / q.gcd r)\n  · by_cases hmk : m.Coprime (r / q.gcd r)\n    · simp only [if_pos hnk, if_pos hmk, star_mul', star_star]\n      have he : ComplexCRT.Compatible q r n m ↔\n          n.Coprime (q.gcd r) ∧ m.Coprime (q.gcd r) ∧ Nat.ModEq (q.gcd r) n m := by\n        constructor\n        · intro h\n          exact ⟨h.1.of_dvd_right (Nat.gcd_dvd_left q r),\n            h.2.1.of_dvd_right (Nat.gcd_dvd_right q r), h.2.2⟩\n        · rintro ⟨hn, hm, hc⟩\n          exact ⟨(coprime_quotient (Nat.gcd_dvd_left q r)).mpr ⟨hnk, hn⟩,\n            (coprime_quotient (Nat.gcd_dvd_right q r)).mpr ⟨hmk, hm⟩, hc⟩\n      calc\n        _ = alpha n * star (alpha m) *\n            ∑ chi : DirichletCharacter ℂ (q.gcd r),\n              star (chi (n : ZMod (q.gcd r))) * chi (m : ZMod (q.gcd r)) := by\n          rw [Finset.mul_sum]\n          apply Finset.sum_congr rfl\n          intro chi _\n          ring\n        _ = _ := by\n          rw [character_orthogonality_nat hdelta]\n          by_cases hc : n.Coprime (q.gcd r) ∧ m.Coprime (q.gcd r) ∧\n              Nat.ModEq (q.gcd r) n m\n          · rw [if_pos hc, if_pos (he.mpr hc)]\n            ring\n          · simp only [if_neg hc, if_neg (fun h ↦ hc (he.mp h)), mul_zero]\n    · have hc : ¬ComplexCRT.Compatible q r n m := by\n        intro h\n        exact hmk ((coprime_quotient (Nat.gcd_dvd_right q r)).mp h.2.1).1\n      simp only [if_neg hmk, star_zero, mul_zero, Finset.sum_const_zero, if_neg hc]\n  · have hc : ¬ComplexCRT.Compatible q r n m := by\n      intro h\n      exact hnk ((coprime_quotient (Nat.gcd_dvd_left q r)).mp h.1).1\n    simp only [if_neg hnk, zero_mul, Finset.sum_const_zero, if_neg hc, mul_zero]\n\n/-- Exact cross covariance: only the principal character is removed.\nBoth quotient sieves remain in the two original-alpha coefficients. -/"
+    },
+    {
+      "name": "covariance_eq_nonprincipal_characters",
+      "kind": "theorem",
+      "complete_header": "theorem covariance_eq_nonprincipal_characters (N : Finset ℕ) (alpha : ℕ → ℂ)\n    {q r : ℕ} (hq : 0 < q) :\n    covariance N alpha q r =\n      (∑ chi ∈ (Finset.univ : Finset (DirichletCharacter ℂ (q.gcd r))).erase 1,\n        auxiliaryCharacterSum N alpha (q / q.gcd r) (q.gcd r) chi *\n          star (auxiliaryCharacterSum N alpha (r / q.gcd r) (q.gcd r) chi)) /\n            ((q.gcd r).totient : ℂ)",
+      "complete_definition": null,
+      "full_source_span": "theorem covariance_eq_nonprincipal_characters (N : Finset ℕ) (alpha : ℕ → ℂ)\n    {q r : ℕ} (hq : 0 < q) :\n    covariance N alpha q r =\n      (∑ chi ∈ (Finset.univ : Finset (DirichletCharacter ℂ (q.gcd r))).erase 1,\n        auxiliaryCharacterSum N alpha (q / q.gcd r) (q.gcd r) chi *\n          star (auxiliaryCharacterSum N alpha (r / q.gcd r) (q.gcd r) chi)) /\n            ((q.gcd r).totient : ℂ) := by\n  have hphi : ((q.gcd r).totient : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr\n    (Nat.totient_pos.mpr (Nat.gcd_pos_of_pos_left r hq)).ne'\n  have he := Finset.sum_erase_add (Finset.univ : Finset (DirichletCharacter ℂ (q.gcd r)))\n    (fun chi ↦ auxiliaryCharacterSum N alpha (q / q.gcd r) (q.gcd r) chi *\n      star (auxiliaryCharacterSum N alpha (r / q.gcd r) (q.gcd r) chi))\n    (Finset.mem_univ 1)\n  rw [sum_all_character_products N alpha hq,\n    auxiliaryCharacterSum_principal N alpha (Nat.gcd_dvd_left q r),\n    auxiliaryCharacterSum_principal N alpha (Nat.gcd_dvd_right q r)] at he\n  rw [← covariance_identity N alpha hq]\n  apply (eq_div_iff hphi).mpr\n  calc\n    _ = ((q.gcd r).totient : ℂ) * compatibleMass N alpha q r -\n        coprimeMass N alpha q * star (coprimeMass N alpha r) := by\n      field_simp\n    _ = _ := (eq_sub_of_add_eq he).symm"
+    },
+    {
+      "name": "factor_pos",
+      "kind": "theorem",
+      "complete_header": "private theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {p : ℕ}\n    (hp : p ∈ factorCarrier Q) : 0 < p",
+      "complete_definition": null,
+      "full_source_span": "private theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {p : ℕ}\n    (hp : p ∈ factorCarrier Q) : 0 < p := by\n  have hlo := (Finset.mem_Icc.mp hp).1\n  have hceil : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  omega\n\n/- The three finite first-factor eliminations are the corresponding\ncoefficient reindexers of the owned shared-row leaf, without beta labels. -/"
+    },
+    {
+      "name": "sum_slice_factor",
+      "kind": "theorem",
+      "complete_header": "private theorem sum_slice_factor (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (f : ℕ → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).complexFactorLabels,\n      (d.q1SliceAtom p).complexFactorGamma a * f (complexFactorModulus a)) =\n      ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        (d.gamma2 u.1 * d.gamma3 u.2) * f (p * (u.1 * u.2))",
+      "complete_definition": null,
+      "full_source_span": "private theorem sum_slice_factor (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (f : ℕ → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).complexFactorLabels,\n      (d.q1SliceAtom p).complexFactorGamma a * f (complexFactorModulus a)) =\n      ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        (d.gamma2 u.1 * d.gamma3 u.2) * f (p * (u.1 * u.2)) := by\n  simp only [MediumAtom.complexFactorLabels, Finset.sum_product]\n  change (∑ q ∈ factorCarrier d.Q1, ∑ q2 ∈ factorCarrier d.Q2,\n    ∑ q3 ∈ factorCarrier d.Q3,\n      ((if q = p then (1 : ℂ) else 0) * d.gamma2 q2 * d.gamma3 q3) *\n        f (q * q2 * q3)) = _\n  rw [Finset.sum_eq_single p]\n  · simp only [ite_true, one_mul, Nat.mul_assoc]\n  · intro q _ hqp\n    simp only [if_neg hqp, zero_mul, Finset.sum_const_zero]\n  · intro hnot\n    exact (hnot hp).elim"
+    },
+    {
+      "name": "sum_star_slice_factor",
+      "kind": "theorem",
+      "complete_header": "private theorem sum_star_slice_factor (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (f : ℕ → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).complexFactorLabels,\n      star ((d.q1SliceAtom p).complexFactorGamma a) * f (complexFactorModulus a)) =\n      ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        star (d.gamma2 u.1 * d.gamma3 u.2) * f (p * (u.1 * u.2))",
+      "complete_definition": null,
+      "full_source_span": "private theorem sum_star_slice_factor (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (f : ℕ → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).complexFactorLabels,\n      star ((d.q1SliceAtom p).complexFactorGamma a) * f (complexFactorModulus a)) =\n      ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        star (d.gamma2 u.1 * d.gamma3 u.2) * f (p * (u.1 * u.2)) := by\n  calc\n    _ = star (∑ a ∈ (d.q1SliceAtom p).complexFactorLabels,\n        (d.q1SliceAtom p).complexFactorGamma a * star (f (complexFactorModulus a))) := by\n      simp only [star_sum, star_mul', star_star]\n    _ = star (∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        (d.gamma2 u.1 * d.gamma3 u.2) * star (f (p * (u.1 * u.2)))) :=\n      congrArg star (sum_slice_factor d hp (fun q ↦ star (f q)))\n    _ = _ := by simp only [star_sum, star_mul', star_star]"
+    },
+    {
+      "name": "pair_sum_slice_factor",
+      "kind": "theorem",
+      "complete_header": "private theorem pair_sum_slice_factor (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (f : ℕ → ℕ → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).complexFactorLabels,\n      ∑ b ∈ (d.q1SliceAtom p).complexFactorLabels,\n        (d.q1SliceAtom p).complexFactorGamma a *\n          star ((d.q1SliceAtom p).complexFactorGamma b) *\n            f (complexFactorModulus a) (complexFactorModulus b)) =\n      ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n          (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n            f (p * (u.1 * u.2)) (p * (v.1 * v.2))",
+      "complete_definition": null,
+      "full_source_span": "private theorem pair_sum_slice_factor (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (f : ℕ → ℕ → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).complexFactorLabels,\n      ∑ b ∈ (d.q1SliceAtom p).complexFactorLabels,\n        (d.q1SliceAtom p).complexFactorGamma a *\n          star ((d.q1SliceAtom p).complexFactorGamma b) *\n            f (complexFactorModulus a) (complexFactorModulus b)) =\n      ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n          (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n            f (p * (u.1 * u.2)) (p * (v.1 * v.2)) := by\n  calc\n    _ = ∑ a ∈ (d.q1SliceAtom p).complexFactorLabels,\n        (d.q1SliceAtom p).complexFactorGamma a *\n          ∑ b ∈ (d.q1SliceAtom p).complexFactorLabels,\n            star ((d.q1SliceAtom p).complexFactorGamma b) *\n              f (complexFactorModulus a) (complexFactorModulus b) := by\n      simp only [Finset.mul_sum, mul_assoc]\n    _ = ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        (d.gamma2 u.1 * d.gamma3 u.2) *\n          ∑ b ∈ (d.q1SliceAtom p).complexFactorLabels,\n            star ((d.q1SliceAtom p).complexFactorGamma b) *\n              f (p * (u.1 * u.2)) (complexFactorModulus b) :=\n      sum_slice_factor d hp (fun q ↦\n        ∑ b ∈ (d.q1SliceAtom p).complexFactorLabels,\n          star ((d.q1SliceAtom p).complexFactorGamma b) * f q (complexFactorModulus b))\n    _ = _ := by\n      apply Finset.sum_congr rfl\n      intro u _\n      rw [sum_star_slice_factor d hp (fun r ↦ f (p * (u.1 * u.2)) r),\n        Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro v _\n      ring\n\n/- Keep the ungrouped full complex labels at the primitive subtraction. -/"
+    },
+    {
+      "name": "rawZero_sub_primitive_eq_factorCovariance",
+      "kind": "theorem",
+      "complete_header": "private theorem rawZero_sub_primitive_eq_factorCovariance\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain d =\n      ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) *\n        ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n          d.complexFactorGamma a * star (d.complexFactorGamma b) *\n            (covariance d.alphaCarrier d.alpha (complexFactorModulus a)\n              (complexFactorModulus b) /\n                ((complexFactorModulus a).lcm (complexFactorModulus b) : ℂ))",
+      "complete_definition": null,
+      "full_source_span": "private theorem rawZero_sub_primitive_eq_factorCovariance\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain d =\n      ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) *\n        ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n          d.complexFactorGamma a * star (d.complexFactorGamma b) *\n            (covariance d.alphaCarrier d.alpha (complexFactorModulus a)\n              (complexFactorModulus b) /\n                ((complexFactorModulus a).lcm (complexFactorModulus b) : ℂ)) := by\n  have hpos {a : ℕ × ℕ × ℕ} (ha : a ∈ d.complexFactorLabels) :\n      0 < complexFactorModulus a := by\n    exact (Finset.mem_Ioc.mp (d.physicalFactorModuli_subset_cap hd\n      (Finset.mem_image_of_mem _ ha))).1\n  rw [actual_rawZero_eq_compatibleMass, primitiveZeroMain, ← mul_sub,\n    ← Finset.sum_sub_distrib]\n  congr 1\n  apply Finset.sum_congr rfl\n  intro a ha\n  rw [← Finset.sum_sub_distrib]\n  apply Finset.sum_congr rfl\n  intro b hb\n  rw [totient_pair_density_eq_lcm (hpos ha).ne' (hpos hb).ne',\n    ← covariance_identity _ _ (hpos ha)]\n  ring\n\nend SharedFirstFactorCharacterDictionary\n\nopen SharedFirstFactorCharacterDictionary TransposedZeroCovariance\n\n/-- Full original-alpha covariance after the exact shared-p deletion.\nThe three gamma labels are not grouped or replaced by absolute values. -/"
+    },
+    {
+      "name": "MediumAtom.q1SliceZero_sub_primitive_eq_factorCovariance",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.q1SliceZero_sub_primitive_eq_factorCovariance\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    (d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n        primitiveZeroMain (d.q1SliceAtom p) =\n      ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) *\n        ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n          ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n            (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n              (covariance d.alphaCarrier d.alpha (p * (u.1 * u.2))\n                (p * (v.1 * v.2)) /\n                  ((p * (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ))",
+      "complete_definition": null,
+      "full_source_span": "theorem MediumAtom.q1SliceZero_sub_primitive_eq_factorCovariance\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    (d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n        primitiveZeroMain (d.q1SliceAtom p) =\n      ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) *\n        ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n          ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n            (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n              (covariance d.alphaCarrier d.alpha (p * (u.1 * u.2))\n                (p * (v.1 * v.2)) /\n                  ((p * (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ)) := by\n  rw [SharedFirstFactorCharacterDictionary.rawZero_sub_primitive_eq_factorCovariance\n    (mediumAdmissible_q1SliceAtom hd hp)]\n  change ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) *\n    (∑ a ∈ (d.q1SliceAtom p).complexFactorLabels,\n      ∑ b ∈ (d.q1SliceAtom p).complexFactorLabels,\n        (d.q1SliceAtom p).complexFactorGamma a *\n          star ((d.q1SliceAtom p).complexFactorGamma b) *\n            (covariance d.alphaCarrier d.alpha (complexFactorModulus a)\n              (complexFactorModulus b) /\n                ((complexFactorModulus a).lcm (complexFactorModulus b) : ℂ))) = _\n  have he := congrArg (fun z : ℂ ↦\n    ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) * z)\n    (SharedFirstFactorCharacterDictionary.pair_sum_slice_factor d\n      (Finset.mem_filter.mp hp).1 (fun q r ↦\n        covariance d.alphaCarrier d.alpha q r / (q.lcm r : ℂ)))\n  simpa only [sharedFirstFactor_lcm] using he\n\n/-- The exact character dictionary, with both actual quotient sieves.\nThe first physical factor is arbitrary composite, and remains shared. -/"
+    },
+    {
+      "name": "MediumAtom.q1SliceZero_sub_primitive_eq_characters",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.q1SliceZero_sub_primitive_eq_characters\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    (d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n        primitiveZeroMain (d.q1SliceAtom p) =\n      ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n          (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n            (((p * (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ) *\n              ((p * (u.1 * u.2).gcd (v.1 * v.2)).totient : ℂ))) *\n            (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n            (∑ chi ∈ (Finset.univ : Finset\n                (DirichletCharacter ℂ (p * (u.1 * u.2).gcd (v.1 * v.2)))).erase 1,\n              auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((u.1 * u.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi *\n              star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((v.1 * v.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi))",
+      "complete_definition": null,
+      "full_source_span": "theorem MediumAtom.q1SliceZero_sub_primitive_eq_characters\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    (d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n        primitiveZeroMain (d.q1SliceAtom p) =\n      ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n          (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n            (((p * (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ) *\n              ((p * (u.1 * u.2).gcd (v.1 * v.2)).totient : ℂ))) *\n            (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n            (∑ chi ∈ (Finset.univ : Finset\n                (DirichletCharacter ℂ (p * (u.1 * u.2).gcd (v.1 * v.2)))).erase 1,\n              auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((u.1 * u.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi *\n              star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((v.1 * v.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi)) := by\n  have hp0 := SharedFirstFactorCharacterDictionary.factor_pos hd.2.2.1\n    (Finset.mem_filter.mp hp).1\n  rw [d.q1SliceZero_sub_primitive_eq_factorCovariance hd hp]\n  rw [Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro u hu\n  rw [Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro v _\n  have hu0 : 0 < u.1 * u.2 := Nat.mul_pos\n    (SharedFirstFactorCharacterDictionary.factor_pos hd.2.2.2.1 (Finset.mem_product.mp hu).1)\n    (SharedFirstFactorCharacterDictionary.factor_pos hd.2.2.2.2.1 (Finset.mem_product.mp hu).2)\n  rw [covariance_eq_nonprincipal_characters d.alphaCarrier d.alpha (Nat.mul_pos hp0 hu0),\n    sharedFirstFactor_gcd, Nat.mul_div_mul_left _ _ hp0, Nat.mul_div_mul_left _ _ hp0]\n  simp only [div_eq_mul_inv, mul_inv_rev]\n  ring\n\n/-- Exact weight relative to the weighted primitive large-sieve measure.\nThis algebraic identity is not an invocation of that analytic estimate. -/"
+    },
+    {
+      "name": "sharedCharacterWeight_normalization",
+      "kind": "theorem",
+      "complete_header": "theorem sharedCharacterWeight_normalization (z : ℂ) {p D L : ℕ}\n    (hp : 0 < p) (hD : 0 < D) (hL : 0 < L) :\n    z / (((p * L : ℕ) : ℂ) * ((p * D).totient : ℂ)) =\n      (z / ((p ^ 2 * D * L : ℕ) : ℂ)) *\n        (((p * D : ℕ) : ℂ) / ((p * D).totient : ℂ))",
+      "complete_definition": null,
+      "full_source_span": "theorem sharedCharacterWeight_normalization (z : ℂ) {p D L : ℕ}\n    (hp : 0 < p) (hD : 0 < D) (hL : 0 < L) :\n    z / (((p * L : ℕ) : ℂ) * ((p * D).totient : ℂ)) =\n      (z / ((p ^ 2 * D * L : ℕ) : ℂ)) *\n        (((p * D : ℕ) : ℂ) / ((p * D).totient : ℂ)) := by\n  have hp' : (p : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hp.ne'\n  have hD' : (D : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hD.ne'\n  have hL' : (L : ℂ) ≠ 0 := Nat.cast_ne_zero.mpr hL.ne'\n  have hphi : ((p * D).totient : ℂ) ≠ 0 :=\n    Nat.cast_ne_zero.mpr (Nat.totient_pos.mpr (Nat.mul_pos hp hD)).ne'\n  push_cast\n  field_simp [hp', hD', hL', hphi]\n\n/-- The complete actual p sum retains the second inverse p and the\nliteral local mass. No frequency, conductor or coefficient is discarded. -/"
+    },
+    {
+      "name": "MediumAtom.sharedZero_sub_primitive_eq_weighted_characters",
+      "kind": "theorem",
+      "complete_header": "theorem MediumAtom.sharedZero_sub_primitive_eq_weighted_characters\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      ((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n        primitiveZeroMain (d.q1SliceAtom p))) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        (∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n          ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n            ((((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n              ((p ^ 2 * (u.1 * u.2).gcd (v.1 * v.2) *\n                (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ)) *\n              (((p * (u.1 * u.2).gcd (v.1 * v.2) : ℕ) : ℂ) /\n                ((p * (u.1 * u.2).gcd (v.1 * v.2)).totient : ℂ))) *\n              (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n              (∑ chi ∈ (Finset.univ : Finset\n                  (DirichletCharacter ℂ (p * (u.1 * u.2).gcd (v.1 * v.2)))).erase 1,\n                auxiliaryCharacterSum d.alphaCarrier d.alpha\n                  ((u.1 * u.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                  (p * (u.1 * u.2).gcd (v.1 * v.2)) chi *\n                star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n                  ((v.1 * v.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                  (p * (u.1 * u.2).gcd (v.1 * v.2)) chi)))",
+      "complete_definition": null,
+      "full_source_span": "theorem MediumAtom.sharedZero_sub_primitive_eq_weighted_characters\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      ((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n        primitiveZeroMain (d.q1SliceAtom p))) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        (∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n          ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n            ((((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n              ((p ^ 2 * (u.1 * u.2).gcd (v.1 * v.2) *\n                (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ)) *\n              (((p * (u.1 * u.2).gcd (v.1 * v.2) : ℕ) : ℂ) /\n                ((p * (u.1 * u.2).gcd (v.1 * v.2)).totient : ℂ))) *\n              (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n              (∑ chi ∈ (Finset.univ : Finset\n                  (DirichletCharacter ℂ (p * (u.1 * u.2).gcd (v.1 * v.2)))).erase 1,\n                auxiliaryCharacterSum d.alphaCarrier d.alpha\n                  ((u.1 * u.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                  (p * (u.1 * u.2).gcd (v.1 * v.2)) chi *\n                star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n                  ((v.1 * v.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                  (p * (u.1 * u.2).gcd (v.1 * v.2)) chi))) := by\n  apply Finset.sum_congr rfl\n  intro p hp\n  rw [d.q1SliceZero_sub_primitive_eq_characters hd hp]\n  apply Finset.sum_congr rfl\n  intro u hu\n  apply Finset.sum_congr rfl\n  intro v hv\n  have hp0 := SharedFirstFactorCharacterDictionary.factor_pos hd.2.2.1\n    (Finset.mem_filter.mp hp).1\n  have hu0 : 0 < u.1 * u.2 := Nat.mul_pos\n    (SharedFirstFactorCharacterDictionary.factor_pos hd.2.2.2.1 (Finset.mem_product.mp hu).1)\n    (SharedFirstFactorCharacterDictionary.factor_pos hd.2.2.2.2.1 (Finset.mem_product.mp hu).2)\n  have hv0 : 0 < v.1 * v.2 := Nat.mul_pos\n    (SharedFirstFactorCharacterDictionary.factor_pos hd.2.2.2.1 (Finset.mem_product.mp hv).1)\n    (SharedFirstFactorCharacterDictionary.factor_pos hd.2.2.2.2.1 (Finset.mem_product.mp hv).2)\n  rw [sharedCharacterWeight_normalization _ hp0\n    (Nat.gcd_pos_of_pos_left _ hu0)\n    (Nat.pos_of_ne_zero (Nat.lcm_ne_zero hu0.ne' hv0.ne'))]\n\nend\n\nend ImbalancedChen.Part3"
+    }
+  ],
+  "same_direct_imports": true,
+  "no_new_foreign": true,
+  "changes_only_seven_actual_proof_blocks": true,
+  "diagnostic_mapping": [
+    "46/49/50 replace letI by the actual style-linter requested let in Prop proofs; same local instances and finite root construction.",
+    "135/139 use both sum_mul and mul_sum after star_sum, genuinely expanding the product of two finite sums before their two sum_comm steps; remove the unused sum_mul_sum.",
+    "202 and375 remove only ring tactics after field_simp already closed the actual goals.",
+    "258 explicit finite calc and lambda arguments for each public same-file slice reindexer, retaining the exact original products and stars; no generic assumption added.",
+    "319 congrArg of explicit bivariate factor-sum equality, then actual shared lcm rewrite, avoids implicit higher-order rw matching.",
+    "344 distribute the fixed scalar only through the two external factor-label sums with controlled rw, retaining the internal whole nonprincipal character sum for ring normalization."
+  ],
+  "mathematics_and_scope_unchanged": [
+    "Actual original-alpha coefficients, auxiliary k quotients, full primitive p and both u/v carriers, complex gamma stars, exact principal coprime masses, local cutoffMass and literal primitiveZeroMain.",
+    "Exact V/(p*L*phi(pD)) and V/(p²DL)*(pD/phi(pD)) equality only; no LS/rough/lowconductor/zero-energy supplier."
+  ],
+  "prior_self_report": "20261016-shared-first-factor-character-dictionary-self-scope.json",
+  "prior_self_report_sha256": "26cbe1cbd93ca784e0171a8d39cc2dfeff1c9447058cf26745f6e3fda2ea549f",
+  "no_Lean_lake_build_or_limits_change": true,
+  "not_acceptance": true
+}

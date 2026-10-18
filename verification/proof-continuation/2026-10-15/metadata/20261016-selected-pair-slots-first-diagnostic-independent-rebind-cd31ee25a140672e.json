@@ -1,0 +1,247 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_ACTUAL_DIAGNOSTIC_PROOF_REBIND_NOT_LEAN_PASS",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "created_at_utc": "2026-10-15T23:50:50.842389+00:00",
+  "module": "ImbalancedChen.ActualFrozenSelectedPairSlots",
+  "old_snapshot": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261016-selected-pair-slots-e62e-before-first-diagnostics.lean",
+    "sha256": "e62e68a31cf286a14e327ef768eb962a8724afa883f1fec8dbfbfee66a232af2"
+  },
+  "current_source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualFrozenSelectedPairSlots.lean",
+    "sha256": "adec5aed12fc7909a1efb65e5038023aafeb22e93751201bf9bb4dc0239485fc"
+  },
+  "scope": "Entire current source and historical actual stdout read; no Lean/lake/build/checker/cache invocation or frozen source edits; no pyc.",
+  "complete_declaration_count": 11,
+  "theorems": 9,
+  "defs": 2,
+  "complete_declarations": [
+    {
+      "kind": "theorem",
+      "name": "actualTwoCapacityGreedy_partition",
+      "complete_type": "theorem actualTwoCapacityGreedy_partition {\u03b1 : Type*} (weight : \u03b1 \u2192 \u211d)\n    (A : \u211d) (input : List \u03b1) :\n    BoxPartition (actualTwoCapacityGreedy weight A input).1\n      (actualTwoCapacityGreedy weight A input).2 input"
+    },
+    {
+      "kind": "def",
+      "name": "actualFrozenSelectedPairSlots",
+      "complete_definition": "def actualFrozenSelectedPairSlots {\u03b1 : Type*} (D A : \u211d) (yz : Bool)\n    (upper : \u03b1 \u2192 \u2115) (p : Fin 3 \u2192 \u03b1) (tail : List \u03b1) : List \u03b1 \u00d7 List \u03b1 \u00d7 List \u03b1 :=\n  if 1 \u2264 D / (A * (actualSelectedPairProduct yz (fun i => upper (p i)) : \u211d)) then\n    let ac := actualTwoCapacityGreedy (fun i => (upper i : \u211d)) A\n      ((if yz then p 0 else p 1) :: tail)\n    (ac.1, if yz then [p 1, p 2] else [p 0, p 2], ac.2)\n  else\n    let ab := actualTwoCapacityGreedy (fun i => (upper i : \u211d)) A\n      (p 0 :: p 1 :: p 2 :: tail)\n    (ab.1, ab.2, [])"
+    },
+    {
+      "kind": "def",
+      "name": "actualFrozenSelectedPairFactors",
+      "complete_definition": "def actualFrozenSelectedPairFactors {\u03b1 : Type*} (D A : \u211d) (yz : Bool)\n    (upper actual : \u03b1 \u2192 \u2115) (p : Fin 3 \u2192 \u03b1) (tail : List \u03b1) : \u2115 \u00d7 \u2115 \u00d7 \u2115 :=\n  let slots := actualFrozenSelectedPairSlots D A yz upper p tail\n  ((slots.1.map actual).prod, (slots.2.1.map actual).prod, (slots.2.2.map actual).prod)"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualFrozenSelectedPairSlots_perm",
+      "complete_type": "theorem actualFrozenSelectedPairSlots_perm {\u03b1 : Type*} (D A : \u211d) (yz : Bool)\n    (upper : \u03b1 \u2192 \u2115) (p : Fin 3 \u2192 \u03b1) (tail : List \u03b1) :\n    let slots := actualFrozenSelectedPairSlots D A yz upper p tail\n    (slots.1 ++ slots.2.1 ++ slots.2.2).Perm (p 0 :: p 1 :: p 2 :: tail)"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualFrozenSelectedPairFactors_prod",
+      "complete_type": "theorem actualFrozenSelectedPairFactors_prod {\u03b1 : Type*} (D A : \u211d) (yz : Bool)\n    (upper actual : \u03b1 \u2192 \u2115) (p : Fin 3 \u2192 \u03b1) (tail : List \u03b1) :\n    let abc := actualFrozenSelectedPairFactors D A yz upper actual p tail\n    abc.1 * abc.2.1 * abc.2.2 = ((p 0 :: p 1 :: p 2 :: tail).map actual).prod"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualFrozenSelectedPairFactors_le_upper",
+      "complete_type": "theorem actualFrozenSelectedPairFactors_le_upper {\u03b1 : Type*} (D A : \u211d) (yz : Bool)\n    (upper actual : \u03b1 \u2192 \u2115) (p : Fin 3 \u2192 \u03b1) (tail : List \u03b1)\n    (hsize : \u2200 i \u2208 p 0 :: p 1 :: p 2 :: tail, actual i \u2264 upper i) :\n    let abc := actualFrozenSelectedPairFactors D A yz upper actual p tail\n    let ABC := actualFrozenSelectedPairFactors D A yz upper upper p tail\n    abc.1 \u2264 ABC.1 \u2227 abc.2.1 \u2264 ABC.2.1 \u2227 abc.2.2 \u2264 ABC.2.2"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualFrozenSelectedPairFactors_at_upper",
+      "complete_type": "theorem actualFrozenSelectedPairFactors_at_upper {\u03b1 : Type*} (D A : \u211d) (yz : Bool)\n    (upper : \u03b1 \u2192 \u2115) (p : Fin 3 \u2192 \u03b1) (tail : List \u03b1) :\n    actualFrozenSelectedPairFactors D A yz upper upper p tail =\n      actualSelectedPairFactors D A yz (fun i => upper (p i)) (tail.map upper)"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualFrozenSelectedPairFactors_coprime",
+      "complete_type": "theorem actualFrozenSelectedPairFactors_coprime {\u03b1 : Type*} (D A : \u211d) (yz : Bool)\n    (upper actual : \u03b1 \u2192 \u2115) (p : Fin 3 \u2192 \u03b1) (tail : List \u03b1)\n    (hprime : \u2200 q \u2208 (p 0 :: p 1 :: p 2 :: tail).map actual, Nat.Prime q)\n    (hnodup : ((p 0 :: p 1 :: p 2 :: tail).map actual).Nodup) :\n    let abc := actualFrozenSelectedPairFactors D A yz upper actual p tail\n    Nat.Coprime abc.1 abc.2.1 \u2227 Nat.Coprime abc.1 abc.2.2 \u2227\n      Nat.Coprime abc.2.1 abc.2.2"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualSelectedPairFactors_targets_of_fullSupport",
+      "complete_type": "theorem actualSelectedPairFactors_targets_of_fullSupport {x \u03b4 \u03b8 \u03b1 A : \u211d} {yz : Bool}\n    (hx : 1 < x) (h\u03b40 : 0 < \u03b4) (h\u03b4 : \u03b4 < 1 / 100000)\n    (h\u03b8lo : 1 / 2 \u2264 \u03b8) (h\u03b8hi : \u03b8 \u2264 5 / 8)\n    (hAlower : x ^ \u03b4 \u2264 A) (hAupper : A \u2264 x ^ (1 / 3 - \u03b4 / 2))\n    (p : Fin 3 \u2192 \u2115) (tail : List \u2115)\n    (hpositive : \u2200 q \u2208 p 0 :: p 1 :: p 2 :: tail, 0 < q)\n    (hfull : actualDwellSupport (x ^ (\u03b8 - 2 * \u03b4)) (p 0 :: p 1 :: p 2 :: tail))\n    (hgate : (actualSelectedPairProduct yz p : \u211d) *\n      (actualSelectedPairRemainingPrime yz p : \u211d) ^ 2 \u2264 x ^ (\u03b8 - 2 * \u03b4))\n    (hblower : x ^ (2 * \u03b8 - 1) \u2264 (actualSelectedPairProduct yz p : \u211d))\n    (hbupper : (actualSelectedPairProduct yz p : \u211d) \u2264 x ^ actualSelectedSubproductUpper \u03b1 \u03b8) :\n    let abc := actualSelectedPairFactors (x ^ (\u03b8 - 2 * \u03b4)) A yz p tail\n    (abc.1 : \u211d) \u2264 A \u2227\n      A ^ 2 * (abc.2.1 : \u211d) * (abc.2.2 : \u211d) ^ 2 \u2264 x ^ (1 - 3 * \u03b4) \u2227\n      x ^ (7 * \u03b1 / 32) * A * (abc.1 : \u211d) * (abc.2.1 : \u211d) ^ 5 *\n        (abc.2.2 : \u211d) ^ 2 \u2264 x ^ (2 - 3 * \u03b4) \u2227\n      (A * (abc.2.2 : \u211d) / (abc.2.1 : \u211d)) ^ (7 / 16 : \u211d) * A * (abc.1 : \u211d) *\n        (abc.2.1 : \u211d) ^ 5 * (abc.2.2 : \u211d) ^ 2 \u2264 x ^ (2 - 2 * \u03b4)"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualExtendedThirdSelectedPair_endpointBounds",
+      "complete_type": "theorem actualExtendedThirdSelectedPair_endpointBounds {e \u03ba \u03b4 x : \u211d} {m : \u2115}\n    {j : ActualExtendedThirdDyadicLabel m} (he0 : 0 < e) (he : e \u2264 1 / 384)\n    (h\u03ba : \u03ba \u2264 e / 4) (h\u03b4 : \u03b4 \u2264 e / 32)\n    (hmesh : actualExtendedThirdDyadicStep m \u2264 e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 \u2264 VariableEnvelope.mu - 4 * e)\n    {t : Fin 3 \u2192 \u211d} (ht : t \u2208 actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (hx : 1 < x) (p : Fin 3 \u2192 \u2115) (hp : \u2200 i, 0 < p i)\n    (hs : actualSelectedPrimeCoordinates x p \u2208 actualExtendedThirdPhysicalCell m j) :\n    let \u03b8 := actualExtendedThirdPairParameter e m j t yz\n    (actualSelectedPairProduct yz p : \u211d) *\n        (actualSelectedPairRemainingPrime yz p : \u211d) ^ 2 < x ^ (\u03b8 - 2 * \u03b4) \u2227\n      x ^ (2 * \u03b8 - 1) \u2264 (actualSelectedPairProduct yz p : \u211d) \u2227\n      (actualSelectedPairProduct yz p : \u211d) \u2264\n        x ^ actualSelectedSubproductUpper (1 + 3 * \u03ba) \u03b8"
+    },
+    {
+      "kind": "theorem",
+      "name": "actualExtendedThirdSelectedPair_frozenUpperTargets",
+      "complete_type": "theorem actualExtendedThirdSelectedPair_frozenUpperTargets\n    {\u03b1 : Type*} {e \u03ba \u03b4 \u03c1 \u03c4 x A : \u211d} {m : \u2115} {j : ActualExtendedThirdDyadicLabel m}\n    (he0 : 0 < e) (he : e \u2264 1 / 384) (h\u03ba : \u03ba \u2264 e / 4)\n    (h\u03b40 : 0 < \u03b4) (h\u03b4 : \u03b4 < 1 / 100000) (h\u03b4fine : \u03b4 \u2264 e / 32)\n    (h\u03c1 : 0 < \u03c1) (h\u03c4 : 0 \u2264 \u03c4)\n    (hwidth : \u03c4 * (actualRoughVectorRankBound \u03c1 + 1) \u2264 e / 2)\n    (hmesh : actualExtendedThirdDyadicStep m \u2264 e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 \u2264 VariableEnvelope.mu - 4 * e)\n    {t : Fin 3 \u2192 \u211d} (ht : t \u2208 actualExtendedThirdPhysicalCell m j)\n    (yz : Bool) (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6)\n    (hx : 1 < x) (actual upper : \u03b1 \u2192 \u2115) (p : Fin 3 \u2192 \u03b1) (tail : List \u03b1)\n    (hpositive : \u2200 i \u2208 p 0 :: p 1 :: p 2 :: tail, 0 < actual i)\n    (hrough : \u2200 i \u2208 p 0 :: p 1 :: p 2 :: tail, x ^ \u03c1 \u2264 (actual i : \u211d))\n    (hbelow : \u2200 i \u2208 p 0 :: p 1 :: p 2 :: tail, actual i \u2264 upper i)\n    (hinflate : \u2200 i \u2208 p 0 :: p 1 :: p 2 :: tail, (upper i : \u211d) \u2264 x ^ \u03c4 * (actual i : \u211d))\n    (hs : actualSelectedPrimeCoordinates x (fun i => upper (p i)) \u2208\n      actualExtendedThirdPhysicalCell m j)\n    (hsupport : actualDwellSupport (x ^ actualExtendedThirdPhysicalLevel e m j)\n      ((p 0 :: p 1 :: p 2 :: tail).map actual))\n    (hAlower : x ^ \u03b4 \u2264 A) (hAupper : A \u2264 x ^ (1 / 3 - \u03b4 / 2)) :\n    let \u03b8 := actualExtendedThirdPairParameter e m j t yz\n    let abc := actualFrozenSelectedPairFactors (x ^ (\u03b8 - 2 * \u03b4)) A yz upper upper p tail\n    (abc.1 : \u211d) \u2264 A \u2227\n      A ^ 2 * (abc.2.1 : \u211d) * (abc.2.2 : \u211d) ^ 2 \u2264 x ^ (1 - 3 * \u03b4) \u2227\n      x ^ (7 * (1 + 3 * \u03ba) / 32) * A * (abc.1 : \u211d) * (abc.2.1 : \u211d) ^ 5 *\n        (abc.2.2 : \u211d) ^ 2 \u2264 x ^ (2 - 3 * \u03b4) \u2227\n      (A * (abc.2.2 : \u211d) / (abc.2.1 : \u211d)) ^ (7 / 16 : \u211d) * A * (abc.1 : \u211d) *\n        (abc.2.1 : \u211d) ^ 5 * (abc.2.2 : \u211d) ^ 2 \u2264 x ^ (2 - 2 * \u03b4)"
+    }
+  ],
+  "comparison": {
+    "all_9_complete_theorem_types_including_statement_lets_exact_equal": true,
+    "all_2_complete_definitions_exact_equal": true,
+    "all_11_declaration_interfaces_equal": true,
+    "imports_exact_equal": true,
+    "forward_bytes_exact": true,
+    "inverse_bytes_exact": true,
+    "changes_only_in_4_proof_bodies": true,
+    "math_quantifiers_thresholds_unchanged": true,
+    "changed_line_blocks": [
+      {
+        "old_lines": [
+          65,
+          66
+        ],
+        "new_lines": [
+          65,
+          67
+        ],
+        "old": "  split_ifs\n  \u00b7 let ac := actualTwoCapacityGreedy (fun i => (upper i : \u211d)) A\n",
+        "new": "  by_cases hC : 1 \u2264 D / (A * (actualSelectedPairProduct yz (fun i => upper (p i)) : \u211d))\n  \u00b7 rw [if_pos hC]\n    let ac := actualTwoCapacityGreedy (fun i => (upper i : \u211d)) A\n"
+      },
+      {
+        "old_lines": [
+          69,
+          68
+        ],
+        "new_lines": [
+          70,
+          70
+        ],
+        "old": "",
+        "new": "    change (ac.1 ++ selected ++ ac.2).Perm (p 0 :: p 1 :: p 2 :: tail)\n"
+      },
+      {
+        "old_lines": [
+          79,
+          79
+        ],
+        "new_lines": [
+          81,
+          82
+        ],
+        "old": "  \u00b7 simpa only [List.append_nil] using\n",
+        "new": "  \u00b7 rw [if_neg hC]\n    simpa only [List.append_nil] using\n"
+      },
+      {
+        "old_lines": [
+          102,
+          102
+        ],
+        "new_lines": [
+          105,
+          106
+        ],
+        "old": "  have hperm := actualFrozenSelectedPairSlots_perm D A yz upper p tail\n",
+        "new": "  have hperm : (slots.1 ++ (slots.2.1 ++ slots.2.2)).Perm (p 0 :: p 1 :: p 2 :: tail) := by\n    simpa only [List.append_assoc] using actualFrozenSelectedPairSlots_perm D A yz upper p tail\n"
+      },
+      {
+        "old_lines": [
+          140,
+          141
+        ],
+        "new_lines": [
+          144,
+          146
+        ],
+        "old": "  split_ifs\n  \u00b7 dsimp only\n",
+        "new": "  by_cases hC : 1 \u2264 D / (A * (actualSelectedPairProduct yz (fun i => upper (p i)) : \u211d))\n  \u00b7 rw [if_pos hC, if_pos hC]\n    dsimp only\n"
+      },
+      {
+        "old_lines": [
+          143,
+          143
+        ],
+        "new_lines": [
+          148,
+          149
+        ],
+        "old": "  \u00b7 exact congrArg (fun ab : \u2115 \u00d7 \u2115 => (ab.1, ab.2, 1)) hfull.symm\n",
+        "new": "  \u00b7 rw [if_neg hC, if_neg hC]\n    exact congrArg (fun ab : \u2115 \u00d7 \u2115 => (ab.1, ab.2, 1)) hfull.symm\n"
+      },
+      {
+        "old_lines": [
+          267,
+          267
+        ],
+        "new_lines": [
+          273,
+          275
+        ],
+        "old": "    \u00b7 change ((p 0 * p 2 : \u2115) : \u211d) * (p 1 : \u211d) ^ 2 = _\n",
+        "new": "    \u00b7 change ((p 0 * p 2 : \u2115) : \u211d) * (p 1 : \u211d) ^ 2 =\n        x ^ (actualSelectedPrimeCoordinates x p 0 +\n          2 * actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2)\n"
+      },
+      {
+        "old_lines": [
+          272,
+          272
+        ],
+        "new_lines": [
+          280,
+          282
+        ],
+        "old": "    \u00b7 change ((p 1 * p 2 : \u2115) : \u211d) * (p 0 : \u211d) ^ 2 = _\n",
+        "new": "    \u00b7 change ((p 1 * p 2 : \u2115) : \u211d) * (p 0 : \u211d) ^ 2 =\n        x ^ (2 * actualSelectedPrimeCoordinates x p 0 +\n          actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2)\n"
+      }
+    ]
+  },
+  "actual_failure": {
+    "receipt_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\runs\\20261015T234409396755Z-ImbalancedChen.ActualFrozenSelectedPairSlots\\receipt.json",
+    "receipt_sha256": "616302836c8db5bdcb0e0cdbb26767de64c548e32b7d2eb4858cc8e6ba073b08",
+    "status": "FAILED",
+    "stdout_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\runs\\20261015T234409396755Z-ImbalancedChen.ActualFrozenSelectedPairSlots\\stdout.log",
+    "stdout_sha256": "603e86a3741221215197f44a64238208a92054ce0785820400278564bbc4feb5",
+    "full_stdout_read": true,
+    "memory_mib": 6144,
+    "command": [
+      "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/lean",
+      "-j2",
+      "-M6144",
+      "-DwarningAsError=true",
+      "-o",
+      "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/ActualFrozenSelectedPairSlots.olean",
+      "ImbalancedChen/ActualFrozenSelectedPairSlots.lean"
+    ],
+    "scope": "Normal-trust development compilation only; no final acceptance claim"
+  },
+  "proof_review": [
+    {
+      "site": "Slots_perm",
+      "conclusion": "by_cases separates only the numerical capacity test; rw removes its outer if, and change zeta-reduces the slots/ac lets. yz remains intact until the unchanged two permutation branches. This removes actual split_ifs over-splitting."
+    },
+    {
+      "site": "Factors_le_upper",
+      "conclusion": "Typed hperm uses slots.1 ++ (slots.2.1 ++ slots.2.2), so the nested mem_append proofs have the intended association. simpa only [List.append_assoc] is the exact reassociation."
+    },
+    {
+      "site": "Factors_at_upper",
+      "conclusion": "The two rw entries remove the same capacity proposition on the slot and numerical-action sides. They preserve the Bool expression in selected and remaining labels, allowing hrest and hb to match. No new branch assumption enters a theorem type."
+    },
+    {
+      "site": "endpointBounds.hstart",
+      "conclusion": "Explicit false RHS gives exponents t0+2t1+t2 for p0*p2 times p1^2; true RHS gives 2t0+t1+t2 for p1*p2 times p0^2. This removes the residual reducible Bool if before the unchanged rpow/ring algebra."
+    }
+  ],
+  "determined_static_blockers": [],
+  "direct_parent": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualRoughVectorEndpointBudget.lean",
+    "source_sha256": "d3b76af73d68d25c0fd84278363f8e40d5eb7d7b23872e230d6c85c2ce919e0e",
+    "object_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\ActualRoughVectorEndpointBudget.olean",
+    "object_sha256": "d0527ee121b0999cd562f5cc6d9131661d98a45eda2daf9acd42ca3fc8d5d61d",
+    "cache_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\cache\\ImbalancedChen.ActualRoughVectorEndpointBudget.json",
+    "cache_sha256": "e7089b831da64ac36510e97bd74ac5eb5865833ed856df45c1ff0fc3ad5d9943",
+    "matches_actual_failed_run_binding": true,
+    "scope": "Current existing file/hash comparison only; no independent imported-closure replay."
+  },
+  "author_report": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261016-selected-pair-slots-first-diagnostics-owner-rebind.json",
+    "sha256": "5348357de101bb8120904d7feb1df43c58cd7819834aefe3d669c433578224e7",
+    "scope": "Read for provenance; independent declaration extraction and byte reconstruction used above."
+  },
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "foreign_scope": "Imports unchanged; zero new foreign relative to unchanged direct parent source DAG. No foreign kernel acceptance asserted.",
+  "remaining_gates": [
+    "Actual authorized strict 6144 compiler retry of adec",
+    "Owned original-object replay plus complete declaration types/axioms after actual compile success",
+    "Slot partition targets alone do not pay grouped arithmetic means or distribution"
+  ]
+}

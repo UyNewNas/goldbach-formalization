@@ -1,4 +1,4 @@
-import ImbalancedChen.ActualLowerRosserBoundaryExpansion
+import ImbalancedChen.ActualSmallRosser
 import ImbalancedChen.ActualPrimeBoxMass
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.List.FinRange
@@ -103,8 +103,11 @@ theorem actualRosserEvenBox_mem_boundary
     (hcap : (N : ℝ) ^ u ≤ (cap : ℝ))
     {p : Fin (2 * k + 2) → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b) :
     p (Fin.last (2 * k + 1)) ∈ actualSmallPrimeFinset N cap ((N : ℝ) ^ u) ∧
-      actualRosserEvenTail p ∈ actualLowerRosserBoundarySets N cap
-        ((N : ℝ) ^ u) ((N : ℝ) ^ beta) (p (Fin.last (2 * k + 1))) ∧
+      actualRosserEvenTail p ∈
+        (((actualSmallPrimeFinset N cap ((N : ℝ) ^ u)).filter
+          (fun q => p (Fin.last (2 * k + 1)) < q)).powerset.filter
+            (LinearSieve.LowerRosserBoundarySet (Nat.ceil ((N : ℝ) ^ beta))
+              (p (Fin.last (2 * k + 1))))) ∧
       (actualRosserEvenTail p).card = 2 * k + 1 := by
   have hNreal : (1 : ℝ) < N := by exact_mod_cast hN
   have hNpos : (0 : ℝ) < N := zero_lt_one.trans hNreal

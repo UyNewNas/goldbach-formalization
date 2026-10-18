@@ -62,10 +62,12 @@ theorem actualFrozenSelectedPairSlots_perm {α : Type*} (D A : ℝ) (yz : Bool)
     let slots := actualFrozenSelectedPairSlots D A yz upper p tail
     (slots.1 ++ slots.2.1 ++ slots.2.2).Perm (p 0 :: p 1 :: p 2 :: tail) := by
   unfold actualFrozenSelectedPairSlots
-  split_ifs
-  · let ac := actualTwoCapacityGreedy (fun i => (upper i : ℝ)) A
+  by_cases hC : 1 ≤ D / (A * (actualSelectedPairProduct yz (fun i => upper (p i)) : ℝ))
+  · rw [if_pos hC]
+    let ac := actualTwoCapacityGreedy (fun i => (upper i : ℝ)) A
       ((if yz then p 0 else p 1) :: tail)
     let selected := if yz then [p 1, p 2] else [p 0, p 2]
+    change (ac.1 ++ selected ++ ac.2).Perm (p 0 :: p 1 :: p 2 :: tail)
     have hpart := actualTwoCapacityGreedy_partition (fun i => (upper i : ℝ)) A
       ((if yz then p 0 else p 1) :: tail)
     have hmove : (ac.1 ++ selected ++ ac.2).Perm (selected ++ (ac.1 ++ ac.2)) := by
@@ -76,7 +78,8 @@ theorem actualFrozenSelectedPairSlots_perm {α : Type*} (D A : ℝ) (yz : Bool)
     · exact (List.Perm.swap (p 1) (p 2) tail).cons (p 0)
     · exact ((List.Perm.swap (p 0) (p 2) tail).cons (p 1)).trans
         (List.Perm.swap (p 0) (p 1) (p 2 :: tail))
-  · simpa only [List.append_nil] using
+  · rw [if_neg hC]
+    simpa only [List.append_nil] using
       (actualTwoCapacityGreedy_partition (fun i => (upper i : ℝ)) A
         (p 0 :: p 1 :: p 2 :: tail)).perm
 
@@ -99,7 +102,8 @@ theorem actualFrozenSelectedPairFactors_le_upper {α : Type*} (D A : ℝ) (yz : 
     let ABC := actualFrozenSelectedPairFactors D A yz upper upper p tail
     abc.1 ≤ ABC.1 ∧ abc.2.1 ≤ ABC.2.1 ∧ abc.2.2 ≤ ABC.2.2 := by
   let slots := actualFrozenSelectedPairSlots D A yz upper p tail
-  have hperm := actualFrozenSelectedPairSlots_perm D A yz upper p tail
+  have hperm : (slots.1 ++ (slots.2.1 ++ slots.2.2)).Perm (p 0 :: p 1 :: p 2 :: tail) := by
+    simpa only [List.append_assoc] using actualFrozenSelectedPairSlots_perm D A yz upper p tail
   have hbound (l : List α) (hmem : ∀ i ∈ l, i ∈ p 0 :: p 1 :: p 2 :: tail) :
       (l.map actual).prod ≤ (l.map upper).prod :=
     List.prod_map_le_prod_map₀ actual upper (fun i _ => Nat.zero_le _)
@@ -137,10 +141,12 @@ theorem actualFrozenSelectedPairFactors_at_upper {α : Type*} (D A : ℝ) (yz : 
       actualSelectedPairProduct yz (fun i => upper (p i)) := by
     cases yz <;> simp [actualSelectedPairProduct]
   unfold actualFrozenSelectedPairFactors actualFrozenSelectedPairSlots actualSelectedPairFactors
-  split_ifs
-  · dsimp only
+  by_cases hC : 1 ≤ D / (A * (actualSelectedPairProduct yz (fun i => upper (p i)) : ℝ))
+  · rw [if_pos hC, if_pos hC]
+    dsimp only
     rw [hrest, hb]
-  · exact congrArg (fun ab : ℕ × ℕ => (ab.1, ab.2, 1)) hfull.symm
+  · rw [if_neg hC, if_neg hC]
+    exact congrArg (fun ab : ℕ × ℕ => (ab.1, ab.2, 1)) hfull.symm
 
 /-- Original prime distinctness pays all three coprimality conditions for
 the same fixed slot partition. -/
@@ -264,12 +270,16 @@ theorem actualExtendedThirdSelectedPair_endpointBounds {e κ δ x : ℝ} {m : �
         else actualSelectedPrimeCoordinates x p 0 +
           2 * actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2) := by
     cases yz
-    · change ((p 0 * p 2 : ℕ) : ℝ) * (p 1 : ℝ) ^ 2 = _
+    · change ((p 0 * p 2 : ℕ) : ℝ) * (p 1 : ℝ) ^ 2 =
+        x ^ (actualSelectedPrimeCoordinates x p 0 +
+          2 * actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2)
       rw [Nat.cast_mul, ← hpow 0, ← hpow 1, ← hpow 2,
         ← Real.rpow_mul_natCast hxpos.le, ← Real.rpow_add hxpos, ← Real.rpow_add hxpos]
       congr 1
       ring
-    · change ((p 1 * p 2 : ℕ) : ℝ) * (p 0 : ℝ) ^ 2 = _
+    · change ((p 1 * p 2 : ℕ) : ℝ) * (p 0 : ℝ) ^ 2 =
+        x ^ (2 * actualSelectedPrimeCoordinates x p 0 +
+          actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2)
       rw [Nat.cast_mul, ← hpow 0, ← hpow 1, ← hpow 2,
         ← Real.rpow_mul_natCast hxpos.le, ← Real.rpow_add hxpos, ← Real.rpow_add hxpos]
       congr 1

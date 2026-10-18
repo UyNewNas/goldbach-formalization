@@ -1,0 +1,30 @@
+{
+  "status": "ROOT_METADATA_ONLY_SPECIFIC_GATE_REBIND",
+  "created_utc": "2026-10-15T23:28:14.164958+00:00",
+  "module": "ImbalancedChen.ActualRosserOddBox",
+  "source_sha256": "641b0b04bd6f6cde7806443069ad20204fd6bb04c6c7843c128e488d3fad5e7e",
+  "original_specific_gate": {
+    "name": "20261016-odd-thin-boundary-import-specific-root-runtime-gate.json",
+    "sha256": "03d5f03958192e744f7758df28436be2be6b85895cecf5b9037ac777065489ea"
+  },
+  "corrected_full_non_author_review": {
+    "name": "20261016-odd-thin-boundary-import-corrected-full-independent-scope.json",
+    "sha256": "3644ff39f324660ec3d0f927aac9acf62cd0d4ddd958ec3e2fd9cf6b7e706d91"
+  },
+  "old_report_preserved_not_full_header_evidence": "8b2732a3ef95af4b8ad49dd9b0f29dcc1811280c279a9779c0dfb1a0be85a4c2",
+  "root_actually_read": "All ten complete headers including named k:=k, two primitive defs, full source255 previously authored/read, corrected independent semantics/API/dependency/pins/byte-inverse scope. Mathematical source unchanged.",
+  "same_gate_only": "One new641b strictM6144/RSS6656/j2 trial, then ifPASS original-object full owned audit. Fresh recursive existing caches/self-only/missingexternal0. No old unchanged-byte retry, no Even/Euler/foreign bootstrap or global resource change. Original old receipts remain failed.",
+  "source_only_not_acceptance": true,
+  "complete_headers": [
+    "def actualRosserOddTail {k : ℕ} (p : Fin (2 * k + 1) → ℕ) : Finset ℕ",
+    "def actualRosserOddBoundaryMap {k : ℕ} (p : Fin (2 * k + 1) → ℕ) :\n    Sigma (fun _ : ℕ => Finset ℕ)",
+    "theorem actualRosserOddTail_card {k : ℕ} {p : Fin (2 * k + 1) → ℕ}\n    (hp : Function.Injective p) : (actualRosserOddTail p).card = 2 * k",
+    "theorem actualRosserOddTail_prod {k : ℕ} {p : Fin (2 * k + 1) → ℕ}\n    (hp : Function.Injective p) (g : ℕ → ℝ) :\n    (∏ r ∈ actualRosserOddTail p, g r) = ∏ i : Fin (2 * k), g (p i.castSucc)",
+    "theorem actualRosserOddTail_range {k : ℕ} (p : Fin (2 * k + 1) → ℕ) :\n    Set.range p = (↑(actualRosserOddTail p) : Set ℕ) ∪ {p (Fin.last (2 * k))}",
+    "theorem actualRosserOddBoundaryMap_injOn_strictAnti {k : ℕ}\n    (T : Finset (Fin (2 * k + 1) → ℕ)) (hT : ∀ p ∈ T, StrictAnti p) :\n    Set.InjOn (actualRosserOddBoundaryMap (k := k)) (T : Set (Fin (2 * k + 1) → ℕ))",
+    "theorem actualRosserOddTail_rank_eq {k l : ℕ}\n    {p : Fin (2 * k + 1) → ℕ} {r : Fin (2 * l + 1) → ℕ}\n    (hp : Function.Injective p) (hr : Function.Injective r)\n    (heq : actualRosserOddTail p = actualRosserOddTail r) : k = l",
+    "private theorem odd_box_upper_le {k : ℕ} {a b : Fin (2 * k + 1) → ℝ} {u : ℝ}\n    (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k), b i.succ ≤ a i.castSucc) (hbu : b 0 ≤ u) :\n    ∀ i, b i ≤ u",
+    "private theorem odd_boundaryChain_of_realBounds\n    {k : ℕ} (p : Fin (2 * k + 1) → ℕ) (R : ℝ)\n    (hlsorted : (List.ofFn (fun i : Fin (2 * k) => p i.castSucc)).SortedGT)\n    (htotalReal : (∏ i : Fin (2 * k), (p i.castSucc : ℝ)) < R)\n    (hprefixReal : ∀ i : Fin (2 * k), Even i.val →\n      (∏ j : Fin (2 * k) with j.val < i.val, (p j.castSucc : ℝ)) *\n        (p i.castSucc : ℝ) ^ 3 < R)\n    (hshellReal : R ≤ (∏ i : Fin (2 * k), (p i.castSucc : ℝ)) *\n      (p (Fin.last (2 * k)) : ℝ) ^ 3) :\n    LinearSieve.UpperRosserBoundaryChain (Nat.ceil R)\n      (p (Fin.last (2 * k))) (List.ofFn (fun i : Fin (2 * k) => p i.castSucc))",
+    "theorem actualRosserOddBox_mem_boundary\n    (k N cap : ℕ) (hN : 1 < N) (a b : Fin (2 * k + 1) → ℝ) (u beta : ℝ)\n    (hbeta : 0 < beta) (hab : ∀ i, a i < b i)\n    (hsep : ∀ i : Fin (2 * k), b i.succ ≤ a i.castSucc)\n    (hbu : b 0 ≤ u)\n    (hprod : (∑ i : Fin (2 * k), b i.castSucc) ≤ beta)\n    (hprefix : ∀ i : Fin (2 * k), Even i.val →\n      (∑ j : Fin (2 * k) with j.val < i.val, b j.castSucc) + 3 * b i.castSucc ≤ beta)\n    (hshell : beta ≤ (∑ i : Fin (2 * k), a i.castSucc) +\n      3 * a (Fin.last (2 * k)))\n    (hcap : (N : ℝ) ^ u ≤ (cap : ℝ))\n    {p : Fin (2 * k + 1) → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b) :\n    p (Fin.last (2 * k)) ∈ actualSmallPrimeFinset N cap ((N : ℝ) ^ u) ∧\n      actualRosserOddTail p ∈\n        (((actualSmallPrimeFinset N cap ((N : ℝ) ^ u)).filter\n          (fun q => p (Fin.last (2 * k)) < q)).powerset.filter\n            (LinearSieve.UpperRosserBoundarySet (Nat.ceil ((N : ℝ) ^ beta))\n              (p (Fin.last (2 * k))))) ∧\n      (actualRosserOddTail p).card = 2 * k"
+  ]
+}

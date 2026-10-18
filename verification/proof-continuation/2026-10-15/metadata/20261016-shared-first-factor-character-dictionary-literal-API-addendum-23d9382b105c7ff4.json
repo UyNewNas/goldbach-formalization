@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "status": "SOURCE_ONLY_LITERAL_API_COMPLETION_ADDENDUM_NO_SOURCE_CHANGE",
+  "source_sha256": "37f563d0e3e64e9d7a2d7bc505ce6e2a05294034f453db2f9317434759a596bc",
+  "self_report": "20261016-shared-first-factor-character-dictionary-self-scope.json",
+  "self_report_sha256": "26cbe1cbd93ca784e0171a8d39cc2dfeff1c9447058cf26745f6e3fda2ea549f",
+  "clarification": "The initial self report has verified literal contextual excerpts, including unrelated Basic386 and RootsComplex1-50 context. This additive file gives the precise inverse and primitive-root declarations used. No previous report is overwritten.",
+  "pinned_API_excerpts": [
+    {
+      "file": "Mathlib/NumberTheory/DirichletCharacter/Orthogonality.lean",
+      "sha256": "8c28bee61c275be882f91a7d90b8745fd8945186718df7d844b9acdb9fd9341b",
+      "API": "Full contextual orthogonality declaration, including NeZero and HasEnoughRoots",
+      "line_start": 29,
+      "line_end": 85,
+      "literal_source_excerpt": "\nvariable (R : Type*) [CommRing R] (n : ℕ) [NeZero n]\n  [HasEnoughRootsOfUnity R (Monoid.exponent (ZMod n)ˣ)]\n\n/-- The group of Dirichlet characters mod `n` with values in a ring `R` that has enough\nroots of unity is (noncanonically) isomorphic to `(ZMod n)ˣ`. -/\nlemma mulEquiv_units : Nonempty (DirichletCharacter R n ≃* (ZMod n)ˣ) :=\n  MulChar.mulEquiv_units ..\n\n/-- There are `n.totient` Dirichlet characters mod `n` with values in a ring that has enough\nroots of unity. -/\nlemma card_eq_totient_of_hasEnoughRootsOfUnity :\n    Nat.card (DirichletCharacter R n) = n.totient := by\n  rw [← ZMod.card_units_eq_totient n, ← Nat.card_eq_fintype_card]\n  exact Nat.card_congr (mulEquiv_units R n).some.toEquiv\n\nvariable {n}\n\n/-- If `R` is a ring that has enough roots of unity and `n ≠ 0`, then for each\n`a ≠ 1` in `ZMod n`, there exists a Dirichlet character `χ` mod `n` with values in `R`\nsuch that `χ a ≠ 1`. -/\ntheorem exists_apply_ne_one_of_hasEnoughRootsOfUnity [Nontrivial R] ⦃a : ZMod n⦄ (ha : a ≠ 1) :\n    ∃ χ : DirichletCharacter R n, χ a ≠ 1 :=\n  MulChar.exists_apply_ne_one_of_hasEnoughRootsOfUnity (ZMod n) R ha\n\nvariable [IsDomain R]\n\n/-- If `R` is an integral domain that has enough roots of unity and `n ≠ 0`, then\nfor each `a ≠ 1` in `ZMod n`, the sum of `χ a` over all Dirichlet characters mod `n`\nwith values in `R` vanishes. -/\ntheorem sum_characters_eq_zero ⦃a : ZMod n⦄ (ha : a ≠ 1) :\n    ∑ χ : DirichletCharacter R n, χ a = 0 := by\n  obtain ⟨χ, hχ⟩ := exists_apply_ne_one_of_hasEnoughRootsOfUnity R ha\n  refine eq_zero_of_mul_eq_self_left hχ ?_\n  simp only [Finset.mul_sum, ← MulChar.mul_apply]\n  exact Fintype.sum_bijective _ (Group.mulLeft_bijective χ) _ _ fun χ' ↦ rfl\n\n/-- If `R` is an integral domain that has enough roots of unity and `n ≠ 0`, then\nfor `a` in `ZMod n`, the sum of `χ a` over all Dirichlet characters mod `n`\nwith values in `R` vanishes if `a ≠ 1` and has the value `n.totient` if `a = 1`. -/\ntheorem sum_characters_eq (a : ZMod n) :\n    ∑ χ : DirichletCharacter R n, χ a = if a = 1 then (n.totient : R) else 0 := by\n  split_ifs with ha\n  · simpa only [ha, map_one, Finset.sum_const, Finset.card_univ, nsmul_eq_mul, mul_one,\n      ← Nat.card_eq_fintype_card]\n      using congrArg Nat.cast <| card_eq_totient_of_hasEnoughRootsOfUnity R n\n  · exact sum_characters_eq_zero R ha\n\n/-- If `R` is an integral domain that has enough roots of unity and `n ≠ 0`, then for `a` and `b`\nin `ZMod n` with `a` a unit, the sum of `χ a⁻¹ * χ b` over all Dirichlet characters\nmod `n` with values in `R` vanishes if `a ≠ b` and has the value `n.totient` if `a = b`. -/\ntheorem sum_char_inv_mul_char_eq {a : ZMod n} (ha : IsUnit a) (b : ZMod n) :\n    ∑ χ : DirichletCharacter R n, χ a⁻¹ * χ b = if a = b then (n.totient : R) else 0 := by\n  simp only [← map_mul, sum_characters_eq, ZMod.inv_mul_eq_one_of_isUnit ha]\n\nend DirichletCharacter"
+    },
+    {
+      "file": "Mathlib/NumberTheory/MulChar/Lemmas.lean",
+      "sha256": "129a9293c86c55153d065a484e7798d82696503851cc461f3b1fba9b74ea72ad",
+      "API": "Finite-unit character star versus inverse character",
+      "line_start": 60,
+      "line_end": 82,
+      "literal_source_excerpt": "@[simp]\nlemma star_apply [StarRing R'] (χ : MulChar R R') (a : R) : (star χ) a = star (χ a) :=\n  rfl\n\n/-- The values of a multiplicative character on `R` are `n`th roots of unity, where `n = #Rˣ`. -/\nlemma apply_mem_rootsOfUnity [Fintype Rˣ] (a : Rˣ) {χ : MulChar R R'} :\n    equivToUnitHom χ a ∈ rootsOfUnity (Fintype.card Rˣ) R' := by\n  rw [mem_rootsOfUnity, ← map_pow, ← (equivToUnitHom χ).map_one, pow_card_eq_one]\n\nvariable [Finite Rˣ]\n\nopen Complex in\n/-- The conjugate of a multiplicative character with values in `ℂ` is its inverse. -/\nlemma star_eq_inv (χ : MulChar R ℂ) : star χ = χ⁻¹ := by\n  cases nonempty_fintype Rˣ\n  ext1 a\n  simp only [inv_apply_eq_inv']\n  exact (inv_eq_conj <| norm_eq_one_of_mem_rootsOfUnity <| χ.apply_mem_rootsOfUnity a).symm\n\nlemma star_apply' (χ : MulChar R ℂ) (a : R) : star (χ a) = χ⁻¹ a := by\n  simp only [RCLike.star_def, ← star_eq_inv, star_apply]\n\nend Ring"
+    },
+    {
+      "file": "Mathlib/NumberTheory/MulChar/Basic.lean",
+      "sha256": "67fcb540ce7bc5fd9bfafe1b6fc92ee5e4c6c96404e7baf9edbe1a24b030b9be",
+      "API": "Actual inverse-character API: input Ring.inverse; no composite-ZMod use of inv_apply'",
+      "line_start": 291,
+      "line_end": 325,
+      "literal_source_excerpt": "\nnoncomputable instance hasInv : Inv (MulChar R R') :=\n  ⟨inv⟩\n\n/-- The inverse of a multiplicative character `χ`, applied to `a`, is the inverse of `χ a`. -/\ntheorem inv_apply_eq_inv (χ : MulChar R R') (a : R) : χ⁻¹ a = (χ a)⁻¹ʳ :=\n  Eq.refl <| inv χ a\n\n/-- The inverse of a multiplicative character `χ`, applied to `a`, is the inverse of `χ a`.\nVariant when the target is a field -/\ntheorem inv_apply_eq_inv' {R' : Type*} [CommGroupWithZero R'] (χ : MulChar R R') (a : R) :\n    χ⁻¹ a = (χ a)⁻¹ :=\n  (inv_apply_eq_inv χ a).trans <| Ring.inverse_eq_inv (χ a)\n\n/-- When the domain has a zero, then the inverse of a multiplicative character `χ`,\napplied to `a`, is `χ` applied to the inverse of `a`. -/\ntheorem inv_apply {R : Type*} [CommMonoidWithZero R] (χ : MulChar R R') (a : R) :\n    χ⁻¹ a = χ a⁻¹ʳ := by\n  by_cases ha : IsUnit a\n  · rw [inv_apply_eq_inv]\n    have h := IsUnit.map χ ha\n    apply_fun (χ a * ·) using IsUnit.mul_right_injective h\n    dsimp only\n    rw [Ring.mul_inverse_cancel _ h, ← map_mul, Ring.mul_inverse_cancel _ ha, map_one]\n  · revert ha\n    nontriviality R\n    intro ha\n    -- `nontriviality R` by itself doesn't do it\n    rw [map_nonunit _ ha, Ring.inverse_non_unit a ha, MulChar.map_zero χ]\n\n/-- When the domain has a zero, then the inverse of a multiplicative character `χ`,\napplied to `a`, is `χ` applied to the inverse of `a`. -/\ntheorem inv_apply' {R : Type*} [CommGroupWithZero R] (χ : MulChar R R') (a : R) : χ⁻¹ a = χ a⁻¹ :=\n  (inv_apply χ a).trans <| congr_arg _ (Ring.inverse_eq_inv a)\n"
+    },
+    {
+      "file": "Mathlib/Data/ZMod/Basic.lean",
+      "sha256": "c910cf5089e3f961c495763c0a6c9609bcb8033f500faa1e7e4f0666f7eb5f99",
+      "API": "Actual composite-ZMod inverse at a unit",
+      "line_start": 835,
+      "line_end": 843,
+      "literal_source_excerpt": "    ¬ IsUnit ((p : ℕ) : ZMod (p ^ d)) := by\n  simp [isUnit_prime_iff_not_dvd hp]\n  lia\n\n@[simp]\ntheorem inv_coe_unit {n : ℕ} (u : (ZMod n)ˣ) : (u : ZMod n)⁻¹ = (u⁻¹ : (ZMod n)ˣ) := by\n  have := congr_arg ((↑) : ℕ → ZMod n) (val_coe_unit_coprime u)\n  rw [← mul_inv_eq_gcd, Nat.cast_one] at this\n  exact (Units.inv_eq_of_mul_eq_one_right this).symm"
+    },
+    {
+      "file": "Mathlib/RingTheory/RootsOfUnity/EnoughRootsOfUnity.lean",
+      "sha256": "954985a3434734fd75cea94bd950005373a66d2128c68d3c20015ab2127c3fcf",
+      "API": "Actual prim/cyc structure constructed locally",
+      "line_start": 20,
+      "line_end": 32,
+      "literal_source_excerpt": "public section\n\n/-- This is a type class recording that a commutative monoid `M` contains primitive `n`th\nroots of unity and such that the group of `n`th roots of unity is cyclic.\n\nSuch monoids are suitable targets in the context of duality statements for groups\nof exponent `n`. -/\nclass HasEnoughRootsOfUnity (M : Type*) [CommMonoid M] (n : ℕ) where\n  prim : ∃ m : M, IsPrimitiveRoot m n\n  cyc : IsCyclic <| rootsOfUnity n M\n\nnamespace HasEnoughRootsOfUnity\n"
+    },
+    {
+      "file": "Mathlib/RingTheory/RootsOfUnity/Complex.lean",
+      "sha256": "a403d79d20137cc03f3e8899594a4c5c63333a690cfb4b77b066018dc3925a53",
+      "API": "Actual Complex.isPrimitiveRoot_exp",
+      "line_start": 88,
+      "line_end": 95,
+      "literal_source_excerpt": "      ← Rat.divInt_eq_div, ← Nat.cast_ofNat (R := ℤ), ← Nat.cast_mul,\n      ← Rat.mk_eq_divInt (nz := by simp)\n        (c := Nat.Coprime.mul_right q.reduced h.natAbs.coprime_two_right)]\n\ntheorem isPrimitiveRoot_exp (n : ℕ) (h0 : n ≠ 0) : IsPrimitiveRoot (exp (2 * π * I / n)) n := by\n  simpa only [Nat.cast_one, one_div] using!\n    isPrimitiveRoot_exp_of_coprime 1 n h0 n.coprime_one_left\n"
+    },
+    {
+      "file": "Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean",
+      "sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "API": "Actual to_additive sum_erase_add source",
+      "line_start": 730,
+      "line_end": 752,
+      "literal_source_excerpt": "    rw [card_eq_one] at h1\n    grind\n\n/-- Taking a product over `s : Finset ι` is the same as multiplying the value on a single element\n`f a` by the product of `s.erase a`.\n\nSee `Multiset.prod_map_erase` for the `Multiset` version. -/\n@[to_additive /-- Taking a sum over `s : Finset ι` is the same as adding the value on a single\nelement `f a` to the sum over `s.erase a`.\n\nSee `Multiset.sum_map_erase` for the `Multiset` version. -/]\ntheorem mul_prod_erase [DecidableEq ι] (s : Finset ι) (f : ι → M) {a : ι} (h : a ∈ s) :\n    (f a * ∏ x ∈ s.erase a, f x) = ∏ x ∈ s, f x := by\n  rw [← prod_insert (notMem_erase a s), insert_erase h]\n\n/-- A variant of `Finset.mul_prod_erase` with the multiplication swapped. -/\n@[to_additive /-- A variant of `Finset.add_sum_erase` with the addition swapped. -/]\ntheorem prod_erase_mul [DecidableEq ι] (s : Finset ι) (f : ι → M) {a : ι} (h : a ∈ s) :\n    (∏ x ∈ s.erase a, f x) * f a = ∏ x ∈ s, f x := by rw [mul_comm, mul_prod_erase s f h]\n\n/-- If a function applied at a point is 1, a product is unchanged by\nremoving that point, if present, from a `Finset`. -/\n@[to_additive /-- If a function applied at a point is 0, a sum is unchanged by"
+    }
+  ],
+  "no_Lean_or_source_change": true,
+  "acceptance_claim": false
+}

@@ -54,7 +54,7 @@ theorem actual_energy_sub_nonzero_abs_le
   apply (Complex.abs_re_le_norm _).trans
   calc
     _ ≤ ‖Z - 2 * V‖ + ‖U‖ := norm_add_le _ _
-    _ ≤ (‖Z‖ + ‖(2 : ℂ) * V‖) + ‖U‖ := add_le_add_right (norm_sub_le _ _) _
+    _ ≤ (‖Z‖ + ‖(2 : ℂ) * V‖) + ‖U‖ := add_le_add (norm_sub_le _ _) le_rfl
     _ = _ := by
       rw [norm_mul, show ‖(2 : ℂ)‖ = (2 : ℝ) by norm_num]
 
@@ -149,7 +149,7 @@ theorem actual_signedError_sq_le_nonzero_add_log_payment {ι : Type*}
   calc
     _ ≤ b * E := hc
     _ = b * N + b * (E - N) := by ring
-    _ ≤ _ := add_le_add_left hdiff (b * N)
+    _ ≤ _ := add_le_add le_rfl hdiff
 
 end TransposedZeroUVPayment
 

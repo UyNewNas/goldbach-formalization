@@ -48,8 +48,10 @@ private theorem card_congruentPairs_le (K p : ℕ) :
       · intro z hz w hw he
         obtain ⟨_, hzmod⟩ := mem_filter.mp hz
         obtain ⟨_, hwmod⟩ := mem_filter.mp hw
-        have hfirst : z.1 = w.1 := congrArg Prod.fst he
-        have hquot : z.2 / p = w.2 / p := congrArg Prod.snd he
+        have hfirst : z.1 = w.1 := by
+          simpa only using congrArg (fun t : ℕ × ℕ ↦ t.1) he
+        have hquot : z.2 / p = w.2 / p := by
+          simpa only using congrArg (fun t : ℕ × ℕ ↦ t.2) he
         apply Prod.ext hfirst
         apply Nat.ext_div_modEq hquot
         rw [hfirst] at hzmod
@@ -112,8 +114,8 @@ private theorem sum_inv_sq_Icc_le (M K : ℕ) (hM : 0 < M) :
         congr 1
         have ht := sum_Icc_sub hMK (fun g : ℕ ↦ (g : ℝ)⁻¹)
         simp only [Nat.cast_add, Nat.cast_one] at ht
-        have hneg : (∑ g ∈ Icc M K, ((g : ℝ) + 1)⁻¹ - (g : ℝ)⁻¹) =
-            -(∑ g ∈ Icc M K, (g : ℝ)⁻¹ - ((g : ℝ) + 1)⁻¹) := by
+        have hneg : (∑ g ∈ Icc M K, (((g : ℝ) + 1)⁻¹ - (g : ℝ)⁻¹)) =
+            -(∑ g ∈ Icc M K, ((g : ℝ)⁻¹ - ((g : ℝ) + 1)⁻¹)) := by
           rw [← sum_neg_distrib]
           apply sum_congr rfl
           intro g _
@@ -168,9 +170,9 @@ private theorem sum_inv_le_log {T : ℝ} (hT : 1 ≤ T)
 private theorem card_le_sum_divisible (T Y : ℝ) (N : Finset ℕ) (p : ℕ)
     (hN : N ⊆ Ioc 0 (Nat.floor T)) :
     (sharedPrimitiveLargeGCDPairs N p Y).card ≤
-      ∑ g ∈ (Ioc 0 (Nat.floor T)).filter (fun g ↦ Y < (g : ℝ) ∧ g.Coprime p),
+      ∑ g ∈ (Ioc 0 (Nat.floor T)).filter (fun g : ℕ ↦ Y < (g : ℝ) ∧ g.Coprime p),
         (divisibleCongruentPairs (Nat.floor T) p g).card := by
-  let G := (Ioc 0 (Nat.floor T)).filter (fun g ↦ Y < (g : ℝ) ∧ g.Coprime p)
+  let G := (Ioc 0 (Nat.floor T)).filter (fun g : ℕ ↦ Y < (g : ℝ) ∧ g.Coprime p)
   let S := sharedPrimitiveLargeGCDPairs N p Y
   have hsub : S ⊆ Ioc 0 (Nat.floor T) ×ˢ Ioc 0 (Nat.floor T) := by
     intro z hz
@@ -192,7 +194,9 @@ private theorem card_le_sum_divisible (T Y : ℝ) (N : Finset ℕ) (p : ℕ)
       have hs := single_le_sum (s := G)
         (f := fun g ↦ if g ∣ z.1 ∧ g ∣ z.2 ∧ Nat.ModEq p z.1 z.2 then (1 : ℕ) else 0)
         (fun _ _ ↦ Nat.zero_le _) hgG
-      simpa only [if_pos ⟨Nat.gcd_dvd_left _ _, Nat.gcd_dvd_right _ _, hzmod⟩] using hs
+      have hdiv : z.1.gcd z.2 ∣ z.1 ∧ z.1.gcd z.2 ∣ z.2 ∧ Nat.ModEq p z.1 z.2 :=
+        ⟨Nat.gcd_dvd_left _ _, Nat.gcd_dvd_right _ _, hzmod⟩
+      simpa only [if_pos hdiv] using hs
     _ ≤ ∑ z ∈ Ioc 0 (Nat.floor T) ×ˢ Ioc 0 (Nat.floor T), ∑ g ∈ G,
         if g ∣ z.1 ∧ g ∣ z.2 ∧ Nat.ModEq p z.1 z.2 then 1 else 0 :=
       sum_le_sum_of_subset_of_nonneg hsub (fun _ _ _ ↦ Nat.zero_le _)
@@ -202,6 +206,7 @@ private theorem card_le_sum_divisible (T Y : ℝ) (N : Finset ℕ) (p : ℕ)
       intro g _
       rw [← sum_filter]
       simp only [divisibleCongruentPairs, sum_const, nsmul_eq_mul, mul_one]
+      rfl
 
 end SharedFirstFactorPairCount
 
@@ -211,7 +216,7 @@ theorem card_sharedPrimitiveLargeGCDPairs_le
     (N : Finset ℕ) (hN : N ⊆ Ioc 0 (Nat.floor T)) :
     ((sharedPrimitiveLargeGCDPairs N p Y).card : ℝ) ≤
       2 * T ^ 2 / ((p : ℝ) * Y) + T * (1 + Real.log T) := by
-  let G := (Ioc 0 (Nat.floor T)).filter (fun g ↦ Y < (g : ℝ) ∧ g.Coprime p)
+  let G := (Ioc 0 (Nat.floor T)).filter (fun g : ℕ ↦ Y < (g : ℝ) ∧ g.Coprime p)
   have hT0 : 0 ≤ T := by linarith
   have hpR : (0 : ℝ) < p := by exact_mod_cast hp
   have hcount : ((sharedPrimitiveLargeGCDPairs N p Y).card : ℝ) ≤
@@ -239,7 +244,7 @@ theorem card_sharedPrimitiveLargeGCDPairs_le
       _ = _ := by simp only [div_eq_mul_inv]; ring
   calc
     _ ≤ ∑ g ∈ G, ((SharedFirstFactorPairCount.divisibleCongruentPairs (Nat.floor T) p g).card : ℝ) := hcount
-    _ ≤ ∑ g ∈ G, (T ^ 2 / p) * ((g : ℝ)⁻¹) ^ 2 + T * (g : ℝ)⁻¹ := sum_le_sum hpoint
+    _ ≤ ∑ g ∈ G, ((T ^ 2 / p) * ((g : ℝ)⁻¹) ^ 2 + T * (g : ℝ)⁻¹) := sum_le_sum hpoint
     _ = (T ^ 2 / p) * (∑ g ∈ G, ((g : ℝ)⁻¹) ^ 2) +
         T * (∑ g ∈ G, (g : ℝ)⁻¹) := by rw [sum_add_distrib, ← mul_sum, ← mul_sum]
     _ ≤ (T ^ 2 / p) * (2 / Y) + T * (1 + Real.log T) := by
@@ -263,7 +268,7 @@ theorem MediumAtom.card_sharedPrimitiveLargeGCDPairs_le
     obtain ⟨hnlo, hnhi⟩ := mem_Icc.mp hn
     have hceil : 1 ≤ Nat.ceil d.U := by exact_mod_cast hU.trans (Nat.le_ceil d.U)
     exact mem_Ioc.mpr ⟨by omega, hnhi⟩
-  have h := card_sharedPrimitiveLargeGCDPairs_le
+  have h := ImbalancedChen.Part3.card_sharedPrimitiveLargeGCDPairs_le
     (T := 2 * d.U) (by linarith) hY hp d.transposedAtom.betaCarrier hsub
   calc
     _ ≤ 2 * (2 * d.U) ^ 2 / ((p : ℝ) * Y) +

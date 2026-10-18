@@ -1,0 +1,222 @@
+{
+  "status": "SOURCE_ONLY_AUTHOR_REVIEW_PENDING_NONAUTHOR_AND_RUNTIME",
+  "reviewer": "/root/lower_resume (source author)",
+  "created_at_utc": "2026-10-15T23:30:11.354263+00:00",
+  "module": "ImbalancedChen.CurrentChenUpsilon8TrueLiMass",
+  "source_sha256": "9f009161174abeb734c21154ebc368a9ae3354b157fc2da42e199e76d307554c",
+  "no_Lean_or_build_invoked": true,
+  "bytecode_writes_disabled": true,
+  "no_kernel_owned_or_cache_acceptance_claimed": true,
+  "path": "ImbalancedChen/CurrentChenUpsilon8TrueLiMass.lean",
+  "declaration_count": 3,
+  "definition_count": 1,
+  "theorem_count": 2,
+  "type_extraction": "All theorem headers split only at actual := by and the definition at top-level assignment outside bracketed named arguments; all complete types, definition and proofs are attached.",
+  "all_complete_headers_definitions_and_proofs": [
+    {
+      "name": "currentChenUpsilon8LogTotientMass",
+      "kind": "def",
+      "private": false,
+      "start_line": 27,
+      "complete_source_header": "def currentChenUpsilon8LogTotientMass (N : ℕ) : ℝ",
+      "complete_definition": "def currentChenUpsilon8LogTotientMass (N : ℕ) : ℝ :=\n∑ a ∈ currentChenUpsilon8PrefixProducts N,\n    (1 / (Nat.totient a : ℝ)) *\n      (1 / (1 - Real.log (a : ℝ) / Real.log (N : ℝ)))",
+      "source_author_semantic_review": "Exactly one definition and two theorems are added. LogTotientMass8 is a literal finite sum over the actual U8PrefixProducts image, with the actual weight1/phi(a) and kernel1/(1-log a/log N). There is no modulus argument, artificial coefficient, replacement ninth source or assumed product support."
+    },
+    {
+      "name": "currentChenUpsilon8LogTotientMass_nonneg",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 32,
+      "complete_source_header": "theorem currentChenUpsilon8LogTotientMass_nonneg {N : ℕ} (hN : 2 ≤ N) :\n    0 ≤ currentChenUpsilon8LogTotientMass N",
+      "complete_proof_body_after_by": "apply Finset.sum_nonneg\n  intro a ha\n  have hgap : 0 < 1 - Real.log (a : ℝ) / Real.log (N : ℝ) :=\n    lt_of_lt_of_le (by norm_num : (0 : ℝ) < 1 / 3)\n      (currentChenUpsilon8_log_gap_lower hN ha)\n  exact mul_nonneg (one_div_nonneg.mpr (Nat.cast_nonneg _))\n    (one_div_nonneg.mpr hgap.le)",
+      "source_author_semantic_review": "The owned literal U8 source proves a>0, a<N^(2/3), N/a>=N^(1/3), and logarithmic gap>=1/3 for N>=2. The new nonnegative-mass theorem uses exactly that positive actual gap and the genuine nonnegative reciprocal totient. No gap is a caller premise."
+    },
+    {
+      "name": "eventually_currentChenUpsilon8_liMainMass_le_logTotientMass",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 44,
+      "complete_source_header": "theorem eventually_currentChenUpsilon8_liMainMass_le_logTotientMass\n    (η : ℝ) (hη : 0 < η) :\n    ∀ᶠ N : ℕ in atTop,\n      currentChenUpsilon8LiMainMass N ≤\n        (1 + η) * ((N : ℝ) / Real.log (N : ℝ)) * currentChenUpsilon8LogTotientMass N",
+      "complete_proof_body_after_by": "obtain ⟨X, hX⟩ := eventually_atTop.mp (eventually_currentChenUpsilon9_trueLi_real_le η hη)\n  have hlarge : ∀ᶠ N : ℕ in atTop, X ≤ (N : ℝ) ^ (1 / 3 : ℝ) :=\n    ((tendsto_rpow_atTop (by norm_num : (0 : ℝ) < 1 / 3)).comp\n      tendsto_natCast_atTop_atTop).eventually (eventually_ge_atTop X)\n  filter_upwards [hlarge, eventually_ge_atTop (2 : ℕ)] with N hlarge hN\n  have hNr : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)\n  have hNp : (0 : ℝ) < N := zero_lt_one.trans hNr\n  have hlog := Real.log_pos hNr\n  have hnormalized : currentChenUpsilon8LiMainMass N * Real.log (N : ℝ) / (N : ℝ) ≤\n      (1 + η) * currentChenUpsilon8LogTotientMass N := by\n    rw [currentChenUpsilon8LiMainMass, Finset.sum_mul, Finset.sum_div,\n      currentChenUpsilon8LogTotientMass, Finset.mul_sum]\n    apply Finset.sum_le_sum\n    intro a ha\n    have hap : (0 : ℝ) < a := by\n      exact_mod_cast (currentChenUpsilon8PrefixProducts_data ha).1\n    have hgap : 0 < 1 - Real.log (a : ℝ) / Real.log (N : ℝ) :=\n      lt_of_lt_of_le (by norm_num : (0 : ℝ) < 1 / 3)\n        (currentChenUpsilon8_log_gap_lower hN ha)\n    have hquot := currentChenUpsilon8_li_argument_power_lower hNr.le ha\n    have hli := hX ((N : ℝ) / (a : ℝ)) (hlarge.trans hquot)\n    have hφ : (0 : ℝ) < Nat.totient a := by\n      exact_mod_cast Nat.totient_pos.mpr (currentChenUpsilon8PrefixProducts_data ha).1\n    have hweight : 1 / (a : ℝ) ≤ 1 / (Nat.totient a : ℝ) :=\n      one_div_le_one_div_of_le hφ (by exact_mod_cast Nat.totient_le a)\n    have hlogquot : Real.log ((N : ℝ) / (a : ℝ)) =\n        Real.log (N : ℝ) * (1 - Real.log (a : ℝ) / Real.log (N : ℝ)) := by\n      rw [Real.log_div hNp.ne' hap.ne']\n      field_simp [hlog.ne']\n    calc\n      _ ≤ ((1 + η) * ((N : ℝ) / (a : ℝ)) / Real.log ((N : ℝ) / (a : ℝ))) *\n          (Real.log (N : ℝ) / (N : ℝ)) := by\n        simpa only [trueLogarithmicIntegral, mul_div_assoc] using mul_le_mul_of_nonneg_right hli\n          (div_nonneg hlog.le hNp.le)\n      _ = (1 + η) * ((1 / (a : ℝ)) *\n          (1 / (1 - Real.log (a : ℝ) / Real.log (N : ℝ)))) := by\n        rw [hlogquot]\n        field_simp [hNp.ne', hap.ne', hlog.ne', hgap.ne']\n      _ ≤ _ := mul_le_mul_of_nonneg_left\n        (mul_le_mul_of_nonneg_right hweight (one_div_nonneg.mpr hgap.le)) (by linarith only [hη])\n  calc\n    _ ≤ ((1 + η) * currentChenUpsilon8LogTotientMass N * (N : ℝ)) / Real.log (N : ℝ) :=\n      (le_div_iff₀ hlog).mpr ((div_le_iff₀ hNp).mp hnormalized)\n    _ = _ := by ring",
+      "source_author_semantic_review": "The only real-variable li estimate invoked is public eventually_currentChenUpsilon9_trueLi_real_le eta heta. That generic theorem has already been proved from the actual exact-remainder sqrt split on all large real arguments; it is not the ninth-specific product transport or an assumed leading-one law. The existing integration constant2/log2 is unchanged. For each fixed eta>0 take the real threshold X from that genuine theorem. Since N^(1/3) tends to infinity, one natural-N threshold puts EVERY actual moving argument N/a above X. This threshold is chosen before any actual a; the theorem requests only eta>0 and has no asymptotic, count, density or harmonic supplier. In the finite normalized sum, the true-log-integral alias is explicitly unfolded exactly as in owned0f49, retaining the same liuLogarithmicIntegral(2/log2) as LiMainMass8. Multiplication by log N/N is justified by N>=2. The identity log(N/a)=logN*(1-log a/logN) uses actual a>0 and positive log N. The actual phi(a)<=a inequality is used in the correct upper-bound direction:1/a<=1/phi(a), with phi(a)>0 paid by actual a>0. It is multiplied only by nonnegative1/gap and1+eta. No incorrect phi reciprocal direction or unproved main-term positivity is used. Finite summation proves the normalized mass inequality as an INTERNAL local have. Positive N and logN then permit exact division conversion to LiMainMass8<=(1+eta)*(N/logN)*LogTotientMass8. The final multiplication reorder is ring algebra; no normalized wrapper, additional definition or caller estimate is introduced. The final type has only eta and eta>0 before an eventual natural N threshold. It preserves the actual eighth product image and one leading li constant. This is a one-sided transport, not a two-sided true-li mass limit, harmonic estimate, density factor8 assembly, complete ordinary U8 mean, hUpper/hLower or adopted K proof."
+    }
+  ],
+  "full_current_source": "import ImbalancedChen.CurrentChenUpsilon8CoprimeGateBudget\nimport ImbalancedChen.CurrentChenUpsilon9TrueLiMass\n\n/-!\n# Leading-one transport on the literal eighth li mass\n\nThe actual eighth product image has a<N^(2/3), so every moving li\nargument N/a is at least N^(1/3). The already proved real-variable\nleading-one bound is therefore uniform on that whole original image.\nIts logarithmic gap is at least1/3, and the true phi(a)<=a inequality\nbounds the same positive profile by its literal reciprocal-totient mass.\nNo density, prime-sum mean or Upsilon mean is supplied by the caller.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen Filter Topology\nopen scoped BigOperators\nopen Classical\nopen MathlibNt.SieveTheory.LiuWeight\nopen MathlibNt.SieveTheory.BombieriVinogradov (trueLogarithmicIntegral)\n\n/-- The literal eighth product-image logarithmic reciprocal-totient mass.\nNeither its support nor its coefficient depends on a sieve modulus. -/\ndef currentChenUpsilon8LogTotientMass (N : ℕ) : ℝ :=\n  ∑ a ∈ currentChenUpsilon8PrefixProducts N,\n    (1 / (Nat.totient a : ℝ)) *\n      (1 / (1 - Real.log (a : ℝ) / Real.log (N : ℝ)))\n\ntheorem currentChenUpsilon8LogTotientMass_nonneg {N : ℕ} (hN : 2 ≤ N) :\n    0 ≤ currentChenUpsilon8LogTotientMass N := by\n  apply Finset.sum_nonneg\n  intro a ha\n  have hgap : 0 < 1 - Real.log (a : ℝ) / Real.log (N : ℝ) :=\n    lt_of_lt_of_le (by norm_num : (0 : ℝ) < 1 / 3)\n      (currentChenUpsilon8_log_gap_lower hN ha)\n  exact mul_nonneg (one_div_nonneg.mpr (Nat.cast_nonneg _))\n    (one_div_nonneg.mpr hgap.le)\n\n/-- The genuine real leading-one bound is uniform on every actual eighth\nproduct. All moving-argument and positive-denominator gates are paid here. -/\ntheorem eventually_currentChenUpsilon8_liMainMass_le_logTotientMass\n    (η : ℝ) (hη : 0 < η) :\n    ∀ᶠ N : ℕ in atTop,\n      currentChenUpsilon8LiMainMass N ≤\n        (1 + η) * ((N : ℝ) / Real.log (N : ℝ)) * currentChenUpsilon8LogTotientMass N := by\n  obtain ⟨X, hX⟩ := eventually_atTop.mp (eventually_currentChenUpsilon9_trueLi_real_le η hη)\n  have hlarge : ∀ᶠ N : ℕ in atTop, X ≤ (N : ℝ) ^ (1 / 3 : ℝ) :=\n    ((tendsto_rpow_atTop (by norm_num : (0 : ℝ) < 1 / 3)).comp\n      tendsto_natCast_atTop_atTop).eventually (eventually_ge_atTop X)\n  filter_upwards [hlarge, eventually_ge_atTop (2 : ℕ)] with N hlarge hN\n  have hNr : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)\n  have hNp : (0 : ℝ) < N := zero_lt_one.trans hNr\n  have hlog := Real.log_pos hNr\n  have hnormalized : currentChenUpsilon8LiMainMass N * Real.log (N : ℝ) / (N : ℝ) ≤\n      (1 + η) * currentChenUpsilon8LogTotientMass N := by\n    rw [currentChenUpsilon8LiMainMass, Finset.sum_mul, Finset.sum_div,\n      currentChenUpsilon8LogTotientMass, Finset.mul_sum]\n    apply Finset.sum_le_sum\n    intro a ha\n    have hap : (0 : ℝ) < a := by\n      exact_mod_cast (currentChenUpsilon8PrefixProducts_data ha).1\n    have hgap : 0 < 1 - Real.log (a : ℝ) / Real.log (N : ℝ) :=\n      lt_of_lt_of_le (by norm_num : (0 : ℝ) < 1 / 3)\n        (currentChenUpsilon8_log_gap_lower hN ha)\n    have hquot := currentChenUpsilon8_li_argument_power_lower hNr.le ha\n    have hli := hX ((N : ℝ) / (a : ℝ)) (hlarge.trans hquot)\n    have hφ : (0 : ℝ) < Nat.totient a := by\n      exact_mod_cast Nat.totient_pos.mpr (currentChenUpsilon8PrefixProducts_data ha).1\n    have hweight : 1 / (a : ℝ) ≤ 1 / (Nat.totient a : ℝ) :=\n      one_div_le_one_div_of_le hφ (by exact_mod_cast Nat.totient_le a)\n    have hlogquot : Real.log ((N : ℝ) / (a : ℝ)) =\n        Real.log (N : ℝ) * (1 - Real.log (a : ℝ) / Real.log (N : ℝ)) := by\n      rw [Real.log_div hNp.ne' hap.ne']\n      field_simp [hlog.ne']\n    calc\n      _ ≤ ((1 + η) * ((N : ℝ) / (a : ℝ)) / Real.log ((N : ℝ) / (a : ℝ))) *\n          (Real.log (N : ℝ) / (N : ℝ)) := by\n        simpa only [trueLogarithmicIntegral, mul_div_assoc] using mul_le_mul_of_nonneg_right hli\n          (div_nonneg hlog.le hNp.le)\n      _ = (1 + η) * ((1 / (a : ℝ)) *\n          (1 / (1 - Real.log (a : ℝ) / Real.log (N : ℝ)))) := by\n        rw [hlogquot]\n        field_simp [hNp.ne', hap.ne', hlog.ne', hgap.ne']\n      _ ≤ _ := mul_le_mul_of_nonneg_left\n        (mul_le_mul_of_nonneg_right hweight (one_div_nonneg.mpr hgap.le)) (by linarith only [hη])\n  calc\n    _ ≤ ((1 + η) * currentChenUpsilon8LogTotientMass N * (N : ℝ)) / Real.log (N : ℝ) :=\n      (le_div_iff₀ hlog).mpr ((div_le_iff₀ hNp).mp hnormalized)\n    _ = _ := by ring\n\nend\n\nend ImbalancedChen\n",
+  "parents": [
+    {
+      "module": "ImbalancedChen.CurrentChenUpsilon8CoprimeGateBudget",
+      "source_sha256": "c4f5a801eadd6128f088b99cd8128602aeba1d0d8fa2a24906cd3e9cd387e761",
+      "object_sha256": "cb431fd9f6abf239bb8d2f487e67467e0ebda4199da1f72721ab7a81fd258ef4",
+      "owned_receipt_path": ".lake/proof-continuation/audits/20261015T225351728783Z/receipt.json",
+      "owned_receipt_sha256": "78aba0d83691468a5f138ce06724772119c5092227ce8d67cbe64d42dbeae9e9",
+      "owned_declaration_count": 13,
+      "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "before_after_exact": true,
+      "scope": "Actual own-object replay and complete types/axioms only, no imported-closure kernel replay claim."
+    },
+    {
+      "module": "ImbalancedChen.CurrentChenUpsilon9TrueLiMass",
+      "source_sha256": "0f49198775e261606e227e6de621a75f445a066ba851ef3a25748f3e86b65289",
+      "object_sha256": "15e8fc57b154ed1e3288513349ab4636b3cc6ae19ac4910800c0f8aa3d9014a7",
+      "owned_receipt_path": ".lake/proof-continuation/audits/20261015T201216595359Z/receipt.json",
+      "owned_receipt_sha256": "5393b03aaa6a1dca84b25ddea2a9dd98d76d3aae8b4eb9c25e33326c3f4e7407",
+      "owned_declaration_count": 18,
+      "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "before_after_exact": true,
+      "scope": "Actual own-object replay and complete types/axioms only, no imported-closure kernel replay claim."
+    }
+  ],
+  "source_author_semantic_review": [
+    "Exactly one definition and two theorems are added. LogTotientMass8 is a literal finite sum over the actual U8PrefixProducts image, with the actual weight1/phi(a) and kernel1/(1-log a/log N). There is no modulus argument, artificial coefficient, replacement ninth source or assumed product support.",
+    "The owned literal U8 source proves a>0, a<N^(2/3), N/a>=N^(1/3), and logarithmic gap>=1/3 for N>=2. The new nonnegative-mass theorem uses exactly that positive actual gap and the genuine nonnegative reciprocal totient. No gap is a caller premise.",
+    "The only real-variable li estimate invoked is public eventually_currentChenUpsilon9_trueLi_real_le eta heta. That generic theorem has already been proved from the actual exact-remainder sqrt split on all large real arguments; it is not the ninth-specific product transport or an assumed leading-one law. The existing integration constant2/log2 is unchanged.",
+    "For each fixed eta>0 take the real threshold X from that genuine theorem. Since N^(1/3) tends to infinity, one natural-N threshold puts EVERY actual moving argument N/a above X. This threshold is chosen before any actual a; the theorem requests only eta>0 and has no asymptotic, count, density or harmonic supplier.",
+    "In the finite normalized sum, the true-log-integral alias is explicitly unfolded exactly as in owned0f49, retaining the same liuLogarithmicIntegral(2/log2) as LiMainMass8. Multiplication by log N/N is justified by N>=2. The identity log(N/a)=logN*(1-log a/logN) uses actual a>0 and positive log N.",
+    "The actual phi(a)<=a inequality is used in the correct upper-bound direction:1/a<=1/phi(a), with phi(a)>0 paid by actual a>0. It is multiplied only by nonnegative1/gap and1+eta. No incorrect phi reciprocal direction or unproved main-term positivity is used.",
+    "Finite summation proves the normalized mass inequality as an INTERNAL local have. Positive N and logN then permit exact division conversion to LiMainMass8<=(1+eta)*(N/logN)*LogTotientMass8. The final multiplication reorder is ring algebra; no normalized wrapper, additional definition or caller estimate is introduced.",
+    "The final type has only eta and eta>0 before an eventual natural N threshold. It preserves the actual eighth product image and one leading li constant. This is a one-sided transport, not a two-sided true-li mass limit, harmonic estimate, density factor8 assembly, complete ordinary U8 mean, hUpper/hLower or adopted K proof."
+  ],
+  "complete_public_API_source": [
+    {
+      "path": "ImbalancedChen/CurrentChenUpsilon8ProductPan.lean",
+      "sha256": "80621797c21adc263fc702e07a13c0b0b543a40f34ca2658a7fa281e1af12b11",
+      "complete_actual_public_declarations": [
+        {
+          "name": "currentChenUpsilon8PrefixProducts_data",
+          "kind": "theorem",
+          "private": false,
+          "start_line": 47,
+          "complete_source_header": "theorem currentChenUpsilon8PrefixProducts_data {N a : ℕ}\n    (ha : a ∈ currentChenUpsilon8PrefixProducts N) :\n    0 < a ∧ Nat.Coprime a N",
+          "complete_proof_body_after_by": "obtain ⟨t, ht, rfl⟩ := Finset.mem_image.mp ha\n  obtain ⟨hc, _⟩ := Finset.mem_filter.mp ht\n  obtain ⟨hc₁, hc₂⟩ := Finset.mem_product.mp hc\n  have hp₁ := mem_chenAdditivePrimeCarrier.mp hc₁\n  have hp₂ := mem_chenAdditivePrimeCarrier.mp hc₂\n  exact ⟨mul_pos hp₁.2.1.pos hp₂.2.1.pos, hp₁.2.2.mul_left hp₂.2.2⟩"
+        },
+        {
+          "name": "currentChenUpsilon8PrefixProducts_power_bounds",
+          "kind": "theorem",
+          "private": false,
+          "start_line": 99,
+          "complete_source_header": "theorem currentChenUpsilon8PrefixProducts_power_bounds {N a : ℕ}\n    (hN : (1 : ℝ) ≤ N) (ha : a ∈ currentChenUpsilon8PrefixProducts N) :\n    (N : ℝ) ^ (6251 / 15000 : ℝ) ≤ (a : ℝ) ∧\n      (a : ℝ) < (N : ℝ) ^ (2 / 3 : ℝ)",
+          "complete_proof_body_after_by": "obtain ⟨t, ht, rfl⟩ := Finset.mem_image.mp ha\n  exact currentChenUpsilon8_multiplier_power_bounds hN ht"
+        },
+        {
+          "name": "currentChenUpsilon8_li_argument_power_lower",
+          "kind": "theorem",
+          "private": false,
+          "start_line": 218,
+          "complete_source_header": "theorem currentChenUpsilon8_li_argument_power_lower {N a : ℕ}\n    (hN : (1 : ℝ) ≤ N) (ha : a ∈ currentChenUpsilon8PrefixProducts N) :\n    (N : ℝ) ^ (1 / 3 : ℝ) ≤ (N : ℝ) / (a : ℝ)",
+          "complete_proof_body_after_by": "have hNp : (0 : ℝ) < N := zero_lt_one.trans_le hN\n  have hap : (0 : ℝ) < a := by exact_mod_cast (currentChenUpsilon8PrefixProducts_data ha).1\n  apply (le_div_iff₀ hap).mpr\n  calc\n    _ ≤ (N : ℝ) ^ (1 / 3 : ℝ) * (N : ℝ) ^ (2 / 3 : ℝ) :=\n      mul_le_mul_of_nonneg_left (currentChenUpsilon8PrefixProducts_power_bounds hN ha).2.le\n        (Real.rpow_nonneg hNp.le _)\n    _ = _ := by\n      rw [← Real.rpow_add hNp, show (1 / 3 : ℝ) + 2 / 3 = 1 by norm_num, Real.rpow_one]"
+        },
+        {
+          "name": "currentChenUpsilon8_log_gap_lower",
+          "kind": "theorem",
+          "private": false,
+          "start_line": 231,
+          "complete_source_header": "theorem currentChenUpsilon8_log_gap_lower {N a : ℕ} (hN : 2 ≤ N)\n    (ha : a ∈ currentChenUpsilon8PrefixProducts N) :\n    (1 / 3 : ℝ) ≤ 1 - Real.log (a : ℝ) / Real.log (N : ℝ)",
+          "complete_proof_body_after_by": "have hNr : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)\n  have hap : (0 : ℝ) < a := by exact_mod_cast (currentChenUpsilon8PrefixProducts_data ha).1\n  have hlog := Real.log_pos hNr\n  have hupper := Real.log_le_log hap\n    (currentChenUpsilon8PrefixProducts_power_bounds hNr.le ha).2.le\n  rw [Real.log_rpow (zero_lt_one.trans hNr)] at hupper\n  have hquot : Real.log (a : ℝ) / Real.log (N : ℝ) ≤ (2 / 3 : ℝ) :=\n    (div_le_iff₀ hlog).mpr (by nlinarith only [hupper])\n  linarith only [hquot]"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen/CurrentChenUpsilon8CoprimeGateBudget.lean",
+      "sha256": "c4f5a801eadd6128f088b99cd8128602aeba1d0d8fa2a24906cd3e9cd387e761",
+      "complete_actual_public_declarations": [
+        {
+          "name": "currentChenUpsilon8LiMainMass",
+          "kind": "def",
+          "private": false,
+          "start_line": 102,
+          "complete_source_header": "def currentChenUpsilon8LiMainMass (N : ℕ) : ℝ",
+          "complete_definition": "def currentChenUpsilon8LiMainMass (N : ℕ) : ℝ :=\n∑ a ∈ currentChenUpsilon8PrefixProducts N,\n    liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ))"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen/CurrentChenUpsilon9TrueLiMass.lean",
+      "sha256": "0f49198775e261606e227e6de621a75f445a066ba851ef3a25748f3e86b65289",
+      "complete_actual_public_declarations": [
+        {
+          "name": "tendsto_currentChenUpsilon9_trueLi_normalized_real",
+          "kind": "theorem",
+          "private": false,
+          "start_line": 27,
+          "complete_source_header": "theorem tendsto_currentChenUpsilon9_trueLi_normalized_real :\n    Tendsto (fun x : ℝ => trueLogarithmicIntegral x * Real.log x / x)\n      atTop (𝓝 1)",
+          "complete_proof_body_after_by": "have hsmall : Tendsto (fun x : ℝ => Real.log x / Real.sqrt x) atTop (𝓝 0) := by\n    simpa only [Real.sqrt_eq_rpow] using\n      (isLittleO_log_rpow_atTop (by norm_num : (0 : ℝ) < 1 / 2)).tendsto_div_nhds_zero\n  have herror : Tendsto (fun x : ℝ =>\n      1 + (1 / Real.log 2 ^ 2) * (Real.log x / Real.sqrt x) + 4 / Real.log x)\n      atTop (𝓝 1) := by\n    simpa only [mul_zero, add_zero] using\n      (tendsto_const_nhds.add (hsmall.const_mul (1 / Real.log 2 ^ 2))).add\n        (Real.tendsto_log_atTop.const_div_atTop (4 : ℝ))\n  apply tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds herror\n  · filter_upwards [eventually_ge_atTop (4 : ℝ)] with x hx\n    exact (currentChen_trueLi_normalized_bounds hx).1\n  · filter_upwards [eventually_ge_atTop (4 : ℝ)] with x hx\n    exact (currentChen_trueLi_normalized_bounds hx).2"
+        },
+        {
+          "name": "eventually_currentChenUpsilon9_trueLi_real_le",
+          "kind": "theorem",
+          "private": false,
+          "start_line": 45,
+          "complete_source_header": "theorem eventually_currentChenUpsilon9_trueLi_real_le (η : ℝ) (hη : 0 < η) :\n    ∀ᶠ x : ℝ in atTop,\n      trueLogarithmicIntegral x ≤ (1 + η) * x / Real.log x",
+          "complete_proof_body_after_by": "have hnorm : ∀ᶠ x : ℝ in atTop,\n      trueLogarithmicIntegral x * Real.log x / x < 1 + η :=\n    tendsto_currentChenUpsilon9_trueLi_normalized_real.eventually\n      (eventually_lt_nhds (by linarith))\n  filter_upwards [hnorm, eventually_ge_atTop (4 : ℝ)] with x hnorm hx\n  have hxp : 0 < x := by linarith only [hx]\n  have hlog : 0 < Real.log x := Real.log_pos (by linarith only [hx])\n  apply (le_div_iff₀ hlog).mpr\n  have h := (div_lt_iff₀ hxp).mp hnorm\n  linarith only [h]"
+        }
+      ]
+    }
+  ],
+  "fixed_native_API_source_evidence": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/Distribution/BombieriVinogradov.lean",
+      "sha256": "4b4373503523f966367ae3852989a16cb64de632ec10489ca3ce8a3acdf403fc",
+      "lines": [
+        22,
+        29
+      ],
+      "role": "The fixed trueLogarithmicIntegral alias is exactly liuLogarithmicIntegral(2/log2), not a different integration constant or proxy",
+      "literal_source_excerpt": "`2 / log 2 + ∫ t in 2..x, 1 / log t`.  Thus it differs from the literal\nintegral from `2` to `x` by the fixed additive constant `2 / log 2`; the two\nnormalizations are asymptotically interchangeable.  This normalization is\nchosen so that it dominates `x / log x` for `x ≥ 2`. -/\nnoncomputable def trueLogarithmicIntegral (x : ℝ) : ℝ :=\n  LiuWeight.liuLogarithmicIntegral (2 / Real.log 2) x\n\n/-- The usual prime count through the integer endpoint `x` in the residue"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Nat/Totient.lean",
+      "sha256": "943c40005c794e014241782a406445e6dcc2a88f369f8388188ba37a58ee82ea",
+      "lines": [
+        57,
+        75
+      ],
+      "role": "Genuine phi(a)<=a and phi(a)>0 iff a>0; reciprocal direction increases1/a to1/phi(a)",
+      "literal_source_excerpt": "      left_inv := fun m => by simp only [Subtype.coe_eta]\n      right_inv := fun m => by simp only }\n  rw [totient_eq_card_coprime, card_congr e, card_eq_fintype_card, Fintype.card_coe]\n\ntheorem totient_le (n : ℕ) : φ n ≤ n :=\n  ((range n).card_filter_le _).trans_eq (card_range n)\n\ntheorem totient_lt (n : ℕ) (hn : 1 < n) : φ n < n :=\n  (card_lt_card (filter_ssubset.2 ⟨0, by simp [hn.ne', pos_of_gt hn]⟩)).trans_eq (card_range n)\n\n@[simp]\ntheorem totient_eq_zero : ∀ {n : ℕ}, φ n = 0 ↔ n = 0\n  | 0 => by decide\n  | n + 1 =>\n    suffices ∃ x < n + 1, (n + 1).gcd x = 1 by simpa [totient, filter_eq_empty_iff]\n    ⟨1 % (n + 1), mod_lt _ n.succ_pos, by rw [gcd_comm, ← gcd_rec, gcd_one_right]⟩\n\n@[simp] theorem totient_pos {n : ℕ} : 0 < φ n ↔ 0 < n := by simp [pos_iff_ne_zero]\n"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenTrueLiNormalization.lean",
+      "sha256": "5ba063153c38848c91146b21dfcc46fbf77a0911af4b691137bffcb0055bafc7",
+      "lines": [
+        1,
+        30
+      ],
+      "role": "Existing actual real exact-remainder normalization source, reused through owned generic9 leading-one theorem",
+      "literal_source_excerpt": "import MathlibNt.SieveTheory.Distribution.BombieriVinogradov\nimport Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics\n\n/-!\n# Leading constant of the genuine logarithmic integral\n\nThe genuine normalized logarithmic integral used by the ordinary prime-AP\nsupplier has leading coefficient one.  Its exact integration-by-parts\nremainder is bounded by splitting the squared logarithmic density at `sqrt x`.\nThe final statements concern the actual `trueLogarithmicIntegral`, with no\nasymptotic supplier assumed by the caller.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen Filter Topology MeasureTheory intervalIntegral\nopen MathlibNt.SieveTheory.LiuWeight\nopen MathlibNt.SieveTheory.BombieriVinogradov (trueLogarithmicIntegral)\n\n/-- An explicit elementary upper bound for the exact squared-log remainder. -/\ntheorem currentChen_squaredLogIntegral_le {x : ℝ} (hx : 4 ≤ x) :\n    (∫ t in (2 : ℝ)..x, 1 / Real.log t ^ 2) ≤\n      Real.sqrt x / Real.log 2 ^ 2 + 4 * x / Real.log x ^ 2 := by\n  have hxpos : 0 < x := by linarith\n  have hx0 : 0 ≤ x := hxpos.le\n  have hlog2 : 0 < Real.log (2 : ℝ) := Real.log_pos (by norm_num)\n  have hlogx : 0 < Real.log x := Real.log_pos (by linarith)\n  have hsqrt0 : 0 ≤ Real.sqrt x := Real.sqrt_nonneg x"
+    }
+  ],
+  "relative_DAG_delta": {
+    "new_local": [
+      "ImbalancedChen.CurrentChenUpsilon8TrueLiMass"
+    ],
+    "new_foreign": []
+  },
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "providers_current": [
+    {
+      "name": "goldbach",
+      "actual_HEAD": "09b97db5764ade1246bfb77206baa1b124760958",
+      "manifest_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+      "git_diff_HEAD_tracked_exit_code": 0
+    },
+    {
+      "name": "mathlib",
+      "actual_HEAD": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "manifest_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "git_diff_HEAD_tracked_exit_code": 0
+    }
+  ],
+  "forbidden_hits": [],
+  "findings": [],
+  "scope_not_claimed": [
+    "density or factor8 bound",
+    "actual8 harmonic mean or numeric integral",
+    "two-sided actual li mass limit",
+    "full ordinary U8 mean",
+    "adopted upper K or full hUpper/hLower"
+  ],
+  "acceptance_boundary": "Source-author review only. Both actual parent owned gates are freshly verified, but the new leaf still needs non-author complete review and exact root strict/owned authorization."
+}

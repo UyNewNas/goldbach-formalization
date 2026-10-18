@@ -1,0 +1,4581 @@
+{
+  "status": "FULL_SOURCE_ONLY_INDEPENDENT_EULER_LOWER_AND_TWO_PARENT_REVIEW_WITH_OPEN_OWNED_GATES",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "created_at_utc": "2026-10-16T00:12:21.180891+00:00",
+  "no_Lean_lake_build_checker_cache_Lean_source_or_pin_mutation": true,
+  "bytecode_disabled": true,
+  "target": {
+    "module": "ImbalancedChen.ActualPrimeBoxEulerLower",
+    "source_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ActualPrimeBoxEulerLower.lean",
+    "source_sha256": "c5a5b3d160d00556eaec65c78f7f6bebc7144f7fe76ab2e5ddf772f7adbe7dab",
+    "line_count": 139,
+    "entire_source_read": true,
+    "complete_5_declarations": [
+      {
+        "name": "actualSmallEulerProduct_antitone_cutoff",
+        "kind": "theorem",
+        "private": false,
+        "complete_header": "theorem actualSmallEulerProduct_antitone_cutoff\n    (N cap : \u2115) (hEven : Even N) (x y : \u211d)\n    (hxy : x \u2264 y) (hycap : y \u2264 (cap : \u211d)) :\n    actualSmallEulerProduct N cap y \u2264 actualSmallEulerProduct N cap x",
+        "complete_source": "theorem actualSmallEulerProduct_antitone_cutoff\n    (N cap : \u2115) (hEven : Even N) (x y : \u211d)\n    (hxy : x \u2264 y) (hycap : y \u2264 (cap : \u211d)) :\n    actualSmallEulerProduct N cap y \u2264 actualSmallEulerProduct N cap x := by\n  rw [currentChen_model_actualEuler_eq_finite N cap y hycap,\n    currentChen_model_actualEuler_eq_finite N cap x (hxy.trans hycap)]\n  exact finiteSieveDensity_antitone hEven (Nat.ceil_mono hxy)"
+      },
+      {
+        "name": "actualPrimeBoxEulerMass",
+        "kind": "def",
+        "private": false,
+        "complete_header": "def actualPrimeBoxEulerMass {k : \u2115} (N cap : \u2115) (a b : Fin k \u2192 \u211d)\n    (u : \u211d) (j : Fin k) : \u211d",
+        "complete_source": "def actualPrimeBoxEulerMass {k : \u2115} (N cap : \u2115) (a b : Fin k \u2192 \u211d)\n    (u : \u211d) (j : Fin k) : \u211d :=\n  \u2211 p \u2208 actualPrimeBoxTuples N a b,\n    (\u220f i, 1 / ((p i : \u211d) - 1)) *\n      (actualSmallEulerProduct N cap (p j : \u211d) /\n        actualSmallEulerProduct N cap ((N : \u211d) ^ u))"
+      },
+      {
+        "name": "actualPrimeBoxEulerMass_ge_endpoint_ratio",
+        "kind": "theorem",
+        "private": false,
+        "complete_header": "theorem actualPrimeBoxEulerMass_ge_endpoint_ratio\n    {k : \u2115} (N cap : \u2115) (hN : 1 < N) (hEven : Even N)\n    (a b : Fin k \u2192 \u211d) (u : \u211d) (j : Fin k)\n    (hbu : b j \u2264 u) (hcap : (N : \u211d) ^ u \u2264 (cap : \u211d)) :\n    (actualSmallEulerProduct N cap ((N : \u211d) ^ b j) /\n        actualSmallEulerProduct N cap ((N : \u211d) ^ u)) *\n      actualPrimeBoxMass N a b \u2264 actualPrimeBoxEulerMass N cap a b u j",
+        "complete_source": "theorem actualPrimeBoxEulerMass_ge_endpoint_ratio\n    {k : \u2115} (N cap : \u2115) (hN : 1 < N) (hEven : Even N)\n    (a b : Fin k \u2192 \u211d) (u : \u211d) (j : Fin k)\n    (hbu : b j \u2264 u) (hcap : (N : \u211d) ^ u \u2264 (cap : \u211d)) :\n    (actualSmallEulerProduct N cap ((N : \u211d) ^ b j) /\n        actualSmallEulerProduct N cap ((N : \u211d) ^ u)) *\n      actualPrimeBoxMass N a b \u2264 actualPrimeBoxEulerMass N cap a b u j := by\n  have hN1 : (1 : \u211d) \u2264 N := by exact_mod_cast (show 1 \u2264 N by omega)\n  have hbcap : (N : \u211d) ^ b j \u2264 (cap : \u211d) :=\n    (Real.rpow_le_rpow_of_exponent_le hN1 hbu).trans hcap\n  rw [actualPrimeBoxMass, actualPrimeBoxEulerMass, Finset.mul_sum]\n  apply Finset.sum_le_sum\n  intro p hp\n  have hpb : (p j : \u211d) \u2264 (N : \u211d) ^ b j :=\n    ((mem_actualPrimeBoxTuples_iff.mp hp) j).2.2.2.le\n  have hV := actualSmallEulerProduct_antitone_cutoff N cap hEven\n    (p j : \u211d) ((N : \u211d) ^ b j) hpb hbcap\n  have hratio := div_le_div_of_nonneg_right hV\n    (currentChen_model_actualEuler_pos N cap ((N : \u211d) ^ u) hEven).le\n  simpa only [mul_comm] using\n    mul_le_mul_of_nonneg_right hratio (actualPrimeBoxWeight_nonneg hp)"
+      },
+      {
+        "name": "primeBoxEuler_tendsto_finiteDensity_power_ratio",
+        "kind": "theorem",
+        "private": true,
+        "complete_header": "private theorem primeBoxEuler_tendsto_finiteDensity_power_ratio {a b : \u211d}\n    (ha : 0 < a) (hb : 0 < b) :\n    Tendsto (fun N : \u2115 =>\n      finiteSieveDensity N (Nat.ceil ((N : \u211d) ^ a)) /\n        finiteSieveDensity N (Nat.ceil ((N : \u211d) ^ b)))\n      (atTop \u2293 Filter.principal {N : \u2115 | 0 < N \u2227 Even N}) (\ud835\udcdd (b / a))",
+        "complete_source": "private theorem primeBoxEuler_tendsto_finiteDensity_power_ratio {a b : \u211d}\n    (ha : 0 < a) (hb : 0 < b) :\n    Tendsto (fun N : \u2115 =>\n      finiteSieveDensity N (Nat.ceil ((N : \u211d) ^ a)) /\n        finiteSieveDensity N (Nat.ceil ((N : \u211d) ^ b)))\n      (atTop \u2293 Filter.principal {N : \u2115 | 0 < N \u2227 Even N}) (\ud835\udcdd (b / a)) := by\n  have hden : 2 * Real.exp (-Real.eulerMascheroniConstant) / b \u2260 0 := by positivity\n  have hlim := (tendsto_currentChen_actualEuler_fixed_normalized ha).div\n    (tendsto_currentChen_actualEuler_fixed_normalized hb) hden\n  have hconstant :\n      (2 * Real.exp (-Real.eulerMascheroniConstant) / a) /\n        (2 * Real.exp (-Real.eulerMascheroniConstant) / b) = b / a := by\n    field_simp [ha.ne', hb.ne', Real.exp_ne_zero]\n  rw [hconstant] at hlim\n  apply hlim.congr'\n  simp only [Filter.EventuallyEq, Filter.eventually_inf_principal, Pi.div_apply]\n  filter_upwards [eventually_ge_atTop (2 : \u2115)] with N hN\n  intro _hEven\n  have hN1 : (1 : \u211d) < N := by exact_mod_cast (show 1 < N by omega)\n  rw [currentChen_model_actualEuler_eq_finite N\n      (Nat.ceil ((N : \u211d) ^ a)) ((N : \u211d) ^ a) (Nat.le_ceil _),\n    currentChen_model_actualEuler_eq_finite N\n      (Nat.ceil ((N : \u211d) ^ b)) ((N : \u211d) ^ b) (Nat.le_ceil _),\n    div_div_div_cancel_right\u2080 (singularSeries_pos N).ne',\n    mul_div_mul_right _ _ (Real.log_pos hN1).ne']"
+      },
+      {
+        "name": "exists_actualPrimeBoxEulerMass_lower_threshold",
+        "kind": "theorem",
+        "private": false,
+        "complete_header": "theorem exists_actualPrimeBoxEulerMass_lower_threshold\n    {k : \u2115} (a b : Fin k \u2192 \u211d) (ha : \u2200 i, 0 < a i) (hab : \u2200 i, a i < b i)\n    (u : \u211d) (hu : 0 < u) (j : Fin k) (hbu : b j \u2264 u)\n    (eta : \u211d) (heta : 0 < eta) :\n    \u2203 N0 : \u2115, 2 \u2264 N0 \u2227 \u2200 N : \u2115, N0 \u2264 N \u2192 Even N \u2192\n      \u2200 cap : \u2115, (N : \u211d) ^ u \u2264 (cap : \u211d) \u2192\n        (u / b j) * (\u220f i, Real.log (b i / a i)) - eta \u2264\n          actualPrimeBoxEulerMass N cap a b u j",
+        "complete_source": "theorem exists_actualPrimeBoxEulerMass_lower_threshold\n    {k : \u2115} (a b : Fin k \u2192 \u211d) (ha : \u2200 i, 0 < a i) (hab : \u2200 i, a i < b i)\n    (u : \u211d) (hu : 0 < u) (j : Fin k) (hbu : b j \u2264 u)\n    (eta : \u211d) (heta : 0 < eta) :\n    \u2203 N0 : \u2115, 2 \u2264 N0 \u2227 \u2200 N : \u2115, N0 \u2264 N \u2192 Even N \u2192\n      \u2200 cap : \u2115, (N : \u211d) ^ u \u2264 (cap : \u211d) \u2192\n        (u / b j) * (\u220f i, Real.log (b i / a i)) - eta \u2264\n          actualPrimeBoxEulerMass N cap a b u j := by\n  have hbj : 0 < b j := (ha j).trans (hab j)\n  have hratio := primeBoxEuler_tendsto_finiteDensity_power_ratio hbj hu\n  have hmass := (tendsto_actualPrimeBoxMass a b ha hab).mono_left\n    (inf_le_left :\n      atTop \u2293 Filter.principal {N : \u2115 | 0 < N \u2227 Even N} \u2264 atTop)\n  have hlim := hratio.mul hmass\n  have hnear : \u2200\u1da0 N : \u2115 in atTop \u2293 Filter.principal {N : \u2115 | 0 < N \u2227 Even N},\n      (u / b j) * (\u220f i, Real.log (b i / a i)) - eta <\n        (finiteSieveDensity N (Nat.ceil ((N : \u211d) ^ b j)) /\n          finiteSieveDensity N (Nat.ceil ((N : \u211d) ^ u))) *\n          actualPrimeBoxMass N a b :=\n    (tendsto_order.mp hlim).1 _ (by linarith)\n  rw [Filter.eventually_inf_principal] at hnear\n  obtain \u27e8N1, hN1\u27e9 := eventually_atTop.mp hnear\n  refine \u27e8max N1 2, le_max_right _ _, ?_\u27e9\n  intro N hN hEven cap hcap\n  have hN2 : 2 \u2264 N := (le_max_right _ _).trans hN\n  have hNpos : 0 < N := by omega\n  have hNreal : (1 : \u211d) \u2264 N := by exact_mod_cast (show 1 \u2264 N by omega)\n  have hbcap : (N : \u211d) ^ b j \u2264 (cap : \u211d) :=\n    (Real.rpow_le_rpow_of_exponent_le hNreal hbu).trans hcap\n  have hbound := actualPrimeBoxEulerMass_ge_endpoint_ratio N cap (by omega)\n    hEven a b u j hbu hcap\n  rw [currentChen_model_actualEuler_eq_finite N cap ((N : \u211d) ^ b j) hbcap,\n    currentChen_model_actualEuler_eq_finite N cap ((N : \u211d) ^ u) hcap] at hbound\n  exact (hN1 N ((le_max_left _ _).trans hN) \u27e8hNpos, hEven\u27e9).le.trans hbound"
+      }
+    ]
+  },
+  "exact_rebind": {
+    "old_snapshot_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/ActualPrimeBoxEulerLower.adc0657ea574d58a0364423062c556119a06380b6edcdb31d6175ca3f99083cb.lean",
+    "old_sha256": "adc0657ea574d58a0364423062c556119a06380b6edcdb31d6175ca3f99083cb",
+    "original4_public_complete_headers_exact_unchanged": true,
+    "original1_definition_exact_unchanged": true,
+    "forward_and_inverse_literal_bytes_exact": true,
+    "literal_replacements": [
+      [
+        "import ImbalancedChen.FullPowerEulerNormalization\nimport ImbalancedChen.RoughPowerParameters\n",
+        "import ImbalancedChen.CurrentChenFixedEulerNormalization\n"
+      ],
+      [
+        "actualSmallEulerProduct_eq_finiteSieveDensity",
+        "currentChen_model_actualEuler_eq_finite"
+      ],
+      [
+        "actualSmallEulerProduct_pos",
+        "currentChen_model_actualEuler_pos"
+      ],
+      [
+        "have hratio := tendsto_finiteSieveDensity_power_ratio hbj hu",
+        "have hratio := primeBoxEuler_tendsto_finiteDensity_power_ratio hbj hu"
+      ]
+    ],
+    "new_private_helper_complete_source": "/-- Two already proved fixed normalizations cancel with their actual common\nsingular series and log. This uses only the public literal Euler endpoint. -/\nprivate theorem primeBoxEuler_tendsto_finiteDensity_power_ratio {a b : \u211d}\n    (ha : 0 < a) (hb : 0 < b) :\n    Tendsto (fun N : \u2115 =>\n      finiteSieveDensity N (Nat.ceil ((N : \u211d) ^ a)) /\n        finiteSieveDensity N (Nat.ceil ((N : \u211d) ^ b)))\n      (atTop \u2293 Filter.principal {N : \u2115 | 0 < N \u2227 Even N}) (\ud835\udcdd (b / a)) := by\n  have hden : 2 * Real.exp (-Real.eulerMascheroniConstant) / b \u2260 0 := by positivity\n  have hlim := (tendsto_currentChen_actualEuler_fixed_normalized ha).div\n    (tendsto_currentChen_actualEuler_fixed_normalized hb) hden\n  have hconstant :\n      (2 * Real.exp (-Real.eulerMascheroniConstant) / a) /\n        (2 * Real.exp (-Real.eulerMascheroniConstant) / b) = b / a := by\n    field_simp [ha.ne', hb.ne', Real.exp_ne_zero]\n  rw [hconstant] at hlim\n  apply hlim.congr'\n  simp only [Filter.EventuallyEq, Filter.eventually_inf_principal, Pi.div_apply]\n  filter_upwards [eventually_ge_atTop (2 : \u2115)] with N hN\n  intro _hEven\n  have hN1 : (1 : \u211d) < N := by exact_mod_cast (show 1 < N by omega)\n  rw [currentChen_model_actualEuler_eq_finite N\n      (Nat.ceil ((N : \u211d) ^ a)) ((N : \u211d) ^ a) (Nat.le_ceil _),\n    currentChen_model_actualEuler_eq_finite N\n      (Nat.ceil ((N : \u211d) ^ b)) ((N : \u211d) ^ b) (Nat.le_ceil _),\n    div_div_div_cancel_right\u2080 (singularSeries_pos N).ne',\n    mul_div_mul_right _ _ (Real.log_pos hN1).ne']\n\n",
+    "old_failed_OOM_receipt": {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/runs/20261015T221314975624Z-ImbalancedChen.ActualPrimeBoxEulerLower/receipt.json",
+      "sha256": "cc4aaa27dc1334b62895096debdfa5715c0168e8cf4394f4e9a57b03742378c4",
+      "status": "FAILED",
+      "exit_code": -6,
+      "memory_mib": 6144,
+      "scope": "Historical adc065 failure retained; new import scope/helper is a new candidate, not license for unchanged retry/resource increase."
+    }
+  },
+  "whole_target_math_and_API_assessment": [
+    "Covered actual Euler product equals the literal finite density at ceil(real cutoff), including integer endpoints. Existing even-center finite antitone theorem gives the correct direction.",
+    "For each actual tuple p_j<N^(b_j), V(p_j)>=V(N^(b_j)); the common denominator is actually positive and tuple weight nonnegative. Only b_j<=u is required for this numerical comparison.",
+    "New private ratio divides the two proved public fixed-exponent normalized Tendsto endpoints at a,b>0. Denominator limit2exp(-gamma)/b is nonzero and constant ratio cancels to b/a. This is no caller Euler-ratio/density assumption.",
+    "Eventually N>=2 gives logN!=0; singularSeries_pos N gives a nonzero common series. Public endpoint dictionary at each coveringceil and actual fixed mathlib cancellation lemmas remove SS/log exactly.",
+    "Final ratio with a=b_j,b=u tends to u/b_j; multiply by genuine tuple mass limit, restrict to positive even targets, take one threshold before N and all covering caps, then transport endpoints by the exact cap dictionary.",
+    "The theorem does not prove least-prime/order/Rosser boundary geometry or count/distribution means. Overlapping boxes remain allowed; no reciprocal-totient identity without injectivity is used."
+  ],
+  "fixed_actual_API_evidence": [
+    {
+      "source_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenFixedEulerNormalization.lean",
+      "source_sha256": "a13617949aaa7ee57345788f287ec486980dcb65bcb1d0e8ff00fb7e34e12b74",
+      "declaration": {
+        "name": "tendsto_currentChen_actualEuler_fixed_normalized",
+        "kind": "theorem",
+        "private": false,
+        "complete_header": "theorem tendsto_currentChen_actualEuler_fixed_normalized {a : \u211d} (ha : 0 < a) :\n    Tendsto (fun N : \u2115 =>\n      actualSmallEulerProduct N (Nat.ceil ((N : \u211d) ^ a)) ((N : \u211d) ^ a) *\n        Real.log (N : \u211d) / singularSeries N)\n      (atTop \u2293 Filter.principal {N : \u2115 | 0 < N \u2227 Even N})\n      (\ud835\udcdd (2 * Real.exp (-Real.eulerMascheroniConstant) / a))",
+        "complete_source": "theorem tendsto_currentChen_actualEuler_fixed_normalized {a : \u211d} (ha : 0 < a) :\n    Tendsto (fun N : \u2115 =>\n      actualSmallEulerProduct N (Nat.ceil ((N : \u211d) ^ a)) ((N : \u211d) ^ a) *\n        Real.log (N : \u211d) / singularSeries N)\n      (atTop \u2293 Filter.principal {N : \u2115 | 0 < N \u2227 Even N})\n      (\ud835\udcdd (2 * Real.exp (-Real.eulerMascheroniConstant) / a)) := by\n  have hlim := currentChenFixedEuler_tendsto_finiteSieveDensity_power_normalized ha\n  apply hlim.congr'\n  exact Filter.Eventually.of_forall fun N => by\n    dsimp only\n    rw [currentChen_model_actualEuler_eq_finite N\n      (Nat.ceil ((N : \u211d) ^ a)) ((N : \u211d) ^ a) (Nat.le_ceil _)]"
+      }
+    },
+    {
+      "source_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenRosserEndpointDictionary.lean",
+      "source_sha256": "10f54a74f1f304d5a50415224cbf913d1821fc3f0592efbb444a38e3091c9bc5",
+      "declaration": {
+        "name": "currentChen_model_actualEuler_eq_finite",
+        "kind": "theorem",
+        "private": false,
+        "complete_header": "theorem currentChen_model_actualEuler_eq_finite\n    (N cap : \u2115) (z : \u211d) (hzcap : z \u2264 (cap : \u211d)) :\n    actualSmallEulerProduct N cap z = finiteSieveDensity N (Nat.ceil z)",
+        "complete_source": "theorem currentChen_model_actualEuler_eq_finite\n    (N cap : \u2115) (z : \u211d) (hzcap : z \u2264 (cap : \u211d)) :\n    actualSmallEulerProduct N cap z = finiteSieveDensity N (Nat.ceil z) := by\n  unfold actualSmallEulerProduct finiteSieveDensity\n  rw [currentChen_model_primeFinset_eq_sievePrimes N cap z hzcap]"
+      }
+    },
+    {
+      "source_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenRosserEndpointDictionary.lean",
+      "source_sha256": "10f54a74f1f304d5a50415224cbf913d1821fc3f0592efbb444a38e3091c9bc5",
+      "declaration": {
+        "name": "currentChen_model_actualEuler_pos",
+        "kind": "theorem",
+        "private": false,
+        "complete_header": "theorem currentChen_model_actualEuler_pos (N cap : \u2115) (z : \u211d) (hEven : Even N) :\n    0 < actualSmallEulerProduct N cap z",
+        "complete_source": "theorem currentChen_model_actualEuler_pos (N cap : \u2115) (z : \u211d) (hEven : Even N) :\n    0 < actualSmallEulerProduct N cap z := by\n  unfold actualSmallEulerProduct\n  apply Finset.prod_pos\n  intro p hp\n  have hp2 : (2 : \u211d) < p := by\n    exact_mod_cast (actualSmallPrimeFinset_odd_of_even hEven hp).2\n  exact sub_pos.mpr ((div_lt_one (by linarith)).mpr (by linarith))"
+      }
+    },
+    {
+      "source_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ActualPrimeBoxMass.lean",
+      "source_sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+      "declaration": {
+        "name": "actualPrimeBoxWeight_nonneg",
+        "kind": "theorem",
+        "private": false,
+        "complete_header": "theorem actualPrimeBoxWeight_nonneg {N k : \u2115} {a b : Fin k \u2192 \u211d}\n    {p : Fin k \u2192 \u2115} (hp : p \u2208 actualPrimeBoxTuples N a b) :\n    0 \u2264 \u220f i, 1 / ((p i : \u211d) - 1)",
+        "complete_source": "theorem actualPrimeBoxWeight_nonneg {N k : \u2115} {a b : Fin k \u2192 \u211d}\n    {p : Fin k \u2192 \u2115} (hp : p \u2208 actualPrimeBoxTuples N a b) :\n    0 \u2264 \u220f i, 1 / ((p i : \u211d) - 1) := by\n  apply Finset.prod_nonneg\n  intro i _\n  have hpi : (1 : \u211d) < p i := by\n    exact_mod_cast (mem_actualPrimeBoxTuples_iff.mp hp i).1.one_lt\n  exact le_of_lt (one_div_pos.mpr (sub_pos.mpr hpi))"
+      }
+    },
+    {
+      "source_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ActualPrimeBoxMass.lean",
+      "source_sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+      "declaration": {
+        "name": "tendsto_actualPrimeBoxMass",
+        "kind": "theorem",
+        "private": false,
+        "complete_header": "theorem tendsto_actualPrimeBoxMass {k : \u2115} (a b : Fin k \u2192 \u211d)\n    (ha : \u2200 i, 0 < a i) (hab : \u2200 i, a i < b i) :\n    Tendsto (fun N : \u2115 => actualPrimeBoxMass N a b) atTop\n      (\ud835\udcdd (\u220f i, Real.log (b i / a i)))",
+        "complete_source": "theorem tendsto_actualPrimeBoxMass {k : \u2115} (a b : Fin k \u2192 \u211d)\n    (ha : \u2200 i, 0 < a i) (hab : \u2200 i, a i < b i) :\n    Tendsto (fun N : \u2115 => actualPrimeBoxMass N a b) atTop\n      (\ud835\udcdd (\u220f i, Real.log (b i / a i))) := by\n  simp only [actualPrimeBoxMass_eq_prod]\n  exact tendsto_finsetProd Finset.univ (fun i _ =>\n    tendsto_actualPrimeReciprocalMass (ha i) (hab i))"
+      }
+    },
+    {
+      "source_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/SieveDimensionComparison.lean",
+      "source_sha256": "cf2369c8ba786bc022140ba469efe3ab6c5dfeeb7976fcbf8ddf9eff1a97a4ec",
+      "declaration": {
+        "name": "finiteSieveDensity_antitone",
+        "kind": "theorem",
+        "private": false,
+        "complete_header": "theorem finiteSieveDensity_antitone {N : \u2115} (hN : Even N) :\n    Antitone (finiteSieveDensity N)",
+        "complete_source": "theorem finiteSieveDensity_antitone {N : \u2115} (hN : Even N) :\n    Antitone (finiteSieveDensity N) := by\n  intro w v hwv\n  have h := (le_div_iff\u2080 (finiteSieveDensity_pos hN v)).mp\n    (one_le_finiteSieveDensity_ratio hN hwv)\n  simpa only [one_mul] using h"
+      }
+    }
+  ],
+  "fixed_mathlib_cancellation_API": {
+    "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/GroupWithZero/Units/Basic.lean",
+    "sha256": "70d9819b0015e85972be567f2864a0516302a566f12fda8f67c243bff5d16bca",
+    "complete_declarations": [
+      "lemma mul_div_mul_right (a b : G\u2080) (hc : c \u2260 0) : a * c / (b * c) = a / b :=\n  hc.isUnit.mul_div_mul_right _ _",
+      "lemma div_div_div_cancel_right\u2080 (hc : c \u2260 0) (a b : G\u2080) : a / c / (b / c) = a / b := by\n  rw [div_div_eq_mul_div, div_mul_cancel\u2080 _ hc]"
+    ]
+  },
+  "determined_target_static_blockers": [],
+  "additional_complete_parent_reviews": [
+    {
+      "module": "ImbalancedChen.ActualPrimeBoxMass",
+      "source_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ActualPrimeBoxMass.lean",
+      "source_sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+      "line_count": 159,
+      "entire_source_read": true,
+      "complete_declaration_count": 13,
+      "definition_count": 2,
+      "complete_declarations": [
+        {
+          "name": "actualPrimeBoxMass",
+          "kind": "def",
+          "private": false,
+          "complete_header": "def actualPrimeBoxMass (N : \u2115) {k : \u2115} (a b : Fin k \u2192 \u211d) : \u211d",
+          "complete_source": "def actualPrimeBoxMass (N : \u2115) {k : \u2115} (a b : Fin k \u2192 \u211d) : \u211d :=\n  \u2211 p \u2208 actualPrimeBoxTuples N a b, \u220f i, 1 / ((p i : \u211d) - 1)"
+        },
+        {
+          "name": "actualPrimeBoxWeight_nonneg",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxWeight_nonneg {N k : \u2115} {a b : Fin k \u2192 \u211d}\n    {p : Fin k \u2192 \u2115} (hp : p \u2208 actualPrimeBoxTuples N a b) :\n    0 \u2264 \u220f i, 1 / ((p i : \u211d) - 1)",
+          "complete_source": "theorem actualPrimeBoxWeight_nonneg {N k : \u2115} {a b : Fin k \u2192 \u211d}\n    {p : Fin k \u2192 \u2115} (hp : p \u2208 actualPrimeBoxTuples N a b) :\n    0 \u2264 \u220f i, 1 / ((p i : \u211d) - 1) := by\n  apply Finset.prod_nonneg\n  intro i _\n  have hpi : (1 : \u211d) < p i := by\n    exact_mod_cast (mem_actualPrimeBoxTuples_iff.mp hp i).1.one_lt\n  exact le_of_lt (one_div_pos.mpr (sub_pos.mpr hpi))"
+        },
+        {
+          "name": "actualPrimeBoxMass_nonneg",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxMass_nonneg (N : \u2115) {k : \u2115} (a b : Fin k \u2192 \u211d) :\n    0 \u2264 actualPrimeBoxMass N a b",
+          "complete_source": "theorem actualPrimeBoxMass_nonneg (N : \u2115) {k : \u2115} (a b : Fin k \u2192 \u211d) :\n    0 \u2264 actualPrimeBoxMass N a b := by\n  exact Finset.sum_nonneg (fun _ hp => actualPrimeBoxWeight_nonneg hp)"
+        },
+        {
+          "name": "actualPrimeBoxMass_eq_prod",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxMass_eq_prod (N : \u2115) {k : \u2115} (a b : Fin k \u2192 \u211d) :\n    actualPrimeBoxMass N a b = \u220f i, actualPrimeReciprocalMass N (a i) (b i)",
+          "complete_source": "theorem actualPrimeBoxMass_eq_prod (N : \u2115) {k : \u2115} (a b : Fin k \u2192 \u211d) :\n    actualPrimeBoxMass N a b = \u220f i, actualPrimeReciprocalMass N (a i) (b i) := by\n  classical\n  exact (Finset.prod_univ_sum\n    (fun i => roughPrimeFinset N (Nat.ceil ((N : \u211d) ^ b i))\n      ((N : \u211d) ^ a i) ((N : \u211d) ^ b i))\n    (fun _ p => 1 / ((p : \u211d) - 1))).symm"
+        },
+        {
+          "name": "tendsto_actualPrimeBoxMass",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem tendsto_actualPrimeBoxMass {k : \u2115} (a b : Fin k \u2192 \u211d)\n    (ha : \u2200 i, 0 < a i) (hab : \u2200 i, a i < b i) :\n    Tendsto (fun N : \u2115 => actualPrimeBoxMass N a b) atTop\n      (\ud835\udcdd (\u220f i, Real.log (b i / a i)))",
+          "complete_source": "theorem tendsto_actualPrimeBoxMass {k : \u2115} (a b : Fin k \u2192 \u211d)\n    (ha : \u2200 i, 0 < a i) (hab : \u2200 i, a i < b i) :\n    Tendsto (fun N : \u2115 => actualPrimeBoxMass N a b) atTop\n      (\ud835\udcdd (\u220f i, Real.log (b i / a i))) := by\n  simp only [actualPrimeBoxMass_eq_prod]\n  exact tendsto_finsetProd Finset.univ (fun i _ =>\n    tendsto_actualPrimeReciprocalMass (ha i) (hab i))"
+        },
+        {
+          "name": "actualPrimeBoxTuples_strictAnti",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxTuples_strictAnti {N k : \u2115} {a b : Fin (k + 1) \u2192 \u211d}\n    {p : Fin (k + 1) \u2192 \u2115} (hN : 1 \u2264 N)\n    (hsep : \u2200 i : Fin k, b i.succ \u2264 a i.castSucc)\n    (hp : p \u2208 actualPrimeBoxTuples N a b) : StrictAnti p",
+          "complete_source": "theorem actualPrimeBoxTuples_strictAnti {N k : \u2115} {a b : Fin (k + 1) \u2192 \u211d}\n    {p : Fin (k + 1) \u2192 \u2115} (hN : 1 \u2264 N)\n    (hsep : \u2200 i : Fin k, b i.succ \u2264 a i.castSucc)\n    (hp : p \u2208 actualPrimeBoxTuples N a b) : StrictAnti p := by\n  apply Fin.strictAnti_iff_succ_lt.mpr\n  intro i\n  have hp' := mem_actualPrimeBoxTuples_iff.mp hp\n  have hN' : (1 : \u211d) \u2264 N := by exact_mod_cast hN\n  have hexp := Real.rpow_le_rpow_of_exponent_le hN' (hsep i)\n  have hlt := (hp' i.succ).2.2.2.trans_le\n    (hexp.trans (hp' i.castSucc).2.2.1)\n  exact_mod_cast hlt"
+        },
+        {
+          "name": "actualPrimeBoxTuples_injective",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxTuples_injective {N k : \u2115} {a b : Fin (k + 1) \u2192 \u211d}\n    {p : Fin (k + 1) \u2192 \u2115} (hN : 1 \u2264 N)\n    (hsep : \u2200 i : Fin k, b i.succ \u2264 a i.castSucc)\n    (hp : p \u2208 actualPrimeBoxTuples N a b) : Function.Injective p",
+          "complete_source": "theorem actualPrimeBoxTuples_injective {N k : \u2115} {a b : Fin (k + 1) \u2192 \u211d}\n    {p : Fin (k + 1) \u2192 \u2115} (hN : 1 \u2264 N)\n    (hsep : \u2200 i : Fin k, b i.succ \u2264 a i.castSucc)\n    (hp : p \u2208 actualPrimeBoxTuples N a b) : Function.Injective p :=\n  (actualPrimeBoxTuples_strictAnti hN hsep hp).injective"
+        },
+        {
+          "name": "totient_primeTuple_cast",
+          "kind": "theorem",
+          "private": true,
+          "complete_header": "private theorem totient_primeTuple_cast {k : \u2115} (p : Fin k \u2192 \u2115)\n    (hprime : \u2200 i, Nat.Prime (p i)) (hinj : Function.Injective p)\n    (s : Finset (Fin k)) :\n    (Nat.totient (\u220f i \u2208 s, p i) : \u211d) = \u220f i \u2208 s, ((p i : \u211d) - 1)",
+          "complete_source": "private theorem totient_primeTuple_cast {k : \u2115} (p : Fin k \u2192 \u2115)\n    (hprime : \u2200 i, Nat.Prime (p i)) (hinj : Function.Injective p)\n    (s : Finset (Fin k)) :\n    (Nat.totient (\u220f i \u2208 s, p i) : \u211d) = \u220f i \u2208 s, ((p i : \u211d) - 1) := by\n  classical\n  induction s using Finset.induction_on with\n  | empty => simp\n  | @insert i s hi ih =>\n    have hcop : (p i).Coprime (\u220f j \u2208 s, p j) := by\n      apply Nat.coprime_prod_right_iff.mpr\n      intro j hj\n      apply (Nat.coprime_primes (hprime i) (hprime j)).mpr\n      intro heq\n      have hij := hinj heq\n      exact hi (hij \u25b8 hj)\n    rw [Finset.prod_insert hi, Nat.totient_mul hcop, Nat.cast_mul,\n      ih, Finset.prod_insert hi, Nat.totient_prime (hprime i)]\n    rw [Nat.cast_sub (hprime i).one_lt.le, Nat.cast_one]"
+        },
+        {
+          "name": "actualPrimeBoxTuple_reciprocalTotient",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxTuple_reciprocalTotient {N k : \u2115} {a b : Fin k \u2192 \u211d}\n    {p : Fin k \u2192 \u2115} (hp : p \u2208 actualPrimeBoxTuples N a b)\n    (hinj : Function.Injective p) :\n    1 / (Nat.totient (\u220f i, p i) : \u211d) = \u220f i, 1 / ((p i : \u211d) - 1)",
+          "complete_source": "theorem actualPrimeBoxTuple_reciprocalTotient {N k : \u2115} {a b : Fin k \u2192 \u211d}\n    {p : Fin k \u2192 \u2115} (hp : p \u2208 actualPrimeBoxTuples N a b)\n    (hinj : Function.Injective p) :\n    1 / (Nat.totient (\u220f i, p i) : \u211d) = \u220f i, 1 / ((p i : \u211d) - 1) := by\n  classical\n  rw [totient_primeTuple_cast p (fun i => (mem_actualPrimeBoxTuples_iff.mp hp i).1)\n    hinj Finset.univ, Finset.prod_div_distrib]\n  simp"
+        },
+        {
+          "name": "actualPrimeBoxTuple_product_coprime_target",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxTuple_product_coprime_target {N k : \u2115}\n    {a b : Fin k \u2192 \u211d} {p : Fin k \u2192 \u2115}\n    (hp : p \u2208 actualPrimeBoxTuples N a b) : (\u220f i, p i).Coprime N",
+          "complete_source": "theorem actualPrimeBoxTuple_product_coprime_target {N k : \u2115}\n    {a b : Fin k \u2192 \u211d} {p : Fin k \u2192 \u2115}\n    (hp : p \u2208 actualPrimeBoxTuples N a b) : (\u220f i, p i).Coprime N := by\n  rw [Nat.coprime_fintype_prod_left_iff]\n  intro i\n  have hi := mem_actualPrimeBoxTuples_iff.mp hp i\n  exact hi.1.coprime_iff_not_dvd.mpr hi.2.1"
+        },
+        {
+          "name": "actualPrimeBoxTotientMass",
+          "kind": "def",
+          "private": false,
+          "complete_header": "def actualPrimeBoxTotientMass (N : \u2115) {k : \u2115} (a b : Fin k \u2192 \u211d) : \u211d",
+          "complete_source": "def actualPrimeBoxTotientMass (N : \u2115) {k : \u2115} (a b : Fin k \u2192 \u211d) : \u211d :=\n  \u2211 p \u2208 actualPrimeBoxTuples N a b, 1 / (Nat.totient (\u220f i, p i) : \u211d)"
+        },
+        {
+          "name": "actualPrimeBoxTotientMass_eq_mass",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem actualPrimeBoxTotientMass_eq_mass {N k : \u2115} {a b : Fin (k + 1) \u2192 \u211d}\n    (hN : 1 \u2264 N) (hsep : \u2200 i : Fin k, b i.succ \u2264 a i.castSucc) :\n    actualPrimeBoxTotientMass N a b = actualPrimeBoxMass N a b",
+          "complete_source": "theorem actualPrimeBoxTotientMass_eq_mass {N k : \u2115} {a b : Fin (k + 1) \u2192 \u211d}\n    (hN : 1 \u2264 N) (hsep : \u2200 i : Fin k, b i.succ \u2264 a i.castSucc) :\n    actualPrimeBoxTotientMass N a b = actualPrimeBoxMass N a b := by\n  classical\n  apply Finset.sum_congr rfl\n  intro p hp\n  exact actualPrimeBoxTuple_reciprocalTotient hp\n    (actualPrimeBoxTuples_injective hN hsep hp)"
+        },
+        {
+          "name": "tendsto_actualPrimeBoxTotientMass",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem tendsto_actualPrimeBoxTotientMass {k : \u2115} (a b : Fin (k + 1) \u2192 \u211d)\n    (ha : \u2200 i, 0 < a i) (hab : \u2200 i, a i < b i)\n    (hsep : \u2200 i : Fin k, b i.succ \u2264 a i.castSucc) :\n    Tendsto (fun N : \u2115 => actualPrimeBoxTotientMass N a b) atTop\n      (\ud835\udcdd (\u220f i, Real.log (b i / a i)))",
+          "complete_source": "theorem tendsto_actualPrimeBoxTotientMass {k : \u2115} (a b : Fin (k + 1) \u2192 \u211d)\n    (ha : \u2200 i, 0 < a i) (hab : \u2200 i, a i < b i)\n    (hsep : \u2200 i : Fin k, b i.succ \u2264 a i.castSucc) :\n    Tendsto (fun N : \u2115 => actualPrimeBoxTotientMass N a b) atTop\n      (\ud835\udcdd (\u220f i, Real.log (b i / a i))) := by\n  apply (tendsto_actualPrimeBoxMass a b ha hab).congr'\n  filter_upwards [eventually_ge_atTop (1 : \u2115)] with N hN\n  exact (actualPrimeBoxTotientMass_eq_mass hN hsep).symm"
+        }
+      ],
+      "full_math_and_API_review": [
+        "True finite actual tuple sum on [N^a_i,N^b_i), preserving target-prime exclusions. Factorization is a proved finite pi-sum distributive law, not the definition.",
+        "Prime>=2 proves actual1/(p-1) weight nonnegative. Fixed positive-exponent tuple mass limit follows by finite product of real actual one-prime limits, with no b<=1/parity restriction.",
+        "Adjacent separated boxes force strict decreasing primes even at equal exponent boundaries, by the strict upper cutoff. The reciprocal-totient identity separately requires actual injectivity; no such equality is asserted for overlapping boxes.",
+        "Private totient product induction proves coprimality of distinct primes and uses Nat.cast_sub only with prime>=2. Product is coprime to the target by each real prime exclusion.",
+        "Separated totient mass equality uses N>=1, and its limit pays that eventual gate. The zero-coordinate mass/limit is1. No distribution/count mean is supplied."
+      ],
+      "determined_static_blockers": [],
+      "forbidden_source_commands": []
+    },
+    {
+      "module": "ImbalancedChen.SieveDimensionComparison",
+      "source_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/SieveDimensionComparison.lean",
+      "source_sha256": "cf2369c8ba786bc022140ba469efe3ab6c5dfeeb7976fcbf8ddf9eff1a97a4ec",
+      "line_count": 299,
+      "entire_source_read": true,
+      "complete_declaration_count": 23,
+      "definition_count": 3,
+      "complete_declarations": [
+        {
+          "name": "oddPrimesInInterval",
+          "kind": "def",
+          "private": false,
+          "complete_header": "def oddPrimesInInterval (w v : \u2115) : Finset \u2115",
+          "complete_source": "def oddPrimesInInterval (w v : \u2115) : Finset \u2115 :=\n  (oddPrimesBelowCap v).filter (fun p : \u2115 => w \u2264 p)"
+        },
+        {
+          "name": "sievePrimesInInterval",
+          "kind": "def",
+          "private": false,
+          "complete_header": "def sievePrimesInInterval (N w v : \u2115) : Finset \u2115",
+          "complete_source": "def sievePrimesInInterval (N w v : \u2115) : Finset \u2115 :=\n  (sievePrimes N v).filter (fun p : \u2115 => w \u2264 p)"
+        },
+        {
+          "name": "oddPrimeSieveDensity",
+          "kind": "def",
+          "private": false,
+          "complete_header": "def oddPrimeSieveDensity (z : \u2115) : \u211d",
+          "complete_source": "def oddPrimeSieveDensity (z : \u2115) : \u211d :=\n  \u220f p \u2208 oddPrimesBelowCap z, (1 - 1 / ((p : \u211d) - 1))"
+        },
+        {
+          "name": "mem_oddPrimesInInterval",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "@[simp] theorem mem_oddPrimesInInterval {w v p : \u2115} :\n    p \u2208 oddPrimesInInterval w v \u2194\n      w \u2264 p \u2227 p < v \u2227 Nat.Prime p \u2227 2 < p",
+          "complete_source": "@[simp] theorem mem_oddPrimesInInterval {w v p : \u2115} :\n    p \u2208 oddPrimesInInterval w v \u2194\n      w \u2264 p \u2227 p < v \u2227 Nat.Prime p \u2227 2 < p := by\n  simp only [oddPrimesInInterval, Finset.mem_filter, mem_oddPrimesBelowCap]\n  constructor\n  \u00b7 rintro \u27e8\u27e8hpv, hp, hp2\u27e9, hwp\u27e9\n    exact \u27e8hwp, hpv, hp, hp2\u27e9\n  \u00b7 rintro \u27e8hwp, hpv, hp, hp2\u27e9\n    exact \u27e8\u27e8hpv, hp, hp2\u27e9, hwp\u27e9"
+        },
+        {
+          "name": "mem_sievePrimesInInterval",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "@[simp] theorem mem_sievePrimesInInterval {N w v p : \u2115} :\n    p \u2208 sievePrimesInInterval N w v \u2194\n      w \u2264 p \u2227 p < v \u2227 Nat.Prime p \u2227 \u00acp \u2223 N",
+          "complete_source": "@[simp] theorem mem_sievePrimesInInterval {N w v p : \u2115} :\n    p \u2208 sievePrimesInInterval N w v \u2194\n      w \u2264 p \u2227 p < v \u2227 Nat.Prime p \u2227 \u00acp \u2223 N := by\n  simp only [sievePrimesInInterval, Finset.mem_filter, mem_sievePrimes]\n  constructor\n  \u00b7 rintro \u27e8\u27e8hpv, hp, hpN\u27e9, hwp\u27e9\n    exact \u27e8hwp, hpv, hp, hpN\u27e9\n  \u00b7 rintro \u27e8hwp, hpv, hp, hpN\u27e9\n    exact \u27e8\u27e8hpv, hp, hpN\u27e9, hwp\u27e9"
+        },
+        {
+          "name": "two_lt_of_mem_sievePrimes",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem two_lt_of_mem_sievePrimes {N z p : \u2115}\n    (hN : Even N) (hp : p \u2208 sievePrimes N z) : 2 < p",
+          "complete_source": "theorem two_lt_of_mem_sievePrimes {N z p : \u2115}\n    (hN : Even N) (hp : p \u2208 sievePrimes N z) : 2 < p := by\n  rw [sievePrimes_eq_oddPrimesBelowCap_filter hN] at hp\n  exact (mem_oddPrimesBelowCap.mp (Finset.mem_filter.mp hp).1).2.2"
+        },
+        {
+          "name": "odd_sieve_factor_pos",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem odd_sieve_factor_pos {p : \u2115} (hp : 2 < p) :\n    (0 : \u211d) < 1 - 1 / ((p : \u211d) - 1)",
+          "complete_source": "theorem odd_sieve_factor_pos {p : \u2115} (hp : 2 < p) :\n    (0 : \u211d) < 1 - 1 / ((p : \u211d) - 1) := by\n  have hpr : (2 : \u211d) < (p : \u211d) := by exact_mod_cast hp\n  have hden : (0 : \u211d) < (p : \u211d) - 1 := by linarith\n  have hlt : 1 / ((p : \u211d) - 1) < (1 : \u211d) :=\n    (div_lt_one hden).mpr (by linarith)\n  linarith"
+        },
+        {
+          "name": "one_le_odd_sieve_ratio_factor",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem one_le_odd_sieve_ratio_factor {p : \u2115} (hp : 2 < p) :\n    (1 : \u211d) \u2264 ((p : \u211d) - 1) / ((p : \u211d) - 2)",
+          "complete_source": "theorem one_le_odd_sieve_ratio_factor {p : \u2115} (hp : 2 < p) :\n    (1 : \u211d) \u2264 ((p : \u211d) - 1) / ((p : \u211d) - 2) := by\n  have hpr : (2 : \u211d) < (p : \u211d) := by exact_mod_cast hp\n  apply (le_div_iff\u2080 (by linarith : (0 : \u211d) < (p : \u211d) - 2)).mpr\n  linarith"
+        },
+        {
+          "name": "odd_sieve_factor_mul_ratio",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem odd_sieve_factor_mul_ratio {p : \u2115} (hp : 2 < p) :\n    (1 - 1 / ((p : \u211d) - 1)) *\n      (((p : \u211d) - 1) / ((p : \u211d) - 2)) = 1",
+          "complete_source": "theorem odd_sieve_factor_mul_ratio {p : \u2115} (hp : 2 < p) :\n    (1 - 1 / ((p : \u211d) - 1)) *\n      (((p : \u211d) - 1) / ((p : \u211d) - 2)) = 1 := by\n  have hpr : (2 : \u211d) < (p : \u211d) := by exact_mod_cast hp\n  have hp1 : (p : \u211d) - 1 \u2260 0 := by linarith\n  have hp2 : (p : \u211d) - 2 \u2260 0 := by linarith\n  field_simp [hp1, hp2] <;> ring"
+        },
+        {
+          "name": "finite_prod_le_prod_of_subset_of_one_le",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finite_prod_le_prod_of_subset_of_one_le\n    {\u03b1 : Type*} {s t : Finset \u03b1} {f : \u03b1 \u2192 \u211d}\n    (hst : s \u2286 t) (hf : \u2200 a \u2208 t, 1 \u2264 f a) :\n    (\u220f a \u2208 s, f a) \u2264 \u220f a \u2208 t, f a",
+          "complete_source": "theorem finite_prod_le_prod_of_subset_of_one_le\n    {\u03b1 : Type*} {s t : Finset \u03b1} {f : \u03b1 \u2192 \u211d}\n    (hst : s \u2286 t) (hf : \u2200 a \u2208 t, 1 \u2264 f a) :\n    (\u220f a \u2208 s, f a) \u2264 \u220f a \u2208 t, f a := by\n  classical\n  have hfilter : t.filter (fun a => a \u2208 s) = s := by\n    ext a\n    simp only [Finset.mem_filter]\n    constructor\n    \u00b7 exact fun h => h.2\n    \u00b7 exact fun h => \u27e8hst h, h\u27e9\n  rw [\u2190 hfilter, Finset.prod_filter]\n  apply Finset.prod_le_prod\n  \u00b7 intro a ha\n    by_cases hs : a \u2208 s\n    \u00b7 simpa only [hs, if_true] using (zero_le_one.trans (hf a ha))\n    \u00b7 simpa only [hs, if_false] using (zero_le_one : (0 : \u211d) \u2264 1)\n  \u00b7 intro a ha\n    by_cases hs : a \u2208 s\n    \u00b7 simpa only [hs, if_true] using (le_rfl : f a \u2264 f a)\n    \u00b7 simpa only [hs, if_false] using (hf a ha)"
+        },
+        {
+          "name": "finite_prod_ratio_of_split",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finite_prod_ratio_of_split\n    {\u03b1 : Type*} (s t u : Finset \u03b1) (f g : \u03b1 \u2192 \u211d)\n    (ht : 0 < \u220f a \u2208 t, f a)\n    (hsplit : (\u220f a \u2208 t, f a) = (\u220f a \u2208 s, f a) * \u220f a \u2208 u, f a)\n    (hfg : \u2200 a \u2208 u, f a * g a = 1) :\n    (\u220f a \u2208 s, f a) / (\u220f a \u2208 t, f a) = \u220f a \u2208 u, g a",
+          "complete_source": "theorem finite_prod_ratio_of_split\n    {\u03b1 : Type*} (s t u : Finset \u03b1) (f g : \u03b1 \u2192 \u211d)\n    (ht : 0 < \u220f a \u2208 t, f a)\n    (hsplit : (\u220f a \u2208 t, f a) = (\u220f a \u2208 s, f a) * \u220f a \u2208 u, f a)\n    (hfg : \u2200 a \u2208 u, f a * g a = 1) :\n    (\u220f a \u2208 s, f a) / (\u220f a \u2208 t, f a) = \u220f a \u2208 u, g a := by\n  have hcancel : (\u220f a \u2208 u, f a) * (\u220f a \u2208 u, g a) = 1 := by\n    rw [\u2190 Finset.prod_mul_distrib]\n    calc\n      (\u220f a \u2208 u, f a * g a) = \u220f _a \u2208 u, (1 : \u211d) := by\n        apply Finset.prod_congr rfl\n        exact hfg\n      _ = 1 := by simp\n  apply (div_eq_iff ht.ne').mpr\n  rw [hsplit]\n  calc\n    (\u220f a \u2208 s, f a) = (\u220f a \u2208 s, f a) * 1 := by ring\n    _ = (\u220f a \u2208 s, f a) * ((\u220f a \u2208 u, f a) * (\u220f a \u2208 u, g a)) := by\n      rw [hcancel]\n    _ = (\u220f a \u2208 u, g a) * ((\u220f a \u2208 s, f a) * (\u220f a \u2208 u, f a)) := by ring"
+        },
+        {
+          "name": "finiteSieveDensity_pos",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finiteSieveDensity_pos {N : \u2115} (hN : Even N) (z : \u2115) :\n    0 < finiteSieveDensity N z",
+          "complete_source": "theorem finiteSieveDensity_pos {N : \u2115} (hN : Even N) (z : \u2115) :\n    0 < finiteSieveDensity N z := by\n  apply Finset.prod_pos\n  intro p hp\n  exact odd_sieve_factor_pos (two_lt_of_mem_sievePrimes hN hp)"
+        },
+        {
+          "name": "oddPrimeSieveDensity_pos",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem oddPrimeSieveDensity_pos (z : \u2115) : 0 < oddPrimeSieveDensity z",
+          "complete_source": "theorem oddPrimeSieveDensity_pos (z : \u2115) : 0 < oddPrimeSieveDensity z := by\n  apply Finset.prod_pos\n  intro p hp\n  exact odd_sieve_factor_pos (mem_oddPrimesBelowCap.mp hp).2.2"
+        },
+        {
+          "name": "finiteSieveDensity_split",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finiteSieveDensity_split {N w v : \u2115} (hwv : w \u2264 v) :\n    finiteSieveDensity N v = finiteSieveDensity N w *\n      \u220f p \u2208 sievePrimesInInterval N w v, (1 - 1 / ((p : \u211d) - 1))",
+          "complete_source": "theorem finiteSieveDensity_split {N w v : \u2115} (hwv : w \u2264 v) :\n    finiteSieveDensity N v = finiteSieveDensity N w *\n      \u220f p \u2208 sievePrimesInInterval N w v, (1 - 1 / ((p : \u211d) - 1)) := by\n  have hbelow : (sievePrimes N v).filter (fun p : \u2115 => p < w) =\n      sievePrimes N w := by\n    ext p\n    simp only [Finset.mem_filter, mem_sievePrimes]\n    constructor\n    \u00b7 rintro \u27e8\u27e8_, hp, hpN\u27e9, hpw\u27e9\n      exact \u27e8hpw, hp, hpN\u27e9\n    \u00b7 rintro \u27e8hpw, hp, hpN\u27e9\n      exact \u27e8\u27e8lt_of_lt_of_le hpw hwv, hp, hpN\u27e9, hpw\u27e9\n  simpa only [finiteSieveDensity, sievePrimesInInterval, hbelow, not_lt] using\n    (Finset.prod_filter_mul_prod_filter_not (sievePrimes N v)\n      (fun p : \u2115 => p < w)\n      (fun p : \u2115 => (1 : \u211d) - 1 / ((p : \u211d) - 1))).symm"
+        },
+        {
+          "name": "oddPrimeSieveDensity_split",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem oddPrimeSieveDensity_split {w v : \u2115} (hwv : w \u2264 v) :\n    oddPrimeSieveDensity v = oddPrimeSieveDensity w *\n      \u220f p \u2208 oddPrimesInInterval w v, (1 - 1 / ((p : \u211d) - 1))",
+          "complete_source": "theorem oddPrimeSieveDensity_split {w v : \u2115} (hwv : w \u2264 v) :\n    oddPrimeSieveDensity v = oddPrimeSieveDensity w *\n      \u220f p \u2208 oddPrimesInInterval w v, (1 - 1 / ((p : \u211d) - 1)) := by\n  have hbelow : (oddPrimesBelowCap v).filter (fun p : \u2115 => p < w) =\n      oddPrimesBelowCap w := by\n    ext p\n    simp only [Finset.mem_filter, mem_oddPrimesBelowCap]\n    constructor\n    \u00b7 rintro \u27e8\u27e8_, hp, hp2\u27e9, hpw\u27e9\n      exact \u27e8hpw, hp, hp2\u27e9\n    \u00b7 rintro \u27e8hpw, hp, hp2\u27e9\n      exact \u27e8\u27e8lt_of_lt_of_le hpw hwv, hp, hp2\u27e9, hpw\u27e9\n  simpa only [oddPrimeSieveDensity, oddPrimesInInterval, hbelow, not_lt] using\n    (Finset.prod_filter_mul_prod_filter_not (oddPrimesBelowCap v)\n      (fun p : \u2115 => p < w)\n      (fun p : \u2115 => (1 : \u211d) - 1 / ((p : \u211d) - 1))).symm"
+        },
+        {
+          "name": "finiteSieveDensity_ratio_eq_interval_product",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finiteSieveDensity_ratio_eq_interval_product\n    {N w v : \u2115} (hN : Even N) (hwv : w \u2264 v) :\n    finiteSieveDensity N w / finiteSieveDensity N v =\n      \u220f p \u2208 sievePrimesInInterval N w v,\n        ((p : \u211d) - 1) / ((p : \u211d) - 2)",
+          "complete_source": "theorem finiteSieveDensity_ratio_eq_interval_product\n    {N w v : \u2115} (hN : Even N) (hwv : w \u2264 v) :\n    finiteSieveDensity N w / finiteSieveDensity N v =\n      \u220f p \u2208 sievePrimesInInterval N w v,\n        ((p : \u211d) - 1) / ((p : \u211d) - 2) := by\n  apply finite_prod_ratio_of_split\n    (sievePrimes N w) (sievePrimes N v) (sievePrimesInInterval N w v)\n    (fun p : \u2115 => (1 : \u211d) - 1 / ((p : \u211d) - 1))\n    (fun p : \u2115 => ((p : \u211d) - 1) / ((p : \u211d) - 2))\n    (finiteSieveDensity_pos hN v) (finiteSieveDensity_split hwv)\n  intro p hp\n  exact odd_sieve_factor_mul_ratio\n    (two_lt_of_mem_sievePrimes hN (Finset.mem_filter.mp hp).1)"
+        },
+        {
+          "name": "oddPrimeSieveDensity_ratio_eq_interval_product",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem oddPrimeSieveDensity_ratio_eq_interval_product\n    {w v : \u2115} (hwv : w \u2264 v) :\n    oddPrimeSieveDensity w / oddPrimeSieveDensity v =\n      \u220f p \u2208 oddPrimesInInterval w v,\n        ((p : \u211d) - 1) / ((p : \u211d) - 2)",
+          "complete_source": "theorem oddPrimeSieveDensity_ratio_eq_interval_product\n    {w v : \u2115} (hwv : w \u2264 v) :\n    oddPrimeSieveDensity w / oddPrimeSieveDensity v =\n      \u220f p \u2208 oddPrimesInInterval w v,\n        ((p : \u211d) - 1) / ((p : \u211d) - 2) := by\n  apply finite_prod_ratio_of_split\n    (oddPrimesBelowCap w) (oddPrimesBelowCap v) (oddPrimesInInterval w v)\n    (fun p : \u2115 => (1 : \u211d) - 1 / ((p : \u211d) - 1))\n    (fun p : \u2115 => ((p : \u211d) - 1) / ((p : \u211d) - 2))\n    (oddPrimeSieveDensity_pos v) (oddPrimeSieveDensity_split hwv)\n  intro p hp\n  exact odd_sieve_factor_mul_ratio (mem_oddPrimesInInterval.mp hp).2.2.2"
+        },
+        {
+          "name": "sievePrimesInInterval_eq_filter",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem sievePrimesInInterval_eq_filter {N w v : \u2115} (hN : Even N) :\n    sievePrimesInInterval N w v =\n      (oddPrimesInInterval w v).filter (fun p : \u2115 => \u00acp \u2223 N)",
+          "complete_source": "theorem sievePrimesInInterval_eq_filter {N w v : \u2115} (hN : Even N) :\n    sievePrimesInInterval N w v =\n      (oddPrimesInInterval w v).filter (fun p : \u2115 => \u00acp \u2223 N) := by\n  ext p\n  simp only [Finset.mem_filter, mem_sievePrimesInInterval, mem_oddPrimesInInterval]\n  constructor\n  \u00b7 rintro \u27e8hwp, hpv, hp, hpN\u27e9\n    have hp2 : 2 < p := two_lt_of_mem_sievePrimes hN\n      (mem_sievePrimes.mpr \u27e8hpv, hp, hpN\u27e9)\n    exact \u27e8\u27e8hwp, hpv, hp, hp2\u27e9, hpN\u27e9\n  \u00b7 rintro \u27e8\u27e8hwp, hpv, hp, _\u27e9, hpN\u27e9\n    exact \u27e8hwp, hpv, hp, hpN\u27e9"
+        },
+        {
+          "name": "finiteSieveDensity_ratio_le_all_odd_primes",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finiteSieveDensity_ratio_le_all_odd_primes\n    {N w v : \u2115} (hN : Even N) (hwv : w \u2264 v) :\n    finiteSieveDensity N w / finiteSieveDensity N v \u2264\n      \u220f p \u2208 oddPrimesInInterval w v,\n        ((p : \u211d) - 1) / ((p : \u211d) - 2)",
+          "complete_source": "theorem finiteSieveDensity_ratio_le_all_odd_primes\n    {N w v : \u2115} (hN : Even N) (hwv : w \u2264 v) :\n    finiteSieveDensity N w / finiteSieveDensity N v \u2264\n      \u220f p \u2208 oddPrimesInInterval w v,\n        ((p : \u211d) - 1) / ((p : \u211d) - 2) := by\n  rw [finiteSieveDensity_ratio_eq_interval_product hN hwv]\n  apply finite_prod_le_prod_of_subset_of_one_le\n  \u00b7 rw [sievePrimesInInterval_eq_filter hN]\n    exact Finset.filter_subset _ _\n  \u00b7 intro p hp\n    exact one_le_odd_sieve_ratio_factor (mem_oddPrimesInInterval.mp hp).2.2.2"
+        },
+        {
+          "name": "finiteSieveDensity_ratio_le_baseline",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finiteSieveDensity_ratio_le_baseline\n    {N w v : \u2115} (hN : Even N) (hwv : w \u2264 v) :\n    finiteSieveDensity N w / finiteSieveDensity N v \u2264\n      oddPrimeSieveDensity w / oddPrimeSieveDensity v",
+          "complete_source": "theorem finiteSieveDensity_ratio_le_baseline\n    {N w v : \u2115} (hN : Even N) (hwv : w \u2264 v) :\n    finiteSieveDensity N w / finiteSieveDensity N v \u2264\n      oddPrimeSieveDensity w / oddPrimeSieveDensity v := by\n  rw [oddPrimeSieveDensity_ratio_eq_interval_product hwv]\n  exact finiteSieveDensity_ratio_le_all_odd_primes hN hwv"
+        },
+        {
+          "name": "one_le_finiteSieveDensity_ratio",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem one_le_finiteSieveDensity_ratio\n    {N w v : \u2115} (hN : Even N) (hwv : w \u2264 v) :\n    1 \u2264 finiteSieveDensity N w / finiteSieveDensity N v",
+          "complete_source": "theorem one_le_finiteSieveDensity_ratio\n    {N w v : \u2115} (hN : Even N) (hwv : w \u2264 v) :\n    1 \u2264 finiteSieveDensity N w / finiteSieveDensity N v := by\n  rw [finiteSieveDensity_ratio_eq_interval_product hN hwv]\n  apply Finset.one_le_prod\n  intro p hp\n  exact one_le_odd_sieve_ratio_factor\n    (two_lt_of_mem_sievePrimes hN (Finset.mem_filter.mp hp).1)"
+        },
+        {
+          "name": "finiteSieveDensity_antitone",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finiteSieveDensity_antitone {N : \u2115} (hN : Even N) :\n    Antitone (finiteSieveDensity N)",
+          "complete_source": "theorem finiteSieveDensity_antitone {N : \u2115} (hN : Even N) :\n    Antitone (finiteSieveDensity N) := by\n  intro w v hwv\n  have h := (le_div_iff\u2080 (finiteSieveDensity_pos hN v)).mp\n    (one_le_finiteSieveDensity_ratio hN hwv)\n  simpa only [one_mul] using h"
+        },
+        {
+          "name": "finiteSieveDensity_ratio_antitone_center_dvd",
+          "kind": "theorem",
+          "private": false,
+          "complete_header": "theorem finiteSieveDensity_ratio_antitone_center_dvd\n    {M N w v : \u2115} (hM : Even M) (hN : Even N)\n    (hMN : M \u2223 N) (hwv : w \u2264 v) :\n    finiteSieveDensity N w / finiteSieveDensity N v \u2264\n      finiteSieveDensity M w / finiteSieveDensity M v",
+          "complete_source": "theorem finiteSieveDensity_ratio_antitone_center_dvd\n    {M N w v : \u2115} (hM : Even M) (hN : Even N)\n    (hMN : M \u2223 N) (hwv : w \u2264 v) :\n    finiteSieveDensity N w / finiteSieveDensity N v \u2264\n      finiteSieveDensity M w / finiteSieveDensity M v := by\n  rw [finiteSieveDensity_ratio_eq_interval_product hN hwv,\n    finiteSieveDensity_ratio_eq_interval_product hM hwv]\n  apply finite_prod_le_prod_of_subset_of_one_le\n  \u00b7 intro p hp\n    obtain \u27e8hwp, hpv, hpprime, hpN\u27e9 := mem_sievePrimesInInterval.mp hp\n    apply mem_sievePrimesInInterval.mpr\n    exact \u27e8hwp, hpv, hpprime, fun hpM => hpN (hpM.trans hMN)\u27e9\n  \u00b7 intro p hp\n    exact one_le_odd_sieve_ratio_factor\n      (two_lt_of_mem_sievePrimes hM (Finset.mem_filter.mp hp).1)"
+        }
+      ],
+      "full_math_and_API_review": [
+        "All intervals are exactly[w,v): p=w retained, p=v excluded. Evenness excludes2 before positivity; all subtractions are real. No unrecorded lower cutoff w>=2 is used.",
+        "Subset product comparison inserts only factors>=1 and separately proves nonnegativity. Ratio-of-split has an actual positive denominator and exact local f*g=1.",
+        "Filter partitions give actual and all-odd finite density splits. Removing center-prime factors decreases the reciprocal ratio. No Mertens, infinite product or analytic dimension supplier is assumed.",
+        "Cutoff antitone follows from ratio>=1 and denominator positive. For M|N, allowed primes for N form a subset of those for M, giving quotient_N<=quotient_M in the correct direction.",
+        "N=0 even and empty/below2 intervals are retained: all primes dividing0 are excluded, actual density is1, and every ratio is defined and correct."
+      ],
+      "determined_static_blockers": [],
+      "forbidden_source_commands": []
+    }
+  ],
+  "proper_source_header_scope": {
+    "parser_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/import_walker_v2.e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914.py",
+    "parser_sha256": "e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914",
+    "method": "AST extraction only of frozen uncomment/header_imports, without runtime/checker main. Fresh project walks preserve implicit Init/public/meta/import-all; foreign objects not replayed.",
+    "old_project_count": 68,
+    "new_project_count": 64,
+    "parent_union_project_count": 63,
+    "new_project_vs_parent_union": [
+      "ImbalancedChen.ActualPrimeBoxEulerLower"
+    ],
+    "new_foreign_vs_actual_parent_union": 0,
+    "new_foreign_frontier_vs_parent_union": [],
+    "reason": "Target imports exactly these3 project parents and no foreign direct module; every foreign descendant is already in their source union. This is a source reachability fact, not imported-object acceptance.",
+    "added_project_vs_old": [
+      "ImbalancedChen.CurrentChenFixedEulerNormalization",
+      "ImbalancedChen.CurrentChenRosserEndpointDictionary"
+    ],
+    "removed_project_vs_old": [
+      "ImbalancedChen.ActualSmallEulerNormalization",
+      "ImbalancedChen.FixedRoughCoefficients",
+      "ImbalancedChen.FullPowerEulerNormalization",
+      "ImbalancedChen.RosserEndpointBridge",
+      "ImbalancedChen.RoughAbsoluteDensity",
+      "ImbalancedChen.RoughPowerParameters"
+    ],
+    "added_foreign_frontier_vs_old": [
+      "MathlibNt.SieveTheory.Switching.SuzukiPrimeSums"
+    ],
+    "removed_foreign_frontier_vs_old": [
+      "MathlibNt.SieveTheory.LiLiuGoldbachB8FibreSieve"
+    ],
+    "old_vs_new_scope_note": "SuzukiPrimeSums is added versus old adc065 alone, but lies in owned CurrentFixed closure; no zero-foreign assertion against the single old import scope.",
+    "new_project_nodes": [
+      {
+        "module": "ImbalancedChen.ActualPrimeBoxEulerLower",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ActualPrimeBoxEulerLower.lean",
+        "source_sha256": "c5a5b3d160d00556eaec65c78f7f6bebc7144f7fe76ab2e5ddf772f7adbe7dab",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ActualPrimeBoxMass",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.CurrentChenFixedEulerNormalization",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.SieveDimensionComparison",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.SieveDimensionComparison",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/SieveDimensionComparison.lean",
+        "source_sha256": "cf2369c8ba786bc022140ba469efe3ab6c5dfeeb7976fcbf8ddf9eff1a97a4ec",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FiniteSieveEuler",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.FiniteSieveEuler",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/FiniteSieveEuler.lean",
+        "source_sha256": "d1eb27002ef3da1327a4574067241a26fd825a6e50c1cd9b530b4ace21db42f7",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FiniteSieveModel",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.SingularSeries",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.SingularSeries",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/SingularSeries.lean",
+        "source_sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.NormalizationGrowth",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.PSeries",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.PrimeFin",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.NormalizationGrowth",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/NormalizationGrowth.lean",
+        "source_sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Ring.Parity",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Filter.AtTopBot.Archimedean",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Filter.AtTopBot.Field",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.FiniteSieveModel",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/FiniteSieveModel.lean",
+        "source_sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.SieveSourceCoprimality",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.SelbergSieve",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Totient",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Squarefree",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.SieveSourceCoprimality",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/SieveSourceCoprimality.lean",
+        "source_sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.HalfProductSource",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.GCD.BigOperators",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.ModEq",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Prime.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Card",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.HalfProductSource",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/HalfProductSource.lean",
+        "source_sha256": "dc6e261ddfdc9a66e966a4ec5c2a129d3f4b7583501c5c82364f2aa4a8af194e",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.BadSourceLocalization",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Prod",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.BadSourceLocalization",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/BadSourceLocalization.lean",
+        "source_sha256": "0e88326b03a4c20a472014b506d7533495d86801909af4d455de5fcfae6695a7",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.HalfProductGeometry",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Floor.Semiring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Card",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.HalfProductGeometry",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/HalfProductGeometry.lean",
+        "source_sha256": "d04e31ea73a853c4fa37e881ef30a748b7f83b8a0e930e0cc2ae231dbb629db1",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.OrderedBad",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Convert",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.OrderedBad",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/OrderedBad.lean",
+        "source_sha256": "a38031995175bd2f847eefd498c929e941400c9cffdf6f78e3e06bd2100764da",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.RationalPowers",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.RationalPowers",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/RationalPowers.lean",
+        "source_sha256": "40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Counting",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.Counting",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Counting.lean",
+        "source_sha256": "8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.Data.Finset.Card",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Prime.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.CurrentChenFixedEulerNormalization",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenFixedEulerNormalization.lean",
+        "source_sha256": "a13617949aaa7ee57345788f287ec486980dcb65bcb1d0e8ff00fb7e34e12b74",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.EulerNormalizationLimit",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.CenterEulerTail",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "MathlibNt.SieveTheory.Arithmetic.MertensTheorem",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.CurrentChenRosserEndpointDictionary",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.CurrentChenRosserEndpointDictionary",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenRosserEndpointDictionary.lean",
+        "source_sha256": "10f54a74f1f304d5a50415224cbf913d1821fc3f0592efbb444a38e3091c9bc5",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ActualSmallRosserDensity",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.ChenInitialPrimeSource",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.FiniteSieveEuler",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "MathlibNt.SieveTheory.Switching.SuzukiPrimeSums",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "MathlibNt.SieveTheory.Arithmetic.MertensTheorem",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.ChenInitialPrimeSource",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ChenInitialPrimeSource.lean",
+        "source_sha256": "330fab9edc70b63f56fb28b7b83748427b269c42da54ee67dd14a812a36720f2",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenElevenSum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.FiniteSieveModel",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.CoprimeRecentering",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.CoprimeRecentering",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CoprimeRecentering.lean",
+        "source_sha256": "45c28d97bd10eccaa99498b2309fb03c9d8efbdd5040e12d7ba33c3702b418c5",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.CurvedRegionDiscrepancy",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Totient",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.CurvedRegionDiscrepancy",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurvedRegionDiscrepancy.lean",
+        "source_sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FiniteSieveModel",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Ring.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenElevenSum",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/QuotientChenElevenSum.lean",
+        "source_sha256": "da37649fd96b1e216424a255cf72e947a29577750640739587bf763026da9c96",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenSummedBridge",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenSummedBridge",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/QuotientChenSummedBridge.lean",
+        "source_sha256": "3ae498ccb6c6e214184e5ffb56889afb1957f3e7666d09acd71bf9a841d35d17",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenPositiveBound",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.RoughSquareException",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.RoughSquareException",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/RoughSquareException.lean",
+        "source_sha256": "02723bf89057e5979946c2e591d76aa93517e455cf88a1f67598719ff14f4e30",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Intervals",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Ring.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Floor.Semiring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Prime.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Real.Archimedean",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Interval.Finset.Nat",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Positivity",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenPositiveBound",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/QuotientChenPositiveBound.lean",
+        "source_sha256": "a7e99b14a66b55e0e5100321d169680a112fb8ef2c1c6ff8754aab88185b28a6",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenWeightCases",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenWeightCases",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/QuotientChenWeightCases.lean",
+        "source_sha256": "0a46a07615bd68b25b56d2655f08fc6c7f87fea7ad0fa3d56f7a584299c31835",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenNinthSwitch",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.Multiplicity",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Choose.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.Multiplicity",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Multiplicity.lean",
+        "source_sha256": "9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Counting",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.AlmostPrime",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.SplitIfs",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenNinthSwitch",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/QuotientChenNinthSwitch.lean",
+        "source_sha256": "702981a5101c248640cbc7b7356f7b0fd666add84edae31a4b7cec554cdba0d2",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenInitialCounts",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenSwitchGeometry",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenSwitchGeometry",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/QuotientChenSwitchGeometry.lean",
+        "source_sha256": "0a9f384144b847a3030bad2c7821e1995be56dff2f8ff0ec3cfbff3d1c692a9b",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenFourCounts",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Sqrt",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Find",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenFourCounts",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/QuotientChenFourCounts.lean",
+        "source_sha256": "dbf594ed81b0ba34cd36f8f7ee04ea1fc95a3446a7c8142db4c057b99fb8c216",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenFourPrime",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Card",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Prod",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenFourPrime",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/QuotientChenFourPrime.lean",
+        "source_sha256": "e2966ad01dec7cd6e9725c6c830f685b1cef6414121d268b0203bf743a394c72",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.Data.Nat.Squarefree",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Prod",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.QuotientChenInitialCounts",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/QuotientChenInitialCounts.lean",
+        "source_sha256": "5d44f2769051957cf1723b4421930ee8caed5fda6054b0404a5a9c77fe038859",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.QuotientChenFourCounts",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.ActualSmallRosserDensity",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ActualSmallRosserDensity.lean",
+        "source_sha256": "9cfe1beef1a9ef09b88abf3c5593edebafc882e95639c50579cf4dc77b4d5ac8",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ActualSmallRosser",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.SmallRoughMainTerm",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "MathlibNt.SieveTheory.LiLiuPrereqWFFundamentalLemma",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "MathlibNt.SieveTheory.LiLiuFouvryG9ProgressionDensityDimension",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.SmallRoughMainTerm",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/SmallRoughMainTerm.lean",
+        "source_sha256": "3a3cdd6bc284237634da7744167e280c9ee56dc33555899ed98cc88e7e691b08",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.SmallRoughAttachment",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.SmallRoughAttachment",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/SmallRoughAttachment.lean",
+        "source_sha256": "8f69bb4f62110e54aeb69c371d4767253d8520d9d904e3dc97e578beaedfccba",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.PhysicalUpperWeightBridge",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.PrimeFin",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.PhysicalUpperWeightBridge",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/PhysicalUpperWeightBridge.lean",
+        "source_sha256": "7c179a6733bd163f5b8e8410a718effa609baa8a10b64b266caa36bf656e77a3",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FiniteSieveModel",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.SignSensitiveAttachment",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.SignSensitiveAttachment",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/SignSensitiveAttachment.lean",
+        "source_sha256": "d34b8483983bf4243479bee70cd4bcd07fbf286abafe982021ca4625a3ab63bc",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Ring.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.ActualSmallRosser",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ActualSmallRosser.lean",
+        "source_sha256": "0dbcd4e45ededb9edfb601d8249cc554b3e53291985c09557ed2a9f5d4fb2cdf",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.RoughPrimeUniverse",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.SmallRoughAttachment",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.GCD.BigOperators",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Int.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.RoughPrimeUniverse",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/RoughPrimeUniverse.lean",
+        "source_sha256": "3d716d89548e2e453e96c598481db2f62ae1c76e7f092a960e490a4b70688e58",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.RetainedModuli",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Interval",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Sort",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.RetainedModuli",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/RetainedModuli.lean",
+        "source_sha256": "ec5df61712426350f0a93f36501ce2f2ca4bf49c9ee13c611920342e67386274",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FirstExitTree",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.FirstExitTree",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/FirstExitTree.lean",
+        "source_sha256": "6ab5eeb136969f76afc8fcc83dfa211985e0b7ffe85e89dab0702f381ad42a6b",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.Group.List",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.List.Prime",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.List.Sublists",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Prime.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.CenterEulerTail",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CenterEulerTail.lean",
+        "source_sha256": "1961b35cce071a6f8d1ef3e1e23aaa0bab05085982aaaac67ac786af03acdf8c",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.EulerNormalizationLimit",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.ChenInitialCorrectionBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.ChenInitialCorrectionBudget",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ChenInitialCorrectionBudget.lean",
+        "source_sha256": "983e6ae56fcfecd1eeea5144c5c02c43b6535e25e51b657b2e830954eba4b264",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ChenInitialPrimeSource",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.TotientReciprocalBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.BoundaryArbitraryLog",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.BoundaryArbitraryLog",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/BoundaryArbitraryLog.lean",
+        "source_sha256": "2694e8398198c9edeab5f0c4bad70c514a22de21a0cec6edec33c2faec742167",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.CurvedDiscrepancyReduction",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.LogMeshGridCount",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.LogMeshGridCount",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/LogMeshGridCount.lean",
+        "source_sha256": "b71b3e65f1ede581fbd881843b45cdeea9196ac15aa2fb7623eb7636bf366aaf",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.BoundaryLogMesh",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.BoundaryLogMesh",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/BoundaryLogMesh.lean",
+        "source_sha256": "364d2571fcbf6c00e5aaa9b70a04c9ddee49a12d5725f70b0a13571fdfa3be81",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ActualGridEnvelopes",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.PowerErrorBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.TotientReciprocalBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.TotientReciprocalBudget",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/TotientReciprocalBudget.lean",
+        "source_sha256": "aa80ff2ad79f77405951f1e56e993a851a1b32ad46c970e7914adb94bdb2db86",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.CurvedRegionDiscrepancy",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Totient",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.ArithmeticFunction.Misc",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.Harmonic.Bounds",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Intervals",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Positivity",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.PowerErrorBudget",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/PowerErrorBudget.lean",
+        "source_sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.SingularSeries",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Floor.Semiring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.ActualGridEnvelopes",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ActualGridEnvelopes.lean",
+        "source_sha256": "f2171599b210583ee28b316da48b114c74f8742b564d0c1d3a30aaf073aaf528",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.MultiplicativeGridPartition",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.BoundaryGlobalCaps",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.BoundaryGlobalCaps",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/BoundaryGlobalCaps.lean",
+        "source_sha256": "95eb4934caa7aa8ed308a7094ae46a4d14d6336e2470ee2b58a88ce0b379caae",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.BoundaryCellContainment",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.Real.Sqrt",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.BoundaryCellContainment",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/BoundaryCellContainment.lean",
+        "source_sha256": "12a74397730d07769c95cb7e1ab6adc4a3b570daedc49dbc65c0c0defd7ba80d",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.BoundaryGridBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.HalfProductSource",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.BoundaryGridBudget",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/BoundaryGridBudget.lean",
+        "source_sha256": "a36da7f8fc558d406e5e00b9790389438846198caa610540da8145471a419245",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.CurvedRegionDiscrepancy",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Max",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Interval.Finset.Nat",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.Harmonic.Bounds",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.MultiplicativeGridPartition",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/MultiplicativeGridPartition.lean",
+        "source_sha256": "9be180c5c070d8855c9e1fa1acaf30ccda7f87d7ec45410670e2d527a6b18598",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.BoundaryCellContainment",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Log.Base",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Floor.Semiring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Prod",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Interval.Finset.Nat",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.CurvedDiscrepancyReduction",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurvedDiscrepancyReduction.lean",
+        "source_sha256": "cb277ada2fb933a5c8a6908978e72973ec703f281a678a87f39d58591a36e0d6",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.RectangleDiscrepancyAssembly",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.BoundaryLogMesh",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.LogCutoffError",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.LogCutoffError",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/LogCutoffError.lean",
+        "source_sha256": "202d60ddffa0cbf6a0cc3259af4ec3654e4227a5e16523a2db71ba30d1dfcd49",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.SingularSeries",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.BadSourceLocalization",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Topology.Algebra.Order.Field",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.RectangleDiscrepancyAssembly",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/RectangleDiscrepancyAssembly.lean",
+        "source_sha256": "5af6880e6c3f2c00a846cfccd8842e08f80ed8eb314cfdaa972904c2f987e861",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ActualGridEnvelopes",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.TotientReciprocalBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.EulerNormalizationLimit",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/EulerNormalizationLimit.lean",
+        "source_sha256": "bdcd1eca2fd8901baa8ac580d6f26dc7f3c473fc3cbbacb1fc0981ea2e7e873e",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.CenterPrimeTail",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.PowerErrorBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Filter.AtTopBot.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Topology.Algebra.InfiniteSum.Defs",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Topology.MetricSpace.Pseudo.Defs",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.CenterPrimeTail",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CenterPrimeTail.lean",
+        "source_sha256": "371000889add32a5e24e64784d1b63b4f3544915a20a728390c9ce1134c05073",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FiniteSieveEuler",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Floor.Semiring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Factorization.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.ActualPrimeBoxMass",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ActualPrimeBoxMass.lean",
+        "source_sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ActualPrimeReciprocalMass",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Ring.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Fin.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Totient",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.GCD.BigOperators",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.FinitePrimeGeometryCore",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.FinitePrimeGeometryCore",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/FinitePrimeGeometryCore.lean",
+        "source_sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FirstExitDepthSplice",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.FirstExitPresieveProjection",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.RoughPrimeUniverse",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.LogPrimeBoxMesh",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.List.GetD",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.List.OfFn",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Fin.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Fin",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.LogPrimeBoxMesh",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/LogPrimeBoxMesh.lean",
+        "source_sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.LogPrimeBoxIntegral",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecificLimits.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Interval.Set.Union",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.LogPrimeBoxIntegral",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/LogPrimeBoxIntegral.lean",
+        "source_sha256": "0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.MeasureTheory.Integral.Pi",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Integrals.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.FirstExitPresieveProjection",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/FirstExitPresieveProjection.lean",
+        "source_sha256": "41a96b9f75048b250e96553a783d4f03350de3d1b17c7dcc5da9aa9028eab694",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FirstExitTree",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.FirstExitDepthSplice",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/FirstExitDepthSplice.lean",
+        "source_sha256": "66803fd4584aa34babb84845e6b84e41417476b2d4499d882d2f61734bd27af6",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FirstExitTree",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.ActualPrimeReciprocalMass",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ActualPrimeReciprocalMass.lean",
+        "source_sha256": "f2cb90c3751d4bbc1208e9f1694f820befa948bddf1c396ca564c10ccd1e1108",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ChenPrimeHarmonicFinite",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.RoughPrimeUniverse",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.PowerErrorBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "MathlibNt.SieveTheory.Arithmetic.PrimeReciprocalLogScale",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.ChenPrimeHarmonicFinite",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ChenPrimeHarmonicFinite.lean",
+        "source_sha256": "8b7b1d6d7b7b9847ade96917beac79be4d695c2444a27c38b3f9e1b878174f38",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ChenQuotientPrimeSource",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.ChenInitialCorrectionBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.RoughSquareException",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      },
+      {
+        "module": "ImbalancedChen.ChenQuotientPrimeSource",
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ChenQuotientPrimeSource.lean",
+        "source_sha256": "538fc0e9a0c9fe55f3746ac31aaffc7375125d49dc58161d22e9abad53b97a8c",
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ChenInitialPrimeSource",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        }
+      }
+    ]
+  },
+  "actual_current_parent_cache_and_owned_bindings": [
+    {
+      "module": "ImbalancedChen.ActualPrimeBoxMass",
+      "source_sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+      "object_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/ActualPrimeBoxMass.olean",
+      "object_sha256": "c6af973456ce283438a3c7643c6ecdb054a792b71d8f9e851d42442310d3d985",
+      "cache_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/cache/ImbalancedChen.ActualPrimeBoxMass.json",
+      "cache_sha256": "0b9c04aa23408fb268e8ae8b13225f6732ad0c70ea44f8421d0406c3f7525a6e",
+      "cache_status": "PASS",
+      "warnings_as_errors": false,
+      "command": [
+        "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/lean",
+        "-j2",
+        "-M6144",
+        "-o",
+        "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/ActualPrimeBoxMass.olean",
+        "ImbalancedChen/ActualPrimeBoxMass.lean"
+      ],
+      "scope": "Normal-trust development compilation only; no final acceptance claim",
+      "reused_receipt": null,
+      "observed_owned_evidence": null,
+      "owned_gate": "OPEN_NOT_ESTABLISHED_BY_DEVELOPMENT_CACHE",
+      "note": "Absent published manifest entry is not proof no other exact receipt exists."
+    },
+    {
+      "module": "ImbalancedChen.CurrentChenFixedEulerNormalization",
+      "source_sha256": "a13617949aaa7ee57345788f287ec486980dcb65bcb1d0e8ff00fb7e34e12b74",
+      "object_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/CurrentChenFixedEulerNormalization.olean",
+      "object_sha256": "d79748aaa9700b7967e3a3d1d7d08624ceb3c2798c855522d67332d24ef0d8e8",
+      "cache_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/cache/ImbalancedChen.CurrentChenFixedEulerNormalization.json",
+      "cache_sha256": "5ea27cbabde4e48133b83f8eddd4c6523a73b3e2bae2dcaac0ae2b7bd7c7b61c",
+      "cache_status": "PASS",
+      "warnings_as_errors": true,
+      "command": [
+        "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/lean",
+        "-j2",
+        "-M6144",
+        "-DwarningAsError=true",
+        "-o",
+        "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/CurrentChenFixedEulerNormalization.olean",
+        "ImbalancedChen/CurrentChenFixedEulerNormalization.lean"
+      ],
+      "scope": "Normal-trust development compilation only; no final acceptance claim",
+      "reused_receipt": null,
+      "observed_owned_evidence": {
+        "manifest_entry": {
+          "source_sha256": "a13617949aaa7ee57345788f287ec486980dcb65bcb1d0e8ff00fb7e34e12b74",
+          "declarations": 39,
+          "audit": "audits/20261015T091648772742Z/receipt.json",
+          "audited_object_parts": {
+            ".olean": "d79748aaa9700b7967e3a3d1d7d08624ceb3c2798c855522d67332d24ef0d8e8"
+          },
+          "audited_pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "audited_lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "compile": "compilation/20261015T090216804916Z-ImbalancedChen.CurrentChenFixedEulerNormalization/receipt.json",
+          "object_parts": {
+            ".olean": "d79748aaa9700b7967e3a3d1d7d08624ceb3c2798c855522d67332d24ef0d8e8"
+          }
+        },
+        "receipt_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261015T091648772742Z/receipt.json",
+        "receipt_sha256": "4dafa262bcbbfdb9ebb0bbab98d09e5519e9c7c3d6280a6c536848436ac80569",
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS"
+      },
+      "owned_gate": "EXISTING_OWNED_RECEIPT_HASH_MATCHED",
+      "note": "Absent published manifest entry is not proof no other exact receipt exists."
+    },
+    {
+      "module": "ImbalancedChen.SieveDimensionComparison",
+      "source_sha256": "cf2369c8ba786bc022140ba469efe3ab6c5dfeeb7976fcbf8ddf9eff1a97a4ec",
+      "object_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/SieveDimensionComparison.olean",
+      "object_sha256": "8136cc98b2cf18b4856ad5f85f03909085b80cebe38c3de5905ae98cd79e653d",
+      "cache_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/cache/ImbalancedChen.SieveDimensionComparison.json",
+      "cache_sha256": "1ba8e341fa8ec4eeba03602fe8b1178c8a2ded27a65c954d390ed041d7f03cb1",
+      "cache_status": "PASS",
+      "warnings_as_errors": false,
+      "command": null,
+      "scope": "Exact-source/direct-object development reuse only",
+      "reused_receipt": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-integration/.lake/takeover-p0/cache/ImbalancedChen.SieveDimensionComparison.json",
+      "observed_owned_evidence": null,
+      "owned_gate": "OPEN_NOT_ESTABLISHED_BY_DEVELOPMENT_CACHE",
+      "note": "Absent published manifest entry is not proof no other exact receipt exists."
+    }
+  ],
+  "published116_snapshot": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/verification/proof-continuation/2026-10-15/manifest.json",
+    "sha256": "7e6d63aebd368c4825e2df95e9e61062e0857cf53c0759b8819f4e1f97fe4c1a",
+    "module_count": 116,
+    "scope": "Evidence snapshot only; no inference of nonexistence from absent entries."
+  },
+  "actual_prior_Mass_success": {
+    "receipt_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/runs/20261015T070957859750Z-ImbalancedChen.ActualPrimeBoxMass/receipt.json",
+    "receipt_sha256": "0b9c04aa23408fb268e8ae8b13225f6732ad0c70ea44f8421d0406c3f7525a6e",
+    "status": "PASS",
+    "exit_code": 0,
+    "warnings_as_errors": false,
+    "object_parts": {
+      ".olean": "c6af973456ce283438a3c7643c6ecdb054a792b71d8f9e851d42442310d3d985"
+    },
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_empty": true,
+    "scope": "Real successful non-strict development compilation only, not strict owned acceptance."
+  },
+  "owner_report": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261016-prime-box-EulerLower-thin-normalizer-root-author-scope.json",
+    "sha256": "002543ae53fd737e08b74013dc1e2f1fc3487fb4990ed2b2e95cc7c3b19db370",
+    "scope": "Provenance; full source/API reading, extraction/byte reconstruction and current hash comparisons above are independent."
+  },
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "remaining_gates": [
+    "OPEN: exact Mass94c and SieveDimensioncf236 strict current-parent compilation/complete owned types and axioms, or independently identified equivalent exact receipts. Existing development PASS caches do not suffice.",
+    "Specific root c5a5 authorization only after its actual direct-parent owned/cache gates.",
+    "Actual strict c5a5 compilation followed by complete original-object owned replay/types/axioms; none performed by reviewer.",
+    "Separate finite Rosser boundary geometric insertion remains unpaid."
+  ]
+}

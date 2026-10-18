@@ -1,6 +1,6 @@
 import ImbalancedChen.ActualExtendedThirdCompactCellCutoff
 import ImbalancedChen.ActualExtendedThirdFirstCubeMargin
-import ImbalancedChen.ActualUpperPolicyDensity
+import ImbalancedChen.ActualUpperPolicyFiniteBridge
 import ImbalancedChen.HistoricalUnorderedThirdGeometry
 
 /-!
@@ -82,7 +82,7 @@ theorem actualExtendedThirdCompactUpperPolicy_through_two (e h : ℝ) (m N : ℕ
 
 theorem actualExtendedThirdCompactUpperPolicy_even (e h : ℝ) (m N : ℕ)
     (history : List ℕ) : actualExtendedThirdCompactUpperPolicy e h m N true history = true := by
-  apply thirdCappedUpperPolicy_even_retained
+  apply UpperPolicyFiniteBridge.thirdCappedUpperPolicy_even_retained
   intro pre
   simp [actualExtendedThirdCompactInitialPolicy, oddFirstExitPolicy]
 
@@ -243,7 +243,7 @@ theorem actualExtendedThirdCompactRho_eq_firstExitAttachment
         (fun d => (firstExitRetainedCoefficient (actualExtendedThirdCompactUpperPolicy e h m N)
           (roughPrimeUniverse N cap w z) d : ℝ))
         (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L) := by
-  exact actualSmallRoughRho_eq_firstExitAttachment
+  exact UpperPolicyFiniteBridge.actualSmallRoughRho_eq_firstExitAttachment
     (actualExtendedThirdCompactUpperPolicy e h m N)
     (actualExtendedThirdCompactUpperPolicy_even e h m N) N cap w z L
 
@@ -254,7 +254,7 @@ theorem actualExtendedThirdCompactRoughDensity_eq_policy
         (fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z) =
       firstExitRetainedPolynomial (actualExtendedThirdCompactUpperPolicy e h m N)
         (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap w z) := by
-  exact (firstExitRetainedPolynomial_eq_fixedRoughDensity_of_even_retained
+  exact (UpperPolicyFiniteBridge.firstExitRetainedPolynomial_eq_fixedRoughDensity_of_even_retained
     (actualExtendedThirdCompactUpperPolicy e h m N)
     (actualExtendedThirdCompactUpperPolicy_even e h m N) N cap w z).symm
 

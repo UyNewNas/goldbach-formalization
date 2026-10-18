@@ -1,0 +1,828 @@
+{
+  "status": "SOURCE_ONLY_NARROW_LOW_CONDUCTOR_SUCCESSOR_DESIGN_NO_MATH_SOURCE_WRITTEN",
+  "created_utc": "2026-10-15T23:49:00.258590+00:00",
+  "reviewer": "/root/dispersion_resume/reuse_endpoint_audit",
+  "scope_boundary": "Read-only source/API review. No Lean/lake/compiler/checker/object/axiom/linter/runtime work, no source/pins/bootstrap changes. Proposed theorem types and proof strategy are uncompiled designs, not declarations claimed to exist.",
+  "one_minimal_successor_leaf": {
+    "suggested_module": "ImbalancedChen.Part3SharedFirstFactorLowConductorSW",
+    "sole_direct_import": "ImbalancedChen.Part3SharedFirstFactorCharacterDictionary",
+    "parent_source_sha256": "37f563d0e3e64e9d7a2d7bc505ce6e2a05294034f453db2f9317434759a596bc",
+    "parent_state": "Root has independently reviewed Char37 and sent its specific runtime gate. This review does not claim CharacterDictionary is accepted/owned; no new successor should be runtime-tested before its parent ownership gate.",
+    "project_increment": 1,
+    "foreign_increment": 0,
+    "why_no_new_foreign": "All needed Basic/conductor/changeLevel, Bounds and MulChar sum-zero APIs already occur in the existing Shared+Zero parent union. Fresh proper v2 source/hash/edge checks below verify concrete paths without importing or building legacy chains.",
+    "one_public_goal_type_proposed_not_elaborated": "theorem uniformAuxiliarySW_lowConductor_auxiliaryCharacterSum\n    {ι : Type*} (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 : ℝ)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∀ A L : ℝ, 0 < A → 0 ≤ L →\n      ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n        ∀ i : ι, x0 ≤ (F i).scale → ∀ k delta : ℕ,\n          1 ≤ k → 1 ≤ delta → ∀ chi : DirichletCharacter ℂ delta,\n          chi ≠ 1 → (chi.conductor : ℝ) ≤ (Real.log (F i).scale) ^ L →\n          ‖SharedFirstFactorCharacterDictionary.auxiliaryCharacterSum\n            (F i).alphaCarrier (F i).alpha k delta chi‖ ≤\n              C * (F i).U * (((k * delta).divisors.card : ℝ) ^ C0) /\n                (Real.log (F i).scale) ^ A",
+    "private_finite_helper_type_proposed_not_elaborated": "theorem auxiliaryCharacterSum_changeLevel_eq_auxSW\n    (d : MediumAtom) (k : ℕ) {f delta : ℕ} [NeZero f] [NeZero delta]\n    (hfd : f ∣ delta) (psi : DirichletCharacter ℂ f) (hpsi : psi ≠ 1) :\n    SharedFirstFactorCharacterDictionary.auxiliaryCharacterSum\n        d.alphaCarrier d.alpha k delta (DirichletCharacter.changeLevel hfd psi) =\n      ∑ b : ZMod f, star (psi b) * d.auxSWError (k * delta) f b.val"
+  },
+  "key_exact_dictionary": {
+    "generic": "For chi of positive level delta with conductor f and primitive psi: S(N,alpha,k,delta,chi) = sum over n coprime to k*delta of alpha(n)*star(psi(n)). Both original coprime gates are kept exactly; k and delta need not be coprime.",
+    "low_level_AP": "Expand the last finite sum over b:ZMod f. For nonprincipal psi, sum_b star(psi b)=0 cancels the identical principal center of auxSWError(k*delta,f,b.val). This yields the proposed finite helper equality.",
+    "actual_shared_substitution": "delta=p*D, k=v/D, D=gcd(v,w)>0 and D|v: k*delta=(v/D)*(p*D)=p*v. Thus the SW auxiliary parameter is the original complete physical modulus p*v, rather than just the quotient v/D. Second side analogously keeps p*w.",
+    "nonunit_correction": "No discarded nonunit error term is required for this exact small-conductor reduction: the ambient-level nonunit restriction is retained inside auxiliary K=k*delta. Replacing K by k would in general be false and would require a genuine correction.",
+    "moving_signed_residue": "No bound or fixedness of a is used. Its original primitive p-coprime-to-|a| carrier is unchanged. The character reduction itself is independent of a, and does not remove any of its existing caller gates."
+  },
+  "smallest_missing_finite_proofs": [
+    "A finite AP-by-character identity for changeLevel psi with full auxiliary k*delta. The current dictionary gives conductor-free covariance only; this exact low-conductor SW identity is not an existing public theorem in the inspected local closure.",
+    "Pointwise nonunit absorption: if n is a unit modulo delta, changeLevel_eq_cast_of_dvd' identifies induced and primitive values (using integer cast bridge); otherwise chi.map_nonunit forces zero. Nat.Coprime.mul_right_iff combines gates, with no coprimality assumption between k and delta.",
+    "Finite AP partition over b:ZMod f uses natCast_eq_natCast_iff and natCast_zmod_val; select the unique b=(n:ZMod f) by Finset.sum_eq_single. This avoids needing to call the existing private sum_reduced_indicator.",
+    "Primitive character is nonprincipal: if chi.primitiveCharacter=1 then changeLevel_primitiveCharacter plus map_one would give chi=1. conductor_ne_zero supplies local NeZero f.",
+    "Character-weighted principal center vanishes by star_sum and MulChar.sum_eq_zero_of_ne_one; no analytic theorem or SW supplier is inserted."
+  ],
+  "norm_and_quantifiers": {
+    "finite_bound": "If each reduced residue error at (K,f,b) has norm<=E>=0, then norm S<=f*E. For unit b, psi.norm_le_one and original SW apply using b.val.Coprime f; for nonunit b, psi.map_nonunit makes the term zero. Fintype.card(ZMod f)=f bounds the total finite sum. A refined phi(f) bound is possible but unnecessary for a polylog cutoff.",
+    "uniform": "For fixed real A>0 and L>=0, request the original UniformAuxiliarySW at exponent A+L. Its single C and threshold x0 are chosen before all family indices, k,delta,chi. Above x0, logX>0, conductor<=logX^L absorbs the linear f factor exactly through real-rpow addition. No changed C0, residue support, q-range or extra analytic estimate is assumed.",
+    "true_auxiliary_cost": "The remaining divisor penalty is tau_2(k*delta)^C0, actually tau_2(p*v)^C0 on the full physical modulus. This must be kept and paid in subsequent finite label ledgers. No claim is made that it equals tau_2(k)^C0.",
+    "scope_limit": "This gives pointwise low-conductor character control only. Summing actual p,u,v, all low-conductor characters, the physical weights and outside beta/gamma1 costs remains a later proved ledger; high conductors/nonzero frequencies/final RestrictedMedium payment remain outside this leaf."
+  },
+  "complete_original_primitives": {
+    "ImbalancedChen/Part3DistributionTargets.lean": {
+      "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "complete_definitions": [
+        "def MediumAtom.auxSWError (d : MediumAtom) (k q b : ℕ) : ℂ :=\n  (∑ n ∈ d.alphaCarrier,\n    if Nat.ModEq q n b ∧ Nat.Coprime n k then d.alpha n else 0) -\n  (∑ n ∈ d.alphaCarrier,\n    if Nat.Coprime n (k * q) then d.alpha n else 0) / (Nat.totient q : ℂ)",
+        "def UniformAuxiliarySW {ι : Type*} (F : ι → MediumAtom) (C0 : ℕ) : Prop :=\n  ∀ A : ℝ, 0 < A → ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n    ∀ i : ι, x0 ≤ (F i).scale → ∀ k q b : ℕ,\n      1 ≤ k → 1 ≤ q → Nat.Coprime b q →\n      ‖(F i).auxSWError k q b‖ ≤\n        C * (F i).U * ((k.divisors.card : ℝ) ^ C0) /\n          (Real.log (F i).scale) ^ A"
+      ]
+    },
+    "ImbalancedChen/Part3SharedFirstFactorCharacterDictionary.lean": {
+      "sha256": "37f563d0e3e64e9d7a2d7bc505ce6e2a05294034f453db2f9317434759a596bc",
+      "complete_definitions": [
+        "def auxiliaryCharacterSum (N : Finset ℕ) (alpha : ℕ → ℂ) (k delta : ℕ)\n    (chi : DirichletCharacter ℂ delta) : ℂ :=\n  ∑ n ∈ N, if n.Coprime k then alpha n * star (chi (n : ZMod delta)) else 0"
+      ]
+    },
+    "ImbalancedChen/Part3SharedFirstFactorDispersion.lean": {
+      "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "complete_definitions": [
+        "def MediumAtom.primitiveFirstFactorCarrier (d : MediumAtom) : Finset ℕ :=\n  (factorCarrier d.Q1).filter (fun p ↦ p.Coprime d.residue.natAbs)"
+      ]
+    }
+  },
+  "pinned_native_API": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/DirichletCharacter/Basic.lean",
+      "sha256": "f004670a9bedc23c4dfaeb61b90d5e613a6b604f9486640eb1ce4ae3699ef64e",
+      "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "current_equals_pinned_blob": true,
+      "literal_excerpts": [
+        {
+          "start_line": 40,
+          "end_line": 44,
+          "text": "abbrev DirichletCharacter (R : Type*) [CommMonoidWithZero R] (n : ℕ) := MulChar (ZMod n) R\n\nopen MulChar\n\nvariable {R : Type*} [CommMonoidWithZero R] {n : ℕ} (χ : DirichletCharacter R n)"
+        },
+        {
+          "start_line": 79,
+          "end_line": 110,
+          "text": "/-- The `changeLevel` map is injective (except in the degenerate case `m = 0`). -/\nlemma changeLevel_injective {m : ℕ} [NeZero m] (hm : n ∣ m) :\n    Function.Injective (changeLevel (R := R) hm) := by\n  intro _ _ h\n  ext1 y\n  obtain ⟨z, rfl⟩ := ZMod.unitsMap_surjective hm y\n  rw [MulChar.ext_iff] at h\n  simpa [changeLevel_def] using h z\n\n@[simp]\nlemma changeLevel_eq_one_iff {m : ℕ} [NeZero m] {χ : DirichletCharacter R n} (hm : n ∣ m) :\n    changeLevel hm χ = 1 ↔ χ = 1 :=\n  map_eq_one_iff _ (changeLevel_injective hm)\n\n@[simp]\nlemma changeLevel_self : changeLevel (dvd_refl n) χ = χ := by\n  simp [changeLevel, ZMod.unitsMap]\n\nlemma changeLevel_self_toUnitHom : (changeLevel (dvd_refl n) χ).toUnitHom = χ.toUnitHom := by\n  rw [changeLevel_self]\n\nlemma changeLevel_trans {m d : ℕ} (hm : n ∣ m) (hd : m ∣ d) :\n    changeLevel (dvd_trans hm hd) χ = changeLevel hd (changeLevel hm χ) := by\n  simp [changeLevel_def, MonoidHom.comp_assoc, ZMod.unitsMap_comp]\n\nlemma changeLevel_eq_cast_of_dvd {m : ℕ} (hm : n ∣ m) (a : Units (ZMod m)) :\n    (changeLevel hm χ) a = χ (ZMod.cast (a : ZMod m)) := by\n  simp [changeLevel_def, ZMod.unitsMap_val]\n\nlemma changeLevel_eq_cast_of_dvd' {m : ℕ} (hm : n ∣ m) {a : ℤ} (ha : IsCoprime a m) :\n    changeLevel hm χ a = χ a := by\n  rw [← ZMod.coe_unitOfIsCoprime _ ha, changeLevel_eq_cast_of_dvd _ hm, ZMod.coe_unitOfIsCoprime,"
+        },
+        {
+          "start_line": 245,
+          "end_line": 271,
+          "text": "/-- The minimum natural number level `n` through which `χ` factors. -/\nnoncomputable def conductor : ℕ := sInf (conductorSet χ)\n\nlemma conductor_mem_conductorSet : conductor χ ∈ conductorSet χ :=\n  Nat.sInf_mem (Set.nonempty_of_mem (level_mem_conductorSet χ))\n\nlemma conductor_dvd_level : conductor χ ∣ n := (conductor_mem_conductorSet χ).dvd\n\nlemma factorsThrough_conductor : FactorsThrough χ (conductor χ) := conductor_mem_conductorSet χ\n\nlemma conductor_ne_zero [NeZero n] : conductor χ ≠ 0 :=\n  fun h ↦ NeZero.ne n <| Nat.eq_zero_of_zero_dvd <| h ▸ conductor_dvd_level _\n\n/-- The conductor of the trivial character is 1. -/\nlemma conductor_one [NeZero n] : conductor (1 : DirichletCharacter R n) = 1 := by\n  suffices FactorsThrough (1 : DirichletCharacter R n) 1 by\n    have h : conductor (1 : DirichletCharacter R n) ≤ 1 :=\n      Nat.sInf_le <| (mem_conductorSet_iff _).mpr this\n    exact Nat.le_antisymm h (Nat.pos_of_ne_zero <| conductor_ne_zero _)\n  exact (factorsThrough_one_iff _).mpr rfl\n\nvariable {χ}\n\nlemma eq_one_iff_conductor_eq_one [NeZero n] : χ = 1 ↔ conductor χ = 1 := by\n  refine ⟨fun h ↦ h ▸ conductor_one, fun hχ ↦ ?_⟩\n  obtain ⟨h', χ₀, h⟩ := factorsThrough_conductor χ\n  exact (level_one' χ₀ hχ ▸ h).trans <| changeLevel_one h'"
+        },
+        {
+          "start_line": 306,
+          "end_line": 331,
+          "text": "/-- The primitive character associated to a Dirichlet character. -/\nnoncomputable def primitiveCharacter : DirichletCharacter R χ.conductor :=\n  Classical.choose (factorsThrough_conductor χ).choose_spec\n\ntheorem changeLevel_primitiveCharacter :\n    (changeLevel χ.conductor_dvd_level) χ.primitiveCharacter = χ :=\n  (factorsThrough_conductor χ).choose_spec.choose_spec.symm\n\nlemma primitiveCharacter_isPrimitive : IsPrimitive (χ.primitiveCharacter) := by\n  by_cases h : χ.conductor = 0\n  · rw [isPrimitive_def]\n    convert! conductor_eq_zero_iff_level_eq_zero.mpr h\n  · exact le_antisymm (Nat.le_of_dvd (Nat.pos_of_ne_zero h) (conductor_dvd_level _)) <|\n      conductor_le_conductor_mem_conductorSet <| conductor_mem_conductorSet χ\n\nlemma primitiveCharacter_one [NeZero n] : (1 : DirichletCharacter R n).primitiveCharacter = 1 := by\n  have : NeZero (conductor (1 : DirichletCharacter R n)) :=\n    ⟨@conductor_one R _ n _ ▸ Nat.one_ne_zero⟩\n  rw [eq_one_iff_conductor_eq_one,\n    (isPrimitive_def _).1 (1 : DirichletCharacter R n).primitiveCharacter_isPrimitive,\n    conductor_one]\n\ntheorem primitiveCharacter_apply_of_isCoprime {a : ℤ} (ha : IsCoprime a n) :\n    χ.primitiveCharacter a = χ a := by\n  rw [← changeLevel_eq_cast_of_dvd' χ.primitiveCharacter χ.conductor_dvd_level ha,\n    changeLevel_primitiveCharacter]"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/DirichletCharacter/Bounds.lean",
+      "sha256": "e2e08cd28b91349e83c69861ac0411e2c952ad51c652b930ec34bc2623a32c73",
+      "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "current_equals_pinned_blob": true,
+      "literal_excerpts": [
+        {
+          "start_line": 22,
+          "end_line": 38,
+          "text": "variable {F : Type*} [NormedField F] {n : ℕ} (χ : DirichletCharacter F n)\n\nnamespace DirichletCharacter\n\n/-- The value at a unit of a Dirichlet character with target a normed field has norm `1`. -/\n@[simp] lemma unit_norm_eq_one (a : (ZMod n)ˣ) : ‖χ a‖ = 1 := by\n  refine (pow_eq_one_iff_of_nonneg (norm_nonneg _) (Nat.card_pos (α := (ZMod n)ˣ)).ne').mp ?_\n  rw [← norm_pow, ← map_pow, ← Units.val_pow_eq_pow_val, pow_card_eq_one', Units.val_one, map_one,\n    norm_one]\n\n/-- The values of a Dirichlet character with target a normed field have norm bounded by `1`. -/\nlemma norm_le_one (a : ZMod n) : ‖χ a‖ ≤ 1 := by\n  by_cases h : IsUnit a\n  · exact (χ.unit_norm_eq_one h.unit).le\n  · rw [χ.map_nonunit h, norm_zero]\n    exact zero_le_one\n"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/MulChar/Basic.lean",
+      "sha256": "67fcb540ce7bc5fd9bfafe1b6fc92ee5e4c6c96404e7baf9edbe1a24b030b9be",
+      "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "current_equals_pinned_blob": true,
+      "literal_excerpts": [
+        {
+          "start_line": 603,
+          "end_line": 610,
+          "text": "variable {R : Type*} [CommMonoid R] [Fintype R] {R' : Type*} [CommRing R']\n\n/-- The sum over all values of a nontrivial multiplicative character on a finite ring is zero\n(when the target is a domain). -/\ntheorem sum_eq_zero_of_ne_one [IsDomain R'] {χ : MulChar R R'} (hχ : χ ≠ 1) : ∑ a, χ a = 0 := by\n  rcases ne_one_iff.mp hχ with ⟨b, hb⟩\n  refine eq_zero_of_mul_eq_self_left hb ?_\n  simpa only [Finset.mul_sum, ← map_mul] using b.mulLeft_bijective.sum_comp _"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/ZMod/Defs.lean",
+      "sha256": "7c3719a4e2c38f9549f5f61a0882fa10e220505dc4b61968186d0a4d30f335f1",
+      "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "current_equals_pinned_blob": true,
+      "literal_excerpts": [
+        {
+          "start_line": 158,
+          "end_line": 169,
+          "text": "instance fintype : ∀ (n : ℕ) [NeZero n], Fintype (ZMod n)\n  | 0, h => (h.ne _ rfl).elim\n  | n + 1, _ => Fin.fintype (n + 1)\n\ninstance infinite : Infinite (ZMod 0) :=\n  Int.infinite\n\n@[simp]\ntheorem card (n : ℕ) [Fintype (ZMod n)] : Fintype.card (ZMod n) = n := by\n  cases n with\n  | zero => exact (not_finite (ZMod 0)).elim\n  | succ n => convert! Fintype.card_fin (n + 1) using 2"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/ZMod/Basic.lean",
+      "sha256": "c910cf5089e3f961c495763c0a6c9609bcb8033f500faa1e7e4f0666f7eb5f99",
+      "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "current_equals_pinned_blob": true,
+      "literal_excerpts": [
+        {
+          "start_line": 200,
+          "end_line": 211,
+          "text": "\nend\n\n/-- So-named because the coercion is `Nat.cast` into `ZMod`. For `Nat.cast` into an arbitrary ring,\nsee `ZMod.natCast_val`. -/\ntheorem natCast_zmod_val {n : ℕ} [NeZero n] (a : ZMod n) : (a.val : ZMod n) = a := by\n  cases n\n  · cases NeZero.ne 0 rfl\n  · apply Fin.cast_val_eq_self\n\ntheorem natCast_rightInverse [NeZero n] : Function.RightInverse val ((↑) : ℕ → ZMod n) :=\n  natCast_zmod_val"
+        },
+        {
+          "start_line": 505,
+          "end_line": 513,
+          "text": "  rw [← ZMod.intCast_eq_intCast_iff', Int.cast_natCast, ZMod.natCast_val, ZMod.cast_id]\n\ntheorem natCast_eq_natCast_iff (a b c : ℕ) : (a : ZMod c) = (b : ZMod c) ↔ a ≡ b [MOD c] := by\n  simpa [Int.natCast_modEq_iff] using ZMod.intCast_eq_intCast_iff a b c\n\ntheorem natCast_eq_natCast_iff' (a b c : ℕ) : (a : ZMod c) = (b : ZMod c) ↔ a % c = b % c :=\n  ZMod.natCast_eq_natCast_iff a b c\n\ntheorem intCast_zmod_eq_zero_iff_dvd (a : ℤ) (b : ℕ) : (a : ZMod b) = 0 ↔ (b : ℤ) ∣ a := by"
+        },
+        {
+          "start_line": 780,
+          "end_line": 792,
+          "text": "  obtain rfl | hn := eq_or_ne n 0\n  · simp [m.coprime_zero_right.1 hmn]\n  have : NeZero n := ⟨hn⟩\n  rw [ZMod.natCast_zmod_val, ZMod.coe_mul_inv_eq_one _ hmn]\n\nlemma val_inv_mul (hmn : m.Coprime n) : ((m⁻¹ : ZMod n).val * m : ZMod n) = 1 := by\n  rw [mul_comm, mul_val_inv hmn]\n\n/-- `unitOfCoprime` makes an element of `(ZMod n)ˣ` given\na natural number `x` and a proof that `x` is coprime to `n` -/\ndef unitOfCoprime {n : ℕ} (x : ℕ) (h : Nat.Coprime x n) : (ZMod n)ˣ :=\n  ⟨x, x⁻¹, coe_mul_inv_eq_one x h, by rw [mul_comm, coe_mul_inv_eq_one x h]⟩\n"
+        }
+      ]
+    }
+  ],
+  "relative_existing_API_paths": {
+    "historical_manifest_report": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261016-shared-first-factor-character-dictionary-relative-DAG.json",
+    "historical_manifest_sha256": "5f3e7fc56d935bbd39d41f8b579a2b51819829ef628546d27d6363d77873c19c",
+    "historical_counts_only": {
+      "parent_resolved": 4092,
+      "candidate_resolved": 4093
+    },
+    "fresh_parser_sha256": "e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914",
+    "fresh_method": "Pure proper header_imports with sys.dont_write_bytecode=True. Re-read each selected path node, checked fresh SHA equals stored manifest, checked complete explicit import headers and each path edge. No full foreign census, no implication that old parser unresolved roots were accepted.",
+    "paths": [
+      [
+        "ImbalancedChen.Part3SharedFirstFactorDispersion",
+        "ImbalancedChen.Part3TransposedDispersion",
+        "ImbalancedChen.Part3FactorFiberDivisor",
+        "ImbalancedChen.Part3ComplexDispersion",
+        "ImbalancedChen.Part3DistributionTargets",
+        "ImbalancedChen.RestrictedResidueScale",
+        "ImbalancedChen.PanProductGridRanges",
+        "ImbalancedChen.PanProductGrid",
+        "ImbalancedChen.PanProductAggregateBudget",
+        "ImbalancedChen.PanProductLiuBridge",
+        "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate",
+        "MathlibNt.SieveTheory.LiLiuPanBoundedPrincipal",
+        "MathlibNt.SieveTheory.LiuPanActualCountCharacters",
+        "MathlibNt.SieveTheory.Distribution.LiuPan.LiuPanActualCountCharacters",
+        "AnalyticNumberTheory.LargeSieve.CharacterIndicators",
+        "AnalyticNumberTheory.LargeSieve.Multiplicative",
+        "Mathlib.NumberTheory.DirichletCharacter.Orthogonality",
+        "Mathlib.NumberTheory.DirichletCharacter.Basic"
+      ],
+      [
+        "ImbalancedChen.Part3SharedFirstFactorDispersion",
+        "ImbalancedChen.Part3TransposedDispersion",
+        "ImbalancedChen.Part3FactorFiberDivisor",
+        "ImbalancedChen.Part3ComplexDispersion",
+        "ImbalancedChen.Part3DistributionTargets",
+        "ImbalancedChen.RestrictedResidueScale",
+        "ImbalancedChen.PanProductGridRanges",
+        "ImbalancedChen.PanProductGrid",
+        "ImbalancedChen.PanProductAggregateBudget",
+        "ImbalancedChen.PanProductLiuBridge",
+        "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate",
+        "MathlibNt.SieveTheory.LiLiuPanBoundedPrincipal",
+        "MathlibNt.SieveTheory.LiuPanActualCountCharacters",
+        "MathlibNt.SieveTheory.Distribution.LiuPan.LiuPanActualCountCharacters",
+        "AnalyticNumberTheory.LargeSieve.CharacterIndicators",
+        "AnalyticNumberTheory.LargeSieve.Multiplicative",
+        "Mathlib.NumberTheory.DirichletCharacter.Bounds"
+      ],
+      [
+        "ImbalancedChen.Part3SharedFirstFactorDispersion",
+        "ImbalancedChen.Part3TransposedDispersion",
+        "ImbalancedChen.Part3FactorFiberDivisor",
+        "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean",
+        "Mathlib.Tactic",
+        "Mathlib.Tactic.NormNum.LegendreSymbol",
+        "Mathlib.NumberTheory.LegendreSymbol.JacobiSymbol",
+        "Mathlib.NumberTheory.LegendreSymbol.QuadraticReciprocity",
+        "Mathlib.NumberTheory.LegendreSymbol.Basic",
+        "Mathlib.NumberTheory.LegendreSymbol.QuadraticChar.Basic",
+        "Mathlib.NumberTheory.LegendreSymbol.ZModChar",
+        "Mathlib.NumberTheory.MulChar.Basic"
+      ]
+    ],
+    "fresh_selected_nodes": {
+      "ImbalancedChen.Part3SharedFirstFactorDispersion": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3SharedFirstFactorDispersion.lean",
+        "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+        "explicit_imports": [
+          "ImbalancedChen.Part3TransposedDispersion"
+        ]
+      },
+      "ImbalancedChen.Part3TransposedDispersion": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3TransposedDispersion.lean",
+        "sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+        "explicit_imports": [
+          "ImbalancedChen.Part3CommonPoisson",
+          "ImbalancedChen.Part3FactorFiberDivisor"
+        ]
+      },
+      "ImbalancedChen.Part3FactorFiberDivisor": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3FactorFiberDivisor.lean",
+        "sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+        "explicit_imports": [
+          "ImbalancedChen.Part3ComplexDispersion",
+          "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean"
+        ]
+      },
+      "ImbalancedChen.Part3ComplexDispersion": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ComplexDispersion.lean",
+        "sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+        "explicit_imports": [
+          "ImbalancedChen.Part3DistributionTargets",
+          "Mathlib.Analysis.Complex.Basic",
+          "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+          "Mathlib.Algebra.Star.BigOperators"
+        ]
+      },
+      "ImbalancedChen.Part3DistributionTargets": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3DistributionTargets.lean",
+        "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+        "explicit_imports": [
+          "ImbalancedChen.RestrictedResidueScale",
+          "Mathlib.Analysis.Complex.Exponential"
+        ]
+      },
+      "ImbalancedChen.RestrictedResidueScale": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/RestrictedResidueScale.lean",
+        "sha256": "3c58f54f875a46886c28bc224fdf4952d6b53a72ae6f6f2b8debaf7e71c01d0f",
+        "explicit_imports": [
+          "ImbalancedChen.PanProductGridRanges"
+        ]
+      },
+      "ImbalancedChen.PanProductGridRanges": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/PanProductGridRanges.lean",
+        "sha256": "88b2c972243ba1e33e89a08b6759c16512620751b7c25206dfa4d767bf79466a",
+        "explicit_imports": [
+          "ImbalancedChen.PanProductGrid",
+          "ImbalancedChen.RealHalfProductMassSplit"
+        ]
+      },
+      "ImbalancedChen.PanProductGrid": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/PanProductGrid.lean",
+        "sha256": "e37bb4d2aa855c86e1601566e9ea6649092ac625c434d8a30476208057fab743",
+        "explicit_imports": [
+          "ImbalancedChen.PanProductAggregateBudget",
+          "ImbalancedChen.SelectedGridRanges"
+        ]
+      },
+      "ImbalancedChen.PanProductAggregateBudget": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/PanProductAggregateBudget.lean",
+        "sha256": "13b512d4c51a00b217ea72b3033ec50bd48d76c10812184a20d1bc838ef04140",
+        "explicit_imports": [
+          "ImbalancedChen.PanProductLiuBridge"
+        ]
+      },
+      "ImbalancedChen.PanProductLiuBridge": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/PanProductLiuBridge.lean",
+        "sha256": "dd239cb5a36898abe49cdb23d60cc1e3e86dede36bd849c41013f18a99ee2d61",
+        "explicit_imports": [
+          "ImbalancedChen.PanProductResidueBudget",
+          "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate"
+        ]
+      },
+      "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate": {
+        "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/LiLiuPanBoundedAggregate.lean",
+        "sha256": "87f7f80dbc1808505d85160e0bdb89a08a3304f1558b8ad625d5e63a66c6c753",
+        "explicit_imports": [
+          "MathlibNt.SieveTheory.LiLiuPanBoundedPrincipal",
+          "MathlibNt.SieveTheory.LiuPanPrimitiveLedgerAssembly",
+          "MathlibNt.AnalyticNumberTheory.LargeSieve.ChenLiuCoprimeProducerPayment",
+          "MathlibNt.SieveTheory.LiuPanUnweightedUnconditional"
+        ],
+        "fixed_goldbach_blob_equal": true
+      },
+      "MathlibNt.SieveTheory.LiLiuPanBoundedPrincipal": {
+        "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/LiLiuPanBoundedPrincipal.lean",
+        "sha256": "81eb0a4433fa74f42c6a5a7130587612f8e4b2d8e1b18bc51b1c89fd85070c2c",
+        "explicit_imports": [
+          "MathlibNt.SieveTheory.LiuPanActualCountCharacters",
+          "MathlibNt.SieveTheory.LiuPanPrincipalRemainder"
+        ],
+        "fixed_goldbach_blob_equal": true
+      },
+      "MathlibNt.SieveTheory.LiuPanActualCountCharacters": {
+        "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/LiuPanActualCountCharacters.lean",
+        "sha256": "c6bc33a01ace5ef682f38bf0aa8106b3c003db5547f3254ce3660e3a1776b242",
+        "explicit_imports": [
+          "MathlibNt.SieveTheory.Distribution.LiuPan.LiuPanActualCountCharacters"
+        ],
+        "fixed_goldbach_blob_equal": true
+      },
+      "MathlibNt.SieveTheory.Distribution.LiuPan.LiuPanActualCountCharacters": {
+        "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/Distribution/LiuPan/LiuPanActualCountCharacters.lean",
+        "sha256": "28a07a474e2e08ca7d6e330e81e9f04bc09ec74ada57336f0879e3ac6e71868d",
+        "explicit_imports": [
+          "MathlibNt.SieveTheory.Distribution.LiuPan.LiuPanWangDingSource",
+          "AnalyticNumberTheory.LargeSieve.CharacterIndicators",
+          "MathlibNt.AnalyticNumberTheory.LargeSieve.PanWangDingEarlySourceReduction"
+        ],
+        "fixed_goldbach_blob_equal": true
+      },
+      "AnalyticNumberTheory.LargeSieve.CharacterIndicators": {
+        "path": "/home/slava/codex-lean-ve/native-packages/goldbach/AnalyticNumberTheory/LargeSieve/CharacterIndicators.lean",
+        "sha256": "b264731ed211f52b3ef21bd9678d5184906eaeb9af9765d9b535a73b2c2d7782",
+        "explicit_imports": [
+          "AnalyticNumberTheory.LargeSieve.Multiplicative",
+          "Mathlib.Tactic"
+        ],
+        "fixed_goldbach_blob_equal": true
+      },
+      "AnalyticNumberTheory.LargeSieve.Multiplicative": {
+        "path": "/home/slava/codex-lean-ve/native-packages/goldbach/AnalyticNumberTheory/LargeSieve/Multiplicative.lean",
+        "sha256": "0fda13811a9ca36a342c8f7b15caeef0e6e35dd1ce6daa3baf42953b226da2e6",
+        "explicit_imports": [
+          "AnalyticNumberTheory.LargeSieve.WellSpaced",
+          "Mathlib.NumberTheory.DirichletCharacter.Orthogonality",
+          "Mathlib.NumberTheory.DirichletCharacter.Bounds",
+          "Mathlib.Analysis.SpecialFunctions.Complex.CircleAddChar",
+          "Mathlib.Tactic"
+        ],
+        "fixed_goldbach_blob_equal": true
+      },
+      "Mathlib.NumberTheory.DirichletCharacter.Orthogonality": {
+        "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/DirichletCharacter/Orthogonality.lean",
+        "sha256": "8c28bee61c275be882f91a7d90b8745fd8945186718df7d844b9acdb9fd9341b",
+        "explicit_imports": [
+          "Mathlib.FieldTheory.Finite.Basic",
+          "Mathlib.NumberTheory.DirichletCharacter.Basic",
+          "Mathlib.NumberTheory.MulChar.Duality"
+        ]
+      },
+      "Mathlib.NumberTheory.DirichletCharacter.Basic": {
+        "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/DirichletCharacter/Basic.lean",
+        "sha256": "f004670a9bedc23c4dfaeb61b90d5e613a6b604f9486640eb1ce4ae3699ef64e",
+        "explicit_imports": [
+          "Mathlib.Algebra.Group.EvenFunction",
+          "Mathlib.Data.ZMod.Units",
+          "Mathlib.NumberTheory.MulChar.Basic",
+          "Mathlib.Tactic.CrossRefAttribute"
+        ]
+      },
+      "Mathlib.NumberTheory.DirichletCharacter.Bounds": {
+        "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/DirichletCharacter/Bounds.lean",
+        "sha256": "e2e08cd28b91349e83c69861ac0411e2c952ad51c652b930ec34bc2623a32c73",
+        "explicit_imports": [
+          "Mathlib.Analysis.Normed.Field.Basic",
+          "Mathlib.FieldTheory.Finite.Basic",
+          "Mathlib.NumberTheory.DirichletCharacter.Basic"
+        ]
+      },
+      "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean": {
+        "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryDivisorMean.lean",
+        "sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+        "explicit_imports": [
+          "Mathlib.NumberTheory.ArithmeticFunction.Misc",
+          "Mathlib.NumberTheory.Harmonic.Bounds",
+          "Mathlib.Data.Nat.Choose.Sum",
+          "Mathlib.Tactic"
+        ],
+        "fixed_goldbach_blob_equal": true
+      },
+      "Mathlib.Tactic": {
+        "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Tactic.lean",
+        "sha256": "be54715469fab9b2696aa222dbc37c0a7fb34b773701919972d349e1799d3041",
+        "explicit_imports": [
+          "Mathlib.Tactic.Abel",
+          "Mathlib.Tactic.AdaptationNote",
+          "Mathlib.Tactic.Algebra.AlgebraNF",
+          "Mathlib.Tactic.Algebra.Basic",
+          "Mathlib.Tactic.Algebra.Lemmas",
+          "Mathlib.Tactic.Algebraize",
+          "Mathlib.Tactic.ApplyAt",
+          "Mathlib.Tactic.ApplyCongr",
+          "Mathlib.Tactic.ApplyFun",
+          "Mathlib.Tactic.ApplyWith",
+          "Mathlib.Tactic.ArithMult",
+          "Mathlib.Tactic.ArithMult.Init",
+          "Mathlib.Tactic.Assume",
+          "Mathlib.Tactic.Attr.Core",
+          "Mathlib.Tactic.Attr.Register",
+          "Mathlib.Tactic.BDSimp",
+          "Mathlib.Tactic.Basic",
+          "Mathlib.Tactic.Bound",
+          "Mathlib.Tactic.Bound.Attribute",
+          "Mathlib.Tactic.Bound.Init",
+          "Mathlib.Tactic.ByCases",
+          "Mathlib.Tactic.ByContra",
+          "Mathlib.Tactic.CancelDenoms",
+          "Mathlib.Tactic.CancelDenoms.Core",
+          "Mathlib.Tactic.Cases",
+          "Mathlib.Tactic.CasesM",
+          "Mathlib.Tactic.CategoryTheory.BicategoricalComp",
+          "Mathlib.Tactic.CategoryTheory.Bicategory.Basic",
+          "Mathlib.Tactic.CategoryTheory.Bicategory.Datatypes",
+          "Mathlib.Tactic.CategoryTheory.Bicategory.Normalize",
+          "Mathlib.Tactic.CategoryTheory.Bicategory.PureCoherence",
+          "Mathlib.Tactic.CategoryTheory.BicategoryCoherence",
+          "Mathlib.Tactic.CategoryTheory.CancelIso",
+          "Mathlib.Tactic.CategoryTheory.CategoryStar",
+          "Mathlib.Tactic.CategoryTheory.CheckCompositions",
+          "Mathlib.Tactic.CategoryTheory.Coherence",
+          "Mathlib.Tactic.CategoryTheory.Coherence.Basic",
+          "Mathlib.Tactic.CategoryTheory.Coherence.Datatypes",
+          "Mathlib.Tactic.CategoryTheory.Coherence.Normalize",
+          "Mathlib.Tactic.CategoryTheory.Coherence.PureCoherence",
+          "Mathlib.Tactic.CategoryTheory.Elementwise",
+          "Mathlib.Tactic.CategoryTheory.IsoReassoc",
+          "Mathlib.Tactic.CategoryTheory.Monoidal.Basic",
+          "Mathlib.Tactic.CategoryTheory.Monoidal.Datatypes",
+          "Mathlib.Tactic.CategoryTheory.Monoidal.Normalize",
+          "Mathlib.Tactic.CategoryTheory.Monoidal.PureCoherence",
+          "Mathlib.Tactic.CategoryTheory.MonoidalComp",
+          "Mathlib.Tactic.CategoryTheory.Reassoc",
+          "Mathlib.Tactic.CategoryTheory.Slice",
+          "Mathlib.Tactic.CategoryTheory.ToApp",
+          "Mathlib.Tactic.Change",
+          "Mathlib.Tactic.Check",
+          "Mathlib.Tactic.Choose",
+          "Mathlib.Tactic.Clean",
+          "Mathlib.Tactic.ClearExcept",
+          "Mathlib.Tactic.ClearExclamation",
+          "Mathlib.Tactic.Clear_",
+          "Mathlib.Tactic.ClickSuggestions",
+          "Mathlib.Tactic.ClickSuggestions.Apply",
+          "Mathlib.Tactic.ClickSuggestions.ApplyAt",
+          "Mathlib.Tactic.ClickSuggestions.FindPremises",
+          "Mathlib.Tactic.ClickSuggestions.GRewrite",
+          "Mathlib.Tactic.ClickSuggestions.Rewrite",
+          "Mathlib.Tactic.ClickSuggestions.SectionState",
+          "Mathlib.Tactic.ClickSuggestions.TryPremises",
+          "Mathlib.Tactic.ClickSuggestions.Unfold",
+          "Mathlib.Tactic.ClickSuggestions.Util",
+          "Mathlib.Tactic.Coe",
+          "Mathlib.Tactic.Common",
+          "Mathlib.Tactic.ComputeAsymptotics.Lemmas",
+          "Mathlib.Tactic.ComputeAsymptotics.Multiseries.Basic",
+          "Mathlib.Tactic.ComputeAsymptotics.Multiseries.Basis",
+          "Mathlib.Tactic.ComputeAsymptotics.Multiseries.Corecursion",
+          "Mathlib.Tactic.ComputeAsymptotics.Multiseries.Defs",
+          "Mathlib.Tactic.ComputeAsymptotics.Multiseries.Majorized",
+          "Mathlib.Tactic.ComputeAsymptotics.Multiseries.Monomial.Basic",
+          "Mathlib.Tactic.ComputeAsymptotics.Multiseries.Monomial.Predicates",
+          "Mathlib.Tactic.ComputeAsymptotics.Multiseries.Trimming",
+          "Mathlib.Tactic.ComputeDegree",
+          "Mathlib.Tactic.CongrExclamation",
+          "Mathlib.Tactic.CongrM",
+          "Mathlib.Tactic.Constructor",
+          "Mathlib.Tactic.Continuity",
+          "Mathlib.Tactic.Continuity.Init",
+          "Mathlib.Tactic.ContinuousFunctionalCalculus",
+          "Mathlib.Tactic.Contrapose",
+          "Mathlib.Tactic.Conv",
+          "Mathlib.Tactic.Convert",
+          "Mathlib.Tactic.Core",
+          "Mathlib.Tactic.CrossRefAttribute",
+          "Mathlib.Tactic.DSimpPercent",
+          "Mathlib.Tactic.DeclarationNames",
+          "Mathlib.Tactic.DefEqAbuse",
+          "Mathlib.Tactic.DefEqTransformations",
+          "Mathlib.Tactic.DepRewrite",
+          "Mathlib.Tactic.DeprecateTo",
+          "Mathlib.Tactic.DeriveCountable",
+          "Mathlib.Tactic.DeriveEncodable",
+          "Mathlib.Tactic.DeriveFintype",
+          "Mathlib.Tactic.DeriveTraversable",
+          "Mathlib.Tactic.Determinant.Bird.Cert",
+          "Mathlib.Tactic.Determinant.Bird.Meta",
+          "Mathlib.Tactic.DuplicateDecls",
+          "Mathlib.Tactic.ENatToNat",
+          "Mathlib.Tactic.Eqns",
+          "Mathlib.Tactic.ErwQuestion",
+          "Mathlib.Tactic.Eval",
+          "Mathlib.Tactic.ExistsI",
+          "Mathlib.Tactic.Explode",
+          "Mathlib.Tactic.Explode.Datatypes",
+          "Mathlib.Tactic.Explode.Pretty",
+          "Mathlib.Tactic.Ext",
+          "Mathlib.Tactic.ExtendDoc",
+          "Mathlib.Tactic.ExtractGoal",
+          "Mathlib.Tactic.FBinop",
+          "Mathlib.Tactic.FailIfNoProgress",
+          "Mathlib.Tactic.FastInstance",
+          "Mathlib.Tactic.Field",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.FieldSimp.Attr",
+          "Mathlib.Tactic.FieldSimp.Discharger",
+          "Mathlib.Tactic.FieldSimp.Lemmas",
+          "Mathlib.Tactic.FinCases",
+          "Mathlib.Tactic.Find",
+          "Mathlib.Tactic.FindSyntax",
+          "Mathlib.Tactic.Finiteness",
+          "Mathlib.Tactic.Finiteness.Attr",
+          "Mathlib.Tactic.FunProp",
+          "Mathlib.Tactic.FunProp.Attr",
+          "Mathlib.Tactic.FunProp.Core",
+          "Mathlib.Tactic.FunProp.Decl",
+          "Mathlib.Tactic.FunProp.Elab",
+          "Mathlib.Tactic.FunProp.FunctionData",
+          "Mathlib.Tactic.FunProp.Mor",
+          "Mathlib.Tactic.FunProp.Theorems",
+          "Mathlib.Tactic.FunProp.ToBatteries",
+          "Mathlib.Tactic.FunProp.Types",
+          "Mathlib.Tactic.GCongr",
+          "Mathlib.Tactic.GCongr.Core",
+          "Mathlib.Tactic.GCongr.CoreAttrs",
+          "Mathlib.Tactic.GCongr.ForwardAttr",
+          "Mathlib.Tactic.GRewrite",
+          "Mathlib.Tactic.GRewrite.Core",
+          "Mathlib.Tactic.GRewrite.Elab",
+          "Mathlib.Tactic.Generalize",
+          "Mathlib.Tactic.GrindAttrs",
+          "Mathlib.Tactic.Group",
+          "Mathlib.Tactic.GuardGoalNums",
+          "Mathlib.Tactic.GuardHypNums",
+          "Mathlib.Tactic.Have",
+          "Mathlib.Tactic.HaveI",
+          "Mathlib.Tactic.HigherOrder",
+          "Mathlib.Tactic.Hint",
+          "Mathlib.Tactic.ITauto",
+          "Mathlib.Tactic.InferParam",
+          "Mathlib.Tactic.Inhabit",
+          "Mathlib.Tactic.IntervalCases",
+          "Mathlib.Tactic.IrreducibleDef",
+          "Mathlib.Tactic.Lemma",
+          "Mathlib.Tactic.Lift",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Linarith.Datatypes",
+          "Mathlib.Tactic.Linarith.Frontend",
+          "Mathlib.Tactic.Linarith.Lemmas",
+          "Mathlib.Tactic.Linarith.NNRealPreprocessor",
+          "Mathlib.Tactic.Linarith.Oracle.FourierMotzkin",
+          "Mathlib.Tactic.Linarith.Oracle.SimplexAlgorithm",
+          "Mathlib.Tactic.Linarith.Oracle.SimplexAlgorithm.Datatypes",
+          "Mathlib.Tactic.Linarith.Oracle.SimplexAlgorithm.Gauss",
+          "Mathlib.Tactic.Linarith.Oracle.SimplexAlgorithm.PositiveVector",
+          "Mathlib.Tactic.Linarith.Oracle.SimplexAlgorithm.SimplexAlgorithm",
+          "Mathlib.Tactic.Linarith.Parsing",
+          "Mathlib.Tactic.Linarith.Preprocessing",
+          "Mathlib.Tactic.Linarith.Verification",
+          "Mathlib.Tactic.LinearCombination",
+          "Mathlib.Tactic.LinearCombination.Lemmas",
+          "Mathlib.Tactic.LinearCombinationPrime",
+          "Mathlib.Tactic.Linter",
+          "Mathlib.Tactic.Linter.AuxLemma",
+          "Mathlib.Tactic.Linter.CommandRanges",
+          "Mathlib.Tactic.Linter.CommandStart",
+          "Mathlib.Tactic.Linter.DeprecatedModule",
+          "Mathlib.Tactic.Linter.DeprecatedSyntaxLinter",
+          "Mathlib.Tactic.Linter.DirectoryDependency",
+          "Mathlib.Tactic.Linter.DocPrime",
+          "Mathlib.Tactic.Linter.DocString",
+          "Mathlib.Tactic.Linter.EmptyLine",
+          "Mathlib.Tactic.Linter.FindDeprecations",
+          "Mathlib.Tactic.Linter.FlexibleLinter",
+          "Mathlib.Tactic.Linter.GlobalAttributeIn",
+          "Mathlib.Tactic.Linter.HashCommandLinter",
+          "Mathlib.Tactic.Linter.HaveILetI",
+          "Mathlib.Tactic.Linter.HaveLetLinter",
+          "Mathlib.Tactic.Linter.Header",
+          "Mathlib.Tactic.Linter.Lint",
+          "Mathlib.Tactic.Linter.MinImports",
+          "Mathlib.Tactic.Linter.Multigoal",
+          "Mathlib.Tactic.Linter.OldObtain",
+          "Mathlib.Tactic.Linter.OverlappingInstances",
+          "Mathlib.Tactic.Linter.PPRoundtrip",
+          "Mathlib.Tactic.Linter.PrivateModule",
+          "Mathlib.Tactic.Linter.Style",
+          "Mathlib.Tactic.Linter.TacticDocumentation",
+          "Mathlib.Tactic.Linter.TextBased",
+          "Mathlib.Tactic.Linter.TextBased.UnicodeLinter",
+          "Mathlib.Tactic.Linter.UnusedInstancesInType",
+          "Mathlib.Tactic.Linter.UnusedTactic",
+          "Mathlib.Tactic.Linter.UnusedTacticExtension",
+          "Mathlib.Tactic.Linter.UpstreamableDecl",
+          "Mathlib.Tactic.Linter.ValidatePRTitle",
+          "Mathlib.Tactic.Linter.Whitespace",
+          "Mathlib.Tactic.Measurability",
+          "Mathlib.Tactic.Measurability.Init",
+          "Mathlib.Tactic.MinImports",
+          "Mathlib.Tactic.MkIffOfInductiveProp",
+          "Mathlib.Tactic.ModCases",
+          "Mathlib.Tactic.Module",
+          "Mathlib.Tactic.Monotonicity",
+          "Mathlib.Tactic.Monotonicity.Attr",
+          "Mathlib.Tactic.Monotonicity.Basic",
+          "Mathlib.Tactic.Monotonicity.Lemmas",
+          "Mathlib.Tactic.MoveAdd",
+          "Mathlib.Tactic.NoncommRing",
+          "Mathlib.Tactic.Nontriviality",
+          "Mathlib.Tactic.Nontriviality.Core",
+          "Mathlib.Tactic.NormDet",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.NormNum.Abs",
+          "Mathlib.Tactic.NormNum.Basic",
+          "Mathlib.Tactic.NormNum.BigOperators",
+          "Mathlib.Tactic.NormNum.Core",
+          "Mathlib.Tactic.NormNum.DivMod",
+          "Mathlib.Tactic.NormNum.Eq",
+          "Mathlib.Tactic.NormNum.GCD",
+          "Mathlib.Tactic.NormNum.Ineq",
+          "Mathlib.Tactic.NormNum.Inv",
+          "Mathlib.Tactic.NormNum.Irrational",
+          "Mathlib.Tactic.NormNum.IsCoprime",
+          "Mathlib.Tactic.NormNum.IsSquare",
+          "Mathlib.Tactic.NormNum.LegendreSymbol",
+          "Mathlib.Tactic.NormNum.ModEq",
+          "Mathlib.Tactic.NormNum.NatFactorial",
+          "Mathlib.Tactic.NormNum.NatFib",
+          "Mathlib.Tactic.NormNum.NatLog",
+          "Mathlib.Tactic.NormNum.NatSqrt",
+          "Mathlib.Tactic.NormNum.OfScientific",
+          "Mathlib.Tactic.NormNum.Ordinal",
+          "Mathlib.Tactic.NormNum.Parity",
+          "Mathlib.Tactic.NormNum.Pow",
+          "Mathlib.Tactic.NormNum.PowMod",
+          "Mathlib.Tactic.NormNum.Prime",
+          "Mathlib.Tactic.NormNum.RealSqrt",
+          "Mathlib.Tactic.NormNum.Result",
+          "Mathlib.Tactic.NthRewrite",
+          "Mathlib.Tactic.Observe",
+          "Mathlib.Tactic.OfNat",
+          "Mathlib.Tactic.Order",
+          "Mathlib.Tactic.Order.CollectFacts",
+          "Mathlib.Tactic.Order.Graph.Basic",
+          "Mathlib.Tactic.Order.Graph.Tarjan",
+          "Mathlib.Tactic.Order.Preprocessing",
+          "Mathlib.Tactic.Order.ToInt",
+          "Mathlib.Tactic.PNatToNat",
+          "Mathlib.Tactic.PPWithUniv",
+          "Mathlib.Tactic.Peel",
+          "Mathlib.Tactic.Polynomial.Basic",
+          "Mathlib.Tactic.Polynomial.Core",
+          "Mathlib.Tactic.Polyrith",
+          "Mathlib.Tactic.Positivity",
+          "Mathlib.Tactic.Positivity.Basic",
+          "Mathlib.Tactic.Positivity.Core",
+          "Mathlib.Tactic.Positivity.Finset",
+          "Mathlib.Tactic.ProdAssoc",
+          "Mathlib.Tactic.ProxyType",
+          "Mathlib.Tactic.Push",
+          "Mathlib.Tactic.Push.Attr",
+          "Mathlib.Tactic.Qify",
+          "Mathlib.Tactic.RSuffices",
+          "Mathlib.Tactic.Recall",
+          "Mathlib.Tactic.Recover",
+          "Mathlib.Tactic.ReduceModChar",
+          "Mathlib.Tactic.ReduceModChar.Ext",
+          "Mathlib.Tactic.Relation.Rfl",
+          "Mathlib.Tactic.Relation.Symm",
+          "Mathlib.Tactic.Rename",
+          "Mathlib.Tactic.RenameBVar",
+          "Mathlib.Tactic.Replace",
+          "Mathlib.Tactic.RewriteSearch",
+          "Mathlib.Tactic.Rify",
+          "Mathlib.Tactic.Ring",
+          "Mathlib.Tactic.Ring.Basic",
+          "Mathlib.Tactic.Ring.Common",
+          "Mathlib.Tactic.Ring.Compare",
+          "Mathlib.Tactic.Ring.NamePolyVars",
+          "Mathlib.Tactic.Ring.NamePowerVars",
+          "Mathlib.Tactic.Ring.PNat",
+          "Mathlib.Tactic.Ring.RingNF",
+          "Mathlib.Tactic.Sat.FromLRAT",
+          "Mathlib.Tactic.Says",
+          "Mathlib.Tactic.ScopedNS",
+          "Mathlib.Tactic.Set",
+          "Mathlib.Tactic.SetLike",
+          "Mathlib.Tactic.SetNotationForOrder",
+          "Mathlib.Tactic.SimpIntro",
+          "Mathlib.Tactic.SimpRw",
+          "Mathlib.Tactic.Simproc.Divisors",
+          "Mathlib.Tactic.Simproc.ExistsAndEq",
+          "Mathlib.Tactic.Simproc.Factors",
+          "Mathlib.Tactic.Simproc.FinsetInterval",
+          "Mathlib.Tactic.Simproc.VecPerm",
+          "Mathlib.Tactic.Simps.Basic",
+          "Mathlib.Tactic.Simps.NotationClass",
+          "Mathlib.Tactic.SplitIfs",
+          "Mathlib.Tactic.Spread",
+          "Mathlib.Tactic.StacksAttribute",
+          "Mathlib.Tactic.Subsingleton",
+          "Mathlib.Tactic.Substs",
+          "Mathlib.Tactic.SuccessIfFailWithMsg",
+          "Mathlib.Tactic.SudoSetOption",
+          "Mathlib.Tactic.SuppressCompilation",
+          "Mathlib.Tactic.SwapVar",
+          "Mathlib.Tactic.TFAE",
+          "Mathlib.Tactic.TacticAnalysis",
+          "Mathlib.Tactic.TacticAnalysis.Declarations",
+          "Mathlib.Tactic.Tauto",
+          "Mathlib.Tactic.TautoSet",
+          "Mathlib.Tactic.TermCongr",
+          "Mathlib.Tactic.ToAdditive",
+          "Mathlib.Tactic.ToDual",
+          "Mathlib.Tactic.ToExpr",
+          "Mathlib.Tactic.ToFun",
+          "Mathlib.Tactic.ToLevel",
+          "Mathlib.Tactic.Trace",
+          "Mathlib.Tactic.Translate.Attributes",
+          "Mathlib.Tactic.Translate.Core",
+          "Mathlib.Tactic.Translate.GuessName",
+          "Mathlib.Tactic.Translate.Reorder",
+          "Mathlib.Tactic.Translate.TagUnfoldBoundary",
+          "Mathlib.Tactic.Translate.ToAdditive",
+          "Mathlib.Tactic.Translate.ToDual",
+          "Mathlib.Tactic.Translate.UnfoldBoundary",
+          "Mathlib.Tactic.TryThis",
+          "Mathlib.Tactic.TypeCheck",
+          "Mathlib.Tactic.TypeStar",
+          "Mathlib.Tactic.UnsetOption",
+          "Mathlib.Tactic.Use",
+          "Mathlib.Tactic.Variable",
+          "Mathlib.Tactic.WLOG",
+          "Mathlib.Tactic.Widget.Calc",
+          "Mathlib.Tactic.Widget.CommDiag",
+          "Mathlib.Tactic.Widget.CongrM",
+          "Mathlib.Tactic.Widget.Conv",
+          "Mathlib.Tactic.Widget.GCongr",
+          "Mathlib.Tactic.Widget.LibraryRewrite",
+          "Mathlib.Tactic.Widget.SelectInsertParamsClass",
+          "Mathlib.Tactic.Widget.SelectPanelUtils",
+          "Mathlib.Tactic.Widget.StringDiagram",
+          "Mathlib.Tactic.WithoutCDot",
+          "Mathlib.Tactic.Zify"
+        ]
+      },
+      "Mathlib.Tactic.NormNum.LegendreSymbol": {
+        "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Tactic/NormNum/LegendreSymbol.lean",
+        "sha256": "e32e76b0f157410d8a263e04a206f17881bcb6b3411149cdcdcead6320fd005e",
+        "explicit_imports": [
+          "Mathlib.NumberTheory.LegendreSymbol.JacobiSymbol"
+        ]
+      },
+      "Mathlib.NumberTheory.LegendreSymbol.JacobiSymbol": {
+        "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/LegendreSymbol/JacobiSymbol.lean",
+        "sha256": "24c6610d4c75840dee9d22a664291e53bcfa5db41627bf69bdccda55d8543dfd",
+        "explicit_imports": [
+          "Mathlib.NumberTheory.LegendreSymbol.QuadraticReciprocity"
+        ]
+      },
+      "Mathlib.NumberTheory.LegendreSymbol.QuadraticReciprocity": {
+        "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/LegendreSymbol/QuadraticReciprocity.lean",
+        "sha256": "24ffbf256f6f6f7a2617901323c2d532e2d7871c826a8b11f0580b283e994302",
+        "explicit_imports": [
+          "Mathlib.NumberTheory.LegendreSymbol.Basic",
+          "Mathlib.NumberTheory.LegendreSymbol.QuadraticChar.GaussSum"
+        ]
+      },
+      "Mathlib.NumberTheory.LegendreSymbol.Basic": {
+        "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/LegendreSymbol/Basic.lean",
+        "sha256": "e719ed31ee33a23d312f2747347358da79cfee90d2ba6a8ed0de81b1aa6cd47b",
+        "explicit_imports": [
+          "Mathlib.NumberTheory.LegendreSymbol.QuadraticChar.Basic"
+        ]
+      },
+      "Mathlib.NumberTheory.LegendreSymbol.QuadraticChar.Basic": {
+        "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/LegendreSymbol/QuadraticChar/Basic.lean",
+        "sha256": "1c6b797c79503a628561d498d1ee26e6ff516e082d889df2d15fc8f9f56f6d61",
+        "explicit_imports": [
+          "Mathlib.Data.Fintype.Parity",
+          "Mathlib.NumberTheory.LegendreSymbol.ZModChar",
+          "Mathlib.FieldTheory.Finite.Basic"
+        ]
+      },
+      "Mathlib.NumberTheory.LegendreSymbol.ZModChar": {
+        "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/LegendreSymbol/ZModChar.lean",
+        "sha256": "91650588effef6e496df87468c8410a9d82a15bb98e131711e17ff26502c9f43",
+        "explicit_imports": [
+          "Mathlib.Data.Int.Range",
+          "Mathlib.Data.ZMod.Basic",
+          "Mathlib.NumberTheory.MulChar.Basic"
+        ]
+      },
+      "Mathlib.NumberTheory.MulChar.Basic": {
+        "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/NumberTheory/MulChar/Basic.lean",
+        "sha256": "67fcb540ce7bc5fd9bfafe1b6fc92ee5e4c6c96404e7baf9edbe1a24b030b9be",
+        "explicit_imports": [
+          "Mathlib.Algebra.CharP.Basic",
+          "Mathlib.Algebra.CharP.Lemmas",
+          "Mathlib.Algebra.Group.Submonoid.Units",
+          "Mathlib.Algebra.GroupWithZero.Units.Fintype",
+          "Mathlib.GroupTheory.OrderOfElement"
+        ]
+      }
+    }
+  },
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "provider_pins": {
+    "goldbach": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1"
+  },
+  "no_source_created_or_modified": true,
+  "acceptance_claim": false
+}
