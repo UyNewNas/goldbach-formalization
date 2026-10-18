@@ -22,12 +22,30 @@ noncomputable section
 Enumeration is independent of both old and new admission policies. -/
 def firstExitNextSelectionCandidates {α : Type*} (h : α → ℝ)
     (pre : List α) (positive : Bool) (mass : ℝ) :
-    List α → List (FirstExitDepthState α)
-  | [] => []
-  | q :: qs =>
+    List α → List (FirstExitDepthState α) :=
+  fun remaining =>
+    List.rec
+      (motive := fun _ : List α => List (FirstExitDepthState α))
+      []
+      (fun q qs rest =>
+        {selectedPrefix := q :: pre, positive := !positive,
+          mass := mass * h q, remaining := qs} :: rest)
+      remaining
+
+/-- Empty input has no next-selection candidates. -/
+theorem firstExitNextSelectionCandidates_nil
+    {α : Type*} (h : α → ℝ) (pre : List α) (positive : Bool) (mass : ℝ) :
+    firstExitNextSelectionCandidates h pre positive mass [] = [] := rfl
+
+/-- One candidate is emitted for the head and the same parent data is used
+for the literal tail. This is a kernel computation of the list recursor. -/
+theorem firstExitNextSelectionCandidates_cons
+    {α : Type*} (h : α → ℝ) (pre : List α) (positive : Bool) (mass : ℝ)
+    (q : α) (qs : List α) :
+    firstExitNextSelectionCandidates h pre positive mass (q :: qs) =
       {selectedPrefix := q :: pre, positive := !positive,
         mass := mass * h q, remaining := qs} ::
-      firstExitNextSelectionCandidates h pre positive mass qs
+      firstExitNextSelectionCandidates h pre positive mass qs := rfl
 
 /-- Every candidate is one more selected label, regardless of how many
 unselected labels precede it in the carrier. -/
@@ -59,7 +77,7 @@ theorem firstExitRetainedPolynomial_eq_skipAll_add_nextSelections
   induction remaining with
   | nil => simp [firstExitRetainedPolynomial, firstExitNextSelectionCandidates]
   | cons q qs ih =>
-      simp only [firstExitRetainedPolynomial, firstExitNextSelectionCandidates,
+      simp only [firstExitRetainedPolynomial, firstExitNextSelectionCandidates_cons,
         List.map_cons, List.sum_cons]
       rw [ih]
       ring

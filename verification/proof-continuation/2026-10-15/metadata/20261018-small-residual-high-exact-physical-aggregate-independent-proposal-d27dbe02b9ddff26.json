@@ -1,0 +1,99 @@
+{
+  "status": "READ_ONLY_NEXT_CORE_SMALL_RESIDUAL_HIGH_CONDUCTOR_MATH_AND_API_PROPOSAL_NOT_NEW_LEAN_NOT_ACCEPTED",
+  "author": "/root/low_aggregate_oct18",
+  "created_utc": "2026-10-18T03:57:01.542799+00:00",
+  "mathematical_verdict": "The proposed scaling retains exactly 1/Q1 and is sufficient after the true outside cost. No extra power-of-X loss or p-coprime-D condition is needed. The generic High public theorem is currently a candidate, not an accepted supplier; no final endpoint may be claimed before actual true owned High and this consumer proof.",
+  "proposed_module": "ImbalancedChen.Part3SharedFirstFactorSmallResidualHighConductorZero",
+  "proposed_two_direct_imports": [
+    "ImbalancedChen.Part3SharedFirstFactorCharacterDictionary",
+    "ImbalancedChen.Part3SharedFirstFactorHighConductor"
+  ],
+  "source_bindings": {
+    "char_sha256": "3b056ab1f03ea46cfc446a32b267f40ec58d85fe0974c0a94c6ed35183631cd3",
+    "High_candidate_sha256": "65ca0077f0d6c8db6c109a62baeae509c9752f67b798fa3afa0e10ce07dabd28",
+    "Low_full_candidate_current_sha256": "213b72ac17c9fec10ff62fcd2ca0aa1f7d862f7b2dca45513d3e89374defc719",
+    "Shared_owned_source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d"
+  },
+  "literal_proposed_definition": "def MediumAtom.sharedFirstFactorSmallResidualHighConductorZero (d : MediumAtom) (Y R : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n      ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        if ((u.1 * u.2).gcd (v.1 * v.2) : ℝ) ≤ Y then\n          (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n            (((p * (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ) *\n              ((p * (u.1 * u.2).gcd (v.1 * v.2)).totient : ℂ))) *\n            (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n            (∑ chi ∈ ((Finset.univ : Finset\n                (DirichletCharacter ℂ (p * (u.1 * u.2).gcd (v.1 * v.2)))).erase 1).filter\n                  (fun chi => R < (chi.conductor : ℝ)),\n              auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((u.1 * u.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi *\n              star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((v.1 * v.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi))\n        else 0",
+  "one_complete_proposed_public_type": "theorem actual_smallResidualHighConductorZero_bound\n    {eta : ℝ} (heta : 0 < eta) (heta1 : eta < 1) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d →\n        ∀ Y R : ℝ, 1 ≤ Y → 1 ≤ R →\n          ‖d.sharedFirstFactorSmallResidualHighConductorZero Y R‖ ≤\n            C * d.V * (1 + Real.log (32 * d.U * d.Q1 * d.Q2 * d.Q3)) ^ (20 : ℕ) *\n              (d.U ^ 2 / (d.Q1 * R ^ (1 - eta)) +\n                d.Q1 ^ eta * Y ^ (1 + eta) * d.U)",
+  "constant_quantifiers": "C depends only on fixed eta and the fixed local cutoffMass / accepted generic High constant. It is selected before B,sigma,kappa,c0,d,Y,R, all original gamma/alpha/interval/residue fields and physical labels. The finite raw estimate needs no SW assumption and no sigma sign assumption beyond the original MediumAdmissible; sigma positivity and smallness are used only for the later outside power payment.",
+  "exact_generic_High_candidate_public_type": "theorem auxiliary_highConductor_mean_le\n    {eta : ℝ} (heta : 0 < eta) (heta1 : eta < 1) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ N Q R k : ℕ,\n        0 < N → 0 < Q → 0 < R → 0 < k →\n        ∀ b : ℕ → ℂ,\n          (∀ n ∈ Finset.Icc 1 N, ‖b n‖ ≤ 1) →\n          (∑ q ∈ Finset.Icc 1 Q,\n            ((q : ℝ) / (q.totient : ℝ)) *\n              ∑ χ ∈\n                (Finset.univ : Finset (DirichletCharacter ℂ q)).filter\n                  (fun χ ↦ R < χ.conductor),\n                ‖∑ n ∈ Finset.Icc 1 N,\n                  (if n.Coprime k then b n else 0) *\n                    χ (n : ZMod q)‖ ^ 2) ≤\n            C * (1 + Real.log (2 * (N : ℝ) * (Q : ℝ))) ^ (12 : ℕ) *\n              ((Q : ℝ) * (N : ℝ) ^ 2 / (R : ℝ) ^ (1 - eta) +\n                (Q : ℝ) ^ (2 + eta) * (N : ℝ))",
+  "exact_actual_alpha_star_bridge": {
+    "N": "N=Nat.floor (2*d.U), positive by U>=1. Actual alphaCarrier⊆Icc 1 N, preserving both original interval cutoffs.",
+    "b": "b(n)=if n∈d.alphaCarrier then star(d.alpha n) else 0. This one sequence is fixed before all p,D,k,q,chi and is one-bounded on Icc 1 N by actual admissibility.",
+    "identity": "S_actual(k,q,chi) = star( sum n∈Icc 1 N, (if n.Coprime k then b(n) else 0)*chi(n:ZMod q) ).",
+    "proof": "Finite zero extension, star_sum, star_mul and star_star; hence equal norms. No interval or alpha coefficient depending on p/q is introduced, no character-inverse/conductor-invariance lemma is needed, and full q nonunit restrictions stay in chi."
+  },
+  "exact_grouping": {
+    "T": "T=4*d.Q2*d.Q3>=4; actual tail products v are positive and <=T.",
+    "G": "G(v)=Σu∈(factorCarrier Q2×factorCarrier Q3).filter(u1*u2=v), gamma2(u1)*gamma3(u2). Group the complex coefficients before taking any norm, with G(v1)*star G(v2) exact.",
+    "majorant": "norm G(v) <= tau(v), by inclusion of the actual ordered factor-pair fiber in v.divisorsAntidiagonal, whose card is v.divisors.card; actual norm gamma2*gamma3<=1. G is never assumed one-bounded.",
+    "D_k_l": "Regroup exact original v1,v2 by D=gcd(v1,v2), v1=D*k,v2=D*l, gcd(k,l)=1. D>=1, D<=T and D<=Y; k,l lie in Icc 1 (floor T / D).",
+    "physical_coefficient": "With delta=p*D and lcm(v1,v2)=D*k*l, actual coefficient V*cutoffMass/[p*lcm*phi(delta)] equals V*cutoffMass/(p^2*D^2) * (delta/phi(delta)) *1/(k*l). All p may be composite and p,D may share factors."
+  },
+  "weighted_Young_and_harmonic_moments": {
+    "weights": "For each fixed D, w_k=norm G(D*k)/k >=0, with w_k<=tau(D)*tau(k)/k.",
+    "common_character_carrier": "For fixed p,D, ambient chi modulo p*D and the high conductor filter depend on p,D,R only; they are common to every k,l.",
+    "inequality": "After taking norms and only then dropping gcd(k,l)=1, Σk,l w_k*w_l*abs(S_k)*abs(S_l) <= (Σk w_k)*(Σk w_k*norm(S_k)^2). This is weighted Young/Cauchy; prove 2ab<=a²+b² then finite symmetry, or use weighted finite Cauchy.",
+    "first_fixed_D_moment": "W_D=Σk w_k <= tau(D)*(1+log T)^2, using divisor submultiplicativity and native sum_fouvryTau_div_le_real at order2.",
+    "remaining_k_moment": "After applying the same generic High bound uniformly for every k, Σk w_k contributes another tau(D)*(1+log T)^2. Total exact tail cost tau(D)^2*(1+log T)^4. No tau(k)<=X^epsilon replacement.",
+    "D_first_sum": "Σ_{1<=D<=min(Y,T)} tau(D)^2/D <= (1+log T)^4.",
+    "D_second_sum": "Σ_{1<=D<=min(Y,T)} tau(D)^2*D^eta <= Y^(1+eta) * Σ_{1<=D<=T}tau(D)^2/D <= Y^(1+eta)*(1+log T)^4. Preserve the actual D<=T before extension, so no unbounded log Y cost appears."
+  },
+  "p_to_level_mean_exact_scaling": {
+    "parameters": "P=floor(2*Q1), Q_D=P*D, N=floor(2*U). All positive for each original physical D>=1.",
+    "injection": "For fixed D, p↦q=p*D is injective and maps the full actual primitive p carrier into Icc 1 Q_D. Both the original alpha b and auxiliary k are fixed inside this p sum.",
+    "second_inverse_p": "For p in the original carrier, Q1<=p, so 1/p²<=1/Q1². Only after this nonnegative inequality and the injection extend to ALL q<=Q_D.",
+    "fixed_D_bound": "Generic High yields <= C_eta * tau(D)^2 * H^16 * V * [ U²/(Q1*D*r^(1-eta)) + Q1^eta*D^eta*U ], where r=floor R and H=1+log(32*U*Q1*Q2*Q3). All floor2 constants are absorbed into C_eta.",
+    "log_argument": "2*N*Q_D <= 2*(2U)*(2Q1D) <= 8*U*Q1*T = 32*U*Q1*Q2*Q3. Also 1+log T<=H. Thus generic log^12 + the two k harmonic moments log^4 + D reciprocal square moment log^4 give exactly log^20.",
+    "after_D_sum": "Raw norm <= C_eta * V * H^20 * [ U²/(Q1*r^(1-eta)) + Q1^eta*Y^(1+eta)*U ]. The first term retains the required 1/Q1."
+  },
+  "real_R_to_natural_r": {
+    "r": "r=floor R, with R>=1 gives r>=1.",
+    "filter_exactness": "For R>=0, Nat.floor_lt gives floor R < conductor chi iff R < (conductor chi:real), so the real high cutoff transports exactly. The physical erase1 carrier is a subset of the generic all-character filtered carrier; extending its nonnegative square sum is legitimate.",
+    "denominator": "Nat.lt_floor_add_one R and r>=1 give R<r+1<=2r, hence r>=R/2. For 0<eta<1, 1/r^(1-eta)<=2^(1-eta)/R^(1-eta); absorb only this eta-dependent constant. Do not pretend r=R."
+  },
+  "true_outside_payment": {
+    "outside_actual_public_type": "SharedFirstFactorDispersion.sharedFirstFactor_outside_le: (Σm∈betaCarrier norm beta(m)^2)*(Σp∈primitiveFirstFactorCarrier norm gamma1(p)^2) <= 4*V*Q1*(1+log(2V))^eB, eB=(2^B)^2-1.",
+    "normalized_energy": "Multiplying the proposed raw bound yields <= C_eta*X²*fixedLog^(eB+20) * [ R^(-(1-eta)) + (Q1*Y/U)*(Q1*Y)^eta ]. No extra Q1 is omitted.",
+    "choices": "eta=sigma/16, Y=X^(sigma/4), R=(log X)^H0. Under 0<sigma<1/100, eta is positive and <1, Y>=1 and R>=1 for X sufficiently large.",
+    "power_calculation": "Actual Q1<U*X^(-sigma) gives Q1*Y/U < X^(-3sigma/4). Actual U<=X gives Q1*Y<=X, hence (Q1*Y)^eta<=X^eta. Therefore the second relative term <=X^(-3sigma/4+sigma/16)=X^(-11sigma/16). No other stronger original geometric inequality is required; all existing original geometry remains in admissibility.",
+    "uniform_logs": "U,Q1,Q2,Q3<=X under actual sigma-positive admissibility, so H<= (5+log32)*log X when log X>=1; likewise 1+log(2V)<=constant*log X. All exponent costs are fixed before i.",
+    "choose_R_cutoff": "For desired signed-error log exponent A, select fixed H0 with H0*(1-eta)>2*A+eB+20 (plus any explicitly budgeted later fixed logs); this pays the first energy term. The X^(-11sigma/16) term pays every fixed log by the genuine power/log asymptotic. R_i and Y_i may vary with scale; all constants and scalar thresholds still precede i.",
+    "low_and_large_compatibility": "Use the already specified Low all-D theorem at L=H0 and a sufficiently large arbitrary output log exponent; its original SW constants precede i. High large-D outside is X²[1/Y+Q1/U] times fixed logs, paid by X^(-sigma/4)+X^(-sigma)."
+  },
+  "exact_three_way_partition": {
+    "identity": "Σp[(q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain(q1SliceAtom p)] = LowZero(R) + SmallResidualHighZero(Y,R) + LargeResidualHighZero(Y,R).",
+    "finite_partition": "At each original p,u,v, partition erase1 characters by conductor<=R versus R<conductor. In the high part partition the same actual D by D<=Y versus Y<D. Finite distributivity and sum_filter/complement identities prove this before all norms.",
+    "disjointness": "Low covers ALL D, small-high uses D<=Y and high conductor, large-high uses Y<D and high conductor. No overlap, no omitted low-conductor large-D terms, no changed primitive center.",
+    "boundary": "This closes only the raw-zero covariance conductor/physical-D decomposition after actual proof/verification. It does not by itself identify U/V primitive centers, bound all nonzero frequencies, establish RestrictedMediumTarget, or prove main Theorem1.1."
+  },
+  "minimal_API_plan": {
+    "native": "Already reachable fixed DivisorMean: fouvryTau_two; sum_fouvryTau_div_le_real 2; sum_fouvryTau_sq_div_le_real 2. Mathlib finite fiberwise sums, divisorsAntidiagonal card and gcd/lcm identities, floor APIs and rpow monotonicity are existing closure.",
+    "finite_project_reuse": "Existing LargeResidual author draft has the exact finite tailGamma grouping and norm<=tau patterns; they are private and currently not owned, so do not call private symbols or claim them accepted. A future authorized small-high source can locally extract only these necessary finite proofs, following the owned FactorFiberDivisor pattern, without importing a broad private chain.",
+    "no_supplier_hypothesis": "The proposed public theorem has no hGenericMean or bound-shaped premise. Its future proof must invoke the named High public theorem only after actual true-owned verification; current proposal status remains not accepted.",
+    "no_new_foreign": "Existing two-parent project union checked freshly:59 project nodes/62 foreign boundaries including implicit Init, missing project []; proposed consumer adds only itself (60), no new foreign imports.",
+    "parent_graph_report": ".lake\\proof-continuation\\source-reviews\\20261018-small-residual-high-proposal-parent-project-dag.json",
+    "parent_graph_report_sha256": "2c8ac2486e69ae1eae8b12677a720933a11437fb0d4a5923cb7257f125e2e9e3"
+  },
+  "primary_API_exact_sources": [
+    {
+      "module": "Mathlib.Algebra.Order.Floor.Semiring",
+      "types": [
+        "Nat.floor_lt (ha : 0 ≤ a) : floor(a) < n ↔ a < n",
+        "Nat.lt_floor_add_one (a : R) : a < floor(a)+1",
+        "Nat.one_le_floor_iff (x : R) : 1 ≤ floor(x) ↔ 1 ≤ x"
+      ]
+    },
+    {
+      "module": "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean",
+      "sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+      "type": "sum_fouvryTau_sq_div_le_real (k : ℕ) {x : ℝ} (hx : 1 ≤ x) : (Σn∈Ioc0 floor x, (fouvryTau k n:ℝ)^2/n) <=(1+log x)^(k^2)",
+      "proof_read": true
+    }
+  ],
+  "no_new_Lean_written_for_this_proposal": true,
+  "Low_full_213b_source_untouched_and_frozen": true,
+  "no_compiler_cache_resources_CI_or_pin_mutation": true,
+  "no_new_agent_spawned": true
+}

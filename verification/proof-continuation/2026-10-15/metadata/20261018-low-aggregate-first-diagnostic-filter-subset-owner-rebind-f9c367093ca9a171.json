@@ -1,0 +1,96 @@
+{
+  "status": "PROOF_ONLY_ACTUAL_FIRST_FAILURE_REPAIR_PREFIX_NOT_AGGREGATE_ACCEPTANCE",
+  "author": "/root/low_aggregate_oct18",
+  "created_utc": "2026-10-18T03:38:41.924212+00:00",
+  "module": "ImbalancedChen.Part3SharedFirstFactorLowConductorAggregate",
+  "old_source_sha256": "ee91f1d8e53e917d1839b2b6286cd792042d049f630ff6d17dad5bea959eb497",
+  "new_source_sha256": "58e0af9d08e30b9b56b68451107dc24676c6e38c94d8d3610ea33a56b1aa37a2",
+  "old_literal": "Finset.sum_le_sum_of_subset_of_nonneg Finset.filter_subset\n",
+  "new_literal": "Finset.sum_le_sum_of_subset_of_nonneg\n        (Finset.filter_subset (fun p => p.Coprime d.residue.natAbs) (factorCarrier d.Q1))\n",
+  "forward_and_inverse_exact_bytes": true,
+  "changed_proof_names": [
+    "primitive_p_reciprocal_square"
+  ],
+  "all_13_complete_headers_unchanged": true,
+  "all_2_full_definitions_unchanged": true,
+  "imports_unchanged": true,
+  "complete_current_headers": [
+    {
+      "name": "MediumAtom.sharedFirstFactorLowConductorZero",
+      "kind": "def",
+      "header": "def MediumAtom.sharedFirstFactorLowConductorZero (d : MediumAtom) (R : ℝ) : ℂ"
+    },
+    {
+      "name": "divisorTau",
+      "kind": "def",
+      "header": "private def divisorTau (n : ℕ) : ℝ"
+    },
+    {
+      "name": "divisorTau_nonneg",
+      "kind": "theorem",
+      "header": "private theorem divisorTau_nonneg (n : ℕ) : 0 ≤ divisorTau n"
+    },
+    {
+      "name": "divisors_mul_eq",
+      "kind": "theorem",
+      "header": "private theorem divisors_mul_eq (a b : ℕ) :\n    (a * b).divisors = a.divisors * b.divisors"
+    },
+    {
+      "name": "divisorTau_mul_le",
+      "kind": "theorem",
+      "header": "private theorem divisorTau_mul_le (a b : ℕ) :\n    divisorTau (a * b) ≤ divisorTau a * divisorTau b"
+    },
+    {
+      "name": "divisorTau_le_of_dvd",
+      "kind": "theorem",
+      "header": "private theorem divisorTau_le_of_dvd {a b : ℕ} (hb : b ≠ 0) (hab : a ∣ b) :\n    divisorTau a ≤ divisorTau b"
+    },
+    {
+      "name": "divisorTau_pow_le",
+      "kind": "theorem",
+      "header": "private theorem divisorTau_pow_le (r : ℕ) {n : ℕ} (hn : n ≠ 0) :\n    divisorTau n ^ r ≤ (fouvryTau (2 ^ r) n : ℝ)"
+    },
+    {
+      "name": "factor_bounds",
+      "kind": "theorem",
+      "header": "private theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) :\n    0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q"
+    },
+    {
+      "name": "factor_subset_Ioc",
+      "kind": "theorem",
+      "header": "private theorem factor_subset_Ioc {Q : ℝ} (hQ : 1 ≤ Q) :\n    factorCarrier Q ⊆ Finset.Ioc 0 (Nat.floor (2 * Q))"
+    },
+    {
+      "name": "dyadic_divisor_harmonic",
+      "kind": "theorem",
+      "header": "private theorem dyadic_divisor_harmonic {Q : ℝ} (hQ : 1 ≤ Q) (r : ℕ) :\n    (∑ n ∈ factorCarrier Q, divisorTau n ^ r / (n : ℝ)) ≤\n      (1 + Real.log (2 * Q)) ^ (2 ^ r)"
+    },
+    {
+      "name": "primitive_p_reciprocal_square",
+      "kind": "theorem",
+      "header": "private theorem primitive_p_reciprocal_square (d : MediumAtom)\n    (hQ : 1 ≤ d.Q1) (r : ℕ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, divisorTau p ^ r / (p : ℝ) ^ 2) ≤\n      (1 + Real.log (2 * d.Q1)) ^ (2 ^ r) / d.Q1"
+    },
+    {
+      "name": "two_label_harmonic",
+      "kind": "theorem",
+      "header": "private theorem two_label_harmonic {Q2 Q3 : ℝ}\n    (hQ2 : 1 ≤ Q2) (hQ3 : 1 ≤ Q3) (r : ℕ) :\n    (∑ u ∈ factorCarrier Q2 ×ˢ factorCarrier Q3,\n      divisorTau (u.1 * u.2) ^ r / ((u.1 * u.2 : ℕ) : ℝ)) ≤\n      (1 + Real.log (2 * Q2)) ^ (2 ^ r) *\n        (1 + Real.log (2 * Q3)) ^ (2 ^ r)"
+    },
+    {
+      "name": "card_low_conductor_le",
+      "kind": "theorem",
+      "header": "private theorem card_low_conductor_le {delta r : ℕ} (hdelta : 0 < delta) :\n    ((Finset.univ : Finset (DirichletCharacter ℂ delta)).filter\n      (fun chi => chi.conductor ≤ r)).card ≤ r * r"
+    }
+  ],
+  "actual_stdout": "ImbalancedChen/Part3SharedFirstFactorLowConductorAggregate.lean:129:50: error: Application type mismatch: The argument\n  filter_subset\nhas type\n  ∀ (p : ?m.355 → Prop) [inst : DecidablePred p] (s : Finset ?m.355), filter p s ⊆ s\nbut is expected to have type\n  d.primitiveFirstFactorCarrier ⊆ factorCarrier d.Q1\nin the application\n  sum_le_sum_of_subset_of_nonneg filter_subset\n",
+  "actual_stdout_sha256": "bcc164db28bf508021da5370552cfb59cb2df6cebc502a3ca048e561e379ea8f",
+  "actual_receipt_sha256": "8032d2df1d431ecc32203a50f8b73ed9100a7281368f21e55aa5de91c3f4c2f7",
+  "actual_exit_code": 1,
+  "actual_seconds": 19.747,
+  "actual_guard_error": null,
+  "actual_binding_before_after_exact": true,
+  "parent_sha256": "5df46739cf416fbf9efd7d40ec17c7434a3cde986f805d1c0193d059b0770485",
+  "all_pins_before_after_exact": true,
+  "no_compilation_performed_by_author": true,
+  "freeze": "Current repaired prefix frozen for specific retry after non-author scope rebind. Later full public aggregate remains ignored draft only.",
+  "final_public_uniform_target_still_not_asserted_or_accepted": true
+}

@@ -1,0 +1,85 @@
+{
+  "status": "ROOT_COMPLETE_READONLY_MATH_API_REVIEW_AND_ONE_SOURCE_AUTHORING_AUTHORIZATION_NOT_COMPILE_GATE",
+  "reviewer": "/root",
+  "created_utc": "2026-10-18T04:20:23.103494+00:00",
+  "proposal_sha256": "cc4f1d582a19eb98f2987101db42f080e481ae0e6e8fc4e1cfb0c49b12466aa3",
+  "source_scope": "ImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean",
+  "sole_imports": [
+    "ImbalancedChen.Part3SharedFirstFactorDispersion",
+    "ImbalancedChen.Part3TransposedPrimitiveVPayment"
+  ],
+  "literal_object": "def MediumAtom.sharedPrimitiveUVError (d : MediumAtom) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    (((d.q1SliceAtom p).transposedAtom.complexDispersionU\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n      TransposedZeroCovariance.primitiveZeroMain (d.q1SliceAtom p)) -\n      2 * (((d.q1SliceAtom p).transposedAtom.complexDispersionV\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n          TransposedZeroCovariance.primitiveZeroMain (d.q1SliceAtom p))",
+  "complete_public_endpoint": "theorem actual_betaL2_gamma1L2_sharedPrimitiveUV_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          ‖d.sharedPrimitiveUVError‖ ≤\n            3 * (d.scale ^ 2 / (Real.log d.scale) ^ A)",
+  "actual_api_headers_source_verified": [
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveU",
+      "source_sha256": "3c1f2c0c17ddcf5d3dfd674376c1f45fb4aea1cde72408c3b1fba11971df3fbb",
+      "full_public_header": "theorem actualU_sub_primitive_finite_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n          C * ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n            ‖primitivePairCoefficient d q r‖ * ((q * r).divisors.card : ℝ)"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveV",
+      "source_sha256": "2cb0bab68ef736dc4f2f59e9f33644ef6b8c9aed205762da8ef0be41774390ca",
+      "full_public_header": "theorem actualV_sub_primitive_finite_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        C * ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n          ‖mixedPairCoefficient d q r‖ *\n            coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n              (r.divisors.card : ℝ)"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveU",
+      "source_sha256": "3c1f2c0c17ddcf5d3dfd674376c1f45fb4aea1cde72408c3b1fba11971df3fbb",
+      "full_public_header": "theorem coprimeMass_norm_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (q : ℕ) :\n    ‖coprimeMass d.alphaCarrier d.alpha q‖ ≤ 2 * d.U"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveVMoment",
+      "source_sha256": "d842ac532a14d6179944fe2b61caf7a56ec17eb140d72471bc198c8d5958f7cd",
+      "full_public_header": "theorem coprimeNormMass_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (q : ℕ) :\n    coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q ≤ 2 * d.U"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "full_public_header": "theorem U_le_scale_half\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.U ≤ d.scale ^ (1 / 2 : ℝ)"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "full_public_header": "theorem eventually_actual_log_cost_le_rpow (p s : ℕ) (sigma : ℝ)\n    (hsigma : 0 < sigma) {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ (B : ℕ) (kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (1 + Real.log (2 * d.V)) ^ p *\n        (1 + Real.log d.physicalFactorCap) ^ s ≤ d.scale ^ epsilon"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "full_public_header": "theorem eventually_const_rpow_two_le_logBudget (C A : ℝ) (hC : 0 ≤ C)\n    {delta : ℝ} (hdelta : 0 < delta) :\n    ∀ᶠ x : ℝ in atTop, C * x ^ (2 - delta) ≤ x ^ 2 / (Real.log x) ^ A"
+    },
+    {
+      "module": "ImbalancedChen.Part3SignedDivisorDeletion",
+      "source_sha256": "0bddcfdb22bdb80cc4d5a888562bccb83ad1c87db6c395d27aef62da1bd366e1",
+      "full_public_header": "theorem MediumAtom.U_mul_physicalFactorCap_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.U * d.physicalFactorCap ≤ 8 * d.scale ^ (1 - 9 * sigma)"
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "full_public_header": "theorem mediumAdmissible_q1SliceAtom\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    MediumAdmissible B sigma kappa c0 (d.q1SliceAtom p)"
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "full_public_header": "theorem MediumAtom.sharedFirstFactor_outside_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤\n        4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)"
+    }
+  ],
+  "root_reads": [
+    "Complete 18742-byte independent physical-denominator proposal including all ten literal public API types",
+    "Full Part3TransposedPrimitiveUMoment and Part3TransposedPrimitiveVMoment source and the sharper pre-coarsening finite inequalities",
+    "Actual primitivePairCoefficient and mixedPairCoefficient definitions; finite U/V supplier public complete headers; sharedFirstFactor centered identity and outside; original MediumAdmissible/UniformAuxiliarySW/q1Slice definitions",
+    "Actual U_le_scale_half and full actual-log-cost and constant-power/log APIs; U_mul_physicalFactorCap_le proof"
+  ],
+  "independent_mathematical_checks": [
+    "Finite grouped coefficient sum retains the original physicalFactorModuli image; inactive Kronecker gamma1 fibres are actually removed, never replaced by an asserted smaller carrier.",
+    "U has both phi(pv) phi(pw). tau(qr)<=tau(q)tau(r) and inverse totient gives tau(p)^4/p^2, two genuine tail harmonic divisor moments and sum_p inverse-square saving. Raw U <= C U^2 H^32/Q1.",
+    "V has exactly one phi(pw). Unweighted tail cardinal <=4Q2Q3 and tau(p)^2/p harmonic cost give raw V <= C U^2 T H^12 (or rigorous H^13 fallback), no spurious p-square.",
+    "Outside 4VQ1 Hbeta^eB converts U to C XU fixedLogs; U<=X^(1/2), fixed log absorption gives X^(7/4), then every requested log.",
+    "Outside V converts to C X*(UQ1T) fixedLogs. T=4Q2Q3, cap=2Q1T, and U*cap<=8 X^(1-9sigma), so genuine power saving pays every fixed log.",
+    "The complex raw-zero discrepancy plus literal U-P0 -2(V-P0) reconstructs the actual centered identity, but remaining nonzero part is still separate."
+  ],
+  "constraints": [
+    "One new source only, complete finite and public unconditional U/V payment from original MediumAdmissible; no new SW/mean/energy/support supplier assumption.",
+    "No source edits outside new file, no pins/CI/toolchain/cache changes and no Lean/lake/checker by author. Existing Low503 remains frozen.",
+    "Full source/public types/primitive defs/proper relative project DAG and nonauthor review required before any future concrete strict+owned gate.",
+    "Compile scope NOT authorized by this authoring record; no parent bootstrap, no increased resources, no weakened audit, no main or full energy claim."
+  ]
+}

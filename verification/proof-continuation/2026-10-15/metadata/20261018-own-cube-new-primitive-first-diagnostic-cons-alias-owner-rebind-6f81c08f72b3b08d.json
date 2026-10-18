@@ -1,0 +1,61 @@
+{
+  "created_utc": "2026-10-18T04:05:06.956310+00:00",
+  "author": "/root/high_conductor_oct18",
+  "status": "ACTUAL_OWNCUBE_NEW_PRIMITIVE_FIRST_DIAGNOSTIC_SINGLE_PROOF_API_REPAIR_NOT_ACCEPTANCE",
+  "source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\FirstExitOwnCubeSplice.lean",
+    "sha256": "982d5b4dcca94c1121f8bbf65e3d63e88bd87cfc63d7b814710b9992a8c71510",
+    "lines": 193,
+    "declarations": 8,
+    "primitive_defs": 1
+  },
+  "old_source_sha256": "69dd751280258eaeb390476d2326a0882e1c343782091b6793010a4b6daed842",
+  "old_failed_snapshot": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261018-own-cube-69dd-new-primitive-first-FAILED.snapshot.lean",
+  "all8_complete_headers_byte_exact": true,
+  "List_rec_primitive_complete_body_byte_exact": true,
+  "all_imports_byte_exact": true,
+  "complete_headers": [
+    "def firstExitNextSelectionCandidates {α : Type*} (h : α → ℝ)\n    (pre : List α) (positive : Bool) (mass : ℝ) :\n    List α → List (FirstExitDepthState α)",
+    "theorem firstExitNextSelectionCandidates_nil\n    {α : Type*} (h : α → ℝ) (pre : List α) (positive : Bool) (mass : ℝ) :\n    firstExitNextSelectionCandidates h pre positive mass [] = []",
+    "theorem firstExitNextSelectionCandidates_cons\n    {α : Type*} (h : α → ℝ) (pre : List α) (positive : Bool) (mass : ℝ)\n    (q : α) (qs : List α) :\n    firstExitNextSelectionCandidates h pre positive mass (q :: qs) =\n      {selectedPrefix := q :: pre, positive := !positive,\n        mass := mass * h q, remaining := qs} ::\n      firstExitNextSelectionCandidates h pre positive mass qs",
+    "theorem firstExitNextSelectionCandidates_selected_length\n    {α : Type*} (h : α → ℝ) (pre remaining : List α)\n    (positive : Bool) (mass : ℝ) (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitNextSelectionCandidates h pre positive mass remaining) :\n    state.selectedPrefix.length = pre.length + 1",
+    "theorem firstExitRetainedPolynomial_eq_skipAll_add_nextSelections\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial retained h pre positive mass remaining =\n      signedTreeCoefficient positive mass +\n        ((firstExitNextSelectionCandidates h pre positive mass remaining).map\n          (fun state => if retained state.positive state.selectedPrefix = true then\n            firstExitRetainedPolynomial retained h state.selectedPrefix state.positive\n              state.mass state.remaining else 0)).sum",
+    "theorem firstExitRetainedPolynomial_sub_eq_nextSelection_sum\n    {α : Type*} (newPolicy oldPolicy : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial newPolicy h pre positive mass remaining -\n      firstExitRetainedPolynomial oldPolicy h pre positive mass remaining =\n        ((firstExitNextSelectionCandidates h pre positive mass remaining).map\n          (fun state =>\n            (if newPolicy state.positive state.selectedPrefix = true then\n              firstExitRetainedPolynomial newPolicy h state.selectedPrefix state.positive\n                state.mass state.remaining else 0) -\n            (if oldPolicy state.positive state.selectedPrefix = true then\n              firstExitRetainedPolynomial oldPolicy h state.selectedPrefix state.positive\n                state.mass state.remaining else 0))).sum",
+    "theorem firstExitRetainedPolynomial_depthSplice_sub_eq_nextSelection_sum\n    {α : Type*} (r : ℕ) (parent newPolicy oldPolicy : Bool → List α → Bool)\n    (h : α → ℝ) (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent newPolicy)\n        h pre positive mass remaining -\n      firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent oldPolicy)\n        h pre positive mass remaining =\n      ((firstExitDepthFrontier r parent h pre positive mass remaining).map\n        (fun frontier =>\n          ((firstExitNextSelectionCandidates h frontier.selectedPrefix\n            frontier.positive frontier.mass frontier.remaining).map\n              (fun candidate =>\n                (if newPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial newPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0) -\n                (if oldPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial oldPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0))).sum)).sum",
+    "theorem firstExitRetainedPolynomial_ownCubeSplice_root_sub_eq\n    {α : Type*} (r : ℕ) (parent newPolicy oldPolicy : Bool → List α → Bool)\n    (h : α → ℝ) (carrier : List α) :\n    firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent newPolicy)\n        h [] true 1 carrier -\n      firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent oldPolicy)\n        h [] true 1 carrier =\n      ((firstExitDepthFrontier r parent h [] true 1 carrier).map\n        (fun frontier =>\n          ((firstExitNextSelectionCandidates h frontier.selectedPrefix\n            frontier.positive frontier.mass frontier.remaining).map\n              (fun candidate =>\n                (if newPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial newPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0) -\n                (if oldPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial oldPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0))).sum)).sum"
+  ],
+  "primitive_source": [
+    "def firstExitNextSelectionCandidates {α : Type*} (h : α → ℝ)\n    (pre : List α) (positive : Bool) (mass : ℝ) :\n    List α → List (FirstExitDepthState α) :=\n  fun remaining =>\n    List.rec\n      (motive := fun _ : List α => List (FirstExitDepthState α))\n      []\n      (fun q qs rest =>\n        {selectedPrefix := q :: pre, positive := !positive,\n          mass := mass * h q, remaining := qs} :: rest)\n      remaining\n\n/-- Empty input has no next-selection candidates. -/\n"
+  ],
+  "single_repair": {
+    "before": "      simp only [firstExitRetainedPolynomial, firstExitNextSelectionCandidates,\n        List.map_cons, List.sum_cons]",
+    "after": "      simp only [firstExitRetainedPolynomial, firstExitNextSelectionCandidates_cons,\n        List.map_cons, List.sum_cons]",
+    "explanation": "In the cons induction proof of skipAll+nextSelections, simplify only by the already proved rfl cons equation, retaining the tail firstExitNextSelectionCandidates alias on both sides. The actual ring failure came solely from one sum using the alias and the other using its unfolded List.rec. No definition or statement change."
+  },
+  "exact_byte_delta": {
+    "before_start": 3723,
+    "before_end": 3840,
+    "after_start": 3723,
+    "after_end": 3845,
+    "before_base64": "ICAgICAgc2ltcCBvbmx5IFtmaXJzdEV4aXRSZXRhaW5lZFBvbHlub21pYWwsIGZpcnN0RXhpdE5leHRTZWxlY3Rpb25DYW5kaWRhdGVzLAogICAgICAgIExpc3QubWFwX2NvbnMsIExpc3Quc3VtX2NvbnNd",
+    "after_base64": "ICAgICAgc2ltcCBvbmx5IFtmaXJzdEV4aXRSZXRhaW5lZFBvbHlub21pYWwsIGZpcnN0RXhpdE5leHRTZWxlY3Rpb25DYW5kaWRhdGVzX2NvbnMsCiAgICAgICAgTGlzdC5tYXBfY29ucywgTGlzdC5zdW1fY29uc10=",
+    "forward_inverse_verified": true
+  },
+  "actual_stdout_full_read": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\runs\\20261018T040356538052Z-ImbalancedChen.FirstExitOwnCubeSplice\\stdout.log",
+    "sha256": "43c1e44848b7f118ba94bb8b48825800e88517f42c13a336763107b6a692422c",
+    "full_text": "Try this:\n  [apply] ring_nf\n  \n  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.\n    \n  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.\nImbalancedChen/FirstExitOwnCubeSplice.lean:79:17: error: unsolved goals\ncase cons\nα : Type u_1\nretained : Bool → List α → Bool\nh : α → ℝ\npre : List α\npositive : Bool\nmass : ℝ\nq : α\nqs : List α\nih :\n  firstExitRetainedPolynomial retained h pre positive mass qs =\n    signedTreeCoefficient positive mass +\n      (List.map\n          (fun state =>\n            if retained state.positive state.selectedPrefix = true then\n              firstExitRetainedPolynomial retained h state.selectedPrefix state.positive state.mass state.remaining\n            else 0)\n          (firstExitNextSelectionCandidates h pre positive mass qs)).sum\n⊢ (signedTreeCoefficient positive mass +\n        (List.map\n            (fun state =>\n              if retained state.positive state.selectedPrefix = true then\n                firstExitRetainedPolynomial retained h state.selectedPrefix state.positive state.mass state.remaining\n              else 0)\n            (firstExitNextSelectionCandidates h pre positive mass qs)).sum +\n      if retained (!positive) (q :: pre) = true then\n        firstExitRetainedPolynomial retained h (q :: pre) (!positive) (mass * h q) qs\n      else 0) =\n    (signedTreeCoefficient positive mass +\n        if retained (!positive) (q :: pre) = true then\n          firstExitRetainedPolynomial retained h (q :: pre) (!positive) (mass * h q) qs\n        else 0) +\n      (List.map\n          (fun state =>\n            if retained state.positive state.selectedPrefix = true then\n              firstExitRetainedPolynomial retained h state.selectedPrefix state.positive state.mass state.remaining\n            else 0)\n          (List.rec []\n            (fun q qs rest =>\n              { selectedPrefix := q :: pre, positive := !positive, mass := mass * h q, remaining := qs } :: rest)\n            qs)).sum\n"
+  },
+  "actual_receipt_full_read": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\runs\\20261018T040356538052Z-ImbalancedChen.FirstExitOwnCubeSplice\\receipt.json",
+    "sha256": "255bf1c8b3f574712d3f91031439acf843aa4413bc9a779f67ab00d86cd0e246",
+    "status": "FAILED",
+    "guard_error": null,
+    "binding_before_after_exact": true
+  },
+  "all_previous_failures_and_INCOMPLETE_preserved": true,
+  "High_f5_source_unchanged": true,
+  "Lean_checker_cache_pins_imports_resources_CI_edited_or_executed": false,
+  "owned_claim": false,
+  "recommendation": "Root nonauthor exact proof-only rebind to new-primitive root544487 original fair6144 strict; fullowned only after PASS, including all generated declarations and unchanged safety/axiom guard."
+}

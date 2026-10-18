@@ -1,0 +1,136 @@
+{
+  "created_utc": "2026-10-18T03:52:37.573175+00:00",
+  "author": "/root/high_conductor_oct18",
+  "status": "NEW_PRIMITIVE_LIST_RECURSOR_IMPLEMENTATION_SOURCE_ONLY_REQUIRES_NONAUTHOR_ROOT_AND_STRICT_OWNED",
+  "source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\FirstExitOwnCubeSplice.lean",
+    "sha256": "69dd751280258eaeb390476d2326a0882e1c343782091b6793010a4b6daed842",
+    "lines": 193,
+    "bytes": 10357,
+    "declarations": 8,
+    "primitive_definitions": 1,
+    "public_theorems": 7,
+    "direct_imports": [
+      "import ImbalancedChen.FirstExitDepthSplice"
+    ]
+  },
+  "original": {
+    "sha256": "87ea2fe58bad781139c27b8bad55380c9c81c006990819be4858720e5035ec13",
+    "snapshot": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261018-own-cube-original-87ea-INCOMPLETE.snapshot.lean",
+    "old_audit": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261018T033834330365Z",
+    "audit_status_preserved": "INCOMPLETE",
+    "stock_replay_was_PASS_but_census_rejected_generated_helper": true
+  },
+  "scope": "Explicit root approval changes exactly one primitive implementation, preserving its complete type, all five original public theorem headers and complete proof bytes, and all imports. Adds exactly two unconditional public nil/cons recursion identities proved by rfl. This is not a proof-only implementation rebind.",
+  "old_definition_source": "def firstExitNextSelectionCandidates {α : Type*} (h : α → ℝ)\n    (pre : List α) (positive : Bool) (mass : ℝ) :\n    List α → List (FirstExitDepthState α)\n  | [] => []\n  | q :: qs =>\n      {selectedPrefix := q :: pre, positive := !positive,\n        mass := mass * h q, remaining := qs} ::\n      firstExitNextSelectionCandidates h pre positive mass qs",
+  "new_definition_source": "def firstExitNextSelectionCandidates {α : Type*} (h : α → ℝ)\n    (pre : List α) (positive : Bool) (mass : ℝ) :\n    List α → List (FirstExitDepthState α) :=\n  fun remaining =>\n    List.rec\n      (motive := fun _ : List α => List (FirstExitDepthState α))\n      []\n      (fun q qs rest =>\n        {selectedPrefix := q :: pre, positive := !positive,\n          mass := mass * h q, remaining := qs} :: rest)\n      remaining",
+  "primitive_complete_type_exact": true,
+  "original_five_theorems_and_proof_bytes_exact": true,
+  "all_current_complete_public_theorems": [
+    {
+      "name": "firstExitNextSelectionCandidates_nil\n",
+      "start_line": 36,
+      "complete_header": "theorem firstExitNextSelectionCandidates_nil\n    {α : Type*} (h : α → ℝ) (pre : List α) (positive : Bool) (mass : ℝ) :\n    firstExitNextSelectionCandidates h pre positive mass [] = []",
+      "body_and_following_source": ":= rfl\n\n/-- One candidate is emitted for the head and the same parent data is used\nfor the literal tail. This is a kernel computation of the list recursor. -/\n"
+    },
+    {
+      "name": "firstExitNextSelectionCandidates_cons\n",
+      "start_line": 42,
+      "complete_header": "theorem firstExitNextSelectionCandidates_cons\n    {α : Type*} (h : α → ℝ) (pre : List α) (positive : Bool) (mass : ℝ)\n    (q : α) (qs : List α) :\n    firstExitNextSelectionCandidates h pre positive mass (q :: qs) =\n      {selectedPrefix := q :: pre, positive := !positive,\n        mass := mass * h q, remaining := qs} ::\n      firstExitNextSelectionCandidates h pre positive mass qs",
+      "body_and_following_source": ":= rfl\n\n/-- Every candidate is one more selected label, regardless of how many\nunselected labels precede it in the carrier. -/\n"
+    },
+    {
+      "name": "firstExitNextSelectionCandidates_selected_length\n",
+      "start_line": 52,
+      "complete_header": "theorem firstExitNextSelectionCandidates_selected_length\n    {α : Type*} (h : α → ℝ) (pre remaining : List α)\n    (positive : Bool) (mass : ℝ) (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitNextSelectionCandidates h pre positive mass remaining) :\n    state.selectedPrefix.length = pre.length + 1",
+      "body_and_following_source": ":= by\n  induction remaining with\n  | nil => simp [firstExitNextSelectionCandidates] at hstate\n  | cons q qs ih =>\n      simp only [firstExitNextSelectionCandidates, List.mem_cons] at hstate\n      rcases hstate with hfirst | hlater\n      · subst state\n        rfl\n      · exact ih hlater\n\n/-- The existing tree polynomial is its skip-all value plus its admitted\nnext-selection continuations. The histories and suffixes are literal data. -/\n"
+    },
+    {
+      "name": "firstExitRetainedPolynomial_eq_skipAll_add_nextSelections\n",
+      "start_line": 68,
+      "complete_header": "theorem firstExitRetainedPolynomial_eq_skipAll_add_nextSelections\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial retained h pre positive mass remaining =\n      signedTreeCoefficient positive mass +\n        ((firstExitNextSelectionCandidates h pre positive mass remaining).map\n          (fun state => if retained state.positive state.selectedPrefix = true then\n            firstExitRetainedPolynomial retained h state.selectedPrefix state.positive\n              state.mass state.remaining else 0)).sum",
+      "body_and_following_source": ":= by\n  induction remaining with\n  | nil => simp [firstExitRetainedPolynomial, firstExitNextSelectionCandidates]\n  | cons q qs ih =>\n      simp only [firstExitRetainedPolynomial, firstExitNextSelectionCandidates,\n        List.map_cons, List.sum_cons]\n      rw [ih]\n      ring\n\n/-- The skip-all term cancels, but both admission indicators and both\npolicy-specific continuations remain visible in the exact difference. -/\n"
+    },
+    {
+      "name": "firstExitRetainedPolynomial_sub_eq_nextSelection_sum\n",
+      "start_line": 87,
+      "complete_header": "theorem firstExitRetainedPolynomial_sub_eq_nextSelection_sum\n    {α : Type*} (newPolicy oldPolicy : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial newPolicy h pre positive mass remaining -\n      firstExitRetainedPolynomial oldPolicy h pre positive mass remaining =\n        ((firstExitNextSelectionCandidates h pre positive mass remaining).map\n          (fun state =>\n            (if newPolicy state.positive state.selectedPrefix = true then\n              firstExitRetainedPolynomial newPolicy h state.selectedPrefix state.positive\n                state.mass state.remaining else 0) -\n            (if oldPolicy state.positive state.selectedPrefix = true then\n              firstExitRetainedPolynomial oldPolicy h state.selectedPrefix state.positive\n                state.mass state.remaining else 0))).sum",
+      "body_and_following_source": ":= by\n  have hsum (states : List (FirstExitDepthState α)) :\n      (states.map (fun state => if newPolicy state.positive state.selectedPrefix = true then\n        firstExitRetainedPolynomial newPolicy h state.selectedPrefix state.positive\n          state.mass state.remaining else 0)).sum -\n      (states.map (fun state => if oldPolicy state.positive state.selectedPrefix = true then\n        firstExitRetainedPolynomial oldPolicy h state.selectedPrefix state.positive\n          state.mass state.remaining else 0)).sum =\n      (states.map (fun state =>\n        (if newPolicy state.positive state.selectedPrefix = true then\n          firstExitRetainedPolynomial newPolicy h state.selectedPrefix state.positive\n            state.mass state.remaining else 0) -\n        (if oldPolicy state.positive state.selectedPrefix = true then\n          firstExitRetainedPolynomial oldPolicy h state.selectedPrefix state.positive\n            state.mass state.remaining else 0))).sum := by\n    induction states with\n    | nil => simp\n    | cons state states ih =>\n        simp only [List.map_cons, List.sum_cons]\n        rw [← ih]\n        ring\n  rw [firstExitRetainedPolynomial_eq_skipAll_add_nextSelections,\n    firstExitRetainedPolynomial_eq_skipAll_add_nextSelections,\n    add_sub_add_left_eq_sub]\n  exact hsum _\n\n/-- Both policies inherit exactly the same parent decisions through rank\n`r`. Every branch ending before that rank cancels through the shared terminal\npolynomial; each frontier state's skip-all term then cancels separately.\nThe remaining terms include every new-admitted/old-rejected candidate. -/\n"
+    },
+    {
+      "name": "firstExitRetainedPolynomial_depthSplice_sub_eq_nextSelection_sum\n",
+      "start_line": 129,
+      "complete_header": "theorem firstExitRetainedPolynomial_depthSplice_sub_eq_nextSelection_sum\n    {α : Type*} (r : ℕ) (parent newPolicy oldPolicy : Bool → List α → Bool)\n    (h : α → ℝ) (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent newPolicy)\n        h pre positive mass remaining -\n      firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent oldPolicy)\n        h pre positive mass remaining =\n      ((firstExitDepthFrontier r parent h pre positive mass remaining).map\n        (fun frontier =>\n          ((firstExitNextSelectionCandidates h frontier.selectedPrefix\n            frontier.positive frontier.mass frontier.remaining).map\n              (fun candidate =>\n                (if newPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial newPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0) -\n                (if oldPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial oldPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0))).sum)).sum",
+      "body_and_following_source": ":= by\n  have hsum (states : List (FirstExitDepthState α)) :\n      (states.map (fun state => firstExitRetainedPolynomial newPolicy h state.selectedPrefix\n        state.positive state.mass state.remaining)).sum -\n      (states.map (fun state => firstExitRetainedPolynomial oldPolicy h state.selectedPrefix\n        state.positive state.mass state.remaining)).sum =\n      (states.map (fun state => firstExitRetainedPolynomial newPolicy h state.selectedPrefix\n        state.positive state.mass state.remaining -\n          firstExitRetainedPolynomial oldPolicy h state.selectedPrefix\n            state.positive state.mass state.remaining)).sum := by\n    induction states with\n    | nil => simp\n    | cons state states ih =>\n        simp only [List.map_cons, List.sum_cons]\n        rw [← ih]\n        ring\n  rw [firstExitRetainedPolynomial_depthSplice_eq_terminal_add_frontier,\n    firstExitRetainedPolynomial_depthSplice_eq_terminal_add_frontier,\n    add_sub_add_left_eq_sub, hsum]\n  simp_rw [firstExitRetainedPolynomial_sub_eq_nextSelection_sum]\n\n/-- Root form for changing rank `r + 1`'s own test and its later policy.\nThe common frontier is the parent's retained rank `r`, never the old rank\n`r + 1` frontier, so restored branches cannot be lost. -/\n"
+    },
+    {
+      "name": "firstExitRetainedPolynomial_ownCubeSplice_root_sub_eq\n",
+      "start_line": 170,
+      "complete_header": "theorem firstExitRetainedPolynomial_ownCubeSplice_root_sub_eq\n    {α : Type*} (r : ℕ) (parent newPolicy oldPolicy : Bool → List α → Bool)\n    (h : α → ℝ) (carrier : List α) :\n    firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent newPolicy)\n        h [] true 1 carrier -\n      firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent oldPolicy)\n        h [] true 1 carrier =\n      ((firstExitDepthFrontier r parent h [] true 1 carrier).map\n        (fun frontier =>\n          ((firstExitNextSelectionCandidates h frontier.selectedPrefix\n            frontier.positive frontier.mass frontier.remaining).map\n              (fun candidate =>\n                (if newPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial newPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0) -\n                (if oldPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial oldPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0))).sum)).sum",
+      "body_and_following_source": ":=\n  firstExitRetainedPolynomial_depthSplice_sub_eq_nextSelection_sum\n    r parent newPolicy oldPolicy h [] carrier true 1\n\nend\n\nend ImbalancedChen\n"
+    }
+  ],
+  "original_complete_public_theorems": [
+    {
+      "name": "firstExitNextSelectionCandidates_selected_length\n",
+      "start_line": 34,
+      "complete_header": "theorem firstExitNextSelectionCandidates_selected_length\n    {α : Type*} (h : α → ℝ) (pre remaining : List α)\n    (positive : Bool) (mass : ℝ) (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitNextSelectionCandidates h pre positive mass remaining) :\n    state.selectedPrefix.length = pre.length + 1",
+      "body_and_following_source": ":= by\n  induction remaining with\n  | nil => simp [firstExitNextSelectionCandidates] at hstate\n  | cons q qs ih =>\n      simp only [firstExitNextSelectionCandidates, List.mem_cons] at hstate\n      rcases hstate with hfirst | hlater\n      · subst state\n        rfl\n      · exact ih hlater\n\n/-- The existing tree polynomial is its skip-all value plus its admitted\nnext-selection continuations. The histories and suffixes are literal data. -/\n"
+    },
+    {
+      "name": "firstExitRetainedPolynomial_eq_skipAll_add_nextSelections\n",
+      "start_line": 50,
+      "complete_header": "theorem firstExitRetainedPolynomial_eq_skipAll_add_nextSelections\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial retained h pre positive mass remaining =\n      signedTreeCoefficient positive mass +\n        ((firstExitNextSelectionCandidates h pre positive mass remaining).map\n          (fun state => if retained state.positive state.selectedPrefix = true then\n            firstExitRetainedPolynomial retained h state.selectedPrefix state.positive\n              state.mass state.remaining else 0)).sum",
+      "body_and_following_source": ":= by\n  induction remaining with\n  | nil => simp [firstExitRetainedPolynomial, firstExitNextSelectionCandidates]\n  | cons q qs ih =>\n      simp only [firstExitRetainedPolynomial, firstExitNextSelectionCandidates,\n        List.map_cons, List.sum_cons]\n      rw [ih]\n      ring\n\n/-- The skip-all term cancels, but both admission indicators and both\npolicy-specific continuations remain visible in the exact difference. -/\n"
+    },
+    {
+      "name": "firstExitRetainedPolynomial_sub_eq_nextSelection_sum\n",
+      "start_line": 69,
+      "complete_header": "theorem firstExitRetainedPolynomial_sub_eq_nextSelection_sum\n    {α : Type*} (newPolicy oldPolicy : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial newPolicy h pre positive mass remaining -\n      firstExitRetainedPolynomial oldPolicy h pre positive mass remaining =\n        ((firstExitNextSelectionCandidates h pre positive mass remaining).map\n          (fun state =>\n            (if newPolicy state.positive state.selectedPrefix = true then\n              firstExitRetainedPolynomial newPolicy h state.selectedPrefix state.positive\n                state.mass state.remaining else 0) -\n            (if oldPolicy state.positive state.selectedPrefix = true then\n              firstExitRetainedPolynomial oldPolicy h state.selectedPrefix state.positive\n                state.mass state.remaining else 0))).sum",
+      "body_and_following_source": ":= by\n  have hsum (states : List (FirstExitDepthState α)) :\n      (states.map (fun state => if newPolicy state.positive state.selectedPrefix = true then\n        firstExitRetainedPolynomial newPolicy h state.selectedPrefix state.positive\n          state.mass state.remaining else 0)).sum -\n      (states.map (fun state => if oldPolicy state.positive state.selectedPrefix = true then\n        firstExitRetainedPolynomial oldPolicy h state.selectedPrefix state.positive\n          state.mass state.remaining else 0)).sum =\n      (states.map (fun state =>\n        (if newPolicy state.positive state.selectedPrefix = true then\n          firstExitRetainedPolynomial newPolicy h state.selectedPrefix state.positive\n            state.mass state.remaining else 0) -\n        (if oldPolicy state.positive state.selectedPrefix = true then\n          firstExitRetainedPolynomial oldPolicy h state.selectedPrefix state.positive\n            state.mass state.remaining else 0))).sum := by\n    induction states with\n    | nil => simp\n    | cons state states ih =>\n        simp only [List.map_cons, List.sum_cons]\n        rw [← ih]\n        ring\n  rw [firstExitRetainedPolynomial_eq_skipAll_add_nextSelections,\n    firstExitRetainedPolynomial_eq_skipAll_add_nextSelections,\n    add_sub_add_left_eq_sub]\n  exact hsum _\n\n/-- Both policies inherit exactly the same parent decisions through rank\n`r`. Every branch ending before that rank cancels through the shared terminal\npolynomial; each frontier state's skip-all term then cancels separately.\nThe remaining terms include every new-admitted/old-rejected candidate. -/\n"
+    },
+    {
+      "name": "firstExitRetainedPolynomial_depthSplice_sub_eq_nextSelection_sum\n",
+      "start_line": 111,
+      "complete_header": "theorem firstExitRetainedPolynomial_depthSplice_sub_eq_nextSelection_sum\n    {α : Type*} (r : ℕ) (parent newPolicy oldPolicy : Bool → List α → Bool)\n    (h : α → ℝ) (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent newPolicy)\n        h pre positive mass remaining -\n      firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent oldPolicy)\n        h pre positive mass remaining =\n      ((firstExitDepthFrontier r parent h pre positive mass remaining).map\n        (fun frontier =>\n          ((firstExitNextSelectionCandidates h frontier.selectedPrefix\n            frontier.positive frontier.mass frontier.remaining).map\n              (fun candidate =>\n                (if newPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial newPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0) -\n                (if oldPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial oldPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0))).sum)).sum",
+      "body_and_following_source": ":= by\n  have hsum (states : List (FirstExitDepthState α)) :\n      (states.map (fun state => firstExitRetainedPolynomial newPolicy h state.selectedPrefix\n        state.positive state.mass state.remaining)).sum -\n      (states.map (fun state => firstExitRetainedPolynomial oldPolicy h state.selectedPrefix\n        state.positive state.mass state.remaining)).sum =\n      (states.map (fun state => firstExitRetainedPolynomial newPolicy h state.selectedPrefix\n        state.positive state.mass state.remaining -\n          firstExitRetainedPolynomial oldPolicy h state.selectedPrefix\n            state.positive state.mass state.remaining)).sum := by\n    induction states with\n    | nil => simp\n    | cons state states ih =>\n        simp only [List.map_cons, List.sum_cons]\n        rw [← ih]\n        ring\n  rw [firstExitRetainedPolynomial_depthSplice_eq_terminal_add_frontier,\n    firstExitRetainedPolynomial_depthSplice_eq_terminal_add_frontier,\n    add_sub_add_left_eq_sub, hsum]\n  simp_rw [firstExitRetainedPolynomial_sub_eq_nextSelection_sum]\n\n/-- Root form for changing rank `r + 1`'s own test and its later policy.\nThe common frontier is the parent's retained rank `r`, never the old rank\n`r + 1` frontier, so restored branches cannot be lost. -/\n"
+    },
+    {
+      "name": "firstExitRetainedPolynomial_ownCubeSplice_root_sub_eq\n",
+      "start_line": 152,
+      "complete_header": "theorem firstExitRetainedPolynomial_ownCubeSplice_root_sub_eq\n    {α : Type*} (r : ℕ) (parent newPolicy oldPolicy : Bool → List α → Bool)\n    (h : α → ℝ) (carrier : List α) :\n    firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent newPolicy)\n        h [] true 1 carrier -\n      firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent oldPolicy)\n        h [] true 1 carrier =\n      ((firstExitDepthFrontier r parent h [] true 1 carrier).map\n        (fun frontier =>\n          ((firstExitNextSelectionCandidates h frontier.selectedPrefix\n            frontier.positive frontier.mass frontier.remaining).map\n              (fun candidate =>\n                (if newPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial newPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0) -\n                (if oldPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial oldPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0))).sum)).sum",
+      "body_and_following_source": ":=\n  firstExitRetainedPolynomial_depthSplice_sub_eq_nextSelection_sum\n    r parent newPolicy oldPolicy h [] carrier true 1\n\nend\n\nend ImbalancedChen\n"
+    }
+  ],
+  "new_equation_names": [
+    "firstExitNextSelectionCandidates_nil\n",
+    "firstExitNextSelectionCandidates_cons\n"
+  ],
+  "imports_exact": true,
+  "one_exact_byte_delta": {
+    "before_start": 843,
+    "before_end": 1204,
+    "after_start": 843,
+    "after_end": 2082,
+    "before_base64": "ZGVmIGZpcnN0RXhpdE5leHRTZWxlY3Rpb25DYW5kaWRhdGVzIHvOsSA6IFR5cGUqfSAoaCA6IM6xIOKGkiDihJ0pCiAgICAocHJlIDogTGlzdCDOsSkgKHBvc2l0aXZlIDogQm9vbCkgKG1hc3MgOiDihJ0pIDoKICAgIExpc3QgzrEg4oaSIExpc3QgKEZpcnN0RXhpdERlcHRoU3RhdGUgzrEpCiAgfCBbXSA9PiBbXQogIHwgcSA6OiBxcyA9PgogICAgICB7c2VsZWN0ZWRQcmVmaXggOj0gcSA6OiBwcmUsIHBvc2l0aXZlIDo9ICFwb3NpdGl2ZSwKICAgICAgICBtYXNzIDo9IG1hc3MgKiBoIHEsIHJlbWFpbmluZyA6PSBxc30gOjoKICAgICAgZmlyc3RFeGl0TmV4dFNlbGVjdGlvbkNhbmRpZGF0ZXMgaCBwcmUgcG9zaXRpdmUgbWFzcyBxcw==",
+    "after_base64": "ZGVmIGZpcnN0RXhpdE5leHRTZWxlY3Rpb25DYW5kaWRhdGVzIHvOsSA6IFR5cGUqfSAoaCA6IM6xIOKGkiDihJ0pCiAgICAocHJlIDogTGlzdCDOsSkgKHBvc2l0aXZlIDogQm9vbCkgKG1hc3MgOiDihJ0pIDoKICAgIExpc3QgzrEg4oaSIExpc3QgKEZpcnN0RXhpdERlcHRoU3RhdGUgzrEpIDo9CiAgZnVuIHJlbWFpbmluZyA9PgogICAgTGlzdC5yZWMKICAgICAgKG1vdGl2ZSA6PSBmdW4gXyA6IExpc3QgzrEgPT4gTGlzdCAoRmlyc3RFeGl0RGVwdGhTdGF0ZSDOsSkpCiAgICAgIFtdCiAgICAgIChmdW4gcSBxcyByZXN0ID0+CiAgICAgICAge3NlbGVjdGVkUHJlZml4IDo9IHEgOjogcHJlLCBwb3NpdGl2ZSA6PSAhcG9zaXRpdmUsCiAgICAgICAgICBtYXNzIDo9IG1hc3MgKiBoIHEsIHJlbWFpbmluZyA6PSBxc30gOjogcmVzdCkKICAgICAgcmVtYWluaW5nCgovLS0gRW1wdHkgaW5wdXQgaGFzIG5vIG5leHQtc2VsZWN0aW9uIGNhbmRpZGF0ZXMuIC0vCnRoZW9yZW0gZmlyc3RFeGl0TmV4dFNlbGVjdGlvbkNhbmRpZGF0ZXNfbmlsCiAgICB7zrEgOiBUeXBlKn0gKGggOiDOsSDihpIg4oSdKSAocHJlIDogTGlzdCDOsSkgKHBvc2l0aXZlIDogQm9vbCkgKG1hc3MgOiDihJ0pIDoKICAgIGZpcnN0RXhpdE5leHRTZWxlY3Rpb25DYW5kaWRhdGVzIGggcHJlIHBvc2l0aXZlIG1hc3MgW10gPSBbXSA6PSByZmwKCi8tLSBPbmUgY2FuZGlkYXRlIGlzIGVtaXR0ZWQgZm9yIHRoZSBoZWFkIGFuZCB0aGUgc2FtZSBwYXJlbnQgZGF0YSBpcyB1c2VkCmZvciB0aGUgbGl0ZXJhbCB0YWlsLiBUaGlzIGlzIGEga2VybmVsIGNvbXB1dGF0aW9uIG9mIHRoZSBsaXN0IHJlY3Vyc29yLiAtLwp0aGVvcmVtIGZpcnN0RXhpdE5leHRTZWxlY3Rpb25DYW5kaWRhdGVzX2NvbnMKICAgIHvOsSA6IFR5cGUqfSAoaCA6IM6xIOKGkiDihJ0pIChwcmUgOiBMaXN0IM6xKSAocG9zaXRpdmUgOiBCb29sKSAobWFzcyA6IOKEnSkKICAgIChxIDogzrEpIChxcyA6IExpc3QgzrEpIDoKICAgIGZpcnN0RXhpdE5leHRTZWxlY3Rpb25DYW5kaWRhdGVzIGggcHJlIHBvc2l0aXZlIG1hc3MgKHEgOjogcXMpID0KICAgICAge3NlbGVjdGVkUHJlZml4IDo9IHEgOjogcHJlLCBwb3NpdGl2ZSA6PSAhcG9zaXRpdmUsCiAgICAgICAgbWFzcyA6PSBtYXNzICogaCBxLCByZW1haW5pbmcgOj0gcXN9IDo6CiAgICAgIGZpcnN0RXhpdE5leHRTZWxlY3Rpb25DYW5kaWRhdGVzIGggcHJlIHBvc2l0aXZlIG1hc3MgcXMgOj0gcmZs",
+    "forward_inverse_replayed": true
+  },
+  "mathematical_semantics": [
+    "Constant List.rec motive returns the same List FirstExitDepthState at each suffix.",
+    "Nil gives empty candidates. Cons emits exactly the candidate with selectedPrefix q::pre, flipped original sign, original mass*h q, and untouched literal suffix qs, then recursively enumerates qs under the same fixed parent parameters.",
+    "Enumeration order, multiplicity and independence of both admission policies are unchanged.",
+    "The two added nil/cons equations are proposed kernel rfl computations; they have not yet been compiled."
+  ],
+  "actual_primary_API_and_consumer_review": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261018-own-cube-explicit-List-rec-unsafe-helper-readonly-proposal.json",
+    "sha256": "d1382bfa1d3ec9f9c574a95c51193bde963d4fd31289db42659bac50b561a288",
+    "generated_name_reference_search_scope": "All immediate current ImbalancedChen/*.lean files, read-only.",
+    "direct_generated_helper_name_references": []
+  },
+  "required_evidence": "Fresh strict build of this exact new primitive hash with unchanged M6144/j2/RSS6656 and then complete unchanged stock/inventory/type/safety/transitive-axiom owned audit. Every generated declaration remains in scope; no unsafe/partial/axiom entry may be ignored.",
+  "Lean_checker_cache_pins_CI_resources_edited_or_executed": false,
+  "other_Lean_sources_edited": false,
+  "High_ee832_remains_unchanged": true,
+  "acceptance_claim": false
+}

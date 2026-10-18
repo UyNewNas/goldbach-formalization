@@ -176,10 +176,19 @@ original admissibility is not replaced by unproved transposed admissibility.
 | `Part3SharedFirstFactorCharacterDictionary` | The full shared-first-factor zero covariance has an exact nonprincipal-character expansion with both auxiliary coprime sieves and actual full-modulus principal masses; all complex factors and the second inverse first factor remain, without an analytic large-sieve payment | Strict compilation; original-object stock kernel replay; complete 35-declaration types, inventory and transitive axiom audit |
 | `ActualPrimePresieveSplit` | The actual capped target-deleted prime universe splits in its exact decreasing order at the real cutoff, and the same retained polynomial equals the fixed reciprocal-totient density with unit and squarefree endpoints retained | Strict compilation; original-object stock kernel replay; complete 9-declaration types, inventory and transitive axiom audit |
 | `Part3SharedFirstFactorLowConductorSW` | The original uniform auxiliary SW family bounds one actual nonprincipal character sum at polylogarithmic conductor, retaining the full auxiliary k times delta divisor cost and uniform threshold; physical-label aggregation and the full zero-mode energy are separate | Strict compilation; original-object stock kernel replay; complete 16-declaration types, inventory and transitive axiom audit |
+| `FirstExitGenericModuli` | Arbitrary literal first-exit policies have weight-independent fixed modulus supports and Mobius coefficients; genuine product injection retains leaf order and multiplicity before the exact signed density dictionary | Strict compilation; original-object stock kernel replay; complete 28-declaration types, inventory and transitive axiom audit |
+| `FirstExitFrontierInvariants` | Actual retained-frontier histories recover their original mass, parity, selected labels and exact remaining smaller-prime carrier with the same target deletion, cap and strict endpoint | Strict compilation; original-object stock kernel replay; complete 19-declaration types, inventory and transitive axiom audit |
+| `ActualPrimeBoxMass` | Actual target-deleted prime tuples in the literal box have the proved positive reciprocal-totient mass limit; no box integral or selected policy mean is assumed | Strict compilation; original-object stock kernel replay; complete 13-declaration types, inventory and transitive axiom audit |
+| `ActualSmallRoughAttachment` | The same signed rough coefficient and actual small Rosser weights give a genuine physical majorant, support, unit coefficient bound and exact signed density sandwich; the absolute rough mass is used only for its explicit attachment error | Strict compilation; original-object stock kernel replay; complete 13-declaration types, inventory and transitive axiom audit |
+| `SieveDimensionComparison` | The actual even-center finite sieve density has exact cap-split Euler quotients and a uniform comparison with all odd primes; this finite comparison does not assert an analytic Mertens dimension estimate | Strict compilation; original-object stock kernel replay; complete 40-declaration types, inventory and transitive axiom audit |
+| `FirstExitOwnCubeSplice` | The exact difference of two literal policies is reindexed at their common before-test frontier, retaining every newly admitted candidate and each original continuation instead of assuming they agree | Strict compilation; original-object stock kernel replay; complete 10-declaration types, inventory and transitive axiom audit |
+| `ActualPrimeBoxEulerLower` | Actual positive prime box mass times the proved Euler ratio gives the genuine lower limit with a single fixed threshold before the even target and cap | Strict compilation; original-object stock kernel replay; complete 14-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorHighConductor` | Arbitrary bounded complex auxiliary-coprime polynomials retain the full imprimitive character level; exact Mobius and conductor grouping plus the sharp primitive coefficient-energy theorem give the genuine uniform high-conductor mean with the first R^(1-eta) saving intact; physical-label aggregation is separate | Strict compilation; original-object stock kernel replay; complete 85-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorLowConductorAggregate` | The original uniform auxiliary SW family pays the full physical first factor and both original tail labels in the actual low-conductor zero covariance, retaining tau(p*v) costs by fixed divisor moments and the genuine 1/Q1 saving; high conductor and the complete distribution remain separate | Strict compilation; original-object stock kernel replay; complete 39-declaration types, inventory and transitive axiom audit |
 
-These 129 modules contain **2533 complete owned declarations**, including
+These 138 modules contain **2794 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-2533 independent major mathematical theorems.
+2794 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.
@@ -330,7 +339,9 @@ family bounds one actual nonprincipal character sum with its constants
 chosen before the atom, auxiliary level and character. Lowering the
 conductor keeps every nonunit in k*delta, so the true divisor penalty is
 tau(k*delta)^C0, or tau(p*v)^C0 at the actual shared-factor specialization.
-Physical-label aggregation and the high-conductor estimate remain open.
+The full physical low-conductor aggregate and generic high-conductor mean
+have their separate acceptance records below; their residual consumers
+and complete zero-mode assembly remain separate.
 
 Deleting actual original-alpha divisors of the moving signed residue
 has a proved finite error and every logarithmic payment, with the same
@@ -362,9 +373,33 @@ decay. The honest V estimate keeps two alpha masses and the full physical
 cap; original medium geometry pays them. Nonzero frequencies and the
 complete physical distribution endpoint remain open.
 
+The full generic high-conductor mean is proved for arbitrary bounded
+complex coefficients, with the original auxiliary coprime mask and full
+imprimitive character level. Exact Mobius/conductor regrouping and the
+sharp primitive coefficient energy retain Q N^2/R^(1-eta) without a global
+Q^eta loss in that term. The constant precedes all varying parameters.
+The actual physical tail-label aggregation is a separate consumer.
+
+The low-conductor zero covariance is now bounded after summing the
+full physical first factor and both original ordered tail labels. The
+original auxiliary SW family supplies the estimate, with the full
+tau(p*v) cost paid by fixed divisor moments and the genuine 1/Q1 saving.
+This is low conductor on every residual gcd, not the full zero estimate.
+
+The next-selection enumeration uses an explicit List.rec implementation
+with unconditional nil/cons equations. Its complete new generated census
+passes the unchanged safety audit. The former unsafe-helper INCOMPLETE
+attempt remains archived and is not retrospectively accepted.
+
+The earlier primitive U/V payments use the original beta L2 outside
+factor. Their reuse in the shared-first-factor setting, with the extra
+primitive gamma1 L2 factor and the p sum, needs a genuine additional
+aggregation and payment. A raw-zero conductor decomposition alone does
+not establish the complete centered energy or physical distribution.
+
 ## Candidates that must not be counted as completed proofs
 
-The 22 unaccepted source candidates are listed with exact source
+The 21 unaccepted source candidates are listed with exact source
 hashes in `verification/proof-continuation/2026-10-15/unaccepted-candidates.json`.
 They are excluded from the accepted module/declaration inventory above.
 Original failed attempts remain failures; replacement sources need their own checks.
@@ -382,15 +417,14 @@ Original failed attempts remain failures; replacement sources need their own che
 * `ActualPrimeFineLabelSortedSelector`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualPrimeFineWordMultiplicity`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualPrimeFineWordSlotRegrouping`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualPrimeBoxEulerLower`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactUpperRho`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactFrontier`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactPolicySaving`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdInitialCutoff`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualUpperPolicyFiniteBridge`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `FirstExitGenericModuli`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `FirstExitOwnCubeSplice`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `FirstExitFrontierInvariants`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3SharedFirstFactorLargeResidualZero`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3SharedFirstFactorSmallResidualHighConductorZero`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualExtendedThirdCompactSignedDensityLimit`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 
 The ordinary lower means above are baseline means. They do not prove the
 manuscript's stronger causal h248 contribution, complete eleven-term lower

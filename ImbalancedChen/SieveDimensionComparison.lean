@@ -91,7 +91,7 @@ theorem odd_sieve_factor_mul_ratio {p : ℕ} (hp : 2 < p) :
   have hpr : (2 : ℝ) < (p : ℝ) := by exact_mod_cast hp
   have hp1 : (p : ℝ) - 1 ≠ 0 := by linarith
   have hp2 : (p : ℝ) - 2 ≠ 0 := by linarith
-  field_simp [hp1, hp2] <;> ring
+  field_simp [hp1, hp2]; ring
 
 /-- Adding factors which are at least one can only increase a product.
 This finite comparison is independent of primality or any asymptotic. -/
