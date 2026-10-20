@@ -1,0 +1,121 @@
+{
+  "status": "ROOT_FULL_MATHEMATICAL_PROPOSAL_AND_ACTUAL_PRIMITIVES_API_REVIEW_ONE_NEW_SOURCE_AUTHORING_SCOPE_NO_COMPILER_PERMISSION",
+  "created_utc": "2026-10-20T10:44:30.808926+00:00",
+  "author": "/root/spectral_reuse_oct20",
+  "source": "ImbalancedChen/Part3SharedFirstFactorSmallCoreFourierTruncation.lean",
+  "namespace": "ImbalancedChen.Part3",
+  "sole_import": "ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction",
+  "direct_actual_owned_parent": {
+    "module": "ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction",
+    "source_sha256": "13a73ca63c527036752d7bd367ac0c5b37582a0e48047855656418e1987a1c13",
+    "object_parts": {
+      ".olean": "1665facba02d1a5e96c8cc383d533fcd7f927985621d12cebb31c63f1b16a893"
+    },
+    "owned_receipt": ".lake/proof-continuation/audits/20261020T104018969633Z/receipt.json",
+    "owned_receipt_sha256": "f4171ef1740f083e13cf34130e0e482b7e01b95555e2edc8061d994ab53328cc",
+    "declarations_json_sha256": "696ebb37d30e4f7baafb802bedc232ddaa050867d815ac925b8218ff8deb7a13",
+    "complete_serialized_declarations": 21
+  },
+  "source_of_parent": "Current exact root-verified original strictPASS and all21 complete owned records; not a pending analytic assumption",
+  "readonly_complete_proposal": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261020-actual-small-core-row-adaptive-fourier-tail-complete-readonly-proposal.json",
+  "readonly_complete_proposal_sha256": "4e2c4760aa409977a4303194560605f16fce7669b07c0ab5a666e121abff7097",
+  "four_literal_public_definitions": [
+    "def CommonSmoothCutoff.poissonNonzeroFrequencyWindow (H : ℕ) : Finset ℤ :=\n  ((Finset.Icc 1 H).image (fun n : ℕ => (n : ℤ))) ∪\n    ((Finset.Icc 1 H).image (fun n : ℕ => -(n : ℤ)))",
+    "def CommonSmoothCutoff.poissonFrequencyCutoff (Z M : ℝ) (L : ℕ) : ℕ :=\n  Nat.ceil (Z * (L : ℝ) / M)",
+    "def MediumAtom.commonFactorPairNonzeroWeightTruncated (d : MediumAtom)\n    (Z : ℝ) (n₁ n₂ : ℕ) : ℂ :=\n  ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\n      (if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then\n        (∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n            (CommonSmoothCutoff.poissonFrequencyCutoff Z d.U\n              ((complexFactorModulus a).lcm (complexFactorModulus b))),\n          CommonSmoothCutoff.poissonNonzeroFrequency\n            (d.U / ((complexFactorModulus a).lcm (complexFactorModulus b) : ℝ))\n            ((ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b)\n              n₁ n₂ d.residue : ℝ) /\n                ((complexFactorModulus a).lcm (complexFactorModulus b) : ℝ)) h).re\n      else 0 : ℝ)",
+    "def MediumAtom.sharedSmallPairedSmallSupportedNonzeroTruncated (d : MediumAtom)\n    (Ybeta Ysupport Z : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ N1 ∈ d.transposedAtom.betaCarrier, ∑ N2 ∈ d.transposedAtom.betaCarrier,\n      if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n          (CanonicalReciprocalData.supportedPart\n            (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n        d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n          (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeightTruncated Z N1 N2\n      else 0"
+  ],
+  "one_complete_public_type": "theorem actual_betaL2_gamma1L2_cleaned_smallSupported_FourierTail_log_payment\n    (B : ℕ) (sigma kappa c0 A eta : ℝ)\n    (hsigma : 0 < sigma) (heta : 0 < eta) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n            ‖d.cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzero\n                (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) -\n              d.cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzeroTruncated\n                (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) (d.scale ^ eta)‖ ≤\n                  d.scale ^ 2 / (Real.log d.scale) ^ A",
+  "required_actual_row_tail_to_prove": "private theorem poissonNonzeroFrequency_row_tail\n    (r : ℕ) (hr : 2 ≤ r) :\n    ∃ C : ℝ, 0 < C ∧ ∀ t : ℝ, 0 < t → ∀ x Z : ℝ, 0 < Z →\n      ‖(∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency t x h) -\n        ∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow (Nat.ceil (Z / t)),\n          CommonSmoothCutoff.poissonNonzeroFrequency t x h‖ ≤ C / Z ^ (r - 1)",
+  "root_mathematical_full_review": [
+    "Literal t=V/L including every moving p/D; Z>0 gives ceil(Z/t)>=1 and t*ceil(Z/t)>=Z; no lost ceil+1 or common frequency substitution",
+    "Exact summable finite-plus-complement identity preserves zero mode zero and both signed tails",
+    "Shift actual owned r2 telescoping step to Hrow; two signs cost2/(1+tHrow)",
+    "Genuine order r Schwartz bound factors r-2 and base2, tail <=Ctail/Z^(r-1) uniform in t and moving residue",
+    "Kernel Re before arbitrary complex gamma/beta coefficients and exact CRT masks retained inside actual difference",
+    "All full label/card/complex coefficient masses paid:2Q1 *4U² *64Q1²Q2²Q3² <=512X9; cleaned transposed beta coefficient extends by zero and is <=1",
+    "Original outside betaL2*gamma1L2 retained once, true owned outside and uniform logarithm theorem give4X3 after B-dependent atom-independent threshold",
+    "Choose r=ceil11/eta+1>=2 for all eta>0, eta(r-1)>=11, total2048Ctail X; actual scalar delta1 pays unit X²/log^A with arbitrary real A",
+    "No SW, kappa sign, new supplier, spectral cancellation or core bound assumed; no imported private API"
+  ],
+  "root_actual_checked_all16_complete_owned_records_against_original_declarations_receipts": true,
+  "root_actual_checked_all12_complete_primitive_spans_and_ten_sources": true,
+  "root_actual_checked_native_complete_complement_sum_API": {
+    "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Topology\\Algebra\\InfiniteSum\\Group.lean",
+    "sha256": "4fff055c5ab67f8bdb076a964e46bbe41ba7bd934a7d36d8baba96d51627580e",
+    "source_span_177_180": "@[to_additive]\nprotected theorem Multipliable.prod_mul_tprod_compl {s : Finset β} (hf : Multipliable f) :\n    (∏ x ∈ s, f x) * ∏' x : ↑(s : Set β)ᶜ, f x = ∏' x, f x :=\n  ((s.hasProd f).mul_compl (s.multipliable_compl_iff.2 hf).hasProd).tprod_eq.symm",
+    "generated_additive_public_name": "Summable.sum_add_tsum_compl",
+    "complete_generated_additive_shape": "For summable f:beta->Complex and finite s, (sum x in s,f x)+(tsum x:{x//x notin s},f x)=tsum x,f x.",
+    "availability": "Already reachable Mathlib InfiniteSum.Group through the existing Poisson/Schwartz imports; no new import was added or proposed."
+  },
+  "mathematical_route": {
+    "row_primitives_and_all_original_labels": [
+      "At the generic factorPair primitive set qA=complexFactorModulus a,qB=complexFactorModulus b andL=lcm(qA,qB). On the actual admissible factor carrier every factor integer is positive, so qA,qB,L>0. This positivity is reproduced from original factorCarrier membership and originalQi>=1; no transposed admissibility assumption is needed.",
+      "The actual generic kernel has t=d.U/L. In the literal same-p transposed slice used by the small core its d.U is the ORIGINALV. Therefore t=originalV/L, with full physicalL, including the sharedp and every tail gcdD. No replacement ofV by aQ scale and no freezingp,D is performed.",
+      "The real phase x=ComplexCRT.residue(qA,qB,N1,N2,signeda)/L is kept exactly. The actual scalar term isP(t,x,h)=0 ifh=0, otherwise t*Fourier(cutoff)(t*h)*fourier(h,x). The last character has norm1 for every signedh and every realx, including the moving signed residue."
+    ],
+    "ceiling_and_nonzero_window": [
+      "ForZ>0,M=originalV>0,L>0, Hrow=ceil(Z*L/M)=ceil(Z/t) is a positive natural, soHrow>=1 even whenZ/t<1. Nat.le_ceil gives t*Hrow>=Z. The upper ceil+1 is not discarded; no upper boundHrow<=Z/t is used.",
+      "The literal finite window is the disjoint union ofpositive1..Hrow and their negatives. Membership is exactlyh!=0 andh.natAbs<=Hrow, withcardinality2Hrow. The zero mode is excluded at the carrier level and alsoP(t,x,0)=0 by the original primitive.",
+      "The complement is precisely zero plus signedh with|h|>Hrow. The zero term is exactly0, and each remaining sign has unique indexHrow+n+1,n>=0. No dyadic lower-frequency shell and no large-frequency additive1 is inserted."
+    ],
+    "actual_summability_and_exact_difference": [
+      "Already owned poissonNonzeroFrequency_summable_norm(ht,x) provides absolute summability for every positive mesht. Hence the complex series is summable, and its finite-window subtraction equals the sum over the complement.",
+      "Use the genuine generated additive API Summable.sum_add_tsum_compl (to_additive of the verified Mathlib Multipliable.prod_mul_tprod_compl) to obtain the exact finite plus complement identity. Then apply norm_tsum_le_tsum_norm and the pointwise majorant. No unsummable rearrangement or unproved tail estimate is a premise."
+    ],
+    "shifted_telescoping_base2": [
+      "The already owned poisson_decay_step says t/(1+t(n+1))²<=1/(1+tn)-1/(1+t(n+1)) for every n>=0 andt>0. Apply it atHrow+n.",
+      "Every finiteN shifted positive tail is<=1/(1+tHrow)-1/(1+t(Hrow+N))<=1/(1+tHrow). The summands are nonnegative; summable_of_sum_range_le and Real.tsum_le_of_sum_range_le (the same APIs used by the owned full-decay proof) give sum_{n>=0} t/(1+t(Hrow+n+1))²<=1/(1+tHrow).",
+      "The negative sign gives the identical tail byabs symmetry. Consequently the two-sided nonzero tail is<=2/(1+tHrow). The constant2 is explicitly retained. This is stronger than merely using the owned full sum<=2, which would lose one decay power."
+    ],
+    "Schwartz_order_r_and_ratio_cancellation": [
+      "Fix naturalr>=2 before the atom. Owned schwartz_norm_le_rapidDecay applied to the literal Fourier cutoff Schwartz map yieldsCr>0 such that normFourier(u)<=Cr/(1+|u|)^r for every realu.",
+      "The originalt prefactor and unit character give normP(t,x,h)<=Cr*t/(1+t|h|)^r. For|h|>Hrow factor the denominator into powers2 andr-2; since1+t|h|>=1+tHrow, the tail is at mostCr*(1+tHrow)^(-(r-2)) times the base2 tail.",
+      "Thus norm(row full minus row truncated)<=2Cr/(1+tHrow)^(r-1)<=2Cr/Z^(r-1). Write Ctail=2Cr. The coefficientt=V/L has canceled exactly, uniformly for all positiveV,L; neither a factorL/V nor a lost+1 remains. No integration or r-dependent1/(r-1) normalization is needed."
+    ],
+    "real_projection_before_complex_coefficients": [
+      "For each actual compatible row, subtract the finite Poisson sum inside the existing real projection: Re(full)-Re(finite)=Re(full-finite). Then keep the outer arbitrary complex beta/gamma coefficientC untouched.",
+      "Use norm(C*(Re(tail):Complex))=normC*|Re(tail)|<=normC*norm(tail). Never replaceC*Re(P) byRe(C*P). Incompatible CRT rows and failed small masks remain literalzero in BOTH sums; only their nonnegative norm envelope may be enlarged after this exact identity."
+    ],
+    "geometry_for_polynomial_envelope": [
+      "For originalhd andsigma>0 letX=U*V>=1. U,V<=X by the other factor>=1. Q1<U X^(-sigma)<=U<=X.",
+      "Original U²Q2Q3²<X^(1-8sigma)<=X. BecauseU,Q2,Q3>=1 this givesQ2<=X andQ3<=Q3²<=X. These comparisons use only existing actual admissibility fields andsigma>0, withoutkappa>=0, sigma<1/100, SW, an a-size hypothesis or a spectral bound."
+    ],
+    "exact_512_X9_core_coefficient_mass": [
+      "Apply the literal core tocleanedAlphaAtom. Its transposed beta is originalcleanedAlpha on originalalphaCarrier andzero otherwise. Therefore its norm is<=1 for everyN in the full actual transposedbetaCarrier, even when that carrier index lies outside the original alpha interval. Both complex beta factors are explicitly counted and their star orientation is preserved.",
+      "The full transposed betaCarrier hascardinality<=2U, notcardinality of a silently changed alpha interval. Thus the orderedN1,N2 pair count is<=4U².",
+      "The original primitivep carrier hascardinality<=2Q1. This outerp cost is paid even though the slicedgamma1 is an indicator; p is not frozen for free.",
+      "Every full factor labela has three original natural coordinates in factorCarrierQi. Each cardfactorCarrierQi<=2Qi via positiveIoc floor bounds, so #labels<=8Q1Q2Q3. The two full ordereda,b label carriers cost<=64Q1²Q2²Q3².",
+      "In each q1-slice transposed atom the first gamma is the indicator ofcoordinatep; its norm<=1. The originalgamma2,gamma3 norms<=1 on their exact carriers. Hence norm ofeach slice gamma coefficient and ofits starred partner is<=1. No originalgamma1 is accidentally omitted: the originalgamma1L2 remains in the OUTSIDE factor as required by the owned shared-p Cauchy.",
+      "Multiplying literal counts and coefficient envelopes gives (2Q1)*(4U²)*(64Q1²Q2²Q3²)=512U²Q1³Q2²Q3²<=512X9. Both beta coefficients, both full gamma labels and all outerp are included exactlyonce in this positive envelope. Masks/compatibility are only bounded by1 after the exact tail identity. All tail gcdD values remain inside the exactrowL/window; the uniform rowtail is independent ofL, so summing everyD is covered by these unchanged label counts.",
+      "Therefore forarbitrary actualsmallcutoffs the cleaned core tail norm<=512*Ctail*X9/Z^(r-1). The endpoint specializes to unchangedYbeta=Ysupport=X^(sigma/4).",
+      "The512X9 figure counts only the inner core coefficient mass. The outside4X3 is its distinct original beta/gamma1L2 product. Explicitly the p carrier contributesQ1, the two full factor-label carriers contributeQ1², and the original outsidegamma1L2 contributes onefurtherQ1: totalQ1⁴. The original outsidebetaL2 contributes its ownV/log factor; it is multiplied exactlyonce. No complex beta coefficient or outside factor is omitted or duplicated."
+    ],
+    "owned_original_outside_and_B_cost": [
+      "Already owned sharedFirstFactor_outside_le has complete type: for original B,sigma,kappa,c0,d andhd, the literal outsideW=(sum_originalbeta normbeta²)*(sum_primitivep normgamma1²) is<=4VQ1*(1+log(2V))^pB, pB=((2^B)^2)-1 as a NATURAL. There are no transposed-admissibility, SW, family-dependent constant or missing hBeta assumptions.",
+      "Owned eventually_actual_log_cost_le_rpow withp=pB,s=0, originalsigma>0 andepsilon=1 gives ONE thresholdxLog>1 before everyB,kappa,c0,d (for the chosen fixedpB) and Hbeta^pB<=X. Instantiate it with the actualB after choosingpB; the resultingthreshold depends on the fixedB throughpB and on originals sigma, never the atom or signedresidue.",
+      "Hence W<=4VQ1 X<=4X3 afterxLog. This pays all originalbeta coefficient growth andgamma1L2 using existing owned work. The outside factor is multiplied ONCE by the coretail envelope; it is not duplicated or absorbed before the true mass calculation. AtB=0,pB=0, this remains literal andvalid."
+    ],
+    "fixed_order_and_unit_log_budget": [
+      "Choose r=Nat.ceil(11/eta)+1. Sinceeta>0,11/eta>0, soceil(11/eta)>=1 andr>=2 for EVERYeta>0, includingeta>11. Nat.le_ceil giveseta*(r-1)>=11. This fixedr is chosen beforeall atoms,physicalrows,p,D,h; it can even be chosen independently ofB.",
+      "TakeZ=X^eta. The actual weightedtail is<= (4X3)*(512Ctail X9)/Z^(r-1)=2048Ctail X^(12-eta*(r-1))<=2048Ctail X forX>=1. Every constant2,512,4 and2048 has been retained.",
+      "Owned eventually_const_rpow_two_le_logBudget withC=2048Ctail>0, delta=1 and arbitrary realA supplies C*X^(2-1)<=X²/log(X)^A eventually. Take x0=max(2,max(xLog,xPower)). This x0 is chosen befored (and therefore before any familyi). It proves the proposed unit-budget endpoint without a new supplier or an outside normalization change."
+    ]
+  },
+  "implementation_guards": [
+    "Do not replace individualHrow by acommonH unless a separate global dominance proof is supplied.",
+    "Do not drop tailgcdD from the literalL, assume p/D fixed across its outer sum, or omit their cost.",
+    "Do not commute Re through arbitrary complex beta/gamma coefficients.",
+    "Do not call a private imported declaration; reproduce the short positive-carrier cardinality/positivity arguments locally using public finite APIs.",
+    "Do not assume a Fourier-tail estimate as a private/publicsupplier: derive it from the actual owned Schwartz decay and shifted telescoping.",
+    "Do not claim the pending SmallPairedSupportedReduction module is accepted; actual implementation waits for its strict and owned record binding."
+  ],
+  "private_helpers": "May prove finite-window/complement identities, shifted decay, original geometry/card/complex mass and scalar assembly; all proof suppliers must actually be proved; complete inventory required",
+  "boundary": "Only this NEW source, no old source/import/CI/pin/tool/resource changes; private local helpers allowed. Complete actual source+all declaration/full primitive/API inventory freeze then root+separate nonauthor full implementation review BEFORE first compiler gate",
+  "compiler_permission": false,
+  "source_already_accepted": false,
+  "unconditional_main_proved": false,
+  "spectral_7_32_proved": false,
+  "quota_latest_remaining": 92,
+  "hard_stop_remaining_at_most": 50
+}

@@ -325,7 +325,7 @@ theorem actualExtendedThirdInitialPolicy_eq_actualPlus {e : ℝ}
           refine ⟨?_, ?_⟩
           · simpa only [Finset.prod_insert hnot, id_eq, hprod, List.prod_cons] using hl
           · simpa only [Bool.false_eq_true, if_false, List.toFinset_cons] using ha
-        simp [policy, ordinaryParityRosserPolicy, oddFirstExitPolicy, hfull]
+        simp [policy, ordinaryParityRosserPolicy, hfull]
     | true => rfl
   have hforward : ∀ (remaining pre : List ℕ) (positive : Bool) (mass : ℝ),
       Adm pre → positive = evenListLength pre →
@@ -392,7 +392,8 @@ theorem actualExtendedThirdInitialPolicy_eq_actualPlus {e : ℝ}
           simpa only [List.reverse_cons, List.append_assoc, List.singleton_append] using hfinal
         have hnext := happend chosen.reverse (p :: pre) hprime' hsort' hfinal'
         have htest : policy (!positive) (p :: pre) = true := by
-          simp [policy, ordinaryParityRosserPolicy, oddFirstExitPolicy, hnext]
+          simp [policy, ordinaryParityRosserPolicy, oddFirstExitPolicy]
+          exact Or.inr (show ordinaryRosserPrefixAdmissible false R (p :: pre) from hnext)
         obtain ⟨leaf, hleaf, heq⟩ :=
           ih (p :: pre) (!positive) (mass * 1) hprime' hsort' hfinal'
         refine ⟨leaf, ?_, ?_⟩
@@ -495,8 +496,9 @@ theorem actualExtendedThirdInitialPolicy_eq_actualPlus {e : ℝ}
   have hM : actualSmallPrimeProduct N N z = carrier.prod := by
     unfold actualSmallPrimeProduct actualSmallPrimeFinset
     rw [← roughPrimeUniverse_toFinset N N 0 z]
-    simpa only [carrier, List.map_id'] using List.prod_toFinset (fun p : ℕ => p)
-      (roughPrimeUniverse_nodup N N 0 z)
+    change (roughPrimeUniverse N N 0 z).toFinset.prod (id : ℕ → ℕ) =
+      (roughPrimeUniverse N N 0 z).prod
+    rw [List.prod_toFinset (id : ℕ → ℕ) (roughPrimeUniverse_nodup N N 0 z), List.map_id]
   rw [← hM]
   unfold actualSmallRosserPlusDensity reciprocalTotientDensity
     actualSmallRosserSupport actualSmallRosserPlus

@@ -160,7 +160,9 @@ private theorem currentChenSeventh_prime_factor_mem_carrier {N b q r : ℕ}
   obtain ⟨_P, _hP, _hmul, hlt, hqpos, _hquot⟩ :=
     currentChenUpsilon9_quotient_witness hb hq
   have hqle : q ≤ b * q := by
-    simpa only [one_mul] using Nat.mul_le_mul_right q (Nat.succ_le_iff.mpr hb)
+    calc
+      q = 1 * q := (one_mul q).symm
+      _ ≤ b * q := Nat.mul_le_mul_right q (by omega)
   have hrle : r ≤ q := Nat.le_of_dvd hqpos hrq
   exact mem_chenAdditivePrimeCarrier.mpr
     ⟨hrle.trans_lt (hqle.trans_lt hlt), hr,
@@ -295,8 +297,10 @@ private theorem currentChenSeventh_composite_eq_pairs_image {N : ℕ} {t : ℕ �
     have hr := (mem_chenAdditivePrimeCarrier.mp hrc).2.1
     have hs := (mem_chenAdditivePrimeCarrier.mp hsc).2.1
     have hprod : 4 ≤ r * s := Nat.mul_le_mul hr.two_le hs.two_le
+    have hnonunit : r * s ≠ 1 :=
+      ne_of_gt (lt_of_lt_of_le (by decide : 1 < 4) hprod)
     exact Finset.mem_filter.mpr
-      ⟨hF, by omega, Nat.not_prime_mul hr.ne_one hs.ne_one⟩
+      ⟨hF, hnonunit, Nat.not_prime_mul hr.ne_one hs.ne_one⟩
 
 private theorem currentChenSeventh_row_card_partition {N : ℕ} {t : ℕ × ℕ}
     (ht : t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))) :
@@ -309,7 +313,7 @@ private theorem currentChenSeventh_row_card_partition {N : ℕ} {t : ℕ × ℕ}
     ext q
     by_cases hq : q = 1
     · subst q
-      by_cases hu : 1 ∈ F <;> simp [G, hu]
+      by_cases hu : 1 ∈ F <;> simp [G, hu, Nat.not_prime_one]
     · by_cases hu : 1 ∈ F <;> simp [hq, hu]
   have hcompset : G.filter (fun q => q ≠ 1) =
       F.filter (fun q => q ≠ 1 ∧ ¬ Nat.Prime q) := by

@@ -1,0 +1,73 @@
+{
+  "status": "ROOT_COMPLETE_MATH_ONE_NEW_FINITE_PROOF_SOURCE_AUTHORING_SCOPE_ONLY_NO_COMPILER_OR_ACCEPTANCE",
+  "created_utc": "2026-10-20T10:04:16.294912+00:00",
+  "owner": "/root/chen7_cofactor_oct20",
+  "one_new_module": "ImbalancedChen.Part3LichtmanSignedDifferenceMultiplicity",
+  "only_imports": [
+    "ImbalancedChen.Part3ActualLargeGCDBetaMass"
+  ],
+  "namespace": "ImbalancedChen.Part3.LichtmanSignedDifferenceMultiplicity",
+  "source_prelude": "noncomputable section\nopen Classical Finset\nopen scoped BigOperators",
+  "nine_exact_literal_public_definitions": [
+    "def dyadicCarrier (T : ℝ) : Finset ℕ :=\n  (Finset.Ioc 0 (Nat.floor (2 * T))).filter\n    (fun n => T ≤ (n : ℝ) ∧ (n : ℝ) < 2 * T)",
+    "def frequencyCarrier (H : ℝ) : Finset ℤ :=\n  ((Finset.Icc 1 (Nat.floor H)).image (fun n : ℕ => (n : ℤ))) ∪\n    ((Finset.Icc 1 (Nat.floor H)).image (fun n : ℕ => -(n : ℤ)))",
+    "def difference (t : (ℕ × ℕ × ℕ) × (ℤ × ℤ)) : ℤ :=\n  t.2.1 * (t.1.1 : ℤ) - t.2.2 * (t.1.2.1 : ℤ)",
+    "def sourceCarrier (S H F : ℝ) : Finset ((ℕ × ℕ × ℕ) × (ℤ × ℤ)) :=\n  ((dyadicCarrier S ×ˢ (dyadicCarrier S ×ˢ dyadicCarrier F)) ×ˢ\n    (frequencyCarrier H ×ˢ frequencyCarrier H)).filter\n      (fun t => difference t ≠ 0)",
+    "def output (t : (ℕ × ℕ × ℕ) × (ℤ × ℤ)) : ℕ × ℤ :=\n  (t.1.1 * t.1.2.1, (t.1.2.2 : ℤ) * difference t)",
+    "def multiplicity (S H F : ℝ) (z : ℕ) (y : ℤ) : ℕ :=\n  ((sourceCarrier S H F).filter (fun t => output t = (z, y))).card",
+    "def multiplicityL2 (S H F : ℝ) (nu : ℕ) : ℝ :=\n  ∑ zy ∈ (sourceCarrier S H F).image output,\n    if (nu : ℤ) ∣ zy.2 then (multiplicity S H F zy.1 zy.2 : ℝ) ^ 2 else 0",
+    "def supportCap (S H F : ℝ) : ℕ :=\n  Nat.ceil (max (4 * S ^ 2) (8 * F * H * S))",
+    "def divisorMaximum (S H F : ℝ) : ℕ :=\n  (Finset.Icc 1 (supportCap S H F)).sup (fun n : ℕ => n.divisors.card)"
+  ],
+  "one_complete_public_theorem_type": "theorem signedDifference_multiplicityL2_bound\n    (S H F : ℝ) (hS : 1 ≤ S) (hH : 1 ≤ H) (hF : 1 ≤ F)\n    (nu : ℕ) (hnu : 0 < nu) :\n    multiplicityL2 S H F nu ≤\n      576 * (divisorMaximum S H F : ℝ) ^ 5 *\n        (harmonic (Nat.floor (2 * S)) : ℝ) *\n          (1 + H / S) * (H * S) ^ 2 * F / (nu : ℝ) ∧\n      (8 * F * H * S ≤ (nu : ℝ) → multiplicityL2 S H F nu = 0)",
+  "private_helper_scope": "Only elementary finite cardinality, divisor, gcd reduction, harmonic sum, and Cauchy lemmas needed for this actual theorem. No fresh analytic premise, estimate field, supplier hypothesis, source pin or external dependency.",
+  "complete_independent_math_and_minimal_API_report": {
+    "path": ".lake/proof-continuation/source-reviews/20261020-lichtman-signed-difference-multiplicity-complete-independent-proposal.json",
+    "sha256": "92d0a9c0062774cc28d99b6bcf97bade13d0d429da1a1ee77108dbb8b3eeba5f"
+  },
+  "input_note_root_full_actual_read": "../goldbach-research/lichtman-lemma51-multiplicity-independent-20261010.txt SHA4814e3dc62e1d6afffbdbaac90325df6abcf06df5becf68682392fce16e40774",
+  "root_actual_math_review": [
+    "Actually read full local note; independently rechecked Dstar2 divisor-decompositionCauchy, equal64 andactualgcdunequal512 counts, nonzero signedmultiple countswithout+1, harmonic gcdmean andDstar5 finalconstant.",
+    "Read all9literaldefinitions/completepublictype and all independent mathematicalderivation/API records. Finite outputimage listscoordinates only; originaltuplefiber cardinalitiesretainmultiplicities.",
+    "For fixedoutput(z,y), s1|z and f||y| identify(s2,k) injectively; trueCauchypaysdecompositioncount, cannotassumesamef; finalF once.",
+    "s1,s2actualgcd d positive reducedu,v coprime; signednonzero g withm1=gv,m2=gu; b=gcd(d,nu/c), notg, supplies exact nu/(cb)|k0; sumg≤4Hd/S empty when2Hd/S<1.",
+    "NoH<S, originalcoprime, k~HS, nu<=HS or smallsigneda hypotheses added. tau(0)neverbounded.",
+    "D>=1 andtau(nu)<=D onlybelowactualsupport; fullzeroaboveν>=8FHS andnonnegativeRHShandleallpositiveν.",
+    "The theorem usespositivef branch only. Jointpositive/negativef cancost4 inL2; do notsilentlymerge signs.",
+    "Nineprovideddefinitionspluscomplete576boundANDliteralzeroclaim mustallactuallybeproved; no placeholderpremise supplyinganyfinitecount."
+  ],
+  "prior_current_chen7_source_frozen": "8a292edb6fa1c27a537595fbd3c905a59a36487756eab479e454d4a29b7019bd alreadystrictPASS awaitingowned; do notedit this file orotheroldsource whileauthoringnewmodule",
+  "sole_parent_owned_API": {
+    "module": "ImbalancedChen.Part3ActualLargeGCDBetaMass",
+    "source_sha256": "a139b7b5121574715696aae718f7c974dafee909005d646b6cf8472d35c46d23",
+    "object_sha256": "462da8e1032d9f4b207a7c2de1b11c8461282027412ce0e29dd02b6820dbff2b",
+    "actual_owned_receipt_sha256": "095d8572453bb36aac176472d685b4db38ebd61753a297984bb70cc9468e161b",
+    "complete_consumed_type": "∀ {a : Nat} (ha : @Ne.{1} Nat a (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))) (n : Nat),\n  @LE.le.{0} Nat instLENat (Nat.gcd a n)\n    (@Finset.sum.{0, 0} Nat Nat Nat.instAddCommMonoid (Nat.divisors a) fun (d : Nat) =>\n      @ite.{1} Nat (@Dvd.dvd.{0} Nat Nat.instDvd d n) (Nat.decidable_dvd d n) d\n        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))"
+  },
+  "minimal_parent_boundary": {
+    "proper": 54,
+    "self_inclusive": 55,
+    "foreign_roots": 63,
+    "source_object_replay_claim": "Allexistingknownsource/cache/parts inspection required; notafreshforeignclosurekernelreplayclaim"
+  },
+  "must_preserve": [
+    "all9completeprimitivebodies andonecompletepublictype/hypotheses/constant576/power5/harmonicfloor2S",
+    "originalhalfopenrealS/H/F≥1 andpositiveν, signednonzeroh/k andallorderedtuples",
+    "onlylocalfinitehelperlemmas foractualcardinalities, divisibility, gcd, Cauchy andharmonic costs",
+    "no sorry/customaxiom/unsafe/partial/supplier or newanalyticassumption; do notreplaceboundbyconditionalinterface",
+    "noexistingLeanfile/frozenruntime/audit/parser/tool/pin/CI/automation/manuscript/resourcechanges",
+    "noauthorLean/lake/checker/cache/install; soleruntimeowner retainsheavyjobs"
+  ],
+  "whole_source_gate": "Freeze completeone-moduleimplementation with allprimitive/header inventoryandexactsourcehash; rootnon-authorwhole read plusindependentwhole implementationreview beforefirstcompiler gate. No publicationclaimbeforestrictandcompleteownedreplay.",
+  "unproved_remainders": [
+    "The finite lemma has not yet been authored or compiled. Nine literal definitions and one complete theorem type are proposed, not accepted proof.",
+    "This proves only the positive signed-difference coefficient L2 multiplicity after a valid preceding separation. Need exact actual-source map from the original shared-p small-paired-small-supported kernel, with all Fourier weights, canonical data, gcd labels, moving signeda, and complete ordered multiplicity.",
+    "A future complex coefficient B(z,y) with each separated scalar tuple weight of norm<=1 obeys normB<=b by triangle and hence its squared L2<=Nnu. Extra output unit phases and coprimality indicators preserve/decrease this envelope. Arbitrary weights still jointly depending on the innerb,c sum cannot be extracted by this count; their separation remains a separate analytic obligation.",
+    "To turn finiteDstar andharmonic into x^o(1), need actual original parameter-polynomial support and uniform fixed-order divisor subpower; to remove1+H/S need a proved source H/S<1 geometry bound. Neither is a hidden hypothesis of the finite theorem.",
+    "No7/32 spectral/trilinear Kloosterman-fractions estimate is supplied. The full signed reciprocal kernel with root/slow-a/difference phases and the required averaged spectral bound remains unproved.",
+    "The later nu|a^infinity weighted summation requires its own exact smooth-divisor analytic proof. This finite theorem is uniform in every positive nu and removes any phantom per-nu+1; it does not itself prove that Euler-product estimate.",
+    "Full distribution and unconditional1+1.75 theorem remain incomplete. No count promotion or generic packet Cauchy is being used as spectral evidence."
+  ],
+  "quota_last_actual_remaining": 93,
+  "hard_conditional_stop_at_most": 50
+}

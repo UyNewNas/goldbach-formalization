@@ -197,10 +197,15 @@ original admissibility is not replaced by unproved transposed admissibility.
 | `Part3SharedFirstFactorEnergyNonzeroReduction` | The actual centered energy minus the complete same-p nonzero series equals the same-p zero covariance plus primitive U/V; their proved payments give a uniform energy remainder and signed squared-error reduction retaining the real part of the full nonzero sum, without assuming its estimate | Strict compilation; original-object stock kernel replay; complete 3-declaration types, inventory and transitive axiom audit |
 | `Part3SharedFirstFactorDifferenceReciprocity` | The literal original shared-row CRT phase equals its constructed root, full slow phase and signed difference reciprocal phase, including zero difference and modulus one; all inverse licenses and original V Poisson-frequency transport are proved finitely, without a spectral estimate supplier | Strict compilation; original-object stock kernel replay; complete 19-declaration types, inventory and transitive axiom audit |
 | `Part3SharedFirstFactorLargeSupportedDeletion` | The original asymmetric small-paired-gcd large-supported-part mask is kept identically in whole W, raw zero and full nonzero series; a genuine positive square-divisor density and same-p quotient count preserve V/p and pay both original outside moments and all three norms uniformly, leaving the small-supported spectral core separate | Strict compilation; original-object stock kernel replay; complete 111-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon7PrimeSemiprimeSource` | The literal seventh rough quotient is below the cube of its second prime and splits exactly into unit, prime and ordered semiprime fibres; the original central-N square-root gate, weak roughness endpoints, prime squares and full outer-pair multiplicity remain, without an arithmetic mean or C/K supplier | Strict compilation; original-object stock kernel replay; complete 34-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdInitialCutoff` | The original initial dyadic first-stop polynomial equals the literal ordinary plus density at its exact floor-grid prime cutoff, retaining zero cutoff exponents, strict endpoints, original cap N and all old-level product and cubic tests; its asymptotic mean remains separate | Strict compilation; original-object stock kernel replay; complete 23-declaration types, inventory and transitive axiom audit |
+| `LogPrimeBoxIntegral` | The literal finite-dimensional half-open prime box has a genuinely integrable reciprocal-coordinate density and exact restricted-Lebesgue product logarithm mass, including weak endpoint and zero-dimensional cases, using the fixed Mathlib Fubini theorem and preserving signed constant and terminal weights | Strict compilation; original-object stock kernel replay; complete 12-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorSmallPairedSupportedReduction` | The literal original shared-p nonzero sum splits into three exact masks; an actual finite cleaned-alpha crude bound and unit-coefficient square transfer pay both deleted pieces with the original outside moments and same-C0 auxiliary SW, leaving precisely the unchanged small paired/supported spectral core and fixed CE+3 error | Strict compilation; original-object stock kernel replay; complete 21-declaration types, inventory and transitive axiom audit |
+| `LogPrimeBoxMesh` | The actual arbitrary finite-dimensional half-open logarithmic mesh has exact coverage, unique cell ownership and endpoint-vector convergence with one fixed step; its original boundary geometry supports real reciprocal-prime integral approximations without changing arithmetic selectors | Strict compilation; original-object stock kernel replay; complete 30-declaration types, inventory and transitive axiom audit |
 
-These 150 modules contain **3409 complete owned declarations**, including
+These 155 modules contain **3529 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-3409 independent major mathematical theorems.
+3529 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.
@@ -355,6 +360,12 @@ The full physical low-conductor aggregate and generic high-conductor mean
 have their separate acceptance records below; their residual consumers
 and complete zero-mode assembly remain separate.
 
+The initial dyadic-first-stop polynomial is exactly the actual
+ordinary plus density at its literal floor-grid prime cutoff. Zero cutoff
+exponents, strict endpoints, cap N and all old-level tests are retained.
+An asymptotic bound must still be proved before replacing that cutoff by
+rho through genuine parameter limits.
+
 Deleting actual original-alpha divisors of the moving signed residue
 has a proved finite error and every logarithmic payment, with the same
 auxiliary-SW constants preserved. The cleaned atom retains the original
@@ -433,15 +444,37 @@ quotient-block count. Its original asymmetric mask, true V/p denominator,
 both outside moments and all three W/zero/nonzero norms are retained. The
 small-supported reciprocal/spectral core remains open.
 
-The earlier primitive U/V payments use the original beta L2 outside
-factor. Their reuse in the shared-first-factor setting, with the extra
-primitive gamma1 L2 factor and the p sum, needs a genuine additional
-aggregation and payment. A raw-zero conductor decomposition alone does
-not establish the complete centered energy or physical distribution.
+The actual seventh quotient is strictly below the cube of its
+second prime. Its full count splits exactly into unit, prime and ordered
+two-prime fibres, retaining central-N square-root walls, weak endpoints,
+prime squares and outer-label multiplicity. No seventh analytic mean or
+full eleven-row lower bound follows from this finite partition alone.
+
+The literal complete nonzero series is now partitioned into all
+three paired/supported masks. A proved cleaned-alpha size bound and squared
+error transfer leave coefficient one on the actual small core, with fixed
+CE+3 logarithmic error under the original uniform auxiliary SW input. No
+spectral estimate for this core is a hypothesis of the reduction.
+
+The actual initial-cutoff selector equals the ordinary upper
+Rosser polynomial at its literal floored cutoff, including cutoff zero.
+The complete finite modulus support and squarefree Mobius/totient dictionary
+are proved; the corresponding original-policy signed mean is still open.
+
+The actual reciprocal-coordinate density has its exact product
+logarithm Lebesgue integral, including signed weights and zero dimension.
+The original half-open mesh has exact coverage, disjoint cells, unique
+boundary ownership and endpoint-vector convergence. These are genuine
+integral inputs, separate from arithmetic mean and signed-policy estimates.
+
+The shared-first-factor primitive U/V and zero-covariance
+aggregations preserve both original outside moments and the actual p sum.
+The remaining small-core spectral bound, original-policy mean constants
+and final unconditional arithmetic lower/upper inputs are still open.
 
 ## Candidates that must not be counted as completed proofs
 
-The 18 unaccepted source candidates are listed with exact source
+The 17 unaccepted source candidates are listed with exact source
 hashes in `verification/proof-continuation/2026-10-15/unaccepted-candidates.json`.
 They are excluded from the accepted module/declaration inventory above.
 Original failed attempts remain failures; replacement sources need their own checks.
@@ -461,9 +494,8 @@ Original failed attempts remain failures; replacement sources need their own che
 * `ActualPrimeFineWordSlotRegrouping`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactFrontier`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactPolicySaving`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdInitialCutoff`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactSignedDensityLimit`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `CurrentChenUpsilon7PrimeSemiprimeSource`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3LichtmanSignedDifferenceMultiplicity`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 
 The ordinary lower means above are baseline means. They do not prove the
 manuscript's stronger causal h248 contribution, complete eleven-term lower

@@ -1,0 +1,420 @@
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:108:4: error: mod_cast has type
+  |h| = |h|
+but is expected to have type
+  ↑h.natAbs = ↑|h|
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:187:77: error: No goals to be solved
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:230:6: error: Application type mismatch: The argument
+  dyadicCarrier F
+has type
+  Finset ℕ
+but is expected to have type
+  Finset ℤ
+in the application
+  {f ∈ dyadicCarrier F | ↑nu ∣ f * k}
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:344:44: error: Application type mismatch: The argument
+  Nat.cast_nonneg ?m.510
+has type
+  0 ≤ ↑?m.510
+but is expected to have type
+  0 ≤ ↑t.2.1
+in the application
+  abs_of_nonneg (Nat.cast_nonneg ?m.510)
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:366:6: error: mod_cast has type
+  |difference t| = |difference t|
+but is expected to have type
+  ↑(difference t).natAbs = ↑|difference t|
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:375:27: error: Variable name `hnu` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hnu
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:402:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  @LE.le ℕ Nat.instLattice.toLE 1 ((Icc 1 (supportCap S H F)).sup fun n => #n.divisors)
+but is expected to have type
+  @LE.le ℕ instLENat 1 (divisorMaximum S H F)
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:407:2: error: Tactic `apply` failed: could not unify the conclusion of `@le_sup`
+  ?f ?b ≤ sup ?s ?f
+with the goal
+  #n.divisors ≤ divisorMaximum S H F
+
+Note: The full type of `@le_sup` is
+  ∀ {α : Type ?u.41} {β : Type ?u.40} [inst : SemilatticeSup α] [inst_1 : OrderBot α] {s : Finset β} {f : β → α}
+    {b : β}, b ∈ s → f b ≤ s.sup f
+
+S H F : ℝ
+n : ℕ
+hn : 0 < n
+hbound : ↑n ≤ max (4 * S ^ 2) (8 * F * H * S)
+⊢ #n.divisors ≤ divisorMaximum S H F
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:466:53: error: Application type mismatch: The argument
+  heq
+has type
+  (fun p => (p.1, p.2.2)) a = (fun p => (p.1, p.2.2)) b
+but is expected to have type
+  a = b
+in the application
+  congrArg Prod.fst heq
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:467:56: error: Application type mismatch: The argument
+  heq
+has type
+  (fun p => (p.1, p.2.2)) a = (fun p => (p.1, p.2.2)) b
+but is expected to have type
+  a.2 = b.2
+in the application
+  congrArg Prod.snd heq
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:535:19: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Membership ((ℕ × ℕ × ℕ) × (ℕ × ℕ × ℕ) × ℤ × ℤ) (Finset ((ℕ × ℕ × ℕ) × ℤ × ℤ))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:542:4: error: Tactic `apply` failed: could not unify the conclusion of `mem_filter.mpr`
+  ?m.280 ∈ filter ?m.277 ?m.279
+with the goal
+  (t.1, h.2) = h
+
+Note: The full type of `mem_filter.mpr` is
+  ?m.280 ∈ ?m.279 ∧ ?m.277 ?m.280 → ?m.280 ∈ filter ?m.277 ?m.279
+
+case left_inv
+S H F : ℝ
+t : (ℕ × ℕ × ℕ) × ℤ × ℤ
+ht : t ∈ sourceCarrier S H F
+hdata :
+  t.1.1 ∈ dyadicCarrier S ∧
+    t.1.2.1 ∈ dyadicCarrier S ∧
+      t.1.2.2 ∈ dyadicCarrier F ∧ t.2.1 ∈ frequencyCarrier H ∧ t.2.2 ∈ frequencyCarrier H ∧ difference t ≠ 0
+hfpos : 0 < t.1.2.2
+hfnz : ↑t.1.2.2 ≠ 0
+h : (ℕ × ℕ × ℕ) × ℤ × ℤ
+hh✝ : h ∈ {u ∈ outputFiber S H F (output t) | u.1 = t.1}
+hh : h ∈ outputFiber S H F (output t)
+hk : h.1 = t.1
+hsource : sorry
+⊢ (t.1, h.2) = h
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:550:19: error: Application type mismatch: The argument
+  Eq.symm hprefix
+has type
+  difference t = u.1 * ↑(t.1.1, t.1.2.1).1 - u.2 * ↑(t.1.1, t.1.2.1).2
+but is expected to have type
+  (t.1, u).2.1 = u.1
+in the application
+  Prod.ext (Eq.symm hprefix)
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:552:4: error: Tactic `rfl` failed: The left-hand side
+  {u ∈ outputFiber S H F (output t) | u.1 = t.1}
+is not definitionally equal to the right-hand side
+  (t.1, h)
+
+case hj
+S H F : ℝ
+t : (ℕ × ℕ × ℕ) × ℤ × ℤ
+ht : t ∈ sourceCarrier S H F
+hdata :
+  t.1.1 ∈ dyadicCarrier S ∧
+    t.1.2.1 ∈ dyadicCarrier S ∧
+      t.1.2.2 ∈ dyadicCarrier F ∧ t.2.1 ∈ frequencyCarrier H ∧ t.2.2 ∈ frequencyCarrier H ∧ difference t ≠ 0
+hfpos : 0 < t.1.2.2
+hfnz : ↑t.1.2.2 ≠ 0
+h : ℤ × ℤ
+ha✝ : h ∈ row H (t.1.1, t.1.2.1) (difference t)
+⊢ (t.1, h) ∈ {u ∈ outputFiber S H F (output t) | u.1 = t.1}
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:608:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ j ∈ Z, ∑ i ∈ A with output i = j, W i
+in the target expression
+  ↑(divisorMaximum S H F) ^ 2 * ∑ zy ∈ Z, ∑ t ∈ outputFiber S H F zy, W t =
+    ↑(divisorMaximum S H F) ^ 2 *
+      ∑ t ∈ sourceCarrier S H F, if ↑nu ∣ (output t).2 then ↑(#(row H (t.1.1, t.1.2.1) (difference t))) else 0
+
+S H F : ℝ
+hS : 1 ≤ S
+hH : 1 ≤ H
+hF : 1 ≤ F
+nu : ℕ
+A : Finset ((ℕ × ℕ × ℕ) × ℤ × ℤ) := sourceCarrier S H F
+Z : Finset (ℕ × ℤ) := image output A
+W : (ℕ × ℕ × ℕ) × ℤ × ℤ → ℝ := fun t => if ↑nu ∣ (output t).2 then ↑(#(row H (t.1.1, t.1.2.1) (difference t))) else 0
+hpoint :
+  ∀ zy ∈ Z,
+    (if ↑nu ∣ zy.2 then ↑(multiplicity S H F zy.1 zy.2) ^ 2 else 0) ≤
+      ↑(divisorMaximum S H F) ^ 2 * ∑ t ∈ outputFiber S H F zy, W t
+hsum : ∑ j ∈ Z, ∑ i ∈ A with output i = j, W i = ∑ i ∈ A, W i
+⊢ ↑(divisorMaximum S H F) ^ 2 * ∑ zy ∈ Z, ∑ t ∈ outputFiber S H F zy, W t =
+    ↑(divisorMaximum S H F) ^ 2 *
+      ∑ t ∈ sourceCarrier S H F, if ↑nu ∣ (output t).2 then ↑(#(row H (t.1.1, t.1.2.1) (difference t))) else 0
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:623:44: error: Application type mismatch: The argument
+  Nat.cast_nonneg ?m.333
+has type
+  0 ≤ ↑?m.333
+but is expected to have type
+  0 ≤ ↑h.1
+in the application
+  abs_of_nonneg (Nat.cast_nonneg ?m.333)
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:633:4: error: mod_cast has type
+  |h✝.1 * ↑s.1 - h✝.2 * ↑s.2| = |h✝.1 * ↑s.1 - h✝.2 * ↑s.2|
+but is expected to have type
+  ↑(h✝.1 * ↑s.1 - h✝.2 * ↑s.2).natAbs = ↑|h✝.1 * ↑s.1 - h✝.2 * ↑s.2|
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:678:12: error: Application type mismatch: The argument
+  dyadicCarrier F
+has type
+  Finset ℕ
+but is expected to have type
+  Finset ℤ
+in the application
+  {f ∈ dyadicCarrier F | ↑nu ∣ f * k}
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:686:84: error: unsolved goals
+S H F : ℝ
+hS : 1 ≤ S
+hH : 1 ≤ H
+nu : ℕ
+hS0 : 0 ≤ S
+hH0 : 0 ≤ H
+⊢ (∑ t ∈ (dyadicCarrier S ×ˢ dyadicCarrier S ×ˢ dyadicCarrier F) ×ˢ frequencyCarrier H ×ˢ frequencyCarrier H with
+      t.2.1 * ↑t.1.1 - t.2.2 * ↑t.1.2.1 ≠ 0,
+      if ↑nu ∣ ↑t.1.2.2 * (t.2.1 * ↑t.1.1 - t.2.2 * ↑t.1.2.1) then
+        ↑(#(row H (t.1.1, t.1.2.1) (t.2.1 * ↑t.1.1 - t.2.2 * ↑t.1.2.1)))
+      else 0) =
+    ∑ x ∈ dyadicCarrier S,
+      ∑ x_1 ∈ dyadicCarrier S,
+        ∑ x_2 ∈ dyadicCarrier F,
+          ∑ x_3 ∈ frequencyCarrier H,
+            ∑ x_4 ∈ frequencyCarrier H,
+              if x_3 * ↑x - x_4 * ↑x_1 ≠ 0 then
+                if ↑nu ∣ ↑x_2 * (x_3 * ↑x - x_4 * ↑x_1) then ↑(#(row H (x, x_1) (x_3 * ↑x - x_4 * ↑x_1))) else 0
+              else 0
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:698:46: error: Application type mismatch: The argument
+  LT.lt.le (mem_dyadicCarrier_iff.mp hs₂).right.right
+has type
+  ↑s₂ ≤ 2 * S
+but is expected to have type
+  ↑(?m.424 h hh).2 ≤ 2 * S
+in the application
+  @difference_mem_frequency H S hH0 hS0 (?m.424 h hh) ?m.406 (LT.lt.le (mem_dyadicCarrier_iff.mp hs₂).right.right)
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:713:18: error: Application type mismatch: The argument
+  dyadicCarrier F
+has type
+  Finset ℕ
+but is expected to have type
+  Finset ℤ
+in the application
+  {f ∈ dyadicCarrier F | ↑nu ∣ f * k}
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:715:82: error: unsolved goals
+S H F : ℝ
+hS : 1 ≤ S
+hH : 1 ≤ H
+nu : ℕ
+hS0 : 0 ≤ S
+hH0 : 0 ≤ H
+s₁ : ℕ
+a✝² : s₁ ∈ dyadicCarrier S
+s₂ : ℕ
+a✝¹ : s₂ ∈ dyadicCarrier S
+k : ℤ
+a✝ : k ∈ frequencyCarrier (4 * H * S)
+⊢ (∑ x ∈ sorry, if ↑nu ∣ x * k then 1 else 0) = ∑ f ∈ dyadicCarrier F, if ↑nu ∣ ↑f * k then 1 else 0
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:747:52: error: Type mismatch: After simplification, term
+  Eq.symm h
+ has type
+  @Eq ℤ (a₀ + ↑m * ↑(q a)) a
+but is expected to have type
+  @Eq ℤ (a₀ + ↑(m * q a)) a
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:760:18: error: linarith failed to find a contradiction
+A : Finset ℤ
+H : ℝ
+hH : 0 ≤ H
+m : ℕ
+hm : 0 < m
+hbound : ∀ a ∈ A, |↑a| ≤ H
+hmod : ∀ a ∈ A, ∀ b ∈ A, ↑m ∣ a - b
+hmR : 0 < ↑m
+hA : A.Nonempty
+a₀ : ℤ := A.min' hA
+ha₀ : a₀ ∈ A
+q : ℤ → ℕ := fun a => ((a - a₀) / ↑m).toNat
+hrepr : ∀ a ∈ A, a = a₀ + ↑m * ↑(q a)
+hc : #A ≤ #(Icc 0 ⌊2 * H / ↑m⌋₊)
+a✝ : 1 + 2 * H / ↑m < ↑⌊2 * H / ↑m⌋₊ + 1
+⊢ False
+failed
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:848:2: error: linarith failed to find a contradiction
+S H : ℝ
+hS : 1 ≤ S
+hH : 0 ≤ H
+s₁ s₂ : ℕ
+hs₁ : s₁ ∈ dyadicCarrier S
+hs₂ : s₂ ∈ dyadicCarrier S
+k : ℤ
+h : ↑(#(row H (s₁, s₂) k)) * ↑(#(row H (s₁, s₂) k)) ≤ (1 + 2 * H * ↑(s₁.gcd s₂) / S) * ↑(#(row H (s₁, s₂) k))
+a✝ : ↑(#(row H (s₁, s₂) k)) + 2 * H / S * ↑(s₁.gcd s₂) * ↑(#(row H (s₁, s₂) k)) < ↑(#(row H (s₁, s₂) k)) ^ 2
+⊢ False
+failed
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:905:12: error: mod_cast has type
+  |q₀.snd.2| = |q₀.snd.2|
+but is expected to have type
+  ↑q₀.snd.2.natAbs = ↑|q₀.snd.2|
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:940:29: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (fun q => q.fst.2) r
+in the target expression
+  q.snd.1 * ↑q.fst.1 - r.snd.2 * ↑r.fst.2 = k
+
+S H F : ℝ
+hS : 1 ≤ S
+hH : 1 ≤ H
+hF : 1 ≤ F
+d : ℕ
+hd : 0 < d
+V : Finset ℕ
+hV : V ⊆ Ioc 0 ⌊2 * S / ↑d⌋₊
+k : ℤ
+Q : Finset ((_ : ℕ × ℕ) × ℤ × ℤ) := (V ×ˢ V).sigma fun s => row H s k
+f : (_ : ℕ × ℕ) × ℤ × ℤ → ℤ × ℕ := fun q => (q.snd.1, q.fst.1)
+hH0 : 0 ≤ H
+hS0 : 0 ≤ S
+hdR : 0 < ↑d
+hdone : 1 ≤ ↑d
+hU0 : 0 ≤ 2 * S / ↑d
+hpair : ∀ q ∈ Q, q.fst ∈ V ×ˢ V ∧ q.snd ∈ row H q.fst k
+hmap : ∀ q ∈ Q, f q ∈ frequencyCarrier H ×ˢ V
+a : ℤ × ℕ
+_ha : a ∈ frequencyCarrier H ×ˢ V
+A : Finset ((_ : ℕ × ℕ) × ℤ × ℤ) := {q ∈ Q | f q = a}
+q₀ : (_ : ℕ × ℕ) × ℤ × ℤ
+hq₀ : q₀ ∈ A
+n : ℤ := a.1 * ↑a.2 - k
+hidentity : ∀ q ∈ A, n = q.snd.2 * ↑q.fst.2
+hs₀ : q₀.fst ∈ V ×ˢ V
+hh₀ : q₀.snd ∈ row H q₀.fst k
+hv₀ : q₀.fst.2 ∈ Ioc 0 ⌊2 * S / ↑d⌋₊
+hv₀pos : 0 < q₀.fst.2
+hh₂₀ : q₀.snd.2 ∈ frequencyCarrier H
+hh₂₀ne : q₀.snd.2 ≠ 0
+hn : n ≠ 0
+hnabs : ↑n.natAbs ≤ max (4 * S ^ 2) (8 * F * H * S)
+htau : #n.natAbs.divisors ≤ divisorMaximum S H F
+q : (_ : ℕ × ℕ) × ℤ × ℤ
+hq : q ∈ ↑A
+r : (_ : ℕ × ℕ) × ℤ × ℤ
+hr : r ∈ ↑A
+hv : (fun q => q.fst.2) q = (fun q => q.fst.2) r
+hqf : f q = a
+hrf : f r = a
+hu : q.fst.1 = r.fst.1
+hh₁ : q.snd.1 = r.snd.1
+hqs : q.fst ∈ V ×ˢ V
+hqh : q.snd ∈ row H q.fst k
+_hrs : r.fst ∈ V ×ˢ V
+hrh : r.snd ∈ row H r.fst k
+hqvpos : 0 < q.fst.2
+hqeq : q.snd.1 * ↑q.fst.1 - q.snd.2 * ↑q.fst.2 = k
+hreq : q.snd.1 * ↑q.fst.1 - r.snd.2 * ↑r.fst.2 = k
+⊢ q.snd.2 * ↑q.fst.2 = r.snd.2 * ↑q.fst.2
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:1107:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ q ∈ (dyadicCarrier S ×ˢ dyadicCarrier S).sigma (hPairs H), ?w q.fst (q.snd.1 * ↑q.fst.1 - q.snd.2 * ↑q.fst.2)
+in the target expression
+  ∑ q ∈ A, W q =
+    ∑ s ∈ dyadicCarrier S ×ˢ dyadicCarrier S,
+      ∑ k ∈ frequencyCarrier (4 * H * S), ↑(s.1.gcd s.2) * ↑(#(row H s k)) * ↑(nu.gcd k.natAbs)
+
+S H : ℝ
+hS : 1 ≤ S
+hH : 1 ≤ H
+nu : ℕ
+A : Finset ((_ : ℕ × ℕ) × ℤ × ℤ) := (dyadicCarrier S ×ˢ dyadicCarrier S).sigma (hPairs H)
+T : Finset ((_ : ℕ) × (_ : ℕ × ℕ) × ℤ × ℤ) :=
+  (Icc 1 ⌊2 * S⌋₊).sigma fun d => (Ioc 0 ⌊2 * S / ↑d⌋₊ ×ˢ Ioc 0 ⌊2 * S / ↑d⌋₊).sigma (hPairs H)
+g : (_ : ℕ × ℕ) × ℤ × ℤ → (_ : ℕ) × (_ : ℕ × ℕ) × ℤ × ℤ :=
+  fun q => ⟨q.fst.1.gcd q.fst.2, ⟨(q.fst.1 / q.fst.1.gcd q.fst.2, q.fst.2 / q.fst.1.gcd q.fst.2), q.snd⟩⟩
+W : (_ : ℕ × ℕ) × ℤ × ℤ → ℝ :=
+  fun q => ↑(q.fst.1.gcd q.fst.2) * ↑(nu.gcd (q.snd.1 * ↑q.fst.1 - q.snd.2 * ↑q.fst.2).natAbs)
+V : (_ : ℕ) × (_ : ℕ × ℕ) × ℤ × ℤ → ℝ :=
+  fun r => ↑r.fst * ↑(nu.gcd (↑r.fst * (r.snd.snd.1 * ↑r.snd.fst.1 - r.snd.snd.2 * ↑r.snd.fst.2)).natAbs)
+hS0 : 0 ≤ S
+hH0 : 0 ≤ H
+hdata : ∀ q ∈ A, q.fst.1 ∈ dyadicCarrier S ∧ q.fst.2 ∈ dyadicCarrier S ∧ q.snd ∈ hPairs H q.fst
+hfactor :
+  ∀ q ∈ A,
+    ↑(q.fst.1.gcd q.fst.2) * (q.snd.1 * ↑(q.fst.1 / q.fst.1.gcd q.fst.2) - q.snd.2 * ↑(q.fst.2 / q.fst.1.gcd q.fst.2)) =
+      q.snd.1 * ↑q.fst.1 - q.snd.2 * ↑q.fst.2
+hmap : ∀ q ∈ A, g q ∈ T
+hinj : Set.InjOn g ↑A
+hweight : ∀ q ∈ A, W q ≤ V (g q)
+hsum : ∑ a ∈ A, W a ≤ ∑ b ∈ T, V b
+⊢ ∑ q ∈ A, W q =
+    ∑ s ∈ dyadicCarrier S ×ˢ dyadicCarrier S,
+      ∑ k ∈ frequencyCarrier (4 * H * S), ↑(s.1.gcd s.2) * ↑(#(row H s k)) * ↑(nu.gcd k.natAbs)
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:1127:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ q ∈ (?m.1822 ×ˢ ?m.1822).sigma (hPairs H), ?w q.fst (q.snd.1 * ↑q.fst.1 - q.snd.2 * ↑q.fst.2)
+in the target expression
+  ∑ s ∈ (Ioc 0 ⌊2 * (S / ↑d)⌋₊ ×ˢ Ioc 0 ⌊2 * (S / ↑d)⌋₊).sigma (hPairs H), V ⟨d, s⟩ =
+    ↑d *
+      ∑ s ∈ Ioc 0 ⌊2 * (S / ↑d)⌋₊ ×ˢ Ioc 0 ⌊2 * (S / ↑d)⌋₊,
+        ∑ k ∈ frequencyCarrier (4 * H * (S / ↑d)), ↑(#(row H s k)) * ↑(nu.gcd (↑d * k).natAbs)
+
+S H : ℝ
+hS : 1 ≤ S
+hH : 1 ≤ H
+nu : ℕ
+A : Finset ((_ : ℕ × ℕ) × ℤ × ℤ) := (dyadicCarrier S ×ˢ dyadicCarrier S).sigma (hPairs H)
+T : Finset ((_ : ℕ) × (_ : ℕ × ℕ) × ℤ × ℤ) :=
+  (Icc 1 ⌊2 * S⌋₊).sigma fun d => (Ioc 0 ⌊2 * S / ↑d⌋₊ ×ˢ Ioc 0 ⌊2 * S / ↑d⌋₊).sigma (hPairs H)
+g : (_ : ℕ × ℕ) × ℤ × ℤ → (_ : ℕ) × (_ : ℕ × ℕ) × ℤ × ℤ :=
+  fun q => ⟨q.fst.1.gcd q.fst.2, ⟨(q.fst.1 / q.fst.1.gcd q.fst.2, q.fst.2 / q.fst.1.gcd q.fst.2), q.snd⟩⟩
+W : (_ : ℕ × ℕ) × ℤ × ℤ → ℝ :=
+  fun q => ↑(q.fst.1.gcd q.fst.2) * ↑(nu.gcd (q.snd.1 * ↑q.fst.1 - q.snd.2 * ↑q.fst.2).natAbs)
+V : (_ : ℕ) × (_ : ℕ × ℕ) × ℤ × ℤ → ℝ :=
+  fun r => ↑r.fst * ↑(nu.gcd (↑r.fst * (r.snd.snd.1 * ↑r.snd.fst.1 - r.snd.snd.2 * ↑r.snd.fst.2)).natAbs)
+hS0 : 0 ≤ S
+hH0 : 0 ≤ H
+hdata : ∀ q ∈ A, q.fst.1 ∈ dyadicCarrier S ∧ q.fst.2 ∈ dyadicCarrier S ∧ q.snd ∈ hPairs H q.fst
+hfactor :
+  ∀ q ∈ A,
+    ↑(q.fst.1.gcd q.fst.2) * (q.snd.1 * ↑(q.fst.1 / q.fst.1.gcd q.fst.2) - q.snd.2 * ↑(q.fst.2 / q.fst.1.gcd q.fst.2)) =
+      q.snd.1 * ↑q.fst.1 - q.snd.2 * ↑q.fst.2
+hmap : ∀ q ∈ A, g q ∈ T
+hinj : Set.InjOn g ↑A
+hweight : ∀ q ∈ A, W q ≤ V (g q)
+hsum : ∑ a ∈ A, W a ≤ ∑ b ∈ T, V b
+hleft :
+  ∑ q ∈ A, W q =
+    ∑ s ∈ dyadicCarrier S ×ˢ dyadicCarrier S,
+      ∑ k ∈ frequencyCarrier (4 * H * S), ↑(s.1.gcd s.2) * ↑(#(row H s k)) * ↑(nu.gcd k.natAbs)
+d : ℕ
+hd : d ∈ Icc 1 ⌊2 * S⌋₊
+hdpos : 0 < d
+hdR : 0 < ↑d
+hVeq : Ioc 0 ⌊2 * S / ↑d⌋₊ = Ioc 0 ⌊2 * (S / ↑d)⌋₊
+⊢ ∑ s ∈ (Ioc 0 ⌊2 * (S / ↑d)⌋₊ ×ˢ Ioc 0 ⌊2 * (S / ↑d)⌋₊).sigma (hPairs H), V ⟨d, s⟩ =
+    ↑d *
+      ∑ s ∈ Ioc 0 ⌊2 * (S / ↑d)⌋₊ ×ˢ Ioc 0 ⌊2 * (S / ↑d)⌋₊,
+        ∑ k ∈ frequencyCarrier (4 * H * (S / ↑d)), ↑(#(row H s k)) * ↑(nu.gcd (↑d * k).natAbs)
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:1192:48: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  LocallyFiniteOrder ℝ
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:1222:6: error: No goals to be solved
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:1275:12: error: Application type mismatch: The argument
+  dyadicCarrier F
+has type
+  Finset ℕ
+but is expected to have type
+  Finset ℤ
+in the application
+  {f ∈ dyadicCarrier F | ↑nu ∣ f * k}
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:1293:50: error: Application type mismatch: The argument
+  ?m.50
+has type
+  1 ≤ 2 * S
+but is expected to have type
+  ↑1 ≤ 2 * S
+in the application
+  Nat.le_floor ?m.50
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:1357:24: error: mod_cast has type
+  (1 : ℕ) ≤ divisorMaximum S H F
+but is expected to have type
+  (1 : ℝ) ≤ D
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:1369:8: error: mod_cast has type
+  #nu.divisors ≤ divisorMaximum S H F
+but is expected to have type
+  t ≤ D
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:1378:8: error: `dsimp` made no progress
+ImbalancedChen/Part3LichtmanSignedDifferenceMultiplicity.lean:1383:6: error: `dsimp` made no progress
