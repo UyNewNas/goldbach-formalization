@@ -1,0 +1,746 @@
+{
+  "status": "ROOT_NONAUTHOR_COMPLETE_SOURCE_PRIMITIVES_PUBLIC_TYPES_MATH_AND_ACTUAL_OWNED_API_SPECIFIC_FIRST_GATE",
+  "reviewer": "/root",
+  "created_utc": "2026-10-18T05:03:49.284601+00:00",
+  "source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorLargePairedGCDNonzero.lean",
+    "sha256": "e3904fe2fbc4a00492f69159bd0764e2456e5e646bf8796deece90946842e0e4",
+    "lines": 780,
+    "declarations": 43,
+    "primitive_definitions": 11,
+    "proofs": 32
+  },
+  "owner": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261018-shared-large-paired-nonzero-full-source-owner-and-proper-DAG.json",
+    "sha256": "30cd64614fbd33ad173a3e31106c68b7e5c4a260919dac406d6f92ca8af99a38"
+  },
+  "independent": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261018-shared-large-paired-nonzero-e390-full-source-independent-review.json",
+    "sha256": "8687fa16a9957d507e971bbe28152093811b445aae9b4bef847d9385b8496098"
+  },
+  "all43_complete_headers_and11_primitive_bodies_actual_matched": [
+    {
+      "name": "MediumAtom.sharedLargePairedGCDZero",
+      "kind": "def",
+      "private": false,
+      "line": 25,
+      "full_header": "def MediumAtom.sharedLargePairedGCDZero (d : MediumAtom) (Y : ℝ) : ℂ",
+      "full_definition": "def MediumAtom.sharedLargePairedGCDZero (d : MediumAtom) (Y : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    (d.q1SliceAtom p).transposedAtom.commonLargeBetaGCDZeroPart Y",
+      "full_span_sha256": "e763cb9624a5721e4ec9bce4f29869cdb5a8216b521d80e79e91d962badb36eb"
+    },
+    {
+      "name": "MediumAtom.sharedLargePairedGCDNonzero",
+      "kind": "def",
+      "private": false,
+      "line": 30,
+      "full_header": "def MediumAtom.sharedLargePairedGCDNonzero (d : MediumAtom) (Y : ℝ) : ℂ",
+      "full_definition": "def MediumAtom.sharedLargePairedGCDNonzero (d : MediumAtom) (Y : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    (d.q1SliceAtom p).transposedAtom.commonLargeBetaGCDNonzeroPart Y",
+      "full_span_sha256": "fe378f0e371ed5c78c798b65995398bb0f0156d4b3cedf9f3c0c00c562200066"
+    },
+    {
+      "name": "tailLabels",
+      "kind": "def",
+      "private": true,
+      "line": 36,
+      "full_header": "private def tailLabels (d : MediumAtom) : Finset (ℕ × ℕ)",
+      "full_definition": "private def tailLabels (d : MediumAtom) : Finset (ℕ × ℕ) :=\n  factorCarrier d.Q2 ×ˢ factorCarrier d.Q3",
+      "full_span_sha256": "090eb5746641b8610929791646db318c9db6474a6d45bc841192f49b043d762e"
+    },
+    {
+      "name": "tailProducts",
+      "kind": "def",
+      "private": true,
+      "line": 39,
+      "full_header": "private def tailProducts (d : MediumAtom) : Finset ℕ",
+      "full_definition": "private def tailProducts (d : MediumAtom) : Finset ℕ :=\n  (tailLabels d).image (fun u ↦ u.1 * u.2)",
+      "full_span_sha256": "eeae45a8ced62037bd7aac51db4af1eacaea67ef7448b7e45ef49a6d742b4b33"
+    },
+    {
+      "name": "tailGamma",
+      "kind": "def",
+      "private": true,
+      "line": 42,
+      "full_header": "private def tailGamma (d : MediumAtom) (v : ℕ) : ℂ",
+      "full_definition": "private def tailGamma (d : MediumAtom) (v : ℕ) : ℂ :=\n  ∑ u ∈ (tailLabels d).filter (fun u ↦ u.1 * u.2 = v), d.gamma2 u.1 * d.gamma3 u.2",
+      "full_span_sha256": "2762f3df903ef28f4d94662a442ce8746c72680a4634fe33e0d912985937c907"
+    },
+    {
+      "name": "tailCap",
+      "kind": "def",
+      "private": true,
+      "line": 45,
+      "full_header": "private def tailCap (d : MediumAtom) : ℝ",
+      "full_definition": "private def tailCap (d : MediumAtom) : ℝ := 4 * d.Q2 * d.Q3",
+      "full_span_sha256": "675a1829e37a715dcf2f6b90e77156e7581316d21875c1fe43db5994491aa6f5"
+    },
+    {
+      "name": "tau",
+      "kind": "def",
+      "private": true,
+      "line": 47,
+      "full_header": "private def tau (n : ℕ) : ℝ",
+      "full_definition": "private def tau (n : ℕ) : ℝ := (n.divisors.card : ℝ)",
+      "full_span_sha256": "d18a3ce262953a38b7184f40fb3466d1fdbb8255e2116239a1346120e7ae626c"
+    },
+    {
+      "name": "factor_bounds",
+      "kind": "theorem",
+      "private": true,
+      "line": 49,
+      "full_header": "private theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) : 0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q",
+      "full_definition": null,
+      "full_span_sha256": "f56a86df64bd87790dd261b8a2c96ffb0f23bf71478460493d8d7f1700c35e2d"
+    },
+    {
+      "name": "one_le_tailCap",
+      "kind": "theorem",
+      "private": true,
+      "line": 59,
+      "full_header": "private theorem one_le_tailCap\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ tailCap d",
+      "full_definition": null,
+      "full_span_sha256": "2b1527b745dd1f6f01fffa4c4a9f9dad8600cfab73d04ffff35b71c9ad7500fc"
+    },
+    {
+      "name": "tail_product_bounds",
+      "kind": "theorem",
+      "private": true,
+      "line": 67,
+      "full_header": "private theorem tail_product_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {u : ℕ × ℕ}\n    (hu : u ∈ tailLabels d) : 0 < u.1 * u.2 ∧ (u.1 * u.2 : ℕ) ≤ Nat.floor (tailCap d)",
+      "full_definition": null,
+      "full_span_sha256": "8d3a95e45a7be52ba07ee23cbd21229beabf51eb152923a50215800af6fab65e"
+    },
+    {
+      "name": "tailProducts_subset_prefix",
+      "kind": "theorem",
+      "private": true,
+      "line": 81,
+      "full_header": "private theorem tailProducts_subset_prefix\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    tailProducts d ⊆ Finset.Ioc 0 (Nat.floor (tailCap d))",
+      "full_definition": null,
+      "full_span_sha256": "4658cddd2b19dde863d125afb63ec050cc0824867607c027a4f60c09f9675e7f"
+    },
+    {
+      "name": "tailGamma_zero_off_products",
+      "kind": "theorem",
+      "private": true,
+      "line": 89,
+      "full_header": "private theorem tailGamma_zero_off_products (d : MediumAtom) {v : ℕ}\n    (hv : v ∉ tailProducts d) : tailGamma d v = 0",
+      "full_definition": null,
+      "full_span_sha256": "5883591d95b7cd4ff9e3f118ef168974bba48c71c3a6b27be0e4c0b36481a7da"
+    },
+    {
+      "name": "tailGamma_norm_le_tau",
+      "kind": "theorem",
+      "private": true,
+      "line": 97,
+      "full_header": "private theorem tailGamma_norm_le_tau\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (v : ℕ) :\n    ‖tailGamma d v‖ ≤ tau v",
+      "full_definition": null,
+      "full_span_sha256": "2b776bdf65b6ae770d118aa830ddfbc65566204ddb55748f00f8b763401457f8"
+    },
+    {
+      "name": "tail_sum_eq_grouped",
+      "kind": "theorem",
+      "private": true,
+      "line": 127,
+      "full_header": "private theorem tail_sum_eq_grouped (d : MediumAtom) (F : ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, (d.gamma2 u.1 * d.gamma3 u.2) * F (u.1 * u.2)) =\n      ∑ v ∈ tailProducts d, tailGamma d v * F v",
+      "full_definition": null,
+      "full_span_sha256": "9b3a0f3b460daa095b33064726bc56ec1f1428814b7e693945aa4a6ef93221c3"
+    },
+    {
+      "name": "tail_star_sum_eq_grouped",
+      "kind": "theorem",
+      "private": true,
+      "line": 142,
+      "full_header": "private theorem tail_star_sum_eq_grouped (d : MediumAtom) (F : ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, star (d.gamma2 u.1 * d.gamma3 u.2) * F (u.1 * u.2)) =\n      ∑ v ∈ tailProducts d, star (tailGamma d v) * F v",
+      "full_definition": null,
+      "full_span_sha256": "c10061b9b1f2a0a5420736b7f65604c9f24086df5db065a9c6880e9dba276deb"
+    },
+    {
+      "name": "tail_pair_sum_eq_grouped",
+      "kind": "theorem",
+      "private": true,
+      "line": 153,
+      "full_header": "private theorem tail_pair_sum_eq_grouped (d : MediumAtom) (F : ℕ → ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, ∑ v ∈ tailLabels d,\n      (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n        F (u.1 * u.2) (v.1 * v.2)) =\n      ∑ a ∈ tailProducts d, ∑ b ∈ tailProducts d,\n        tailGamma d a * star (tailGamma d b) * F a b",
+      "full_definition": null,
+      "full_span_sha256": "914cf80a4e1680834eb18635d029e5ed68a79e6142038a7747686b2f0f938801"
+    },
+    {
+      "name": "slice_factor_sum",
+      "kind": "theorem",
+      "private": true,
+      "line": 177,
+      "full_header": "private theorem slice_factor_sum (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (F : (ℕ × ℕ × ℕ) → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n      (d.q1SliceAtom p).transposedAtom.complexFactorGamma a * F a) =\n      ∑ u ∈ tailLabels d, (d.gamma2 u.1 * d.gamma3 u.2) * F (p, u.1, u.2)",
+      "full_definition": null,
+      "full_span_sha256": "2e4d4bb45ddcc783aca8c75befa7149c026d328b2b0254f22e620c145a156682"
+    },
+    {
+      "name": "slice_factor_star_sum",
+      "kind": "theorem",
+      "private": true,
+      "line": 193,
+      "full_header": "private theorem slice_factor_star_sum (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (F : (ℕ × ℕ × ℕ) → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n      star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma a) * F a) =\n      ∑ u ∈ tailLabels d, star (d.gamma2 u.1 * d.gamma3 u.2) * F (p, u.1, u.2)",
+      "full_definition": null,
+      "full_span_sha256": "be3195b9e34d4240700cf3bdfddb0b7ae13191af2e02f5158412fc7c00274cf3"
+    },
+    {
+      "name": "slice_factor_pair_sum",
+      "kind": "theorem",
+      "private": true,
+      "line": 207,
+      "full_header": "private theorem slice_factor_pair_sum (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (F : (ℕ × ℕ × ℕ) → (ℕ × ℕ × ℕ) → ℂ) :\n    (∑ a ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n      ∑ b ∈ (d.q1SliceAtom p).transposedAtom.complexFactorLabels,\n        (d.q1SliceAtom p).transposedAtom.complexFactorGamma a *\n          star ((d.q1SliceAtom p).transposedAtom.complexFactorGamma b) * F a b) =\n      ∑ u ∈ tailLabels d, ∑ v ∈ tailLabels d,\n        (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n          F (p, u.1, u.2) (p, v.1, v.2)",
+      "full_definition": null,
+      "full_span_sha256": "5ce6907974ccaa8290644af9bd9edad61aa5239a609b39c3dc1439434b09ab33"
+    },
+    {
+      "name": "slice_zero_eq_grouped",
+      "kind": "theorem",
+      "private": true,
+      "line": 234,
+      "full_header": "private theorem slice_zero_eq_grouped (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (n1 n2 : ℕ) :\n    (d.q1SliceAtom p).transposedAtom.commonFactorPairZeroWeight n1 n2 =\n      ∑ v ∈ tailProducts d, ∑ w ∈ tailProducts d,\n        tailGamma d v * star (tailGamma d w) *\n          ((if ComplexCRT.Compatible (p * v) (p * w) n1 n2 then\n            d.V / ((p * v.lcm w : ℕ) : ℝ) * CommonSmoothCutoff.cutoffMass\n          else 0 : ℝ) : ℂ)",
+      "full_definition": null,
+      "full_span_sha256": "3cb74cc1de84d9f6563f1d9d33003c67beb7b0365656db86346e2a9bca51866a"
+    },
+    {
+      "name": "tail_lcm_moment",
+      "kind": "theorem",
+      "private": true,
+      "line": 250,
+      "full_header": "private theorem tail_lcm_moment\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ v ∈ tailProducts d, ∑ w ∈ tailProducts d,\n      ‖tailGamma d v‖ * ‖tailGamma d w‖ / (v.lcm w : ℝ)) ≤\n        (1 + Real.log (tailCap d)) ^ 9",
+      "full_definition": null,
+      "full_span_sha256": "4418d45121b49f06a868015ebd2765e44c1691fbc238534989f1039a2bf1731e"
+    },
+    {
+      "name": "pairGate",
+      "kind": "def",
+      "private": true,
+      "line": 269,
+      "full_header": "private def pairGate (p n1 n2 : ℕ) : Prop",
+      "full_definition": "private def pairGate (p n1 n2 : ℕ) : Prop :=\n  n1.Coprime p ∧ n2.Coprime p ∧ Nat.ModEq p n1 n2",
+      "full_span_sha256": "f1d821f967d3835e264100c4766998a4b1db2378ffd5dced062a2d3855a2ff9d"
+    },
+    {
+      "name": "compatible_implies_pairGate",
+      "kind": "theorem",
+      "private": true,
+      "line": 272,
+      "full_header": "private theorem compatible_implies_pairGate (p v w n1 n2 : ℕ)\n    (h : ComplexCRT.Compatible (p * v) (p * w) n1 n2) : pairGate p n1 n2",
+      "full_definition": null,
+      "full_span_sha256": "8fcc605edc514e1b4120736a1419239e3691d509d3efc17c6aad0b5fc6532a25"
+    },
+    {
+      "name": "slice_zero_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 278,
+      "full_header": "private theorem slice_zero_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) (n1 n2 : ℕ) :\n    ‖(d.q1SliceAtom p).transposedAtom.commonFactorPairZeroWeight n1 n2‖ ≤\n      if pairGate p n1 n2 then\n        |CommonSmoothCutoff.cutoffMass| * d.V / (p : ℝ) *\n          (1 + Real.log (tailCap d)) ^ 9 else 0",
+      "full_definition": null,
+      "full_span_sha256": "e42db3fdc13b46bbcff9f54b1e5007cab5f4343fb1a9c9ac3ab6ce09b34563ed"
+    },
+    {
+      "name": "transposed_beta_norm_le_one",
+      "kind": "theorem",
+      "private": true,
+      "line": 329,
+      "full_header": "private theorem transposed_beta_norm_le_one\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\n    ‖d.transposedAtom.beta n‖ ≤ 1",
+      "full_definition": null,
+      "full_span_sha256": "13ea6627c1da38b1d13e9364804391e9e27771620af00d47f365864edb6839b8"
+    },
+    {
+      "name": "card_primitiveCarrier_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 341,
+      "full_header": "private theorem card_primitiveCarrier_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (d.primitiveFirstFactorCarrier.card : ℝ) ≤ 2 * d.Q1",
+      "full_definition": null,
+      "full_span_sha256": "cb0bc382181550ff3c330d84014817f23b927e6b443663d7e048f9f085660562"
+    },
+    {
+      "name": "slice_large_zero_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 355,
+      "full_header": "private theorem slice_large_zero_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) (Y : ℝ) :\n    ‖(d.q1SliceAtom p).transposedAtom.commonLargeBetaGCDZeroPart Y‖ ≤\n      (|CommonSmoothCutoff.cutoffMass| * d.V / (p : ℝ) *\n        (1 + Real.log (tailCap d)) ^ 9) *\n          ((sharedPrimitiveLargeGCDPairs d.transposedAtom.betaCarrier p Y).card : ℝ)",
+      "full_definition": null,
+      "full_span_sha256": "7f0d87a41bb8c20f409ceaba544c0beb296dd84f98e057f86a7cfacaf9b238bc"
+    },
+    {
+      "name": "shared_large_zero_bound",
+      "kind": "theorem",
+      "private": false,
+      "line": 416,
+      "full_header": "theorem shared_large_zero_bound\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Y : ℝ} (hY : 1 ≤ Y) :\n    ‖d.sharedLargePairedGCDZero Y‖ ≤\n      |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 9 *\n        (16 * d.U ^ 2 / (d.Q1 * Y) + 4 * d.U * (1 + Real.log (2 * d.U)))",
+      "full_definition": null,
+      "full_span_sha256": "b454a30c9d3000c8c8d900ce6710d7fbf98ee05cc0685d8e54a2fea905e464f0"
+    },
+    {
+      "name": "shared_largeW_eq_zero_add_nonzero",
+      "kind": "theorem",
+      "private": false,
+      "line": 467,
+      "full_header": "theorem shared_largeW_eq_zero_add_nonzero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    d.sharedLargePairedGCDW Y =\n      d.sharedLargePairedGCDZero Y + d.sharedLargePairedGCDNonzero Y",
+      "full_definition": null,
+      "full_span_sha256": "91602132a74576fde3184e93dc020e9b76f7995503e09ca59c7990790488cbca"
+    },
+    {
+      "name": "shared_nonzero_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 479,
+      "full_header": "private theorem shared_nonzero_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    ‖d.sharedLargePairedGCDNonzero Y‖ ≤\n      ‖d.sharedLargePairedGCDW Y‖ + ‖d.sharedLargePairedGCDZero Y‖",
+      "full_definition": null,
+      "full_span_sha256": "05f8774746642ec5c38bc3ca12c0d1788a0a913d8f9ccd0a77feaf962648d0cf"
+    },
+    {
+      "name": "outside",
+      "kind": "def",
+      "private": true,
+      "line": 491,
+      "full_header": "private def outside (d : MediumAtom) : ℝ",
+      "full_definition": "private def outside (d : MediumAtom) : ℝ :=\n  (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n    (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)",
+      "full_span_sha256": "baf31febe900b370fbf76d27b8ddae83527b8f119f80cf657a10db9b6f9ef6a7"
+    },
+    {
+      "name": "betaLog",
+      "kind": "def",
+      "private": true,
+      "line": 495,
+      "full_header": "private def betaLog (d : MediumAtom) : ℝ",
+      "full_definition": "private def betaLog (d : MediumAtom) : ℝ := 1 + Real.log (2 * d.V)\n",
+      "full_span_sha256": "88ccc193979900b397ba13bfd7ffa78c0b9747558c47aabaecdba5e4e3be923c"
+    },
+    {
+      "name": "capLog",
+      "kind": "def",
+      "private": true,
+      "line": 496,
+      "full_header": "private def capLog (d : MediumAtom) : ℝ",
+      "full_definition": "private def capLog (d : MediumAtom) : ℝ := 1 + Real.log d.physicalFactorCap",
+      "full_span_sha256": "6fc83232ffccc4227a5d2487ca2c0f14d7253bb872249b943a2d87ccf9cba624"
+    },
+    {
+      "name": "outside_nonneg",
+      "kind": "theorem",
+      "private": true,
+      "line": 498,
+      "full_header": "private theorem outside_nonneg (d : MediumAtom) : 0 ≤ outside d",
+      "full_definition": null,
+      "full_span_sha256": "b5b7a1715157e051ae195a3ff4048ce269a8ba30146460043251f8676119ef0f"
+    },
+    {
+      "name": "log_and_scale_bounds",
+      "kind": "theorem",
+      "private": true,
+      "line": 502,
+      "full_header": "private theorem log_and_scale_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.U ≤ d.V ∧ d.Q1 ≤ d.U ∧ 1 ≤ betaLog d ∧ 1 ≤ capLog d ∧\n      1 + Real.log (2 * d.U) ≤ betaLog d ∧\n        1 + Real.log (tailCap d) ≤ capLog d",
+      "full_definition": null,
+      "full_span_sha256": "753bfa5ed79d4324bebf4fa0447978387dc40c1bb9f1694d0d527ebb5d2b368b"
+    },
+    {
+      "name": "bracket_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 539,
+      "full_header": "private theorem bracket_bound (a b q Y L H : ℝ)\n    (ha : 0 ≤ a) (hb : 0 ≤ b) (hq : 0 ≤ q) (hY : 0 < Y)\n    (hL : 1 ≤ L) (hH : H ≤ L) :\n    a / Y + b * q * H ≤ (a + b) * L * (1 / Y + q)",
+      "full_definition": null,
+      "full_span_sha256": "4c2e3157a1c0932c6812411cff42d4abfee54bea1f9f18c892f62bbb5950fdf1"
+    },
+    {
+      "name": "outside_zero_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 552,
+      "full_header": "private theorem outside_zero_bound\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    {Y : ℝ} (hY : 1 ≤ Y) :\n    outside d * ‖d.cleanedAlphaAtom.sharedLargePairedGCDZero Y‖ ≤\n      (80 * |CommonSmoothCutoff.cutoffMass|) * d.scale ^ 2 *\n        betaLog d ^ (((2 ^ B) ^ 2 - 1) + 1) * capLog d ^ 9 *\n          (1 / Y + d.Q1 / d.U)",
+      "full_definition": null,
+      "full_span_sha256": "4798a71373f55553d8127bbc8e60029a62428001bf428bbf8ab79e8b92db01de"
+    },
+    {
+      "name": "outside_wholeW_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 596,
+      "full_header": "private theorem outside_wholeW_bound (kappa : ℝ) {epsilon : ℝ}\n    (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      0 < sigma → MediumAdmissible B sigma kappa c0 d → ∀ Y : ℝ, 1 ≤ Y →\n        outside d * ‖d.cleanedAlphaAtom.sharedLargePairedGCDW Y‖ ≤\n          C * d.scale ^ epsilon * d.scale ^ 2 *\n            betaLog d ^ (((2 ^ B) ^ 2 - 1) + 1) * capLog d ^ 9 *\n              (1 / Y + d.Q1 / d.U)",
+      "full_definition": null,
+      "full_span_sha256": "ad3a273d540329930cb02e8910b940cac08ae629091bd536d4bf8deb99663159"
+    },
+    {
+      "name": "outside_nonzero_finite_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 646,
+      "full_header": "private theorem outside_nonzero_finite_bound (kappa : ℝ) {epsilon : ℝ}\n    (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      0 < sigma → MediumAdmissible B sigma kappa c0 d → ∀ Y : ℝ, 1 ≤ Y →\n        outside d * ‖d.cleanedAlphaAtom.sharedLargePairedGCDNonzero Y‖ ≤\n          C * d.scale ^ epsilon * d.scale ^ 2 *\n            betaLog d ^ (((2 ^ B) ^ 2 - 1) + 1) * capLog d ^ 9 *\n              (1 / Y + d.Q1 / d.U)",
+      "full_definition": null,
+      "full_span_sha256": "e15d7116c12796b3cdf03f7c1debce171a841dbe201b99786f7206b92b131e39"
+    },
+    {
+      "name": "first_factor_relative_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 692,
+      "full_header": "private theorem first_factor_relative_bound\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.Q1 / d.U ≤ d.scale ^ (-sigma)",
+      "full_definition": null,
+      "full_span_sha256": "70c623d4a3e72117f09178ead6c113b4db453e7e948bcde157d7b3cff8fff289"
+    },
+    {
+      "name": "relative_power_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 700,
+      "full_header": "private theorem relative_power_bound\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    1 / d.scale ^ (sigma / 4) + d.Q1 / d.U ≤ 2 * d.scale ^ (-(sigma / 4))",
+      "full_definition": null,
+      "full_span_sha256": "cd8d12061eda775b2e6cac8b47811e81fa1469986694fdd264ae9b928299635a"
+    },
+    {
+      "name": "outside_nonzero_power_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 713,
+      "full_header": "private theorem outside_nonzero_power_bound (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        outside d * ‖d.cleanedAlphaAtom.sharedLargePairedGCDNonzero\n          (d.scale ^ (sigma / 4))‖ ≤ C * d.scale ^ (2 - sigma / 8)",
+      "full_definition": null,
+      "full_span_sha256": "7e26959e7f85f090f5ef99da6dd1c03e1539567cf349732f798e9841cf3ceed0"
+    },
+    {
+      "name": "actual_betaL2_gamma1L2_cleaned_sharedLargePairedGCDNonzero_log_payment",
+      "kind": "theorem",
+      "private": false,
+      "line": 763,
+      "full_header": "theorem actual_betaL2_gamma1L2_cleaned_sharedLargePairedGCDNonzero_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          ‖d.cleanedAlphaAtom.sharedLargePairedGCDNonzero (d.scale ^ (sigma / 4))‖ ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A",
+      "full_definition": null,
+      "full_span_sha256": "2a5c444b7093a19b3aab9f78cc17ccced755039596cfaf886b670d311601f98c"
+    }
+  ],
+  "root_source_read_chunks": [
+    [
+      1,
+      260
+    ],
+    [
+      261,
+      520
+    ],
+    [
+      521,
+      780
+    ]
+  ],
+  "root_rederived_mathematics": [
+    "Literal full original common-p carrier and identical ordered-alpha gcd>Y mask in W/rawZero/complete integer NZ series. No unmasked covariance substitution.",
+    "Full physical labels stay until exact Kronecker slice then complex tail grouping. NormG<=tau2, lcm(pv,pw)=p*lcm(v,w) retainsV/p without extra coprimality. Compatibility implies actual p-units and p congruence. Nativej2 LCM sum gives Htail9.",
+    "Actual paircount includes diagonal8U²/(pY)+2U LU; p>=Q1/card<=2Q1 yields rawzero |mass|V Htail9[16U²/(Q1Y)+4U LU].",
+    "Actual original outside<=4VQ1Lbeta^eB is paid before normalization. Rawzero costs80|mass|X²Lbeta^(eB+1)Hcap9[1/Y+Q1/U]. Cleaning changes alpha only.",
+    "Original U²<X^(1-8sigma),sigma>0 implyU<=V;Q1<=U so4V/Q1+1<=5V/Q1. Owned wholeW gives400C X^(2+epsilon)Lbeta^(eB+1)Hcap9[1/Y+Q1/U].",
+    "Same-mask W=rawZero+NZ before triangle,epsilon=sigma/16,Y=X^(sigma/4),originalQ1/U<=X^-sigma and actual log costX^(sigma/16) give genuine2-sigma/8 exponent. Scalar log budget pays all realA with threshold before atoms.",
+    "Root read current fullsource780 plus actual definitions,13source APIs,12 complete elaborated owned fulltypes/flags/axioms and full pinned nativeLCM107-170 proof. No fresh external-import-closure replay claim."
+  ],
+  "complete_final_public_type": "theorem actual_betaL2_gamma1L2_cleaned_sharedLargePairedGCDNonzero_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          ‖d.cleanedAlphaAtom.sharedLargePairedGCDNonzero (d.scale ^ (sigma / 4))‖ ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A",
+  "actual_direct_owned_parents": [
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW",
+      "current_source_sha256": "46a6defd68675b0be26a003d84fc735ac0a7720f51483e4d9e5dfa67b03ac58f",
+      "archived_own_declaration_count": 29,
+      "audit_receipt": "verification/proof-continuation/2026-10-15/audits/20261016T001130334786Z/receipt.json",
+      "audit_receipt_sha256": "f58dd232eb1fec0c6d6148b4f8a462f71f2fe31ccd0947cbffd5d8dc6d2d575a",
+      "existing_audit_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "cache_pass_and_current_source_exact": true,
+      "cache_sha256": "87c78289204ac66a35cda59d5ecc9fef9b04b66e2f34e35ea654836a1da39ab8",
+      "existing_audit_scope": "Owned stock replay and complete serialized/type/axiom census only",
+      "external_closure_replay_claimed": false
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedGCDPoissonMask",
+      "current_source_sha256": "9d41c0858ea52223240405a003fdab49b3fbc9bcf6f8dd84c0a32a96a5295584",
+      "archived_own_declaration_count": 24,
+      "audit_receipt": "verification/proof-continuation/2026-10-15/audits/20261015T214547521812Z/receipt.json",
+      "audit_receipt_sha256": "3d7d2421d949485fe5a154541fcc93c9bd56f9e1d439afe4c9d5f8553786c851",
+      "existing_audit_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "cache_pass_and_current_source_exact": true,
+      "cache_sha256": "a45bbc421145e1f988800313920a98ec1159eceeaed77255b3dabd482aaffed9",
+      "existing_audit_scope": "Owned stock replay and complete serialized/type/axiom census only",
+      "external_closure_replay_claimed": false
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "current_source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "archived_own_declaration_count": 9,
+      "audit_receipt": "verification/proof-continuation/2026-10-15/audits/20261015T220551593674Z/receipt.json",
+      "audit_receipt_sha256": "876bf1b68a2a355d885c61ed503ebf9a0e2e50182895d43a91f862a92bd9f766",
+      "existing_audit_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "cache_pass_and_current_source_exact": true,
+      "cache_sha256": "c533c59658fccbe8267112459667cb3c803e54e89b679f5ba1ec5900bee3a5ef",
+      "existing_audit_scope": "Owned stock replay and complete serialized/type/axiom census only",
+      "external_closure_replay_claimed": false
+    }
+  ],
+  "all12_elaborated_owned_APIs_root_full_types_flags_axioms_read": {
+    "TransposedPrimitiveUMoment.U_sq_lt_scale_rpow": {
+      "owning_module": "ImbalancedChen.Part3TransposedPrimitiveUMoment",
+      "current_source_sha256": "10ee3c1507a8074abea88c430cfcd79ec1e6256c0df414462dd43652c0eae310",
+      "audit_receipt": "verification/proof-continuation/2026-10-15/audits/20261015T212007031406Z/receipt.json",
+      "audit_receipt_sha256": "115c80406e7e7e1d801f775259dfdb48f09115ea5372c6c325a7d9ff57e263c8",
+      "declarations_json_sha256": "a148f5e02b18f38d5f7a9b8c85477642807db98975e5c1cd9fd60be9c8bb3299",
+      "actual_complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3TransposedPrimitiveUMoment",
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUMoment.U_sq_lt_scale_rpow",
+        "partial": false,
+        "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d),\n  @LT.lt.{0} Real Real.instLT\n    (@HPow.hPow.{0, 0, 0} Real Nat Real\n      (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n      (ImbalancedChen.Part3.MediumAtom.U d) (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n    (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n      (ImbalancedChen.Part3.MediumAtom.scale d)\n      (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (@OfNat.ofNat.{0} Real (nat_lit 8)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 8) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6)))))))\n          sigma)))",
+        "unsafe": false
+      }
+    },
+    "TransposedGCDPoissonMask.transposed_largeW_eq_zero_add_nonzero": {
+      "owning_module": "ImbalancedChen.Part3TransposedGCDPoissonMask",
+      "current_source_sha256": "9d41c0858ea52223240405a003fdab49b3fbc9bcf6f8dd84c0a32a96a5295584",
+      "audit_receipt": "verification/proof-continuation/2026-10-15/audits/20261015T214547521812Z/receipt.json",
+      "audit_receipt_sha256": "3d7d2421d949485fe5a154541fcc93c9bd56f9e1d439afe4c9d5f8553786c851",
+      "declarations_json_sha256": "2f85ad3c3a4f8230cac04a296fb50a023d4aefa5a7d61d1217a838b3743ed621",
+      "actual_complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3TransposedGCDPoissonMask",
+        "name": "ImbalancedChen.Part3.TransposedGCDPoissonMask.transposed_largeW_eq_zero_add_nonzero",
+        "partial": false,
+        "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d) (Y : Real),\n  @Eq.{1} Complex\n    (ImbalancedChen.Part3.MediumAtom.commonLargeBetaGCDW (ImbalancedChen.Part3.MediumAtom.transposedAtom d) Y)\n    (@HAdd.hAdd.{0, 0, 0} Complex Complex Complex (@instHAdd.{0} Complex Complex.instAdd)\n      (ImbalancedChen.Part3.MediumAtom.commonLargeBetaGCDZeroPart (ImbalancedChen.Part3.MediumAtom.transposedAtom d) Y)\n      (ImbalancedChen.Part3.MediumAtom.commonLargeBetaGCDNonzeroPart (ImbalancedChen.Part3.MediumAtom.transposedAtom d)\n        Y))",
+        "unsafe": false
+      }
+    },
+    "mediumAdmissible_cleanedAlphaAtom": {
+      "owning_module": "ImbalancedChen.Part3PairedAlphaDeletion",
+      "current_source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "audit_receipt": "verification/proof-continuation/2026-10-15/audits/20261015T215420005455Z/receipt.json",
+      "audit_receipt_sha256": "20274662054d91ccbd5b03e0303256a969ea6c011e1d99ed111f5d18bda04ccc",
+      "declarations_json_sha256": "c5eff2d933dcc470dc864fe28328a6a5f74fa675ed9c7ce7e4d7217014d62e5d",
+      "actual_complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+        "name": "ImbalancedChen.Part3.mediumAdmissible_cleanedAlphaAtom",
+        "partial": false,
+        "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d),\n  ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 (ImbalancedChen.Part3.MediumAtom.cleanedAlphaAtom d)",
+        "unsafe": false
+      }
+    },
+    "TransposedPrimitiveUPayment.eventually_actual_log_cost_le_rpow": {
+      "owning_module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "current_source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "audit_receipt": "verification/proof-continuation/2026-10-15/audits/20261015T220551593674Z/receipt.json",
+      "audit_receipt_sha256": "876bf1b68a2a355d885c61ed503ebf9a0e2e50182895d43a91f862a92bd9f766",
+      "declarations_json_sha256": "4a93aa5f55e8cedaa0425b124079958b09a4940137ed5a717cd557da0764ff85",
+      "actual_complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUPayment.eventually_actual_log_cost_le_rpow",
+        "partial": false,
+        "type": "∀ (p s : Nat) (sigma : Real)\n  (hsigma :\n    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) sigma)\n  {epsilon : Real}\n  (hepsilon :\n    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) epsilon),\n  @Exists.{1} Real fun (x0 : Real) =>\n    And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) x0)\n      (∀ (B : Nat) (kappa c0 : Real) (d : ImbalancedChen.Part3.MediumAtom),\n        ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d →\n          @LE.le.{0} Real Real.instLE x0 (ImbalancedChen.Part3.MediumAtom.scale d) →\n            @LE.le.{0} Real Real.instLE\n              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                (@HPow.hPow.{0, 0, 0} Real Nat Real\n                  (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                  (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                    (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                    (Real.log\n                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                        (@OfNat.ofNat.{0} Real (nat_lit 2)\n                          (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n                            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n                        (ImbalancedChen.Part3.MediumAtom.V d))))\n                  p)\n                (@HPow.hPow.{0, 0, 0} Real Nat Real\n                  (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                  (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                    (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                    (Real.log (ImbalancedChen.Part3.MediumAtom.physicalFactorCap d)))\n                  s))\n              (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                (ImbalancedChen.Part3.MediumAtom.scale d) epsilon))",
+        "unsafe": false
+      }
+    },
+    "TransposedPrimitiveUPayment.eventually_const_rpow_two_le_logBudget": {
+      "owning_module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "current_source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "audit_receipt": "verification/proof-continuation/2026-10-15/audits/20261015T220551593674Z/receipt.json",
+      "audit_receipt_sha256": "876bf1b68a2a355d885c61ed503ebf9a0e2e50182895d43a91f862a92bd9f766",
+      "declarations_json_sha256": "4a93aa5f55e8cedaa0425b124079958b09a4940137ed5a717cd557da0764ff85",
+      "actual_complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUPayment.eventually_const_rpow_two_le_logBudget",
+        "partial": false,
+        "type": "∀ (C A : Real)\n  (hC : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) C)\n  {delta : Real}\n  (hdelta :\n    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) delta),\n  @Filter.Eventually.{0} Real\n    (fun (x : Real) =>\n      @LE.le.{0} Real Real.instLE\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) C\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) x\n            (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n              (@OfNat.ofNat.{0} Real (nat_lit 2)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n              delta)))\n        (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n          (@HPow.hPow.{0, 0, 0} Real Nat Real\n            (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid))) x\n            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow) (Real.log x) A)))\n    (@Filter.atTop.{0} Real Real.instPreorder)",
+        "unsafe": false
+      }
+    },
+    "TransposedPrimitiveUPayment.one_le_scale": {
+      "owning_module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "current_source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "audit_receipt": "verification/proof-continuation/2026-10-15/audits/20261015T220551593674Z/receipt.json",
+      "audit_receipt_sha256": "876bf1b68a2a355d885c61ed503ebf9a0e2e50182895d43a91f862a92bd9f766",
+      "declarations_json_sha256": "4a93aa5f55e8cedaa0425b124079958b09a4940137ed5a717cd557da0764ff85",
+      "actual_complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+        "name": "ImbalancedChen.Part3.TransposedPrimitiveUPayment.one_le_scale",
+        "partial": false,
+        "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d),\n  @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n    (ImbalancedChen.Part3.MediumAtom.scale d)",
+        "unsafe": false
+      }
+    },
+    "mediumAdmissible_q1SliceAtom": {
+      "owning_module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "current_source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "audit_receipt": "verification/proof-continuation/2026-10-15/audits/20261015T230927740441Z/receipt.json",
+      "audit_receipt_sha256": "ad9c3b6b8f3fd2d65d87f7de96ef19dfb83518b193250d168c04f0bcd571634f",
+      "declarations_json_sha256": "7207f8a6f0b5e5c3d64fdd2113d89e2b02c7fbcb0d78450fc70658eeba98eaec",
+      "actual_complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+        "name": "ImbalancedChen.Part3.mediumAdmissible_q1SliceAtom",
+        "partial": false,
+        "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d) {p : Nat}\n  (hp :\n    @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n      (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n      (ImbalancedChen.Part3.MediumAtom.primitiveFirstFactorCarrier d) p),\n  ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 (ImbalancedChen.Part3.MediumAtom.q1SliceAtom d p)",
+        "unsafe": false
+      }
+    },
+    "sharedFirstFactor_compatible_iff": {
+      "owning_module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "current_source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "audit_receipt": "verification/proof-continuation/2026-10-15/audits/20261015T230927740441Z/receipt.json",
+      "audit_receipt_sha256": "ad9c3b6b8f3fd2d65d87f7de96ef19dfb83518b193250d168c04f0bcd571634f",
+      "declarations_json_sha256": "7207f8a6f0b5e5c3d64fdd2113d89e2b02c7fbcb0d78450fc70658eeba98eaec",
+      "actual_complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+        "name": "ImbalancedChen.Part3.sharedFirstFactor_compatible_iff",
+        "partial": false,
+        "type": "∀ (p v1 v2 n1 n2 : Nat),\n  Iff\n    (ImbalancedChen.Part3.ComplexCRT.Compatible (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v1)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v2) n1 n2)\n    (And (Nat.Coprime n1 (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v1))\n      (And (Nat.Coprime n2 (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v2))\n        (Nat.ModEq (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p (Nat.gcd v1 v2)) n1 n2)))",
+        "unsafe": false
+      }
+    },
+    "sharedFirstFactor_lcm": {
+      "owning_module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "current_source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "audit_receipt": "verification/proof-continuation/2026-10-15/audits/20261015T230927740441Z/receipt.json",
+      "audit_receipt_sha256": "ad9c3b6b8f3fd2d65d87f7de96ef19dfb83518b193250d168c04f0bcd571634f",
+      "declarations_json_sha256": "7207f8a6f0b5e5c3d64fdd2113d89e2b02c7fbcb0d78450fc70658eeba98eaec",
+      "actual_complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+        "name": "ImbalancedChen.Part3.sharedFirstFactor_lcm",
+        "partial": false,
+        "type": "∀ (p v1 v2 : Nat),\n  @Eq.{1} Nat\n    (Nat.lcm (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v1)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v2))\n    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p (Nat.lcm v1 v2))",
+        "unsafe": false
+      }
+    },
+    "MediumAtom.sharedFirstFactor_outside_le": {
+      "owning_module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "current_source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "audit_receipt": "verification/proof-continuation/2026-10-15/audits/20261015T230927740441Z/receipt.json",
+      "audit_receipt_sha256": "ad9c3b6b8f3fd2d65d87f7de96ef19dfb83518b193250d168c04f0bcd571634f",
+      "declarations_json_sha256": "7207f8a6f0b5e5c3d64fdd2113d89e2b02c7fbcb0d78450fc70658eeba98eaec",
+      "actual_complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+        "name": "ImbalancedChen.Part3.MediumAtom.sharedFirstFactor_outside_le",
+        "partial": false,
+        "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d),\n  @LE.le.{0} Real Real.instLE\n    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n      (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid (ImbalancedChen.Part3.MediumAtom.betaCarrier d)\n        fun (m : Nat) =>\n        @HPow.hPow.{0, 0, 0} Real Nat Real\n          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n          (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.Part3.MediumAtom.beta d m))\n          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n      (@Finset.sum.{0, 0} Nat Real Real.instAddCommMonoid\n        (ImbalancedChen.Part3.MediumAtom.primitiveFirstFactorCarrier d) fun (p : Nat) =>\n        @HPow.hPow.{0, 0, 0} Real Nat Real\n          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n          (@Norm.norm.{0} Complex Complex.instNorm (ImbalancedChen.Part3.MediumAtom.gamma1 d p))\n          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))\n    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (@OfNat.ofNat.{0} Real (nat_lit 4)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))\n          (ImbalancedChen.Part3.MediumAtom.V d))\n        (ImbalancedChen.Part3.MediumAtom.Q1 d))\n      (@HPow.hPow.{0, 0, 0} Real Nat Real\n        (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n        (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n          (Real.log\n            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n              (@OfNat.ofNat.{0} Real (nat_lit 2)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n              (ImbalancedChen.Part3.MediumAtom.V d))))\n        (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat)\n          (@HPow.hPow.{0, 0, 0} Nat Nat Nat\n            (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))\n            (@HPow.hPow.{0, 0, 0} Nat Nat Nat\n              (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))\n              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) B)\n            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))",
+        "unsafe": false
+      }
+    },
+    "MediumAtom.card_sharedPrimitiveLargeGCDPairs_le": {
+      "owning_module": "ImbalancedChen.Part3SharedFirstFactorPairCount",
+      "current_source_sha256": "0fb3b9c8af11f17ef73fb422749a2de51b8ac695e08aca6b4599e9e05cf56f30",
+      "audit_receipt": "verification/proof-continuation/2026-10-15/audits/20261015T234824636753Z/receipt.json",
+      "audit_receipt_sha256": "9f6cd4afd92e1cd8347739f10272a6290ef2fe8dff59f7dbb065349686409456",
+      "declarations_json_sha256": "39206a2a264d784caf825005eca223cf9a6d8499e02d3acbe7b09d1744fda1d7",
+      "actual_complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3SharedFirstFactorPairCount",
+        "name": "ImbalancedChen.Part3.MediumAtom.card_sharedPrimitiveLargeGCDPairs_le",
+        "partial": false,
+        "type": "∀ {d : ImbalancedChen.Part3.MediumAtom}\n  (hU :\n    @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n      (ImbalancedChen.Part3.MediumAtom.U d))\n  {Y : Real}\n  (hY : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) Y)\n  {p : Nat} (hp : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) p),\n  @LE.le.{0} Real Real.instLE\n    (@Nat.cast.{0} Real Real.instNatCast\n      (@Finset.card.{0} (Prod.{0, 0} Nat Nat)\n        (ImbalancedChen.Part3.sharedPrimitiveLargeGCDPairs\n          (ImbalancedChen.Part3.MediumAtom.betaCarrier (ImbalancedChen.Part3.MediumAtom.transposedAtom d)) p Y)))\n    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (@OfNat.ofNat.{0} Real (nat_lit 8)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 8) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6)))))))\n          (@HPow.hPow.{0, 0, 0} Real Nat Real\n            (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n            (ImbalancedChen.Part3.MediumAtom.U d) (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (@Nat.cast.{0} Real Real.instNatCast p)\n          Y))\n      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (@OfNat.ofNat.{0} Real (nat_lit 2)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n          (ImbalancedChen.Part3.MediumAtom.U d))\n        (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n          (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n          (Real.log\n            (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n              (@OfNat.ofNat.{0} Real (nat_lit 2)\n                (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n                  (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                    (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n              (ImbalancedChen.Part3.MediumAtom.U d))))))",
+        "unsafe": false
+      }
+    },
+    "cleanedAlpha_sharedLargePairedGCDW_bound": {
+      "owning_module": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW",
+      "current_source_sha256": "46a6defd68675b0be26a003d84fc735ac0a7720f51483e4d9e5dfa67b03ac58f",
+      "audit_receipt": "verification/proof-continuation/2026-10-15/audits/20261016T001130334786Z/receipt.json",
+      "audit_receipt_sha256": "f58dd232eb1fec0c6d6148b4f8a462f71f2fe31ccd0947cbffd5d8dc6d2d575a",
+      "declarations_json_sha256": "c6daee90d1e705661ee08f296b57ad504d54a01fef3d24ca14d3953a4f99366c",
+      "actual_complete_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW",
+        "name": "ImbalancedChen.Part3.cleanedAlpha_sharedLargePairedGCDW_bound",
+        "partial": false,
+        "type": "∀ (kappa : Real) {epsilon : Real}\n  (hepsilon :\n    @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) epsilon),\n  @Exists.{1} Real fun (C : Real) =>\n    And (@LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) C)\n      (∀ (B : Nat) (sigma c0 : Real) (d : ImbalancedChen.Part3.MediumAtom),\n        ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d →\n          ∀ (Y : Real),\n            @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) Y →\n              @LE.le.{0} Real Real.instLE\n                (@Norm.norm.{0} Complex Complex.instNorm\n                  (ImbalancedChen.Part3.MediumAtom.sharedLargePairedGCDW\n                    (ImbalancedChen.Part3.MediumAtom.cleanedAlphaAtom d) Y))\n                (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                  (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) C\n                      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n                        (ImbalancedChen.Part3.MediumAtom.scale d) epsilon))\n                    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                      (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                        (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                          (@OfNat.ofNat.{0} Real (nat_lit 4)\n                            (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast\n                              (@Nat.instAtLeastTwoHAddOfNat\n                                (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))\n                                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))\n                          (ImbalancedChen.Part3.MediumAtom.V d))\n                        (ImbalancedChen.Part3.MediumAtom.Q1 d))\n                      (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n                  (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                    (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                      (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                        (@OfNat.ofNat.{0} Real (nat_lit 16)\n                          (@instOfNatAtLeastTwo.{0} Real (nat_lit 16) Real.instNatCast\n                            (@Nat.instAtLeastTwoHAddOfNat\n                              (@OfNat.ofNat.{0} Nat (nat_lit 15) (instOfNatNat (nat_lit 15)))\n                              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 14) (instOfNatNat (nat_lit 14)))))))\n                        (@HPow.hPow.{0, 0, 0} Real Nat Real\n                          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n                          (ImbalancedChen.Part3.MediumAtom.U d)\n                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))\n                      Y)\n                    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                          (@OfNat.ofNat.{0} Real (nat_lit 4)\n                            (@instOfNatAtLeastTwo.{0} Real (nat_lit 4) Real.instNatCast\n                              (@Nat.instAtLeastTwoHAddOfNat\n                                (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))\n                                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))\n                          (ImbalancedChen.Part3.MediumAtom.Q1 d))\n                        (ImbalancedChen.Part3.MediumAtom.U d))\n                      (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n                        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                        (Real.log\n                          (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                            (@OfNat.ofNat.{0} Real (nat_lit 2)\n                              (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n                                (@Nat.instAtLeastTwoHAddOfNat\n                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n                                  (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))\n                            (ImbalancedChen.Part3.MediumAtom.U d))))))))",
+        "unsafe": false
+      }
+    }
+  },
+  "native_primary_LCM_fullproof_root_read": {
+    "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LcmWeightBounds.lean",
+    "sha256": "6be009d9f4d15468db14dca03434e22259f1d26fe137005f888c76227c1d74ea",
+    "actual_complete_public_proof_lines_read": [
+      107,
+      170
+    ],
+    "header": "theorem sum_abs_lcm_weight_le_log (j : ℕ) {L : ℝ} (hL : 1 ≤ L)\n    (Q : Finset ℕ) (hQ : Q ⊆ Ioc 0 ⌊L⌋₊) (c : ℕ → ℝ)\n    (hc : ∀ q ∈ Q, |c q| ≤ (fouvryTau j q : ℝ)) :\n    (∑ q ∈ Q, ∑ r ∈ Q, |c q * c r / (q.lcm r : ℝ)|) ≤\n      (1 + Real.log L) ^ (2 * j ^ 2 + 1)",
+    "instance_j": 2,
+    "log_exponent": 9,
+    "already_in_existing_parent_closure": true,
+    "new_native_replay_claimed": false,
+    "header_exact_from_current_source": true
+  },
+  "proper_DAG": {
+    "project_parents": 68,
+    "with_self": 69,
+    "foreign_including_Init": 65,
+    "new_foreign": [],
+    "all_current_project_sources_rechecked": true
+  },
+  "specific_first_gate": {
+    "target": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDNonzero",
+    "source_sha256": "e3904fe2fbc4a00492f69159bd0764e2456e5e646bf8796deece90946842e0e4",
+    "preconditions": [
+      "sole runtime lock/publication freeze released",
+      "fresh all68 proper source/object cache exact onlyselfmissing,65foreign known/zero new or missing;no prerequisite bootstrap",
+      "three exact direct owned receipts29/24/9 preserved;no unaccepted residual/zero/Energy dependencies"
+    ],
+    "execution": "ONE complete-source strict by sole runtime unchangedj2/M6144/RSS6656/warningsAsErrors; iff actualPASS original-object stock replay plus original complete all-generated serialized/environment census/fulltypes/safety/transitive-three-axiom audit. Preserve failures/no skips/auditor/resource/pin/CI changes.",
+    "queue": "Upper114c natural terminal then readyZerofair then thisfirst; no competing compiler."
+  },
+  "remaining_boundary": "This closes only the large paired-original-alpha gcd nonzero region if strict+owned acceptance succeeds; no conclusion about the complementary small-paired core, complete analytic transfer, Theorem1.1, Corollary1.2, or full1+1.75 main theorem is claimed.",
+  "full_nonzero_energy_distribution_externalclosure_or_main_claimed": false
+}

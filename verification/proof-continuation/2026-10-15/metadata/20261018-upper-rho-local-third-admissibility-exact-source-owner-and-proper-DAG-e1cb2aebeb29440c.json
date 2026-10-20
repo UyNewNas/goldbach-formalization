@@ -1,0 +1,2291 @@
+{
+  "status": "NARROW_LOCAL_PRIMITIVE_PROOF_EXTRACTION_COMPLETE_SOURCE_FROZEN_NOT_COMPILED_OR_ACCEPTED",
+  "author": "/root/low_aggregate_oct18",
+  "created_utc": "2026-10-18T04:36:44.073381+00:00",
+  "module": "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+  "old_source_sha256": "9b68d3d5e1bdc9847b6e6d29be6b0c20fc7f73bde1d70be0575bef41ff157537",
+  "new_source_sha256": "3f264c1f738787275be0dfc39ddf44a225334bb8b61b74f6d808db7769456262",
+  "old_actual_splitlines_count": 293,
+  "new_actual_splitlines_count": 334,
+  "copied_actual_theorem_lines": 39,
+  "old_source_backup": ".lake\\proof-continuation\\source-reviews\\drafts\\ActualExtendedThirdCompactUpperRho.9b68d3d5e1bdc9847b6e6d29be6b0c20fc7f73bde1d70be0575bef41ff157537.lean",
+  "exact_patch_operations": [
+    {
+      "operation": "remove one import",
+      "old": "import ImbalancedChen.HistoricalUnorderedThirdGeometry\n",
+      "new": ""
+    },
+    {
+      "operation": "insert one private theorem copied verbatim except private local name",
+      "anchor": "/-- The first coordinate is owned half-open and its label's upper endpoint",
+      "inserted_full_text": "/-- The complete inherited and third-cube Rosser tests, extracted locally\nwithout the unrelated historical frontier imports. -/\nprivate theorem actualExtendedThirdCompact_third_admissible_iff\n    (Q : ℝ) (p1 p2 p3 : ℕ) (h3 : 0 < p3)\n    (h32 : p3 < p2) (h21 : p2 < p1) :\n    ordinaryRosserPrefixAdmissible false Q [p3, p2, p1] ↔\n      (p1 : ℝ) ^ 3 < Q ∧ (p1 : ℝ) * p2 * p3 ^ 3 < Q := by\n  have h31 := h32.trans h21\n  let S : Finset ℕ := {p3, p2, p1}\n  have hf1 : S.filter (fun p => p1 ≤ p) = {p1} := by\n    ext p\n    simp only [S, Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]\n    omega\n  have hf2 : S.filter (fun p => p2 ≤ p) = {p2, p1} := by\n    ext p\n    simp only [S, Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]\n    omega\n  have hf3 : S.filter (fun p => p3 ≤ p) = S := by\n    ext p\n    simp only [S, Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]\n    omega\n  have hc : UpperAdmissibleSet Q [p3, p2, p1].toFinset ↔\n      (p1 : ℝ) ^ 3 < Q ∧ (p1 : ℝ) * p2 * p3 ^ 3 < Q := by\n    simp only [List.toFinset_cons, List.toFinset_nil]\n    change UpperAdmissibleSet Q S ↔ _\n    simp only [UpperAdmissibleSet, S, Finset.forall_mem_insert,\n      Finset.mem_singleton, forall_eq]\n    rw [hf1, hf2, hf3]\n    norm_num [S, h32.ne, h21.ne, h31.ne, Nat.cast_mul, pow_succ,\n      mul_comm, mul_left_comm, mul_assoc, and_comm]\n  have hsq : (1 : ℝ) ≤ (p3 : ℝ) ^ 2 := by\n    have hp3 : (1 : ℝ) ≤ p3 := by exact_mod_cast h3\n    nlinarith\n  have hprod : (([p3, p2, p1].prod : ℕ) : ℝ) ≤\n      (p1 : ℝ) * p2 * p3 ^ 3 := by\n    have hh := mul_le_mul_of_nonneg_left hsq\n      (by positivity : (0 : ℝ) ≤ (p1 : ℝ) * p2 * p3)\n    simp only [List.prod_cons, List.prod_nil, Nat.cast_mul, mul_one]\n    nlinarith only [hh]\n  simp only [ordinaryRosserPrefixAdmissible, Bool.false_eq_true, if_false, hc]\n  exact ⟨fun h => h.2, fun h => ⟨hprod.trans_lt h.2, h⟩⟩\n\n"
+    },
+    {
+      "operation": "change one proof call",
+      "old": "historicalUnorderedThird_admissible_iff _ p0 p1 p2 hp2 hp21 hp10",
+      "new": "actualExtendedThirdCompact_third_admissible_iff _ p0 p1 p2 hp2 hp21 hp10"
+    }
+  ],
+  "exact_forward_inverse_bytes": true,
+  "all_original_27_complete_headers_unchanged": true,
+  "all_original_7_full_definitions_unchanged": true,
+  "all_other_19_full_proof_spans_byte_exact": true,
+  "only_existing_proof_body_changed": "actualExtendedThirdCompactUpperPolicy_third_iff",
+  "new_one_private_theorem_full_source": "private theorem actualExtendedThirdCompact_third_admissible_iff\n    (Q : ℝ) (p1 p2 p3 : ℕ) (h3 : 0 < p3)\n    (h32 : p3 < p2) (h21 : p2 < p1) :\n    ordinaryRosserPrefixAdmissible false Q [p3, p2, p1] ↔\n      (p1 : ℝ) ^ 3 < Q ∧ (p1 : ℝ) * p2 * p3 ^ 3 < Q := by\n  have h31 := h32.trans h21\n  let S : Finset ℕ := {p3, p2, p1}\n  have hf1 : S.filter (fun p => p1 ≤ p) = {p1} := by\n    ext p\n    simp only [S, Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]\n    omega\n  have hf2 : S.filter (fun p => p2 ≤ p) = {p2, p1} := by\n    ext p\n    simp only [S, Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]\n    omega\n  have hf3 : S.filter (fun p => p3 ≤ p) = S := by\n    ext p\n    simp only [S, Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]\n    omega\n  have hc : UpperAdmissibleSet Q [p3, p2, p1].toFinset ↔\n      (p1 : ℝ) ^ 3 < Q ∧ (p1 : ℝ) * p2 * p3 ^ 3 < Q := by\n    simp only [List.toFinset_cons, List.toFinset_nil]\n    change UpperAdmissibleSet Q S ↔ _\n    simp only [UpperAdmissibleSet, S, Finset.forall_mem_insert,\n      Finset.mem_singleton, forall_eq]\n    rw [hf1, hf2, hf3]\n    norm_num [S, h32.ne, h21.ne, h31.ne, Nat.cast_mul, pow_succ,\n      mul_comm, mul_left_comm, mul_assoc, and_comm]\n  have hsq : (1 : ℝ) ≤ (p3 : ℝ) ^ 2 := by\n    have hp3 : (1 : ℝ) ≤ p3 := by exact_mod_cast h3\n    nlinarith\n  have hprod : (([p3, p2, p1].prod : ℕ) : ℝ) ≤\n      (p1 : ℝ) * p2 * p3 ^ 3 := by\n    have hh := mul_le_mul_of_nonneg_left hsq\n      (by positivity : (0 : ℝ) ≤ (p1 : ℝ) * p2 * p3)\n    simp only [List.prod_cons, List.prod_nil, Nat.cast_mul, mul_one]\n    nlinarith only [hh]\n  simp only [ordinaryRosserPrefixAdmissible, Bool.false_eq_true, if_false, hc]\n  exact ⟨fun h => h.2, fun h => ⟨hprod.trans_lt h.2, h⟩⟩",
+  "historical_primitive_source_sha256": "4ffa5f89e52a26f621f2e896d2fa4dd3c26508b887967eac696994ef4c54b129",
+  "historical_original_full_theorem": "theorem historicalUnorderedThird_admissible_iff\n    (Q : ℝ) (p1 p2 p3 : ℕ) (h3 : 0 < p3)\n    (h32 : p3 < p2) (h21 : p2 < p1) :\n    ordinaryRosserPrefixAdmissible false Q [p3, p2, p1] ↔\n      (p1 : ℝ) ^ 3 < Q ∧ (p1 : ℝ) * p2 * p3 ^ 3 < Q := by\n  have h31 := h32.trans h21\n  let S : Finset ℕ := {p3, p2, p1}\n  have hf1 : S.filter (fun p => p1 ≤ p) = {p1} := by\n    ext p\n    simp only [S, Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]\n    omega\n  have hf2 : S.filter (fun p => p2 ≤ p) = {p2, p1} := by\n    ext p\n    simp only [S, Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]\n    omega\n  have hf3 : S.filter (fun p => p3 ≤ p) = S := by\n    ext p\n    simp only [S, Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]\n    omega\n  have hc : UpperAdmissibleSet Q [p3, p2, p1].toFinset ↔\n      (p1 : ℝ) ^ 3 < Q ∧ (p1 : ℝ) * p2 * p3 ^ 3 < Q := by\n    simp only [List.toFinset_cons, List.toFinset_nil]\n    change UpperAdmissibleSet Q S ↔ _\n    simp only [UpperAdmissibleSet, S, Finset.forall_mem_insert,\n      Finset.mem_singleton, forall_eq]\n    rw [hf1, hf2, hf3]\n    norm_num [S, h32.ne, h21.ne, h31.ne, Nat.cast_mul, pow_succ,\n      mul_comm, mul_left_comm, mul_assoc, and_comm]\n  have hsq : (1 : ℝ) ≤ (p3 : ℝ) ^ 2 := by\n    have hp3 : (1 : ℝ) ≤ p3 := by exact_mod_cast h3\n    nlinarith\n  have hprod : (([p3, p2, p1].prod : ℕ) : ℝ) ≤\n      (p1 : ℝ) * p2 * p3 ^ 3 := by\n    have hh := mul_le_mul_of_nonneg_left hsq\n      (by positivity : (0 : ℝ) ≤ (p1 : ℝ) * p2 * p3)\n    simp only [List.prod_cons, List.prod_nil, Nat.cast_mul, mul_one]\n    nlinarith only [hh]\n  simp only [ordinaryRosserPrefixAdmissible, Bool.false_eq_true, if_false, hc]\n  exact ⟨fun h => h.2, fun h => ⟨hprod.trans_lt h.2, h⟩⟩",
+  "copied_complete_proof_exact_except_private_local_name": true,
+  "old_complete_declaration_and_primitive_inventory": [
+    {
+      "name": "actualExtendedThirdCompactFirstStop",
+      "kind": "def",
+      "private": false,
+      "line": 31,
+      "full_header": "def actualExtendedThirdCompactFirstStop (e : ℝ) (m N : ℕ) (history : List ℕ) : Prop",
+      "full_span_sha256": "d3a845a96e2a8a6bbe406271c73cd33a9004c4882f4e864a9ca18267caaf136c",
+      "proof_body_sha256": null,
+      "full_definition": "def actualExtendedThirdCompactFirstStop (e : ℝ) (m N : ℕ) (history : List ℕ) : Prop :=\n  ∃ i : Fin (2 ^ m),\n    actualExtendedThirdDyadicLo m (fun _ => i) 0 ≤\n        primeHistoryLogCoordinates (N : ℝ) 1 history 0 ∧\n      primeHistoryLogCoordinates (N : ℝ) 1 history 0 <\n        actualExtendedThirdDyadicHi m (fun _ => i) 0 ∧\n      actualExtendedThirdDyadicHi m (fun _ => i) 0 ≤ thirdPrefixRho - 4 * e"
+    },
+    {
+      "name": "actualExtendedThirdCompactInitialPolicy",
+      "kind": "def",
+      "private": false,
+      "line": 39,
+      "full_header": "def actualExtendedThirdCompactInitialPolicy (e : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool",
+      "full_span_sha256": "42e47db11880e6be483316c03d4f81af4296be3c681e825e1e12873921250146",
+      "proof_body_sha256": null,
+      "full_definition": "def actualExtendedThirdCompactInitialPolicy (e : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool :=\n  oddFirstExitPolicy fun history => decide\n    (ordinaryRosserPrefixAdmissible false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e)) history ∧\n      (history.length = 1 → actualExtendedThirdCompactFirstStop e m N history))"
+    },
+    {
+      "name": "actualExtendedThirdCompactRawLevel",
+      "kind": "def",
+      "private": false,
+      "line": 45,
+      "full_header": "def actualExtendedThirdCompactRawLevel (e h : ℝ) (m N : ℕ) (history : List ℕ) : ℝ",
+      "full_span_sha256": "ead972228a61a3ee8a4944f87d644a590d29de6fc74b874efb1247436bc584c8",
+      "proof_body_sha256": null,
+      "full_definition": "def actualExtendedThirdCompactRawLevel (e h : ℝ) (m N : ℕ) (history : List ℕ) : ℝ :=\n  (N : ℝ) ^ actualExtendedThirdCompactCellLevel e h m\n    (primeHistoryLogCoordinates (N : ℝ) 3 history)"
+    },
+    {
+      "name": "actualExtendedThirdCompactActive",
+      "kind": "def",
+      "private": false,
+      "line": 49,
+      "full_header": "def actualExtendedThirdCompactActive (e h : ℝ) (m N : ℕ) (history : List ℕ) : Prop",
+      "full_span_sha256": "8527a6b65e2dfc913894825b83b9ea85b0569b325c726540dbb25b00b2b197de",
+      "proof_body_sha256": null,
+      "full_definition": "def actualExtendedThirdCompactActive (e h : ℝ) (m N : ℕ) (history : List ℕ) : Prop :=\n  ∃ j ∈ actualExtendedThirdCompactCells e h m,\n    primeHistoryLogCoordinates (N : ℝ) 3 history ∈ actualExtendedThirdOwnedCell m j"
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy",
+      "kind": "def",
+      "private": false,
+      "line": 53,
+      "full_header": "def actualExtendedThirdCompactUpperPolicy (e h : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool",
+      "full_span_sha256": "4058b7b5d4b764c5ec5ea1c968281c36288c7b4c41800365805e63bf779dfc12",
+      "proof_body_sha256": null,
+      "full_definition": "def actualExtendedThirdCompactUpperPolicy (e h : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool :=\n  thirdCappedUpperPolicy (actualExtendedThirdCompactInitialPolicy e m N)\n    (actualExtendedThirdCompactRawLevel e h m N)"
+    },
+    {
+      "name": "actualExtendedThirdCompactRawLevel_on_cell",
+      "kind": "theorem",
+      "private": false,
+      "line": 58,
+      "full_header": "theorem actualExtendedThirdCompactRawLevel_on_cell {e h : ℝ} {m N : ℕ}\n    {history : List ℕ} {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 history ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactRawLevel e h m N history =\n      (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j",
+      "full_span_sha256": "dcf1349c011e7bedb6b807d313645eace84bed054a3fddeb86abbbffd274c60a",
+      "proof_body_sha256": "ef5234c98953e6d2b92e686905271484e85c81fcee4d71f68446323f44cf6f82",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactRawLevel_inactive",
+      "kind": "theorem",
+      "private": false,
+      "line": 67,
+      "full_header": "theorem actualExtendedThirdCompactRawLevel_inactive {e h : ℝ} {m N : ℕ}\n    {history : List ℕ} (ha : ¬actualExtendedThirdCompactActive e h m N history) :\n    actualExtendedThirdCompactRawLevel e h m N history =\n      (N : ℝ) ^ (thirdPrefixTheta - 2 * e)",
+      "full_span_sha256": "9bbd10d145dd9b77c83db0811ebe40b9acf6b1adb17089c10796cce49b08cea5",
+      "proof_body_sha256": "2233056a620e4523250d240608b71138b8bd4e9b038afd645f34c98ecd771615",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_through_two",
+      "kind": "theorem",
+      "private": false,
+      "line": 76,
+      "full_header": "theorem actualExtendedThirdCompactUpperPolicy_through_two (e h : ℝ) (m N : ℕ)\n    (positive : Bool) (history : List ℕ) (hlen : history.length ≤ 2) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      actualExtendedThirdCompactInitialPolicy e m N positive history",
+      "full_span_sha256": "9256dd9030312aa2edb7c9c39d9c7c8d8b4d72f3b05beb5894582f70e7f1471b",
+      "proof_body_sha256": "abfa8232318cfa965cd9e5251c151fc4351b3af104c2aa7df36bfa3a89a8c485",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_even",
+      "kind": "theorem",
+      "private": false,
+      "line": 83,
+      "full_header": "theorem actualExtendedThirdCompactUpperPolicy_even (e h : ℝ) (m N : ℕ)\n    (history : List ℕ) : actualExtendedThirdCompactUpperPolicy e h m N true history = true",
+      "full_span_sha256": "1ff6afdf5787098bf624a9216bfc0c936f41f2d5a68721dc6ef9f65928bd76c1",
+      "proof_body_sha256": "b3fa85608363dc8155e18e5c369726731471c424f70245ccab3cfc3e679fcf40",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_inactive",
+      "kind": "theorem",
+      "private": false,
+      "line": 91,
+      "full_header": "theorem actualExtendedThirdCompactUpperPolicy_inactive (e h : ℝ) (m N : ℕ)\n    (positive : Bool) (history : List ℕ)\n    (ha : ¬actualExtendedThirdCompactActive e h m N (rosserAncestor 3 history)) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      actualExtendedThirdCompactInitialPolicy e m N positive history",
+      "full_span_sha256": "6c364ade9608e16176c194d448bf3c02bc965beed59644ae45a592c082cd1880",
+      "proof_body_sha256": "eb21b1c6e9dce32b0b57c1de7857598faaee1ecdf34f84fd52a51ee663a751e0",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_on_cell",
+      "kind": "theorem",
+      "private": false,
+      "line": 104,
+      "full_header": "theorem actualExtendedThirdCompactUpperPolicy_on_cell {e h : ℝ} {m N : ℕ}\n    (positive : Bool) (history : List ℕ) (hlen : 3 ≤ history.length)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 (rosserAncestor 3 history) ∈\n      actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      ordinaryParityRosserPolicy false ((N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j)\n        positive history",
+      "full_span_sha256": "ad7a0bff3d380e715d1aabef36b182fb1a78efaaa411c5e9aeb124588eafedab",
+      "proof_body_sha256": "99ceb153890099f355bf7f5f2e29f37a48f61446140b2ee597e012f90577ea5c",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactFrozenLevel_append",
+      "kind": "theorem",
+      "private": false,
+      "line": 118,
+      "full_header": "theorem actualExtendedThirdCompactFrozenLevel_append (e h : ℝ) (m N : ℕ)\n    (later history : List ℕ) (hlen : 3 ≤ history.length) :\n    actualExtendedThirdCompactRawLevel e h m N (rosserAncestor 3 (later ++ history)) =\n      actualExtendedThirdCompactRawLevel e h m N (rosserAncestor 3 history)",
+      "full_span_sha256": "f8ed394b3ca8af7d0e8dd1f3c42ca2a0863b6770db3b6fdd0bd575b1b1360cdb",
+      "proof_body_sha256": "8241d01c64032eeb642337bb8f3957ea933416c439a84eada73a71f47fe7d835",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_empty_cells",
+      "kind": "theorem",
+      "private": false,
+      "line": 124,
+      "full_header": "theorem actualExtendedThirdCompactUpperPolicy_empty_cells (e h : ℝ) (m N : ℕ)\n    (hempty : actualExtendedThirdCompactCells e h m = ∅) :\n    actualExtendedThirdCompactUpperPolicy e h m N = actualExtendedThirdCompactInitialPolicy e m N",
+      "full_span_sha256": "d41073dd7625e92214b367ce6cf9314f8970c1cd9b3d912e0eb9b43b5666db61",
+      "proof_body_sha256": "08532fa3ce996934741587253fd4b8ac06305a07051331dacdd08002d7e50aaf",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactFirstStop_of_cell",
+      "kind": "theorem",
+      "private": false,
+      "line": 135,
+      "full_header": "theorem actualExtendedThirdCompactFirstStop_of_cell {e h : ℝ} {m N : ℕ}\n    (p0 p1 p2 : ℕ) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactFirstStop e m N [p0]",
+      "full_span_sha256": "43d950220145e0be6d06fd2195df7e845da400dc5322d12c4ec778495faa77c5",
+      "proof_body_sha256": "aef082225a5d6c4d68584ba4d17cb3b771109b5153ea0cd89cec6f702a2b4245",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactInitialPolicy_first_iff",
+      "kind": "theorem",
+      "private": false,
+      "line": 152,
+      "full_header": "theorem actualExtendedThirdCompactInitialPolicy_first_iff (e : ℝ) (m N p : ℕ)\n    (hp : 0 < p) :\n    actualExtendedThirdCompactInitialPolicy e m N false [p] = true ↔\n      (p : ℝ) ^ 3 < (N : ℝ) ^ (thirdPrefixTheta - 2 * e) ∧\n        actualExtendedThirdCompactFirstStop e m N [p]",
+      "full_span_sha256": "24b7ff526004b23468a7d2f169d931b44e2882d9d742b536625b9948ce0772a7",
+      "proof_body_sha256": "6402bfb1142dde16eef73ed41ec55ead81630edd9a7cc4c0ede71a542eaaed2b",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactCell_prime_firstCube",
+      "kind": "theorem",
+      "private": false,
+      "line": 177,
+      "full_header": "theorem actualExtendedThirdCompactCell_prime_firstCube {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp0 : 0 < p0) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    (p0 : ℝ) ^ 3 < (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j",
+      "full_span_sha256": "dc854106201950a8b4b6b99c5268f54714e5c8f43658f22b018882488cab2e10",
+      "proof_body_sha256": "81f6e8bac644da40d0c73c84515c5b029bb5574a4feeac2f3a452d462d3f066f",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactInitialPolicy_first_of_cell",
+      "kind": "theorem",
+      "private": false,
+      "line": 194,
+      "full_header": "theorem actualExtendedThirdCompactInitialPolicy_first_of_cell {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp0 : 0 < p0) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactInitialPolicy e m N false [p0] = true",
+      "full_span_sha256": "361f2dda11335208b608a4ce1a4712bc652e93b60e3a8f4bf9a3b34efd3331dd",
+      "proof_body_sha256": "f1a2c2982be4dbba05ae4d7fd235d76f865bed2a3aa5e91bb6406f2f402ddf5a",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_third_iff",
+      "kind": "theorem",
+      "private": false,
+      "line": 210,
+      "full_header": "theorem actualExtendedThirdCompactUpperPolicy_third_iff {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp2 : 0 < p2) (hp21 : p2 < p1) (hp10 : p1 < p0)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactUpperPolicy e h m N false [p2, p1, p0] = true ↔\n      (p0 : ℝ) * p1 * p2 ^ 3 < (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j",
+      "full_span_sha256": "3531ff84a5323aff8cfcc8d802681f20a975d68a3bbac3b1dac4d04c37eca16a",
+      "proof_body_sha256": "fcb878e4486b17cf8a2cb30ef68e54f680870625eb71df01ae323ec5ca468aa1",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactModuli",
+      "kind": "def",
+      "private": false,
+      "line": 231,
+      "full_header": "def actualExtendedThirdCompactModuli (e h : ℝ) (m N cap : ℕ) (w z : ℝ) : Finset ℕ",
+      "full_span_sha256": "656b24450f38b371e1fd378f85518199a471dfe12fba7887fe05cc3faccf1753",
+      "proof_body_sha256": null,
+      "full_definition": "def actualExtendedThirdCompactModuli (e h : ℝ) (m N cap : ℕ) (w z : ℝ) : Finset ℕ :=\n  actualSmallRoughModuli (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z"
+    },
+    {
+      "name": "actualExtendedThirdCompactRho",
+      "kind": "def",
+      "private": false,
+      "line": 234,
+      "full_header": "def actualExtendedThirdCompactRho (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) : ℕ → ℝ",
+      "full_span_sha256": "89184a225acb0421eaa02cf78844bad348ad558d0f10707eaa5474b0d51a3c1b",
+      "proof_body_sha256": null,
+      "full_definition": "def actualExtendedThirdCompactRho (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) : ℕ → ℝ :=\n  actualSmallRoughRho (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z L"
+    },
+    {
+      "name": "actualExtendedThirdCompactRho_eq_firstExitAttachment",
+      "kind": "theorem",
+      "private": false,
+      "line": 237,
+      "full_header": "theorem actualExtendedThirdCompactRho_eq_firstExitAttachment\n    (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) :\n    actualExtendedThirdCompactRho e h m N cap w z L =\n      smallRoughRho (actualSmallRosserSupport N cap w)\n        (firstExitRetainedModuli (actualExtendedThirdCompactUpperPolicy e h m N)\n          (roughPrimeUniverse N cap w z))\n        (fun d => (firstExitRetainedCoefficient (actualExtendedThirdCompactUpperPolicy e h m N)\n          (roughPrimeUniverse N cap w z) d : ℝ))\n        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)",
+      "full_span_sha256": "31b4aa5a06ccf85190a8efc02bfe10aa9e1c4c405126a4d5dc6c408e37f982f0",
+      "proof_body_sha256": "b7f509c8289884b9e91043177636eed5c219f62ce65ca74ae1f63e0efeef721e",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactRoughDensity_eq_policy",
+      "kind": "theorem",
+      "private": false,
+      "line": 250,
+      "full_header": "theorem actualExtendedThirdCompactRoughDensity_eq_policy\n    (e h : ℝ) (m N cap : ℕ) (w z : ℝ) :\n    reciprocalTotientDensity\n        (fixedRoughSupport (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z)\n        (fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z) =\n      firstExitRetainedPolynomial (actualExtendedThirdCompactUpperPolicy e h m N)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap w z)",
+      "full_span_sha256": "9bd0784ad635a71ee5416a746031ae5c6690c9f3b6d08abd01d28e88357413e8",
+      "proof_body_sha256": "f4dbddf59a3f8b52b4dab83ce33174a84f4e085d29b92c8e3c78285f73a98890",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactRho_majorant",
+      "kind": "theorem",
+      "private": false,
+      "line": 261,
+      "full_header": "theorem actualExtendedThirdCompactRho_majorant (e h : ℝ) (m N cap : ℕ) (w z L : ℝ)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z) (hzcap : z ≤ (cap : ℝ)) (n : ℤ) :\n    actualSmallRoughIndicator N z n ≤\n      physicalDivisorSum (actualExtendedThirdCompactModuli e h m N cap w z)\n        (actualExtendedThirdCompactRho e h m N cap w z L) n.natAbs",
+      "full_span_sha256": "625a751563cfa531f6ada577853964f1663a25a16312ab50ff454a7e52330732",
+      "proof_body_sha256": "9e43617cabd2787e8cbe6106453a3ca0926df6961fe7f89b45d789a9067c837b",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactRho_abs_le_one",
+      "kind": "theorem",
+      "private": false,
+      "line": 268,
+      "full_header": "theorem actualExtendedThirdCompactRho_abs_le_one (e h : ℝ) (m N cap : ℕ)\n    (w z L : ℝ) (q : ℕ) : |actualExtendedThirdCompactRho e h m N cap w z L q| ≤ 1",
+      "full_span_sha256": "3e2a124c4b9461de2f654d9f79097da80e8eb723d0347cb87741936f2177c3e9",
+      "proof_body_sha256": "6c9b031de3a0ed3095a6fa8eafe8e712e04e34ff9bbcd3fd2aea22ea9b1f2969",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactModuli_squarefree",
+      "kind": "theorem",
+      "private": false,
+      "line": 272,
+      "full_header": "theorem actualExtendedThirdCompactModuli_squarefree (e h : ℝ) (m N cap : ℕ)\n    (w z : ℝ) {q : ℕ} (hq : q ∈ actualExtendedThirdCompactModuli e h m N cap w z) :\n    Squarefree q",
+      "full_span_sha256": "81759f452ff8a023875aa34b63a03f23c3e484842013b07ddf0bd2d6d571e4df",
+      "proof_body_sha256": "599fb9a11e9cf0be79602c70c9c85cdf7624cc25331368fa50a068f749fca210",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactModuli_coprime_target",
+      "kind": "theorem",
+      "private": false,
+      "line": 277,
+      "full_header": "theorem actualExtendedThirdCompactModuli_coprime_target (e h : ℝ) (m N cap : ℕ)\n    (w z : ℝ) {q : ℕ} (hq : q ∈ actualExtendedThirdCompactModuli e h m N cap w z) :\n    q.Coprime N",
+      "full_span_sha256": "ace63f640e64f2b184779153d1371f96e9c0a22e161fd10577f2b9e96967a95b",
+      "proof_body_sha256": "ed1f0d8ad1bae68dc34c63659e30be3b46200a047e75ca8cc3021e7f30ad05e4",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactRho_empty_cells",
+      "kind": "theorem",
+      "private": false,
+      "line": 284,
+      "full_header": "theorem actualExtendedThirdCompactRho_empty_cells (e h : ℝ) (m N cap : ℕ) (w z L : ℝ)\n    (hempty : actualExtendedThirdCompactCells e h m = ∅) :\n    actualExtendedThirdCompactRho e h m N cap w z L =\n      actualSmallRoughRho (actualExtendedThirdCompactInitialPolicy e m N false) N cap w z L",
+      "full_span_sha256": "4af7d081c11fdb1ff9ebdd70e4d0e1e6752b61d63e6827f9bb098e5c52d0ab72",
+      "proof_body_sha256": "bd82bee82a258d5934cc2b372973a1bcf4ee5ed811838cbb9937aaac2d221142",
+      "full_definition": null
+    }
+  ],
+  "new_complete_declaration_and_primitive_inventory": [
+    {
+      "name": "actualExtendedThirdCompact_third_admissible_iff",
+      "kind": "theorem",
+      "private": true,
+      "line": 30,
+      "full_header": "private theorem actualExtendedThirdCompact_third_admissible_iff\n    (Q : ℝ) (p1 p2 p3 : ℕ) (h3 : 0 < p3)\n    (h32 : p3 < p2) (h21 : p2 < p1) :\n    ordinaryRosserPrefixAdmissible false Q [p3, p2, p1] ↔\n      (p1 : ℝ) ^ 3 < Q ∧ (p1 : ℝ) * p2 * p3 ^ 3 < Q",
+      "full_span_sha256": "b0d3dcdda5e9525aa0125ebeb1eaceedfb864e5d0dcb8e70ba1473ddd20eb704",
+      "proof_body_sha256": "c9558200ed893fb420d8cc82c64b3120478743373b53a74a1d08449de77d6e75",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactFirstStop",
+      "kind": "def",
+      "private": false,
+      "line": 72,
+      "full_header": "def actualExtendedThirdCompactFirstStop (e : ℝ) (m N : ℕ) (history : List ℕ) : Prop",
+      "full_span_sha256": "d3a845a96e2a8a6bbe406271c73cd33a9004c4882f4e864a9ca18267caaf136c",
+      "proof_body_sha256": null,
+      "full_definition": "def actualExtendedThirdCompactFirstStop (e : ℝ) (m N : ℕ) (history : List ℕ) : Prop :=\n  ∃ i : Fin (2 ^ m),\n    actualExtendedThirdDyadicLo m (fun _ => i) 0 ≤\n        primeHistoryLogCoordinates (N : ℝ) 1 history 0 ∧\n      primeHistoryLogCoordinates (N : ℝ) 1 history 0 <\n        actualExtendedThirdDyadicHi m (fun _ => i) 0 ∧\n      actualExtendedThirdDyadicHi m (fun _ => i) 0 ≤ thirdPrefixRho - 4 * e"
+    },
+    {
+      "name": "actualExtendedThirdCompactInitialPolicy",
+      "kind": "def",
+      "private": false,
+      "line": 80,
+      "full_header": "def actualExtendedThirdCompactInitialPolicy (e : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool",
+      "full_span_sha256": "42e47db11880e6be483316c03d4f81af4296be3c681e825e1e12873921250146",
+      "proof_body_sha256": null,
+      "full_definition": "def actualExtendedThirdCompactInitialPolicy (e : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool :=\n  oddFirstExitPolicy fun history => decide\n    (ordinaryRosserPrefixAdmissible false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e)) history ∧\n      (history.length = 1 → actualExtendedThirdCompactFirstStop e m N history))"
+    },
+    {
+      "name": "actualExtendedThirdCompactRawLevel",
+      "kind": "def",
+      "private": false,
+      "line": 86,
+      "full_header": "def actualExtendedThirdCompactRawLevel (e h : ℝ) (m N : ℕ) (history : List ℕ) : ℝ",
+      "full_span_sha256": "ead972228a61a3ee8a4944f87d644a590d29de6fc74b874efb1247436bc584c8",
+      "proof_body_sha256": null,
+      "full_definition": "def actualExtendedThirdCompactRawLevel (e h : ℝ) (m N : ℕ) (history : List ℕ) : ℝ :=\n  (N : ℝ) ^ actualExtendedThirdCompactCellLevel e h m\n    (primeHistoryLogCoordinates (N : ℝ) 3 history)"
+    },
+    {
+      "name": "actualExtendedThirdCompactActive",
+      "kind": "def",
+      "private": false,
+      "line": 90,
+      "full_header": "def actualExtendedThirdCompactActive (e h : ℝ) (m N : ℕ) (history : List ℕ) : Prop",
+      "full_span_sha256": "8527a6b65e2dfc913894825b83b9ea85b0569b325c726540dbb25b00b2b197de",
+      "proof_body_sha256": null,
+      "full_definition": "def actualExtendedThirdCompactActive (e h : ℝ) (m N : ℕ) (history : List ℕ) : Prop :=\n  ∃ j ∈ actualExtendedThirdCompactCells e h m,\n    primeHistoryLogCoordinates (N : ℝ) 3 history ∈ actualExtendedThirdOwnedCell m j"
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy",
+      "kind": "def",
+      "private": false,
+      "line": 94,
+      "full_header": "def actualExtendedThirdCompactUpperPolicy (e h : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool",
+      "full_span_sha256": "4058b7b5d4b764c5ec5ea1c968281c36288c7b4c41800365805e63bf779dfc12",
+      "proof_body_sha256": null,
+      "full_definition": "def actualExtendedThirdCompactUpperPolicy (e h : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool :=\n  thirdCappedUpperPolicy (actualExtendedThirdCompactInitialPolicy e m N)\n    (actualExtendedThirdCompactRawLevel e h m N)"
+    },
+    {
+      "name": "actualExtendedThirdCompactRawLevel_on_cell",
+      "kind": "theorem",
+      "private": false,
+      "line": 99,
+      "full_header": "theorem actualExtendedThirdCompactRawLevel_on_cell {e h : ℝ} {m N : ℕ}\n    {history : List ℕ} {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 history ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactRawLevel e h m N history =\n      (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j",
+      "full_span_sha256": "dcf1349c011e7bedb6b807d313645eace84bed054a3fddeb86abbbffd274c60a",
+      "proof_body_sha256": "ef5234c98953e6d2b92e686905271484e85c81fcee4d71f68446323f44cf6f82",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactRawLevel_inactive",
+      "kind": "theorem",
+      "private": false,
+      "line": 108,
+      "full_header": "theorem actualExtendedThirdCompactRawLevel_inactive {e h : ℝ} {m N : ℕ}\n    {history : List ℕ} (ha : ¬actualExtendedThirdCompactActive e h m N history) :\n    actualExtendedThirdCompactRawLevel e h m N history =\n      (N : ℝ) ^ (thirdPrefixTheta - 2 * e)",
+      "full_span_sha256": "9bbd10d145dd9b77c83db0811ebe40b9acf6b1adb17089c10796cce49b08cea5",
+      "proof_body_sha256": "2233056a620e4523250d240608b71138b8bd4e9b038afd645f34c98ecd771615",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_through_two",
+      "kind": "theorem",
+      "private": false,
+      "line": 117,
+      "full_header": "theorem actualExtendedThirdCompactUpperPolicy_through_two (e h : ℝ) (m N : ℕ)\n    (positive : Bool) (history : List ℕ) (hlen : history.length ≤ 2) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      actualExtendedThirdCompactInitialPolicy e m N positive history",
+      "full_span_sha256": "9256dd9030312aa2edb7c9c39d9c7c8d8b4d72f3b05beb5894582f70e7f1471b",
+      "proof_body_sha256": "abfa8232318cfa965cd9e5251c151fc4351b3af104c2aa7df36bfa3a89a8c485",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_even",
+      "kind": "theorem",
+      "private": false,
+      "line": 124,
+      "full_header": "theorem actualExtendedThirdCompactUpperPolicy_even (e h : ℝ) (m N : ℕ)\n    (history : List ℕ) : actualExtendedThirdCompactUpperPolicy e h m N true history = true",
+      "full_span_sha256": "1ff6afdf5787098bf624a9216bfc0c936f41f2d5a68721dc6ef9f65928bd76c1",
+      "proof_body_sha256": "b3fa85608363dc8155e18e5c369726731471c424f70245ccab3cfc3e679fcf40",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_inactive",
+      "kind": "theorem",
+      "private": false,
+      "line": 132,
+      "full_header": "theorem actualExtendedThirdCompactUpperPolicy_inactive (e h : ℝ) (m N : ℕ)\n    (positive : Bool) (history : List ℕ)\n    (ha : ¬actualExtendedThirdCompactActive e h m N (rosserAncestor 3 history)) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      actualExtendedThirdCompactInitialPolicy e m N positive history",
+      "full_span_sha256": "6c364ade9608e16176c194d448bf3c02bc965beed59644ae45a592c082cd1880",
+      "proof_body_sha256": "eb21b1c6e9dce32b0b57c1de7857598faaee1ecdf34f84fd52a51ee663a751e0",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_on_cell",
+      "kind": "theorem",
+      "private": false,
+      "line": 145,
+      "full_header": "theorem actualExtendedThirdCompactUpperPolicy_on_cell {e h : ℝ} {m N : ℕ}\n    (positive : Bool) (history : List ℕ) (hlen : 3 ≤ history.length)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 (rosserAncestor 3 history) ∈\n      actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      ordinaryParityRosserPolicy false ((N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j)\n        positive history",
+      "full_span_sha256": "ad7a0bff3d380e715d1aabef36b182fb1a78efaaa411c5e9aeb124588eafedab",
+      "proof_body_sha256": "99ceb153890099f355bf7f5f2e29f37a48f61446140b2ee597e012f90577ea5c",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactFrozenLevel_append",
+      "kind": "theorem",
+      "private": false,
+      "line": 159,
+      "full_header": "theorem actualExtendedThirdCompactFrozenLevel_append (e h : ℝ) (m N : ℕ)\n    (later history : List ℕ) (hlen : 3 ≤ history.length) :\n    actualExtendedThirdCompactRawLevel e h m N (rosserAncestor 3 (later ++ history)) =\n      actualExtendedThirdCompactRawLevel e h m N (rosserAncestor 3 history)",
+      "full_span_sha256": "f8ed394b3ca8af7d0e8dd1f3c42ca2a0863b6770db3b6fdd0bd575b1b1360cdb",
+      "proof_body_sha256": "8241d01c64032eeb642337bb8f3957ea933416c439a84eada73a71f47fe7d835",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_empty_cells",
+      "kind": "theorem",
+      "private": false,
+      "line": 165,
+      "full_header": "theorem actualExtendedThirdCompactUpperPolicy_empty_cells (e h : ℝ) (m N : ℕ)\n    (hempty : actualExtendedThirdCompactCells e h m = ∅) :\n    actualExtendedThirdCompactUpperPolicy e h m N = actualExtendedThirdCompactInitialPolicy e m N",
+      "full_span_sha256": "d41073dd7625e92214b367ce6cf9314f8970c1cd9b3d912e0eb9b43b5666db61",
+      "proof_body_sha256": "08532fa3ce996934741587253fd4b8ac06305a07051331dacdd08002d7e50aaf",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactFirstStop_of_cell",
+      "kind": "theorem",
+      "private": false,
+      "line": 176,
+      "full_header": "theorem actualExtendedThirdCompactFirstStop_of_cell {e h : ℝ} {m N : ℕ}\n    (p0 p1 p2 : ℕ) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactFirstStop e m N [p0]",
+      "full_span_sha256": "43d950220145e0be6d06fd2195df7e845da400dc5322d12c4ec778495faa77c5",
+      "proof_body_sha256": "aef082225a5d6c4d68584ba4d17cb3b771109b5153ea0cd89cec6f702a2b4245",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactInitialPolicy_first_iff",
+      "kind": "theorem",
+      "private": false,
+      "line": 193,
+      "full_header": "theorem actualExtendedThirdCompactInitialPolicy_first_iff (e : ℝ) (m N p : ℕ)\n    (hp : 0 < p) :\n    actualExtendedThirdCompactInitialPolicy e m N false [p] = true ↔\n      (p : ℝ) ^ 3 < (N : ℝ) ^ (thirdPrefixTheta - 2 * e) ∧\n        actualExtendedThirdCompactFirstStop e m N [p]",
+      "full_span_sha256": "24b7ff526004b23468a7d2f169d931b44e2882d9d742b536625b9948ce0772a7",
+      "proof_body_sha256": "6402bfb1142dde16eef73ed41ec55ead81630edd9a7cc4c0ede71a542eaaed2b",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactCell_prime_firstCube",
+      "kind": "theorem",
+      "private": false,
+      "line": 218,
+      "full_header": "theorem actualExtendedThirdCompactCell_prime_firstCube {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp0 : 0 < p0) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    (p0 : ℝ) ^ 3 < (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j",
+      "full_span_sha256": "dc854106201950a8b4b6b99c5268f54714e5c8f43658f22b018882488cab2e10",
+      "proof_body_sha256": "81f6e8bac644da40d0c73c84515c5b029bb5574a4feeac2f3a452d462d3f066f",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactInitialPolicy_first_of_cell",
+      "kind": "theorem",
+      "private": false,
+      "line": 235,
+      "full_header": "theorem actualExtendedThirdCompactInitialPolicy_first_of_cell {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp0 : 0 < p0) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactInitialPolicy e m N false [p0] = true",
+      "full_span_sha256": "361f2dda11335208b608a4ce1a4712bc652e93b60e3a8f4bf9a3b34efd3331dd",
+      "proof_body_sha256": "f1a2c2982be4dbba05ae4d7fd235d76f865bed2a3aa5e91bb6406f2f402ddf5a",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactUpperPolicy_third_iff",
+      "kind": "theorem",
+      "private": false,
+      "line": 251,
+      "full_header": "theorem actualExtendedThirdCompactUpperPolicy_third_iff {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp2 : 0 < p2) (hp21 : p2 < p1) (hp10 : p1 < p0)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactUpperPolicy e h m N false [p2, p1, p0] = true ↔\n      (p0 : ℝ) * p1 * p2 ^ 3 < (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j",
+      "full_span_sha256": "76a9c693e0473dd0555ac517b38d581fc7e2effc7c85227a54e47cb45c2717d4",
+      "proof_body_sha256": "be0eb724c4510f8bb20ab34e208cab80eeed445d249bd87e98fcfe5e9057d9cd",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactModuli",
+      "kind": "def",
+      "private": false,
+      "line": 272,
+      "full_header": "def actualExtendedThirdCompactModuli (e h : ℝ) (m N cap : ℕ) (w z : ℝ) : Finset ℕ",
+      "full_span_sha256": "656b24450f38b371e1fd378f85518199a471dfe12fba7887fe05cc3faccf1753",
+      "proof_body_sha256": null,
+      "full_definition": "def actualExtendedThirdCompactModuli (e h : ℝ) (m N cap : ℕ) (w z : ℝ) : Finset ℕ :=\n  actualSmallRoughModuli (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z"
+    },
+    {
+      "name": "actualExtendedThirdCompactRho",
+      "kind": "def",
+      "private": false,
+      "line": 275,
+      "full_header": "def actualExtendedThirdCompactRho (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) : ℕ → ℝ",
+      "full_span_sha256": "89184a225acb0421eaa02cf78844bad348ad558d0f10707eaa5474b0d51a3c1b",
+      "proof_body_sha256": null,
+      "full_definition": "def actualExtendedThirdCompactRho (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) : ℕ → ℝ :=\n  actualSmallRoughRho (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z L"
+    },
+    {
+      "name": "actualExtendedThirdCompactRho_eq_firstExitAttachment",
+      "kind": "theorem",
+      "private": false,
+      "line": 278,
+      "full_header": "theorem actualExtendedThirdCompactRho_eq_firstExitAttachment\n    (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) :\n    actualExtendedThirdCompactRho e h m N cap w z L =\n      smallRoughRho (actualSmallRosserSupport N cap w)\n        (firstExitRetainedModuli (actualExtendedThirdCompactUpperPolicy e h m N)\n          (roughPrimeUniverse N cap w z))\n        (fun d => (firstExitRetainedCoefficient (actualExtendedThirdCompactUpperPolicy e h m N)\n          (roughPrimeUniverse N cap w z) d : ℝ))\n        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)",
+      "full_span_sha256": "31b4aa5a06ccf85190a8efc02bfe10aa9e1c4c405126a4d5dc6c408e37f982f0",
+      "proof_body_sha256": "b7f509c8289884b9e91043177636eed5c219f62ce65ca74ae1f63e0efeef721e",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactRoughDensity_eq_policy",
+      "kind": "theorem",
+      "private": false,
+      "line": 291,
+      "full_header": "theorem actualExtendedThirdCompactRoughDensity_eq_policy\n    (e h : ℝ) (m N cap : ℕ) (w z : ℝ) :\n    reciprocalTotientDensity\n        (fixedRoughSupport (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z)\n        (fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z) =\n      firstExitRetainedPolynomial (actualExtendedThirdCompactUpperPolicy e h m N)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap w z)",
+      "full_span_sha256": "9bd0784ad635a71ee5416a746031ae5c6690c9f3b6d08abd01d28e88357413e8",
+      "proof_body_sha256": "f4dbddf59a3f8b52b4dab83ce33174a84f4e085d29b92c8e3c78285f73a98890",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactRho_majorant",
+      "kind": "theorem",
+      "private": false,
+      "line": 302,
+      "full_header": "theorem actualExtendedThirdCompactRho_majorant (e h : ℝ) (m N cap : ℕ) (w z L : ℝ)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z) (hzcap : z ≤ (cap : ℝ)) (n : ℤ) :\n    actualSmallRoughIndicator N z n ≤\n      physicalDivisorSum (actualExtendedThirdCompactModuli e h m N cap w z)\n        (actualExtendedThirdCompactRho e h m N cap w z L) n.natAbs",
+      "full_span_sha256": "625a751563cfa531f6ada577853964f1663a25a16312ab50ff454a7e52330732",
+      "proof_body_sha256": "9e43617cabd2787e8cbe6106453a3ca0926df6961fe7f89b45d789a9067c837b",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactRho_abs_le_one",
+      "kind": "theorem",
+      "private": false,
+      "line": 309,
+      "full_header": "theorem actualExtendedThirdCompactRho_abs_le_one (e h : ℝ) (m N cap : ℕ)\n    (w z L : ℝ) (q : ℕ) : |actualExtendedThirdCompactRho e h m N cap w z L q| ≤ 1",
+      "full_span_sha256": "3e2a124c4b9461de2f654d9f79097da80e8eb723d0347cb87741936f2177c3e9",
+      "proof_body_sha256": "6c9b031de3a0ed3095a6fa8eafe8e712e04e34ff9bbcd3fd2aea22ea9b1f2969",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactModuli_squarefree",
+      "kind": "theorem",
+      "private": false,
+      "line": 313,
+      "full_header": "theorem actualExtendedThirdCompactModuli_squarefree (e h : ℝ) (m N cap : ℕ)\n    (w z : ℝ) {q : ℕ} (hq : q ∈ actualExtendedThirdCompactModuli e h m N cap w z) :\n    Squarefree q",
+      "full_span_sha256": "81759f452ff8a023875aa34b63a03f23c3e484842013b07ddf0bd2d6d571e4df",
+      "proof_body_sha256": "599fb9a11e9cf0be79602c70c9c85cdf7624cc25331368fa50a068f749fca210",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactModuli_coprime_target",
+      "kind": "theorem",
+      "private": false,
+      "line": 318,
+      "full_header": "theorem actualExtendedThirdCompactModuli_coprime_target (e h : ℝ) (m N cap : ℕ)\n    (w z : ℝ) {q : ℕ} (hq : q ∈ actualExtendedThirdCompactModuli e h m N cap w z) :\n    q.Coprime N",
+      "full_span_sha256": "ace63f640e64f2b184779153d1371f96e9c0a22e161fd10577f2b9e96967a95b",
+      "proof_body_sha256": "ed1f0d8ad1bae68dc34c63659e30be3b46200a047e75ca8cc3021e7f30ad05e4",
+      "full_definition": null
+    },
+    {
+      "name": "actualExtendedThirdCompactRho_empty_cells",
+      "kind": "theorem",
+      "private": false,
+      "line": 325,
+      "full_header": "theorem actualExtendedThirdCompactRho_empty_cells (e h : ℝ) (m N cap : ℕ) (w z L : ℝ)\n    (hempty : actualExtendedThirdCompactCells e h m = ∅) :\n    actualExtendedThirdCompactRho e h m N cap w z L =\n      actualSmallRoughRho (actualExtendedThirdCompactInitialPolicy e m N false) N cap w z L",
+      "full_span_sha256": "4af7d081c11fdb1ff9ebdd70e4d0e1e6752b61d63e6827f9bb098e5c52d0ab72",
+      "proof_body_sha256": "bd82bee82a258d5934cc2b372973a1bcf4ee5ed811838cbb9937aaac2d221142",
+      "full_definition": null
+    }
+  ],
+  "primitive_API_inventory": {
+    "ordinaryRosserPrefixAdmissible": "def ordinaryRosserPrefixAdmissible (lower : Bool) (R : ℝ) (pre : List ℕ) : Prop :=\n  (pre.prod : ℝ) < R ∧\n    if lower then LiLiuPrereqWF.SmallRosser.LowerAdmissibleSet R pre.toFinset\n    else LiLiuPrereqWF.SmallRosser.UpperAdmissibleSet R pre.toFinset",
+    "FinitePrimeGeometryCore_sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+    "actual_UpperAdmissibleSet_use": "The copied proof unfolds the actual reachable provider UpperAdmissibleSet and evaluates all three finite filters; it keeps the inherited first cube and third cube. The last cube implies the strict total-product cutoff using smallest selected factor >=1.",
+    "premises": "Q arbitrary real; p3>0; p3<p2<p1. No new cap sign/order or primality assumption.",
+    "other_Historical_exclusive_names": [],
+    "existing_Helper_sha256": "6394e8f839aa3899670a5169f96e21c33267e53b36f6b8491d66dc945e0307a3"
+  },
+  "old_graph": {
+    "project_count_inclusive": 71,
+    "proper_project_parent_count": 70,
+    "foreign_boundary_count_including_Init": 71,
+    "foreign_boundary": [
+      "Init",
+      "Lean.Elab.Tactic.NormCast",
+      "Lean.Elab.Tactic.Omega",
+      "Mathlib.Algebra.BigOperators.Fin",
+      "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+      "Mathlib.Algebra.BigOperators.Ring.Finset",
+      "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+      "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+      "Mathlib.Algebra.Order.BigOperators.Group.List",
+      "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+      "Mathlib.Algebra.Order.Floor.Semiring",
+      "Mathlib.Algebra.Ring.Parity",
+      "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+      "Mathlib.Analysis.Normed.Group.FunctionSeries",
+      "Mathlib.Analysis.PSeries",
+      "Mathlib.Analysis.SpecialFunctions.Integrals.Basic",
+      "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+      "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+      "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+      "Mathlib.Analysis.SpecificLimits.Basic",
+      "Mathlib.Data.Finset.Card",
+      "Mathlib.Data.Finset.Interval",
+      "Mathlib.Data.Finset.Prod",
+      "Mathlib.Data.Finset.Sort",
+      "Mathlib.Data.Int.Basic",
+      "Mathlib.Data.List.GetD",
+      "Mathlib.Data.List.OfFn",
+      "Mathlib.Data.List.Prime",
+      "Mathlib.Data.List.Sublists",
+      "Mathlib.Data.Nat.GCD.BigOperators",
+      "Mathlib.Data.Nat.ModEq",
+      "Mathlib.Data.Nat.Prime.Basic",
+      "Mathlib.Data.Nat.PrimeFin",
+      "Mathlib.Data.Nat.Squarefree",
+      "Mathlib.Data.Nat.Totient",
+      "Mathlib.Data.Real.Basic",
+      "Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic",
+      "Mathlib.MeasureTheory.Constructions.Pi",
+      "Mathlib.MeasureTheory.Integral.DominatedConvergence",
+      "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+      "Mathlib.MeasureTheory.Integral.Pi",
+      "Mathlib.MeasureTheory.Integral.Prod",
+      "Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar",
+      "Mathlib.NumberTheory.AlmostPrime",
+      "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+      "Mathlib.NumberTheory.SelbergSieve",
+      "Mathlib.Order.Filter.AtTopBot.Archimedean",
+      "Mathlib.Order.Filter.AtTopBot.Basic",
+      "Mathlib.Order.Filter.AtTopBot.Field",
+      "Mathlib.Order.Fin.Basic",
+      "Mathlib.Order.Interval.Set.Union",
+      "Mathlib.Tactic",
+      "Mathlib.Tactic.Convert",
+      "Mathlib.Tactic.FieldSimp",
+      "Mathlib.Tactic.Linarith",
+      "Mathlib.Tactic.NormNum",
+      "Mathlib.Tactic.Ring",
+      "Mathlib.Tactic.SplitIfs",
+      "Mathlib.Topology.Algebra.Ring.Real",
+      "Mathlib.Topology.Instances.EReal.Lemmas",
+      "Mathlib.Topology.Instances.Real.Lemmas",
+      "Mathlib.Topology.Order.Lattice",
+      "Mathlib.Topology.UniformSpace.HeineCantor",
+      "MathlibNt.SieveTheory.LiLiuFouvryG9ProgressionDensityDimension",
+      "MathlibNt.SieveTheory.LiLiuPrereqWFFundamentalLemma",
+      "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser",
+      "MathlibNt.SieveTheory.LinearSieve.JurkatRichert.JurkatRichert1965Section13HatSource",
+      "MathlibNt.SieveTheory.LinearSieve.Suzuki.SuzukiContinuousLowerFactorSecondInterval",
+      "MathlibNt.SieveTheory.LinearSieve.Suzuki.SuzukiProposition118SourceIntegralDDE",
+      "MathlibNt.SieveTheory.LinearSieve.Suzuki.SuzukiUpperSourcePTail"
+    ],
+    "missing_project": [],
+    "nodes": {
+      "ImbalancedChen.ActualExtendedThirdCompactUpperRho": {
+        "sha256": "9b68d3d5e1bdc9847b6e6d29be6b0c20fc7f73bde1d70be0575bef41ff157537",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdCompactCellCutoff",
+          "ImbalancedChen.ActualExtendedThirdFirstCubeMargin",
+          "ImbalancedChen.ActualUpperPolicyFiniteBridge",
+          "ImbalancedChen.HistoricalUnorderedThirdGeometry"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdCompactCellCutoff": {
+        "sha256": "edb8876bd5881b7087e85062e64b05a1a7b0c5c1ed465825c5925dbbed059428",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdFiniteCellIntegral"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdFiniteCellIntegral": {
+        "sha256": "b4ce361d78d02ff88d8800d9a129b70092bc31231508a0554007e1c8b1405df3",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdFunctionalConvergence"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdFunctionalConvergence": {
+        "sha256": "3e387b884b00a6aec44b9f960530c2bf32800ca9b2f2205a1cf267da162b2526",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdKernelL1Convergence"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdKernelL1Convergence": {
+        "sha256": "d9f1193904afacda34dac62c45f6f625bb22abe1eea6a1f3127e2575ca12d524",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdCompactKernelApproximation",
+          "ImbalancedChen.ActualExtendedThirdBoundaryLoss"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdCompactKernelApproximation": {
+        "sha256": "d30fac0302230cfc453eddf394c65d52f71eeabda95c0bfd4d25d8d49631e5fb",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdGammaApproximation",
+          "ImbalancedChen.ActualExtendedThirdStripIntegral",
+          "Mathlib.Topology.UniformSpace.HeineCantor"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdGammaApproximation": {
+        "sha256": "dd92805e7b6c4f301a7feb153e1265a63a860a2b2ef9bbf5e5a81ad6c8f96d86",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdDyadicCoverage"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdDyadicCoverage": {
+        "sha256": "2f4d8ee167d08cc3a279cda02d47e17a68d130d70c62fd9ba570bcb7f9d905ad",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdPhysicalCell",
+          "Mathlib.Order.Interval.Set.Union"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdPhysicalCell": {
+        "sha256": "601afd3ed6aa21e3e3d6569b37a1a0f90cb3ae8fe10427305df4daeeb6639edd",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdIdealCap"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdIdealCap": {
+        "sha256": "45ca79fc68b641358b7885eb1d7490d72976e901cf215fbd8b272a65ecab0614",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualThirdPrefixTailIntegralCore"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualThirdPrefixTailIntegralCore": {
+        "sha256": "91007ec8c5499586255048f1a46572e6e4262205319351b98bd9873c7f67475f",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualSieveGapTailBounds",
+          "ImbalancedChen.LogPrimeBoxIntegral",
+          "ImbalancedChen.VariableEnvelopeTailFloor",
+          "Mathlib.Analysis.SpecialFunctions.Integrals.Basic",
+          "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualSieveGapTailBounds": {
+        "sha256": "88acf0144c397f7949dc7b19443104ba85dfbf80fcbb7b73973571d57cf414b9",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualSieveGapTailDecay",
+          "MathlibNt.SieveTheory.LinearSieve.Suzuki.SuzukiUpperSourcePTail"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualSieveGapTailDecay": {
+        "sha256": "08495bdbebdaa16e59fa5b99afd847554aad8f10176324753ea2aebd248a4cdb",
+        "imports": [
+          "Init",
+          "Init",
+          "MathlibNt.SieveTheory.LinearSieve.Suzuki.SuzukiContinuousLowerFactorSecondInterval",
+          "MathlibNt.SieveTheory.LinearSieve.JurkatRichert.JurkatRichert1965Section13HatSource",
+          "MathlibNt.SieveTheory.LinearSieve.Suzuki.SuzukiProposition118SourceIntegralDDE",
+          "Mathlib.Analysis.Calculus.Deriv.MeanValue"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.LogPrimeBoxIntegral": {
+        "sha256": "0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.MeasureTheory.Integral.Pi",
+          "Mathlib.Analysis.SpecialFunctions.Integrals.Basic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.VariableEnvelopeTailFloor": {
+        "sha256": "7a01c3084702fd4d214569fb078dcd503a149818b1de83043de2c8ab5f3ff390",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.BufferedFirstCubeGeometry"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.BufferedFirstCubeGeometry": {
+        "sha256": "be65e75cc81b6d1275dde681e0de1a95add9da3ab18949b94f8595c6c3c6829c",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.VariableEnvelopeCertificates",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.VariableEnvelopeCertificates": {
+        "sha256": "20eb454668f0121d5cbc969eb6e7fc5307f2eee03c60fab976c1064347a89c36",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.VariableEnvelopeBoxes",
+          "ImbalancedChen.VariableEnvelopeScaled"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.VariableEnvelopeBoxes": {
+        "sha256": "a564a26ca50503c595e4ec8722baea77d6e390ad03f063afe6c36ba164bd36cc",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.VariableEnvelopeRegularity"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.VariableEnvelopeRegularity": {
+        "sha256": "c91fda06f64c413f3136986dff1ef9367ad3f692d28dd78927eed993d1446d8c",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.VariableEnvelopeConsequences"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.VariableEnvelopeConsequences": {
+        "sha256": "0ebf8e9ad18fccd621c53f4db1968927e99cc9a1ac5ea4ff68e8cb9cb01b8b54",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.VariableEnvelope"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.VariableEnvelope": {
+        "sha256": "ec0fc1a6099e6667015e90306d18cf05b43c556ef8ad8e2f99c91f967e0f4b8c",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Topology.Algebra.Ring.Real",
+          "Mathlib.Topology.Order.Lattice",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.VariableEnvelopeScaled": {
+        "sha256": "4f5873c8f4edeec34dd458e21b351f73098a04e33bb1828fc3b639a3e8e7a787",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.VariableEnvelopeRegularity"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdStripIntegral": {
+        "sha256": "13172ca884b42cec8147dd0f60bba50e06d205d4a807dd763371ea1f9aed6663",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdFinitePhysicalKernel"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdFinitePhysicalKernel": {
+        "sha256": "0a4890d8a7c80c4b64d4702ccefd29b035006c6932d894772d6a78fb8bfd6d6c",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdDyadicCoverage",
+          "ImbalancedChen.ActualExtendedThirdLowerFactorRegularity"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdLowerFactorRegularity": {
+        "sha256": "bd32a9d441e76a00931ec089dab3e9b23c11d43fd8731680f909562027dcb857",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdOrderedIntegral",
+          "Mathlib.Analysis.Normed.Group.FunctionSeries"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdOrderedIntegral": {
+        "sha256": "773db903edbdceb90dd0c39fb4852a360a8863d7a697d7f78f82af10dcbd7677",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdIdealCap",
+          "Mathlib.MeasureTheory.Constructions.Pi",
+          "Mathlib.MeasureTheory.Integral.Prod"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdBoundaryLoss": {
+        "sha256": "8e790c273e702bb8fc5d1f36d0cfb1a16fd1d57f1f29332fb94248e8d2639e33",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdStripIntegral",
+          "ImbalancedChen.ActualExtendedThirdFiniteTailIntegral"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdFiniteTailIntegral": {
+        "sha256": "97ce8706081a96aa97abb4703009c3a2758507100e9af5fbe5f5b42cf64d638c",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdFinitePhysicalKernel",
+          "ImbalancedChen.ActualExtendedThirdClosedIntegral"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdClosedIntegral": {
+        "sha256": "260359c41fb0efb288a8fe8fcf542cef5e4a16cb65949aef797e1841b236a73c",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdOrderedIntegral",
+          "ImbalancedChen.AffinePrimeGates"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.AffinePrimeGates": {
+        "sha256": "3dbc9a6ddf2ee158a9b179239da2870c6fb8f0dfaaa5a49dc417c05042e091fc",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar",
+          "Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic",
+          "Mathlib.MeasureTheory.Integral.DominatedConvergence",
+          "Mathlib.Topology.Instances.Real.Lemmas"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdFirstCubeMargin": {
+        "sha256": "290bd48ab1ca9b3994c02c3208849ae81dcb3ab24607b92c8c8dc52d1f67786a",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdDyadicCoverage"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualUpperPolicyFiniteBridge": {
+        "sha256": "6394e8f839aa3899670a5169f96e21c33267e53b36f6b8491d66dc945e0307a3",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualSmallRoughAttachment",
+          "ImbalancedChen.ActualPrimePresieveSplit",
+          "ImbalancedChen.FirstExitGenericModuli",
+          "ImbalancedChen.FinitePrimeGeometryCore"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualSmallRoughAttachment": {
+        "sha256": "211d48055ec640a666dfde8721833eacb7fbc215ef9cda791c44b869404b9ee5",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FiniteUpperCarrierCore",
+          "ImbalancedChen.ActualSmallRosser",
+          "ImbalancedChen.FixedRoughCoefficients",
+          "ImbalancedChen.SmallRoughMainTerm",
+          "ImbalancedChen.ActualSmallRosserDensity",
+          "ImbalancedChen.SmallRoughDensityError"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FiniteUpperCarrierCore": {
+        "sha256": "5bb08b49bf20551e996afbafd92a90ce6aa17941424fa55485d9fa9f69ce98b7",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualSmallRosser",
+          "ImbalancedChen.FixedRoughCoefficients",
+          "ImbalancedChen.RealHalfProductSource"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualSmallRosser": {
+        "sha256": "0dbcd4e45ededb9edfb601d8249cc554b3e53291985c09557ed2a9f5d4fb2cdf",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RoughPrimeUniverse",
+          "ImbalancedChen.SmallRoughAttachment",
+          "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser",
+          "Mathlib.Data.Nat.GCD.BigOperators",
+          "Mathlib.Data.Int.Basic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.RoughPrimeUniverse": {
+        "sha256": "3d716d89548e2e453e96c598481db2f62ae1c76e7f092a960e490a4b70688e58",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RetainedModuli",
+          "Mathlib.Data.Finset.Interval",
+          "Mathlib.Data.Finset.Sort",
+          "Mathlib.Tactic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.RetainedModuli": {
+        "sha256": "ec5df61712426350f0a93f36501ce2f2ca4bf49c9ee13c611920342e67386274",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FirstExitTree",
+          "Mathlib.Algebra.BigOperators.Group.Finset.Basic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FirstExitTree": {
+        "sha256": "6ab5eeb136969f76afc8fcc83dfa211985e0b7ffe85e89dab0702f381ad42a6b",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Algebra.Order.BigOperators.Group.List",
+          "Mathlib.Data.List.Prime",
+          "Mathlib.Data.List.Sublists",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Real.Basic",
+          "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.SmallRoughAttachment": {
+        "sha256": "8f69bb4f62110e54aeb69c371d4767253d8520d9d904e3dc97e578beaedfccba",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PhysicalUpperWeightBridge",
+          "Mathlib.Data.Nat.PrimeFin"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.PhysicalUpperWeightBridge": {
+        "sha256": "7c179a6733bd163f5b8e8410a718effa609baa8a10b64b266caa36bf656e77a3",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FiniteSieveModel",
+          "ImbalancedChen.SignSensitiveAttachment"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FiniteSieveModel": {
+        "sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.SieveSourceCoprimality",
+          "Mathlib.NumberTheory.SelbergSieve",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.Data.Nat.Squarefree",
+          "Mathlib.Tactic.NormNum",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.SieveSourceCoprimality": {
+        "sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Data.Nat.GCD.BigOperators",
+          "Mathlib.Data.Nat.ModEq",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.HalfProductSource": {
+        "sha256": "dc6e261ddfdc9a66e966a4ec5c2a129d3f4b7583501c5c82364f2aa4a8af194e",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.BadSourceLocalization",
+          "Mathlib.Data.Finset.Prod"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.BadSourceLocalization": {
+        "sha256": "0e88326b03a4c20a472014b506d7533495d86801909af4d455de5fcfae6695a7",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductGeometry",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.HalfProductGeometry": {
+        "sha256": "d04e31ea73a853c4fa37e881ef30a748b7f83b8a0e930e0cc2ae231dbb629db1",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.OrderedBad",
+          "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+          "Mathlib.Tactic.Convert",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.OrderedBad": {
+        "sha256": "a38031995175bd2f847eefd498c929e941400c9cffdf6f78e3e06bd2100764da",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RationalPowers"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.RationalPowers": {
+        "sha256": "40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Counting",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Counting": {
+        "sha256": "8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Data.Finset.Card",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Real.Basic",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.SignSensitiveAttachment": {
+        "sha256": "d34b8483983bf4243479bee70cd4bcd07fbf286abafe982021ca4625a3ab63bc",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+          "Mathlib.Algebra.BigOperators.Ring.Finset",
+          "Mathlib.Data.Real.Basic",
+          "Mathlib.Tactic.NormNum"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FixedRoughCoefficients": {
+        "sha256": "24bc451c0234f867cb85539b0d93d37e02c68e6f8d0bf6cf82f081e75e3d892b",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RoughPrimeUniverse",
+          "ImbalancedChen.SmallRoughAttachment",
+          "Mathlib.Tactic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.RealHalfProductSource": {
+        "sha256": "0c3211cb72d8f27eb380f57fe5d751f8fc3179cb646c683c1449d450c71c55e7",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.CurrentMainTheorem",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Prod",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.CurrentMainTheorem": {
+        "sha256": "68a2a3aad8ccdc73ed8e5076e31b9984bc659c307d71150920a71b5fc98f067d",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.CurrentNumericalTransfer",
+          "ImbalancedChen.OrderedBad",
+          "Mathlib.Topology.Instances.EReal.Lemmas"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.CurrentNumericalTransfer": {
+        "sha256": "acc924036cb6ca73ef660c632d5577462ba5c69b8b5600aef63255264c3a270a",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.AsymptoticTransfer",
+          "ImbalancedChen.RationalPowers",
+          "ImbalancedChen.SingularSeries",
+          "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Linarith"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.AsymptoticTransfer": {
+        "sha256": "ece82cd26ee1030d708e6055395bdb5a6a4cf8b1d8c6072a67a9a59cd36bc560",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Counting",
+          "ImbalancedChen.Multiplicity",
+          "Mathlib.Order.Filter.AtTopBot.Basic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Multiplicity": {
+        "sha256": "9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Counting",
+          "Mathlib.NumberTheory.AlmostPrime",
+          "Mathlib.Tactic.SplitIfs"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.SingularSeries": {
+        "sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.NormalizationGrowth",
+          "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+          "Mathlib.Analysis.PSeries",
+          "Mathlib.Data.Nat.PrimeFin",
+          "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.NormalizationGrowth": {
+        "sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+          "Mathlib.Algebra.Ring.Parity",
+          "Mathlib.Order.Filter.AtTopBot.Archimedean",
+          "Mathlib.Order.Filter.AtTopBot.Field"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.SmallRoughMainTerm": {
+        "sha256": "3a3cdd6bc284237634da7744167e280c9ee56dc33555899ed98cc88e7e691b08",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.SmallRoughAttachment",
+          "Mathlib.Tactic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualSmallRosserDensity": {
+        "sha256": "9cfe1beef1a9ef09b88abf3c5593edebafc882e95639c50579cf4dc77b4d5ac8",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualSmallRosser",
+          "ImbalancedChen.SmallRoughMainTerm",
+          "MathlibNt.SieveTheory.LiLiuPrereqWFFundamentalLemma",
+          "MathlibNt.SieveTheory.LiLiuFouvryG9ProgressionDensityDimension"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.SmallRoughDensityError": {
+        "sha256": "95854fdf8ac0e0b47368e71fb6a1fae20178bee004c384b80103f9abe45d40ab",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.SmallRoughMainTerm"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualPrimePresieveSplit": {
+        "sha256": "dc6170c527cdde252ecdaa00997841522a4aa469adf799eaae4549e1310ced41",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualSmallRosserDensity",
+          "ImbalancedChen.FixedRoughCoefficients"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FirstExitGenericModuli": {
+        "sha256": "aeb5adad90208c1e09e186c1008529b113c6b0f8b0870fb82d3b8056bee6efaf",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FixedRoughCoefficients",
+          "ImbalancedChen.FirstExitPresieveProjection"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FirstExitPresieveProjection": {
+        "sha256": "41a96b9f75048b250e96553a783d4f03350de3d1b17c7dcc5da9aa9028eab694",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FirstExitTree"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FinitePrimeGeometryCore": {
+        "sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FirstExitDepthSplice",
+          "ImbalancedChen.FirstExitPresieveProjection",
+          "ImbalancedChen.RoughPrimeUniverse",
+          "ImbalancedChen.LogPrimeBoxMesh",
+          "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser",
+          "Mathlib.Data.List.GetD",
+          "Mathlib.Data.List.OfFn",
+          "Mathlib.Order.Fin.Basic",
+          "Mathlib.Algebra.BigOperators.Fin",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FirstExitDepthSplice": {
+        "sha256": "66803fd4584aa34babb84845e6b84e41417476b2d4499d882d2f61734bd27af6",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FirstExitTree"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.LogPrimeBoxMesh": {
+        "sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.LogPrimeBoxIntegral",
+          "Mathlib.Analysis.SpecificLimits.Basic",
+          "Mathlib.Order.Interval.Set.Union",
+          "Mathlib.Tactic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.HistoricalUnorderedThirdGeometry": {
+        "sha256": "4ffa5f89e52a26f621f2e896d2fa4dd3c26508b887967eac696994ef4c54b129",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FinitePrimeGeometryCore",
+          "ImbalancedChen.FirstExitFrontierTupleReindex",
+          "ImbalancedChen.AffinePrimeGates"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FirstExitFrontierTupleReindex": {
+        "sha256": "c42a94ac4802e8114667a4f3282e316746fd9b8beef9dce363440aee33f74452",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FirstExitOwnCubeSplice",
+          "ImbalancedChen.FirstExitFrontierInvariants",
+          "ImbalancedChen.FirstExitValidSelection",
+          "ImbalancedChen.FinitePrimeGeometryCore"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FirstExitOwnCubeSplice": {
+        "sha256": "982d5b4dcca94c1121f8bbf65e3d63e88bd87cfc63d7b814710b9992a8c71510",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FirstExitDepthSplice"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FirstExitFrontierInvariants": {
+        "sha256": "44ad360ca47574571eeb514613a0328069b98aa424eb7d2383fa76dd6f7da153",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FirstExitDepthSplice",
+          "ImbalancedChen.RoughPrimeUniverse"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FirstExitValidSelection": {
+        "sha256": "40327d64b355ee84c652ad11f1d1697610c8edb29b1bdc354e34e35bc5d2417f",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FirstExitGenericModuli"
+        ],
+        "parser_findings": []
+      }
+    }
+  },
+  "new_graph": {
+    "project_count_inclusive": 66,
+    "proper_project_parent_count": 65,
+    "foreign_boundary_count_including_Init": 71,
+    "foreign_boundary": [
+      "Init",
+      "Lean.Elab.Tactic.NormCast",
+      "Lean.Elab.Tactic.Omega",
+      "Mathlib.Algebra.BigOperators.Fin",
+      "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+      "Mathlib.Algebra.BigOperators.Ring.Finset",
+      "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+      "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+      "Mathlib.Algebra.Order.BigOperators.Group.List",
+      "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+      "Mathlib.Algebra.Order.Floor.Semiring",
+      "Mathlib.Algebra.Ring.Parity",
+      "Mathlib.Analysis.Calculus.Deriv.MeanValue",
+      "Mathlib.Analysis.Normed.Group.FunctionSeries",
+      "Mathlib.Analysis.PSeries",
+      "Mathlib.Analysis.SpecialFunctions.Integrals.Basic",
+      "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+      "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+      "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+      "Mathlib.Analysis.SpecificLimits.Basic",
+      "Mathlib.Data.Finset.Card",
+      "Mathlib.Data.Finset.Interval",
+      "Mathlib.Data.Finset.Prod",
+      "Mathlib.Data.Finset.Sort",
+      "Mathlib.Data.Int.Basic",
+      "Mathlib.Data.List.GetD",
+      "Mathlib.Data.List.OfFn",
+      "Mathlib.Data.List.Prime",
+      "Mathlib.Data.List.Sublists",
+      "Mathlib.Data.Nat.GCD.BigOperators",
+      "Mathlib.Data.Nat.ModEq",
+      "Mathlib.Data.Nat.Prime.Basic",
+      "Mathlib.Data.Nat.PrimeFin",
+      "Mathlib.Data.Nat.Squarefree",
+      "Mathlib.Data.Nat.Totient",
+      "Mathlib.Data.Real.Basic",
+      "Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic",
+      "Mathlib.MeasureTheory.Constructions.Pi",
+      "Mathlib.MeasureTheory.Integral.DominatedConvergence",
+      "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+      "Mathlib.MeasureTheory.Integral.Pi",
+      "Mathlib.MeasureTheory.Integral.Prod",
+      "Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar",
+      "Mathlib.NumberTheory.AlmostPrime",
+      "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+      "Mathlib.NumberTheory.SelbergSieve",
+      "Mathlib.Order.Filter.AtTopBot.Archimedean",
+      "Mathlib.Order.Filter.AtTopBot.Basic",
+      "Mathlib.Order.Filter.AtTopBot.Field",
+      "Mathlib.Order.Fin.Basic",
+      "Mathlib.Order.Interval.Set.Union",
+      "Mathlib.Tactic",
+      "Mathlib.Tactic.Convert",
+      "Mathlib.Tactic.FieldSimp",
+      "Mathlib.Tactic.Linarith",
+      "Mathlib.Tactic.NormNum",
+      "Mathlib.Tactic.Ring",
+      "Mathlib.Tactic.SplitIfs",
+      "Mathlib.Topology.Algebra.Ring.Real",
+      "Mathlib.Topology.Instances.EReal.Lemmas",
+      "Mathlib.Topology.Instances.Real.Lemmas",
+      "Mathlib.Topology.Order.Lattice",
+      "Mathlib.Topology.UniformSpace.HeineCantor",
+      "MathlibNt.SieveTheory.LiLiuFouvryG9ProgressionDensityDimension",
+      "MathlibNt.SieveTheory.LiLiuPrereqWFFundamentalLemma",
+      "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser",
+      "MathlibNt.SieveTheory.LinearSieve.JurkatRichert.JurkatRichert1965Section13HatSource",
+      "MathlibNt.SieveTheory.LinearSieve.Suzuki.SuzukiContinuousLowerFactorSecondInterval",
+      "MathlibNt.SieveTheory.LinearSieve.Suzuki.SuzukiProposition118SourceIntegralDDE",
+      "MathlibNt.SieveTheory.LinearSieve.Suzuki.SuzukiUpperSourcePTail"
+    ],
+    "missing_project": [],
+    "nodes": {
+      "ImbalancedChen.ActualExtendedThirdCompactUpperRho": {
+        "sha256": "3f264c1f738787275be0dfc39ddf44a225334bb8b61b74f6d808db7769456262",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdCompactCellCutoff",
+          "ImbalancedChen.ActualExtendedThirdFirstCubeMargin",
+          "ImbalancedChen.ActualUpperPolicyFiniteBridge"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdCompactCellCutoff": {
+        "sha256": "edb8876bd5881b7087e85062e64b05a1a7b0c5c1ed465825c5925dbbed059428",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdFiniteCellIntegral"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdFiniteCellIntegral": {
+        "sha256": "b4ce361d78d02ff88d8800d9a129b70092bc31231508a0554007e1c8b1405df3",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdFunctionalConvergence"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdFunctionalConvergence": {
+        "sha256": "3e387b884b00a6aec44b9f960530c2bf32800ca9b2f2205a1cf267da162b2526",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdKernelL1Convergence"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdKernelL1Convergence": {
+        "sha256": "d9f1193904afacda34dac62c45f6f625bb22abe1eea6a1f3127e2575ca12d524",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdCompactKernelApproximation",
+          "ImbalancedChen.ActualExtendedThirdBoundaryLoss"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdCompactKernelApproximation": {
+        "sha256": "d30fac0302230cfc453eddf394c65d52f71eeabda95c0bfd4d25d8d49631e5fb",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdGammaApproximation",
+          "ImbalancedChen.ActualExtendedThirdStripIntegral",
+          "Mathlib.Topology.UniformSpace.HeineCantor"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdGammaApproximation": {
+        "sha256": "dd92805e7b6c4f301a7feb153e1265a63a860a2b2ef9bbf5e5a81ad6c8f96d86",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdDyadicCoverage"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdDyadicCoverage": {
+        "sha256": "2f4d8ee167d08cc3a279cda02d47e17a68d130d70c62fd9ba570bcb7f9d905ad",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdPhysicalCell",
+          "Mathlib.Order.Interval.Set.Union"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdPhysicalCell": {
+        "sha256": "601afd3ed6aa21e3e3d6569b37a1a0f90cb3ae8fe10427305df4daeeb6639edd",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdIdealCap"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdIdealCap": {
+        "sha256": "45ca79fc68b641358b7885eb1d7490d72976e901cf215fbd8b272a65ecab0614",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualThirdPrefixTailIntegralCore"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualThirdPrefixTailIntegralCore": {
+        "sha256": "91007ec8c5499586255048f1a46572e6e4262205319351b98bd9873c7f67475f",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualSieveGapTailBounds",
+          "ImbalancedChen.LogPrimeBoxIntegral",
+          "ImbalancedChen.VariableEnvelopeTailFloor",
+          "Mathlib.Analysis.SpecialFunctions.Integrals.Basic",
+          "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualSieveGapTailBounds": {
+        "sha256": "88acf0144c397f7949dc7b19443104ba85dfbf80fcbb7b73973571d57cf414b9",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualSieveGapTailDecay",
+          "MathlibNt.SieveTheory.LinearSieve.Suzuki.SuzukiUpperSourcePTail"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualSieveGapTailDecay": {
+        "sha256": "08495bdbebdaa16e59fa5b99afd847554aad8f10176324753ea2aebd248a4cdb",
+        "imports": [
+          "Init",
+          "Init",
+          "MathlibNt.SieveTheory.LinearSieve.Suzuki.SuzukiContinuousLowerFactorSecondInterval",
+          "MathlibNt.SieveTheory.LinearSieve.JurkatRichert.JurkatRichert1965Section13HatSource",
+          "MathlibNt.SieveTheory.LinearSieve.Suzuki.SuzukiProposition118SourceIntegralDDE",
+          "Mathlib.Analysis.Calculus.Deriv.MeanValue"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.LogPrimeBoxIntegral": {
+        "sha256": "0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.MeasureTheory.Integral.Pi",
+          "Mathlib.Analysis.SpecialFunctions.Integrals.Basic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.VariableEnvelopeTailFloor": {
+        "sha256": "7a01c3084702fd4d214569fb078dcd503a149818b1de83043de2c8ab5f3ff390",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.BufferedFirstCubeGeometry"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.BufferedFirstCubeGeometry": {
+        "sha256": "be65e75cc81b6d1275dde681e0de1a95add9da3ab18949b94f8595c6c3c6829c",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.VariableEnvelopeCertificates",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.VariableEnvelopeCertificates": {
+        "sha256": "20eb454668f0121d5cbc969eb6e7fc5307f2eee03c60fab976c1064347a89c36",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.VariableEnvelopeBoxes",
+          "ImbalancedChen.VariableEnvelopeScaled"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.VariableEnvelopeBoxes": {
+        "sha256": "a564a26ca50503c595e4ec8722baea77d6e390ad03f063afe6c36ba164bd36cc",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.VariableEnvelopeRegularity"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.VariableEnvelopeRegularity": {
+        "sha256": "c91fda06f64c413f3136986dff1ef9367ad3f692d28dd78927eed993d1446d8c",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.VariableEnvelopeConsequences"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.VariableEnvelopeConsequences": {
+        "sha256": "0ebf8e9ad18fccd621c53f4db1968927e99cc9a1ac5ea4ff68e8cb9cb01b8b54",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.VariableEnvelope"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.VariableEnvelope": {
+        "sha256": "ec0fc1a6099e6667015e90306d18cf05b43c556ef8ad8e2f99c91f967e0f4b8c",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Topology.Algebra.Ring.Real",
+          "Mathlib.Topology.Order.Lattice",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.VariableEnvelopeScaled": {
+        "sha256": "4f5873c8f4edeec34dd458e21b351f73098a04e33bb1828fc3b639a3e8e7a787",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.VariableEnvelopeRegularity"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdStripIntegral": {
+        "sha256": "13172ca884b42cec8147dd0f60bba50e06d205d4a807dd763371ea1f9aed6663",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdFinitePhysicalKernel"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdFinitePhysicalKernel": {
+        "sha256": "0a4890d8a7c80c4b64d4702ccefd29b035006c6932d894772d6a78fb8bfd6d6c",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdDyadicCoverage",
+          "ImbalancedChen.ActualExtendedThirdLowerFactorRegularity"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdLowerFactorRegularity": {
+        "sha256": "bd32a9d441e76a00931ec089dab3e9b23c11d43fd8731680f909562027dcb857",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdOrderedIntegral",
+          "Mathlib.Analysis.Normed.Group.FunctionSeries"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdOrderedIntegral": {
+        "sha256": "773db903edbdceb90dd0c39fb4852a360a8863d7a697d7f78f82af10dcbd7677",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdIdealCap",
+          "Mathlib.MeasureTheory.Constructions.Pi",
+          "Mathlib.MeasureTheory.Integral.Prod"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdBoundaryLoss": {
+        "sha256": "8e790c273e702bb8fc5d1f36d0cfb1a16fd1d57f1f29332fb94248e8d2639e33",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdStripIntegral",
+          "ImbalancedChen.ActualExtendedThirdFiniteTailIntegral"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdFiniteTailIntegral": {
+        "sha256": "97ce8706081a96aa97abb4703009c3a2758507100e9af5fbe5f5b42cf64d638c",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdFinitePhysicalKernel",
+          "ImbalancedChen.ActualExtendedThirdClosedIntegral"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdClosedIntegral": {
+        "sha256": "260359c41fb0efb288a8fe8fcf542cef5e4a16cb65949aef797e1841b236a73c",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdOrderedIntegral",
+          "ImbalancedChen.AffinePrimeGates"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.AffinePrimeGates": {
+        "sha256": "3dbc9a6ddf2ee158a9b179239da2870c6fb8f0dfaaa5a49dc417c05042e091fc",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar",
+          "Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic",
+          "Mathlib.MeasureTheory.Integral.DominatedConvergence",
+          "Mathlib.Topology.Instances.Real.Lemmas"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualExtendedThirdFirstCubeMargin": {
+        "sha256": "290bd48ab1ca9b3994c02c3208849ae81dcb3ab24607b92c8c8dc52d1f67786a",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualExtendedThirdDyadicCoverage"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualUpperPolicyFiniteBridge": {
+        "sha256": "6394e8f839aa3899670a5169f96e21c33267e53b36f6b8491d66dc945e0307a3",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualSmallRoughAttachment",
+          "ImbalancedChen.ActualPrimePresieveSplit",
+          "ImbalancedChen.FirstExitGenericModuli",
+          "ImbalancedChen.FinitePrimeGeometryCore"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualSmallRoughAttachment": {
+        "sha256": "211d48055ec640a666dfde8721833eacb7fbc215ef9cda791c44b869404b9ee5",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FiniteUpperCarrierCore",
+          "ImbalancedChen.ActualSmallRosser",
+          "ImbalancedChen.FixedRoughCoefficients",
+          "ImbalancedChen.SmallRoughMainTerm",
+          "ImbalancedChen.ActualSmallRosserDensity",
+          "ImbalancedChen.SmallRoughDensityError"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FiniteUpperCarrierCore": {
+        "sha256": "5bb08b49bf20551e996afbafd92a90ce6aa17941424fa55485d9fa9f69ce98b7",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualSmallRosser",
+          "ImbalancedChen.FixedRoughCoefficients",
+          "ImbalancedChen.RealHalfProductSource"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualSmallRosser": {
+        "sha256": "0dbcd4e45ededb9edfb601d8249cc554b3e53291985c09557ed2a9f5d4fb2cdf",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RoughPrimeUniverse",
+          "ImbalancedChen.SmallRoughAttachment",
+          "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser",
+          "Mathlib.Data.Nat.GCD.BigOperators",
+          "Mathlib.Data.Int.Basic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.RoughPrimeUniverse": {
+        "sha256": "3d716d89548e2e453e96c598481db2f62ae1c76e7f092a960e490a4b70688e58",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RetainedModuli",
+          "Mathlib.Data.Finset.Interval",
+          "Mathlib.Data.Finset.Sort",
+          "Mathlib.Tactic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.RetainedModuli": {
+        "sha256": "ec5df61712426350f0a93f36501ce2f2ca4bf49c9ee13c611920342e67386274",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FirstExitTree",
+          "Mathlib.Algebra.BigOperators.Group.Finset.Basic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FirstExitTree": {
+        "sha256": "6ab5eeb136969f76afc8fcc83dfa211985e0b7ffe85e89dab0702f381ad42a6b",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Algebra.Order.BigOperators.Group.List",
+          "Mathlib.Data.List.Prime",
+          "Mathlib.Data.List.Sublists",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Real.Basic",
+          "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.SmallRoughAttachment": {
+        "sha256": "8f69bb4f62110e54aeb69c371d4767253d8520d9d904e3dc97e578beaedfccba",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PhysicalUpperWeightBridge",
+          "Mathlib.Data.Nat.PrimeFin"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.PhysicalUpperWeightBridge": {
+        "sha256": "7c179a6733bd163f5b8e8410a718effa609baa8a10b64b266caa36bf656e77a3",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FiniteSieveModel",
+          "ImbalancedChen.SignSensitiveAttachment"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FiniteSieveModel": {
+        "sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.SieveSourceCoprimality",
+          "Mathlib.NumberTheory.SelbergSieve",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.Data.Nat.Squarefree",
+          "Mathlib.Tactic.NormNum",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.SieveSourceCoprimality": {
+        "sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Data.Nat.GCD.BigOperators",
+          "Mathlib.Data.Nat.ModEq",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.HalfProductSource": {
+        "sha256": "dc6e261ddfdc9a66e966a4ec5c2a129d3f4b7583501c5c82364f2aa4a8af194e",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.BadSourceLocalization",
+          "Mathlib.Data.Finset.Prod"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.BadSourceLocalization": {
+        "sha256": "0e88326b03a4c20a472014b506d7533495d86801909af4d455de5fcfae6695a7",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductGeometry",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.HalfProductGeometry": {
+        "sha256": "d04e31ea73a853c4fa37e881ef30a748b7f83b8a0e930e0cc2ae231dbb629db1",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.OrderedBad",
+          "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+          "Mathlib.Tactic.Convert",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.OrderedBad": {
+        "sha256": "a38031995175bd2f847eefd498c929e941400c9cffdf6f78e3e06bd2100764da",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RationalPowers"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.RationalPowers": {
+        "sha256": "40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Counting",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Counting": {
+        "sha256": "8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Data.Finset.Card",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Real.Basic",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.SignSensitiveAttachment": {
+        "sha256": "d34b8483983bf4243479bee70cd4bcd07fbf286abafe982021ca4625a3ab63bc",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+          "Mathlib.Algebra.BigOperators.Ring.Finset",
+          "Mathlib.Data.Real.Basic",
+          "Mathlib.Tactic.NormNum"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FixedRoughCoefficients": {
+        "sha256": "24bc451c0234f867cb85539b0d93d37e02c68e6f8d0bf6cf82f081e75e3d892b",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RoughPrimeUniverse",
+          "ImbalancedChen.SmallRoughAttachment",
+          "Mathlib.Tactic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.RealHalfProductSource": {
+        "sha256": "0c3211cb72d8f27eb380f57fe5d751f8fc3179cb646c683c1449d450c71c55e7",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.CurrentMainTheorem",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Prod",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.CurrentMainTheorem": {
+        "sha256": "68a2a3aad8ccdc73ed8e5076e31b9984bc659c307d71150920a71b5fc98f067d",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.CurrentNumericalTransfer",
+          "ImbalancedChen.OrderedBad",
+          "Mathlib.Topology.Instances.EReal.Lemmas"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.CurrentNumericalTransfer": {
+        "sha256": "acc924036cb6ca73ef660c632d5577462ba5c69b8b5600aef63255264c3a270a",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.AsymptoticTransfer",
+          "ImbalancedChen.RationalPowers",
+          "ImbalancedChen.SingularSeries",
+          "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Linarith"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.AsymptoticTransfer": {
+        "sha256": "ece82cd26ee1030d708e6055395bdb5a6a4cf8b1d8c6072a67a9a59cd36bc560",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Counting",
+          "ImbalancedChen.Multiplicity",
+          "Mathlib.Order.Filter.AtTopBot.Basic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Multiplicity": {
+        "sha256": "9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Counting",
+          "Mathlib.NumberTheory.AlmostPrime",
+          "Mathlib.Tactic.SplitIfs"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.SingularSeries": {
+        "sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.NormalizationGrowth",
+          "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+          "Mathlib.Analysis.PSeries",
+          "Mathlib.Data.Nat.PrimeFin",
+          "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.NormalizationGrowth": {
+        "sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+          "Mathlib.Algebra.Ring.Parity",
+          "Mathlib.Order.Filter.AtTopBot.Archimedean",
+          "Mathlib.Order.Filter.AtTopBot.Field"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.SmallRoughMainTerm": {
+        "sha256": "3a3cdd6bc284237634da7744167e280c9ee56dc33555899ed98cc88e7e691b08",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.SmallRoughAttachment",
+          "Mathlib.Tactic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualSmallRosserDensity": {
+        "sha256": "9cfe1beef1a9ef09b88abf3c5593edebafc882e95639c50579cf4dc77b4d5ac8",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualSmallRosser",
+          "ImbalancedChen.SmallRoughMainTerm",
+          "MathlibNt.SieveTheory.LiLiuPrereqWFFundamentalLemma",
+          "MathlibNt.SieveTheory.LiLiuFouvryG9ProgressionDensityDimension"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.SmallRoughDensityError": {
+        "sha256": "95854fdf8ac0e0b47368e71fb6a1fae20178bee004c384b80103f9abe45d40ab",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.SmallRoughMainTerm"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualPrimePresieveSplit": {
+        "sha256": "dc6170c527cdde252ecdaa00997841522a4aa469adf799eaae4549e1310ced41",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualSmallRosserDensity",
+          "ImbalancedChen.FixedRoughCoefficients"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FirstExitGenericModuli": {
+        "sha256": "aeb5adad90208c1e09e186c1008529b113c6b0f8b0870fb82d3b8056bee6efaf",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FixedRoughCoefficients",
+          "ImbalancedChen.FirstExitPresieveProjection"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FirstExitPresieveProjection": {
+        "sha256": "41a96b9f75048b250e96553a783d4f03350de3d1b17c7dcc5da9aa9028eab694",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FirstExitTree"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FinitePrimeGeometryCore": {
+        "sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FirstExitDepthSplice",
+          "ImbalancedChen.FirstExitPresieveProjection",
+          "ImbalancedChen.RoughPrimeUniverse",
+          "ImbalancedChen.LogPrimeBoxMesh",
+          "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser",
+          "Mathlib.Data.List.GetD",
+          "Mathlib.Data.List.OfFn",
+          "Mathlib.Order.Fin.Basic",
+          "Mathlib.Algebra.BigOperators.Fin",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FirstExitDepthSplice": {
+        "sha256": "66803fd4584aa34babb84845e6b84e41417476b2d4499d882d2f61734bd27af6",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FirstExitTree"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.LogPrimeBoxMesh": {
+        "sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.LogPrimeBoxIntegral",
+          "Mathlib.Analysis.SpecificLimits.Basic",
+          "Mathlib.Order.Interval.Set.Union",
+          "Mathlib.Tactic"
+        ],
+        "parser_findings": []
+      }
+    }
+  },
+  "new_project_nodes": [],
+  "removed_project_nodes": [
+    "ImbalancedChen.FirstExitFrontierInvariants",
+    "ImbalancedChen.FirstExitFrontierTupleReindex",
+    "ImbalancedChen.FirstExitOwnCubeSplice",
+    "ImbalancedChen.FirstExitValidSelection",
+    "ImbalancedChen.HistoricalUnorderedThirdGeometry"
+  ],
+  "new_foreign_boundaries": [],
+  "removed_foreign_boundaries": [],
+  "no_compile_checker_cache_helper_parent_pin_CI_resource_or_linter_mutation": true,
+  "UV_ca0b_and_Low503_frozen_original_bytes": true,
+  "old_9b_candidate_and_old_reports_preserved": true,
+  "requires_new_specific_non_author_review_and_runtime_gate": true,
+  "scope_limit": "Same literal policy, rho, carriers, first cube, third cube and density goals. Source refinement only; no density-limit acceptance or historical closure bootstrap. The old 9b gate is not reused."
+}

@@ -1,7 +1,6 @@
 import ImbalancedChen.ActualExtendedThirdCompactCellCutoff
 import ImbalancedChen.ActualExtendedThirdFirstCubeMargin
 import ImbalancedChen.ActualUpperPolicyFiniteBridge
-import ImbalancedChen.HistoricalUnorderedThirdGeometry
 
 /-!
 # The literal upper coefficient of the compact extended-third policy
@@ -25,6 +24,48 @@ noncomputable section
 open Set
 open MathlibNt.SieveTheory.LiLiuPrereqWF.SmallRosser
 open scoped Classical
+
+/-- The complete inherited and third-cube Rosser tests, extracted locally
+without the unrelated historical frontier imports. -/
+private theorem actualExtendedThirdCompact_third_admissible_iff
+    (Q : ℝ) (p1 p2 p3 : ℕ) (h3 : 0 < p3)
+    (h32 : p3 < p2) (h21 : p2 < p1) :
+    ordinaryRosserPrefixAdmissible false Q [p3, p2, p1] ↔
+      (p1 : ℝ) ^ 3 < Q ∧ (p1 : ℝ) * p2 * p3 ^ 3 < Q := by
+  have h31 := h32.trans h21
+  let S : Finset ℕ := {p3, p2, p1}
+  have hf1 : S.filter (fun p => p1 ≤ p) = {p1} := by
+    ext p
+    simp only [S, Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]
+    omega
+  have hf2 : S.filter (fun p => p2 ≤ p) = {p2, p1} := by
+    ext p
+    simp only [S, Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]
+    omega
+  have hf3 : S.filter (fun p => p3 ≤ p) = S := by
+    ext p
+    simp only [S, Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]
+    omega
+  have hc : UpperAdmissibleSet Q [p3, p2, p1].toFinset ↔
+      (p1 : ℝ) ^ 3 < Q ∧ (p1 : ℝ) * p2 * p3 ^ 3 < Q := by
+    simp only [List.toFinset_cons, List.toFinset_nil]
+    change UpperAdmissibleSet Q S ↔ _
+    simp only [UpperAdmissibleSet, S, Finset.forall_mem_insert,
+      Finset.mem_singleton, forall_eq]
+    rw [hf1, hf2, hf3]
+    norm_num [S, h32.ne, h21.ne, h31.ne, Nat.cast_mul, pow_succ,
+      mul_comm, mul_left_comm, mul_assoc, and_comm]
+  have hsq : (1 : ℝ) ≤ (p3 : ℝ) ^ 2 := by
+    have hp3 : (1 : ℝ) ≤ p3 := by exact_mod_cast h3
+    nlinarith
+  have hprod : (([p3, p2, p1].prod : ℕ) : ℝ) ≤
+      (p1 : ℝ) * p2 * p3 ^ 3 := by
+    have hh := mul_le_mul_of_nonneg_left hsq
+      (by positivity : (0 : ℝ) ≤ (p1 : ℝ) * p2 * p3)
+    simp only [List.prod_cons, List.prod_nil, Nat.cast_mul, mul_one]
+    nlinarith only [hh]
+  simp only [ordinaryRosserPrefixAdmissible, Bool.false_eq_true, if_false, hc]
+  exact ⟨fun h => h.2, fun h => ⟨hprod.trans_lt h.2, h⟩⟩
 
 /-- The first coordinate is owned half-open and its label's upper endpoint
 passes the original closed first-stop wall. -/
@@ -119,7 +160,9 @@ theorem actualExtendedThirdCompactFrozenLevel_append (e h : ℝ) (m N : ℕ)
     (later history : List ℕ) (hlen : 3 ≤ history.length) :
     actualExtendedThirdCompactRawLevel e h m N (rosserAncestor 3 (later ++ history)) =
       actualExtendedThirdCompactRawLevel e h m N (rosserAncestor 3 history) := by
-  rw [rosserAncestor_append 3 later history hlen]
+  apply congrArg (actualExtendedThirdCompactRawLevel e h m N)
+  unfold rosserAncestor
+  rw [List.length_append, Nat.add_sub_assoc hlen, List.drop_length_add_append]
 
 theorem actualExtendedThirdCompactUpperPolicy_empty_cells (e h : ℝ) (m N : ℕ)
     (hempty : actualExtendedThirdCompactCells e h m = ∅) :
@@ -223,7 +266,7 @@ theorem actualExtendedThirdCompactUpperPolicy_third_iff {e h : ℝ} {m N : ℕ}
   rw [hpolicy]
   change decide (ordinaryRosserPrefixAdmissible false
     ((N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j) [p2, p1, p0]) = true ↔ _
-  rw [decide_eq_true_eq, historicalUnorderedThird_admissible_iff _ p0 p1 p2 hp2 hp21 hp10]
+  rw [decide_eq_true_eq, actualExtendedThirdCompact_third_admissible_iff _ p0 p1 p2 hp2 hp21 hp10]
   exact and_iff_right hfirst
 
 /-- The support and coefficient use the existing physical construction,

@@ -1,0 +1,535 @@
+{
+  "status": "ACTUAL_LINT_ONLY_REPAIR_APPLIED_NOT_COMPILED",
+  "created_utc": "2026-10-18T04:44:17.830619+00:00",
+  "author": "/root/large_residual_zero_oct18",
+  "source_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorLargeResidualZero.lean",
+  "old_source_sha256": "90ac477c8cf0473ef6fcf25f21c273f168b80d8aafeab9542a6b105ba736a109",
+  "current_source_sha256": "2801c38ab964e3df1850fb0b07cb3adc272c6f80004088aabc95adf360c6afda",
+  "old_lines": 1034,
+  "current_lines": 1034,
+  "current_bytes": 47567,
+  "actual_failed_attempt": {
+    "run": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\runs\\20261018T043906565704Z-ImbalancedChen.Part3SharedFirstFactorLargeResidualZero",
+    "receipt_sha256": "06b739a2c9f04bda5703a19d2a5eb708648bcbbfa29c3d26892620014792c3a9",
+    "stdout_sha256": "02d0854a206d32a241335e408d6c69102960f767ef2953f3fcfad32ab0f194d5",
+    "full_stdout_lines_read": 6,
+    "full_receipt_read": true,
+    "seconds": 43.738,
+    "max_rss_kib": 4692716,
+    "guard_error": null,
+    "before_after_bindings_exact": true,
+    "old_failure_preserved": true
+  },
+  "exact_forward_patch": [
+    {
+      "actual_diagnostic_lines": [
+        746
+      ],
+      "old_text": "      field_simp [hpR, hvR, hwR] <;> ring\n",
+      "new_text": "      field_simp [hpR, hvR, hwR]\n",
+      "reason": "Remove only the redundant ring actually diagnosed after exact pair-coefficient cancellation.",
+      "occurrence_count": 1
+    },
+    {
+      "actual_diagnostic_lines": [
+        775
+      ],
+      "old_text": "  field_simp [hpR, hDR] <;> ring\n",
+      "new_text": "  field_simp [hpR, hDR]\n",
+      "reason": "Remove only the redundant ring actually diagnosed after the fixed-D harmonic-square algebra.",
+      "occurrence_count": 1
+    }
+  ],
+  "exact_offset_inverse_patch_stages": [
+    {
+      "position_in_stage_text_characters": 32187,
+      "old_text": "      field_simp [hpR, hvR, hwR] <;> ring\n",
+      "new_text": "      field_simp [hpR, hvR, hwR]\n"
+    },
+    {
+      "position_in_stage_text_characters": 33406,
+      "old_text": "  field_simp [hpR, hDR] <;> ring\n",
+      "new_text": "  field_simp [hpR, hDR]\n"
+    }
+  ],
+  "inverse_rule": "Use stages in reverse order; at each recorded character position replace exactly new_text with old_text, including deletion cases. Reconstructed complete original bytes exactly.",
+  "forward_inverse_exact": true,
+  "all_complete_headers_unchanged": 52,
+  "all_primitive_definitions_unchanged": 11,
+  "imports_unchanged": true,
+  "complete_old_and_current_identical_inventory": [
+    {
+      "name": "characterTransform",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def characterTransform (N : Finset ℕ) (a : ℕ → ℂ) (delta : ℕ)\n    (chi : DirichletCharacter ℂ delta) : ℂ",
+      "header_sha256": "80b0d5fd34e19c14b0cc580001319a7a5c85a14eb95c2c0fd34bf81c3c4f849f",
+      "primitive_definition_with_body": "private def characterTransform (N : Finset ℕ) (a : ℕ → ℂ) (delta : ℕ)\n    (chi : DirichletCharacter ℂ delta) : ℂ :=\n  ∑ n ∈ N, a n * star (chi (n : ZMod delta))",
+      "primitive_definition_sha256": "b47fe90cee0236ab29f41fd46735687596c1c097ae52fc652aee2b6de5a35d91"
+    },
+    {
+      "name": "character_star_inverse",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem character_star_inverse {delta : ℕ} [NeZero delta]\n    (chi : DirichletCharacter ℂ delta) {a : ZMod delta} (ha : IsUnit a) :\n    star (chi a) = chi a⁻¹",
+      "header_sha256": "85279a9808021f950168d1f3f97f5b62cf5383ea5e2becb323fbb6703c16fe4b",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "character_orthogonality",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem character_orthogonality {delta : ℕ} (hdelta : 0 < delta)\n    (n m : ℕ) :\n    (∑ chi : DirichletCharacter ℂ delta,\n      star (chi (n : ZMod delta)) * chi (m : ZMod delta)) =\n      if n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m then\n        (delta.totient : ℂ) else 0",
+      "header_sha256": "995afcac6b14ad22fa56a16c738e183fd3e99e635795278fd6f169e9f7ece4e6",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "transform_parseval",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem transform_parseval (N : Finset ℕ) (a : ℕ → ℂ)\n    {delta : ℕ} (hdelta : 0 < delta) :\n    (∑ chi : DirichletCharacter ℂ delta,\n      characterTransform N a delta chi * star (characterTransform N a delta chi)) =\n      (delta.totient : ℂ) *\n        ∑ n ∈ N, ∑ m ∈ N,\n          if n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m then\n            a n * star (a m) else 0",
+      "header_sha256": "f4d0fec96ce10e700794a1f1709907f63f946eebfc0cb4bcf1f6cf2e47157e3a",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "progression_card_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem progression_card_le (N : Finset ℕ) (H delta b : ℕ)\n    (hN : N ⊆ Finset.Ioc 0 H) :\n    ((N.filter (fun n ↦ Nat.ModEq delta n b)).card : ℝ) ≤\n      (H : ℝ) / delta + 1",
+      "header_sha256": "a10d3ee6b8eeb96cd841754cc78ed81a6ab9ef6922d92611a90f87ede1f5a508",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "unit_pair_mass_norm_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem unit_pair_mass_norm_le (N : Finset ℕ) (a : ℕ → ℂ)\n    (H delta : ℕ) (hN : N ⊆ Finset.Ioc 0 H)\n    (ha : ∀ n ∈ N, ‖a n‖ ≤ 1) :\n    ‖∑ n ∈ N, ∑ m ∈ N,\n      if n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m then\n        a n * star (a m) else 0‖ ≤\n      (H : ℝ) * ((H : ℝ) / delta + 1)",
+      "header_sha256": "aed96af72a885652d11ddf9e79855a94cb6d0009d34219026fb06b26918b014c",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "transform_square_sum_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem transform_square_sum_le (N : Finset ℕ) (a : ℕ → ℂ)\n    (H : ℕ) {delta : ℕ} (hdelta : 0 < delta)\n    (hN : N ⊆ Finset.Ioc 0 H) (ha : ∀ n ∈ N, ‖a n‖ ≤ 1) :\n    (∑ chi : DirichletCharacter ℂ delta,\n      ‖characterTransform N a delta chi‖ ^ 2) ≤\n      (delta.totient : ℝ) * ((H : ℝ) * ((H : ℝ) / delta + 1))",
+      "header_sha256": "9892dadeceb95306991ddfccd8a2bb08587c04cf53f751f79e042988c7d25604",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "auxiliary_eq_transform",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem auxiliary_eq_transform (N : Finset ℕ) (a : ℕ → ℂ)\n    (k delta : ℕ) (chi : DirichletCharacter ℂ delta) :\n    auxiliaryCharacterSum N a k delta chi =\n      characterTransform N (fun n ↦ if n.Coprime k then a n else 0) delta chi",
+      "header_sha256": "086a657146d5d50f9f44d9a41653c7a85539cabe719285ff8342ff91e335c399",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "alpha_subset_prefix",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem alpha_subset_prefix {d : MediumAtom} (hU : 1 ≤ d.U) :\n    d.alphaCarrier ⊆ Finset.Ioc 0 (Nat.floor (2 * d.U))",
+      "header_sha256": "0c222990d46012fb689a5abe14c934b6106a6a0d11ecf407f77b897cba678ab0",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "actual_auxiliary_square_sum_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem actual_auxiliary_square_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (k : ℕ)\n    {delta : ℕ} (hdelta : 0 < delta) :\n    (∑ chi : DirichletCharacter ℂ delta,\n      ‖auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi‖ ^ 2) ≤\n      (delta.totient : ℝ) * (2 * d.U * (2 * d.U / delta + 1))",
+      "header_sha256": "b73665901bac852f38f3020dc85b6e93de80598b8690246ea5c7d691b248f521",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "auxiliary_cross_div_totient_norm_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem auxiliary_cross_div_totient_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (k l : ℕ)\n    {delta : ℕ} (hdelta : 0 < delta)\n    (C : Finset (DirichletCharacter ℂ delta)) :\n    ‖(∑ chi ∈ C,\n      auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi *\n        star (auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi)) /\n          (delta.totient : ℂ)‖ ≤ 2 * d.U * (2 * d.U / delta + 1)",
+      "header_sha256": "66a69647d6c747a293bc2524a92ef373cb5abe69b9a6ef63994d1ee333fe329d",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tailLabels",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def tailLabels (d : MediumAtom) : Finset (ℕ × ℕ)",
+      "header_sha256": "820511ab31f7dc69d19fbd4eb64dfd34578e210debecb920d34045c67120e6d1",
+      "primitive_definition_with_body": "private def tailLabels (d : MediumAtom) : Finset (ℕ × ℕ) :=\n  factorCarrier d.Q2 ×ˢ factorCarrier d.Q3",
+      "primitive_definition_sha256": "0c688a2ab5d8cc7cd3dfc31142e6aac46ae45d1872617aace45dfee83ab00a6d"
+    },
+    {
+      "name": "tailProducts",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def tailProducts (d : MediumAtom) : Finset ℕ",
+      "header_sha256": "35e2e2d93659c47a171df2b304912f3c6a85370d3b3ed7c1d4e5e021127fa338",
+      "primitive_definition_with_body": "private def tailProducts (d : MediumAtom) : Finset ℕ :=\n  (tailLabels d).image (fun u ↦ u.1 * u.2)",
+      "primitive_definition_sha256": "188f791c17e6e192f9b0cb2754e02f51b5b18317178c0b993cf4d82ac31bcbab"
+    },
+    {
+      "name": "tailGamma",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def tailGamma (d : MediumAtom) (v : ℕ) : ℂ",
+      "header_sha256": "e3c54e69c9e217208c63188af175b3c5311033a920e985fc6e5cf457ac019511",
+      "primitive_definition_with_body": "private def tailGamma (d : MediumAtom) (v : ℕ) : ℂ :=\n  ∑ u ∈ (tailLabels d).filter (fun u ↦ u.1 * u.2 = v), d.gamma2 u.1 * d.gamma3 u.2",
+      "primitive_definition_sha256": "04f6c40339dd63459f639f4b398544fb61c8f460ab5f32f63ca9967cd032af28"
+    },
+    {
+      "name": "tailCap",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def tailCap (d : MediumAtom) : ℝ",
+      "header_sha256": "eae9b1625a44bc85af0c8d76e126d5dbc7cb435ede7c816d6ddfc694182b9efe",
+      "primitive_definition_with_body": "private def tailCap (d : MediumAtom) : ℝ := 4 * d.Q2 * d.Q3",
+      "primitive_definition_sha256": "7e11ed968dc33ccb0d235267f3752e93b9004432a7b4641e3ab7188df2c781d3"
+    },
+    {
+      "name": "tau",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def tau (n : ℕ) : ℝ",
+      "header_sha256": "1352713ca1ee3e906c7b243d58b57a3923713bd6b94151b9fcaefbfd8dde8e7d",
+      "primitive_definition_with_body": "private def tau (n : ℕ) : ℝ := (n.divisors.card : ℝ)",
+      "primitive_definition_sha256": "93d72abb5c853bb9ebd7be5bd5324e69e4446279d62469382e78da48b273cbf8"
+    },
+    {
+      "name": "factor_bounds",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) : 0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q",
+      "header_sha256": "981206b566d4652d16b3260572978bd9ce899a0dd557ff4ed0b937faff326ecf",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "one_le_tailCap",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem one_le_tailCap\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ tailCap d",
+      "header_sha256": "529ea77d176014384aea15009cac5b860e882125528501fa98e7f9b7be911e0f",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tail_product_bounds",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tail_product_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {u : ℕ × ℕ}\n    (hu : u ∈ tailLabels d) : 0 < u.1 * u.2 ∧ (u.1 * u.2 : ℕ) ≤ Nat.floor (tailCap d)",
+      "header_sha256": "be1d565088cc8f486321d2c5cdfb3d4f00e23ac53752cf15decd9d2741d76ade",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tailProducts_subset_prefix",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tailProducts_subset_prefix\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    tailProducts d ⊆ Finset.Ioc 0 (Nat.floor (tailCap d))",
+      "header_sha256": "27c5563f5fc0c52193bf5b75b8ef82ca21ddc0dc58b23c0c6fc004fb86aac908",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tailGamma_zero_off_products",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tailGamma_zero_off_products (d : MediumAtom) {v : ℕ}\n    (hv : v ∉ tailProducts d) : tailGamma d v = 0",
+      "header_sha256": "5a0a0c04fddb7d3143e819a3b3727177e23e3a15ff873963a5fabb819b9b57a1",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tailGamma_norm_le_tau",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tailGamma_norm_le_tau\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (v : ℕ) :\n    ‖tailGamma d v‖ ≤ tau v",
+      "header_sha256": "02a8b8aba56736cecd7817f93cbdd17700aa2999450a3069848231acc47daf19",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tail_sum_eq_grouped",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tail_sum_eq_grouped (d : MediumAtom) (F : ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, (d.gamma2 u.1 * d.gamma3 u.2) * F (u.1 * u.2)) =\n      ∑ v ∈ tailProducts d, tailGamma d v * F v",
+      "header_sha256": "a4177c11a76a2204611e31707c97643ecfdfe0a24bfe5d901512116078d6adde",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tail_star_sum_eq_grouped",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tail_star_sum_eq_grouped (d : MediumAtom) (F : ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, star (d.gamma2 u.1 * d.gamma3 u.2) * F (u.1 * u.2)) =\n      ∑ v ∈ tailProducts d, star (tailGamma d v) * F v",
+      "header_sha256": "dcd7568908e337f24c190e425a371ad7465291995e2effbf2b57997d765a277e",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tail_pair_sum_eq_grouped",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tail_pair_sum_eq_grouped (d : MediumAtom) (F : ℕ → ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, ∑ v ∈ tailLabels d,\n      (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n        F (u.1 * u.2) (v.1 * v.2)) =\n      ∑ a ∈ tailProducts d, ∑ b ∈ tailProducts d,\n        tailGamma d a * star (tailGamma d b) * F a b",
+      "header_sha256": "281e30bd180d6168e1392e7995217ea36e6a2ad662ffa33f1d0da5c2aa5454a3",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tail_sum_eq_prefix",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tail_sum_eq_prefix\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (F : ℕ → ℂ) :\n    (∑ v ∈ tailProducts d, tailGamma d v * F v) =\n      ∑ v ∈ Finset.Ioc 0 (Nat.floor (tailCap d)), tailGamma d v * F v",
+      "header_sha256": "548acefc30d846ba795d5cc2e38460aeb90be4c4d91fdb421dcc64cfb762652b",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tail_pair_sum_eq_prefix",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tail_pair_sum_eq_prefix\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (F : ℕ → ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, ∑ v ∈ tailLabels d,\n      (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n        F (u.1 * u.2) (v.1 * v.2)) =\n      ∑ a ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n        ∑ b ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n          tailGamma d a * star (tailGamma d b) * F a b",
+      "header_sha256": "357b2343813b0a8475ab843e99a7e4e96698b3a32f2b1ff2d4c904bb535e27cd",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "pair_sum_by_gcd",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem pair_sum_by_gcd (N : ℕ) (F : ℕ → ℕ → ℂ) :\n    (∑ a ∈ Finset.Ioc 0 N, ∑ b ∈ Finset.Ioc 0 N, F a b) =\n      ∑ D ∈ Finset.Ioc 0 N, ∑ a ∈ Finset.Ioc 0 N, ∑ b ∈ Finset.Ioc 0 N,\n        if a.gcd b = D then F a b else 0",
+      "header_sha256": "05e8674380d8e04fdd8cbda35411583d46ebfc9a2c965bee7f95c968ca9826ca",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "characterKernel",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def characterKernel (d : MediumAtom) (p v w : ℕ) (R : ℝ) : ℂ",
+      "header_sha256": "b62e6f9b2686f5efe921b01ba236c6a6c49461ea5a6368f5644267f96f65c289",
+      "primitive_definition_with_body": "private def characterKernel (d : MediumAtom) (p v w : ℕ) (R : ℝ) : ℂ :=\n  (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n    ((p * v.lcm w : ℕ) : ℂ)) *\n      ((∑ chi ∈ ((Finset.univ : Finset\n          (DirichletCharacter ℂ (p * v.gcd w))).erase 1).filter\n            (fun chi ↦ R < (chi.conductor : ℝ)),\n        auxiliaryCharacterSum d.alphaCarrier d.alpha (v / v.gcd w) (p * v.gcd w) chi *\n          star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n            (w / v.gcd w) (p * v.gcd w) chi)) / ((p * v.gcd w).totient : ℂ))",
+      "primitive_definition_sha256": "e271c075eece6f452cbd4e35d4351fffaa7fa3ccb7bfa407fb581daeb67b4beb"
+    },
+    {
+      "name": "gcdSlice",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def gcdSlice (d : MediumAtom) (p D : ℕ) (R : ℝ) : ℂ",
+      "header_sha256": "89323a22d8d646d94992cf09cbfb6c9b5f42686232836a8e21bbe0b2555781a0",
+      "primitive_definition_with_body": "private def gcdSlice (d : MediumAtom) (p D : ℕ) (R : ℝ) : ℂ :=\n  ∑ v ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n    ∑ w ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n      if v.gcd w = D then\n        tailGamma d v * star (tailGamma d w) * characterKernel d p v w R\n      else 0",
+      "primitive_definition_sha256": "a35adc5d75eaf552db3a990249a15d13f8bbdd4541b149804b7eb01b3b84fec0"
+    },
+    {
+      "name": "largeDivisors",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def largeDivisors (d : MediumAtom) (Y : ℝ) : Finset ℕ",
+      "header_sha256": "3e9138b753f38b292caf806e50801d46e78fdd2679ae051f156626881df742a5",
+      "primitive_definition_with_body": "private def largeDivisors (d : MediumAtom) (Y : ℝ) : Finset ℕ :=\n  (Finset.Ioc 0 (Nat.floor (tailCap d))).filter (fun D ↦ Y < (D : ℝ))",
+      "primitive_definition_sha256": "c199f29186a58c6d43fc38ff99308e75ecf629f474718bc1ac65c31cd666b070"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactorLargeResidualHighConductorZero",
+      "kind": "def",
+      "visibility": "public",
+      "complete_header": "def MediumAtom.sharedFirstFactorLargeResidualHighConductorZero\n    (d : MediumAtom) (Y R : ℝ) : ℂ",
+      "header_sha256": "f057a646af1bca487e7c3cac98ae9b6550f475cfbc449ffa7a8353d01592c803",
+      "primitive_definition_with_body": "def MediumAtom.sharedFirstFactorLargeResidualHighConductorZero\n    (d : MediumAtom) (Y R : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n      ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        if Y < ((u.1 * u.2).gcd (v.1 * v.2) : ℝ) then\n          (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n            (((p * (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ) *\n              ((p * (u.1 * u.2).gcd (v.1 * v.2)).totient : ℂ))) *\n            (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n            (∑ chi ∈ ((Finset.univ : Finset\n                (DirichletCharacter ℂ (p * (u.1 * u.2).gcd (v.1 * v.2)))).erase 1).filter\n                  (fun chi ↦ R < (chi.conductor : ℝ)),\n              auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((u.1 * u.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi *\n              star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((v.1 * v.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi))\n        else 0",
+      "primitive_definition_sha256": "b15b488f461396e63a54f617366768a643d4e15ffc76a54b41555e8325341d20"
+    },
+    {
+      "name": "actual_eq_gcd_slices",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem actual_eq_gcd_slices\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y R : ℝ) :\n    d.sharedFirstFactorLargeResidualHighConductorZero Y R =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ D ∈ largeDivisors d Y, gcdSlice d p D R",
+      "header_sha256": "82ab476bb26f0c7995c346cd9ffd816f6a582fdc2cd58debc7f26bdc15a9e98d",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "characterKernel_norm_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem characterKernel_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {p v w : ℕ} (hp : 0 < p) (hv : 0 < v) (hw : 0 < w) (R : ℝ) :\n    ‖characterKernel d p v w R‖ ≤\n      |CommonSmoothCutoff.cutoffMass| * d.V *\n        (4 * d.U ^ 2 / ((p : ℝ) ^ 2 * v * w) +\n          2 * d.U * (v.gcd w : ℝ) / ((p : ℝ) * v * w))",
+      "header_sha256": "7e1eaf8cc9569ad1284cb8dbfb610f36a7773e0fb5194f88a8279ce52bc77984",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "divisors_mul_eq",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem divisors_mul_eq (a b : ℕ) :\n    (a * b).divisors = a.divisors * b.divisors",
+      "header_sha256": "f7b75b9142552cf680d9075a650980b8737975a57cd930d739ede71dcf90a236",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tau_nonneg",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tau_nonneg (n : ℕ) : 0 ≤ tau n",
+      "header_sha256": "e1b6ed5fdd2b89921906796f7ba2f7a21a00dbeae8102a6422fe593238489de3",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tau_mul_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tau_mul_le (a b : ℕ) : tau (a * b) ≤ tau a * tau b",
+      "header_sha256": "17f283f3e417fb6ddb225e47e364100e528ed3d3e26be27d2c7c5958d7db4723",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "multipleWeight",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def multipleWeight (D n : ℕ) : ℝ",
+      "header_sha256": "376f856d4791525bbed74593d2b299a813e3227d05a65e6e2cc4d7cf16498d87",
+      "primitive_definition_with_body": "private def multipleWeight (D n : ℕ) : ℝ := if D ∣ n then tau n / (n : ℝ) else 0",
+      "primitive_definition_sha256": "cacec833cdce7970eb8f46a146b0959a7c0d8bc8994f8548ccdb2aa3924c4508"
+    },
+    {
+      "name": "multipleWeight_nonneg",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem multipleWeight_nonneg (D n : ℕ) : 0 ≤ multipleWeight D n",
+      "header_sha256": "c238a8a530950a83351ebad9d27f7b3ca1eb03a67472ce0eed6c6705c5783913",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "sum_multiples_real",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem sum_multiples_real (N D : ℕ) (hD : 0 < D) (f : ℕ → ℝ) :\n    (∑ n ∈ Finset.Ioc 0 N, if D ∣ n then f n else 0) =\n      ∑ k ∈ Finset.Ioc 0 (N / D), f (D * k)",
+      "header_sha256": "91c95493a27ac51d4bfcb88e41b21550de187dfabfaa6e86764f5ea0fc84d36b",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "multiple_harmonic_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem multiple_harmonic_le {T : ℝ} (hT : 1 ≤ T)\n    {D : ℕ} (hD : 0 < D) :\n    (∑ n ∈ Finset.Ioc 0 (Nat.floor T), multipleWeight D n) ≤\n      tau D / (D : ℝ) * (1 + Real.log T) ^ 2",
+      "header_sha256": "73c73f54e05b3d5abcd45217cc2390fedc7135481c30400232f96b508c60524b",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "gcdSlice_norm_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem gcdSlice_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {p D : ℕ} (hp : 0 < p) (hD : 0 < D) (R : ℝ) :\n    ‖gcdSlice d p D R‖ ≤\n      |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 4 *\n        (4 * d.U ^ 2 / (p : ℝ) ^ 2 * (tau D ^ 2 / (D : ℝ) ^ 2) +\n          2 * d.U / (p : ℝ) * (tau D ^ 2 / (D : ℝ)))",
+      "header_sha256": "319ff9ac0cbc826a607136187266c1f12956e68c10eedd3cf0ba3e8240ce14f7",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tau_square_harmonic_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tau_square_harmonic_le {T : ℝ} (hT : 1 ≤ T) :\n    (∑ D ∈ Finset.Ioc 0 (Nat.floor T), tau D ^ 2 / (D : ℝ)) ≤\n      (1 + Real.log T) ^ 4",
+      "header_sha256": "f4c7742e3a839f21504937ccba73a9f163422e01302304a199e3b7974a438a45",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "reciprocal_square_tail_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem reciprocal_square_tail_le\n    {T Y : ℝ} (hT : 1 ≤ T) (hY : 1 ≤ Y) :\n    (∑ D ∈ (Finset.Ioc 0 (Nat.floor T)).filter (fun D : ℕ ↦ Y < (D : ℝ)),\n      tau D ^ 2 / (D : ℝ) ^ 2) ≤ (1 + Real.log T) ^ 4 / Y",
+      "header_sha256": "7795a256600e52cd44329b9f10753c4b84cfc4ff1c096fe8f686a2234b80dc09",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "large_divisor_harmonic_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem large_divisor_harmonic_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    (∑ D ∈ largeDivisors d Y, tau D ^ 2 / (D : ℝ)) ≤\n      (1 + Real.log (tailCap d)) ^ 4",
+      "header_sha256": "cdc071deaf4359515534e2c837b6f363d15ef7261df8fc95363f8befa05d42cc",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "one_p_large_divisor_norm_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem one_p_large_divisor_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {p : ℕ} (hp : 0 < p) {Y : ℝ} (hY : 1 ≤ Y) (R : ℝ) :\n    ‖∑ D ∈ largeDivisors d Y, gcdSlice d p D R‖ ≤\n      |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 8 *\n        (4 * d.U ^ 2 / ((p : ℝ) ^ 2 * Y) + 2 * d.U / (p : ℝ))",
+      "header_sha256": "a0de7a610bf807c2b75f6d72f3032a37cb22e16d4b0b332771b70e46ca3b326b",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "primitive_factor_card_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem primitive_factor_card_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (d.primitiveFirstFactorCarrier.card : ℝ) ≤ 2 * d.Q1",
+      "header_sha256": "87bee5b65f597e3fb739651a9857bef303ce83a1aeecc8c9f498d5f7294edd76",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "primitive_reciprocal_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem primitive_reciprocal_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, 1 / (p : ℝ)) ≤ 2",
+      "header_sha256": "75f446894ac6d6c4e0f7514d5ea38bb400617b92d9a6dc94e2ab514a25795473",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "primitive_reciprocal_square_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem primitive_reciprocal_square_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, 1 / (p : ℝ) ^ 2) ≤ 2 / d.Q1",
+      "header_sha256": "8ce8f347cbcfff6b278025704680d3822302da5f611496ff1873cca1906a5c47",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "actual_finite_bound",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem actual_finite_bound\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Y : ℝ} (hY : 1 ≤ Y) (R : ℝ) :\n    ‖d.sharedFirstFactorLargeResidualHighConductorZero Y R‖ ≤\n      |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 8 *\n        (8 * d.U ^ 2 / (d.Q1 * Y) + 4 * d.U)",
+      "header_sha256": "fb84374fbe851fba056e204a1b8c61d1733069fc41571f7529a1cdab3a49eb74",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "actual_largeResidualHighConductorZero_bound",
+      "kind": "theorem",
+      "visibility": "public",
+      "complete_header": "theorem actual_largeResidualHighConductorZero_bound :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d → ∀ Y R : ℝ, 1 ≤ Y →\n          ‖d.sharedFirstFactorLargeResidualHighConductorZero Y R‖ ≤\n            C * d.V * (1 + Real.log (4 * d.Q2 * d.Q3)) ^ 8 *\n              (d.U ^ 2 / (d.Q1 * Y) + d.U)",
+      "header_sha256": "f642fd1452adea55ce21dbcdbcf88d26bf0dfaa99b77be05928c004c92254c63",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "actual_outside_mul_largeResidualHighConductorZero_bound",
+      "kind": "theorem",
+      "visibility": "public",
+      "complete_header": "theorem actual_outside_mul_largeResidualHighConductorZero_bound :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d → ∀ Y R : ℝ, 1 ≤ Y →\n          ((∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n              (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)) *\n            ‖d.sharedFirstFactorLargeResidualHighConductorZero Y R‖ ≤\n              C * d.scale ^ 2 *\n                (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n                (1 + Real.log (4 * d.Q2 * d.Q3)) ^ 8 *\n                (1 / Y + d.Q1 / d.U)",
+      "header_sha256": "103467bd77409824f797a48710562521572173b04f67441510220dfa204e4425",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    }
+  ],
+  "current_complete_candidate_source_utf8": "import ImbalancedChen.Part3SharedFirstFactorCharacterDictionary\n\n/-!\n# The large residual gcd in the actual shared first-factor zero mode\n\nThe residual divisor here is gcd of the two remaining physical factor\nproducts. It is not the gcd of the paired original-alpha variables.\nThe high-conductor restriction is retained, so this object can accompany\nthe low-conductor estimate on all residual divisors without overlap.\n\nThe finite character argument keeps the auxiliary coprimality sieve.\nExact complex factor grouping and gcd grouping precede every norm.\nThe resulting coefficients cost tau_2, rather than an assumed unit bound.\nThe finite reciprocal-square tail retains its literal inverse cutoff.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset\nopen scoped BigOperators Pointwise\nopen SharedFirstFactorCharacterDictionary\nopen MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n\nnamespace SharedFirstFactorLargeResidualZero\n\nprivate def characterTransform (N : Finset ℕ) (a : ℕ → ℂ) (delta : ℕ)\n    (chi : DirichletCharacter ℂ delta) : ℂ :=\n  ∑ n ∈ N, a n * star (chi (n : ZMod delta))\n\nprivate theorem character_star_inverse {delta : ℕ} [NeZero delta]\n    (chi : DirichletCharacter ℂ delta) {a : ZMod delta} (ha : IsUnit a) :\n    star (chi a) = chi a⁻¹ := by\n  obtain ⟨u, rfl⟩ := ha\n  rw [MulChar.star_apply', MulChar.inv_apply, Ring.inverse_unit, ZMod.inv_coe_unit]\n\nprivate theorem character_orthogonality {delta : ℕ} (hdelta : 0 < delta)\n    (n m : ℕ) :\n    (∑ chi : DirichletCharacter ℂ delta,\n      star (chi (n : ZMod delta)) * chi (m : ZMod delta)) =\n      if n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m then\n        (delta.totient : ℂ) else 0 := by\n  let : NeZero delta := ⟨hdelta.ne'⟩\n  have hexp : Monoid.exponent (ZMod delta)ˣ ≠ 0 := Monoid.exponent_ne_zero.mpr\n    (Monoid.ExponentExists.of_finite (G := (ZMod delta)ˣ))\n  let : HasEnoughRootsOfUnity ℂ (Monoid.exponent (ZMod delta)ˣ) := by\n    let : NeZero (Monoid.exponent (ZMod delta)ˣ) := ⟨hexp⟩\n    refine { prim := ?_, cyc := ?_ }\n    · exact ⟨Complex.exp (2 * Real.pi * Complex.I /\n        (Monoid.exponent (ZMod delta)ˣ : ℂ)),\n        Complex.isPrimitiveRoot_exp (Monoid.exponent (ZMod delta)ˣ) hexp⟩\n    · infer_instance\n  have hz (a b : ZMod delta) :\n      (∑ chi : DirichletCharacter ℂ delta, star (chi a) * chi b) =\n        if IsUnit a ∧ IsUnit b ∧ a = b then (delta.totient : ℂ) else 0 := by\n    by_cases ha : IsUnit a\n    · by_cases hb : IsUnit b\n      · calc\n          _ = ∑ chi : DirichletCharacter ℂ delta, chi a⁻¹ * chi b := by\n            apply Finset.sum_congr rfl\n            intro chi _\n            rw [character_star_inverse chi ha]\n          _ = if a = b then (delta.totient : ℂ) else 0 :=\n            DirichletCharacter.sum_char_inv_mul_char_eq ℂ ha b\n          _ = _ := by simp only [ha, hb, true_and]\n      · rw [if_neg (fun h ↦ hb h.2.1)]\n        apply Finset.sum_eq_zero\n        intro chi _\n        rw [chi.map_nonunit hb, mul_zero]\n    · rw [if_neg (fun h ↦ ha h.1)]\n      apply Finset.sum_eq_zero\n      intro chi _\n      rw [chi.map_nonunit ha, star_zero, zero_mul]\n  simpa only [ZMod.isUnit_iff_coprime, ZMod.natCast_eq_natCast_iff] using\n    hz (n : ZMod delta) (m : ZMod delta)\n\nprivate theorem transform_parseval (N : Finset ℕ) (a : ℕ → ℂ)\n    {delta : ℕ} (hdelta : 0 < delta) :\n    (∑ chi : DirichletCharacter ℂ delta,\n      characterTransform N a delta chi * star (characterTransform N a delta chi)) =\n      (delta.totient : ℂ) *\n        ∑ n ∈ N, ∑ m ∈ N,\n          if n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m then\n            a n * star (a m) else 0 := by\n  unfold characterTransform\n  simp only [star_sum]\n  simp only [Finset.sum_mul]\n  simp only [Finset.mul_sum]\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro n _\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro m _\n  calc\n    _ = a n * star (a m) *\n        ∑ chi : DirichletCharacter ℂ delta,\n          star (chi (n : ZMod delta)) * chi (m : ZMod delta) := by\n      rw [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro chi _\n      simp only [star_mul', star_star]\n      ring\n    _ = _ := by\n      rw [character_orthogonality hdelta]\n      split_ifs <;> ring\n\nprivate theorem progression_card_le (N : Finset ℕ) (H delta b : ℕ)\n    (hN : N ⊆ Finset.Ioc 0 H) :\n    ((N.filter (fun n ↦ Nat.ModEq delta n b)).card : ℝ) ≤\n      (H : ℝ) / delta + 1 := by\n  have hc : (N.filter (fun n ↦ Nat.ModEq delta n b)).card ≤ H / delta + 1 := by\n    calc\n      _ ≤ (Finset.range (H / delta + 1)).card := by\n        apply Finset.card_le_card_of_injOn (fun n : ℕ ↦ n / delta)\n        · intro n hn\n          exact Finset.mem_range.mpr (Nat.lt_succ_of_le\n            (Nat.div_le_div_right (Finset.mem_Ioc.mp (hN (Finset.mem_filter.mp hn).1)).2))\n        · intro n hn m hm he\n          apply Nat.ext_div_modEq he\n          exact (Finset.mem_filter.mp hn).2.trans (Finset.mem_filter.mp hm).2.symm\n      _ = _ := Finset.card_range _\n  calc\n    _ ≤ ((H / delta : ℕ) : ℝ) + 1 := by exact_mod_cast hc\n    _ ≤ _ := add_le_add Nat.cast_div_le le_rfl\n\nprivate theorem unit_pair_mass_norm_le (N : Finset ℕ) (a : ℕ → ℂ)\n    (H delta : ℕ) (hN : N ⊆ Finset.Ioc 0 H)\n    (ha : ∀ n ∈ N, ‖a n‖ ≤ 1) :\n    ‖∑ n ∈ N, ∑ m ∈ N,\n      if n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m then\n        a n * star (a m) else 0‖ ≤\n      (H : ℝ) * ((H : ℝ) / delta + 1) := by\n  have hcard : (N.card : ℝ) ≤ (H : ℝ) := by\n    exact_mod_cast (Finset.card_le_card hN).trans_eq (by simp)\n  calc\n    _ ≤ ∑ n ∈ N, ∑ m ∈ N,\n        if Nat.ModEq delta n m then (1 : ℝ) else 0 := by\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro n hn\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro m hm\n      by_cases h : n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m\n      · simp only [if_pos h, if_pos h.2.2, norm_mul, norm_star]\n        simpa only [one_mul] using mul_le_mul (ha n hn) (ha m hm)\n          (norm_nonneg _) zero_le_one\n      · simp only [if_neg h, norm_zero]\n        split_ifs <;> norm_num\n    _ = ∑ n ∈ N, ((N.filter (fun m ↦ Nat.ModEq delta m n)).card : ℝ) := by\n      apply Finset.sum_congr rfl\n      intro n _\n      simp only [Nat.ModEq.comm (a := n), ← Finset.sum_filter]\n      simp\n    _ ≤ ∑ _n ∈ N, ((H : ℝ) / delta + 1) :=\n      Finset.sum_le_sum (fun n _ ↦ progression_card_le N H delta n hN)\n    _ = (N.card : ℝ) * ((H : ℝ) / delta + 1) := by\n      rw [Finset.sum_const, nsmul_eq_mul]\n    _ ≤ _ := mul_le_mul_of_nonneg_right hcard (by positivity)\n\nprivate theorem transform_square_sum_le (N : Finset ℕ) (a : ℕ → ℂ)\n    (H : ℕ) {delta : ℕ} (hdelta : 0 < delta)\n    (hN : N ⊆ Finset.Ioc 0 H) (ha : ∀ n ∈ N, ‖a n‖ ≤ 1) :\n    (∑ chi : DirichletCharacter ℂ delta,\n      ‖characterTransform N a delta chi‖ ^ 2) ≤\n      (delta.totient : ℝ) * ((H : ℝ) * ((H : ℝ) / delta + 1)) := by\n  have hcast :\n      (((∑ chi : DirichletCharacter ℂ delta,\n        ‖characterTransform N a delta chi‖ ^ 2) : ℝ) : ℂ) =\n        ∑ chi : DirichletCharacter ℂ delta,\n          characterTransform N a delta chi * star (characterTransform N a delta chi) := by\n    push_cast\n    apply Finset.sum_congr rfl\n    intro chi _\n    exact (Complex.mul_conj' _).symm\n  calc\n    _ = ‖(((∑ chi : DirichletCharacter ℂ delta,\n        ‖characterTransform N a delta chi‖ ^ 2) : ℝ) : ℂ)‖ := by\n      rw [Complex.norm_real, Real.norm_eq_abs,\n        abs_of_nonneg (Finset.sum_nonneg (fun _ _ ↦ sq_nonneg _))]\n    _ = ‖(delta.totient : ℂ) *\n        ∑ n ∈ N, ∑ m ∈ N,\n          if n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m then\n            a n * star (a m) else 0‖ := by rw [hcast, transform_parseval N a hdelta]\n    _ = (delta.totient : ℝ) * ‖∑ n ∈ N, ∑ m ∈ N,\n          if n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m then\n            a n * star (a m) else 0‖ := by rw [norm_mul, Complex.norm_natCast]\n    _ ≤ _ := mul_le_mul_of_nonneg_left (unit_pair_mass_norm_le N a H delta hN ha)\n      (Nat.cast_nonneg _)\n\nprivate theorem auxiliary_eq_transform (N : Finset ℕ) (a : ℕ → ℂ)\n    (k delta : ℕ) (chi : DirichletCharacter ℂ delta) :\n    auxiliaryCharacterSum N a k delta chi =\n      characterTransform N (fun n ↦ if n.Coprime k then a n else 0) delta chi := by\n  unfold auxiliaryCharacterSum characterTransform\n  apply Finset.sum_congr rfl\n  intro n _\n  by_cases hn : n.Coprime k\n  · simp only [if_pos hn]\n  · simp only [if_neg hn, zero_mul]\n\nprivate theorem alpha_subset_prefix {d : MediumAtom} (hU : 1 ≤ d.U) :\n    d.alphaCarrier ⊆ Finset.Ioc 0 (Nat.floor (2 * d.U)) := by\n  intro n hn\n  obtain ⟨hn, _⟩ := Finset.mem_filter.mp hn\n  obtain ⟨hlo, hhi⟩ := Finset.mem_Icc.mp hn\n  have hc : 1 ≤ Nat.ceil d.U := by exact_mod_cast hU.trans (Nat.le_ceil d.U)\n  exact Finset.mem_Ioc.mpr ⟨by omega, hhi⟩\n\nprivate theorem actual_auxiliary_square_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (k : ℕ)\n    {delta : ℕ} (hdelta : 0 < delta) :\n    (∑ chi : DirichletCharacter ℂ delta,\n      ‖auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi‖ ^ 2) ≤\n      (delta.totient : ℝ) * (2 * d.U * (2 * d.U / delta + 1)) := by\n  have ha : ∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1 := by\n    obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, ha, _⟩ := hd\n    exact ha\n  simp only [auxiliary_eq_transform]\n  have hb : ∀ n ∈ d.alphaCarrier, ‖if n.Coprime k then d.alpha n else 0‖ ≤ 1 := by\n    intro n hn\n    split_ifs\n    · exact ha n hn\n    · simp\n  refine (transform_square_sum_le d.alphaCarrier\n    (fun n ↦ if n.Coprime k then d.alpha n else 0)\n    (Nat.floor (2 * d.U)) hdelta (alpha_subset_prefix hd.1) hb).trans ?_\n  apply mul_le_mul_of_nonneg_left _ (Nat.cast_nonneg _)\n  have hf : (Nat.floor (2 * d.U) : ℝ) ≤ 2 * d.U := Nat.floor_le (by linarith [hd.1])\n  have hdelta0 : (0 : ℝ) ≤ delta := Nat.cast_nonneg _\n  exact mul_le_mul hf (add_le_add (div_le_div_of_nonneg_right hf hdelta0) le_rfl)\n    (by positivity) (by linarith [hd.1])\n\n/-- The same arbitrary character subset occurs in both coefficient sums.\nOnly nonnegative square sums are enlarged to the full character carrier. -/\nprivate theorem auxiliary_cross_div_totient_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (k l : ℕ)\n    {delta : ℕ} (hdelta : 0 < delta)\n    (C : Finset (DirichletCharacter ℂ delta)) :\n    ‖(∑ chi ∈ C,\n      auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi *\n        star (auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi)) /\n          (delta.totient : ℂ)‖ ≤ 2 * d.U * (2 * d.U / delta + 1) := by\n  let E : ℝ := (delta.totient : ℝ) * (2 * d.U * (2 * d.U / delta + 1))\n  have hsq (j : ℕ) :\n      (∑ chi ∈ C, ‖auxiliaryCharacterSum d.alphaCarrier d.alpha j delta chi‖ ^ 2) ≤ E := by\n    refine (Finset.sum_le_sum_of_subset_of_nonneg\n      (Finset.subset_univ C) (fun _ _ _ ↦ sq_nonneg _)).trans ?_\n    exact actual_auxiliary_square_sum_le hd j hdelta\n  have hcross : ‖∑ chi ∈ C,\n      auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi *\n        star (auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi)‖ ≤ E := by\n    calc\n      _ ≤ ∑ chi ∈ C,\n          ‖auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi‖ *\n            ‖auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi‖ := by\n        simpa only [norm_mul, norm_star] using norm_sum_le C\n          (fun chi ↦ auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi *\n            star (auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi))\n      _ ≤ ∑ chi ∈ C,\n          (‖auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi‖ ^ 2 +\n            ‖auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi‖ ^ 2) / 2 := by\n        apply Finset.sum_le_sum\n        intro chi _\n        nlinarith [sq_nonneg\n          (‖auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi‖ -\n            ‖auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi‖)]\n      _ = ((∑ chi ∈ C,\n          ‖auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi‖ ^ 2) +\n          (∑ chi ∈ C,\n            ‖auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi‖ ^ 2)) / 2 := by\n        rw [← Finset.sum_div, Finset.sum_add_distrib]\n      _ ≤ E := by linarith [hsq k, hsq l]\n  have hphi : (0 : ℝ) < delta.totient :=\n    Nat.cast_pos.mpr (Nat.totient_pos.mpr hdelta)\n  rw [norm_div, Complex.norm_natCast]\n  apply (div_le_iff₀ hphi).mpr\n  dsimp only [E] at hcross\n  nlinarith only [hcross]\n\nprivate def tailLabels (d : MediumAtom) : Finset (ℕ × ℕ) :=\n  factorCarrier d.Q2 ×ˢ factorCarrier d.Q3\n\nprivate def tailProducts (d : MediumAtom) : Finset ℕ :=\n  (tailLabels d).image (fun u ↦ u.1 * u.2)\n\nprivate def tailGamma (d : MediumAtom) (v : ℕ) : ℂ :=\n  ∑ u ∈ (tailLabels d).filter (fun u ↦ u.1 * u.2 = v), d.gamma2 u.1 * d.gamma3 u.2\n\nprivate def tailCap (d : MediumAtom) : ℝ := 4 * d.Q2 * d.Q3\n\nprivate def tau (n : ℕ) : ℝ := (n.divisors.card : ℝ)\n\nprivate theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) : 0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q := by\n  obtain ⟨hlo, hhi⟩ := Finset.mem_Icc.mp hn\n  have hlower : Q ≤ (n : ℝ) :=\n    (Nat.le_ceil Q).trans (by exact_mod_cast hlo)\n  have hpos : (0 : ℝ) < n := (zero_lt_one.trans_le hQ).trans_le hlower\n  refine ⟨by exact_mod_cast hpos, hlower, ?_⟩\n  exact (show (n : ℝ) ≤ (Nat.floor (2 * Q) : ℝ) by exact_mod_cast hhi).trans\n    (Nat.floor_le (by linarith : 0 ≤ 2 * Q))\n\nprivate theorem one_le_tailCap\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ tailCap d := by\n  have h2 := hd.2.2.2.1\n  have h3 := hd.2.2.2.2.1\n  unfold tailCap\n  nlinarith [mul_le_mul h2 h3 zero_le_one (by linarith : 0 ≤ d.Q2)]\n\nprivate theorem tail_product_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {u : ℕ × ℕ}\n    (hu : u ∈ tailLabels d) : 0 < u.1 * u.2 ∧ (u.1 * u.2 : ℕ) ≤ Nat.floor (tailCap d) := by\n  obtain ⟨h2, h3⟩ := Finset.mem_product.mp hu\n  have hb2 := factor_bounds hd.2.2.2.1 h2\n  have hb3 := factor_bounds hd.2.2.2.2.1 h3\n  refine ⟨Nat.mul_pos hb2.1 hb3.1, Nat.le_floor ?_⟩\n  push_cast\n  calc\n    (u.1 : ℝ) * u.2 ≤ (2 * d.Q2) * (2 * d.Q3) :=\n      mul_le_mul hb2.2.2 hb3.2.2 (Nat.cast_nonneg _) (by linarith [hd.2.2.2.1])\n    _ = tailCap d := by unfold tailCap; ring\n\nprivate theorem tailProducts_subset_prefix\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    tailProducts d ⊆ Finset.Ioc 0 (Nat.floor (tailCap d)) := by\n  intro v hv\n  obtain ⟨u, hu, rfl⟩ := Finset.mem_image.mp hv\n  exact Finset.mem_Ioc.mpr (tail_product_bounds hd hu)\n\nprivate theorem tailGamma_zero_off_products (d : MediumAtom) {v : ℕ}\n    (hv : v ∉ tailProducts d) : tailGamma d v = 0 := by\n  unfold tailGamma\n  apply Finset.sum_eq_zero\n  intro u hu\n  obtain ⟨hu, he⟩ := Finset.mem_filter.mp hu\n  exact (hv (Finset.mem_image.mpr ⟨u, hu, he⟩)).elim\n\nprivate theorem tailGamma_norm_le_tau\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (v : ℕ) :\n    ‖tailGamma d v‖ ≤ tau v := by\n  let S := (tailLabels d).filter (fun u ↦ u.1 * u.2 = v)\n  have hsub : S ⊆ v.divisorsAntidiagonal := by\n    intro u hu\n    obtain ⟨hu, he⟩ := Finset.mem_filter.mp hu\n    exact Nat.mem_divisorsAntidiagonal.mpr\n      ⟨he, by rw [← he]; exact (tail_product_bounds hd hu).1.ne'⟩\n  have hcard : v.divisorsAntidiagonal.card = v.divisors.card := by\n    rw [← Nat.map_div_right_divisors]\n    exact Finset.card_map _\n  have hg : ∀ u ∈ S, ‖d.gamma2 u.1 * d.gamma3 u.2‖ ≤ 1 := by\n    intro u hu\n    obtain ⟨hu, _⟩ := Finset.mem_filter.mp hu\n    obtain ⟨h2, h3⟩ := Finset.mem_product.mp hu\n    obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, hg2, hg3⟩ := hd\n    rw [norm_mul]\n    simpa only [one_mul] using mul_le_mul (hg2 _ h2).1 (hg3 _ h3).1\n      (norm_nonneg _) zero_le_one\n  calc\n    ‖tailGamma d v‖ ≤ ∑ u ∈ S, ‖d.gamma2 u.1 * d.gamma3 u.2‖ := norm_sum_le _ _\n    _ ≤ ∑ _u ∈ S, (1 : ℝ) := Finset.sum_le_sum hg\n    _ = (S.card : ℝ) := by simp\n    _ ≤ tau v := by\n      unfold tau\n      exact_mod_cast (Finset.card_le_card hsub).trans_eq hcard\n\n/-- Group every original complex tail label before taking its norm. -/\nprivate theorem tail_sum_eq_grouped (d : MediumAtom) (F : ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, (d.gamma2 u.1 * d.gamma3 u.2) * F (u.1 * u.2)) =\n      ∑ v ∈ tailProducts d, tailGamma d v * F v := by\n  have hf := Finset.sum_fiberwise_of_maps_to\n    (s := tailLabels d) (t := tailProducts d) (g := fun u ↦ u.1 * u.2)\n    (fun u hu ↦ Finset.mem_image_of_mem _ hu)\n    (fun u ↦ (d.gamma2 u.1 * d.gamma3 u.2) * F (u.1 * u.2))\n  rw [← hf]\n  apply Finset.sum_congr rfl\n  intro v _\n  rw [tailGamma, Finset.sum_mul]\n  apply Finset.sum_congr rfl\n  intro u hu\n  rw [(Finset.mem_filter.mp hu).2]\n\nprivate theorem tail_star_sum_eq_grouped (d : MediumAtom) (F : ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, star (d.gamma2 u.1 * d.gamma3 u.2) * F (u.1 * u.2)) =\n      ∑ v ∈ tailProducts d, star (tailGamma d v) * F v := by\n  calc\n    _ = star (∑ u ∈ tailLabels d,\n        (d.gamma2 u.1 * d.gamma3 u.2) * star (F (u.1 * u.2))) := by\n      simp only [star_sum, star_mul', star_star]\n    _ = star (∑ v ∈ tailProducts d, tailGamma d v * star (F v)) :=\n      congrArg star (tail_sum_eq_grouped d (fun v ↦ star (F v)))\n    _ = _ := by simp only [star_sum, star_mul', star_star]\n\nprivate theorem tail_pair_sum_eq_grouped (d : MediumAtom) (F : ℕ → ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, ∑ v ∈ tailLabels d,\n      (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n        F (u.1 * u.2) (v.1 * v.2)) =\n      ∑ a ∈ tailProducts d, ∑ b ∈ tailProducts d,\n        tailGamma d a * star (tailGamma d b) * F a b := by\n  calc\n    _ = ∑ u ∈ tailLabels d, (d.gamma2 u.1 * d.gamma3 u.2) *\n        ∑ v ∈ tailLabels d,\n          star (d.gamma2 v.1 * d.gamma3 v.2) * F (u.1 * u.2) (v.1 * v.2) := by\n      simp only [Finset.mul_sum, mul_assoc]\n    _ = ∑ a ∈ tailProducts d, tailGamma d a *\n        ∑ v ∈ tailLabels d,\n          star (d.gamma2 v.1 * d.gamma3 v.2) * F a (v.1 * v.2) :=\n      tail_sum_eq_grouped d (fun a ↦ ∑ v ∈ tailLabels d,\n        star (d.gamma2 v.1 * d.gamma3 v.2) * F a (v.1 * v.2))\n    _ = _ := by\n      apply Finset.sum_congr rfl\n      intro a _\n      rw [tail_star_sum_eq_grouped d (F a), Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro b _\n      ring\n\nprivate theorem tail_sum_eq_prefix\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (F : ℕ → ℂ) :\n    (∑ v ∈ tailProducts d, tailGamma d v * F v) =\n      ∑ v ∈ Finset.Ioc 0 (Nat.floor (tailCap d)), tailGamma d v * F v := by\n  apply Finset.sum_subset (tailProducts_subset_prefix hd)\n  intro v _ hv\n  rw [tailGamma_zero_off_products d hv, zero_mul]\n\nprivate theorem tail_pair_sum_eq_prefix\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (F : ℕ → ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, ∑ v ∈ tailLabels d,\n      (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n        F (u.1 * u.2) (v.1 * v.2)) =\n      ∑ a ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n        ∑ b ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n          tailGamma d a * star (tailGamma d b) * F a b := by\n  rw [tail_pair_sum_eq_grouped]\n  calc\n    _ = ∑ a ∈ tailProducts d, tailGamma d a *\n        ∑ b ∈ tailProducts d, star (tailGamma d b) * F a b := by\n      simp only [Finset.mul_sum, mul_assoc]\n    _ = ∑ a ∈ Finset.Ioc 0 (Nat.floor (tailCap d)), tailGamma d a *\n        ∑ b ∈ tailProducts d, star (tailGamma d b) * F a b :=\n      tail_sum_eq_prefix hd (fun a ↦ ∑ b ∈ tailProducts d,\n        star (tailGamma d b) * F a b)\n    _ = _ := by\n      apply Finset.sum_congr rfl\n      intro a _\n      have hb : (∑ b ∈ tailProducts d, star (tailGamma d b) * F a b) =\n          ∑ b ∈ Finset.Ioc 0 (Nat.floor (tailCap d)), star (tailGamma d b) * F a b := by\n        apply Finset.sum_subset (tailProducts_subset_prefix hd)\n        intro b _ hb\n        rw [tailGamma_zero_off_products d hb, star_zero, zero_mul]\n      rw [hb, Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro b _\n      ring\n\n/-- Exact gcd disintegration, still for the original complex sum. -/\nprivate theorem pair_sum_by_gcd (N : ℕ) (F : ℕ → ℕ → ℂ) :\n    (∑ a ∈ Finset.Ioc 0 N, ∑ b ∈ Finset.Ioc 0 N, F a b) =\n      ∑ D ∈ Finset.Ioc 0 N, ∑ a ∈ Finset.Ioc 0 N, ∑ b ∈ Finset.Ioc 0 N,\n        if a.gcd b = D then F a b else 0 := by\n  symm\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro a ha\n  rw [Finset.sum_comm]\n  apply Finset.sum_congr rfl\n  intro b _\n  have hag : a.gcd b ∈ Finset.Ioc 0 N := Finset.mem_Ioc.mpr\n    ⟨Nat.gcd_pos_of_pos_left b (Finset.mem_Ioc.mp ha).1,\n      (Nat.le_of_dvd (Finset.mem_Ioc.mp ha).1 (Nat.gcd_dvd_left a b)).trans\n        (Finset.mem_Ioc.mp ha).2⟩\n  rw [Finset.sum_eq_single (a.gcd b)]\n  · rw [if_pos rfl]\n  · intro D _ hD\n    exact if_neg (fun h ↦ hD h.symm)\n  · exact fun h ↦ (h hag).elim\n\nprivate def characterKernel (d : MediumAtom) (p v w : ℕ) (R : ℝ) : ℂ :=\n  (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n    ((p * v.lcm w : ℕ) : ℂ)) *\n      ((∑ chi ∈ ((Finset.univ : Finset\n          (DirichletCharacter ℂ (p * v.gcd w))).erase 1).filter\n            (fun chi ↦ R < (chi.conductor : ℝ)),\n        auxiliaryCharacterSum d.alphaCarrier d.alpha (v / v.gcd w) (p * v.gcd w) chi *\n          star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n            (w / v.gcd w) (p * v.gcd w) chi)) / ((p * v.gcd w).totient : ℂ))\n\nprivate def gcdSlice (d : MediumAtom) (p D : ℕ) (R : ℝ) : ℂ :=\n  ∑ v ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n    ∑ w ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n      if v.gcd w = D then\n        tailGamma d v * star (tailGamma d w) * characterKernel d p v w R\n      else 0\n\nprivate def largeDivisors (d : MediumAtom) (Y : ℝ) : Finset ℕ :=\n  (Finset.Ioc 0 (Nat.floor (tailCap d))).filter (fun D ↦ Y < (D : ℝ))\n\nend SharedFirstFactorLargeResidualZero\n\nopen SharedFirstFactorLargeResidualZero\n\n/-- The literal zero-mode dictionary restricted to high conductor and\nlarge gcd of the two remaining physical factor products. -/\ndef MediumAtom.sharedFirstFactorLargeResidualHighConductorZero\n    (d : MediumAtom) (Y R : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n      ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        if Y < ((u.1 * u.2).gcd (v.1 * v.2) : ℝ) then\n          (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n            (((p * (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ) *\n              ((p * (u.1 * u.2).gcd (v.1 * v.2)).totient : ℂ))) *\n            (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n            (∑ chi ∈ ((Finset.univ : Finset\n                (DirichletCharacter ℂ (p * (u.1 * u.2).gcd (v.1 * v.2)))).erase 1).filter\n                  (fun chi ↦ R < (chi.conductor : ℝ)),\n              auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((u.1 * u.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi *\n              star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((v.1 * v.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi))\n        else 0\n\nnamespace SharedFirstFactorLargeResidualZero\n\n/-- The actual signed expression is grouped twice before any norm:\nfirst by each full tail product, then by their exact gcd. -/\nprivate theorem actual_eq_gcd_slices\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y R : ℝ) :\n    d.sharedFirstFactorLargeResidualHighConductorZero Y R =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ D ∈ largeDivisors d Y, gcdSlice d p D R := by\n  unfold MediumAtom.sharedFirstFactorLargeResidualHighConductorZero\n  apply Finset.sum_congr rfl\n  intro p _\n  calc\n    _ = ∑ u ∈ tailLabels d, ∑ v ∈ tailLabels d,\n        (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n          (if Y < ((u.1 * u.2).gcd (v.1 * v.2) : ℝ) then\n            characterKernel d p (u.1 * u.2) (v.1 * v.2) R else 0) := by\n      apply Finset.sum_congr rfl\n      intro u _\n      apply Finset.sum_congr rfl\n      intro v _\n      unfold characterKernel\n      split_ifs <;> ring\n    _ = ∑ v ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n        ∑ w ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n          tailGamma d v * star (tailGamma d w) *\n            (if Y < (v.gcd w : ℝ) then characterKernel d p v w R else 0) :=\n      tail_pair_sum_eq_prefix hd (fun v w ↦\n        if Y < (v.gcd w : ℝ) then characterKernel d p v w R else 0)\n    _ = ∑ D ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n        ∑ v ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n          ∑ w ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n            if v.gcd w = D then tailGamma d v * star (tailGamma d w) *\n              (if Y < (v.gcd w : ℝ) then characterKernel d p v w R else 0) else 0 :=\n      pair_sum_by_gcd _ _\n    _ = _ := by\n      rw [largeDivisors, Finset.sum_filter]\n      apply Finset.sum_congr rfl\n      intro D _\n      by_cases hY : Y < (D : ℝ)\n      · rw [if_pos hY]\n        unfold gcdSlice\n        apply Finset.sum_congr rfl\n        intro v _\n        apply Finset.sum_congr rfl\n        intro w _\n        by_cases hD : v.gcd w = D\n        · simp only [hD, if_pos hY, ite_true]\n        · simp only [if_neg hD]\n      · rw [if_neg hY]\n        apply Finset.sum_eq_zero\n        intro v _\n        apply Finset.sum_eq_zero\n        intro w _\n        by_cases hD : v.gcd w = D\n        · simp only [hD, if_neg hY, mul_zero, ite_true]\n        · simp only [if_neg hD]\n\nprivate theorem characterKernel_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {p v w : ℕ} (hp : 0 < p) (hv : 0 < v) (hw : 0 < w) (R : ℝ) :\n    ‖characterKernel d p v w R‖ ≤\n      |CommonSmoothCutoff.cutoffMass| * d.V *\n        (4 * d.U ^ 2 / ((p : ℝ) ^ 2 * v * w) +\n          2 * d.U * (v.gcd w : ℝ) / ((p : ℝ) * v * w)) := by\n  have hD : 0 < v.gcd w := Nat.gcd_pos_of_pos_left w hv\n  have hL : 0 < v.lcm w := Nat.pos_of_ne_zero (Nat.lcm_ne_zero hv.ne' hw.ne')\n  have hpR : (0 : ℝ) < p := by exact_mod_cast hp\n  have hvR : (0 : ℝ) < v := by exact_mod_cast hv\n  have hwR : (0 : ℝ) < w := by exact_mod_cast hw\n  have hDR : (0 : ℝ) < v.gcd w := by exact_mod_cast hD\n  have hLR : (0 : ℝ) < v.lcm w := by exact_mod_cast hL\n  have hprod : (v.gcd w : ℝ) * (v.lcm w : ℝ) = (v : ℝ) * w := by\n    exact_mod_cast Nat.gcd_mul_lcm v w\n  have he : (v.lcm w : ℝ) = (v : ℝ) * w / (v.gcd w : ℝ) := by\n    apply (eq_div_iff hDR.ne').mpr\n    nlinarith only [hprod]\n  have hV0 : 0 ≤ d.V := by linarith [hd.2.1]\n  unfold characterKernel\n  rw [norm_mul]\n  have hfirst :\n      ‖(((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n        ((p * v.lcm w : ℕ) : ℂ))‖ =\n        d.V * |CommonSmoothCutoff.cutoffMass| / ((p : ℝ) * (v.lcm w : ℝ)) := by\n    rw [norm_div, Complex.norm_real, Real.norm_eq_abs, abs_mul,\n      abs_of_nonneg (by linarith [hd.2.1]), Complex.norm_natCast, Nat.cast_mul]\n  rw [hfirst]\n  refine (mul_le_mul_of_nonneg_left\n    (auxiliary_cross_div_totient_norm_le hd (v / v.gcd w) (w / v.gcd w)\n      (Nat.mul_pos hp hD) _) (by positivity)).trans_eq ?_\n  rw [Nat.cast_mul, he]\n  field_simp [hpR.ne', hvR.ne', hwR.ne', hDR.ne']; ring\n\nprivate theorem divisors_mul_eq (a b : ℕ) :\n    (a * b).divisors = a.divisors * b.divisors := by\n  ext n\n  simp_rw [Finset.mem_mul, Nat.mem_divisors, Nat.dvd_mul, mul_ne_zero_iff,\n    ← exists_and_left, ← exists_and_right]\n  simp only [and_assoc, and_comm, and_left_comm]\n\nprivate theorem tau_nonneg (n : ℕ) : 0 ≤ tau n := Nat.cast_nonneg _\n\nprivate theorem tau_mul_le (a b : ℕ) : tau (a * b) ≤ tau a * tau b := by\n  unfold tau\n  rw [divisors_mul_eq]\n  exact_mod_cast (Finset.card_mul_le (s := a.divisors) (t := b.divisors))\n\nprivate def multipleWeight (D n : ℕ) : ℝ := if D ∣ n then tau n / (n : ℝ) else 0\n\nprivate theorem multipleWeight_nonneg (D n : ℕ) : 0 ≤ multipleWeight D n := by\n  unfold multipleWeight\n  split_ifs\n  · exact div_nonneg (tau_nonneg n) (Nat.cast_nonneg _)\n  · exact le_rfl\n\nprivate theorem sum_multiples_real (N D : ℕ) (hD : 0 < D) (f : ℕ → ℝ) :\n    (∑ n ∈ Finset.Ioc 0 N, if D ∣ n then f n else 0) =\n      ∑ k ∈ Finset.Ioc 0 (N / D), f (D * k) := by\n  rw [← Finset.sum_filter]\n  symm\n  refine Finset.sum_bij (fun k _ ↦ D * k) ?_ ?_ ?_ ?_\n  · intro k hk\n    obtain ⟨hk0, hkN⟩ := Finset.mem_Ioc.mp hk\n    exact Finset.mem_filter.mpr ⟨Finset.mem_Ioc.mpr\n      ⟨Nat.mul_pos hD hk0, (Nat.mul_le_mul_left D hkN).trans (Nat.mul_div_le N D)⟩,\n      dvd_mul_right D k⟩\n  · intro k₁ _ k₂ _ he\n    exact Nat.eq_of_mul_eq_mul_left hD he\n  · intro n hn\n    obtain ⟨hn, hDn⟩ := Finset.mem_filter.mp hn\n    obtain ⟨hn0, hnN⟩ := Finset.mem_Ioc.mp hn\n    refine ⟨n / D, Finset.mem_Ioc.mpr\n      ⟨Nat.div_pos (Nat.le_of_dvd hn0 hDn) hD, Nat.div_le_div_right hnN⟩,\n      Nat.mul_div_cancel' hDn⟩\n  · intro k _\n    rfl\n\n/-- The exact multiples reindexing keeps the full divisor cost of D. -/\nprivate theorem multiple_harmonic_le {T : ℝ} (hT : 1 ≤ T)\n    {D : ℕ} (hD : 0 < D) :\n    (∑ n ∈ Finset.Ioc 0 (Nat.floor T), multipleWeight D n) ≤\n      tau D / (D : ℝ) * (1 + Real.log T) ^ 2 := by\n  unfold multipleWeight\n  rw [sum_multiples_real _ _ hD]\n  calc\n    _ ≤ ∑ k ∈ Finset.Ioc 0 (Nat.floor T / D),\n        (tau D / (D : ℝ)) * (tau k / (k : ℝ)) := by\n      apply Finset.sum_le_sum\n      intro k hk\n      have hkR : (0 : ℝ) < k := by exact_mod_cast (Finset.mem_Ioc.mp hk).1\n      have hDR : (0 : ℝ) < D := by exact_mod_cast hD\n      calc\n        _ ≤ (tau D * tau k) / ((D * k : ℕ) : ℝ) :=\n          div_le_div_of_nonneg_right (tau_mul_le D k) (Nat.cast_nonneg _)\n        _ = _ := by\n          rw [Nat.cast_mul]\n          field_simp [hDR.ne', hkR.ne']\n    _ = (tau D / (D : ℝ)) *\n        ∑ k ∈ Finset.Ioc 0 (Nat.floor T / D), tau k / (k : ℝ) := by\n      rw [Finset.mul_sum]\n    _ ≤ (tau D / (D : ℝ)) *\n        ∑ k ∈ Finset.Ioc 0 (Nat.floor T), tau k / (k : ℝ) := by\n      apply mul_le_mul_of_nonneg_left _ (div_nonneg (tau_nonneg D) (Nat.cast_nonneg _))\n      apply Finset.sum_le_sum_of_subset_of_nonneg\n      · intro k hk\n        exact Finset.mem_Ioc.mpr ⟨(Finset.mem_Ioc.mp hk).1,\n          (Finset.mem_Ioc.mp hk).2.trans (Nat.div_le_self _ _)⟩\n      · intro k _ _\n        exact div_nonneg (tau_nonneg k) (Nat.cast_nonneg _)\n    _ ≤ _ := by\n      apply mul_le_mul_of_nonneg_left _ (div_nonneg (tau_nonneg D) (Nat.cast_nonneg _))\n      simpa only [fouvryTau_two, tau] using sum_fouvryTau_div_le_real 2 hT\n\nprivate theorem gcdSlice_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {p D : ℕ} (hp : 0 < p) (hD : 0 < D) (R : ℝ) :\n    ‖gcdSlice d p D R‖ ≤\n      |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 4 *\n        (4 * d.U ^ 2 / (p : ℝ) ^ 2 * (tau D ^ 2 / (D : ℝ) ^ 2) +\n          2 * d.U / (p : ℝ) * (tau D ^ 2 / (D : ℝ))) := by\n  let K : ℝ := |CommonSmoothCutoff.cutoffMass| * d.V *\n    (4 * d.U ^ 2 / (p : ℝ) ^ 2 + 2 * d.U * (D : ℝ) / (p : ℝ))\n  have hV0 : 0 ≤ d.V := by linarith [hd.2.1]\n  have hU0 : 0 ≤ d.U := by linarith [hd.1]\n  have hK : 0 ≤ K := by dsimp [K]; positivity\n  have hpoint {v w : ℕ}\n      (hv : v ∈ Finset.Ioc 0 (Nat.floor (tailCap d)))\n      (hw : w ∈ Finset.Ioc 0 (Nat.floor (tailCap d))) :\n      ‖if v.gcd w = D then\n        tailGamma d v * star (tailGamma d w) * characterKernel d p v w R else 0‖ ≤\n        K * multipleWeight D v * multipleWeight D w := by\n    by_cases hg : v.gcd w = D\n    · have hv0 := (Finset.mem_Ioc.mp hv).1\n      have hw0 := (Finset.mem_Ioc.mp hw).1\n      have hDv : D ∣ v := hg ▸ Nat.gcd_dvd_left v w\n      have hDw : D ∣ w := hg ▸ Nat.gcd_dvd_right v w\n      rw [if_pos hg, norm_mul, norm_mul, norm_star,\n        multipleWeight, if_pos hDv, multipleWeight, if_pos hDw]\n      refine (mul_le_mul\n        (mul_le_mul (tailGamma_norm_le_tau hd v) (tailGamma_norm_le_tau hd w)\n          (norm_nonneg _) (tau_nonneg v))\n        (characterKernel_norm_le hd hp hv0 hw0 R) (norm_nonneg _)\n        (mul_nonneg (tau_nonneg v) (tau_nonneg w))).trans_eq ?_\n      rw [hg]\n      dsimp only [K]\n      have hpR : (p : ℝ) ≠ 0 := by exact_mod_cast hp.ne'\n      have hvR : (v : ℝ) ≠ 0 := by exact_mod_cast hv0.ne'\n      have hwR : (w : ℝ) ≠ 0 := by exact_mod_cast hw0.ne'\n      field_simp [hpR, hvR, hwR]\n    · rw [if_neg hg, norm_zero]\n      exact mul_nonneg (mul_nonneg hK (multipleWeight_nonneg D v))\n        (multipleWeight_nonneg D w)\n  have hbase : ‖gcdSlice d p D R‖ ≤\n      K * (∑ n ∈ Finset.Ioc 0 (Nat.floor (tailCap d)), multipleWeight D n) ^ 2 := by\n    unfold gcdSlice\n    calc\n      _ ≤ ∑ v ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n          ∑ w ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n            K * multipleWeight D v * multipleWeight D w := by\n        apply (norm_sum_le _ _).trans\n        apply Finset.sum_le_sum\n        intro v hv\n        apply (norm_sum_le _ _).trans\n        apply Finset.sum_le_sum\n        intro w hw\n        exact hpoint hv hw\n      _ = _ := by\n        rw [pow_two, Finset.sum_mul_sum]\n        simp only [Finset.mul_sum, mul_assoc]\n  refine hbase.trans ?_\n  have hsum0 : 0 ≤ ∑ n ∈ Finset.Ioc 0 (Nat.floor (tailCap d)), multipleWeight D n :=\n    Finset.sum_nonneg (fun n _ ↦ multipleWeight_nonneg D n)\n  refine (mul_le_mul_of_nonneg_left\n    (pow_le_pow_left₀ hsum0 (multiple_harmonic_le (one_le_tailCap hd) hD) 2) hK).trans_eq ?_\n  dsimp only [K]\n  have hpR : (p : ℝ) ≠ 0 := by exact_mod_cast hp.ne'\n  have hDR : (D : ℝ) ≠ 0 := by exact_mod_cast hD.ne'\n  field_simp [hpR, hDR]\n\nprivate theorem tau_square_harmonic_le {T : ℝ} (hT : 1 ≤ T) :\n    (∑ D ∈ Finset.Ioc 0 (Nat.floor T), tau D ^ 2 / (D : ℝ)) ≤\n      (1 + Real.log T) ^ 4 := by\n  have hfour : (2 : ℕ) ^ 2 = 4 := by norm_num\n  simpa only [fouvryTau_two, tau, hfour] using sum_fouvryTau_sq_div_le_real 2 hT\n\n/-- This is a finite endpoint estimate. The inverse Y is retained before\nthe remaining divisor harmonic sum is enlarged. -/\nprivate theorem reciprocal_square_tail_le\n    {T Y : ℝ} (hT : 1 ≤ T) (hY : 1 ≤ Y) :\n    (∑ D ∈ (Finset.Ioc 0 (Nat.floor T)).filter (fun D : ℕ ↦ Y < (D : ℝ)),\n      tau D ^ 2 / (D : ℝ) ^ 2) ≤ (1 + Real.log T) ^ 4 / Y := by\n  have hY0 : 0 < Y := zero_lt_one.trans_le hY\n  calc\n    _ ≤ ∑ D ∈ (Finset.Ioc 0 (Nat.floor T)).filter (fun D : ℕ ↦ Y < (D : ℝ)),\n        (tau D ^ 2 / (D : ℝ)) / Y := by\n      apply Finset.sum_le_sum\n      intro D hD\n      have hyD : Y < (D : ℝ) := (Finset.mem_filter.mp hD).2\n      have hDR : 0 < (D : ℝ) := hY0.trans hyD\n      calc\n        _ = (tau D ^ 2 / (D : ℝ)) * (1 / (D : ℝ)) := by\n          field_simp [hDR.ne']\n        _ ≤ (tau D ^ 2 / (D : ℝ)) * (1 / Y) :=\n          mul_le_mul_of_nonneg_left\n            (one_div_le_one_div_of_le hY0 hyD.le) (by positivity)\n        _ = _ := by ring\n    _ = (∑ D ∈ (Finset.Ioc 0 (Nat.floor T)).filter (fun D : ℕ ↦ Y < (D : ℝ)),\n        tau D ^ 2 / (D : ℝ)) / Y := by rw [Finset.sum_div]\n    _ ≤ (∑ D ∈ Finset.Ioc 0 (Nat.floor T), tau D ^ 2 / (D : ℝ)) / Y := by\n      apply div_le_div_of_nonneg_right _ hY0.le\n      exact Finset.sum_le_sum_of_subset_of_nonneg (Finset.filter_subset _ _)\n        (fun D _ _ ↦ div_nonneg (sq_nonneg _) (Nat.cast_nonneg _))\n    _ ≤ _ := div_le_div_of_nonneg_right (tau_square_harmonic_le hT) hY0.le\n\nprivate theorem large_divisor_harmonic_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    (∑ D ∈ largeDivisors d Y, tau D ^ 2 / (D : ℝ)) ≤\n      (1 + Real.log (tailCap d)) ^ 4 := by\n  refine (Finset.sum_le_sum_of_subset_of_nonneg (Finset.filter_subset _ _)\n    (fun D _ _ ↦ div_nonneg (sq_nonneg _) (Nat.cast_nonneg _))).trans ?_\n  exact tau_square_harmonic_le (one_le_tailCap hd)\n\nprivate theorem one_p_large_divisor_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {p : ℕ} (hp : 0 < p) {Y : ℝ} (hY : 1 ≤ Y) (R : ℝ) :\n    ‖∑ D ∈ largeDivisors d Y, gcdSlice d p D R‖ ≤\n      |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 8 *\n        (4 * d.U ^ 2 / ((p : ℝ) ^ 2 * Y) + 2 * d.U / (p : ℝ)) := by\n  have hY0 : 0 < Y := zero_lt_one.trans_le hY\n  have hV0 : 0 ≤ d.V := by linarith [hd.2.1]\n  have hU0 : 0 ≤ d.U := by linarith [hd.1]\n  have hlog0 : 0 ≤ 1 + Real.log (tailCap d) := by\n    have := Real.log_nonneg (one_le_tailCap hd)\n    linarith\n  have hD2 : (∑ D ∈ largeDivisors d Y, tau D ^ 2 / (D : ℝ) ^ 2) ≤\n      (1 + Real.log (tailCap d)) ^ 4 / Y :=\n    reciprocal_square_tail_le (one_le_tailCap hd) hY\n  have hD1 := large_divisor_harmonic_le hd Y\n  calc\n    _ ≤ ∑ D ∈ largeDivisors d Y,\n        |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 4 *\n          (4 * d.U ^ 2 / (p : ℝ) ^ 2 * (tau D ^ 2 / (D : ℝ) ^ 2) +\n            2 * d.U / (p : ℝ) * (tau D ^ 2 / (D : ℝ))) := by\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro D hD\n      exact gcdSlice_norm_le hd hp\n        (Finset.mem_Ioc.mp (Finset.mem_filter.mp hD).1).1 R\n    _ = |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 4 *\n        (4 * d.U ^ 2 / (p : ℝ) ^ 2 *\n            (∑ D ∈ largeDivisors d Y, tau D ^ 2 / (D : ℝ) ^ 2) +\n          2 * d.U / (p : ℝ) *\n            (∑ D ∈ largeDivisors d Y, tau D ^ 2 / (D : ℝ))) := by\n      simp only [Finset.mul_sum, Finset.sum_add_distrib, mul_add, mul_assoc]\n    _ ≤ |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 4 *\n        (4 * d.U ^ 2 / (p : ℝ) ^ 2 * ((1 + Real.log (tailCap d)) ^ 4 / Y) +\n          2 * d.U / (p : ℝ) * (1 + Real.log (tailCap d)) ^ 4) := by\n      apply mul_le_mul_of_nonneg_left _ (by positivity)\n      apply add_le_add\n      · exact mul_le_mul_of_nonneg_left hD2 (by positivity)\n      · exact mul_le_mul_of_nonneg_left hD1 (by positivity)\n    _ = _ := by\n      have hpR : (p : ℝ) ≠ 0 := by exact_mod_cast hp.ne'\n      field_simp [hpR, hY0.ne']\n\nprivate theorem primitive_factor_card_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (d.primitiveFirstFactorCarrier.card : ℝ) ≤ 2 * d.Q1 := by\n  have hsub : d.primitiveFirstFactorCarrier ⊆ Finset.Ioc 0 (Nat.floor (2 * d.Q1)) := by\n    intro p hp\n    have hp' := (Finset.mem_filter.mp hp).1\n    exact Finset.mem_Ioc.mpr ⟨(factor_bounds hd.2.2.1 hp').1,\n      (Finset.mem_Icc.mp hp').2⟩\n  have hc : (d.primitiveFirstFactorCarrier.card : ℝ) ≤\n      (Nat.floor (2 * d.Q1) : ℝ) := by\n    exact_mod_cast (Finset.card_le_card hsub).trans_eq (by simp)\n  exact hc.trans (Nat.floor_le (by linarith [hd.2.2.1]))\n\nprivate theorem primitive_reciprocal_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, 1 / (p : ℝ)) ≤ 2 := by\n  have hQ : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1\n  calc\n    _ ≤ ∑ _p ∈ d.primitiveFirstFactorCarrier, 1 / d.Q1 := by\n      apply Finset.sum_le_sum\n      intro p hp\n      exact one_div_le_one_div_of_le hQ\n        (factor_bounds hd.2.2.1 (Finset.mem_filter.mp hp).1).2.1\n    _ = (d.primitiveFirstFactorCarrier.card : ℝ) * (1 / d.Q1) := by\n      rw [Finset.sum_const, nsmul_eq_mul]\n    _ ≤ (2 * d.Q1) * (1 / d.Q1) :=\n      mul_le_mul_of_nonneg_right (primitive_factor_card_le hd) (by positivity)\n    _ = 2 := by field_simp [hQ.ne']\n\nprivate theorem primitive_reciprocal_square_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, 1 / (p : ℝ) ^ 2) ≤ 2 / d.Q1 := by\n  have hQ : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1\n  calc\n    _ ≤ ∑ _p ∈ d.primitiveFirstFactorCarrier, 1 / d.Q1 ^ 2 := by\n      apply Finset.sum_le_sum\n      intro p hp\n      have hlo := (factor_bounds hd.2.2.1 (Finset.mem_filter.mp hp).1).2.1\n      exact one_div_le_one_div_of_le (sq_pos_of_pos hQ)\n        (pow_le_pow_left₀ hQ.le hlo 2)\n    _ = (d.primitiveFirstFactorCarrier.card : ℝ) * (1 / d.Q1 ^ 2) := by\n      rw [Finset.sum_const, nsmul_eq_mul]\n    _ ≤ (2 * d.Q1) * (1 / d.Q1 ^ 2) :=\n      mul_le_mul_of_nonneg_right (primitive_factor_card_le hd) (by positivity)\n    _ = 2 / d.Q1 := by field_simp [hQ.ne']\n\nprivate theorem actual_finite_bound\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Y : ℝ} (hY : 1 ≤ Y) (R : ℝ) :\n    ‖d.sharedFirstFactorLargeResidualHighConductorZero Y R‖ ≤\n      |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 8 *\n        (8 * d.U ^ 2 / (d.Q1 * Y) + 4 * d.U) := by\n  have hY0 : 0 < Y := zero_lt_one.trans_le hY\n  have hQ0 : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1\n  have hU0 : 0 ≤ d.U := by linarith [hd.1]\n  have hV0 : 0 ≤ d.V := by linarith [hd.2.1]\n  have hL0 : 0 ≤ 1 + Real.log (tailCap d) := by\n    have := Real.log_nonneg (one_le_tailCap hd)\n    linarith\n  rw [actual_eq_gcd_slices hd]\n  calc\n    _ ≤ ∑ p ∈ d.primitiveFirstFactorCarrier,\n        |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 8 *\n          (4 * d.U ^ 2 / ((p : ℝ) ^ 2 * Y) + 2 * d.U / (p : ℝ)) := by\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro p hp\n      exact one_p_large_divisor_norm_le hd\n        (factor_bounds hd.2.2.1 (Finset.mem_filter.mp hp).1).1 hY R\n    _ = |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 8 *\n        ((4 * d.U ^ 2 / Y) *\n            (∑ p ∈ d.primitiveFirstFactorCarrier, 1 / (p : ℝ) ^ 2) +\n          (2 * d.U) * (∑ p ∈ d.primitiveFirstFactorCarrier, 1 / (p : ℝ))) := by\n      rw [← Finset.mul_sum]\n      congr 1\n      rw [Finset.mul_sum, Finset.mul_sum, ← Finset.sum_add_distrib]\n      apply Finset.sum_congr rfl\n      intro p _\n      simp only [div_eq_mul_inv, mul_inv_rev]\n      ring\n    _ ≤ |CommonSmoothCutoff.cutoffMass| * d.V * (1 + Real.log (tailCap d)) ^ 8 *\n        ((4 * d.U ^ 2 / Y) * (2 / d.Q1) + (2 * d.U) * 2) := by\n      apply mul_le_mul_of_nonneg_left _ (by positivity)\n      exact add_le_add\n        (mul_le_mul_of_nonneg_left (primitive_reciprocal_square_le hd) (by positivity))\n        (mul_le_mul_of_nonneg_left (primitive_reciprocal_le hd) (by positivity))\n    _ = _ := by\n      field_simp [hY0.ne', hQ0.ne']; ring\n\nend SharedFirstFactorLargeResidualZero\n\n/-- A universal finite bound on the literal original high-conductor,\nlarge-residual zero covariance. There is no SW or large-sieve supplier. -/\ntheorem actual_largeResidualHighConductorZero_bound :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d → ∀ Y R : ℝ, 1 ≤ Y →\n          ‖d.sharedFirstFactorLargeResidualHighConductorZero Y R‖ ≤\n            C * d.V * (1 + Real.log (4 * d.Q2 * d.Q3)) ^ 8 *\n              (d.U ^ 2 / (d.Q1 * Y) + d.U) := by\n  refine ⟨8 * (1 + |CommonSmoothCutoff.cutoffMass|), by positivity,\n    fun B sigma kappa c0 d hd Y R hY ↦ ?_⟩\n  refine (SharedFirstFactorLargeResidualZero.actual_finite_bound hd hY R).trans ?_\n  have hU : 0 ≤ d.U := by linarith [hd.1]\n  have hV : 0 ≤ d.V := by linarith [hd.2.1]\n  have hQ : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1\n  have hY0 : 0 < Y := zero_lt_one.trans_le hY\n  have hL : 0 ≤ 1 + Real.log (4 * d.Q2 * d.Q3) := by\n    have := Real.log_nonneg (SharedFirstFactorLargeResidualZero.one_le_tailCap hd)\n    change 0 ≤ 1 + Real.log (SharedFirstFactorLargeResidualZero.tailCap d)\n    linarith\n  change |CommonSmoothCutoff.cutoffMass| * d.V *\n    (1 + Real.log (4 * d.Q2 * d.Q3)) ^ 8 *\n      (8 * d.U ^ 2 / (d.Q1 * Y) + 4 * d.U) ≤ _\n  have ht : 0 ≤ d.U ^ 2 / (d.Q1 * Y) := by positivity\n  have hbracket : 8 * d.U ^ 2 / (d.Q1 * Y) + 4 * d.U ≤\n      8 * (d.U ^ 2 / (d.Q1 * Y) + d.U) := by\n    rw [mul_div_assoc]\n    nlinarith\n  calc\n    _ ≤ |CommonSmoothCutoff.cutoffMass| * d.V *\n        (1 + Real.log (4 * d.Q2 * d.Q3)) ^ 8 *\n          (8 * (d.U ^ 2 / (d.Q1 * Y) + d.U)) :=\n      mul_le_mul_of_nonneg_left hbracket (by positivity)\n    _ ≤ (1 + |CommonSmoothCutoff.cutoffMass|) * d.V *\n        (1 + Real.log (4 * d.Q2 * d.Q3)) ^ 8 *\n          (8 * (d.U ^ 2 / (d.Q1 * Y) + d.U)) := by\n      apply mul_le_mul_of_nonneg_right _ (by positivity)\n      apply mul_le_mul_of_nonneg_right _ (by positivity)\n      apply mul_le_mul_of_nonneg_right _ hV\n      linarith\n    _ = _ := by ring\n\n/-- The original outside beta and gamma1 factors are paid without an\nepsilon power loss; both geometric savings remain explicit. -/\ntheorem actual_outside_mul_largeResidualHighConductorZero_bound :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d → ∀ Y R : ℝ, 1 ≤ Y →\n          ((∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n              (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)) *\n            ‖d.sharedFirstFactorLargeResidualHighConductorZero Y R‖ ≤\n              C * d.scale ^ 2 *\n                (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n                (1 + Real.log (4 * d.Q2 * d.Q3)) ^ 8 *\n                (1 / Y + d.Q1 / d.U) := by\n  obtain ⟨C, hC, hbound⟩ := actual_largeResidualHighConductorZero_bound\n  refine ⟨4 * C, by positivity, fun B sigma kappa c0 d hd Y R hY ↦ ?_⟩\n  have hU : 0 < d.U := zero_lt_one.trans_le hd.1\n  have hV : 0 < d.V := zero_lt_one.trans_le hd.2.1\n  have hQ : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1\n  have hY0 : 0 < Y := zero_lt_one.trans_le hY\n  have hLV : 0 ≤ 1 + Real.log (2 * d.V) := by\n    have := Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])\n    linarith\n  have hLT : 0 ≤ 1 + Real.log (4 * d.Q2 * d.Q3) := by\n    have := Real.log_nonneg (SharedFirstFactorLargeResidualZero.one_le_tailCap hd)\n    change 0 ≤ 1 + Real.log (SharedFirstFactorLargeResidualZero.tailCap d)\n    linarith\n  refine (mul_le_mul (d.sharedFirstFactor_outside_le hd)\n    (hbound B sigma kappa c0 d hd Y R hY) (norm_nonneg _) (by positivity)).trans_eq ?_\n  unfold MediumAtom.scale\n  field_simp [hU.ne', hQ.ne', hY0.ne']\n\nend\n\nend ImbalancedChen.Part3\n",
+  "mathematical_change": false,
+  "header_or_primitive_scope_change": false,
+  "no_Lean_lake_checker_cache_CI_or_pin_mutation": true,
+  "not_claimed_compiling_or_owned": true
+}

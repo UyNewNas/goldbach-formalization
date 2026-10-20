@@ -1,0 +1,35 @@
+{
+  "status": "ROOT_COMPLETE_NONAUTHOR_SAME_TARGET_SOURCE_AND_LOCAL_FINITE_PROOF_REVIEW_SPECIFIC_FIRST_GATE_NOT_ACCEPTANCE",
+  "reviewer": "/root",
+  "created_utc": "2026-10-18T04:40:52.623692+00:00",
+  "target": "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+  "old_source_sha256": "9b68d3d5e1bdc9847b6e6d29be6b0c20fc7f73bde1d70be0575bef41ff157537",
+  "new_source_sha256": "3f264c1f738787275be0dfc39ddf44a225334bb8b61b74f6d808db7769456262",
+  "root_complete_read": "Complete original293 source lines in two chunks; all three exact patches read, including full new39-line local private theorem. Original Historical248 fullsource and native provider full UpperAdmissibleSet definition already read. Current334 is exactforward of those threehunks, inverse reconstructsoriginal9b bytes.",
+  "owner_report_sha256": "e1cb2aebeb29440c1d4f8e439b08610c3e14cacc0a48e4e19845814d4000cb46",
+  "new_private_full_source": "private theorem actualExtendedThirdCompact_third_admissible_iff\n    (Q : ℝ) (p1 p2 p3 : ℕ) (h3 : 0 < p3)\n    (h32 : p3 < p2) (h21 : p2 < p1) :\n    ordinaryRosserPrefixAdmissible false Q [p3, p2, p1] ↔\n      (p1 : ℝ) ^ 3 < Q ∧ (p1 : ℝ) * p2 * p3 ^ 3 < Q := by\n  have h31 := h32.trans h21\n  let S : Finset ℕ := {p3, p2, p1}\n  have hf1 : S.filter (fun p => p1 ≤ p) = {p1} := by\n    ext p\n    simp only [S, Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]\n    omega\n  have hf2 : S.filter (fun p => p2 ≤ p) = {p2, p1} := by\n    ext p\n    simp only [S, Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]\n    omega\n  have hf3 : S.filter (fun p => p3 ≤ p) = S := by\n    ext p\n    simp only [S, Finset.mem_filter, Finset.mem_insert, Finset.mem_singleton]\n    omega\n  have hc : UpperAdmissibleSet Q [p3, p2, p1].toFinset ↔\n      (p1 : ℝ) ^ 3 < Q ∧ (p1 : ℝ) * p2 * p3 ^ 3 < Q := by\n    simp only [List.toFinset_cons, List.toFinset_nil]\n    change UpperAdmissibleSet Q S ↔ _\n    simp only [UpperAdmissibleSet, S, Finset.forall_mem_insert,\n      Finset.mem_singleton, forall_eq]\n    rw [hf1, hf2, hf3]\n    norm_num [S, h32.ne, h21.ne, h31.ne, Nat.cast_mul, pow_succ,\n      mul_comm, mul_left_comm, mul_assoc, and_comm]\n  have hsq : (1 : ℝ) ≤ (p3 : ℝ) ^ 2 := by\n    have hp3 : (1 : ℝ) ≤ p3 := by exact_mod_cast h3\n    nlinarith\n  have hprod : (([p3, p2, p1].prod : ℕ) : ℝ) ≤\n      (p1 : ℝ) * p2 * p3 ^ 3 := by\n    have hh := mul_le_mul_of_nonneg_left hsq\n      (by positivity : (0 : ℝ) ≤ (p1 : ℝ) * p2 * p3)\n    simp only [List.prod_cons, List.prod_nil, Nat.cast_mul, mul_one]\n    nlinarith only [hh]\n  simp only [ordinaryRosserPrefixAdmissible, Bool.false_eq_true, if_false, hc]\n  exact ⟨fun h => h.2, fun h => ⟨hprod.trans_lt h.2, h⟩⟩",
+  "all_existing_public_targets_and_primitives_unchanged": "All original27completeheaders and7definitions unchanged. Nineteen existing proofbodies unchanged, sole20th invokes mathematicallyidentical localprivate admissibility instead of removedHistorical module. No added premise/narrowedregion/changedinitialpolicy/selector/cap.",
+  "mathematical_review": "Same decreasing positive triple: actual provider upper admissibility tests exactly firstcube andthirdcube; p3>=1 makes lastcube imply totalproduct. The copied proof keeps both strictcubes, without initial/third cap ordering or positivity assumptions. Original exactpolicy, mass, rho/support/attachment/countingendpoints untouched.",
+  "import_scope": {
+    "sole_direct_imports": [
+      "ImbalancedChen.ActualExtendedThirdCompactCellCutoff",
+      "ImbalancedChen.ActualExtendedThirdFirstCubeMargin",
+      "ImbalancedChen.ActualUpperPolicyFiniteBridge"
+    ],
+    "inclusive_project_nodes": 66,
+    "proper_project_nodes": 65,
+    "foreign_header_roots_including_Init": 71,
+    "new_project_nodes": [],
+    "removed_project_nodes": [
+      "ImbalancedChen.FirstExitFrontierInvariants",
+      "ImbalancedChen.FirstExitFrontierTupleReindex",
+      "ImbalancedChen.FirstExitOwnCubeSplice",
+      "ImbalancedChen.FirstExitValidSelection",
+      "ImbalancedChen.HistoricalUnorderedThirdGeometry"
+    ],
+    "new_foreign_roots": []
+  },
+  "specific_first_gate": "ONLY after exactCorebecd and Helper6394 TRUEowned, and actual CellCutoff/FirstCubeMargin originalsourceTRUEowned, runtime fullsource/APIread plusfresh65propercache exact/selfonly0missingforeign: ONE newcomplete-source strict under originalj2/M6144/RSS6656; iffstrictPASS then unchangedoriginalobject stock replay +completeallgenerated/env/types/safety/transitiveaxiomowned. NoHistorical/TupleReindex/Affine prereqbootstrap, no pins/import/CI/resources/validatorchanges.",
+  "old_9b_gate_superseded_for_current_source": true,
+  "no_main_or_full_density_claim": true
+}

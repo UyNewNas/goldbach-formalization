@@ -14,8 +14,8 @@ existing root build would therefore not validate them.
 
 | Core dependency | Proved components | Still required for the manuscript theorem |
 | --- | --- | --- |
-| Chen lower ledger | Actual ordinary means for the first six rows; actual ninth upper mean with coefficient eight | Stronger causal contributions, remaining rows, and the complete eleven-term ledger |
-| Strong physical distribution | Exact complex CRT, Fourier and Poisson dictionaries; ordinary transposed residuals and actual shared-factor pair/large-gcd whole-W bounds as accepted individually below | Shared-factor centered energy with its required 1/Q1 saving, complete conductor aggregation, remaining nonzero-frequency regions and the original full physical range |
+| Chen lower ledger | Actual ordinary means for the first six rows; ordinary eighth and ninth upper means with coefficient eight | Original selected masks, stronger causal contributions, remaining seventh/tenth/eleventh means and the complete eleven-term ledger |
+| Strong physical distribution | Exact complex CRT/Fourier/Poisson dictionaries; shared-first-factor zero covariance and U/V energy payments under the original auxiliary SW input; reciprocal-phase identities and large-gcd/large-supported-part nonzero payments | A genuine estimate for the retained small paired-gcd/supported-part spectral core, remaining tail-gcd/frequency costs and final assembly over the original full physical range |
 | Original signed first-exit policy | Full nonlinear kernel integral convergence and actual compact prime harmonic limits | Exact original signed coefficient dictionary, the same-policy arithmetic mean, and its counting error |
 | Final theorem and constants | Existing conditional numerical transfer and individually checked certificate lemmas | Derive the original `hLower` and `hUpper` and connect every required enclosure to the unconditional main theorem |
 
@@ -185,10 +185,22 @@ original admissibility is not replaced by unproved transposed admissibility.
 | `ActualPrimeBoxEulerLower` | Actual positive prime box mass times the proved Euler ratio gives the genuine lower limit with a single fixed threshold before the even target and cap | Strict compilation; original-object stock kernel replay; complete 14-declaration types, inventory and transitive axiom audit |
 | `Part3SharedFirstFactorHighConductor` | Arbitrary bounded complex auxiliary-coprime polynomials retain the full imprimitive character level; exact Mobius and conductor grouping plus the sharp primitive coefficient-energy theorem give the genuine uniform high-conductor mean with the first R^(1-eta) saving intact; physical-label aggregation is separate | Strict compilation; original-object stock kernel replay; complete 85-declaration types, inventory and transitive axiom audit |
 | `Part3SharedFirstFactorLowConductorAggregate` | The original uniform auxiliary SW family pays the full physical first factor and both original tail labels in the actual low-conductor zero covariance, retaining tau(p*v) costs by fixed divisor moments and the genuine 1/Q1 saving; high conductor and the complete distribution remain separate | Strict compilation; original-object stock kernel replay; complete 39-declaration types, inventory and transitive axiom audit |
+| `FinitePrimeGeometryCore` | The extracted finite prime-sieve geometry and literal upper/lower admissibility dictionaries retain the original product, strict cube and support gates; current-source owned acceptance is separate from the older producer receipts and from analytic density limits | Strict compilation; original-object stock kernel replay; complete 70-declaration types, inventory and transitive axiom audit |
+| `ActualUpperPolicyFiniteBridge` | Finite structural identities identify the same globally even-retaining policy with its literal modulus support, Mobius coefficient, physical attachment and reciprocal-totient polynomial without importing historical integral estimates | Strict compilation; original-object stock kernel replay; complete 10-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorLargeResidualZero` | The literal high-conductor and large residual-tail gcd zero covariance has a universal finite Parseval and divisor-moment bound, retaining 1/Y and 1/Q1; the actual beta and gamma1 outside cost is paid by an explicit finite bound, with power/log and other regions separate | Strict compilation; original-object stock kernel replay; complete 120-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorSmallResidualHighConductorZero` | The actual high-conductor and small residual-tail gcd zero covariance consumes the proved generic mean through an exact original-alpha conjugation and physical-level injection, retaining all eta powers and true divisor multiplicities; the full outside finite bound is explicit and zero assembly remains separate | Strict compilation; original-object stock kernel replay; complete 99-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorPrimitiveUVPayment` | The full same-p primitive U/V correction retains the original physical factor fibres and centers; actual beta and gamma1 moments are paid uniformly before atoms with a genuine arbitrary logarithmic saving, without a zero-mode or nonzero-frequency supplier | Strict compilation; original-object stock kernel replay; complete 34-declaration types, inventory and transitive axiom audit |
+| `ActualExtendedThirdCompactUpperRho` | One concrete initial dyadic first-stop policy and frozen third-cell extension define the actual original physical rho; inherited first admission and finite attachment, support and majorant identities are proved | Strict compilation; original-object stock kernel replay; complete 49-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon8OrdinaryUpperMean` | The actual eighth finite count, positive true-li mass and genuine eighth harmonic limit combine with the same signed switched density of coefficient eight; explicit positive normalization and fixed-before-error Pan exponent give the literal ordinary eighth upper mean without a mean supplier or adopted C/K claim | Strict compilation; original-object stock kernel replay; complete 12-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorZeroCovariancePayment` | The exact complex same-p raw-zero covariance partitions all original characters into low conductor and the two high-conductor residual-gcd regions before norms; their proved estimates and original auxiliary SW pay both actual outside moments uniformly, while U/V and nonzero frequencies remain separate | Strict compilation; original-object stock kernel replay; complete 23-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorLargePairedGCDNonzero` | The original large paired-gcd mask is retained identically in whole W, raw zero and the complete nonzero series; genuine tail-label grouping preserves the 1/p lcm weight, actual pair counting and both outside moments, and original geometry pays every logarithmic budget for the cleaned-alpha nonzero region | Strict compilation; original-object stock kernel replay; complete 65-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorEnergyNonzeroReduction` | The actual centered energy minus the complete same-p nonzero series equals the same-p zero covariance plus primitive U/V; their proved payments give a uniform energy remainder and signed squared-error reduction retaining the real part of the full nonzero sum, without assuming its estimate | Strict compilation; original-object stock kernel replay; complete 3-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorDifferenceReciprocity` | The literal original shared-row CRT phase equals its constructed root, full slow phase and signed difference reciprocal phase, including zero difference and modulus one; all inverse licenses and original V Poisson-frequency transport are proved finitely, without a spectral estimate supplier | Strict compilation; original-object stock kernel replay; complete 19-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorLargeSupportedDeletion` | The original asymmetric small-paired-gcd large-supported-part mask is kept identically in whole W, raw zero and full nonzero series; a genuine positive square-divisor density and same-p quotient count preserve V/p and pay both original outside moments and all three norms uniformly, leaving the small-supported spectral core separate | Strict compilation; original-object stock kernel replay; complete 111-declaration types, inventory and transitive axiom audit |
 
-These 138 modules contain **2794 complete owned declarations**, including
+These 150 modules contain **3409 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-2794 independent major mathematical theorems.
+3409 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.
@@ -391,6 +403,36 @@ with unconditional nil/cons equations. Its complete new generated census
 passes the unchanged safety audit. The former unsafe-helper INCOMPLETE
 attempt remains archived and is not retrospectively accepted.
 
+The actual eighth arithmetic count now has its ordinary upper mean
+with coefficient eight and the unchanged eighth harmonic integral. This does
+not supply the adopted causal constant K.
+
+Under the original uniform auxiliary SW input, the full same-p
+zero covariance is now assembled from low-conductor and both high-conductor
+residual regions, with both original outside moments paid. The primitive
+U/V correction has its separate completed payment.
+
+The literal centered energy minus the complete same-p nonzero
+series is the zero covariance plus the primitive U/V correction. Its proved
+payment reduces the signed squared error to the real part of that same
+nonzero series; no estimate of the remaining series is assumed.
+
+The actual shared-row CRT phase has an exact root, slow and signed
+reciprocal-phase factorization with all inverse licenses constructed from
+the original tuple. Zero difference, modulus one, signed frequencies and
+the original V/L Poisson scale are retained. This identity is not a spectral
+estimate.
+
+The original large paired-gcd nonzero contribution now has every
+requested logarithmic saving after both actual outside moments. Whole W,
+raw zero and the complete nonzero series keep exactly the same mask.
+
+The small-paired-gcd, large-supported-part region is also paid
+uniformly, using a positive square-divisor density and the genuine same-p
+quotient-block count. Its original asymmetric mask, true V/p denominator,
+both outside moments and all three W/zero/nonzero norms are retained. The
+small-supported reciprocal/spectral core remains open.
+
 The earlier primitive U/V payments use the original beta L2 outside
 factor. Their reuse in the shared-first-factor setting, with the extra
 primitive gamma1 L2 factor and the p sum, needs a genuine additional
@@ -399,7 +441,7 @@ not establish the complete centered energy or physical distribution.
 
 ## Candidates that must not be counted as completed proofs
 
-The 21 unaccepted source candidates are listed with exact source
+The 18 unaccepted source candidates are listed with exact source
 hashes in `verification/proof-continuation/2026-10-15/unaccepted-candidates.json`.
 They are excluded from the accepted module/declaration inventory above.
 Original failed attempts remain failures; replacement sources need their own checks.
@@ -417,14 +459,11 @@ Original failed attempts remain failures; replacement sources need their own che
 * `ActualPrimeFineLabelSortedSelector`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualPrimeFineWordMultiplicity`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualPrimeFineWordSlotRegrouping`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualExtendedThirdCompactUpperRho`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactFrontier`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactPolicySaving`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdInitialCutoff`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `ActualUpperPolicyFiniteBridge`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3SharedFirstFactorLargeResidualZero`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3SharedFirstFactorSmallResidualHighConductorZero`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactSignedDensityLimit`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenUpsilon7PrimeSemiprimeSource`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 
 The ordinary lower means above are baseline means. They do not prove the
 manuscript's stronger causal h248 contribution, complete eleven-term lower

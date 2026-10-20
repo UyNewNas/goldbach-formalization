@@ -84,7 +84,9 @@ private theorem transform_parseval (N : Finset ℕ) (a : ℕ → ℂ)
           if n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m then
             a n * star (a m) else 0 := by
   unfold characterTransform
-  simp only [star_sum, Finset.sum_mul_sum, Finset.mul_sum]
+  simp only [star_sum]
+  simp only [Finset.sum_mul]
+  simp only [Finset.mul_sum]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
   intro n _
@@ -176,7 +178,8 @@ private theorem transform_square_sum_le (N : Finset ℕ) (a : ℕ → ℂ)
   calc
     _ = ‖(((∑ chi : DirichletCharacter ℂ delta,
         ‖characterTransform N a delta chi‖ ^ 2) : ℝ) : ℂ)‖ := by
-      rw [Complex.norm_real, abs_of_nonneg (Finset.sum_nonneg (fun _ _ ↦ sq_nonneg _))]
+      rw [Complex.norm_real, Real.norm_eq_abs,
+        abs_of_nonneg (Finset.sum_nonneg (fun _ _ ↦ sq_nonneg _))]
     _ = ‖(delta.totient : ℂ) *
         ∑ n ∈ N, ∑ m ∈ N,
           if n.Coprime delta ∧ m.Coprime delta ∧ Nat.ModEq delta n m then
@@ -194,7 +197,9 @@ private theorem auxiliary_eq_transform (N : Finset ℕ) (a : ℕ → ℂ)
   unfold auxiliaryCharacterSum characterTransform
   apply Finset.sum_congr rfl
   intro n _
-  split_ifs <;> simp
+  by_cases hn : n.Coprime k
+  · simp only [if_pos hn]
+  · simp only [if_neg hn, zero_mul]
 
 private theorem alpha_subset_prefix {d : MediumAtom} (hU : 1 ≤ d.U) :
     d.alphaCarrier ⊆ Finset.Ioc 0 (Nat.floor (2 * d.U)) := by
@@ -268,7 +273,7 @@ private theorem auxiliary_cross_div_totient_norm_le
           ‖auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi‖ ^ 2) +
           (∑ chi ∈ C,
             ‖auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi‖ ^ 2)) / 2 := by
-        rw [Finset.sum_div, Finset.sum_add_distrib]
+        rw [← Finset.sum_div, Finset.sum_add_distrib]
       _ ≤ E := by linarith [hsq k, hsq l]
   have hphi : (0 : ℝ) < delta.totient :=
     Nat.cast_pos.mpr (Nat.totient_pos.mpr hdelta)
@@ -575,7 +580,7 @@ private theorem actual_eq_gcd_slices
         apply Finset.sum_congr rfl
         intro w _
         by_cases hD : v.gcd w = D
-        · simp only [if_pos hD, hD, if_pos hY]
+        · simp only [hD, if_pos hY, ite_true]
         · simp only [if_neg hD]
       · rw [if_neg hY]
         apply Finset.sum_eq_zero
@@ -583,7 +588,7 @@ private theorem actual_eq_gcd_slices
         apply Finset.sum_eq_zero
         intro w _
         by_cases hD : v.gcd w = D
-        · simp only [if_pos hD, hD, if_neg hY, mul_zero]
+        · simp only [hD, if_neg hY, mul_zero, ite_true]
         · simp only [if_neg hD]
 
 private theorem characterKernel_norm_le
@@ -606,20 +611,21 @@ private theorem characterKernel_norm_le
   have he : (v.lcm w : ℝ) = (v : ℝ) * w / (v.gcd w : ℝ) := by
     apply (eq_div_iff hDR.ne').mpr
     nlinarith only [hprod]
+  have hV0 : 0 ≤ d.V := by linarith [hd.2.1]
   unfold characterKernel
   rw [norm_mul]
   have hfirst :
       ‖(((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /
         ((p * v.lcm w : ℕ) : ℂ))‖ =
         d.V * |CommonSmoothCutoff.cutoffMass| / ((p : ℝ) * (v.lcm w : ℝ)) := by
-    rw [norm_div, Complex.norm_real, abs_mul,
+    rw [norm_div, Complex.norm_real, Real.norm_eq_abs, abs_mul,
       abs_of_nonneg (by linarith [hd.2.1]), Complex.norm_natCast, Nat.cast_mul]
   rw [hfirst]
   refine (mul_le_mul_of_nonneg_left
     (auxiliary_cross_div_totient_norm_le hd (v / v.gcd w) (w / v.gcd w)
       (Nat.mul_pos hp hD) _) (by positivity)).trans_eq ?_
   rw [Nat.cast_mul, he]
-  field_simp [hpR.ne', hvR.ne', hwR.ne', hDR.ne'] <;> ring
+  field_simp [hpR.ne', hvR.ne', hwR.ne', hDR.ne']; ring
 
 private theorem divisors_mul_eq (a b : ℕ) :
     (a * b).divisors = a.divisors * b.divisors := by
@@ -684,7 +690,7 @@ private theorem multiple_harmonic_le {T : ℝ} (hT : 1 ≤ T)
           div_le_div_of_nonneg_right (tau_mul_le D k) (Nat.cast_nonneg _)
         _ = _ := by
           rw [Nat.cast_mul]
-          field_simp [hDR.ne', hkR.ne'] <;> ring
+          field_simp [hDR.ne', hkR.ne']
     _ = (tau D / (D : ℝ)) *
         ∑ k ∈ Finset.Ioc 0 (Nat.floor T / D), tau k / (k : ℝ) := by
       rw [Finset.mul_sum]
@@ -711,7 +717,9 @@ private theorem gcdSlice_norm_le
           2 * d.U / (p : ℝ) * (tau D ^ 2 / (D : ℝ))) := by
   let K : ℝ := |CommonSmoothCutoff.cutoffMass| * d.V *
     (4 * d.U ^ 2 / (p : ℝ) ^ 2 + 2 * d.U * (D : ℝ) / (p : ℝ))
-  have hK : 0 ≤ K := by dsimp [K]; have := hd.2.1; positivity
+  have hV0 : 0 ≤ d.V := by linarith [hd.2.1]
+  have hU0 : 0 ≤ d.U := by linarith [hd.1]
+  have hK : 0 ≤ K := by dsimp [K]; positivity
   have hpoint {v w : ℕ}
       (hv : v ∈ Finset.Ioc 0 (Nat.floor (tailCap d)))
       (hw : w ∈ Finset.Ioc 0 (Nat.floor (tailCap d))) :
@@ -735,7 +743,7 @@ private theorem gcdSlice_norm_le
       have hpR : (p : ℝ) ≠ 0 := by exact_mod_cast hp.ne'
       have hvR : (v : ℝ) ≠ 0 := by exact_mod_cast hv0.ne'
       have hwR : (w : ℝ) ≠ 0 := by exact_mod_cast hw0.ne'
-      field_simp [hpR, hvR, hwR] <;> ring
+      field_simp [hpR, hvR, hwR]
     · rw [if_neg hg, norm_zero]
       exact mul_nonneg (mul_nonneg hK (multipleWeight_nonneg D v))
         (multipleWeight_nonneg D w)
@@ -764,22 +772,23 @@ private theorem gcdSlice_norm_le
   dsimp only [K]
   have hpR : (p : ℝ) ≠ 0 := by exact_mod_cast hp.ne'
   have hDR : (D : ℝ) ≠ 0 := by exact_mod_cast hD.ne'
-  field_simp [hpR, hDR] <;> ring
+  field_simp [hpR, hDR]
 
 private theorem tau_square_harmonic_le {T : ℝ} (hT : 1 ≤ T) :
     (∑ D ∈ Finset.Ioc 0 (Nat.floor T), tau D ^ 2 / (D : ℝ)) ≤
       (1 + Real.log T) ^ 4 := by
-  simpa only [fouvryTau_two, tau] using sum_fouvryTau_sq_div_le_real 2 hT
+  have hfour : (2 : ℕ) ^ 2 = 4 := by norm_num
+  simpa only [fouvryTau_two, tau, hfour] using sum_fouvryTau_sq_div_le_real 2 hT
 
 /-- This is a finite endpoint estimate. The inverse Y is retained before
 the remaining divisor harmonic sum is enlarged. -/
 private theorem reciprocal_square_tail_le
     {T Y : ℝ} (hT : 1 ≤ T) (hY : 1 ≤ Y) :
-    (∑ D ∈ (Finset.Ioc 0 (Nat.floor T)).filter (fun D ↦ Y < (D : ℝ)),
+    (∑ D ∈ (Finset.Ioc 0 (Nat.floor T)).filter (fun D : ℕ ↦ Y < (D : ℝ)),
       tau D ^ 2 / (D : ℝ) ^ 2) ≤ (1 + Real.log T) ^ 4 / Y := by
   have hY0 : 0 < Y := zero_lt_one.trans_le hY
   calc
-    _ ≤ ∑ D ∈ (Finset.Ioc 0 (Nat.floor T)).filter (fun D ↦ Y < (D : ℝ)),
+    _ ≤ ∑ D ∈ (Finset.Ioc 0 (Nat.floor T)).filter (fun D : ℕ ↦ Y < (D : ℝ)),
         (tau D ^ 2 / (D : ℝ)) / Y := by
       apply Finset.sum_le_sum
       intro D hD
@@ -787,16 +796,16 @@ private theorem reciprocal_square_tail_le
       have hDR : 0 < (D : ℝ) := hY0.trans hyD
       calc
         _ = (tau D ^ 2 / (D : ℝ)) * (1 / (D : ℝ)) := by
-          field_simp [hDR.ne'] <;> ring
+          field_simp [hDR.ne']
         _ ≤ (tau D ^ 2 / (D : ℝ)) * (1 / Y) :=
           mul_le_mul_of_nonneg_left
             (one_div_le_one_div_of_le hY0 hyD.le) (by positivity)
         _ = _ := by ring
-    _ = (∑ D ∈ (Finset.Ioc 0 (Nat.floor T)).filter (fun D ↦ Y < (D : ℝ)),
+    _ = (∑ D ∈ (Finset.Ioc 0 (Nat.floor T)).filter (fun D : ℕ ↦ Y < (D : ℝ)),
         tau D ^ 2 / (D : ℝ)) / Y := by rw [Finset.sum_div]
     _ ≤ (∑ D ∈ Finset.Ioc 0 (Nat.floor T), tau D ^ 2 / (D : ℝ)) / Y := by
       apply div_le_div_of_nonneg_right _ hY0.le
-      exact Finset.sum_le_sum_of_subset_of_nonneg Finset.filter_subset
+      exact Finset.sum_le_sum_of_subset_of_nonneg (Finset.filter_subset _ _)
         (fun D _ _ ↦ div_nonneg (sq_nonneg _) (Nat.cast_nonneg _))
     _ ≤ _ := div_le_div_of_nonneg_right (tau_square_harmonic_le hT) hY0.le
 
@@ -805,7 +814,7 @@ private theorem large_divisor_harmonic_le
     (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :
     (∑ D ∈ largeDivisors d Y, tau D ^ 2 / (D : ℝ)) ≤
       (1 + Real.log (tailCap d)) ^ 4 := by
-  refine (Finset.sum_le_sum_of_subset_of_nonneg Finset.filter_subset
+  refine (Finset.sum_le_sum_of_subset_of_nonneg (Finset.filter_subset _ _)
     (fun D _ _ ↦ div_nonneg (sq_nonneg _) (Nat.cast_nonneg _))).trans ?_
   exact tau_square_harmonic_le (one_le_tailCap hd)
 
@@ -851,7 +860,7 @@ private theorem one_p_large_divisor_norm_le
       · exact mul_le_mul_of_nonneg_left hD1 (by positivity)
     _ = _ := by
       have hpR : (p : ℝ) ≠ 0 := by exact_mod_cast hp.ne'
-      field_simp [hpR, hY0.ne'] <;> ring
+      field_simp [hpR, hY0.ne']
 
 private theorem primitive_factor_card_le
     {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}
@@ -900,7 +909,7 @@ private theorem primitive_reciprocal_square_le
       rw [Finset.sum_const, nsmul_eq_mul]
     _ ≤ (2 * d.Q1) * (1 / d.Q1 ^ 2) :=
       mul_le_mul_of_nonneg_right (primitive_factor_card_le hd) (by positivity)
-    _ = 2 / d.Q1 := by field_simp [hQ.ne'] <;> ring
+    _ = 2 / d.Q1 := by field_simp [hQ.ne']
 
 private theorem actual_finite_bound
     {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}
@@ -943,7 +952,7 @@ private theorem actual_finite_bound
         (mul_le_mul_of_nonneg_left (primitive_reciprocal_square_le hd) (by positivity))
         (mul_le_mul_of_nonneg_left (primitive_reciprocal_le hd) (by positivity))
     _ = _ := by
-      field_simp [hY0.ne', hQ0.ne'] <;> ring
+      field_simp [hY0.ne', hQ0.ne']; ring
 
 end SharedFirstFactorLargeResidualZero
 
@@ -972,7 +981,9 @@ theorem actual_largeResidualHighConductorZero_bound :
       (8 * d.U ^ 2 / (d.Q1 * Y) + 4 * d.U) ≤ _
   have ht : 0 ≤ d.U ^ 2 / (d.Q1 * Y) := by positivity
   have hbracket : 8 * d.U ^ 2 / (d.Q1 * Y) + 4 * d.U ≤
-      8 * (d.U ^ 2 / (d.Q1 * Y) + d.U) := by nlinarith
+      8 * (d.U ^ 2 / (d.Q1 * Y) + d.U) := by
+    rw [mul_div_assoc]
+    nlinarith
   calc
     _ ≤ |CommonSmoothCutoff.cutoffMass| * d.V *
         (1 + Real.log (4 * d.Q2 * d.Q3)) ^ 8 *
@@ -1016,7 +1027,7 @@ theorem actual_outside_mul_largeResidualHighConductorZero_bound :
   refine (mul_le_mul (d.sharedFirstFactor_outside_le hd)
     (hbound B sigma kappa c0 d hd Y R hY) (norm_nonneg _) (by positivity)).trans_eq ?_
   unfold MediumAtom.scale
-  field_simp [hU.ne', hQ.ne', hY0.ne'] <;> ring
+  field_simp [hU.ne', hQ.ne', hY0.ne']
 
 end
 

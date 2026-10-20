@@ -320,7 +320,7 @@ private theorem actual_eq_gcd_slices
         apply Finset.sum_congr rfl
         intro w _
         by_cases hD : v.gcd w = D
-        · simp only [if_pos hD, hD, if_pos hY]
+        · simp only [hD, if_pos hY, ite_true]
         · simp only [if_neg hD]
       · rw [if_neg hY]
         apply Finset.sum_eq_zero
@@ -328,7 +328,7 @@ private theorem actual_eq_gcd_slices
         apply Finset.sum_eq_zero
         intro w _
         by_cases hD : v.gcd w = D
-        · simp only [if_pos hD, hD, if_neg hY, mul_zero]
+        · simp only [hD, if_neg hY, mul_zero, ite_true]
         · simp only [if_neg hD]
 
 private def alphaStar (d : MediumAtom) (n : ℕ) : ℂ :=
@@ -359,7 +359,7 @@ private theorem alpha_subset_Icc
 
 private theorem alpha_prefix_pos {d : MediumAtom} (hU : 1 ≤ d.U) :
     0 < Nat.floor (2 * d.U) := by
-  exact Nat.one_le_floor_iff.mpr (by linarith)
+  exact (Nat.one_le_floor_iff (2 * d.U)).mpr (by linarith)
 
 /-- One sequence, zero-extended before all physical levels and auxiliary
 factors, gives the precise conjugation bridge to the generic mean. -/
@@ -401,11 +401,17 @@ private theorem alphaStar_norm_le_one
 private theorem commonLog_one_le
     {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}
     (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ commonLog d := by
+  have h12 : 1 ≤ d.U * d.Q1 := by
+    simpa only [one_mul] using mul_le_mul hd.1 hd.2.2.1
+      zero_le_one (by linarith [hd.1] : 0 ≤ d.U)
+  have h123 : 1 ≤ d.U * d.Q1 * d.Q2 := by
+    simpa only [one_mul] using mul_le_mul h12 hd.2.2.2.1
+      zero_le_one (by linarith [h12] : 0 ≤ d.U * d.Q1)
+  have h1234 : 1 ≤ d.U * d.Q1 * d.Q2 * d.Q3 := by
+    simpa only [one_mul] using mul_le_mul h123 hd.2.2.2.2.1
+      zero_le_one (by linarith [h123] : 0 ≤ d.U * d.Q1 * d.Q2)
   have harg : 1 ≤ 32 * d.U * d.Q1 * d.Q2 * d.Q3 := by
-    calc
-      1 ≤ 32 * (1 : ℝ) * 1 * 1 * 1 := by norm_num
-      _ ≤ _ := by gcongr <;> first | exact hd.1 | exact hd.2.2.1 |
-        exact hd.2.2.2.1 | exact hd.2.2.2.2.1
+    nlinarith only [h1234]
   unfold commonLog
   linarith [Real.log_nonneg harg]
 
@@ -422,13 +428,13 @@ private theorem tail_log_le_commonLog
     calc
       tailCap d = 4 * (1 : ℝ) * 1 * d.Q2 * d.Q3 := by unfold tailCap; ring
       _ ≤ 32 * d.U * d.Q1 * d.Q2 * d.Q3 := by
-        gcongr <;> first | assumption | norm_num
-  exact add_le_add_left (Real.log_le_log hT0 harg) 1
+        gcongr; first | assumption | norm_num
+  exact add_le_add le_rfl (Real.log_le_log hT0 harg)
 
 private theorem floor_inverse_rpow_le
     {eta R : ℝ} (heta : 0 < eta) (heta1 : eta < 1) (hR : 1 ≤ R) :
     1 / (Nat.floor R : ℝ) ^ (1 - eta) ≤ 2 / R ^ (1 - eta) := by
-  have hr : 1 ≤ Nat.floor R := Nat.one_le_floor_iff.mpr hR
+  have hr : 1 ≤ Nat.floor R := (Nat.one_le_floor_iff R).mpr hR
   have hrR : (1 : ℝ) ≤ Nat.floor R := by exact_mod_cast hr
   have hR0 : 0 < R := zero_lt_one.trans_le hR
   have hr0 : (0 : ℝ) < Nat.floor R := zero_lt_one.trans_le hrR
@@ -467,7 +473,7 @@ private theorem actual_real_cutoff_mean
   obtain ⟨C, hC, hm⟩ := SharedFirstFactorHighConductor.auxiliary_highConductor_mean_le
     heta heta1
   refine ⟨C, hC, fun B sigma kappa c0 d hd Q k hQ hk R hR ↦ ?_⟩
-  have hr : 0 < Nat.floor R := Nat.one_le_floor_iff.mpr hR
+  have hr : 0 < Nat.floor R := (Nat.one_le_floor_iff R).mpr hR
   have hfilter (q : ℕ) :
       (Finset.univ : Finset (DirichletCharacter ℂ q)).filter
           (fun chi ↦ R < (chi.conductor : ℝ)) =
@@ -521,7 +527,7 @@ private theorem physical_level_mean_le
   have hQ1 : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1
   have hDR : (0 : ℝ) < D := by exact_mod_cast hD
   have hN : 0 < N := alpha_prefix_pos hd.1
-  have hP : 0 < P := Nat.one_le_floor_iff.mpr (by linarith [hd.2.2.1])
+  have hP : 0 < P := (Nat.one_le_floor_iff (2 * d.Q1)).mpr (by linarith [hd.2.2.1])
   have hQ : 0 < Q := Nat.mul_pos hP hD
   have hNr : (N : ℝ) ≤ 2 * d.U := Nat.floor_le (by linarith)
   have hPr : (P : ℝ) ≤ 2 * d.Q1 := Nat.floor_le (by linarith)
@@ -530,7 +536,9 @@ private theorem physical_level_mean_le
     rw [Nat.cast_mul]
     exact mul_le_mul_of_nonneg_right hPr hDR.le
   have hlog : 1 + Real.log (2 * (N : ℝ) * (Q : ℝ)) ≤ commonLog d := by
-    apply add_le_add_left
+    change 1 + Real.log (2 * (N : ℝ) * (Q : ℝ)) ≤
+      1 + Real.log (32 * d.U * d.Q1 * d.Q2 * d.Q3)
+    apply add_le_add le_rfl
     apply Real.log_le_log (by positivity)
     calc
       2 * (N : ℝ) * (Q : ℝ) ≤ 2 * (2 * d.U) * (2 * d.Q1 * (D : ℝ)) := by
@@ -682,7 +690,7 @@ private theorem weighted_young_sum_eq (S : Finset ℕ) (a E : ℕ → ℝ) :
   have hpoint (k l : ℕ) : a k * a l * ((E k + E l) / 2) =
       ((a k * E k) * a l + a k * (a l * E l)) / 2 := by ring
   simp_rw [hpoint]
-  simp only [Finset.sum_div, Finset.sum_add_distrib]
+  simp only [← Finset.sum_div, Finset.sum_add_distrib]
   rw [← Finset.sum_mul_sum, ← Finset.sum_mul_sum]
   ring
 
@@ -730,7 +738,7 @@ private theorem weighted_cross_norm_le (d : MediumAtom) (k l delta : ℕ) (R : �
           ‖auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi‖ ^ 2) +
           (∑ chi ∈ C,
             ‖auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi‖ ^ 2)) / 2 := by
-        rw [Finset.sum_div, Finset.sum_add_distrib]
+        rw [← Finset.sum_div, Finset.sum_add_distrib]
       _ ≤ _ := by linarith [hsq k, hsq l]
   refine (mul_le_mul_of_nonneg_left hc (by positivity)).trans_eq ?_
   unfold highEnergy
@@ -773,7 +781,7 @@ private theorem gcd_pair_norm_le
                 star (auxiliaryCharacterSum d.alphaCarrier d.alpha (w / D) (p * D) chi)‖) := by
     unfold characterKernel tailWeight
     rw [hg, hvk, hwl]
-    simp only [norm_mul, norm_star, norm_div, Complex.norm_real, abs_mul,
+    simp only [norm_mul, norm_star, norm_div, Complex.norm_real, Real.norm_eq_abs,
       abs_of_nonneg hV, Complex.norm_natCast, Nat.cast_mul]
     have hvR : (D : ℝ) * ((v / D : ℕ) : ℝ) = (v : ℝ) := by exact_mod_cast hvk
     have hwR : (D : ℝ) * ((w / D : ℕ) : ℝ) = (w : ℝ) := by exact_mod_cast hwl
@@ -786,10 +794,13 @@ private theorem gcd_pair_norm_le
           rw [← hvR, ← hwR]
           ring
     rw [hLcast]
-    field_simp [hpR, hDR, hkR, hlR, hphiR] <;> ring
+    field_simp [hpR, hDR, hkR, hlR, hphiR]
   rw [hnorm]
   exact mul_le_mul_of_nonneg_left (weighted_cross_norm_le d (v / D) (w / D) (p * D) R)
-    (by positivity)
+    (mul_nonneg (mul_nonneg
+      (div_nonneg (mul_nonneg (abs_nonneg _) hV)
+        (mul_nonneg (sq_nonneg _) (sq_nonneg _)))
+      (tailWeight_nonneg d D (v / D))) (tailWeight_nonneg d D (w / D)))
 
 /-- Extra pairs are inserted only after the exact gcd has fixed p*D.
 Their character level is never recomputed from the extra pair. -/
@@ -899,7 +910,7 @@ private theorem shared_gcd_sum_norm_le_energy
       exact div_le_div_of_nonneg_left (by positivity) (by positivity)
         (mul_le_mul_of_nonneg_right (pow_le_pow_left₀ hQ.le hlo 2) (sq_nonneg _))
     _ = _ := by
-      simp only [Finset.mul_sum, mul_assoc]
+      simp only [Finset.mul_sum]
       rw [Finset.sum_comm]
 
 private theorem tau_square_harmonic_le
@@ -908,9 +919,10 @@ private theorem tau_square_harmonic_le
     (∑ D ∈ smallDivisors d Y, tau D ^ 2 / (D : ℝ)) ≤ commonLog d ^ 4 := by
   have hfull : (∑ D ∈ Finset.Ioc 0 (Nat.floor (tailCap d)), tau D ^ 2 / (D : ℝ)) ≤
       (1 + Real.log (tailCap d)) ^ 4 := by
-    simpa only [tau, fouvryTau_two] using
+    have hfour : (2 : ℕ) ^ 2 = 4 := by norm_num
+    simpa only [tau, fouvryTau_two, hfour] using
       sum_fouvryTau_sq_div_le_real 2 (one_le_tailCap hd)
-  refine (Finset.sum_le_sum_of_subset_of_nonneg Finset.filter_subset
+  refine (Finset.sum_le_sum_of_subset_of_nonneg (Finset.filter_subset _ _)
     (fun D _ _ ↦ div_nonneg (sq_nonneg _) (Nat.cast_nonneg _))).trans (hfull.trans ?_)
   exact pow_le_pow_left₀ (by linarith [Real.log_nonneg (one_le_tailCap hd)])
     (tail_log_le_commonLog hd) 4
@@ -930,7 +942,7 @@ private theorem tau_square_power_sum_le
       calc
         _ = (D : ℝ) ^ (1 + eta) * (tau D ^ 2 / (D : ℝ)) := by
           rw [Real.rpow_add hDR 1 eta, Real.rpow_one]
-          field_simp [hDR.ne'] <;> ring
+          field_simp [hDR.ne']
         _ ≤ _ := mul_le_mul_of_nonneg_right
           (Real.rpow_le_rpow hDR.le hDY (by linarith)) (by positivity)
     _ = Y ^ (1 + eta) * ∑ D ∈ smallDivisors d Y, tau D ^ 2 / (D : ℝ) := by
@@ -997,7 +1009,7 @@ theorem actual_smallResidualHighConductorZero_bound
           exact mul_le_mul_of_nonneg_left
             (hlevel B sigma kappa c0 d hd D k hD0 hDT (Finset.mem_Ioc.mp hk).1 R hR)
             (tailWeight_nonneg d D k)
-        _ = _ := by rw [Finset.sum_mul]; ring
+        _ = _ := by rw [← Finset.sum_mul]; ring
     have hW0 : 0 ≤ ∑ k ∈ quotientCarrier d D, tailWeight d D k :=
       Finset.sum_nonneg (fun k _ ↦ tailWeight_nonneg d D k)
     calc
@@ -1017,7 +1029,7 @@ theorem actual_smallResidualHighConductorZero_bound
         dsimp only [A]
         rw [Real.rpow_add hQ 2 eta, Real.rpow_add hDR 2 eta]
         norm_num only [Real.rpow_two]
-        field_simp [hQ.ne', hDR.ne', (Real.rpow_pos_of_pos hR0 (1 - eta)).ne'] <;> ring
+        field_simp [hQ.ne', hDR.ne', (Real.rpow_pos_of_pos hR0 (1 - eta)).ne']
   rw [actual_eq_gcd_slices hd, Finset.sum_comm]
   calc
     _ ≤ ∑ D ∈ smallDivisors d Y,
@@ -1041,8 +1053,6 @@ theorem actual_smallResidualHighConductorZero_bound
     _ = |CommonSmoothCutoff.cutoffMass| * C * d.V * commonLog d ^ 20 *
         (d.U ^ 2 / (d.Q1 * R ^ (1 - eta)) + d.Q1 ^ eta * Y ^ (1 + eta) * d.U) := by ring
     _ ≤ _ := by
-      change |CommonSmoothCutoff.cutoffMass| * C * d.V * commonLog d ^ 20 *
-        (d.U ^ 2 / (d.Q1 * R ^ (1 - eta)) + d.Q1 ^ eta * Y ^ (1 + eta) * d.U) ≤ _
       apply mul_le_mul_of_nonneg_right _ (by positivity)
       apply mul_le_mul_of_nonneg_right _ (by positivity)
       apply mul_le_mul_of_nonneg_right _ hV.le
@@ -1078,7 +1088,7 @@ theorem actual_outside_mul_smallResidualHighConductorZero_bound
     (hbound B sigma kappa c0 d hd Y R hY hR) (norm_nonneg _) (by positivity)).trans_eq ?_
   unfold MediumAtom.scale
   rw [Real.rpow_add hQ 1 eta, Real.rpow_one]
-  field_simp [hU.ne', hQ.ne', (Real.rpow_pos_of_pos hR0 (1 - eta)).ne'] <;> ring
+  field_simp [hU.ne', hQ.ne', (Real.rpow_pos_of_pos hR0 (1 - eta)).ne']
 
 end
 

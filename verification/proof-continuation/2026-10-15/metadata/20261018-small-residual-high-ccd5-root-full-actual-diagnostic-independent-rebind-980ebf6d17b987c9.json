@@ -1,0 +1,506 @@
+{
+  "status": "ROOT_NONAUTHOR_COMPLETE_ACTUAL_DIAGNOSTIC_PROOF_ONLY_REPAIR_REBIND_NOT_ACCEPTANCE",
+  "reviewer": "/root",
+  "created_utc": "2026-10-18T04:37:57.789506+00:00",
+  "target_source": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorSmallResidualHighConductorZero.lean",
+  "old_source_sha256": "5f6d36e82126440fa02d38b77272315246250ebfcb7b1e1b07673bececc56f10",
+  "current_source_sha256": "ccd54bdf5f4bb548a7f60e90f16b63effd061df35b0173438d11b2ad86cfbb33",
+  "full_source_read_scope": "Full original mathematical source read at original complete gate and all intermediate actual patches read; ALL actual first-failure288 lines (Small) or full second-failure10 lines (Large) now read directly. Every old/new patch in this report read without truncation; exact fullforward/inverse verified against actual current file.",
+  "actual_failure": {
+    "run": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\runs\\20261018T043022372254Z-ImbalancedChen.Part3SharedFirstFactorSmallResidualHighConductorZero",
+    "receipt_sha256": "4bb68a8f3079130e158a0599a2b86d412d2464f447c5b393ac4ec7a0c2e9c599",
+    "stdout_sha256": "3fa8212b257406dd262240146232dba48c8a07bb3a185e36dec2869d96e13cce",
+    "all_stdout_lines_read": 288,
+    "full_receipt_read": true,
+    "seconds": 35.961,
+    "max_rss_kib": 4692296,
+    "guard_error": null,
+    "bindings_before_after_exact": true,
+    "old_failure_preserved": true
+  },
+  "owner_report_sha256": "5d2b28b3538b2fcf323f943093a888e73228f2e7f9a852f3e4fd831507888c0a",
+  "number_complete_headers_preserved": 53,
+  "number_primitive_bodies_preserved": 14,
+  "actual_current_headers_and_bodies_verified": [
+    {
+      "name": "tailLabels",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def tailLabels (d : MediumAtom) : Finset (ℕ × ℕ)",
+      "header_sha256": "820511ab31f7dc69d19fbd4eb64dfd34578e210debecb920d34045c67120e6d1",
+      "primitive_definition_with_body": "private def tailLabels (d : MediumAtom) : Finset (ℕ × ℕ) :=\n  factorCarrier d.Q2 ×ˢ factorCarrier d.Q3",
+      "primitive_definition_sha256": "0c688a2ab5d8cc7cd3dfc31142e6aac46ae45d1872617aace45dfee83ab00a6d"
+    },
+    {
+      "name": "tailProducts",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def tailProducts (d : MediumAtom) : Finset ℕ",
+      "header_sha256": "35e2e2d93659c47a171df2b304912f3c6a85370d3b3ed7c1d4e5e021127fa338",
+      "primitive_definition_with_body": "private def tailProducts (d : MediumAtom) : Finset ℕ :=\n  (tailLabels d).image (fun u ↦ u.1 * u.2)",
+      "primitive_definition_sha256": "188f791c17e6e192f9b0cb2754e02f51b5b18317178c0b993cf4d82ac31bcbab"
+    },
+    {
+      "name": "tailGamma",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def tailGamma (d : MediumAtom) (v : ℕ) : ℂ",
+      "header_sha256": "e3c54e69c9e217208c63188af175b3c5311033a920e985fc6e5cf457ac019511",
+      "primitive_definition_with_body": "private def tailGamma (d : MediumAtom) (v : ℕ) : ℂ :=\n  ∑ u ∈ (tailLabels d).filter (fun u ↦ u.1 * u.2 = v), d.gamma2 u.1 * d.gamma3 u.2",
+      "primitive_definition_sha256": "04f6c40339dd63459f639f4b398544fb61c8f460ab5f32f63ca9967cd032af28"
+    },
+    {
+      "name": "tailCap",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def tailCap (d : MediumAtom) : ℝ",
+      "header_sha256": "eae9b1625a44bc85af0c8d76e126d5dbc7cb435ede7c816d6ddfc694182b9efe",
+      "primitive_definition_with_body": "private def tailCap (d : MediumAtom) : ℝ := 4 * d.Q2 * d.Q3",
+      "primitive_definition_sha256": "7e11ed968dc33ccb0d235267f3752e93b9004432a7b4641e3ab7188df2c781d3"
+    },
+    {
+      "name": "tau",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def tau (n : ℕ) : ℝ",
+      "header_sha256": "1352713ca1ee3e906c7b243d58b57a3923713bd6b94151b9fcaefbfd8dde8e7d",
+      "primitive_definition_with_body": "private def tau (n : ℕ) : ℝ := (n.divisors.card : ℝ)",
+      "primitive_definition_sha256": "93d72abb5c853bb9ebd7be5bd5324e69e4446279d62469382e78da48b273cbf8"
+    },
+    {
+      "name": "factor_bounds",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) : 0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q",
+      "header_sha256": "981206b566d4652d16b3260572978bd9ce899a0dd557ff4ed0b937faff326ecf",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "one_le_tailCap",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem one_le_tailCap\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ tailCap d",
+      "header_sha256": "529ea77d176014384aea15009cac5b860e882125528501fa98e7f9b7be911e0f",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tail_product_bounds",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tail_product_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {u : ℕ × ℕ}\n    (hu : u ∈ tailLabels d) : 0 < u.1 * u.2 ∧ (u.1 * u.2 : ℕ) ≤ Nat.floor (tailCap d)",
+      "header_sha256": "be1d565088cc8f486321d2c5cdfb3d4f00e23ac53752cf15decd9d2741d76ade",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tailProducts_subset_prefix",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tailProducts_subset_prefix\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    tailProducts d ⊆ Finset.Ioc 0 (Nat.floor (tailCap d))",
+      "header_sha256": "27c5563f5fc0c52193bf5b75b8ef82ca21ddc0dc58b23c0c6fc004fb86aac908",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tailGamma_zero_off_products",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tailGamma_zero_off_products (d : MediumAtom) {v : ℕ}\n    (hv : v ∉ tailProducts d) : tailGamma d v = 0",
+      "header_sha256": "5a0a0c04fddb7d3143e819a3b3727177e23e3a15ff873963a5fabb819b9b57a1",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tailGamma_norm_le_tau",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tailGamma_norm_le_tau\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (v : ℕ) :\n    ‖tailGamma d v‖ ≤ tau v",
+      "header_sha256": "02a8b8aba56736cecd7817f93cbdd17700aa2999450a3069848231acc47daf19",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tail_sum_eq_grouped",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tail_sum_eq_grouped (d : MediumAtom) (F : ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, (d.gamma2 u.1 * d.gamma3 u.2) * F (u.1 * u.2)) =\n      ∑ v ∈ tailProducts d, tailGamma d v * F v",
+      "header_sha256": "a4177c11a76a2204611e31707c97643ecfdfe0a24bfe5d901512116078d6adde",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tail_star_sum_eq_grouped",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tail_star_sum_eq_grouped (d : MediumAtom) (F : ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, star (d.gamma2 u.1 * d.gamma3 u.2) * F (u.1 * u.2)) =\n      ∑ v ∈ tailProducts d, star (tailGamma d v) * F v",
+      "header_sha256": "dcd7568908e337f24c190e425a371ad7465291995e2effbf2b57997d765a277e",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tail_pair_sum_eq_grouped",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tail_pair_sum_eq_grouped (d : MediumAtom) (F : ℕ → ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, ∑ v ∈ tailLabels d,\n      (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n        F (u.1 * u.2) (v.1 * v.2)) =\n      ∑ a ∈ tailProducts d, ∑ b ∈ tailProducts d,\n        tailGamma d a * star (tailGamma d b) * F a b",
+      "header_sha256": "281e30bd180d6168e1392e7995217ea36e6a2ad662ffa33f1d0da5c2aa5454a3",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tail_sum_eq_prefix",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tail_sum_eq_prefix\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (F : ℕ → ℂ) :\n    (∑ v ∈ tailProducts d, tailGamma d v * F v) =\n      ∑ v ∈ Finset.Ioc 0 (Nat.floor (tailCap d)), tailGamma d v * F v",
+      "header_sha256": "548acefc30d846ba795d5cc2e38460aeb90be4c4d91fdb421dcc64cfb762652b",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tail_pair_sum_eq_prefix",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tail_pair_sum_eq_prefix\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (F : ℕ → ℕ → ℂ) :\n    (∑ u ∈ tailLabels d, ∑ v ∈ tailLabels d,\n      (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n        F (u.1 * u.2) (v.1 * v.2)) =\n      ∑ a ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n        ∑ b ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n          tailGamma d a * star (tailGamma d b) * F a b",
+      "header_sha256": "357b2343813b0a8475ab843e99a7e4e96698b3a32f2b1ff2d4c904bb535e27cd",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "pair_sum_by_gcd",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem pair_sum_by_gcd (N : ℕ) (F : ℕ → ℕ → ℂ) :\n    (∑ a ∈ Finset.Ioc 0 N, ∑ b ∈ Finset.Ioc 0 N, F a b) =\n      ∑ D ∈ Finset.Ioc 0 N, ∑ a ∈ Finset.Ioc 0 N, ∑ b ∈ Finset.Ioc 0 N,\n        if a.gcd b = D then F a b else 0",
+      "header_sha256": "05e8674380d8e04fdd8cbda35411583d46ebfc9a2c965bee7f95c968ca9826ca",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "characterKernel",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def characterKernel (d : MediumAtom) (p v w : ℕ) (R : ℝ) : ℂ",
+      "header_sha256": "b62e6f9b2686f5efe921b01ba236c6a6c49461ea5a6368f5644267f96f65c289",
+      "primitive_definition_with_body": "private def characterKernel (d : MediumAtom) (p v w : ℕ) (R : ℝ) : ℂ :=\n  (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n    ((p * v.lcm w : ℕ) : ℂ)) *\n      ((∑ chi ∈ ((Finset.univ : Finset\n          (DirichletCharacter ℂ (p * v.gcd w))).erase 1).filter\n            (fun chi ↦ R < (chi.conductor : ℝ)),\n        auxiliaryCharacterSum d.alphaCarrier d.alpha (v / v.gcd w) (p * v.gcd w) chi *\n          star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n            (w / v.gcd w) (p * v.gcd w) chi)) / ((p * v.gcd w).totient : ℂ))",
+      "primitive_definition_sha256": "e271c075eece6f452cbd4e35d4351fffaa7fa3ccb7bfa407fb581daeb67b4beb"
+    },
+    {
+      "name": "gcdSlice",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def gcdSlice (d : MediumAtom) (p D : ℕ) (R : ℝ) : ℂ",
+      "header_sha256": "89323a22d8d646d94992cf09cbfb6c9b5f42686232836a8e21bbe0b2555781a0",
+      "primitive_definition_with_body": "private def gcdSlice (d : MediumAtom) (p D : ℕ) (R : ℝ) : ℂ :=\n  ∑ v ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n    ∑ w ∈ Finset.Ioc 0 (Nat.floor (tailCap d)),\n      if v.gcd w = D then\n        tailGamma d v * star (tailGamma d w) * characterKernel d p v w R\n      else 0",
+      "primitive_definition_sha256": "a35adc5d75eaf552db3a990249a15d13f8bbdd4541b149804b7eb01b3b84fec0"
+    },
+    {
+      "name": "smallDivisors",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def smallDivisors (d : MediumAtom) (Y : ℝ) : Finset ℕ",
+      "header_sha256": "c76dd613b4a31e45017ecb94ae7417d80617c66550e2a95365864ffca3671a35",
+      "primitive_definition_with_body": "private def smallDivisors (d : MediumAtom) (Y : ℝ) : Finset ℕ :=\n  (Finset.Ioc 0 (Nat.floor (tailCap d))).filter (fun D ↦ (D : ℝ) ≤ Y)",
+      "primitive_definition_sha256": "482e066a0e2f613a55cbe289fa3d05900c6b0988b88093b6518a80bcfd0d05d6"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactorSmallResidualHighConductorZero",
+      "kind": "def",
+      "visibility": "public",
+      "complete_header": "def MediumAtom.sharedFirstFactorSmallResidualHighConductorZero\n    (d : MediumAtom) (Y R : ℝ) : ℂ",
+      "header_sha256": "4d6d8b36bc2cb52d0603d4e38eeae5c99193220a443d45bf6f837cb1650a084b",
+      "primitive_definition_with_body": "def MediumAtom.sharedFirstFactorSmallResidualHighConductorZero\n    (d : MediumAtom) (Y R : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n      ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        if ((u.1 * u.2).gcd (v.1 * v.2) : ℝ) ≤ Y then\n          (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n            (((p * (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ) *\n              ((p * (u.1 * u.2).gcd (v.1 * v.2)).totient : ℂ))) *\n            (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n            (∑ chi ∈ ((Finset.univ : Finset\n                (DirichletCharacter ℂ (p * (u.1 * u.2).gcd (v.1 * v.2)))).erase 1).filter\n                  (fun chi ↦ R < (chi.conductor : ℝ)),\n              auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((u.1 * u.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi *\n              star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((v.1 * v.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi))\n        else 0",
+      "primitive_definition_sha256": "12ce7c7b78e4e821630dc9f765e74c6d5cd927bd430cd5bcabb9b4341f5569b7"
+    },
+    {
+      "name": "actual_eq_gcd_slices",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem actual_eq_gcd_slices\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y R : ℝ) :\n    d.sharedFirstFactorSmallResidualHighConductorZero Y R =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ D ∈ smallDivisors d Y, gcdSlice d p D R",
+      "header_sha256": "042b8afc0b3e5ac91472ba039ce3aef3f273b6dc857b4aadb68f1b8626311171",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "alphaStar",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def alphaStar (d : MediumAtom) (n : ℕ) : ℂ",
+      "header_sha256": "898b70b849f89e6ebc358848cd0966040341005dee3e2d6e7c2f4d76630c05dd",
+      "primitive_definition_with_body": "private def alphaStar (d : MediumAtom) (n : ℕ) : ℂ :=\n  if n ∈ d.alphaCarrier then star (d.alpha n) else 0",
+      "primitive_definition_sha256": "d3d4f3700ad92bcd4c1154b363a1fa0a868cd4ce484f2b6737813c752caa6d0e"
+    },
+    {
+      "name": "commonLog",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def commonLog (d : MediumAtom) : ℝ",
+      "header_sha256": "56d2e75232e1cd317b311e1cd814ca40ff9c10e3aec5a0c1938a14cd998734ba",
+      "primitive_definition_with_body": "private def commonLog (d : MediumAtom) : ℝ :=\n  1 + Real.log (32 * d.U * d.Q1 * d.Q2 * d.Q3)",
+      "primitive_definition_sha256": "97d5bc988ce4ce1ee88f91bbd573db43b1f4ece6f9a4b02788b129f845c77fa5"
+    },
+    {
+      "name": "highEnergy",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def highEnergy (d : MediumAtom) (k q : ℕ) (R : ℝ) : ℝ",
+      "header_sha256": "348bfea2a7982ad3c3c1cc38de5ba8058b87c533a3e4a088a85993f9441938d2",
+      "primitive_definition_with_body": "private def highEnergy (d : MediumAtom) (k q : ℕ) (R : ℝ) : ℝ :=\n  ((q : ℝ) / (q.totient : ℝ)) *\n    ∑ chi ∈ (Finset.univ : Finset (DirichletCharacter ℂ q)).filter\n        (fun chi ↦ R < (chi.conductor : ℝ)),\n      ‖auxiliaryCharacterSum d.alphaCarrier d.alpha k q chi‖ ^ 2",
+      "primitive_definition_sha256": "0a57b375f332c724eb1736977fde02b1fd266b7de91a7f85297977bea251b08b"
+    },
+    {
+      "name": "highEnergy_nonneg",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem highEnergy_nonneg (d : MediumAtom) (k q : ℕ) (R : ℝ) :\n    0 ≤ highEnergy d k q R",
+      "header_sha256": "c1521b5e0ae19ea4221f03eb8b60a4ad7da6e0b910b3dca2317aa1b20533e9fd",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "alpha_subset_Icc",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem alpha_subset_Icc\n    {d : MediumAtom} (hU : 1 ≤ d.U) :\n    d.alphaCarrier ⊆ Finset.Icc 1 (Nat.floor (2 * d.U))",
+      "header_sha256": "372555771b9b0682073c88363a23bf282443f224ad8de7f0861641f9671a7d32",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "alpha_prefix_pos",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem alpha_prefix_pos {d : MediumAtom} (hU : 1 ≤ d.U) :\n    0 < Nat.floor (2 * d.U)",
+      "header_sha256": "4e0fc5002c1be76475c784b54e05a67c9ca37bc435abda35f5b9194d1c40d53e",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "auxiliary_star_bridge",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem auxiliary_star_bridge\n    {d : MediumAtom} (hU : 1 ≤ d.U) (k q : ℕ)\n    (chi : DirichletCharacter ℂ q) :\n    auxiliaryCharacterSum d.alphaCarrier d.alpha k q chi =\n      star (∑ n ∈ Finset.Icc 1 (Nat.floor (2 * d.U)),\n        (if n.Coprime k then alphaStar d n else 0) * chi (n : ZMod q))",
+      "header_sha256": "02e882d8c77406f24c9335c0d0240ef03eee3ae2e0d4d4577587d5fd92452a80",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "alphaStar_norm_le_one",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem alphaStar_norm_le_one\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\n    ‖alphaStar d n‖ ≤ 1",
+      "header_sha256": "e3aad60bb810ea88decc326184f11c118eca4252072699e112634571abb5ec62",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "commonLog_one_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem commonLog_one_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ commonLog d",
+      "header_sha256": "4a6064ea6b290d598e3a495363c63f864df320a17c6d0ea9fe59ee00400b0228",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tail_log_le_commonLog",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tail_log_le_commonLog\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    1 + Real.log (tailCap d) ≤ commonLog d",
+      "header_sha256": "58bf47fa9cf41053b974fb68ef683f5babb0347a82dad5abd131d6bda6465772",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "floor_inverse_rpow_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem floor_inverse_rpow_le\n    {eta R : ℝ} (heta : 0 < eta) (heta1 : eta < 1) (hR : 1 ≤ R) :\n    1 / (Nat.floor R : ℝ) ^ (1 - eta) ≤ 2 / R ^ (1 - eta)",
+      "header_sha256": "b2389988799cf04230346172ed360349ae36dd30088169c36a23f4a16cd815b2",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "actual_real_cutoff_mean",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem actual_real_cutoff_mean\n    {eta : ℝ} (heta : 0 < eta) (heta1 : eta < 1) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d →\n        ∀ Q k : ℕ, 0 < Q → 0 < k → ∀ R : ℝ, 1 ≤ R →\n          (∑ q ∈ Finset.Icc 1 Q, highEnergy d k q R) ≤\n            C * (1 + Real.log (2 * (Nat.floor (2 * d.U) : ℝ) * (Q : ℝ))) ^ 12 *\n              ((Q : ℝ) * (Nat.floor (2 * d.U) : ℝ) ^ 2 /\n                  (Nat.floor R : ℝ) ^ (1 - eta) +\n                (Q : ℝ) ^ (2 + eta) * (Nat.floor (2 * d.U) : ℝ))",
+      "header_sha256": "86a4811cf2ad05d76b6a009d363bc7bd3b2bf38eb361701b977d56fcdd008c0b",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "physical_level_image_subset",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem physical_level_image_subset\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {D : ℕ} (hD : 0 < D) :\n    (d.primitiveFirstFactorCarrier.image (fun p ↦ p * D)) ⊆\n      Finset.Icc 1 (Nat.floor (2 * d.Q1) * D)",
+      "header_sha256": "db74239a8980d9776a38129eeab22f6a3433ffe889f4554cfd5ac9279f3f977b",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "physical_level_mean_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem physical_level_mean_le\n    {eta : ℝ} (heta : 0 < eta) (heta1 : eta < 1) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d →\n        ∀ D k : ℕ, 0 < D → (D : ℝ) ≤ tailCap d → 0 < k →\n          ∀ R : ℝ, 1 ≤ R →\n            (∑ p ∈ d.primitiveFirstFactorCarrier, highEnergy d k (p * D) R) ≤\n              C * commonLog d ^ 12 *\n                (d.Q1 * (D : ℝ) * d.U ^ 2 / R ^ (1 - eta) +\n                  d.Q1 ^ (2 + eta) * (D : ℝ) ^ (2 + eta) * d.U)",
+      "header_sha256": "2f79638b44b8b50cb538d68358b2a6f23ac78ef8db70b62dff4a32a1de0b36bb",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "divisors_mul_eq",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem divisors_mul_eq (a b : ℕ) :\n    (a * b).divisors = a.divisors * b.divisors",
+      "header_sha256": "f7b75b9142552cf680d9075a650980b8737975a57cd930d739ede71dcf90a236",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tau_nonneg",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tau_nonneg (n : ℕ) : 0 ≤ tau n",
+      "header_sha256": "e1b6ed5fdd2b89921906796f7ba2f7a21a00dbeae8102a6422fe593238489de3",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tau_mul_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tau_mul_le (a b : ℕ) : tau (a * b) ≤ tau a * tau b",
+      "header_sha256": "17f283f3e417fb6ddb225e47e364100e528ed3d3e26be27d2c7c5958d7db4723",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "sum_multiples_real",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem sum_multiples_real (N D : ℕ) (hD : 0 < D) (f : ℕ → ℝ) :\n    (∑ n ∈ Finset.Ioc 0 N, if D ∣ n then f n else 0) =\n      ∑ k ∈ Finset.Ioc 0 (N / D), f (D * k)",
+      "header_sha256": "91c95493a27ac51d4bfcb88e41b21550de187dfabfaa6e86764f5ea0fc84d36b",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "quotientCarrier",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def quotientCarrier (d : MediumAtom) (D : ℕ) : Finset ℕ",
+      "header_sha256": "a43d66f4057f25777ac74de9da1b62658711dfe7dcdcaa12e03da4de7aa6be2b",
+      "primitive_definition_with_body": "private def quotientCarrier (d : MediumAtom) (D : ℕ) : Finset ℕ :=\n  Finset.Ioc 0 (Nat.floor (tailCap d) / D)",
+      "primitive_definition_sha256": "d254d1ddb88ce673afdece5ee5a5b731c1bcb4d2c3eb005297d35f8c6611aaca"
+    },
+    {
+      "name": "tailWeight",
+      "kind": "def",
+      "visibility": "private",
+      "complete_header": "private def tailWeight (d : MediumAtom) (D k : ℕ) : ℝ",
+      "header_sha256": "6d1752a3050083b5e7beb573b0634881ceccce40305988bf7a35486618196bce",
+      "primitive_definition_with_body": "private def tailWeight (d : MediumAtom) (D k : ℕ) : ℝ :=\n  ‖tailGamma d (D * k)‖ / (k : ℝ)",
+      "primitive_definition_sha256": "19c391a51ff61c5f1ee84e0a026cd680eba068f2ee5d587578dd560224b4c85a"
+    },
+    {
+      "name": "tailWeight_nonneg",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tailWeight_nonneg (d : MediumAtom) (D k : ℕ) :\n    0 ≤ tailWeight d D k",
+      "header_sha256": "b4404c8079563b9418f500bee6ec897a70bdd9e1d7ad6a46e9a15349ee435a9a",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tailWeight_sum_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tailWeight_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (D : ℕ) :\n    (∑ k ∈ quotientCarrier d D, tailWeight d D k) ≤\n      tau D * (1 + Real.log (tailCap d)) ^ 2",
+      "header_sha256": "751be24615b1c2289c21c988119c85b5f2a6ac785716cf230009e0bad5755daf",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "weighted_young_sum_eq",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem weighted_young_sum_eq (S : Finset ℕ) (a E : ℕ → ℝ) :\n    (∑ k ∈ S, ∑ l ∈ S, a k * a l * ((E k + E l) / 2)) =\n      (∑ k ∈ S, a k) * (∑ k ∈ S, a k * E k)",
+      "header_sha256": "6cb4db79a8f19ea623e29d2259375041ef5e15dd44c19af0ef8c5da7cd5527cd",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "weighted_cross_norm_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem weighted_cross_norm_le (d : MediumAtom) (k l delta : ℕ) (R : ℝ) :\n    ((delta : ℝ) / (delta.totient : ℝ)) *\n      ‖∑ chi ∈ ((Finset.univ : Finset (DirichletCharacter ℂ delta)).erase 1).filter\n          (fun chi ↦ R < (chi.conductor : ℝ)),\n        auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi *\n          star (auxiliaryCharacterSum d.alphaCarrier d.alpha l delta chi)‖ ≤\n      (highEnergy d k delta R + highEnergy d l delta R) / 2",
+      "header_sha256": "380b85186a602197e8a32b0a8a9fda434ef1097d08f14fc6c80ecbe0514d08ec",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "gcd_pair_norm_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem gcd_pair_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {p D v w : ℕ} (hp : 0 < p) (hD : 0 < D) (hv : 0 < v) (hw : 0 < w)\n    (hg : v.gcd w = D) (R : ℝ) :\n    ‖tailGamma d v * star (tailGamma d w) * characterKernel d p v w R‖ ≤\n      (|CommonSmoothCutoff.cutoffMass| * d.V / ((p : ℝ) ^ 2 * (D : ℝ) ^ 2)) *\n        tailWeight d D (v / D) * tailWeight d D (w / D) *\n          ((highEnergy d (v / D) (p * D) R + highEnergy d (w / D) (p * D) R) / 2)",
+      "header_sha256": "45499edd5344d60100b72a81b930ca99483b62da6e1c7cfcac69f36004724ce9",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "gcdSlice_norm_le_energy",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem gcdSlice_norm_le_energy\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {p D : ℕ} (hp : 0 < p) (hD : 0 < D) (R : ℝ) :\n    ‖gcdSlice d p D R‖ ≤\n      (|CommonSmoothCutoff.cutoffMass| * d.V / ((p : ℝ) ^ 2 * (D : ℝ) ^ 2)) *\n        (∑ k ∈ quotientCarrier d D, tailWeight d D k) *\n          (∑ k ∈ quotientCarrier d D, tailWeight d D k * highEnergy d k (p * D) R)",
+      "header_sha256": "e8eebe3c4c0ad6d38e4dbf4a0db4c8454fbdabe7fe80e342bc4f820b2a5bcc31",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "shared_gcd_sum_norm_le_energy",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem shared_gcd_sum_norm_le_energy\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {D : ℕ} (hD : 0 < D) (R : ℝ) :\n    ‖∑ p ∈ d.primitiveFirstFactorCarrier, gcdSlice d p D R‖ ≤\n      (|CommonSmoothCutoff.cutoffMass| * d.V / (d.Q1 ^ 2 * (D : ℝ) ^ 2)) *\n        (∑ k ∈ quotientCarrier d D, tailWeight d D k) *\n          (∑ k ∈ quotientCarrier d D, tailWeight d D k *\n            (∑ p ∈ d.primitiveFirstFactorCarrier, highEnergy d k (p * D) R))",
+      "header_sha256": "1fcffc19b138890a6760c324b9a5e560a707611013b7daee9ba7d4da01fb9eca",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tau_square_harmonic_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tau_square_harmonic_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    (∑ D ∈ smallDivisors d Y, tau D ^ 2 / (D : ℝ)) ≤ commonLog d ^ 4",
+      "header_sha256": "29f3dd49c18007ae3f9dcd93cbf53d55bbfaf4222865360a564d8160bb61d80a",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "tau_square_power_sum_le",
+      "kind": "theorem",
+      "visibility": "private",
+      "complete_header": "private theorem tau_square_power_sum_le\n    {B : ℕ} {sigma kappa c0 eta : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (heta : 0 < eta)\n    {Y : ℝ} (hY : 1 ≤ Y) :\n    (∑ D ∈ smallDivisors d Y, tau D ^ 2 * (D : ℝ) ^ eta) ≤\n      Y ^ (1 + eta) * commonLog d ^ 4",
+      "header_sha256": "6a35dc2b3ba3d50a33af9404d8998ab19185178bd245c846600c78aea37a9bac",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "actual_smallResidualHighConductorZero_bound",
+      "kind": "theorem",
+      "visibility": "public",
+      "complete_header": "theorem actual_smallResidualHighConductorZero_bound\n    {eta : ℝ} (heta : 0 < eta) (heta1 : eta < 1) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d →\n        ∀ Y R : ℝ, 1 ≤ Y → 1 ≤ R →\n          ‖d.sharedFirstFactorSmallResidualHighConductorZero Y R‖ ≤\n            C * d.V * (1 + Real.log (32 * d.U * d.Q1 * d.Q2 * d.Q3)) ^ 20 *\n              (d.U ^ 2 / (d.Q1 * R ^ (1 - eta)) +\n                d.Q1 ^ eta * Y ^ (1 + eta) * d.U)",
+      "header_sha256": "9dfbc67de506fe7cae614a9193c92299981ca9f3c3d0b86f14f90ae8ef11d00a",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    },
+    {
+      "name": "actual_outside_mul_smallResidualHighConductorZero_bound",
+      "kind": "theorem",
+      "visibility": "public",
+      "complete_header": "theorem actual_outside_mul_smallResidualHighConductorZero_bound\n    {eta : ℝ} (heta : 0 < eta) (heta1 : eta < 1) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d →\n        ∀ Y R : ℝ, 1 ≤ Y → 1 ≤ R →\n          ((∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n              (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)) *\n            ‖d.sharedFirstFactorSmallResidualHighConductorZero Y R‖ ≤\n              C * d.scale ^ 2 *\n                (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n                (1 + Real.log (32 * d.U * d.Q1 * d.Q2 * d.Q3)) ^ 20 *\n                (1 / R ^ (1 - eta) +\n                  d.Q1 ^ (1 + eta) * Y ^ (1 + eta) / d.U)",
+      "header_sha256": "09a55dee56487a59c1279fb0834e427b42f17c609173f51eef2d06f9953f8560",
+      "primitive_definition_with_body": null,
+      "primitive_definition_sha256": null
+    }
+  ],
+  "all_imports_and_mathematics_preserved": true,
+  "precise_fair_retry": "Sole runtime SAME complete-source gate 972c3bb172cdf636569964f87a5ff09e7eb27125f6ddaada031b46e4deae5bf5 rebound to this current source. Original strict j2/M6144/RSS6656 and exact original trueowned direct parents plus freshpropercache/selfonly/zero missingforeign; original failed attempt stays FAILED. Iff actualPASS run unchanged originalobject stock and complete allgenerated/env/types/safety/axiom owned audit. No prefix surrogate, no extra prerequisites/resources/runtime/audit/pin/CI changes.",
+  "no_main_theorem_claim": true
+}

@@ -1,0 +1,685 @@
+{
+  "status": "ACTUAL_FIRST_DIAGNOSTIC_ONE_EXPLICIT_PRIMITIVE_BODY_SYNTAX_AND_PROOF_REPAIRS_FULL_SOURCE_NOT_ACCEPTANCE",
+  "author": "/root/low_aggregate_oct18",
+  "created_utc": "2026-10-18T04:40:35.136090+00:00",
+  "root_one_primitive_scope_sha256": "18ca2031b12e53d9c91cf87c18876ace45a842ac086a723d3927d961310ce9f0",
+  "module": "ImbalancedChen.Part3SharedFirstFactorPrimitiveUVPayment",
+  "old_source_sha256": "ca0b0244a0d2d56e0c69a31a7ecd01dd174ef3482bc5493d97da14a4f2f4733e",
+  "new_source_sha256": "631af675eaf29f8452963a2fe544517b2fae9b87cdcb5e38b7e6b2e1f9e1ce64",
+  "old_line_count": 759,
+  "new_line_count": 774,
+  "source_declarations": 32,
+  "source_definitions": 4,
+  "source_proofs": 28,
+  "all_32_complete_headers_unchanged": true,
+  "other_3_complete_definitions_unchanged": true,
+  "changed_declaration_spans": [
+    "MediumAtom.sharedPrimitiveUVError",
+    "cap_log_bounds",
+    "slice_gamma_tau_sum_le",
+    "shared_U_error_bound",
+    "shared_V_error_bound",
+    "outside_U_bound",
+    "outside_V_bound"
+  ],
+  "all_other_25_complete_declaration_spans_unchanged": true,
+  "old_complete_inventory": [
+    {
+      "name": "MediumAtom.sharedPrimitiveUVError",
+      "kind": "def",
+      "private": false,
+      "line": 26,
+      "full_header": "def MediumAtom.sharedPrimitiveUVError (d : MediumAtom) : ℂ",
+      "full_span_sha256": "0da74346c0b911d96ff9096cf158e243ab2fe9a13aa4320ad7e7af9c44803c1e",
+      "full_definition": "def MediumAtom.sharedPrimitiveUVError (d : MediumAtom) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    (((d.q1SliceAtom p).transposedAtom.complexDispersionU\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n      primitiveZeroMain (d.q1SliceAtom p)) -\n      2 * (((d.q1SliceAtom p).transposedAtom.complexDispersionV\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n          primitiveZeroMain (d.q1SliceAtom p))"
+    },
+    {
+      "name": "uError",
+      "kind": "def",
+      "private": true,
+      "line": 37,
+      "full_header": "private def uError (d : MediumAtom) (p : ℕ) : ℂ",
+      "full_span_sha256": "b3f0c8f1da517e9544a203cc961c51b3a86d493e58d65cb509838c06a7b55181",
+      "full_definition": "private def uError (d : MediumAtom) (p : ℕ) : ℂ :=\n  ((d.q1SliceAtom p).transposedAtom.complexDispersionU\n    d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n      primitiveZeroMain (d.q1SliceAtom p)"
+    },
+    {
+      "name": "vError",
+      "kind": "def",
+      "private": true,
+      "line": 42,
+      "full_header": "private def vError (d : MediumAtom) (p : ℕ) : ℂ",
+      "full_span_sha256": "01c7ce9bd6c7d643e43dc8b98a108235aad14b8af47238c094a09f2dee104a6d",
+      "full_definition": "private def vError (d : MediumAtom) (p : ℕ) : ℂ :=\n  ((d.q1SliceAtom p).transposedAtom.complexDispersionV\n    d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n      primitiveZeroMain (d.q1SliceAtom p)"
+    },
+    {
+      "name": "divisorTau",
+      "kind": "def",
+      "private": true,
+      "line": 47,
+      "full_header": "private def divisorTau (n : ℕ) : ℝ",
+      "full_span_sha256": "02484f818b76574af6fd1b6b39631ce57737367a4a7639ebd8fb00d22f1bc99e",
+      "full_definition": "private def divisorTau (n : ℕ) : ℝ := (n.divisors.card : ℝ)"
+    },
+    {
+      "name": "divisorTau_nonneg",
+      "kind": "theorem",
+      "private": true,
+      "line": 49,
+      "full_header": "private theorem divisorTau_nonneg (n : ℕ) : 0 ≤ divisorTau n",
+      "full_span_sha256": "dad70bfc5c3c7273688852322f9a79329346bf7e59555334be7902a35cd48517",
+      "full_definition": null
+    },
+    {
+      "name": "divisorTau_mul_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 52,
+      "full_header": "private theorem divisorTau_mul_le (a b : ℕ) :\n    divisorTau (a * b) ≤ divisorTau a * divisorTau b",
+      "full_span_sha256": "959c34eb2aaea075f98d42c4136dd960ebf995dee009b4af29cab5d364a2a70f",
+      "full_definition": null
+    },
+    {
+      "name": "divisorTau_pow_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 57,
+      "full_header": "private theorem divisorTau_pow_le (r : ℕ) {n : ℕ} (hn : n ≠ 0) :\n    divisorTau n ^ r ≤ (fouvryTau (2 ^ r) n : ℝ)",
+      "full_span_sha256": "8c52a241696aca87e9b2c74e5052e48e163ff12b20397a3771ef82be11cea105",
+      "full_definition": null
+    },
+    {
+      "name": "factor_bounds",
+      "kind": "theorem",
+      "private": true,
+      "line": 64,
+      "full_header": "private theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) :\n    0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q",
+      "full_span_sha256": "29af019afc6061d6e097563ecefc2ccb5511660cc6b0f6101dfc8c9fdb90a764",
+      "full_definition": null
+    },
+    {
+      "name": "factor_subset_Ioc",
+      "kind": "theorem",
+      "private": true,
+      "line": 75,
+      "full_header": "private theorem factor_subset_Ioc {Q : ℝ} (hQ : 1 ≤ Q) :\n    factorCarrier Q ⊆ Finset.Ioc 0 (Nat.floor (2 * Q))",
+      "full_span_sha256": "2bc610bf7def3d66bb66e277b4555cf94c2f6de58a957f201d0d7dd95cc8a1b9",
+      "full_definition": null
+    },
+    {
+      "name": "dyadic_divisor_harmonic",
+      "kind": "theorem",
+      "private": true,
+      "line": 80,
+      "full_header": "private theorem dyadic_divisor_harmonic {Q : ℝ} (hQ : 1 ≤ Q) (r : ℕ) :\n    (∑ n ∈ factorCarrier Q, divisorTau n ^ r / (n : ℝ)) ≤\n      (1 + Real.log (2 * Q)) ^ (2 ^ r)",
+      "full_span_sha256": "b23357e551d83afc34e322532aa3ce187f09d661bfd87c86ef29161f5861d46d",
+      "full_definition": null
+    },
+    {
+      "name": "primitive_p_reciprocal_square",
+      "kind": "theorem",
+      "private": true,
+      "line": 95,
+      "full_header": "private theorem primitive_p_reciprocal_square (d : MediumAtom)\n    (hQ : 1 ≤ d.Q1) (r : ℕ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, divisorTau p ^ r / (p : ℝ) ^ 2) ≤\n      (1 + Real.log (2 * d.Q1)) ^ (2 ^ r) / d.Q1",
+      "full_span_sha256": "475882a00e00d6032ac4075eba10e15676416d07fabe99f38eda9806900d58d3",
+      "full_definition": null
+    },
+    {
+      "name": "card_factorCarrier_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 124,
+      "full_header": "private theorem card_factorCarrier_le {Q : ℝ} (hQ : 1 ≤ Q) :\n    ((factorCarrier Q).card : ℝ) ≤ 2 * Q",
+      "full_span_sha256": "f1633980de58a0a34e980d7eaa71a9d60b31dc1a20f161eeaa65ac6d0389eed1",
+      "full_definition": null
+    },
+    {
+      "name": "cap_log_bounds",
+      "kind": "theorem",
+      "private": true,
+      "line": 131,
+      "full_header": "private theorem cap_log_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    1 ≤ 1 + Real.log d.physicalFactorCap ∧\n      1 + Real.log (2 * d.Q1) ≤ 1 + Real.log d.physicalFactorCap ∧\n      1 + Real.log (2 * d.Q2) ≤ 1 + Real.log d.physicalFactorCap ∧\n      1 + Real.log (2 * d.Q3) ≤ 1 + Real.log d.physicalFactorCap",
+      "full_span_sha256": "fd35204bbe500e1440efbdaee272b2d58d22d0083d4d8ee8842321e1f2850fe4",
+      "full_definition": null
+    },
+    {
+      "name": "weighted_slice_gamma_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 164,
+      "full_header": "private theorem weighted_slice_gamma_le (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (f : ℕ → ℝ) (hf : ∀ q, 0 ≤ f q) :\n    (∑ q ∈ (d.q1SliceAtom p).physicalFactorModuli,\n      ‖(d.q1SliceAtom p).groupedFactorGamma q‖ * f q) ≤\n        ∑ a ∈ factorCarrier d.Q2, ∑ b ∈ factorCarrier d.Q3,\n          ‖d.gamma2 a * d.gamma3 b‖ * f (p * a * b)",
+      "full_span_sha256": "b2255bbbf271dd77dec9a54528cc805d75a2dcfb32a91aa02917cd064722114f",
+      "full_definition": null
+    },
+    {
+      "name": "tail_gamma_norm_le_one",
+      "kind": "theorem",
+      "private": true,
+      "line": 206,
+      "full_header": "private theorem tail_gamma_norm_le_one\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {a b : ℕ}\n    (ha : a ∈ factorCarrier d.Q2) (hb : b ∈ factorCarrier d.Q3) :\n    ‖d.gamma2 a * d.gamma3 b‖ ≤ 1",
+      "full_span_sha256": "4d1b02832e093c7e65d93651836ccde3401bafca30c8b1e966ea5a6f78a104e0",
+      "full_definition": null
+    },
+    {
+      "name": "tau_div_totient_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 216,
+      "full_header": "private theorem tau_div_totient_le {n : ℕ} (hn : 0 < n) :\n    divisorTau n / (n.totient : ℝ) ≤ divisorTau n ^ 2 / (n : ℝ)",
+      "full_span_sha256": "a3f821f560b09ffb743ddeba662918869a139e189fde283e83b69141fe57c473",
+      "full_definition": null
+    },
+    {
+      "name": "tau_totient_three_factor",
+      "kind": "theorem",
+      "private": true,
+      "line": 229,
+      "full_header": "private theorem tau_totient_three_factor {p a b : ℕ}\n    (hp : 0 < p) (ha : 0 < a) (hb : 0 < b) :\n    divisorTau (p * a * b) / ((p * a * b).totient : ℝ) ≤\n      (divisorTau p ^ 2 / (p : ℝ)) *\n        (divisorTau a ^ 2 / (a : ℝ)) * (divisorTau b ^ 2 / (b : ℝ))",
+      "full_span_sha256": "24c8bddfc302d937e0e21bec457aceafe0b40860402c215824040d763905bad0",
+      "full_definition": null
+    },
+    {
+      "name": "slice_gamma_norm_sum_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 248,
+      "full_header": "private theorem slice_gamma_norm_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    (∑ q ∈ (d.q1SliceAtom p).physicalFactorModuli,\n      ‖(d.q1SliceAtom p).groupedFactorGamma q‖) ≤ 4 * d.Q2 * d.Q3",
+      "full_span_sha256": "c71ce57f3c337bdcd91f7f521f050a961d3a7625c259889bb60b3a909be0b0c6",
+      "full_definition": null
+    },
+    {
+      "name": "slice_gamma_tau_sum_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 269,
+      "full_header": "private theorem slice_gamma_tau_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    (∑ q ∈ (d.q1SliceAtom p).physicalFactorModuli,\n      ‖(d.q1SliceAtom p).groupedFactorGamma q‖ * divisorTau q / (q.totient : ℝ)) ≤\n      (divisorTau p ^ 2 / (p : ℝ)) * (1 + Real.log d.physicalFactorCap) ^ 8",
+      "full_span_sha256": "489a9a6cb51b1cfa7b388affc5e7c5ca2aca8603d5127076fa514c609c6e70e2",
+      "full_definition": null
+    },
+    {
+      "name": "U_finite_envelope_le_weight_sq",
+      "kind": "theorem",
+      "private": true,
+      "line": 326,
+      "full_header": "private theorem U_finite_envelope_le_weight_sq\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖primitivePairCoefficient d q r‖ * ((q * r).divisors.card : ℝ)) ≤\n        4 * d.U ^ 2 * (∑ q ∈ d.physicalFactorModuli,\n          ‖d.groupedFactorGamma q‖ * divisorTau q / (q.totient : ℝ)) ^ 2",
+      "full_span_sha256": "7c02d26244a19ec51c8f99459880987d86f67831ada45bb66e74bb547f24104c",
+      "full_definition": null
+    },
+    {
+      "name": "V_finite_envelope_le_weights",
+      "kind": "theorem",
+      "private": true,
+      "line": 372,
+      "full_header": "private theorem V_finite_envelope_le_weights\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖mixedPairCoefficient d q r‖ *\n        coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n          (r.divisors.card : ℝ)) ≤\n      4 * d.U ^ 2 *\n        ((∑ q ∈ d.physicalFactorModuli, ‖d.groupedFactorGamma q‖) *\n          ∑ r ∈ d.physicalFactorModuli,\n            ‖d.groupedFactorGamma r‖ * divisorTau r / (r.totient : ℝ))",
+      "full_span_sha256": "f1ed3193213a31a43e35892f78181a539d9c865818d9292667ed25f2a6d82207",
+      "full_definition": null
+    },
+    {
+      "name": "shared_U_error_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 426,
+      "full_header": "private theorem shared_U_error_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖uError d p‖) ≤\n        C * d.U ^ 2 / d.Q1 * (1 + Real.log d.physicalFactorCap) ^ 32",
+      "full_span_sha256": "438ff54345315cabd56a640c6bfd0c22cdaac4b7d62d24784787c9b6293b5336",
+      "full_definition": null
+    },
+    {
+      "name": "primitive_p_harmonic",
+      "kind": "theorem",
+      "private": true,
+      "line": 480,
+      "full_header": "private theorem primitive_p_harmonic (d : MediumAtom)\n    (hQ : 1 ≤ d.Q1) (r : ℕ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, divisorTau p ^ r / (p : ℝ)) ≤\n      (1 + Real.log (2 * d.Q1)) ^ (2 ^ r)",
+      "full_span_sha256": "17a898e45cc38fc4881c64938b40f8f8f467e6b0200078b95b5af8a13f6bd852",
+      "full_definition": null
+    },
+    {
+      "name": "shared_V_error_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 493,
+      "full_header": "private theorem shared_V_error_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖vError d p‖) ≤\n        C * d.U ^ 2 * (4 * d.Q2 * d.Q3) *\n          (1 + Real.log d.physicalFactorCap) ^ 12",
+      "full_span_sha256": "41705ad2c91b5995d0736123b8e362cb559870cc0e609808aa75e1c61bb11735",
+      "full_definition": null
+    },
+    {
+      "name": "outside_U_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 550,
+      "full_header": "private theorem outside_U_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖uError d p‖) ≤\n        C * d.V * d.U ^ 2 *\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n            (1 + Real.log d.physicalFactorCap) ^ 32",
+      "full_span_sha256": "f5b5bdbd2dcc0c2b2117ae48e360409dff9db82f5128e449f02dbc4761423ddf",
+      "full_definition": null
+    },
+    {
+      "name": "outside_V_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 579,
+      "full_header": "private theorem outside_V_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖vError d p‖) ≤\n        C * d.V * d.U ^ 2 * d.physicalFactorCap *\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n            (1 + Real.log d.physicalFactorCap) ^ 12",
+      "full_span_sha256": "25fc939a2d5c71c2b81dbbd07bd69866e520621fe9d0111e9d88649d4080c137",
+      "full_definition": null
+    },
+    {
+      "name": "outside_U_power_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 603,
+      "full_header": "private theorem outside_U_power_bound (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖uError d p‖) ≤\n            C * d.scale ^ (7 / 4 : ℝ)",
+      "full_span_sha256": "47e61ba5ab84816b69f5bae9d10cb7785cb3161960b5ef49e59ae985b04b79d1",
+      "full_definition": null
+    },
+    {
+      "name": "outside_V_power_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 637,
+      "full_header": "private theorem outside_V_power_bound (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖vError d p‖) ≤\n            C * d.scale ^ (2 - 8 * sigma)",
+      "full_span_sha256": "86f3c2c0b61d74752a3429db399cb3518a44df76e277540e98652fdcc7a5b592",
+      "full_definition": null
+    },
+    {
+      "name": "outside_U_log_payment",
+      "kind": "theorem",
+      "private": true,
+      "line": 674,
+      "full_header": "private theorem outside_U_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖uError d p‖) ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A",
+      "full_span_sha256": "cfbf819de3a7208691eac4d3a20b1c88f2341eda7f3bbad0063b6b1f38d745d3",
+      "full_definition": null
+    },
+    {
+      "name": "outside_V_log_payment",
+      "kind": "theorem",
+      "private": true,
+      "line": 691,
+      "full_header": "private theorem outside_V_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖vError d p‖) ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A",
+      "full_span_sha256": "a5b91bc67f9ddb0b3e788eb11025d8605b81df9ccdb0d41b6bf01d89af5c3ebe",
+      "full_definition": null
+    },
+    {
+      "name": "shared_UV_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 706,
+      "full_header": "private theorem shared_UV_norm_le (d : MediumAtom) :\n    ‖d.sharedPrimitiveUVError‖ ≤\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖uError d p‖) +\n        2 * (∑ p ∈ d.primitiveFirstFactorCarrier, ‖vError d p‖)",
+      "full_span_sha256": "5fca5bf768025cdcf96c3ea78e0e4f148f1db5c5e51ed19bfb3320b76a1f1ecf",
+      "full_definition": null
+    },
+    {
+      "name": "actual_betaL2_gamma1L2_sharedPrimitiveUV_log_payment",
+      "kind": "theorem",
+      "private": false,
+      "line": 727,
+      "full_header": "theorem actual_betaL2_gamma1L2_sharedPrimitiveUV_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          ‖d.sharedPrimitiveUVError‖ ≤\n            3 * (d.scale ^ 2 / (Real.log d.scale) ^ A)",
+      "full_span_sha256": "df1422d49bab8a77cb708c9b476420062aedb22f077046536f99fbb49cd47459",
+      "full_definition": null
+    }
+  ],
+  "new_complete_inventory": [
+    {
+      "name": "MediumAtom.sharedPrimitiveUVError",
+      "kind": "def",
+      "private": false,
+      "line": 26,
+      "full_header": "def MediumAtom.sharedPrimitiveUVError (d : MediumAtom) : ℂ",
+      "full_span_sha256": "bf8b1709eb98e7d90ec4b1c9d8a0702d58d34bca04163ef80754a56cbf2d50ce",
+      "full_definition": "def MediumAtom.sharedPrimitiveUVError (d : MediumAtom) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ((((d.q1SliceAtom p).transposedAtom.complexDispersionU\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n      primitiveZeroMain (d.q1SliceAtom p)) -\n      2 * (((d.q1SliceAtom p).transposedAtom.complexDispersionV\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n          primitiveZeroMain (d.q1SliceAtom p)))"
+    },
+    {
+      "name": "uError",
+      "kind": "def",
+      "private": true,
+      "line": 37,
+      "full_header": "private def uError (d : MediumAtom) (p : ℕ) : ℂ",
+      "full_span_sha256": "b3f0c8f1da517e9544a203cc961c51b3a86d493e58d65cb509838c06a7b55181",
+      "full_definition": "private def uError (d : MediumAtom) (p : ℕ) : ℂ :=\n  ((d.q1SliceAtom p).transposedAtom.complexDispersionU\n    d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n      primitiveZeroMain (d.q1SliceAtom p)"
+    },
+    {
+      "name": "vError",
+      "kind": "def",
+      "private": true,
+      "line": 42,
+      "full_header": "private def vError (d : MediumAtom) (p : ℕ) : ℂ",
+      "full_span_sha256": "01c7ce9bd6c7d643e43dc8b98a108235aad14b8af47238c094a09f2dee104a6d",
+      "full_definition": "private def vError (d : MediumAtom) (p : ℕ) : ℂ :=\n  ((d.q1SliceAtom p).transposedAtom.complexDispersionV\n    d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n      primitiveZeroMain (d.q1SliceAtom p)"
+    },
+    {
+      "name": "divisorTau",
+      "kind": "def",
+      "private": true,
+      "line": 47,
+      "full_header": "private def divisorTau (n : ℕ) : ℝ",
+      "full_span_sha256": "02484f818b76574af6fd1b6b39631ce57737367a4a7639ebd8fb00d22f1bc99e",
+      "full_definition": "private def divisorTau (n : ℕ) : ℝ := (n.divisors.card : ℝ)"
+    },
+    {
+      "name": "divisorTau_nonneg",
+      "kind": "theorem",
+      "private": true,
+      "line": 49,
+      "full_header": "private theorem divisorTau_nonneg (n : ℕ) : 0 ≤ divisorTau n",
+      "full_span_sha256": "dad70bfc5c3c7273688852322f9a79329346bf7e59555334be7902a35cd48517",
+      "full_definition": null
+    },
+    {
+      "name": "divisorTau_mul_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 52,
+      "full_header": "private theorem divisorTau_mul_le (a b : ℕ) :\n    divisorTau (a * b) ≤ divisorTau a * divisorTau b",
+      "full_span_sha256": "959c34eb2aaea075f98d42c4136dd960ebf995dee009b4af29cab5d364a2a70f",
+      "full_definition": null
+    },
+    {
+      "name": "divisorTau_pow_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 57,
+      "full_header": "private theorem divisorTau_pow_le (r : ℕ) {n : ℕ} (hn : n ≠ 0) :\n    divisorTau n ^ r ≤ (fouvryTau (2 ^ r) n : ℝ)",
+      "full_span_sha256": "8c52a241696aca87e9b2c74e5052e48e163ff12b20397a3771ef82be11cea105",
+      "full_definition": null
+    },
+    {
+      "name": "factor_bounds",
+      "kind": "theorem",
+      "private": true,
+      "line": 64,
+      "full_header": "private theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) :\n    0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q",
+      "full_span_sha256": "29af019afc6061d6e097563ecefc2ccb5511660cc6b0f6101dfc8c9fdb90a764",
+      "full_definition": null
+    },
+    {
+      "name": "factor_subset_Ioc",
+      "kind": "theorem",
+      "private": true,
+      "line": 75,
+      "full_header": "private theorem factor_subset_Ioc {Q : ℝ} (hQ : 1 ≤ Q) :\n    factorCarrier Q ⊆ Finset.Ioc 0 (Nat.floor (2 * Q))",
+      "full_span_sha256": "2bc610bf7def3d66bb66e277b4555cf94c2f6de58a957f201d0d7dd95cc8a1b9",
+      "full_definition": null
+    },
+    {
+      "name": "dyadic_divisor_harmonic",
+      "kind": "theorem",
+      "private": true,
+      "line": 80,
+      "full_header": "private theorem dyadic_divisor_harmonic {Q : ℝ} (hQ : 1 ≤ Q) (r : ℕ) :\n    (∑ n ∈ factorCarrier Q, divisorTau n ^ r / (n : ℝ)) ≤\n      (1 + Real.log (2 * Q)) ^ (2 ^ r)",
+      "full_span_sha256": "b23357e551d83afc34e322532aa3ce187f09d661bfd87c86ef29161f5861d46d",
+      "full_definition": null
+    },
+    {
+      "name": "primitive_p_reciprocal_square",
+      "kind": "theorem",
+      "private": true,
+      "line": 95,
+      "full_header": "private theorem primitive_p_reciprocal_square (d : MediumAtom)\n    (hQ : 1 ≤ d.Q1) (r : ℕ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, divisorTau p ^ r / (p : ℝ) ^ 2) ≤\n      (1 + Real.log (2 * d.Q1)) ^ (2 ^ r) / d.Q1",
+      "full_span_sha256": "475882a00e00d6032ac4075eba10e15676416d07fabe99f38eda9806900d58d3",
+      "full_definition": null
+    },
+    {
+      "name": "card_factorCarrier_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 124,
+      "full_header": "private theorem card_factorCarrier_le {Q : ℝ} (hQ : 1 ≤ Q) :\n    ((factorCarrier Q).card : ℝ) ≤ 2 * Q",
+      "full_span_sha256": "f1633980de58a0a34e980d7eaa71a9d60b31dc1a20f161eeaa65ac6d0389eed1",
+      "full_definition": null
+    },
+    {
+      "name": "cap_log_bounds",
+      "kind": "theorem",
+      "private": true,
+      "line": 131,
+      "full_header": "private theorem cap_log_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    1 ≤ 1 + Real.log d.physicalFactorCap ∧\n      1 + Real.log (2 * d.Q1) ≤ 1 + Real.log d.physicalFactorCap ∧\n      1 + Real.log (2 * d.Q2) ≤ 1 + Real.log d.physicalFactorCap ∧\n      1 + Real.log (2 * d.Q3) ≤ 1 + Real.log d.physicalFactorCap",
+      "full_span_sha256": "44202a95d2e177a3e280c2eac2ba0503178e3d4a1d2f46330e5a83f3e2fdec18",
+      "full_definition": null
+    },
+    {
+      "name": "weighted_slice_gamma_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 165,
+      "full_header": "private theorem weighted_slice_gamma_le (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (f : ℕ → ℝ) (hf : ∀ q, 0 ≤ f q) :\n    (∑ q ∈ (d.q1SliceAtom p).physicalFactorModuli,\n      ‖(d.q1SliceAtom p).groupedFactorGamma q‖ * f q) ≤\n        ∑ a ∈ factorCarrier d.Q2, ∑ b ∈ factorCarrier d.Q3,\n          ‖d.gamma2 a * d.gamma3 b‖ * f (p * a * b)",
+      "full_span_sha256": "b2255bbbf271dd77dec9a54528cc805d75a2dcfb32a91aa02917cd064722114f",
+      "full_definition": null
+    },
+    {
+      "name": "tail_gamma_norm_le_one",
+      "kind": "theorem",
+      "private": true,
+      "line": 207,
+      "full_header": "private theorem tail_gamma_norm_le_one\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {a b : ℕ}\n    (ha : a ∈ factorCarrier d.Q2) (hb : b ∈ factorCarrier d.Q3) :\n    ‖d.gamma2 a * d.gamma3 b‖ ≤ 1",
+      "full_span_sha256": "4d1b02832e093c7e65d93651836ccde3401bafca30c8b1e966ea5a6f78a104e0",
+      "full_definition": null
+    },
+    {
+      "name": "tau_div_totient_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 217,
+      "full_header": "private theorem tau_div_totient_le {n : ℕ} (hn : 0 < n) :\n    divisorTau n / (n.totient : ℝ) ≤ divisorTau n ^ 2 / (n : ℝ)",
+      "full_span_sha256": "a3f821f560b09ffb743ddeba662918869a139e189fde283e83b69141fe57c473",
+      "full_definition": null
+    },
+    {
+      "name": "tau_totient_three_factor",
+      "kind": "theorem",
+      "private": true,
+      "line": 230,
+      "full_header": "private theorem tau_totient_three_factor {p a b : ℕ}\n    (hp : 0 < p) (ha : 0 < a) (hb : 0 < b) :\n    divisorTau (p * a * b) / ((p * a * b).totient : ℝ) ≤\n      (divisorTau p ^ 2 / (p : ℝ)) *\n        (divisorTau a ^ 2 / (a : ℝ)) * (divisorTau b ^ 2 / (b : ℝ))",
+      "full_span_sha256": "24c8bddfc302d937e0e21bec457aceafe0b40860402c215824040d763905bad0",
+      "full_definition": null
+    },
+    {
+      "name": "slice_gamma_norm_sum_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 249,
+      "full_header": "private theorem slice_gamma_norm_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    (∑ q ∈ (d.q1SliceAtom p).physicalFactorModuli,\n      ‖(d.q1SliceAtom p).groupedFactorGamma q‖) ≤ 4 * d.Q2 * d.Q3",
+      "full_span_sha256": "c71ce57f3c337bdcd91f7f521f050a961d3a7625c259889bb60b3a909be0b0c6",
+      "full_definition": null
+    },
+    {
+      "name": "slice_gamma_tau_sum_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 270,
+      "full_header": "private theorem slice_gamma_tau_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    (∑ q ∈ (d.q1SliceAtom p).physicalFactorModuli,\n      ‖(d.q1SliceAtom p).groupedFactorGamma q‖ * divisorTau q / (q.totient : ℝ)) ≤\n      (divisorTau p ^ 2 / (p : ℝ)) * (1 + Real.log d.physicalFactorCap) ^ 8",
+      "full_span_sha256": "0255a84a2f617da753c1700500c9dec04874716aa054569be6f858a84c3a7196",
+      "full_definition": null
+    },
+    {
+      "name": "U_finite_envelope_le_weight_sq",
+      "kind": "theorem",
+      "private": true,
+      "line": 336,
+      "full_header": "private theorem U_finite_envelope_le_weight_sq\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖primitivePairCoefficient d q r‖ * ((q * r).divisors.card : ℝ)) ≤\n        4 * d.U ^ 2 * (∑ q ∈ d.physicalFactorModuli,\n          ‖d.groupedFactorGamma q‖ * divisorTau q / (q.totient : ℝ)) ^ 2",
+      "full_span_sha256": "7c02d26244a19ec51c8f99459880987d86f67831ada45bb66e74bb547f24104c",
+      "full_definition": null
+    },
+    {
+      "name": "V_finite_envelope_le_weights",
+      "kind": "theorem",
+      "private": true,
+      "line": 382,
+      "full_header": "private theorem V_finite_envelope_le_weights\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖mixedPairCoefficient d q r‖ *\n        coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n          (r.divisors.card : ℝ)) ≤\n      4 * d.U ^ 2 *\n        ((∑ q ∈ d.physicalFactorModuli, ‖d.groupedFactorGamma q‖) *\n          ∑ r ∈ d.physicalFactorModuli,\n            ‖d.groupedFactorGamma r‖ * divisorTau r / (r.totient : ℝ))",
+      "full_span_sha256": "f1ed3193213a31a43e35892f78181a539d9c865818d9292667ed25f2a6d82207",
+      "full_definition": null
+    },
+    {
+      "name": "shared_U_error_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 436,
+      "full_header": "private theorem shared_U_error_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖uError d p‖) ≤\n        C * d.U ^ 2 / d.Q1 * (1 + Real.log d.physicalFactorCap) ^ 32",
+      "full_span_sha256": "70369e4419551ba3947749dbd1038db6ab366d2ccbffe8e623c777b70bb36e7d",
+      "full_definition": null
+    },
+    {
+      "name": "primitive_p_harmonic",
+      "kind": "theorem",
+      "private": true,
+      "line": 490,
+      "full_header": "private theorem primitive_p_harmonic (d : MediumAtom)\n    (hQ : 1 ≤ d.Q1) (r : ℕ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, divisorTau p ^ r / (p : ℝ)) ≤\n      (1 + Real.log (2 * d.Q1)) ^ (2 ^ r)",
+      "full_span_sha256": "17a898e45cc38fc4881c64938b40f8f8f467e6b0200078b95b5af8a13f6bd852",
+      "full_definition": null
+    },
+    {
+      "name": "shared_V_error_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 503,
+      "full_header": "private theorem shared_V_error_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖vError d p‖) ≤\n        C * d.U ^ 2 * (4 * d.Q2 * d.Q3) *\n          (1 + Real.log d.physicalFactorCap) ^ 12",
+      "full_span_sha256": "cfc5c3c9c7514eda6b970040a26afc29ed83e041a9bb046e6090a7fbe6c69525",
+      "full_definition": null
+    },
+    {
+      "name": "outside_U_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 562,
+      "full_header": "private theorem outside_U_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖uError d p‖) ≤\n        C * d.V * d.U ^ 2 *\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n            (1 + Real.log d.physicalFactorCap) ^ 32",
+      "full_span_sha256": "cf0dd20cfc76cd3f659e6a34bd3b8c9a91f59ba6fbad1c5d726e82fa66c1a2ac",
+      "full_definition": null
+    },
+    {
+      "name": "outside_V_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 592,
+      "full_header": "private theorem outside_V_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖vError d p‖) ≤\n        C * d.V * d.U ^ 2 * d.physicalFactorCap *\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n            (1 + Real.log d.physicalFactorCap) ^ 12",
+      "full_span_sha256": "4d45a31760ae4b1d3329c2aea3d32c48915d6c73b2ccb78edae4c584f4e08827",
+      "full_definition": null
+    },
+    {
+      "name": "outside_U_power_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 618,
+      "full_header": "private theorem outside_U_power_bound (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖uError d p‖) ≤\n            C * d.scale ^ (7 / 4 : ℝ)",
+      "full_span_sha256": "47e61ba5ab84816b69f5bae9d10cb7785cb3161960b5ef49e59ae985b04b79d1",
+      "full_definition": null
+    },
+    {
+      "name": "outside_V_power_bound",
+      "kind": "theorem",
+      "private": true,
+      "line": 652,
+      "full_header": "private theorem outside_V_power_bound (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖vError d p‖) ≤\n            C * d.scale ^ (2 - 8 * sigma)",
+      "full_span_sha256": "86f3c2c0b61d74752a3429db399cb3518a44df76e277540e98652fdcc7a5b592",
+      "full_definition": null
+    },
+    {
+      "name": "outside_U_log_payment",
+      "kind": "theorem",
+      "private": true,
+      "line": 689,
+      "full_header": "private theorem outside_U_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖uError d p‖) ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A",
+      "full_span_sha256": "cfbf819de3a7208691eac4d3a20b1c88f2341eda7f3bbad0063b6b1f38d745d3",
+      "full_definition": null
+    },
+    {
+      "name": "outside_V_log_payment",
+      "kind": "theorem",
+      "private": true,
+      "line": 706,
+      "full_header": "private theorem outside_V_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          (∑ p ∈ d.primitiveFirstFactorCarrier, ‖vError d p‖) ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A",
+      "full_span_sha256": "a5b91bc67f9ddb0b3e788eb11025d8605b81df9ccdb0d41b6bf01d89af5c3ebe",
+      "full_definition": null
+    },
+    {
+      "name": "shared_UV_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "line": 721,
+      "full_header": "private theorem shared_UV_norm_le (d : MediumAtom) :\n    ‖d.sharedPrimitiveUVError‖ ≤\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖uError d p‖) +\n        2 * (∑ p ∈ d.primitiveFirstFactorCarrier, ‖vError d p‖)",
+      "full_span_sha256": "5fca5bf768025cdcf96c3ea78e0e4f148f1db5c5e51ed19bfb3320b76a1f1ecf",
+      "full_definition": null
+    },
+    {
+      "name": "actual_betaL2_gamma1L2_sharedPrimitiveUV_log_payment",
+      "kind": "theorem",
+      "private": false,
+      "line": 742,
+      "full_header": "theorem actual_betaL2_gamma1L2_sharedPrimitiveUV_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          ‖d.sharedPrimitiveUVError‖ ≤\n            3 * (d.scale ^ 2 / (Real.log d.scale) ^ A)",
+      "full_span_sha256": "df1422d49bab8a77cb708c9b476420062aedb22f077046536f99fbb49cd47459",
+      "full_definition": null
+    }
+  ],
+  "ONE_primitive_old_full_definition": "def MediumAtom.sharedPrimitiveUVError (d : MediumAtom) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    (((d.q1SliceAtom p).transposedAtom.complexDispersionU\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n      primitiveZeroMain (d.q1SliceAtom p)) -\n      2 * (((d.q1SliceAtom p).transposedAtom.complexDispersionV\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n          primitiveZeroMain (d.q1SliceAtom p))",
+  "ONE_primitive_new_full_definition": "def MediumAtom.sharedPrimitiveUVError (d : MediumAtom) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ((((d.q1SliceAtom p).transposedAtom.complexDispersionU\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n      primitiveZeroMain (d.q1SliceAtom p)) -\n      2 * (((d.q1SliceAtom p).transposedAtom.complexDispersionV\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n          primitiveZeroMain (d.q1SliceAtom p)))",
+  "primitive_math_intention": "The entire original same-p expression (U_p-P0_p)-2(V_p-P0_p) now lies inside its original sum binder, preserving actual p-specific primitiveZeroMain and original common cutoff. No object coefficient, carrier, cutoff, factor or quantifier was changed.",
+  "no_formal_equivalence_claim_for_old_ill_formed_body": true,
+  "exact_forward_inverse_bytes": true,
+  "exact_patches": [
+    {
+      "old": "def MediumAtom.sharedPrimitiveUVError (d : MediumAtom) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    (((d.q1SliceAtom p).transposedAtom.complexDispersionU\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n      primitiveZeroMain (d.q1SliceAtom p)) -\n      2 * (((d.q1SliceAtom p).transposedAtom.complexDispersionV\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n          primitiveZeroMain (d.q1SliceAtom p))",
+      "new": "def MediumAtom.sharedPrimitiveUVError (d : MediumAtom) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ((((d.q1SliceAtom p).transposedAtom.complexDispersionU\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n      primitiveZeroMain (d.q1SliceAtom p)) -\n      2 * (((d.q1SliceAtom p).transposedAtom.complexDispersionV\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n          primitiveZeroMain (d.q1SliceAtom p)))",
+      "scope": "ONE primitive body lexical-binder correction explicitly root authorized18ca; full difference is the sum integrand",
+      "count": 1
+    },
+    {
+      "old": "  obtain ⟨_, _, hQ1, hQ2, hQ3, _⟩ := hd\n  have h1 : 2 * d.Q1 ≤ d.physicalFactorCap := by",
+      "new": "  have hcap := d.one_le_physicalFactorCap hd\n  obtain ⟨_, _, hQ1, hQ2, hQ3, _⟩ := hd\n  have h1 : 2 * d.Q1 ≤ d.physicalFactorCap := by",
+      "scope": "cap log proof keeps cap bound before destruct consumes hd",
+      "count": 1
+    },
+    {
+      "old": "  exact ⟨by linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)],\n    add_le_add_left (Real.log_le_log (by linarith) h1) 1,\n    add_le_add_left (Real.log_le_log (by linarith) h2) 1,\n    add_le_add_left (Real.log_le_log (by linarith) h3) 1⟩",
+      "new": "  exact ⟨by linarith [Real.log_nonneg hcap],\n    add_le_add (le_refl 1) (Real.log_le_log (by linarith) h1),\n    add_le_add (le_refl 1) (Real.log_le_log (by linarith) h2),\n    add_le_add (le_refl 1) (Real.log_le_log (by linarith) h3)⟩",
+      "scope": "cap log actual add order API",
+      "count": 1
+    },
+    {
+      "old": "        (∑ b ∈ factorCarrier d.Q3, divisorTau b ^ 2 / (b : ℝ)) := by\n      simp only [Finset.mul_sum, Finset.sum_mul, mul_assoc]",
+      "new": "        (∑ b ∈ factorCarrier d.Q3, divisorTau b ^ 2 / (b : ℝ)) := by\n      calc\n        _ = (divisorTau p ^ 2 / (p : ℝ)) *\n            (∑ a ∈ factorCarrier d.Q2, ∑ b ∈ factorCarrier d.Q3,\n              (divisorTau a ^ 2 / (a : ℝ)) * (divisorTau b ^ 2 / (b : ℝ))) := by\n          simp only [Finset.mul_sum, mul_assoc]\n        _ = (divisorTau p ^ 2 / (p : ℝ)) *\n            ((∑ a ∈ factorCarrier d.Q2, divisorTau a ^ 2 / (a : ℝ)) *\n              (∑ b ∈ factorCarrier d.Q3, divisorTau b ^ 2 / (b : ℝ))) := by\n          rw [Finset.sum_mul_sum]\n        _ = _ := by ring",
+      "scope": "preserve actual ordered two-label sums using sum_mul_sum; no exchanged unsupported equality",
+      "count": 1
+    },
+    {
+      "old": "(pow_le_pow_left₀ (by linarith [Real.log_nonneg\n          (show 1 ≤ 2 * d.Q1 by linarith [hd.2.2.1])])",
+      "new": "(pow_le_pow_left₀ (by linarith [(Real.log_nonneg\n          (show 1 ≤ 2 * d.Q1 by linarith [hd.2.2.1]))])",
+      "scope": "actual line475 parse: parenthesized entire function application in linarith list",
+      "count": 1
+    },
+    {
+      "old": "  have hT : 0 ≤ T := by dsimp [T]; linarith [hd.2.2.2.1, hd.2.2.2.2.1,\n    mul_nonneg (show 0 ≤ d.Q2 by linarith [hd.2.2.2.1])\n      (show 0 ≤ d.Q3 by linarith [hd.2.2.2.2.1])]",
+      "new": "  have hT : 0 ≤ T := by\n    dsimp [T]\n    exact mul_nonneg\n      (mul_nonneg (by norm_num : (0 : ℝ) ≤ 4)\n        (by linarith [hd.2.2.2.1])) (by linarith [hd.2.2.2.2.1])",
+      "scope": "actual line505 parse and sign: explicit product nonnegativity",
+      "count": 1
+    },
+    {
+      "old": "exact pow_le_pow_left₀ (by linarith [Real.log_nonneg\n        (show 1 ≤ 2 * d.Q1 by linarith [hd.2.2.1])])",
+      "new": "exact pow_le_pow_left₀ (by linarith [(Real.log_nonneg\n        (show 1 ≤ 2 * d.Q1 by linarith [hd.2.2.1]))])",
+      "scope": "actual line546 parse: parenthesized entire function application in linarith list",
+      "count": 1
+    },
+    {
+      "old": "  refine ⟨4 * C, by positivity, fun B sigma kappa c0 d hd ↦ ?_⟩\n  have hQ1 : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1",
+      "new": "  refine ⟨4 * C, by positivity, fun B sigma kappa c0 d hd ↦ ?_⟩\n  have hV : 0 ≤ d.V := by linarith [hd.2.1]\n  have hQ1 : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1",
+      "scope": "actual line571 positivity: expose original V sign",
+      "count": 1
+    },
+    {
+      "old": "  refine ⟨2 * C, by positivity, fun B sigma kappa c0 d hd ↦ ?_⟩\n  have hH : 0 ≤ 1 + Real.log d.physicalFactorCap :=",
+      "new": "  refine ⟨2 * C, by positivity, fun B sigma kappa c0 d hd ↦ ?_⟩\n  have hV : 0 ≤ d.V := by linarith [hd.2.1]\n  have hQ1 : 0 ≤ d.Q1 := by linarith [hd.2.2.1]\n  have hH : 0 ≤ 1 + Real.log d.physicalFactorCap :=",
+      "scope": "actual line600 positivity: expose original V and Q1 signs",
+      "count": 1
+    }
+  ],
+  "actual_stdout_full": "ImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:31:27: error(lean.unknownIdentifier): Unknown identifier `p`\nImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:33:43: error(lean.unknownIdentifier): Unknown identifier `p`\nImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:158:4: error: Application type mismatch: The argument\n  add_le_add_left (Real.log_le_log ?m.444 h1) 1\nhas type\n  Real.log (2 * d.Q1) + 1 ≤ Real.log d.physicalFactorCap + 1\nbut is expected to have type\n  1 + Real.log (2 * d.Q1) ≤ 1 + Real.log d.physicalFactorCap\nin the application\n  And.intro (add_le_add_left (Real.log_le_log ?m.444 h1) 1)\nImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:159:4: error: Application type mismatch: The argument\n  add_le_add_left (Real.log_le_log ?m.457 h2) 1\nhas type\n  Real.log (2 * d.Q2) + 1 ≤ Real.log d.physicalFactorCap + 1\nbut is expected to have type\n  1 + Real.log (2 * d.Q2) ≤ 1 + Real.log d.physicalFactorCap\nin the application\n  And.intro (add_le_add_left (Real.log_le_log ?m.457 h2) 1)\nImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:157:66: error(lean.unknownIdentifier): Unknown identifier `hd`\nImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:308:66: error: unsolved goals\nB : ℕ\nsigma kappa c0 : ℝ\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\np : ℕ\nhp : p ∈ d.primitiveFirstFactorCarrier\nhp0 : 0 < p\nhQ2 : 1 ≤ d.Q2\nhQ3 : 1 ≤ d.Q3\nhH : 1 ≤ 1 + Real.log d.physicalFactorCap\nleft✝ : 1 + Real.log (2 * d.Q1) ≤ 1 + Real.log d.physicalFactorCap\nhH2 : 1 + Real.log (2 * d.Q2) ≤ 1 + Real.log d.physicalFactorCap\nhH3 : 1 + Real.log (2 * d.Q3) ≤ 1 + Real.log d.physicalFactorCap\nh2nonneg : 0 ≤ 1 + Real.log (2 * d.Q2)\nh3nonneg : 0 ≤ 1 + Real.log (2 * d.Q3)\n⊢ ∑ x ∈ factorCarrier d.Q2,\n      ∑ x_1 ∈ factorCarrier d.Q3, divisorTau p ^ 2 / ↑p * (divisorTau x ^ 2 / ↑x * (divisorTau x_1 ^ 2 / ↑x_1)) =\n    ∑ x ∈ factorCarrier d.Q3,\n      ∑ x_1 ∈ factorCarrier d.Q2, divisorTau p ^ 2 / ↑p * (divisorTau x_1 ^ 2 / ↑x_1 * (divisorTau x ^ 2 / ↑x))\nImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:475:55: error: unexpected token '('; expected ']'\nImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:475:40: error: don't know how to synthesize implicit argument `x`\n  @Real.log_nonneg ?m.874\ncontext:\nC : ℝ\nhC : 0 < C\nhbound :\n  ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n    MediumAdmissible B sigma kappa c0 d →\n      ‖↑(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight) -\n            primitiveZeroMain d‖ ≤\n        C *\n          ∑ q ∈ d.physicalFactorModuli,\n            ∑ r ∈ d.physicalFactorModuli, ‖primitivePairCoefficient d q r‖ * ↑(#(q * r).divisors)\nB : ℕ\nsigma kappa c0 : ℝ\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\nH : ℝ := ⋯\nhH : 0 ≤ H\nhQ1 : 0 < d.Q1\nhpoint : ∀ p ∈ d.primitiveFirstFactorCarrier, ‖uError d p‖ ≤ 4 * C * d.U ^ 2 * H ^ 16 * (divisorTau p ^ 4 / ↑p ^ 2)\n⊢ ℝ\nImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:475:27: error: unsolved goals\nC : ℝ\nhC : 0 < C\nhbound :\n  ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n    MediumAdmissible B sigma kappa c0 d →\n      ‖↑(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight) -\n            primitiveZeroMain d‖ ≤\n        C *\n          ∑ q ∈ d.physicalFactorModuli,\n            ∑ r ∈ d.physicalFactorModuli, ‖primitivePairCoefficient d q r‖ * ↑(#(q * r).divisors)\nB : ℕ\nsigma kappa c0 : ℝ\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\nH : ℝ := 1 + Real.log d.physicalFactorCap\nhH : 0 ≤ H\nhQ1 : 0 < d.Q1\nhpoint : ∀ p ∈ d.primitiveFirstFactorCarrier, ‖uError d p‖ ≤ 4 * C * d.U ^ 2 * H ^ 16 * (divisorTau p ^ 4 / ↑p ^ 2)\n⊢ 0 ≤ ?m.868\nImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:430:72: error: unsolved goals\ncase calc.step\nC : ℝ\nhC : 0 < C\nhbound :\n  ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n    MediumAdmissible B sigma kappa c0 d →\n      ‖↑(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight) -\n            primitiveZeroMain d‖ ≤\n        C *\n          ∑ q ∈ d.physicalFactorModuli,\n            ∑ r ∈ d.physicalFactorModuli, ‖primitivePairCoefficient d q r‖ * ↑(#(q * r).divisors)\nB : ℕ\nsigma kappa c0 : ℝ\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\nH : ℝ := 1 + Real.log d.physicalFactorCap\nhH : 0 ≤ H\nhQ1 : 0 < d.Q1\nhpoint : ∀ p ∈ d.primitiveFirstFactorCarrier, ‖uError d p‖ ≤ 4 * C * d.U ^ 2 * H ^ 16 * (divisorTau p ^ 4 / ↑p ^ 2)\n⊢ 4 * C * d.U ^ 2 * H ^ 16 * (H ^ 16 / d.Q1) ≤ 4 * C * d.U ^ 2 / d.Q1 * (1 + Real.log d.physicalFactorCap) ^ 32\nImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:505:14: error: unexpected token '('; expected ']'\nImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:505:4: error: typeclass instance problem is stuck\n  PosMulMono ?m.209\n\nNote: Lean will not try to resolve this typeclass instance problem because the first, second, third, and fourth type arguments to `PosMulMono` contain metavariables. These arguments must be fully determined before Lean will try to resolve the typeclass.\n\nHint: Adding type annotations and supplying implicit arguments to functions can give Lean more information for typeclass resolution. For example, if you have a variable `x` that you intend to be a `Nat`, but Lean reports it as having an unresolved type like `?m`, replacing `x` with `(x : Nat)` can get typeclass resolution un-stuck.\nImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:498:53: error: unsolved goals\nC : ℝ\nhC : 0 < C\nhbound :\n  ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n    MediumAdmissible B sigma kappa c0 d →\n      ‖↑(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight) -\n            primitiveZeroMain d‖ ≤\n        C *\n          ∑ q ∈ d.physicalFactorModuli,\n            ∑ r ∈ d.physicalFactorModuli,\n              ‖mixedPairCoefficient d q r‖ * coprimeMass d.alphaCarrier (fun n => ‖d.alpha n‖) q * ↑(#r.divisors)\nB : ℕ\nsigma kappa c0 : ℝ\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\nH : ℝ := 1 + Real.log d.physicalFactorCap\nT : ℝ := 4 * d.Q2 * d.Q3\nhH : 0 ≤ H\nhT : 0 ≤ T\n⊢ ∑ p ∈ d.primitiveFirstFactorCarrier, ‖vError d p‖ ≤\n    4 * C * d.U ^ 2 * (4 * d.Q2 * d.Q3) * (1 + Real.log d.physicalFactorCap) ^ 12\nImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:571:58: error: failed to prove positivity/nonnegativity/nonzeroness\nImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:600:58: error: failed to prove positivity/nonnegativity/nonzeroness\nImbalancedChen/Part3SharedFirstFactorPrimitiveUVPayment.lean:711:4: error: invalid 'calc' step, left-hand side is\n  ‖∑ i ∈ d.primitiveFirstFactorCarrier, (uError d i - 2 * vError d i)‖ : ℝ\nbut is expected to be\n  ‖d.sharedPrimitiveUVError‖ : ℝ\n",
+  "actual_stdout_sha256": "b326c453876668c3a9daf36eddb1f367f77c41cacdd63de6732009ce369ad3ee",
+  "actual_receipt_sha256": "59b5bec6f8c2beb73e3e9821ac5c14aca9ad2ba51ee1066ebac20f694642fa17",
+  "actual_seconds": 40.596,
+  "actual_max_rss_kib": 4767556,
+  "actual_guard_null_and_bindings_exact": true,
+  "imports_and_public_types_same": true,
+  "proper_DAG_unchanged_from_ca0b": {
+    "proper_existing_project_parents": 68,
+    "inclusive_with_self": 69,
+    "foreign_boundary_including_Init": 65,
+    "new_foreign": [],
+    "prior_full_owner_report": "20261018-shared-primitive-UV-full-source-owner-and-proper-DAG.json",
+    "prior_owner_sha256": "9b2ce400940df6f0b9dfee3d66bf769fc0592e496971674643b85d34e00a4afa"
+  },
+  "Low503_Upper3f_frozen": true,
+  "no_author_Lean_compile_checker_cache_pin_CI_resource_or_linter_mutation": true,
+  "source_frozen_for_non_author_exact_primitive_and_full_proof_rebind": true
+}
