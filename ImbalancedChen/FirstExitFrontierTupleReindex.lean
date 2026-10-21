@@ -42,7 +42,12 @@ private theorem nextCandidates_reverse_history {α : Type*} (h : α → ℝ)
       carrier.map (fun p => pre.reverse ++ [p]) := by
   induction carrier with
   | nil => rfl
-  | cons p ps ih => simp [firstExitNextSelectionCandidates, ih]
+  | cons p ps ih =>
+      change (p :: pre).reverse ::
+          ((firstExitNextSelectionCandidates h pre positive mass ps).map
+            (fun state => state.selectedPrefix.reverse)) =
+        (pre.reverse ++ [p]) :: ps.map (fun q => pre.reverse ++ [q])
+      rw [List.reverse_cons, ih]
 
 private theorem parentChoices_zero {α : Type*}
     (parent : Bool → List α → Bool) (pre carrier : List α) (positive : Bool) :

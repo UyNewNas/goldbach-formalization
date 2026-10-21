@@ -1,0 +1,163 @@
+{
+  "status": "ONE_ORIGINAL_TUPLE_C42A94_FIRST_STRICT_FAILED_FULL_AFTER_FRESH_NOHEAVY_TERMINAL_HOLD",
+  "created_utc": "2026-10-21T02:01:57.113520+00:00",
+  "owner": "/root/runtime_oct21",
+  "module": "ImbalancedChen.FirstExitFrontierTupleReindex",
+  "source": {
+    "path": "ImbalancedChen\\FirstExitFrontierTupleReindex.lean",
+    "sha256": "c42a94ac4802e8114667a4f3282e316746fd9b8beef9dce363440aee33f74452",
+    "bytes": 18370,
+    "LF": 347
+  },
+  "specific_gate": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021-frontier-tuple-c42a94-root-one-self-specific-first-runtime-gate.json",
+    "sha256": "77266326ab62b92fd37a4f34e6038a7b8a7df66b8a5b26972c9bdce04480e7ee"
+  },
+  "proper_before": {
+    "path": ".lake\\proof-continuation\\preflights\\20261021T015235078285Z-exact-current-ImbalancedChen.FirstExitFrontierTupleReindex.json",
+    "sha256": "d6166910f32d80f7689ddaba0a1d059d9d3fffdbbc2ac8cfa4eb8f588e47b0d6"
+  },
+  "fullbefore": {
+    "path": ".lake\\proof-continuation\\preflights\\20261021T015848814475Z-tuplec42a94-before-allparts-exact.json",
+    "sha256": "2f65d11a9bb9d2debdd06945940d1e8afb66636eba25ac3bd6f838fe9d6894f8"
+  },
+  "strict_receipt": {
+    "path": ".lake\\proof-continuation\\runs\\20261021T015925681287Z-ImbalancedChen.FirstExitFrontierTupleReindex\\receipt.json",
+    "sha256": "8a63e2a8a9c1f14728c5e8d2984cd267bbecfd5b3a06e31d81cec4e91562dcb7"
+  },
+  "complete_stdout": {
+    "path": ".lake\\proof-continuation\\runs\\20261021T015925681287Z-ImbalancedChen.FirstExitFrontierTupleReindex\\stdout.log",
+    "sha256": "e7f6f49ff6c36132451b16d6062200be06a1afffe379988e47f95134b534f19a",
+    "bytes": 891,
+    "complete_stdout_utf8": "ImbalancedChen/FirstExitFrontierTupleReindex.lean:45:17: error: unsolved goals\ncase cons\nα : Type u_1\nh : α → ℝ\npre : List α\npositive : Bool\nmass : ℝ\np : α\nps : List α\nih :\n  List.map (fun state => state.selectedPrefix.reverse) (firstExitNextSelectionCandidates h pre positive mass ps) =\n    List.map (fun p => pre.reverse ++ [p]) ps\n⊢ List.map (fun state => state.selectedPrefix.reverse)\n      (List.rec []\n        (fun q qs rest =>\n          { selectedPrefix := q :: pre, positive := !positive, mass := mass * h q, remaining := qs } :: rest)\n        ps) =\n    List.map (fun p => pre.reverse ++ [p]) ps\nImbalancedChen/FirstExitFrontierTupleReindex.lean:45:60: error: This simp argument is unused:\n  ih\n\nHint: Omit it from the simp argument list.\n  [apply] simp [firstExitNextSelectionCandidates]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n"
+  },
+  "actual_compiler_diagnostics": [
+    {
+      "line": 45,
+      "column": 17,
+      "kind": "unsolved goals",
+      "theorem": "nextCandidates_reverse_history"
+    },
+    {
+      "line": 45,
+      "column": 60,
+      "kind": "strict unusedSimpArgs ih",
+      "theorem": "nextCandidates_reverse_history"
+    }
+  ],
+  "affected_complete_private_theorem": {
+    "name": "nextCandidates_reverse_history",
+    "kind": "theorem",
+    "private": true,
+    "start_line": 38,
+    "end_line": 45,
+    "char_range": [
+      1562,
+      1973
+    ],
+    "utf8_byte_range": [
+      1588,
+      2008
+    ],
+    "true_complete_source_header": "private theorem nextCandidates_reverse_history {α : Type*} (h : α → ℝ)\n    (pre carrier : List α) (positive : Bool) (mass : ℝ) :\n    (firstExitNextSelectionCandidates h pre positive mass carrier).map\n        (fun state => state.selectedPrefix.reverse) =\n      carrier.map (fun p => pre.reverse ++ [p])",
+    "definition_body_or_complete_proof_after_colon_equals": " by\n  induction carrier with\n  | nil => rfl\n  | cons p ps ih => simp [firstExitNextSelectionCandidates, ih]",
+    "complete_literal_declaration": "private theorem nextCandidates_reverse_history {α : Type*} (h : α → ℝ)\n    (pre carrier : List α) (positive : Bool) (mass : ℝ) :\n    (firstExitNextSelectionCandidates h pre positive mass carrier).map\n        (fun state => state.selectedPrefix.reverse) =\n      carrier.map (fun p => pre.reverse ++ [p]) := by\n  induction carrier with\n  | nil => rfl\n  | cons p ps ih => simp [firstExitNextSelectionCandidates, ih]",
+    "complete_declaration_sha256": "30aa5fed47d2e532fd0cc94b7fa3514c3d3ccc7872c0814a11a5c7accd770a8b",
+    "all_binders_let_chains_preserved": true,
+    "whole_declaration_proof_read": true,
+    "independent_review": "Induction on exact candidate recursion: each candidate has selectedPrefix=p::pre, so reverse is pre.reverse++[p]. Remaining labels and mass irrelevant to this exact history map, not discarded as assumptions."
+  },
+  "proper_after": {
+    "path": ".lake\\proof-continuation\\preflights\\20261021T020031315823Z-exact-current-ImbalancedChen.FirstExitFrontierTupleReindex.json",
+    "sha256": "d6166910f32d80f7689ddaba0a1d059d9d3fffdbbc2ac8cfa4eb8f588e47b0d6"
+  },
+  "fullafter": {
+    "path": ".lake\\proof-continuation\\preflights\\20261021T020057780702Z-tuplec42a94-after-allparts-exact.json",
+    "sha256": "94cb222825f985890493fb78bcd265e53fe6cbb1f616bda3463482e7950986f1"
+  },
+  "fullbefore_after_stable_inputs_exact": true,
+  "fresh_owned_census": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021T020035229752Z-runtime-fresh-current-terminal-owned-census.json",
+    "sha256": "688ad298171959f3cb856a4a080840411d3212bb47e4d5634917c7d4047bcdfe"
+  },
+  "owned_modules": 161,
+  "complete_serialized_declarations": 3705,
+  "original_owned_receipts": 109,
+  "actual_noheavy_original_lockfree": {
+    "path": ".lake\\proof-continuation\\preflights\\20261021T020120785426Z-tuplec42a94-full-terminal-HOLD-actual-process-and-lock.json",
+    "sha256": "a526ccffed382d203162252031f851354ab71f53b290748e41338f50c5bfc0da"
+  },
+  "all_handles_terminal": {
+    "proper_before": {
+      "handle": 17604,
+      "exit_code": 0
+    },
+    "fullbefore": {
+      "handle": 47257,
+      "exit_code": 0
+    },
+    "strict": {
+      "handle": 55809,
+      "exit_code": 1
+    },
+    "proper_after": {
+      "handle": 39611,
+      "exit_code": 0
+    },
+    "fullafter": {
+      "handle": 24501,
+      "exit_code": 0
+    },
+    "fresh_census": {
+      "direct_exec_exit_code": 0
+    },
+    "noheavy": {
+      "direct_exec_exit_code": 0
+    }
+  },
+  "actual_quota": {
+    "primary_used": 15,
+    "primary_remaining": 85,
+    "secondary": null,
+    "stop_remaining_le": 50,
+    "stop_triggered": false
+  },
+  "stock_or_ALL_started": false,
+  "source_edit_or_retry_performed": false,
+  "target_cache_exists": false,
+  "target_object_exists": false,
+  "current_scope": {
+    "parents": 24,
+    "actual_owned": 7,
+    "all_complete_flags": 180,
+    "inherited_normal_trust_NOT_OWNED": 17,
+    "project_objects": 65,
+    "project_parts": 226,
+    "native_modules": 4933,
+    "native_parts": 24602,
+    "native_missing_part_slots": 63,
+    "direct_edges": 88,
+    "nonnull_direct_source": 80,
+    "true_null_direct_source": 8,
+    "missing_binding_after": 17
+  },
+  "preflight_helpers": {
+    "proper_frozen_helper": {
+      "path": ".lake\\proof-continuation\\preflight_current_oct20.py",
+      "sha256": "e5c11c36e35582e4f864fa8582e49800027e91cbfab85d71f3456da83abb1947"
+    },
+    "fullparts_new_readonly": {
+      "path": ".lake\\proof-continuation\\rounds\\20261021-tuplec42a94-full-inputs.py",
+      "sha256": "142780f4889304d7b19a743aa7a6b5ef0fbe42a940b04bb4075c8afa6c36de01"
+    },
+    "census_new_readonly": {
+      "path": ".lake\\proof-continuation\\rounds\\20261021-tuplec42a94-current-owned-census.py",
+      "sha256": "a9eb2a1ca9d8baa0175be59fee40da5bc4a8d50616a4286e49c536fe898ffccc"
+    }
+  },
+  "foreign_allparts_hashes_all_historical_matched": true,
+  "inherited_parent_bootstrap_promotion_or_replay": false,
+  "fullforeign_kernel_replay_claimed": false,
+  "unconditional_main_claimed": false,
+  "next_action": "HOLD; root source review and new exact one-source gate required for any retry or new target"
+}

@@ -208,10 +208,12 @@ original admissibility is not replaced by unproved transposed admissibility.
 | `CurrentChenUniformEulerNormalization` | The actual target-prime-deleted Euler product has a genuine single threshold uniform over every fixed compact positive exponent interval and every covering cap, using exact cap identity, finite product antitonicity, two proved fixed endpoint limits and a finite compact cover; no Rosser-ratio or signed-mean supplier | Strict compilation; original-object stock kernel replay; complete 3-declaration types, inventory and transitive axiom audit |
 | `Part3SharedFirstFactorSmallCoreFourierTruncation` | The literal small paired supported core has an actual signed row-adaptive finite Fourier truncation with proved Schwartz tail; all original p and row label costs, complex coefficient real projection, original outside moments and fixed-before-atom unit logarithmic payment are retained, without a spectral cancellation supplier | Strict compilation; original-object stock kernel replay; complete 33-declaration types, inventory and transitive axiom audit |
 | `FirstExitValidSelection` | Actual retained tree leaves and natural retained-modulus support are exactly constructive policy-valid chosen sublists, with both directions preserving processing order and parity; finite equivalence only, no density or distribution hypothesis | Strict compilation; original-object stock kernel replay; complete 11-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorSmallCoreSmoothFrequency` | The literal original small paired supported core has a genuine smooth signed common-D frequency approximation; actual cutoff support, full complex coefficient real projection, all row labels and original outside moments are retained and its Schwartz tail pays a fixed-before-atom unit logarithmic budget, without root separation or spectral cancellation suppliers | Strict compilation; original-object stock kernel replay; complete 51-declaration types, inventory and transitive axiom audit |
+| `FirstExitFrontierTupleReindex` | Actual stopped first-exit frontier histories preserve list multiplicities by an exact proper-prefix-valid sublist permutation, then genuine no-repetition permits original tuple and reciprocal-weight sum identities with target deletion, cap and strict/weak endpoints unchanged; finite dictionary only, without analytic density supplier | Strict compilation; original-object stock kernel replay; complete 43-declaration types, inventory and transitive axiom audit |
 
-These 161 modules contain **3705 complete owned declarations**, including
+These 163 modules contain **3799 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-3705 independent major mathematical theorems.
+3799 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.
