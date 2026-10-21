@@ -1,0 +1,765 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-commonp-m2-polylog-majorant-independent-source-review-HOLD",
+  "created_utc": "2026-10-21T21:51:36.0284639Z",
+  "reviewer": "/root/signed_precision_review_sol_high_oct22",
+  "status": "INDEPENDENT_COMPLETE_FIVE_PROOF_M2_POLYLOG_MAJORANT_SOURCE_REVIEW_NO_STATIC_BLOCKER_UNCOMPILED_HOLD",
+  "verdict": "no_static_blocker",
+  "HOLD": true,
+  "scope": "Exactly this bounded165LF module: two closed definitions and five complete proofs. Independent source-only review, no elaboration/compilation or analytic signed-error saving claim.",
+  "artifact": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPM2PolylogMajorant-module-source.txt",
+    "sha256": "f6502dc7f0084f729f817ebd244de18b6b6ef015d7aca92a038e9e20ea646a39",
+    "bytes": 7736,
+    "lf_lines": 165
+  },
+  "author_checkpoint": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-commonp-m2-polylog-majorant-source-proposal-author-HOLD.json",
+    "sha256": "f5a6f739ad77d855ea4c00a2dc3de52c1b83f7128a4db1eb53707815e386d8ac",
+    "bytes": 61661,
+    "lf_lines": 585
+  },
+  "complete_source": "import ImbalancedChen.Part3CommonPCappedMixedMoment\nimport ImbalancedChen.Part3SharedFirstFactorDispersion\nimport Mathlib.Analysis.SpecialFunctions.Log.Basic\n\n/-!\n# Explicit capped common-p M2 polylogarithmic majorant\n\nSOURCE PROPOSAL ONLY -- UNCOMPILED -- HOLD -- 2026-10-22.\nThe first import names the future module of the independently reviewed\n169-line capped-mixed proposal, SHA256\naad0b9c32ec449b054f5d59561810255ad028e05d9ebf7bccc38e67582a4b622.\nThis module pays the actual outsideEnergy and 3*U/Q1 exactly once.\nIts constant is fixed by B before every atom, sigma, kappa and residue.\nAll original MediumAdmissible, positive-sigma and capped-kappa hypotheses\nremain. The large shifted-order constant is never numerically expanded.\nThe result is a positive polylogarithmic upper majorant only: it provides\nno signed-error saving, full medium estimate, spectral return or main theorem.\n-/\n\nnamespace ImbalancedChen.Part3.CommonPM2PolylogMajorant\nnoncomputable section\nopen ElementaryCommonPMixedMoment\n\ndef betaLogExponent (B : ℕ) : ℕ := (2 ^ B) ^ 2 - 1\n\ndef m2PolylogConstant (B : ℕ) : ℝ :=\n  12 * mixedMomentConstant * (2 : ℝ) ^ betaLogExponent B\n\ntheorem m2PolylogConstant_pos (B : ℕ) : 0 < m2PolylogConstant B := by\n  unfold m2PolylogConstant\n  exact mul_pos\n    (mul_pos (by norm_num) mixedMomentConstant_pos_and_mixedSum_le.1)\n    (pow_pos (by norm_num) _)\n\n/-- A scale comparison, valid also at x=V=1 and at exponent zero later. -/\ntheorem log_two_mul_bounds {x V : ℝ} (hx : 1 ≤ x) (hV : 1 ≤ V)\n    (hVx : V ≤ x) :\n    0 ≤ 1 + Real.log (2 * V) ∧\n      1 + Real.log (2 * V) ≤ 2 * (1 + Real.log x) := by\n  have hVpos : 0 < V := zero_lt_one.trans_le hV\n  have hlogx : 0 ≤ Real.log x := Real.log_nonneg hx\n  have hlog2 : Real.log (2 : ℝ) ≤ 1 := by\n    have h := Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ) < 2)\n    linarith\n  constructor\n  · have h := Real.log_nonneg (by linarith : 1 ≤ 2 * V)\n    linarith\n  · have hlogV : Real.log V ≤ Real.log x := Real.log_le_log hVpos hVx\n    rw [Real.log_mul (by norm_num : (2 : ℝ) ≠ 0) hVpos.ne']\n    linarith\n\nend\nend ImbalancedChen.Part3.CommonPM2PolylogMajorant\n\nnamespace ImbalancedChen.Part3\nnoncomputable section\nopen scoped BigOperators\nopen ElementaryCommonPMixedMoment CommonPM2PolylogMajorant\n\n/-- Cancel the sole Q1 ratio against the actual outside second moments. -/\ntheorem MediumAtom.cleaned_commonP_M2_le_capped_mixedMoment_with_beta_log\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      12 * mixedMomentConstant * d.scale ^ 2 *\n        (1 + Real.log (2 * d.V)) ^ betaLogExponent B *\n          (1 + Real.log d.scale) ^ 131073 := by\n  have hx : 1 ≤ d.scale := by\n    change (1 : ℝ) ≤ d.U * d.V\n    simpa only [one_mul] using\n      mul_le_mul hd.1 hd.2.1 (by norm_num : (0 : ℝ) ≤ 1) (zero_le_one.trans hd.1)\n  have hx0 : 0 ≤ d.scale := zero_le_one.trans hx\n  have hQpos : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1\n  have hfactor : 0 ≤ 3 * d.U / d.Q1 :=\n    div_nonneg (mul_nonneg (by norm_num) (zero_le_one.trans hd.1)) hQpos.le\n  have hL : 0 ≤ 1 + Real.log d.scale := by\n    linarith [Real.log_nonneg hx]\n  have hmain : 0 ≤ mixedMomentConstant * d.scale *\n      (1 + Real.log d.scale) ^ 131073 :=\n    mul_nonneg (mul_nonneg mixedMomentConstant_pos_and_mixedSum_le.1.le hx0)\n      (pow_nonneg hL _)\n  have hlength : (4 * d.V * d.Q1) * (3 * d.U / d.Q1) = 12 * d.scale := by\n    calc\n      (4 * d.V * d.Q1) * (3 * d.U / d.Q1) =\n          (4 * d.V) * ((3 * d.U / d.Q1) * d.Q1) := by ac_rfl\n      _ = (4 * d.V) * (3 * d.U) := by rw [div_mul_cancel₀ _ hQpos.ne']\n      _ = 12 * d.scale := by unfold MediumAtom.scale; ring\n  calc\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n        CommonPM2FiniteFold.outsideEnergy d *\n          ((3 * d.U / d.Q1) *\n            (mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073)) :=\n      d.cleaned_commonP_M2_le_capped_mixedMoment hd hsigma hkappa hcap\n    _ ≤ (4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ betaLogExponent B) *\n        ((3 * d.U / d.Q1) *\n          (mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073)) :=\n      mul_le_mul_of_nonneg_right (d.sharedFirstFactor_outside_le hd)\n        (mul_nonneg hfactor hmain)\n    _ = ((4 * d.V * d.Q1) * (3 * d.U / d.Q1)) *\n        (mixedMomentConstant * d.scale) *\n          ((1 + Real.log (2 * d.V)) ^ betaLogExponent B *\n            (1 + Real.log d.scale) ^ 131073) := by ac_rfl\n    _ = (12 * d.scale) * (mixedMomentConstant * d.scale) *\n        ((1 + Real.log (2 * d.V)) ^ betaLogExponent B *\n          (1 + Real.log d.scale) ^ 131073) := by rw [hlength]\n    _ = _ := by rw [pow_two d.scale]; ac_rfl\n\n/-- Merge the two logarithms with a constant depending only on B. -/\ntheorem MediumAtom.cleaned_commonP_M2_le_capped_polylog\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      m2PolylogConstant B * d.scale ^ 2 *\n        (1 + Real.log d.scale) ^ (131073 + betaLogExponent B) := by\n  have hx : 1 ≤ d.scale := by\n    change (1 : ℝ) ≤ d.U * d.V\n    simpa only [one_mul] using\n      mul_le_mul hd.1 hd.2.1 (by norm_num : (0 : ℝ) ≤ 1) (zero_le_one.trans hd.1)\n  have hVx : d.V ≤ d.scale := by\n    change d.V ≤ d.U * d.V\n    simpa only [one_mul] using mul_le_mul_of_nonneg_right hd.1 (zero_le_one.trans hd.2.1)\n  have hlogs := log_two_mul_bounds hx hd.2.1 hVx\n  have hp : (1 + Real.log (2 * d.V)) ^ betaLogExponent B ≤\n      (2 * (1 + Real.log d.scale)) ^ betaLogExponent B :=\n    pow_le_pow_left₀ hlogs.1 hlogs.2 _\n  have hL : 0 ≤ 1 + Real.log d.scale := by\n    linarith [Real.log_nonneg hx]\n  have hcoefficient : 0 ≤ 12 * mixedMomentConstant * d.scale ^ 2 :=\n    mul_nonneg\n      (mul_nonneg (by norm_num) mixedMomentConstant_pos_and_mixedSum_le.1.le)\n      (sq_nonneg _)\n  calc\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n        12 * mixedMomentConstant * d.scale ^ 2 *\n          (1 + Real.log (2 * d.V)) ^ betaLogExponent B *\n            (1 + Real.log d.scale) ^ 131073 :=\n      d.cleaned_commonP_M2_le_capped_mixedMoment_with_beta_log hd hsigma hkappa hcap\n    _ ≤ 12 * mixedMomentConstant * d.scale ^ 2 *\n        (2 * (1 + Real.log d.scale)) ^ betaLogExponent B *\n          (1 + Real.log d.scale) ^ 131073 :=\n      mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hp hcoefficient)\n        (pow_nonneg hL _)\n    _ = _ := by\n      rw [mul_pow (2 : ℝ) (1 + Real.log d.scale) (betaLogExponent B),\n        pow_add (1 + Real.log d.scale) 131073 (betaLogExponent B)]\n      unfold m2PolylogConstant\n      ac_rfl\n\n/-- Fix C_B>0 before sigma, kappa, c0, the scale and the moving residue. -/\ntheorem CommonPM2PolylogMajorant.constant_pos_and_uniform (B : ℕ) :\n    0 < m2PolylogConstant B ∧\n      ∀ (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d → 0 < sigma → 0 ≤ kappa →\n          kappa ≤ 1 / (2 * (kshift : ℝ)) →\n        CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n          m2PolylogConstant B * d.scale ^ 2 *\n            (1 + Real.log d.scale) ^ (131073 + betaLogExponent B) := by\n  refine ⟨m2PolylogConstant_pos B, ?_⟩\n  intro sigma kappa c0 d hd hsigma hkappa hcap\n  exact d.cleaned_commonP_M2_le_capped_polylog hd hsigma hkappa hcap\n\nend\nend ImbalancedChen.Part3\n",
+  "imports": [
+    "ImbalancedChen.Part3CommonPCappedMixedMoment",
+    "ImbalancedChen.Part3SharedFirstFactorDispersion",
+    "Mathlib.Analysis.SpecialFunctions.Log.Basic"
+  ],
+  "module_existence_audit": [
+    {
+      "module": "ImbalancedChen.Part3CommonPM2PolylogMajorant",
+      "actual_source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonPM2PolylogMajorant.lean",
+      "actual_source_exists": false,
+      "ownership_or_kernel_acceptance": "NOT_INFERRED_FROM_EXISTENCE_OR_WRITTEN_IMPORT"
+    },
+    {
+      "module": "ImbalancedChen.Part3CommonPCappedMixedMoment",
+      "actual_source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonPCappedMixedMoment.lean",
+      "actual_source_exists": false,
+      "ownership_or_kernel_acceptance": "NOT_INFERRED_FROM_EXISTENCE_OR_WRITTEN_IMPORT"
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "actual_source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3SharedFirstFactorDispersion.lean",
+      "actual_source_exists": true,
+      "ownership_or_kernel_acceptance": "NOT_INFERRED_FROM_EXISTENCE_OR_WRITTEN_IMPORT"
+    },
+    {
+      "module": "ImbalancedChen.Part3CommonPM2FiniteFold",
+      "actual_source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonPM2FiniteFold.lean",
+      "actual_source_exists": true,
+      "ownership_or_kernel_acceptance": "NOT_INFERRED_FROM_EXISTENCE_OR_WRITTEN_IMPORT"
+    },
+    {
+      "module": "ImbalancedChen.Part3CommonPMixedMomentCauchy",
+      "actual_source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonPMixedMomentCauchy.lean",
+      "actual_source_exists": false,
+      "ownership_or_kernel_acceptance": "NOT_INFERRED_FROM_EXISTENCE_OR_WRITTEN_IMPORT"
+    },
+    {
+      "module": "ImbalancedChen.Part3ShiftedTauCappedLog",
+      "actual_source_path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ShiftedTauCappedLog.lean",
+      "actual_source_exists": false,
+      "ownership_or_kernel_acceptance": "NOT_INFERRED_FROM_EXISTENCE_OR_WRITTEN_IMPORT"
+    },
+    {
+      "module": "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+      "actual_source_path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Log\\Basic.lean",
+      "actual_source_exists": true,
+      "ownership_or_kernel_acceptance": "NOT_INFERRED_FROM_EXISTENCE_OR_WRITTEN_IMPORT"
+    }
+  ],
+  "import_limit": "The first imported parent and its two future analytic source dependencies are absent as actual modules. Written source imports and independent reviews do not confer ownership, admission, import resolution, or kernel acceptance. Actual finite-fold/shared-factor files exist; their kernel status was not checked here.",
+  "declaration_counts": {
+    "definitions": 2,
+    "complete_proofs": 5,
+    "global_declarations": 7,
+    "full_new_source_lf_lines": 165
+  },
+  "complete_written_declarations": [
+    {
+      "kind": "definition",
+      "name": "betaLogExponent",
+      "fully_qualified_name": "ImbalancedChen.Part3.CommonPM2PolylogMajorant.betaLogExponent",
+      "first": 24,
+      "last": 24,
+      "complete_written_type": "def betaLogExponent (B : ℕ) : ℕ\n",
+      "complete_written_body": " (2 ^ B) ^ 2 - 1\n",
+      "complete_written_declaration": "def betaLogExponent (B : ℕ) : ℕ := (2 ^ B) ^ 2 - 1\n",
+      "type_normalized_lf_utf8_sha256": "42fde41818a60ec3eb7af04196a5f5337b86c9f65d18951ae64c8d4c28a40b98",
+      "body_normalized_lf_utf8_sha256": "cceb1b4a73e52fa099a52e17888dedb9cc96acebde974403534baea4f10e1436",
+      "full_declaration_normalized_lf_utf8_sha256": "893d1238817070de671dbff7065b0de77ebd75eb7ffb919944483b0d05cca22d",
+      "full_type_and_body_independently_read": true,
+      "kernel_checked": false
+    },
+    {
+      "kind": "definition",
+      "name": "m2PolylogConstant",
+      "fully_qualified_name": "ImbalancedChen.Part3.CommonPM2PolylogMajorant.m2PolylogConstant",
+      "first": 26,
+      "last": 27,
+      "complete_written_type": "def m2PolylogConstant (B : ℕ) : ℝ\n",
+      "complete_written_body": "\n  12 * mixedMomentConstant * (2 : ℝ) ^ betaLogExponent B\n",
+      "complete_written_declaration": "def m2PolylogConstant (B : ℕ) : ℝ :=\n  12 * mixedMomentConstant * (2 : ℝ) ^ betaLogExponent B\n",
+      "type_normalized_lf_utf8_sha256": "3d5a24c3658f9b2e9dad75ce3a3ce14a5e09f731d1480c93c84a5752adbf50d6",
+      "body_normalized_lf_utf8_sha256": "2b52b5aefbee3d1c10b0b3d5cc940cfd2c05b8aeb022af1768bcd72e03eb8071",
+      "full_declaration_normalized_lf_utf8_sha256": "cf84e6bc74d4feb0678842ed14577f463d48b4cd8b4ce98f75e733ffc52aa865",
+      "full_type_and_body_independently_read": true,
+      "kernel_checked": false
+    },
+    {
+      "kind": "theorem",
+      "name": "m2PolylogConstant_pos",
+      "fully_qualified_name": "ImbalancedChen.Part3.CommonPM2PolylogMajorant.m2PolylogConstant_pos",
+      "first": 29,
+      "type_last": 29,
+      "last": 33,
+      "complete_written_type": "theorem m2PolylogConstant_pos (B : ℕ) : 0 < m2PolylogConstant B := by\n",
+      "complete_written_body": "  unfold m2PolylogConstant\n  exact mul_pos\n    (mul_pos (by norm_num) mixedMomentConstant_pos_and_mixedSum_le.1)\n    (pow_pos (by norm_num) _)\n",
+      "complete_written_proof_body": "  unfold m2PolylogConstant\n  exact mul_pos\n    (mul_pos (by norm_num) mixedMomentConstant_pos_and_mixedSum_le.1)\n    (pow_pos (by norm_num) _)\n",
+      "complete_written_declaration": "theorem m2PolylogConstant_pos (B : ℕ) : 0 < m2PolylogConstant B := by\n  unfold m2PolylogConstant\n  exact mul_pos\n    (mul_pos (by norm_num) mixedMomentConstant_pos_and_mixedSum_le.1)\n    (pow_pos (by norm_num) _)\n",
+      "type_normalized_lf_utf8_sha256": "7bf4d0314640518ff0c9755cefd8ceba10193db462b59850de8cbd6840224c00",
+      "body_normalized_lf_utf8_sha256": "642359f0c20134965626154892247a79e64d03dbbc95a2f691175503f37203de",
+      "proof_body_normalized_lf_utf8_sha256": "642359f0c20134965626154892247a79e64d03dbbc95a2f691175503f37203de",
+      "full_declaration_normalized_lf_utf8_sha256": "2be013cc6596a1a076a137786e096df5f43f4efa0b1a3c22ebab5d7067b09c19",
+      "full_type_and_body_independently_read": true,
+      "kernel_checked": false
+    },
+    {
+      "kind": "theorem",
+      "name": "log_two_mul_bounds",
+      "fully_qualified_name": "ImbalancedChen.Part3.CommonPM2PolylogMajorant.log_two_mul_bounds",
+      "first": 36,
+      "type_last": 39,
+      "last": 50,
+      "complete_written_type": "theorem log_two_mul_bounds {x V : ℝ} (hx : 1 ≤ x) (hV : 1 ≤ V)\n    (hVx : V ≤ x) :\n    0 ≤ 1 + Real.log (2 * V) ∧\n      1 + Real.log (2 * V) ≤ 2 * (1 + Real.log x) := by\n",
+      "complete_written_body": "  have hVpos : 0 < V := zero_lt_one.trans_le hV\n  have hlogx : 0 ≤ Real.log x := Real.log_nonneg hx\n  have hlog2 : Real.log (2 : ℝ) ≤ 1 := by\n    have h := Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ) < 2)\n    linarith\n  constructor\n  · have h := Real.log_nonneg (by linarith : 1 ≤ 2 * V)\n    linarith\n  · have hlogV : Real.log V ≤ Real.log x := Real.log_le_log hVpos hVx\n    rw [Real.log_mul (by norm_num : (2 : ℝ) ≠ 0) hVpos.ne']\n    linarith\n",
+      "complete_written_proof_body": "  have hVpos : 0 < V := zero_lt_one.trans_le hV\n  have hlogx : 0 ≤ Real.log x := Real.log_nonneg hx\n  have hlog2 : Real.log (2 : ℝ) ≤ 1 := by\n    have h := Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ) < 2)\n    linarith\n  constructor\n  · have h := Real.log_nonneg (by linarith : 1 ≤ 2 * V)\n    linarith\n  · have hlogV : Real.log V ≤ Real.log x := Real.log_le_log hVpos hVx\n    rw [Real.log_mul (by norm_num : (2 : ℝ) ≠ 0) hVpos.ne']\n    linarith\n",
+      "complete_written_declaration": "theorem log_two_mul_bounds {x V : ℝ} (hx : 1 ≤ x) (hV : 1 ≤ V)\n    (hVx : V ≤ x) :\n    0 ≤ 1 + Real.log (2 * V) ∧\n      1 + Real.log (2 * V) ≤ 2 * (1 + Real.log x) := by\n  have hVpos : 0 < V := zero_lt_one.trans_le hV\n  have hlogx : 0 ≤ Real.log x := Real.log_nonneg hx\n  have hlog2 : Real.log (2 : ℝ) ≤ 1 := by\n    have h := Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ) < 2)\n    linarith\n  constructor\n  · have h := Real.log_nonneg (by linarith : 1 ≤ 2 * V)\n    linarith\n  · have hlogV : Real.log V ≤ Real.log x := Real.log_le_log hVpos hVx\n    rw [Real.log_mul (by norm_num : (2 : ℝ) ≠ 0) hVpos.ne']\n    linarith\n",
+      "type_normalized_lf_utf8_sha256": "1754990f4bf32a754e96695a72f7a3809baf2a879fcbfb846e3d44f3b0a30055",
+      "body_normalized_lf_utf8_sha256": "f48c2aaa968fb884cb2e7281f1077c407f97dddb2d04c4ab18d37958d788fb78",
+      "proof_body_normalized_lf_utf8_sha256": "f48c2aaa968fb884cb2e7281f1077c407f97dddb2d04c4ab18d37958d788fb78",
+      "full_declaration_normalized_lf_utf8_sha256": "752103e6e8bb432d5c2d4ca87a48db335969ab00998ba2fbd0ef24816f5d5266",
+      "full_type_and_body_independently_read": true,
+      "kernel_checked": false
+    },
+    {
+      "kind": "theorem",
+      "name": "MediumAtom.cleaned_commonP_M2_le_capped_mixedMoment_with_beta_log",
+      "fully_qualified_name": "ImbalancedChen.Part3.MediumAtom.cleaned_commonP_M2_le_capped_mixedMoment_with_beta_log",
+      "first": 61,
+      "type_last": 68,
+      "last": 107,
+      "complete_written_type": "theorem MediumAtom.cleaned_commonP_M2_le_capped_mixedMoment_with_beta_log\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      12 * mixedMomentConstant * d.scale ^ 2 *\n        (1 + Real.log (2 * d.V)) ^ betaLogExponent B *\n          (1 + Real.log d.scale) ^ 131073 := by\n",
+      "complete_written_body": "  have hx : 1 ≤ d.scale := by\n    change (1 : ℝ) ≤ d.U * d.V\n    simpa only [one_mul] using\n      mul_le_mul hd.1 hd.2.1 (by norm_num : (0 : ℝ) ≤ 1) (zero_le_one.trans hd.1)\n  have hx0 : 0 ≤ d.scale := zero_le_one.trans hx\n  have hQpos : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1\n  have hfactor : 0 ≤ 3 * d.U / d.Q1 :=\n    div_nonneg (mul_nonneg (by norm_num) (zero_le_one.trans hd.1)) hQpos.le\n  have hL : 0 ≤ 1 + Real.log d.scale := by\n    linarith [Real.log_nonneg hx]\n  have hmain : 0 ≤ mixedMomentConstant * d.scale *\n      (1 + Real.log d.scale) ^ 131073 :=\n    mul_nonneg (mul_nonneg mixedMomentConstant_pos_and_mixedSum_le.1.le hx0)\n      (pow_nonneg hL _)\n  have hlength : (4 * d.V * d.Q1) * (3 * d.U / d.Q1) = 12 * d.scale := by\n    calc\n      (4 * d.V * d.Q1) * (3 * d.U / d.Q1) =\n          (4 * d.V) * ((3 * d.U / d.Q1) * d.Q1) := by ac_rfl\n      _ = (4 * d.V) * (3 * d.U) := by rw [div_mul_cancel₀ _ hQpos.ne']\n      _ = 12 * d.scale := by unfold MediumAtom.scale; ring\n  calc\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n        CommonPM2FiniteFold.outsideEnergy d *\n          ((3 * d.U / d.Q1) *\n            (mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073)) :=\n      d.cleaned_commonP_M2_le_capped_mixedMoment hd hsigma hkappa hcap\n    _ ≤ (4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ betaLogExponent B) *\n        ((3 * d.U / d.Q1) *\n          (mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073)) :=\n      mul_le_mul_of_nonneg_right (d.sharedFirstFactor_outside_le hd)\n        (mul_nonneg hfactor hmain)\n    _ = ((4 * d.V * d.Q1) * (3 * d.U / d.Q1)) *\n        (mixedMomentConstant * d.scale) *\n          ((1 + Real.log (2 * d.V)) ^ betaLogExponent B *\n            (1 + Real.log d.scale) ^ 131073) := by ac_rfl\n    _ = (12 * d.scale) * (mixedMomentConstant * d.scale) *\n        ((1 + Real.log (2 * d.V)) ^ betaLogExponent B *\n          (1 + Real.log d.scale) ^ 131073) := by rw [hlength]\n    _ = _ := by rw [pow_two d.scale]; ac_rfl\n",
+      "complete_written_proof_body": "  have hx : 1 ≤ d.scale := by\n    change (1 : ℝ) ≤ d.U * d.V\n    simpa only [one_mul] using\n      mul_le_mul hd.1 hd.2.1 (by norm_num : (0 : ℝ) ≤ 1) (zero_le_one.trans hd.1)\n  have hx0 : 0 ≤ d.scale := zero_le_one.trans hx\n  have hQpos : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1\n  have hfactor : 0 ≤ 3 * d.U / d.Q1 :=\n    div_nonneg (mul_nonneg (by norm_num) (zero_le_one.trans hd.1)) hQpos.le\n  have hL : 0 ≤ 1 + Real.log d.scale := by\n    linarith [Real.log_nonneg hx]\n  have hmain : 0 ≤ mixedMomentConstant * d.scale *\n      (1 + Real.log d.scale) ^ 131073 :=\n    mul_nonneg (mul_nonneg mixedMomentConstant_pos_and_mixedSum_le.1.le hx0)\n      (pow_nonneg hL _)\n  have hlength : (4 * d.V * d.Q1) * (3 * d.U / d.Q1) = 12 * d.scale := by\n    calc\n      (4 * d.V * d.Q1) * (3 * d.U / d.Q1) =\n          (4 * d.V) * ((3 * d.U / d.Q1) * d.Q1) := by ac_rfl\n      _ = (4 * d.V) * (3 * d.U) := by rw [div_mul_cancel₀ _ hQpos.ne']\n      _ = 12 * d.scale := by unfold MediumAtom.scale; ring\n  calc\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n        CommonPM2FiniteFold.outsideEnergy d *\n          ((3 * d.U / d.Q1) *\n            (mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073)) :=\n      d.cleaned_commonP_M2_le_capped_mixedMoment hd hsigma hkappa hcap\n    _ ≤ (4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ betaLogExponent B) *\n        ((3 * d.U / d.Q1) *\n          (mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073)) :=\n      mul_le_mul_of_nonneg_right (d.sharedFirstFactor_outside_le hd)\n        (mul_nonneg hfactor hmain)\n    _ = ((4 * d.V * d.Q1) * (3 * d.U / d.Q1)) *\n        (mixedMomentConstant * d.scale) *\n          ((1 + Real.log (2 * d.V)) ^ betaLogExponent B *\n            (1 + Real.log d.scale) ^ 131073) := by ac_rfl\n    _ = (12 * d.scale) * (mixedMomentConstant * d.scale) *\n        ((1 + Real.log (2 * d.V)) ^ betaLogExponent B *\n          (1 + Real.log d.scale) ^ 131073) := by rw [hlength]\n    _ = _ := by rw [pow_two d.scale]; ac_rfl\n",
+      "complete_written_declaration": "theorem MediumAtom.cleaned_commonP_M2_le_capped_mixedMoment_with_beta_log\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      12 * mixedMomentConstant * d.scale ^ 2 *\n        (1 + Real.log (2 * d.V)) ^ betaLogExponent B *\n          (1 + Real.log d.scale) ^ 131073 := by\n  have hx : 1 ≤ d.scale := by\n    change (1 : ℝ) ≤ d.U * d.V\n    simpa only [one_mul] using\n      mul_le_mul hd.1 hd.2.1 (by norm_num : (0 : ℝ) ≤ 1) (zero_le_one.trans hd.1)\n  have hx0 : 0 ≤ d.scale := zero_le_one.trans hx\n  have hQpos : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1\n  have hfactor : 0 ≤ 3 * d.U / d.Q1 :=\n    div_nonneg (mul_nonneg (by norm_num) (zero_le_one.trans hd.1)) hQpos.le\n  have hL : 0 ≤ 1 + Real.log d.scale := by\n    linarith [Real.log_nonneg hx]\n  have hmain : 0 ≤ mixedMomentConstant * d.scale *\n      (1 + Real.log d.scale) ^ 131073 :=\n    mul_nonneg (mul_nonneg mixedMomentConstant_pos_and_mixedSum_le.1.le hx0)\n      (pow_nonneg hL _)\n  have hlength : (4 * d.V * d.Q1) * (3 * d.U / d.Q1) = 12 * d.scale := by\n    calc\n      (4 * d.V * d.Q1) * (3 * d.U / d.Q1) =\n          (4 * d.V) * ((3 * d.U / d.Q1) * d.Q1) := by ac_rfl\n      _ = (4 * d.V) * (3 * d.U) := by rw [div_mul_cancel₀ _ hQpos.ne']\n      _ = 12 * d.scale := by unfold MediumAtom.scale; ring\n  calc\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n        CommonPM2FiniteFold.outsideEnergy d *\n          ((3 * d.U / d.Q1) *\n            (mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073)) :=\n      d.cleaned_commonP_M2_le_capped_mixedMoment hd hsigma hkappa hcap\n    _ ≤ (4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ betaLogExponent B) *\n        ((3 * d.U / d.Q1) *\n          (mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073)) :=\n      mul_le_mul_of_nonneg_right (d.sharedFirstFactor_outside_le hd)\n        (mul_nonneg hfactor hmain)\n    _ = ((4 * d.V * d.Q1) * (3 * d.U / d.Q1)) *\n        (mixedMomentConstant * d.scale) *\n          ((1 + Real.log (2 * d.V)) ^ betaLogExponent B *\n            (1 + Real.log d.scale) ^ 131073) := by ac_rfl\n    _ = (12 * d.scale) * (mixedMomentConstant * d.scale) *\n        ((1 + Real.log (2 * d.V)) ^ betaLogExponent B *\n          (1 + Real.log d.scale) ^ 131073) := by rw [hlength]\n    _ = _ := by rw [pow_two d.scale]; ac_rfl\n",
+      "type_normalized_lf_utf8_sha256": "8bcd2ee2b5e162eaa60a328b11528da409a20dd446063a7c0f0e41a0ee0efea7",
+      "body_normalized_lf_utf8_sha256": "c1e3c6270e9b28786136c57aa717db5ed4f78ef4c74ecfb93846fe5ed0b958cd",
+      "proof_body_normalized_lf_utf8_sha256": "c1e3c6270e9b28786136c57aa717db5ed4f78ef4c74ecfb93846fe5ed0b958cd",
+      "full_declaration_normalized_lf_utf8_sha256": "a37d39af1804d5a2826f55a5ff414e606c6a37f51fa3f8cd034768172f19a6ad",
+      "full_type_and_body_independently_read": true,
+      "kernel_checked": false
+    },
+    {
+      "kind": "theorem",
+      "name": "MediumAtom.cleaned_commonP_M2_le_capped_polylog",
+      "fully_qualified_name": "ImbalancedChen.Part3.MediumAtom.cleaned_commonP_M2_le_capped_polylog",
+      "first": 110,
+      "type_last": 116,
+      "last": 149,
+      "complete_written_type": "theorem MediumAtom.cleaned_commonP_M2_le_capped_polylog\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      m2PolylogConstant B * d.scale ^ 2 *\n        (1 + Real.log d.scale) ^ (131073 + betaLogExponent B) := by\n",
+      "complete_written_body": "  have hx : 1 ≤ d.scale := by\n    change (1 : ℝ) ≤ d.U * d.V\n    simpa only [one_mul] using\n      mul_le_mul hd.1 hd.2.1 (by norm_num : (0 : ℝ) ≤ 1) (zero_le_one.trans hd.1)\n  have hVx : d.V ≤ d.scale := by\n    change d.V ≤ d.U * d.V\n    simpa only [one_mul] using mul_le_mul_of_nonneg_right hd.1 (zero_le_one.trans hd.2.1)\n  have hlogs := log_two_mul_bounds hx hd.2.1 hVx\n  have hp : (1 + Real.log (2 * d.V)) ^ betaLogExponent B ≤\n      (2 * (1 + Real.log d.scale)) ^ betaLogExponent B :=\n    pow_le_pow_left₀ hlogs.1 hlogs.2 _\n  have hL : 0 ≤ 1 + Real.log d.scale := by\n    linarith [Real.log_nonneg hx]\n  have hcoefficient : 0 ≤ 12 * mixedMomentConstant * d.scale ^ 2 :=\n    mul_nonneg\n      (mul_nonneg (by norm_num) mixedMomentConstant_pos_and_mixedSum_le.1.le)\n      (sq_nonneg _)\n  calc\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n        12 * mixedMomentConstant * d.scale ^ 2 *\n          (1 + Real.log (2 * d.V)) ^ betaLogExponent B *\n            (1 + Real.log d.scale) ^ 131073 :=\n      d.cleaned_commonP_M2_le_capped_mixedMoment_with_beta_log hd hsigma hkappa hcap\n    _ ≤ 12 * mixedMomentConstant * d.scale ^ 2 *\n        (2 * (1 + Real.log d.scale)) ^ betaLogExponent B *\n          (1 + Real.log d.scale) ^ 131073 :=\n      mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hp hcoefficient)\n        (pow_nonneg hL _)\n    _ = _ := by\n      rw [mul_pow (2 : ℝ) (1 + Real.log d.scale) (betaLogExponent B),\n        pow_add (1 + Real.log d.scale) 131073 (betaLogExponent B)]\n      unfold m2PolylogConstant\n      ac_rfl\n",
+      "complete_written_proof_body": "  have hx : 1 ≤ d.scale := by\n    change (1 : ℝ) ≤ d.U * d.V\n    simpa only [one_mul] using\n      mul_le_mul hd.1 hd.2.1 (by norm_num : (0 : ℝ) ≤ 1) (zero_le_one.trans hd.1)\n  have hVx : d.V ≤ d.scale := by\n    change d.V ≤ d.U * d.V\n    simpa only [one_mul] using mul_le_mul_of_nonneg_right hd.1 (zero_le_one.trans hd.2.1)\n  have hlogs := log_two_mul_bounds hx hd.2.1 hVx\n  have hp : (1 + Real.log (2 * d.V)) ^ betaLogExponent B ≤\n      (2 * (1 + Real.log d.scale)) ^ betaLogExponent B :=\n    pow_le_pow_left₀ hlogs.1 hlogs.2 _\n  have hL : 0 ≤ 1 + Real.log d.scale := by\n    linarith [Real.log_nonneg hx]\n  have hcoefficient : 0 ≤ 12 * mixedMomentConstant * d.scale ^ 2 :=\n    mul_nonneg\n      (mul_nonneg (by norm_num) mixedMomentConstant_pos_and_mixedSum_le.1.le)\n      (sq_nonneg _)\n  calc\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n        12 * mixedMomentConstant * d.scale ^ 2 *\n          (1 + Real.log (2 * d.V)) ^ betaLogExponent B *\n            (1 + Real.log d.scale) ^ 131073 :=\n      d.cleaned_commonP_M2_le_capped_mixedMoment_with_beta_log hd hsigma hkappa hcap\n    _ ≤ 12 * mixedMomentConstant * d.scale ^ 2 *\n        (2 * (1 + Real.log d.scale)) ^ betaLogExponent B *\n          (1 + Real.log d.scale) ^ 131073 :=\n      mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hp hcoefficient)\n        (pow_nonneg hL _)\n    _ = _ := by\n      rw [mul_pow (2 : ℝ) (1 + Real.log d.scale) (betaLogExponent B),\n        pow_add (1 + Real.log d.scale) 131073 (betaLogExponent B)]\n      unfold m2PolylogConstant\n      ac_rfl\n",
+      "complete_written_declaration": "theorem MediumAtom.cleaned_commonP_M2_le_capped_polylog\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      m2PolylogConstant B * d.scale ^ 2 *\n        (1 + Real.log d.scale) ^ (131073 + betaLogExponent B) := by\n  have hx : 1 ≤ d.scale := by\n    change (1 : ℝ) ≤ d.U * d.V\n    simpa only [one_mul] using\n      mul_le_mul hd.1 hd.2.1 (by norm_num : (0 : ℝ) ≤ 1) (zero_le_one.trans hd.1)\n  have hVx : d.V ≤ d.scale := by\n    change d.V ≤ d.U * d.V\n    simpa only [one_mul] using mul_le_mul_of_nonneg_right hd.1 (zero_le_one.trans hd.2.1)\n  have hlogs := log_two_mul_bounds hx hd.2.1 hVx\n  have hp : (1 + Real.log (2 * d.V)) ^ betaLogExponent B ≤\n      (2 * (1 + Real.log d.scale)) ^ betaLogExponent B :=\n    pow_le_pow_left₀ hlogs.1 hlogs.2 _\n  have hL : 0 ≤ 1 + Real.log d.scale := by\n    linarith [Real.log_nonneg hx]\n  have hcoefficient : 0 ≤ 12 * mixedMomentConstant * d.scale ^ 2 :=\n    mul_nonneg\n      (mul_nonneg (by norm_num) mixedMomentConstant_pos_and_mixedSum_le.1.le)\n      (sq_nonneg _)\n  calc\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n        12 * mixedMomentConstant * d.scale ^ 2 *\n          (1 + Real.log (2 * d.V)) ^ betaLogExponent B *\n            (1 + Real.log d.scale) ^ 131073 :=\n      d.cleaned_commonP_M2_le_capped_mixedMoment_with_beta_log hd hsigma hkappa hcap\n    _ ≤ 12 * mixedMomentConstant * d.scale ^ 2 *\n        (2 * (1 + Real.log d.scale)) ^ betaLogExponent B *\n          (1 + Real.log d.scale) ^ 131073 :=\n      mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hp hcoefficient)\n        (pow_nonneg hL _)\n    _ = _ := by\n      rw [mul_pow (2 : ℝ) (1 + Real.log d.scale) (betaLogExponent B),\n        pow_add (1 + Real.log d.scale) 131073 (betaLogExponent B)]\n      unfold m2PolylogConstant\n      ac_rfl\n",
+      "type_normalized_lf_utf8_sha256": "e568069782bac2d3f2e95c18a87d0d3b2a6e97bbf94319dbe54fda7d08c03a05",
+      "body_normalized_lf_utf8_sha256": "0e22d1dcd1c89436ffddb1753f6e567c77971e37869c77a11df3ebb7b8685a4c",
+      "proof_body_normalized_lf_utf8_sha256": "0e22d1dcd1c89436ffddb1753f6e567c77971e37869c77a11df3ebb7b8685a4c",
+      "full_declaration_normalized_lf_utf8_sha256": "5cf2a92d7d56d52672407cfc608688d729e40683fa736d29d1841d5f50c844c4",
+      "full_type_and_body_independently_read": true,
+      "kernel_checked": false
+    },
+    {
+      "kind": "theorem",
+      "name": "CommonPM2PolylogMajorant.constant_pos_and_uniform",
+      "fully_qualified_name": "ImbalancedChen.Part3.CommonPM2PolylogMajorant.constant_pos_and_uniform",
+      "first": 152,
+      "type_last": 159,
+      "last": 162,
+      "complete_written_type": "theorem CommonPM2PolylogMajorant.constant_pos_and_uniform (B : ℕ) :\n    0 < m2PolylogConstant B ∧\n      ∀ (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d → 0 < sigma → 0 ≤ kappa →\n          kappa ≤ 1 / (2 * (kshift : ℝ)) →\n        CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n          m2PolylogConstant B * d.scale ^ 2 *\n            (1 + Real.log d.scale) ^ (131073 + betaLogExponent B) := by\n",
+      "complete_written_body": "  refine ⟨m2PolylogConstant_pos B, ?_⟩\n  intro sigma kappa c0 d hd hsigma hkappa hcap\n  exact d.cleaned_commonP_M2_le_capped_polylog hd hsigma hkappa hcap\n",
+      "complete_written_proof_body": "  refine ⟨m2PolylogConstant_pos B, ?_⟩\n  intro sigma kappa c0 d hd hsigma hkappa hcap\n  exact d.cleaned_commonP_M2_le_capped_polylog hd hsigma hkappa hcap\n",
+      "complete_written_declaration": "theorem CommonPM2PolylogMajorant.constant_pos_and_uniform (B : ℕ) :\n    0 < m2PolylogConstant B ∧\n      ∀ (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d → 0 < sigma → 0 ≤ kappa →\n          kappa ≤ 1 / (2 * (kshift : ℝ)) →\n        CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n          m2PolylogConstant B * d.scale ^ 2 *\n            (1 + Real.log d.scale) ^ (131073 + betaLogExponent B) := by\n  refine ⟨m2PolylogConstant_pos B, ?_⟩\n  intro sigma kappa c0 d hd hsigma hkappa hcap\n  exact d.cleaned_commonP_M2_le_capped_polylog hd hsigma hkappa hcap\n",
+      "type_normalized_lf_utf8_sha256": "e5afed960ad25f4c7eab04640253df84632e008da8ced2d9e59d9bf5766db171",
+      "body_normalized_lf_utf8_sha256": "53def93e96f9529ebd947f3dc7a01a6f1cd978961b21014f6ed15c0c19b0ac80",
+      "proof_body_normalized_lf_utf8_sha256": "53def93e96f9529ebd947f3dc7a01a6f1cd978961b21014f6ed15c0c19b0ac80",
+      "full_declaration_normalized_lf_utf8_sha256": "9460e4f5fd3aba962e9570662af03e750a933ba9ea116eb0f0599b05dfe24796",
+      "full_type_and_body_independently_read": true,
+      "kernel_checked": false
+    }
+  ],
+  "parent_bindings": {
+    "parent_source": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3CommonPCappedMixedMoment-module-source.txt",
+      "sha256": "aad0b9c32ec449b054f5d59561810255ad028e05d9ebf7bccc38e67582a4b622",
+      "bytes": 7458,
+      "lf_lines": 169
+    },
+    "parent_author_checkpoint": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-commonp-capped-mixed-moment-source-proposal-author-HOLD.json",
+      "sha256": "c16afb01f1953abe51e8f05c19789766be1b3a903c17e25cdba8bb113d1ae41d",
+      "bytes": 51543,
+      "lf_lines": 543
+    },
+    "parent_independent_checkpoint": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-commonp-capped-mixed-moment-independent-source-review-HOLD.json",
+      "sha256": "a7057d85b37c7896735c8e1999e7da4a455db7b209f9ffc7716c36f3f700aa26",
+      "bytes": 62303,
+      "lf_lines": 827
+    }
+  },
+  "parent_review_reuse": {
+    "status": "no_static_blocker_UNCOMPILED_HOLD",
+    "full169LF_parent_independently_read": true,
+    "prior_independent_review_reused_as_source_only": true,
+    "all_new5_proofs_freshly_independently_reviewed": true,
+    "kernel_certificate": false,
+    "dependency_review_limit": "Only the selected complete parent interfaces/definition and required transitive constant definitions are consumed; prior parent independent source review is hash bound, never treated as a kernel certificate."
+  },
+  "complete_consumed_parent_and_actual_declarations": [
+    {
+      "kind": "definition",
+      "name": "mixedMomentConstant",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryCommonPMixedMoment.mixedMomentConstant",
+      "first": 93,
+      "last": 94,
+      "complete_written_type": "def mixedMomentConstant : ℝ\n",
+      "complete_written_body": "\n  Real.sqrt (1296 * shiftedTauLogConstant kshift)\n",
+      "complete_written_declaration": "def mixedMomentConstant : ℝ :=\n  Real.sqrt (1296 * shiftedTauLogConstant kshift)\n",
+      "type_normalized_lf_utf8_sha256": "51edf0a6595b8781d38c6ea288170784e6ebb32978bdd49c8664c08bdc7f77cd",
+      "body_normalized_lf_utf8_sha256": "36a29f78a72881f285f13168b3be84770d50072f7d40381abade1792b53fb172",
+      "full_declaration_normalized_lf_utf8_sha256": "ee3e930231cea6474db0030e5ff42ae81efff357316d94a01db60b72942727bf",
+      "full_type_and_body_independently_read": true,
+      "kernel_checked": false
+    },
+    {
+      "kind": "theorem",
+      "name": "mixedMomentConstant_pos_and_mixedSum_le",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryCommonPMixedMoment.mixedMomentConstant_pos_and_mixedSum_le",
+      "first": 97,
+      "type_last": 101,
+      "last": 126,
+      "complete_written_type": "theorem mixedMomentConstant_pos_and_mixedSum_le :\n    0 < mixedMomentConstant ∧\n      ∀ (x κ : ℝ), 1 ≤ x → 0 ≤ κ → κ ≤ 1 / (2 * (kshift : ℝ)) →\n        ∀ a : ℤ, |(a : ℝ)| ≤ x ^ (1 + κ) →\n          mixedSum x a ≤ mixedMomentConstant * x * (1 + Real.log x) ^ 131073 := by\n",
+      "complete_written_body": "  have hc : 0 < 1296 * shiftedTauLogConstant kshift :=\n    mul_pos (by norm_num) (shiftedTauLogConstant_pos kshift_ge_two)\n  have hD : 0 < mixedMomentConstant := by\n    exact Real.sqrt_pos.mpr hc\n  refine ⟨hD, ?_⟩\n  intro x κ hx hκ hcap a ha\n  let L : ℝ := 1 + Real.log x\n  have hL : 0 ≤ L := by\n    have h := Real.log_nonneg hx\n    dsimp [L]\n    linarith\n  have hx0 : 0 ≤ x := by linarith\n  have hright : 0 ≤ mixedMomentConstant * x * L ^ 131073 :=\n    mul_nonneg (mul_nonneg hD.le hx0) (pow_nonneg hL _)\n  have hright_sq : (mixedMomentConstant * x * L ^ 131073) ^ 2 =\n      1296 * shiftedTauLogConstant kshift * x ^ 2 * L ^ 262146 := by\n    rw [mul_pow, mul_pow, ← pow_mul L 131073 2,\n      show (131073 : ℕ) * 2 = 262146 from rfl,\n      mixedMomentConstant, Real.sq_sqrt hc.le]\n  apply (sq_le_sq₀ (mixedSum_nonneg x a) hright).mp\n  calc\n    mixedSum x a ^ 2 ≤\n        1296 * shiftedTauLogConstant kshift * x ^ 2 * L ^ 262146 :=\n      mixedSum_sq_le_capped hx hκ hcap a ha\n    _ = (mixedMomentConstant * x * L ^ 131073) ^ 2 := hright_sq.symm\n",
+      "complete_written_proof_body": "  have hc : 0 < 1296 * shiftedTauLogConstant kshift :=\n    mul_pos (by norm_num) (shiftedTauLogConstant_pos kshift_ge_two)\n  have hD : 0 < mixedMomentConstant := by\n    exact Real.sqrt_pos.mpr hc\n  refine ⟨hD, ?_⟩\n  intro x κ hx hκ hcap a ha\n  let L : ℝ := 1 + Real.log x\n  have hL : 0 ≤ L := by\n    have h := Real.log_nonneg hx\n    dsimp [L]\n    linarith\n  have hx0 : 0 ≤ x := by linarith\n  have hright : 0 ≤ mixedMomentConstant * x * L ^ 131073 :=\n    mul_nonneg (mul_nonneg hD.le hx0) (pow_nonneg hL _)\n  have hright_sq : (mixedMomentConstant * x * L ^ 131073) ^ 2 =\n      1296 * shiftedTauLogConstant kshift * x ^ 2 * L ^ 262146 := by\n    rw [mul_pow, mul_pow, ← pow_mul L 131073 2,\n      show (131073 : ℕ) * 2 = 262146 from rfl,\n      mixedMomentConstant, Real.sq_sqrt hc.le]\n  apply (sq_le_sq₀ (mixedSum_nonneg x a) hright).mp\n  calc\n    mixedSum x a ^ 2 ≤\n        1296 * shiftedTauLogConstant kshift * x ^ 2 * L ^ 262146 :=\n      mixedSum_sq_le_capped hx hκ hcap a ha\n    _ = (mixedMomentConstant * x * L ^ 131073) ^ 2 := hright_sq.symm\n",
+      "complete_written_declaration": "theorem mixedMomentConstant_pos_and_mixedSum_le :\n    0 < mixedMomentConstant ∧\n      ∀ (x κ : ℝ), 1 ≤ x → 0 ≤ κ → κ ≤ 1 / (2 * (kshift : ℝ)) →\n        ∀ a : ℤ, |(a : ℝ)| ≤ x ^ (1 + κ) →\n          mixedSum x a ≤ mixedMomentConstant * x * (1 + Real.log x) ^ 131073 := by\n  have hc : 0 < 1296 * shiftedTauLogConstant kshift :=\n    mul_pos (by norm_num) (shiftedTauLogConstant_pos kshift_ge_two)\n  have hD : 0 < mixedMomentConstant := by\n    exact Real.sqrt_pos.mpr hc\n  refine ⟨hD, ?_⟩\n  intro x κ hx hκ hcap a ha\n  let L : ℝ := 1 + Real.log x\n  have hL : 0 ≤ L := by\n    have h := Real.log_nonneg hx\n    dsimp [L]\n    linarith\n  have hx0 : 0 ≤ x := by linarith\n  have hright : 0 ≤ mixedMomentConstant * x * L ^ 131073 :=\n    mul_nonneg (mul_nonneg hD.le hx0) (pow_nonneg hL _)\n  have hright_sq : (mixedMomentConstant * x * L ^ 131073) ^ 2 =\n      1296 * shiftedTauLogConstant kshift * x ^ 2 * L ^ 262146 := by\n    rw [mul_pow, mul_pow, ← pow_mul L 131073 2,\n      show (131073 : ℕ) * 2 = 262146 from rfl,\n      mixedMomentConstant, Real.sq_sqrt hc.le]\n  apply (sq_le_sq₀ (mixedSum_nonneg x a) hright).mp\n  calc\n    mixedSum x a ^ 2 ≤\n        1296 * shiftedTauLogConstant kshift * x ^ 2 * L ^ 262146 :=\n      mixedSum_sq_le_capped hx hκ hcap a ha\n    _ = (mixedMomentConstant * x * L ^ 131073) ^ 2 := hright_sq.symm\n",
+      "type_normalized_lf_utf8_sha256": "c9f3fd4b107b466e736da3a0f887ba720ccc00811d088bdb03348dff77428c3f",
+      "body_normalized_lf_utf8_sha256": "42a8fee7d10dcc11c99a59552af4682d793c03b3f313d570b1ff5181983e9042",
+      "proof_body_normalized_lf_utf8_sha256": "42a8fee7d10dcc11c99a59552af4682d793c03b3f313d570b1ff5181983e9042",
+      "full_declaration_normalized_lf_utf8_sha256": "006005619346e0459236cb9aa9aed916097686896b02ae0032f9de13f9f47ce5",
+      "full_type_and_body_independently_read": true,
+      "kernel_checked": false
+    },
+    {
+      "kind": "theorem",
+      "name": "MediumAtom.cleaned_commonP_M2_le_capped_mixedMoment",
+      "fully_qualified_name": "ImbalancedChen.Part3.MediumAtom.cleaned_commonP_M2_le_capped_mixedMoment",
+      "first": 137,
+      "type_last": 144,
+      "last": 166,
+      "complete_written_type": "theorem MediumAtom.cleaned_commonP_M2_le_capped_mixedMoment\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      CommonPM2FiniteFold.outsideEnergy d *\n        ((3 * d.U / d.Q1) *\n          (mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073)) := by\n",
+      "complete_written_body": "  have hx : 1 ≤ d.scale := by\n    change (1 : ℝ) ≤ d.U * d.V\n    simpa only [one_mul] using\n      mul_le_mul hd.1 hd.2.1 (by norm_num : (0 : ℝ) ≤ 1) (zero_le_one.trans hd.1)\n  have ha : |(d.residue : ℝ)| ≤ d.scale ^ (1 + kappa) := by\n    simpa only [Nat.cast_natAbs, Int.cast_abs] using\n      (hd.2.2.2.2.2.2.2.1 :\n        (d.residue.natAbs : ℝ) ≤ d.scale ^ (1 + kappa))\n  have hfold : CommonPM2FiniteFold.foldedSum d ≤\n      mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073 := by\n    rw [foldedSum_eq_mixedSum]\n    exact mixedMomentConstant_pos_and_mixedSum_le.2\n      d.scale kappa hx hkappa hcap d.residue ha\n  have hfactor : 0 ≤ 3 * d.U / d.Q1 :=\n    div_nonneg (mul_nonneg (by norm_num) (zero_le_one.trans hd.1))\n      (zero_le_one.trans hd.2.2.1)\n  have henergy : 0 ≤ CommonPM2FiniteFold.outsideEnergy d := by\n    unfold CommonPM2FiniteFold.outsideEnergy\n    exact mul_nonneg (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n      (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n  exact (d.cleaned_commonP_M2_le_finite_divisor_fold hd hsigma).trans\n    (mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hfold hfactor) henergy)\n",
+      "complete_written_proof_body": "  have hx : 1 ≤ d.scale := by\n    change (1 : ℝ) ≤ d.U * d.V\n    simpa only [one_mul] using\n      mul_le_mul hd.1 hd.2.1 (by norm_num : (0 : ℝ) ≤ 1) (zero_le_one.trans hd.1)\n  have ha : |(d.residue : ℝ)| ≤ d.scale ^ (1 + kappa) := by\n    simpa only [Nat.cast_natAbs, Int.cast_abs] using\n      (hd.2.2.2.2.2.2.2.1 :\n        (d.residue.natAbs : ℝ) ≤ d.scale ^ (1 + kappa))\n  have hfold : CommonPM2FiniteFold.foldedSum d ≤\n      mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073 := by\n    rw [foldedSum_eq_mixedSum]\n    exact mixedMomentConstant_pos_and_mixedSum_le.2\n      d.scale kappa hx hkappa hcap d.residue ha\n  have hfactor : 0 ≤ 3 * d.U / d.Q1 :=\n    div_nonneg (mul_nonneg (by norm_num) (zero_le_one.trans hd.1))\n      (zero_le_one.trans hd.2.2.1)\n  have henergy : 0 ≤ CommonPM2FiniteFold.outsideEnergy d := by\n    unfold CommonPM2FiniteFold.outsideEnergy\n    exact mul_nonneg (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n      (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n  exact (d.cleaned_commonP_M2_le_finite_divisor_fold hd hsigma).trans\n    (mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hfold hfactor) henergy)\n",
+      "complete_written_declaration": "theorem MediumAtom.cleaned_commonP_M2_le_capped_mixedMoment\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      CommonPM2FiniteFold.outsideEnergy d *\n        ((3 * d.U / d.Q1) *\n          (mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073)) := by\n  have hx : 1 ≤ d.scale := by\n    change (1 : ℝ) ≤ d.U * d.V\n    simpa only [one_mul] using\n      mul_le_mul hd.1 hd.2.1 (by norm_num : (0 : ℝ) ≤ 1) (zero_le_one.trans hd.1)\n  have ha : |(d.residue : ℝ)| ≤ d.scale ^ (1 + kappa) := by\n    simpa only [Nat.cast_natAbs, Int.cast_abs] using\n      (hd.2.2.2.2.2.2.2.1 :\n        (d.residue.natAbs : ℝ) ≤ d.scale ^ (1 + kappa))\n  have hfold : CommonPM2FiniteFold.foldedSum d ≤\n      mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073 := by\n    rw [foldedSum_eq_mixedSum]\n    exact mixedMomentConstant_pos_and_mixedSum_le.2\n      d.scale kappa hx hkappa hcap d.residue ha\n  have hfactor : 0 ≤ 3 * d.U / d.Q1 :=\n    div_nonneg (mul_nonneg (by norm_num) (zero_le_one.trans hd.1))\n      (zero_le_one.trans hd.2.2.1)\n  have henergy : 0 ≤ CommonPM2FiniteFold.outsideEnergy d := by\n    unfold CommonPM2FiniteFold.outsideEnergy\n    exact mul_nonneg (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n      (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n  exact (d.cleaned_commonP_M2_le_finite_divisor_fold hd hsigma).trans\n    (mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hfold hfactor) henergy)\n",
+      "type_normalized_lf_utf8_sha256": "9a908ac382b71cd82bbfd10e155c99b0463e84f9e995ff7a03cc65fea9b1d8f2",
+      "body_normalized_lf_utf8_sha256": "db14559098f6fd065fab6cd620560a7ae44183bd042bba1189d50956b91cb5f7",
+      "proof_body_normalized_lf_utf8_sha256": "db14559098f6fd065fab6cd620560a7ae44183bd042bba1189d50956b91cb5f7",
+      "full_declaration_normalized_lf_utf8_sha256": "9388b7f5193219ea2a2a4cb86103233c05f916a353bb8ab7b63419202a9de50c",
+      "full_type_and_body_independently_read": true,
+      "kernel_checked": false
+    },
+    {
+      "kind": "theorem",
+      "name": "MediumAtom.sharedFirstFactor_outside_le",
+      "fully_qualified_name": "ImbalancedChen.Part3.MediumAtom.sharedFirstFactor_outside_le",
+      "first": 255,
+      "type_last": 260,
+      "last": 280,
+      "complete_written_type": "theorem MediumAtom.sharedFirstFactor_outside_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤\n        4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) := by\n",
+      "complete_written_body": "  have hgamma : (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤ 2 * d.Q1 := by\n    calc\n      _ ≤ ∑ _p ∈ d.primitiveFirstFactorCarrier, (1 : ℝ) := by\n        apply Finset.sum_le_sum\n        intro p hp\n        have hh := (SharedFirstFactorDispersion.gamma1_gate hd (Finset.mem_filter.mp hp).1).1\n        simpa only [one_pow] using\n          (sq_le_sq₀ (norm_nonneg (d.gamma1 p)) (by norm_num : (0 : ℝ) ≤ 1)).2 hh\n      _ = (d.primitiveFirstFactorCarrier.card : ℝ) := by simp\n      _ ≤ ((factorCarrier d.Q1).card : ℝ) := by\n        exact_mod_cast Finset.card_le_card (Finset.filter_subset _ _)\n      _ ≤ _ := SharedFirstFactorDispersion.card_factorCarrier_le hd.2.2.1\n  have hbeta := mediumAdmissible_beta_norm_sq_sum_le hd\n  have hbetaNonneg : 0 ≤ 2 * d.V *\n      (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) :=\n    (Finset.sum_nonneg (fun _ _ ↦ sq_nonneg _)).trans hbeta\n  calc\n    _ ≤ (2 * d.V * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) * (2 * d.Q1) :=\n      mul_le_mul hbeta hgamma (by positivity) hbetaNonneg\n    _ = _ := by ring\n",
+      "complete_written_proof_body": "  have hgamma : (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤ 2 * d.Q1 := by\n    calc\n      _ ≤ ∑ _p ∈ d.primitiveFirstFactorCarrier, (1 : ℝ) := by\n        apply Finset.sum_le_sum\n        intro p hp\n        have hh := (SharedFirstFactorDispersion.gamma1_gate hd (Finset.mem_filter.mp hp).1).1\n        simpa only [one_pow] using\n          (sq_le_sq₀ (norm_nonneg (d.gamma1 p)) (by norm_num : (0 : ℝ) ≤ 1)).2 hh\n      _ = (d.primitiveFirstFactorCarrier.card : ℝ) := by simp\n      _ ≤ ((factorCarrier d.Q1).card : ℝ) := by\n        exact_mod_cast Finset.card_le_card (Finset.filter_subset _ _)\n      _ ≤ _ := SharedFirstFactorDispersion.card_factorCarrier_le hd.2.2.1\n  have hbeta := mediumAdmissible_beta_norm_sq_sum_le hd\n  have hbetaNonneg : 0 ≤ 2 * d.V *\n      (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) :=\n    (Finset.sum_nonneg (fun _ _ ↦ sq_nonneg _)).trans hbeta\n  calc\n    _ ≤ (2 * d.V * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) * (2 * d.Q1) :=\n      mul_le_mul hbeta hgamma (by positivity) hbetaNonneg\n    _ = _ := by ring\n",
+      "complete_written_declaration": "theorem MediumAtom.sharedFirstFactor_outside_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤\n        4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) := by\n  have hgamma : (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤ 2 * d.Q1 := by\n    calc\n      _ ≤ ∑ _p ∈ d.primitiveFirstFactorCarrier, (1 : ℝ) := by\n        apply Finset.sum_le_sum\n        intro p hp\n        have hh := (SharedFirstFactorDispersion.gamma1_gate hd (Finset.mem_filter.mp hp).1).1\n        simpa only [one_pow] using\n          (sq_le_sq₀ (norm_nonneg (d.gamma1 p)) (by norm_num : (0 : ℝ) ≤ 1)).2 hh\n      _ = (d.primitiveFirstFactorCarrier.card : ℝ) := by simp\n      _ ≤ ((factorCarrier d.Q1).card : ℝ) := by\n        exact_mod_cast Finset.card_le_card (Finset.filter_subset _ _)\n      _ ≤ _ := SharedFirstFactorDispersion.card_factorCarrier_le hd.2.2.1\n  have hbeta := mediumAdmissible_beta_norm_sq_sum_le hd\n  have hbetaNonneg : 0 ≤ 2 * d.V *\n      (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) :=\n    (Finset.sum_nonneg (fun _ _ ↦ sq_nonneg _)).trans hbeta\n  calc\n    _ ≤ (2 * d.V * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) * (2 * d.Q1) :=\n      mul_le_mul hbeta hgamma (by positivity) hbetaNonneg\n    _ = _ := by ring\n",
+      "type_normalized_lf_utf8_sha256": "b5131e70466ce1e636034f1a28f06e25471dd4b6cd1a336ce6c984bb74496c22",
+      "body_normalized_lf_utf8_sha256": "f4eab7fea3e538f1364ee3039b54adc1b3f715dddcfefd92dafccd664918733e",
+      "proof_body_normalized_lf_utf8_sha256": "f4eab7fea3e538f1364ee3039b54adc1b3f715dddcfefd92dafccd664918733e",
+      "full_declaration_normalized_lf_utf8_sha256": "f24fdcfc353217b328152de90b232a90307e01d0dbf2ab02269fac7dfe00f4b7",
+      "full_type_and_body_independently_read": true,
+      "kernel_checked": false
+    }
+  ],
+  "actual_and_written_API_hash_spans": [
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3CommonPCappedMixedMoment-module-source.txt",
+        "sha256": "aad0b9c32ec449b054f5d59561810255ad028e05d9ebf7bccc38e67582a4b622",
+        "bytes": 7458,
+        "lf_lines": 169
+      },
+      "evidence_kind": "written_UNCOMPILED_dependency",
+      "file_hash_revalidated": true,
+      "all_span_hashes_revalidated": true,
+      "spans": [
+        {
+          "first": 93,
+          "last": 126,
+          "literal_source": "def mixedMomentConstant : ℝ :=\n  Real.sqrt (1296 * shiftedTauLogConstant kshift)\n\n/-- D is chosen once before every scale, capped kappa and integer shift. -/\ntheorem mixedMomentConstant_pos_and_mixedSum_le :\n    0 < mixedMomentConstant ∧\n      ∀ (x κ : ℝ), 1 ≤ x → 0 ≤ κ → κ ≤ 1 / (2 * (kshift : ℝ)) →\n        ∀ a : ℤ, |(a : ℝ)| ≤ x ^ (1 + κ) →\n          mixedSum x a ≤ mixedMomentConstant * x * (1 + Real.log x) ^ 131073 := by\n  have hc : 0 < 1296 * shiftedTauLogConstant kshift :=\n    mul_pos (by norm_num) (shiftedTauLogConstant_pos kshift_ge_two)\n  have hD : 0 < mixedMomentConstant := by\n    exact Real.sqrt_pos.mpr hc\n  refine ⟨hD, ?_⟩\n  intro x κ hx hκ hcap a ha\n  let L : ℝ := 1 + Real.log x\n  have hL : 0 ≤ L := by\n    have h := Real.log_nonneg hx\n    dsimp [L]\n    linarith\n  have hx0 : 0 ≤ x := by linarith\n  have hright : 0 ≤ mixedMomentConstant * x * L ^ 131073 :=\n    mul_nonneg (mul_nonneg hD.le hx0) (pow_nonneg hL _)\n  have hright_sq : (mixedMomentConstant * x * L ^ 131073) ^ 2 =\n      1296 * shiftedTauLogConstant kshift * x ^ 2 * L ^ 262146 := by\n    rw [mul_pow, mul_pow, ← pow_mul L 131073 2,\n      show (131073 : ℕ) * 2 = 262146 from rfl,\n      mixedMomentConstant, Real.sq_sqrt hc.le]\n  apply (sq_le_sq₀ (mixedSum_nonneg x a) hright).mp\n  calc\n    mixedSum x a ^ 2 ≤\n        1296 * shiftedTauLogConstant kshift * x ^ 2 * L ^ 262146 :=\n      mixedSum_sq_le_capped hx hκ hcap a ha\n    _ = (mixedMomentConstant * x * L ^ 131073) ^ 2 := hright_sq.symm\n",
+          "normalized_lf_utf8_sha256": "f1baf41287635373db4d3a1a5023e05fc230fbec144daa01a523fa30f076fde7",
+          "independently_read_from_source": true
+        },
+        {
+          "first": 137,
+          "last": 166,
+          "literal_source": "theorem MediumAtom.cleaned_commonP_M2_le_capped_mixedMoment\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      CommonPM2FiniteFold.outsideEnergy d *\n        ((3 * d.U / d.Q1) *\n          (mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073)) := by\n  have hx : 1 ≤ d.scale := by\n    change (1 : ℝ) ≤ d.U * d.V\n    simpa only [one_mul] using\n      mul_le_mul hd.1 hd.2.1 (by norm_num : (0 : ℝ) ≤ 1) (zero_le_one.trans hd.1)\n  have ha : |(d.residue : ℝ)| ≤ d.scale ^ (1 + kappa) := by\n    simpa only [Nat.cast_natAbs, Int.cast_abs] using\n      (hd.2.2.2.2.2.2.2.1 :\n        (d.residue.natAbs : ℝ) ≤ d.scale ^ (1 + kappa))\n  have hfold : CommonPM2FiniteFold.foldedSum d ≤\n      mixedMomentConstant * d.scale * (1 + Real.log d.scale) ^ 131073 := by\n    rw [foldedSum_eq_mixedSum]\n    exact mixedMomentConstant_pos_and_mixedSum_le.2\n      d.scale kappa hx hkappa hcap d.residue ha\n  have hfactor : 0 ≤ 3 * d.U / d.Q1 :=\n    div_nonneg (mul_nonneg (by norm_num) (zero_le_one.trans hd.1))\n      (zero_le_one.trans hd.2.2.1)\n  have henergy : 0 ≤ CommonPM2FiniteFold.outsideEnergy d := by\n    unfold CommonPM2FiniteFold.outsideEnergy\n    exact mul_nonneg (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n      (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n  exact (d.cleaned_commonP_M2_le_finite_divisor_fold hd hsigma).trans\n    (mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hfold hfactor) henergy)\n",
+          "normalized_lf_utf8_sha256": "9388b7f5193219ea2a2a4cb86103233c05f916a353bb8ab7b63419202a9de50c",
+          "independently_read_from_source": true
+        }
+      ],
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorDispersion.lean",
+        "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+        "bytes": 29327,
+        "lf_lines": 592
+      },
+      "evidence_kind": "actual_source_API",
+      "file_hash_revalidated": true,
+      "all_span_hashes_revalidated": true,
+      "spans": [
+        {
+          "first": 255,
+          "last": 280,
+          "literal_source": "theorem MediumAtom.sharedFirstFactor_outside_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤\n        4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) := by\n  have hgamma : (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤ 2 * d.Q1 := by\n    calc\n      _ ≤ ∑ _p ∈ d.primitiveFirstFactorCarrier, (1 : ℝ) := by\n        apply Finset.sum_le_sum\n        intro p hp\n        have hh := (SharedFirstFactorDispersion.gamma1_gate hd (Finset.mem_filter.mp hp).1).1\n        simpa only [one_pow] using\n          (sq_le_sq₀ (norm_nonneg (d.gamma1 p)) (by norm_num : (0 : ℝ) ≤ 1)).2 hh\n      _ = (d.primitiveFirstFactorCarrier.card : ℝ) := by simp\n      _ ≤ ((factorCarrier d.Q1).card : ℝ) := by\n        exact_mod_cast Finset.card_le_card (Finset.filter_subset _ _)\n      _ ≤ _ := SharedFirstFactorDispersion.card_factorCarrier_le hd.2.2.1\n  have hbeta := mediumAdmissible_beta_norm_sq_sum_le hd\n  have hbetaNonneg : 0 ≤ 2 * d.V *\n      (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) :=\n    (Finset.sum_nonneg (fun _ _ ↦ sq_nonneg _)).trans hbeta\n  calc\n    _ ≤ (2 * d.V * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) * (2 * d.Q1) :=\n      mul_le_mul hbeta hgamma (by positivity) hbetaNonneg\n    _ = _ := by ring\n",
+          "normalized_lf_utf8_sha256": "f24fdcfc353217b328152de90b232a90307e01d0dbf2ab02269fac7dfe00f4b7",
+          "independently_read_from_source": true
+        }
+      ],
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3DistributionTargets.lean",
+        "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+        "bytes": 8889,
+        "lf_lines": 197
+      },
+      "evidence_kind": "actual_source_API",
+      "file_hash_revalidated": true,
+      "all_span_hashes_revalidated": true,
+      "spans": [
+        {
+          "first": 51,
+          "last": 58,
+          "literal_source": "def MediumAtom.scale (d : MediumAtom) : ℝ := d.U * d.V\n\ndef MediumAtom.alphaCarrier (d : MediumAtom) : Finset ℕ :=\n  (Finset.Icc (Nat.ceil d.U) (Nat.floor (2 * d.U))).filter\n    (fun n => d.intervalLo < (n : ℝ) ∧ (n : ℝ) ≤ d.intervalHi)\n\ndef MediumAtom.betaCarrier (d : MediumAtom) : Finset ℕ :=\n  Finset.Icc (Nat.ceil d.V) (Nat.floor (2 * d.V))\n",
+          "normalized_lf_utf8_sha256": "d86dff7c58083551cff8a7c1e46d638486325a03311ec8183204db84e08d7e87",
+          "independently_read_from_source": true
+        },
+        {
+          "first": 126,
+          "last": 148,
+          "literal_source": "def MediumAdmissible (B : ℕ) (σ κ c0 : ℝ) (d : MediumAtom) : Prop :=\n  1 ≤ d.U ∧ 1 ≤ d.V ∧ 1 ≤ d.Q1 ∧ 1 ≤ d.Q2 ∧ 1 ≤ d.Q3 ∧\n  Real.exp (Real.exp 1) < d.scale ∧\n  c0 * d.scale ≤ (d.residue.natAbs : ℝ) ∧\n  (d.residue.natAbs : ℝ) ≤ d.scale ^ (1 + κ) ∧\n  d.Q1 < d.U * d.scale ^ (-σ) ∧\n  d.U ^ 2 * d.Q2 * d.Q3 ^ 2 < d.scale ^ (1 - 8 * σ) ∧\n  (d.residue.natAbs : ℝ) ^ (7 / 32 : ℝ) * d.U * d.Q1 * d.Q2 ^ 5 * d.Q3 ^ 2 <\n    d.scale ^ (2 - 15 * σ) ∧\n  d.U ^ (1 + 2 * (7 / 32 : ℝ)) * d.Q1 *\n      d.Q2 ^ (5 - 2 * (7 / 32 : ℝ)) * d.Q3 ^ (2 + 2 * (7 / 32 : ℝ)) <\n    d.scale ^ (2 - 15 * σ) ∧\n  (∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1) ∧\n  (∀ n ∈ d.alphaCarrier, d.alpha n ≠ 0 → ∀ p : ℕ,\n    Nat.Prime p → p ∣ n →\n      d.scale ^ (1 / (Real.log (Real.log d.scale)) ^ 3) < (p : ℝ)) ∧\n  (∀ m ∈ d.betaCarrier, ‖d.beta m‖ ≤ (m.divisors.card : ℝ) ^ B) ∧\n  (∀ q ∈ factorCarrier d.Q1, ‖d.gamma1 q‖ ≤ 1 ∧\n    (d.gamma1 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q2, ‖d.gamma2 q‖ ≤ 1 ∧\n    (d.gamma2 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q3, ‖d.gamma3 q‖ ≤ 1 ∧\n    (d.gamma3 q ≠ 0 → Nat.Coprime q d.residue.natAbs))\n",
+          "normalized_lf_utf8_sha256": "6c6ad1c398c235af394a2a4b6232e405ebc5c2de648cc448ad97074af7bf1b0a",
+          "independently_read_from_source": true
+        }
+      ],
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonPM2FiniteFold.lean",
+        "sha256": "eda9f3c56d44e87fb9cfa17c5420900c58d871d53acf9db5a9236464c333bc32",
+        "bytes": 14829,
+        "lf_lines": 306
+      },
+      "evidence_kind": "actual_source_API",
+      "file_hash_revalidated": true,
+      "all_span_hashes_revalidated": true,
+      "spans": [
+        {
+          "first": 31,
+          "last": 53,
+          "literal_source": "def moment (d : MediumAtom) : ℝ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n      d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m * rowSum d p m ^ 2\n\n/-- Every label is (p,m,n), not an unlabelled modulus or a pair quotient. -/\ndef activeLabels (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ) :=\n  ((d.primitiveFirstFactorCarrier ×ˢ\n      d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier) ×ˢ\n      d.cleanedAlphaAtom.transposedAtom.betaCarrier).filter\n    (fun z => d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight z.1.2 ≠ 0 ∧\n      z.2 ∈ d.cleanedCommonPProgression z.1.1 z.1.2)\n\ndef labelProduct (z : (ℕ × ℕ) × ℕ) : ℕ := z.1.2 * z.2\n\ndef foldedSum (d : MediumAtom) : ℝ :=\n  ∑ v ∈ productCarrier d,\n    tau v * tau (shiftDifference d v) * fourthDivisorWeight d v\n\n/-- Original outside energies occur exactly once. -/\ndef outsideEnergy (d : MediumAtom) : ℝ :=\n  (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n    (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)\n",
+          "normalized_lf_utf8_sha256": "b24b1e6ce58f7102f417f087ca55a74ba04b17fea4e3735ae6fa1aa28ac5103a",
+          "independently_read_from_source": true
+        },
+        {
+          "first": 292,
+          "last": 302,
+          "literal_source": "theorem MediumAtom.cleaned_commonP_M2_le_finite_divisor_fold\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      CommonPM2FiniteFold.outsideEnergy d *\n        ((3 * d.U / d.Q1) * CommonPM2FiniteFold.foldedSum d) := by\n  apply mul_le_mul_of_nonneg_left\n    (d.cleaned_commonP_moment_le_finite_divisor_fold hd hsigma)\n  unfold CommonPM2FiniteFold.outsideEnergy\n  exact mul_nonneg (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n    (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n",
+          "normalized_lf_utf8_sha256": "90a06d1b6bac40ecfb8a77f8ec880b5f22d21d5f6097e2432a09981183aa2af0",
+          "independently_read_from_source": true
+        }
+      ],
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Log\\Basic.lean",
+        "sha256": "1f36a9802233e878953d809b16e020beaf0ace5afd4c8279d47b52af6ee186bf",
+        "bytes": 28230,
+        "lf_lines": 713
+      },
+      "evidence_kind": "actual_pinned_Mathlib_API",
+      "file_hash_revalidated": true,
+      "all_span_hashes_revalidated": true,
+      "spans": [
+        {
+          "first": 133,
+          "last": 135,
+          "literal_source": "theorem log_mul (hx : x ≠ 0) (hy : y ≠ 0) : log (x * y) = log x + log y :=\n  exp_injective <| by\n    rw [exp_log_eq_abs (mul_ne_zero hx hy), exp_add, exp_log_eq_abs hx, exp_log_eq_abs hy, abs_mul]\n",
+          "normalized_lf_utf8_sha256": "9a44f9eefa77145efe6a5076e28ee992c49d796f0957d3ce6cf99596bf1d5b4d",
+          "independently_read_from_source": true
+        },
+        {
+          "first": 147,
+          "last": 153,
+          "literal_source": "theorem log_le_log_iff (h : 0 < x) (h₁ : 0 < y) : log x ≤ log y ↔ x ≤ y := by\n  rw [← exp_le_exp, exp_log h, exp_log h₁]\n\n@[gcongr, bound]\nlemma log_le_log (hx : 0 < x) (hxy : x ≤ y) : log x ≤ log y :=\n  (log_le_log_iff hx (hx.trans_le hxy)).2 hxy\n\n",
+          "normalized_lf_utf8_sha256": "d3c094a5f9e6f090158acaedee1fb4bce330df2f47a322991555c079e85e976f",
+          "independently_read_from_source": true
+        },
+        {
+          "first": 212,
+          "last": 214,
+          "literal_source": "@[bound]\ntheorem log_nonneg (hx : 1 ≤ x) : 0 ≤ log x :=\n  (log_nonneg_iff (zero_lt_one.trans_le hx)).2 hx\n",
+          "normalized_lf_utf8_sha256": "d58117374bfb81b052a790afa82d819188a8e94cadc8227c7f66d8cb8b7fac79",
+          "independently_read_from_source": true
+        },
+        {
+          "first": 307,
+          "last": 310,
+          "literal_source": "theorem log_le_sub_one_of_pos {x : ℝ} (hx : 0 < x) : log x ≤ x - 1 := by\n  rw [le_sub_iff_add_le]\n  convert! add_one_le_exp (log x)\n  rw [exp_log hx]\n",
+          "normalized_lf_utf8_sha256": "ab01aa45ff76500576c449f0722266ebe1fbcb2e2e4c105c097b5b25b9a2c993",
+          "independently_read_from_source": true
+        }
+      ],
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\GroupWithZero\\Units\\Basic.lean",
+        "sha256": "70d9819b0015e85972be567f2864a0516302a566f12fda8f67c243bff5d16bca",
+        "bytes": 21010,
+        "lf_lines": 531
+      },
+      "evidence_kind": "actual_pinned_Mathlib_API",
+      "file_hash_revalidated": true,
+      "all_span_hashes_revalidated": true,
+      "spans": [
+        {
+          "first": 337,
+          "last": 337,
+          "literal_source": "lemma div_mul_cancel₀ (a : G₀) (h : b ≠ 0) : a / b * b = a := by simp [h]\n",
+          "normalized_lf_utf8_sha256": "333a0562b1c98c0ad037c1e917c5122e66621c394892e27dea65cff3ef1a296b",
+          "independently_read_from_source": true
+        }
+      ],
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Defs.lean",
+        "sha256": "01a908236dc99e5040cb487165c1a73fbd4e495d44183e6465f86b42f744dc02",
+        "bytes": 22609,
+        "lf_lines": 472
+      },
+      "evidence_kind": "actual_pinned_Mathlib_API",
+      "file_hash_revalidated": true,
+      "all_span_hashes_revalidated": true,
+      "spans": [
+        {
+          "first": 225,
+          "last": 231,
+          "literal_source": "@[gcongr]\ntheorem mul_le_mul_of_nonneg_left [PosMulMono α] (hbc : b ≤ c) (ha : 0 ≤ a) : a * b ≤ a * c :=\n  PosMulMono.mul_le_mul_of_nonneg_left ha hbc\n\n@[gcongr]\ntheorem mul_le_mul_of_nonneg_right [MulPosMono α] (hbc : b ≤ c) (ha : 0 ≤ a) : b * a ≤ c * a :=\n  MulPosMono.mul_le_mul_of_nonneg_right ha hbc\n",
+          "normalized_lf_utf8_sha256": "b151334e68d43e5c7cec9be7f0c0305cbbb685dd04f0d9690e3c6ae8d6a91a35",
+          "independently_read_from_source": true
+        },
+        {
+          "first": 312,
+          "last": 318,
+          "literal_source": "theorem mul_le_mul_of_nonneg [PosMulMono α] [MulPosMono α]\n    (h₁ : a ≤ b) (h₂ : c ≤ d) (a0 : 0 ≤ a) (d0 : 0 ≤ d) : a * c ≤ b * d :=\n  (mul_le_mul_of_nonneg_left h₂ a0).trans (mul_le_mul_of_nonneg_right h₁ d0)\n\ntheorem mul_le_mul_of_nonneg' [PosMulMono α] [MulPosMono α]\n    (h₁ : a ≤ b) (h₂ : c ≤ d) (c0 : 0 ≤ c) (b0 : 0 ≤ b) : a * c ≤ b * d :=\n  (mul_le_mul_of_nonneg_right h₁ c0).trans (mul_le_mul_of_nonneg_left h₂ b0)\n",
+          "normalized_lf_utf8_sha256": "8541e13359503b9d65764f7cb140ae0fcddd3d13900f18b4689ccdcf006b4783",
+          "independently_read_from_source": true
+        },
+        {
+          "first": 352,
+          "last": 352,
+          "literal_source": "alias mul_le_mul := mul_le_mul_of_nonneg'\n",
+          "normalized_lf_utf8_sha256": "7379346d13e6977cf410e451a9377cdcac63bd948a54503af7ef100973a0eae6",
+          "independently_read_from_source": true
+        }
+      ],
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+        "sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+        "bytes": 63984,
+        "lf_lines": 1480
+      },
+      "evidence_kind": "actual_pinned_Mathlib_API",
+      "file_hash_revalidated": true,
+      "all_span_hashes_revalidated": true,
+      "spans": [
+        {
+          "first": 64,
+          "last": 68,
+          "literal_source": "/-- Assumes left covariance. -/\ntheorem Left.mul_nonneg [PosMulMono α] (ha : 0 ≤ a) (hb : 0 ≤ b) : 0 ≤ a * b := by\n  simpa only [mul_zero] using mul_le_mul_of_nonneg_left hb ha\n\nalias mul_nonneg := Left.mul_nonneg\n",
+          "normalized_lf_utf8_sha256": "4f85bb1d9eeed8b9f1e517b2d6bafe161e1efa2ac03f900cb5c86ad6a186e24d",
+          "independently_read_from_source": true
+        },
+        {
+          "first": 378,
+          "last": 380,
+          "literal_source": "@[simp] lemma pow_nonneg [ZeroLEOneClass M₀] [PosMulMono M₀] (ha : 0 ≤ a) : ∀ n, 0 ≤ a ^ n\n  | 0 => pow_zero a ▸ zero_le_one\n  | n + 1 => pow_succ a n ▸ mul_nonneg (pow_nonneg ha _) ha\n",
+          "normalized_lf_utf8_sha256": "019fb6216492e4ac9a27a97702b648e12ada5e94358852f05708b65fe5090369",
+          "independently_read_from_source": true
+        },
+        {
+          "first": 469,
+          "last": 475,
+          "literal_source": "@[mono, gcongr, bound]\ntheorem pow_le_pow_left₀ [PosMulMono M₀] [MulPosMono M₀]\n    (ha : 0 ≤ a) (hab : a ≤ b) : ∀ n, a ^ n ≤ b ^ n\n  | 0 => by simp\n  | 1 => by simpa using hab\n  | n + 2 => by simpa only [pow_succ']\n      using mul_le_mul hab (pow_le_pow_left₀ ha hab _) (pow_succ_nonneg ha _) (ha.trans hab)\n",
+          "normalized_lf_utf8_sha256": "780d8849fc108a1c6ea540be3a03d43fd77afc7dcf43a1ecaffe76d6de637cd5",
+          "independently_read_from_source": true
+        },
+        {
+          "first": 541,
+          "last": 543,
+          "literal_source": "@[simp] lemma pow_pos [ZeroLEOneClass M₀] (ha : 0 < a) : ∀ n, 0 < a ^ n\n  | 0 => by nontriviality; rw [pow_zero]; exact zero_lt_one\n  | _ + 1 => pow_succ a _ ▸ mul_pos (pow_pos ha _) ha\n",
+          "normalized_lf_utf8_sha256": "96a3b6f8b8a06d7dcd87ada66e01b731ec0d3a9c25c607a461d33aed1b118664",
+          "independently_read_from_source": true
+        },
+        {
+          "first": 883,
+          "last": 884,
+          "literal_source": "lemma div_nonneg (ha : 0 ≤ a) (hb : 0 ≤ b) : 0 ≤ a / b := by\n  rw [div_eq_mul_inv]; exact mul_nonneg ha (inv_nonneg.2 hb)\n",
+          "normalized_lf_utf8_sha256": "82fc2e4624342e41cb20c11c9961e6d54c31a53c14428c21e796f17e026df80e",
+          "independently_read_from_source": true
+        }
+      ],
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Ring\\Unbundled\\Basic.lean",
+        "sha256": "85232d08ea50e7fb03dbcdb4738d9ed47ae3671c045fb9cd3bc377576cd4ea60",
+        "bytes": 34159,
+        "lf_lines": 788
+      },
+      "evidence_kind": "actual_pinned_Mathlib_API",
+      "file_hash_revalidated": true,
+      "all_span_hashes_revalidated": true,
+      "spans": [
+        {
+          "first": 606,
+          "last": 609,
+          "literal_source": "lemma sq_nonneg [ExistsAddOfLE R] [PosMulMono R] [AddLeftMono R]\n    (a : R) : 0 ≤ a ^ 2 := by\n  obtain ha | ha := le_or_gt 0 a\n  · exact pow_succ_nonneg ha _\n",
+          "normalized_lf_utf8_sha256": "c89340f9542fdfb75c913ab6505e1f03592978a213abf2d339c738e0dee42c5e",
+          "independently_read_from_source": true
+        }
+      ],
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Group\\Basic.lean",
+        "sha256": "1ba194c84c72d56d485334bb05b2a943627c3a73de91a0b939ab6fd5ea17d1b1",
+        "bytes": 38365,
+        "lf_lines": 1096
+      },
+      "evidence_kind": "actual_pinned_Mathlib_API",
+      "file_hash_revalidated": true,
+      "all_span_hashes_revalidated": true,
+      "spans": [
+        {
+          "first": 219,
+          "last": 221,
+          "literal_source": "@[to_additive nsmul_add] lemma mul_pow (a b : M) : ∀ n, (a * b) ^ n = a ^ n * b ^ n\n  | 0 => by rw [pow_zero, pow_zero, pow_zero, one_mul]\n  | n + 1 => by rw [pow_succ', pow_succ', pow_succ', mul_pow, mul_mul_mul_comm]\n",
+          "normalized_lf_utf8_sha256": "e0f7213a1b6355357d4760ad33f2a637b4227ab885839cd4a9db91fe6e0af13a",
+          "independently_read_from_source": true
+        }
+      ],
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Group\\Defs.lean",
+        "sha256": "15119bf00cbb5e31beee450c4ee72967250387fd1532652041c971b304753def",
+        "bytes": 62382,
+        "lf_lines": 1483
+      },
+      "evidence_kind": "actual_pinned_Mathlib_API",
+      "file_hash_revalidated": true,
+      "all_span_hashes_revalidated": true,
+      "spans": [
+        {
+          "first": 715,
+          "last": 716,
+          "literal_source": "/-- Note that most of the lemmas about powers of two refer to it as `sq`. -/\n@[to_additive two_nsmul] lemma pow_two (a : M) : a ^ 2 = a * a := by rw [pow_succ, pow_one]\n",
+          "normalized_lf_utf8_sha256": "d20e9441bb5b476ff3f78b16e8e0de0e3d6227b627f382842f399c460c2af2e0",
+          "independently_read_from_source": true
+        },
+        {
+          "first": 733,
+          "last": 735,
+          "literal_source": "lemma pow_add (a : M) (m : ℕ) : ∀ n, a ^ (m + n) = a ^ m * a ^ n\n  | 0 => by rw [Nat.add_zero, pow_zero, mul_one]\n  | n + 1 => by rw [pow_succ, ← mul_assoc, ← pow_add, ← pow_succ, Nat.add_assoc]\n",
+          "normalized_lf_utf8_sha256": "5b952e5f71d41596ac01ff31148e050694c8f40d8f856fc9214691290cd67b48",
+          "independently_read_from_source": true
+        }
+      ],
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPMixedMomentCauchy-module-source.txt",
+        "sha256": "6ad176dd55564a32beb3fa6da37d910fa6ed1191b9f81dc6f3627d6ac5e965bf",
+        "bytes": 9571,
+        "lf_lines": 208
+      },
+      "evidence_kind": "written_UNCOMPILED_dependency",
+      "role": "Written parent kshift definition and exact fixed order; not actual module",
+      "spans": [
+        {
+          "first": 39,
+          "last": 58,
+          "literal_source": "/-- Ordinary divisor count, retaining exactly the weight in the finite fold. -/\ndef tau (n : ℕ) : ℝ := (n.divisors.card : ℝ)\n\n/-- Keep the large shifted order symbolic throughout the Cauchy calculation. -/\ndef kshift : ℕ := 512 ^ 2\n\ndef mixedCarrier (x : ℝ) (a : ℤ) : Finset ℕ :=\n  (Ioc 0 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a)\n\ndef mixedSum (x : ℝ) (a : ℤ) : ℝ :=\n  ∑ v ∈ mixedCarrier x a,\n    tau v * tau ((v : ℤ) - a).natAbs *\n      (fouvryTau 4 ((v : ℤ) - a).natAbs : ℝ) ^ 4\n\ntheorem kshift_eq : kshift = 262144 := by\n  norm_num only [kshift]\n\ntheorem kshift_ge_two : 2 ≤ kshift := by\n  rw [kshift_eq]\n  exact Nat.le_of_lt (by decide : 2 < 262144)\n",
+          "normalized_lf_utf8_sha256": "05d6b591029f3cb98f1b3af38361b54a4b4d0199e261a6894640cfdd07261965",
+          "independently_read_from_source": true
+        }
+      ],
+      "kernel_acceptance_inferred": false
+    },
+    {
+      "artifact": {
+        "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-shifted-tau-capped-log-pure-module-proposal.txt",
+        "sha256": "0c3d8e24bd1467cb3bb127c9c35e5dd6a0ef04a1f5a658ead2c5c820f22b1842",
+        "bytes": 8460,
+        "lf_lines": 168
+      },
+      "evidence_kind": "written_UNCOMPILED_dependency",
+      "role": "Written fixed shifted constant and symbolic positivity; not actual module",
+      "spans": [
+        {
+          "first": 95,
+          "last": 102,
+          "literal_source": "/-- Auxiliary fixed-order constant; unrelated to the main theorem's currentC/currentK. -/\ndef shiftedTauLogConstant (K : ℕ) : ℝ := 26 * (K : ℝ) * (7 : ℝ) ^ (K - 1)\n\ntheorem shiftedTauLogConstant_pos {K : ℕ} (hK : 2 ≤ K) :\n    0 < shiftedTauLogConstant K := by\n  have hKR : (0 : ℝ) < K := by exact_mod_cast (by omega : 0 < K)\n  unfold shiftedTauLogConstant\n  exact mul_pos (mul_pos (by norm_num) hKR) (pow_pos (by norm_num) _)\n",
+          "normalized_lf_utf8_sha256": "8754f2ed70e414aa33d52aa50ba606e56bd47eb12ddc1986791cb205c22b807b",
+          "independently_read_from_source": true
+        }
+      ],
+      "kernel_acceptance_inferred": false
+    }
+  ],
+  "original_premises": {
+    "parent_span": [
+      138,
+      140
+    ],
+    "new_spans": [
+      [
+        62,
+        64
+      ],
+      [
+        111,
+        113
+      ]
+    ],
+    "literal_source": "    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n",
+    "normalized_lf_utf8_sha256": "82ed9d935e2b1b89b6f8c61c89a064730c9b4af12de5e6c9811bb6891cf97569",
+    "both_new_blocks_byte_equal": true,
+    "retained": [
+      "Full MediumAdmissible B sigma kappa c0 d",
+      "0<sigma",
+      "0<=kappa",
+      "kappa<=1/(2*(kshift:Real))"
+    ],
+    "new_residue_sign_or_c0_restrictions": false
+  },
+  "independent_mathematical_audit": {
+    "constant": "eB=(2^B)^2-1 is a Nat exponent. D is the fixed parent sqrt(1296*shiftedTauLogConstant kshift), kshift=512^2. C_B=12*D*2^eB is strictly positive and depends only on B; neither D nor the large seven-power is expanded.",
+    "constant_quantifier_order": "constant_pos_and_uniform fixes B, states 0<C_B, and only then quantifies all sigma,kappa,c0,d and their premises. All scale,residue,coefficient and carrier dependence is in d, after C_B. There is no d-dependent constant or threshold.",
+    "original_outside_energy": "The actual definition is exactly beta norm-square sum times primitive gamma1 norm-square sum. The actual sharedFirstFactor_outside_le left side is definitionally this outsideEnergy. The original moment is the actual finite cleaned common-p moment, not a substitute.",
+    "one_ratio_cancellation": "Parent bound137-166 uses E*((3U/Q1)*(D*x*L^131073)). Actual outside bound255-280 is used exactly once and gives 4VQ1*LB^eB. Q1>=1 from hd.2.2.1 yields Q1>0; AC rearrangement isolates ((3U/Q1)*Q1), and div_mul_cancel0 applies once in an equality. 4V*3U=12UV=12x. The already present parent x then gives x^2. No energy or inequality is divided/canceled.",
+    "nonnegative_multipliers": "Before multiplying the actual outside upper bound, hfactor proves 0<=3U/Q1 and hmain proves 0<=D*x*L^131073 from original U,V>=1,D>0 and log_nonneg. The log-merge step proves 0<=12D*x^2 and 0<=L^131073 before its two ordered multiplications. No strict positivity of energy or moment is required.",
+    "scale_bounds": "hd.1 and hd.2.1 are exactly 1<=U and 1<=V. The mul_le_mul API gives1<=U*V=x; multiplying1<=U by V>=0 gives V<=x. These derivations add no geometry premise.",
+    "logarithm": "For1<=V<=x, V>0, log x>=0, log2<=1 by log_le_sub_one_of_pos. Real.log_mul is applied with explicit2 and V nonzero; Real.log_le_log uses V>0 and V<=x. Thus0<=1+log(2V)<=2*(1+log x), the exact stronger helper needed for the beta log.",
+    "exponent": "pow_le_pow_left0 applies to nonnegative bases and the unchanged natural eB. Explicit mul_pow2 L eB introduces2^eB; explicit pow_add L131073 eB rewrites only L^(131073+eB). AC normalization yields C_B*x^2*L^(131073+eB). Natural powers remain symbolic; no real exponent or large numeral expansion is substituted.",
+    "API_application": "The parent M2 theorem consumes exactly hd,hsigma,hkappa,hcap; the actual outside theorem consumes exactly hd. outsideEnergy and betaLogExponent unfold definitionally to the API expressions. New namespace-qualified declarations match their written namespaces and no matching new name was found in actual ImbalancedChen source.",
+    "claim": "Only E*moment<=C_B*x^2*(1+log x)^(131073+eB) on the explicitly capped domain follows. No signedError saving, centered-variance bridge, unrestricted kappa medium estimate, spectral return, or main theorem follows from this package."
+  },
+  "edge_cases": {
+    "B_zero": "eB=0, C_B=12D, and the natural-power APIs explicitly include exponent0; no eB>0 premise is used.",
+    "Q1_zero": "Excluded by the retained original1<=Q1, with explicit Q1>0 before its only cancellation.",
+    "x_V_one": "Log helper permits x=V=1; full MediumAdmissible is stronger but that stronger scale gate is not used here.",
+    "zero_energy_or_moment": "Allowed; only nonnegative multiplication is used, never cancellation of those quantities.",
+    "kappa_endpoints": "kappa=0 and equality at the explicit cap remain included.",
+    "integer_residue": "Original signed residue and full hd are retained, including the existing natAbs upper gate; no new sign or nonzero condition is added."
+  },
+  "proof_obstructions": [],
+  "minimum_repair": "NONE_IDENTIFIED_STATICALLY",
+  "independent_static_review": {
+    "all165_source_lines_read": true,
+    "all5_full_types_and_proof_bodies_independently_read": true,
+    "both2_definition_types_and_bodies_independently_read": true,
+    "all169_parent_source_lines_read": true,
+    "new_author_checkpoint_fully_read": true,
+    "new_author_hash_matches_root_supplied": true,
+    "all_new_author_decl_type_body_and_full_hashes_match": true,
+    "all_required_actual_API_file_and_span_hashes_revalidated": true,
+    "source_sorry_admit_axiom_absent": true,
+    "no_new_conclusion_as_premise": true,
+    "mathematical_gap_found": false,
+    "compiler": "NOT_RUN",
+    "elaboration": "NOT_CHECKED",
+    "import_resolution": "NOT_TESTED",
+    "kernel": "NOT_CHECKED",
+    "linter": "NOT_RUN",
+    "warning_free_claim": false,
+    "engineering_admission": false
+  },
+  "claim_boundaries": {
+    "explicit_capped_polylog_M2_majorant": "COMPLETE_WRITTEN_SOURCE_NO_STATIC_BLOCKER_UNCOMPILED_HOLD",
+    "actual_source_materialization": "NOT_PERFORMED",
+    "signed_error_saving": "NOT_PROVED",
+    "centered_variance_bridge": "OPEN",
+    "original_forall_kappa_medium": "OPEN",
+    "full_M2_analytic_provider": "OPEN",
+    "spectrum": "OPEN",
+    "seven_over_32": "OPEN",
+    "hAtPrecision_supplier": "OPEN",
+    "main": "OPEN",
+    "kernel_acceptance": "NOT_CHECKED"
+  },
+  "quota": {
+    "fresh_primary_used_percent": 48,
+    "fresh_primary_remaining_percent": 52,
+    "secondary": null,
+    "secondary_interpretation": "Unavailable, not zero",
+    "stop_if_any_effective_remaining_lte_percent": 40,
+    "continued_only_above_stop": true,
+    "reset_consumed": false
+  },
+  "actions": {
+    "written_files": [
+      "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-commonp-m2-polylog-majorant-independent-source-review-HOLD.json"
+    ],
+    "actual_lean_edits": 0,
+    "parent_or_author_artifact_edits": 0,
+    "new_agents": 0,
+    "lean_lake_proof_runtime_preflight_proper_classifier_export_git_site_calls": 0,
+    "allowed_operations": "Ordinary source read/hash/span scripts and this one new independent checkpoint write only"
+  },
+  "stop_condition": "This one newly authorized finite5-proof package complete; HOLD and return to root. No compilation or autonomous continuation."
+}

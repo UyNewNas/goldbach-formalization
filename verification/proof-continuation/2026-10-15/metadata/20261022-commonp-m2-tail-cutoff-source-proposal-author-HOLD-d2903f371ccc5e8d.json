@@ -1,0 +1,949 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-commonp-m2-tail-cutoff-source-proposal",
+  "created_utc": "2026-10-21T22:16:38.5919115Z",
+  "author": "/root/e1_interval_review_sol_high_oct22",
+  "status": "COMPLETE_FINITE_SOURCE_PROPOSAL_UNCOMPILED_HOLD",
+  "HOLD": true,
+  "scope": "Exactly three literal d4-tail definitions and three requested finite public theorems, with seven necessary private finite proof helpers. No logarithmic corollary, retained centered-row estimate or spectral work.",
+  "artifact": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3CommonPM2TailCutoff-module-source.txt",
+    "sha256": "b83a5197e71923944f22dd0714c558f89624f3d6f42f39c16e101cc4bfec957b",
+    "bytes": 15908,
+    "lf_lines": 334
+  },
+  "intended_actual_module": "ImbalancedChen.Part3CommonPM2TailCutoff",
+  "intended_actual_path": "ImbalancedChen/Part3CommonPM2TailCutoff.lean",
+  "imports": [
+    "import ImbalancedChen.Part3CommonPM2FiniteFold",
+    "import ImbalancedChen.Part3CleanBetaLargeGCDMajorant",
+    "import Mathlib.Data.Int.ModEq",
+    "import Mathlib.Algebra.BigOperators.Field"
+  ],
+  "complete_source": "import ImbalancedChen.Part3CommonPM2FiniteFold\nimport ImbalancedChen.Part3CleanBetaLargeGCDMajorant\nimport Mathlib.Data.Int.ModEq\nimport Mathlib.Algebra.BigOperators.Field\n\n/-!\n# Literal finite common-p shifted-d4 tail consumer\n\nSOURCE PROPOSAL ONLY -- UNCOMPILED -- HOLD -- 2026-10-22.\nThe three public targets and three definitions are the finite consumer\nspecified by the independent role audit SHA256\ndec05d44a1857590cea4530a4eff32b05f74d3f6acc451e2d4c111a483e51fec.\nThe principal row is unchanged. All ordered physical labels and the\noriginal common smoothing and outside energies remain. No logarithmic\ncorollary, retained-row saving or spectral estimate is asserted here.\n-/\n\nnamespace ImbalancedChen.Part3.CommonPM2TailCutoff\nnoncomputable section\nopen Classical Finset\nopen scoped BigOperators\nopen MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n\ndef tailRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℂ :=\n  ∑ n ∈ d.cleanedCommonPProgression p m,\n    ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue ∧\n          H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n      then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n\n      else 0\n\ndef keptProgressionRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℂ :=\n  ∑ n ∈ d.cleanedCommonPProgression p m,\n    ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue ∧\n          (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) ≤ H\n      then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n\n      else 0\n\ndef truncatedCenteredRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℂ :=\n  keptProgressionRow d H p m -\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexPrincipalRow m\n\nprivate theorem full_modEq_imp_common (p r s m n : ℕ) (a : ℤ)\n    (h : Int.ModEq (p * r * s) ((m : ℤ) * n) a) :\n    Int.ModEq p ((m : ℤ) * n) a := by\n  apply Int.ModEq.of_dvd (show (p : ℤ) ∣ (p : ℤ) * r * s from ?_) h\n  exact ⟨(r : ℤ) * s, by ring⟩\n\nprivate theorem sliced_progression_expansion (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (m : ℕ) :\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexProgressionRow m =\n      ∑ n ∈ d.cleanedAlphaAtom.transposedAtom.betaCarrier,\n        ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n          if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n          then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n\n          else 0 := by\n  unfold MediumAtom.complexProgressionRow\n  simp only [MediumAtom.complexRowLabels, MediumAtom.complexFactorLabels,\n    Finset.sum_product, MediumAtom.complexFactorGamma, complexFactorModulus,\n    Nat.cast_mul]\n  change (∑ q ∈ factorCarrier d.Q1, ∑ r ∈ factorCarrier d.Q2,\n    ∑ s ∈ factorCarrier d.Q3, ∑ n ∈ d.cleanedAlphaAtom.transposedAtom.betaCarrier,\n      ((if q = p then (1 : ℂ) else 0) * d.gamma2 r * d.gamma3 s *\n        d.cleanedAlphaAtom.transposedAtom.beta n) *\n        (if Int.ModEq (q * r * s) ((m : ℤ) * n) d.residue then 1 else 0)) = _\n  rw [Finset.sum_eq_single p]\n  · simp only [if_pos rfl, one_mul]\n    simp_rw [Finset.sum_comm (s := factorCarrier d.Q3)\n      (t := d.cleanedAlphaAtom.transposedAtom.betaCarrier)]\n    rw [Finset.sum_comm]\n    apply Finset.sum_congr rfl\n    intro n _hn\n    apply Finset.sum_congr rfl\n    intro r _hr\n    apply Finset.sum_congr rfl\n    intro s _hs\n    split_ifs <;> simp\n  · intro q _hq hqp\n    simp only [if_neg hqp, zero_mul, Finset.sum_const_zero]\n  · intro hnot\n    exact (hnot hp).elim\n\nprivate theorem progression_eq_common_row (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (m : ℕ) :\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexProgressionRow m =\n      ∑ n ∈ d.cleanedCommonPProgression p m,\n        ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n          if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n          then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n\n          else 0 := by\n  rw [sliced_progression_expansion d hp m]\n  symm\n  apply Finset.sum_subset (Finset.filter_subset _ _)\n  intro n hn hnnot\n  by_cases hdiv : (n : ℤ) ∣ d.residue\n  · have hb : d.cleanedAlphaAtom.transposedAtom.beta n = 0 := by\n      change (if n ∈ d.alphaCarrier then d.cleanedAlpha n else 0) = 0\n      simp only [MediumAtom.cleanedAlpha, if_pos hdiv, ite_self]\n    simp only [hb, mul_zero, ite_self, Finset.sum_const_zero]\n  · have hmod : ¬Int.ModEq p ((m : ℤ) * n) d.residue := by\n      intro h\n      exact hnnot (Finset.mem_filter.mpr ⟨hn, hdiv, h⟩)\n    apply Finset.sum_eq_zero\n    intro r _hr\n    apply Finset.sum_eq_zero\n    intro s _hs\n    exact if_neg (fun h => hmod (full_modEq_imp_common p r s m n d.residue h))\n\nprivate theorem absolute_row_eq_fibers (d : MediumAtom) (m n : ℕ) :\n    d.absoluteFactorModulusRow m n = ∑ q ∈ d.physicalFactorModuli,\n      if Int.ModEq q ((m : ℤ) * n) d.residue then d.absoluteFactorFiber q else 0 := by\n  unfold MediumAtom.absoluteFactorModulusRow\n  rw [← Finset.sum_fiberwise_of_maps_to\n    (s := d.complexFactorLabels) (t := d.physicalFactorModuli)\n    (g := complexFactorModulus) (fun r hr => Finset.mem_image_of_mem _ hr)]\n  apply Finset.sum_congr rfl\n  intro q _hq\n  by_cases hq : Int.ModEq q ((m : ℤ) * n) d.residue\n  · rw [if_pos hq]\n    apply Finset.sum_congr rfl\n    intro r hr\n    simp only [(Finset.mem_filter.mp hr).2, if_pos hq]\n  · rw [if_neg hq]\n    apply Finset.sum_eq_zero\n    intro r hr\n    simp only [(Finset.mem_filter.mp hr).2, if_neg hq]\n\nprivate theorem absolute_row_le_tauFour_of_ne\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (m n : ℕ)\n    (hne : (m : ℤ) * n - d.residue ≠ 0) :\n    d.absoluteFactorModulusRow m n ≤\n      (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ) := by\n  rw [absolute_row_eq_fibers]\n  calc\n    _ ≤ ∑ q ∈ d.physicalFactorModuli,\n        if Int.ModEq q ((m : ℤ) * n) d.residue then (fouvryTau 3 q : ℝ) else 0 := by\n      apply Finset.sum_le_sum\n      intro q _hq\n      split_ifs\n      · exact d.absoluteFactorFiber_le_tauThree hd q\n      · exact le_rfl\n    _ = ∑ q ∈ d.physicalFactorModuli.filter\n        (fun q : ℕ => Int.ModEq q ((m : ℤ) * n) d.residue), (fouvryTau 3 q : ℝ) := by\n      rw [Finset.sum_filter]\n    _ ≤ ∑ q ∈ (((m : ℤ) * n - d.residue).natAbs).divisors,\n        (fouvryTau 3 q : ℝ) := by\n      apply Finset.sum_le_sum_of_subset_of_nonneg\n      · intro q hq\n        have he := (Finset.mem_filter.mp hq).2\n        apply Nat.mem_divisors.mpr\n        refine ⟨?_, Int.natAbs_ne_zero.mpr hne⟩\n        have hdiv : (q : ℤ) ∣ (m : ℤ) * n - d.residue :=\n          Int.modEq_iff_dvd.mp he.symm\n        exact_mod_cast Int.natAbs_dvd_natAbs.mpr hdiv\n      · intro _ _ _\n        positivity\n    _ = _ := by rw [show 4 = 3 + 1 from rfl, fouvryTau_succ, Nat.cast_sum]\n\nprivate theorem slice_absolute_row_eq_pair (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (m n : ℕ) :\n    (d.q1SliceAtom p).absoluteFactorModulusRow m n =\n      ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n        if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n        then ‖d.gamma2 r * d.gamma3 s‖ else 0 := by\n  unfold MediumAtom.absoluteFactorModulusRow\n  simp only [MediumAtom.complexFactorLabels, Finset.sum_product,\n    MediumAtom.complexFactorGamma, complexFactorModulus, Nat.cast_mul]\n  change (∑ q ∈ factorCarrier d.Q1, ∑ r ∈ factorCarrier d.Q2,\n    ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (q * r * s) ((m : ℤ) * n) d.residue\n      then ‖(if q = p then (1 : ℂ) else 0) * d.gamma2 r * d.gamma3 s‖ else 0) = _\n  rw [Finset.sum_eq_single p]\n  · simp only [if_pos rfl, one_mul]\n  · intro q _hq hqp\n    simp only [if_neg hqp, zero_mul, norm_zero, ite_self, Finset.sum_const_zero]\n  · intro hnot\n    exact (hnot hp).elim\n\nprivate theorem inner_tail_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {H : ℝ} (hH : 0 < H)\n    {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (m n : ℕ)\n    (hn : n ∈ d.cleanedCommonPProgression p m) :\n    ‖∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue ∧\n          H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n      then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n else 0‖ ≤\n      ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ *\n        (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) ^ 2 / H := by\n  let T : ℝ := (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n  have hT : 0 ≤ T := Nat.cast_nonneg _\n  have hne : (m : ℤ) * n - d.residue ≠ 0 := by\n    intro he\n    exact (Finset.mem_filter.mp hn).2.1 ⟨(m : ℤ), by nlinarith⟩\n  have hmass : (∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n      then ‖d.gamma2 r * d.gamma3 s‖ else 0) ≤ T := by\n    have hh := absolute_row_le_tauFour_of_ne (mediumAdmissible_q1SliceAtom hd hp) m n hne\n    rw [slice_absolute_row_eq_pair d (Finset.mem_filter.mp hp).1 m n] at hh\n    simpa only [MediumAtom.q1SliceAtom, CommonPM2FiniteFold.shiftDifference, Nat.cast_mul] using hh\n  by_cases hcut : H < T\n  · have hpay : T ≤ T ^ 2 / H := by\n      apply (le_div_iff₀ hH).mpr\n      simpa only [pow_two] using mul_le_mul_of_nonneg_left hcut.le hT\n    calc\n      _ ≤ ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n          if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n          then ‖d.gamma2 r * d.gamma3 s‖ * ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ else 0 := by\n        apply (norm_sum_le _ _).trans\n        apply Finset.sum_le_sum\n        intro r _hr\n        apply (norm_sum_le _ _).trans\n        apply Finset.sum_le_sum\n        intro s _hs\n        by_cases hmod : Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n        · simp only [show H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n            from hcut, hmod, and_self, if_pos, norm_mul, le_refl]\n        · simp only [hmod, false_and, if_false, norm_zero, le_refl]\n      _ = (∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n          if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n          then ‖d.gamma2 r * d.gamma3 s‖ else 0) *\n            ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ := by\n        simp only [Finset.sum_mul, ite_mul, zero_mul]\n      _ ≤ T * ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ :=\n        mul_le_mul_of_nonneg_right hmass (norm_nonneg _)\n      _ ≤ (T ^ 2 / H) * ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ :=\n        mul_le_mul_of_nonneg_right hpay (norm_nonneg _)\n      _ = _ := by dsimp [T]; ring\n  · have hzero : ∀ r s : ℕ,\n        (if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue ∧\n          H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n        then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n else 0) = 0 := by\n      intro r s\n      exact if_neg (fun h => hcut h.2)\n    simp only [hzero, Finset.sum_const_zero, norm_zero]\n    exact div_nonneg (mul_nonneg (norm_nonneg _) (sq_nonneg _)) hH.le\n\ntheorem centeredRow_sub_truncated_eq_tail\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    (H : ℝ) {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (m : ℕ) :\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m -\n      truncatedCenteredRow d H p m = tailRow d H p m := by\n  by_cases hpzero : p = 0\n  · have hlo := (Finset.mem_Icc.mp (Finset.mem_filter.mp hp).1).1\n    have hceil : 1 ≤ Nat.ceil d.Q1 := by\n      exact_mod_cast hd.2.2.1.trans (Nat.le_ceil d.Q1)\n    omega\n  · have hsplit :\n        (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexProgressionRow m =\n          keptProgressionRow d H p m + tailRow d H p m := by\n      rw [progression_eq_common_row d (Finset.mem_filter.mp hp).1 m]\n      unfold keptProgressionRow tailRow\n      rw [← Finset.sum_add_distrib]\n      apply Finset.sum_congr rfl\n      intro n _hn\n      rw [← Finset.sum_add_distrib]\n      apply Finset.sum_congr rfl\n      intro r _hr\n      rw [← Finset.sum_add_distrib]\n      apply Finset.sum_congr rfl\n      intro s _hs\n      by_cases hmod : Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n      · by_cases hcut : (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) ≤ H\n        · simp only [hmod, hcut, not_lt_of_ge hcut, and_true, and_false,\n            if_true, if_false, add_zero]\n        · have hgt : H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) :=\n            lt_of_not_ge hcut\n          simp only [hmod, hcut, hgt, and_true, and_false, if_true, if_false, zero_add]\n      · simp only [hmod, false_and, if_false, add_zero]\n    unfold MediumAtom.complexCenteredRow truncatedCenteredRow\n    rw [hsplit]\n    ring\n\ntheorem tailRow_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {H : ℝ} (hH : 0 < H)\n    {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (m : ℕ) :\n    ‖tailRow d H p m‖ ≤ CommonPM2FiniteFold.rowSum d p m / H := by\n  unfold tailRow CommonPM2FiniteFold.rowSum\n  apply (norm_sum_le _ _).trans\n  calc\n    _ ≤ ∑ n ∈ d.cleanedCommonPProgression p m,\n        ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ *\n          (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) ^ 2 / H :=\n      Finset.sum_le_sum (fun n hn => inner_tail_norm_le hd hH hp m n hn)\n    _ = _ := by rw [Finset.sum_div]\n\ntheorem centered_tail_energy_le_M2\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {H : ℝ} (hH : 0 < H) :\n    CommonPM2FiniteFold.outsideEnergy d *\n      (∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n          d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n            ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m -\n              truncatedCenteredRow d H p m‖ ^ 2) ≤\n      (CommonPM2FiniteFold.outsideEnergy d *\n        CommonPM2FiniteFold.moment d) / H ^ 2 := by\n  have hE : 0 ≤ CommonPM2FiniteFold.outsideEnergy d := by\n    unfold CommonPM2FiniteFold.outsideEnergy\n    exact mul_nonneg (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n      (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n  calc\n    _ ≤ CommonPM2FiniteFold.outsideEnergy d *\n        (∑ p ∈ d.primitiveFirstFactorCarrier,\n          ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n            d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n              (CommonPM2FiniteFold.rowSum d p m ^ 2 / H ^ 2)) := by\n      apply mul_le_mul_of_nonneg_left _ hE\n      apply Finset.sum_le_sum\n      intro p hp\n      apply Finset.sum_le_sum\n      intro m _hm\n      apply mul_le_mul_of_nonneg_left _\n        (d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight_nonneg m)\n      rw [centeredRow_sub_truncated_eq_tail hd H hp m]\n      have hrow : 0 ≤ CommonPM2FiniteFold.rowSum d p m := by\n        unfold CommonPM2FiniteFold.rowSum\n        exact Finset.sum_nonneg (fun _ _ => mul_nonneg (norm_nonneg _)\n          (sq_nonneg _))\n      have hs := (sq_le_sq₀ (norm_nonneg (tailRow d H p m))\n        (div_nonneg hrow hH.le)).2 (tailRow_norm_le hd hH hp m)\n      simpa only [div_pow] using hs\n    _ = _ := by\n      unfold CommonPM2FiniteFold.moment\n      simp only [Finset.sum_div, mul_div_assoc]\n\nend\nend ImbalancedChen.Part3.CommonPM2TailCutoff\n",
+  "source_task_audit": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-capped-commonp-m2-original-role-and-tail-consumer-mathematical-review-HOLD.json",
+    "sha256": "dec05d44a1857590cea4530a4eff32b05f74d3f6acc451e2d4c111a483e51fec",
+    "bytes": 54590,
+    "lf_lines": 385
+  },
+  "proposed_audit_definitions_exact": "def tailRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℂ :=\n  ∑ n ∈ d.cleanedCommonPProgression p m,\n    ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue ∧\n          H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n      then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n\n      else 0\n\ndef keptProgressionRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℂ :=\n  ∑ n ∈ d.cleanedCommonPProgression p m,\n    ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue ∧\n          (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) ≤ H\n      then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n\n      else 0\n\ndef truncatedCenteredRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℂ :=\n  keptProgressionRow d H p m -\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexPrincipalRow m",
+  "three_definitions_byte_exact": true,
+  "three_public_full_types_byte_exact": [
+    {
+      "complete_audit_type": "theorem centeredRow_sub_truncated_eq_tail\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    (H : ℝ) {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (m : ℕ) :\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m -\n      truncatedCenteredRow d H p m = tailRow d H p m",
+      "normalized_lf_utf8_sha256": "13023d8630e5ffe6100b1d9098b22b5300c20f88c5840949a1d6cb1a02e66d92",
+      "byte_exact_before_assignment": true
+    },
+    {
+      "complete_audit_type": "theorem tailRow_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {H : ℝ} (hH : 0 < H)\n    {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (m : ℕ) :\n    ‖tailRow d H p m‖ ≤ CommonPM2FiniteFold.rowSum d p m / H",
+      "normalized_lf_utf8_sha256": "0b4a7f7847a3dafc084a63a21b82eeaa67bed7abe1bd0f9763c60a0aed0eb462",
+      "byte_exact_before_assignment": true
+    },
+    {
+      "complete_audit_type": "theorem centered_tail_energy_le_M2\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {H : ℝ} (hH : 0 < H) :\n    CommonPM2FiniteFold.outsideEnergy d *\n      (∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n          d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n            ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m -\n              truncatedCenteredRow d H p m‖ ^ 2) ≤\n      (CommonPM2FiniteFold.outsideEnergy d *\n        CommonPM2FiniteFold.moment d) / H ^ 2",
+      "normalized_lf_utf8_sha256": "10c6e88f150e755e98fa3e282a13d43488802d2f9769d05cca7a1aad861a9793",
+      "byte_exact_before_assignment": true
+    }
+  ],
+  "declaration_counts": {
+    "definitions": 3,
+    "complete_public_proofs": 3,
+    "complete_private_helper_proofs": 7,
+    "all_complete_written_declarations": 13
+  },
+  "complete_written_declarations": [
+    {
+      "kind": "def",
+      "name": "tailRow",
+      "written_qualified_name": "ImbalancedChen.Part3.CommonPM2TailCutoff.tailRow",
+      "private_internal_name_note": "Public written qualified name.",
+      "first": 24,
+      "type_last": 24,
+      "last": 30,
+      "complete_written_type": "def tailRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℂ\n",
+      "complete_written_body": "\n  ∑ n ∈ d.cleanedCommonPProgression p m,\n    ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue ∧\n          H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n      then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n\n      else 0\n",
+      "complete_written_declaration": "def tailRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℂ :=\n  ∑ n ∈ d.cleanedCommonPProgression p m,\n    ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue ∧\n          H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n      then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n\n      else 0\n",
+      "type_normalized_lf_utf8_sha256": "25c23feaf310da577abbc984cfbf5c84f58dd44a4358fbfbe055252b23b9b340",
+      "body_normalized_lf_utf8_sha256": "0d61bd3367c2ea715365bd8094831d0722ff5cd2efb22be50bbf434a190a2b79",
+      "full_declaration_normalized_lf_utf8_sha256": "07b3a87ab00217eed973403ec1f20620941577fb5264b20f6c2d66ec4ea9ae92",
+      "full_type_body_read": true,
+      "author_static_verdict": "no_static_blocker",
+      "author_reason": "Exactly the specified strict shifted-d4 gate, actual common-p progression, original gamma2/gamma3 and cleaned transposed beta.",
+      "kernel_checked": false
+    },
+    {
+      "kind": "def",
+      "name": "keptProgressionRow",
+      "written_qualified_name": "ImbalancedChen.Part3.CommonPM2TailCutoff.keptProgressionRow",
+      "private_internal_name_note": "Public written qualified name.",
+      "first": 32,
+      "type_last": 32,
+      "last": 38,
+      "complete_written_type": "def keptProgressionRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℂ\n",
+      "complete_written_body": "\n  ∑ n ∈ d.cleanedCommonPProgression p m,\n    ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue ∧\n          (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) ≤ H\n      then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n\n      else 0\n",
+      "complete_written_declaration": "def keptProgressionRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℂ :=\n  ∑ n ∈ d.cleanedCommonPProgression p m,\n    ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue ∧\n          (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) ≤ H\n      then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n\n      else 0\n",
+      "type_normalized_lf_utf8_sha256": "b0d37c0c9bbc18675863e6027352f6171ce55f86006926024b7857eac7ba4085",
+      "body_normalized_lf_utf8_sha256": "fd25147fdca858a50a78d76934887a53d11143e1de79b219035795c08c38fae7",
+      "full_declaration_normalized_lf_utf8_sha256": "2a9751af1b64d77762a456ee475f18a83ccf3d0b9085e8e7683f83254fe9403a",
+      "full_type_body_read": true,
+      "author_static_verdict": "no_static_blocker",
+      "author_reason": "Exactly the specified complementary inclusive d4<=H gate on the same labels and coefficient.",
+      "kernel_checked": false
+    },
+    {
+      "kind": "def",
+      "name": "truncatedCenteredRow",
+      "written_qualified_name": "ImbalancedChen.Part3.CommonPM2TailCutoff.truncatedCenteredRow",
+      "private_internal_name_note": "Public written qualified name.",
+      "first": 40,
+      "type_last": 40,
+      "last": 42,
+      "complete_written_type": "def truncatedCenteredRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℂ\n",
+      "complete_written_body": "\n  keptProgressionRow d H p m -\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexPrincipalRow m\n",
+      "complete_written_declaration": "def truncatedCenteredRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℂ :=\n  keptProgressionRow d H p m -\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexPrincipalRow m\n",
+      "type_normalized_lf_utf8_sha256": "559323a2553b0aa947008ab81472dc2b70f7260fcdc64739909602f23970ea6a",
+      "body_normalized_lf_utf8_sha256": "79657e014a11211c3c492d2d1dfafcf56b06570d36fbe650f5f6c8b8c3ac72e7",
+      "full_declaration_normalized_lf_utf8_sha256": "2f5d7daee66cb303385b1812f13f26fd4444611c5421bc231a33089a389fc5d6",
+      "full_type_body_read": true,
+      "author_static_verdict": "no_static_blocker",
+      "author_reason": "Kept progression row minus the completely unchanged actual primitive-coprime principal row.",
+      "kernel_checked": false
+    },
+    {
+      "kind": "private theorem",
+      "name": "full_modEq_imp_common",
+      "written_qualified_name": "ImbalancedChen.Part3.CommonPM2TailCutoff.full_modEq_imp_common",
+      "private_internal_name_note": "Lean generated internal private name not asserted before compilation.",
+      "first": 44,
+      "type_last": 46,
+      "last": 48,
+      "complete_written_type": "private theorem full_modEq_imp_common (p r s m n : ℕ) (a : ℤ)\n    (h : Int.ModEq (p * r * s) ((m : ℤ) * n) a) :\n    Int.ModEq p ((m : ℤ) * n) a := by\n",
+      "complete_written_body": "  apply Int.ModEq.of_dvd (show (p : ℤ) ∣ (p : ℤ) * r * s from ?_) h\n  exact ⟨(r : ℤ) * s, by ring⟩\n",
+      "complete_written_declaration": "private theorem full_modEq_imp_common (p r s m n : ℕ) (a : ℤ)\n    (h : Int.ModEq (p * r * s) ((m : ℤ) * n) a) :\n    Int.ModEq p ((m : ℤ) * n) a := by\n  apply Int.ModEq.of_dvd (show (p : ℤ) ∣ (p : ℤ) * r * s from ?_) h\n  exact ⟨(r : ℤ) * s, by ring⟩\n",
+      "type_normalized_lf_utf8_sha256": "93428b8f71939f4b0133194919a2e9d707aadff07972bb6027834671ea815eaf",
+      "body_normalized_lf_utf8_sha256": "0d424fb92eb401ba60026a54ca5e88ab7f79ffb78a5ae66bc0fd8ac76ca1bd7c",
+      "full_declaration_normalized_lf_utf8_sha256": "d4d2e59527b36e242eb946eafdda7d292b27dfaef1419a2f8d223d421a9d460f",
+      "full_type_body_read": true,
+      "author_static_verdict": "no_static_blocker",
+      "author_reason": "Actual Int.ModEq.of_dvd with the explicit witness r*s proves full p*r*s congruence implies common p congruence, with no primality or inverse hypothesis.",
+      "kernel_checked": false
+    },
+    {
+      "kind": "private theorem",
+      "name": "sliced_progression_expansion",
+      "written_qualified_name": "ImbalancedChen.Part3.CommonPM2TailCutoff.sliced_progression_expansion",
+      "private_internal_name_note": "Lean generated internal private name not asserted before compilation.",
+      "first": 50,
+      "type_last": 57,
+      "last": 82,
+      "complete_written_type": "private theorem sliced_progression_expansion (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (m : ℕ) :\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexProgressionRow m =\n      ∑ n ∈ d.cleanedAlphaAtom.transposedAtom.betaCarrier,\n        ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n          if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n          then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n\n          else 0 := by\n",
+      "complete_written_body": "  unfold MediumAtom.complexProgressionRow\n  simp only [MediumAtom.complexRowLabels, MediumAtom.complexFactorLabels,\n    Finset.sum_product, MediumAtom.complexFactorGamma, complexFactorModulus,\n    Nat.cast_mul]\n  change (∑ q ∈ factorCarrier d.Q1, ∑ r ∈ factorCarrier d.Q2,\n    ∑ s ∈ factorCarrier d.Q3, ∑ n ∈ d.cleanedAlphaAtom.transposedAtom.betaCarrier,\n      ((if q = p then (1 : ℂ) else 0) * d.gamma2 r * d.gamma3 s *\n        d.cleanedAlphaAtom.transposedAtom.beta n) *\n        (if Int.ModEq (q * r * s) ((m : ℤ) * n) d.residue then 1 else 0)) = _\n  rw [Finset.sum_eq_single p]\n  · simp only [if_pos rfl, one_mul]\n    simp_rw [Finset.sum_comm (s := factorCarrier d.Q3)\n      (t := d.cleanedAlphaAtom.transposedAtom.betaCarrier)]\n    rw [Finset.sum_comm]\n    apply Finset.sum_congr rfl\n    intro n _hn\n    apply Finset.sum_congr rfl\n    intro r _hr\n    apply Finset.sum_congr rfl\n    intro s _hs\n    split_ifs <;> simp\n  · intro q _hq hqp\n    simp only [if_neg hqp, zero_mul, Finset.sum_const_zero]\n  · intro hnot\n    exact (hnot hp).elim\n",
+      "complete_written_declaration": "private theorem sliced_progression_expansion (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (m : ℕ) :\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexProgressionRow m =\n      ∑ n ∈ d.cleanedAlphaAtom.transposedAtom.betaCarrier,\n        ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n          if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n          then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n\n          else 0 := by\n  unfold MediumAtom.complexProgressionRow\n  simp only [MediumAtom.complexRowLabels, MediumAtom.complexFactorLabels,\n    Finset.sum_product, MediumAtom.complexFactorGamma, complexFactorModulus,\n    Nat.cast_mul]\n  change (∑ q ∈ factorCarrier d.Q1, ∑ r ∈ factorCarrier d.Q2,\n    ∑ s ∈ factorCarrier d.Q3, ∑ n ∈ d.cleanedAlphaAtom.transposedAtom.betaCarrier,\n      ((if q = p then (1 : ℂ) else 0) * d.gamma2 r * d.gamma3 s *\n        d.cleanedAlphaAtom.transposedAtom.beta n) *\n        (if Int.ModEq (q * r * s) ((m : ℤ) * n) d.residue then 1 else 0)) = _\n  rw [Finset.sum_eq_single p]\n  · simp only [if_pos rfl, one_mul]\n    simp_rw [Finset.sum_comm (s := factorCarrier d.Q3)\n      (t := d.cleanedAlphaAtom.transposedAtom.betaCarrier)]\n    rw [Finset.sum_comm]\n    apply Finset.sum_congr rfl\n    intro n _hn\n    apply Finset.sum_congr rfl\n    intro r _hr\n    apply Finset.sum_congr rfl\n    intro s _hs\n    split_ifs <;> simp\n  · intro q _hq hqp\n    simp only [if_neg hqp, zero_mul, Finset.sum_const_zero]\n  · intro hnot\n    exact (hnot hp).elim\n",
+      "type_normalized_lf_utf8_sha256": "107a06e1fa1ef92ff7564e442592bab770173f23ce4fb5a2defd14578d60cfe5",
+      "body_normalized_lf_utf8_sha256": "863699419c83981739ef408b51a00ea2fcd2ad20b67d636532305186ba6130a0",
+      "full_declaration_normalized_lf_utf8_sha256": "244eb717bee064a7c99f3e7ff00092d287bd448f95df8ee97e9afc2e710d3791",
+      "full_type_body_read": true,
+      "author_static_verdict": "no_static_blocker",
+      "author_reason": "Unfold the actual q1 point-mass slice, transpose and full physical progression row; collapse the q1 sum at p using actual membership; exchange only finite r,s,n sums. Coefficient and full congruence are preserved before taking any norm.",
+      "kernel_checked": false
+    },
+    {
+      "kind": "private theorem",
+      "name": "progression_eq_common_row",
+      "written_qualified_name": "ImbalancedChen.Part3.CommonPM2TailCutoff.progression_eq_common_row",
+      "private_internal_name_note": "Lean generated internal private name not asserted before compilation.",
+      "first": 84,
+      "type_last": 91,
+      "last": 108,
+      "complete_written_type": "private theorem progression_eq_common_row (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (m : ℕ) :\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexProgressionRow m =\n      ∑ n ∈ d.cleanedCommonPProgression p m,\n        ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n          if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n          then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n\n          else 0 := by\n",
+      "complete_written_body": "  rw [sliced_progression_expansion d hp m]\n  symm\n  apply Finset.sum_subset (Finset.filter_subset _ _)\n  intro n hn hnnot\n  by_cases hdiv : (n : ℤ) ∣ d.residue\n  · have hb : d.cleanedAlphaAtom.transposedAtom.beta n = 0 := by\n      change (if n ∈ d.alphaCarrier then d.cleanedAlpha n else 0) = 0\n      simp only [MediumAtom.cleanedAlpha, if_pos hdiv, ite_self]\n    simp only [hb, mul_zero, ite_self, Finset.sum_const_zero]\n  · have hmod : ¬Int.ModEq p ((m : ℤ) * n) d.residue := by\n      intro h\n      exact hnnot (Finset.mem_filter.mpr ⟨hn, hdiv, h⟩)\n    apply Finset.sum_eq_zero\n    intro r _hr\n    apply Finset.sum_eq_zero\n    intro s _hs\n    exact if_neg (fun h => hmod (full_modEq_imp_common p r s m n d.residue h))\n",
+      "complete_written_declaration": "private theorem progression_eq_common_row (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (m : ℕ) :\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexProgressionRow m =\n      ∑ n ∈ d.cleanedCommonPProgression p m,\n        ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n          if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n          then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n\n          else 0 := by\n  rw [sliced_progression_expansion d hp m]\n  symm\n  apply Finset.sum_subset (Finset.filter_subset _ _)\n  intro n hn hnnot\n  by_cases hdiv : (n : ℤ) ∣ d.residue\n  · have hb : d.cleanedAlphaAtom.transposedAtom.beta n = 0 := by\n      change (if n ∈ d.alphaCarrier then d.cleanedAlpha n else 0) = 0\n      simp only [MediumAtom.cleanedAlpha, if_pos hdiv, ite_self]\n    simp only [hb, mul_zero, ite_self, Finset.sum_const_zero]\n  · have hmod : ¬Int.ModEq p ((m : ℤ) * n) d.residue := by\n      intro h\n      exact hnnot (Finset.mem_filter.mpr ⟨hn, hdiv, h⟩)\n    apply Finset.sum_eq_zero\n    intro r _hr\n    apply Finset.sum_eq_zero\n    intro s _hs\n    exact if_neg (fun h => hmod (full_modEq_imp_common p r s m n d.residue h))\n",
+      "type_normalized_lf_utf8_sha256": "f1bf0e89f09395216fb0628235696f66ecdcfa328b4da390e0c8293d992dfb9c",
+      "body_normalized_lf_utf8_sha256": "827d09cd7b0154cef9fe4a6b3ed588d207b86dde77bfddbbabf48735e5b384dd",
+      "full_declaration_normalized_lf_utf8_sha256": "5ae9561cfe6b15a0c56ed160da788ad8431f6b0bb2cc0dda5e7f97ff70ede981",
+      "full_type_body_read": true,
+      "author_static_verdict": "no_static_blocker",
+      "author_reason": "The removed n dividing signed a has cleaned beta zero. At every remaining removed n the common p congruence fails, so every full p*r*s congruence fails by full_modEq_imp_common. Actual Finset.sum_subset removes exactly these zero terms.",
+      "kernel_checked": false
+    },
+    {
+      "kind": "private theorem",
+      "name": "absolute_row_eq_fibers",
+      "written_qualified_name": "ImbalancedChen.Part3.CommonPM2TailCutoff.absolute_row_eq_fibers",
+      "private_internal_name_note": "Lean generated internal private name not asserted before compilation.",
+      "first": 110,
+      "type_last": 112,
+      "last": 127,
+      "complete_written_type": "private theorem absolute_row_eq_fibers (d : MediumAtom) (m n : ℕ) :\n    d.absoluteFactorModulusRow m n = ∑ q ∈ d.physicalFactorModuli,\n      if Int.ModEq q ((m : ℤ) * n) d.residue then d.absoluteFactorFiber q else 0 := by\n",
+      "complete_written_body": "  unfold MediumAtom.absoluteFactorModulusRow\n  rw [← Finset.sum_fiberwise_of_maps_to\n    (s := d.complexFactorLabels) (t := d.physicalFactorModuli)\n    (g := complexFactorModulus) (fun r hr => Finset.mem_image_of_mem _ hr)]\n  apply Finset.sum_congr rfl\n  intro q _hq\n  by_cases hq : Int.ModEq q ((m : ℤ) * n) d.residue\n  · rw [if_pos hq]\n    apply Finset.sum_congr rfl\n    intro r hr\n    simp only [(Finset.mem_filter.mp hr).2, if_pos hq]\n  · rw [if_neg hq]\n    apply Finset.sum_eq_zero\n    intro r hr\n    simp only [(Finset.mem_filter.mp hr).2, if_neg hq]\n",
+      "complete_written_declaration": "private theorem absolute_row_eq_fibers (d : MediumAtom) (m n : ℕ) :\n    d.absoluteFactorModulusRow m n = ∑ q ∈ d.physicalFactorModuli,\n      if Int.ModEq q ((m : ℤ) * n) d.residue then d.absoluteFactorFiber q else 0 := by\n  unfold MediumAtom.absoluteFactorModulusRow\n  rw [← Finset.sum_fiberwise_of_maps_to\n    (s := d.complexFactorLabels) (t := d.physicalFactorModuli)\n    (g := complexFactorModulus) (fun r hr => Finset.mem_image_of_mem _ hr)]\n  apply Finset.sum_congr rfl\n  intro q _hq\n  by_cases hq : Int.ModEq q ((m : ℤ) * n) d.residue\n  · rw [if_pos hq]\n    apply Finset.sum_congr rfl\n    intro r hr\n    simp only [(Finset.mem_filter.mp hr).2, if_pos hq]\n  · rw [if_neg hq]\n    apply Finset.sum_eq_zero\n    intro r hr\n    simp only [(Finset.mem_filter.mp hr).2, if_neg hq]\n",
+      "type_normalized_lf_utf8_sha256": "59a0e3c73252166a75ab3f954a046a11af1be967d18cebc6134cd69a191c36bc",
+      "body_normalized_lf_utf8_sha256": "95bb1a502f269e702de567aef0b86871c7224c3c64c9d717fd1bd65d927df2dc",
+      "full_declaration_normalized_lf_utf8_sha256": "2653292ca1746d8bb892463af90fcf3468d05276d3c898a78c630610594bf0b5",
+      "full_type_body_read": true,
+      "author_static_verdict": "no_static_blocker",
+      "author_reason": "Reprove the existing private actual fiber identity locally using sum_fiberwise_of_maps_to. The physical modulus image and every ordered triple label are preserved; no quotient labeling or multiplicity normalization.",
+      "kernel_checked": false
+    },
+    {
+      "kind": "private theorem",
+      "name": "absolute_row_le_tauFour_of_ne",
+      "written_qualified_name": "ImbalancedChen.Part3.CommonPM2TailCutoff.absolute_row_le_tauFour_of_ne",
+      "private_internal_name_note": "Lean generated internal private name not asserted before compilation.",
+      "first": 129,
+      "type_last": 134,
+      "last": 159,
+      "complete_written_type": "private theorem absolute_row_le_tauFour_of_ne\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (m n : ℕ)\n    (hne : (m : ℤ) * n - d.residue ≠ 0) :\n    d.absoluteFactorModulusRow m n ≤\n      (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ) := by\n",
+      "complete_written_body": "  rw [absolute_row_eq_fibers]\n  calc\n    _ ≤ ∑ q ∈ d.physicalFactorModuli,\n        if Int.ModEq q ((m : ℤ) * n) d.residue then (fouvryTau 3 q : ℝ) else 0 := by\n      apply Finset.sum_le_sum\n      intro q _hq\n      split_ifs\n      · exact d.absoluteFactorFiber_le_tauThree hd q\n      · exact le_rfl\n    _ = ∑ q ∈ d.physicalFactorModuli.filter\n        (fun q : ℕ => Int.ModEq q ((m : ℤ) * n) d.residue), (fouvryTau 3 q : ℝ) := by\n      rw [Finset.sum_filter]\n    _ ≤ ∑ q ∈ (((m : ℤ) * n - d.residue).natAbs).divisors,\n        (fouvryTau 3 q : ℝ) := by\n      apply Finset.sum_le_sum_of_subset_of_nonneg\n      · intro q hq\n        have he := (Finset.mem_filter.mp hq).2\n        apply Nat.mem_divisors.mpr\n        refine ⟨?_, Int.natAbs_ne_zero.mpr hne⟩\n        have hdiv : (q : ℤ) ∣ (m : ℤ) * n - d.residue :=\n          Int.modEq_iff_dvd.mp he.symm\n        exact_mod_cast Int.natAbs_dvd_natAbs.mpr hdiv\n      · intro _ _ _\n        positivity\n    _ = _ := by rw [show 4 = 3 + 1 from rfl, fouvryTau_succ, Nat.cast_sum]\n",
+      "complete_written_declaration": "private theorem absolute_row_le_tauFour_of_ne\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (m n : ℕ)\n    (hne : (m : ℤ) * n - d.residue ≠ 0) :\n    d.absoluteFactorModulusRow m n ≤\n      (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ) := by\n  rw [absolute_row_eq_fibers]\n  calc\n    _ ≤ ∑ q ∈ d.physicalFactorModuli,\n        if Int.ModEq q ((m : ℤ) * n) d.residue then (fouvryTau 3 q : ℝ) else 0 := by\n      apply Finset.sum_le_sum\n      intro q _hq\n      split_ifs\n      · exact d.absoluteFactorFiber_le_tauThree hd q\n      · exact le_rfl\n    _ = ∑ q ∈ d.physicalFactorModuli.filter\n        (fun q : ℕ => Int.ModEq q ((m : ℤ) * n) d.residue), (fouvryTau 3 q : ℝ) := by\n      rw [Finset.sum_filter]\n    _ ≤ ∑ q ∈ (((m : ℤ) * n - d.residue).natAbs).divisors,\n        (fouvryTau 3 q : ℝ) := by\n      apply Finset.sum_le_sum_of_subset_of_nonneg\n      · intro q hq\n        have he := (Finset.mem_filter.mp hq).2\n        apply Nat.mem_divisors.mpr\n        refine ⟨?_, Int.natAbs_ne_zero.mpr hne⟩\n        have hdiv : (q : ℤ) ∣ (m : ℤ) * n - d.residue :=\n          Int.modEq_iff_dvd.mp he.symm\n        exact_mod_cast Int.natAbs_dvd_natAbs.mpr hdiv\n      · intro _ _ _\n        positivity\n    _ = _ := by rw [show 4 = 3 + 1 from rfl, fouvryTau_succ, Nat.cast_sum]\n",
+      "type_normalized_lf_utf8_sha256": "bf5a6101061dfc1b10e4d92388bcc91bd37a80517bf5bf29e6ff63bdf97d918e",
+      "body_normalized_lf_utf8_sha256": "db19627a535af1c4de3c9452dca6da27fa65fcd440f4901a352cd18aaa0018ad",
+      "full_declaration_normalized_lf_utf8_sha256": "27b676889f5fa66ebea0d727fe60c85ebde40be63249524ed2efe4f3084e45c8",
+      "full_type_body_read": true,
+      "author_static_verdict": "no_static_blocker",
+      "author_reason": "Generalize only the premise of actual tauFour proof from cleanedBeta!=0 to explicit mn-a!=0. Reuse public actual absoluteFactorFiber_le_tauThree, whose proof uses gamma norms<=1 and card_physicalFactorFiber_le_tauThree. Every eligible modulus divides the positive natAbs difference. The full divisor recurrence sum_{q|t}d3(q)=d4(t) gives the bound, including repeated ordered factor labels.",
+      "kernel_checked": false
+    },
+    {
+      "kind": "private theorem",
+      "name": "slice_absolute_row_eq_pair",
+      "written_qualified_name": "ImbalancedChen.Part3.CommonPM2TailCutoff.slice_absolute_row_eq_pair",
+      "private_internal_name_note": "Lean generated internal private name not asserted before compilation.",
+      "first": 161,
+      "type_last": 166,
+      "last": 179,
+      "complete_written_type": "private theorem slice_absolute_row_eq_pair (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (m n : ℕ) :\n    (d.q1SliceAtom p).absoluteFactorModulusRow m n =\n      ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n        if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n        then ‖d.gamma2 r * d.gamma3 s‖ else 0 := by\n",
+      "complete_written_body": "  unfold MediumAtom.absoluteFactorModulusRow\n  simp only [MediumAtom.complexFactorLabels, Finset.sum_product,\n    MediumAtom.complexFactorGamma, complexFactorModulus, Nat.cast_mul]\n  change (∑ q ∈ factorCarrier d.Q1, ∑ r ∈ factorCarrier d.Q2,\n    ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (q * r * s) ((m : ℤ) * n) d.residue\n      then ‖(if q = p then (1 : ℂ) else 0) * d.gamma2 r * d.gamma3 s‖ else 0) = _\n  rw [Finset.sum_eq_single p]\n  · simp only [if_pos rfl, one_mul]\n  · intro q _hq hqp\n    simp only [if_neg hqp, zero_mul, norm_zero, ite_self, Finset.sum_const_zero]\n  · intro hnot\n    exact (hnot hp).elim\n",
+      "complete_written_declaration": "private theorem slice_absolute_row_eq_pair (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1) (m n : ℕ) :\n    (d.q1SliceAtom p).absoluteFactorModulusRow m n =\n      ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n        if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n        then ‖d.gamma2 r * d.gamma3 s‖ else 0 := by\n  unfold MediumAtom.absoluteFactorModulusRow\n  simp only [MediumAtom.complexFactorLabels, Finset.sum_product,\n    MediumAtom.complexFactorGamma, complexFactorModulus, Nat.cast_mul]\n  change (∑ q ∈ factorCarrier d.Q1, ∑ r ∈ factorCarrier d.Q2,\n    ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (q * r * s) ((m : ℤ) * n) d.residue\n      then ‖(if q = p then (1 : ℂ) else 0) * d.gamma2 r * d.gamma3 s‖ else 0) = _\n  rw [Finset.sum_eq_single p]\n  · simp only [if_pos rfl, one_mul]\n  · intro q _hq hqp\n    simp only [if_neg hqp, zero_mul, norm_zero, ite_self, Finset.sum_const_zero]\n  · intro hnot\n    exact (hnot hp).elim\n",
+      "type_normalized_lf_utf8_sha256": "5fd6c6d839d6b1fad19ad99cc10ca82417be8f554adfdc327260a8e6a9ca6a47",
+      "body_normalized_lf_utf8_sha256": "12762a1af2cf03f85e25cb7938bba7aaabb3390131e075783752f4ad89ed9c64",
+      "full_declaration_normalized_lf_utf8_sha256": "0652ddb0d8392f13fad9830466ac6594b998fbfd35f40fea41f8e6e1b641b724",
+      "full_type_body_read": true,
+      "author_static_verdict": "no_static_blocker",
+      "author_reason": "The exact absolute modulus row of the actual original q1 slice collapses to the original ordered r,s pair norm sum. Slice only sets gamma1 to its actual point mass; gamma2/gamma3 are unchanged.",
+      "kernel_checked": false
+    },
+    {
+      "kind": "private theorem",
+      "name": "inner_tail_norm_le",
+      "written_qualified_name": "ImbalancedChen.Part3.CommonPM2TailCutoff.inner_tail_norm_le",
+      "private_internal_name_note": "Lean generated internal private name not asserted before compilation.",
+      "first": 181,
+      "type_last": 191,
+      "last": 238,
+      "complete_written_type": "private theorem inner_tail_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {H : ℝ} (hH : 0 < H)\n    {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (m n : ℕ)\n    (hn : n ∈ d.cleanedCommonPProgression p m) :\n    ‖∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue ∧\n          H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n      then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n else 0‖ ≤\n      ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ *\n        (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) ^ 2 / H := by\n",
+      "complete_written_body": "  let T : ℝ := (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n  have hT : 0 ≤ T := Nat.cast_nonneg _\n  have hne : (m : ℤ) * n - d.residue ≠ 0 := by\n    intro he\n    exact (Finset.mem_filter.mp hn).2.1 ⟨(m : ℤ), by nlinarith⟩\n  have hmass : (∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n      then ‖d.gamma2 r * d.gamma3 s‖ else 0) ≤ T := by\n    have hh := absolute_row_le_tauFour_of_ne (mediumAdmissible_q1SliceAtom hd hp) m n hne\n    rw [slice_absolute_row_eq_pair d (Finset.mem_filter.mp hp).1 m n] at hh\n    simpa only [MediumAtom.q1SliceAtom, CommonPM2FiniteFold.shiftDifference, Nat.cast_mul] using hh\n  by_cases hcut : H < T\n  · have hpay : T ≤ T ^ 2 / H := by\n      apply (le_div_iff₀ hH).mpr\n      simpa only [pow_two] using mul_le_mul_of_nonneg_left hcut.le hT\n    calc\n      _ ≤ ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n          if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n          then ‖d.gamma2 r * d.gamma3 s‖ * ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ else 0 := by\n        apply (norm_sum_le _ _).trans\n        apply Finset.sum_le_sum\n        intro r _hr\n        apply (norm_sum_le _ _).trans\n        apply Finset.sum_le_sum\n        intro s _hs\n        by_cases hmod : Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n        · simp only [show H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n            from hcut, hmod, and_self, if_pos, norm_mul, le_refl]\n        · simp only [hmod, false_and, if_false, norm_zero, le_refl]\n      _ = (∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n          if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n          then ‖d.gamma2 r * d.gamma3 s‖ else 0) *\n            ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ := by\n        simp only [Finset.sum_mul, ite_mul, zero_mul]\n      _ ≤ T * ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ :=\n        mul_le_mul_of_nonneg_right hmass (norm_nonneg _)\n      _ ≤ (T ^ 2 / H) * ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ :=\n        mul_le_mul_of_nonneg_right hpay (norm_nonneg _)\n      _ = _ := by dsimp [T]; ring\n  · have hzero : ∀ r s : ℕ,\n        (if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue ∧\n          H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n        then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n else 0) = 0 := by\n      intro r s\n      exact if_neg (fun h => hcut h.2)\n    simp only [hzero, Finset.sum_const_zero, norm_zero]\n    exact div_nonneg (mul_nonneg (norm_nonneg _) (sq_nonneg _)) hH.le\n",
+      "complete_written_declaration": "private theorem inner_tail_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {H : ℝ} (hH : 0 < H)\n    {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (m n : ℕ)\n    (hn : n ∈ d.cleanedCommonPProgression p m) :\n    ‖∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue ∧\n          H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n      then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n else 0‖ ≤\n      ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ *\n        (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) ^ 2 / H := by\n  let T : ℝ := (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n  have hT : 0 ≤ T := Nat.cast_nonneg _\n  have hne : (m : ℤ) * n - d.residue ≠ 0 := by\n    intro he\n    exact (Finset.mem_filter.mp hn).2.1 ⟨(m : ℤ), by nlinarith⟩\n  have hmass : (∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n      if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n      then ‖d.gamma2 r * d.gamma3 s‖ else 0) ≤ T := by\n    have hh := absolute_row_le_tauFour_of_ne (mediumAdmissible_q1SliceAtom hd hp) m n hne\n    rw [slice_absolute_row_eq_pair d (Finset.mem_filter.mp hp).1 m n] at hh\n    simpa only [MediumAtom.q1SliceAtom, CommonPM2FiniteFold.shiftDifference, Nat.cast_mul] using hh\n  by_cases hcut : H < T\n  · have hpay : T ≤ T ^ 2 / H := by\n      apply (le_div_iff₀ hH).mpr\n      simpa only [pow_two] using mul_le_mul_of_nonneg_left hcut.le hT\n    calc\n      _ ≤ ∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n          if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n          then ‖d.gamma2 r * d.gamma3 s‖ * ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ else 0 := by\n        apply (norm_sum_le _ _).trans\n        apply Finset.sum_le_sum\n        intro r _hr\n        apply (norm_sum_le _ _).trans\n        apply Finset.sum_le_sum\n        intro s _hs\n        by_cases hmod : Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n        · simp only [show H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n            from hcut, hmod, and_self, if_pos, norm_mul, le_refl]\n        · simp only [hmod, false_and, if_false, norm_zero, le_refl]\n      _ = (∑ r ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q3,\n          if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n          then ‖d.gamma2 r * d.gamma3 s‖ else 0) *\n            ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ := by\n        simp only [Finset.sum_mul, ite_mul, zero_mul]\n      _ ≤ T * ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ :=\n        mul_le_mul_of_nonneg_right hmass (norm_nonneg _)\n      _ ≤ (T ^ 2 / H) * ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ :=\n        mul_le_mul_of_nonneg_right hpay (norm_nonneg _)\n      _ = _ := by dsimp [T]; ring\n  · have hzero : ∀ r s : ℕ,\n        (if Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue ∧\n          H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ)\n        then d.gamma2 r * d.gamma3 s * d.cleanedAlphaAtom.transposedAtom.beta n else 0) = 0 := by\n      intro r s\n      exact if_neg (fun h => hcut h.2)\n    simp only [hzero, Finset.sum_const_zero, norm_zero]\n    exact div_nonneg (mul_nonneg (norm_nonneg _) (sq_nonneg _)) hH.le\n",
+      "type_normalized_lf_utf8_sha256": "4c5d9c610edc6791273121b6f199f593e9a645a0c3c28a191e429a534a8d4ac9",
+      "body_normalized_lf_utf8_sha256": "6d8df00e473fde7c5adb809fab3cebdbaa930ef950ffbdbab33e52d4d5f92628",
+      "full_declaration_normalized_lf_utf8_sha256": "60b106ec9b6561bdfd35ec34144d70365341b1d30a472fffb8954ef0da2b8830",
+      "full_type_body_read": true,
+      "author_static_verdict": "no_static_blocker",
+      "author_reason": "Actual hn includes n not dividing a, hence mn-a is nonzero even without m support restrictions. Apply the genuine q1-slice admissibility theorem and the nonzero-difference mass bound. For H<T, triangle inequality and gamma mass bound give b*T; T<=T^2/H follows by multiplying H<=T by T>=0 and using H>0. For the complementary gate all terms vanish. The result is exactly b*d4(t)^2/H, not a different divisor power.",
+      "kernel_checked": false
+    },
+    {
+      "kind": "theorem",
+      "name": "centeredRow_sub_truncated_eq_tail",
+      "written_qualified_name": "ImbalancedChen.Part3.CommonPM2TailCutoff.centeredRow_sub_truncated_eq_tail",
+      "private_internal_name_note": "Public written qualified name.",
+      "first": 240,
+      "type_last": 245,
+      "last": 275,
+      "complete_written_type": "theorem centeredRow_sub_truncated_eq_tail\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    (H : ℝ) {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (m : ℕ) :\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m -\n      truncatedCenteredRow d H p m = tailRow d H p m := by\n",
+      "complete_written_body": "  by_cases hpzero : p = 0\n  · have hlo := (Finset.mem_Icc.mp (Finset.mem_filter.mp hp).1).1\n    have hceil : 1 ≤ Nat.ceil d.Q1 := by\n      exact_mod_cast hd.2.2.1.trans (Nat.le_ceil d.Q1)\n    omega\n  · have hsplit :\n        (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexProgressionRow m =\n          keptProgressionRow d H p m + tailRow d H p m := by\n      rw [progression_eq_common_row d (Finset.mem_filter.mp hp).1 m]\n      unfold keptProgressionRow tailRow\n      rw [← Finset.sum_add_distrib]\n      apply Finset.sum_congr rfl\n      intro n _hn\n      rw [← Finset.sum_add_distrib]\n      apply Finset.sum_congr rfl\n      intro r _hr\n      rw [← Finset.sum_add_distrib]\n      apply Finset.sum_congr rfl\n      intro s _hs\n      by_cases hmod : Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n      · by_cases hcut : (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) ≤ H\n        · simp only [hmod, hcut, not_lt_of_ge hcut, and_true, and_false,\n            if_true, if_false, add_zero]\n        · have hgt : H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) :=\n            lt_of_not_ge hcut\n          simp only [hmod, hcut, hgt, and_true, and_false, if_true, if_false, zero_add]\n      · simp only [hmod, false_and, if_false, add_zero]\n    unfold MediumAtom.complexCenteredRow truncatedCenteredRow\n    rw [hsplit]\n    ring\n",
+      "complete_written_declaration": "theorem centeredRow_sub_truncated_eq_tail\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    (H : ℝ) {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (m : ℕ) :\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m -\n      truncatedCenteredRow d H p m = tailRow d H p m := by\n  by_cases hpzero : p = 0\n  · have hlo := (Finset.mem_Icc.mp (Finset.mem_filter.mp hp).1).1\n    have hceil : 1 ≤ Nat.ceil d.Q1 := by\n      exact_mod_cast hd.2.2.1.trans (Nat.le_ceil d.Q1)\n    omega\n  · have hsplit :\n        (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexProgressionRow m =\n          keptProgressionRow d H p m + tailRow d H p m := by\n      rw [progression_eq_common_row d (Finset.mem_filter.mp hp).1 m]\n      unfold keptProgressionRow tailRow\n      rw [← Finset.sum_add_distrib]\n      apply Finset.sum_congr rfl\n      intro n _hn\n      rw [← Finset.sum_add_distrib]\n      apply Finset.sum_congr rfl\n      intro r _hr\n      rw [← Finset.sum_add_distrib]\n      apply Finset.sum_congr rfl\n      intro s _hs\n      by_cases hmod : Int.ModEq (p * r * s) ((m : ℤ) * n) d.residue\n      · by_cases hcut : (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) ≤ H\n        · simp only [hmod, hcut, not_lt_of_ge hcut, and_true, and_false,\n            if_true, if_false, add_zero]\n        · have hgt : H < (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) :=\n            lt_of_not_ge hcut\n          simp only [hmod, hcut, hgt, and_true, and_false, if_true, if_false, zero_add]\n      · simp only [hmod, false_and, if_false, add_zero]\n    unfold MediumAtom.complexCenteredRow truncatedCenteredRow\n    rw [hsplit]\n    ring\n",
+      "type_normalized_lf_utf8_sha256": "6deb54df1a4dad584be3fdb7370d51665887bb4617c4b5b41d7b176e17f0b41d",
+      "body_normalized_lf_utf8_sha256": "83a25f28689256f617efdea4ad1974cc5a1873be742d0cdc4c8deb97cfd577d2",
+      "full_declaration_normalized_lf_utf8_sha256": "c4d2d7944a09ccfbf80c4cd3ff976a84ebd492187cc63b3812950483a9b249d3",
+      "full_type_body_read": true,
+      "author_static_verdict": "no_static_blocker",
+      "author_reason": "Exclude p=0 using the original Q1>=1 and actual primitive carrier lower endpoint, giving a genuine use of hd and explicit modulus-edge treatment. On the remaining branch expand the exact progression on the original common-p carrier and split each full congruence term into d4<=H or H<d4. Unchanged principal rows cancel algebraically. No principal mean is approximated or truncated.",
+      "kernel_checked": false
+    },
+    {
+      "kind": "theorem",
+      "name": "tailRow_norm_le",
+      "written_qualified_name": "ImbalancedChen.Part3.CommonPM2TailCutoff.tailRow_norm_le",
+      "private_internal_name_note": "Public written qualified name.",
+      "first": 277,
+      "type_last": 282,
+      "last": 290,
+      "complete_written_type": "theorem tailRow_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {H : ℝ} (hH : 0 < H)\n    {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (m : ℕ) :\n    ‖tailRow d H p m‖ ≤ CommonPM2FiniteFold.rowSum d p m / H := by\n",
+      "complete_written_body": "  unfold tailRow CommonPM2FiniteFold.rowSum\n  apply (norm_sum_le _ _).trans\n  calc\n    _ ≤ ∑ n ∈ d.cleanedCommonPProgression p m,\n        ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ *\n          (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) ^ 2 / H :=\n      Finset.sum_le_sum (fun n hn => inner_tail_norm_le hd hH hp m n hn)\n    _ = _ := by rw [Finset.sum_div]\n",
+      "complete_written_declaration": "theorem tailRow_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {H : ℝ} (hH : 0 < H)\n    {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (m : ℕ) :\n    ‖tailRow d H p m‖ ≤ CommonPM2FiniteFold.rowSum d p m / H := by\n  unfold tailRow CommonPM2FiniteFold.rowSum\n  apply (norm_sum_le _ _).trans\n  calc\n    _ ≤ ∑ n ∈ d.cleanedCommonPProgression p m,\n        ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ *\n          (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * n)) : ℝ) ^ 2 / H :=\n      Finset.sum_le_sum (fun n hn => inner_tail_norm_le hd hH hp m n hn)\n    _ = _ := by rw [Finset.sum_div]\n",
+      "type_normalized_lf_utf8_sha256": "e53780471b1a4f8836aeaaebe16d3ce9321b3b98419d7bee304664f16442c894",
+      "body_normalized_lf_utf8_sha256": "173e4abe7df0ad980e9deb909a526248025bba0b43d4dbb57c8a3c3f2b5f2a64",
+      "full_declaration_normalized_lf_utf8_sha256": "8966397c018f7c66e3459dcb6dbced2f06dcc851fc4737bf3178120b18d2b8c3",
+      "full_type_body_read": true,
+      "author_static_verdict": "no_static_blocker",
+      "author_reason": "Triangle inequality over the actual common-p progression and inner_tail_norm_le give the sum of b*d4(t)^2/H. Actual Finset.sum_div identifies it with literal rowSum/H for H>0.",
+      "kernel_checked": false
+    },
+    {
+      "kind": "theorem",
+      "name": "centered_tail_energy_le_M2",
+      "written_qualified_name": "ImbalancedChen.Part3.CommonPM2TailCutoff.centered_tail_energy_le_M2",
+      "private_internal_name_note": "Public written qualified name.",
+      "first": 292,
+      "type_last": 303,
+      "last": 331,
+      "complete_written_type": "theorem centered_tail_energy_le_M2\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {H : ℝ} (hH : 0 < H) :\n    CommonPM2FiniteFold.outsideEnergy d *\n      (∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n          d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n            ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m -\n              truncatedCenteredRow d H p m‖ ^ 2) ≤\n      (CommonPM2FiniteFold.outsideEnergy d *\n        CommonPM2FiniteFold.moment d) / H ^ 2 := by\n",
+      "complete_written_body": "  have hE : 0 ≤ CommonPM2FiniteFold.outsideEnergy d := by\n    unfold CommonPM2FiniteFold.outsideEnergy\n    exact mul_nonneg (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n      (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n  calc\n    _ ≤ CommonPM2FiniteFold.outsideEnergy d *\n        (∑ p ∈ d.primitiveFirstFactorCarrier,\n          ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n            d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n              (CommonPM2FiniteFold.rowSum d p m ^ 2 / H ^ 2)) := by\n      apply mul_le_mul_of_nonneg_left _ hE\n      apply Finset.sum_le_sum\n      intro p hp\n      apply Finset.sum_le_sum\n      intro m _hm\n      apply mul_le_mul_of_nonneg_left _\n        (d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight_nonneg m)\n      rw [centeredRow_sub_truncated_eq_tail hd H hp m]\n      have hrow : 0 ≤ CommonPM2FiniteFold.rowSum d p m := by\n        unfold CommonPM2FiniteFold.rowSum\n        exact Finset.sum_nonneg (fun _ _ => mul_nonneg (norm_nonneg _)\n          (sq_nonneg _))\n      have hs := (sq_le_sq₀ (norm_nonneg (tailRow d H p m))\n        (div_nonneg hrow hH.le)).2 (tailRow_norm_le hd hH hp m)\n      simpa only [div_pow] using hs\n    _ = _ := by\n      unfold CommonPM2FiniteFold.moment\n      simp only [Finset.sum_div, mul_div_assoc]\n",
+      "complete_written_declaration": "theorem centered_tail_energy_le_M2\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {H : ℝ} (hH : 0 < H) :\n    CommonPM2FiniteFold.outsideEnergy d *\n      (∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n          d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n            ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m -\n              truncatedCenteredRow d H p m‖ ^ 2) ≤\n      (CommonPM2FiniteFold.outsideEnergy d *\n        CommonPM2FiniteFold.moment d) / H ^ 2 := by\n  have hE : 0 ≤ CommonPM2FiniteFold.outsideEnergy d := by\n    unfold CommonPM2FiniteFold.outsideEnergy\n    exact mul_nonneg (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n      (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n  calc\n    _ ≤ CommonPM2FiniteFold.outsideEnergy d *\n        (∑ p ∈ d.primitiveFirstFactorCarrier,\n          ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n            d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n              (CommonPM2FiniteFold.rowSum d p m ^ 2 / H ^ 2)) := by\n      apply mul_le_mul_of_nonneg_left _ hE\n      apply Finset.sum_le_sum\n      intro p hp\n      apply Finset.sum_le_sum\n      intro m _hm\n      apply mul_le_mul_of_nonneg_left _\n        (d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight_nonneg m)\n      rw [centeredRow_sub_truncated_eq_tail hd H hp m]\n      have hrow : 0 ≤ CommonPM2FiniteFold.rowSum d p m := by\n        unfold CommonPM2FiniteFold.rowSum\n        exact Finset.sum_nonneg (fun _ _ => mul_nonneg (norm_nonneg _)\n          (sq_nonneg _))\n      have hs := (sq_le_sq₀ (norm_nonneg (tailRow d H p m))\n        (div_nonneg hrow hH.le)).2 (tailRow_norm_le hd hH hp m)\n      simpa only [div_pow] using hs\n    _ = _ := by\n      unfold CommonPM2FiniteFold.moment\n      simp only [Finset.sum_div, mul_div_assoc]\n",
+      "type_normalized_lf_utf8_sha256": "19b3a03ca720b7f5566dfc807ff74f52b4547dced02596fae26c94e74e76e941",
+      "body_normalized_lf_utf8_sha256": "7ee54b7fc06047711445f3b9c28621c81d2e3800cd199dcc73976d58227463db",
+      "full_declaration_normalized_lf_utf8_sha256": "86a812085f3a3fd782e94dcccea3cef847cd513c291fe8b3710cb729f05c6028",
+      "full_type_body_read": true,
+      "author_static_verdict": "no_static_blocker",
+      "author_reason": "OutsideEnergy is the product of the two original sums of norm squares, hence nonnegative. At every original p,m label rewrite the actual centered difference to tail, square its bound using norm>=0 and rowSum/H>=0, and use div_pow. Multiply by the actual psi>=0 and sum over both complete original carriers, then multiply original Eout once. Finset.sum_div and mul_div_assoc yield the exact moment/H^2. No smoothing support point or zero weight is omitted.",
+      "kernel_checked": false
+    }
+  ],
+  "actual_API_hash_spans": [
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3ComplexDispersion.lean",
+        "sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+        "bytes": 13464,
+        "lf_lines": 287
+      },
+      "spans": [
+        {
+          "first": 33,
+          "last": 73,
+          "literal_source": "def complexFactorModulus (r : ℕ × ℕ × ℕ) : ℕ := r.1 * r.2.1 * r.2.2\n\n/-- The original complex factor coefficient, with no absolute value or\nnormalization by a number of factorizations. -/\ndef MediumAtom.complexFactorGamma (d : MediumAtom) (r : ℕ × ℕ × ℕ) : ℂ :=\n  d.gamma1 r.1 * d.gamma2 r.2.1 * d.gamma3 r.2.2\n\ndef MediumAtom.complexFactorLabels (d : MediumAtom) : Finset (ℕ × ℕ × ℕ) :=\n  factorCarrier d.Q1 ×ˢ (factorCarrier d.Q2 ×ˢ factorCarrier d.Q3)\n\n/-- A complete factor label together with the original beta integer. -/\ndef MediumAtom.complexRowLabels (d : MediumAtom) : Finset ((ℕ × ℕ × ℕ) × ℕ) :=\n  d.complexFactorLabels ×ˢ d.betaCarrier\n\n/-- The literal arithmetic kernel of `MediumAtom.discrepancy`.\nFinite identities also permit modulus zero under total division; actual\nadmissible carrier applications already have positive physical moduli. -/\ndef complexPrimitiveKernel (a : ℤ) (q n m : ℕ) : ℂ :=\n  (if (((n * m : ℕ) : ℤ) % (q : ℤ) = a % (q : ℤ)) then 1 else 0) -\n    (if (n * m).Coprime q then 1 else 0) / (Nat.totient q : ℂ)\n\ndef MediumAtom.complexRowContribution (d : MediumAtom) (n : ℕ)\n    (l : (ℕ × ℕ × ℕ) × ℕ) : ℂ :=\n  d.complexFactorGamma l.1 * d.beta l.2 *\n    complexPrimitiveKernel d.residue (complexFactorModulus l.1) n l.2\n\n/-- The full progression row before its primitive centre is subtracted. -/\ndef MediumAtom.complexProgressionRow (d : MediumAtom) (n : ℕ) : ℂ :=\n  ∑ l ∈ d.complexRowLabels, d.complexFactorGamma l.1 * d.beta l.2 *\n    (if (((n * l.2 : ℕ) : ℤ) % (complexFactorModulus l.1 : ℤ) =\n      d.residue % (complexFactorModulus l.1 : ℤ)) then 1 else 0)\n\n/-- The full primitive-coprime centre on the same labels and modulus. -/\ndef MediumAtom.complexPrincipalRow (d : MediumAtom) (n : ℕ) : ℂ :=\n  ∑ l ∈ d.complexRowLabels,\n    d.complexFactorGamma l.1 * d.beta l.2 *\n      (if (n * l.2).Coprime (complexFactorModulus l.1) then 1 else 0) /\n        (Nat.totient (complexFactorModulus l.1) : ℂ)\n\ndef MediumAtom.complexCenteredRow (d : MediumAtom) (n : ℕ) : ℂ :=\n  d.complexProgressionRow n - d.complexPrincipalRow n\n",
+          "normalized_lf_utf8_sha256": "70c43b7086d3aefae2dea9621721665cdddb9e85eed4d78ac1b00f6a4847f8b6",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorDispersion.lean",
+        "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+        "bytes": 29327,
+        "lf_lines": 592
+      },
+      "spans": [
+        {
+          "first": 29,
+          "last": 41,
+          "literal_source": "def MediumAtom.q1SliceAtom (d : MediumAtom) (p : ℕ) : MediumAtom :=\n  { d with gamma1 := fun q ↦ if q = p then 1 else 0 }\n\ndef MediumAtom.primitiveFirstFactorCarrier (d : MediumAtom) : Finset ℕ :=\n  (factorCarrier d.Q1).filter (fun p ↦ p.Coprime d.residue.natAbs)\n\ndef MediumAtom.sharedFirstFactorRows (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ) :=\n  (factorCarrier d.Q2 ×ˢ factorCarrier d.Q3) ×ˢ d.transposedAtom.betaCarrier\n\ndef MediumAtom.sharedFirstFactorCoefficient (d : MediumAtom)\n    (l : (ℕ × ℕ) × ℕ) : ℂ :=\n  d.gamma2 l.1.1 * d.gamma3 l.1.2 * d.transposedAtom.beta l.2\n\n",
+          "normalized_lf_utf8_sha256": "7973c17a322b6e34d33fed532be701bc7c8a5667ec8e763a88b854b1ffc6b2c5",
+          "actual_source_read": true
+        },
+        {
+          "first": 88,
+          "last": 110,
+          "literal_source": "/-- A slice has original geometry; its new point mass is primitive. -/\ntheorem mediumAdmissible_q1SliceAtom\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    MediumAdmissible B sigma kappa c0 (d.q1SliceAtom p) := by\n  obtain ⟨_hp, hpa⟩ := Finset.mem_filter.mp hp\n  obtain ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    hAlpha, hRough, hBeta, _hGamma1, hGamma2, hGamma3⟩ := hd\n  refine ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    hAlpha, hRough, hBeta, ?_, hGamma2, hGamma3⟩\n  intro q _\n  change ‖(if q = p then (1 : ℂ) else 0)‖ ≤ 1 ∧\n    ((if q = p then (1 : ℂ) else 0) ≠ 0 → q.Coprime d.residue.natAbs)\n  by_cases hqp : q = p\n  · subst q\n    constructor\n    · simpa only [ite_true, norm_one] using (le_refl (1 : ℝ))\n    · exact fun _ ↦ hpa\n  · constructor\n    · simpa only [if_neg hqp, norm_zero] using (zero_le_one : (0 : ℝ) ≤ 1)\n    · intro hn\n      exact (hn (if_neg hqp)).elim\n",
+          "normalized_lf_utf8_sha256": "1185920e71d7d50f28258ef984f8ddaf0853ab3eb60f06b9bc6cce0fcab422a2",
+          "actual_source_read": true
+        },
+        {
+          "first": 318,
+          "last": 349,
+          "literal_source": "private theorem slice_rows (d : MediumAtom) (p : ℕ) :\n    (d.q1SliceAtom p).transposedAtom.complexRowLabels =\n      d.transposedAtom.complexRowLabels := rfl\n\nprivate theorem slice_coefficient (d : MediumAtom) (p : ℕ)\n    (l : (ℕ × ℕ × ℕ) × ℕ) :\n    (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l =\n      (if l.1.1 = p then (1 : ℂ) else 0) *\n        d.gamma2 l.1.2.1 * d.gamma3 l.1.2.2 * d.transposedAtom.beta l.2 := rfl\n\n/-- The private reindexer is applied below to the literal constructed CRT kernel. -/\nprivate theorem sum_slice_coefficient (d : MediumAtom) {p : ℕ}\n    (hp : p ∈ factorCarrier d.Q1)\n    (f : ((ℕ × ℕ × ℕ) × ℕ) → ℂ) :\n    (∑ l ∈ (d.q1SliceAtom p).transposedAtom.complexRowLabels,\n      (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient l * f l) =\n      ∑ l ∈ d.sharedFirstFactorRows,\n        d.sharedFirstFactorCoefficient l * f ((p, l.1.1, l.1.2), l.2) := by\n  rw [slice_rows]\n  simp only [MediumAtom.complexRowLabels, MediumAtom.complexFactorLabels,\n    MediumAtom.sharedFirstFactorRows, Finset.sum_product]\n  change (∑ q ∈ factorCarrier d.Q1, ∑ q2 ∈ factorCarrier d.Q2,\n    ∑ q3 ∈ factorCarrier d.Q3, ∑ n ∈ d.transposedAtom.betaCarrier,\n      (d.q1SliceAtom p).transposedAtom.complexBetaCoefficient ((q, q2, q3), n) *\n        f ((q, q2, q3), n)) = _\n  rw [Finset.sum_eq_single p]\n  · simp only [slice_coefficient, ite_true, one_mul,\n      MediumAtom.sharedFirstFactorCoefficient]\n  · intro q _ hqp\n    simp only [slice_coefficient, if_neg hqp, zero_mul, Finset.sum_const_zero]\n  · intro hnot\n    exact (hnot hp).elim\n",
+          "normalized_lf_utf8_sha256": "cc0df3231ef8519e2a5e1fac0b49d04e185c14adf33d72cf99884638b41c1f31",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3TransposedDispersion.lean",
+        "sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+        "bytes": 18832,
+        "lf_lines": 379
+      },
+      "spans": [
+        {
+          "first": 34,
+          "last": 41,
+          "literal_source": "def MediumAtom.transposedAtom (d : MediumAtom) : MediumAtom :=\n  { d with\n    U := d.V\n    V := d.U\n    intervalLo := -1\n    intervalHi := (Nat.floor (2 * d.V) : ℝ)\n    alpha := d.beta\n    beta := fun n ↦ if n ∈ d.alphaCarrier then d.alpha n else 0 }\n",
+          "normalized_lf_utf8_sha256": "a50dc8ed44617f5f26008dd2d22ab4e927fb85337738bea459640193023e5833",
+          "actual_source_read": true
+        },
+        {
+          "first": 63,
+          "last": 79,
+          "literal_source": "theorem MediumAtom.transposedAtom_betaCarrier (d : MediumAtom) :\n    d.transposedAtom.betaCarrier = factorCarrier d.U := rfl\n\n/-- Exact finite extension by zero of the original interval coefficient. -/\ntheorem MediumAtom.sum_transposedBeta_mul (d : MediumAtom) (f : ℕ → ℂ) :\n    (∑ n ∈ d.transposedAtom.betaCarrier, d.transposedAtom.beta n * f n) =\n      ∑ n ∈ d.alphaCarrier, d.alpha n * f n := by\n  change (∑ n ∈ factorCarrier d.U,\n    (if n ∈ d.alphaCarrier then d.alpha n else 0) * f n) = _\n  simp only [ite_mul, zero_mul]\n  rw [← Finset.sum_filter]\n  have hsub : d.alphaCarrier ⊆ factorCarrier d.U := Finset.filter_subset _ _\n  have heq : (factorCarrier d.U).filter (fun n ↦ n ∈ d.alphaCarrier) = d.alphaCarrier := by\n    ext n\n    simp only [Finset.mem_filter]\n    exact ⟨fun h ↦ h.2, fun h ↦ ⟨hsub h, h⟩⟩\n  rw [heq]\n",
+          "normalized_lf_utf8_sha256": "96598db14c82856ec3fab828ff9417dde3e9fe9147a44463b668fdfbbd66f031",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3PairedAlphaDeletion.lean",
+        "sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+        "bytes": 40715,
+        "lf_lines": 786
+      },
+      "spans": [
+        {
+          "first": 38,
+          "last": 45,
+          "literal_source": "def MediumAtom.cleanedAlpha (d : MediumAtom) (n : ℕ) : ℂ :=\n  if (n : ℤ) ∣ d.residue then 0 else d.alpha n\n\ndef MediumAtom.divisorAlpha (d : MediumAtom) (n : ℕ) : ℂ :=\n  if (n : ℤ) ∣ d.residue then d.alpha n else 0\n\ndef MediumAtom.cleanedAlphaAtom (d : MediumAtom) : MediumAtom :=\n  { d with alpha := d.cleanedAlpha }\n",
+          "normalized_lf_utf8_sha256": "c8a813898599a468edab1fd166514964497535eda723074b926d2d492c14ddf2",
+          "actual_source_read": true
+        },
+        {
+          "first": 71,
+          "last": 102,
+          "literal_source": "theorem mediumAdmissible_cleanedAlphaAtom\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    MediumAdmissible B sigma kappa c0 d.cleanedAlphaAtom := by\n  obtain ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    hAlpha, hRough, hBeta, hGamma1, hGamma2, hGamma3⟩ := hd\n  refine ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    ?_, ?_, hBeta, hGamma1, hGamma2, hGamma3⟩\n  · intro n hn\n    change ‖d.cleanedAlpha n‖ ≤ 1\n    by_cases h : (n : ℤ) ∣ d.residue\n    · simp only [MediumAtom.cleanedAlpha, if_pos h, norm_zero, zero_le_one]\n    · simpa only [MediumAtom.cleanedAlpha, if_neg h] using hAlpha n hn\n  · intro n hn hnz p hp hpn\n    apply hRough n hn _ p hp hpn\n    change d.cleanedAlpha n ≠ 0 at hnz\n    by_cases h : (n : ℤ) ∣ d.residue\n    · exact (hnz (by simp only [MediumAtom.cleanedAlpha, if_pos h])).elim\n    · simpa only [MediumAtom.cleanedAlpha, if_neg h] using hnz\n\ntheorem MediumAtom.cleanedAlpha_ne_zero_not_dvd {d : MediumAtom} {n : ℕ}\n    (hn : d.cleanedAlpha n ≠ 0) : ¬(n : ℤ) ∣ d.residue := by\n  intro h\n  exact hn (by simp only [MediumAtom.cleanedAlpha, if_pos h])\n\n/-- This is the actual coefficient paired by the new dispersion. -/\ntheorem MediumAtom.cleanedAlpha_transposedBeta_ne_zero_not_dvd {d : MediumAtom} {n : ℕ}\n    (hn : d.cleanedAlphaAtom.transposedAtom.beta n ≠ 0) : ¬(n : ℤ) ∣ d.residue := by\n  change (if n ∈ d.alphaCarrier then d.cleanedAlpha n else 0) ≠ 0 at hn\n  by_cases hm : n ∈ d.alphaCarrier\n  · exact d.cleanedAlpha_ne_zero_not_dvd (by simpa only [if_pos hm] using hn)\n  · exact (hn (by simp only [if_neg hm])).elim\n",
+          "normalized_lf_utf8_sha256": "d7187ef8f3cfe65f1c51f65c3215801ff795bbb38ad5b3c3164af5d38b2a048a",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonPFiniteReduction.lean",
+        "sha256": "8b16b4c39d359d07380ec4074d7c3546196aa41d459f05dbed2f97ed0cca7d3f",
+        "bytes": 5672,
+        "lf_lines": 124
+      },
+      "spans": [
+        {
+          "first": 27,
+          "last": 30,
+          "literal_source": "def MediumAtom.cleanedCommonPProgression (d : MediumAtom) (p m : ℕ) : Finset ℕ :=\n  d.cleanedAlphaAtom.transposedAtom.betaCarrier.filter\n    (fun n => ¬(n : ℤ) ∣ d.residue ∧\n      Int.ModEq p ((m : ℤ) * n) d.residue)\n",
+          "normalized_lf_utf8_sha256": "2a06f73e1656e0cffecb9ea67a051dabe590e27c54303f4b9a685508d594acb4",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonPM2FiniteFold.lean",
+        "sha256": "eda9f3c56d44e87fb9cfa17c5420900c58d871d53acf9db5a9236464c333bc32",
+        "bytes": 14829,
+        "lf_lines": 306
+      },
+      "spans": [
+        {
+          "first": 14,
+          "last": 34,
+          "literal_source": "def shiftDifference (d : MediumAtom) (v : ℕ) : ℕ :=\n  ((v : ℤ) - d.residue).natAbs\n\ndef tau (v : ℕ) : ℝ := (v.divisors.card : ℝ)\n\ndef fourthDivisorWeight (d : MediumAtom) (v : ℕ) : ℝ :=\n  (fouvryTau 4 (shiftDifference d v) : ℝ) ^ 4\n\ndef productCarrier (d : MediumAtom) : Finset ℕ :=\n  (Ioc 0 (Nat.floor (6 * d.scale))).filter (fun v => (v : ℤ) ≠ d.residue)\n\n/-- The literal actual row, including its signed divisor-deletion gate. -/\ndef rowSum (d : MediumAtom) (p m : ℕ) : ℝ :=\n  ∑ n ∈ d.cleanedCommonPProgression p m,\n    ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ *\n      (fouvryTau 4 (shiftDifference d (m * n)) : ℝ) ^ 2\n\ndef moment (d : MediumAtom) : ℝ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n      d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m * rowSum d p m ^ 2\n",
+          "normalized_lf_utf8_sha256": "00f60fdfa75e34f75109c8a9fc6ee9fa45e238ce571b95a5e7dca4cb7df40253",
+          "actual_source_read": true
+        },
+        {
+          "first": 50,
+          "last": 53,
+          "literal_source": "/-- Original outside energies occur exactly once. -/\ndef outsideEnergy (d : MediumAtom) : ℝ :=\n  (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n    (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)\n",
+          "normalized_lf_utf8_sha256": "116ce31a9deb23cc8eaa21970753fbdb2e55458077b66b441c2e1e8eb15ae390",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CleanBetaLargeGCDMajorant.lean",
+        "sha256": "94826ca0668f613e348ddddfa4683820d7d6a99844a0cf3923f7bb90159b6bbb",
+        "bytes": 16108,
+        "lf_lines": 350
+      },
+      "spans": [
+        {
+          "first": 128,
+          "last": 153,
+          "literal_source": "def MediumAtom.absoluteFactorFiber (d : MediumAtom) (q : ℕ) : ℝ :=\n  ∑ r ∈ d.physicalFactorFiber q, ‖d.complexFactorGamma r‖\n\nprivate theorem gamma_norm_le_one\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {r : ℕ × ℕ × ℕ}\n    (hr : r ∈ d.complexFactorLabels) : ‖d.complexFactorGamma r‖ ≤ 1 := by\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, h1, h2, h3⟩ := hd\n  obtain ⟨hr1, hr23⟩ := Finset.mem_product.mp hr\n  obtain ⟨hr2, hr3⟩ := Finset.mem_product.mp hr23\n  rw [MediumAtom.complexFactorGamma, norm_mul, norm_mul]\n  calc\n    ‖d.gamma1 r.1‖ * ‖d.gamma2 r.2.1‖ * ‖d.gamma3 r.2.2‖ ≤ 1 * 1 * 1 :=\n      mul_le_mul (mul_le_mul (h1 _ hr1).1 (h2 _ hr2).1 (norm_nonneg _) zero_le_one)\n        (h3 _ hr3).1 (norm_nonneg _) (by norm_num)\n    _ = 1 := by norm_num\n\ntheorem MediumAtom.absoluteFactorFiber_le_tauThree\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (q : ℕ) :\n    d.absoluteFactorFiber q ≤ (fouvryTau 3 q : ℝ) := by\n  calc\n    _ ≤ ∑ _r ∈ d.physicalFactorFiber q, (1 : ℝ) :=\n      Finset.sum_le_sum (fun r hr ↦ gamma_norm_le_one hd (Finset.mem_filter.mp hr).1)\n    _ = ((d.physicalFactorFiber q).card : ℝ) := by simp\n    _ ≤ _ := by exact_mod_cast d.card_physicalFactorFiber_le_tauThree hd q\n",
+          "normalized_lf_utf8_sha256": "64e58deaaca36a777aef44b24ad997ac7910f8fe19ac50f8b12e1f53ac9abd27",
+          "actual_source_read": true
+        },
+        {
+          "first": 155,
+          "last": 219,
+          "literal_source": "def MediumAtom.absoluteFactorModulusRow (d : MediumAtom) (m n : ℕ) : ℝ :=\n  ∑ r ∈ d.complexFactorLabels,\n    if Int.ModEq (complexFactorModulus r) ((m : ℤ) * n) d.residue\n      then ‖d.complexFactorGamma r‖ else 0\n\ntheorem MediumAtom.absoluteFactorModulusRow_nonneg (d : MediumAtom) (m n : ℕ) :\n    0 ≤ d.absoluteFactorModulusRow m n := by\n  apply Finset.sum_nonneg\n  intro r _\n  split_ifs <;> positivity\n\nprivate theorem absoluteFactorModulusRow_eq_fibers (d : MediumAtom) (m n : ℕ) :\n    d.absoluteFactorModulusRow m n = ∑ q ∈ d.physicalFactorModuli,\n      if Int.ModEq q ((m : ℤ) * n) d.residue then d.absoluteFactorFiber q else 0 := by\n  unfold MediumAtom.absoluteFactorModulusRow\n  rw [← Finset.sum_fiberwise_of_maps_to\n    (s := d.complexFactorLabels) (t := d.physicalFactorModuli)\n    (g := complexFactorModulus) (fun r hr ↦ Finset.mem_image_of_mem _ hr)]\n  apply Finset.sum_congr rfl\n  intro q _\n  by_cases hq : Int.ModEq q ((m : ℤ) * n) d.residue\n  · rw [if_pos hq]\n    apply Finset.sum_congr rfl\n    intro r hr\n    simp only [(Finset.mem_filter.mp hr).2, if_pos hq]\n  · rw [if_neg hq]\n    apply Finset.sum_eq_zero\n    intro r hr\n    simp only [(Finset.mem_filter.mp hr).2, if_neg hq]\n\n/-- The good coefficient pays the nonzero-difference gate before tau_4 is used. -/\ntheorem MediumAtom.absoluteFactorModulusRow_le_tauFour\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (m n : ℕ)\n    (hn : d.cleanedBeta n ≠ 0) :\n    d.absoluteFactorModulusRow m n ≤\n      (fouvryTau 4 (((m : ℤ) * n - d.residue).natAbs) : ℝ) := by\n  have hne : (m : ℤ) * n - d.residue ≠ 0 := by\n    intro h\n    exact (d.cleanedBeta_ne_zero_not_dvd hn) ⟨m, by nlinarith⟩\n  rw [absoluteFactorModulusRow_eq_fibers]\n  calc\n    _ ≤ ∑ q ∈ d.physicalFactorModuli,\n        if Int.ModEq q ((m : ℤ) * n) d.residue then (fouvryTau 3 q : ℝ) else 0 := by\n      apply Finset.sum_le_sum\n      intro q _\n      split_ifs\n      · exact d.absoluteFactorFiber_le_tauThree hd q\n      · exact le_rfl\n    _ = ∑ q ∈ d.physicalFactorModuli.filter\n        (fun q : ℕ ↦ Int.ModEq q ((m : ℤ) * n) d.residue), (fouvryTau 3 q : ℝ) := by\n      rw [Finset.sum_filter]\n    _ ≤ ∑ q ∈ (((m : ℤ) * n - d.residue).natAbs).divisors,\n        (fouvryTau 3 q : ℝ) := by\n      apply Finset.sum_le_sum_of_subset_of_nonneg\n      · intro q hq\n        have he := (Finset.mem_filter.mp hq).2\n        apply Nat.mem_divisors.mpr\n        refine ⟨?_, Int.natAbs_ne_zero.mpr hne⟩\n        have hdiv : (q : ℤ) ∣ (m : ℤ) * n - d.residue :=\n          Int.modEq_iff_dvd.mp he.symm\n        exact_mod_cast Int.natAbs_dvd_natAbs.mpr hdiv\n      · intro _ _ _\n        positivity\n    _ = _ := by rw [show 4 = 3 + 1 from rfl, fouvryTau_succ, Nat.cast_sum]\n",
+          "normalized_lf_utf8_sha256": "4a25e26380fb4a36e5a665b142f41c350377727b1cb6cb9cf43e550640ceabf9",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3FactorFiberDivisor.lean",
+        "sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+        "bytes": 12276,
+        "lf_lines": 250
+      },
+      "spans": [
+        {
+          "first": 35,
+          "last": 58,
+          "literal_source": "def orderedThreeFactors (q : ℕ) : Finset (Σ _ : ℕ × ℕ, ℕ × ℕ) :=\n  q.divisorsAntidiagonal.sigma (fun p ↦ p.2.divisorsAntidiagonal)\n\ntheorem card_orderedThreeFactors (q : ℕ) :\n    (orderedThreeFactors q).card = fouvryTau 3 q := by\n  have hcard (n : ℕ) : n.divisorsAntidiagonal.card = n.divisors.card := by\n    rw [← Nat.map_div_right_divisors]\n    exact Finset.card_map _\n  calc\n    _ = ∑ p ∈ q.divisorsAntidiagonal, p.2.divisors.card := by\n      simp only [orderedThreeFactors, Finset.card_sigma, hcard]\n    _ = ∑ n ∈ q.divisors, n.divisors.card :=\n      Nat.sum_divisorsAntidiagonal' (fun _ n ↦ n.divisors.card)\n    _ = _ := by rw [show 3 = 2 + 1 from rfl, fouvryTau_succ]; simp only [fouvryTau_two]\n\ndef tripleToConvolution (r : ℕ × ℕ × ℕ) : Σ _ : ℕ × ℕ, ℕ × ℕ :=\n  ⟨(r.1, r.2.1 * r.2.2), (r.2.1, r.2.2)⟩\n\ntheorem tripleToConvolution_injective : Function.Injective tripleToConvolution := by\n  intro r s h\n  exact Prod.ext (congrArg (fun p ↦ p.1.1) h) (congrArg (fun p ↦ p.2) h)\n\nend FactorFiber\n\n",
+          "normalized_lf_utf8_sha256": "2eba5903f48b107ba27613f608c122545ecd1a2e0ead1f291638b0deb1b877cd",
+          "actual_source_read": true
+        },
+        {
+          "first": 59,
+          "last": 63,
+          "literal_source": "def MediumAtom.physicalFactorModuli (d : MediumAtom) : Finset ℕ :=\n  d.complexFactorLabels.image complexFactorModulus\n\ndef MediumAtom.physicalFactorFiber (d : MediumAtom) (q : ℕ) : Finset (ℕ × ℕ × ℕ) :=\n  d.complexFactorLabels.filter (fun r ↦ complexFactorModulus r = q)\n",
+          "normalized_lf_utf8_sha256": "5fcba4540ece11fcff4f14e7d7a46ba9a25ee435cef80c8ab82675b8efd38700",
+          "actual_source_read": true
+        },
+        {
+          "first": 122,
+          "last": 141,
+          "literal_source": "theorem MediumAtom.card_physicalFactorFiber_le_tauThree\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (q : ℕ) :\n    (d.physicalFactorFiber q).card ≤ fouvryTau 3 q := by\n  rw [← FactorFiber.card_orderedThreeFactors]\n  apply Finset.card_le_card_of_injOn FactorFiber.tripleToConvolution\n  · intro r hr\n    obtain ⟨hr, hq⟩ := Finset.mem_filter.mp hr\n    obtain ⟨h1, h2, h3⟩ := factorLabel_mem hr\n    obtain ⟨_, _, hQ1, hQ2, hQ3, _⟩ := hd\n    have hp1 := (factorCarrier_bounds hQ1 h1).1\n    have hp2 := (factorCarrier_bounds hQ2 h2).1\n    have hp3 := (factorCarrier_bounds hQ3 h3).1\n    apply Finset.mem_sigma.mpr\n    refine ⟨Nat.mem_divisorsAntidiagonal.mpr ⟨?_, ?_⟩,\n      Nat.mem_divisorsAntidiagonal.mpr ⟨rfl, (Nat.mul_pos hp2 hp3).ne'⟩⟩\n    · simpa only [FactorFiber.tripleToConvolution, complexFactorModulus, mul_assoc] using hq\n    · rw [← hq]\n      exact (Nat.mul_pos (Nat.mul_pos hp1 hp2) hp3).ne'\n  · exact FactorFiber.tripleToConvolution_injective.injOn\n",
+          "normalized_lf_utf8_sha256": "08f5e5cda483750e9da2ad681770e3e48c88fd0c7ffe18c0907413c9a0cbffb0",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3DistributionTargets.lean",
+        "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+        "bytes": 8889,
+        "lf_lines": 197
+      },
+      "spans": [
+        {
+          "first": 126,
+          "last": 148,
+          "literal_source": "def MediumAdmissible (B : ℕ) (σ κ c0 : ℝ) (d : MediumAtom) : Prop :=\n  1 ≤ d.U ∧ 1 ≤ d.V ∧ 1 ≤ d.Q1 ∧ 1 ≤ d.Q2 ∧ 1 ≤ d.Q3 ∧\n  Real.exp (Real.exp 1) < d.scale ∧\n  c0 * d.scale ≤ (d.residue.natAbs : ℝ) ∧\n  (d.residue.natAbs : ℝ) ≤ d.scale ^ (1 + κ) ∧\n  d.Q1 < d.U * d.scale ^ (-σ) ∧\n  d.U ^ 2 * d.Q2 * d.Q3 ^ 2 < d.scale ^ (1 - 8 * σ) ∧\n  (d.residue.natAbs : ℝ) ^ (7 / 32 : ℝ) * d.U * d.Q1 * d.Q2 ^ 5 * d.Q3 ^ 2 <\n    d.scale ^ (2 - 15 * σ) ∧\n  d.U ^ (1 + 2 * (7 / 32 : ℝ)) * d.Q1 *\n      d.Q2 ^ (5 - 2 * (7 / 32 : ℝ)) * d.Q3 ^ (2 + 2 * (7 / 32 : ℝ)) <\n    d.scale ^ (2 - 15 * σ) ∧\n  (∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1) ∧\n  (∀ n ∈ d.alphaCarrier, d.alpha n ≠ 0 → ∀ p : ℕ,\n    Nat.Prime p → p ∣ n →\n      d.scale ^ (1 / (Real.log (Real.log d.scale)) ^ 3) < (p : ℝ)) ∧\n  (∀ m ∈ d.betaCarrier, ‖d.beta m‖ ≤ (m.divisors.card : ℝ) ^ B) ∧\n  (∀ q ∈ factorCarrier d.Q1, ‖d.gamma1 q‖ ≤ 1 ∧\n    (d.gamma1 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q2, ‖d.gamma2 q‖ ≤ 1 ∧\n    (d.gamma2 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q3, ‖d.gamma3 q‖ ≤ 1 ∧\n    (d.gamma3 q ≠ 0 → Nat.Coprime q d.residue.natAbs))\n",
+          "normalized_lf_utf8_sha256": "6c6ad1c398c235af394a2a4b6232e405ebc5c2de648cc448ad97074af7bf1b0a",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonSmoothCutoff.lean",
+        "sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+        "bytes": 9757,
+        "lf_lines": 220
+      },
+      "spans": [
+        {
+          "first": 157,
+          "last": 164,
+          "literal_source": "def MediumAtom.commonSmoothCarrier (d : MediumAtom) : Finset ℕ :=\n  Finset.Icc 0 (Nat.ceil (3 * d.U))\n\ndef MediumAtom.commonSmoothWeight (d : MediumAtom) (n : ℕ) : ℝ :=\n  CommonSmoothCutoff.scaledDyadicCutoff d.U (n : ℝ)\n\ntheorem MediumAtom.commonSmoothWeight_nonneg (d : MediumAtom) (n : ℕ) :\n    0 ≤ d.commonSmoothWeight n := CommonSmoothCutoff.scaledDyadicCutoff_nonneg _ _\n",
+          "normalized_lf_utf8_sha256": "204e92bcacd5bdf275fea31073fd774f720231b1a4a7cdc329f9347eaa834049",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvryDivisorMean.lean",
+        "sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+        "bytes": 17917,
+        "lf_lines": 405
+      },
+      "spans": [
+        {
+          "first": 33,
+          "last": 35,
+          "literal_source": "theorem fouvryTau_succ (k n : ℕ) :\n    fouvryTau (k + 1) n = ∑ d ∈ n.divisors, fouvryTau k d := by\n  exact ArithmeticFunction.coe_mul_zeta_apply (f := fouvryTau k)\n",
+          "normalized_lf_utf8_sha256": "51a7f18435b9d3b03b15955741b284171ad84ea84e391d35fe03e568ca50f0d1",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Int\\ModEq.lean",
+        "sha256": "c1130960b648b5047a673d1f47f4ce653f0cf1174fff41b28a41e4813b89d86c",
+        "bytes": 14443,
+        "lf_lines": 410
+      },
+      "spans": [
+        {
+          "first": 109,
+          "last": 117,
+          "literal_source": "theorem modEq_iff_dvd : a ≡ b [ZMOD n] ↔ n ∣ b - a := by\n  rw [ModEq, eq_comm]\n  simp [emod_eq_emod_iff_emod_sub_eq_zero, dvd_iff_emod_eq_zero]\n\ntheorem modEq_iff_add_fac {a b n : ℤ} : a ≡ b [ZMOD n] ↔ ∃ t, b = a + n * t := by\n  rw [modEq_iff_dvd]\n  exact exists_congr fun t => sub_eq_iff_eq_add'\n\nalias ⟨ModEq.dvd, modEq_of_dvd⟩ := modEq_iff_dvd\n",
+          "normalized_lf_utf8_sha256": "9cbc258e7291cc44cb3ae112dac6ab57f2d4a9b9023352a1ecf2beb29c332a4b",
+          "actual_source_read": true
+        },
+        {
+          "first": 129,
+          "last": 132,
+          "literal_source": "namespace ModEq\n\nprotected theorem of_dvd (d : m ∣ n) (h : a ≡ b [ZMOD n]) : a ≡ b [ZMOD m] :=\n  modEq_iff_dvd.2 <| d.trans h.dvd\n",
+          "normalized_lf_utf8_sha256": "7afa64c2842e7226ac7c0ac36db386df274ae45ddbf45dfa1b4618a1e95e158a",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Int\\DivMod\\Bootstrap.lean",
+        "sha256": "bd55b51820dbc53925d34190fcb5de38afc5d6b3528759101fe6da87973026c1",
+        "bytes": 14105,
+        "lf_lines": 346
+      },
+      "spans": [
+        {
+          "first": 66,
+          "last": 74,
+          "literal_source": "@[simp] theorem natAbs_dvd_natAbs {a b : Int} : natAbs a ∣ natAbs b ↔ a ∣ b := by\n  refine ⟨fun ⟨k, hk⟩ => ?_, fun ⟨k, hk⟩ => ⟨natAbs k, hk.symm ▸ natAbs_mul a k⟩⟩\n  rw [← natAbs_natCast k, ← natAbs_mul, natAbs_eq_natAbs_iff] at hk\n  cases hk <;> subst b\n  · apply Int.dvd_mul_right\n  · rw [← Int.mul_neg]; apply Int.dvd_mul_right\n\ntheorem ofNat_dvd_left {n : Nat} {z : Int} : (↑n : Int) ∣ z ↔ n ∣ z.natAbs := by\n  rw [← natAbs_dvd_natAbs, natAbs_natCast]\n",
+          "normalized_lf_utf8_sha256": "c874941de6b7fad4cc8c3b0a9cf7028b9e506d15a52a5ec72202555f7e3182d1",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Group\\Finset\\Basic.lean",
+        "sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+        "bytes": 51600,
+        "lf_lines": 1138
+      },
+      "spans": [
+        {
+          "first": 103,
+          "last": 110,
+          "literal_source": "@[to_additive (attr := congr)]\ntheorem prod_congr (h : s₁ = s₂) : (∀ x ∈ s₂, f x = g x) → s₁.prod f = s₂.prod g := by\n  rw [h]; exact fold_congr\n\n@[to_additive]\ntheorem prod_eq_one (h : ∀ x ∈ s, f x = 1) : ∏ x ∈ s, f x = 1 := calc\n  ∏ x ∈ s, f x = ∏ _x ∈ s, 1 := prod_congr rfl h\n  _ = 1 := prod_const_one\n",
+          "normalized_lf_utf8_sha256": "ef765676f25c10b92a1e3109b0ad6a28949426bc6d4814d561b5a54cea2a9030",
+          "actual_source_read": true
+        },
+        {
+          "first": 194,
+          "last": 199,
+          "literal_source": "@[to_additive]\ntheorem prod_subset (h : s₁ ⊆ s₂) (hf : ∀ x ∈ s₂, x ∉ s₁ → f x = 1) :\n    ∏ x ∈ s₁, f x = ∏ x ∈ s₂, f x :=\n  haveI := Classical.decEq ι\n  prod_subset_one_on_sdiff h (by simpa) fun _ _ => rfl\n\n",
+          "normalized_lf_utf8_sha256": "090e5c4556abdb51297ed3de65cfae3f599c9e7782c64a89341ae0307dd097c0",
+          "actual_source_read": true
+        },
+        {
+          "first": 255,
+          "last": 261,
+          "literal_source": "@[to_additive]\nlemma prod_fiberwise_of_maps_to {g : ι → κ} (h : ∀ i ∈ s, g i ∈ t) (f : ι → M) :\n    ∏ j ∈ t, ∏ i ∈ s with g i = j, f i = ∏ i ∈ s, f i := by\n  rw [← prod_disjiUnion, disjiUnion_filter_eq_of_maps_to h]\n  #adaptation_note /-- 2025-09-12 (kmill) copied from private lemma pairwiseDisjoint_fibers -/\n  intro x' hx y' hy hne\n  simp_rw [disjoint_left, mem_filter]; rintro i ⟨_, rfl⟩ ⟨_, rfl⟩; exact hne rfl\n",
+          "normalized_lf_utf8_sha256": "090a5975a309ea82735a2e5fddd79acea185150d74cf312df03f1a63a0bb8709",
+          "actual_source_read": true
+        },
+        {
+          "first": 300,
+          "last": 303,
+          "literal_source": "\n@[to_additive]\ntheorem prod_mul_distrib : ∏ x ∈ s, f x * g x = (∏ x ∈ s, f x) * ∏ x ∈ s, g x :=\n  Eq.trans (by rw [one_mul]; rfl) fold_op_distrib\n",
+          "normalized_lf_utf8_sha256": "6541174b8a527b8e72286873aac5a44fbd0a238ed83e7e87aacb7519982cb059",
+          "actual_source_read": true
+        },
+        {
+          "first": 324,
+          "last": 333,
+          "literal_source": "@[to_additive]\ntheorem prod_filter (p : ι → Prop) [DecidablePred p] (f : ι → M) :\n    ∏ a ∈ s with p a, f a = ∏ a ∈ s, if p a then f a else 1 :=\n  calc\n    ∏ a ∈ s with p a, f a = ∏ a ∈ s with p a, if p a then f a else 1 :=\n      prod_congr rfl fun a h => by rw [if_pos]; simpa using (mem_filter.1 h).2\n    _ = ∏ a ∈ s, if p a then f a else 1 := by\n      { refine prod_subset (filter_subset _ s) fun x hs h => ?_\n        rw [mem_filter, not_and] at h\n        exact if_neg (by simpa using h hs) }\n",
+          "normalized_lf_utf8_sha256": "b851efd98220aeb3d9a3e33bc8354740212fced8c50cf5640dd73f2e88898913",
+          "actual_source_read": true
+        },
+        {
+          "first": 346,
+          "last": 350,
+          "literal_source": "@[to_additive]\ntheorem prod_eq_single {s : Finset ι} {f : ι → M} (a : ι) (h₀ : ∀ b ∈ s, b ≠ a → f b = 1)\n    (h₁ : a ∉ s → f a = 1) : ∏ x ∈ s, f x = f a :=\n  haveI := Classical.decEq ι\n  by_cases (prod_eq_single_of_mem a · h₀) fun this =>\n",
+          "normalized_lf_utf8_sha256": "03bb13f39387841185d0028e656e92d2205b4fbea352086d0afeab8a0fd21c41",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Group\\Finset\\Sigma.lean",
+        "sha256": "795e36343a20dfc70b670f0b03c4c4e92a119e04d2d33904dd4438f78a30c764",
+        "bytes": 6475,
+        "lf_lines": 138
+      },
+      "spans": [
+        {
+          "first": 120,
+          "last": 124,
+          "literal_source": "@[to_additive]\ntheorem prod_comm {s : Finset γ} {t : Finset α} {f : γ → α → β} :\n    (∏ x ∈ s, ∏ y ∈ t, f x y) = ∏ y ∈ t, ∏ x ∈ s, f x y :=\n  prod_comm' fun _ _ => Iff.rfl\n\n",
+          "normalized_lf_utf8_sha256": "eba9cfd837ff0a365aad1fca6b279140a2b18603db0478a696d4e46f4e5b952f",
+          "actual_source_read": true
+        },
+        {
+          "first": 75,
+          "last": 83,
+          "literal_source": "\n/-- The product over a product set equals the product of the fiberwise products. For rewriting\nin the reverse direction, use `Finset.prod_product'`. -/\n@[to_additive /-- The sum over a product set equals the sum of the fiberwise sums. For rewriting\nin the reverse direction, use `Finset.sum_product'` -/]\ntheorem prod_product (s : Finset γ) (t : Finset α) (f : γ × α → β) :\n    ∏ x ∈ s ×ˢ t, f x = ∏ x ∈ s, ∏ y ∈ t, f (x, y) :=\n  prod_finset_product (s ×ˢ t) s (fun _a => t) fun _p => mem_product\n\n",
+          "normalized_lf_utf8_sha256": "b34397caf41834528287b5f20a2e3410ae0e94b042ac8a93ebfa97e87d7a1da2",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\BigOperators\\Group\\Finset.lean",
+        "sha256": "6a8daafb9e3b8b6ac48a696661c99a2d10dce57f48907ae18280914bf0ac639f",
+        "bytes": 36509,
+        "lf_lines": 752
+      },
+      "spans": [
+        {
+          "first": 108,
+          "last": 112,
+          "literal_source": "@[to_additive (attr := gcongr) sum_le_sum]\ntheorem prod_le_prod' [MulLeftMono N] (h : ∀ i ∈ s, f i ≤ g i) : ∏ i ∈ s, f i ≤ ∏ i ∈ s, g i :=\n  Multiset.prod_map_le_prod_map f g h\n\nattribute [bound] sum_le_sum\n",
+          "normalized_lf_utf8_sha256": "295167d52bd286eea7ed8364e690083f602e17f8c88ce2ec69a5c5b2bfd31070",
+          "actual_source_read": true
+        },
+        {
+          "first": 147,
+          "last": 153,
+          "literal_source": "@[to_additive sum_nonneg]\ntheorem one_le_prod' [MulLeftMono N] (h : ∀ i ∈ s, 1 ≤ f i) : 1 ≤ ∏ i ∈ s, f i :=\n  le_trans (by rw [prod_const_one]) (prod_le_prod' h)\n\n@[to_additive Finset.sum_nonneg']\ntheorem one_le_prod'' [MulLeftMono N] (h : ∀ i : ι, 1 ≤ f i) : 1 ≤ ∏ i ∈ s, f i :=\n  Finset.one_le_prod' fun i _ ↦ h i\n",
+          "normalized_lf_utf8_sha256": "1638a93e34bd81b68d4f094bf88d3d879ea8c9b10fa5481e600a1dee621f3dec",
+          "actual_source_read": true
+        },
+        {
+          "first": 159,
+          "last": 166,
+          "literal_source": "@[to_additive (attr := gcongr) sum_le_sum_of_subset_of_nonneg]\ntheorem prod_le_prod_of_subset_of_one_le' [MulLeftMono N] (h : s ⊆ t)\n    (hf : ∀ i ∈ t, i ∉ s → 1 ≤ f i) : ∏ i ∈ s, f i ≤ ∏ i ∈ t, f i := by\n  classical calc\n      ∏ i ∈ s, f i ≤ (∏ i ∈ t \\ s, f i) * ∏ i ∈ s, f i :=\n        le_mul_of_one_le_left' <| one_le_prod' <| by simpa only [mem_sdiff, and_imp]\n      _ = ∏ i ∈ t \\ s ∪ s, f i := (prod_union sdiff_disjoint).symm\n      _ = ∏ i ∈ t, f i := by rw [sdiff_union_of_subset h]\n",
+          "normalized_lf_utf8_sha256": "011f59981abce250705f5be0122eb8d85a0293fecaf0dbd991e34879db4764f0",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Field.lean",
+        "sha256": "ea6805b6e04e1a10e4f1800fbf6f645af1b3fbe7b7bc9db5c014508a4b9f528f",
+        "bytes": 2002,
+        "lf_lines": 58
+      },
+      "spans": [
+        {
+          "first": 20,
+          "last": 27,
+          "literal_source": "variable {ι K : Type*} [DivisionSemiring K]\n\nlemma Multiset.sum_map_div (s : Multiset ι) (f : ι → K) (a : K) :\n    (s.map (fun x ↦ f x / a)).sum = (s.map f).sum / a := by\n  simp only [div_eq_mul_inv, Multiset.sum_map_mul_right]\n\nlemma Finset.sum_div (s : Finset ι) (f : ι → K) (a : K) :\n    (∑ i ∈ s, f i) / a = ∑ i ∈ s, f i / a := by simp only [div_eq_mul_inv, sum_mul]\n",
+          "normalized_lf_utf8_sha256": "5f2c1ea38ff9be2265c3c7b731601360af01ea4d4a4c791b7e6bc42a41c98729",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Normed\\Group\\Basic.lean",
+        "sha256": "e92959e9926534225cb4ae284cb22662dacca17a9c3996b57d31c51a0e856c94",
+        "bytes": 44531,
+        "lf_lines": 1115
+      },
+      "spans": [
+        {
+          "first": 828,
+          "last": 831,
+          "literal_source": "@[bound]\ntheorem norm_sum_le {E} [SeminormedAddCommGroup E] (s : Finset ι) (f : ι → E) :\n    ‖∑ i ∈ s, f i‖ ≤ ∑ i ∈ s, ‖f i‖ :=\n  s.le_sum_of_subadditive norm norm_zero.le norm_add_le f\n",
+          "normalized_lf_utf8_sha256": "9ee9d49fa1985c879f9fe02e7a497915e92a5ebd2ebb47b69d8d3c897c8272a5",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+        "sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+        "bytes": 63984,
+        "lf_lines": 1480
+      },
+      "spans": [
+        {
+          "first": 715,
+          "last": 717,
+          "literal_source": "lemma sq_le_sq₀ (ha : 0 ≤ a) (hb : 0 ≤ b) : a ^ 2 ≤ b ^ 2 ↔ a ≤ b :=\n  pow_le_pow_iff_left₀ ha hb two_ne_zero\n\n",
+          "normalized_lf_utf8_sha256": "88bab13469e0c7bfb4a03151289e8c50958fde434cfe2c8b81c618681ccfff30",
+          "actual_source_read": true
+        },
+        {
+          "first": 883,
+          "last": 884,
+          "literal_source": "lemma div_nonneg (ha : 0 ≤ a) (hb : 0 ≤ b) : 0 ≤ a / b := by\n  rw [div_eq_mul_inv]; exact mul_nonneg ha (inv_nonneg.2 hb)\n",
+          "normalized_lf_utf8_sha256": "82fc2e4624342e41cb20c11c9961e6d54c31a53c14428c21e796f17e026df80e",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Group\\Basic.lean",
+        "sha256": "1ba194c84c72d56d485334bb05b2a943627c3a73de91a0b939ab6fd5ea17d1b1",
+        "bytes": 38365,
+        "lf_lines": 1096
+      },
+      "spans": [
+        {
+          "first": 584,
+          "last": 586,
+          "literal_source": "@[to_additive nsmul_sub]\nlemma div_pow (a b : α) (n : ℕ) : (a / b) ^ n = a ^ n / b ^ n := by\n  simp only [div_eq_mul_inv, mul_pow, inv_pow]\n",
+          "normalized_lf_utf8_sha256": "bfbcd9dcbf382afd65db6367b06e24e38799448e6f372490d5b20b9caf8fc18c",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Defs.lean",
+        "sha256": "01a908236dc99e5040cb487165c1a73fbd4e495d44183e6465f86b42f744dc02",
+        "bytes": 22609,
+        "lf_lines": 472
+      },
+      "spans": [
+        {
+          "first": 225,
+          "last": 231,
+          "literal_source": "@[gcongr]\ntheorem mul_le_mul_of_nonneg_left [PosMulMono α] (hbc : b ≤ c) (ha : 0 ≤ a) : a * b ≤ a * c :=\n  PosMulMono.mul_le_mul_of_nonneg_left ha hbc\n\n@[gcongr]\ntheorem mul_le_mul_of_nonneg_right [MulPosMono α] (hbc : b ≤ c) (ha : 0 ≤ a) : b * a ≤ c * a :=\n  MulPosMono.mul_le_mul_of_nonneg_right ha hbc\n",
+          "normalized_lf_utf8_sha256": "b151334e68d43e5c7cec9be7f0c0305cbbb685dd04f0d9690e3c6ae8d6a91a35",
+          "actual_source_read": true
+        },
+        {
+          "first": 312,
+          "last": 318,
+          "literal_source": "theorem mul_le_mul_of_nonneg [PosMulMono α] [MulPosMono α]\n    (h₁ : a ≤ b) (h₂ : c ≤ d) (a0 : 0 ≤ a) (d0 : 0 ≤ d) : a * c ≤ b * d :=\n  (mul_le_mul_of_nonneg_left h₂ a0).trans (mul_le_mul_of_nonneg_right h₁ d0)\n\ntheorem mul_le_mul_of_nonneg' [PosMulMono α] [MulPosMono α]\n    (h₁ : a ≤ b) (h₂ : c ≤ d) (c0 : 0 ≤ c) (b0 : 0 ≤ b) : a * c ≤ b * d :=\n  (mul_le_mul_of_nonneg_right h₁ c0).trans (mul_le_mul_of_nonneg_left h₂ b0)\n",
+          "normalized_lf_utf8_sha256": "8541e13359503b9d65764f7cb140ae0fcddd3d13900f18b4689ccdcf006b4783",
+          "actual_source_read": true
+        },
+        {
+          "first": 352,
+          "last": 352,
+          "literal_source": "alias mul_le_mul := mul_le_mul_of_nonneg'\n",
+          "normalized_lf_utf8_sha256": "7379346d13e6977cf410e451a9377cdcac63bd948a54503af7ef100973a0eae6",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Ring\\Finset.lean",
+        "sha256": "472cd5000412d8ec35c8b9ee919b2aeedbf0a830033a55009aad436595923809",
+        "bytes": 16305,
+        "lf_lines": 386
+      },
+      "spans": [
+        {
+          "first": 56,
+          "last": 60,
+          "literal_source": "lemma sum_mul (s : Finset ι) (f : ι → R) (a : R) :\n    (∑ i ∈ s, f i) * a = ∑ i ∈ s, f i * a := map_sum (AddMonoidHom.mulRight a) _ s\n\nlemma mul_sum (s : Finset ι) (f : ι → R) (a : R) :\n    a * ∑ i ∈ s, f i = ∑ i ∈ s, a * f i := map_sum (AddMonoidHom.mulLeft a) _ s\n",
+          "normalized_lf_utf8_sha256": "0bcf51ba6a360dde5d3860df10915e9d03caec60d9c9c5baa795aa2e3cc36276",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Group\\Defs.lean",
+        "sha256": "15119bf00cbb5e31beee450c4ee72967250387fd1532652041c971b304753def",
+        "bytes": 62382,
+        "lf_lines": 1483
+      },
+      "spans": [
+        {
+          "first": 1119,
+          "last": 1121,
+          "literal_source": "theorem mul_div_assoc (a b c : G) : a * b / c = a * (b / c) := by\n  rw [div_eq_mul_inv, div_eq_mul_inv, mul_assoc]\n\n",
+          "normalized_lf_utf8_sha256": "cc5252de247e4d90ab2bd0d290ac7e184e2c67006e3de5fa6933c093817a9c3d",
+          "actual_source_read": true
+        }
+      ],
+      "evidence_kind": "ACTUAL_READ_HASHED_SOURCE; kernel not rechecked"
+    }
+  ],
+  "API_scope_notes": [
+    "Existing private absoluteFactorModulusRow_eq_fibers cannot be invoked as a public API; a local private proof is supplied from its exact public definitions and actual sum_fiberwise_of_maps_to.",
+    "Existing public absoluteFactorModulusRow_le_tauFour has an unrelated cleanedBeta premise. The new local proof exposes its genuine explicit nonzero-difference premise and reuses actual absoluteFactorFiber_le_tauThree and native fouvryTau_succ. No transposed MediumAdmissible hypothesis is assumed.",
+    "The actual mediumAdmissible_q1SliceAtom theorem is used on the original atom for norm counting. The actual slice puts gamma1=delta_p; original gamma2/gamma3 remain unchanged and every ordered r,s label is counted.",
+    "Finset sum_congr,sum_subset,sum_eq_zero,sum_fiberwise_of_maps_to,sum_add_distrib,sum_filter,sum_eq_single,sum_comm and sum_nonneg have the actual additive-generator spans bound. Standard simp/order/cast tactics remain unexecuted source."
+  ],
+  "literal_row_audit": {
+    "progression": "Full q1 point-mass progression row expanded before any norm; finite r,s,n exchange only.",
+    "alpha_interval": "Transpose retains original alpha interval via zero extension. Removed signed divisors n|a have cleaned coefficient zero.",
+    "common_p_support": "Full p*r*s congruence implies common p congruence via actual Int.ModEq.of_dvd; terms outside actual cleanedCommonPProgression vanish exactly.",
+    "primitive_mean": "The same actual (cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexPrincipalRow is subtracted on both sides. It is never replaced by total mass, an approximate mean or a truncated mean.",
+    "boundary": "At d4=H the term is kept and not tailed. The row identity is for every real H; norm and energy inequalities require only H>0."
+  },
+  "ordered_label_count_audit": {
+    "nonzero_difference": "Actual common-p row membership gives n not dividing signed residue. If mn-a=0, a=n*m, contradiction. No need to remove m=0 or impose a>0.",
+    "gamma_norms": "Actual absoluteFactorFiber_le_tauThree proves the norm mass<=ordered physical triple cardinal by actual one-bounded gamma gates, then uses card_physicalFactorFiber_le_tauThree. q1 slice preserves every original gamma2/gamma3.",
+    "count": "Fixed p ordered r,s labels enter the exact q1-slice physical row. Its grouping retains labels and multiplicities, including repeated products. Each eligible physical modulus divides t=natAbs(mn-a), t!=0. Sum d3(q) over q|t equals d4(t). This realizes the same sufficient ordered pair count through the already existing actual finite triple-fiber injection; no new factorization-count hypothesis is inserted.",
+    "p_primality": "Never assumed. p is the actual primitive integer first-factor label.",
+    "zero_modulus": "Actual admissibility and carrier endpoints exclude p=0; first public identity treats that edge case explicitly using hd and hp. Int.ModEq.of_dvd itself is unconditional."
+  },
+  "power_and_payment_audit": {
+    "pointwise": "b*d4(t)*indicator(H<d4(t))<=b*d4(t)^2/H for H>0.",
+    "rowSum": "The literal actual rowSum uses b*d4(t)^2, so the norm bound is exactly rowSum/H. No d4 power is raised or lowered silently.",
+    "squared": "After proving rowSum>=0 and H>0, actual sq_le_sq0 and div_pow give normdiff^2<=rowSum^2/H^2.",
+    "smoothing": "Multiply by actual nonnegative psi on every point of the complete original commonSmoothCarrier, including m=0 and other zero-weight points. No claim ceil(3V)<=3V is made.",
+    "outside": "Multiply the same original outsideEnergy once, retaining original beta and primitive gamma1 second moments.",
+    "ratio": "No new3U/Q1 or outsideEnergy factor is introduced. The exact conclusion is original Eout*moment/H^2."
+  },
+  "quantifiers": {
+    "identity": "For every B,sigma,kappa,c0,d satisfying original MediumAdmissible, every H:Real, every actual primitive p and every m:Nat.",
+    "norm": "Same original hd, H>0, every primitive p and every m. No hsigma,hkappa,hcap,SW or analytic saving premise is required for these finite bridges.",
+    "energy": "Same hd and H>0; complete original p,m sums, psi and Eout.",
+    "new_target_assumptions": "NONE: no variance bound, row identity, paircount or final conclusion is accepted as an input."
+  },
+  "static_review": {
+    "author_verdict": "no_static_blocker",
+    "full334_source_lines_read": true,
+    "all13_complete_types_definitions_and_proof_bodies_read": true,
+    "all_requested_types_and_definitions_match_Astra": true,
+    "no_sorry_admit_axiom": true,
+    "no_new_namespace_conflict_found_in_actual_sources": true,
+    "independent_review": "PENDING_FOR_NEW_FINITE_SOURCE",
+    "compiler": "NOT_RUN",
+    "elaboration": "NOT_CHECKED",
+    "kernel": "NOT_CHECKED",
+    "linter": "NOT_RUN",
+    "engineering_admission": false
+  },
+  "claim_boundaries": {
+    "three_finite_bridges": "Complete written arguments; author no_static_blocker; UNCOMPILED/HOLD",
+    "log_saving_corollary": "NOT_WRITTEN_OR_CLAIMED",
+    "difference_of_variances": "NOT_IDENTIFIED_WITH_SQUARED_NORM_DIFFERENCE",
+    "retained_truncated_centered_row_saving": "OPEN",
+    "general_arithmetic_progression_M2": "NOT_SUPPLIED",
+    "other_beta_rough_close_pair_cutoffs": "NOT_AUTOMATIC",
+    "original_forall_kappa_medium": "OPEN",
+    "spectral_return": "OPEN",
+    "same_policy_supplier": "OPEN",
+    "main": "OPEN"
+  },
+  "pins": {
+    "goldbach": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "lean_toolchain": "leanprover/lean4:v4.33.0-rc1",
+    "provenance": "Parent-fixed pins,actual source hashes and literal API spans; no Git or runtime invocation."
+  },
+  "quota": {
+    "fresh_used_percent": 49,
+    "fresh_remaining_percent": 51,
+    "effective_window_minutes": 10080,
+    "stop_if_any_effective_remaining_lte_percent": 40,
+    "reset_not_consumed": true
+  },
+  "actions": {
+    "new_files_only": [
+      "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3CommonPM2TailCutoff-module-source.txt",
+      "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-commonp-m2-tail-cutoff-source-proposal-author-HOLD.json"
+    ],
+    "ordinary_local_read_hash_text_scripts_only": true,
+    "actual_Lean_written": false,
+    "old_drafts_or_checkpoints_written": false,
+    "Lean_or_proof_tools_run": false,
+    "Runtime_run": false,
+    "proper_classifier_census_export_run": false,
+    "Git_run": false,
+    "Site_run": false,
+    "new_agent_spawned": false
+  },
+  "stop_condition": "The requested finite package is complete; HOLD for independent review. No logarithmic corollary or further route work started."
+}

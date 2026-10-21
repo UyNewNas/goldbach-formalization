@@ -197,7 +197,7 @@ theorem realDeletionRadius_eq_manuscript {K : ℕ} (hK : 2 ≤ K) (Z : ℝ) :
   unfold realDeletionRadius
   congr 1
   rw [hcast]
-  field_simp [hKR] <;> ring
+  field_simp [hKR]
 
 theorem realDeletionRadius_pow {K : ℕ} (hK : 2 ≤ K) {Z : ℝ} (hZ : 0 ≤ Z) :
     realDeletionRadius K Z ^ K = Z ^ (K - 1) := by
@@ -211,7 +211,7 @@ theorem realDeletionRadius_bounds {K : ℕ} (hK : 2 ≤ K) {Z : ℝ} (hZ : 1 ≤
   have hnum : ((K - 1 : ℕ) : ℝ) ≤ (K : ℝ) := by exact_mod_cast (Nat.sub_le K 1)
   constructor
   · exact Real.one_le_rpow hZ (div_nonneg (Nat.cast_nonneg _) (Nat.cast_nonneg _))
-  · exact Real.rpow_le_self_of_one_le hZ ((div_le_iff₀ hKR).mpr (by simpa using hnum))
+  · exact Real.rpow_le_self_of_one_le hZ ((div_le_iff₀ hKR).mpr (by simp))
 
 /-- The true floor supplies a strict successor-power cutoff, without any rounding loss. -/
 theorem floor_radius_strict_cutoff {K B : ℕ} (hK : 2 ≤ K) {Z : ℝ}
@@ -245,7 +245,7 @@ theorem native_floor_tau_payment {K : ℕ} (hK : 2 ≤ K) {R Z Y : ℝ}
     have := Real.log_nonneg hR
     linarith
   have hL : 1 + Real.log R ≤ 1 + Real.log Z :=
-    add_le_add_left (Real.log_le_log (by linarith : 0 < R) hRZ) 1
+    add_le_add_right (Real.log_le_log (by linarith : 0 < R) hRZ) 1
   have hp1 : (1 + Real.log R) ^ (K - 1) ≤ (1 + Real.log Z) ^ (K - 1) :=
     pow_le_pow_left₀ hL0 hL _
   have hp2 : (1 + Real.log R) ^ (K - 2) ≤ (1 + Real.log Z) ^ (K - 2) :=
