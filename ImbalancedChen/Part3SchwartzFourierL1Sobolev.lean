@@ -70,21 +70,25 @@ private theorem fourier_normalizedFourth_apply (f : 𝓢(E, ℂ)) (ξ : E) :
 
 private def inverseSymbol (ξ : E) : ℝ := ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹
 
+omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem inverseSymbol_nonneg (ξ : E) : 0 ≤ inverseSymbol ξ := by
   unfold inverseSymbol
   positivity
 
+omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem inverseSymbol_continuous : Continuous (inverseSymbol : E → ℝ) := by
   unfold inverseSymbol
-  exact ((continuous_const.add (continuous_norm.pow 2)).pow 2).inv₀
-    (fun ξ ↦ by positivity)
+  have hne (ξ : E) : (1 + ‖ξ‖ ^ 2) ^ 2 ≠ 0 := by positivity
+  exact ((continuous_const.add (continuous_norm.pow 2)).pow 2).inv₀ hne
 
+omit [InnerProductSpace ℝ E] [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E] in
 private theorem inverseSymbol_sq_eq (ξ : E) :
     inverseSymbol ξ ^ 2 = (1 + ‖ξ‖ ^ 2) ^ (-(8 : ℝ) / 2) := by
   have he : -(8 : ℝ) / 2 = -(4 : ℝ) := by norm_num
   rw [he]
   norm_num only [inverseSymbol, Real.rpow_neg_ofNat, zpow_neg, zpow_natCast,
     ← inv_pow, ← pow_mul]
+  exact inv_pow _ _
 
 private theorem inverseSymbol_sq_integrable
     (hd : Module.finrank ℝ E < 8) :

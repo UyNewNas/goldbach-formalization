@@ -215,10 +215,11 @@ original admissibility is not replaced by unproved transposed admissibility.
 | `CurrentChenUpsilon7SourceErrorBudget` | The actual U7 unit and original P <= N^(1/5) prime and semiprime P_2 errors retain coefficient 2, ordered factors and repeated primes; their N^(19/20) bound is negligible relative to singularNormalization. The large-P main mean and full lower constant C remain open. | Strict compilation; original-object stock kernel replay; complete 17-declaration types, inventory and transitive axiom audit |
 | `Part3SmoothReciprocityLogMixed` | The actual signed log-monomial reciprocity weight has uniform bounds for every fixed order of mixed Frechet derivatives, with the constant preceding all varying scales and degree-j modulation cost. Quantitative Fourier L1 separation and the retained spectral bound remain open. | Strict compilation; original-object stock kernel replay; complete 43-declaration types, inventory and transitive axiom audit |
 | `Part3SmoothReciprocityLogRegularity` | The literal signed logarithmic reciprocity weight is genuinely smooth for all real atom parameters, its topological support lies in the fixed localizer support, and compact support follows without a smoothness premise. Quantitative Fourier L1 and spectral estimates are separate obligations. | Strict compilation; original-object stock kernel replay; complete 3-declaration types, inventory and transitive axiom audit |
+| `Part3SchwartzFourierL1Sobolev` | Genuine quantitative Fourier L1 bound in real dimension below eight, controlled by the actual normalized fourth-order operator energy with the constant chosen before all Schwartz functions. Actual-weight, decay-envelope and spectral consumers remain separate obligations. | Strict compilation; original-object stock kernel replay; complete 24-declaration types, inventory and transitive axiom audit |
 
-These 168 modules contain **3935 complete owned declarations**, including
+These 169 modules contain **3959 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-3935 independent major mathematical theorems.
+3959 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.
@@ -532,8 +533,8 @@ Original failed attempts remain failures; replacement sources need their own che
 * `ActualExtendedThirdCompactFrontier`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactPolicySaving`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactSignedDensityLimit`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3SchwartzFourierL1Sobolev`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `Part3SmoothReciprocityLogFourierL1`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3SmoothReciprocityLogFourierEnvelope`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 
 The ordinary lower means above are baseline means. They do not prove the
 manuscript's stronger causal h248 contribution, complete eleven-term lower
