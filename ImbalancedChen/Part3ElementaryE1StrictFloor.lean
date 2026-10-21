@@ -118,7 +118,7 @@ theorem fouvryTau_le_truncated_divisor_sum_strict {K n D : ℕ}
       exact card_deletionFiber_orderedFactorTuples_le_fouvryTau hK (by omega)
         (Finset.mem_filter.mp hd).1 i
     _ = _ := by
-      simp only [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin,
+      simp only [Finset.sum_const, Nat.nsmul_eq_mul, Finset.card_univ, Fintype.card_fin,
         truncatedDivisors]
 
 end

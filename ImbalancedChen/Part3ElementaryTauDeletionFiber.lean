@@ -171,8 +171,8 @@ theorem card_orderedFactorTuples_eq_fouvryTau (k n : ℕ) (hn : 0 < n) :
   induction k generalizing n with
   | zero =>
       by_cases hn1 : n = 1
-      · simp [orderedFactorTuples_zero, fouvryTau, ArithmeticFunction.one_apply, hn1]
-      · simp [orderedFactorTuples_zero, fouvryTau, ArithmeticFunction.one_apply, hn1]
+      · simp [orderedFactorTuples_zero, fouvryTau, hn1]
+      · simp [orderedFactorTuples_zero, fouvryTau, hn1]
   | succ k ih =>
       rw [card_orderedFactorTuples_succ k hn, fouvryTau_succ]
       apply Finset.sum_congr rfl
@@ -296,7 +296,7 @@ theorem fouvryTau_le_truncated_divisor_sum {K n D : ℕ}
       exact card_deletionFiber_orderedFactorTuples_le_fouvryTau hK (by omega)
         (Finset.mem_filter.mp hd).1 i
     _ = K * (∑ d ∈ n.divisors.filter (fun d => d ≤ D), fouvryTau (K - 1) d) := by
-      simp only [Finset.sum_const, nsmul_eq_mul, Finset.card_univ, Fintype.card_fin,
+      simp only [Finset.sum_const, Nat.nsmul_eq_mul, Finset.card_univ, Fintype.card_fin,
         truncatedDivisors]
 
 end
