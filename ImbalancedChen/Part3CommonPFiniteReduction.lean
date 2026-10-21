@@ -116,7 +116,7 @@ theorem MediumAtom.cleaned_commonP_progression_geometry
       exact_mod_cast Finset.card_le_card hsub
     _ ≤ 2 * d.U / (p : ℝ) + 1 := hprogression
     _ ≤ 2 * d.U / d.Q1 + 1 := add_le_add hdiv le_rfl
-    _ ≤ 2 * d.U / d.Q1 + d.U / d.Q1 := add_le_add_left hone _
+    _ ≤ 2 * d.U / d.Q1 + d.U / d.Q1 := add_le_add le_rfl hone
     _ = 3 * d.U / d.Q1 := by ring
 
 end

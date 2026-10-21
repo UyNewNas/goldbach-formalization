@@ -102,7 +102,7 @@ private theorem atom_factor (d : MediumAtom) (Z : ℝ) (p r s w N1 N2 : ℕ) (h 
   unfold amplitude character
   dsimp only
   by_cases hh : h = 0
-  · simp only [hh, poissonNonzeroFrequency_zero, if_pos rfl, mul_zero, zero_mul]
+  · simp only [hh, poissonNonzeroFrequency_zero, if_true, mul_zero, zero_mul]
   · simp only [poissonNonzeroFrequency, if_neg hh]
     ring
 
@@ -208,9 +208,11 @@ theorem MediumAtom.smallCoreSquaredRowTerm_pair_packet
         hp hr hs hs' hw hN1 hN2 hu.2 hv.2 (hv.1.trans hu.1.symm)
         d.residue u.2 v.2 (d.gamma2 u.1) (d.gamma2 v.1) _ _
     · have hpair : ¬ (gate u ∧ gate v) := fun h => hv h.2
-      simp only [if_pos hu, if_neg hv, if_neg hpair, star_zero, mul_zero]
+      rw [if_pos hu, if_neg hv, if_neg hpair]
+      simp only [star_zero, mul_zero]
   · have hpair : ¬ (gate u ∧ gate v) := fun h => hu h.1
-    simp only [if_neg hu, if_neg hpair, zero_mul]
+    rw [if_neg hu, if_neg hpair]
+    simp only [zero_mul]
 
 /-- Finite adapter on the literal original Cauchy block. The signed
 resonance mask, carrier, coefficient multiplicity and all gates survive. -/
