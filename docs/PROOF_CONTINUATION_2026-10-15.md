@@ -202,10 +202,16 @@ original admissibility is not replaced by unproved transposed admissibility.
 | `LogPrimeBoxIntegral` | The literal finite-dimensional half-open prime box has a genuinely integrable reciprocal-coordinate density and exact restricted-Lebesgue product logarithm mass, including weak endpoint and zero-dimensional cases, using the fixed Mathlib Fubini theorem and preserving signed constant and terminal weights | Strict compilation; original-object stock kernel replay; complete 12-declaration types, inventory and transitive axiom audit |
 | `Part3SharedFirstFactorSmallPairedSupportedReduction` | The literal original shared-p nonzero sum splits into three exact masks; an actual finite cleaned-alpha crude bound and unit-coefficient square transfer pay both deleted pieces with the original outside moments and same-C0 auxiliary SW, leaving precisely the unchanged small paired/supported spectral core and fixed CE+3 error | Strict compilation; original-object stock kernel replay; complete 21-declaration types, inventory and transitive axiom audit |
 | `LogPrimeBoxMesh` | The actual arbitrary finite-dimensional half-open logarithmic mesh has exact coverage, unique cell ownership and endpoint-vector convergence with one fixed step; its original boundary geometry supports real reciprocal-prime integral approximations without changing arithmetic selectors | Strict compilation; original-object stock kernel replay; complete 30-declaration types, inventory and transitive axiom audit |
+| `ActualPrimeBoxTestFunctions` | The actual target-linked reciprocal-prime tuple sum with arbitrary signed continuous test function converges to its genuine reciprocal-coordinate Lebesgue cube integral via one fixed finite half-open mesh, exact arithmetic partitions and uniform signed error budgets; no convergence or error supplier is assumed | Strict compilation; original-object stock kernel replay; complete 27-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorSmallCorePrimeDifferenceReindex` | The literal compatible first-factor carrier has a genuine nonzero signed difference quotient with exact product identity, natural inverse, both signs, no-additive-term original Q1-g-D bound and injectivity; the carrier has no added prime gate, and no spectral or sum-reindex supplier is assumed | Strict compilation; original-object stock kernel replay; complete 7-declaration types, inventory and transitive axiom audit |
+| `Part3LichtmanSignedDifferenceMultiplicity` | The literal positive-f ordered signed nonzero difference multiplicity has a genuine all-positive-divisor second-moment bound with constant576, divisorMaximum fifth power and harmonic cost, retaining cross-f collisions and exact zero beyond8FHS; this is a finite multiplicity input, not spectral cancellation | Strict compilation; original-object stock kernel replay; complete 95-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUniformEulerNormalization` | The actual target-prime-deleted Euler product has a genuine single threshold uniform over every fixed compact positive exponent interval and every covering cap, using exact cap identity, finite product antitonicity, two proved fixed endpoint limits and a finite compact cover; no Rosser-ratio or signed-mean supplier | Strict compilation; original-object stock kernel replay; complete 3-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorSmallCoreFourierTruncation` | The literal small paired supported core has an actual signed row-adaptive finite Fourier truncation with proved Schwartz tail; all original p and row label costs, complex coefficient real projection, original outside moments and fixed-before-atom unit logarithmic payment are retained, without a spectral cancellation supplier | Strict compilation; original-object stock kernel replay; complete 33-declaration types, inventory and transitive axiom audit |
+| `FirstExitValidSelection` | Actual retained tree leaves and natural retained-modulus support are exactly constructive policy-valid chosen sublists, with both directions preserving processing order and parity; finite equivalence only, no density or distribution hypothesis | Strict compilation; original-object stock kernel replay; complete 11-declaration types, inventory and transitive axiom audit |
 
-These 155 modules contain **3529 complete owned declarations**, including
+These 161 modules contain **3705 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-3529 independent major mathematical theorems.
+3705 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.
@@ -467,6 +473,30 @@ The original half-open mesh has exact coverage, disjoint cells, unique
 boundary ownership and endpoint-vector convergence. These are genuine
 integral inputs, separate from arithmetic mean and signed-policy estimates.
 
+The genuine target-linked reciprocal-prime tuple sum now converges
+for every signed continuous cube test to its reciprocal-coordinate Lebesgue
+integral. One finite uniform mesh is fixed before the arithmetic limit;
+the actual positive masses pay both signed approximation errors. This is
+an arithmetic integral limit, without an assumed convergence supplier.
+
+The literal small core has a proved finite Fourier truncation.
+Its row-dependent ceiling keeps the original physical lcm, both frequency
+signs and real projection inside the complex coefficient. A genuine Schwartz
+tail pays every original carrier and outside moment with a fixed-before-atom
+unit logarithmic budget. Cancellation within the finite window remains open.
+
+On the original compatible first-factor carrier the signed
+quotient is nonzero, has both exact sign identities and recovers the first
+factor injectively. Its bound retains Q1, the row gcd and the tail gcd with
+no additive term. No primeness gate is added to the actual carrier. This
+arithmetic license does not yet supply a spectral sum estimate.
+
+The literal ordered positive-f signed nonzero difference
+multiplicity has a genuine finite second moment with constant576, the fifth
+power of the divisor maximum and explicit harmonic cost, for every positive
+auxiliary divisor. Cross-f collisions and exact zero above8FHS are retained.
+This does not establish cancellation in the actual physical spectral core.
+
 The shared-first-factor primitive U/V and zero-covariance
 aggregations preserve both original outside moments and the actual p sum.
 The remaining small-core spectral bound, original-policy mean constants
@@ -474,7 +504,7 @@ and final unconditional arithmetic lower/upper inputs are still open.
 
 ## Candidates that must not be counted as completed proofs
 
-The 17 unaccepted source candidates are listed with exact source
+The 16 unaccepted source candidates are listed with exact source
 hashes in `verification/proof-continuation/2026-10-15/unaccepted-candidates.json`.
 They are excluded from the accepted module/declaration inventory above.
 Original failed attempts remain failures; replacement sources need their own checks.
@@ -495,7 +525,6 @@ Original failed attempts remain failures; replacement sources need their own che
 * `ActualExtendedThirdCompactFrontier`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactPolicySaving`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactSignedDensityLimit`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3LichtmanSignedDifferenceMultiplicity`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 
 The ordinary lower means above are baseline means. They do not prove the
 manuscript's stronger causal h248 contribution, complete eleven-term lower

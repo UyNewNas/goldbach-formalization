@@ -105,7 +105,8 @@ private theorem card_frequencyCarrier_le {H : ℝ} (hH : 0 ≤ H) :
 private theorem frequency_norm_bound {H : ℝ} (hH : 0 ≤ H) {h : ℤ}
     (hh : h ∈ frequencyCarrier H) : |(h : ℝ)| ≤ H := by
   have habs : ((h.natAbs : ℕ) : ℝ) = |(h : ℝ)| := by
-    exact_mod_cast Int.natCast_natAbs h
+    simpa only [Int.cast_natCast, Int.cast_abs] using
+      congrArg (fun z : ℤ => (z : ℝ)) (Int.natCast_natAbs h)
   rw [← habs]
   exact ((mem_frequencyCarrier_iff hH).mp hh).2
 
@@ -184,7 +185,7 @@ private theorem card_dyadic_multiples_le (F : ℝ) (hF : 0 ≤ F)
         _ = g := Nat.div_mul_cancel hgdiv
   calc
     _ ≤ ((Icc 1 (Nat.floor (2 * F / m))).card : ℝ) := by exact_mod_cast hc
-    _ = (Nat.floor (2 * F / m) : ℝ) := by simp only [Nat.card_Icc]; congr 1; omega
+    _ = (Nat.floor (2 * F / m) : ℝ) := by simp only [Nat.card_Icc]; congr 1
     _ ≤ _ := Nat.floor_le (div_nonneg (by positivity) hmR.le)
 
 private theorem card_le_sum_fiber_bound {α β : Type*} [DecidableEq α] [DecidableEq β]
@@ -227,7 +228,7 @@ private theorem product_divisibility_reduced {nu f : ℕ} (hnu : 0 < nu) (k : �
 
 private theorem card_f_product_divisible_le (F : ℝ) (hF : 0 ≤ F)
     (nu : ℕ) (hnu : 0 < nu) (k : ℤ) :
-    (((dyadicCarrier F).filter (fun f => (nu : ℤ) ∣ (f : ℤ) * k)).card : ℝ) ≤
+    (((dyadicCarrier F).filter (fun (f : ℕ) => (nu : ℤ) ∣ (f : ℤ) * k)).card : ℝ) ≤
       2 * F * (nu.gcd k.natAbs : ℝ) / nu := by
   let g := nu.gcd k.natAbs
   let m := nu / g
@@ -341,8 +342,9 @@ private theorem source_output_bounds {S H F : ℝ}
       _ ≤ |(t.2.1 : ℝ) * (t.1.1 : ℝ)| + |(t.2.2 : ℝ) * (t.1.2.1 : ℝ)| :=
         abs_sub _ _
       _ = |(t.2.1 : ℝ)| * (t.1.1 : ℝ) + |(t.2.2 : ℝ)| * (t.1.2.1 : ℝ) := by
-        rw [abs_mul, abs_mul, abs_of_nonneg (Nat.cast_nonneg _),
-          abs_of_nonneg (Nat.cast_nonneg _)]
+        rw [abs_mul, abs_mul,
+          abs_of_nonneg (Nat.cast_nonneg t.1.1 : (0 : ℝ) ≤ (t.1.1 : ℝ)),
+          abs_of_nonneg (Nat.cast_nonneg t.1.2.1 : (0 : ℝ) ≤ (t.1.2.1 : ℝ))]
       _ ≤ H * (t.1.1 : ℝ) + H * (t.1.2.1 : ℝ) :=
         add_le_add (mul_le_mul_of_nonneg_right hh₁bound (Nat.cast_nonneg _))
           (mul_le_mul_of_nonneg_right hh₂bound (Nat.cast_nonneg _))
@@ -363,7 +365,8 @@ private theorem source_output_bounds {S H F : ℝ}
       change (((t.1.2.2 : ℤ) * difference t).natAbs : ℝ) = _
       rw [Int.natAbs_mul, Nat.cast_mul, Int.natAbs_natCast]
       congr 1
-      exact_mod_cast Int.natCast_natAbs (difference t)
+      simpa only [Int.cast_natCast, Int.cast_abs] using
+        congrArg (fun z : ℤ => (z : ℝ)) (Int.natCast_natAbs (difference t))
     rw [habs]
     calc
       _ ≤ (2 * F) * |((difference t : ℤ) : ℝ)| :=
@@ -374,19 +377,21 @@ private theorem source_output_bounds {S H F : ℝ}
 private theorem zero_above_support (S H F : ℝ) (hS : 1 ≤ S) (hH : 1 ≤ H)
     (hF : 1 ≤ F) (nu : ℕ) (hnu : 0 < nu)
     (hlarge : 8 * F * H * S ≤ (nu : ℝ)) : multiplicityL2 S H F nu = 0 := by
-  unfold multiplicityL2
-  apply sum_eq_zero
-  intro zy hzy
-  obtain ⟨t, ht, rfl⟩ := mem_image.mp hzy
-  have hb := source_output_bounds hS hH hF ht
-  have hnot : ¬ (nu : ℤ) ∣ (output t).2 := by
-    intro hd
-    have hnat := Int.natCast_dvd.mp hd
-    have hle : nu ≤ (output t).2.natAbs :=
-      Nat.le_of_dvd (Int.natAbs_pos.mpr hb.2.1) hnat
-    have hleR : (nu : ℝ) ≤ ((output t).2.natAbs : ℝ) := by exact_mod_cast hle
-    exact (not_lt_of_ge hleR) (hb.2.2.2.trans_le hlarge)
-  exact if_neg hnot
+  by_cases hnuZero : nu = 0
+  · exact False.elim (hnu.ne' hnuZero)
+  · unfold multiplicityL2
+    apply sum_eq_zero
+    intro zy hzy
+    obtain ⟨t, ht, rfl⟩ := mem_image.mp hzy
+    have hb := source_output_bounds hS hH hF ht
+    have hnot : ¬ (nu : ℤ) ∣ (output t).2 := by
+      intro hd
+      have hnat := Int.natCast_dvd.mp hd
+      have hle : nu ≤ (output t).2.natAbs :=
+        Nat.le_of_dvd (Int.natAbs_pos.mpr hb.2.1) hnat
+      have hleR : (nu : ℝ) ≤ ((output t).2.natAbs : ℝ) := by exact_mod_cast hle
+      exact (not_lt_of_ge hleR) (hb.2.2.2.trans_le hlarge)
+    exact if_neg hnot
 
 private theorem divisorMaximum_pos (S H F : ℝ) (hS : 1 ≤ S) :
     1 ≤ divisorMaximum S H F := by
@@ -399,15 +404,18 @@ private theorem divisorMaximum_pos (S H F : ℝ) (hS : 1 ≤ S) :
     exact_mod_cast hreal
   have h := le_sup (s := Icc 1 (supportCap S H F)) (f := fun n : ℕ => n.divisors.card)
     (mem_Icc.mpr ⟨le_rfl, hcap⟩ : 1 ∈ Icc 1 (supportCap S H F))
-  simpa only [Nat.divisors_one, card_singleton] using h
+  simpa only [divisorMaximum, Nat.divisors_one, card_singleton] using h
 
 private theorem tau_le_divisorMaximum {S H F : ℝ} {n : ℕ}
     (hn : 0 < n) (hbound : (n : ℝ) ≤ max (4 * S ^ 2) (8 * F * H * S)) :
     n.divisors.card ≤ divisorMaximum S H F := by
-  apply le_sup
-  apply mem_Icc.mpr
-  refine ⟨Nat.succ_le_iff.mpr hn, ?_⟩
-  exact_mod_cast hbound.trans (Nat.le_ceil _)
+  have hmem : n ∈ Icc 1 (supportCap S H F) := by
+    apply mem_Icc.mpr
+    refine ⟨Nat.succ_le_iff.mpr hn, ?_⟩
+    exact_mod_cast hbound.trans (Nat.le_ceil _)
+  have hsup := Finset.le_sup (s := Icc 1 (supportCap S H F))
+    (f := fun m : ℕ => m.divisors.card) (b := n) hmem
+  simpa only [divisorMaximum] using hsup
 
 private def row (H : ℝ) (s : ℕ × ℕ) (k : ℤ) : Finset (ℤ × ℤ) :=
   (frequencyCarrier H ×ˢ frequencyCarrier H).filter
@@ -463,8 +471,9 @@ private theorem card_decompositionCarrier_le {S H F : ℝ}
       · intro a ha b hb heq
         obtain ⟨ha', hasource, haout⟩ := decomposition_witness ha
         obtain ⟨hb', _hbsource, hbout⟩ := decomposition_witness hb
-        have hfirst : a.1 = b.1 := congrArg Prod.fst heq
-        have hlast : a.2.2 = b.2.2 := congrArg Prod.snd heq
+        have hfirst : a.1 = b.1 := congrArg (fun p : ℕ × ℕ => p.1) heq
+        have hpair : (a.1, a.2.2) = (b.1, b.2.2) := heq
+        have hlast := congrArg (fun p : ℕ × ℕ => p.2) hpair
         have haz : a.1 * a.2.1 = zy.1 := congrArg Prod.fst haout
         have hbz : b.1 * b.2.1 = zy.1 := congrArg Prod.fst hbout
         have hapos := (mem_dyadicCarrier_iff.mp (source_data hasource).1).1
@@ -518,38 +527,44 @@ private theorem row_fiber_card {S H F : ℝ}
   have hdata := source_data ht
   have hfpos := (mem_dyadicCarrier_iff.mp hdata.2.2.1).1
   have hfnz : (t.1.2.2 : ℤ) ≠ 0 := by exact_mod_cast hfpos.ne'
-  apply card_bij' (fun u _ => u.2) (fun h _ => (t.1, h))
-  · intro u hu
-    obtain ⟨hu, hprefix⟩ := mem_filter.mp hu
-    obtain ⟨husource, huout⟩ := mem_filter.mp hu
-    have hudata := source_data husource
-    apply mem_filter.mpr
-    refine ⟨mem_product.mpr ⟨hudata.2.2.2.1, hudata.2.2.2.2.1⟩, ?_⟩
-    have hy := congrArg Prod.snd huout
-    change (u.1.2.2 : ℤ) * difference u = (t.1.2.2 : ℤ) * difference t at hy
-    rw [hprefix] at hy
-    have hk := (mul_right_inj' hfnz).mp hy
-    simpa only [difference, hprefix] using hk
-  · intro h hh
-    obtain ⟨hh, hk⟩ := mem_filter.mp hh
-    have hsource : (t.1, h) ∈ sourceCarrier S H F := by
+  exact card_bij' (fun u _ => u.2) (fun (h : ℤ × ℤ) _ => (t.1, h))
+    (by
+      intro u hu
+      obtain ⟨hu, hprefix⟩ := mem_filter.mp hu
+      obtain ⟨husource, huout⟩ := mem_filter.mp hu
+      have hudata := source_data husource
       apply mem_filter.mpr
-      refine ⟨mem_product.mpr
-        ⟨mem_product.mpr ⟨hdata.1, mem_product.mpr ⟨hdata.2.1, hdata.2.2.1⟩⟩, hh⟩, ?_⟩
-      change h.1 * (t.1.1 : ℤ) - h.2 * (t.1.2.1 : ℤ) ≠ 0
-      rw [hk]
-      exact hdata.2.2.2.2.2
-    apply mem_filter.mpr
-    refine ⟨mem_filter.mpr ⟨hsource, ?_⟩, rfl⟩
-    apply Prod.ext rfl
-    change (t.1.2.2 : ℤ) *
-      (h.1 * (t.1.1 : ℤ) - h.2 * (t.1.2.1 : ℤ)) = _
-    rw [hk]
-  · intro u hu
-    have hprefix := (mem_filter.mp hu).2
-    exact Prod.ext hprefix.symm rfl
-  · intro h _
-    rfl
+      refine ⟨mem_product.mpr ⟨hudata.2.2.2.1, hudata.2.2.2.2.1⟩, ?_⟩
+      have hy := congrArg Prod.snd huout
+      change (u.1.2.2 : ℤ) * difference u = (t.1.2.2 : ℤ) * difference t at hy
+      rw [hprefix] at hy
+      have hk := (mul_right_inj' hfnz).mp hy
+      simpa only [difference, hprefix] using hk)
+    (by
+      intro h hh
+      obtain ⟨hh, hk⟩ := mem_filter.mp hh
+      have hsource : (t.1, h) ∈ sourceCarrier S H F := by
+        apply mem_filter.mpr
+        refine ⟨mem_product.mpr
+          ⟨mem_product.mpr ⟨hdata.1, mem_product.mpr ⟨hdata.2.1, hdata.2.2.1⟩⟩, hh⟩, ?_⟩
+        change h.1 * (t.1.1 : ℤ) - h.2 * (t.1.2.1 : ℤ) ≠ 0
+        rw [hk]
+        exact hdata.2.2.2.2.2
+      apply mem_filter.mpr
+      refine ⟨mem_filter.mpr ⟨hsource, ?_⟩, rfl⟩
+      unfold output
+      apply Prod.ext
+      · rfl
+      · change (t.1.2.2 : ℤ) *
+          (h.1 * (t.1.1 : ℤ) - h.2 * (t.1.2.1 : ℤ)) = _
+        rw [hk])
+    (by
+      intro u hu
+      have hprefix := (mem_filter.mp hu).2
+      exact Prod.ext hprefix.symm rfl)
+    (by
+      intro h _
+      rfl)
 
 private theorem multiplicityL2_le_source_rows (S H F : ℝ)
     (hS : 1 ≤ S) (hH : 1 ≤ H) (hF : 1 ≤ F) (nu : ℕ) :
@@ -605,7 +620,11 @@ private theorem multiplicityL2_le_source_rows (S H F : ℝ)
         ∑ t ∈ outputFiber S H F zy, W t := sum_le_sum hpoint
     _ = (divisorMaximum S H F : ℝ) ^ 2 *
         ∑ zy ∈ Z, ∑ t ∈ outputFiber S H F zy, W t := (mul_sum _ _ _).symm
-    _ = _ := by rw [hsum]
+    _ = _ := by
+      change (divisorMaximum S H F : ℝ) ^ 2 *
+          (∑ zy ∈ Z, ∑ t ∈ A.filter (fun t => output t = zy), W t) =
+        (divisorMaximum S H F : ℝ) ^ 2 * ∑ t ∈ A, W t
+      rw [hsum]
 
 private theorem difference_mem_frequency {H T : ℝ} (hH : 0 ≤ H) (hT : 0 ≤ T)
     {s : ℕ × ℕ} (hs₁ : (s.1 : ℝ) ≤ 2 * T) (hs₂ : (s.2 : ℝ) ≤ 2 * T)
@@ -620,8 +639,9 @@ private theorem difference_mem_frequency {H T : ℝ} (hH : 0 ≤ H) (hT : 0 ≤ 
     calc
       _ ≤ |(h.1 : ℝ) * (s.1 : ℝ)| + |(h.2 : ℝ) * (s.2 : ℝ)| := abs_sub _ _
       _ = |(h.1 : ℝ)| * (s.1 : ℝ) + |(h.2 : ℝ)| * (s.2 : ℝ) := by
-        rw [abs_mul, abs_mul, abs_of_nonneg (Nat.cast_nonneg _),
-          abs_of_nonneg (Nat.cast_nonneg _)]
+        rw [abs_mul, abs_mul,
+          abs_of_nonneg (Nat.cast_nonneg s.1 : (0 : ℝ) ≤ (s.1 : ℝ)),
+          abs_of_nonneg (Nat.cast_nonneg s.2 : (0 : ℝ) ≤ (s.2 : ℝ))]
       _ ≤ H * (2 * T) + H * (2 * T) :=
         add_le_add (mul_le_mul hh₁ hs₁ (Nat.cast_nonneg _) hH)
           (mul_le_mul hh₂ hs₂ (Nat.cast_nonneg _) hH)
@@ -629,8 +649,9 @@ private theorem difference_mem_frequency {H T : ℝ} (hH : 0 ≤ H) (hT : 0 ≤ 
   have habs :
       ((h.1 * (s.1 : ℤ) - h.2 * (s.2 : ℤ)).natAbs : ℝ) =
         |(h.1 : ℝ) * (s.1 : ℝ) - (h.2 : ℝ) * (s.2 : ℝ)| := by
-    have h := Int.natCast_natAbs (h.1 * (s.1 : ℤ) - h.2 * (s.2 : ℤ))
-    exact_mod_cast h
+    simpa only [Int.cast_natCast, Int.cast_abs, Int.cast_sub, Int.cast_mul] using
+      congrArg (fun z : ℤ => (z : ℝ))
+        (Int.natCast_natAbs (h.1 * (s.1 : ℤ) - h.2 * (s.2 : ℤ)))
   rwa [habs]
 
 private theorem row_fiberwise (H L : ℝ) (hL : 0 ≤ L)
@@ -675,7 +696,7 @@ private theorem source_rows_eq_moment (S H F : ℝ)
           ((row H (t.1.1, t.1.2.1) (difference t)).card : ℝ) else 0) =
       ∑ s₁ ∈ dyadicCarrier S, ∑ s₂ ∈ dyadicCarrier S,
         ∑ k ∈ frequencyCarrier (4 * H * S), ((row H (s₁, s₂) k).card : ℝ) ^ 2 *
-          (((dyadicCarrier F).filter (fun f => (nu : ℤ) ∣ (f : ℤ) * k)).card : ℝ) := by
+          (((dyadicCarrier F).filter (fun (f : ℕ) => (nu : ℤ) ∣ (f : ℤ) * k)).card : ℝ) := by
   have hS0 : 0 ≤ S := by linarith
   have hH0 : 0 ≤ H := by linarith
   calc
@@ -684,7 +705,10 @@ private theorem source_rows_eq_moment (S H F : ℝ)
           (fun h => h.1 * (s₁ : ℤ) - h.2 * (s₂ : ℤ) ≠ 0),
           if (nu : ℤ) ∣ (f : ℤ) * (h.1 * (s₁ : ℤ) - h.2 * (s₂ : ℤ)) then
             ((row H (s₁, s₂) (h.1 * (s₁ : ℤ) - h.2 * (s₂ : ℤ))).card : ℝ) else 0 := by
-      simp only [sourceCarrier, sum_filter, sum_product, output, difference]
+      unfold sourceCarrier
+      rw [sum_filter]
+      simp only [sum_product, sum_filter, output, difference]
+      rfl
     _ = ∑ s₁ ∈ dyadicCarrier S, ∑ s₂ ∈ dyadicCarrier S, ∑ f ∈ dyadicCarrier F,
         ∑ k ∈ frequencyCarrier (4 * H * S),
           if (nu : ℤ) ∣ (f : ℤ) * k then ((row H (s₁, s₂) k).card : ℝ) ^ 2 else 0 := by
@@ -694,8 +718,13 @@ private theorem source_rows_eq_moment (S H F : ℝ)
       intro s₂ hs₂
       apply sum_congr rfl
       intro f _
-      have hmap := fun h hh hne => difference_mem_frequency hH0 hS0
-        (mem_dyadicCarrier_iff.mp hs₁).2.2.le (mem_dyadicCarrier_iff.mp hs₂).2.2.le hh hne
+      have hmap : ∀ (h : ℤ × ℤ), h ∈ frequencyCarrier H ×ˢ frequencyCarrier H →
+          h.1 * (s₁ : ℤ) - h.2 * (s₂ : ℤ) ≠ 0 →
+          h.1 * (s₁ : ℤ) - h.2 * (s₂ : ℤ) ∈ frequencyCarrier (4 * H * S) := by
+        intro h hh hne
+        exact difference_mem_frequency (s := (s₁, s₂)) hH0 hS0
+          (mem_dyadicCarrier_iff.mp hs₁).2.2.le
+          (mem_dyadicCarrier_iff.mp hs₂).2.2.le hh hne
       rw [row_fiberwise H (4 * H * S) (by positivity) (s₁, s₂)
         (fun k => if (nu : ℤ) ∣ (f : ℤ) * k then
           ((row H (s₁, s₂) k).card : ℝ) else 0) hmap]
@@ -711,7 +740,7 @@ private theorem source_rows_eq_moment (S H F : ℝ)
       apply sum_congr rfl
       intro k _
       have hc : (((dyadicCarrier F).filter
-          (fun f => (nu : ℤ) ∣ (f : ℤ) * k)).card : ℝ) =
+          (fun (f : ℕ) => (nu : ℤ) ∣ (f : ℤ) * k)).card : ℝ) =
           ∑ f ∈ dyadicCarrier F, if (nu : ℤ) ∣ (f : ℤ) * k then (1 : ℝ) else 0 := by
         simp only [card_eq_sum_ones, sum_filter, Nat.cast_sum, Nat.cast_ite,
           Nat.cast_one, Nat.cast_zero]
@@ -743,8 +772,9 @@ private theorem card_integer_progression_le (A : Finset ℤ) (H : ℝ) (hH : 0 �
       apply card_le_card_of_injOn q
       · intro a ha
         have hr : (m : ℝ) * (q a : ℝ) = (a : ℝ) - (a₀ : ℝ) := by
-          have h := hrepr a ha
-          exact_mod_cast (eq_sub_iff_add_eq.mpr (by simpa only [add_comm] using h.symm))
+          have h := congrArg (fun z : ℤ => (z : ℝ)) (hrepr a ha)
+          simp only [Int.cast_add, Int.cast_mul, Int.cast_natCast] at h
+          linarith
         have ha := abs_le.mp (hbound a ha)
         have hb := abs_le.mp (hbound a₀ ha₀)
         have hqbound : (q a : ℝ) ≤ 2 * H / m := by
@@ -757,7 +787,10 @@ private theorem card_integer_progression_le (A : Finset ℤ) (H : ℝ) (hH : 0 �
       _ ≤ ((Icc 0 (Nat.floor (2 * H / m))).card : ℝ) := by exact_mod_cast hc
       _ = (Nat.floor (2 * H / m) : ℝ) + 1 := by
         simp only [Nat.card_Icc, Nat.sub_zero, Nat.cast_add, Nat.cast_one]
-      _ ≤ _ := by linarith [Nat.floor_le (div_nonneg (by positivity) hmR.le)]
+      _ ≤ _ := by
+        have hfloor : (Nat.floor (2 * H / (m : ℝ)) : ℝ) ≤ 2 * H / (m : ℝ) :=
+          Nat.floor_le (div_nonneg (by positivity) hmR.le)
+        linarith
   · have hEmpty : A = ∅ := not_nonempty_iff_eq_empty.mp hA
     rw [hEmpty, card_empty, Nat.cast_zero]
     positivity
@@ -845,7 +878,13 @@ private theorem row_square_le (S H : ℝ) (hS : 1 ≤ S) (hH : 0 ≤ H)
         (2 * H / S) * (s₁.gcd s₂ : ℝ) * ((row H (s₁, s₂) k).card : ℝ) := by
   have h := mul_le_mul_of_nonneg_right (row_card_le S H hS hH hs₁ hs₂ k)
     (Nat.cast_nonneg (row H (s₁, s₂) k).card)
-  nlinarith
+  calc
+    ((row H (s₁, s₂) k).card : ℝ) ^ 2 =
+        ((row H (s₁, s₂) k).card : ℝ) * ((row H (s₁, s₂) k).card : ℝ) := pow_two _
+    _ ≤ (1 + 2 * H * (s₁.gcd s₂ : ℝ) / S) *
+        ((row H (s₁, s₂) k).card : ℝ) := h
+    _ = ((row H (s₁, s₂) k).card : ℝ) +
+        (2 * H / S) * (s₁.gcd s₂ : ℝ) * ((row H (s₁, s₂) k).card : ℝ) := by ring
 
 private theorem linear_first_moment_le (S H F : ℝ)
     (hS : 1 ≤ S) (hH : 1 ≤ H) (hF : 1 ≤ F)
@@ -902,7 +941,8 @@ private theorem linear_first_moment_le (S H F : ℝ)
           have heq : (n.natAbs : ℝ) = |(q₀.2.2 : ℝ)| * (q₀.1.2 : ℝ) := by
             rw [hidentity q₀ hq₀, Int.natAbs_mul, Nat.cast_mul, Int.natAbs_natCast]
             congr 1
-            exact_mod_cast Int.natCast_natAbs q₀.2.2
+            simpa only [Int.cast_natCast, Int.cast_abs] using
+              congrArg (fun z : ℤ => (z : ℝ)) (Int.natCast_natAbs q₀.2.2)
           rw [heq]
           exact mul_le_mul hhbound hvupper (Nat.cast_nonneg _) hH0
         have hquot : 2 * S / d ≤ 2 * S := div_le_self (by positivity) hdone
@@ -937,6 +977,7 @@ private theorem linear_first_moment_le (S H F : ℝ)
           have hh₂ : q.2.2 = r.2.2 := by
             apply (mul_left_inj'
               (show (q.1.2 : ℤ) ≠ 0 by exact_mod_cast hqvpos.ne')).mp
+            change q.1.2 = r.1.2 at hv
             rw [← hu, ← hh₁, ← hv] at hreq
             nlinarith [hqeq, hreq]
           apply Sigma.ext (Prod.ext hu hv)
@@ -1104,7 +1145,12 @@ private theorem reduced_weighted_sum_le (S H : ℝ) (hS : 1 ≤ S) (hH : 1 ≤ H
       (∑ q ∈ A, W q) =
       ∑ s ∈ dyadicCarrier S ×ˢ dyadicCarrier S, ∑ k ∈ frequencyCarrier (4 * H * S),
         (s.1.gcd s.2 : ℝ) * ((row H s k).card : ℝ) * (nu.gcd k.natAbs : ℝ) := by
-    rw [sigma_hPairs_sum_eq (dyadicCarrier S) H S hH0 hS0 (filter_subset _ _)]
+    change (∑ q ∈ (dyadicCarrier S ×ˢ dyadicCarrier S).sigma (hPairs H),
+      (q.1.1.gcd q.1.2 : ℝ) *
+        (nu.gcd (q.2.1 * (q.1.1 : ℤ) - q.2.2 * (q.1.2 : ℤ)).natAbs : ℝ)) = _
+    rw [sigma_hPairs_sum_eq (dyadicCarrier S) H S hH0 hS0
+      (by intro n hn; exact (mem_filter.mp hn).1)
+      (fun s k => (s.1.gcd s.2 : ℝ) * (nu.gcd k.natAbs : ℝ))]
     apply sum_congr rfl
     intro s _
     apply sum_congr rfl
@@ -1124,13 +1170,13 @@ private theorem reduced_weighted_sum_le (S H : ℝ) (hS : 1 ≤ S) (hH : 1 ≤ H
     have hVeq : Ioc 0 (Nat.floor (2 * S / d)) = Ioc 0 (Nat.floor (2 * (S / d))) := by
       congr 2
       ring
-    rw [hVeq, sigma_hPairs_sum_eq _ H (S / d) hH0 (by positivity) (by intro n hn; exact hn)]
-    simp only [V, mul_sum]
-    apply sum_congr rfl
-    intro s _
-    apply sum_congr rfl
-    intro k _
-    ring
+    rw [hVeq]
+    have hfinite := sigma_hPairs_sum_eq
+      (Ioc 0 (Nat.floor (2 * (S / d)))) H (S / d) hH0 (by positivity)
+      (by intro n hn; exact hn)
+      (fun _ k => (nu.gcd ((d : ℤ) * k).natAbs : ℝ))
+    have hscaled := congrArg (fun v : ℝ => (d : ℝ) * v) hfinite
+    simpa only [V, mul_sum] using hscaled
   rwa [hleft, hright] at hsum
 
 private theorem bounded_first_moment_gcd_le (S H F : ℝ)
@@ -1188,8 +1234,9 @@ private theorem first_moment_gcd_le (S H F : ℝ)
         ((row H s k).card : ℝ) * (nu.gcd k.natAbs : ℝ)) ≤
       32 * (divisorMaximum S H F : ℝ) * (nu.divisors.card : ℝ) * (H * S) ^ 2 := by
   have h := bounded_first_moment_gcd_le S H F hS hH hF nu hnu 1 (by norm_num)
-    (dyadicCarrier S) (by simpa only [Nat.cast_one, div_one] using (filter_subset
-      (fun n => S ≤ (n : ℝ) ∧ (n : ℝ) < 2 * S) (Ioc 0 (Nat.floor (2 * S)))))
+    (dyadicCarrier S) (by
+      intro n hn
+      simpa only [Nat.cast_one, div_one] using (mem_filter.mp hn).1)
   simpa only [Nat.cast_one, Int.natCast_one, div_one, one_mul, one_pow,
     Nat.gcd_one_left, Nat.cast_one, mul_one] using h
 
@@ -1219,7 +1266,6 @@ private theorem gcd_weighted_first_moment_le (S H F : ℝ)
       intro d hd
       have hdpos : (0 : ℝ) < d := by exact_mod_cast (by have := (mem_Icc.mp hd).1; omega : 0 < d)
       field_simp [hdpos.ne']
-      ring
     _ ≤ 32 * (divisorMaximum S H F : ℝ) * (nu.divisors.card : ℝ) * (H * S) ^ 2 *
         ((nu.divisors.card : ℝ) * (harmonic (Nat.floor (2 * S)) : ℝ)) :=
       mul_le_mul_of_nonneg_left
@@ -1272,7 +1318,7 @@ private theorem multiplicityL2_le_second_moment (S H F : ℝ)
   have hmoment :
       (∑ s₁ ∈ dyadicCarrier S, ∑ s₂ ∈ dyadicCarrier S,
         ∑ k ∈ frequencyCarrier (4 * H * S), ((row H (s₁, s₂) k).card : ℝ) ^ 2 *
-          (((dyadicCarrier F).filter (fun f => (nu : ℤ) ∣ (f : ℤ) * k)).card : ℝ)) ≤
+          (((dyadicCarrier F).filter (fun (f : ℕ) => (nu : ℤ) ∣ (f : ℤ) * k)).card : ℝ)) ≤
       (2 * F / nu) * ∑ s ∈ dyadicCarrier S ×ˢ dyadicCarrier S,
         ∑ k ∈ frequencyCarrier (4 * H * S),
           ((row H s k).card : ℝ) ^ 2 * (nu.gcd k.natAbs : ℝ) := by
@@ -1285,12 +1331,15 @@ private theorem multiplicityL2_le_second_moment (S H F : ℝ)
     intro k _
     have h := mul_le_mul_of_nonneg_left (card_f_product_divisible_le F hF0 nu hnu k)
       (sq_nonneg ((row H (s₁, s₂) k).card : ℝ))
-    convert h using 1 <;> ring
+    convert h using 1
+    ring
   exact (hfirst.trans (mul_le_mul_of_nonneg_left hmoment (sq_nonneg _))).trans_eq (by ring)
 
 private theorem harmonic_floor_twice_ge_one (S : ℝ) (hS : 1 ≤ S) :
     1 ≤ (harmonic (Nat.floor (2 * S)) : ℝ) := by
-  have hM : 1 ≤ Nat.floor (2 * S) := Nat.le_floor (by linarith : (1 : ℝ) ≤ 2 * S)
+  have hM : 1 ≤ Nat.floor (2 * S) := by
+    apply Nat.le_floor
+    simpa only [Nat.cast_one] using (by linarith : (1 : ℝ) ≤ 2 * S)
   have h := single_le_sum (s := Icc 1 (Nat.floor (2 * S)))
     (f := fun n : ℕ => 1 / (n : ℝ)) (fun _ _ => by positivity)
     (mem_Icc.mpr ⟨le_rfl, hM⟩ : 1 ∈ Icc 1 (Nat.floor (2 * S)))
@@ -1354,7 +1403,9 @@ theorem signedDifference_multiplicityL2_bound
   have hHpos : 0 < H := by linarith
   have hFpos : 0 < F := by linarith
   have hnuR : (0 : ℝ) < nu := by exact_mod_cast hnu
-  have hD : 1 ≤ D := by exact_mod_cast divisorMaximum_pos S H F hS
+  have hD : 1 ≤ D := by
+    change (1 : ℝ) ≤ (divisorMaximum S H F : ℝ)
+    exact_mod_cast divisorMaximum_pos S H F hS
   have ht : 0 ≤ t := Nat.cast_nonneg _
   have hJ : 1 ≤ J := harmonic_floor_twice_ge_one S hS
   have hx : 0 ≤ x := by dsimp [x]; positivity
@@ -1366,6 +1417,7 @@ theorem signedDifference_multiplicityL2_bound
       positivity
     · have hsmall : (nu : ℝ) < 8 * F * H * S := lt_of_not_ge hlarge
       have htD : t ≤ D := by
+        change (nu.divisors.card : ℝ) ≤ (divisorMaximum S H F : ℝ)
         exact_mod_cast tau_le_divisorMaximum hnu
           (hsmall.le.trans (le_max_right (4 * S ^ 2) (8 * F * H * S)))
       have hraw := multiplicityL2_le_second_moment S H F hS hH hF nu hnu
@@ -1374,15 +1426,30 @@ theorem signedDifference_multiplicityL2_bound
         (show 0 ≤ (divisorMaximum S H F : ℝ) ^ 2 * (2 * F / nu) by positivity))
       have hraw' : multiplicityL2 S H F nu ≤
           (64 * D ^ 3 * t + 128 * D ^ 3 * t ^ 2 * J * x) * T := by
-        convert hpaid using 1
-        dsimp [D, t, J, x, T]
-        simp only [div_eq_mul_inv]
-        ring
+        change multiplicityL2 S H F nu ≤
+          (64 * (divisorMaximum S H F : ℝ) ^ 3 * (nu.divisors.card : ℝ) +
+            128 * (divisorMaximum S H F : ℝ) ^ 3 * (nu.divisors.card : ℝ) ^ 2 *
+              (harmonic (Nat.floor (2 * S)) : ℝ) * (H / S)) *
+            ((H * S) ^ 2 * F / (nu : ℝ))
+        calc
+          _ ≤ (divisorMaximum S H F : ℝ) ^ 2 * (2 * F / (nu : ℝ)) *
+              (32 * (divisorMaximum S H F : ℝ) * (nu.divisors.card : ℝ) * (H * S) ^ 2 +
+                (2 * H / S) * (32 * (divisorMaximum S H F : ℝ) *
+                  (nu.divisors.card : ℝ) ^ 2 * (H * S) ^ 2 *
+                    (harmonic (Nat.floor (2 * S)) : ℝ))) := hpaid
+          _ = _ := by ring
       have hfinal := hraw'.trans (scalar_budget hD ht htD hJ hx hT)
-      convert hfinal using 1
-      dsimp [D, J, x, T]
-      simp only [div_eq_mul_inv]
-      ring
+      calc
+        _ ≤ 576 * D ^ 5 * J * (1 + x) * T := hfinal
+        _ = _ := by
+          change
+            576 * (divisorMaximum S H F : ℝ) ^ 5 *
+                (harmonic (Nat.floor (2 * S)) : ℝ) * (1 + H / S) *
+                  ((H * S) ^ 2 * F / (nu : ℝ)) =
+              576 * (divisorMaximum S H F : ℝ) ^ 5 *
+                (harmonic (Nat.floor (2 * S)) : ℝ) * (1 + H / S) *
+                  (H * S) ^ 2 * F / (nu : ℝ)
+          ring
   · exact zero_above_support S H F hS hH hF nu hnu
 
 end
