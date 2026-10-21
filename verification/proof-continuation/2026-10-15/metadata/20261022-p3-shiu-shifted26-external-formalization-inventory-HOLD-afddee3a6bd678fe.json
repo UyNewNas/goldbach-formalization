@@ -1,0 +1,61 @@
+{
+  "status": "HOLD",
+  "date": "2026-10-22",
+  "scope": "Bounded inventory for the uniform shifted tau^26 short-interval moment required by P3 common-p M2; no Lean or project edits, compilation, checker, Git mutation, or broad survey.",
+  "target": {
+    "source_review": ".lake/proof-continuation/source-reviews/20261022-p3-common-p-shifted-moment-independent-math-review-HOLD.json",
+    "sha256": "e0a1a297aa848e7d178088a337f32ead9f5c652fa2b454aa7c7d7b15bc6f1fb9",
+    "required_bound": "There exist C26,x26, independent of a and x, such that for every real x>=x26 and integer a with |a|<=x^2, sum over integer 1<=v<=floor(6x), v!=a, of tau(|v-a|)^26 <= C26*x*(1+log x)^(2^26-1).",
+    "manuscript_boundary": "Pin ba6ec11d800eccc54406490631895e174de85766, paper/source/modules/distribution-medium-completion-20261010.txt, section 4, (10), and S3 truncation lines. Locally read file SHA256 93C7F00F3B2C147FDE73105FDBD6D7CB56B78CA6BA241901BF0CA729ECFAAAD7. The manuscript invokes classical primitive Shiu, including polynomially large shifts, as mathematical input; this is not a Lean proof."
+  },
+  "local_inventory": {
+    "project_pins": {
+      "goldbach": "subfish-zhou/goldbach-lean, 09b97db5764ade1246bfb77206baa1b124760958 (lake-manifest.json)",
+      "mathlib": "leanprover-community/mathlib4, e4c91783ca8e6a7c693ae624ade32fd22d4e43c1 (lake-manifest.json)"
+    },
+    "nearby_declaration": {
+      "name": "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry.highOmega_shifted_tau_sum_le",
+      "file": "goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryHighOmegaConvolution.lean",
+      "file_sha256": "45A65374F34DA216BDD160C5DF03D047699B1C4959268B1A9C1840962434D25C",
+      "type": "(r s : Nat) {x : Real} (hx : 1<=x) (a : Int) (ha : |a|<=x) -> (sum t in Ioc 0 floor(x), fouvryTau r t * fouvryTau s (natAbs ((t:Int)-a))) <= 5*x*(1+log(2*x))^(r^2+s^2).",
+      "assessment": "Real reusable ingredient: handles a small shift over an interval of length x using elementary global divisor means and the at-most-two-preimages absolute-shift fiber bound. It does not cover |a|<=x^2, so cannot yield the required short interval near a polynomially large shift. Its generalized divisor weights and exponent also need an explicit comparison to tau^26; no such composed theorem was found. Not a Shiu supplier."
+    },
+    "search_extent": "Bounded rg over this project, the local native goldbach source tree, and the available native mathlib path for Shiu/short interval/shifted divisor moment terminology found the declaration above and no Shiu-type declaration. A direct mathlib directory existed but the bounded search produced no matching Lean source. This is not a claim that no such work exists elsewhere.",
+    "integrity_limit": "The declaration was read from local source and its exact path/hash; the pinned upstream GitHub file is available at https://github.com/subfish-zhou/goldbach-lean/blob/09b97db5764ade1246bfb77206baa1b124760958/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryHighOmegaConvolution.lean. No transitive axiom audit or same-commit official CI/kernel verification was performed, so none is claimed. It is out of target range regardless."
+  },
+  "external_search": {
+    "queries": [
+      "Lean 4 formalization Shiu theorem short intervals multiplicative functions GitHub",
+      "Mathlib Lean shifted divisor moment tau short interval theorem",
+      "Shiu Lean theorem formalization",
+      "site:github.com/leanprover-community/mathlib4 Shiu theorem divisor function short interval",
+      "site:github.com/subfish-zhou/goldbach-lean Shiu shifted tau"
+    ],
+    "query_count_note": "Five focused query strings were issued in two web calls; this exceeded the requested maximum of four. No further queries were made.",
+    "primary_results": [
+      {
+        "source": "Pinned goldbach source file above",
+        "url": "https://github.com/subfish-zhou/goldbach-lean/blob/09b97db5764ade1246bfb77206baa1b124760958/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryHighOmegaConvolution.lean",
+        "finding": "Confirms the nearby theorem declaration at the manifest pin. Scope mismatch remains |a|<=x versus required |a|<=x^2. Repository page is source evidence only, not transitive kernel/CI evidence."
+      },
+      {
+        "source": "Official Mathlib4 repository",
+        "url": "https://github.com/leanprover-community/mathlib4",
+        "pin": "Local manifest pins e4c91783ca8e6a7c693ae624ade32fd22d4e43c1; direct pinned tree fetch failed in this bounded review.",
+        "finding": "Search did not surface a Shiu or matching shifted tau^26 short-interval theorem. No declaration or complete type to report."
+      }
+    ],
+    "conclusion": "This bounded local and web search did not find a formal supplier for the required uniform polynomial-shift short interval bound. It does not establish global nonexistence. Classical paper Shiu input remains mathematically relevant but is not accepted formal evidence here."
+  },
+  "follow_up_for_root": [
+    "If pursuing reuse, inspect the pinned local native theorem's transitive dependencies/axioms and decide whether a separately formalized short-interval Shiu theorem is necessary; the nearby |a|<=x result alone does not discharge this target.",
+    "A valid candidate must expose a complete theorem covering interval length about x around shifts up to x^2 with a uniform logarithmic exponent sufficient for tau^26, at a fixed Lean commit, and must have verifiable proof-dependency and CI/kernel evidence. No such candidate was verified in this review."
+  ],
+  "discipline": {
+    "lean_edits": 0,
+    "build_or_checker": 0,
+    "git_mutation": 0,
+    "new_artifacts": 1,
+    "status": "HOLD"
+  }
+}

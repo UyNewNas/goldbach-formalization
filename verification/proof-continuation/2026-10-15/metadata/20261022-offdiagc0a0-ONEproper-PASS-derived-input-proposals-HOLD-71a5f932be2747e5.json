@@ -1,0 +1,262 @@
+{
+  "status": "ONE_CURRENT_C0A0_ORIGINAL_PROPER_PASS_INPUT_PROPOSALS_UNEXECUTED_HOLD",
+  "created_utc": "2026-10-21T18:37:57.866447+00:00",
+  "source_sha256": "c0a0c6130bf0406c24bacae440806b514c144075bc9e623cadd0687554bab8d2",
+  "source_bytes": 7292,
+  "source_LF": 169,
+  "source_CR": 0,
+  "proper": {
+    "path": "preflights/20261021T183427788849Z-exact-current-ImbalancedChen.Part3ResonanceOffDiagonalCount.json",
+    "sha256": "11df8456fe86b1c175202fc56152e1396732eeee4df0a302df8d3c8e9a062efb",
+    "bytes": 894072
+  },
+  "actual_terminal": {
+    "status": "PASS",
+    "invocations": 1,
+    "retries": 0,
+    "pid": 785,
+    "argv": [
+      "/usr/bin/python3",
+      "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/preflight_current_oct20.py",
+      "ImbalancedChen.Part3ResonanceOffDiagonalCount",
+      "c0a0c6130bf0406c24bacae440806b514c144075bc9e623cadd0687554bab8d2"
+    ],
+    "started_utc": "2026-10-21T18:34:20.299724+00:00",
+    "ended_utc": "2026-10-21T18:34:27.952748+00:00",
+    "exit_code": 0,
+    "logs": {
+      "stdout.log": {
+        "path": "rounds/20261022-offdiagc0a0-ONE-currentproper.stdout.log",
+        "sha256": "3cea7924381517f738c8f343b8b40eac304106f74229fda6e7fba1e9dd3a2ada"
+      },
+      "stderr.log": {
+        "path": "rounds/20261022-offdiagc0a0-ONE-currentproper.stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "combined.log": {
+        "path": "rounds/20261022-offdiagc0a0-ONE-currentproper.combined.log",
+        "sha256": "75a9c1f080b3f037202e244526d5d9b5273f83a6b3fd55f6a83fa2276cfcfca3"
+      }
+    }
+  },
+  "root_application": {
+    "path": "source-reviews/20261022-offdiagc0a0-root-elaboration-repair-source-only-applied-HOLD.json",
+    "sha256": "ef17ab395245d8fc499826d5aa7d83d869fd17e6cfdb31021c9dbc85392def35",
+    "bytes": 1310
+  },
+  "repair": {
+    "path": "source-reviews/20261022-offdiag8826-projection-elaboration-repair-sourceonly-HOLD.json",
+    "sha256": "0f1a4ddfec4db7ae840b566b806b7e90ea17650a1351f47fee45f322e4a48f41",
+    "bytes": 109092
+  },
+  "old_source_backup": {
+    "path": "rounds/20261022-offdiag8826-original-before-root-c0a0-elaboration-repair.txt",
+    "sha256": "8826a1ca9fdbebcbe2f5a44cac43b02ac0510c568e916eefa09fff64194e4546",
+    "bytes": 7247
+  },
+  "all_three_complete_current_written_types": [
+    {
+      "source_name": "increasing_count_le",
+      "namespace": "ImbalancedChen.Part3.ResonanceOffDiagonalCount",
+      "visibility": "private",
+      "public_fully_qualified_name": null,
+      "first_line": 32,
+      "full_declaration_header_and_type": "private theorem increasing_count_le (S : Finset ℕ) (U : ℝ)\n    (hS : ∀ n ∈ S, U ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * U)\n    (m : ℕ) (hm : 0 < m) :\n    ((S ×ˢ S).filter (fun z => z.1 < z.2 ∧ Nat.ModEq m z.1 z.2)).card ≤\n      S.card * Nat.floor (U / (m : ℝ))",
+      "dependencies": [
+        "Finset.card_le_card_of_injOn",
+        "Finset.mem_filter",
+        "Finset.mem_product",
+        "Nat.modEq_iff_dvd'",
+        "Nat.sub_pos_of_lt",
+        "Nat.le_of_dvd",
+        "Nat.div_pos",
+        "Nat.div_mul_cancel",
+        "Nat.sub_add_cancel",
+        "le_div_iff₀",
+        "Nat.le_floor",
+        "Finset.card_product",
+        "Nat.card_Icc",
+        "Prod.ext"
+      ],
+      "header_utf8_sha256": "d98047ef9e2df03f1b49b840ed9d409f378e709aae6f0c6c70d6cad55a3637ba"
+    },
+    {
+      "source_name": "finite_count_le",
+      "namespace": "ImbalancedChen.Part3.ResonanceOffDiagonalCount",
+      "visibility": "private",
+      "public_fully_qualified_name": null,
+      "first_line": 87,
+      "full_declaration_header_and_type": "private theorem finite_count_le (S : Finset ℕ) (U : ℝ) (hU : 1 ≤ U)\n    (hS : ∀ n ∈ S, U ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * U)\n    (m : ℕ) (hm : 0 < m) :\n    (((S ×ˢ S).filter (fun z => z.1 ≠ z.2 ∧ Nat.ModEq m z.1 z.2)).card : ℝ) ≤\n      4 * U ^ 2 / (m : ℝ)",
+      "dependencies": [
+        "increasing_count_le",
+        "Finset.card_le_card_of_injOn",
+        "Nat.ModEq.symm",
+        "lt_or_gt_of_ne",
+        "Finset.card_union_le",
+        "Nat.add_le_add",
+        "Finset.card_le_card",
+        "Nat.card_Ioc",
+        "Nat.floor_le",
+        "mul_le_mul"
+      ],
+      "header_utf8_sha256": "cca50fd4bb711798039832e6ceb92fd159838545282c221ec931c9f1f65d27e6"
+    },
+    {
+      "source_name": "dyadic_ordered_offDiagonal_modEq_count_le",
+      "namespace": "ImbalancedChen.Part3.ResonanceOffDiagonalCount",
+      "visibility": "public",
+      "public_fully_qualified_name": "ImbalancedChen.Part3.ResonanceOffDiagonalCount.dyadic_ordered_offDiagonal_modEq_count_le",
+      "first_line": 153,
+      "full_declaration_header_and_type": "theorem dyadic_ordered_offDiagonal_modEq_count_le (U : ℝ) (hU : 1 ≤ U)\n    (m : ℕ) (hm : 0 < m) :\n    (((Icc (Nat.ceil U) (Nat.floor (2 * U)) ×ˢ\n        Icc (Nat.ceil U) (Nat.floor (2 * U))).filter\n      (fun z => z.1 ≠ z.2 ∧ Nat.ModEq m z.1 z.2)).card : ℝ) ≤\n        4 * U ^ 2 / (m : ℝ)",
+      "dependencies": [
+        "finite_count_le",
+        "Nat.le_ceil",
+        "Nat.floor_le",
+        "Finset.mem_Icc"
+      ],
+      "header_utf8_sha256": "c9511e9adf77a4cede3651cbfb2139946c0919cf347a9de2fec2248526d5abc0"
+    }
+  ],
+  "source_repair_one_block_raw_forward_reverse": {
+    "offset_units": "zero-based UTF8 raw byte offsets; end exclusive",
+    "original_path": "ImbalancedChen/Part3ResonanceOffDiagonalCount.lean",
+    "original_sha256": "8826a1ca9fdbebcbe2f5a44cac43b02ac0510c568e916eefa09fff64194e4546",
+    "candidate_path": "rounds/20261022-offdiag8826-projection-elaboration-repair-proposal.txt",
+    "candidate_sha256": "c0a0c6130bf0406c24bacae440806b514c144075bc9e623cadd0687554bab8d2",
+    "edits": [
+      {
+        "old_start": 2819,
+        "old_end": 3002,
+        "new_start": 2819,
+        "new_end": 3047,
+        "old_utf8": "        have hfirst : z.1 = w.1 := congrArg (fun v : ℕ × ℕ => v.1) he\n        have hquot : (z.2 - z.1) / m = (w.2 - w.1) / m :=\n          congrArg (fun v : ℕ × ℕ => v.2) he\n",
+        "new_utf8": "        have hfirst := congrArg (fun v : ℕ × ℕ => v.1) he\n        have hquot :=\n          congrArg (fun v : ℕ × ℕ => v.2) he\n        change z.1 = w.1 at hfirst\n        change (z.2 - z.1) / m = (w.2 - w.1) / m at hquot\n",
+        "old_hex": "20202020202020206861766520686669727374203a207a2e31203d20772e31203a3d20636f6e6772417267202866756e2076203a20e2849520c39720e28495203d3e20762e31292068650a202020202020202068617665206871756f74203a20287a2e32202d207a2e3129202f206d203d2028772e32202d20772e3129202f206d203a3d0a20202020202020202020636f6e6772417267202866756e2076203a20e2849520c39720e28495203d3e20762e32292068650a",
+        "new_hex": "20202020202020206861766520686669727374203a3d20636f6e6772417267202866756e2076203a20e2849520c39720e28495203d3e20762e31292068650a202020202020202068617665206871756f74203a3d0a20202020202020202020636f6e6772417267202866756e2076203a20e2849520c39720e28495203d3e20762e32292068650a20202020202020206368616e6765207a2e31203d20772e31206174206866697273740a20202020202020206368616e676520287a2e32202d207a2e3129202f206d203d2028772e32202d20772e3129202f206d206174206871756f740a",
+        "old_occurrences": 1,
+        "new_occurrences": 1,
+        "old_lines": [
+          68,
+          70
+        ],
+        "new_lines": [
+          68,
+          72
+        ]
+      }
+    ],
+    "forward_rule": "original[:old_start] + bytes.fromhex(new_hex) + original[old_end:]",
+    "reverse_rule": "candidate[:new_start] + bytes.fromhex(old_hex) + candidate[new_end:]",
+    "raw_forward_exact": true,
+    "raw_reverse_exact": true,
+    "outside_one_consecutive_block_byte_exact": true
+  },
+  "classifier_function_AST_equal": {
+    "path": true,
+    "sha": true,
+    "read": true,
+    "exact": true,
+    "source_path": true,
+    "verify_baseline": true,
+    "collect": false,
+    "main": false
+  },
+  "classifier_native_global_tail_exact_except_current_metadata_SHA": true,
+  "all_historical171_to174_guards_verify_baseline_AST_preserved": true,
+  "all_native2475_12375_five_slots_preserved": true,
+  "old_source_checks_bind_immutable8826_backup": true,
+  "generic178_entire_AST_equal_after_two_literal_inverse": true,
+  "artifacts": [
+    {
+      "path": "rounds/20261022-offdiagc0a0-readonly-classification-historical174-proposal.py",
+      "sha256": "e3f38a1030f5a8cbc03c32c5d93b9de8166f7079888ff2532408b81945cc7fbf",
+      "bytes": 28790
+    },
+    {
+      "path": "rounds/20261022-offdiagc0a0-readonly-classification-historical174-proposal.py.full.diff",
+      "sha256": "8cd47c78f7cfc1b1348d4f050a268daac22420b941de2641220d5640be8e1d48",
+      "bytes": 12279
+    },
+    {
+      "path": "rounds/20261022-offdiagc0a0-readonly-classification-historical174-proposal.py.raw-inverse.json",
+      "sha256": "8761a85e5863b2239eb91d2721d1b3b9f10e6a0305aed4cb51c7b8c670f7d85d",
+      "bytes": 83945
+    },
+    {
+      "path": "rounds/20261022-offdiagc0a0-full-inputs-historical174-unbound-proposal.py",
+      "sha256": "c10ce190c7a14c25402a115b6191ad462fa489aacf9ace1539bcf21df0842e5c",
+      "bytes": 6770
+    },
+    {
+      "path": "rounds/20261022-offdiagc0a0-full-inputs-historical174-unbound-proposal.py.full.diff",
+      "sha256": "8a9fa1a6f74c4e5e97645244afc9aded03b20ae48313f2a6595687f14282f091",
+      "bytes": 3652
+    },
+    {
+      "path": "rounds/20261022-offdiagc0a0-full-inputs-historical174-unbound-proposal.py.raw-inverse.json",
+      "sha256": "c5d375c9345a2a3219733eb0da59c81200ff707088875db1c3a66a496d6ec859",
+      "bytes": 23230
+    },
+    {
+      "path": "rounds/20261022-offdiagc0a0-owned-census-generic-fresh-baseline178-proposal.py",
+      "sha256": "34cee9c7e32669e99d57e5dfbe86161efd0e7bc90bcba0b4050f4370195ffac1",
+      "bytes": 6690
+    },
+    {
+      "path": "rounds/20261022-offdiagc0a0-owned-census-generic-fresh-baseline178-proposal.py.full.diff",
+      "sha256": "4183c507af56c70740431becc7c03adbe7f8930e6799a18319c51b82c6b63260",
+      "bytes": 1422
+    },
+    {
+      "path": "rounds/20261022-offdiagc0a0-owned-census-generic-fresh-baseline178-proposal.py.raw-inverse.json",
+      "sha256": "3c3f91030d38f96f12b8b9be0041435d36dcd9f46723b375c1e1bb2f20de0754",
+      "bytes": 20490
+    },
+    {
+      "path": "rounds/20261022-offdiagc0a0-derived-source-bindings.json",
+      "sha256": "fe0db6b89a7a91eb35978f12715ca90d9570df2a700cf85b4c8fff95362dd6af",
+      "bytes": 23308
+    },
+    {
+      "path": "rounds/20261022-offdiagc0a0-current-proper-cache-native-measurement.json",
+      "sha256": "6efeea3700a1d5f03d822dca786dbf90befdbfcffd23d73e46816d72f88d4c33",
+      "bytes": 2853732
+    },
+    {
+      "path": "rounds/20261022-offdiagc0a0-derived-source-bindings.json.full.diff",
+      "sha256": "c0ec13f143ef677dd2819ca84e0b4b3baee0431e65c502cfcdb36c1174cd38b3",
+      "bytes": 2315
+    },
+    {
+      "path": "rounds/20261022-offdiagc0a0-derived-source-bindings.json.raw-inverse.json",
+      "sha256": "e1e8702ec3176d4a949a17155cc1d208f70c51f9020b1b77d51d473e4f92a260",
+      "bytes": 67060
+    }
+  ],
+  "wrapper_binding_status": "UNBOUND_FAIL_CLOSED: current classification/data hashes and root gate do not exist. PENDING literals require exact binding only after ONE classifier actual PASS. No stale8826 output can satisfy wrapper.",
+  "wrapper_changed_logic": "Current metadata SHA reference updated from META_SHA (historical8826) to CURRENT_META_SHA. All comparisons retained.",
+  "global_owned_baseline": [
+    178,
+    4109,
+    126
+  ],
+  "historical_fullwrapper_baseline": [
+    174,
+    4037,
+    122
+  ],
+  "classifier_executed": false,
+  "collect_executed": false,
+  "compiler_checker_census_Git_executed": false,
+  "Lean_modified": false,
+  "kernel_acceptance": false,
+  "generated_count_predicted": null,
+  "foreign_replay_claimed": false,
+  "preparation_only_mechanical_exception": "First measurement assembly Counter.update(mapping) caused TypeError when summing digest strings. No proper rerun, classifier or source change; corrected local measurement assembly to Counter.update(mapping.keys()).",
+  "quota": {
+    "used": 42,
+    "remaining": 58,
+    "stop_remaining_lte": 40
+  },
+  "HOLD": true
+}

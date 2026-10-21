@@ -33,7 +33,7 @@ theorem firstExitAdmittedTuples_three_eq_candidate_filter
     mem_firstExitFrontierTuples_iff]
   have hp : List.ofFn p = [p 0, p 1, p 2] := by
     simp [List.ofFn_succ]
-  simp [hp, FirstExitValidSelection, and_assoc]
+  simp [FirstExitValidSelection, and_assoc]
 
 /-- The same actual admitted frontier on an owned cell uses exactly the
 strict physical third own cube. Neither inherited admission nor the
@@ -113,7 +113,9 @@ theorem actualExtendedThirdCompactAdmittedCell_weighted_sum
           G (primeHistoryTuple 3 state.selectedPrefix) else 0))).sum = _
   rw [firstExitRootFrontier_weighted_sum_eq_admitted_tuple_sum 3
     (actualExtendedThirdCompactUpperPolicy e h m N)
-    (fun q : ℕ => 1 / ((q : ℝ) - 1)) _ (roughPrimeUniverse_nodup N cap w z)]
+    (fun q : ℕ => 1 / ((q : ℝ) - 1)) _ (roughPrimeUniverse_nodup N cap w z)
+      (fun p : Fin 3 → ℕ =>
+        if actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j then G p else 0)]
   simp_rw [mul_ite, mul_zero]
   rw [← Finset.sum_filter,
     actualExtendedThirdCompactAdmitted_cell_filter hN he0 he hmesh w z hj]

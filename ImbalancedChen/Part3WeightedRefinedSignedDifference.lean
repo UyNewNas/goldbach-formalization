@@ -67,7 +67,7 @@ private theorem sum_refinedFiber_card (U : Finset Source)
       ((U.filter (fun t => output t = zy)).filter (fun t => ell t = r)) =
         refinedFiber U ell r zy := by
     ext t
-    simp only [refinedFiber, Finset.mem_filter, and_assoc, and_left_comm, and_comm]
+    simp only [refinedFiber, Finset.mem_filter, and_left_comm, and_comm]
   simpa only [hfiber] using hcard.symm
 
 private theorem output_energy_le (S H F : ℝ) (U : Finset Source)
@@ -80,7 +80,7 @@ private theorem output_energy_le (S H F : ℝ) (U : Finset Source)
       (∑ r ∈ U.image ell, (refinedFiber U ell r zy).card) ≤
         multiplicity S H F zy.1 zy.2 := by
     rw [sum_refinedFiber_card U ell zy]
-    unfold multiplicity
+    unfold LichtmanSignedDifferenceMultiplicity.multiplicity
     apply Finset.card_le_card
     intro t ht
     exact Finset.mem_filter.mpr

@@ -261,7 +261,7 @@ theorem sharedGeneralD_paired_fourier
       have hK0 : (K : ℝ) ≠ 0 := by positivity
       have ht0 : (t : ℝ) ≠ 0 := by positivity
       have ht'0 : (t' : ℝ) ≠ 0 := by positivity
-      field_simp [hN10, hK0, ht0, ht'0] <;> ring
+      field_simp [hN10, hK0, ht0, ht'0]
     rw [hreal]
   refine ⟨hK, hA, hcpos, hst, hst', hb, hzeta, htAc, htAc', hL, hL', ?_⟩
   rw [hphase, hphase']
