@@ -220,10 +220,11 @@ original admissibility is not replaced by unproved transposed admissibility.
 | `Part3SmoothReciprocityLogDecayJet` | Root accepted the exact current source after strict compilation, stock replay and complete type/safety/axiom checks of all 17 actual declarations. This owned weighted reciprocity decay-jet input does not establish full foreign-closure replay or the main C/K and hLower/hUpper claims. | Strict compilation; original-object stock kernel replay; complete 17-declaration types, inventory and transitive axiom audit |
 | `Part3SmoothReciprocityLogFourierEnvelope` | Root accepted the exact current source after strict compilation, stock replay and complete type/safety/axiom checks of all 17 actual declarations. This owned common Fourier envelope input does not establish full foreign-closure replay or the main C/K and hLower/hUpper claims. | Strict compilation; original-object stock kernel replay; complete 17-declaration types, inventory and transitive axiom audit |
 | `Part3SmoothReciprocityLogDecayingFourierEnvelope` | Root accepted the exact current source after strict compilation, stock replay and complete type/safety/axiom checks of all 17 actual declarations. This weighted decaying pointwise envelope preserves the common integrable kernel; the original spectral estimate and main C/K and hLower/hUpper claims remain open. | Strict compilation; original-object stock kernel replay; complete 17-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorSupportedCoreCauchy` | Root accepted this exact source after strict compilation, original-object stock replay and complete checks of all 13 actual generated declarations. Literal original Co support, supported complex energy and positive complete row-square Cauchy are retained; nonresonant PSD, spectral supplier and main C/K and hLower/hUpper claims remain open. | Strict compilation; original-object stock kernel replay; complete 13-declaration types, inventory and transitive axiom audit |
 
-These 173 modules contain **4024 complete owned declarations**, including
+These 174 modules contain **4037 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-4024 independent major mathematical theorems.
+4037 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.
@@ -516,7 +517,7 @@ and final unconditional arithmetic lower/upper inputs are still open.
 
 ## Candidates that must not be counted as completed proofs
 
-The 22 unaccepted source candidates are listed with exact source
+The 23 unaccepted source candidates are listed with exact source
 hashes in `verification/proof-continuation/2026-10-15/unaccepted-candidates.json`.
 They are excluded from the accepted module/declaration inventory above.
 Original failed attempts remain failures; replacement sources need their own checks.
@@ -524,8 +525,9 @@ Original failed attempts remain failures; replacement sources need their own che
 * `Part3ReciprocalAPSupplier`: New target not executed; limited external prerequisite bootstrap stopped at a resource failure.
 * `Certificates.PairedV2FullCertificate`: Not executed; requires the full original-strip chain, beyond the frozen baseline pilot.
 * `ActualThirdPrefixTailIntegral`: Broad arithmetic tuple/profile bridge is not compiled; the separate canonical integral core is verified.
-* `Part3SharedFirstFactorSupportedCoreCauchy`: Root source-reviewed this uncompiled supported-core Cauchy source; its original O_C zero deletion and coefficient-energy and positive row-square retention remain source-level only. No signed-block positivity, target supplier or kernel acceptance is claimed.
-* `Part3NonresonantManuscriptCostAlgebra`: Root source-reviewed this uncompiled manuscript-cost algebra source; its displayed normalizations and spectral monomials remain source-level only. No supplied analytic target, spectral estimate or kernel acceptance is claimed.
+* `Part3NonresonantManuscriptCostAlgebra`: The current 147-line source repairs six unused ring errors and a missing section from the original strict attempt; this repair remains unaccepted and requires exact-source compilation and complete owned audit. No supplied analytic target or spectral estimate is claimed.
+* `Part3SharedFirstFactorGeneralDRootPacket`: Independent source review passed for this exact source; it remains uncompiled and unaccepted. No analytic target, spectral estimate or kernel acceptance is claimed.
+* `Part3SharedFirstFactorGeneralDPairedFourier`: Independent source review passed for this exact source; it remains uncompiled and unaccepted. No analytic target, spectral estimate or kernel acceptance is claimed.
 * `Part3PairedUpperEndpointSW`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualFrozenSlotCoefficientRegrouping`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualFrozenSelectedPairAssignment`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.

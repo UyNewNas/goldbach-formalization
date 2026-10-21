@@ -73,7 +73,7 @@ theorem completed_diagonal_normalization
     prefactorSq U Q R S * diagonalCost U V Q R S =
       (U ^ 2 / Q) ^ 2 * D0 U V R S := by
   unfold prefactorSq diagonalCost D0
-  field_simp [hU.ne', hV.ne', hQ.ne', hR.ne', hS.ne'] <;> ring
+  field_simp [hU.ne', hV.ne', hQ.ne', hR.ne', hS.ne']
 
 /-- P^4/(U^2/Q)^4 is the reciprocal spectral normalizer. -/
 theorem prefactor_fourth_normalization
@@ -82,7 +82,7 @@ theorem prefactor_fourth_normalization
     (prefactorSq U Q R S) ^ 2 / (U ^ 2 / Q) ^ 4 =
       1 / normalizer U R S := by
   unfold prefactorSq normalizer
-  field_simp [hU.ne', hQ.ne', hR.ne', hS.ne'] <;> ring
+  field_simp [hU.ne', hQ.ne', hR.ne', hS.ne']
 
 /-- An exact real-power rewrite of the source's exceptional monomial. -/
 theorem spectral_second_monomial
@@ -91,7 +91,7 @@ theorem spectral_second_monomial
       C * B * Z ^ 2 * (C / Z) ^ (2 * θ) := by
   rw [Real.rpow_add hC 1 (2 * θ), Real.rpow_sub hZ 2 (2 * θ),
     Real.rpow_one, Real.rpow_two, Real.div_rpow hC.le hZ.le (2 * θ)]
-  field_simp [(Real.rpow_pos_of_pos hZ (2 * θ)).ne'] <;> ring
+  field_simp [(Real.rpow_pos_of_pos hZ (2 * θ)).ne']
 
 /-- All four source monomials are retained: D1, (a/x)D1, D2 and the zero mode. -/
 theorem completed_spectral_normalization
@@ -104,10 +104,10 @@ theorem completed_spectral_normalization
   dsimp only
   rw [spectral_second_monomial (by positivity) (by positivity)]
   have hratio : U * R * S / S ^ 2 = U * R / S := by
-    field_simp [hS.ne'] <;> ring
+    field_simp [hS.ne']
   rw [hratio]
   unfold normalizer D1 D2 zeroModeCost
-  field_simp [hU.ne', hV.ne', hQ.ne', hR.ne', hS.ne'] <;> ring
+  field_simp [hU.ne', hV.ne', hQ.ne', hR.ne', hS.ne']
 
 /-- The original geometry and a^theta >= 1 pay the zero Poisson mode. -/
 theorem zero_mode_le_D1
@@ -122,7 +122,7 @@ theorem zero_mode_le_D1
   calc
     zeroModeCost V Q R S = (U * R) ^ 2 / (U * V) * base := by
       dsimp [zeroModeCost, base]
-      field_simp [hU.ne', hV.ne'] <;> ring
+      field_simp [hU.ne', hV.ne']
     _ ≤ 1 * base := mul_le_mul_of_nonneg_right hratio hbase
     _ ≤ a ^ θ * base :=
       mul_le_mul_of_nonneg_right (Real.one_le_rpow ha hθ) hbase
@@ -143,4 +143,5 @@ theorem completed_spectral_upper_bound
   have hproduct : 0 ≤ a / (U * V) * D1 U V Q R S a θ := by positivity
   nlinarith
 
+end
 end ImbalancedChen.Part3NonresonantManuscriptCostAlgebra

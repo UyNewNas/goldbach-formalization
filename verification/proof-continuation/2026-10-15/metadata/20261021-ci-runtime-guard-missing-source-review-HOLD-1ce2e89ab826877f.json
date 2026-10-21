@@ -1,0 +1,91 @@
+{
+  "schema": "ci-runtime-guard-missing-source-review/v1",
+  "recorded_at_utc": "2026-10-21 10:07:43 UTC",
+  "disposition": "HOLD",
+  "scope": "Read-only mechanical source inventory; no downloads, source execution, workflow dispatch, or edits other than this evidence JSON.",
+  "repository": {
+    "name": "UyNewNas/goldbach-formalization",
+    "current_worktree": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation",
+    "current_head": "4c4d53782d0d0805b9498b487ce5d28a67063c2d",
+    "pr": 5,
+    "pr_url": "https://github.com/UyNewNas/goldbach-formalization/pull/5"
+  },
+  "target_source": {
+    "path": "verification/parts/p0/ci_runtime_guard.py",
+    "exists_in_worktree": false,
+    "exists_in_exact_head_tree": false,
+    "tracked_in_current_worktree": false,
+    "untracked_in_current_worktree": false,
+    "local_source_text": null,
+    "byte_length": null,
+    "sha256": null,
+    "git_blob_oid": null,
+    "git_history_or_refs_contain_path": false,
+    "source_origin": "No local source found; no authoritative Git object or local checkout provenance is available."
+  },
+  "searched_local_checkouts": [
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation",
+      "head": "4c4d53782d0d0805b9498b487ce5d28a67063c2d",
+      "result": "Target path absent; not tracked or untracked."
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-variable-envelope",
+      "head": "1a80c1bcce67886f699d097fc37fd245cd3620bf",
+      "result": "Target path absent."
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-integration",
+      "head": "1337e2db4712fb4a9f86add073f771f84b66d0c8",
+      "result": "Target path absent."
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath",
+      "result": "Recursive local filename search found no ci_runtime_guard.py."
+    }
+  ],
+  "workflow_evidence": {
+    "exact_run_url": "https://github.com/UyNewNas/goldbach-formalization/actions/runs/39577677120",
+    "exact_run_head_sha": "4c4d53782d0d0805b9498b487ce5d28a67063c2d",
+    "workflow_path_reported_by_github": ".github/workflows/variable-envelope.yml",
+    "exact_head_workflow_blob_oid": "406ce939b925a7f495afefee34a1adaa15379ba0",
+    "exact_head_workflow_references_helper": false,
+    "observed_commands_from_run_log": [
+      "python3 verification/parts/p0/ci_runtime_guard.py setup --evidence \"$RUNNER_TEMP/variable-envelope-runtime\"",
+      "python3 verification/parts/p0/ci_runtime_guard.py audit --probe --require-source"
+    ],
+    "exact_head_workflow_commands_relevant_to_variable_envelope": [
+      "python3 verification/verify_variable_envelope_boxes.py --cache-imports",
+      "lake exe cache get \"${imports[@]}\"",
+      "python3 verification/verify_variable_envelope_boxes.py"
+    ],
+    "discrepancy": "The exact-head .github/workflows/variable-envelope.yml has no ci_runtime_guard reference, while the run log for that same head records two helper invocations and corresponding guard/audit job steps. The run's executed workflow definition therefore does not match the exact-head workflow source inspected here; its authoritative workflow revision was not found locally."
+  },
+  "source_review": {
+    "functions_and_behavior": "Not inspectable because the helper source is absent.",
+    "resource_guard_implementation": "Unknown; the setup command names an evidence directory under RUNNER_TEMP and the audit command uses --probe --require-source, but neither implementation nor resource files were available.",
+    "local_path_dependencies": [
+      "Observed helper path: verification/parts/p0/ci_runtime_guard.py",
+      "Observed setup evidence argument: $RUNNER_TEMP/variable-envelope-runtime"
+    ],
+    "additional_local_dependencies": "None evidenced by the available log commands; absence of helper source prevents a complete dependency inventory.",
+    "secrets_review": "No helper text is available to inspect for embedded secrets. No secrets were emitted by this read-only inventory.",
+    "file_size_review": "No local helper file exists, so no helper size can be assessed."
+  },
+  "minimum_source_recovery_suggestion": {
+    "missing_source_files": [
+      "verification/parts/p0/ci_runtime_guard.py — obtain the complete authoritative source with provenance before considering restoration."
+    ],
+    "caveat": "This single-file list identifies the missing referenced helper only. To explain or reproduce the recorded run, first identify the authoritative workflow revision because the run's helper-invoking steps are absent from the exact-head workflow file. No workflow edit or helper reconstruction is proposed."
+  },
+  "acceptance_boundary": {
+    "exact_sha_ci": "Not passed; variable-envelope failed before proof builds because the referenced helper file was missing, and Lean core verification was cancelled.",
+    "proof_acceptance_from_this_ci": "Not established.",
+    "reported_local_inventory": {
+      "accepted_modules": 173,
+      "actual_declarations": 4024,
+      "receipts": 121,
+      "note": "These were reported as existing local audit receipts. This CI source inventory neither revalidates nor invalidates their authenticity; the failed pre-proof CI run cannot corroborate their execution."
+    }
+  }
+}
