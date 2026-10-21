@@ -65,9 +65,9 @@ private theorem increasing_count_le (S : Finset ℕ) (U : ℝ)
       · intro z hz w hw he
         obtain ⟨_, hzlt, hzmod⟩ := mem_filter.mp hz
         obtain ⟨_, hwlt, hwmod⟩ := mem_filter.mp hw
-        have hfirst : z.1 = w.1 := congrArg Prod.fst he
-        have hquot : (z.2 - z.1) / m = (w.2 - w.1) / m :=
-          congrArg Prod.snd he
+        have hfirst := congrArg (fun v : ℕ × ℕ => v.1) he
+        have hquot :=
+          congrArg (fun v : ℕ × ℕ => v.2) he
         have hzdvd : m ∣ z.2 - z.1 :=
           (Nat.modEq_iff_dvd' hzlt.le).mp hzmod
         have hwdvd : m ∣ w.2 - w.1 :=
