@@ -210,10 +210,12 @@ original admissibility is not replaced by unproved transposed admissibility.
 | `FirstExitValidSelection` | Actual retained tree leaves and natural retained-modulus support are exactly constructive policy-valid chosen sublists, with both directions preserving processing order and parity; finite equivalence only, no density or distribution hypothesis | Strict compilation; original-object stock kernel replay; complete 11-declaration types, inventory and transitive axiom audit |
 | `Part3SharedFirstFactorSmallCoreSmoothFrequency` | The literal original small paired supported core has a genuine smooth signed common-D frequency approximation; actual cutoff support, full complex coefficient real projection, all row labels and original outside moments are retained and its Schwartz tail pays a fixed-before-atom unit logarithmic budget, without root separation or spectral cancellation suppliers | Strict compilation; original-object stock kernel replay; complete 51-declaration types, inventory and transitive axiom audit |
 | `FirstExitFrontierTupleReindex` | Actual stopped first-exit frontier histories preserve list multiplicities by an exact proper-prefix-valid sublist permutation, then genuine no-repetition permits original tuple and reciprocal-weight sum identities with target deletion, cap and strict/weak endpoints unchanged; finite dictionary only, without analytic density supplier | Strict compilation; original-object stock kernel replay; complete 43-declaration types, inventory and transitive axiom audit |
+| `Part3SharedFirstFactorSmallCoreSquaredFinite` | The actual smooth core has an exact divisor-indexed signed-frequency Cauchy decomposition with complex coefficients outside the real projection; rational unsigned-slope fibres prove the resonant Gram mass nonnegative and retain the signed complementary block, with no resonance logarithmic payment or spectral cancellation supplier | Strict compilation; original-object stock kernel replay; complete 34-declaration types, inventory and transitive axiom audit |
+| `Part3SmoothReciprocityProfile` | The actual complex low-pass Fourier profile with its signed positive slow reciprocity phase has genuine uniform polynomially weighted ordinary derivatives for every fixed pair of orders on Z at least one, retaining the precise degree-J modulation cost; no joint Mellin, root-operator or spectral cancellation supplier | Strict compilation; original-object stock kernel replay; complete 39-declaration types, inventory and transitive axiom audit |
 
-These 163 modules contain **3799 complete owned declarations**, including
+These 165 modules contain **3872 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-3799 independent major mathematical theorems.
+3872 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.

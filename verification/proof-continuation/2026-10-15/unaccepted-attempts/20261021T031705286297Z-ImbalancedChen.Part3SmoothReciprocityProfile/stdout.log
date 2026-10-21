@@ -1,0 +1,28 @@
+ImbalancedChen/Part3SmoothReciprocityProfile.lean:156:2: error: Type mismatch: After simplification, term
+  ContDiff.comp Complex.contDiff_exp hlinear
+ has type
+  ContDiff ℝ (↑n) (Complex.exp ∘ fun u => 2 * (↑Real.pi * (Complex.I * (↑rho * ↑u))))
+but is expected to have type
+  ContDiff ℝ (↑n) (phasePart rho)
+ImbalancedChen/Part3SmoothReciprocityProfile.lean:164:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  HasDerivAt (fun x => ↑(AddCircle.toCircle ↑(rho * x)))
+    (Complex.I * (↑rho * (↑Real.pi * (2 * ↑(AddCircle.toCircle ↑(rho * u)))))) u
+but is expected to have type
+  HasDerivAt (phasePart rho) (Complex.I * (↑rho * (↑Real.pi * (2 * ↑(AddCircle.toCircle ↑(rho * u)))))) u
+ImbalancedChen/Part3SmoothReciprocityProfile.lean:178:14: error: unsolved goals
+case succ
+rho : ℝ
+n : ℕ
+ih : iteratedDeriv n (phasePart rho) = fun u => (2 * ↑Real.pi * Complex.I * ↑rho) ^ n * phasePart rho u
+u : ℝ
+⊢ (2 * ↑Real.pi * (Complex.I * ↑rho)) ^ n * (fun u => 2 * ↑Real.pi * (Complex.I * ↑rho) * phasePart rho u) u =
+    (2 * ↑Real.pi * (Complex.I * ↑rho)) ^ n * (2 * ↑Real.pi * (Complex.I * ↑rho)) * phasePart rho u
+ImbalancedChen/Part3SmoothReciprocityProfile.lean:192:10: error: This simp argument is unused:
+  norm_mul
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Complex.norm_real, Real.norm_eq_abs, abs_of_pos Real.pi_pos]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
