@@ -216,10 +216,11 @@ original admissibility is not replaced by unproved transposed admissibility.
 | `Part3SmoothReciprocityLogMixed` | The actual signed log-monomial reciprocity weight has uniform bounds for every fixed order of mixed Frechet derivatives, with the constant preceding all varying scales and degree-j modulation cost. Quantitative Fourier L1 separation and the retained spectral bound remain open. | Strict compilation; original-object stock kernel replay; complete 43-declaration types, inventory and transitive axiom audit |
 | `Part3SmoothReciprocityLogRegularity` | The literal signed logarithmic reciprocity weight is genuinely smooth for all real atom parameters, its topological support lies in the fixed localizer support, and compact support follows without a smoothness premise. Quantitative Fourier L1 and spectral estimates are separate obligations. | Strict compilation; original-object stock kernel replay; complete 3-declaration types, inventory and transitive axiom audit |
 | `Part3SchwartzFourierL1Sobolev` | Genuine quantitative Fourier L1 bound in real dimension below eight, controlled by the actual normalized fourth-order operator energy with the constant chosen before all Schwartz functions. Actual-weight, decay-envelope and spectral consumers remain separate obligations. | Strict compilation; original-object stock kernel replay; complete 24-declaration types, inventory and transitive axiom audit |
+| `Part3SmoothReciprocityLogFourierL1` | Root accepted the exact current source after strict compilation, stock replay and complete type/safety/axiom checks of all 14 actual declarations. This owned Fourier L1 input does not establish full foreign-closure replay or the main C/K and hLower/hUpper claims. | Strict compilation; original-object stock kernel replay; complete 14-declaration types, inventory and transitive axiom audit |
 
-These 169 modules contain **3959 complete owned declarations**, including
+These 170 modules contain **3973 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-3959 independent major mathematical theorems.
+3973 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.
@@ -512,7 +513,7 @@ and final unconditional arithmetic lower/upper inputs are still open.
 
 ## Candidates that must not be counted as completed proofs
 
-The 18 unaccepted source candidates are listed with exact source
+The 22 unaccepted source candidates are listed with exact source
 hashes in `verification/proof-continuation/2026-10-15/unaccepted-candidates.json`.
 They are excluded from the accepted module/declaration inventory above.
 Original failed attempts remain failures; replacement sources need their own checks.
@@ -533,8 +534,12 @@ Original failed attempts remain failures; replacement sources need their own che
 * `ActualExtendedThirdCompactFrontier`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactPolicySaving`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdCompactSignedDensityLimit`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `Part3SmoothReciprocityLogFourierL1`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `Part3SmoothReciprocityLogFourierEnvelope`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3SmoothReciprocityLogDecayJet`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `Part3ResonanceOffDiagonalCount`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenUpsilon1011JointSource`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `ActualExtendedThirdAdmittedOwnCubeBridge`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
+* `CurrentChenUpsilon7LargePrimeSwitch`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 
 The ordinary lower means above are baseline means. They do not prove the
 manuscript's stronger causal h248 contribution, complete eleven-term lower
