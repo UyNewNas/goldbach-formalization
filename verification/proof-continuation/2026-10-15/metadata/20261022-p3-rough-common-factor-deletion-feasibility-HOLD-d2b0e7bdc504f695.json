@@ -1,0 +1,56 @@
+{
+  "status": "HOLD",
+  "date": "2026-10-22",
+  "scope": "仅检查原稿rough common-factor删除能否接当前cleaned实际domain；heavy=0，工程Lean冻结，仅新增本JSON。",
+  "verdict": "粗糙性与A=1的算术归约成立；raw-zero可完整支付任意log。现有全W/非零界不足以删除全部g>1，所缺是保留共同p进程的对数级移位除数矩，而非再一个纯gcd计数。不能据此宣布原稿有误，也不能宣布c类谱障碍已消除。",
+  "fixed_source": {
+    "pin": "ba6ec11d800eccc54406490631895e174de85766",
+    "appendix": "paper/source/modules/distribution-medium-completion-20261010.txt，第3、4节；SHA256 93c7f00f3b2c147fde73105fdbd6d7cb56b78ca6ba241901bf0ca729ecfaaad7",
+    "elementary": "本轮native git show读取proof-library/source/q1-elementary-shifted-moments-20261010.txt的E1；原κ分支核对复用20261021-q1-kappa-branch-scope-audit-HOLD.json并与固定Appendix第3节对照。",
+    "local_sha256": {
+      "Part3DistributionTargets.lean": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "Part3PairedAlphaDeletion.lean": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "Part3SharedFirstFactorLargePairedGCDW.lean": "46a6defd68675b0be26a003d84fc735ac0a7720f51483e4d9e5dfa67b03ac58f",
+      "Part3SharedFirstFactorLargePairedGCDNonzero.lean": "708ca30636c8bb28d0b5c21241b704f0c1cb336c48530c8299974f18ac23d93e",
+      "Part3SharedFirstFactorPairCount.lean": "0fb3b9c8af11f17ef73fb422749a2de51b8ac695e08aca6b4599e9e05cf56f30",
+      "Part3ActualLargeGCDBetaMass.lean": "a139b7b5121574715696aae718f7c974dafee909005d646b6cf8472d35c46d23"
+    }
+  },
+  "proven_arithmetic": {
+    "domain": "hd:MediumAdmissible B sigma kappa c0 d，x=d.scale，z=x^(1/(log(log x))^3)，e=d.cleanedAlphaAtom。transposedAtom.beta n=if n∈原alphaCarrier then cleanedAlpha n else 0。Co≠0迫使这两个beta均非零，不是原divisor-bounded beta标签。",
+    "roughness": "mediumAdmissible_cleanedAlphaAtom保持hd的rough门。故每个Ni的任意素因子P满足P>z；cleanedAlpha还给Ni∤a，使所有mNi-a≠0。无需假定Ni与a互素。z>1来自x>exp(exp 1)。",
+    "proof": "若g=gcd(N1,N2)>1，取素因子P|g，则P|N1且z<P≤g；反向g>z⇒g>1。因此在非零配对系数上，1<g与z<g完全等价，包含有序相同标签。W、raw-zero、nonzero三个同mask总和分别在Y=1与Y=z相等（零系数先置零）。",
+    "A_one": "剩余g=1时，supportedPart(N1/g,1)的乘积索引为空，故d1=1且A=g*d1=1。不能用原Y=x^(sigma/4)小门直接得此结论。",
+    "diagonal": "完整大gcd计数含N1=N2；其+U(1+log U)项已计费。原几何给U>x^sigma>1，所以剩余g=1没有相同标签。当前smallCoreSquaredOuterCarrier已经排除相同标签，不能再次删而不追踪其此前支付。",
+    "parameters": "这些算术步骤对κ=0和整个0≤κ≤σ/100都有效，rough cutoff不依赖κ。"
+  },
+  "proven_zero_deletion": {
+    "statement": "固定B、sigma>0、kappa、c0及任意L>0，存在x0，使全部hd且x≥x0满足Eout(d)*||e.sharedLargePairedGCDZero 1||≤x²/(log x)^L。Eout=(sum原betaCarrier||beta||²)*(sum primitiveFirstFactorCarrier||gamma1||²)。",
+    "proof": "先以同mask等式换Y=z。public SharedFirstFactorLargePairedGCDNonzero.shared_large_zero_bound给 ||Zero z||≤|cutoffMass| V(1+log(4Q2Q3))^9*[16U²/(Q1 z)+4U(1+log(2U))]。用sharedFirstFactor_outside_le的Eout≤4VQ1(1+log(2V))^((2^B)^2-1)，以及U≤V、Q1/U≤x^(-sigma)，得≤C x²(1+log x)^K*(1/z+x^(-sigma))，K=((2^B)^2-1)+10。所有尺度≤x的固定幂，常数统一。",
+    "decay": "log z=log x/(loglog x)^3；其与loglog x之比→∞，故任意固定K,L，(log x)^(K+L)/z→0；另x^(-sigma)支付所有log。因此上述完整命题成立，不需额外κcap、不用SW。",
+    "status": "完整数学证明；对应新Lean未实现。现有outside_zero_bound是private，可按以上public两个界复证，不能引用mangled private API。"
+  },
+  "obstruction": {
+    "actual_bound": "public cleanedAlpha_sharedLargePairedGCDW_bound给任意固定epsilon>0的C_epsilon x^epsilon*(4V/Q1+1)*(16U²/Y+4Q1 U(1+log 2U))。乘真实Eout后，Y=z只能得到C_epsilon x²(1+log x)^K*(x^epsilon/z+x^(epsilon-sigma))。同maskW=Zero+Nonzero并不会改善第一项。",
+    "precise_failure": "对每个固定epsilon>0，x^epsilon/z=exp((epsilon-1/(loglog x)^3)*log x)→∞。不能令epsilon随x选为1/(2(loglog x)^3)：API的常数C_epsilon先于所有atom，且没有随epsilon的统一增长控制。即使κ=0也不消除此问题。",
+    "insufficient_apis": "PairCount保留p并给1/Y+Q1/U，是合适计数；ActualLargeGCDBetaMass仅给配对质量/除数均值，没有mNi-a移位进程矩；LargeSupported的平方因子删除也保留同类x^epsilon损失，不能替代所有g>1。RoughAuxiliarySW的单辅助整数删除不控制实际W权。已有这些API均未给所缺log级矩。",
+    "source_difference": "原稿第4节明确先在S3'中删除大tau(mn_i-a)、留下对数截断，才支付(n1,n2)>1。当前cleanedAlpha仅删除Ni|a，没有这个依赖(m,Ni)的截断。因此原稿那一段不能直接套在当前完整W上；需证明截断误差并在相同门内恢复。此处是明确接口义务，不是原稿定理反例。"
+  },
+  "one_sufficient_next_analytic_lemma": {
+    "statement": "保持原0<sigma<1/100、0≤kappa≤sigma/100、c0>0和任意固定B。记alpha_tilde=e.transposedAtom.beta，psi(m)=e.transposedAtom.commonSmoothWeight m，a=d.residue，T(m,n)=fouvryTau 4(|mn-a|)。证明存在C,E,x0（先于所有hd atom）使 M2(d):=Eout(d)*sum_{p∈primitiveFirstFactorCarrier} sum_{m∈e.transposedAtom.commonSmoothCarrier} psi(m)*[sum_{n∈e.transposedAtom.betaCarrier, n∤a, mn≡a (mod p)} |alpha_tilde(n)|*T(m,n)^2]^2 ≤C x²(1+log x)^E。",
+    "logical_status": "这是明确的充分移位矩目标，不是已证明定理/隐含supplier。它无目标谱norm、无gcd删除结论作假设；保留共同p、原alpha区间、原β/γ能量及非零移位。是否能从固定原稿(10)完整推出仍需一个独立有界证明；q=1矩单独不够说明p平均。",
+    "why_suffices": "令T0=(log x)^J。坏对max(T1,T2)>T0时，T1*T2≤T1²*T2²/T0（非零整数的tau4≥1），故其完整正majorant≤M2/T0。好对保留实际原门，以已有PairCount和m进程数计，whole W坏g部分≤C x²(1+log x)^K*T0²*(1/z+x^(-sigma))。先固定矩指数E，再令J>E+所需log精度，前一截断误差有任意log节省，后一项由z支付所有固定log。加已证raw-zero，得到Eout*||e.sharedLargePairedGCDNonzero 1||≤C_L x²/log(x)^L。",
+    "kappa_check": "固定原稿的classical Shiu分支允许原整个移动a范围；本轮未认证其Lean supplier。elementary q=1替代需K≥2^(2max(R,S,1))且κ≤1/(2K)。一般固定B及已给κ不保证此cap；κ=0满足它，但不能拿κ=0或缩κ证明原RestrictedMediumObligation。不能把选应用参数的存在性替代其全称量词。"
+  },
+  "contract_and_interfaces": {
+    "no_false_power": "z=x^o(1)，仅由1/z不能声称任何固定x^(-delta)节省，更不能保留现有Y=x^(sigma/4)门或由其得到的sigma/8中间幂界。本路线最终需要任意log删除，不要求该固定幂contract。",
+    "unchanged_main_if_moment_proved": "原RestrictedMediumTarget只要求对所有L的O(x/log^L x)。在原平方能量层支付x²/log^L足够；最终开方使用更高log精度。有限dyadic选择和端点固定常数用再提高L支付。不会减小原σ/κ范围，也不改变最终C、K、b或main命题。",
+    "explicit_new_obligations": [
+      "先证明上述M2（或同样保留p且无固定x^epsilon损失的截断误差定理），再证明全g>1 nonzero任意log删除；目前不能据原full W范数控制任意signed子mask。",
+      "从已有清理后完整nonzero能量入口，使用三mask恒等式的Ybeta=Ysupport=1；g≤1时large-supported支严格为空，剩余smallcore(1,1)有A=1。这样不需对当前smallg子块做非法范数单调比较。",
+      "新增/泛化固定Y=x^(sigma/4)的uniformAuxiliarySW_signedError_sq_le_cleanedSmallPairedSupportedNonzero_add_log_payment、smoothFiniteFrequency_log_payment、squared_resonance_Cauchy和SupportedRowConsumer到Y=1；底层有限门/尾界多数参数一般，但public已冻结contracts不能自动改写。",
+      "保留原闭端点、所有有序配对和真实Eout；不重复收取β能量或gamma1能量；tail-product乘法重数仍由tau与已有log^9支付。A=1只消除额外root余类问题，bare非零7/32谱仍未证明。"
+    ]
+  },
+  "stop": "HOLD：本轮可实现的是rough同mask等式与raw-zero删除；完整rough共同因子删除因上述明确移位矩缺口未闭合。无新Lean/编译/检查/构建/Git修改；quota39used/61remaining，≤40停止规则未触发，主目标未完成。"
+}

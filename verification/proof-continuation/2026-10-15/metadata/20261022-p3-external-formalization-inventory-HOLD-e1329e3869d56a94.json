@@ -1,0 +1,51 @@
+{
+  "status": "HOLD",
+  "date": "2026-10-22",
+  "scope": "限定外部检索 Lean/Kuznetsov/Kloosterman 谱大筛形式化；最多4个聚焦检索；不编译、安装、改Lean、改Git或改主定理。原1+1.75主定理未完成；C1.96176252、K6.7617368保持。",
+  "basis": {
+    "route_review": ".lake/proof-continuation/source-reviews/20261022-p3-one-quantitative-step-route-review-HOLD.json",
+    "exact_remaining_theorem": "对Appendix (25)实际平滑互逆核，在1≤A≤x^(sigma/2)、(J,A)=1、j∈(Z/AZ)^×时保留1_{c≡j mod A}、(bz,c)=1、(a,z)=1、原复beta及root标签；在完整slow的合法共同Fourier分离后，证明与(25)同一二次多项式界，常数对A,j一致或给出可支付额外A幂；保持共同completed m区间、共同additive phase，并兼容真实外层gcd/CRT结构。",
+    "review_sha256": "dcd1daaf8096b9d154c2ff3d38e5937d9a8d9b38917935bd7bc866e72c329dac"
+  },
+  "queries": [
+    "Lean 4 Kuznetsov formula spectral large sieve GitHub",
+    "Pascadi Lean formalization Kloosterman spectral large sieve",
+    "Assing Blomer Lean theorem spectral large sieve GitHub",
+    "Kim Sarnak Lean formalized 7/32 theta spectral large sieve"
+  ],
+  "findings": [
+    {
+      "source": "https://github.com/openai/math/blob/main/lean/OAI/NumberTheory/Ostmann/Preliminaries/SievePhaseGram.lean",
+      "pin": "网页检索只显示main；commit未能确定，故不作固定版本依赖。",
+      "exact_declarations": "sieveHalfPhase_star、sieveHalfPhase_difference、finite_complex_norm_expansion、sieve_phase_gram、twisted_cosecant_bound。可见代码中均由Lean证明块给出；有限Gram展开把相位平方和改写成双和，twisted_cosecant_bound是圆分离下的cosecant核估计。",
+      "evidence": "GitHub源码页面可核对定理文字与证明；本次没有同commit官方CI/lean-eval-submissions证据、完整transitive依赖/公理审计或kernel复验。不能据此标记可靠0sorry producer。",
+      "match": "只覆盖一般有限相位Gram和特定cosecant核。未见Kloosterman/Kuznetsov、theta=7/32、外层c平均、c≡j mod A谱子和或本任务三相/根标签/共同完成区间。不是强谱producer。",
+      "reuse": "若root审阅后确认适用，可参考finite_complex_norm_expansion/sieve_phase_gram的有限双和展开；twisted_cosecant_bound只可能作为分离性/核代数参考，不能提供目标估计。",
+      "root_followup": "若需复用，先在固定commit读取完整源码、lake依赖和CI，再判定其抽象Gram代数是否有必要；无须作为当前路线的主供应引理。"
+    },
+    {
+      "source": "https://arxiv.org/abs/2309.08522",
+      "authors": "Jared Duker Lichtman",
+      "pin": "arXiv版本页面；不是Lean仓库或Lean commit。",
+      "exact_result": "论文使用Deshouillers–Iwaniec谱大筛，并研究异常谱及7/32 Ramanujan–Petersson参数依赖；作者摘要明确说明对Goldbach beyond square-root barrier的应用。",
+      "evidence": "作者论文页面/原文为数学结果的primary source；没有Lean声明、源码依赖或Lean CI证据。",
+      "match": "经典解析估计说明目标技术来源，但原论文界本身不保持本任务按c余类的mask、完整slow、根标签与共同additive phase，也没有可直接导入的形式化producer。普通BV更不能代替所需第7项范围（至少N^0.708）。",
+      "root_followup": "可供root人工比对(25)所需参数与异常谱成本；不能计入Lean已证供应项。"
+    }
+  ],
+  "negative_result": "四个限定查询未发现命题范围匹配、固定pin且有同一commit内核/CI证据的Lean强谱producer。本结论仅限本次检索，不声称全网不存在。已知goldbach native 09b97db5764ade1246bfb77206baa1b124760958的completeKloosterman_weil/reciprocalInterval_fouvry是单模sqrt(q*gcd)原语，没有7/32谱平均或目标c类子和；本轮不重复包装为候选。已知947f799 chen_theorem属于孪生素数/P2范围，本轮不重复检索。",
+  "locally_reusable_verified_inputs_from_route_review": [
+    "已验收LichtmanSignedDifferenceMultiplicity.signedDifference_multiplicityL2_bound：完整signed频率的显式576系数L2界及端点归零。",
+    "Mathlib norm_sum_le、sum_sq_le_sq_sum_of_nonneg、card_eq_sum_card_fiberwise：支撑已选加权细分系数L2引理。",
+    "它们仅处理系数能量；不产生c类谱二次多项式界。PairedFourier/RowAdapter等仍为source-reviewed，不能当作已验收kernel API。"
+  ],
+  "conclusion": "本次未找到可复用的0sorry强谱producer。目标c≡j mod A的保门、保根、保slow且uniform-in-A,j谱子和仍是独立未解供应项；现有有限Gram/系数L2原语不足以闭合P3。若root发现当前strongproducer，请据其固定commit再审源码依赖与官方验证证据。",
+  "accounting": {
+    "new_source_review_files": 1,
+    "lean_files_changed": 0,
+    "compile_or_checker_run": false,
+    "git_mutation": false,
+    "main_completion": false,
+    "quota_stop_threshold_remaining_percent": 40
+  }
+}

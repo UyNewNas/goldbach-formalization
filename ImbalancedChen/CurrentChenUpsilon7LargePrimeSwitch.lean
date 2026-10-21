@@ -138,7 +138,7 @@ theorem currentChenUpsilon7_largePrime_semiprime_card_eq_APSum (N : ℕ) :
       have heq := (seventh_switch_backward ht hr hP).2.1
       simp only [heq]
   have hreal := congrArg (fun n : ℕ => (n : ℝ)) hcard
-  simpa only [T, Finset.card_sigma, Nat.cast_sum,
+  simpa only [T, Finset.card_sigma, Nat.cast_sum, Finset.sum_sigma,
     currentChenUpsilon7LargePrimeSemiprimeAPSum] using hreal
 
 /-- The accepted error budget leaves exactly the two large-original-prime

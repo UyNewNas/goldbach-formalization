@@ -224,10 +224,11 @@ original admissibility is not replaced by unproved transposed admissibility.
 | `Part3NonresonantManuscriptCostAlgebra` | Root accepted this exact source after strict compilation, original-object stock replay and complete type, inventory, safety and axiom checks of all 29 actual generated declarations. It proves scalar prefactor, diagonal, spectral and zero-mode normalizations and original zero-mode payment under explicit positive geometric hypotheses. The actual spectral bound, original core C/K suppliers and nonzero 7/32 estimate remain open. | Strict compilation; original-object stock kernel replay; complete 29-declaration types, inventory and transitive axiom audit |
 | `Part3SharedFirstFactorGeneralDRootPacket` | Root accepted the exact 183-line c165 source after strict compilation, original-object stock replay and complete type, inventory, safety and standard-axiom checks of all 3 actual generated declarations, with exact full inputs after and current176 census. Actual gcd normalization, constructed root modulus and coprimality gates, and full signed Fourier phase retain the slow factor. The nonzero spectral estimate, C/K suppliers and main hLower/hUpper claims remain open. | Strict compilation; original-object stock kernel replay; complete 3-declaration types, inventory and transitive axiom audit |
 | `FirstExitAdmittedFrontierTuples` | Root accepted the exact 6d68 source after strict compilation, original-object stock replay and complete type, unique inventory, safety and standard-axiom checks of all 25 actual generated declarations, with exact proper/full inputs before and after and current177 census. The original policy admitted selections have exact history and tuple permutations with multiplicities retained, finite no-repetition and exact ordinary and weighted sum identities. The sharp K arithmetic mean, original K supplier and main hLower/hUpper claims remain open. | Strict compilation; original-object stock kernel replay; complete 25-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon7LargePrimeSwitch` | Root accepted the exact 652017e9 source after strict compilation, original-object stock replay and complete type, unique inventory, safety and standard-three-axiom checks of all 15 actual generated declarations, with exact proper/full inputs before and after and current178 census. The original large-prime semiprime branch has an exact finite AP switch, retaining the original selector, labels, order, repeated prime factors, quotient primality and coefficient two. The analytic AP main mean at moduli at least N^.708, sharp C/K suppliers and main hLower/hUpper theorem remain OPEN. | Strict compilation; original-object stock kernel replay; complete 15-declaration types, inventory and transitive axiom audit |
 
-These 177 modules contain **4094 complete owned declarations**, including
+These 178 modules contain **4109 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-4094 independent major mathematical theorems.
+4109 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.
@@ -471,6 +472,10 @@ second prime. Its full count splits exactly into unit, prime and ordered
 two-prime fibres, retaining central-N square-root walls, weak endpoints,
 prime squares and outer-label multiplicity. No seventh analytic mean or
 full eleven-row lower bound follows from this finite partition alone.
+The separately accepted 15-declaration large-original-prime AP switch
+retains the original selector, order, repeated primes, quotient primality
+and coefficient two. Its AP main mean at moduli at least N^.708, sharp
+C/K suppliers and the main theorem remain OPEN.
 
 The literal complete nonzero series is now partitioned into all
 three paired/supported masks. A proved cleaned-alpha size bound and squared
@@ -525,13 +530,14 @@ hashes in `verification/proof-continuation/2026-10-15/unaccepted-candidates.json
 They are excluded from the accepted module/declaration inventory above.
 Original failed attempts remain failures; replacement sources need their own checks.
 
+* `Part3WeightedRefinedSignedDifference`: Root applied the exact f26985d7 source after author and independent source-only review; it remains uncompiled and unaccepted. It retains a genuine subset and one actual label per original source index, arbitrary complex weights with norm at most M, the original 576 energy budget multiplied by M squared and the exact zero endpoint for nu at least 8*F*H*S. No c-class spectral supplier, actual packet embedding or kernel acceptance is claimed.
 * `Part3ReciprocalAPSupplier`: New target not executed; limited external prerequisite bootstrap stopped at a resource failure.
 * `Certificates.PairedV2FullCertificate`: Not executed; requires the full original-strip chain, beyond the frozen baseline pilot.
 * `ActualThirdPrefixTailIntegral`: Broad arithmetic tuple/profile bridge is not compiled; the separate canonical integral core is verified.
-* `Part3SharedFirstFactorGeneralDPairedFourier`: Independent source review passed for this exact source; it remains uncompiled and unaccepted. No analytic target, spectral estimate or kernel acceptance is claimed.
+* `Part3SharedFirstFactorGeneralDPairedFourier`: The current 26108146 three-proof repair source is a source-only candidate after the preserved original 0248 strict failure. The current repaired source remains uncompiled and unaccepted; its exact general-D phase, original row factors and spectral obligations are retained. No analytic target, spectral estimate, sharp C/K supplier or kernel acceptance is claimed.
 * `Part3SharedFirstFactorGeneralDRowAdapter`: Source-only complete guarded-row and original finite-block equality adapter with all four signed actual general-D phase packets and the original resonance mask retained. It remains uncompiled and unaccepted; its paired Fourier prerequisite is also unaccepted. No complementary-block positivity or spectral bound is claimed.
 * `Part3SharedFirstFactorGeneralDSupportedRowConsumer`: Source-only 95-line cleaned supported-carrier consumer of the unchanged general-D row adapter. Original admissibility and literal supported-carrier membership discharge its positivity premises while preserving the actual cleaned atom, original scale cutoffs, signed resonance mask and complete four-branch packets. Author checkpoint 37d95e96 and independent review 2ae4bc6c record source-only review completion; kernel validation remains pending. The imported row adapter and paired Fourier prerequisite remain uncompiled and unaccepted; no complementary-block positivity, spectral bound or kernel acceptance is claimed.
-* `Part3ResonanceOffDiagonalCount`: The current e3acf880 projection-repair source remains uncompiled and unaccepted. The original 1a0e strict failure and source-only repair evidence remain retained. The October22 independent review falsely reported LF/CR literal and JSON defects; its R1/R2 rejection was retracted in the preserved correction checkpoint after actual AST-byte inspection, with no source repair required. Derived input preparation and corrected static review are advisory metadata, not kernel acceptance; original labels, masks, endpoints and weights are retained.
+* `Part3ResonanceOffDiagonalCount`: The current 8826a1ca explicit projection-result-type repair is applied as source only and remains uncompiled and unaccepted. Original 1a0e and e3ac strict failures are retained. New current-source proper/input preparation is advisory and does not accept the source. The prior LF/CR and JSON rejection was retracted after actual AST-byte inspection; original labels, masks, endpoints and weights are retained.
 * `Part3PairedUpperEndpointSW`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualFrozenSlotCoefficientRegrouping`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualFrozenSelectedPairAssignment`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
@@ -547,7 +553,6 @@ Original failed attempts remain failures; replacement sources need their own che
 * `ActualExtendedThirdCompactSignedDensityLimit`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `CurrentChenUpsilon1011JointSource`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 * `ActualExtendedThirdAdmittedOwnCubeBridge`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
-* `CurrentChenUpsilon7LargePrimeSwitch`: Source candidate only until exact-source strict compilation and complete owned replay/type/axiom evidence are accepted; no full main theorem is asserted.
 
 The ordinary lower means above are baseline means. They do not prove the
 manuscript's stronger causal h248 contribution, complete eleven-term lower

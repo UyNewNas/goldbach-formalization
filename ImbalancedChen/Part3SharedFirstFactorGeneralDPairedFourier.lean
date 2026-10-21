@@ -58,14 +58,14 @@ private theorem inverse_pair_modEq {m n t t' : ℕ}
       _ ≡ (t : ℤ) * j [ZMOD m] := by
         simpa only [mul_one] using hx'.mul_left ((t : ℤ) * j)
   have hdifference := (hleft.mul_left h).sub (hright.mul_left h')
-  convert hdifference using 1 <;> ring
+  convert hdifference using 1; ring
 
 private theorem fourier_pair_real (h h' : ℤ) (x x' : ℝ) :
     fourier h (x : UnitAddCircle) * star (fourier h' (x' : UnitAddCircle)) =
       fourier 1 ((((h : ℝ) * x - (h' : ℝ) * x') : ℝ) : UnitAddCircle) := by
   simp only [Complex.star_def]
   rw [← fourier_neg]
-  simp only [fourier_coe_apply, div_one]
+  simp only [fourier_coe_apply]
   rw [← Complex.exp_add]
   congr 1
   push_cast
@@ -283,9 +283,12 @@ theorem sharedGeneralD_paired_fourier
           (CanonicalReciprocalPhase.wPhaseInverse (b * t') c : ℝ) / c) : ℝ) :
             UnitAddCircle))) := by ring
     _ = _ := by
-      simpa only [k, z, mul_assoc] using
+      have hpair :=
         congrArg₂ (fun x y : ℂ => x * y)
           (congrArg₂ (fun x y : ℂ => x * y) hrootpair hslowpair) hrecippair
+      dsimp only [D, d, q, r0, t, t', g, d1, n1, n2, A, w0, b, c,
+        zeta, K, L, L', f, k, z] at hpair ⊢
+      simpa only [mul_assoc] using hpair
 
 /-- Apply this to the complete smooth Fourier atoms F,G, including their
 low pass and Poisson amplitudes. It is the exact real-projection Gram,
