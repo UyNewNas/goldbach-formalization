@@ -175,7 +175,8 @@ theorem sharedGeneralDRootPacket_fourier
               (A * n2 * ((r * s) / D)) c : ℝ)) / ((n1 : ℝ) * w0)) : ℝ) :
               UnitAddCircle) at he
   have hcR : (c : ℝ) = (n1 : ℝ) * w0 := Nat.cast_mul n1 w0
-  simpa only [hrootden, hrecip, hcR] using he
+  rw [hrootden, hrecip, ← hcR] at he
+  exact he
 
 end
 
