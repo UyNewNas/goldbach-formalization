@@ -1,0 +1,534 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-tau-deletion-fiber-source-proposal-v2-author-HOLD",
+  "created_utc": "2026-10-21T19:41:19.477772Z",
+  "author": "/root/e1_interval_review_sol_high_oct22",
+  "status": "ONE_SITE_GENUINE_POSITIVITY_PARAMETER_USE_SOURCE_PROPOSAL_UNCOMPILED_HOLD",
+  "HOLD": true,
+  "scope": "Source-proposal-only v2 of the complete 304-LF native finite tau truncation proposal. Exactly one proof expression changes at original/new line278. All eighteen public theorem types, imports, definitions, historical comments and the other seventeen complete proofs remain byte-identical. Root independent review of this local proof is pending. No actual Lean/runtime/pin writes or heavy actions.",
+  "original": {
+    "path": ".lake/proof-continuation/source-reviews/drafts/20261022-tau-deletion-fiber-source-proposal.txt",
+    "sha256": "3861e14b0fe94d2117a9f697f8704a54a783639238be97ae6e66e47a69299cbf",
+    "bytes": 14779,
+    "lf_lines": 304
+  },
+  "artifact": {
+    "path": ".lake/proof-continuation/source-reviews/drafts/20261022-tau-deletion-fiber-source-proposal-v2.txt",
+    "sha256": "8bf0caff8389f127ce21c5519d5745ef657894c2ccc050b12a8c349375d35b21",
+    "bytes": 14804,
+    "lf_lines": 304
+  },
+  "original_author_checkpoint": {
+    "path": ".lake/proof-continuation/source-reviews/20261022-tau-deletion-fiber-source-proposal-author-HOLD.json",
+    "sha256": "957f75a60f2f4c21f8199a076fcbd8cca1c6092d15af95a871147cfbff5cf7ba",
+    "bytes": 54965,
+    "lf_lines": 778
+  },
+  "original_full_independent_review": {
+    "path": ".lake/proof-continuation/source-reviews/20261022-tau-deletion-fiber-independent-source-review-HOLD.json",
+    "sha256": "739853160d034643b65c60529a530d9be7caaf31cf0ba6aa60d1d6b1ddf0490e",
+    "bytes": 33813,
+    "lf_lines": 662
+  },
+  "original_review_status": "Earlier complete independent eighteen-proof source review found no_static_blocker at original SHA3861e14b. Reused only for the byte-identical code; this new one-site repair is author-only pending root review.",
+  "actual_base_observation": {
+    "artifact": {
+      "path": "ImbalancedChen/Part3ElementaryTauTruncation.lean",
+      "sha256": "8e315aec5a3f00506ac26e8710474c47a448b043d3cf38be27c4df30c18a478f",
+      "bytes": 11349,
+      "lf_lines": 236
+    },
+    "full_source_read": true,
+    "modified": false,
+    "note": "Actual workspace file was observed at 236LF/SHA8e315aec. Parent separately reports accepted finite-core181 artifacts; no runtime rebind, receipt validation or acceptance inference was performed here."
+  },
+  "warning_rationale": {
+    "configured_linter": "Actual Lean v4.33.0-rc1 UnusedVariables.lean defaults linter.unusedVariables=true and funArgs=true. analyzeTactics=false still lints declaration parameters. The old public binder hn has no explicit source reference in this proof.",
+    "strict_runtime_evidence": "Read prior local strict-command receipt embedded in 20261021-tail-b25d independent review: command includes -DwarningAsError=true and warnings_as_errors=true. This is actual historical strict invocation evidence, not a claim that this new source was run.",
+    "lakefile": "Actual lakefile.toml has no unused-variable suppression or warning override.",
+    "exact_old_warning_observed": false,
+    "static_risk": "Possible unused-parameter diagnostic is supported by enabled linter/default behavior and absent explicit reference. The zero-branch omega may inspect arithmetic context; this review does not claim its exact linter outcome without execution. The new direct identifier occurrence and genuinely dependent positivity derivation remove reliance on any incidental tactic use.",
+    "no_linter_option_change": true,
+    "no_parameter_rename_or_removal": true
+  },
+  "exact_repair": {
+    "declaration": "card_deletionFiber_orderedFactorTuples_le_fouvryTau",
+    "complete_old_type_and_body": "theorem card_deletionFiber_orderedFactorTuples_le_fouvryTau {K n d : ℕ}\n    (hK : 2 ≤ K) (hn : 0 < n) (hd : d ∈ n.divisors) (i : Fin K) :\n    (deletionFiber (orderedFactorTuples K n) i d).card ≤ fouvryTau (K - 1) d := by\n  cases K with\n  | zero => omega\n  | succ k =>\n      simpa only [Nat.succ_eq_add_one, Nat.add_sub_cancel] using\n        (card_deletionFiber_le_fouvryTau_succ (orderedFactorTuples (k + 1) n) i\n          (Nat.pos_of_mem_divisors hd))\n",
+    "complete_new_type_and_body": "theorem card_deletionFiber_orderedFactorTuples_le_fouvryTau {K n d : ℕ}\n    (hK : 2 ≤ K) (hn : 0 < n) (hd : d ∈ n.divisors) (i : Fin K) :\n    (deletionFiber (orderedFactorTuples K n) i d).card ≤ fouvryTau (K - 1) d := by\n  cases K with\n  | zero => omega\n  | succ k =>\n      simpa only [Nat.succ_eq_add_one, Nat.add_sub_cancel] using\n        (card_deletionFiber_le_fouvryTau_succ (orderedFactorTuples (k + 1) n) i\n          (Nat.pos_of_dvd_of_pos (Nat.mem_divisors.mp hd).1 hn))\n",
+    "changed_line": 278,
+    "old_expression": "(Nat.pos_of_mem_divisors hd))",
+    "new_expression": "(Nat.pos_of_dvd_of_pos (Nat.mem_divisors.mp hd).1 hn))",
+    "proof": "Nat.mem_divisors.mp hd gives d divides n. Actual Nat.pos_of_dvd_of_pos takes that divisibility and hn:0<n, yielding d>0; its native proof excludes d=0 because 0 divides n forces n=0, contradicting hn. The positivity is the exact argument required by card_deletionFiber_le_fouvryTau_succ. The hK contradiction branch and K=succ k simplification remain unchanged.",
+    "genuine_hn_use": "hn is directly passed as the second proof argument to Nat.pos_of_dvd_of_pos, and that theorem proof uses its positive-total-product premise to rule out a zero divisor. This is mathematical use, with no dummy have, string reference or option suppression.",
+    "target_unchanged": "Native tau_(K-1)(d) bound on the exact existing deletionFiber(orderedFactorTuples K n) i d; hK,hn,hd,i and their public type remain identical.",
+    "author_static_verdict": "no_static_blocker",
+    "independent_review": "PENDING_ROOT_LOCAL_PROOF_REVIEW",
+    "elaboration_or_linter_run": false
+  },
+  "complete_unified_diff": "--- a/source-reviews/drafts/20261022-tau-deletion-fiber-source-proposal.txt\n+++ b/source-reviews/drafts/20261022-tau-deletion-fiber-source-proposal-v2.txt\n@@ -275,4 +275,4 @@\n   | succ k =>\n       simpa only [Nat.succ_eq_add_one, Nat.add_sub_cancel] using\n         (card_deletionFiber_le_fouvryTau_succ (orderedFactorTuples (k + 1) n) i\n-          (Nat.pos_of_mem_divisors hd))\n+          (Nat.pos_of_dvd_of_pos (Nat.mem_divisors.mp hd).1 hn))\n",
+  "unique_byte_transform": {
+    "encoding": "UTF8 without BOM; LF",
+    "old_token": "(Nat.pos_of_mem_divisors hd))",
+    "new_token": "(Nat.pos_of_dvd_of_pos (Nat.mem_divisors.mp hd).1 hn))",
+    "old_token_occurrences": 1,
+    "new_token_occurrences": 1,
+    "byte_offset_zero_based": 13577,
+    "old_token_bytes": 29,
+    "new_token_bytes": 54,
+    "byte_length_delta": 25,
+    "unchanged_prefix_bytes": 13577,
+    "unchanged_prefix_sha256": "bdb7ea0b5466b932155d1a8bd98aa99f7c2399d289b9056d31db3253fb1e58c2",
+    "unchanged_suffix_bytes": 1173,
+    "unchanged_suffix_sha256": "a56b9e63754bb511e7a7d5a4ba0605391983ca8e034681ba25dbb5566b7a0255",
+    "complete_forward": "Replace the unique old_token by new_token; leave prefix/suffix byte-identical.",
+    "complete_inverse": "Replace the unique new_token by old_token; reconstructs the entire original raw-byte SHA3861e14b0fe94d2117a9f697f8704a54a783639238be97ae6e66e47a69299cbf.",
+    "inverse_roundtrip_exact": true,
+    "inverse_roundtrip_sha256": "3861e14b0fe94d2117a9f697f8704a54a783639238be97ae6e66e47a69299cbf",
+    "source_whole_utf8_roundtrip_exact": true,
+    "old_lf_lines": 304,
+    "new_lf_lines": 304,
+    "imports_identical": true,
+    "definitions_identical": true,
+    "public_types_identical": 18,
+    "other_full_proofs_identical": 17,
+    "historical_comments_identical": true
+  },
+  "all_old_and_new_public_theorem_types_and_declaration_hashes": [
+    {
+      "name": "mem_orderedFactorTuples_iff",
+      "span": [
+        72,
+        82
+      ],
+      "type_last": 73,
+      "complete_public_type": "theorem mem_orderedFactorTuples_iff {k n : ℕ} (hn : n ≠ 0) {a : Fin k → ℕ} :\n    a ∈ orderedFactorTuples k n ↔ (∏ j, a j) = n := by\n",
+      "old_type_normalized_lf_utf8_sha256": "90f3ed5f86b396da6cfef16e2bf8bec2668d93dbe42b7f79932bd9ae2985bb18",
+      "new_type_normalized_lf_utf8_sha256": "90f3ed5f86b396da6cfef16e2bf8bec2668d93dbe42b7f79932bd9ae2985bb18",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "803d83873396bf21c19e433d867754ac06cb0b56c396fc9eed94292214c31a2c",
+      "new_full_declaration_normalized_lf_utf8_sha256": "803d83873396bf21c19e433d867754ac06cb0b56c396fc9eed94292214c31a2c",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "orderedFactorTuples_zero",
+      "span": [
+        85,
+        105
+      ],
+      "type_last": 86,
+      "complete_public_type": "theorem orderedFactorTuples_zero (n : ℕ) :\n    orderedFactorTuples 0 n = if n = 1 then {Fin.elim0} else ∅ := by\n",
+      "old_type_normalized_lf_utf8_sha256": "fff209f71e69364bf78bb4bc802601093f8c7f35171e6decc74f6d945dc5fa3d",
+      "new_type_normalized_lf_utf8_sha256": "fff209f71e69364bf78bb4bc802601093f8c7f35171e6decc74f6d945dc5fa3d",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "c04b5e63253e95b10cf55ed95f05f1447a2c113abb9ba321fbdbe1a83d9b049b",
+      "new_full_declaration_normalized_lf_utf8_sha256": "c04b5e63253e95b10cf55ed95f05f1447a2c113abb9ba321fbdbe1a83d9b049b",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "splitHeadTail_mem",
+      "span": [
+        117,
+        126
+      ],
+      "type_last": 119,
+      "complete_public_type": "theorem splitHeadTail_mem {k n : ℕ} (hn : 0 < n) {a : Fin (k + 1) → ℕ}\n    (ha : a ∈ orderedFactorTuples (k + 1) n) :\n    splitHeadTail k a ∈ headTailCarrier k n := by\n",
+      "old_type_normalized_lf_utf8_sha256": "84988530920f3596ce659edcc0f4cdb0436fa3c0af6ccbf3fdd01d61c0bb431c",
+      "new_type_normalized_lf_utf8_sha256": "84988530920f3596ce659edcc0f4cdb0436fa3c0af6ccbf3fdd01d61c0bb431c",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "a99e039c4a8ad460533e763641eff0ee068060086bf6cfa8008c3e938a76a972",
+      "new_full_declaration_normalized_lf_utf8_sha256": "a99e039c4a8ad460533e763641eff0ee068060086bf6cfa8008c3e938a76a972",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "joinHeadTail_mem",
+      "span": [
+        128,
+        138
+      ],
+      "type_last": 130,
+      "complete_public_type": "theorem joinHeadTail_mem {k n : ℕ} (hn : 0 < n) {p : Σ _ : ℕ × ℕ, Fin k → ℕ}\n    (hp : p ∈ headTailCarrier k n) :\n    joinHeadTail k p ∈ orderedFactorTuples (k + 1) n := by\n",
+      "old_type_normalized_lf_utf8_sha256": "f22d02b8d4a08fec5f6d229a9494da94d8a3a1064a967d8107e4656100ab7a14",
+      "new_type_normalized_lf_utf8_sha256": "f22d02b8d4a08fec5f6d229a9494da94d8a3a1064a967d8107e4656100ab7a14",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "b74f375d098ca3030c703e34475e8cdf2e356f00c28f1b6b60eb3dd89c0b5bf7",
+      "new_full_declaration_normalized_lf_utf8_sha256": "b74f375d098ca3030c703e34475e8cdf2e356f00c28f1b6b60eb3dd89c0b5bf7",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "join_splitHeadTail",
+      "span": [
+        140,
+        142
+      ],
+      "type_last": 141,
+      "complete_public_type": "theorem join_splitHeadTail (k : ℕ) (a : Fin (k + 1) → ℕ) :\n    joinHeadTail k (splitHeadTail k a) = a := by\n",
+      "old_type_normalized_lf_utf8_sha256": "6f475993db776a4d22bd6e5ecd1ca7f55643d4bed260fb600e4847bacd44489d",
+      "new_type_normalized_lf_utf8_sha256": "6f475993db776a4d22bd6e5ecd1ca7f55643d4bed260fb600e4847bacd44489d",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "18de010ba30985b31744d862fe15d253881329206859df40de7e6c2bedf5f1f6",
+      "new_full_declaration_normalized_lf_utf8_sha256": "18de010ba30985b31744d862fe15d253881329206859df40de7e6c2bedf5f1f6",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "split_joinHeadTail",
+      "span": [
+        144,
+        150
+      ],
+      "type_last": 145,
+      "complete_public_type": "theorem split_joinHeadTail {k n : ℕ} {p : Σ _ : ℕ × ℕ, Fin k → ℕ}\n    (hp : p ∈ headTailCarrier k n) : splitHeadTail k (joinHeadTail k p) = p := by\n",
+      "old_type_normalized_lf_utf8_sha256": "a7c4e6efbd4ca9b646fe45dd02678f33ba23721036647a0a899e19086f1124c6",
+      "new_type_normalized_lf_utf8_sha256": "a7c4e6efbd4ca9b646fe45dd02678f33ba23721036647a0a899e19086f1124c6",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "7d777a75af0844fc301e05d46b54d1a06ed9b5b7f6aa1ff1d9923ca70353b3ca",
+      "new_full_declaration_normalized_lf_utf8_sha256": "7d777a75af0844fc301e05d46b54d1a06ed9b5b7f6aa1ff1d9923ca70353b3ca",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "card_orderedFactorTuples_succ",
+      "span": [
+        153,
+        166
+      ],
+      "type_last": 154,
+      "complete_public_type": "theorem card_orderedFactorTuples_succ (k : ℕ) {n : ℕ} (hn : 0 < n) :\n    (orderedFactorTuples (k + 1) n).card = ∑ d ∈ n.divisors, (orderedFactorTuples k d).card := by\n",
+      "old_type_normalized_lf_utf8_sha256": "aecea23eb9260e792de9e3aef63e1f1d0c134997be4882cbb580c97e262371be",
+      "new_type_normalized_lf_utf8_sha256": "aecea23eb9260e792de9e3aef63e1f1d0c134997be4882cbb580c97e262371be",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "441806dcc11c992a87b45bcfffe0ec7282a366889c43a46d2d8e3251251e1272",
+      "new_full_declaration_normalized_lf_utf8_sha256": "441806dcc11c992a87b45bcfffe0ec7282a366889c43a46d2d8e3251251e1272",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "card_orderedFactorTuples_eq_fouvryTau",
+      "span": [
+        169,
+        180
+      ],
+      "type_last": 170,
+      "complete_public_type": "theorem card_orderedFactorTuples_eq_fouvryTau (k n : ℕ) (hn : 0 < n) :\n    (orderedFactorTuples k n).card = fouvryTau k n := by\n",
+      "old_type_normalized_lf_utf8_sha256": "d91246af1de48eae8c6aa396a657336eba2f3995dce101e70366a2903e6261d3",
+      "new_type_normalized_lf_utf8_sha256": "d91246af1de48eae8c6aa396a657336eba2f3995dce101e70366a2903e6261d3",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "da8480d479ae66cb3950f0bb7a58ce16e0b37c4f20087e80b768d31575295231",
+      "new_full_declaration_normalized_lf_utf8_sha256": "da8480d479ae66cb3950f0bb7a58ce16e0b37c4f20087e80b768d31575295231",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "prod_eraseAt",
+      "span": [
+        189,
+        198
+      ],
+      "type_last": 190,
+      "complete_public_type": "theorem prod_eraseAt (a : ι → ℕ) (i : ι) :\n    (∏ j, eraseAt a i j) = deletedProduct a i := by\n",
+      "old_type_normalized_lf_utf8_sha256": "793829106eb147ee377a55eaed5a42f91940d83acca405cc3a6e53e4abb8eeed",
+      "new_type_normalized_lf_utf8_sha256": "793829106eb147ee377a55eaed5a42f91940d83acca405cc3a6e53e4abb8eeed",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "2c19278798651a4c4b34dbcb5a37f0cf6ba5402e4dd14095070e6326309ed4fa",
+      "new_full_declaration_normalized_lf_utf8_sha256": "2c19278798651a4c4b34dbcb5a37f0cf6ba5402e4dd14095070e6326309ed4fa",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "deletionFiber_normalized",
+      "span": [
+        201,
+        205
+      ],
+      "type_last": 202,
+      "complete_public_type": "theorem deletionFiber_normalized (S : Finset (ι → ℕ)) {i : ι} {d : ℕ} {b : ι → ℕ}\n    (hb : b ∈ deletionFiber S i d) : b i = 1 ∧ (∏ j, b j) = d := by\n",
+      "old_type_normalized_lf_utf8_sha256": "e1638eca651aa7f25d3df31b10e837334a03c75614df395794f017738ab9097c",
+      "new_type_normalized_lf_utf8_sha256": "e1638eca651aa7f25d3df31b10e837334a03c75614df395794f017738ab9097c",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "344fe46dad3be32c14d3b87888a487ea1e2bac13b6d1816272ed013e7ce99d91",
+      "new_full_declaration_normalized_lf_utf8_sha256": "344fe46dad3be32c14d3b87888a487ea1e2bac13b6d1816272ed013e7ce99d91",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "compressDeleted_prod",
+      "span": [
+        213,
+        219
+      ],
+      "type_last": 215,
+      "complete_public_type": "theorem compressDeleted_prod {k : ℕ} (S : Finset (Fin (k + 1) → ℕ))\n    {i : Fin (k + 1)} {d : ℕ} {b : Fin (k + 1) → ℕ}\n    (hb : b ∈ deletionFiber S i d) : (∏ j, compressDeleted k i b j) = d := by\n",
+      "old_type_normalized_lf_utf8_sha256": "2d59515b8d9abe865e83f473b3c5bafd8d5e2fc038af4bc186b2e0f7466b03b8",
+      "new_type_normalized_lf_utf8_sha256": "2d59515b8d9abe865e83f473b3c5bafd8d5e2fc038af4bc186b2e0f7466b03b8",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "92979c26166973328bfa91c86a5b64f7cb0d23cec574cf157dfe3cf868cca8c0",
+      "new_full_declaration_normalized_lf_utf8_sha256": "92979c26166973328bfa91c86a5b64f7cb0d23cec574cf157dfe3cf868cca8c0",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "compressDeleted_dvd",
+      "span": [
+        222,
+        228
+      ],
+      "type_last": 224,
+      "complete_public_type": "theorem compressDeleted_dvd {k : ℕ} (S : Finset (Fin (k + 1) → ℕ))\n    {i : Fin (k + 1)} {d : ℕ} {b : Fin (k + 1) → ℕ}\n    (hb : b ∈ deletionFiber S i d) (j : Fin k) : compressDeleted k i b j ∣ d := by\n",
+      "old_type_normalized_lf_utf8_sha256": "1caf034fc8f4076f8622637877351bee73d35367b1e4e7db1f37a91b966a49f5",
+      "new_type_normalized_lf_utf8_sha256": "1caf034fc8f4076f8622637877351bee73d35367b1e4e7db1f37a91b966a49f5",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "3a7ae2d4e51c98e10ca888ca994808bcb4996a1243bb36ecb557847642b49381",
+      "new_full_declaration_normalized_lf_utf8_sha256": "3a7ae2d4e51c98e10ca888ca994808bcb4996a1243bb36ecb557847642b49381",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "compressDeleted_mapsTo",
+      "span": [
+        231,
+        238
+      ],
+      "type_last": 233,
+      "complete_public_type": "theorem compressDeleted_mapsTo {k : ℕ} (S : Finset (Fin (k + 1) → ℕ))\n    (i : Fin (k + 1)) {d : ℕ} (hd : 0 < d) :\n    Set.MapsTo (compressDeleted k i) (deletionFiber S i d) (orderedFactorTuples k d) := by\n",
+      "old_type_normalized_lf_utf8_sha256": "eee25ff93c7755ba96b2fd61cb13e51cb3e4cab69c8c2209960faeb37e72e6de",
+      "new_type_normalized_lf_utf8_sha256": "eee25ff93c7755ba96b2fd61cb13e51cb3e4cab69c8c2209960faeb37e72e6de",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "dc45ee5ef204121312cae7e1068734c8c08e07cb426018f0f91a8dd4bb0db3e4",
+      "new_full_declaration_normalized_lf_utf8_sha256": "dc45ee5ef204121312cae7e1068734c8c08e07cb426018f0f91a8dd4bb0db3e4",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "compressDeleted_injective_of_normalized",
+      "span": [
+        241,
+        250
+      ],
+      "type_last": 243,
+      "complete_public_type": "theorem compressDeleted_injective_of_normalized {k : ℕ} (i : Fin (k + 1))\n    {b c : Fin (k + 1) → ℕ} (hb : b i = 1) (hc : c i = 1)\n    (hbc : compressDeleted k i b = compressDeleted k i c) : b = c := by\n",
+      "old_type_normalized_lf_utf8_sha256": "14949d2b58e3e02db4bbfc7d030726c2a1f2d50953f5817fbd476d887a41aa02",
+      "new_type_normalized_lf_utf8_sha256": "14949d2b58e3e02db4bbfc7d030726c2a1f2d50953f5817fbd476d887a41aa02",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "67b06392370069f539bd03443a6b07ac557c26e28f8b636f6d215af7c70f38c3",
+      "new_full_declaration_normalized_lf_utf8_sha256": "67b06392370069f539bd03443a6b07ac557c26e28f8b636f6d215af7c70f38c3",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "card_deletionFiber_le_orderedFactorTuples",
+      "span": [
+        253,
+        259
+      ],
+      "type_last": 255,
+      "complete_public_type": "theorem card_deletionFiber_le_orderedFactorTuples {k : ℕ}\n    (S : Finset (Fin (k + 1) → ℕ)) (i : Fin (k + 1)) {d : ℕ} (hd : 0 < d) :\n    (deletionFiber S i d).card ≤ (orderedFactorTuples k d).card := by\n",
+      "old_type_normalized_lf_utf8_sha256": "63608e0336cdb136e1ad1cc28f62e47512b6c51e4f3be8a5ffa5e82dbf12546b",
+      "new_type_normalized_lf_utf8_sha256": "63608e0336cdb136e1ad1cc28f62e47512b6c51e4f3be8a5ffa5e82dbf12546b",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "2d3df31dd0dcf47c0ce279c00d58521c322735a6638b0123dc86b27242c74255",
+      "new_full_declaration_normalized_lf_utf8_sha256": "2d3df31dd0dcf47c0ce279c00d58521c322735a6638b0123dc86b27242c74255",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "card_deletionFiber_le_fouvryTau_succ",
+      "span": [
+        261,
+        267
+      ],
+      "type_last": 263,
+      "complete_public_type": "theorem card_deletionFiber_le_fouvryTau_succ {k : ℕ}\n    (S : Finset (Fin (k + 1) → ℕ)) (i : Fin (k + 1)) {d : ℕ} (hd : 0 < d) :\n    (deletionFiber S i d).card ≤ fouvryTau k d := by\n",
+      "old_type_normalized_lf_utf8_sha256": "a7a499ab01d019dfcde0a6678f76d8d47b8d7e2469046af3abc721eb2892e5f5",
+      "new_type_normalized_lf_utf8_sha256": "a7a499ab01d019dfcde0a6678f76d8d47b8d7e2469046af3abc721eb2892e5f5",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "02f4102ff40f062e84b534ac72477a91023c1131173ce532bb459b9c5e58b1d4",
+      "new_full_declaration_normalized_lf_utf8_sha256": "02f4102ff40f062e84b534ac72477a91023c1131173ce532bb459b9c5e58b1d4",
+      "full_declaration_byte_identical": true
+    },
+    {
+      "name": "card_deletionFiber_orderedFactorTuples_le_fouvryTau",
+      "span": [
+        270,
+        278
+      ],
+      "type_last": 272,
+      "complete_public_type": "theorem card_deletionFiber_orderedFactorTuples_le_fouvryTau {K n d : ℕ}\n    (hK : 2 ≤ K) (hn : 0 < n) (hd : d ∈ n.divisors) (i : Fin K) :\n    (deletionFiber (orderedFactorTuples K n) i d).card ≤ fouvryTau (K - 1) d := by\n",
+      "old_type_normalized_lf_utf8_sha256": "707a6abe454ed6f67a77541a156e77f1ca662eb3fd4adb2cf33089087b9118bf",
+      "new_type_normalized_lf_utf8_sha256": "707a6abe454ed6f67a77541a156e77f1ca662eb3fd4adb2cf33089087b9118bf",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "138a1a82e40804b616ad26c12d0b4fcb6d97728bc7349d13ddf1fb00159fc289",
+      "new_full_declaration_normalized_lf_utf8_sha256": "f982b2e265a8dd53c4fbfa0f0a3986dd8bcb31349adf511472d981149c13e1d3",
+      "full_declaration_byte_identical": false
+    },
+    {
+      "name": "fouvryTau_le_truncated_divisor_sum",
+      "span": [
+        281,
+        300
+      ],
+      "type_last": 284,
+      "complete_public_type": "theorem fouvryTau_le_truncated_divisor_sum {K n D : ℕ}\n    (hK : 2 ≤ K) (hn : 1 ≤ n) (hcut : n ^ (K - 1) ≤ D ^ K) :\n    fouvryTau K n ≤ K *\n      (∑ d ∈ n.divisors.filter (fun d => d ≤ D), fouvryTau (K - 1) d) := by\n",
+      "old_type_normalized_lf_utf8_sha256": "e22f572297666c009b0544a86490439089a4658b22a7398686f7026380304dd8",
+      "new_type_normalized_lf_utf8_sha256": "e22f572297666c009b0544a86490439089a4658b22a7398686f7026380304dd8",
+      "type_byte_identical": true,
+      "old_full_declaration_normalized_lf_utf8_sha256": "210553b07bffa8bb7a9ea035ffd0161dbdf67c7a331e8a6fe4498b6997249280",
+      "new_full_declaration_normalized_lf_utf8_sha256": "210553b07bffa8bb7a9ea035ffd0161dbdf67c7a331e8a6fe4498b6997249280",
+      "full_declaration_byte_identical": true
+    }
+  ],
+  "actual_API_and_linter_evidence": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Dvd.lean",
+      "raw_sha256": "12cd37a3909fddc05c1f5541662d1a099c083aa1084777ded9d583c7a6780f96",
+      "bytes": 6888,
+      "spans": [
+        {
+          "first": 76,
+          "last": 86,
+          "literal_source": "protected theorem dvd_antisymm : ∀ {m n : Nat}, m ∣ n → n ∣ m → m = n\n  | _, 0, _, h₂ => Nat.eq_zero_of_zero_dvd h₂\n  | 0, _, h₁, _ => (Nat.eq_zero_of_zero_dvd h₁).symm\n  | _+1, _+1, h₁, h₂ => Nat.le_antisymm (le_of_dvd (succ_pos _) h₁) (le_of_dvd (succ_pos _) h₂)\n\ntheorem pos_of_dvd_of_pos {m n : Nat} (H1 : m ∣ n) (H2 : 0 < n) : 0 < m :=\n  Nat.pos_of_ne_zero fun m0 => Nat.ne_of_gt H2 <| Nat.eq_zero_of_zero_dvd (m0 ▸ H1)\n\n@[simp] protected theorem one_dvd (n : Nat) : 1 ∣ n := ⟨n, n.one_mul.symm⟩\n\ntheorem eq_one_of_dvd_one {n : Nat} (H : n ∣ 1) : n = 1 := Nat.dvd_antisymm H n.one_dvd\n",
+          "normalized_lf_utf8_sha256": "be724bc28eb154898a09fb88a924d7bd91d7ae48a7097c94ee3b667d587521c9",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Gcd.lean",
+      "raw_sha256": "672c96102205b59a47742be74c959ed780ba319713baaa8a2eeede2cdc46cbea",
+      "bytes": 20329,
+      "spans": [
+        {
+          "first": 143,
+          "last": 151,
+          "literal_source": "\ntheorem gcd_mul_right (m n k : Nat) : gcd (m * n) (k * n) = gcd m k * n := by\n  rw [Nat.mul_comm m n, Nat.mul_comm k n, Nat.mul_comm (gcd m k) n, gcd_mul_left]\n\ntheorem gcd_pos_of_pos_left {m : Nat} (n : Nat) (mpos : 0 < m) : 0 < gcd m n :=\n  pos_of_dvd_of_pos (gcd_dvd_left m n) mpos\n\ntheorem gcd_pos_of_pos_right (m : Nat) {n : Nat} (npos : 0 < n) : 0 < gcd m n :=\n  pos_of_dvd_of_pos (gcd_dvd_right m n) npos\n",
+          "normalized_lf_utf8_sha256": "5bccb4754cfba72b20aa13d273b3d8d0a77209b07da1b2f4e2a800d24cba5515",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\NumberTheory\\Divisors.lean",
+      "raw_sha256": "60d4c8969dc88c34042be6e3d34951e355655f1fa26c6dd03ee1f9dd285ad910",
+      "bytes": 31481,
+      "spans": [
+        {
+          "first": 108,
+          "last": 112,
+          "literal_source": "theorem mem_divisors {m : ℕ} : n ∈ divisors m ↔ n ∣ m ∧ m ≠ 0 := by\n  rcases eq_or_ne m 0 with (rfl | hm); · simp [divisors]\n  simp only [hm, Ne, not_false_iff, and_true, ← filter_dvd_eq_divisors hm, mem_filter,\n    mem_range, and_iff_right_iff_imp, Nat.lt_succ_iff]\n  exact le_of_dvd hm.bot_lt\n",
+          "normalized_lf_utf8_sha256": "439990420474c526d59e52a0da467720ad4bcdaa24bd7e7c9c452dd617e3771e",
+          "actual_source_read": true
+        },
+        {
+          "first": 272,
+          "last": 276,
+          "literal_source": "theorem pos_of_mem_divisors {m : ℕ} (h : m ∈ n.divisors) : 0 < m := by\n  cases m\n  · rw [mem_divisors, zero_dvd_iff (a := n)] at h\n    cases h.2 h.1\n  apply Nat.succ_pos\n",
+          "normalized_lf_utf8_sha256": "f4abbabfb373a561d1771bb12f3f1ac2290a9f77ae32c272514182543f44c62b",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Lean\\Linter\\UnusedVariables.lean",
+      "raw_sha256": "b583c77e3d5a593a2804b1f61a42503bb598a726203eaddd93c5fe293bb4eda1",
+      "bytes": 28306,
+      "spans": [
+        {
+          "first": 15,
+          "last": 38,
+          "literal_source": "/-! # Unused variable Linter\n\nThis file implements the unused variable linter, which runs automatically on all\ncommands and reports any local variables that are never referred to, using\ninformation from the info tree.\n\nIt is not immediately obvious but this is a surprisingly expensive check without\nsome optimizations.  The main complication is that it can be difficult to\ndetermine what constitutes a \"use\" apart from direct references to a variable\nthat we can easily find in the info tree.  For example, we would like this to be\nconsidered a use of `x`:\n```\ndef foo (x : Nat) : Nat := by assumption\n```\n\nThe final proof term is `fun x => x` so clearly `x` was used, but we can't make\nuse of this because the final proof term is after we have abstracted over the\noriginal `fvar` for `x`. Instead, we make sure to store the proof term before\nabstraction but after instantiation of mvars in the info tree and retrieve it in\nthe linter. Using the instantiated term is very important as redoing that step\nin the linter can be prohibitively expensive. The downside of special-casing the\ndefinition body in this way is that while it works for parameters, it does not\nwork for local variables in the body, so we ignore them by default if any tactic\ninfos are present (`linter.unusedVariables.analyzeTactics`).\n",
+          "normalized_lf_utf8_sha256": "b10594b898f163d10635cb6f10740222b175a4d4b74d2c4ff004520b1ff3ccdb",
+          "actual_source_read": true
+        },
+        {
+          "first": 83,
+          "last": 120,
+          "literal_source": "/-- Enables or disables all unused variable linter warnings -/\nregister_builtin_option linter.unusedVariables : Bool := {\n  defValue := true,\n  descr := \"enable the 'unused variables' linter\"\n}\n/-- Enables or disables unused variable linter warnings in function arguments -/\nregister_builtin_option linter.unusedVariables.funArgs : Bool := {\n  defValue := true,\n  descr := \"enable the 'unused variables' linter to mark unused function arguments\"\n}\n/-- Enables or disables unused variable linter warnings in patterns -/\nregister_builtin_option linter.unusedVariables.patternVars : Bool := {\n  defValue := true,\n  descr := \"enable the 'unused variables' linter to mark unused pattern variables\"\n}\n/-- Enables linting variables defined in tactic blocks, may be expensive for complex proofs -/\nregister_builtin_option linter.unusedVariables.analyzeTactics : Bool := {\n  defValue := false\n  descr := \"enable analysis of local variables in presence of tactic proofs\\\n          \\n\\\n          \\nBy default, the linter will limit itself to linting a declaration's parameters \\\n            whenever tactic proofs are present as these can be expensive to analyze. Enabling this \\\n            option extends linting to local variables both inside and outside tactic proofs, \\\n            though it can also lead to some false negatives as intermediate tactic states may \\\n            reference some variables without the declaration ultimately depending on them.\"\n}\n\n/-- Gets the status of `linter.unusedVariables` -/\ndef getLinterUnusedVariables (o : LinterOptions) : Bool :=\n  getLinterValue linter.unusedVariables o\n\n/-- Gets the status of `linter.unusedVariables.funArgs` -/\ndef getLinterUnusedVariablesFunArgs (o : LinterOptions) : Bool :=\n  o.get linter.unusedVariables.funArgs.name (getLinterUnusedVariables o)\n\n/-- Gets the status of `linter.unusedVariables.patternVars` -/\ndef getLinterUnusedVariablesPatternVars (o : LinterOptions) : Bool :=\n  o.get linter.unusedVariables.patternVars.name (getLinterUnusedVariables o)\n",
+          "normalized_lf_utf8_sha256": "e70f455b8912cfce7bd713da2db5e7f4200d052e6730e04ab322023055629408",
+          "actual_source_read": true
+        },
+        {
+          "first": 258,
+          "last": 267,
+          "literal_source": "/--\nFunction argument in declaration signature (when `linter.unusedVariables.funArgs` is false)\n* `def foo (unused : Nat) := 1`\n-/\nbuiltin_initialize addBuiltinUnusedVariablesIgnoreFn (fun _ stack opts =>\n  !getLinterUnusedVariablesFunArgs opts &&\n  stack.matches [`null, none, `null, none] &&\n  (stack[3]? |>.any fun (stx, pos) =>\n    pos == 0 &&\n    [``Lean.Parser.Command.optDeclSig, ``Lean.Parser.Command.declSig].any (stx.isOfKind ·)))\n",
+          "normalized_lf_utf8_sha256": "8d1f1bd29dd8d97cea251f981fdbd43b0c62ff76d8d19ee69c2a9ed06d40449a",
+          "actual_source_read": true
+        },
+        {
+          "first": 477,
+          "last": 503,
+          "literal_source": "/-- Reports unused variable warnings on each command. Use `linter.unusedVariables` to disable. -/\ndef unusedVariables : Linter where\n  run cmdStx := do\n    unless getLinterUnusedVariables (← getLinterOptions) do\n      return\n\n    -- NOTE: `messages` is local to the current command\n    if (← get).messages.hasErrors then\n      return\n\n    let some cmdStxRange := cmdStx.getRange?\n      | return\n\n    -- We used to look for `sorry` on the `Expr` level, which is more robust, but just too expensive\n    -- on huge declarations (see e.g. `omega_stress` benchmark).\n    if hasSorry cmdStx then\n      return\n\n    let infoTrees := (← get).infoState.trees.toArray\n\n    let linterSets := (linterSetsExt.getState (← getEnv)).merged\n\n    -- Run the main collection pass, resulting in `s : References`.\n    let (_, s) ← (collectReferences infoTrees cmdStxRange linterSets).run {}\n\n    -- If there are no local defs then there is nothing to do\n    if s.fvarDefs.isEmpty then return\n",
+          "normalized_lf_utf8_sha256": "fc9424bc1ffb90719cf36000bc2c7dbdb3e3e74b00625413f09fa04f2de49d2d",
+          "actual_source_read": true
+        },
+        {
+          "first": 523,
+          "last": 579,
+          "literal_source": "    -- For each variable definition, check to see if it is used\n    for (range, { userName, stx := declStx, opts, aliases }) in s.fvarDefs.toArray do\n      let fvarUses ← fvarUsesRef.get\n      -- If any of the `fvar`s corresponding to this declaration is (an alias of) a variable in\n      -- `fvarUses`, then it is used\n      if aliases.any fun id => fvarUses.contains (getCanonVar id) then continue\n      -- If this is a global declaration then it is (potentially) used after the command\n      if s.constDecls.contains range then continue\n\n      -- Get the syntax stack for this variable declaration\n      let some ((id', _) :: stack) := cmdStx.findStack? (·.getRange?.any (·.includes range))\n        | continue\n\n      -- If it is blacklisted by an `ignoreFn` then skip it\n      let linterOpts ← opts.toLinterOptions\n      if id'.isIdent && ignoreFns.any (· declStx stack linterOpts) then continue\n\n      -- Evaluate ignore functions again on macro expansion outputs\n      if ← infoTrees.anyM fun tree => do\n        let some macroExpansions ← collectMacroExpansions? range tree | return false\n        return macroExpansions.any fun expansion =>\n          -- in a macro expansion, there may be multiple leafs whose (synthetic) range\n          -- includes `range`, so accept strict matches only\n          if let some (_ :: stack) :=\n            expansion.output.findStack?\n              (·.getRange?.any (·.includes range))\n              (fun stx => stx.isIdent && stx.getRange?.any (· == range))\n          then\n            ignoreFns.any (· declStx stack linterOpts)\n          else\n            false\n      then\n        continue\n\n      -- Visiting the metavariable assignments is expensive so we delay initialization\n      if !initializedMVars then\n        -- collect additional `fvarUses` from tactic assignments\n        visitAssignments (← IO.mkRef {}) fvarUsesRef s.assignments\n        -- Resolve potential aliases again to preserve `fvarUsesRef` invariant\n        fvarUsesRef.modify fun fvarUses => fvarUses.toArray.map getCanonVar |> .insertMany {}\n        initializedMVars := true\n        let fvarUses ← fvarUsesRef.get\n        -- Redo the initial check because `fvarUses` could be bigger now\n        if aliases.any fun id => fvarUses.contains (getCanonVar id) then continue\n\n      -- If we made it this far then the variable is unused and not ignored\n      unused := unused.push (declStx, userName)\n\n    -- Sort the outputs by position\n    for (declStx, userName) in unused.qsort (·.1.getPos?.get! < ·.1.getPos?.get!) do\n      let suggestion : Meta.Hint.Suggestion := s!\"_{userName}\"\n      let suggestion := { suggestion with span? := declStx, diffGranularity := .none }\n      let hint ← liftCoreM <| MessageData.hint\n        m!\"The binding can be removed (if unused) or named `_` (if used implicitly). \\\n          Alternatively, prefix the name with `_` to silence this warning:\" #[suggestion]\n      logLint linter.unusedVariables declStx\n        (m!\"Variable name `{userName}` is not explicitly referenced.\" ++ hint)\n",
+          "normalized_lf_utf8_sha256": "a5b49675d71b8252ae19495adf71b8c43234145f7de720059206f187cdbe29db",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\lakefile.toml",
+      "raw_sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "bytes": 394,
+      "spans": [
+        {
+          "first": 1,
+          "last": 16,
+          "literal_source": "name = \"imbalancedChen\"\nversion = \"0.1.0\"\ndefaultTargets = [\"ImbalancedChen\"]\n\n[[require]]\nname = \"mathlib\"\ngit = \"https://github.com/leanprover-community/mathlib4.git\"\nrev = \"e4c91783ca8e6a7c693ae624ade32fd22d4e43c1\"\n\n[[require]]\nname = \"goldbach\"\ngit = \"https://github.com/subfish-zhou/goldbach-lean.git\"\nrev = \"09b97db5764ade1246bfb77206baa1b124760958\"\n\n[[lean_lib]]\nname = \"ImbalancedChen\"\n",
+          "normalized_lf_utf8_sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261021-tail-b25d-one-warning-independent-61line-24-header-byte-review.json",
+      "raw_sha256": "68ebf27db1ef0005bc05a8733c25fafbcb5a4c0ea1de9ea763a639e20d9d192d",
+      "bytes": 49037,
+      "spans": [
+        {
+          "first": 51,
+          "last": 61,
+          "literal_source": "      \"command\": [\n        \"/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/lean\",\n        \"-j2\",\n        \"-M6144\",\n        \"-DwarningAsError=true\",\n        \"-o\",\n        \"/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorSmallCoreFourierTruncation.olean\",\n        \"ImbalancedChen/Part3SharedFirstFactorSmallCoreFourierTruncation.lean\"\n      ],\n      \"cwd\": \"/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation\",\n      \"warnings_as_errors\": true,\n",
+          "normalized_lf_utf8_sha256": "4637ee8369aec2a0edc9d73b0e631d713e6c8f245a1e2b2e463d43607a9e560e",
+          "actual_source_read": true
+        }
+      ]
+    }
+  ],
+  "integration_notes": [
+    "Proposal imports the actual ImbalancedChen.Part3ElementaryTauTruncation base; it does not redeclare orderedFactorTuples.",
+    "Copied cardinality and tau declarations are supplied once in this standalone TXT. Do not concatenate another copy or import a module that already declares them.",
+    "This v2 intentionally preserves every original header/comment byte to keep the unique repair auditable. Historical source-only and uncompiled descriptions are not updated by this warning repair.",
+    "Actual module path, source application and strict compilation remain root decisions after independent local review. This source author claims no accepted or kernel-checked new module."
+  ],
+  "claim_boundaries": {
+    "native_finite_tau_truncation": "Complete original written source argument plus one direct positivity proof replacement; uncompiled HOLD.",
+    "warning_free_compilation": "NOT_CHECKED",
+    "E1": "OPEN",
+    "strict_successor_floor_bridge": "OUTSIDE_THIS_TASK",
+    "means_applications": "OPEN",
+    "M2": "OPEN",
+    "spectrum": "OPEN",
+    "original_forall_kappa": "OPEN",
+    "main_theorem": "OPEN",
+    "engineering_admission": false
+  },
+  "quota": {
+    "fresh_used_percent": 44,
+    "fresh_remaining_percent": 56,
+    "window_duration_mins": 10080,
+    "secondary": null,
+    "stop_any_valid_remaining_percent_lte": 40,
+    "threshold_triggered": false
+  },
+  "actions": {
+    "writes": [
+      ".lake/proof-continuation/source-reviews/drafts/20261022-tau-deletion-fiber-source-proposal-v2.txt",
+      ".lake/proof-continuation/source-reviews/20261022-tau-deletion-fiber-source-proposal-v2-author-HOLD.json"
+    ],
+    "actual_lean_edits": 0,
+    "old_draft_edits": 0,
+    "helper_files": 0,
+    "runtime_or_pin_edits": 0,
+    "compiler_runs": 0,
+    "checker_runs": 0,
+    "proper_runs": 0,
+    "classifier_runs": 0,
+    "census_runs": 0,
+    "cache_operations": 0,
+    "git_operations": 0,
+    "new_subagents": 0
+  },
+  "stop_condition": "Single source-only warning-compatibility repair delivered for root independent review; no actual integration or execution."
+}

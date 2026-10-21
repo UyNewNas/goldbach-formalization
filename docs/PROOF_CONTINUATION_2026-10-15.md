@@ -227,10 +227,11 @@ original admissibility is not replaced by unproved transposed admissibility.
 | `CurrentChenUpsilon7LargePrimeSwitch` | Root accepted the exact 652017e9 source after strict compilation, original-object stock replay and complete type, unique inventory, safety and standard-three-axiom checks of all 15 actual generated declarations, with exact proper/full inputs before and after and current178 census. The original large-prime semiprime branch has an exact finite AP switch, retaining the original selector, labels, order, repeated prime factors, quotient primality and coefficient two. The analytic AP main mean at moduli at least N^.708, sharp C/K suppliers and main hLower/hUpper theorem remain OPEN. | Strict compilation; original-object stock kernel replay; complete 15-declaration types, inventory and transitive axiom audit |
 | `Part3SharedFirstFactorGeneralDPairedFourier` | Root accepted exact source 8976615eaf0542a3fea124574a4883d949789e565d75412196968eb63e285428 after strict compilation, stock replay, exact before/after inputs and complete root verification of all 12 actual declarations; the exact current owned census is 179 modules, 4121 declarations and 127 receipts. The signed general-D paired Fourier phases and four real-projection branches are retained. The spectral supplier and main theorem remain open; acceptance does not claim full foreign-closure replay. | Strict compilation; original-object stock kernel replay; complete 12-declaration types, inventory and transitive axiom audit |
 | `ActualExtendedThirdAdmittedOwnCubeBridge` | Root accepted the exact current 711d2635fb500d43865763989294fba5b38f9ba8a4455895f07ff4103d77d8da source after strict compilation, stock replay and complete verification of its five actual declarations; the current owned census is 180 modules, 4126 declarations and 128 receipts. The accepted finite bridge retains the original rough carrier, cap, target-prime deletion, strict physical-level gate and all three reciprocal-totient weights. The sharp K mean and main theorem remain OPEN. | Strict compilation; original-object stock kernel replay; complete 5-declaration types, inventory and transitive axiom audit |
+| `Part3ElementaryTauTruncation` | Root accepted exact source 8e315aec5a3f00506ac26e8710474c47a448b043d3cf38be27c4df30c18a478f after strict compilation, original-object stock replay, exact before/after inputs and complete root verification of all 20 actual declarations: five definitions, seven written theorems and eight generated declarations. It proves finite indexed product deletion, positive fixed-product injectivity, finite cover cardinality and exact divisor-fiber truncation, retaining original n >= 1 and natural-power cutoff hypotheses. Generic tau cardinality and deletion bridge, E1 interval counting, M2, spectrum, sharp C/K suppliers and the main theorem remain OPEN. | Strict compilation; original-object stock kernel replay; complete 20-declaration types, inventory and transitive axiom audit |
 
-These 180 modules contain **4126 complete owned declarations**, including
+These 181 modules contain **4146 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-4126 independent major mathematical theorems.
+4146 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.
@@ -527,13 +528,12 @@ and final unconditional arithmetic lower/upper inputs are still open.
 
 ## Candidates that must not be counted as completed proofs
 
-The 23 unaccepted source candidates are listed with exact source
+The 22 unaccepted source candidates are listed with exact source
 hashes in `verification/proof-continuation/2026-10-15/unaccepted-candidates.json`.
 They are excluded from the accepted module/declaration inventory above.
 Original failed attempts remain failures; replacement sources need their own checks.
 
 * `Part3CommonPFiniteReduction`: Root applied the exact 124-line source-only proposal (4b2d7e668fa944acd4ac4bf0d9bf2cb18dd0b31d69b679c69fa223e35605c86c); it remains uncompiled and unaccepted. It proves only the finite reduction V/2 <= m <= 3V with m>0, m coprime to p, and occupied-row cardinality <= 3U/Q1 under its stated hypotheses. No M2/spectral estimate or main theorem is claimed.
-* `Part3ElementaryTauTruncation`: The exact finite source 8e315aec5a3f00506ac26e8710474c47a448b043d3cf38be27c4df30c18a478f has actual ONE readonly classifier and strict compilation PASS. This 180-module checkpoint does not accept this source: full before/after pipeline and separate root verification of actual generated declarations are required. Its five definitions and seven written theorems concern finite indexed product deletion and divisor-fiber truncation only; generic tau cardinality, E1, M2 and main remain OPEN.
 * `Part3WeightedRefinedSignedDifference`: The current exact source 6e16d77482cd63d5aef89ff62b90f2ca95c30e5cf0828800c20dcc49373aabff has one current-source proper PASS and actual ONE readonly classifier PASS (generic178 inputs); it remains uncompiled and unaccepted, with the original f26985 failure chain preserved. It proves only the M-squared times original-576 weighted energy bound and exact nu endpoint. No packet embedding, c-class spectral supplier, kernel acceptance or main theorem is claimed.
 * `Part3ReciprocalAPSupplier`: New target not executed; limited external prerequisite bootstrap stopped at a resource failure.
 * `Certificates.PairedV2FullCertificate`: Not executed; requires the full original-strip chain, beyond the frozen baseline pilot.
