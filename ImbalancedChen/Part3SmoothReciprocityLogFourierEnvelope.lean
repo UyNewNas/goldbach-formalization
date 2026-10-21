@@ -281,6 +281,7 @@ theorem CommonSmoothCutoff.smoothReciprocityLogWeight_fourier_envelope_kernel_in
       (1 + ‖ξ‖ ^ 2) ^ (-(4 : ℝ) / 2) = ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹ := by
     norm_num only [show -(4 : ℝ) / 2 = -(2 : ℝ) by norm_num,
       Real.rpow_neg_ofNat, zpow_neg, zpow_natCast]
+    rfl
   simpa only [heq] using h
 
 end

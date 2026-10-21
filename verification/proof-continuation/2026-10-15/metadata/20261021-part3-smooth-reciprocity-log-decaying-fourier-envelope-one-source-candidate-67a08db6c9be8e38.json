@@ -1,0 +1,467 @@
+{
+  "status": "ONE_COMPLETE_DECAYING_POINTWISE_FOURIER_ENVELOPE_SOURCE_CANDIDATE_ONLY_HOLD",
+  "created_utc": "2026-10-21T08:14:57.3576244Z",
+  "author": "/root/decaying_fourier_sol_high_oct21",
+  "source": {
+    "path": "ImbalancedChen/Part3SmoothReciprocityLogDecayingFourierEnvelope.lean",
+    "sha256": "1d09f151f7756050003b5ec73c49898f08d747ccce267f77db185d954219c5af",
+    "bytes": 14685,
+    "lines_lf": 295,
+    "initial_state": "Absent before this task",
+    "encoding": "UTF-8 without BOM; LF",
+    "compiled": false,
+    "runtime_accepted": false,
+    "owned": false,
+    "namespace": "ImbalancedChen.Part3",
+    "private_namespace": "ImbalancedChen.Part3.SmoothReciprocityLogDecayingFourierEnvelopeProof",
+    "private_context_literal": "variable {d : ℕ}",
+    "lexical_context": "noncomputable section; open MeasureTheory FourierTransform Laplacian LineDeriv; open scoped SchwartzMap FourierTransform ContDiff BigOperators RealInnerProductSpace; open CommonSmoothCutoff SchwartzFourierL1Sobolev",
+    "complete_all_public_private_literal_headers": [
+      {
+        "line_1based": 25,
+        "private": true,
+        "complete_literal_header": "private def tau : ℝ",
+        "header_utf8_sha256": "5377a7c6f1d38a2a3e0b6fccba97a32595b35f165b8700f587bc57ea08602e54"
+      },
+      {
+        "line_1based": 27,
+        "private": true,
+        "complete_literal_header": "private theorem tau_nonneg : 0 ≤ tau",
+        "header_utf8_sha256": "14a82ff2141f22bdeeae9e86e01463ece7e1aff5e48606eb1a1300ebb3017231"
+      },
+      {
+        "line_1based": 31,
+        "private": true,
+        "complete_literal_header": "private theorem word_norm_le {n : ℕ}\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ))\n    (m : Fin n → EuclideanSpace ℝ (Fin d))\n    (hm : ∀ i, ‖m i‖ ≤ 1) (x : EuclideanSpace ℝ (Fin d)) (B : ℝ)\n    (hB : ‖iteratedFDeriv ℝ n f x‖ ≤ B) : ‖∂^{m} f x‖ ≤ B",
+        "header_utf8_sha256": "66e92447e390f114478a831c661cc92b358d46e191f8974548fd94e7f209d97f"
+      },
+      {
+        "line_1based": 40,
+        "private": true,
+        "complete_literal_header": "private theorem laplacian_sq_sum\n    (e : OrthonormalBasis (Fin d) ℝ (EuclideanSpace ℝ (Fin d)))\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) :\n    Δ (Δ f) = ∑ i : Fin d, ∑ j : Fin d,\n      ∂_{e i} (∂_{e i} (∂_{e j} (∂_{e j} f)))",
+        "header_utf8_sha256": "251e4de59dbab5fa86d4b4fcd3f863920b69cccc6d6761da5996feb948258faa"
+      },
+      {
+        "line_1based": 48,
+        "private": true,
+        "complete_literal_header": "private theorem laplacian_norm_le\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (x : EuclideanSpace ℝ (Fin d))\n    (B : ℝ) (hB : ‖iteratedFDeriv ℝ 2 f x‖ ≤ B) :\n    ‖Δ f x‖ ≤ (d : ℝ) * B",
+        "header_utf8_sha256": "5e667f49c1bb13ed5bf83de81e214c5c0960241c831e2762f792ddcea3d5872f"
+      },
+      {
+        "line_1based": 66,
+        "private": true,
+        "complete_literal_header": "private theorem laplacian_sq_norm_le\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (x : EuclideanSpace ℝ (Fin d))\n    (B : ℝ) (hB : ‖iteratedFDeriv ℝ 4 f x‖ ≤ B) :\n    ‖Δ (Δ f) x‖ ≤ (d : ℝ) ^ 2 * B",
+        "header_utf8_sha256": "8dcae5c79e78db802e29aee3457f1df40a225fdff969a4d28764c5040f52d164"
+      },
+      {
+        "line_1based": 90,
+        "private": true,
+        "complete_literal_header": "private theorem normalizedFourth_apply\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (x : EuclideanSpace ℝ (Fin d)) :\n    normalizedFourth f x = (f x - tau • Δ f x) -\n      tau • (Δ f x - tau • Δ (Δ f) x)",
+        "header_utf8_sha256": "24d0831cd70ca24f3e4b028d5a559336941cc875fb169e0766a1e063bfe2d29c"
+      },
+      {
+        "line_1based": 103,
+        "private": true,
+        "complete_literal_header": "private theorem normalizedFourth_norm_le\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (x : EuclideanSpace ℝ (Fin d))\n    (B : ℝ) (hjet : ∀ j : ℕ, j ≤ 4 → ‖iteratedFDeriv ℝ j f x‖ ≤ B) :\n    ‖normalizedFourth f x‖ ≤ (1 + tau * d) ^ 2 * B",
+        "header_utf8_sha256": "8c42e48a5549ee06420f6c5b6b477a87b1d427e65e66800196896ffcb9a002df"
+      },
+      {
+        "line_1based": 130,
+        "private": true,
+        "complete_literal_header": "private theorem normalizedFourth_zero_off_support\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (x : EuclideanSpace ℝ (Fin d))\n    (hx : x ∉ tsupport f) : normalizedFourth f x = 0",
+        "header_utf8_sha256": "3e528bd9b44ebae0ff274d7e7b06d4718be3683b7d7d83f49586d327e81a802c"
+      },
+      {
+        "line_1based": 157,
+        "private": true,
+        "complete_literal_header": "private theorem fourier_laplacian_apply (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (ξ : EuclideanSpace ℝ (Fin d)) :\n    𝓕 (Δ f) ξ = (-(2 * Real.pi) ^ 2 * ‖ξ‖ ^ 2) • 𝓕 f ξ",
+        "header_utf8_sha256": "11621056a61da8df34bea379b60e90c6ddb0eb3e7117590134243b478de52752"
+      },
+      {
+        "line_1based": 167,
+        "private": true,
+        "complete_literal_header": "private theorem fourier_normalizedStep_apply (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (ξ : EuclideanSpace ℝ (Fin d)) :\n    𝓕 (normalizedStep f) ξ = (1 + ‖ξ‖ ^ 2) • 𝓕 f ξ",
+        "header_utf8_sha256": "21e3c30d974d4d27118a065360b846a5bb697d4dafd113e9d52cfa299ae35e4c"
+      },
+      {
+        "line_1based": 185,
+        "private": true,
+        "complete_literal_header": "private theorem fourier_normalizedFourth_apply (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (ξ : EuclideanSpace ℝ (Fin d)) :\n    𝓕 (normalizedFourth f) ξ = (1 + ‖ξ‖ ^ 2) ^ 2 • 𝓕 f ξ",
+        "header_utf8_sha256": "75410ee1df5dfc4d39343ea064b43ed6980b311256c4a468344c01c6cd0c8e8a"
+      },
+      {
+        "line_1based": 190,
+        "private": true,
+        "complete_literal_header": "private theorem normalizedFourth_integral_norm_le\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ))\n    (K : Set (EuclideanSpace ℝ (Fin d))) (hK : IsCompact K)\n    (hsupport : tsupport f ⊆ K) (B : ℝ)\n    (hbound : ∀ x, ‖normalizedFourth f x‖ ≤ B) :\n    (∫ x, ‖normalizedFourth f x‖) ≤ B * volume.real K",
+        "header_utf8_sha256": "a44936d2627f5a815b322d59cb8cff46e072d57507a9285f2cd73285bacef654"
+      },
+      {
+        "line_1based": 209,
+        "private": true,
+        "complete_literal_header": "private theorem fourier_norm_le_normalizedFourth_integral\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (ξ : EuclideanSpace ℝ (Fin d)) :\n    ‖𝓕 f ξ‖ ≤ (∫ x, ‖normalizedFourth f x‖) * ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹",
+        "header_utf8_sha256": "ac5028cc6378425ea497b490a491214c7e5a8519c43f24cd512bb870827a9391"
+      },
+      {
+        "line_1based": 231,
+        "private": false,
+        "complete_literal_header": "theorem CommonSmoothCutoff.smoothReciprocityLogWeight_zeroSlope_decaying_fourier_pointwise_envelope\n    {d : ℕ} (a c : EuclideanSpace ℝ (Fin d))\n    (Q : EuclideanSpace ℝ (Fin d) → ℂ)\n    (hQ : ContDiff ℝ ∞ Q) (hQc : HasCompactSupport Q) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ Z u₀ rho₀ R : ℝ, 1 ≤ Z → 0 ≤ R → |rho₀| ≤ R →\n        ∀ ξ : EuclideanSpace ℝ (Fin d),\n          (1 + |u₀|) * ‖𝓕 (smoothReciprocityLogWeight a 0 c Q Z u₀ rho₀) ξ‖ ≤\n            C * (1 + R) ^ 4 * ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹",
+        "header_utf8_sha256": "efc4e1350c4b330c1d2ff73f2efe7b46a4e5196b65c9cebcdc38af795a5eee98"
+      },
+      {
+        "line_1based": 288,
+        "private": false,
+        "complete_literal_header": "theorem CommonSmoothCutoff.smoothReciprocityLogWeight_zeroSlope_decaying_fourier_envelope_kernel_integrable\n    {d : ℕ} (hd : d < 4) :\n    Integrable (fun ξ : EuclideanSpace ℝ (Fin d) ↦ ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹)",
+        "header_utf8_sha256": "9c07c44f3f0e364b5b3d096937107e98f53807b9a1a1489cbdd872df4fcc42d3"
+      }
+    ],
+    "complete_source_literal": "import ImbalancedChen.Part3SmoothReciprocityLogDecayJet\nimport ImbalancedChen.Part3SmoothReciprocityLogFourierEnvelope\n\n/-!\nA common pointwise Fourier envelope retaining one power of signed u0 decay\nfor the literal b=0 logarithmic weight. The weighted jet estimate comes from\nthe moment-five profile estimate. Compact support pays the actual normalized\nfourth-order operator's L1 norm, and its native Fourier symbol pays the radial\ndecay. The full native 2*pi normalization is retained.\n\nThis source candidate depends on two parent source candidates. Their import\nhere does not assert that either parent has passed strict acceptance.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen MeasureTheory FourierTransform Laplacian LineDeriv\nopen scoped SchwartzMap FourierTransform ContDiff BigOperators RealInnerProductSpace\nopen CommonSmoothCutoff SchwartzFourierL1Sobolev\n\nnamespace SmoothReciprocityLogDecayingFourierEnvelopeProof\n\nprivate def tau : ℝ := ((2 * Real.pi) ^ 2)⁻¹\n\nprivate theorem tau_nonneg : 0 ≤ tau := by unfold tau; positivity\n\nvariable {d : ℕ}\n\nprivate theorem word_norm_le {n : ℕ}\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ))\n    (m : Fin n → EuclideanSpace ℝ (Fin d))\n    (hm : ∀ i, ‖m i‖ ≤ 1) (x : EuclideanSpace ℝ (Fin d)) (B : ℝ)\n    (hB : ‖iteratedFDeriv ℝ n f x‖ ≤ B) : ‖∂^{m} f x‖ ≤ B := by\n  rw [SchwartzMap.iteratedLineDerivOp_eq_iteratedFDeriv]\n  exact ((iteratedFDeriv ℝ n f x).le_opNorm_mul_prod_of_le hm).trans\n    (by simpa only [Finset.prod_const_one, mul_one] using hB)\n\nprivate theorem laplacian_sq_sum\n    (e : OrthonormalBasis (Fin d) ℝ (EuclideanSpace ℝ (Fin d)))\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) :\n    Δ (Δ f) = ∑ i : Fin d, ∑ j : Fin d,\n      ∂_{e i} (∂_{e i} (∂_{e j} (∂_{e j} f))) := by\n  rw [SchwartzMap.laplacian_eq_sum e]\n  simp_rw [SchwartzMap.laplacian_eq_sum e f, lineDerivOp_sum]\n\nprivate theorem laplacian_norm_le\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (x : EuclideanSpace ℝ (Fin d))\n    (B : ℝ) (hB : ‖iteratedFDeriv ℝ 2 f x‖ ≤ B) :\n    ‖Δ f x‖ ≤ (d : ℝ) * B := by\n  let e := EuclideanSpace.basisFun (Fin d) ℝ\n  have hword (i : Fin d) : ‖∂_{e i} (∂_{e i} f) x‖ ≤ B := by\n    change ‖∂^{![e i, e i]} f x‖ ≤ B\n    exact word_norm_le f ![e i, e i]\n      (by intro k; fin_cases k <;> exact (e.norm_eq_one i).le) x B hB\n  rw [SchwartzMap.laplacian_eq_sum e]\n  calc\n    ‖(∑ i : Fin d, ∂_{e i} (∂_{e i} f)) x‖ ≤\n        ∑ i : Fin d, ‖∂_{e i} (∂_{e i} f) x‖ := by\n      simpa only [sum_apply] using\n        (norm_sum_le (s := Finset.univ) (f := fun i : Fin d ↦ ∂_{e i} (∂_{e i} f) x))\n    _ ≤ ∑ _i : Fin d, B := Finset.sum_le_sum (fun i _ ↦ hword i)\n    _ = (d : ℝ) * B := by simp\n\nprivate theorem laplacian_sq_norm_le\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (x : EuclideanSpace ℝ (Fin d))\n    (B : ℝ) (hB : ‖iteratedFDeriv ℝ 4 f x‖ ≤ B) :\n    ‖Δ (Δ f) x‖ ≤ (d : ℝ) ^ 2 * B := by\n  let e := EuclideanSpace.basisFun (Fin d) ℝ\n  have hword (i j : Fin d) :\n      ‖∂_{e i} (∂_{e i} (∂_{e j} (∂_{e j} f))) x‖ ≤ B := by\n    change ‖∂^{![e i, e i, e j, e j]} f x‖ ≤ B\n    exact word_norm_le f ![e i, e i, e j, e j]\n      (by intro k; fin_cases k <;> exact (e.norm_eq_one _).le) x B hB\n  rw [laplacian_sq_sum e f]\n  simp only [sum_apply]\n  calc\n    ‖∑ i : Fin d, ∑ j : Fin d,\n        (∂_{e i} (∂_{e i} (∂_{e j} (∂_{e j} f)))) x‖ ≤\n        ∑ i : Fin d, ‖∑ j : Fin d,\n          (∂_{e i} (∂_{e i} (∂_{e j} (∂_{e j} f)))) x‖ := norm_sum_le _ _\n    _ ≤ ∑ i : Fin d, ∑ j : Fin d,\n        ‖(∂_{e i} (∂_{e i} (∂_{e j} (∂_{e j} f)))) x‖ :=\n      Finset.sum_le_sum (fun i _ ↦ norm_sum_le _ _)\n    _ ≤ ∑ _i : Fin d, ∑ _j : Fin d, B :=\n      Finset.sum_le_sum (fun i _ ↦ Finset.sum_le_sum (fun j _ ↦ hword i j))\n    _ = (d : ℝ) ^ 2 * B := by simp; ring\n\nprivate theorem normalizedFourth_apply\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (x : EuclideanSpace ℝ (Fin d)) :\n    normalizedFourth f x = (f x - tau • Δ f x) -\n      tau • (Δ f x - tau • Δ (Δ f) x) := by\n  have hΔ : Δ (f - tau • Δ f) = Δ f - tau • Δ (Δ f) := by\n    change (laplacianCLM ℝ (EuclideanSpace ℝ (Fin d))\n      𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (f - tau • Δ f) = _\n    rw [map_sub, map_smul]\n    rfl\n  change ((f - tau • Δ f) - tau • Δ (f - tau • Δ f)) x = _\n  rw [hΔ]\n  rfl\n\nprivate theorem normalizedFourth_norm_le\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (x : EuclideanSpace ℝ (Fin d))\n    (B : ℝ) (hjet : ∀ j : ℕ, j ≤ 4 → ‖iteratedFDeriv ℝ j f x‖ ≤ B) :\n    ‖normalizedFourth f x‖ ≤ (1 + tau * d) ^ 2 * B := by\n  have h₀ : ‖f x‖ ≤ B := by simpa only [norm_iteratedFDeriv_zero] using hjet 0 (by norm_num)\n  have h₂ := laplacian_norm_le f x B (hjet 2 (by norm_num))\n  have h₄ := laplacian_sq_norm_le f x B (hjet 4 le_rfl)\n  rw [normalizedFourth_apply]\n  calc\n    ‖(f x - tau • Δ f x) - tau • (Δ f x - tau • Δ (Δ f) x)‖ ≤\n        ‖f x‖ + tau * ‖Δ f x‖ + tau * (‖Δ f x‖ + tau * ‖Δ (Δ f) x‖) := by\n      calc\n        _ ≤ ‖f x - tau • Δ f x‖ + ‖tau • (Δ f x - tau • Δ (Δ f) x)‖ := norm_sub_le _ _\n        _ ≤ (‖f x‖ + ‖tau • Δ f x‖) +\n            ‖tau‖ * (‖Δ f x‖ + ‖tau • Δ (Δ f) x‖) := by\n          rw [norm_smul]\n          exact add_le_add (norm_sub_le _ _)\n            (mul_le_mul_of_nonneg_left (norm_sub_le _ _) (norm_nonneg _))\n        _ = _ := by simp only [norm_smul, Real.norm_eq_abs, abs_of_nonneg tau_nonneg]\n    _ ≤ B + tau * ((d : ℝ) * B) + tau * ((d : ℝ) * B +\n        tau * ((d : ℝ) ^ 2 * B)) := by\n      exact add_le_add\n        (add_le_add h₀ (mul_le_mul_of_nonneg_left h₂ tau_nonneg))\n        (mul_le_mul_of_nonneg_left\n          (add_le_add h₂ (mul_le_mul_of_nonneg_left h₄ tau_nonneg)) tau_nonneg)\n    _ = (1 + tau * d) ^ 2 * B := by ring\n\nprivate theorem normalizedFourth_zero_off_support\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (x : EuclideanSpace ℝ (Fin d))\n    (hx : x ∉ tsupport f) : normalizedFourth f x = 0 := by\n  let e := EuclideanSpace.basisFun (Fin d) ℝ\n  have hf : f x = 0 := by\n    by_contra hne\n    exact hx (subset_closure hne)\n  have hword {n : ℕ} (m : Fin n → EuclideanSpace ℝ (Fin d)) : ∂^{m} f x = 0 := by\n    by_contra hne\n    exact hx (SchwartzMap.tsupport_iteratedLineDerivOp_subset m f (subset_closure hne))\n  have h₂ : Δ f x = 0 := by\n    rw [SchwartzMap.laplacian_eq_sum e]\n    simp only [sum_apply]\n    apply Finset.sum_eq_zero\n    intro i _\n    exact hword ![e i, e i]\n  have h₄ : Δ (Δ f) x = 0 := by\n    rw [laplacian_sq_sum e f]\n    simp only [sum_apply]\n    apply Finset.sum_eq_zero\n    intro i _\n    apply Finset.sum_eq_zero\n    intro j _\n    exact hword ![e i, e i, e j, e j]\n  rw [normalizedFourth_apply, hf, h₂, h₄]\n  simp\n\nprivate theorem fourier_laplacian_apply (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (ξ : EuclideanSpace ℝ (Fin d)) :\n    𝓕 (Δ f) ξ = (-(2 * Real.pi) ^ 2 * ‖ξ‖ ^ 2) • 𝓕 f ξ := by\n  rw [SchwartzMap.laplacian_eq_fourierMultiplierCLM,\n    FourierTransform.fourier_smul, SchwartzMap.fourierMultiplierCLM_apply,\n    FourierTransform.fourier_fourierInv_eq]\n  change (-(2 * Real.pi) ^ 2) •\n      (SchwartzMap.smulLeftCLM ℂ (fun x : EuclideanSpace ℝ (Fin d) ↦ ‖x‖ ^ 2) (𝓕 f) ξ) = _\n  rw [SchwartzMap.smulLeftCLM_apply_apply\n    (Function.hasTemperateGrowth_norm_sq (EuclideanSpace ℝ (Fin d))), smul_smul]\n\nprivate theorem fourier_normalizedStep_apply (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (ξ : EuclideanSpace ℝ (Fin d)) :\n    𝓕 (normalizedStep f) ξ = (1 + ‖ξ‖ ^ 2) • 𝓕 f ξ := by\n  have hlin : 𝓕 (normalizedStep f) =\n      𝓕 f - (((2 * Real.pi) ^ 2)⁻¹ : ℝ) • 𝓕 (Δ f) := by\n    simp only [normalizedStep, sub_eq_add_neg, FourierTransform.fourier_add,\n      FourierTransform.fourier_neg, FourierTransform.fourier_smul]\n  rw [hlin]\n  change 𝓕 f ξ - (((2 * Real.pi) ^ 2)⁻¹ : ℝ) • 𝓕 (Δ f) ξ = _\n  rw [fourier_laplacian_apply, smul_smul]\n  have hpi : (2 * Real.pi) ^ 2 ≠ 0 := by positivity\n  have hcoef : ((2 * Real.pi) ^ 2)⁻¹ *\n      (-(2 * Real.pi) ^ 2 * ‖ξ‖ ^ 2) = -(‖ξ‖ ^ 2) := by\n    calc\n      ((2 * Real.pi) ^ 2)⁻¹ * (-(2 * Real.pi) ^ 2 * ‖ξ‖ ^ 2) =\n          -((((2 * Real.pi) ^ 2)⁻¹ * (2 * Real.pi) ^ 2) * ‖ξ‖ ^ 2) := by ring\n      _ = -(‖ξ‖ ^ 2) := by rw [inv_mul_cancel₀ hpi, one_mul]\n  rw [hcoef, neg_smul, sub_neg_eq_add, add_smul, one_smul]\n\nprivate theorem fourier_normalizedFourth_apply (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (ξ : EuclideanSpace ℝ (Fin d)) :\n    𝓕 (normalizedFourth f) ξ = (1 + ‖ξ‖ ^ 2) ^ 2 • 𝓕 f ξ := by\n  rw [normalizedFourth, fourier_normalizedStep_apply,\n    fourier_normalizedStep_apply, smul_smul, ← pow_two]\n\nprivate theorem normalizedFourth_integral_norm_le\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ))\n    (K : Set (EuclideanSpace ℝ (Fin d))) (hK : IsCompact K)\n    (hsupport : tsupport f ⊆ K) (B : ℝ)\n    (hbound : ∀ x, ‖normalizedFourth f x‖ ≤ B) :\n    (∫ x, ‖normalizedFourth f x‖) ≤ B * volume.real K := by\n  have hzero (x : EuclideanSpace ℝ (Fin d)) (hx : x ∉ K) :\n      ‖normalizedFourth f x‖ = 0 := by\n    rw [normalizedFourth_zero_off_support f x (fun hf ↦ hx (hsupport hf)), norm_zero]\n  have hset := setIntegral_eq_integral_of_forall_compl_eq_zero (μ := volume) hzero\n  rw [← hset]\n  calc\n    (∫ x in K, ‖normalizedFourth f x‖) ≤ ‖∫ x in K, ‖normalizedFourth f x‖‖ :=\n      le_abs_self _\n    _ ≤ B * volume.real K :=\n      norm_setIntegral_le_of_norm_le_const hK.measure_lt_top (fun x _ ↦ by\n        rw [Real.norm_eq_abs, abs_of_nonneg (norm_nonneg _)]\n        exact hbound x)\n\nprivate theorem fourier_norm_le_normalizedFourth_integral\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (ξ : EuclideanSpace ℝ (Fin d)) :\n    ‖𝓕 f ξ‖ ≤ (∫ x, ‖normalizedFourth f x‖) * ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹ := by\n  have hF : ‖𝓕 (normalizedFourth f) ξ‖ ≤ ∫ x, ‖normalizedFourth f x‖ := by\n    exact VectorFourier.norm_fourierIntegral_le_integral_norm Real.fourierChar volume\n      (innerₗ (EuclideanSpace ℝ (Fin d)))\n      (normalizedFourth f : EuclideanSpace ℝ (Fin d) → ℂ) ξ\n  have hidentity : ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹ * ‖𝓕 (normalizedFourth f) ξ‖ = ‖𝓕 f ξ‖ := by\n    rw [fourier_normalizedFourth_apply, norm_smul, Real.norm_eq_abs,\n      abs_of_nonneg (sq_nonneg (1 + ‖ξ‖ ^ 2))]\n    rw [← mul_assoc, inv_mul_cancel₀ (by positivity), one_mul]\n  calc\n    ‖𝓕 f ξ‖ = ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹ * ‖𝓕 (normalizedFourth f) ξ‖ := hidentity.symm\n    _ ≤ ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹ * (∫ x, ‖normalizedFourth f x‖) :=\n      mul_le_mul_of_nonneg_left hF (by positivity)\n    _ = _ := mul_comm _ _\n\nend SmoothReciprocityLogDecayingFourierEnvelopeProof\nopen SmoothReciprocityLogDecayingFourierEnvelopeProof in\n/-- The true constant-rho row has one common Fourier envelope retaining signed\nu0 decay. Its constant is fixed before every varying parameter and frequency.\nThe pointwise statement holds in every finite real dimension. -/\ntheorem CommonSmoothCutoff.smoothReciprocityLogWeight_zeroSlope_decaying_fourier_pointwise_envelope\n    {d : ℕ} (a c : EuclideanSpace ℝ (Fin d))\n    (Q : EuclideanSpace ℝ (Fin d) → ℂ)\n    (hQ : ContDiff ℝ ∞ Q) (hQc : HasCompactSupport Q) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ Z u₀ rho₀ R : ℝ, 1 ≤ Z → 0 ≤ R → |rho₀| ≤ R →\n        ∀ ξ : EuclideanSpace ℝ (Fin d),\n          (1 + |u₀|) * ‖𝓕 (smoothReciprocityLogWeight a 0 c Q Z u₀ rho₀) ξ‖ ≤\n            C * (1 + R) ^ 4 * ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹ := by\n  obtain ⟨C₄, hC₄, hjet⟩ :=\n    smoothReciprocityLogWeight_zeroSlope_decayJet_uniform a c Q hQ hQc\n  let L : ℝ := (1 + tau * d) ^ 2 * C₄\n  let M : ℝ := volume.real (tsupport Q)\n  have hL : 0 ≤ L := mul_nonneg (sq_nonneg _) hC₄.le\n  have hM : 0 ≤ M := ENNReal.toReal_nonneg\n  have hconstant : 0 ≤ L * M := mul_nonneg hL hM\n  refine ⟨1 + L * M, by positivity, ?_⟩\n  intro Z u₀ rho₀ R hZ hR hrho ξ\n  let f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ) :=\n    smoothReciprocityLogSchwartzWeight a 0 c Q hQ hQc Z u₀ rho₀\n  let w : ℝ := 1 + |u₀|\n  let p : ℝ := 1 + R\n  have hw : 0 < w := by dsimp [w]; positivity\n  have hp4 : 0 ≤ p ^ 4 := by positivity\n  have hj (j : ℕ) (hj : j ≤ 4) (x : EuclideanSpace ℝ (Fin d)) :\n      ‖iteratedFDeriv ℝ j f x‖ ≤ C₄ * p ^ 4 / w := by\n    have hjw : w * ‖iteratedFDeriv ℝ j f x‖ ≤ C₄ * p ^ 4 :=\n      hjet Z u₀ rho₀ R hZ hR hrho j hj x\n    apply (le_div_iff₀ hw).2\n    simpa only [mul_comm] using hjw\n  have hbound (x : EuclideanSpace ℝ (Fin d)) :\n      ‖normalizedFourth f x‖ ≤ L * p ^ 4 / w := by\n    exact (normalizedFourth_norm_le f x (C₄ * p ^ 4 / w)\n      (fun j hj' ↦ hj j hj' x)).trans_eq (by dsimp [L]; ring)\n  have hsupport : tsupport f ⊆ tsupport Q :=\n    smoothReciprocityLogWeight_tsupport_subset a 0 c Q Z u₀ rho₀\n  have hL1 := normalizedFourth_integral_norm_le f (tsupport Q) hQc hsupport\n    (L * p ^ 4 / w) hbound\n  change w * ‖𝓕 f ξ‖ ≤ _\n  calc\n    w * ‖𝓕 f ξ‖ ≤\n        w * ((∫ x, ‖normalizedFourth f x‖) * ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹) :=\n      mul_le_mul_of_nonneg_left (fourier_norm_le_normalizedFourth_integral f ξ) hw.le\n    _ ≤ w * (((L * p ^ 4 / w) * M) * ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹) :=\n      mul_le_mul_of_nonneg_left\n        (mul_le_mul_of_nonneg_right hL1 (by positivity)) hw.le\n    _ = (L * M) * p ^ 4 * ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹ := by\n      rw [div_eq_mul_inv]\n      calc\n        _ = (w * w⁻¹) * ((L * M) * p ^ 4 * ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹) := by ring\n        _ = _ := by rw [mul_inv_cancel₀ hw.ne', one_mul]\n    _ ≤ (1 + L * M) * (1 + R) ^ 4 * ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹ :=\n      mul_le_mul_of_nonneg_right\n        (mul_le_mul_of_nonneg_right (by linarith) hp4) (by positivity)\n\n/-- The common radial kernel is integrable in d<4, by the parent public theorem.\nThis reuses the same kernel; no supremum and integral are interchanged. -/\ntheorem CommonSmoothCutoff.smoothReciprocityLogWeight_zeroSlope_decaying_fourier_envelope_kernel_integrable\n    {d : ℕ} (hd : d < 4) :\n    Integrable (fun ξ : EuclideanSpace ℝ (Fin d) ↦ ((1 + ‖ξ‖ ^ 2) ^ 2)⁻¹) :=\n  smoothReciprocityLogWeight_fourier_envelope_kernel_integrable hd\n\nend\n\nend ImbalancedChen.Part3\n",
+    "explicit_declarations": 16,
+    "explicit_private_declarations": 14,
+    "explicit_public_declarations": 2,
+    "generated_declarations": null
+  },
+  "imports": [
+    "ImbalancedChen.Part3SmoothReciprocityLogDecayJet",
+    "ImbalancedChen.Part3SmoothReciprocityLogFourierEnvelope"
+  ],
+  "inputs": [
+    {
+      "path": "ImbalancedChen/Part3SmoothReciprocityLogDecayJet.lean",
+      "sha256": "7629b96caa79a368e728c66906a9d257a41366f64f3310832ae3d25af4895407",
+      "acceptance_boundary": "UNACCEPTED_PARENT_SOURCE_CANDIDATE; no acceptance inferred from import"
+    },
+    {
+      "path": "ImbalancedChen/Part3SmoothReciprocityLogFourierEnvelope.lean",
+      "sha256": "93415c30b282ea8f4d04ae23c6260b158b011ca24a6c01dc1bc2b50daa23370f",
+      "acceptance_boundary": "UNACCEPTED_PARENT_SOURCE_CANDIDATE; no acceptance inferred from import"
+    },
+    {
+      "path": "ImbalancedChen/Part3SmoothReciprocityLogFourierL1.lean",
+      "sha256": "8c023450f0578c021addb4a33f4da1bbc63801c0304de9f57b53dec72dbb1a44",
+      "acceptance_boundary": "Parent reports accepted; this task makes no independent runtime claim"
+    },
+    {
+      "path": "ImbalancedChen/Part3SchwartzFourierL1Sobolev.lean",
+      "sha256": "b839d998114141aa8a5272e46601857a48b2ea80683380ddb674e2571f082140",
+      "acceptance_boundary": "Parent reports accepted; this task makes no independent runtime claim"
+    },
+    {
+      "path": "ImbalancedChen/Part3SmoothReciprocityLogMixed.lean",
+      "sha256": "625fe3def4535386b877996caa1f71c872495e1bbf1219edb2971ba37dcd100d",
+      "acceptance_boundary": "Parent reports accepted; this task makes no independent runtime claim"
+    },
+    {
+      "path": "ImbalancedChen/Part3SmoothReciprocityLogRegularity.lean",
+      "sha256": "23b01c7001aa23174075e46d15ceedfaf58e7b3f9d97080f5ec428fbba0df629",
+      "acceptance_boundary": "Parent reports accepted; this task makes no independent runtime claim"
+    },
+    {
+      "path": "ImbalancedChen/Part3SmoothReciprocityProfile.lean",
+      "sha256": "4b67e10465db25f2360b3af0f7ba4e14985c1f0621fdf11669f738230ed8cc09",
+      "acceptance_boundary": "Parent reports accepted; this task makes no independent runtime claim"
+    }
+  ],
+  "parent_candidate_boundary": {
+    "weightedJet": "7629b96caa79a368e728c66906a9d257a41366f64f3310832ae3d25af4895407: parent says currently undergoing unique heavy strict compile; this task has no success evidence",
+    "ordinaryEnvelope": "93415c30b282ea8f4d04ae23c6260b158b011ca24a6c01dc1bc2b50daa23370f: parent one-line repair after first strict final heq reflexive goal; not recompiled at dispatch",
+    "current_source_bytes_are_dependency_candidates": true,
+    "downstream_usable_acceptance": "Requires parent acceptance and separate complete strict/stock/ALL verification of this exact candidate; not performed here"
+  },
+  "exact_mathematical_contract": {
+    "fixed_before_witness": "d : Nat, a c : EuclideanSpace R (Fin d), Q : E -> C, hQ : ContDiff R infinity Q, hQc : HasCompactSupport Q",
+    "witness": "exists C : R, 0 < C",
+    "varying_after_witness": "forall Z u0 rho0 R : R, 1 <= Z -> 0 <= R -> abs rho0 <= R -> forall xi : E",
+    "actual_object": "Fourier transform of smoothReciprocityLogWeight a 0 c Q Z u0 rho0, complex-valued throughout",
+    "conclusion": "(1 + abs u0) * norm(FT(actualWeight)(xi)) <= C * (1 + R)^4 * ((1 + norm(xi)^2)^2)^(-1)",
+    "pointwise_dimension": "all finite d including d=0",
+    "kernel_integrability_dimension": "d < 4, via parent public theorem; d=2 covered",
+    "forbidden_extra_premises": "No supplied energy, Sobolev, Fourier-symbol, Fourier-norm, row envelope, parameter-specific C, or target estimate assumptions",
+    "no_integral_sup_exchange": true
+  },
+  "payment_chain": [
+    "Parent weightedJet supplies moment-five-derived true jets j<=4 with (1+abs u0) retained; no deduction from ordinary envelope",
+    "Set w=1+abs u0 > 0; divide each genuine jet estimate by w",
+    "Evaluate actual normalizedFourth=(Id-((2*pi)^2)^(-1)*Delta)^2 using j=0,2,4; coefficient (1+tau*d)^2",
+    "All derivatives vanish outside tsupport Q; compact fixed support pays actual normalizedFourth integral of norm",
+    "Native norm_fourierIntegral_le_integral_norm and actual normalizedFourth symbol (1+norm xi^2)^2 produce pointwise radial decay",
+    "Multiply by w; cancel w*w^(-1); witness 1+((1+tau*d)^2*C4)*volume.real(tsupport Q) was selected before all varying parameters",
+    "The common radial kernel integrability theorem reuses parent public API only"
+  ],
+  "necessary_duplication": {
+    "copied_scope": "14 private declarations, tau through fourier_norm_le_normalizedFourth_integral, from current ordinary-envelope source; only enclosing namespace changed",
+    "reason": "Accepted FourierL1 and SchwartzFourierL1Sobolev files expose their final L1 conclusions and actual normalized operators, but derivative-to-operator/support and Fourier-symbol bridges are private. Ordinary-envelope candidate exposes only its final unweighted envelope and radial integrability theorem. Private generated names are not accessed. A weighted conclusion cannot follow from its unweighted final theorem.",
+    "no_parent_modification": true,
+    "public_reuse": "smoothReciprocityLogWeight_zeroSlope_decayJet_uniform; smoothReciprocityLogSchwartzWeight; smoothReciprocityLogWeight_tsupport_subset; smoothReciprocityLogWeight_fourier_envelope_kernel_integrable"
+  },
+  "native_mathlib": {
+    "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib",
+    "required_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "pin_origin": "Fixed parent instruction; no Git operation used",
+    "native_source_and_spans": [
+      {
+        "api": "iteratedLineDerivOp_eq_iteratedFDeriv",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\SchwartzSpace\\Deriv.lean",
+        "source_sha256": "87cd6a4f452f1eceeaa5e68a50e2d083dfb58191f0dfe7f196488e4ab532f1a7",
+        "first_line_1based": 132,
+        "last_line_1based": 140,
+        "literal_source_span": "theorem iteratedLineDerivOp_eq_iteratedFDeriv {n : ℕ} {m : Fin n → E} {f : 𝓢(E, F)} {x : E} :\n    ∂^{m} f x = iteratedFDeriv ℝ n f x m := by\n  induction n generalizing x with\n  | zero => simp\n  | succ n ih =>\n    rw [iteratedLineDerivOp_succ_left, iteratedFDeriv_succ_apply_left,\n      ← fderiv_continuousMultilinear_apply_const_apply]\n    · simp only [lineDerivOp_apply_eq_fderiv, ← ih]\n    · exact (f.smooth ⊤).differentiable_iteratedFDeriv (mod_cast ENat.natCast_lt_top n) x",
+        "span_utf8_sha256": "ac636496d27dbeccf3403d641e616bbee062331a971b4e8ddee37c9b57bf7f4a",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "directional derivative support inclusion",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\SchwartzSpace\\Deriv.lean",
+        "source_sha256": "87cd6a4f452f1eceeaa5e68a50e2d083dfb58191f0dfe7f196488e4ab532f1a7",
+        "first_line_1based": 171,
+        "last_line_1based": 181,
+        "literal_source_span": "theorem tsupport_lineDerivOp_subset (m : E) (f : 𝓢(E, F)) :\n    tsupport (∂_{m} f : 𝓢(E, F)) ⊆ tsupport f :=\n  tsupport_fderiv_apply_subset ℝ m\n\ntheorem tsupport_iteratedLineDerivOp_subset {n : ℕ} (m : Fin n → E) (f : 𝓢(E, F)) :\n    tsupport (∂^{m} f : 𝓢(E, F)) ⊆ tsupport f := by\n  induction n with\n  | zero => simp\n  | succ n IH =>\n    rw [iteratedLineDerivOp_succ_left]\n    exact (tsupport_lineDerivOp_subset (m 0) _).trans (IH <| Fin.tail m)",
+        "span_utf8_sha256": "7bde91c45de9d489c5b1a78ce82005bc2a78e8342466d2d577ec589b34a4cd34",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "actual Laplacian and orthonormal basis finite sum",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\SchwartzSpace\\Deriv.lean",
+        "source_sha256": "87cd6a4f452f1eceeaa5e68a50e2d083dfb58191f0dfe7f196488e4ab532f1a7",
+        "first_line_1based": 194,
+        "last_line_1based": 211,
+        "literal_source_span": "  laplacian := laplacianCLM ℝ E 𝓢(E, F)\n\ntheorem laplacianCLM_eq' (f : 𝓢(E, F)) : laplacianCLM ℝ E 𝓢(E, F) f = Δ f := rfl\n\ntheorem laplacian_eq_sum [Fintype ι] (b : OrthonormalBasis ι ℝ E) (f : 𝓢(E, F)) :\n    Δ f = ∑ i, ∂_{b i} (∂_{b i} f) :=\n  LineDeriv.laplacianCLM_eq_sum b f\n\nvariable (𝕜) in\n@[simp]\ntheorem laplacianCLM_eq [RCLike 𝕜] [NormedSpace 𝕜 F] (f : 𝓢(E, F)) :\n    laplacianCLM 𝕜 E 𝓢(E, F) f = Δ f := by\n  simp [laplacianCLM, laplacian_eq_sum (stdOrthonormalBasis ℝ E)]\n\ntheorem laplacian_apply (f : 𝓢(E, F)) (x : E) : Δ f x = Δ (f : E → F) x := by\n  rw [laplacian_eq_sum (stdOrthonormalBasis ℝ E)]\n  simp [InnerProductSpace.laplacian_eq_iteratedFDeriv_orthonormalBasis f (stdOrthonormalBasis ℝ E),\n    sum_apply, ← iteratedLineDerivOp_eq_iteratedFDeriv, iteratedLineDerivOp_succ_left]",
+        "span_utf8_sha256": "fd2cd8a788a4e36972336da669b0fdbefe6ec1c5ebb48e444addca1dd8339342",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "iterated words and exact recursive order",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\DerivNotation.lean",
+        "source_sha256": "810b2eb230c1a433d88acadf7472080648a9bb39145bc2d8989cf9f5cfc8a13b",
+        "first_line_1based": 51,
+        "last_line_1based": 69,
+        "literal_source_span": "\n/-- `∂^{m} f` is the iterated line derivative of `f`, where `m` is a finite number of (different)\ndirections. -/\ndef iteratedLineDerivOp {n : ℕ} : (Fin n → V) → E → E :=\n  Nat.recOn n (fun _ ↦ id) (fun _ rec y ↦ LineDeriv.lineDerivOp (y 0) ∘ rec (tail y))\n\n@[inherit_doc] scoped notation \"∂^{\" v \"}\" => LineDeriv.iteratedLineDerivOp v\n\n@[simp]\ntheorem iteratedLineDerivOp_fin_zero (m : Fin 0 → V) (f : E) : ∂^{m} f = f :=\n  rfl\n\n@[simp]\ntheorem iteratedLineDerivOp_one (m : Fin 1 → V) (f : E) : ∂^{m} f = ∂_{m 0} f :=\n  rfl\n\ntheorem iteratedLineDerivOp_succ_left {n : ℕ} (m : Fin (n + 1) → V) (f : E) :\n    ∂^{m} f = ∂_{m 0} (∂^{tail m} f) :=\n  rfl",
+        "span_utf8_sha256": "f0e64b5fe163a41befa39020dfe15d9905843c1afd6a70fa9bfe574e8ca2c035",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "lineDerivOp_sum",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\DerivNotation.lean",
+        "source_sha256": "810b2eb230c1a433d88acadf7472080648a9bb39145bc2d8989cf9f5cfc8a13b",
+        "first_line_1based": 149,
+        "last_line_1based": 161,
+        "literal_source_span": "@[simp]\ntheorem lineDerivOp_zero (v : V) : ∂_{v} (0 : E) = 0 :=\n  map_zero (AddMonoidHom.mk' ∂_{v} (lineDerivOp_add v))\n\n@[simp]\ntheorem lineDerivOp_neg (v : V) (x : E) : ∂_{v} (-x) = - ∂_{v} x :=\n  map_neg (AddMonoidHom.mk' ∂_{v} (lineDerivOp_add v)) x\n\n@[simp]\ntheorem lineDerivOp_sum (v : V) (f : ι → E) (s : Finset ι) :\n    ∂_{v} (∑ i ∈ s, f i) = ∑ i ∈ s, ∂_{v} (f i) :=\n  map_sum (AddMonoidHom.mk' ∂_{v} (lineDerivOp_add v)) f s\n",
+        "span_utf8_sha256": "1678e54a5b6dd50a1849c913d8046a49f783f318ccd6919c47a40fb4929fee52",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "laplacianCLM linearity and basis sum",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\DerivNotation.lean",
+        "source_sha256": "810b2eb230c1a433d88acadf7472080648a9bb39145bc2d8989cf9f5cfc8a13b",
+        "first_line_1based": 343,
+        "last_line_1based": 363,
+        "literal_source_span": "  [LineDerivAdd E V₁ V₂] [LineDerivSMul R E V₁ V₂] [ContinuousLineDeriv E V₁ V₂]\n  [LineDerivAdd E V₂ V₃] [LineDerivSMul R E V₂ V₃] [ContinuousLineDeriv E V₂ V₃]\n\nvariable (R E V₁) in\n/-- The Laplacian defined by iterated `lineDerivOp` as a continuous linear map. -/\ndef laplacianCLM : V₁ →L[R] V₃ :=\n  ∑ i, lineDerivOpCLM R V₂ (stdOrthonormalBasis ℝ E i) ∘L\n    lineDerivOpCLM R V₁ (stdOrthonormalBasis ℝ E i)\n\nend definition\n\nvariable [Module ℝ V₁] [Module ℝ V₂] [Module ℝ V₃]\n  [TopologicalSpace V₁] [TopologicalSpace V₂] [TopologicalSpace V₃] [IsTopologicalAddGroup V₃]\n  [LineDerivAdd E V₁ V₂] [LineDerivSMul ℝ E V₁ V₂] [ContinuousLineDeriv E V₁ V₂]\n  [LineDerivAdd E V₂ V₃] [LineDerivSMul ℝ E V₂ V₃] [ContinuousLineDeriv E V₂ V₃]\n  [LineDerivLeftSMul ℝ E V₁ V₂] [LineDerivLeftSMul ℝ E V₂ V₃]\n\ntheorem laplacianCLM_eq_sum [Fintype ι] (v : OrthonormalBasis ι ℝ E) (f : V₁) :\n    laplacianCLM ℝ E V₁ f = ∑ i, ∂_{v i} (∂_{v i} f) := by\n  simp [laplacianCLM, ← tensorLineDerivTwo_canonicalCovariantTensor_eq_sum]\n",
+        "span_utf8_sha256": "aabf9a52e4dc325cd703d2ed5ef2e1b8756c8d1ee519e9596cbc0600be2bb66c",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "operator norm bounds evaluations at vectors of norm at most one",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Normed\\Module\\Multilinear\\Basic.lean",
+        "source_sha256": "62b0c5491f2c576dacf5913f9e04fcafd49b2901449bf57e4213df5ec0e05534",
+        "first_line_1based": 378,
+        "last_line_1based": 392,
+        "literal_source_span": "/-- The fundamental property of the operator norm of a continuous multilinear map:\n`‖f m‖` is bounded by `‖f‖` times the product of the `‖m i‖`. -/\ntheorem le_opNorm (f : ContinuousMultilinearMap 𝕜 E G) (m : ∀ i, E i) :\n    ‖f m‖ ≤ ‖f‖ * ∏ i, ‖m i‖ :=\n  f.isLeast_opNorm.1.2 m\n\ntheorem le_mul_prod_of_opNorm_le_of_le {f : ContinuousMultilinearMap 𝕜 E G}\n    {m : ∀ i, E i} {C : ℝ} {b : ι → ℝ} (hC : ‖f‖ ≤ C) (hm : ∀ i, ‖m i‖ ≤ b i) :\n    ‖f m‖ ≤ C * ∏ i, b i :=\n  (f.le_opNorm m).trans <| by gcongr; exacts [f.opNorm_nonneg.trans hC, hm _]\n\ntheorem le_opNorm_mul_prod_of_le (f : ContinuousMultilinearMap 𝕜 E G)\n    {m : ∀ i, E i} {b : ι → ℝ} (hm : ∀ i, ‖m i‖ ≤ b i) : ‖f m‖ ≤ ‖f‖ * ∏ i, b i :=\n  le_mul_prod_of_opNorm_le_of_le le_rfl hm\n",
+        "span_utf8_sha256": "91fec482599115f5d912c129ac6274d13ccc85ada0753ace4193227b066c7bd2",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "norm_iteratedFDeriv_zero",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Calculus\\ContDiff\\FTaylorSeries.lean",
+        "source_sha256": "8c82bcae96ad4759777af750ea750ffe9af2721914dde7a4ce7438ac5940c9af",
+        "first_line_1based": 813,
+        "last_line_1based": 824,
+        "literal_source_span": "@[simp]\ntheorem iteratedFDeriv_zero_apply (m : Fin 0 → E) :\n    (iteratedFDeriv 𝕜 0 f x : (Fin 0 → E) → F) m = f x :=\n  rfl\n\ntheorem iteratedFDeriv_zero_eq_comp :\n    iteratedFDeriv 𝕜 0 f = (continuousMultilinearCurryFin0 𝕜 E F).symm ∘ f :=\n  rfl\n\n@[simp]\ntheorem norm_iteratedFDeriv_zero : ‖iteratedFDeriv 𝕜 0 f x‖ = ‖f x‖ := by\n  rw [iteratedFDeriv_zero_eq_comp, comp_apply, LinearIsometryEquiv.norm_map]",
+        "span_utf8_sha256": "563afb79abb647566ec1aba1fbe44085ceb3afaf7098af1ead6468db17363d33",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "finrank_euclideanSpace_fin",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\InnerProductSpace\\PiL2.lean",
+        "source_sha256": "1f9827b2db67213c725a2dcc3fec52a87772966d1fbd3fc6857a019dbd7a6053",
+        "first_line_1based": 207,
+        "last_line_1based": 209,
+        "literal_source_span": "theorem finrank_euclideanSpace_fin {n : ℕ} :\n    Module.finrank 𝕜 (EuclideanSpace 𝕜 (Fin n)) = n := by simp\n",
+        "span_utf8_sha256": "548e1f219a747aec7145f10940039f8d6edb5ccc3fb6515367651521703e9100",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "OrthonormalBasis.norm_eq_one",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\InnerProductSpace\\PiL2.lean",
+        "source_sha256": "1f9827b2db67213c725a2dcc3fec52a87772966d1fbd3fc6857a019dbd7a6053",
+        "first_line_1based": 455,
+        "last_line_1based": 458,
+        "literal_source_span": "\n@[simp]\nlemma norm_eq_one (b : OrthonormalBasis ι 𝕜 E) (i : ι) :\n    ‖b i‖ = 1 := b.orthonormal.norm_eq_one i",
+        "span_utf8_sha256": "c1496ac743f6d1fd453cee68e1394978e28ac0bc5c7bd4395904fd2784d69857",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "EuclideanSpace.basisFun",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\InnerProductSpace\\PiL2.lean",
+        "source_sha256": "1f9827b2db67213c725a2dcc3fec52a87772966d1fbd3fc6857a019dbd7a6053",
+        "first_line_1based": 801,
+        "last_line_1based": 809,
+        "literal_source_span": "variable (𝕜 ι)\n\n/-- The basis `Pi.basisFun`, bundled as an orthonormal basis of `EuclideanSpace 𝕜 ι`. -/\nnoncomputable def basisFun : OrthonormalBasis ι 𝕜 (EuclideanSpace 𝕜 ι) :=\n  ⟨LinearIsometryEquiv.refl _ _⟩\n\n@[simp]\ntheorem basisFun_apply [DecidableEq ι] (i : ι) : basisFun ι 𝕜 i = EuclideanSpace.single i 1 :=\n  PiLp.basisFun_apply _ _ _ _",
+        "span_utf8_sha256": "3b47fe5a5597828330f09dfdaada56501d1403b052c842c8ce455b169690fbbb",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "IsCompact.measure_lt_top",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Measure\\Typeclasses\\Finite.lean",
+        "source_sha256": "731d53e69288e971655bc19cdd45b70353b40d335eccf08189b0c377559b2fbd",
+        "first_line_1based": 331,
+        "last_line_1based": 344,
+        "literal_source_span": "/-- A measure `μ` is finite on compacts if any compact set `K` satisfies `μ K < ∞`. -/\nclass IsFiniteMeasureOnCompacts [TopologicalSpace α] (μ : Measure α) : Prop where\n  protected lt_top_of_isCompact : ∀ ⦃K : Set α⦄, IsCompact K → μ K < ∞\n\n/-- A compact subset has finite measure for a measure which is finite on compacts. -/\ntheorem _root_.IsCompact.measure_lt_top [TopologicalSpace α] {μ : Measure α}\n    [IsFiniteMeasureOnCompacts μ] ⦃K : Set α⦄ (hK : IsCompact K) : μ K < ∞ :=\n  IsFiniteMeasureOnCompacts.lt_top_of_isCompact hK\n\n/-- A compact subset has finite measure for a measure which is finite on compacts. -/\ntheorem _root_.IsCompact.measure_ne_top [TopologicalSpace α] {μ : Measure α}\n    [IsFiniteMeasureOnCompacts μ] ⦃K : Set α⦄ (hK : IsCompact K) : μ K ≠ ∞ :=\n  hK.measure_lt_top.ne\n",
+        "span_utf8_sha256": "54106cb4fd8031aeba004a0a6ddf6940f66a9c5d1b78afc16b4499de3573210f",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "setIntegral_eq_integral_of_forall_compl_eq_zero",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Integral\\Bochner\\Set.lean",
+        "source_sha256": "119710a23a0a09d22f770ca36844ddc3ca1d72cb479e231fe9ec06cea20629f9",
+        "first_line_1based": 478,
+        "last_line_1based": 491,
+        "literal_source_span": "/-- If a function vanishes almost everywhere on `sᶜ`, then its integral on `s`\ncoincides with its integral on the whole space. -/\ntheorem setIntegral_eq_integral_of_ae_compl_eq_zero (h : ∀ᵐ x ∂μ, x ∉ s → f x = 0) :\n    ∫ x in s, f x ∂μ = ∫ x, f x ∂μ := by\n  symm\n  nth_rw 1 [← setIntegral_univ]\n  apply setIntegral_eq_of_subset_of_ae_sdiff_eq_zero nullMeasurableSet_univ (subset_univ _)\n  filter_upwards [h] with x hx h'x using hx h'x.2\n\n/-- If a function vanishes on `sᶜ`, then its integral on `s` coincides with its integral on the\nwhole space. -/\ntheorem setIntegral_eq_integral_of_forall_compl_eq_zero (h : ∀ x, x ∉ s → f x = 0) :\n    ∫ x in s, f x ∂μ = ∫ x, f x ∂μ :=\n  setIntegral_eq_integral_of_ae_compl_eq_zero (Eventually.of_forall h)",
+        "span_utf8_sha256": "ab51d68449cdc67a2ea3a01875d278a3c70a7bdbf28e2b1bc5117602ef6eba73",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "norm_setIntegral_le_of_norm_le_const_ae actual finite measure proof",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Integral\\Bochner\\Set.lean",
+        "source_sha256": "119710a23a0a09d22f770ca36844ddc3ca1d72cb479e231fe9ec06cea20629f9",
+        "first_line_1based": 588,
+        "last_line_1based": 591,
+        "literal_source_span": "theorem norm_setIntegral_le_of_norm_le_const_ae {C : ℝ} (hs : μ s < ∞)\n    (hC : ∀ᵐ x ∂μ.restrict s, ‖f x‖ ≤ C) : ‖∫ x in s, f x ∂μ‖ ≤ C * μ.real s := by\n  rw [← Measure.restrict_apply_univ] at *\n  have : IsFiniteMeasure (μ.restrict s) := ⟨hs⟩",
+        "span_utf8_sha256": "da3f14d8849e4715dea85fb8478f230e5be62050dd28a66553df52c79db7db84",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "norm_setIntegral_le_of_norm_le_const",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Integral\\Bochner\\Set.lean",
+        "source_sha256": "119710a23a0a09d22f770ca36844ddc3ca1d72cb479e231fe9ec06cea20629f9",
+        "first_line_1based": 615,
+        "last_line_1based": 618,
+        "literal_source_span": "\ntheorem norm_setIntegral_le_of_norm_le_const {C : ℝ} (hs : μ s < ∞) (hC : ∀ x ∈ s, ‖f x‖ ≤ C) :\n    ‖∫ x in s, f x ∂μ‖ ≤ C * μ.real s :=\n  norm_setIntegral_le_of_norm_le_const_ae' hs (Eventually.of_forall hC)",
+        "span_utf8_sha256": "b7bd1f4515190d133342ebda03c7c5ed42e7d34daee8b0721334dd8b0d80560b",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "Schwartz/function Fourier coercion is definitionally exact; reused actual source read",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\SchwartzSpace\\Fourier.lean",
+        "source_sha256": "8f74642098d0390e08eae980f72ba29801c46b03446dae2fd20eff9ba0f08737",
+        "first_line_1based": 97,
+        "last_line_1based": 102,
+        "literal_source_span": "\nlemma fourier_coe (f : 𝓢(V, E)) : 𝓕 f = 𝓕 (f : V → E) := rfl\n\n@[simp]\ntheorem fourierTransformCLM_apply (f : 𝓢(V, E)) :\n    fourierTransformCLM 𝕜 f = 𝓕 f := rfl",
+        "span_utf8_sha256": "5a21fa774ea2d1c222f9beb6081764c38cceb971a6f7621189cb260843304330",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "Native L1 to pointwise Fourier norm inequality",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Fourier\\FourierTransform.lean",
+        "source_sha256": "ef5c7bdc1c9a5da06fbd56111c36be06445ba33498109343e2d47b52a38915a6",
+        "first_line_1based": 99,
+        "last_line_1based": 104,
+        "literal_source_span": "/-- The uniform norm of the Fourier integral of `f` is bounded by the `L¹` norm of `f`. -/\ntheorem norm_fourierIntegral_le_integral_norm (e : AddChar 𝕜 𝕊) (μ : Measure V)\n    (L : V →ₗ[𝕜] W →ₗ[𝕜] 𝕜) (f : V → E) (w : W) :\n    ‖fourierIntegral e μ L f w‖ ≤ ∫ v : V, ‖f v‖ ∂μ := by\n  refine (norm_integral_le_integral_norm _).trans (le_of_eq ?_)\n  simp_rw [Circle.norm_smul]",
+        "span_utf8_sha256": "30d2766356e6dfef826beab27d7eabd894a50b413d5e19bb81d09f1755af362f",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "Actual Real Fourier transform is the vector Fourier integral with inner bilinear form",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Fourier\\FourierTransform.lean",
+        "source_sha256": "ef5c7bdc1c9a5da06fbd56111c36be06445ba33498109343e2d47b52a38915a6",
+        "first_line_1based": 417,
+        "last_line_1based": 439,
+        "literal_source_span": "variable [NormedAddCommGroup V] [InnerProductSpace ℝ V] [MeasurableSpace V] [BorelSpace V]\n  [NormedAddCommGroup W] [InnerProductSpace ℝ W] [MeasurableSpace W] [BorelSpace W]\n  [FiniteDimensional ℝ W]\n\nopen scoped RealInnerProductSpace\n\n@[simp] theorem fourierIntegral_convergent_iff {μ : Measure V} {f : V → E} (w : V) :\n    Integrable (fun v : V ↦ 𝐞 (- ⟪v, w⟫) • f v) μ ↔ Integrable f μ :=\n  fourierIntegral_convergent_iff' (innerSL ℝ) w\n\nvariable [FiniteDimensional ℝ V]\n\ninstance instFourierTransform : FourierTransform (V → E) (V → E) where\n  fourier f := VectorFourier.fourierIntegral 𝐞 volume (innerₗ V) f\n\ninstance instFourierTransformInv : FourierTransformInv (V → E) (V → E) where\n  fourierInv f w := VectorFourier.fourierIntegral 𝐞 volume (-innerₗ V) f w\n\nlemma fourier_eq (f : V → E) (w : V) :\n    𝓕 f w = ∫ v, 𝐞 (-⟪v, w⟫) • f v := rfl\n\nlemma fourier_eq' (f : V → E) (w : V) :\n    𝓕 f w = ∫ v, Complex.exp ((↑(-2 * π * ⟪v, w⟫) * Complex.I)) • f v := by",
+        "span_utf8_sha256": "7b6ac648e2b787d94fd44a6c2c0cef33d9bdeee5c6764db249c1f22e6ee2d2fb",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "Integrable radial rpow kernel at r4 and finrank<4",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\JapaneseBracket.lean",
+        "source_sha256": "417a150d05e8c2150dbcc8a3ad8adf294e6b3efd13eed6bb2a9377bc93150618",
+        "first_line_1based": 147,
+        "last_line_1based": 154,
+        "literal_source_span": "theorem integrable_rpow_neg_one_add_norm_sq {r : ℝ} (hnr : (finrank ℝ E : ℝ) < r) :\n    Integrable (fun x ↦ ((1 : ℝ) + ‖x‖ ^ 2) ^ (-r / 2)) μ := by\n  have hr : 0 < r := lt_of_le_of_lt (finrank ℝ E).cast_nonneg hnr\n  refine ((integrable_one_add_norm hnr).const_mul <| (2 : ℝ) ^ (r / 2)).mono'\n    ?_ (Eventually.of_forall fun x => ?_)\n  · apply Measurable.aestronglyMeasurable (by fun_prop)\n  refine (abs_of_pos ?_).trans_le (rpow_neg_one_add_norm_sq_le x hr)\n  positivity",
+        "span_utf8_sha256": "9b93f183d1c6b5cc1ca5d2d54cb16487792d05cef43362224e0b164f419ef5e4",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "fourierMultiplierCLM and exact apply",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\FourierMultiplier.lean",
+        "source_sha256": "22f9fad5a18b2e677fbb861a21f12c78275bffe0fa67c97495b8aa996011f067",
+        "first_line_1based": 48,
+        "last_line_1based": 56,
+        "literal_source_span": "variable (F) in\n/-- Fourier multiplier on Schwartz functions. -/\ndef fourierMultiplierCLM (g : E → 𝕜) : 𝓢(E, F) →L[𝕜] 𝓢(E, F) :=\n  fourierInvCLM 𝕜 𝓢(E, F) ∘L (smulLeftCLM F g) ∘L fourierCLM 𝕜 𝓢(E, F)\n\ntheorem fourierMultiplierCLM_apply (g : E → 𝕜) (f : 𝓢(E, F)) :\n    fourierMultiplierCLM F g f = 𝓕⁻ (smulLeftCLM F g (𝓕 f)) := by\n  rfl\n",
+        "span_utf8_sha256": "e642c1eb3d7c9834ba64d8c38216c5dd294bb9e7a051c5fb72513c37704955f3",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "Actual Laplacian symbol with full negative(2pi)^2 coefficient",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\FourierMultiplier.lean",
+        "source_sha256": "22f9fad5a18b2e677fbb861a21f12c78275bffe0fa67c97495b8aa996011f067",
+        "first_line_1based": 104,
+        "last_line_1based": 125,
+        "literal_source_span": "\nopen Laplacian\n\ntheorem laplacian_eq_fourierMultiplierCLM (f : 𝓢(E, F)) :\n    Δ f = -(2 * π) ^ 2 • fourierMultiplierCLM F (‖·‖ ^ 2) f := by\n  let ι := Fin (Module.finrank ℝ E)\n  let b := stdOrthonormalBasis ℝ E\n  have : ∀ i (hi : i ∈ Finset.univ), (inner ℝ · (b i) ^ 2).HasTemperateGrowth := by\n    fun_prop\n  simp_rw [laplacian_eq_sum b, ← b.sum_sq_inner_left, fourierMultiplierCLM_sum F this,\n    _root_.sum_apply, Finset.smul_sum]\n  congr 1\n  ext i x\n  simp_rw [smul_apply, lineDeriv_eq_fourierMultiplierCLM]\n  rw [← fourierMultiplierCLM_ofReal ℂ (by fun_prop)]\n  simp_rw [map_smul, smul_apply, smul_smul]\n  congr 1\n  · ring_nf\n    simp\n  · rw [fourierMultiplierCLM_ofReal ℂ (by fun_prop),\n      fourierMultiplierCLM_fourierMultiplierCLM_apply (by fun_prop) (by fun_prop)]\n    simp [sq, Pi.mul_def]",
+        "span_utf8_sha256": "e37e42c916c42f16ec8b2373d9b7e6009ac5d3eb45a2062ca464b6fb5dc82389",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "rpow_neg_ofNat from actual rpow_neg_natCast proof",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Pow\\Real.lean",
+        "source_sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+        "first_line_1based": 73,
+        "last_line_1based": 75,
+        "literal_source_span": "@[simp]\ntheorem rpow_neg_ofNat (x : ℝ) (n : ℕ) [n.AtLeastTwo] : x ^ (-ofNat(n) : ℝ) = x ^ (-ofNat(n) : ℤ) :=\n  rpow_neg_natCast _ _",
+        "span_utf8_sha256": "d45f295b2d54e30e8cd22e56bbc3d033df10aca61183bd671ccd02cce968a7ea",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "SchwartzMap.smulLeftCLM_apply and smulLeftCLM_apply_apply",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\SchwartzSpace\\Basic.lean",
+        "source_sha256": "419ecc0c5e5041be90969b55722b67e368c253d62c75e65209a749a031602cd0",
+        "first_line_1based": 743,
+        "last_line_1based": 750,
+        "literal_source_span": "theorem smulLeftCLM_apply {g : E → 𝕜} (hg : g.HasTemperateGrowth) (f : 𝓢(E, F)) :\n    smulLeftCLM F g f = fun x ↦ g x • f x := by\n  simp [smulLeftCLM, hg]\n\n@[simp]\ntheorem smulLeftCLM_apply_apply {g : E → 𝕜} (hg : g.HasTemperateGrowth) (f : 𝓢(E, F)) (x : E) :\n    smulLeftCLM F g f x = g x • f x := by\n  simp [smulLeftCLM_apply hg]",
+        "span_utf8_sha256": "01875ffbfbe8a1ca05210475155bb23cf307ae2b8483ac0850492f710dd578a3",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      },
+      {
+        "api": "Function.hasTemperateGrowth_norm_sq",
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\TemperateGrowth.lean",
+        "source_sha256": "4699e2d98fe58e309260bec97d498e956d047c7bab33ade2b7e4dc6acfd498e2",
+        "first_line_1based": 320,
+        "last_line_1based": 329,
+        "literal_source_span": "@[fun_prop]\ntheorem hasTemperateGrowth_inner_right (c : H) : (inner ℝ c ·).HasTemperateGrowth :=\n  (innerSL ℝ c).hasTemperateGrowth\n\nvariable (H) in\n@[fun_prop]\ntheorem hasTemperateGrowth_norm_sq : (fun (x : H) ↦ ‖x‖ ^ 2).HasTemperateGrowth := by\n  apply _root_.Function.HasTemperateGrowth.of_fderiv (C := 1) (k := 2)\n  · rw [fderiv_norm_sq]\n    convert! (2 • innerSL ℝ).hasTemperateGrowth",
+        "span_utf8_sha256": "e67edc726dba4f7f71a37f423cfa1030a04e39b3bef1d060951536dc1cfdfa43",
+        "inspection": "Freshly read as source only; no Lean tool invocation"
+      }
+    ],
+    "predecessor_native_review": {
+      "path": ".lake/proof-continuation/source-reviews/20261021-part3-smooth-reciprocity-log-fourier-envelope-one-source-candidate.json",
+      "sha256": "65ed9e1eb66845907673bcf7771b4855a53c1386d6758a20469d79e1a8e01c1c",
+      "usage": "Source span coordinates only; all included source spans freshly read and rebound to hashes; its historical runtime statuses are not adopted"
+    }
+  },
+  "source_only_audit": {
+    "entire_candidate_source_read": true,
+    "all_explicit_headers_included": true,
+    "no_sorry_admit_customaxiom_unsafe_partial": "Confirmed by full source reading, not compiler acceptance",
+    "no_checker_or_lean_process": true,
+    "no_proper_helper_cache_catalog_Git_CI": true,
+    "no_parent_file_mutation": true,
+    "no_subagents_or_threads": true,
+    "allowed_actions_only": "Read source/reviews, create exactly one Lean file and this review JSON, hashes, quota tool"
+  },
+  "applicable_AGENTS": "No AGENTS.md found in workspace recursive listing; explicit ancestor and ImbalancedChen checks also absent",
+  "baseline_untouched": "Parent-dispatched baseline170/3973/118; censusa3fe896; Git7aba961; not independently run, no catalog/registry/cache mutation",
+  "quota": {
+    "latest_used_percent": 31,
+    "remaining_percent": 69,
+    "stop_if_real_remaining_lte": 50,
+    "secondary": "Unavailable, not zero"
+  },
+  "ending_state": "HOLD after one complete source candidate; no automatic exploration, compile or promotion"
+}
