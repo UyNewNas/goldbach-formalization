@@ -212,10 +212,11 @@ original admissibility is not replaced by unproved transposed admissibility.
 | `FirstExitFrontierTupleReindex` | Actual stopped first-exit frontier histories preserve list multiplicities by an exact proper-prefix-valid sublist permutation, then genuine no-repetition permits original tuple and reciprocal-weight sum identities with target deletion, cap and strict/weak endpoints unchanged; finite dictionary only, without analytic density supplier | Strict compilation; original-object stock kernel replay; complete 43-declaration types, inventory and transitive axiom audit |
 | `Part3SharedFirstFactorSmallCoreSquaredFinite` | The actual smooth core has an exact divisor-indexed signed-frequency Cauchy decomposition with complex coefficients outside the real projection; rational unsigned-slope fibres prove the resonant Gram mass nonnegative and retain the signed complementary block, with no resonance logarithmic payment or spectral cancellation supplier | Strict compilation; original-object stock kernel replay; complete 34-declaration types, inventory and transitive axiom audit |
 | `Part3SmoothReciprocityProfile` | The actual complex low-pass Fourier profile with its signed positive slow reciprocity phase has genuine uniform polynomially weighted ordinary derivatives for every fixed pair of orders on Z at least one, retaining the precise degree-J modulation cost; no joint Mellin, root-operator or spectral cancellation supplier | Strict compilation; original-object stock kernel replay; complete 39-declaration types, inventory and transitive axiom audit |
+| `CurrentChenUpsilon7SourceErrorBudget` | The actual U7 unit and original P <= N^(1/5) prime and semiprime P_2 errors retain coefficient 2, ordered factors and repeated primes; their N^(19/20) bound is negligible relative to singularNormalization. The large-P main mean and full lower constant C remain open. | Strict compilation; original-object stock kernel replay; complete 17-declaration types, inventory and transitive axiom audit |
 
-These 165 modules contain **3872 complete owned declarations**, including
+These 166 modules contain **3889 complete owned declarations**, including
 private and generated declarations. The count is an inventory size, not
-3872 independent major mathematical theorems.
+3889 independent major mathematical theorems.
 
 The first, second and fifth literal current count means have complete
 ordinary proofs with no analytic supplier premise.
