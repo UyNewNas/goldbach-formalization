@@ -1,0 +1,1310 @@
+{
+  "status": "BOUNDED_INDEPENDENT_SOURCE_REVIEW_COMPLETE_NO_NEW_PROOF_ACCEPTANCE_HOLD",
+  "created_utc": "2026-10-21T08:59:57.2301850Z",
+  "reviewer": "/root/k_frontier_parent_review_sol_high_oct21",
+  "scope": "P4 prerequisite FirstExitAdmittedFrontierTuples only, exact current consumer comparison, relevant complete source types and parent/native bindings. Original 1+1.75 route; no entire sharp-K audit.",
+  "authorization_limits": [
+    "No compiler or checker",
+    "No proper gate or classifier",
+    "No new Lean helper or source change",
+    "No Git or catalog or CI",
+    "One atomic STATE JSON only; no verification archive write",
+    "No agents spawned"
+  ],
+  "quota": {
+    "before": {
+      "resets_at": 1793082725,
+      "codex_primary_remaining_percent": 67,
+      "secondary": null,
+      "codex_primary_used_percent": 33,
+      "source": "fresh get_usage_limits call at review entry",
+      "window_duration_mins": 10080
+    },
+    "after": {
+      "resets_at": 1793082725,
+      "codex_primary_remaining_percent": 67,
+      "secondary": null,
+      "codex_primary_used_percent": 33,
+      "source": "independently fresh get_usage_limits after mathematical/native source review",
+      "window_duration_mins": 10080
+    },
+    "stop_used_percent": 60,
+    "stop_remaining_percent": 40,
+    "null_is_not_zero": true
+  },
+  "prerequisite": {
+    "path": "ImbalancedChen\\FirstExitAdmittedFrontierTuples.lean",
+    "absolute_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\FirstExitAdmittedFrontierTuples.lean",
+    "source_sha256": "6d68ca9c79d8fdca0ee88f764f1abbf0bff8f9ac38b47d1c26a56ba860fa9e9a",
+    "bytes": 11472,
+    "LF_count": 223,
+    "imports": [
+      "ImbalancedChen.FirstExitFrontierTupleReindex"
+    ],
+    "declarations": [
+      {
+        "start_line": 19,
+        "explicit_source_header": "def firstExitAdmittedChoices {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (pre : List α) (positive : Bool)\n    (carrier : List α) : List (List α)",
+        "name": "firstExitAdmittedChoices",
+        "explicit_source_header_utf8_sha256": "fd35b5deecece053452349d939e64a106878aff411da0bf891664fb353f4e04d"
+      },
+      {
+        "start_line": 25,
+        "explicit_source_header": "private theorem admittedChoices_zero {α : Type*}\n    (parent : Bool → List α → Bool) (pre carrier : List α) (positive : Bool) :\n    firstExitAdmittedChoices 0 parent pre positive carrier = [[]]",
+        "name": "admittedChoices_zero",
+        "explicit_source_header_utf8_sha256": "cbad65c1b7963839b1d2272696daa218a9d880b8be9e0e2ea0cbf021a185f9b5"
+      },
+      {
+        "start_line": 32,
+        "explicit_source_header": "private theorem admittedChoices_cons {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (pre carrier : List α) (positive : Bool) (p : α) :\n    firstExitAdmittedChoices (k + 1) parent pre positive (p :: carrier) =\n      firstExitAdmittedChoices (k + 1) parent pre positive carrier ++\n        if parent (!positive) (p :: pre) = true then\n          (firstExitAdmittedChoices k parent (p :: pre) (!positive) carrier).map (List.cons p)\n        else []",
+        "name": "admittedChoices_cons",
+        "explicit_source_header_utf8_sha256": "25a2fbb9f4060e32f4d61396ef5630d50439b74b2373c36ca269d27e4c038331"
+      },
+      {
+        "start_line": 45,
+        "explicit_source_header": "theorem firstExitDepthFrontier_admitted_history_perm {α : Type*}\n    (r : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (pre carrier : List α) (positive : Bool) (mass : ℝ) :\n    ((firstExitDepthFrontier (pre.length + r) parent h pre positive mass carrier).map\n      (fun state => state.selectedPrefix.reverse)).Perm\n      ((firstExitAdmittedChoices r parent pre positive carrier).map\n        (fun chosen => pre.reverse ++ chosen))",
+        "name": "firstExitDepthFrontier_admitted_history_perm",
+        "explicit_source_header_utf8_sha256": "880ca72edf0bb189d174bb20a2e4a814b230dac53b6dc71e84a3e3f641345b89"
+      },
+      {
+        "start_line": 75,
+        "explicit_source_header": "theorem firstExitRootFrontier_admitted_history_perm {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ) (carrier : List α) :\n    ((firstExitDepthFrontier k parent h [] true 1 carrier).map\n      (fun state => state.selectedPrefix.reverse)).Perm\n      (firstExitAdmittedChoices k parent [] true carrier)",
+        "name": "firstExitRootFrontier_admitted_history_perm",
+        "explicit_source_header_utf8_sha256": "dfda77336e41811235d3cb72f1f365d2a91681dcff33529e3bba0e3e8ed0dc42"
+      },
+      {
+        "start_line": 84,
+        "explicit_source_header": "def firstExitAdmittedTuples (k : ℕ) (parent : Bool → List ℕ → Bool)\n    (carrier : List ℕ) : Finset (Fin k → ℕ)",
+        "name": "firstExitAdmittedTuples",
+        "explicit_source_header_utf8_sha256": "6a80796165a943fb915ad970784fa6be0cad060aa5a25464473c91f4b7cf85c8"
+      },
+      {
+        "start_line": 89,
+        "explicit_source_header": "private theorem admittedTuple_ofFn {k : ℕ} {chosen : List ℕ}\n    (hc : chosen.length = k) :\n    List.ofFn (primeHistoryTuple k chosen.reverse) = chosen",
+        "name": "admittedTuple_ofFn",
+        "explicit_source_header_utf8_sha256": "8731ae3a983bae778933c15ff462faa8952334770fb1a8b3b7711d09fb24fbd8"
+      },
+      {
+        "start_line": 95,
+        "explicit_source_header": "theorem mem_firstExitAdmittedTuples_iff (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (carrier : List ℕ) (p : Fin k → ℕ) :\n    p ∈ firstExitAdmittedTuples k parent carrier ↔\n      List.ofFn p <+ carrier ∧ FirstExitValidSelection parent [] true (List.ofFn p)",
+        "name": "mem_firstExitAdmittedTuples_iff",
+        "explicit_source_header_utf8_sha256": "30d6ce26f6ad29a12016ae91d33bc725d06515e8acf5736d23c7abc4aa8aff74"
+      },
+      {
+        "start_line": 116,
+        "explicit_source_header": "private theorem admittedChoices_tuple_nodup (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (carrier : List ℕ) (hc : carrier.Nodup) :\n    ((firstExitAdmittedChoices k parent [] true carrier).map\n      (fun chosen => primeHistoryTuple k chosen.reverse)).Nodup",
+        "name": "admittedChoices_tuple_nodup",
+        "explicit_source_header_utf8_sha256": "c0bf65bce4dd1cc9eb5cc342a87c7d737106ef29090ed536c20448b17f549736"
+      },
+      {
+        "start_line": 127,
+        "explicit_source_header": "theorem firstExitRootFrontier_admitted_tuple_perm (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ) :\n    ((firstExitDepthFrontier k parent h [] true 1 carrier).map\n      (fun state => primeHistoryTuple k state.selectedPrefix)).Perm\n      ((firstExitAdmittedChoices k parent [] true carrier).map\n        (fun chosen => primeHistoryTuple k chosen.reverse))",
+        "name": "firstExitRootFrontier_admitted_tuple_perm",
+        "explicit_source_header_utf8_sha256": "f4501dbeaaa376bbe71a5e0b1ca8d3fae238c0751675f690dff9da6a1c8b89c0"
+      },
+      {
+        "start_line": 137,
+        "explicit_source_header": "theorem firstExitRootFrontier_admitted_tuple_nodup (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ)\n    (hc : carrier.Nodup) :\n    ((firstExitDepthFrontier k parent h [] true 1 carrier).map\n      (fun state => primeHistoryTuple k state.selectedPrefix)).Nodup",
+        "name": "firstExitRootFrontier_admitted_tuple_nodup",
+        "explicit_source_header_utf8_sha256": "f9f56d15159ac4913f5d964bf5a301dc69da0a87e176c55a2fc3730ddf0e9f65"
+      },
+      {
+        "start_line": 146,
+        "explicit_source_header": "theorem firstExitRootFrontier_sum_eq_admitted_tuple_sum (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ)\n    (hc : carrier.Nodup) (f : (Fin k → ℕ) → ℝ) :\n    ((firstExitDepthFrontier k parent h [] true 1 carrier).map\n      (fun state => f (primeHistoryTuple k state.selectedPrefix))).sum =\n      ∑ p ∈ firstExitAdmittedTuples k parent carrier, f p",
+        "name": "firstExitRootFrontier_sum_eq_admitted_tuple_sum",
+        "explicit_source_header_utf8_sha256": "4fd5803971d2a474f60690e005267a209599a3d66378a177d353c0cd35e330f3"
+      },
+      {
+        "start_line": 158,
+        "explicit_source_header": "theorem firstExitRootFrontier_weighted_sum_eq_admitted_tuple_sum (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ)\n    (hc : carrier.Nodup) (f : (Fin k → ℕ) → ℝ) :\n    ((firstExitDepthFrontier k parent h [] true 1 carrier).map (fun state =>\n      (state.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n        f (primeHistoryTuple k state.selectedPrefix))).sum =\n      ∑ p ∈ firstExitAdmittedTuples k parent carrier,\n        (∏ i, 1 / ((p i : ℝ) - 1)) * f p",
+        "name": "firstExitRootFrontier_weighted_sum_eq_admitted_tuple_sum",
+        "explicit_source_header_utf8_sha256": "c4a05594d01669cbc6d4b75eb7caa42b62d19577e727fb548ac79267259755b0"
+      },
+      {
+        "start_line": 174,
+        "explicit_source_header": "theorem firstExitRootFrontier_history_sum_eq_admitted_tuple_sum (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ)\n    (hc : carrier.Nodup) (F : List ℕ → ℝ) :\n    ((firstExitDepthFrontier k parent h [] true 1 carrier).map (fun state =>\n      (state.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n        F state.selectedPrefix)).sum =\n      ∑ p ∈ firstExitAdmittedTuples k parent carrier,\n        (∏ i, 1 / ((p i : ℝ) - 1)) * F (List.ofFn p).reverse",
+        "name": "firstExitRootFrontier_history_sum_eq_admitted_tuple_sum",
+        "explicit_source_header_utf8_sha256": "ef5c9954d9d43260d90a7e7e37b4cc2ff42ec4736cef6aac37d19b2851f26c6a"
+      },
+      {
+        "start_line": 190,
+        "explicit_source_header": "theorem mem_firstExitAdmittedTuples_iff_of_decreasing (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (carrier : List ℕ)\n    (hc : carrier.Pairwise (· > ·)) (p : Fin k → ℕ) :\n    p ∈ firstExitAdmittedTuples k parent carrier ↔\n      StrictAnti p ∧ (∀ i, p i ∈ carrier) ∧\n        FirstExitValidSelection parent [] true (List.ofFn p)",
+        "name": "mem_firstExitAdmittedTuples_iff_of_decreasing",
+        "explicit_source_header_utf8_sha256": "a3a3f8f345a22d5d4f0984dad800a0098a0a45d5a930e3d9cb08b2a3b91afaf5"
+      },
+      {
+        "start_line": 210,
+        "explicit_source_header": "theorem mem_actualPrimeAdmittedTuples_iff_of_cutoff_le_cap (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (hzcap : z ≤ (cap : ℝ)) (p : Fin k → ℕ) :\n    p ∈ firstExitAdmittedTuples k parent (roughPrimeUniverse N cap w z) ↔\n      StrictAnti p ∧\n        (∀ i, Nat.Prime (p i) ∧ ¬p i ∣ N ∧ w ≤ (p i : ℝ) ∧ (p i : ℝ) < z) ∧\n        FirstExitValidSelection parent [] true (List.ofFn p)",
+        "name": "mem_actualPrimeAdmittedTuples_iff_of_cutoff_le_cap",
+        "explicit_source_header_utf8_sha256": "561ab89026cf6f6217e0193b6a2b7859b958d5ec97577e5ae9bd187923da256c"
+      }
+    ],
+    "complete_literal_source": "import ImbalancedChen.FirstExitFrontierTupleReindex\n\n/-!\n# Exact tuple sums for the admitted depth frontier\n\nUnlike next candidates, every selected prime in this frontier has passed\nits policy test. The concrete recursion and the complete valid sublist\nenumeration have the same multiplicities, before taking a finite set.\nThis transfers fourth-level upper residuals on the actual historical tree.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen scoped Classical List BigOperators\n\n/-- Processing-order choices with every selected prefix tested. -/\ndef firstExitAdmittedChoices {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (pre : List α) (positive : Bool)\n    (carrier : List α) : List (List α) :=\n  (carrier.sublistsLen k).filter fun chosen =>\n    decide (FirstExitValidSelection parent pre positive chosen)\n\nprivate theorem admittedChoices_zero {α : Type*}\n    (parent : Bool → List α → Bool) (pre carrier : List α) (positive : Bool) :\n    firstExitAdmittedChoices 0 parent pre positive carrier = [[]] := by\n  have hv : decide (FirstExitValidSelection parent pre positive []) = true :=\n    decide_eq_true_eq.mpr trivial\n  simp [firstExitAdmittedChoices, List.filter_nil, hv]\n\nprivate theorem admittedChoices_cons {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (pre carrier : List α) (positive : Bool) (p : α) :\n    firstExitAdmittedChoices (k + 1) parent pre positive (p :: carrier) =\n      firstExitAdmittedChoices (k + 1) parent pre positive carrier ++\n        if parent (!positive) (p :: pre) = true then\n          (firstExitAdmittedChoices k parent (p :: pre) (!positive) carrier).map (List.cons p)\n        else [] := by\n  by_cases hp : parent (!positive) (p :: pre) = true <;>\n    simp [firstExitAdmittedChoices, List.sublistsLen_succ_cons, List.filter_append,\n      List.filter_map, Function.comp_def, FirstExitValidSelection, hp]\n\n/-- The genuine stopped frontier preserves the multiplicities of all\nfully admitted sublists, including the empty frontier at depth zero. -/\ntheorem firstExitDepthFrontier_admitted_history_perm {α : Type*}\n    (r : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (pre carrier : List α) (positive : Bool) (mass : ℝ) :\n    ((firstExitDepthFrontier (pre.length + r) parent h pre positive mass carrier).map\n      (fun state => state.selectedPrefix.reverse)).Perm\n      ((firstExitAdmittedChoices r parent pre positive carrier).map\n        (fun chosen => pre.reverse ++ chosen)) := by\n  induction carrier generalizing r pre positive mass with\n  | nil =>\n      cases r with\n      | zero => simp [firstExitDepthFrontier, admittedChoices_zero]\n      | succ r => simp [firstExitDepthFrontier, firstExitAdmittedChoices]\n  | cons p ps ih =>\n      cases r with\n      | zero =>\n          simp [firstExitDepthFrontier, admittedChoices_zero]\n      | succ r =>\n          have hk : ¬ pre.length + (r + 1) ≤ pre.length := by omega\n          rw [firstExitDepthFrontier, if_neg hk, admittedChoices_cons,\n            List.map_append, List.map_append]\n          by_cases hp : parent (!positive) (p :: pre) = true\n          · rw [if_pos hp, if_pos hp]\n            apply List.Perm.append (ih (r + 1) pre positive mass)\n            have hh := ih r (p :: pre) (!positive) (mass * h p)\n            simpa only [List.length_cons, List.reverse_cons, List.map_map,\n              Function.comp_def, List.append_assoc, List.singleton_append,\n              show pre.length + 1 + r = pre.length + (r + 1) by omega] using hh\n          · simp only [if_neg hp, List.map_nil, List.append_nil]\n            exact ih (r + 1) pre positive mass\n\ntheorem firstExitRootFrontier_admitted_history_perm {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ) (carrier : List α) :\n    ((firstExitDepthFrontier k parent h [] true 1 carrier).map\n      (fun state => state.selectedPrefix.reverse)).Perm\n      (firstExitAdmittedChoices k parent [] true carrier) := by\n  simpa using firstExitDepthFrontier_admitted_history_perm k parent h [] carrier true 1\n\n/-- Admitted tuples differ from candidate tuples: their final selection\nis tested as well as every earlier selection. -/\ndef firstExitAdmittedTuples (k : ℕ) (parent : Bool → List ℕ → Bool)\n    (carrier : List ℕ) : Finset (Fin k → ℕ) :=\n  ((firstExitAdmittedChoices k parent [] true carrier).map\n    (fun chosen => primeHistoryTuple k chosen.reverse)).toFinset\n\nprivate theorem admittedTuple_ofFn {k : ℕ} {chosen : List ℕ}\n    (hc : chosen.length = k) :\n    List.ofFn (primeHistoryTuple k chosen.reverse) = chosen := by\n  simpa only [List.reverse_reverse] using primeHistoryTuple_ofFn\n    (show chosen.reverse.length = k by simpa using hc)\n\ntheorem mem_firstExitAdmittedTuples_iff (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (carrier : List ℕ) (p : Fin k → ℕ) :\n    p ∈ firstExitAdmittedTuples k parent carrier ↔\n      List.ofFn p <+ carrier ∧ FirstExitValidSelection parent [] true (List.ofFn p) := by\n  simp only [firstExitAdmittedTuples, List.mem_toFinset, List.mem_map]\n  constructor\n  · rintro ⟨chosen, hc, rfl⟩\n    have hh : chosen <+ carrier ∧ chosen.length = k ∧\n        FirstExitValidSelection parent [] true chosen := by\n      simpa only [firstExitAdmittedChoices, List.mem_filter, List.mem_sublistsLen,\n        decide_eq_true_eq, and_assoc] using hc\n    rw [admittedTuple_ofFn hh.2.1]\n    exact ⟨hh.1, hh.2.2⟩\n  · rintro ⟨hsub, hv⟩\n    refine ⟨List.ofFn p, ?_, ?_⟩\n    · simp only [firstExitAdmittedChoices, List.mem_filter, List.mem_sublistsLen,\n        decide_eq_true_eq]\n      exact ⟨⟨hsub, List.length_ofFn⟩, hv⟩\n    · apply List.ofFn_injective\n      exact admittedTuple_ofFn List.length_ofFn\n\nprivate theorem admittedChoices_tuple_nodup (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (carrier : List ℕ) (hc : carrier.Nodup) :\n    ((firstExitAdmittedChoices k parent [] true carrier).map\n      (fun chosen => primeHistoryTuple k chosen.reverse)).Nodup := by\n  apply ((List.nodup_sublistsLen k hc).filter\n    (fun chosen => decide (FirstExitValidSelection parent [] true chosen))).map_on\n  intro x hx y hy he\n  have hxlen := List.length_of_sublistsLen (List.mem_filter.mp hx).1\n  have hylen := List.length_of_sublistsLen (List.mem_filter.mp hy).1\n  simpa only [admittedTuple_ofFn hxlen, admittedTuple_ofFn hylen] using congrArg List.ofFn he\n\ntheorem firstExitRootFrontier_admitted_tuple_perm (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ) :\n    ((firstExitDepthFrontier k parent h [] true 1 carrier).map\n      (fun state => primeHistoryTuple k state.selectedPrefix)).Perm\n      ((firstExitAdmittedChoices k parent [] true carrier).map\n        (fun chosen => primeHistoryTuple k chosen.reverse)) := by\n  simpa only [List.map_map, Function.comp_def, List.reverse_reverse] using\n    (firstExitRootFrontier_admitted_history_perm k parent h carrier).map\n      (fun chosen => primeHistoryTuple k chosen.reverse)\n\ntheorem firstExitRootFrontier_admitted_tuple_nodup (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ)\n    (hc : carrier.Nodup) :\n    ((firstExitDepthFrontier k parent h [] true 1 carrier).map\n      (fun state => primeHistoryTuple k state.selectedPrefix)).Nodup :=\n  (firstExitRootFrontier_admitted_tuple_perm k parent h carrier).nodup_iff.mpr\n    (admittedChoices_tuple_nodup k parent carrier hc)\n\n/-- Exact arbitrary summation on the fully admitted tuple set. -/\ntheorem firstExitRootFrontier_sum_eq_admitted_tuple_sum (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ)\n    (hc : carrier.Nodup) (f : (Fin k → ℕ) → ℝ) :\n    ((firstExitDepthFrontier k parent h [] true 1 carrier).map\n      (fun state => f (primeHistoryTuple k state.selectedPrefix))).sum =\n      ∑ p ∈ firstExitAdmittedTuples k parent carrier, f p := by\n  have he := ((firstExitRootFrontier_admitted_tuple_perm k parent h carrier).map f).sum_eq\n  simp only [List.map_map, Function.comp_def] at he\n  rw [he]\n  simpa only [List.map_map, Function.comp_def, firstExitAdmittedTuples] using\n    (List.sum_toFinset f (admittedChoices_tuple_nodup k parent carrier hc)).symm\n\ntheorem firstExitRootFrontier_weighted_sum_eq_admitted_tuple_sum (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ)\n    (hc : carrier.Nodup) (f : (Fin k → ℕ) → ℝ) :\n    ((firstExitDepthFrontier k parent h [] true 1 carrier).map (fun state =>\n      (state.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n        f (primeHistoryTuple k state.selectedPrefix))).sum =\n      ∑ p ∈ firstExitAdmittedTuples k parent carrier,\n        (∏ i, 1 / ((p i : ℝ) - 1)) * f p := by\n  rw [← firstExitRootFrontier_sum_eq_admitted_tuple_sum k parent h carrier hc\n    (fun p => (∏ i, 1 / ((p i : ℝ) - 1)) * f p)]\n  congr 1\n  apply List.map_congr_left\n  intro state hs\n  rw [primeHistoryTuple_reciprocal_mass\n    (firstExitDepthFrontier_selected_length k parent h [] carrier true 1 (by simp) state hs)]\n\ntheorem firstExitRootFrontier_history_sum_eq_admitted_tuple_sum (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ)\n    (hc : carrier.Nodup) (F : List ℕ → ℝ) :\n    ((firstExitDepthFrontier k parent h [] true 1 carrier).map (fun state =>\n      (state.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n        F state.selectedPrefix)).sum =\n      ∑ p ∈ firstExitAdmittedTuples k parent carrier,\n        (∏ i, 1 / ((p i : ℝ) - 1)) * F (List.ofFn p).reverse := by\n  rw [← firstExitRootFrontier_weighted_sum_eq_admitted_tuple_sum k parent h carrier hc\n    (fun p => F (List.ofFn p).reverse)]\n  congr 1\n  apply List.map_congr_left\n  intro state hs\n  rw [primeHistoryTuple_reverse_ofFn\n    (firstExitDepthFrontier_selected_length k parent h [] carrier true 1 (by simp) state hs)]\n\ntheorem mem_firstExitAdmittedTuples_iff_of_decreasing (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (carrier : List ℕ)\n    (hc : carrier.Pairwise (· > ·)) (p : Fin k → ℕ) :\n    p ∈ firstExitAdmittedTuples k parent carrier ↔\n      StrictAnti p ∧ (∀ i, p i ∈ carrier) ∧\n        FirstExitValidSelection parent [] true (List.ofFn p) := by\n  rw [mem_firstExitAdmittedTuples_iff]\n  constructor\n  · rintro ⟨hs, hv⟩\n    exact ⟨List.pairwise_ofFn.mp (hc.sublist hs),\n      fun i => hs.subset (List.mem_ofFn.mpr ⟨i, rfl⟩), hv⟩\n  · rintro ⟨ha, hm, hv⟩\n    have hp : (List.ofFn p).Pairwise (· > ·) := List.pairwise_ofFn.mpr ha\n    have hsub : List.ofFn p ⊆ carrier := by\n      intro q hq\n      obtain ⟨i, rfl⟩ := List.mem_ofFn.mp hq\n      exact hm i\n    exact ⟨List.sublist_of_subperm_of_pairwise\n      (List.subperm_of_subset hp.nodup hsub) hp hc, hv⟩\n\ntheorem mem_actualPrimeAdmittedTuples_iff_of_cutoff_le_cap (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (hzcap : z ≤ (cap : ℝ)) (p : Fin k → ℕ) :\n    p ∈ firstExitAdmittedTuples k parent (roughPrimeUniverse N cap w z) ↔\n      StrictAnti p ∧\n        (∀ i, Nat.Prime (p i) ∧ ¬p i ∣ N ∧ w ≤ (p i : ℝ) ∧ (p i : ℝ) < z) ∧\n        FirstExitValidSelection parent [] true (List.ofFn p) := by\n  rw [mem_firstExitAdmittedTuples_iff_of_decreasing k parent _\n    (roughPrimeUniverse_pairwise_gt N cap w z)]\n  simp only [mem_roughPrimeUniverse_iff_of_cutoff_le_cap hzcap]\n\nend\n\nend ImbalancedChen\n"
+  },
+  "exact_consumer": {
+    "path": "ImbalancedChen\\ActualExtendedThirdAdmittedOwnCubeBridge.lean",
+    "absolute_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdAdmittedOwnCubeBridge.lean",
+    "source_sha256": "90d72df9c9f1bcea79c3ec01a3471a98ce220c15c3993317ff5dd6cbfa596165",
+    "bytes": 6018,
+    "LF_count": 123,
+    "imports": [
+      "ImbalancedChen.FirstExitAdmittedFrontierTuples",
+      "ImbalancedChen.ActualExtendedThirdCompactUpperRho"
+    ],
+    "declarations": [
+      {
+        "start_line": 26,
+        "explicit_source_header": "theorem firstExitAdmittedTuples_three_eq_candidate_filter\n    (retained : Bool → List ℕ → Bool) (carrier : List ℕ) :\n    firstExitAdmittedTuples 3 retained carrier =\n      (firstExitFrontierTuples 2 retained carrier).filter\n        (fun p => retained false [p 2, p 1, p 0] = true)",
+        "name": "firstExitAdmittedTuples_three_eq_candidate_filter",
+        "explicit_source_header_utf8_sha256": "1748661da61bc6a1bfc0cc8ab0026beb4e39d13eca335fd943aad7b4c796790b"
+      },
+      {
+        "start_line": 41,
+        "explicit_source_header": "theorem actualExtendedThirdCompactAdmitted_cell_filter\n    {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (w z : ℝ)\n    {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    (firstExitAdmittedTuples 3 (actualExtendedThirdCompactUpperPolicy e h m N)\n        (roughPrimeUniverse N cap w z)).filter\n        (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j) =\n      (firstExitFrontierTuples 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n        (roughPrimeUniverse N cap w z)).filter\n        (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j ∧\n          (p 0 : ℝ) * p 1 * p 2 ^ 3 <\n            (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j)",
+        "name": "actualExtendedThirdCompactAdmitted_cell_filter",
+        "explicit_source_header_utf8_sha256": "523882315557117f54161a23c31d07bd36890e5f829f5055788978cb1c693cf5"
+      },
+      {
+        "start_line": 87,
+        "explicit_source_header": "theorem actualExtendedThirdCompactAdmittedCell_weighted_sum\n    {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (w z : ℝ)\n    {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (G : (Fin 3 → ℕ) → ℝ) :\n    ((firstExitDepthFrontier 3 (actualExtendedThirdCompactUpperPolicy e h m N)\n      (fun q : ℕ => 1 / ((q : ℝ) - 1)) [] true 1\n      (roughPrimeUniverse N cap w z)).map (fun state =>\n        (state.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n          (if primeHistoryLogCoordinates (N : ℝ) 3 state.selectedPrefix ∈\n              actualExtendedThirdOwnedCell m j then\n            G (primeHistoryTuple 3 state.selectedPrefix) else 0))).sum =\n      ∑ p ∈ (firstExitFrontierTuples 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n          (roughPrimeUniverse N cap w z)).filter\n          (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j ∧\n            (p 0 : ℝ) * p 1 * p 2 ^ 3 <\n              (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j),\n        (∏ i : Fin 3, 1 / ((p i : ℝ) - 1)) * G p",
+        "name": "actualExtendedThirdCompactAdmittedCell_weighted_sum",
+        "explicit_source_header_utf8_sha256": "e11046ecd5cebb7a29416ce89196924a5b180d7a7642512538b2d4c4a86d652d"
+      }
+    ],
+    "complete_literal_source": "import ImbalancedChen.FirstExitAdmittedFrontierTuples\nimport ImbalancedChen.ActualExtendedThirdCompactUpperRho\n\n/-!\n# The same compact policy's admitted third frontier\n\nThe depth-three frontier has tested the third prime itself. It is exactly\nthe original depth-two next-candidate tuple set filtered by that last\npolicy decision. On an adopted compact cell this last decision is the\nstrict original third own-cube inequality.\n\nThe finite weighted sum keeps the original rough carrier, cap, target\nprime deletion and all three reciprocal-totient prime weights. No signed\ndensity limit, numerical coefficient or progression estimate is assumed.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen Set\nopen scoped Classical BigOperators\n\n/-- Testing the third candidate completes precisely the same selected\nhistory; the first two policy decisions are retained on both sides. -/\ntheorem firstExitAdmittedTuples_three_eq_candidate_filter\n    (retained : Bool → List ℕ → Bool) (carrier : List ℕ) :\n    firstExitAdmittedTuples 3 retained carrier =\n      (firstExitFrontierTuples 2 retained carrier).filter\n        (fun p => retained false [p 2, p 1, p 0] = true) := by\n  ext p\n  rw [mem_firstExitAdmittedTuples_iff, Finset.mem_filter,\n    mem_firstExitFrontierTuples_iff]\n  have hp : List.ofFn p = [p 0, p 1, p 2] := by\n    simp [List.ofFn_succ]\n  simp [hp, FirstExitValidSelection, and_assoc]\n\n/-- The same actual admitted frontier on an owned cell uses exactly the\nstrict physical third own cube. Neither inherited admission nor the\noriginal rough enumeration and target-prime gates are discarded. -/\ntheorem actualExtendedThirdCompactAdmitted_cell_filter\n    {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (w z : ℝ)\n    {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    (firstExitAdmittedTuples 3 (actualExtendedThirdCompactUpperPolicy e h m N)\n        (roughPrimeUniverse N cap w z)).filter\n        (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j) =\n      (firstExitFrontierTuples 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n        (roughPrimeUniverse N cap w z)).filter\n        (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j ∧\n          (p 0 : ℝ) * p 1 * p 2 ^ 3 <\n            (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j) := by\n  have hgate (p : Fin 3 → ℕ)\n      (hp : p ∈ firstExitFrontierTuples 2\n        (actualExtendedThirdCompactUpperPolicy e h m N)\n        (roughPrimeUniverse N cap w z))\n      (ht : actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j) :\n      actualExtendedThirdCompactUpperPolicy e h m N false [p 2, p 1, p 0] = true ↔\n        (p 0 : ℝ) * p 1 * p 2 ^ 3 <\n          (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j := by\n    obtain ⟨hanti, hprime, _hparent⟩ :=\n      (mem_actualPrimeFrontierTuples_iff 2\n        (actualExtendedThirdCompactUpperPolicy e h m N) N cap w z p).mp hp\n    have hlog : primeHistoryLogCoordinates (N : ℝ) 3 [p 2, p 1, p 0] =\n        actualPrimeTupleLog N p := by\n      funext i\n      fin_cases i <;>\n        simp [primeHistoryLogCoordinates, primeHistoryTuple, actualPrimeTupleLog]\n    exact actualExtendedThirdCompactUpperPolicy_third_iff hN he0 he hmesh\n      (p 0) (p 1) (p 2) (hprime 2).2.1.pos\n      (hanti (by decide : (1 : Fin 3) < 2))\n      (hanti (by decide : (0 : Fin 3) < 1)) hj (by rw [hlog]; exact ht)\n  rw [firstExitAdmittedTuples_three_eq_candidate_filter]\n  ext p\n  simp only [Finset.mem_filter]\n  constructor\n  · rintro ⟨⟨hp, hown⟩, ht⟩\n    exact ⟨hp, ht, (hgate p hp ht).mp hown⟩\n  · rintro ⟨hp, ht, hown⟩\n    exact ⟨⟨hp, (hgate p hp ht).mpr hown⟩, ht⟩\n\n/-- An arbitrary signed test on the genuine depth-three frontier is the\nsame strict-own-cube filtered prime tuple sum, with every original\nreciprocal-totient prime weight counted once. -/\ntheorem actualExtendedThirdCompactAdmittedCell_weighted_sum\n    {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) (w z : ℝ)\n    {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (G : (Fin 3 → ℕ) → ℝ) :\n    ((firstExitDepthFrontier 3 (actualExtendedThirdCompactUpperPolicy e h m N)\n      (fun q : ℕ => 1 / ((q : ℝ) - 1)) [] true 1\n      (roughPrimeUniverse N cap w z)).map (fun state =>\n        (state.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n          (if primeHistoryLogCoordinates (N : ℝ) 3 state.selectedPrefix ∈\n              actualExtendedThirdOwnedCell m j then\n            G (primeHistoryTuple 3 state.selectedPrefix) else 0))).sum =\n      ∑ p ∈ (firstExitFrontierTuples 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n          (roughPrimeUniverse N cap w z)).filter\n          (fun p => actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j ∧\n            (p 0 : ℝ) * p 1 * p 2 ^ 3 <\n              (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j),\n        (∏ i : Fin 3, 1 / ((p i : ℝ) - 1)) * G p := by\n  change ((firstExitDepthFrontier 3 (actualExtendedThirdCompactUpperPolicy e h m N)\n    (fun q : ℕ => 1 / ((q : ℝ) - 1)) [] true 1\n    (roughPrimeUniverse N cap w z)).map (fun state =>\n      (state.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n        (if actualPrimeTupleLog N (primeHistoryTuple 3 state.selectedPrefix) ∈\n            actualExtendedThirdOwnedCell m j then\n          G (primeHistoryTuple 3 state.selectedPrefix) else 0))).sum = _\n  rw [firstExitRootFrontier_weighted_sum_eq_admitted_tuple_sum 3\n    (actualExtendedThirdCompactUpperPolicy e h m N)\n    (fun q : ℕ => 1 / ((q : ℝ) - 1)) _ (roughPrimeUniverse_nodup N cap w z)]\n  simp_rw [mul_ite, mul_zero]\n  rw [← Finset.sum_filter,\n    actualExtendedThirdCompactAdmitted_cell_filter hN he0 he hmesh w z hj]\n\nend\n\nend ImbalancedChen\n"
+  },
+  "target_inventory": {
+    "private_theorems": 4,
+    "public_theorems": 10,
+    "header_scope": "Complete explicit source headers; target has no elaborated environment output, so no generated-name or elaborated-type acceptance is asserted",
+    "explicit_declarations": 16,
+    "theorems": 14,
+    "definitions": 2,
+    "full_223_LF_read": true
+  },
+  "source_review": {
+    "multiplicities": "History permutation is established before toFinset. Tuple Nodup uses carrier.Nodup and injective List.ofFn recovery. The arbitrary signed sum uses genuine List.sum_toFinset only after this Nodup proof; no unconditional duplicate erasure.",
+    "cutoff": "Only the final corollary removes p<cap, and only under explicit z<=cap. The actual consumer retains the original roughPrimeUniverse N cap w z without this removal.",
+    "admittedChoices_zero": "At rank zero the frontier returns the incoming state regardless of policy; sublistsLen zero contributes exactly the empty choice. Empty root therefore counts once, including Fin 0 tuples.",
+    "mass": "Weighted theorem transfers exactly one reciprocal factor 1/(q-1) per selected history entry via selected length and primeHistoryTuple_reciprocal_mass. Its weight is explicitly the selected-prefix product, independent of arbitrary h; consumer instantiates h with the same reciprocal factor.",
+    "admitted_history_perm": "Carrier induction with remaining rank r, incoming pre, sign and mass generalized preserves exact list multiplicities. Rank pre.length+r and selected pre.length+1+r are aligned arithmetically. The result claims only histories, with no invented assertion that arbitrary initial pre was admitted.",
+    "ordered_membership": "On Pairwise (>) carrier, List.ofFn membership is exactly StrictAnti plus coordinate membership plus all selected policy tests. Reverse implication uses Nodup subset=>Subperm and same-order Subperm=>Sublist; types checked in actual native sources.",
+    "safety": "Literal prerequisite and consumer contain proof bodies, no sorry, admit, axiom, unsafe or partial declarations and no target conclusion used as a hypothesis. This is source inspection only; transitive target axioms and generated declarations remain unknown until genuine runtime.",
+    "tuple_recovery": "primeHistoryTuple reads history.reverse; admittedTuple_ofFn uses chosen.length=k to avoid total getD padding. The map is injective on all enumerated length-k lists.",
+    "admittedChoices_cons": "Native sublistsLen successor splits skips and selections. Only selection calls parent (!positive) (p::pre); recursive validity toggles sign and updates reverse-stored history identically to firstExitDepthFrontier."
+  },
+  "exact_consumer_binding": {
+    "strategy": "Finite exact reindexing only. Original compact-policy / physical-level / inherited first-stop route is preserved; no asymptotic density, distribution input, numerical K bound or accepted main result is hidden in the statement.",
+    "policy": "actualExtendedThirdCompactUpperPolicy e h m N is identical on both sides; no replacement selector or test-dependent policy. The selected owned label j is unchanged.",
+    "own_cube": "Current original third_iff requires hN, he0, he<=1/384, mesh<=e/2, p2>0, p2<p1<p0 and the same owned-cell membership. These are explicit consumer hypotheses or supplied by candidate StrictAnti/primality. It gives the literal strict p0*p1*p2^3 < N^(actualExtendedThirdPhysicalLevel e m j).",
+    "tests": "For processing tuple [p0,p1,p2], Bool progression from true is false,true,false; admitted rank three equals rank-two next-candidate tuples filtered by retained false [p2,p1,p0]. Both earlier tests remain in candidate membership.",
+    "parent_projection": "hprime 2 has shape p2<cap AND Prime p2 AND ..., so (hprime 2).2.1.pos supplies p2>0. StrictAnti uses 1<2 and 0<1 in the correct direction.",
+    "coordinates": "primeHistoryLogCoordinates (N:Real) 3 history and actualPrimeTupleLog N (primeHistoryTuple 3 history) are definitionally identical; the weighted consumer change preserves the same target N.",
+    "repeated_factors": "Strictly descending rough-prime carrier excludes repeated selected prime labels. Each of three reciprocal-totient factors survives once. The third own-cube p2^3 remains an intentional repeated factor; no replacement with squarefree product or mass-normalized density.",
+    "endpoints": "Original carrier retains p<cap, Prime p, not p divides N, w<=p and p<z. OwnedCell is Ico in each actual dyadic coordinate intersected with closed order. The cell label and open/closed endpoints are never replaced by a box surrogate."
+  },
+  "relevant_complete_parent_source_API_headers": [
+    {
+      "path": "ImbalancedChen\\ActualExtendedThirdCompactCellCutoff.lean",
+      "absolute_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdCompactCellCutoff.lean",
+      "source_sha256": "edb8876bd5881b7087e85062e64b05a1a7b0c5c1ed465825c5925dbbed059428",
+      "bytes": 8107,
+      "LF_count": 169,
+      "imports": [
+        "ImbalancedChen.ActualExtendedThirdFiniteCellIntegral"
+      ],
+      "declarations": [
+        {
+          "start_line": 24,
+          "explicit_source_header": "def actualExtendedThirdCompactCells (e h : ℝ) (m : ℕ) :\n    Finset (ActualExtendedThirdDyadicLabel m)",
+          "name": "actualExtendedThirdCompactCells",
+          "explicit_source_header_utf8_sha256": "d162069c168066f156cf4c65fd7f5e226b209edb1d51614554b99920358c2e37"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen\\ActualExtendedThirdCompactUpperRho.lean",
+      "absolute_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdCompactUpperRho.lean",
+      "source_sha256": "d8b61b9bc550d6d1af36e5181516e4ca99e2b7c08bf3bd61cd98ad6a85b7a001",
+      "bytes": 18753,
+      "LF_count": 336,
+      "imports": [
+        "ImbalancedChen.ActualExtendedThirdCompactCellCutoff",
+        "ImbalancedChen.ActualExtendedThirdFirstCubeMargin",
+        "ImbalancedChen.ActualUpperPolicyFiniteBridge"
+      ],
+      "declarations": [
+        {
+          "start_line": 72,
+          "explicit_source_header": "def actualExtendedThirdCompactFirstStop (e : ℝ) (m N : ℕ) (history : List ℕ) : Prop",
+          "name": "actualExtendedThirdCompactFirstStop",
+          "explicit_source_header_utf8_sha256": "cf858fa313108e0b7999e4767643b6443fd643fdbcca9edb7e8b4d510cb5f54b"
+        },
+        {
+          "start_line": 80,
+          "explicit_source_header": "def actualExtendedThirdCompactInitialPolicy (e : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool",
+          "name": "actualExtendedThirdCompactInitialPolicy",
+          "explicit_source_header_utf8_sha256": "0fc59860367064f6453ab82e8f8f3dab47d9e15795157aa32025b430b3ba7097"
+        },
+        {
+          "start_line": 94,
+          "explicit_source_header": "def actualExtendedThirdCompactUpperPolicy (e h : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool",
+          "name": "actualExtendedThirdCompactUpperPolicy",
+          "explicit_source_header_utf8_sha256": "fb823b4b566506dc369ad63dddc8061fc94f6d7e6af46d3f11564b9c308d1faf"
+        },
+        {
+          "start_line": 117,
+          "explicit_source_header": "theorem actualExtendedThirdCompactUpperPolicy_through_two (e h : ℝ) (m N : ℕ)\n    (positive : Bool) (history : List ℕ) (hlen : history.length ≤ 2) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      actualExtendedThirdCompactInitialPolicy e m N positive history",
+          "name": "actualExtendedThirdCompactUpperPolicy_through_two",
+          "explicit_source_header_utf8_sha256": "b71f6bbb88d5530da2a79ea6089dc5937c1c25af99abb158db52b34f4f15f9d6"
+        },
+        {
+          "start_line": 253,
+          "explicit_source_header": "theorem actualExtendedThirdCompactUpperPolicy_third_iff {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp2 : 0 < p2) (hp21 : p2 < p1) (hp10 : p1 < p0)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactUpperPolicy e h m N false [p2, p1, p0] = true ↔\n      (p0 : ℝ) * p1 * p2 ^ 3 < (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j",
+          "name": "actualExtendedThirdCompactUpperPolicy_third_iff",
+          "explicit_source_header_utf8_sha256": "759c17450422193c1c7bd2f3d46d02a447951716987985c13f2553e77cdbf658"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen\\ActualExtendedThirdDyadicCoverage.lean",
+      "absolute_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdDyadicCoverage.lean",
+      "source_sha256": "2f4d8ee167d08cc3a279cda02d47e17a68d130d70c62fd9ba570bcb7f9d905ad",
+      "bytes": 11012,
+      "LF_count": 216,
+      "imports": [
+        "ImbalancedChen.ActualExtendedThirdPhysicalCell",
+        "Mathlib.Order.Interval.Set.Union"
+      ],
+      "declarations": [
+        {
+          "start_line": 70,
+          "explicit_source_header": "def actualExtendedThirdOwnedCell (m : ℕ) (j : ActualExtendedThirdDyadicLabel m) :\n    Set (Fin 3 → ℝ)",
+          "name": "actualExtendedThirdOwnedCell",
+          "explicit_source_header_utf8_sha256": "775e45c6de5e2a6219105cb7d1ec8f501d327e4358aaae44b55750dd46cb4113"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen\\ActualExtendedThirdPhysicalCell.lean",
+      "absolute_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdPhysicalCell.lean",
+      "source_sha256": "601afd3ed6aa21e3e3d6569b37a1a0f90cb3ae8fe10427305df4daeeb6639edd",
+      "bytes": 14325,
+      "LF_count": 275,
+      "imports": [
+        "ImbalancedChen.ActualExtendedThirdIdealCap"
+      ],
+      "declarations": [
+        {
+          "start_line": 31,
+          "explicit_source_header": "abbrev ActualExtendedThirdDyadicLabel (m : ℕ)",
+          "name": "ActualExtendedThirdDyadicLabel",
+          "explicit_source_header_utf8_sha256": "b1f0b911c970ae9911c5abfd065fbd01edec87b1b4757e01c186a5da0ae85edb"
+        },
+        {
+          "start_line": 33,
+          "explicit_source_header": "def actualExtendedThirdDyadicLo (m : ℕ) (j : ActualExtendedThirdDyadicLabel m) (i : Fin 3) : ℝ",
+          "name": "actualExtendedThirdDyadicLo",
+          "explicit_source_header_utf8_sha256": "4d2f2d13486de2ecce5987121a8a9cec0822969d1eb8eb30b011002649722d63"
+        },
+        {
+          "start_line": 36,
+          "explicit_source_header": "def actualExtendedThirdDyadicHi (m : ℕ) (j : ActualExtendedThirdDyadicLabel m) (i : Fin 3) : ℝ",
+          "name": "actualExtendedThirdDyadicHi",
+          "explicit_source_header_utf8_sha256": "a18514d8874584a8c4d9f4306dfb4a2b7c3d240f96922c20a7aa96c4f0201277"
+        },
+        {
+          "start_line": 39,
+          "explicit_source_header": "def actualExtendedThirdClosedOrder : Set (Fin 3 → ℝ)",
+          "name": "actualExtendedThirdClosedOrder",
+          "explicit_source_header_utf8_sha256": "cc2213d5e1509a52e33f5fcd28e40b1d4a1e68494dd340ff8306725343001ab4"
+        },
+        {
+          "start_line": 138,
+          "explicit_source_header": "def actualExtendedThirdPhysicalLevel (e : ℝ) (m : ℕ) (j : ActualExtendedThirdDyadicLabel m) : ℝ",
+          "name": "actualExtendedThirdPhysicalLevel",
+          "explicit_source_header_utf8_sha256": "ea2b0ab332e44c60c8a9929ff996d2940c31d1804a056dcbf469d6a3cd3ab97a"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen\\FinitePrimeGeometryCore.lean",
+      "absolute_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\FinitePrimeGeometryCore.lean",
+      "source_sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+      "bytes": 19819,
+      "LF_count": 458,
+      "imports": [
+        "ImbalancedChen.FirstExitDepthSplice",
+        "ImbalancedChen.FirstExitPresieveProjection",
+        "ImbalancedChen.RoughPrimeUniverse",
+        "ImbalancedChen.LogPrimeBoxMesh",
+        "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser",
+        "Mathlib.Data.List.GetD",
+        "Mathlib.Data.List.OfFn",
+        "Mathlib.Order.Fin.Basic",
+        "Mathlib.Algebra.BigOperators.Fin",
+        "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+      ],
+      "declarations": [
+        {
+          "start_line": 74,
+          "explicit_source_header": "def primeHistoryTuple (k : ℕ) (history : List ℕ) : Fin k → ℕ",
+          "name": "primeHistoryTuple",
+          "explicit_source_header_utf8_sha256": "0cfbef43a7704fb1128025e680cd54a2a0c43e4d9d3bc580d75cbe98f12b9408"
+        },
+        {
+          "start_line": 79,
+          "explicit_source_header": "noncomputable def primeHistoryLogCoordinates (N : ℝ) (k : ℕ)\n    (history : List ℕ) : Fin k → ℝ",
+          "name": "primeHistoryLogCoordinates",
+          "explicit_source_header_utf8_sha256": "b49984ed46ffe26ebd19fdd36c163484d960a38966c1709e3aa8b73a2da4e3b0"
+        },
+        {
+          "start_line": 84,
+          "explicit_source_header": "theorem primeHistoryTuple_ofFn {k : ℕ} {history : List ℕ}\n    (hlen : history.length = k) :\n    List.ofFn (primeHistoryTuple k history) = history.reverse",
+          "name": "primeHistoryTuple_ofFn",
+          "explicit_source_header_utf8_sha256": "52e5fe77802f368343186ef0d4910496207c89e20d51031a417dbd81c0f19329"
+        },
+        {
+          "start_line": 94,
+          "explicit_source_header": "theorem primeHistoryTuple_reverse_ofFn {k : ℕ} {history : List ℕ}\n    (hlen : history.length = k) :\n    (List.ofFn (primeHistoryTuple k history)).reverse = history",
+          "name": "primeHistoryTuple_reverse_ofFn",
+          "explicit_source_header_utf8_sha256": "6d6c10620043f9a148addfcef1604bbb6d7091e50a52cc289b26490ffe807b77"
+        },
+        {
+          "start_line": 100,
+          "explicit_source_header": "theorem primeHistoryTuple_reciprocal_mass {k : ℕ} {history : List ℕ}\n    (hlen : history.length = k) :\n    (∏ i, 1 / ((primeHistoryTuple k history i : ℝ) - 1)) =\n      (history.map (fun p : ℕ => 1 / ((p : ℝ) - 1))).prod",
+          "name": "primeHistoryTuple_reciprocal_mass",
+          "explicit_source_header_utf8_sha256": "3ec5b866d5eb6b3daf78c666ea907eba130effea8063263fb135aa30a3187507"
+        },
+        {
+          "start_line": 183,
+          "explicit_source_header": "def actualPrimeTupleLog {k : ℕ} (N : ℕ) (p : Fin k → ℕ) : Fin k → ℝ",
+          "name": "actualPrimeTupleLog",
+          "explicit_source_header_utf8_sha256": "590c278d8677fbc7311dc2c919a97755c8f036e0dc02a21f3c69e9754b91fb17"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen\\FirstExitDepthSplice.lean",
+      "absolute_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\FirstExitDepthSplice.lean",
+      "source_sha256": "66803fd4584aa34babb84845e6b84e41417476b2d4499d882d2f61734bd27af6",
+      "bytes": 12961,
+      "LF_count": 238,
+      "imports": [
+        "ImbalancedChen.FirstExitTree"
+      ],
+      "declarations": [
+        {
+          "start_line": 49,
+          "explicit_source_header": "def firstExitDepthFrontier {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (h : α → ℝ)\n    (selectedPrefix : List α) (positive : Bool) (mass : ℝ) :\n    List α → List (FirstExitDepthState α)\n  | [] =>\n      if k ≤ selectedPrefix.length then\n        [{selectedPrefix",
+          "name": "firstExitDepthFrontier",
+          "explicit_source_header_utf8_sha256": "ae77276018dd9dc92644ac45b334d39eb23544bf5c58bd41717fa88cf9105d41"
+        },
+        {
+          "start_line": 85,
+          "explicit_source_header": "theorem firstExitDepthFrontier_selected_length\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (selectedPrefix remaining : List α) (positive : Bool) (mass : ℝ)\n    (hpre : selectedPrefix.length ≤ k) :\n    ∀ state ∈ firstExitDepthFrontier k parent h selectedPrefix positive mass remaining,\n      state.selectedPrefix.length = k",
+          "name": "firstExitDepthFrontier_selected_length",
+          "explicit_source_header_utf8_sha256": "911aaa172e70c769036182841ee13e7a224bb7e86ed850a9422fcf4866e4604f"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen\\FirstExitFrontierAdmission.lean",
+      "absolute_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\FirstExitFrontierAdmission.lean",
+      "source_sha256": "0cac970b515afeabf0c25af330b814a376b7dd82b83856c1b6eff9de7f06ee85",
+      "bytes": 9669,
+      "LF_count": 177,
+      "imports": [
+        "ImbalancedChen.FrozenRosserPolicy",
+        "ImbalancedChen.FirstExitFrontierInvariants"
+      ],
+      "declarations": [
+        {
+          "start_line": 23,
+          "explicit_source_header": "theorem mem_firstExitDepthFrontier_admitted\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ)\n    (hentry : parent positive pre = true ∨ pre.length < k)\n    (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitDepthFrontier k parent h pre positive mass remaining) :\n    parent state.positive state.selectedPrefix = true",
+          "name": "mem_firstExitDepthFrontier_admitted",
+          "explicit_source_header_utf8_sha256": "164dba05c1e27499e548605fc64b5e2291013d0b18e594af12fbe7cf54f4390d"
+        },
+        {
+          "start_line": 51,
+          "explicit_source_header": "theorem mem_firstExitDepthFrontier_root_admitted\n    {α : Type*} (k : ℕ) (hk : 0 < k) (parent : Bool → List α → Bool)\n    (h : α → ℝ) (carrier : List α) (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitDepthFrontier k parent h [] true 1 carrier) :\n    parent state.positive state.selectedPrefix = true",
+          "name": "mem_firstExitDepthFrontier_root_admitted",
+          "explicit_source_header_utf8_sha256": "ce5a29011c6d874bdbba08298ee5490ccfd7a99e5321ecbbe2376b0174a05a22"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen\\FirstExitFrontierTupleReindex.lean",
+      "absolute_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\FirstExitFrontierTupleReindex.lean",
+      "source_sha256": "55db69dc7a01b6ff0cbe3f3e631d9b5d8932a8d8a2623d6a57215e9da010e7f6",
+      "bytes": 18595,
+      "LF_count": 352,
+      "imports": [
+        "ImbalancedChen.FirstExitOwnCubeSplice",
+        "ImbalancedChen.FirstExitFrontierInvariants",
+        "ImbalancedChen.FirstExitValidSelection",
+        "ImbalancedChen.FinitePrimeGeometryCore"
+      ],
+      "declarations": [
+        {
+          "start_line": 32,
+          "explicit_source_header": "def firstExitParentChoices {α : Type*} (k : ℕ)\n    (parent : Bool → List α → Bool) (pre : List α) (positive : Bool)\n    (carrier : List α) : List (List α)",
+          "name": "firstExitParentChoices",
+          "explicit_source_header_utf8_sha256": "abe9f98fceb66aab38357c2cee72ed5eb7f747db32113506e89a399dbb52813c"
+        },
+        {
+          "start_line": 167,
+          "explicit_source_header": "def firstExitFrontierTuples (k : ℕ) (parent : Bool → List ℕ → Bool)\n    (carrier : List ℕ) : Finset (Fin (k + 1) → ℕ)",
+          "name": "firstExitFrontierTuples",
+          "explicit_source_header_utf8_sha256": "61bfa22be9b430305b133d8836609fbdfd0d70c614373e6301ca4c1e4766fdbd"
+        },
+        {
+          "start_line": 184,
+          "explicit_source_header": "theorem mem_firstExitFrontierTuples_iff (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (carrier : List ℕ) (p : Fin (k + 1) → ℕ) :\n    p ∈ firstExitFrontierTuples k parent carrier ↔\n      List.ofFn p <+ carrier ∧ FirstExitValidSelection parent [] true (List.ofFn p).dropLast",
+          "name": "mem_firstExitFrontierTuples_iff",
+          "explicit_source_header_utf8_sha256": "c5b590ee48f56bfdf1a53cedf96cb32596d87f22ce788687e28ac73f56416bf3"
+        },
+        {
+          "start_line": 247,
+          "explicit_source_header": "theorem firstExitFrontierCandidates_weighted_sum_eq_tuple_sum (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ) (carrier : List ℕ)\n    (hc : carrier.Nodup) (f : (Fin (k + 1) → ℕ) → ℝ) :\n    ((firstExitFrontierCandidates k parent h carrier).map (fun state =>\n      (state.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n        f (primeHistoryTuple (k + 1) state.selectedPrefix))).sum =\n      ∑ p ∈ firstExitFrontierTuples k parent carrier,\n        (∏ i, 1 / ((p i : ℝ) - 1)) * f p",
+          "name": "firstExitFrontierCandidates_weighted_sum_eq_tuple_sum",
+          "explicit_source_header_utf8_sha256": "8aaae39f63408549f79d85113a740dfc3249acc8c60a9eb43e18163bd9102916"
+        },
+        {
+          "start_line": 286,
+          "explicit_source_header": "theorem mem_actualPrimeFrontierTuples_iff (k : ℕ)\n    (parent : Bool → List ℕ → Bool) (N cap : ℕ) (w z : ℝ)\n    (p : Fin (k + 1) → ℕ) :\n    p ∈ firstExitFrontierTuples k parent (roughPrimeUniverse N cap w z) ↔\n      StrictAnti p ∧\n        (∀ i, p i < cap ∧ Nat.Prime (p i) ∧ ¬p i ∣ N ∧\n          w ≤ (p i : ℝ) ∧ (p i : ℝ) < z) ∧\n        FirstExitValidSelection parent [] true (List.ofFn p).dropLast",
+          "name": "mem_actualPrimeFrontierTuples_iff",
+          "explicit_source_header_utf8_sha256": "aa434f4fb64693ce3928c340a4d50f48ec7a9a989c764ad26ae50e32d42301f4"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen\\FirstExitValidSelection.lean",
+      "absolute_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\FirstExitValidSelection.lean",
+      "source_sha256": "ac65228de387c57af2c53dbea7e16d6b457f042ec145800ce90e96229030f232",
+      "bytes": 4612,
+      "LF_count": 95,
+      "imports": [
+        "ImbalancedChen.FirstExitGenericModuli"
+      ],
+      "declarations": [
+        {
+          "start_line": 18,
+          "explicit_source_header": "noncomputable def FirstExitValidSelection {α : Type*}\n    (retained : Bool → List α → Bool) (pre : List α) (positive : Bool) : List α → Prop\n  | [] => True\n  | p :: ps => retained (!positive) (p :: pre) = true ∧\n      FirstExitValidSelection retained (p :: pre) (!positive) ps\n\ntheorem exists_firstExitRetainedLeaf_of_validSelection\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    {chosen remaining : List α} (hsub : chosen <+ remaining)\n    (pre : List α) (positive : Bool) (mass : ℝ)\n    (hvalid : FirstExitValidSelection retained pre positive chosen) :\n    ∃ leaf ∈ firstExitRetainedLeaves retained h pre positive mass remaining,\n      leaf.selected = chosen.reverse ++ pre",
+          "name": "FirstExitValidSelection",
+          "explicit_source_header_utf8_sha256": "6e9a836bfdfb7216d64cdf655cb2d64d72ab05321212a9965f01e53297029c75"
+        }
+      ]
+    },
+    {
+      "path": "ImbalancedChen\\RoughPrimeUniverse.lean",
+      "absolute_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RoughPrimeUniverse.lean",
+      "source_sha256": "3d716d89548e2e453e96c598481db2f62ae1c76e7f092a960e490a4b70688e58",
+      "bytes": 9294,
+      "LF_count": 219,
+      "imports": [
+        "ImbalancedChen.RetainedModuli",
+        "Mathlib.Data.Finset.Interval",
+        "Mathlib.Data.Finset.Sort",
+        "Mathlib.Tactic"
+      ],
+      "declarations": [
+        {
+          "start_line": 58,
+          "explicit_source_header": "def roughPrimeUniverse (N cap : ℕ) (w z : ℝ) : List ℕ",
+          "name": "roughPrimeUniverse",
+          "explicit_source_header_utf8_sha256": "749b320ba9cc6ad40a634b923a2ffe57ffae9a7a8ae655095258916b495ee35e"
+        },
+        {
+          "start_line": 70,
+          "explicit_source_header": "theorem mem_roughPrimeUniverse_iff_of_cutoff_le_cap\n    {N cap p : ℕ} {w z : ℝ} (hzcap : z ≤ (cap : ℝ)) :\n    p ∈ roughPrimeUniverse N cap w z ↔\n      p.Prime ∧ ¬p ∣ N ∧ w ≤ (p : ℝ) ∧ (p : ℝ) < z",
+          "name": "mem_roughPrimeUniverse_iff_of_cutoff_le_cap",
+          "explicit_source_header_utf8_sha256": "dffd36e88b389330f27821152c5e3235e95cfff97ffe07bd171b4ae5e00a525e"
+        },
+        {
+          "start_line": 85,
+          "explicit_source_header": "theorem roughPrimeUniverse_nodup (N cap : ℕ) (w z : ℝ) :\n    (roughPrimeUniverse N cap w z).Nodup",
+          "name": "roughPrimeUniverse_nodup",
+          "explicit_source_header_utf8_sha256": "335dfb39806c426ebc9c92785f1f8b7522df168c61ccb5ea29d2089a2579db04"
+        },
+        {
+          "start_line": 106,
+          "explicit_source_header": "theorem roughPrimeUniverse_pairwise_gt (N cap : ℕ) (w z : ℝ) :\n    (roughPrimeUniverse N cap w z).Pairwise (· > ·)",
+          "name": "roughPrimeUniverse_pairwise_gt",
+          "explicit_source_header_utf8_sha256": "e71c833085940ef0602528bfe5bfa0308b6e3f047368b71f44e2284b17d6e5d5"
+        }
+      ]
+    }
+  ],
+  "actual_original_parent_bindings": [
+    {
+      "object_path": ".lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\FirstExitFrontierTupleReindex.olean",
+      "actual_existing_declarations_json_sha256": "3f917578e11b4a990e27e5e5cc5a672966409932c93dfa90916f843b0d7e9673",
+      "cached_binding_after": {
+        "source_sha256": "55db69dc7a01b6ff0cbe3f3e631d9b5d8932a8d8a2623d6a57215e9da010e7f6",
+        "direct_source_sha256": {
+          "ImbalancedChen.FirstExitOwnCubeSplice": "982d5b4dcca94c1121f8bbf65e3d63e88bd87cfc63d7b814710b9992a8c71510",
+          "ImbalancedChen.FirstExitFrontierInvariants": "44ad360ca47574571eeb514613a0328069b98aa424eb7d2383fa76dd6f7da153",
+          "ImbalancedChen.FirstExitValidSelection": "ac65228de387c57af2c53dbea7e16d6b457f042ec145800ce90e96229030f232",
+          "ImbalancedChen.FinitePrimeGeometryCore": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85"
+        },
+        "dependencies": {
+          "ImbalancedChen.FirstExitOwnCubeSplice": "d22e8d5b857778de0546445449bf226639cceee32499fdc9e665640b8aff557d",
+          "ImbalancedChen.FirstExitFrontierInvariants": "36ec52451f1ea274c32bff7ab3919503d1bb0e7a8e8b68b4fb61fa041984da9b",
+          "ImbalancedChen.FirstExitValidSelection": "cab149fbb849c1d29c93eec09915bb6c191d3baf41a659a4637224993ef83bde",
+          "ImbalancedChen.FinitePrimeGeometryCore": "d4ee2de1d28b07d433759ab4da2884047495d2153398072fe992ec014698ae48"
+        },
+        "pins": {
+          "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+          "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+          "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+        },
+        "dependency_parts": {
+          "ImbalancedChen.FirstExitOwnCubeSplice": {
+            ".olean": "d22e8d5b857778de0546445449bf226639cceee32499fdc9e665640b8aff557d"
+          },
+          "ImbalancedChen.FirstExitFrontierInvariants": {
+            ".olean": "36ec52451f1ea274c32bff7ab3919503d1bb0e7a8e8b68b4fb61fa041984da9b"
+          },
+          "ImbalancedChen.FirstExitValidSelection": {
+            ".olean": "cab149fbb849c1d29c93eec09915bb6c191d3baf41a659a4637224993ef83bde"
+          },
+          "ImbalancedChen.FinitePrimeGeometryCore": {
+            ".olean": "d4ee2de1d28b07d433759ab4da2884047495d2153398072fe992ec014698ae48"
+          }
+        },
+        "lean_wrapper_sha256": "98ae075329cac5c48823aff15c364b8da4fa76b1ddcd14c801dc891032614ab9",
+        "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "actual_direct_object_part_bindings": [
+        {
+          "expected_sha256": "d22e8d5b857778de0546445449bf226639cceee32499fdc9e665640b8aff557d",
+          "path": ".lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\FirstExitOwnCubeSplice.olean",
+          "actual_sha256": "d22e8d5b857778de0546445449bf226639cceee32499fdc9e665640b8aff557d",
+          "module": "ImbalancedChen.FirstExitOwnCubeSplice",
+          "part": ".olean",
+          "match": true
+        },
+        {
+          "expected_sha256": "36ec52451f1ea274c32bff7ab3919503d1bb0e7a8e8b68b4fb61fa041984da9b",
+          "path": ".lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\FirstExitFrontierInvariants.olean",
+          "actual_sha256": "36ec52451f1ea274c32bff7ab3919503d1bb0e7a8e8b68b4fb61fa041984da9b",
+          "module": "ImbalancedChen.FirstExitFrontierInvariants",
+          "part": ".olean",
+          "match": true
+        },
+        {
+          "expected_sha256": "cab149fbb849c1d29c93eec09915bb6c191d3baf41a659a4637224993ef83bde",
+          "path": ".lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\FirstExitValidSelection.olean",
+          "actual_sha256": "cab149fbb849c1d29c93eec09915bb6c191d3baf41a659a4637224993ef83bde",
+          "module": "ImbalancedChen.FirstExitValidSelection",
+          "part": ".olean",
+          "match": true
+        },
+        {
+          "expected_sha256": "d4ee2de1d28b07d433759ab4da2884047495d2153398072fe992ec014698ae48",
+          "path": ".lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\FinitePrimeGeometryCore.olean",
+          "actual_sha256": "d4ee2de1d28b07d433759ab4da2884047495d2153398072fe992ec014698ae48",
+          "module": "ImbalancedChen.FinitePrimeGeometryCore",
+          "part": ".olean",
+          "match": true
+        }
+      ],
+      "existing_cache_status": "PASS",
+      "existing_declarations_json_path": ".lake\\proof-continuation\\audits\\20261021T022230029394Z\\declarations.json",
+      "cache_sha256": "6d5036f1f082bc351902bbfe322c430a8916c4febdc4dc8bc36dd0308f5f5f1e",
+      "actual_object_sha256": "2d8c4e750666808c9022da40485bc7f95bb83e31d29d26de550911bda673299b",
+      "existing_original_owned_receipt": {
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+        "targets": {
+          "ImbalancedChen.FirstExitFrontierTupleReindex": "55db69dc7a01b6ff0cbe3f3e631d9b5d8932a8d8a2623d6a57215e9da010e7f6"
+        },
+        "stages": [
+          {
+            "kind": "stock_replay",
+            "module": "ImbalancedChen.FirstExitFrontierTupleReindex",
+            "result": {
+              "status": "PASS",
+              "command": [
+                "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/leanchecker",
+                "--verbose",
+                "ImbalancedChen.FirstExitFrontierTupleReindex"
+              ],
+              "resource_reason": "Root038436 Tuple55db actual strict022144PASS object2d8c4e75 fullbefore9b15cd; ONE originalstock then ALLserialized generated environment complete fulltypes safety totality transitive only3axioms frozen267d no filters autoretry or successors",
+              "child_pid": 405,
+              "rss_guard": {
+                "limit_mib": 6656,
+                "poll_seconds": 0.05,
+                "samples": 930,
+                "max_observed_rss_kib": 3250432,
+                "signals": [],
+                "scope": "Periodic owned-child RSS observation; not OS hard cap"
+              },
+              "returncode": 0,
+              "max_rss_kib": 3249812,
+              "guard_error": null,
+              "seconds": 46.844,
+              "log_sha256": "02565a743583ccbb9b30173b608851450e20bd447c22041e936090d5060e165e"
+            }
+          },
+          {
+            "kind": "full_inventory_type_axioms",
+            "exit_code": 0,
+            "seconds": 12.649,
+            "max_rss_kib": 3651376,
+            "log_sha256": "580bbb7bf50d221aaa185c2faf24846c1fc6d0bac3ac5cf1a6e85673751761c8",
+            "command": [
+              "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/lean",
+              "-j2",
+              "-M6144",
+              "-DwarningAsError=true",
+              ".lake/proof-continuation/audits/20261021T022230029394Z/OwnedAudit.lean"
+            ]
+          }
+        ],
+        "audit_runner_sha256": "267d59bfc37e5d5a742b619390f5b42155bb5ab33d923684487acb6b8a7e19e6",
+        "scope": "Owned stock replay and complete serialized/type/axiom census only",
+        "external_closure_replay_claimed": false,
+        "unconditional_main_claimed": false,
+        "inputs_before": {
+          "pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "sources": {
+            "ImbalancedChen.FirstExitFrontierTupleReindex": "55db69dc7a01b6ff0cbe3f3e631d9b5d8932a8d8a2623d6a57215e9da010e7f6"
+          },
+          "owned_object_parts": {
+            "ImbalancedChen.FirstExitFrontierTupleReindex": {
+              ".olean": "2d8c4e750666808c9022da40485bc7f95bb83e31d29d26de550911bda673299b"
+            }
+          },
+          "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "checker_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+        },
+        "generated_audit_sha256": "dbb66d75d03a22b5ee19fab82df2deb973cefe0f314d4c99835480a5c6589092",
+        "inputs_after": {
+          "pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "sources": {
+            "ImbalancedChen.FirstExitFrontierTupleReindex": "55db69dc7a01b6ff0cbe3f3e631d9b5d8932a8d8a2623d6a57215e9da010e7f6"
+          },
+          "owned_object_parts": {
+            "ImbalancedChen.FirstExitFrontierTupleReindex": {
+              ".olean": "2d8c4e750666808c9022da40485bc7f95bb83e31d29d26de550911bda673299b"
+            }
+          },
+          "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "checker_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+        },
+        "declaration_counts": {
+          "ImbalancedChen.FirstExitFrontierTupleReindex": 43
+        },
+        "source_template_sha256": "df79aecf54317dbdc193e9b68ec8e833f6d4d09a92f369ac6985d23d974ff822"
+      },
+      "cache_path": ".lake\\proof-continuation\\cache\\ImbalancedChen.FirstExitFrontierTupleReindex.json",
+      "cached_binding": {
+        "source_sha256": "55db69dc7a01b6ff0cbe3f3e631d9b5d8932a8d8a2623d6a57215e9da010e7f6",
+        "direct_source_sha256": {
+          "ImbalancedChen.FirstExitOwnCubeSplice": "982d5b4dcca94c1121f8bbf65e3d63e88bd87cfc63d7b814710b9992a8c71510",
+          "ImbalancedChen.FirstExitFrontierInvariants": "44ad360ca47574571eeb514613a0328069b98aa424eb7d2383fa76dd6f7da153",
+          "ImbalancedChen.FirstExitValidSelection": "ac65228de387c57af2c53dbea7e16d6b457f042ec145800ce90e96229030f232",
+          "ImbalancedChen.FinitePrimeGeometryCore": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85"
+        },
+        "dependencies": {
+          "ImbalancedChen.FirstExitOwnCubeSplice": "d22e8d5b857778de0546445449bf226639cceee32499fdc9e665640b8aff557d",
+          "ImbalancedChen.FirstExitFrontierInvariants": "36ec52451f1ea274c32bff7ab3919503d1bb0e7a8e8b68b4fb61fa041984da9b",
+          "ImbalancedChen.FirstExitValidSelection": "cab149fbb849c1d29c93eec09915bb6c191d3baf41a659a4637224993ef83bde",
+          "ImbalancedChen.FinitePrimeGeometryCore": "d4ee2de1d28b07d433759ab4da2884047495d2153398072fe992ec014698ae48"
+        },
+        "pins": {
+          "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+          "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+          "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+        },
+        "dependency_parts": {
+          "ImbalancedChen.FirstExitOwnCubeSplice": {
+            ".olean": "d22e8d5b857778de0546445449bf226639cceee32499fdc9e665640b8aff557d"
+          },
+          "ImbalancedChen.FirstExitFrontierInvariants": {
+            ".olean": "36ec52451f1ea274c32bff7ab3919503d1bb0e7a8e8b68b4fb61fa041984da9b"
+          },
+          "ImbalancedChen.FirstExitValidSelection": {
+            ".olean": "cab149fbb849c1d29c93eec09915bb6c191d3baf41a659a4637224993ef83bde"
+          },
+          "ImbalancedChen.FinitePrimeGeometryCore": {
+            ".olean": "d4ee2de1d28b07d433759ab4da2884047495d2153398072fe992ec014698ae48"
+          }
+        },
+        "lean_wrapper_sha256": "98ae075329cac5c48823aff15c364b8da4fa76b1ddcd14c801dc891032614ab9",
+        "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "existing_original_owned_receipt_path": ".lake\\proof-continuation\\audits\\20261021T022230029394Z\\receipt.json",
+      "selected_existing_elaborated_API_records": [
+        {
+          "existing_axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "existing_axiom_field": false,
+          "type_utf8_sha256": "b4afb434ee5035d4b0645dd45e622033483bef8d301e72dc4944c9dd3b3047fc",
+          "existing_partial_field": false,
+          "module": "ImbalancedChen.FirstExitFrontierTupleReindex",
+          "existing_unsafe_field": false,
+          "name": "ImbalancedChen.firstExitFrontierCandidates_weighted_sum_eq_tuple_sum",
+          "complete_existing_elaborated_type": "∀ (k : Nat) (parent : Bool → List.{0} Nat → Bool) (h : Nat → Real) (carrier : List.{0} Nat)\n  (hc : @List.Nodup.{0} Nat carrier)\n  (f :\n    (Fin\n          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n        Nat) →\n      Real),\n  @Eq.{1} Real\n    (@List.sum.{0} Real Real.instAdd Real.instZero\n      (@List.map.{0, 0} (ImbalancedChen.FirstExitDepthState.{0} Nat) Real\n        (fun (state : ImbalancedChen.FirstExitDepthState.{0} Nat) =>\n          @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n            (@List.prod.{0} Real Real.instMul Real.instOne\n              (@List.map.{0, 0} Nat Real\n                (fun (q : Nat) =>\n                  @HDiv.hDiv.{0, 0, 0} Real Real Real\n                    (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                    (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n                    (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n                      (@Nat.cast.{0} Real Real.instNatCast q)\n                      (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n                (@ImbalancedChen.FirstExitDepthState.selectedPrefix.{0} Nat state)))\n            (f\n              (ImbalancedChen.primeHistoryTuple\n                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))\n                (@ImbalancedChen.FirstExitDepthState.selectedPrefix.{0} Nat state))))\n        (@ImbalancedChen.firstExitFrontierCandidates.{0} Nat k parent h carrier)))\n    (@Finset.sum.{0, 0}\n      (Fin\n          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n        Nat)\n      Real Real.instAddCommMonoid (ImbalancedChen.firstExitFrontierTuples k parent carrier)\n      fun\n        (p :\n          Fin\n              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n            Nat) =>\n      @HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n        (@Finset.prod.{0, 0}\n          (Fin\n            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))\n          Real Real.instCommMonoid\n          (@Finset.univ.{0}\n            (Fin\n              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))\n            (Fin.fintype\n              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))\n          fun\n            (i :\n              Fin\n                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))) =>\n          @HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n            (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n              (@Nat.cast.{0} Real Real.instNatCast (p i))\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n        (f p))"
+        },
+        {
+          "existing_axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "existing_axiom_field": false,
+          "type_utf8_sha256": "d2fe91ac86499120ccf416796f65e280d4e0f061c14832ac9506dccfcb2fb41f",
+          "existing_partial_field": false,
+          "module": "ImbalancedChen.FirstExitFrontierTupleReindex",
+          "existing_unsafe_field": false,
+          "name": "ImbalancedChen.firstExitFrontierTuples",
+          "complete_existing_elaborated_type": "(k : Nat) →\n  (parent : Bool → List.{0} Nat → Bool) →\n    (carrier : List.{0} Nat) →\n      Finset.{0}\n        (Fin\n            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n          Nat)"
+        },
+        {
+          "existing_axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "existing_axiom_field": false,
+          "type_utf8_sha256": "64c6b834a304c4698c4a046fba8da0513d18995f750a1058ddcfc9b646104719",
+          "existing_partial_field": false,
+          "module": "ImbalancedChen.FirstExitFrontierTupleReindex",
+          "existing_unsafe_field": false,
+          "name": "ImbalancedChen.mem_actualPrimeFrontierTuples_iff",
+          "complete_existing_elaborated_type": "∀ (k : Nat) (parent : Bool → List.{0} Nat → Bool) (N cap : Nat) (w z : Real)\n  (p :\n    Fin\n        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n      Nat),\n  Iff\n    (@Membership.mem.{0, 0}\n      (Fin\n          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n        Nat)\n      (Finset.{0}\n        (Fin\n            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n          Nat))\n      (@SetLike.instMembership.{0, 0}\n        (Finset.{0}\n          (Fin\n              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n            Nat))\n        (Fin\n            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n          Nat)\n        (@Finset.instSetLike.{0}\n          (Fin\n              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n            Nat)))\n      (ImbalancedChen.firstExitFrontierTuples k parent (ImbalancedChen.roughPrimeUniverse N cap w z)) p)\n    (And\n      (@StrictAnti.{0, 0}\n        (Fin\n          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))\n        Nat\n        (@PartialOrder.toPreorder.{0}\n          (Fin\n            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))\n          (@Fin.instPartialOrder\n            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))\n        Nat.instPreorder p)\n      (And\n        (∀\n          (i :\n            Fin\n              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))),\n          And (@LT.lt.{0} Nat instLTNat (p i) cap)\n            (And (Nat.Prime (p i))\n              (And (Not (@Dvd.dvd.{0} Nat Nat.instDvd (p i) N))\n                (And (@LE.le.{0} Real Real.instLE w (@Nat.cast.{0} Real Real.instNatCast (p i)))\n                  (@LT.lt.{0} Real Real.instLT (@Nat.cast.{0} Real Real.instNatCast (p i)) z)))))\n        (@ImbalancedChen.FirstExitValidSelection.{0} Nat parent (@List.nil.{0} Nat) Bool.true\n          (@List.dropLast.{0} Nat\n            (@List.ofFn.{0} Nat\n              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))\n              p)))))"
+        },
+        {
+          "existing_axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "existing_axiom_field": false,
+          "type_utf8_sha256": "6c161c5372258c2aa2d62af96b8bf4202e5e8205040e14dd8f4856e70a132c54",
+          "existing_partial_field": false,
+          "module": "ImbalancedChen.FirstExitFrontierTupleReindex",
+          "existing_unsafe_field": false,
+          "name": "ImbalancedChen.mem_firstExitFrontierTuples_iff",
+          "complete_existing_elaborated_type": "∀ (k : Nat) (parent : Bool → List.{0} Nat → Bool) (carrier : List.{0} Nat)\n  (p :\n    Fin\n        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n          (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n      Nat),\n  Iff\n    (@Membership.mem.{0, 0}\n      (Fin\n          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n        Nat)\n      (Finset.{0}\n        (Fin\n            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n          Nat))\n      (@SetLike.instMembership.{0, 0}\n        (Finset.{0}\n          (Fin\n              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n            Nat))\n        (Fin\n            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n          Nat)\n        (@Finset.instSetLike.{0}\n          (Fin\n              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))) →\n            Nat)))\n      (ImbalancedChen.firstExitFrontierTuples k parent carrier) p)\n    (And\n      (@List.Sublist.{0} Nat\n        (@List.ofFn.{0} Nat\n          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))\n          p)\n        carrier)\n      (@ImbalancedChen.FirstExitValidSelection.{0} Nat parent (@List.nil.{0} Nat) Bool.true\n        (@List.dropLast.{0} Nat\n          (@List.ofFn.{0} Nat\n            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) k\n              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))\n            p))))"
+        }
+      ],
+      "cached_object_parts": {
+        ".olean": "2d8c4e750666808c9022da40485bc7f95bb83e31d29d26de550911bda673299b"
+      },
+      "object_matches_cache": true,
+      "source_path": "ImbalancedChen\\FirstExitFrontierTupleReindex.lean",
+      "module": "ImbalancedChen.FirstExitFrontierTupleReindex",
+      "acceptance_action": "None. Existing original owned evidence observed and byte-bound; no new acceptance or fresh replay.",
+      "actual_direct_source_bindings": [
+        {
+          "expected_source_sha256": "982d5b4dcca94c1121f8bbf65e3d63e88bd87cfc63d7b814710b9992a8c71510",
+          "path": "ImbalancedChen\\FirstExitOwnCubeSplice.lean",
+          "match": true,
+          "module": "ImbalancedChen.FirstExitOwnCubeSplice",
+          "actual_source_sha256": "982d5b4dcca94c1121f8bbf65e3d63e88bd87cfc63d7b814710b9992a8c71510"
+        },
+        {
+          "expected_source_sha256": "44ad360ca47574571eeb514613a0328069b98aa424eb7d2383fa76dd6f7da153",
+          "path": "ImbalancedChen\\FirstExitFrontierInvariants.lean",
+          "match": true,
+          "module": "ImbalancedChen.FirstExitFrontierInvariants",
+          "actual_source_sha256": "44ad360ca47574571eeb514613a0328069b98aa424eb7d2383fa76dd6f7da153"
+        },
+        {
+          "expected_source_sha256": "ac65228de387c57af2c53dbea7e16d6b457f042ec145800ce90e96229030f232",
+          "path": "ImbalancedChen\\FirstExitValidSelection.lean",
+          "match": true,
+          "module": "ImbalancedChen.FirstExitValidSelection",
+          "actual_source_sha256": "ac65228de387c57af2c53dbea7e16d6b457f042ec145800ce90e96229030f232"
+        },
+        {
+          "expected_source_sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+          "path": "ImbalancedChen\\FinitePrimeGeometryCore.lean",
+          "match": true,
+          "module": "ImbalancedChen.FinitePrimeGeometryCore",
+          "actual_source_sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85"
+        }
+      ],
+      "receipt_matches_census": true,
+      "records_match_census": true,
+      "existing_owned_census_entry": {
+        "module": "ImbalancedChen.FirstExitFrontierTupleReindex",
+        "source_sha256": "55db69dc7a01b6ff0cbe3f3e631d9b5d8932a8d8a2623d6a57215e9da010e7f6",
+        "object_parts": {
+          ".olean": "2d8c4e750666808c9022da40485bc7f95bb83e31d29d26de550911bda673299b"
+        },
+        "owned_receipt": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261021T022230029394Z/receipt.json",
+        "owned_receipt_sha256": "701a21009d26dcc617c63f6eccee843784ee7cfe4b231a1a3e4b608fe30065d9",
+        "declarations_json_sha256": "3f917578e11b4a990e27e5e5cc5a672966409932c93dfa90916f843b0d7e9673",
+        "complete_serialized_declarations": 43
+      },
+      "source_matches_cache": true,
+      "actual_source_sha256": "55db69dc7a01b6ff0cbe3f3e631d9b5d8932a8d8a2623d6a57215e9da010e7f6",
+      "actual_original_owned_receipt_sha256": "701a21009d26dcc617c63f6eccee843784ee7cfe4b231a1a3e4b608fe30065d9"
+    },
+    {
+      "object_path": ".lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\ActualExtendedThirdCompactUpperRho.olean",
+      "actual_existing_declarations_json_sha256": "217ceac2e29b37bb1fe541cf9405d0c2313cd9209cf5874af20f0bfca300ccb8",
+      "cached_binding_after": {
+        "source_sha256": "d8b61b9bc550d6d1af36e5181516e4ca99e2b7c08bf3bd61cd98ad6a85b7a001",
+        "direct_source_sha256": {
+          "ImbalancedChen.ActualExtendedThirdCompactCellCutoff": "edb8876bd5881b7087e85062e64b05a1a7b0c5c1ed465825c5925dbbed059428",
+          "ImbalancedChen.ActualExtendedThirdFirstCubeMargin": "290bd48ab1ca9b3994c02c3208849ae81dcb3ab24607b92c8c8dc52d1f67786a",
+          "ImbalancedChen.ActualUpperPolicyFiniteBridge": "6394e8f839aa3899670a5169f96e21c33267e53b36f6b8491d66dc945e0307a3"
+        },
+        "dependencies": {
+          "ImbalancedChen.ActualExtendedThirdCompactCellCutoff": "e972c096712f46ff0a34ddd1a712f7fdfe1ea9b27c8a9fe8f55f0e2732bf5955",
+          "ImbalancedChen.ActualExtendedThirdFirstCubeMargin": "24b866f4887a35e35fd0ddd1fea9aa9bec5b994c2100af41f6ed99a0359dd38a",
+          "ImbalancedChen.ActualUpperPolicyFiniteBridge": "1cb111c9be3f583edc45cf8ba16c75445db53e7429d6763fba5ca6fa9c6d0ad5"
+        },
+        "pins": {
+          "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+          "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+          "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+        },
+        "dependency_parts": {
+          "ImbalancedChen.ActualExtendedThirdCompactCellCutoff": {
+            ".olean": "e972c096712f46ff0a34ddd1a712f7fdfe1ea9b27c8a9fe8f55f0e2732bf5955"
+          },
+          "ImbalancedChen.ActualExtendedThirdFirstCubeMargin": {
+            ".olean": "24b866f4887a35e35fd0ddd1fea9aa9bec5b994c2100af41f6ed99a0359dd38a"
+          },
+          "ImbalancedChen.ActualUpperPolicyFiniteBridge": {
+            ".olean": "1cb111c9be3f583edc45cf8ba16c75445db53e7429d6763fba5ca6fa9c6d0ad5"
+          }
+        },
+        "lean_wrapper_sha256": "98ae075329cac5c48823aff15c364b8da4fa76b1ddcd14c801dc891032614ab9",
+        "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "actual_direct_object_part_bindings": [
+        {
+          "expected_sha256": "e972c096712f46ff0a34ddd1a712f7fdfe1ea9b27c8a9fe8f55f0e2732bf5955",
+          "path": ".lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\ActualExtendedThirdCompactCellCutoff.olean",
+          "actual_sha256": "e972c096712f46ff0a34ddd1a712f7fdfe1ea9b27c8a9fe8f55f0e2732bf5955",
+          "module": "ImbalancedChen.ActualExtendedThirdCompactCellCutoff",
+          "part": ".olean",
+          "match": true
+        },
+        {
+          "expected_sha256": "24b866f4887a35e35fd0ddd1fea9aa9bec5b994c2100af41f6ed99a0359dd38a",
+          "path": ".lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\ActualExtendedThirdFirstCubeMargin.olean",
+          "actual_sha256": "24b866f4887a35e35fd0ddd1fea9aa9bec5b994c2100af41f6ed99a0359dd38a",
+          "module": "ImbalancedChen.ActualExtendedThirdFirstCubeMargin",
+          "part": ".olean",
+          "match": true
+        },
+        {
+          "expected_sha256": "1cb111c9be3f583edc45cf8ba16c75445db53e7429d6763fba5ca6fa9c6d0ad5",
+          "path": ".lake\\proof-continuation\\lib\\lean\\ImbalancedChen\\ActualUpperPolicyFiniteBridge.olean",
+          "actual_sha256": "1cb111c9be3f583edc45cf8ba16c75445db53e7429d6763fba5ca6fa9c6d0ad5",
+          "module": "ImbalancedChen.ActualUpperPolicyFiniteBridge",
+          "part": ".olean",
+          "match": true
+        }
+      ],
+      "existing_cache_status": "PASS",
+      "existing_declarations_json_path": ".lake\\proof-continuation\\audits\\20261018T050207997839Z\\declarations.json",
+      "cache_sha256": "c3d8a18a9aeb476d6e9972fe69e29677a793513c3490515f3a8bbde3efd15829",
+      "actual_object_sha256": "aedfb74056e053af84d8948c32b2da00f4c891d3a75c4969fd52d9b1576a2b4b",
+      "existing_original_owned_receipt": {
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+        "targets": {
+          "ImbalancedChen.ActualExtendedThirdCompactUpperRho": "d8b61b9bc550d6d1af36e5181516e4ca99e2b7c08bf3bd61cd98ad6a85b7a001"
+        },
+        "stages": [
+          {
+            "kind": "stock_replay",
+            "module": "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+            "result": {
+              "status": "PASS",
+              "command": [
+                "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/leanchecker",
+                "--verbose",
+                "ImbalancedChen.ActualExtendedThirdCompactUpperRho"
+              ],
+              "resource_reason": "root-114cfa02-Upperd8b-STRICT050050PASS-objectaedfb740-complete28types7defs-allgeneratedflagsaxiomsstock",
+              "child_pid": 11237,
+              "rss_guard": {
+                "limit_mib": 6656,
+                "poll_seconds": 0.05,
+                "samples": 1240,
+                "max_observed_rss_kib": 4070340,
+                "signals": [],
+                "scope": "Periodic owned-child RSS observation; not OS hard cap"
+              },
+              "returncode": 0,
+              "max_rss_kib": 4068784,
+              "guard_error": null,
+              "seconds": 62.398,
+              "log_sha256": "8d2ecd7f362ee48557895ab4987791d7a7b6287de5f0d84583042df21aa9c681"
+            }
+          },
+          {
+            "kind": "full_inventory_type_axioms",
+            "exit_code": 0,
+            "seconds": 16.183,
+            "max_rss_kib": 4582024,
+            "log_sha256": "40ed5aa57bb45b02f25bca2f9971cc91377913fbdbc2b7e3b3048a21e9a48f76",
+            "command": [
+              "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/lean",
+              "-j2",
+              "-M6144",
+              "-DwarningAsError=true",
+              ".lake/proof-continuation/audits/20261018T050207997839Z/OwnedAudit.lean"
+            ]
+          }
+        ],
+        "audit_runner_sha256": "267d59bfc37e5d5a742b619390f5b42155bb5ab33d923684487acb6b8a7e19e6",
+        "scope": "Owned stock replay and complete serialized/type/axiom census only",
+        "external_closure_replay_claimed": false,
+        "unconditional_main_claimed": false,
+        "inputs_before": {
+          "pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "sources": {
+            "ImbalancedChen.ActualExtendedThirdCompactUpperRho": "d8b61b9bc550d6d1af36e5181516e4ca99e2b7c08bf3bd61cd98ad6a85b7a001"
+          },
+          "owned_object_parts": {
+            "ImbalancedChen.ActualExtendedThirdCompactUpperRho": {
+              ".olean": "aedfb74056e053af84d8948c32b2da00f4c891d3a75c4969fd52d9b1576a2b4b"
+            }
+          },
+          "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "checker_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+        },
+        "generated_audit_sha256": "3183a3442fc40df2e0836eecf1b98b588098f14ed186dda6bc4bb9fab55c82a4",
+        "inputs_after": {
+          "pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "sources": {
+            "ImbalancedChen.ActualExtendedThirdCompactUpperRho": "d8b61b9bc550d6d1af36e5181516e4ca99e2b7c08bf3bd61cd98ad6a85b7a001"
+          },
+          "owned_object_parts": {
+            "ImbalancedChen.ActualExtendedThirdCompactUpperRho": {
+              ".olean": "aedfb74056e053af84d8948c32b2da00f4c891d3a75c4969fd52d9b1576a2b4b"
+            }
+          },
+          "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "checker_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+        },
+        "declaration_counts": {
+          "ImbalancedChen.ActualExtendedThirdCompactUpperRho": 49
+        },
+        "source_template_sha256": "df79aecf54317dbdc193e9b68ec8e833f6d4d09a92f369ac6985d23d974ff822"
+      },
+      "cache_path": ".lake\\proof-continuation\\cache\\ImbalancedChen.ActualExtendedThirdCompactUpperRho.json",
+      "cached_binding": {
+        "source_sha256": "d8b61b9bc550d6d1af36e5181516e4ca99e2b7c08bf3bd61cd98ad6a85b7a001",
+        "direct_source_sha256": {
+          "ImbalancedChen.ActualExtendedThirdCompactCellCutoff": "edb8876bd5881b7087e85062e64b05a1a7b0c5c1ed465825c5925dbbed059428",
+          "ImbalancedChen.ActualExtendedThirdFirstCubeMargin": "290bd48ab1ca9b3994c02c3208849ae81dcb3ab24607b92c8c8dc52d1f67786a",
+          "ImbalancedChen.ActualUpperPolicyFiniteBridge": "6394e8f839aa3899670a5169f96e21c33267e53b36f6b8491d66dc945e0307a3"
+        },
+        "dependencies": {
+          "ImbalancedChen.ActualExtendedThirdCompactCellCutoff": "e972c096712f46ff0a34ddd1a712f7fdfe1ea9b27c8a9fe8f55f0e2732bf5955",
+          "ImbalancedChen.ActualExtendedThirdFirstCubeMargin": "24b866f4887a35e35fd0ddd1fea9aa9bec5b994c2100af41f6ed99a0359dd38a",
+          "ImbalancedChen.ActualUpperPolicyFiniteBridge": "1cb111c9be3f583edc45cf8ba16c75445db53e7429d6763fba5ca6fa9c6d0ad5"
+        },
+        "pins": {
+          "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+          "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+          "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+        },
+        "dependency_parts": {
+          "ImbalancedChen.ActualExtendedThirdCompactCellCutoff": {
+            ".olean": "e972c096712f46ff0a34ddd1a712f7fdfe1ea9b27c8a9fe8f55f0e2732bf5955"
+          },
+          "ImbalancedChen.ActualExtendedThirdFirstCubeMargin": {
+            ".olean": "24b866f4887a35e35fd0ddd1fea9aa9bec5b994c2100af41f6ed99a0359dd38a"
+          },
+          "ImbalancedChen.ActualUpperPolicyFiniteBridge": {
+            ".olean": "1cb111c9be3f583edc45cf8ba16c75445db53e7429d6763fba5ca6fa9c6d0ad5"
+          }
+        },
+        "lean_wrapper_sha256": "98ae075329cac5c48823aff15c364b8da4fa76b1ddcd14c801dc891032614ab9",
+        "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "existing_original_owned_receipt_path": ".lake\\proof-continuation\\audits\\20261018T050207997839Z\\receipt.json",
+      "selected_existing_elaborated_API_records": [
+        {
+          "existing_axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "existing_axiom_field": false,
+          "type_utf8_sha256": "2512f8c430f241b4b4bee3a216afa7873d7f6037b616b572c51653e07c75df2e",
+          "existing_partial_field": false,
+          "module": "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+          "existing_unsafe_field": false,
+          "name": "ImbalancedChen.actualExtendedThirdCompactUpperPolicy",
+          "complete_existing_elaborated_type": "(e h : Real) → (m N : Nat) → Bool → List.{0} Nat → Bool"
+        },
+        {
+          "existing_axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "existing_axiom_field": false,
+          "type_utf8_sha256": "bd4bae72393348a8d7fb38ce2d01c8c46027005131c4ad2955d37acabd61b1f3",
+          "existing_partial_field": false,
+          "module": "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+          "existing_unsafe_field": false,
+          "name": "ImbalancedChen.actualExtendedThirdCompactUpperPolicy_third_iff",
+          "complete_existing_elaborated_type": "∀ {e h : Real} {m N : Nat}\n  (hN : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) N)\n  (he0 : @LT.lt.{0} Real Real.instLT (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) e)\n  (he :\n    @LE.le.{0} Real Real.instLE e\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n        (@OfNat.ofNat.{0} Real (nat_lit 384)\n          (@instOfNatAtLeastTwo.{0} Real (nat_lit 384) Real.instNatCast\n            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 383) (instOfNatNat (nat_lit 383)))\n              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 382) (instOfNatNat (nat_lit 382)))))))))\n  (hmesh :\n    @LE.le.{0} Real Real.instLE (ImbalancedChen.actualExtendedThirdDyadicStep m)\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid)) e\n        (@OfNat.ofNat.{0} Real (nat_lit 2)\n          (@instOfNatAtLeastTwo.{0} Real (nat_lit 2) Real.instNatCast\n            (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))\n              (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))))))\n  (p0 p1 p2 : Nat) (hp2 : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) p2)\n  (hp21 : @LT.lt.{0} Nat instLTNat p2 p1) (hp10 : @LT.lt.{0} Nat instLTNat p1 p0)\n  {j : ImbalancedChen.ActualExtendedThirdDyadicLabel m}\n  (hj :\n    @Membership.mem.{0, 0} (ImbalancedChen.ActualExtendedThirdDyadicLabel m)\n      (Finset.{0} (ImbalancedChen.ActualExtendedThirdDyadicLabel m))\n      (@SetLike.instMembership.{0, 0} (Finset.{0} (ImbalancedChen.ActualExtendedThirdDyadicLabel m))\n        (ImbalancedChen.ActualExtendedThirdDyadicLabel m)\n        (@Finset.instSetLike.{0} (ImbalancedChen.ActualExtendedThirdDyadicLabel m)))\n      (ImbalancedChen.actualExtendedThirdCompactCells e h m) j)\n  (ht :\n    @Membership.mem.{0, 0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) → Real)\n      (Set.{0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) → Real))\n      (@Set.instMembership.{0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) → Real))\n      (ImbalancedChen.actualExtendedThirdOwnedCell m j)\n      (ImbalancedChen.primeHistoryLogCoordinates (@Nat.cast.{0} Real Real.instNatCast N)\n        (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))\n        (@List.cons.{0} Nat p2 (@List.cons.{0} Nat p1 (@List.cons.{0} Nat p0 (@List.nil.{0} Nat)))))),\n  Iff\n    (@Eq.{1} Bool\n      (ImbalancedChen.actualExtendedThirdCompactUpperPolicy e h m N Bool.false\n        (@List.cons.{0} Nat p2 (@List.cons.{0} Nat p1 (@List.cons.{0} Nat p0 (@List.nil.{0} Nat)))))\n      Bool.true)\n    (@LT.lt.{0} Real Real.instLT\n      (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul) (@Nat.cast.{0} Real Real.instNatCast p0)\n          (@Nat.cast.{0} Real Real.instNatCast p1))\n        (@HPow.hPow.{0, 0, 0} Real Nat Real\n          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n          (@Nat.cast.{0} Real Real.instNatCast p2) (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))))\n      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n        (@Nat.cast.{0} Real Real.instNatCast N) (ImbalancedChen.actualExtendedThirdPhysicalLevel e m j)))"
+        }
+      ],
+      "cached_object_parts": {
+        ".olean": "aedfb74056e053af84d8948c32b2da00f4c891d3a75c4969fd52d9b1576a2b4b"
+      },
+      "object_matches_cache": true,
+      "source_path": "ImbalancedChen\\ActualExtendedThirdCompactUpperRho.lean",
+      "module": "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+      "acceptance_action": "None. Existing original owned evidence observed and byte-bound; no new acceptance or fresh replay.",
+      "actual_direct_source_bindings": [
+        {
+          "expected_source_sha256": "edb8876bd5881b7087e85062e64b05a1a7b0c5c1ed465825c5925dbbed059428",
+          "path": "ImbalancedChen\\ActualExtendedThirdCompactCellCutoff.lean",
+          "match": true,
+          "module": "ImbalancedChen.ActualExtendedThirdCompactCellCutoff",
+          "actual_source_sha256": "edb8876bd5881b7087e85062e64b05a1a7b0c5c1ed465825c5925dbbed059428"
+        },
+        {
+          "expected_source_sha256": "290bd48ab1ca9b3994c02c3208849ae81dcb3ab24607b92c8c8dc52d1f67786a",
+          "path": "ImbalancedChen\\ActualExtendedThirdFirstCubeMargin.lean",
+          "match": true,
+          "module": "ImbalancedChen.ActualExtendedThirdFirstCubeMargin",
+          "actual_source_sha256": "290bd48ab1ca9b3994c02c3208849ae81dcb3ab24607b92c8c8dc52d1f67786a"
+        },
+        {
+          "expected_source_sha256": "6394e8f839aa3899670a5169f96e21c33267e53b36f6b8491d66dc945e0307a3",
+          "path": "ImbalancedChen\\ActualUpperPolicyFiniteBridge.lean",
+          "match": true,
+          "module": "ImbalancedChen.ActualUpperPolicyFiniteBridge",
+          "actual_source_sha256": "6394e8f839aa3899670a5169f96e21c33267e53b36f6b8491d66dc945e0307a3"
+        }
+      ],
+      "receipt_matches_census": true,
+      "records_match_census": true,
+      "existing_owned_census_entry": {
+        "module": "ImbalancedChen.ActualExtendedThirdCompactUpperRho",
+        "source_sha256": "d8b61b9bc550d6d1af36e5181516e4ca99e2b7c08bf3bd61cd98ad6a85b7a001",
+        "object_parts": {
+          ".olean": "aedfb74056e053af84d8948c32b2da00f4c891d3a75c4969fd52d9b1576a2b4b"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261018T050207997839Z/receipt.json",
+        "owned_receipt_sha256": "1f87c866599bf387b8395c9fa80f348a06f3282197a41c4f7eb8125801342e60",
+        "declarations_json_sha256": "217ceac2e29b37bb1fe541cf9405d0c2313cd9209cf5874af20f0bfca300ccb8",
+        "complete_serialized_declarations": 49
+      },
+      "source_matches_cache": true,
+      "actual_source_sha256": "d8b61b9bc550d6d1af36e5181516e4ca99e2b7c08bf3bd61cd98ad6a85b7a001",
+      "actual_original_owned_receipt_sha256": "1f87c866599bf387b8395c9fa80f348a06f3282197a41c4f7eb8125801342e60"
+    }
+  ],
+  "native_finite_API_actual_full_spans": [
+    {
+      "matches_historical_actual_native_source_hash": true,
+      "binding_scope": "Actual current native source, with complete referenced finite API declaration span; no foreign kernel replay",
+      "source_sha256": "3855ae7209036e242754504ae29512d722d5208fa8d56b74e020dc872878c564",
+      "complete_actual_span": "@[simp]\ntheorem sublistsLen_zero (l : List α) : sublistsLen 0 l = [[]] :=\n  sublistsLenAux_zero _ _ _\n\n@[simp]\ntheorem sublistsLen_succ_nil (n) : sublistsLen (n + 1) (@nil α) = [] :=\n  rfl\n\n@[simp]\ntheorem sublistsLen_succ_cons (n) (a : α) (l) :\n    sublistsLen (n + 1) (a :: l) = sublistsLen (n + 1) l ++ (sublistsLen n l).map (cons a) := by\n  rw [sublistsLen, sublistsLenAux, sublistsLenAux_eq, sublistsLenAux_eq, map_id,\n      append_nil]; rfl\n\ntheorem sublistsLen_one (l : List α) : sublistsLen 1 l = l.reverse.map ([·]) :=\n  l.rec (by rw [sublistsLen_succ_nil, reverse_nil, map_nil]) fun a s ih ↦ by\n    rw [sublistsLen_succ_cons, ih, reverse_cons, map_append, sublistsLen_zero]; rfl",
+      "lines": [
+        215,
+        231
+      ],
+      "purpose": "Base reversed singleton enumeration and exact successor split",
+      "span_lf_utf8_sha256": "41e39b172dee3fad4501cb372088a993369399d1876754817b640def09b2a4d4",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\List\\Sublists.lean"
+    },
+    {
+      "matches_historical_actual_native_source_hash": true,
+      "binding_scope": "Actual current native source, with complete referenced finite API declaration span; no foreign kernel replay",
+      "source_sha256": "3855ae7209036e242754504ae29512d722d5208fa8d56b74e020dc872878c564",
+      "complete_actual_span": "theorem length_of_sublistsLen :\n    ∀ {n} {l l' : List α}, l' ∈ sublistsLen n l → length l' = n\n  | 0, l, l', h => by simp_all\n  | n + 1, a :: l, l', h => by\n    rw [sublistsLen_succ_cons, mem_append, mem_map] at h\n    rcases h with (h | ⟨l', h, rfl⟩)\n    · exact length_of_sublistsLen h\n    · exact congr_arg (· + 1) (length_of_sublistsLen h)\n\ntheorem mem_sublistsLen_self {l l' : List α} (h : l' <+ l) :\n    l' ∈ sublistsLen (length l') l := by\n  induction h with\n  | slnil => simp\n  | @cons l₁ l₂ a s IH =>\n    rcases l₁ with - | ⟨b, l₁⟩\n    · simp\n    · rw [length, sublistsLen_succ_cons]\n      exact mem_append_left _ IH\n  | cons_cons a s IH =>\n    rw [length, sublistsLen_succ_cons]\n    exact mem_append_right _ (mem_map.2 ⟨_, IH, rfl⟩)\n\n@[simp]\ntheorem mem_sublistsLen {n} {l l' : List α} :\n    l' ∈ sublistsLen n l ↔ l' <+ l ∧ length l' = n :=\n  ⟨fun h =>\n    ⟨mem_sublists'.1 ((sublistsLen_sublist_sublists' _ _).subset h), length_of_sublistsLen h⟩,\n    fun ⟨h₁, h₂⟩ => h₂ ▸ mem_sublistsLen_self h₁⟩",
+      "lines": [
+        261,
+        288
+      ],
+      "purpose": "Exact sublist length and membership",
+      "span_lf_utf8_sha256": "70928b463b90eed5bded47f242b9c847622fae7d4fd6160c081902e5708c4e26",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\List\\Sublists.lean"
+    },
+    {
+      "matches_historical_actual_native_source_hash": true,
+      "binding_scope": "Actual current native source, with complete referenced finite API declaration span; no foreign kernel replay",
+      "source_sha256": "3855ae7209036e242754504ae29512d722d5208fa8d56b74e020dc872878c564",
+      "complete_actual_span": "protected alias ⟨Nodup.of_sublists', _⟩ := nodup_sublists'\n\ntheorem nodup_sublistsLen (n : ℕ) {l : List α} (h : Nodup l) : (sublistsLen n l).Nodup := by\n  have : Pairwise (· ≠ ·) l.sublists' := Pairwise.imp\n    (fun h => Lex.to_ne (by convert! h using 3; simp [eq_comm])) h.sublists'\n  exact this.sublist (sublistsLen_sublist_sublists' _ _)\n\ntheorem sublists_map (f : α → β) : ∀ (l : List α),\n    sublists (map f l) = map (map f) (sublists l)",
+      "lines": [
+        330,
+        338
+      ],
+      "purpose": "Nodup length enumeration",
+      "span_lf_utf8_sha256": "6d90f84c5e0c1fe1b2bde139624b8aab01a6b4f847341419487ad9bf4ff25917",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\List\\Sublists.lean"
+    },
+    {
+      "matches_historical_actual_native_source_hash": true,
+      "binding_scope": "Actual current native source, with complete referenced finite API declaration span; no foreign kernel replay",
+      "source_sha256": "e14a87415ad8baf04439924697192e596e5d4730506ed54448c3d8b4b6fb1be2",
+      "complete_actual_span": "theorem pairwise_ofFn {R : α → α → Prop} {n} {f : Fin n → α} :\n    (ofFn f).Pairwise R ↔ ∀ ⦃i j⦄, i < j → R (f i) (f j) := by\n  simp only [pairwise_iff_getElem, length_ofFn, List.getElem_ofFn,\n    Fin.forall_iff,\n    Fin.mk_lt_mk, forall_comm (α := (_ : Prop)) (β := ℕ)]",
+      "lines": [
+        119,
+        123
+      ],
+      "purpose": "Pairwise equivalence for tuples",
+      "span_lf_utf8_sha256": "73574469c974bd03a823401eae650ab269d406d47841f399118fdf01fcb2a2ea",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\List\\OfFn.lean"
+    },
+    {
+      "matches_historical_actual_native_source_hash": true,
+      "binding_scope": "Actual current native source, with complete referenced finite API declaration span; no foreign kernel replay",
+      "source_sha256": "e14a87415ad8baf04439924697192e596e5d4730506ed54448c3d8b4b6fb1be2",
+      "complete_actual_span": "theorem ofFn_injective {n : ℕ} : Function.Injective (ofFn : (Fin n → α) → List α) := fun f g h =>\n  eq_of_heq <| by rw [ofFn_inj'] at h; cases h; rfl\n\n/-- A special case of `List.ofFn_inj` for when the two functions are indexed by defeq `n`. -/\n@[simp]\ntheorem ofFn_inj {n : ℕ} {f g : Fin n → α} : ofFn f = ofFn g ↔ f = g :=\n  ofFn_injective.eq_iff",
+      "lines": [
+        184,
+        190
+      ],
+      "purpose": "Tuple/List.ofFn injectivity",
+      "span_lf_utf8_sha256": "d1dee40c939fb82ffd2bc2eeb44d43122fe8a569258330ded57c14dbf4c4caef",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\List\\OfFn.lean"
+    },
+    {
+      "matches_historical_actual_native_source_hash": true,
+      "binding_scope": "Actual current native source, with complete referenced finite API declaration span; no foreign kernel replay",
+      "source_sha256": "a171582a4611a508efa9e9fcf5ae85d6be39eaf38b13d51256a08ad465bfb598",
+      "complete_actual_span": "theorem Nodup.of_map (f : α → β) {l : List α} : Nodup (map f l) → Nodup l :=\n  (Pairwise.of_map f) fun _ _ => mt <| congr_arg f\n\ntheorem Nodup.map_on {f : α → β} (H : ∀ x ∈ l, ∀ y ∈ l, f x = f y → x = y) (d : Nodup l) :\n    (map f l).Nodup :=\n  Pairwise.map _ (fun a b ⟨ma, mb, n⟩ e => n (H a ma b mb e)) (Pairwise.and_mem.1 d)",
+      "lines": [
+        186,
+        191
+      ],
+      "purpose": "Restricted map injectivity=>Nodup",
+      "span_lf_utf8_sha256": "e26fbfa2edb9618d2ad702e475fc1f9837690056d44751fead3f57caf6df6928",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\List\\Nodup.lean"
+    },
+    {
+      "matches_historical_actual_native_source_hash": true,
+      "binding_scope": "Actual current native source, with complete referenced finite API declaration span; no foreign kernel replay",
+      "source_sha256": "a65c7f1e0ebe02f1fd8fa923d06df360db27bab16c0f1f8a9eff729c2ea5ed48",
+      "complete_actual_span": "section Antisymm\n\nvariable {r : α → α → Prop} [Std.Antisymm r]\n\n/-- Variant of `Perm.eq_of_pairwise` using relation typeclasses. -/\ntheorem Perm.eq_of_pairwise' {l₁ l₂ : List α} :\n    Pairwise r l₁ → Pairwise r l₂ → (hl : l₁ ~ l₂) → l₁ = l₂ :=\n  eq_of_pairwise (fun _ _ _ _ => antisymm)\n\ntheorem sublist_of_subperm_of_pairwise {l₁ l₂ : List α} (hp : l₁ <+~ l₂)\n    (hs₁ : l₁.Pairwise r) (hs₂ : l₂.Pairwise r) : l₁ <+ l₂ := by\n  let ⟨_, h, h'⟩ := hp\n  exact Sublist.trans (h.eq_of_pairwise' (hs₂.sublist h') hs₁ ▸ Sublist.refl _) h'",
+      "lines": [
+        300,
+        312
+      ],
+      "purpose": "Sorted subperm=>sublist",
+      "span_lf_utf8_sha256": "09361e6472f66978096d33c26712feed89aa6410b065f9ab0d9c667259cec4f2",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\List\\Sort.lean"
+    },
+    {
+      "matches_historical_actual_native_source_hash": true,
+      "binding_scope": "Actual current native source, with complete referenced finite API declaration span; no foreign kernel replay",
+      "source_sha256": "73c40b98c1637cff3565e50e8a3818a9a7d9f6675e88c91112d378a0d070652c",
+      "complete_actual_span": "alias ⟨_, Subperm.map⟩ := map_subperm_map_iff\n\nprotected theorem Nodup.subperm (d : Nodup l₁) (H : l₁ ⊆ l₂) : l₁ <+~ l₂ :=\n  subperm_of_subset d H",
+      "lines": [
+        80,
+        83
+      ],
+      "purpose": "Nodup subset=>Subperm call boundary",
+      "span_lf_utf8_sha256": "b33a36b16544283598cabd351da6b8a649b986cec397b8ea62c6c821633613bc",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\List\\Perm\\Subperm.lean"
+    },
+    {
+      "matches_historical_actual_native_source_hash": true,
+      "binding_scope": "Actual current native source, with complete referenced finite API declaration span; no foreign kernel replay",
+      "source_sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "complete_actual_span": "namespace List\n\n@[to_additive]\ntheorem prod_toFinset {M : Type*} [DecidableEq ι] [CommMonoid M] (f : ι → M) :\n    ∀ {l : List ι} (_hl : l.Nodup), l.toFinset.prod f = (l.map f).prod\n  | [], _ => by simp\n  | a :: l, hl => by\n    let ⟨notMem, hl⟩ := List.nodup_cons.mp hl\n    simp [Finset.prod_insert (mt List.mem_toFinset.mp notMem), prod_toFinset _ hl]",
+      "lines": [
+        1051,
+        1059
+      ],
+      "purpose": "to_additive List.sum_toFinset full argument order",
+      "span_lf_utf8_sha256": "c51f8f19701d11dabc88cae52af8d8bb6e5cbe3968e5813de43b7d906386a78f",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Group\\Finset\\Basic.lean"
+    },
+    {
+      "complete_actual_span": "theorem subperm_of_subset (d : Nodup l₁) (H : l₁ ⊆ l₂) : l₁ <+~ l₂ := by\n  induction d with\n  | nil => exact ⟨nil, .nil, nil_sublist _⟩\n  | cons h _ IH =>\n    have ⟨H₁, H₂⟩ := forall_mem_cons.1 H\n    exact cons_subperm_of_not_mem_of_mem (h _ · rfl) H₁ (IH H₂)",
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\batteries\\Batteries\\Data\\List\\Perm.lean",
+      "source_sha256": "123f908f2e142be19700231d1478e8632e88191d52ee818a8f32c73c44e0c707",
+      "purpose": "Actual defining subperm_of_subset full signature and proof, rather than only the mathlib wrapper",
+      "span_lf_utf8_sha256": "8b79b2267beb2cc2857f110512517d98a61c4f631b37c8d638ddfa779bfee541",
+      "lines": [
+        138,
+        143
+      ]
+    }
+  ],
+  "versions": {
+    "current_original_pin_hashes": {
+      "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+    },
+    "native_mathlib_path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib",
+    "lean": "leanprover/lean4:v4.33.0-rc1",
+    "mathlib_manifest_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1"
+  },
+  "existing_census_reference": {
+    "scope": "Only two relevant entries read for existing parent evidence; no new census, no broad proof audit",
+    "path": ".lake\\proof-continuation\\source-reviews\\20261021T084509477056Z-runtime-fresh-current-terminal-owned-census.json",
+    "sha256": "dbdd629eae44ea214916da0ce7e49a18c94b548b5b79fc87d5afea03e4492674"
+  },
+  "reuse": {
+    "other_existing_source": "FirstExitFrontierAdmission proves returned-state admission, but does not give multiplicity-preserving enumeration or a tuple sum. It cannot supply the prerequisite exact finite transfer alone.",
+    "current_consumer_reuses_prerequisite": [
+      "firstExitAdmittedTuples",
+      "mem_firstExitAdmittedTuples_iff",
+      "firstExitRootFrontier_weighted_sum_eq_admitted_tuple_sum"
+    ],
+    "bounded_local_search": "Named admitted frontier/tuple/sum search in current ImbalancedChen sources found this prerequisite and its consumer as the admitted tuple implementation; existing candidate and admission APIs retained. No whole-repository theorem-library completeness claim.",
+    "difference": "Candidate tuple APIs deliberately leave the final prime untested; admitted API tests all k selected primes and transfers the genuine stopped rank-k frontier. Existing candidate weighted sum does not directly replace the admitted-frontier theorem.",
+    "existing_original_owned_APIs": [
+      "firstExitFrontierTuples",
+      "mem_firstExitFrontierTuples_iff",
+      "mem_actualPrimeFrontierTuples_iff",
+      "firstExitFrontierCandidates_weighted_sum_eq_tuple_sum",
+      "actualExtendedThirdCompactUpperPolicy_third_iff"
+    ]
+  },
+  "findings": {
+    "necessary_source_repairs_identified": [],
+    "source_consistent_with_original_route": true,
+    "clear_compiler_independent_API_blockers": [],
+    "blocking_mathematical_findings": []
+  },
+  "minimal_remaining_obstacles": [
+    "Prerequisite exact source 6d68ca9c79d8fdca has no target cache or owned receipt observed; source review is not Lean elaboration or kernel acceptance.",
+    "Genuine owner must independently select this exact prerequisite and perform original frozen runtime source/object/pin preflight, strict warnings-as-errors compilation, stock checker and complete generated/full-type/safety/transitive-axiom audit before any ownership claim. This review authorizes none of those actions.",
+    "Only after genuine prerequisite acceptance may the exact 90d72df9 consumer be considered separately under its original gates; no compiled consumer or main 1+1.75 proof is claimed."
+  ],
+  "mutations": {
+    "compiler_checker_run": false,
+    "verification_archive_modified": false,
+    "agents_spawned": false,
+    "Git_catalog_CI_or_pins_modified": false,
+    "proper_classifier_run": false,
+    "source_changes": false,
+    "new_JSON_only": true,
+    "atomic_tmp_then_move": true
+  },
+  "final_state": "HOLD"
+}
