@@ -1,0 +1,324 @@
+{
+  "status": "ONE_COMPLETE_GENERIC_QUANTITATIVE_SOURCE_CANDIDATE_STATIC_ONLY_HOLD",
+  "author": "/root/mixed_log_sol_xhigh_oct21",
+  "date_utc": "2026-10-21",
+  "source": {
+    "path": "ImbalancedChen/Part3SchwartzFourierL1Sobolev.lean",
+    "sha256": "bb99945a37040ebe36d0202e69ecc533078e043dc4c3ea0e2a22f6fab7363a65",
+    "lines": 154,
+    "compiled": false,
+    "owned": false
+  },
+  "public_namespace": "ImbalancedChen.Part3.SchwartzFourierL1Sobolev",
+  "public_context_literal": "variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]\n  [FiniteDimensional ℝ E] [MeasurableSpace E] [BorelSpace E]",
+  "public_definitions_literal": "def normalizedStep (f : 𝓢(E, ℂ)) : 𝓢(E, ℂ) :=\n  f - (((2 * Real.pi) ^ 2)⁻¹ : ℝ) • Δ f\n\ndef normalizedFourth (f : 𝓢(E, ℂ)) : 𝓢(E, ℂ) :=\n  normalizedStep (normalizedStep f)",
+  "public_theorem_literal": "theorem fourier_integral_norm_le_normalizedFourth\n    (hd : Module.finrank ℝ E < 8) :\n    ∃ C : ℝ, 0 < C ∧ ∀ f : 𝓢(E, ℂ),\n      (∫ ξ : E, ‖𝓕 f ξ‖) ≤\n        C * Real.sqrt (∫ x : E, ‖normalizedFourth f x‖ ^ 2)",
+  "public_lines": {
+    "normalizedStep": 31,
+    "normalizedFourth": 35,
+    "fourier_integral_norm_le_normalizedFourth": 142
+  },
+  "explicit_witness": "C=1+sqrt(integral xi:E, k(xi)^2), k(xi)=((1+norm(xi)^2)^2)^(-1). The private explicit theorem proves the sharper coefficient sqrt(integral k^2). C is fixed before every f.",
+  "proof_chain": [
+    "Native laplacian_eq_fourierMultiplierCLM, Fourier homogeneity and Fourier-FourierInv cancellation give Fourier(Delta f)(xi)=(-(2pi)^2*norm(xi)^2) smul Fourier f(xi). Pointwise multiplier expansion is justified by the genuine native Function.hasTemperateGrowth_norm_sq E.",
+    "The explicit nonzero real factor (2pi)^2 cancels its inverse in normalizedStep, giving symbol1+norm(xi)^2. Two applications prove normalizedFourth has the square of this symbol; its definition remains the actual D(Df) differential operator.",
+    "k is nonnegative and continuous. Its square is exactly (1+norm(xi)^2)^(-8/2). JapaneseBracket integrable_rpow_neg_one_add_norm_sq applies under finrank(E)<8. Native memLp_two_iff_integrable_sq gives k in L2.",
+    "Fourier(normalizedFourth f) is an actual Schwartz function, so its norm is in L2 by native SchwartzMap.memLp and MemLp.norm. Quantitative integral_mul_le_Lp_mul_Lq_of_nonneg with Real.HolderConjugate.two_two yields sqrt(integral k^2)*sqrt(integral norm(Fourier normalizedFourth f)^2).",
+    "The exact positive norm identity k*norm(Fourier normalizedFourth f)=norm(Fourier f) is proved from the actual symbol. Native SchwartzMap.integral_norm_sq_fourier converts the last factor to the actual normalizedFourth energy with no additional normalization."
+  ],
+  "dimension_and_measure": "All integrals use native volume on the fixed finite-dimensional real inner-product space. For E=EuclideanSpace R(Fin d), native finrank_euclideanSpace_fin converts d<8 to hd. This generic statement is stronger than the requested Euclidean specialization; no varying f occurs in C.",
+  "native_root": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib",
+  "native_pin_supplied_by_parent": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+  "native_file_span_bindings": [
+    {
+      "sha256": "22f9fad5a18b2e677fbb861a21f12c78275bffe0fa67c97495b8aa996011f067",
+      "path": "Mathlib/Analysis/Distribution/FourierMultiplier.lean",
+      "spans": [
+        {
+          "first": 48,
+          "normalized_lf_utf8_sha256": "8c05ce4a0516942f28539308d567f6e98b30db78e900e144e7c751c982a3cef5",
+          "last": 56
+        },
+        {
+          "first": 110,
+          "normalized_lf_utf8_sha256": "2903bf539019dfd67af01a3d387af387e4f496172f7e6f7d5e8aecb60d010f69",
+          "last": 125
+        }
+      ]
+    },
+    {
+      "sha256": "8f74642098d0390e08eae980f72ba29801c46b03446dae2fd20eff9ba0f08737",
+      "path": "Mathlib/Analysis/Distribution/SchwartzSpace/Fourier.lean",
+      "spans": [
+        {
+          "first": 128,
+          "normalized_lf_utf8_sha256": "74c5f0ab856cdf5cb9a971f0498dc5434a9b1217c5bdb431a31727ca0d78afdf",
+          "last": 140
+        },
+        {
+          "first": 313,
+          "normalized_lf_utf8_sha256": "89b1d524b98863d2b8be498382c7ec6e1ca50e73aa5e923920bdf7ce3041fb41",
+          "last": 322
+        }
+      ]
+    },
+    {
+      "sha256": "419ecc0c5e5041be90969b55722b67e368c253d62c75e65209a749a031602cd0",
+      "spans": [
+        {
+          "last": 752,
+          "first": 739,
+          "normalized_lf_utf8_sha256": "82f8dfa3726a0da6d2c2285f58dfcc4d1a3b09a0580c8c76a58f0475572797ca"
+        },
+        {
+          "last": 1318,
+          "first": 1315,
+          "normalized_lf_utf8_sha256": "f3d118194f33ff3a8d9d8eda6fcba247697a370c19ab658dd7dd88f8dcc00622"
+        }
+      ],
+      "path": "Mathlib/Analysis/Distribution/SchwartzSpace/Basic.lean"
+    },
+    {
+      "path": "Mathlib/Analysis/Distribution/TemperateGrowth.lean",
+      "sha256": "4699e2d98fe58e309260bec97d498e956d047c7bab33ade2b7e4dc6acfd498e2",
+      "spans": [
+        {
+          "first": 324,
+          "last": 333,
+          "normalized_lf_utf8_sha256": "a2996ad2d55cbc404efef8293d94f6becfb2dbfaaef2e4933062a722b4523ad9"
+        },
+        {
+          "first": 415,
+          "last": 444,
+          "normalized_lf_utf8_sha256": "659f141f5e089495ceb313bedd03b631bfbf3b4105339ae7c7805b66a905d417"
+        }
+      ]
+    },
+    {
+      "sha256": "417a150d05e8c2150dbcc8a3ad8adf294e6b3efd13eed6bb2a9377bc93150618",
+      "path": "Mathlib/Analysis/SpecialFunctions/JapaneseBracket.lean",
+      "spans": [
+        {
+          "first": 147,
+          "normalized_lf_utf8_sha256": "cb5c4155388da6279da1e5b30ea68d1e2a95812ea4934592adeca0a0eed11b67",
+          "last": 154
+        }
+      ]
+    },
+    {
+      "sha256": "7dd0542490f2841e8a91d2258a903d328383d7305915375d99d589fae40de399",
+      "path": "Mathlib/MeasureTheory/Function/L2Space.lean",
+      "spans": [
+        {
+          "first": 45,
+          "normalized_lf_utf8_sha256": "c62e908aa02ba73d456ed12005c5a67dc9bd5c1b67e59892aea13a2764cedd1c",
+          "last": 54
+        }
+      ]
+    },
+    {
+      "sha256": "f81a06eab17faccbc4b671a93e7af73332f5fd3946f7690e7c2a3cfee77d28c8",
+      "path": "Mathlib/MeasureTheory/Integral/Bochner/Basic.lean",
+      "spans": [
+        {
+          "first": 1191,
+          "normalized_lf_utf8_sha256": "ec53e6e77d2aa24d9ee3ab71585c0613c3812f7cc37f07c4d515f6390164c23b",
+          "last": 1208
+        }
+      ]
+    },
+    {
+      "sha256": "05c27ac26ef7efb35b27b1e022a783082846bd11e4d87730425873a6322c80fb",
+      "spans": [
+        {
+          "last": 139,
+          "first": 110,
+          "normalized_lf_utf8_sha256": "bc27ecc6d0dd4b5c644b9a648f43fecafc0cd2686d4c6bc9e1387cc35bee8442"
+        }
+      ],
+      "path": "Mathlib/Analysis/Fourier/Notation.lean"
+    },
+    {
+      "sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+      "path": "Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+      "spans": [
+        {
+          "first": 60,
+          "normalized_lf_utf8_sha256": "f460ea638efc8041cfdb0a850641bddc0bf4a4ab3ed866de1277342ef2f61c7d",
+          "last": 75
+        },
+        {
+          "first": 984,
+          "normalized_lf_utf8_sha256": "c116c418c6931d9027273c4f064be11aaa7c2f34248ca95a8e765c6fdab75b3e",
+          "last": 985
+        }
+      ]
+    },
+    {
+      "sha256": "f0241138e98d0a54b244854b61990aa554a1e4cb50ced19a8b42149e8068e3a6",
+      "spans": [
+        {
+          "last": 140,
+          "first": 135,
+          "normalized_lf_utf8_sha256": "91edce04d2e41b2069140957dc224b530cb4b87d4cf3e9ee894bf80abe2427c7"
+        }
+      ],
+      "path": "Mathlib/Data/Real/ConjExponents.lean"
+    },
+    {
+      "sha256": "9c14c6ea5181e22642975305eee8725a8d7cbe1358a73f822e042427be6c9694",
+      "path": "Mathlib/Data/ENNReal/Basic.lean",
+      "spans": [
+        {
+          "first": 507,
+          "normalized_lf_utf8_sha256": "9f06f104275d48106e2d7346032958d1bd22b85ab1e28d00b11669c3ed7b620a",
+          "last": 511
+        }
+      ]
+    },
+    {
+      "path": "Mathlib/MeasureTheory/Measure/Haar/OfBasis.lean",
+      "sha256": "69ebaf9328733df7c742ae16a376e6f2eab61e8de910f73c1a5836fd0a0e3ac5",
+      "spans": [
+        {
+          "first": 294,
+          "last": 318,
+          "normalized_lf_utf8_sha256": "d5d7221f6703c4d1672d49390a67e1461bc89806151bc71dfc414b0d7c3ed9bd"
+        }
+      ]
+    }
+  ],
+  "span_hash_encoding": "ReadAllLines; selected inclusive lines; joined with LF plus one final LF; UTF-8 without BOM; SHA256. Full-file SHA256 is the original file bytes.",
+  "validation": "Complete candidate proof scripts and bounded native source/API inspection only; no Lean/compiler/checker/probe/cache/bootstrap invoked, no ownership asserted. No sorry/admit/new axioms/unsafe/partial. The only smulLeftCLM use is expanded with explicit true squared-norm growth evidence. No MemSobolev membership theorem substitutes for quantitative Holder.",
+  "boundaries": "Generic quantitative Fourier-L1 bridge only. No actual W support-volume/L2 budget, J4 application, Mellin inversion, dyadic recombination, spectral/root/arithmetic endpoint, kappa budget or original C/K/hLower/hUpper completion is claimed. Mixed and Regularity were not modified. Only this one new source and this ignored checkpoint were authored.",
+  "parent_review_source": {
+    "path": ".lake/proof-continuation/source-reviews/20261021-mellin-sobolev-fourth-order-independent-astra-high-HOLD.json",
+    "sha256": "e3bf19fff67eea596f11f2c0155d9970c18731ea055db390e1f4b57ab787664a"
+  },
+  "quota": {
+    "start_used_percent": 25,
+    "last_used_percent": 26,
+    "available_remaining_percent": 74,
+    "stop_remaining_lte": 50,
+    "unavailable_secondary_is_not_zero": true,
+    "standard_control_exposed": false,
+    "reset_purchase_pool_switch": false
+  },
+  "HOLD": true,
+  "explicit_declaration_inventory": [
+    {
+      "last": 31,
+      "private": false,
+      "first": 31,
+      "kind": "def",
+      "name": "normalizedStep",
+      "literal_header": "def normalizedStep (f : 𝓢(E, ℂ)) : 𝓢(E, ℂ)"
+    },
+    {
+      "last": 35,
+      "private": false,
+      "first": 35,
+      "kind": "def",
+      "name": "normalizedFourth",
+      "literal_header": "def normalizedFourth (f : 𝓢(E, ℂ)) : 𝓢(E, ℂ)"
+    },
+    {
+      "last": 39,
+      "private": true,
+      "first": 38,
+      "kind": "theorem",
+      "name": "fourier_laplacian_apply",
+      "literal_header": "private theorem fourier_laplacian_apply (f : 𝓢(E, ℂ)) (ξ : E) :\n    𝓕 (Δ f) ξ = (-(2 * Real.pi) ^ 2 * ‖ξ‖ ^ 2) • 𝓕 f ξ"
+    },
+    {
+      "last": 49,
+      "private": true,
+      "first": 48,
+      "kind": "theorem",
+      "name": "fourier_normalizedStep_apply",
+      "literal_header": "private theorem fourier_normalizedStep_apply (f : 𝓢(E, ℂ)) (ξ : E) :\n    𝓕 (normalizedStep f) ξ = (1 + ‖ξ‖ ^ 2) • 𝓕 f ξ"
+    },
+    {
+      "last": 67,
+      "private": true,
+      "first": 66,
+      "kind": "theorem",
+      "name": "fourier_normalizedFourth_apply",
+      "literal_header": "private theorem fourier_normalizedFourth_apply (f : 𝓢(E, ℂ)) (ξ : E) :\n    𝓕 (normalizedFourth f) ξ = (1 + ‖ξ‖ ^ 2) ^ 2 • 𝓕 f ξ"
+    },
+    {
+      "last": 71,
+      "private": true,
+      "first": 71,
+      "kind": "def",
+      "name": "inverseSymbol",
+      "literal_header": "private def inverseSymbol (ξ : E) : ℝ"
+    },
+    {
+      "last": 73,
+      "private": true,
+      "first": 73,
+      "kind": "theorem",
+      "name": "inverseSymbol_nonneg",
+      "literal_header": "private theorem inverseSymbol_nonneg (ξ : E) : 0 ≤ inverseSymbol ξ"
+    },
+    {
+      "last": 77,
+      "private": true,
+      "first": 77,
+      "kind": "theorem",
+      "name": "inverseSymbol_continuous",
+      "literal_header": "private theorem inverseSymbol_continuous : Continuous (inverseSymbol : E → ℝ)"
+    },
+    {
+      "last": 83,
+      "private": true,
+      "first": 82,
+      "kind": "theorem",
+      "name": "inverseSymbol_sq_eq",
+      "literal_header": "private theorem inverseSymbol_sq_eq (ξ : E) :\n    inverseSymbol ξ ^ 2 = (1 + ‖ξ‖ ^ 2) ^ (-(8 : ℝ) / 2)"
+    },
+    {
+      "last": 91,
+      "private": true,
+      "first": 89,
+      "kind": "theorem",
+      "name": "inverseSymbol_sq_integrable",
+      "literal_header": "private theorem inverseSymbol_sq_integrable\n    (hd : Module.finrank ℝ E < 8) :\n    Integrable (fun ξ : E ↦ inverseSymbol ξ ^ 2)"
+    },
+    {
+      "last": 97,
+      "private": true,
+      "first": 96,
+      "kind": "theorem",
+      "name": "inverseSymbol_memLp",
+      "literal_header": "private theorem inverseSymbol_memLp (hd : Module.finrank ℝ E < 8) :\n    MemLp (inverseSymbol : E → ℝ) 2"
+    },
+    {
+      "last": 102,
+      "private": true,
+      "first": 101,
+      "kind": "theorem",
+      "name": "inverseSymbol_mul_fourier_norm",
+      "literal_header": "private theorem inverseSymbol_mul_fourier_norm (f : 𝓢(E, ℂ)) (ξ : E) :\n    inverseSymbol ξ * ‖𝓕 (normalizedFourth f) ξ‖ = ‖𝓕 f ξ‖"
+    },
+    {
+      "last": 112,
+      "private": true,
+      "first": 108,
+      "kind": "theorem",
+      "name": "fourier_integral_norm_le_explicit",
+      "literal_header": "private theorem fourier_integral_norm_le_explicit\n    (hd : Module.finrank ℝ E < 8) (f : 𝓢(E, ℂ)) :\n    (∫ ξ : E, ‖𝓕 f ξ‖) ≤\n      Real.sqrt (∫ ξ : E, inverseSymbol ξ ^ 2) *\n        Real.sqrt (∫ x : E, ‖normalizedFourth f x‖ ^ 2)"
+    },
+    {
+      "last": 146,
+      "private": false,
+      "first": 142,
+      "kind": "theorem",
+      "name": "fourier_integral_norm_le_normalizedFourth",
+      "literal_header": "theorem fourier_integral_norm_le_normalizedFourth\n    (hd : Module.finrank ℝ E < 8) :\n    ∃ C : ℝ, 0 < C ∧ ∀ f : 𝓢(E, ℂ),\n      (∫ ξ : E, ‖𝓕 f ξ‖) ≤\n        C * Real.sqrt (∫ x : E, ‖normalizedFourth f x‖ ^ 2)"
+    }
+  ],
+  "generated_declarations": "Only the 14 explicit source def/theorem headers are inventoried, including all private declarations. Generated names, private kernel mangling and compiler-produced declaration counts are neither enumerated nor predicted; no Lean environment probe was run.",
+  "measure_instance_boundary": "No arbitrary Measure E or extra MeasureSpace E premise is supplied. Native measureSpaceOfInnerProductSpace at Haar/OfBasis310-312 fixes volume as the Haar measure of the standard orthonormal basis; the following instance315-317 gives IsAddHaarMeasure volume. Native Measure.IsAddHaarMeasure.instHasTemperateGrowth at TemperateGrowth441-444 then supplies the genuine measure-growth instance consumed by SchwartzMap.memLp. All require the stated finite-dimensional real inner-product/Borel context. The Fourier and Plancherel statements use this same normalized volume, so no independent Haar scaling is allowed or hidden."
+}

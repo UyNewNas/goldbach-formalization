@@ -1,0 +1,285 @@
+{
+  "status": "ROOT_COMPLETE249_SOURCE_MATH_AND13_HEADERS_NATIVE20_STATIC_REVIEW_UNCOMPILED",
+  "created_utc": "2026-10-21T05:51:09.663091+00:00",
+  "source": {
+    "path": "ImbalancedChen/Part3SmoothReciprocityLogFourierL1.lean",
+    "sha256": "8c023450f0578c021addb4a33f4da1bbc63801c0304de9f57b53dec72dbb1a44",
+    "lines_lf": 249,
+    "bytes": 12001,
+    "initially_absent": true,
+    "compiled": false,
+    "owned": false,
+    "public_namespace": "ImbalancedChen.Part3",
+    "private_namespace": "ImbalancedChen.Part3.SmoothReciprocityLogFourierL1Proof",
+    "private_context_literal": "variable {d : ℕ}",
+    "all_public_private_complete_literal_headers": [
+      {
+        "line_1based": 21,
+        "private": false,
+        "complete_literal_header": "def CommonSmoothCutoff.smoothReciprocityLogSchwartzWeight\n    {d : ℕ} (a b c : EuclideanSpace ℝ (Fin d))\n    (Q : EuclideanSpace ℝ (Fin d) → ℂ)\n    (hQ : ContDiff ℝ ∞ Q) (hQc : HasCompactSupport Q) (Z u₀ rho₀ : ℝ) :\n    𝓢(EuclideanSpace ℝ (Fin d), ℂ)",
+        "header_utf8_sha256": "d977b82a4cc5a6d2e64480283c7917b99bba475c8afecc46d71cde88ab327c6b"
+      },
+      {
+        "line_1based": 29,
+        "private": false,
+        "complete_literal_header": "@[simp] theorem CommonSmoothCutoff.smoothReciprocityLogSchwartzWeight_apply\n    {d : ℕ} (a b c : EuclideanSpace ℝ (Fin d))\n    (Q : EuclideanSpace ℝ (Fin d) → ℂ)\n    (hQ : ContDiff ℝ ∞ Q) (hQc : HasCompactSupport Q) (Z u₀ rho₀ : ℝ)\n    (t : EuclideanSpace ℝ (Fin d)) :\n    smoothReciprocityLogSchwartzWeight a b c Q hQ hQc Z u₀ rho₀ t =\n      smoothReciprocityLogWeight a b c Q Z u₀ rho₀ t",
+        "header_utf8_sha256": "1ef9c888d646fa444a28dba8e1022f3867a4bd0bf359414e23a07cbbc50995b9"
+      },
+      {
+        "line_1based": 39,
+        "private": true,
+        "complete_literal_header": "private def tau : ℝ",
+        "header_utf8_sha256": "5377a7c6f1d38a2a3e0b6fccba97a32595b35f165b8700f587bc57ea08602e54"
+      },
+      {
+        "line_1based": 41,
+        "private": true,
+        "complete_literal_header": "private theorem tau_nonneg : 0 ≤ tau",
+        "header_utf8_sha256": "14a82ff2141f22bdeeae9e86e01463ece7e1aff5e48606eb1a1300ebb3017231"
+      },
+      {
+        "line_1based": 45,
+        "private": true,
+        "complete_literal_header": "private theorem word_norm_le {n : ℕ}\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ))\n    (m : Fin n → EuclideanSpace ℝ (Fin d))\n    (hm : ∀ i, ‖m i‖ ≤ 1) (x : EuclideanSpace ℝ (Fin d)) (B : ℝ)\n    (hB : ‖iteratedFDeriv ℝ n f x‖ ≤ B) : ‖∂^{m} f x‖ ≤ B",
+        "header_utf8_sha256": "66e92447e390f114478a831c661cc92b358d46e191f8974548fd94e7f209d97f"
+      },
+      {
+        "line_1based": 54,
+        "private": true,
+        "complete_literal_header": "private theorem laplacian_sq_sum\n    (e : OrthonormalBasis (Fin d) ℝ (EuclideanSpace ℝ (Fin d)))\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) :\n    Δ (Δ f) = ∑ i : Fin d, ∑ j : Fin d,\n      ∂_{e i} (∂_{e i} (∂_{e j} (∂_{e j} f)))",
+        "header_utf8_sha256": "251e4de59dbab5fa86d4b4fcd3f863920b69cccc6d6761da5996feb948258faa"
+      },
+      {
+        "line_1based": 62,
+        "private": true,
+        "complete_literal_header": "private theorem laplacian_norm_le\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (x : EuclideanSpace ℝ (Fin d))\n    (B : ℝ) (hB : ‖iteratedFDeriv ℝ 2 f x‖ ≤ B) :\n    ‖Δ f x‖ ≤ (d : ℝ) * B",
+        "header_utf8_sha256": "5e667f49c1bb13ed5bf83de81e214c5c0960241c831e2762f792ddcea3d5872f"
+      },
+      {
+        "line_1based": 80,
+        "private": true,
+        "complete_literal_header": "private theorem laplacian_sq_norm_le\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (x : EuclideanSpace ℝ (Fin d))\n    (B : ℝ) (hB : ‖iteratedFDeriv ℝ 4 f x‖ ≤ B) :\n    ‖Δ (Δ f) x‖ ≤ (d : ℝ) ^ 2 * B",
+        "header_utf8_sha256": "8dcae5c79e78db802e29aee3457f1df40a225fdff969a4d28764c5040f52d164"
+      },
+      {
+        "line_1based": 104,
+        "private": true,
+        "complete_literal_header": "private theorem normalizedFourth_apply\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (x : EuclideanSpace ℝ (Fin d)) :\n    normalizedFourth f x = (f x - tau • Δ f x) -\n      tau • (Δ f x - tau • Δ (Δ f) x)",
+        "header_utf8_sha256": "24d0831cd70ca24f3e4b028d5a559336941cc875fb169e0766a1e063bfe2d29c"
+      },
+      {
+        "line_1based": 117,
+        "private": true,
+        "complete_literal_header": "private theorem normalizedFourth_norm_le\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (x : EuclideanSpace ℝ (Fin d))\n    (B : ℝ) (hjet : ∀ j : ℕ, j ≤ 4 → ‖iteratedFDeriv ℝ j f x‖ ≤ B) :\n    ‖normalizedFourth f x‖ ≤ (1 + tau * d) ^ 2 * B",
+        "header_utf8_sha256": "8c42e48a5549ee06420f6c5b6b477a87b1d427e65e66800196896ffcb9a002df"
+      },
+      {
+        "line_1based": 144,
+        "private": true,
+        "complete_literal_header": "private theorem normalizedFourth_zero_off_support\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ)) (x : EuclideanSpace ℝ (Fin d))\n    (hx : x ∉ tsupport f) : normalizedFourth f x = 0",
+        "header_utf8_sha256": "3e528bd9b44ebae0ff274d7e7b06d4718be3683b7d7d83f49586d327e81a802c"
+      },
+      {
+        "line_1based": 171,
+        "private": true,
+        "complete_literal_header": "private theorem normalizedFourth_sqrt_integral_le\n    (f : 𝓢(EuclideanSpace ℝ (Fin d), ℂ))\n    (K : Set (EuclideanSpace ℝ (Fin d))) (hK : IsCompact K)\n    (hsupport : tsupport f ⊆ K) (B : ℝ) (hB : 0 ≤ B)\n    (hbound : ∀ x, ‖normalizedFourth f x‖ ≤ B) :\n    Real.sqrt (∫ x, ‖normalizedFourth f x‖ ^ 2) ≤ B * Real.sqrt (volume.real K)",
+        "header_utf8_sha256": "31213d3144543845235706b4f19bb2a89b0cd1352e30c0e202c4a203a4d487e0"
+      },
+      {
+        "line_1based": 200,
+        "private": false,
+        "complete_literal_header": "theorem CommonSmoothCutoff.smoothReciprocityLogWeight_fourier_integral_norm_uniform\n    {d : ℕ} (hd : d < 8) (a b c : EuclideanSpace ℝ (Fin d))\n    (Q : EuclideanSpace ℝ (Fin d) → ℂ)\n    (hQ : ContDiff ℝ ∞ Q) (hQc : HasCompactSupport Q) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ Z u₀ rho₀ R : ℝ, 1 ≤ Z → 0 ≤ R →\n        (∀ t ∈ tsupport Q, |rho₀ * Real.exp (inner ℝ b t)| ≤ R) →\n        (∫ ξ : EuclideanSpace ℝ (Fin d),\n          ‖𝓕 (smoothReciprocityLogWeight a b c Q Z u₀ rho₀) ξ‖) ≤ C * (1 + R) ^ 4",
+        "header_utf8_sha256": "9c20fa963747e52ab31dea94297e610f2cd23a6a6022bdd28230eabf99cb5c89"
+      }
+    ],
+    "public_declarations": 3,
+    "private_declarations": 10,
+    "forbidden_tokens": 0
+  },
+  "author_checkpoint": {
+    "path": ".lake/proof-continuation/source-reviews/20261021-part3-smooth-reciprocity-log-fourier-L1-one-source-candidate.json",
+    "sha256": "357ad2b4a0a9c25dd352dc61e3543f805a9ddc4c70a418700b3da193de122063"
+  },
+  "entire12001byte249LF_source_freshly_read": true,
+  "all13_literal_headers_context_recomputed_exact": true,
+  "all20_native_file_and_raw_span_hashes_reverified_and_read": true,
+  "all5_parent_and_review_bindings_actual_SHA_rechecked": true,
+  "mathematical_judgments": [
+    "The public Schwartz bundle is the literal W built from proved smoothness and compact support.",
+    "Genuine directional derivative words and exact Laplacian finite sums pay d and d² from actual J2/J4 operator-norm bounds. No assumed Laplacian estimate supplier.",
+    "Actual normalizedFourth expansion uses tau=((2π)^2)^−1 and yields fixed factor(1+tau*d)^2 times the true J4 budget. No unnecessary tau≤1 estimate changes constants.",
+    "All derivative words vanish off tsupportW; finite volume of fixed compact tsupportQ pays the actual squared integral and its square root.",
+    "Public C=1+Cd*((1+tau*d)^2*C4)*sqrt(volume.real(tsupportQ)) is chosen before all Z,u0,rho0,R and uses only fixed Q,a,b,c,d and native normalized volume.",
+    "Phase cap is required on the whole tsupportQ; positive character and all signed variable/exp-amplitude factors are retained. No arbitrary moving Q, atom amplitude, root mask or spectral bound is hidden."
+  ],
+  "quantifiers": "d,a,b,c,Q,hQ,hQc fixed before C. C precedes every Z,u0,rho0,R. Conditions are1<=Z,0<=R,and the phase-size cap on the entire tsupport Q. All signed atom parameters and the full exp(inner c t) amplitude and positive circle phase are retained.",
+  "native_bindings": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\SchwartzSpace\\Deriv.lean",
+      "source_sha256": "87cd6a4f452f1eceeaa5e68a50e2d083dfb58191f0dfe7f196488e4ab532f1a7",
+      "first_line_1based": 132,
+      "last_line_1based": 140,
+      "span_utf8_sha256": "f33178fd803e69df3bf1c29a1ebfac143e8a48869378c3f453d491a42bf4b4b0",
+      "api": "iteratedLineDerivOp_eq_iteratedFDeriv"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\SchwartzSpace\\Deriv.lean",
+      "source_sha256": "87cd6a4f452f1eceeaa5e68a50e2d083dfb58191f0dfe7f196488e4ab532f1a7",
+      "first_line_1based": 171,
+      "last_line_1based": 181,
+      "span_utf8_sha256": "b1205884eebf635b79dae071770320e2877b44cc755dfd488d061575963c6800",
+      "api": "directional derivative support inclusion"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\SchwartzSpace\\Deriv.lean",
+      "source_sha256": "87cd6a4f452f1eceeaa5e68a50e2d083dfb58191f0dfe7f196488e4ab532f1a7",
+      "first_line_1based": 194,
+      "last_line_1based": 211,
+      "span_utf8_sha256": "34b56850dcc58178db6304c343f8c76c8bb0c1be72489e5bd893a9ae278370bc",
+      "api": "actual Laplacian and orthonormal basis finite sum"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\DerivNotation.lean",
+      "source_sha256": "810b2eb230c1a433d88acadf7472080648a9bb39145bc2d8989cf9f5cfc8a13b",
+      "first_line_1based": 51,
+      "last_line_1based": 69,
+      "span_utf8_sha256": "ba7b9b9949920fa124bd088999e18278c1e5c613ad98c9dda17fc6842f5e0a4b",
+      "api": "iterated words and exact recursive order"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\DerivNotation.lean",
+      "source_sha256": "810b2eb230c1a433d88acadf7472080648a9bb39145bc2d8989cf9f5cfc8a13b",
+      "first_line_1based": 149,
+      "last_line_1based": 161,
+      "span_utf8_sha256": "df6a11a282cf00f70551364bc84ca7589ef4e6129a44865d0c20a499be918b62",
+      "api": "lineDerivOp_sum"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\DerivNotation.lean",
+      "source_sha256": "810b2eb230c1a433d88acadf7472080648a9bb39145bc2d8989cf9f5cfc8a13b",
+      "first_line_1based": 343,
+      "last_line_1based": 363,
+      "span_utf8_sha256": "519a6cb0908520be4a88d99c9b4731664e28c2f23320cd872b0e768bf7d70098",
+      "api": "laplacianCLM linearity and basis sum"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Normed\\Module\\Multilinear\\Basic.lean",
+      "source_sha256": "62b0c5491f2c576dacf5913f9e04fcafd49b2901449bf57e4213df5ec0e05534",
+      "first_line_1based": 378,
+      "last_line_1based": 392,
+      "span_utf8_sha256": "859973308313294554a2475c50ef914dba798d72a342b32d3a79f656b3054c7f",
+      "api": "operator norm bounds evaluations at vectors of norm at most one"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Calculus\\ContDiff\\FTaylorSeries.lean",
+      "source_sha256": "8c82bcae96ad4759777af750ea750ffe9af2721914dde7a4ce7438ac5940c9af",
+      "first_line_1based": 813,
+      "last_line_1based": 824,
+      "span_utf8_sha256": "2f97cd8e149b75036063f7a15d16d7b37ce1c07fe0fb9ad62df0ebdbb878213a",
+      "api": "norm_iteratedFDeriv_zero"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\InnerProductSpace\\PiL2.lean",
+      "source_sha256": "1f9827b2db67213c725a2dcc3fec52a87772966d1fbd3fc6857a019dbd7a6053",
+      "first_line_1based": 207,
+      "last_line_1based": 209,
+      "span_utf8_sha256": "e19a2d6056567d17495420a77f1ccfa53813afce0e1ed6efa8ea5b2b46297209",
+      "api": "finrank_euclideanSpace_fin"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\InnerProductSpace\\PiL2.lean",
+      "source_sha256": "1f9827b2db67213c725a2dcc3fec52a87772966d1fbd3fc6857a019dbd7a6053",
+      "first_line_1based": 455,
+      "last_line_1based": 458,
+      "span_utf8_sha256": "566526edb1de7bf6c94735705535b59d5d72e0193975502f013f5462b17a73c7",
+      "api": "OrthonormalBasis.norm_eq_one"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\InnerProductSpace\\PiL2.lean",
+      "source_sha256": "1f9827b2db67213c725a2dcc3fec52a87772966d1fbd3fc6857a019dbd7a6053",
+      "first_line_1based": 801,
+      "last_line_1based": 809,
+      "span_utf8_sha256": "4528551eb6600b05ecf390bbf37e42013b613381a6f4aa28f0d6e2b4329eefac",
+      "api": "EuclideanSpace.basisFun"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Measure\\Typeclasses\\Finite.lean",
+      "source_sha256": "731d53e69288e971655bc19cdd45b70353b40d335eccf08189b0c377559b2fbd",
+      "first_line_1based": 331,
+      "last_line_1based": 344,
+      "span_utf8_sha256": "8878c1fb3a0ed58c8cb3161880711f0ec2d0f7e148661516d96e2981e2df79d3",
+      "api": "IsCompact.measure_lt_top"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Integral\\Bochner\\Set.lean",
+      "source_sha256": "119710a23a0a09d22f770ca36844ddc3ca1d72cb479e231fe9ec06cea20629f9",
+      "first_line_1based": 478,
+      "last_line_1based": 491,
+      "span_utf8_sha256": "ef54ba946f14fcb1ea7f05b28d23286a28ef7af5bf67368743874bdd2b77b4ca",
+      "api": "setIntegral_eq_integral_of_forall_compl_eq_zero"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Integral\\Bochner\\Set.lean",
+      "source_sha256": "119710a23a0a09d22f770ca36844ddc3ca1d72cb479e231fe9ec06cea20629f9",
+      "first_line_1based": 588,
+      "last_line_1based": 591,
+      "span_utf8_sha256": "a58a0d6230b89654b45d696735e9afe968f820a54b0895f95863a5dbc2fef051",
+      "api": "norm_setIntegral_le_of_norm_le_const_ae actual finite measure proof"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\MeasureTheory\\Integral\\Bochner\\Set.lean",
+      "source_sha256": "119710a23a0a09d22f770ca36844ddc3ca1d72cb479e231fe9ec06cea20629f9",
+      "first_line_1based": 615,
+      "last_line_1based": 618,
+      "span_utf8_sha256": "e39a086891cdff9ec810388bbcee05bdeabd872c4f3d56af9d1d07710668226d",
+      "api": "norm_setIntegral_le_of_norm_le_const"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Real\\Sqrt.lean",
+      "source_sha256": "1935b1e2996b58fde92e5150455c1b5c22766baa22a5167566acf06bc3391a05",
+      "first_line_1based": 180,
+      "last_line_1based": 182,
+      "span_utf8_sha256": "170dcd0465a16f1998aa623d367e2d30423dab7d6db63d735722c64de11d57d3",
+      "api": "Real.sqrt_sq"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Real\\Sqrt.lean",
+      "source_sha256": "1935b1e2996b58fde92e5150455c1b5c22766baa22a5167566acf06bc3391a05",
+      "first_line_1based": 208,
+      "last_line_1based": 211,
+      "span_utf8_sha256": "bf057028126c400480b770535f359c7994b24182bc802216ffcc583435c2f7cc",
+      "api": "Real.sqrt_le_sqrt"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Real\\Sqrt.lean",
+      "source_sha256": "1935b1e2996b58fde92e5150455c1b5c22766baa22a5167566acf06bc3391a05",
+      "first_line_1based": 365,
+      "last_line_1based": 371,
+      "span_utf8_sha256": "e678a6c612a7b6dd9ea5f33608b0d3c8e6a10b20b81140f0031b05a5066c0bfd",
+      "api": "Real.sqrt_mul"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\SchwartzSpace\\Basic.lean",
+      "source_sha256": "419ecc0c5e5041be90969b55722b67e368c253d62c75e65209a749a031602cd0",
+      "first_line_1based": 553,
+      "last_line_1based": 566,
+      "span_utf8_sha256": "2a2c26a938723a44b53dcf90acb709bfde58c238764f6872ee6f428bdeb54296",
+      "api": "HasCompactSupport.toSchwartzMap; read and reused from Regularity task"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Distribution\\SchwartzSpace\\Fourier.lean",
+      "source_sha256": "8f74642098d0390e08eae980f72ba29801c46b03446dae2fd20eff9ba0f08737",
+      "first_line_1based": 97,
+      "last_line_1based": 102,
+      "span_utf8_sha256": "005ca8a5ee3ffa8d87a29df8f533279f388a9e299673f9e3c184dcf667518442",
+      "api": "Schwartz/function Fourier coercion is definitionally exact; reused actual source read"
+    }
+  ],
+  "compiled": false,
+  "owned": false,
+  "generated_declaration_count_predicted": null,
+  "parent_runtime_note": "Regularity strict and original stock+ALL3 now actuallyPASS but terminal fullafter/census still running; generic bb999 remains uncompiled. No candidate promoted.",
+  "main_CK_hLower_hUpper_proved": false,
+  "full_Mellin_recombination_or_spectral_bound_proved": false,
+  "next": "Only after both actual parents accepted: exact proper/full inputs and ONE original strict/stock/ALL verification. Generic parent must be verified first."
+}
