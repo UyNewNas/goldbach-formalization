@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "checkpoint_kind": "bounded_independent_source_recheck_and_acceptance_todo",
+  "review_actor": "/root/tail_real_independent_sol_high_oct22",
+  "created_utc": "2026-10-21T23:35:55.6146280Z",
+  "status": "SOURCE_NO_NEW_STATIC_BLOCKER_ACCEPTANCE_PENDING_HOLD",
+  "result": "no_new_substantive_mathematical_or_API_blocker_identified",
+  "HOLD": true,
+  "actual_source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Certificates\\RationalLogCertificate.lean",
+    "sha256": "4d705f561d4ba07e01dd7b3af1b0a73bcbf28c9dd6d2ddfd4ae288fb84de9d22",
+    "bytes": 4217
+  },
+  "source_lf_lines": 106,
+  "all106_source_lines_independently_read": true,
+  "imports": [
+    "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+    "Mathlib.Tactic"
+  ],
+  "source_written_inventory": {
+    "decidability_instance": 1,
+    "generated_count_not_predicted": true,
+    "structure": 1,
+    "public_theorems": 1,
+    "rational_definitions": 5,
+    "private_theorems": 2
+  },
+  "complete_actual_types_bodies": [
+    {
+      "name": "Decidable_RationalLogCertificate_Valid_instance",
+      "first": 46,
+      "type_last": 46,
+      "last": 48,
+      "complete_actual_type": "instance (c : RationalLogCertificate) : Decidable c.Valid := by\n",
+      "complete_actual_body": "  unfold RationalLogCertificate.Valid\n  infer_instance\n",
+      "type_sha256": "78871f6fb7a8409e8c70250680fba81fc6ec24ff7aff0acabba1cd308b623849",
+      "body_sha256": "c49afd621520bc1ea5491d2df234543beb50221b373198d8d725d2e7a0a101e3",
+      "matches_historical_review": true
+    },
+    {
+      "name": "private logParameter_bounds",
+      "first": 54,
+      "type_last": 55,
+      "last": 60,
+      "complete_actual_type": "private theorem logParameter_bounds {q : ℚ} (hq : 1 ≤ q) :\n    0 ≤ logParameter q ∧ logParameter q < 1 := by\n",
+      "complete_actual_body": "  have hden : 0 < q + 1 := by linarith\n  constructor\n  · exact div_nonneg (sub_nonneg.mpr hq) hden.le\n  · change (q - 1) / (q + 1) < 1\n    exact (div_lt_one hden).mpr (by linarith)\n",
+      "type_sha256": "8639da7d7335f921d8875ec740a756c8430eba4509d6f655208a464832781e6d",
+      "body_sha256": "e32822fa5e9f349763223d37aafd785cd4ec60de8f85fd8dc788bf7d14680538",
+      "matches_historical_review": true
+    },
+    {
+      "name": "private logParameter_identity",
+      "first": 62,
+      "type_last": 63,
+      "last": 67,
+      "complete_actual_type": "private theorem logParameter_identity {q : ℚ} (hq : 1 ≤ q) :\n    (1 + logParameter q) / (1 - logParameter q) = q := by\n",
+      "complete_actual_body": "  have hden : q + 1 ≠ 0 := ne_of_gt (by linarith : 0 < q + 1)\n  unfold logParameter\n  field_simp [hden]\n  ring\n",
+      "type_sha256": "5801023bce245442597f92b48e90f5d2db6ffd0023d5831b146efed1b25dc861",
+      "body_sha256": "ec27320f883a4ddbb4f99c17328e9e433ab52ddbdd14b021e3b7224ce922f30b",
+      "matches_historical_review": true
+    },
+    {
+      "name": "RationalLogCertificate.check_sound",
+      "first": 72,
+      "type_last": 75,
+      "last": 104,
+      "complete_actual_type": "theorem RationalLogCertificate.check_sound (c : RationalLogCertificate)\n    (hcheck : c.check = true) :\n    (c.lower : ℝ) ≤ Real.log (c.argument : ℝ) ∧\n      Real.log (c.argument : ℝ) ≤ (c.upper : ℝ) := by\n",
+      "complete_actual_body": "  have hv : c.Valid := of_decide_eq_true hcheck\n  rcases hv with ⟨hq, hlo, hhi⟩\n  obtain ⟨hx0, hx1⟩ := logParameter_bounds hq\n  have hx0R : (0 : ℝ) ≤ (logParameter c.argument : ℝ) := by exact_mod_cast hx0\n  have hx1R : (logParameter c.argument : ℝ) < (1 : ℝ) := by exact_mod_cast hx1\n  have heq : (1 + (logParameter c.argument : ℝ)) /\n      (1 - (logParameter c.argument : ℝ)) = (c.argument : ℝ) := by\n    exact_mod_cast logParameter_identity hq\n  have hl := Real.sum_range_le_log_div hx0R hx1R c.terms\n  have hu := Real.log_div_le_sum_range_add hx0R hx1R c.terms\n  rw [heq] at hl hu\n  have hlCast : (logSeriesLower c.argument c.terms : ℝ) =\n      2 * ∑ i ∈ Finset.range c.terms,\n        (logParameter c.argument : ℝ) ^ (2 * i + 1) /\n          (2 * (i : ℝ) + 1) := by\n    simp [logSeriesLower]\n  have huCast : (logSeriesUpper c.argument c.terms : ℝ) =\n      (logSeriesLower c.argument c.terms : ℝ) +\n        2 * (logParameter c.argument : ℝ) ^ (2 * c.terms + 1) /\n          (1 - (logParameter c.argument : ℝ) ^ 2) := by\n    simp [logSeriesUpper]\n  have hloR : (c.lower : ℝ) ≤ (logSeriesLower c.argument c.terms : ℝ) := by\n    exact_mod_cast hlo\n  have hhiR : (logSeriesUpper c.argument c.terms : ℝ) ≤ (c.upper : ℝ) := by\n    exact_mod_cast hhi\n  rw [hlCast] at hloR\n  rw [huCast, hlCast] at hhiR\n  simp only [mul_div_assoc] at hhiR\n  constructor <;> linarith\n",
+      "type_sha256": "74dfa792bf90293a3acf245b3d50e3df5bd011a489b02d7a014e081faf566c1a",
+      "body_sha256": "edd0afd3c21151ff5c3788b4565ede3737ea7b34433be5a893ba656a4ad8941b",
+      "matches_historical_review": true
+    }
+  ],
+  "rational_definition_binding": [
+    {
+      "first": 21,
+      "last": 44,
+      "literal_source": "def logParameter (q : ℚ) : ℚ := (q - 1) / (q + 1)\n\n/-- A finite rational lower bound suggested by the logarithmic series. -/\ndef logSeriesLower (q : ℚ) (n : ℕ) : ℚ :=\n  2 * ∑ i ∈ Finset.range n,\n    logParameter q ^ (2 * i + 1) / ((2 * i + 1 : ℕ) : ℚ)\n\n/-- The exact Mathlib remainder, rather than a sharper external tail. -/\ndef logSeriesUpper (q : ℚ) (n : ℕ) : ℚ :=\n  logSeriesLower q n +\n    2 * logParameter q ^ (2 * n + 1) / (1 - logParameter q ^ 2)\n\n/-- A fully rational proof obligation for one logarithm. -/\nstructure RationalLogCertificate where\n  argument : ℚ\n  terms : ℕ\n  lower : ℚ\n  upper : ℚ\n  deriving DecidableEq, Repr\n\ndef RationalLogCertificate.Valid (c : RationalLogCertificate) : Prop :=\n  1 ≤ c.argument ∧\n    c.lower ≤ logSeriesLower c.argument c.terms ∧\n    logSeriesUpper c.argument c.terms ≤ c.upper\n",
+      "normalized_lf_utf8_sha256": "9507125dd8b4587538dc72695b5b9208329bc8d9d528d6e423680f94dda3e68c"
+    },
+    {
+      "first": 51,
+      "last": 52,
+      "literal_source": "def RationalLogCertificate.check (c : RationalLogCertificate) : Bool :=\n  decide c.Valid\n",
+      "normalized_lf_utf8_sha256": "9db82f5104139d2cb015e3fb3f593ee7e15b02a91006af8fb5fd4f959e92b1ca"
+    }
+  ],
+  "actual_odd_log_provider": {
+    "file": {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Analysis/SpecialFunctions/Log/Deriv.lean",
+      "sha256": "8d89d4b427d64327c296cf27bc14d4e3af4cfefbae6832b261b5da2bb8d5d834",
+      "bytes": 18831
+    },
+    "abs_remainder_type": {
+      "first": 288,
+      "last": 290,
+      "literal_source": "lemma sum_range_sub_log_div_le {x : ℝ} (h : |x| < 1) (n : ℕ) :\n    |1 / 2 * log ((1 + x) / (1 - x)) - ∑ i ∈ range n, x ^ (2 * i + 1) / (2 * i + 1)| ≤\n      |x| ^ (2 * n + 1) / (1 - x ^ 2) := by\n",
+      "normalized_lf_utf8_sha256": "76bc142aa23a8a8a83d98fe8780fd5ac6decc9a4dd2ad2cfcea0d9de5f779d70"
+    },
+    "complete_direct_lower_and_upper_API": {
+      "first": 320,
+      "last": 347,
+      "literal_source": "lemma sum_range_le_log_div {x : ℝ} (h₀ : 0 ≤ x) (h : x < 1) (n : ℕ) :\n    ∑ i ∈ range n, x ^ (2 * i + 1) / (2 * i + 1) ≤ 1 / 2 * log ((1 + x) / (1 - x)) := by\n  let F (x : ℝ) : ℝ :=\n    1 / 2 * log ((1 + x) / (1 - x)) - (∑ i ∈ range n, x ^ (2 * i + 1) / (2 * i + 1))\n  let F' (y : ℝ) : ℝ := (y ^ 2) ^ n / (1 - y ^ 2)\n  -- First step: compute the derivative of `F`\n  have A : ∀ y ∈ Icc 0 x, HasDerivAt F (F' y) y := by\n    intro y hy\n    exact hasDerivAt_half_log_one_add_div_one_sub_sub_sum_range _ (by grind) (by grind)\n  -- It suffices to show that `F` is monotone on `[0, x]`\n  suffices MonotoneOn F (Icc 0 x) by simpa [F] using this ⟨le_rfl, h₀⟩ ⟨h₀, le_rfl⟩ h₀\n  -- Second step: show that the derivative of `F` is nonnegative; it has been computed already.\n  refine monotoneOn_of_hasDerivWithinAt_nonneg (convex_Icc 0 x)\n    (fun y hy ↦ (A y hy).continuousAt.continuousWithinAt)\n    (fun y hy ↦ (A y (interior_subset hy)).hasDerivWithinAt) ?_\n  intro y hy\n  simp only [interior_Icc, Set.mem_Ioo] at hy\n  have : 0 ≤ 1 - y ^ 2 := by calc\n    0 ≤ 1 - x ^ 2 := by simp [abs_of_nonneg h₀, h.le]\n    _ ≤ 1 - y ^ 2 := sub_le_sub_left (pow_le_pow_left₀ hy.1.le hy.2.le 2) 1\n  positivity\n\nlemma log_div_le_sum_range_add {x : ℝ} (h₀ : 0 ≤ x) (h : x < 1) (n : ℕ) :\n    1 / 2 * log ((1 + x) / (1 - x)) ≤\n      (∑ i ∈ range n, x ^ (2 * i + 1) / (2 * i + 1)) + x ^ (2 * n + 1) / (1 - x ^ 2) := by\n  have h₁ := sum_range_sub_log_div_le (by rwa [abs_of_nonneg h₀]) n\n  rwa [abs_of_nonneg (sub_nonneg_of_le (sum_range_le_log_div h₀ h n)), abs_of_nonneg h₀,\n    sub_le_iff_le_add'] at h₁\n",
+      "normalized_lf_utf8_sha256": "de896d6bb4901925d0d58a1499aa7a8a16571ce649ac3fdc03ace4032cfea988"
+    },
+    "source_directly_read": true
+  },
+  "supporting_native_API_bindings": [
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Analysis/SpecialFunctions/Log/Deriv.lean",
+        "sha256": "8d89d4b427d64327c296cf27bc14d4e3af4cfefbae6832b261b5da2bb8d5d834",
+        "bytes": 18831
+      },
+      "role": "Actual unsharpened odd-series remainder and the two directly invoked logarithm bounds",
+      "unchanged_from_historical_native_binding": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Data/Rat/Cast/CharZero.lean",
+        "sha256": "39c30fd995f1c9f0b8e74b8d494ee14295763c6d290c46b81af97a15d6bc3764",
+        "bytes": 4584
+      },
+      "role": "Exact rational-to-real addition,subtraction,multiplication and totalized division",
+      "unchanged_from_historical_native_binding": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Data/Rat/Cast/Lemmas.lean",
+        "sha256": "58f8f967f66d5c1ed48a5231b7112247bb12ef2af4a79343a5db0300268770f4",
+        "bytes": 3480
+      },
+      "role": "Natural powers commute with rational cast",
+      "unchanged_from_historical_native_binding": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Data/Rat/Cast/Order.lean",
+        "sha256": "2df1dcb5ad5bcac62adc9def0ffe5f8fc4da13f1c8f1dc89c0ff84bc41253cb8",
+        "bytes": 10804
+      },
+      "role": "Rational inequalities and strict inequalities preserved by ordered real cast",
+      "unchanged_from_historical_native_binding": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Data/Rat/BigOperators.lean",
+        "sha256": "4024ae991e95d72610ab8ee928d61d16afafcb6433468bbba306b433377bac33",
+        "bytes": 1427
+      },
+      "role": "Finite rational sum cast, including empty range",
+      "unchanged_from_historical_native_binding": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean/Init/Prelude.lean",
+        "sha256": "56de5780adc4358372fa9cfac270a70f2d03fd4f213a373aea4365483b31a544",
+        "bytes": 235820
+      },
+      "role": "of_decide_eq_true converts an exact Bool check proof to its decidable proposition",
+      "unchanged_from_historical_native_binding": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Algebra/Order/Field/Basic.lean",
+        "sha256": "1d6672beae57890d355067ff20de13b715bece8e87e0d088b7e959e773025f57",
+        "bytes": 34578
+      },
+      "role": "Exact positive-denominator div_lt_one used in parameter bound",
+      "unchanged_from_historical_native_binding": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Algebra/Group/Defs.lean",
+        "sha256": "15119bf00cbb5e31beee450c4ee72967250387fd1532652041c971b304753def",
+        "bytes": 62382
+      },
+      "role": "mul_div_assoc aligns2*xpower/denominator with2*(xpower/denominator) before linarith",
+      "unchanged_from_historical_native_binding": true
+    }
+  ],
+  "independent_argument": [
+    "All certificate data argument,lower,upper are rational and terms is Nat. Valid contains only1<=argument and two exact rational inequalities. check=decide Valid; the actual of_decide_eq_true API recovers exactly those premises from a proof of check=true. No floating evaluation or native_decide oracle is used.",
+    "q>=1 gives q+1>0 and x=(q-1)/(q+1) in[0,1). The private rational identity(1+x)/(1-x)=q uses exact algebra. Its cast supplies exactly the actual real argument of the two native log lemmas.",
+    "Both native direct APIs require0<=x and x<1 and quantify every Nat n. The lower is S_n<=log((1+x)/(1-x))/2; the upper is log(...)/2<=S_n+x^(2n+1)/(1-x^2). The written rational upper includes exactly twice this full unsharpened remainder, with no omitted positive tail factor.",
+    "Exact Rat cast_add/sub/mul/div/pow/sum and cast-order APIs match the written hlCast,huCast,hloR,hhiR. The natural odd denominator casts to2*(i:Real)+1. mul_div_assoc aligns the upper tail, and the final linear arithmetic combines twice-series endpoint inequalities with the half-log bounds.",
+    "q=1 gives x=0 and is permitted. terms=0 gives the empty lower sum and the native complete upper tail. q<1 is rejected by Valid. A suggested endpoint has no semantic status until the exact checker equality is proved."
+  ],
+  "substantive_obstructions": [],
+  "minimal_source_repair": null,
+  "existing_evidence": {
+    "historical_source_review": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-p5-rational-log-certificate-independent-source-review-HOLD.json",
+      "sha256": "e5f2abb1aff36e62969d961962bab4a5a0925d6dc93e89c16e0ca71729b1a063",
+      "bytes": 24291
+    },
+    "historical_current185_v2_proposal": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-p5-rationallog4d70-current185-v2-proposal-CP-HOLD.json",
+      "sha256": "ccbb32b7e5da63f20f69fea620747f8ac33e49e65eca0740e4f606db493ae523",
+      "bytes": 3501
+    },
+    "proposal_status": "CURRENT185_V2_SOURCE_ONLY_EXECUTABLE_PROPOSAL_UNEXECUTED_HOLD",
+    "proposal_baseline": [
+      185,
+      4227,
+      133
+    ],
+    "historical184_admission": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-p5-rationallog4d70-actualONE-proper184-admission-v2-HOLD.json",
+      "sha256": "466fbfae21d3810a47cc0952712c8ef3b42ddedbc622a900850306ff747f6662",
+      "bytes": 11213
+    },
+    "historical184_status": "ONE_PROPER_PASS_EXISTING_UNOWNED_CACHE_ADMISSION_V2_SOURCE_ONLY_HOLD",
+    "existing_proper_record_reference": {
+      "path": "preflights/20261021T221748349443Z-exact-current-ImbalancedChen.Certificates.RationalLogCertificate.json",
+      "sha256": "5072a1114e29585f8f5b01688fc7ab6181593648a043a95e8ead83cbc6c6a667"
+    },
+    "reuse_boundary": "Historical184 proper and native4627 measurements and current185 proposal are evidence/proposal references only. No proper was rerun and no execution or fresh cache/object validity is asserted."
+  },
+  "acceptance_todo": [
+    "After root completes its authorized M2/Shifted edits, root must construct or review a gate bound to its then-current owned186 baseline and current source state. The old current185 proposal and old publicationHEAD are not a ready-to-run current gate. No global source snapshot is frozen by this review.",
+    "Revalidate the exact4d705f target, the actual native/provider/input bindings and existing proper reuse conditions under the root-selected gate. Reuse existing evidence only when its bindings remain exact; this reviewer requests no proper rerun.",
+    "Root alone schedules any later isolated strict warning-as-error module build under the sole compiler policy, followed by exact target binding and stock ALL checks. Preserve the original records and all owned objects/receipts; legal changes to target output parts and effects on owned descendants require the gate explicit policy rather than silent cache promotion.",
+    "Only after actual successful kernel/module evidence exists, inspect every full actual generated/public/private declaration type, safety and standard-axiom closure, obtain the required owned receipt and reconcile the current census. This source recheck predicts no generated declaration count or ownership increment."
+  ],
+  "scope_boundaries": [
+    "This leaf would certify only exact rational enclosures of Real.log for rational arguments>=1, conditional on proven rational checker equality.",
+    "It does not establish P5 integral evaluation, all row checks, original C/K analytic suppliers, E1/M2 estimates, spectrum, nonzero results or main theorem. Numerical certificates cannot replace those original analytic obligations.",
+    "Inherited development cache is not strict/kernel ownership acceptance. Heading text claiming kernel-checked enclosures is not evidence.",
+    "Root-reported current baseline186/4246/134 and GitHEAD a498130... are context only; neither census nor Git was queried here."
+  ],
+  "targeted_source_observations_only": {
+    "observed_utc": "2026-10-21T23:35:55.6538886Z",
+    "M2": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonPM2FiniteFold.lean",
+      "sha256": "d86216a99d8f6764c2172e9c5d5e67112096d8751383531675ff0bcddc533991",
+      "bytes": 15172
+    },
+    "ShiftedTau": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3ShiftedTauFiniteInterval.lean",
+      "sha256": "2ed54a430ce8fafacc051d46b1ac4cd9ace5a5b85a05d9296459619ce5db6042",
+      "bytes": 10459
+    },
+    "meaning": "Only two individual current source hashes observed. No global snapshot, freeze or preservation assertion across root concurrent authorized edits."
+  },
+  "modifications": {
+    "new_files_only": [
+      "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-p5-rationallog4d70-independent-source-recheck-and-acceptance-todo-HOLD.json"
+    ],
+    "actual_source_cache_or_old_evidence_changed": false
+  },
+  "prohibited_actions_not_run": [
+    "proper",
+    "operator",
+    "Lean",
+    "Runtime",
+    "compiler",
+    "cache edit",
+    "census",
+    "Git",
+    "Site",
+    "new agent spawn",
+    "global source snapshot"
+  ],
+  "quota": {
+    "reset_consumed": false,
+    "observed_remaining_percent": 47,
+    "stop_remaining_lte": 40,
+    "observed_used_percent": 53
+  },
+  "engineering_admission": false,
+  "kernel_acceptance": false
+}

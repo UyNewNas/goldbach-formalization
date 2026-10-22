@@ -132,8 +132,16 @@ theorem sum_activeLabels (d : MediumAtom) (F : ℕ → ℝ) :
     simp only [MediumAtom.cleanedCommonPProgression, Finset.sum_filter]
     apply Finset.sum_congr rfl
     intro n hn
-    simp only [hpsi, true_and, MediumAtom.cleanedCommonPProgression,
-      Finset.mem_filter, hn, true_and]
+    simp only [Finset.mem_filter, hn, true_and]
+    by_cases hg : ¬(n : ℤ) ∣ d.residue ∧
+        Int.ModEq p ((m : ℤ) * n) d.residue
+    · rw [if_pos (And.intro hpsi hg), if_pos hg]
+    · have hboth : ¬(d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m ≠ 0 ∧
+          (¬(n : ℤ) ∣ d.residue ∧
+            Int.ModEq p ((m : ℤ) * n) d.residue)) := by
+        intro h
+        exact hg h.2
+      rw [if_neg hboth, if_neg hg]
   · simp only [hpsi, false_and, if_false, Finset.sum_const_zero]
 
 theorem moment_le_activeLabels

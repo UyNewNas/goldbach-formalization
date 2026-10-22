@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-lcm-harmonic-exact-divisor-constant-mathematical-review",
+  "reviewer": "/root/retained_tail_spectral_route_astra_high_oct22",
+  "status": "BOUNDED_FINITE_MATHEMATICAL_REVIEW_COMPLETE_SOURCE_ONLY_HOLD",
+  "HOLD": true,
+  "verdict": "The requested exact d_(j+1)(q)/q constant is valid on the actual Z>=2 application domain. A stronger purely finite inequality has a complete elementary proof. The native fouvryTau_mul_le is NOT argument-submultiplicativity; one new finite argument-submultiplicativity lemma must be proved (proof supplied below), then finite injective reindexing and the existing native harmonic mean suffice. No new analytic supplier is needed.",
+  "scope": "One CP only. No actual/source draft edit, Lean/proper/runtime/Git/Site operation, external search or subagent. Bounded actual API reads only.",
+  "source_bindings": [
+    {
+      "path": "source-reviews/drafts/20261022-Part3ElementaryProgressionLCMPayment-module-source.txt",
+      "sha256": "868a77bb8532f5fa5e4e1a62eb6dd0272a521cd6bb408dac59ea0f71b5c502af",
+      "read": "exact final lcm payment and Z>=2 hypotheses"
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvryDivisorMean.lean",
+      "sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+      "read": "19-54 actual definition,order-one,successor and prime powers;102-120 same-argument order-product inequality;239-255 harmonic APIs"
+    },
+    {
+      "path": "ImbalancedChen/Part3ElementaryE1StrictFloor.lean",
+      "read": "230-256 native harmonic/ordinary mean consumer"
+    },
+    {
+      "path": "Mathlib/Data/Nat/GCD/Basic.lean and Mathlib/Algebra/GCDMonoid/Nat.lean",
+      "read": "actual uses of Nat.gcd_mul_lcm; no claim to have located every foundational imported Nat gcd lemma"
+    }
+  ],
+  "domain_check": {
+    "correct_type": "For j,D,q:Nat with 1<=j and0<q, Z:Real with1<=Z and(D:Real)<=Z, sum_{d in Icc1D}(d_j(d):Real)/(Nat.lcm d q:Real) <= ((d_(j+1)(q):Real)/(q:Real))*(1+log Z)^j.",
+    "edge_case": "If the prompt is read literally with ONLY D<=Z and q>0, allowing D=0 and0<Z<1, it is false: j=1,q=1,D=0,Z=exp(-2) yields0<=-1. This is irrelevant to the actual LCM parent, which has Z>=2. For D>=1, D<=Z already forcesZ>=1. Keep an explicit1<=Z assumption if D=0 is permitted.",
+    "no_changes": "No change to theta7/32,C1.96176252,K6.7617368, other masks/phases, residue classes, q ranges or main theorem."
+  },
+  "stronger_finite_lemma": {
+    "complete_type": "For every j,D,q:Nat with1<=j and0<q, writing H_j(D)=sum_{u in Icc1D}(d_j(u):Real)/(u:Real), one has sum_{d in Icc1D}(d_j(d):Real)/(Nat.lcm d q:Real) <= ((d_(j+1)(q):Real)/(q:Real))*H_j(D). This also holds atD=0, with both sides0; no real Z is involved.",
+    "proof": [
+      "For each1<=d<=D put g=gcd(d,q)>0 and u=d/g>0. Then g|q,d=g*u and gcd(u,q/g)=1. The latter is the exact residual coprimality; do NOT replace it with gcd(u,q)=1, which can be false. Since gcd(g*u,q)=g, lcm(d,q)=q*u. Alsou<=d<=D.",
+      "The map d->(g,u) is injective because d=g*u. Its image is contained in q.divisors x Icc1D. By argument-submultiplicativity proved below, d_j(d)=d_j(g*u)<=d_j(g)*d_j(u). All denominators are positive, so d_j(d)/lcm(d,q)<=d_j(g)*d_j(u)/(q*u).",
+      "Sum over the injective image, then enlarge to the complete finite product q.divisors x Icc1D using nonnegative summands. This discards the residual coprimality and the sharper gu<=D restriction only in an upper bound. The resulting sum factors EXACTLY as (1/q)*(sum_{g|q}d_j(g))*H_j(D).",
+      "The actual fouvryTau_succ j q gives sum_{g|q}d_j(g)=d_(j+1)(q). This proves the finite inequality with precisely the requested constant, not a tau(q) surrogate or extra log."
+    ],
+    "optional_exact_gcd_fiber_identity": "The original sum equals (1/q)*sum_{g|q}sum_{1<=u<=floor(D/g),gcd(u,q/g)=1}d_j(g*u)/u. This is mathematically exact; formalizing the injection bound above is smaller because it avoids constructing a full fiber bijection."
+  },
+  "argument_submultiplicativity": {
+    "new_lemma_type": "theorem fouvryTau_mul_argument_le {j m n : Nat} (hj : 1<=j) (hm : 0<m) (hn : 0<n) : fouvryTau j (m*n) <= fouvryTau j m * fouvryTau j n",
+    "not_existing_mul_le": "Actual native fouvryTau_mul_le(k,l,n) states d_k(n)*d_l(n)<=d_(k*l)(n). It has one integer argument and two orders. Neither its direction nor its parameters proves the new lemma. Multiplicativity only gives equality for coprime m,n and also does not suffice alone.",
+    "complete_recursive_proof": [
+      "Induct on j starting at1. For positive m,n, native fouvryTau_order_one makes all three order-one values1, so the base is equality.",
+      "Suppose the assertion holds at j for all positive arguments. For each e|(m*n), put b=gcd(e,m),c=e/b. Then b|m and c|n, and both are positive. To see c|n, write e=b*c,m=b*m1. The identity gcd(c,m1)=1 and e|m*n imply c|m1*n by cancellation of positive b; Euclid's lemma gives c|n. Equivalently, lcm(e,m)|m*n and lcm(e,m)=m*c give c|n. No coprimality of c and m is asserted.",
+      "The divisor map e->(b,c) is injective by e=b*c. The inductive hypothesis yields d_j(e)<=d_j(b)*d_j(c). Enlarge its nonnegative weighted image to all b|m,c|n. Thus sum_{e|mn}d_j(e)<=sum_{b|m,c|n}d_j(b)*d_j(c).",
+      "Apply native fouvryTau_succ on each side and finite product-sum factorization. The result is d_(j+1)(mn)<=d_(j+1)(m)*d_(j+1)(n), closing the induction. This proof uses only positive-divisor arithmetic, finite injections and the existing successor recurrence."
+    ],
+    "status": "Complete mathematical proof, no Lean declaration written or compiler check. No direct argument-submultiplicativity declaration was found in the inspected native DivisorMean file or task-local source searches; this is a scoped API finding, not a claim of exhaustive library absence."
+  },
+  "existing_exact_API_references": [
+    {
+      "file": "native-packages/goldbach/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryDivisorMean.lean",
+      "line": 19,
+      "type": "def fouvryTau (k : Nat) : ArithmeticFunction Nat := ArithmeticFunction.zeta ^ k"
+    },
+    {
+      "file": "same actual file",
+      "line": 30,
+      "type": "theorem fouvryTau_order_one {n : Nat} (hn : n != 0) : fouvryTau 1 n = 1"
+    },
+    {
+      "file": "same actual file",
+      "line": 33,
+      "type": "theorem fouvryTau_succ (k n : Nat) : fouvryTau (k+1) n = sum d in n.divisors, fouvryTau k d"
+    },
+    {
+      "file": "same actual file",
+      "line": 239,
+      "type": "theorem sum_fouvryTau_div_le (k N : Nat) : (sum n in Ioc0N, (fouvryTau k n:Real)/n) <= (1+Real.log N)^k"
+    },
+    {
+      "file": "same actual file",
+      "line": 245,
+      "type": "theorem sum_fouvryTau_div_le_real (k : Nat) {x : Real} (hx : 1<=x) : (sum n in Ioc0(floor x), (fouvryTau k n:Real)/n) <= (1+Real.log x)^k"
+    }
+  ],
+  "final_log_step": "SinceD<=Z, enlarge Icc1D to Ioc0(floor Z) with nonnegative d_j(u)/u. Apply the ACTUAL sum_fouvryTau_div_le_real j hZ. This gives H_j(D)<=(1+log Z)^j. Multiply by d_(j+1)(q)/q>=0 and combine with the finite lemma. There is no need to take log(D/g), assume D/g>=1, or split empty small fibers.",
+  "minimal_formalization_obligations": [
+    "Supply the new positive-argument submultiplicativity lemma, using the stated induction. A useful finite helper is the weighted divisor injection into m.divisors x n.divisors. Its mathematics is fully proved above.",
+    "Establish or locate the exact native Nat lemma for e/gcd(e,m)|n when e|m*n, or prove it via lcm(e,m)|m*n and positive cancellation. The audited sources demonstrate Nat.gcd_mul_lcm, but this CP does not invent an unverified exact theorem name for the quotient-divisibility step.",
+    "For the budget, use the injective map d->(gcd(d,q),d/gcd(d,q)), positive denominator casts, lcm(d,q)=q*(d/gcd(d,q)), Finset sum injection/nonnegative enlargement, and sum_product. These are finite API tasks, not an additional analytic hypothesis.",
+    "Close with native fouvryTau_succ and sum_fouvryTau_div_le_real; preserve the exact d_(j+1)(q)/q coefficient."
+  ],
+  "LCM_payment_consequence": "With j=K-1, D=floor(Z^(1-1/K)), the existing LCM payment main term is <=K*(b-a)*d_K(q)/q*(1+log Z)^(K-1). The +1 ordinary divisor sum remains a separate endpoint error. This CP does not divide that error byq or claim a full general-q moment theorem.",
+  "quota": {
+    "observed_used_percent": 53,
+    "observed_remaining_percent": 47,
+    "secondary": "unavailable",
+    "stop_any_available_remaining_lte": 40,
+    "reset_consumed": false
+  },
+  "stop": "Bounded finite proof route complete. HOLD; no source authoring or compilation."
+}

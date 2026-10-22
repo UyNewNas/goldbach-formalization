@@ -1,0 +1,301 @@
+{
+  "schema_version": 1,
+  "status": "COMPLETE_INDEPENDENT_FINITE_ARGUMENT_SUBMULTIPLICATIVITY_SOURCE_REVIEW_UNCOMPILED_HOLD",
+  "result": "no_static_blocker",
+  "review_actor": "/root/tail_real_independent_sol_high_oct22",
+  "created_utc": "2026-10-22T00:00:55.655358+00:00",
+  "HOLD": true,
+  "source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3FouvryTauArgumentSubmultiplicative-module-source.txt",
+    "sha256": "622b3e42bde7958499b5f72bd5d975a25687b8f6447e9bd6748e54f65be9900d",
+    "bytes": 4307,
+    "spans": [
+      {
+        "first": 1,
+        "last": 3,
+        "literal_source": "import MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean\nimport Mathlib.Data.Nat.GCD.Basic\nimport Mathlib.Tactic\n",
+        "normalized_lf_utf8_sha256": "f41b1d1b0b02922df7bca0bb582642a02f8a69bda6a95140cf5940161df6ebb2"
+      }
+    ]
+  },
+  "author_CP": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-fouvry-tau-argument-submultiplicative-source-proposal-author-HOLD.json",
+    "sha256": "0b9f16dbe1617dc1886c15986b24890322f29d101e7acbdd5439e2ad6d4de80a",
+    "bytes": 18526,
+    "spans": []
+  },
+  "full88_lines_independently_read": true,
+  "complete_actual_declarations": [
+    {
+      "name": "div_gcd_dvd_of_dvd_mul",
+      "first": 20,
+      "type_last": 21,
+      "last": 27,
+      "complete_actual_type": "theorem div_gcd_dvd_of_dvd_mul {e m n : ℕ} (hm : 0 < m) (he : e ∣ m * n) :\n    e / Nat.gcd e m ∣ n := by\n",
+      "type_sha256": "87ff55419a79b3fc00c07a07d8bb6a1608a3c3050cfa12af489d32bf7da72db4",
+      "complete_actual_body": "  have hdiv : Nat.lcm e m ∣ m * n := Nat.lcm_dvd he (Nat.dvd_mul_right m n)\n  have hid : Nat.lcm e m = m * (e / Nat.gcd e m) := by\n    rw [Nat.lcm_eq_mul_div, Nat.mul_comm e m,\n      Nat.mul_div_assoc m (Nat.gcd_dvd_left e m)]\n  rw [hid] at hdiv\n  exact Nat.dvd_of_mul_dvd_mul_left hm hdiv\n",
+      "body_sha256": "a7810097e838eb69b6992928d7997db0c7533308875d3bc7ec9e917e4dde8179",
+      "matches_author_actual_type_body_hash": true
+    },
+    {
+      "name": "gcd_quotient_split_injective",
+      "first": 29,
+      "type_last": 30,
+      "last": 37,
+      "complete_actual_type": "theorem gcd_quotient_split_injective (m : ℕ) :\n    Function.Injective (fun e : ℕ => (Nat.gcd e m, e / Nat.gcd e m)) := by\n",
+      "type_sha256": "fe14484040f15ab4df49316e8e17cf407f9c66a8d0cccce16ce509b51d658219",
+      "complete_actual_body": "  intro e f h\n  calc\n    e = Nat.gcd e m * (e / Nat.gcd e m) :=\n      (Nat.mul_div_cancel' (Nat.gcd_dvd_left e m)).symm\n    _ = Nat.gcd f m * (f / Nat.gcd f m) :=\n      congrArg (fun z : ℕ × ℕ => z.1 * z.2) h\n    _ = f := Nat.mul_div_cancel' (Nat.gcd_dvd_left f m)\n",
+      "body_sha256": "dd39281eb7a244f5ee60cbca4e7872ae9f3a480009b12e7fd3c2745198b05afb",
+      "matches_author_actual_type_body_hash": true
+    },
+    {
+      "name": "fouvryTau_mul_argument_le",
+      "first": 40,
+      "type_last": 42,
+      "last": 86,
+      "complete_actual_type": "theorem fouvryTau_mul_argument_le {j : ℕ} (hj : 1 ≤ j) :\n    ∀ {m n : ℕ}, 0 < m → 0 < n →\n      fouvryTau j (m * n) ≤ fouvryTau j m * fouvryTau j n := by\n",
+      "type_sha256": "de3dc548aed314ce48f2fa6a01ff0a3f3d97dd429c881acdba61d4556e6e172a",
+      "complete_actual_body": "  obtain ⟨k, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (by omega : j ≠ 0)\n  clear hj\n  induction k with\n  | zero =>\n      intro m n hm hn\n      simp only [fouvryTau_order_one (Nat.mul_pos hm hn).ne',\n        fouvryTau_order_one hm.ne', fouvryTau_order_one hn.ne', mul_one, le_refl]\n  | succ k ih =>\n      intro m n hm hn\n      let splitDivisor : ℕ → ℕ × ℕ := fun e => (Nat.gcd e m, e / Nat.gcd e m)\n      have hinj : Function.Injective splitDivisor := gcd_quotient_split_injective m\n      have hmaps : ((m * n).divisors.image splitDivisor) ⊆ m.divisors ×ˢ n.divisors := by\n        intro z hz\n        obtain ⟨e, he, rfl⟩ := Finset.mem_image.mp hz\n        exact Finset.mem_product.mpr\n          ⟨Nat.mem_divisors.mpr ⟨Nat.gcd_dvd_right e m, hm.ne'⟩,\n            Nat.mem_divisors.mpr\n              ⟨div_gcd_dvd_of_dvd_mul hm (Nat.mem_divisors.mp he).1, hn.ne'⟩⟩\n      have hpoint : ∀ e ∈ (m * n).divisors,\n          fouvryTau (k + 1) e ≤\n            fouvryTau (k + 1) (splitDivisor e).1 * fouvryTau (k + 1) (splitDivisor e).2 := by\n        intro e he\n        have hepos : 0 < e := Nat.pos_of_mem_divisors he\n        simpa only [splitDivisor, Nat.mul_div_cancel' (Nat.gcd_dvd_left e m)] using\n          (ih (m := Nat.gcd e m) (n := e / Nat.gcd e m)\n            (Nat.gcd_pos_of_pos_left m hepos) (Nat.div_gcd_pos_of_pos_left m hepos))\n      calc\n        fouvryTau (k + 1 + 1) (m * n) =\n            ∑ e ∈ (m * n).divisors, fouvryTau (k + 1) e := fouvryTau_succ _ _\n        _ ≤ ∑ e ∈ (m * n).divisors,\n            fouvryTau (k + 1) (splitDivisor e).1 * fouvryTau (k + 1) (splitDivisor e).2 :=\n          Finset.sum_le_sum hpoint\n        _ = ∑ z ∈ (m * n).divisors.image splitDivisor,\n            fouvryTau (k + 1) z.1 * fouvryTau (k + 1) z.2 :=\n          (Finset.sum_image hinj.injOn).symm\n        _ ≤ ∑ z ∈ m.divisors ×ˢ n.divisors,\n            fouvryTau (k + 1) z.1 * fouvryTau (k + 1) z.2 :=\n          Finset.sum_le_sum_of_subset_of_nonneg hmaps (fun _ _ _ => Nat.zero_le _)\n        _ = (∑ g ∈ m.divisors, fouvryTau (k + 1) g) *\n            (∑ h ∈ n.divisors, fouvryTau (k + 1) h) := by\n          rw [Finset.sum_product]\n          exact (Finset.sum_mul_sum _ _ _ _).symm\n        _ = fouvryTau (k + 1 + 1) m * fouvryTau (k + 1 + 1) n := by\n          rw [← fouvryTau_succ (k + 1) m, ← fouvryTau_succ (k + 1) n]\n",
+      "body_sha256": "07076bac26927fc7910ae5da5d72a126961b5534fe845e91de98d22eca8b42b2",
+      "matches_author_actual_type_body_hash": true
+    }
+  ],
+  "written_counts": {
+    "proofs": 3,
+    "definitions": 0,
+    "lf_lines": 88
+  },
+  "direct_actual_native_API": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvryDivisorMean.lean",
+      "sha256": "4e119e53ec5df626bb7e02aa44bf950dbe721bd1f2767fba5fbf90c30784ff59",
+      "bytes": 17917,
+      "spans": [
+        {
+          "first": 19,
+          "last": 19,
+          "literal_source": "def fouvryTau (k : ℕ) : ArithmeticFunction ℕ := ArithmeticFunction.zeta ^ k\n",
+          "normalized_lf_utf8_sha256": "dbd8023a6545e4627f4171e9497a9430b850f26645b5703d30faaf242ab4e1c6"
+        },
+        {
+          "first": 30,
+          "last": 35,
+          "literal_source": "theorem fouvryTau_order_one {n : ℕ} (hn : n ≠ 0) : fouvryTau 1 n = 1 := by\n  simp [fouvryTau, ArithmeticFunction.zeta_apply, hn]\n\ntheorem fouvryTau_succ (k n : ℕ) :\n    fouvryTau (k + 1) n = ∑ d ∈ n.divisors, fouvryTau k d := by\n  exact ArithmeticFunction.coe_mul_zeta_apply (f := fouvryTau k)\n",
+          "normalized_lf_utf8_sha256": "c17871315d635d1d760d5d6cac428dcdd38c13442221d779b92599c5e0fd4f19"
+        },
+        {
+          "first": 104,
+          "last": 105,
+          "literal_source": "theorem fouvryTau_mul_le (k l n : ℕ) :\n    fouvryTau k n * fouvryTau l n ≤ fouvryTau (k * l) n := by\n",
+          "normalized_lf_utf8_sha256": "db3a6bb8e7e844ffc48476ff53872fdc6b532569fc1383a65fabc27dfbd939e4"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Lcm.lean",
+      "sha256": "c4accc5e10306750e0c990d43eebf4b02bf8444bb3a56be6c4aef663bcf5018c",
+      "bytes": 10816,
+      "spans": [
+        {
+          "first": 36,
+          "last": 36,
+          "literal_source": "theorem lcm_eq_mul_div (m n : Nat) : lcm m n = m * n / gcd m n := rfl\n",
+          "normalized_lf_utf8_sha256": "2665a25abfec29cb76ec9659b249d8ca7577221b69a8bae0c72c9a84c57a932d"
+        },
+        {
+          "first": 100,
+          "last": 106,
+          "literal_source": "theorem lcm_dvd {m n k : Nat} (H1 : m ∣ k) (H2 : n ∣ k) : lcm m n ∣ k := by\n  match eq_zero_or_pos k with\n  | .inl h => rw [h]; exact Nat.dvd_zero _\n  | .inr kpos =>\n    apply Nat.dvd_of_mul_dvd_mul_left (gcd_pos_of_pos_left n (pos_of_dvd_of_pos H1 kpos))\n    rw [gcd_mul_lcm, ← gcd_mul_right, Nat.mul_comm n k]\n    exact dvd_gcd (Nat.mul_dvd_mul_left _ H2) (Nat.mul_dvd_mul_right H1 _)\n",
+          "normalized_lf_utf8_sha256": "1ce8f2940193ec83f411bc07336550ef31c6a3ad7e081f163f841c364ff93386"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Dvd.lean",
+      "sha256": "12cd37a3909fddc05c1f5541662d1a099c083aa1084777ded9d583c7a6780f96",
+      "bytes": 6888,
+      "spans": [
+        {
+          "first": 24,
+          "last": 24,
+          "literal_source": "protected theorem dvd_mul_right (a b : Nat) : a ∣ a * b := ⟨b, rfl⟩\n",
+          "normalized_lf_utf8_sha256": "f6a386aaacc5caa4e8a2ee9ae9b0bcf5c68224b6c6c7a243cb552cd4d561332e"
+        },
+        {
+          "first": 106,
+          "last": 109,
+          "literal_source": "protected theorem mul_div_cancel' {n m : Nat} (H : n ∣ m) : n * (m / n) = m := by\n  have := mod_add_div m n\n  rwa [mod_eq_zero_of_dvd H, Nat.zero_add] at this\n\n",
+          "normalized_lf_utf8_sha256": "90de4b4b40a751a9641ede8e63416a27361f8e0d3a43562239227f721d39a95e"
+        },
+        {
+          "first": 119,
+          "last": 123,
+          "literal_source": "protected theorem dvd_of_mul_dvd_mul_left\n    (kpos : 0 < k) (H : k * m ∣ k * n) : m ∣ n := by\n  let ⟨l, H⟩ := H\n  rw [Nat.mul_assoc] at H\n  exact ⟨_, Nat.eq_of_mul_eq_mul_left kpos H⟩\n",
+          "normalized_lf_utf8_sha256": "ac28100fc3b53f78e6d7db0635ff03cac4e5e751fab1019aed41cf4e7aa19541"
+        },
+        {
+          "first": 162,
+          "last": 167,
+          "literal_source": "protected theorem mul_div_assoc (m : Nat) (H : k ∣ n) : m * n / k = m * (n / k) := by\n  match Nat.eq_zero_or_pos k with\n  | .inl h0 => rw [h0, Nat.div_zero, Nat.div_zero, Nat.mul_zero]\n  | .inr hpos =>\n    have h1 : m * n / k = m * (n / k * k) / k := by rw [Nat.div_mul_cancel H]\n    rw [h1, ← Nat.mul_assoc, Nat.mul_div_cancel _ hpos]\n",
+          "normalized_lf_utf8_sha256": "f7d13b200f42a13d4c6bc27f8f0b74fe589bd6572be33407e3d055b7bf000037"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Gcd.lean",
+      "sha256": "672c96102205b59a47742be74c959ed780ba319713baaa8a2eeede2cdc46cbea",
+      "bytes": 20329,
+      "spans": [
+        {
+          "first": 92,
+          "last": 94,
+          "literal_source": "theorem gcd_dvd_left (m n : Nat) : gcd m n ∣ m := (gcd_dvd m n).left\n\ntheorem gcd_dvd_right (m n : Nat) : gcd m n ∣ n := (gcd_dvd m n).right\n",
+          "normalized_lf_utf8_sha256": "f7ecf27ae2ca255dad237987480d1c524c39cd2fa8f6461f95a8d98e76241b44"
+        },
+        {
+          "first": 147,
+          "last": 154,
+          "literal_source": "theorem gcd_pos_of_pos_left {m : Nat} (n : Nat) (mpos : 0 < m) : 0 < gcd m n :=\n  pos_of_dvd_of_pos (gcd_dvd_left m n) mpos\n\ntheorem gcd_pos_of_pos_right (m : Nat) {n : Nat} (npos : 0 < n) : 0 < gcd m n :=\n  pos_of_dvd_of_pos (gcd_dvd_right m n) npos\n\ntheorem div_gcd_pos_of_pos_left (b : Nat) (h : 0 < a) : 0 < a / a.gcd b :=\n  (Nat.le_div_iff_mul_le <| Nat.gcd_pos_of_pos_left _ h).2 (Nat.one_mul _ ▸ Nat.gcd_le_left _ h)\n",
+          "normalized_lf_utf8_sha256": "3bb859973dbdb7471d0d857852db3d4862a6bf169d4b27ddff3ef1e28d23a4de"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\NumberTheory\\Divisors.lean",
+      "sha256": "60d4c8969dc88c34042be6e3d34951e355655f1fa26c6dd03ee1f9dd285ad910",
+      "bytes": 31481,
+      "spans": [
+        {
+          "first": 108,
+          "last": 112,
+          "literal_source": "theorem mem_divisors {m : ℕ} : n ∈ divisors m ↔ n ∣ m ∧ m ≠ 0 := by\n  rcases eq_or_ne m 0 with (rfl | hm); · simp [divisors]\n  simp only [hm, Ne, not_false_iff, and_true, ← filter_dvd_eq_divisors hm, mem_filter,\n    mem_range, and_iff_right_iff_imp, Nat.lt_succ_iff]\n  exact le_of_dvd hm.bot_lt\n",
+          "normalized_lf_utf8_sha256": "439990420474c526d59e52a0da467720ad4bcdaa24bd7e7c9c452dd617e3771e"
+        },
+        {
+          "first": 272,
+          "last": 276,
+          "literal_source": "theorem pos_of_mem_divisors {m : ℕ} (h : m ∈ n.divisors) : 0 < m := by\n  cases m\n  · rw [mem_divisors, zero_dvd_iff (a := n)] at h\n    cases h.2 h.1\n  apply Nat.succ_pos\n",
+          "normalized_lf_utf8_sha256": "f4abbabfb373a561d1771bb12f3f1ac2290a9f77ae32c272514182543f44c62b"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Group\\Finset\\Basic.lean",
+      "sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "bytes": 51600,
+      "spans": [
+        {
+          "first": 90,
+          "last": 97,
+          "literal_source": "/-- If a function is injective on a finset, products over the original finset or its image coincide.\nSee also `prod_image_of_pairwise_eq_one` for a version with weaker assumptions. -/\n@[to_additive (attr := simp) /-- If a function is injective on a finset, sums over the original\nfinset or its image coincide.\nSee also `sum_image_of_pairwise_eq_zero` for a version with weaker assumptions. -/]\ntheorem prod_image [DecidableEq ι] {s : Finset κ} {g : κ → ι} :\n    Set.InjOn g s → ∏ x ∈ s.image g, f x = ∏ x ∈ s, f (g x) :=\n  fold_image\n",
+          "normalized_lf_utf8_sha256": "4d15059a79605c469ef2075430c5287d644bfb365b0970dd962df2643642261e"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\BigOperators\\Group\\Finset.lean",
+      "sha256": "6a8daafb9e3b8b6ac48a696661c99a2d10dce57f48907ae18280914bf0ac639f",
+      "bytes": 36509,
+      "spans": [
+        {
+          "first": 158,
+          "last": 166,
+          "literal_source": "\n@[to_additive (attr := gcongr) sum_le_sum_of_subset_of_nonneg]\ntheorem prod_le_prod_of_subset_of_one_le' [MulLeftMono N] (h : s ⊆ t)\n    (hf : ∀ i ∈ t, i ∉ s → 1 ≤ f i) : ∏ i ∈ s, f i ≤ ∏ i ∈ t, f i := by\n  classical calc\n      ∏ i ∈ s, f i ≤ (∏ i ∈ t \\ s, f i) * ∏ i ∈ s, f i :=\n        le_mul_of_one_le_left' <| one_le_prod' <| by simpa only [mem_sdiff, and_imp]\n      _ = ∏ i ∈ t \\ s ∪ s, f i := (prod_union sdiff_disjoint).symm\n      _ = ∏ i ∈ t, f i := by rw [sdiff_union_of_subset h]\n",
+          "normalized_lf_utf8_sha256": "a8a8395ee8b78be93044ed60c5bee4a698b6e2e4967e763d7232f9bb5dadc1da"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Ring\\Finset.lean",
+      "sha256": "472cd5000412d8ec35c8b9ee919b2aeedbf0a830033a55009aad436595923809",
+      "bytes": 16305,
+      "spans": [
+        {
+          "first": 62,
+          "last": 64,
+          "literal_source": "lemma sum_mul_sum (s : Finset ι) (t : Finset κ) (f : ι → R) (g : κ → R) :\n    (∑ i ∈ s, f i) * ∑ j ∈ t, g j = ∑ i ∈ s, ∑ j ∈ t, f i * g j := by\n  simp_rw [sum_mul, ← mul_sum]\n",
+          "normalized_lf_utf8_sha256": "d87d28cfa8e964d86eea1fae191acd0b640dfe55fbaf3238d7accee1e4217853"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Basic.lean",
+      "sha256": "92edcd298633bc57f70cf6c9cea73a3b6f984b91b3c8cc8fcc72f57bada0ee36",
+      "bytes": 47163,
+      "spans": [
+        {
+          "first": 726,
+          "last": 727,
+          "literal_source": "theorem exists_eq_succ_of_ne_zero : ∀ {n}, n ≠ 0 → Exists fun k => n = succ k\n  | _+1, _ => ⟨_, rfl⟩\n",
+          "normalized_lf_utf8_sha256": "5f5ae6d14485cdc2559e237daf48db50d20e18c96c8fbe2eae2323918cd795f8"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Group\\Finset\\Sigma.lean",
+      "sha256": "795e36343a20dfc70b670f0b03c4c4e92a119e04d2d33904dd4438f78a30c764",
+      "bytes": 6475,
+      "spans": [
+        {
+          "first": 78,
+          "last": 82,
+          "literal_source": "@[to_additive /-- The sum over a product set equals the sum of the fiberwise sums. For rewriting\nin the reverse direction, use `Finset.sum_product'` -/]\ntheorem prod_product (s : Finset γ) (t : Finset α) (f : γ × α → β) :\n    ∏ x ∈ s ×ˢ t, f x = ∏ x ∈ s, ∏ y ∈ t, f (x, y) :=\n  prod_finset_product (s ×ˢ t) s (fun _a => t) fun _p => mem_product\n",
+          "normalized_lf_utf8_sha256": "b4050616912d64b6876aeddeb932aab61f8d479ee1f8de8e545eecedd3e378b4"
+        }
+      ]
+    }
+  ],
+  "mathematical_route_reference": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-lcm-harmonic-exact-divisor-constant-mathematical-review-HOLD.json",
+    "sha256": "749f88cad9ccb0c45df59bbc2564d897418dcb6f4e0c9398976b15623e38203a",
+    "bytes": 8886,
+    "spans": []
+  },
+  "independent_proof_audit": [
+    {
+      "name": "div_gcd_dvd_of_dvd_mul",
+      "result": "source_consistent",
+      "argument": "From e|m*n and m|m*n obtain lcm(e,m)|m*n. Actual lcm_eq_mul_div plus commutation and mul_div_assoc, requiring gcd(e,m)|e, gives exactly lcm(e,m)=m*(e/gcd(e,m)). The actual positive-cancellation API takes hm:0<m and cancels the same left factor m. No positivity of n or e is needed; n=0/e=0 cases remain valid."
+    },
+    {
+      "name": "gcd_quotient_split_injective",
+      "result": "source_consistent",
+      "argument": "Actual Nat.mul_div_cancel prime requires only divisor proof gcd(e,m)|e and reconstructs e=gcd(e,m)*(e/gcd(e,m)). Applying pair-product to equal split pairs reconstructs e=f. This is global injection, including e=0 and m=0, and asserts no false residual gcd(e/gcd(e,m),m)=1."
+    },
+    {
+      "name": "fouvryTau_mul_argument_le",
+      "result": "source_consistent",
+      "argument": "hj implies j!=0; the actual exists_eq_succ_of_ne_zero has n=succ k orientation, so obtain k,rfl and clear hj leave induction quantified over both positive arguments. Base actual order-one values at m,n,m*n are1. In the successor case every e in Div(m*n) is positive. The actual gcd_pos_of_pos_left m hepos and div_gcd_pos_of_pos_left m hepos provide both IH argument positivities. IH on gcd and quotient gives exactly the pointwise bound after the genuine reconstruction product simplifies to e. The image split pair lies in m.divisors product n.divisors using gcd_dvd_right and the quotient-divisor helper with original hm,hn nonzero. Global injection restricts to this source domain for exact sum_image. Pointwise natural sum monotonicity, nonnegative enlargement to the complete divisor product, sum_product and sum_mul_sum factor the complete double sum; actual fouvryTau_succ(k+1,m/n) closes the induction with exact coefficient1."
+    }
+  ],
+  "type_domain_audit": {
+    "main": "Every j:Nat with1<=j and every positive m,n; no coprimality, squarefree, analytic or target-shaped premise. Output is a natural-number inequality for actual fouvryTau at varying integer arguments.",
+    "helper_domain": "First helper m>0,e|m*n; n>0 is intentionally unnecessary. Second helper any m and all natural e,f.",
+    "IH_positivity": "No application to zero divisors: pos_of_mem_divisors establishes e>0 and both split factors are strictly positive by actual API.",
+    "sum_domain": "Source exactly Div(m*n), globally injective split image subset Div(m) product Div(n); no missing/misidentified multiplicity or quotient carrier."
+  },
+  "not_the_existing_mul_order_inequality": "Native fouvryTau_mul_le(k,l,n) concerns one integer argument and two orders. It is not used and is not substituted for this argument-submultiplicativity result.",
+  "static_issues": [],
+  "minimal_repair": null,
+  "namespace_search": "Source-only rg found no matching new namespace/theorem in actual ImbalancedChen Lean files.",
+  "limits": [
+    "Actual native source signatures and full three written proof bodies were read; import resolution, elaboration, strict linter and kernel acceptance were not checked.",
+    "Only a finite arithmetic lemma. Separate LCM harmonic reindexing/denominator/factorization and progression mean remain undone. No endpoint remainder division by q, weighted general-q analyticM2, spectral return, original C/K or main theorem follows.",
+    "No actual accepted module/declaration/receipt increment or generated count is inferred."
+  ],
+  "actions": {
+    "new_review_CP_only": true,
+    "actual_source_old_draft_or_evidence_edits": 0,
+    "Lean_Runtime_proper_classifier_census_Git_Site": 0,
+    "heavy_lock_or_pipeline": 0,
+    "agent_spawn": 0
+  },
+  "quota": {
+    "observed_used": 54,
+    "observed_remaining": 46,
+    "stop_remaining_lte": 40,
+    "reset_consumed": false
+  },
+  "engineering_admission": false,
+  "kernel_acceptance": false
+}
