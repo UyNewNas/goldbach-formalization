@@ -1,0 +1,216 @@
+{
+  "status": "SOURCE_ONLY_LITERAL_PRINCIPAL_EU_PURE_LOG_COMPLETE_ARGUMENT_UNCOMPILED_HOLD",
+  "created_utc": "2026-10-22T01:11:39.594968+00:00",
+  "draft": {
+    "path": "source-reviews/drafts/20261022-Part3LiteralPrincipalEnergyPolylog-module-source-v2.txt",
+    "sha256": "699d4da28026455e31c630ebedc9570f679da7b8f6f66ba5130688eed0e3d1b7",
+    "bytes": 6430,
+    "LF": 129
+  },
+  "imports": [
+    "ImbalancedChen.Part3LiteralPrincipalEnergySupplier",
+    "ImbalancedChen.Part3CommonPM2PolylogMajorant",
+    "ImbalancedChen.Part3PairedAlphaDeletion"
+  ],
+  "source_parents": {
+    "finite_EU": {
+      "path": "source-reviews/drafts/20261022-Part3LiteralPrincipalEnergySupplier-module-source-v2.txt",
+      "sha256": "2f814fc1fe97565c8e1e67db05c503312b6f33892dc68486041cf274585aa402",
+      "API": "PrincipalEnergySupplier.principalEnergy; outsideEnergy_mul_principalEnergy_le",
+      "written_span": [
+        409,
+        449
+      ]
+    },
+    "finite_independent_review": {
+      "path": "source-reviews/20261022-literal-principal-energy-supplier-independent-source-review-HOLD.json",
+      "sha256": "c9e83403f3690debf68cb859c31498f5190181e90806ce2e4821caf5172b1dce"
+    },
+    "M2_polylog": {
+      "path": "source-reviews/drafts/20261022-Part3CommonPM2PolylogMajorant-module-source.txt",
+      "sha256": "f6502dc7f0084f729f817ebd244de18b6b6ef015d7aca92a038e9e20ea646a39",
+      "APIs": {
+        "betaLogExponent": [
+          24,
+          24
+        ],
+        "log_two_mul_bounds": [
+          36,
+          50
+        ],
+        "M2_P_exact_expression": "131073 + betaLogExponent B"
+      }
+    }
+  },
+  "all7_written_types_and_body_hashes": [
+    {
+      "name": "principalEnergyPolylogConstant",
+      "kind": "def",
+      "first_line": 15,
+      "complete_written_type": "def principalEnergyPolylogConstant (B : ℕ) : ℝ",
+      "type_sha256": "bff095300e2d20d20910448cf06346e57db68a2dc69ad4881b43857800560623",
+      "type_body_sha256": "9185804da756c3f4a3b21c2ea3070136f22fce19c2ce5aa94e5c018a43115200"
+    },
+    {
+      "name": "principalEnergyPolylogConstant_pos",
+      "kind": "theorem",
+      "first_line": 18,
+      "complete_written_type": "theorem principalEnergyPolylogConstant_pos (B : ℕ) :\n    0 < principalEnergyPolylogConstant B",
+      "type_sha256": "98e61eca7a2eca5fa52645f9f1730ec37db57d401bad0375268ded64d0fe15e8",
+      "type_body_sha256": "f793656e15bfa7b1d17928cfd095f612698a74e0bb7ec9f5db7358f50d8868de"
+    },
+    {
+      "name": "scale_log_bounds",
+      "kind": "theorem",
+      "first_line": 25,
+      "complete_written_type": "theorem scale_log_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 ≤ sigma) :\n    1 ≤ 1 + Real.log d.scale ∧\n      0 ≤ 1 + Real.log (2 * d.V) ∧\n      1 + Real.log (2 * d.V) ≤ 2 * (1 + Real.log d.scale) ∧\n      0 ≤ 1 + Real.log d.physicalFactorCap ∧\n      1 + Real.log d.physicalFactorCap ≤ 4 * (1 + Real.log d.scale)",
+      "type_sha256": "33cccd853a2c8aa284dfb6d6929dbe697a2e5a685e2d550fa905f9ec1418f359",
+      "type_body_sha256": "8fbbbcd6d18cf6c6641cc14b12f77e6efd8ffe4cd8696cd50665061808d83069"
+    },
+    {
+      "name": "outsideEnergy_mul_principalEnergy_le_polylog",
+      "kind": "theorem",
+      "first_line": 65,
+      "complete_written_type": "theorem outsideEnergy_mul_principalEnergy_le_polylog\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 ≤ sigma) :\n    CommonPM2FiniteFold.outsideEnergy d * principalEnergy d ≤\n      principalEnergyPolylogConstant B * d.scale ^ 2 *\n        (1 + Real.log d.scale) ^ (betaLogExponent B + 32)",
+      "type_sha256": "f40fc4256c1bac65e4ff9a38e7d851c433d90d3b14214c5bb296af718537cd1c",
+      "type_body_sha256": "eb8c7b1aab53c03cc19303d4d190ad219681ebb2d93d350a1c0bfa1324381a7f"
+    },
+    {
+      "name": "outsideEnergy_mul_principalEnergy_le_exponent",
+      "kind": "theorem",
+      "first_line": 96,
+      "complete_written_type": "theorem outsideEnergy_mul_principalEnergy_le_exponent\n    {B P : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 ≤ sigma)\n    (hP : betaLogExponent B + 32 ≤ P) :\n    CommonPM2FiniteFold.outsideEnergy d * principalEnergy d ≤\n      principalEnergyPolylogConstant B * d.scale ^ 2 * (1 + Real.log d.scale) ^ P",
+      "type_sha256": "1bf90b630df4d6f6cd114429fdeea63fc22ca53db11a1d44a5ca5b93ef9a076e",
+      "type_body_sha256": "33dbdfbedbee7704058f65432de0a7f38508177ba6754c5311017b5c6ffd086c"
+    },
+    {
+      "name": "outsideEnergy_mul_principalEnergy_le_m2Exponent",
+      "kind": "theorem",
+      "first_line": 108,
+      "complete_written_type": "theorem outsideEnergy_mul_principalEnergy_le_m2Exponent\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 ≤ sigma) :\n    CommonPM2FiniteFold.outsideEnergy d * principalEnergy d ≤\n      principalEnergyPolylogConstant B * d.scale ^ 2 *\n        (1 + Real.log d.scale) ^ (131073 + betaLogExponent B)",
+      "type_sha256": "480595f540c5ec21ccac7dbae1b921b6eb0007f81d57bae5c6b60d6ab60f356b",
+      "type_body_sha256": "7ed81c7cf6d7e5ed56f69017784b1d420ae27e716f31e17143c5c95ab8025cd6"
+    },
+    {
+      "name": "constant_pos_and_uniform",
+      "kind": "theorem",
+      "first_line": 117,
+      "complete_written_type": "theorem constant_pos_and_uniform (B : ℕ) :\n    0 < principalEnergyPolylogConstant B ∧\n      ∀ (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d → 0 ≤ sigma →\n        CommonPM2FiniteFold.outsideEnergy d * principalEnergy d ≤\n          principalEnergyPolylogConstant B * d.scale ^ 2 *\n            (1 + Real.log d.scale) ^ (betaLogExponent B + 32)",
+      "type_sha256": "814a025d7fe68539890539a018d901b49353faeb77032ea72dc1f42bb6e32492",
+      "type_body_sha256": "2586ec1ebbd4e861017f3f6e1589bbfd3522f557bec676c7bfd84e234e4ef4c1"
+    }
+  ],
+  "actual_pinned_API": [
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3DistributionTargets.lean",
+      "file_sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "spans": [
+        {
+          "first": 51,
+          "last": 51,
+          "normalized_span_sha256": "e65278fa79177f34b9b963700776608edc7e052f277594bc088939e95bba9cbc"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3PairedAlphaDeletion.lean",
+      "file_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "spans": [
+        {
+          "first": 438,
+          "last": 442,
+          "normalized_span_sha256": "b69a8736a6da2814f1bff6be1b417d5569b7ce1d6fa472bb912dcf23d857a14b"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3FactorFiberDivisor.lean",
+      "file_sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+      "spans": [
+        {
+          "first": 171,
+          "last": 179,
+          "normalized_span_sha256": "1b099963f41e2f688c87379afd97888c309e80bade4a7669f900f941eb7e84fe"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+      "file_sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+      "spans": [
+        {
+          "first": 615,
+          "last": 617,
+          "normalized_span_sha256": "d72bc440d281d715d72c275c8df0def558a269c492036466f3ad61bc564e9d6d"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/SpecialFunctions/Log/Basic.lean",
+      "file_sha256": "1f36a9802233e878953d809b16e020beaf0ace5afd4c8279d47b52af6ee186bf",
+      "spans": [
+        {
+          "first": 133,
+          "last": 135,
+          "normalized_span_sha256": "9a44f9eefa77145efe6a5076e28ee992c49d796f0957d3ce6cf99596bf1d5b4d"
+        },
+        {
+          "first": 151,
+          "last": 152,
+          "normalized_span_sha256": "7a210a74aeb2e55287b15f4e58c99f92a64a131bd7e22362002d3128e40becdb"
+        },
+        {
+          "first": 213,
+          "last": 214,
+          "normalized_span_sha256": "5b97eeec1db7e6ead02af23e15e46c7ee09ddc3448f1c94b50379ddaf976a3f4"
+        },
+        {
+          "first": 288,
+          "last": 289,
+          "normalized_span_sha256": "6d614362ba02674acfe18c398e71f6480639a0acac49f7c1bb5cb04ff1352f20"
+        },
+        {
+          "first": 307,
+          "last": 309,
+          "normalized_span_sha256": "9843e8ca89ae946b692318195610e89b30bd1dc9e0d85c83cdb79d0fad79bd47"
+        }
+      ]
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/Order/GroupWithZero/Basic.lean",
+      "file_sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+      "spans": [
+        {
+          "first": 456,
+          "last": 459,
+          "normalized_span_sha256": "6fcc30ffec2a707698f8643d51a8c5e8d607bfc01369e82ff397dbdf0a77ca61"
+        },
+        {
+          "first": 470,
+          "last": 473,
+          "normalized_span_sha256": "d3990bce08437bb0d3727de766d2b435d0e5689bf9ec9e5561162787e42b651d"
+        }
+      ]
+    }
+  ],
+  "constant": "CU(B)=80*(2:Real)^((2^B)^2-1)*(4:Real)^32; strictly positive and fixed before sigma,kappa,c0,d,residue,intervals. No gigantic fixed power is expanded.",
+  "exact_definitions": "x=d.scale=d.U*d.V; L=1+log x; Lbeta=1+log(2*d.V); Lcap=1+log(d.physicalFactorCap); b=CommonPM2PolylogMajorant.betaLogExponent B=(2^B)^2-1. E and U0 are exactly the finite parent outsideEnergy and principalEnergy.",
+  "hypotheses": "Original hd:MediumAdmissible B sigma kappa c0 d plus sigma>=0 only. No kappa sign/cap, residue-size alteration, lower scale threshold or EU bound is added as a hypothesis.",
+  "argument": [
+    "hd gives U,V>=1, hence x>=1 and V<=x; public log_two_mul_bounds gives 0<=Lbeta<=2L.",
+    "Original actual_geometry_bounds gives cap<=8*x^(1-10sigma); sigma>=0 and x>=1 give cap<=8x by real exponent monotonicity.",
+    "cap>=1 gives Lcap>=0. log(8)=3log2<=3 and log x>=0 imply Lcap<=4L, including x=1,sigma=0.",
+    "Apply the actual finite EU theorem, then two natural-power monotonicity steps with explicitly nonnegative multipliers. Product powers merge to CU(B)*x^2*L^(b+32). E is retained, never canceled or divided.",
+    "For any natural P with b+32<=P, L>=1 gives the exact public downstream interface without changing CU. Specialize P=131073+b using omega."
+  ],
+  "downstream_scope": "The EU interface is independent of kappa caps. The existing capped M2 majorant still requires its own sigma>0,kappa>=0 and kappa cap when combined. The source does not claim those M2 hypotheses disappear or that cross/retained variance/spectrum/main is solved.",
+  "unclosed_obstacles": [],
+  "formal_status": "No compiler/proof tool used. The first two imports are future source modules; their actual import resolution and kernel acceptance are not asserted. Both the new proof and the source-only parents still require their own gates.",
+  "execution": {
+    "actual_edits": 0,
+    "Lean_Runtime_proper_cache_Git_Site_TeX": 0,
+    "new_agents": 0
+  },
+  "source_only_zero_sorry": true,
+  "HOLD": true
+}

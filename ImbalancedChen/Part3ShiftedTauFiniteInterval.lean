@@ -75,7 +75,7 @@ theorem shiftedAbs_injOn_nonneg (S : Finset ℕ) (a : ℤ)
   have hdiff : (v : ℤ) - a = (w : ℤ) - a :=
     (Int.natAbs_inj_of_nonneg_of_nonneg
       (sub_nonneg.mpr (hS v hv)) (sub_nonneg.mpr (hS w hw))).mp heq
-  exact_mod_cast (sub_right_cancel hdiff)
+  exact_mod_cast ((Int.sub_left_inj a).mp hdiff)
 
 theorem shiftedAbs_injOn_nonpos (S : Finset ℕ) (a : ℤ)
     (hS : ∀ v ∈ S, (v : ℤ) ≤ a) : Set.InjOn (shiftedAbs a) S := by
@@ -83,7 +83,7 @@ theorem shiftedAbs_injOn_nonpos (S : Finset ℕ) (a : ℤ)
   have hdiff : (v : ℤ) - a = (w : ℤ) - a :=
     (Int.natAbs_inj_of_nonpos_of_nonpos
       (sub_nonpos.mpr (hS v hv)) (sub_nonpos.mpr (hS w hw))).mp heq
-  exact_mod_cast (sub_right_cancel hdiff)
+  exact_mod_cast ((Int.sub_left_inj a).mp hdiff)
 
 /-- Clamping an interval at one preserves its width upper bound. -/
 theorem clamped_interval_geometry {c H Z : ℝ} (hH : 0 ≤ H) (hZ : 1 ≤ Z)
@@ -124,13 +124,15 @@ theorem sum_image_in_clamped_interval_le (S : Finset ℕ) (f : ℕ → ℕ)
     _ ≤ (K : ℝ) * ((max 1 (c + H) - max 1 c) * (1 + Real.log Z) ^ (K - 1) +
         Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)) := he1
     _ ≤ _ := mul_le_mul_of_nonneg_left
-      (add_le_add_right (mul_le_mul_of_nonneg_right hg.2.2.2 (pow_nonneg hL _)) _)
+      (add_le_add
+        (mul_le_mul_of_nonneg_right hg.2.2.2 (pow_nonneg hL (K - 1)))
+        (le_refl (Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2))))
       (Nat.cast_nonneg K)
 
 /-- Finite shifted tau payment in the original near-linear moving-shift range. -/
 theorem shifted_tau_Icc_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}
     (hx : 1 ≤ x) (hκ : 0 ≤ κ) (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :
-    (∑ v ∈ (Icc 1 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),
+    (∑ v ∈ (Icc 1 ⌊6 * x⌋₊).filter (fun (v : ℕ) => (v : ℤ) ≠ a),
       (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤
       2 * (K : ℝ) * (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 1) +
         (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) *
@@ -140,8 +142,8 @@ theorem shifted_tau_Icc_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}
   let M : ℝ := 6 * x * (1 + Real.log Z) ^ (K - 1) +
     Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)
   let S := shiftedSource x a
-  let P := S.filter (fun v => a < (v : ℤ))
-  let N := S.filter (fun v => ¬a < (v : ℤ))
+  let P := S.filter (fun (v : ℕ) => a < (v : ℤ))
+  let N := S.filter (fun (v : ℕ) => ¬a < (v : ℤ))
   change (∑ v ∈ S, (fouvryTau K (shiftedAbs a v) : ℝ)) ≤ 2 * (K : ℝ) * M
   have hxT : x ≤ T := by
     calc
@@ -195,7 +197,7 @@ theorem shifted_tau_Icc_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}
 /-- The identical Ioc carrier used by the literal finite common-p folded sum. -/
 theorem shifted_tau_Ioc_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}
     (hx : 1 ≤ x) (hκ : 0 ≤ κ) (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :
-    (∑ v ∈ (Ioc 0 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),
+    (∑ v ∈ (Ioc 0 ⌊6 * x⌋₊).filter (fun (v : ℕ) => (v : ℤ) ≠ a),
       (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤
       2 * (K : ℝ) * (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 1) +
         (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) *
