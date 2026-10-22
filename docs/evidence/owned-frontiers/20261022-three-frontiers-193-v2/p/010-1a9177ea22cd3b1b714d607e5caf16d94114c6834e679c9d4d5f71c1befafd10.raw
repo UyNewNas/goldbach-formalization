@@ -1,0 +1,117 @@
+{
+  "schema": "independent-minimal-source-delta-review-v1",
+  "status": "NO_STATIC_BLOCKER_FOR_CURRENT190_NEW_READONLY_SUCCESSOR_SOURCE_ONLY_HOLD",
+  "HOLD": true,
+  "no_static_blocker_for_observed_current190_path_scheme": true,
+  "blockers": [],
+  "created_utc": "2026-10-22T02:10:11.675478+00:00",
+  "reviewer": "progression_lcm_review_sol_high_oct22",
+  "author_CP": {
+    "path": "source-reviews/20261022-three-frontiers-v2-minimal-path-repair-source-only-HOLD.json",
+    "sha256": "ea459ec5303de0c18415a58bea22096e03ce70e98aa7816bd6b8b8404a765c8b"
+  },
+  "v1_independent_review": {
+    "path": "source-reviews/20261022-three-frontiers-complete-source-independent-review-HOLD.json",
+    "sha256": "b904938ab589f2394b5e78e387e242e9176baae2aca60c38387962963dcfbc62",
+    "limitation_correction": "My earlier b904 source-only review missed that POSIX pathlib treats the one baseline receipt E:/... as relative. Its NO_STATIC_BLOCKER was not an integration result. Actual v1 preparation failed before any original proper/capture/heavy command. That original review is preserved as history and must not be described as a successful pipeline/path check."
+  },
+  "v1_failure": {
+    "path": "rounds\\three-frontiers-preparation-20261022-current190-v1\\HOLD.json",
+    "sha256": "82cefed1f9d6b776dd68744a9192b0299342e406cd8752c86b740962bbe23f80"
+  },
+  "failure_observed": {
+    "status": "FIRSTFAIL_HOLD_NO_RETRY",
+    "stage": "ImbalancedChen.Counting:proper",
+    "chain": "prepare gate_check -> verify_census -> bound -> sha -> common.path",
+    "cause": "WSL treated E:/... as STATE-relative",
+    "directory_files": [
+      "HOLD.json"
+    ],
+    "original_proper_invocations": 0,
+    "capture_invocations": 0,
+    "heavy_invocations": 0,
+    "actual_v1_attempts_as_reported_by_root": 1,
+    "HOLD_digest_recomputed_exact": true
+  },
+  "source_changes": {
+    "common": {
+      "v1_path": "rounds\\20261022-three-frontiers-common-SOURCE-ONLY.py",
+      "v1_sha256": "7ab795b65b4c4ee03a894e9219761ddbbe880bc3350822604efdf3b9cb2e3dcb",
+      "v2_path": "rounds\\20261022-three-frontiers-common-v2-SOURCE-ONLY.py",
+      "v2_sha256": "481d94a26e973a94f410bd7c8a0f320ad0babb7e66eaa11b1ab5e6dec2f763d4",
+      "raw_diff_sha256": "bce9ff5215ad12a3092e59efaef15179171dc7d88cb9f3e3416f5d890f736f8e",
+      "delta": "Windows absolute drive to /mnt lowercase drive on non-nt only",
+      "independent_inverse_bytes_and_AST_exact": true
+    },
+    "operator": {
+      "v1_path": "rounds\\20261022-three-frontiers-operator-SOURCE-ONLY.py",
+      "v1_sha256": "c6a2c87fad9d5dcf0bd50881c0bdce8dcd15dd6a1428641ad40dc282de2561bc",
+      "v2_path": "rounds\\20261022-three-frontiers-operator-v2-SOURCE-ONLY.py",
+      "v2_sha256": "3f0362f9bd85098cc2a260efde43f3bbf0e7ff8faba721a2e0e9a25c4196de2b",
+      "raw_diff_sha256": "ff150be3050cb8fd04e5bc49ed589e49cdbe412831fd3f076b5fae00734e2aa9",
+      "delta": "New sibling helper filename binding only",
+      "independent_inverse_bytes_and_AST_exact": true
+    },
+    "prepare": {
+      "v1_path": "rounds\\20261022-three-frontiers-prepare-SOURCE-ONLY.py",
+      "v1_sha256": "c297ac22417a6c12115bd793c9ed032747af7ef2f93b5323a477903752afc6f5",
+      "v2_path": "rounds\\20261022-three-frontiers-prepare-v2-SOURCE-ONLY.py",
+      "v2_sha256": "50076e87cb314cc10579089c69beae37e8b1ba4d4d62f315cf67872d015ae03f",
+      "raw_diff_sha256": "6af20ca28281a26fc083be7e22a13675a87e14abb94a492f370d837d28c8796b",
+      "delta": "New sibling helper filename binding only",
+      "independent_inverse_bytes_and_AST_exact": true
+    }
+  },
+  "independent_checks": {
+    "all11_author_artifact_digests_recomputed": true,
+    "all_three_v1_and_v2_actual_source_digests_recomputed": true,
+    "all_three_complete_rawdiffs_regenerated_from_bytes_exact": true,
+    "all_three_inverse_byte_transforms_equal_original": true,
+    "inverse_AST_equal_original": true,
+    "template_only_three_source_hash_values_changed_and_inverse_bytes_exact": true,
+    "AST_parse_only_no_pipeline_import": true,
+    "own_standalone_PurePath_model_fixtures": 16,
+    "author14_fixture_expectations_independently_rechecked": true,
+    "two_additional_UNC_model_cases_checked": true
+  },
+  "path_review": {
+    "lines": "common-v2 47-56",
+    "only_substantive_delta": "After slash normalization, on non-nt only, an ASCII alphabetic drive X:/... becomes /mnt/x/... with lowercase drive. No relative-drive or non-ASCII/number drive mapping added.",
+    "POSIX_cases": {
+      "E:/timot/a.json": "/mnt/e/timot/a.json",
+      "E:\\timot\\a.json": "/mnt/e/timot/a.json",
+      "c:/Users/timot/a.json": "/mnt/c/Users/timot/a.json",
+      "Z:/": "/mnt/z",
+      "/mnt/e/timot/a.json": "unchanged",
+      "/home/slava/a.olean": "unchanged",
+      ".lake/proof-continuation/audits/a.json": "ROOT-relative",
+      "audits/a.json": "STATE-relative",
+      "E:relative.json": "STATE-relative; not an absolute drive path",
+      "1:/a.json": "STATE-relative; not a letter drive"
+    },
+    "nt_cases": "Existing /mnt/e/... -> E:/..., E:/..., C:\\Users\\..., STATE-relative handling are unchanged.",
+    "UNC_exact_limit": "\\\\wsl.localhost\\Debian\\home\\slava\\a.json normalizes to //wsl.localhost/Debian/home/slava/a.json. Native Windows UNC syntax stays absolute. On POSIX this is also an absolute literal path, not rewritten to /home/slava/a.json. This patch is not general UNC-to-WSL filesystem translation and must not be claimed as such.",
+    "actual_current190_owned_receipt_path_entries": {
+      "relative": 157,
+      "absolute_drive": 1,
+      "POSIX_absolute": 32,
+      "UNC": 0
+    },
+    "observed_failure_path_covered": true
+  },
+  "controls_preserved": "Exact inverse recovery proves all code other than two path lines and sibling filename bindings remains byte-exact to reviewed v1: exact three targets/reviews/tools, baseline binding, full source freeze, fresh quota age/previous-event binding, fixed stage order, original strict/stock/fulltypes/inventory/safety/std3/resource/sole-owner/firstfail/no-retry controls. No claim of new semantic integration testing follows from AST equality.",
+  "successor_condition": "This scoped static result can be bound by root in a NEW readonly preparation gate for exact v2 hashes and a NEW preparation directory, with actual fresh quota/owner and unchanged current190 baseline. It does not authorize execution, restore v1, clear/reset its HOLD, reuse v1 gate, skip stages or promote ownership. Any future unsupported path/receipt/API/native failure must produce FIRSTFAIL HOLD.",
+  "unknown_future_results": "Actual new preparation/proper/capture outputs and hashes, native counts, all-heavy/kernel results and root acceptance remain unknown. No PASS or new serialized counts are predicted.",
+  "actions": {
+    "new_review_CP_only": true,
+    "pipeline_imported": false,
+    "pipeline_executed": false,
+    "proper_runtime_Lean_stock_census_lock_Git_Site_executed": false,
+    "new_gate_created": false,
+    "v1_HOLD_or_scripts_or_old_review_modified": false,
+    "actual_sources_cache_objects_modified": false
+  },
+  "execution_authority": false,
+  "quota_stop_remaining_lte_percent": 5,
+  "main_1_plus_1_75": "OPEN"
+}
