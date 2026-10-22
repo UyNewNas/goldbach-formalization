@@ -1,0 +1,98 @@
+"""Unexecuted, root-gated original proper + shared readonly capture preparation.
+
+Six stages, one original proper then one capture per exact target. This never
+invokes runtime CLI compile/audit or a compiler/checker and never acquires a lock.
+"""
+from pathlib import Path
+import argparse
+import hashlib
+import importlib.util
+import json
+import traceback
+
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument('--operator-sha256', required=True)
+    p.add_argument('--common-sha256', required=True)
+    p.add_argument('--gate', required=True)
+    p.add_argument('--gate-sha256', required=True)
+    p.add_argument('--quota', required=True)
+    p.add_argument('--quota-sha256', required=True)
+    p.add_argument('--stage', required=True)
+    p.add_argument('--directory', required=True)
+    a = p.parse_args()
+    operator = Path(__file__).with_name('20261022-EU-next-three-current193-operator-SOURCE-ONLY.py')
+    with operator.open('rb') as stream:
+        digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+    if digest != a.operator_sha256:
+        raise ValueError('Unbound operator helper')
+    spec = importlib.util.spec_from_file_location('frontier_operator_definitions', operator)
+    op = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(op)
+    c = op.import_common(a.common_sha256)
+    directory = c.path(a.directory).resolve()
+    c.require(directory.parent == (c.STATE / 'rounds').resolve() and directory.name.startswith('three-frontiers-preparation-'), 'Preparation directory')
+    directory.mkdir(exist_ok=True)
+    try:
+        c.require(not (directory / 'HOLD.json').exists(), 'Preparation already HOLD')
+        gate_ref = {'path': a.gate, 'sha256': a.gate_sha256}
+        gate = op.gate_check(c, gate_ref, 'ROOT_AUTHORIZED_THREE_FRONTIERS_READONLY_PREPARATION')
+        c.require(str(directory) == str(c.path(gate['preparation_directory']).resolve()), 'Preparation directory gate binding')
+        c.require(c.sha(__file__) == gate['prepare_sha256'], 'Preparation source binding')
+        stages = [module + ':' + phase for module in c.TARGETS for phase in ('proper', 'capture')]
+        finished = sorted(directory.glob('[0-9][0-9][0-9]-finished.json'))
+        previous, events = None, []
+        for index, value in enumerate(finished):
+            event = c.read(value)
+            c.require(value.name == f'{index:03d}-finished.json' and event['stage'] == stages[index] and
+                event['previous'] == previous and event['gate'] == gate_ref and event['status'] == 'PASS', 'Preparation chain')
+            started = c.read(c.bound(event['started']))
+            c.require(started['stage'] == event['stage'] and started['previous'] == previous, 'Preparation started chain')
+            previous = c.ref(value)
+            events.append(event)
+        c.require(len(list(directory.glob('[0-9][0-9][0-9]-started.json'))) == len(finished), 'Started preparation cannot be retried')
+        index = len(events)
+        c.require(index < len(stages) and a.stage == stages[index], 'Preparation stage ordering')
+        quota_ref = {'path': a.quota, 'sha256': a.quota_sha256}
+        quota = op.quota_check(c, quota_ref, a.stage, gate_ref)
+        c.require(quota.get('previous_event') == previous, 'Preparation quota chain')
+        idle_before = c.physical_idle()
+        before_artifacts, before_sources = c.artifacts(), c.frozen_sources()
+        if events:
+            c.require(before_artifacts == events[-1]['artifact_map_after'] and before_sources == events[-1]['source_map_after'], 'Preparation between-stage mutation')
+        start_ref = c.write_new(directory / f'{index:03d}-started.json', {'status': 'RUNNING', 'stage': a.stage,
+            'previous': previous, 'gate': gate_ref, 'quota': quota_ref, 'observed_quota': quota, 'idle_before': idle_before})
+        module, phase = a.stage.split(':', 1)
+        if phase == 'proper':
+            result = op.command(c, directory, index, ['/usr/bin/python3', str(c.STATE / 'preflight_current_oct20.py'), module, c.TARGETS[module]])
+            proper_ref = op.only_output(c, result, 'report')
+            c.validate_proper(proper_ref, module)
+            value = {'proper': proper_ref, 'command': result}
+        else:
+            c.require(events[-1]['stage'] == module + ':proper', 'Capture requires immediate original proper')
+            proper_ref = events[-1]['result']['proper']
+            capture = c.collect(module, proper_ref)
+            op.original_runtime_branch(c, module)
+            value = {'capture': c.write_new(directory / f'{index:03d}-capture.json', capture)}
+        after_artifacts, after_sources = c.artifacts(), c.frozen_sources()
+        c.require(before_artifacts == after_artifacts and before_sources == after_sources, 'Preparation mutation')
+        event_ref = c.write_new(directory / f'{index:03d}-finished.json', {'status': 'PASS', 'stage': a.stage,
+            'previous': previous, 'started': start_ref, 'gate': gate_ref, 'result': value,
+            'artifact_map_after': after_artifacts, 'source_map_after': after_sources, 'idle_after': c.physical_idle()})
+        if index + 1 == len(stages):
+            captures = {event['stage'].split(':', 1)[0]: event['result']['capture']
+                for event in events if event['stage'].endswith(':capture')}
+            captures[module] = value['capture']
+            c.write_new(directory / 'TERMINAL.json', {'status': 'READONLY_PREPARATION_PASS_NOT_EXECUTION_AUTHORITY',
+                'last_event': event_ref, 'prepared': captures, 'generated_count_predicted': None})
+        print(json.dumps({'event': event_ref, 'status': 'READONLY_PREPARATION_PASS'}))
+    except BaseException as error:
+        if not (directory / 'HOLD.json').exists():
+            c.write_new(directory / 'HOLD.json', {'status': 'FIRSTFAIL_HOLD_NO_RETRY', 'stage': a.stage,
+                'error': str(error), 'traceback': traceback.format_exc(), 'observed_utc': c.now()})
+        raise
+
+
+if __name__ == '__main__':
+    main()

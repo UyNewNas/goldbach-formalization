@@ -1,0 +1,95 @@
+"""Independent read-only verification of an explicitly bound owned census.
+
+No compiler, checker, import bootstrap, source mutation or Git operation.
+This does not prove the main theorem or replay the imported closure.
+"""
+from pathlib import Path
+import hashlib
+import json
+
+ROOT = Path(__file__).resolve().parents[3]
+STATE = ROOT / '.lake/proof-continuation'
+ALLOWED_AXIOMS = {'propext', 'Classical.choice', 'Quot.sound'}
+
+
+def path(value):
+    value = str(value).replace('\\', '/')
+    if value.startswith('/mnt/e/'):
+        value = 'E:/' + value[7:]
+    elif value.startswith('/mnt/c/'):
+        value = 'C:/' + value[7:]
+    result = Path(value)
+    return result if result.is_absolute() else ROOT / result
+
+
+def sha(value):
+    return hashlib.sha256(path(value).read_bytes()).hexdigest()
+
+
+def read(value):
+    return json.loads(path(value).read_bytes())
+
+
+def bound(value, digest):
+    assert sha(value) == digest, str(value)
+
+
+def verify(census_path, expected_sha):
+    bound(census_path, expected_sha)
+    census = read(census_path)
+    assert census['status'] == 'ALL_CURRENT_OWNED_SOURCES_OBJECTS_COMPLETE_TYPES_AXIOMS_EXACT'
+    assert not census['external_closure_replayed']
+    assert not census['unconditional_main_proved']
+    modules = census['modules']
+    receipts = {}
+    total = 0
+    for module, entry in modules.items():
+        bound(ROOT / (module.replace('.', '/') + '.lean'), entry['source_sha256'])
+        for suffix, digest in entry['object_parts'].items():
+            bound(STATE / 'lib/lean' / (module.replace('.', '/') + suffix), digest)
+        receipt_path = path(entry['owned_receipt'])
+        bound(receipt_path, entry['owned_receipt_sha256'])
+        key = str(receipt_path)
+        if key not in receipts:
+            receipt = read(receipt_path)
+            assert receipt['status'] == 'PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS'
+            assert receipt['inputs_before'] == receipt['inputs_after']
+            assert not receipt['external_closure_replay_claimed']
+            assert not receipt['unconditional_main_claimed']
+            stages = [s for s in receipt['stages'] if s['kind'] == 'full_inventory_type_axioms']
+            assert len(stages) == 1 and stages[0]['exit_code'] == 0
+            log = receipt_path.parent / 'declarations.log'
+            bound(log, stages[0]['log_sha256'])
+            inventories = {}
+            for line in log.read_text(encoding='utf-8').splitlines():
+                if line.startswith('P0_QUEUE_INVENTORY '):
+                    item = json.loads(line.split(' ', 1)[1])
+                    assert item['module'] not in inventories
+                    inventories[item['module']] = item
+            receipts[key] = receipt, read(receipt_path.parent / 'declarations.json'), inventories
+        receipt, records_all, inventories = receipts[key]
+        assert receipt['targets'][module] == entry['source_sha256']
+        assert receipt['inputs_before']['owned_object_parts'][module] == entry['object_parts']
+        bound(receipt_path.parent / 'declarations.json', entry['declarations_json_sha256'])
+        records = [r for r in records_all if r['module'] == module]
+        assert len(records) == entry['complete_serialized_declarations'] == receipt['declaration_counts'][module]
+        names = [r['name'] for r in records]
+        assert len(names) == len(set(names))
+        for record in records:
+            assert record['type'] and '⋯' not in record['type']
+            assert not (record['unsafe'] or record['partial'] or record['axiom'])
+            assert set(record['axioms']) <= ALLOWED_AXIOMS
+        inventory = inventories[module]
+        assert len(inventory['serialized']) == len(set(inventory['serialized'])) == len(names)
+        assert len(inventory['environment']) == len(set(inventory['environment'])) == len(names)
+        assert set(names) == set(inventory['serialized']) == set(inventory['environment'])
+        stocks = [s for s in receipt['stages'] if s['kind'] == 'stock_replay' and s['module'] == module]
+        assert len(stocks) == 1
+        stock = stocks[0]['result']
+        assert stock['status'] == 'PASS' and stock['returncode'] == 0
+        bound(receipt_path.parent / ('replay-' + module + '.log'), stock['log_sha256'])
+        total += len(records)
+    assert len(modules) == census['owned_modules']
+    assert total == census['complete_serialized_declarations']
+    assert len(receipts) == census['original_owned_receipts_rehashed']
+    return census, {'owned_modules': len(modules), 'declarations': total, 'original_receipts': len(receipts)}
