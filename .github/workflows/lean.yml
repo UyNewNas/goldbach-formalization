@@ -112,6 +112,11 @@ jobs:
           restore-keys: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}
       - name: Get the existing Mathlib cache
         run: |
+          # Mirror Cache.IO's bare `lean --print-prefix` lookup under Lake's
+          # environment. This is diagnostic only and never skips the required cache command.
+          if ! lake env python3 verification/parts/p0/ci_runtime_guard.py cache-leantar-diagnostic; then
+            printf 'Cache.IO leantar lookup diagnostic launcher failed; continuing to required cache command.\n' >&2
+          fi
           "$RUNNER_TEMP/lean-ci/run-stage" mathlib-cache lake exe cache get
       - name: Build the full project
         id: build

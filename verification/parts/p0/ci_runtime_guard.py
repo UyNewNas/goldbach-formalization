@@ -337,9 +337,52 @@ def audit(state_path: Path, probe: bool = False, require_source: bool = False) -
     return report
 
 
+def cache_leantar_diagnostic() -> dict:
+    """Log the pinned Mathlib Cache.IO bare-lean prefix lookup; never gate CI."""
+    expected_sysroot = os.environ.get('LEAN_SYSROOT')
+    resolved_lean = shutil.which('lean')
+    result = {
+        'kind': 'mathlib-cache-io-bare-lean-prefix-lookup',
+        'command': ['lean', '--print-prefix'],
+        'resolved_lean': resolved_lean,
+        'expected_lean': (expected_sysroot + '/bin/lean') if expected_sysroot else None,
+        'expected_sysroot': expected_sysroot,
+        'timeout_seconds': 10,
+    }
+    def clipped(value):
+        if value is None:
+            return None
+        if isinstance(value, bytes):
+            value = value.decode('utf-8', errors='replace')
+        return value[:4096]
+    try:
+        child = subprocess.run(['lean', '--print-prefix'], capture_output=True, text=True,
+                               errors='replace', check=False, timeout=10)
+        stdout = child.stdout
+        # Match Lean's trimAscii before deriving <prefix>/bin/leantar.
+        prefix = stdout.strip(' \t\n\v\f\r')
+        candidate = Path(prefix) / 'bin' / 'leantar' if child.returncode == 0 and prefix else None
+        result.update({
+            'status': 'child-returned',
+            'exit_code': child.returncode,
+            'stdout': clipped(stdout),
+            'stderr': clipped(child.stderr),
+            'prefix': prefix if child.returncode == 0 else None,
+            'prefix_matches_LEAN_SYSROOT': child.returncode == 0 and prefix == expected_sysroot,
+            'candidate_leantar': str(candidate) if candidate is not None else None,
+            # Cache.IO uses pathExists, not executable-bit or child-process checks.
+            'candidate_leantar_path_exists': candidate.exists() if candidate is not None else False,
+        })
+    except subprocess.TimeoutExpired as error:
+        result.update({'status': 'child-timeout', 'stdout': clipped(error.stdout), 'stderr': clipped(error.stderr)})
+    except OSError as error:
+        result.update({'status': 'child-launch-error', 'error_type': type(error).__name__, 'error': clipped(str(error))})
+    return result
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('mode', choices=('setup', 'audit', 'probe'))
+    parser.add_argument('mode', choices=('setup', 'audit', 'probe', 'cache-leantar-diagnostic'))
     parser.add_argument('--evidence', type=Path)
     parser.add_argument('--state', type=Path)
     parser.add_argument('--probe', action='store_true')
@@ -356,6 +399,10 @@ def main() -> None:
         with open(os.environ['GITHUB_PATH'], 'a') as out:
             out.write(state['shadow'] + '/bin\n')
         print(json.dumps({'status': 'PREPARED_RUNTIME_GUARD', 'state': state['environment']['P0_CI_GUARD_STATE']}))
+    elif args.mode == 'cache-leantar-diagnostic':
+        # Informational only: the required Mathlib cache command below remains
+        # the authoritative gate and is always attempted by the workflow.
+        print(json.dumps(cache_leantar_diagnostic(), sort_keys=True))
     else:
         state_path = args.state or Path(os.environ['P0_CI_GUARD_STATE'])
         if args.mode == 'probe':
