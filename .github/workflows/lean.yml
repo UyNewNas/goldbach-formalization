@@ -89,6 +89,12 @@ jobs:
       - name: Install Elan and the pinned project toolchain
         run: |
           "$RUNNER_TEMP/lean-ci/run-stage" install-elan "$LEAN_ACTION_DIR/scripts/install_elan.sh"
+      - name: Guard the pinned toolchain for all source compiler children
+        run: |
+          python3 verification/parts/p0/ci_runtime_guard.py setup --evidence "$RUNNER_TEMP/lean-verification-logs/runtime"
+      - name: Verify guarded runtime hashes and shadow sysroot before cache
+        run: |
+          python3 verification/parts/p0/ci_runtime_guard.py audit --probe
       - name: Configure lean-action with the existing inputs
         id: config
         env:
@@ -172,9 +178,15 @@ jobs:
         timeout-minutes: 25
         run: |
           "$RUNNER_TEMP/lean-ci/run-stage" round6-types python3 verification/parts/p0/check_round6_types.py --timeout-seconds 1440
+      - name: Audit actual compiler commands and unchanged runtime
+        id: runtime-audit
+        if: ${{ always() }}
+        run: |
+          python3 verification/parts/p0/ci_runtime_guard.py audit --probe --require-source
       - name: Record required verification outcomes
         if: ${{ always() }}
         env:
+          RUNTIME_OUTCOME: ${{ steps.runtime-audit.outcome }}
           BUILD_OUTCOME: ${{ steps.build.outcome }}
           LEANCHECKER_OUTCOME: ${{ steps.leanchecker.outcome }}
           AXIOM_AUDIT_OUTCOME: ${{ steps.axiom-audit.outcome }}
@@ -185,6 +197,7 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/lean-verification-logs"
           {
+            printf 'runtime-audit=%s\n' "$RUNTIME_OUTCOME"
             printf 'build=%s\n' "$BUILD_OUTCOME"
             printf 'leanchecker=%s\n' "$LEANCHECKER_OUTCOME"
             printf 'axiom-audit=%s\n' "$AXIOM_AUDIT_OUTCOME"
@@ -195,6 +208,7 @@ jobs:
           } | tee "$RUNNER_TEMP/lean-verification-logs/outcomes.log"
           {
             printf '\n### Required core verification stages\n'
+            printf -- '- Guarded pinned runtime and shadow sysroot audit: %s\n' "$RUNTIME_OUTCOME"
             printf -- '- Build: %s\n' "$BUILD_OUTCOME"
             printf -- '- Bundled leanchecker (ImbalancedChen): %s\n' "$LEANCHECKER_OUTCOME"
             printf -- '- Full root/transitive axiom audit: %s\n' "$AXIOM_AUDIT_OUTCOME"
@@ -205,6 +219,7 @@ jobs:
             printf '\nAllowed axioms: propext, Classical.choice, Quot.sound.\n'
             printf 'A skipped or uncompleted stage is not a successful verification.\n'
           } >> "$GITHUB_STEP_SUMMARY"
+          test "$RUNTIME_OUTCOME" = success
           test "$BUILD_OUTCOME" = success
           test "$LEANCHECKER_OUTCOME" = success
           test "$AXIOM_AUDIT_OUTCOME" = success

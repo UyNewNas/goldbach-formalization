@@ -139,7 +139,9 @@ else:
     os.environ['P0_COMPILER_SLOT_HELD'] = str(os.getpid())
     os.environ['P0_COMPILER_SLOT_FD'] = str(fd)
     os.environ['P0_COMPILER_SLOT_TOOL'] = name
-cmd = [C['realbin'] + '/' + name, *args]
+compiler = (C['shadow'] + '/bin/lean-runtime' if name == 'lean'
+            else C['realbin'] + '/' + name)
+cmd = [compiler, *args]
 record = {'pid': os.getpid(), 'tool': name, 'command': cmd,
           'input_args': sys.argv[1:], 'slot_owner': os.environ['P0_COMPILER_SLOT_HELD'],
           'cwd': os.getcwd(), 'sysroot': os.environ['LEAN_SYSROOT']}
@@ -216,6 +218,23 @@ def prepare(root: Path, runner_temp: Path, evidence: Path, realbin: Path,
             (shadow / 'bin' / path.name).symlink_to(path, target_is_directory=path.is_dir())
     # See module docstring: a symlink is insufficient for IO.appPath.
     shutil.copy2(realbin / 'lake', shadow / 'bin' / 'lake')
+    # Execute the exact pinned Lean bytes from the shadow bin directory.
+    shadow_lean = shadow / 'bin' / 'lean-runtime'
+    shutil.copy2(realbin / 'lean', shadow_lean)
+    require(sha(realbin / 'lean') == sha(shadow_lean), 'Shadow Lean copy differs')
+    real_leantar = realbin / 'leantar'
+    shadow_leantar = shadow / 'bin' / 'leantar'
+    leantar_setup = {
+        'real_leantar_exists': real_leantar.is_file() and os.access(real_leantar, os.X_OK),
+        'real_leantar_within_pin_root': real_leantar.is_file() and real_leantar.resolve().is_relative_to(realroot),
+        'shadow_leantar_exists': shadow_leantar.is_file() and os.access(shadow_leantar, os.X_OK),
+        'shadow_is_real_symlink': shadow_leantar.is_symlink() and shadow_leantar.resolve() == real_leantar.resolve(),
+        'leantar_hashes_match': real_leantar.is_file() and shadow_leantar.is_file()
+                                and sha(real_leantar) == sha(shadow_leantar),
+    }
+    print(json.dumps({'pinned_leantar_setup': leantar_setup}, sort_keys=True))
+    require(all(leantar_setup.values()),
+            'Pinned toolchain must expose its in-root leantar through the shadow sysroot')
     state_path = evidence / 'state.json'
     environment = {'LEAN_SYSROOT': str(shadow), 'LAKE_OVERRIDE_LEAN': 'true',
                    'LEAN_NUM_THREADS': '2', 'ELAN_TOOLCHAIN': PIN, 'P0_CI_GUARD_STATE': str(state_path)}
@@ -224,6 +243,11 @@ def prepare(root: Path, runner_temp: Path, evidence: Path, realbin: Path,
               'tools': list(TOOLS)}
     runtime = {str(realbin / name): sha(realbin / name) for name in (*TOOLS, 'lake', 'leanchecker')}
     runtime[str(shadow / 'bin' / 'lake')] = sha(shadow / 'bin' / 'lake')
+    runtime[str(shadow_lean)] = sha(shadow_lean)
+    runtime[str(real_leantar)] = sha(real_leantar)
+    runtime[str(shadow_leantar)] = sha(shadow_leantar)
+    require(runtime[str(realbin / 'lean')] == runtime[str(shadow_lean)], 'Shadow Lean bytes differ from pin')
+    require(runtime[str(real_leantar)] == runtime[str(shadow_leantar)], 'Shadow leantar bytes differ from pin')
     require(runtime[str(realbin / 'lake')] == runtime[str(shadow / 'bin' / 'lake')], 'Lake copy differs')
     for name in TOOLS:
         wrapper = shadow / 'bin' / name
@@ -275,12 +299,29 @@ def audit(state_path: Path, probe: bool = False, require_source: bool = False) -
                             '--state', str(state_path)], cwd=cwd, check=True)
         before = len(Path(state['log']).read_text().splitlines())
         prefix = capture('lake', 'env', 'lean', '--print-prefix')
-        require(prefix == state['shadow'], 'Lean reports a bypassed sysroot')
+        realbin = Path(state['realbin'])
+        realroot = realbin.parent.resolve()
+        real_leantar = realbin / 'leantar'
+        shadow_leantar = Path(state['shadow']) / 'bin' / 'leantar'
+        diagnostics = {
+            'prefix_matches_shadow': prefix == state['shadow'],
+            'real_leantar_exists': real_leantar.is_file() and os.access(real_leantar, os.X_OK),
+            'real_leantar_within_pin_root': real_leantar.is_file() and real_leantar.resolve().is_relative_to(realroot),
+            'shadow_leantar_exists': shadow_leantar.is_file() and os.access(shadow_leantar, os.X_OK),
+            'shadow_leantar_is_real_symlink': shadow_leantar.is_symlink()
+                                             and shadow_leantar.resolve() == real_leantar.resolve(),
+            'leantar_hashes_match': real_leantar.is_file() and shadow_leantar.is_file()
+                                    and sha(real_leantar) == sha(shadow_leantar),
+        }
+        print(json.dumps({'pinned_sysroot_probe': diagnostics}, sort_keys=True))
+        require(all(diagnostics.values()), 'Pinned Lean sysroot/leantar binding failed')
         require(len(Path(state['log']).read_text().splitlines()) > before, 'Lean probe bypassed wrapper')
     commands = [json.loads(line) for line in Path(state['log']).read_text().splitlines()]
     for record in commands:
         name = record['tool']
-        require(name in TOOLS and record['command'][0] == state['realbin'] + '/' + name, 'Unknown compiler command')
+        expected_binary = (state['shadow'] + '/bin/lean-runtime' if name == 'lean'
+                           else state['realbin'] + '/' + name)
+        require(name in TOOLS and record['command'][0] == expected_binary, 'Unknown/bypassed compiler command')
         require(record['sysroot'] == state['shadow'], 'Compiler sysroot bypass')
         if name == 'lean':
             require(record['command'][1:] == normalize_lean_args(record['input_args']),
