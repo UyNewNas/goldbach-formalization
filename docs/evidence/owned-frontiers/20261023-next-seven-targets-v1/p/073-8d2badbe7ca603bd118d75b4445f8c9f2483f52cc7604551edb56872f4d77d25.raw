@@ -1,0 +1,179 @@
+"""SOURCEONLY / UNEXECUTED. ROOT must review before writing one fresh archive plan.
+
+No helper imports/execution, subprocess, Git access, package/source/cache writes.
+Only --write-plan permits one exclusive new plan in state/source-reviews.
+The original archive preparer independently validates the resulting plan later.
+"""
+import argparse, hashlib, json, os
+from pathlib import Path
+
+STATE = '.lake/proof-continuation'
+TEMPLATE = STATE + '/source-reviews/drafts/20261023-next-seven-GitHub-evidence-archive-input-plan-SOURCEONLY.json'
+TEMPLATE_SHA = 'dc2313f316d3c726ad9d4fb63b6537f93f7821fca5b56c53ac38f6b12ea88b57'
+PREPARER = STATE + '/source-reviews/drafts/20261023-next-seven-GitHub-evidence-archive-actual-record-schema-sol61-SOURCEONLY.py.txt'
+PREPARER_SHA = 'f093e1592176f631b763332c5502dd167c78b691061dad9d5653bca51f753eb2'
+SIGNER = STATE + '/source-reviews/drafts/20261023-root-sign-next-seven-terminal-future-V2-schema-binding-sol61-SOURCEONLY.py.txt'
+SIGNER_SHA = 'b37586e6ae808f7c96d363c6194909f4c19ea1d9a5bf18ba769ac365a1133890'
+BINDINGS = {
+    'terminal_independent_peer': 'terminal_independent_review',
+    'root_protocol_verification': 'root_protocol_verification',
+    'candidate_census': 'current_census', 'complete_records': 'complete_declarations',
+    'collector_proposal': 'collector_acceptance_proposal',
+    'previous_root_acceptance': 'previous_root_acceptance',
+    'compiler_cachelib_freeze': 'compiler_cachelib_freeze',
+    'fresh_all_current_source_freeze': 'source_freeze', 'fresh_capture_refs': 'fresh_capture_refs',
+    'root_authority': 'formal_authority', 'collector_source': 'collector_source',
+    'collector_source_peer': 'collector_source_peer', 'candidate_manifest': 'candidate_manifest',
+    'collector_execution_witness': 'collector_execution_witness',
+    'complete_original_evidence_intake': 'complete_original_evidence_intake',
+}
+COUNT_FIELDS = {
+    'owned_modules': 'owned_modules', 'complete_serialized_declarations': 'declarations',
+    'distinct_constant_fullnames': 'distinct_constant_fullnames',
+    'original_owned_receipts_rehashed': 'original_receipts', 'added_modules': 'added_modules',
+    'added_complete_serialized_declarations': 'added_complete_serialized_declarations',
+    'added_distinct_constant_fullnames': 'added_distinct_constant_fullnames',
+    'added_original_receipts': 'added_original_receipts',
+    'actual_new_module_record_counts': 'actual_new_module_record_counts',
+    'historical_duplicate_name_count': 'historical_duplicate_names',
+    'historical_duplicate_record_excess': 'historical_duplicate_record_excess',
+}
+HISTORICAL_SUPPLEMENTS = {
+    'failed_archive_record_schema_diagnostic': ('source-reviews/20261023-root-next-seven-archive-record-schema-diagnostic.json', '8b6e108454f8f57b8fd96efc59ee5ecd15c5e576a1593a5e979f716c0d519bd5'),
+    'failed_V1_fullname_collision_diagnostic': ('source-reviews/20261023-root-next-seven-original-fullname-collision-diagnostic.json', '2b113f1413d7d4c794750470b7e86290c947dfdb4d72c00c5db65ed4d7d1b7bc'),
+    'failed_ROOT_protocol_path_diagnostic': ('source-reviews/20261023-root-next-seven-v2-protocol-native-path-diagnostic.json', '941d0059ca1cd9710be8cb3be8dee432182a9df876dbc1e530db05f6d75f8e28'),
+    'P4_import_only_installation': ('source-reviews/20261023-root-P4-owned-theta-equation-import-installation.json', '84dd0dd4871f2b5d3981c8b3843708c0095718045a96437c86a9a3d10f9a1e06'),
+    'P3_import_only_installation': ('source-reviews/20261023-root-P3-owned-frequency-equation-import-installation.json', 'd7658cefa7b803f046b8acf7857b4ac7e6c1be188ab3c8a498f03b9f0494f5a5'),
+}
+
+def need(ok, message):
+    if not ok: raise ValueError(message)
+
+def sha(raw): return hashlib.sha256(raw).hexdigest()
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument('--root', required=True)
+    ap.add_argument('--signed-acceptance', required=True)
+    ap.add_argument('--signed-acceptance-sha256', required=True)
+    ap.add_argument('--base-head', required=True, help='Full current HEAD, explicitly supplied by ROOT; no Git call is made')
+    ap.add_argument('--output', required=True)
+    ap.add_argument('--write-plan', action='store_true')
+    args = ap.parse_args(); root = Path(args.root).resolve(); state = root / STATE
+    inputs = {}
+    def local(value):
+        value = str(value).replace('\\', '/')
+        if os.name == 'nt' and value.startswith('/mnt/') and len(value) > 7:
+            value = value[5].upper() + ':/' + value[7:]
+        elif os.name != 'nt' and len(value) >= 3 and value[0].isascii() and value[0].isalpha() and value[1:3] == ':/':
+            value = '/mnt/' + value[0].lower() + '/' + value[3:]
+        p = Path(value)
+        if not p.is_absolute():
+            p = (root if value.startswith(('.lake/', 'docs/', 'ImbalancedChen/')) or value == '.gitattributes' else state) / p
+        p = p.resolve(); need(p.is_relative_to(root), 'Path escapes repository: ' + value)
+        return p
+    def ref(value, digest=None):
+        if digest is None:
+            need(isinstance(value, dict) and set(value) == {'path', 'sha256'}, 'Exact path/SHA ref required')
+            value, digest = value['path'], value['sha256']
+        p = local(value); raw = p.read_bytes(); need(sha(raw) == digest, 'Changed input: ' + str(p))
+        inputs[p] = digest
+        return {'path': p.relative_to(root).as_posix(), 'sha256': digest}
+    def read(r): return json.loads(local(ref(r)['path']).read_bytes())
+    def current(value):
+        p = local(value); return ref(p, sha(p.read_bytes()))
+    def schema(document, fields):
+        return {k: {'json_pointer': '/' + k, 'equals': document[k]} for k in fields}
+
+    plan = read(ref(TEMPLATE, TEMPLATE_SHA)); inherited = json.loads(json.dumps(plan['inherited_archive']))
+    verifier = dict(plan['standalone_verifier']); r = plan['refs']
+    need(plan['status'] == 'SOURCEONLY_PENDING_ROOT_216_TERMINAL_ACCEPTANCE', 'Unexpected unbound template')
+    signed_ref = ref(args.signed_acceptance, args.signed_acceptance_sha256); a = read(signed_ref)
+    need(a['status'].startswith('ROOT_NEXT_SEVEN_ACTUAL') and a['status'].endswith('_TERMINAL_ACCEPTED'), 'Terminal ROOT signature required')
+    need(a['old209_whole_entries_deep_equal'] is True and a['old5511_complete_records_deep_equal'] is True
+         and a['new_fullname_collisions'] == 0 and a['strict_seven_original_producers_verified'] is True,
+         'Signed preservation/qualification gates required')
+    for role, field in BINDINGS.items():
+        r[role] = ref(a[field])
+        need(r[role] == a[field], 'Signed refs must already be canonical repository-relative: ' + field)
+    r['root_final_acceptance'] = signed_ref; r['preparer'] = ref(PREPARER, PREPARER_SHA)
+    for role in ('baseline_archive_manifest', 'baseline_source_plan'): ref(r[role])
+    ref(verifier); baseline_manifest = read(r['baseline_archive_manifest'])
+    need(ref(baseline_manifest['root_accepted_input_ref']) == r['previous_root_acceptance'], 'Wrong inherited ROOT209 acceptance')
+    intake = read(r['complete_original_evidence_intake'])
+    need(set(intake) == {'status', 'targets', 'strict_producers', 'audit_receipts'}
+         and intake['status'] == 'ROOT_COMPLETE_SEVEN_TARGET_ORIGINAL_EVIDENCE_INTAKE_V2', 'Signed current V2 intake required')
+    targets = plan['scope']['targets']; groups = plan['scope']['audit_groups']
+    need(len(targets) == len(set(targets)) == 7 and len(groups) == 4
+         and sorted(m for ms in groups.values() for m in ms) == sorted(targets), 'Wrong template partition')
+    need(set(intake['targets']) == set(intake['strict_producers']) == set(targets)
+         and set(intake['audit_receipts']) == set(groups), 'Intake partition differs')
+    r['target_sources'] = {m: ref(m.replace('.', '/') + '.lean', intake['targets'][m]) for m in targets}
+    r['strict_producers'] = {}
+    for m in targets:
+        spec = intake['strict_producers'][m]
+        need(set(spec) == {'cache', 'receipt', 'stdout', 'resource_policy'}, 'Incomplete strict intake: ' + m)
+        r['strict_producers'][m] = {k: ref(spec[k]) for k in ('cache', 'receipt', 'stdout')}
+    r['audit_receipts'], r['audit_sidecars'] = {}, {}
+    for group, modules in groups.items():
+        spec = intake['audit_receipts'][group]
+        need(set(spec) == {'ref', 'targets', 'sidecars'} and spec['targets'] == {m: intake['targets'][m] for m in modules}, 'Audit targets differ')
+        r['audit_receipts'][group] = ref(spec['ref'])
+        need(r['audit_receipts'][group] == ref(a['actual_audits'][group]), 'Signed audit ref differs')
+        required = {'OwnedAudit.lean', 'declarations.json', 'declarations.log', 'audit-process.json'} | {'replay-' + m + '.' + ext for m in modules for ext in ('json', 'log')}
+        need(set(spec['sidecars']) == required, 'Incomplete audit sidecars: ' + group)
+        parent = local(r['audit_receipts'][group]['path']).parent
+        r['audit_sidecars'][group] = {name: ref(parent / name, spec['sidecars'][name]) for name in sorted(required)}
+
+    peer, protocol = read(r['terminal_independent_peer']), read(r['root_protocol_verification'])
+    need(peer['status'] == 'PASS_TERMINAL_EVIDENCE_PENDING_ROOT_SIGNATURE' and peer['blockers'] == [], 'Terminal peer must pass')
+    need(protocol['status'] == 'ROOT_NEXT_SEVEN_INDEPENDENT_TERMINAL_PROTOCOL_PASS_PENDING_FINAL_ACCEPTANCE', 'ROOT protocol must pass')
+    census = read(r['candidate_census']); counts = {k: a[field] for k, field in COUNT_FIELDS.items()}
+    for k in ('owned_modules', 'complete_serialized_declarations', 'distinct_constant_fullnames', 'original_owned_receipts_rehashed'):
+        need(counts[k] == census[k] == peer['derived_counts'][k] == protocol['derived_counts'][k], 'Actual count disagreement: ' + k)
+    need(counts['actual_new_module_record_counts'] == peer['derived_new_module_records'] == protocol['actual_new_module_record_counts'], 'Per-module counts differ')
+    need(set(counts['actual_new_module_record_counts']) == set(targets), 'Count map target mismatch')
+    need(a['main_1_plus_1_75'] == 'OPEN' and a['weighted_estimate'] == 30
+         and a['trust_mode'] == 'NORMAL_IMPORTED_ENVIRONMENT_TRUST'
+         and all(a[k] is False for k in ('external_closure_replayed', 'project_import_closure_replayed', 'unconditional_main_proved')), 'Trust/main scope changed')
+    plan['acceptance_bindings'] = {role: '/' + field for role, field in BINDINGS.items()}
+    plan['acceptance_schema'] = {
+        'status': schema(a, ('status', 'main_1_plus_1_75', 'weighted_estimate', 'trust_mode', 'external_closure_replayed', 'project_import_closure_replayed', 'unconditional_main_proved', 'old209_whole_entries_deep_equal', 'old5511_complete_records_deep_equal', 'new_fullname_collisions')),
+        'counts': {k: {'json_pointer': '/' + field, 'measure': k} for k, field in COUNT_FIELDS.items()},
+    }
+    plan['terminal_evidence_schema'] = {
+        'peer': schema(peer, ('status', 'blockers', 'derived_counts', 'derived_new_module_records', 'historical_entries_deep_equal', 'historical_records_deep_equal', 'trust_mode', 'external_closure_replayed', 'project_import_closure_replayed', 'unconditional_main_proved', 'main_1_plus_1_75', 'weighted_estimate')),
+        'protocol': schema(protocol, ('status', 'derived_counts', 'actual_new_module_record_counts', 'old209_entries_deep_equal', 'old5511_records_deep_equal', 'trust_mode', 'external_closure_replayed', 'project_import_closure_replayed', 'unconditional_main_proved')),
+    }
+    plan['accepted_counts'] = counts; plan['computed_counts'] = counts.copy()
+    need(len(args.base_head) == 40 and set(args.base_head) <= set('0123456789abcdef') and args.base_head.startswith('908df28'), 'ROOT must supply full reviewed 908df28 base HEAD')
+    plan['base_git_head'] = args.base_head
+    attrs_ref = current('.gitattributes'); attrs = local(attrs_ref['path']).read_bytes()
+    lines = [m.replace('.', '/') + '.lean -text' for m in targets] + [plan['package_path'] + '/** -text']
+    need(lines == plan['root_gitattributes_append_lines'] and all(x.encode() not in attrs.splitlines() for x in lines), 'Attributes already changed or rules differ')
+    required_attrs = attrs + (b'' if attrs.endswith(b'\n') else b'\n') + b''.join((x + '\n').encode() for x in lines)
+    plan['root_gitattributes_before_sha256'] = sha(attrs); plan['required_root_gitattributes_sha256'] = sha(required_attrs)
+
+    capture = read(r['fresh_capture_refs'])
+    supplements = {'actual_ROOT_signature_helper': ref(SIGNER, SIGNER_SHA),
+                   'actual_ROOT_source_capture_helper': ref(capture['capture_script']),
+                   'actual_ROOT_protocol_V3_helper': ref(protocol['verifier']),
+                   'this_plan_binder_source': current(Path(__file__).resolve())}
+    for role, (path, digest) in HISTORICAL_SUPPLEMENTS.items(): supplements[role] = ref(path, digest)
+    execution = peer['reviewer_verifier_execution']
+    supplements['independent_terminal_verifier'] = ref(execution['path'], execution['sha256'])
+    for key in ('raw_stdout', 'packaging_script'): supplements['independent_terminal_' + key] = ref(execution[key])
+    plan['supplemental_evidence_roles'] = supplements
+    plan['supplemental_evidence_scope'] = 'Historical failures and import installation records are provenance only; current qualification uses the signed V2 intake and original terminal receipts. No stale V1 intake/cache is promoted.'
+    plan['intake_records'] = list({(v['path'], v['sha256']): v for v in supplements.values()}.values())
+    plan['future_collector_outputs'] = {'candidate_census_path': r['candidate_census']['path'], 'complete_records_path': r['complete_records']['path'], 'collector_proposal_path': r['collector_proposal']['path'], 'all_hashes_pending_collector_completion': False}
+    plan['status'] = 'ROOT_BOUND_NEXT_SEVEN_PUBLICATION_INPUT_PLAN'; plan['git_writes_performed'] = False
+    need(plan['inherited_archive'] == inherited and plan['standalone_verifier'] == verifier, 'Inherited archive/verifier changed')
+    for p, digest in inputs.items(): need(sha(p.read_bytes()) == digest, 'Input drift before plan write: ' + str(p))
+    out = local(args.output)
+    need(out.parent == state / 'source-reviews' and out.name.endswith('-input-plan.json') and not out.exists(), 'Fresh scoped archive input-plan output required')
+    need(args.write_plan, 'ROOT must explicitly pass --write-plan after reviewing this binder')
+    with out.open('x', encoding='utf-8', newline='\n') as f: f.write(json.dumps(plan, ensure_ascii=False, indent=2) + '\n')
+    print(json.dumps({'status': 'ROOT_BOUND_ARCHIVE_PLAN_WRITTEN_NO_PACKAGE_OR_GIT_WRITES', 'plan': {'path': out.relative_to(root).as_posix(), 'sha256': sha(out.read_bytes())}, 'accepted_counts': counts}))
+
+if __name__ == '__main__': main()
