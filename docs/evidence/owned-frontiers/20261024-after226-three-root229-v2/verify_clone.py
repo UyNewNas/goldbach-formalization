@@ -1,0 +1,391 @@
+"""UNEXECUTED SOURCEONLY finite three-module archive/standalone byte verifier.
+
+Future prepare reads explicit ROOT evidence and Git blobs, then writes one fresh
+archive directory. It never stages/commits/pushes, edits sources or .gitattributes,
+imports evidence/helpers, runs Lean/checkers, or walks historical JSON ancestry.
+Clone verification checks archived bytes/records under normal import trust only.
+"""
+import argparse
+import gzip
+import hashlib
+import json
+from pathlib import Path, PurePosixPath
+
+WSL_ROOT = '/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation'
+WINDOWS_ROOT = 'E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation'
+BASE = 'docs/evidence/owned-frontiers/20261024-after221-root-accepted-successor-v1'
+BASE_COMMIT = '346f61f2a1c1a0f98ce2b34f6bd3e652b46897e3'
+BASE_MANIFEST_SHA = '09fe6eb08a922e5bc8e22574554fe5eeb9215cde2f9027b8af05c81f63585f10'
+BASE_PLAN_SHA = 'ad3b913d32140984be6d17322c3b9fcf777bab63359844c1073b15f8d49a5f2b'
+BASE_ACCEPTANCE_SHA = '7277981c004f0712e34d34e08f5d0ef4b070df2e1a05eae2dd8a01a9761e91ca'
+BASE_PUBLICATION = {'path': '.lake/proof-continuation/publication-integrity/20261024-root226-GITHUB-PUBLICATION.json',
+                    'sha256': '3885ad2a5fe01291402562fe3226c424706f333729a74a3dab1208fed68bd634'}
+TARGETS = {
+    'ImbalancedChen.Part4ActualThirdOriginalClosedSplitAggregation': '27c9daffb5b47294f4f73b954f2512c12a77102655488d6b300726d581749a98',
+    'ImbalancedChen.Part4ActualThirdOriginalFirstChordQuery': 'ebbe1299c206348423e5ccffe4b9e2a77f397b20cc2e2fa23ac8cf334e43498d',
+    'ImbalancedChen.Part3FreeEpsilonActualCount': '0b2a0fabceb27d083e29f8e54114d95faad41d46d36f5c522c00d3109910ba47',
+}
+# Exact future contract explicitly defined by ROOT; no actual acceptance assumed.
+ROOT_STATUS = 'ROOT_AFTER226_THREE_TERMINAL_ACCEPTED'
+ROLE_FIELDS = {
+    'previous_root_acceptance': 'previous_root_acceptance',
+    'proposal': 'collector_acceptance_proposal',
+    'current_census': 'current_census',
+    'complete_declarations': 'complete_declarations',
+    'intake': 'complete_original_evidence_intake',
+    'collector_source': 'collector_source',
+    'collector_source_peer': 'collector_source_peer',
+    'terminal_review': 'terminal_independent_review',
+    'terminal_execution_cp': 'terminal_independent_execution_cp',
+    'finite_capture': 'normal_import_trust_capture',
+    'execution_witness': 'execution_witness',
+    'root_adoption_source': 'root_adoption_source',
+}
+BOUND_ROOT_SHA = '4526bf2a1fa10b336af0964d2322793de349d903bb7814d650b9ac6c2d3d5377'
+MAX_RAW = 96 * 1024 * 1024
+STD3 = {'propext', 'Classical.choice', 'Quot.sound'}
+CONTROL_FILES = {'verify_clone.py', 'root-gitattributes-before.raw', 'root-gitattributes-required.raw',
+                 'root-gitattributes-proposed.raw', 'README.txt', 'stage-paths.nul'}
+SCOPE = {'trust_mode': 'NORMAL_IMPORTED_ENVIRONMENT_TRUST', 'main_1_plus_1_75': 'OPEN',
+         'weighted_estimate': 30, 'external_closure_replayed': False,
+         'project_import_closure_replayed': False, 'unconditional_main_proved': False,
+         'ci_pass_claimed': False}
+
+
+def need(ok, message):
+    if not ok:
+        raise ValueError(message)
+
+
+def digest(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def encoded(value):
+    return (json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + '\n').encode('utf-8')
+
+
+def relative(name):
+    need(isinstance(name, str) and name and '\x00' not in name, 'Path string required')
+    name = name.replace(chr(92), '/')
+    for prefix in (WSL_ROOT, WINDOWS_ROOT):
+        if name.startswith(prefix + '/'):
+            name = name[len(prefix) + 1:]
+            break
+    p = PurePosixPath(name)
+    need(not p.is_absolute() and ':' not in name and all(x not in ('', '.', '..') for x in name.split('/')), 'Outside fixed repository: ' + name)
+    return p.as_posix()
+
+
+def pair(reference):
+    need(isinstance(reference, dict) and set(reference) == {'path', 'sha256'}, 'Exact path/SHA pair required')
+    sha = reference['sha256']
+    need(isinstance(sha, str) and len(sha) == 64 and set(sha) <= set('0123456789abcdef'), 'Malformed SHA')
+    return {'path': relative(reference['path']), 'sha256': sha}
+
+
+def same(left, right):
+    return pair(left) == pair(right)
+
+
+def member(root, name):
+    path = root / relative(name)
+    resolved = path.resolve(strict=True)
+    need(resolved.is_relative_to(root.resolve()) and resolved.is_file(), 'Missing/escaping archive member')
+    return resolved
+
+
+def restore(package, row):
+    need(set(row) == {'original_path', 'source_sha256', 'source_bytes', 'stored_path', 'stored_sha256', 'encoding'}, 'Inherited payload row schema')
+    need(type(row['source_bytes']) is int and 0 <= row['source_bytes'] <= MAX_RAW, 'Inherited payload size')
+    raw = member(package, row['stored_path']).read_bytes()
+    need(digest(raw) == row['stored_sha256'], 'Inherited stored payload SHA')
+    if row['encoding'] == 'gzip-mtime0-empty-filename':
+        import io
+        with gzip.GzipFile(fileobj=io.BytesIO(raw)) as stream:
+            raw = stream.read(row['source_bytes'] + 1)
+    else:
+        need(row['encoding'] == 'raw', 'Inherited payload encoding')
+    need(len(raw) == row['source_bytes'] and digest(raw) == row['source_sha256'], 'Inherited original bytes/SHA')
+    return raw
+
+
+def load_baseline(repo):
+    package = repo / BASE
+    raw = member(package, 'archive-manifest.json').read_bytes()
+    need(digest(raw) == BASE_MANIFEST_SHA and digest(member(package, 'source-plan.json').read_bytes()) == BASE_PLAN_SHA, 'Published baseline archive bytes changed')
+    manifest = json.loads(raw)
+    documents = {}
+    for role in ('root_acceptance', 'current_census', 'complete_declarations'):
+        row = manifest['source_refs'][role]
+        documents[role] = json.loads(restore(package, row))
+    need(manifest['source_refs']['root_acceptance']['source_sha256'] == BASE_ACCEPTANCE_SHA, 'Published baseline acceptance SHA')
+    accepted = documents['root_acceptance']
+    need(accepted['status'] == 'ROOT_AFTER221_TERMINAL_ACCEPTED'
+         and [accepted[k] for k in ('owned_modules', 'declarations', 'distinct_constant_fullnames', 'original_receipts')] == [226, 6219, 6200, 160], 'Published accepted baseline counts/status')
+    for role in ('current_census', 'complete_declarations'):
+        need(pair(accepted[role]) == {'path': relative(manifest['source_refs'][role]['original_path']),
+                                    'sha256': manifest['source_refs'][role]['source_sha256']}, 'Baseline acceptance primary reference')
+    return documents
+
+
+def guarded(result, exit_key):
+    need(result['status'] == 'PASS' and type(result[exit_key]) is int and result[exit_key] == 0
+         and result['guard_error'] is None and result['rss_guard']['limit_mib'] == 6656
+         and result['rss_guard']['signals'] == [] and type(result['max_rss_kib']) is int
+         and 0 <= result['max_rss_kib'] <= 6656 * 1024
+         and isinstance(result['resource_reason'], str) and result['resource_reason'].strip(), 'Original guarded process failed')
+
+
+def record_identity(rows):
+    need(isinstance(rows, list) and len({(r['module'], r['name']) for r in rows}) == len(rows), 'Complete record identity')
+    for row in rows:
+        need(isinstance(row['name'], str) and row['name'] and isinstance(row['type'], str) and row['type'] and '\u22ef' not in row['type']
+             and all(row[k] is False for k in ('unsafe', 'partial', 'axiom'))
+             and isinstance(row['axioms'], list) and set(row['axioms']) <= STD3, 'Unsafe/truncated/non-std3 complete record')
+
+
+def validate(load, roles, baseline, source_bytes):
+    """Finite archive consistency check; does not execute producers or evidence."""
+    need(ROOT_STATUS is not None and isinstance(ROLE_FIELDS, dict), 'ROOT exact acceptance contract not installed')
+    need(set(roles) == {'root_acceptance', *ROLE_FIELDS}, 'Exact finite current role set required')
+    root = json.loads(load(roles['root_acceptance']))
+    need(root['status'] == ROOT_STATUS and pair(roles['root_acceptance'])['path'] ==
+         '.lake/proof-continuation/source-reviews/20261024d-root-after226-three-terminal-acceptance.json', 'Actual exact ROOT terminal acceptance required')
+    for role, field in ROLE_FIELDS.items():
+        need(same(root[field], roles[role]), 'ROOT current reference binding: ' + role)
+    for key in ('trust_mode', 'main_1_plus_1_75', 'weighted_estimate', 'external_closure_replayed', 'project_import_closure_replayed', 'unconditional_main_proved'):
+        need(root[key] == SCOPE[key], 'ROOT normal import claim scope')
+    need(type(root['weighted_estimate']) is int
+         and all(root[key] is False for key in ('external_closure_replayed', 'project_import_closure_replayed', 'unconditional_main_proved')), 'ROOT exact scope field types')
+    census = json.loads(load(roles['current_census']))
+    rows = json.loads(load(roles['complete_declarations']))
+    intake = json.loads(load(roles['intake']))
+    proposal = json.loads(load(roles['proposal']))
+    need(intake['targets'] == TARGETS and set(intake['strict_producers']) == set(TARGETS), 'Exact accepted three source hashes')
+    need(root['targets'] == TARGETS and root['strict_producers'] == intake['strict_producers'], 'ROOT exact target/strict producer map binding')
+    need(pair(roles['previous_root_acceptance'])['sha256'] == BASE_ACCEPTANCE_SHA
+         and json.loads(load(roles['previous_root_acceptance'])) == baseline['root_acceptance'], 'Published previous ROOT acceptance binding')
+    pin_hashes = {name: pair(ref)['sha256'] for name, ref in intake['pins'].items()}
+    need(set(pin_hashes) == {'lean-toolchain', 'lakefile.toml', 'lake-manifest.json'}, 'Project pins')
+    tools, commands = intake['tools'], intake['producer_command_paths']
+    need(same(proposal['candidate_census'], roles['current_census']) and same(proposal['complete_declarations'], roles['complete_declarations'])
+         and same(proposal['complete_original_evidence_intake'], roles['intake']), 'Actual proposal primary bindings')
+    record_identity(rows)
+    old_census, old_rows = baseline['current_census'], baseline['complete_declarations']
+    need({m: census['modules'][m] for m in old_census['modules']} == old_census['modules']
+         and set(census['modules']) == set(old_census['modules']) | set(TARGETS), 'Old226 entries deep equality/exact append')
+    need([r for r in rows if r['module'] not in TARGETS] == old_rows, 'Old6219 records deep equality')
+    new_rows = [r for r in rows if r['module'] in TARGETS]
+    need(len({r['name'] for r in new_rows}) == len(new_rows)
+         and not {r['name'] for r in new_rows} & {r['name'] for r in old_rows}, 'New fullname collision')
+    for module in TARGETS:
+        need(census['modules'][module]['module'] == module and census['modules'][module]['source_sha256'] == TARGETS[module]
+             and digest(source_bytes[module]) == TARGETS[module], 'Actual ROOT source bytes mismatch')
+        strict_spec = intake['strict_producers'][module]
+        strict = json.loads(load(strict_spec['receipt']))
+        guarded(strict, 'exit_code')
+        need(strict['module'] == module and strict['warnings_as_errors'] is True and strict['lean_memory_mib'] == 6144
+             and strict['binding'] == strict['binding_after'] and strict['binding']['source_sha256'] == TARGETS[module]
+             and strict['object_parts'] == census['modules'][module]['object_parts'], 'Original strict accepted source/object binding')
+        strict_path = PurePosixPath(relative(strict_spec['receipt']['path']))
+        need(strict_path.name == 'receipt.json' and str(strict_path.parent.parent) == '.lake/proof-continuation/runs', 'Original strict run location')
+        need(strict['binding']['pins'] == pin_hashes and strict['binding']['lean_real_sha256'] == tools['lean_real']['sha256']
+             and strict['binding']['lean_wrapper_sha256'] == tools['lean']['sha256']
+             and strict['runtime_sha256'] == strict['runtime_sha256_after'] == tools['runtime']['sha256'], 'Strict pin/compiler/runtime binding')
+        need(len(strict['command']) == 7 and strict['command'][:5] == [commands['lean'], '-j2', '-M6144', '-DwarningAsError=true', '-o']
+             and strict['command'][-1] == module.replace('.', '/') + '.lean', 'Original strict exact compiler arguments')
+        need(relative(strict_spec['stdout']['path']) == str(PurePosixPath(relative(strict_spec['receipt']['path'])).parent / 'stdout.log'), 'Exact original strict stdout')
+        load(strict_spec['stdout'])
+    need(len(intake['audit_receipts']) == 1, 'Exactly one original triple audit required')
+    spec = intake['audit_receipts'][0]
+    need(spec['targets'] == TARGETS, 'Triple audit final target binding')
+    need(set(root['actual_audits']) == {'next3'} and same(root['actual_audits']['next3'], spec['ref']), 'ROOT exact next3 original audit binding')
+    audit = json.loads(load(spec['ref']))
+    directory = PurePosixPath(relative(spec['ref']['path'])).parent
+    need(PurePosixPath(relative(spec['ref']['path'])).name == 'receipt.json'
+         and str(directory.parent) == '.lake/proof-continuation/audits', 'Original triple audit location')
+    side_names = {'OwnedAudit.lean', 'declarations.json', 'declarations.log', 'audit-process.json'}
+    side_names.update('replay-' + m + '.' + ext for m in TARGETS for ext in ('json', 'log'))
+    need(set(spec['sidecars']) == side_names, 'All original triple audit sidecars required')
+    side = {name: load({'path': str(directory / name), 'sha256': sha}) for name, sha in spec['sidecars'].items()}
+    need(audit['status'] == 'PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS' and audit['targets'] == TARGETS
+         and audit['inputs_before'] == audit['inputs_after'] and audit['external_closure_replay_claimed'] is False
+         and audit['unconditional_main_claimed'] is False, 'Actual original triple audit status/scope')
+    need(audit['inputs_before']['sources'] == TARGETS
+         and audit['inputs_before']['owned_object_parts'] == {m: census['modules'][m]['object_parts'] for m in TARGETS}
+         and audit['inputs_before']['pins'] == pin_hashes
+         and audit['inputs_before']['lean_real_sha256'] == tools['lean_real']['sha256']
+         and audit['inputs_before']['checker_sha256'] == tools['leanchecker']['sha256'], 'Audit accepted source/object/pin/compiler snapshots')
+    need(audit['generated_audit_sha256'] == digest(side['OwnedAudit.lean'])
+         and audit['audit_runner_sha256'] == tools['audit_runner']['sha256']
+         and audit['source_template_sha256'] == tools['audit_template']['sha256'], 'Original audit generated source/runner/template')
+    process = json.loads(side['audit-process.json'])
+    guarded(process, 'returncode')
+    need(len(process['command']) == 5 and process['command'][:4] == [commands['lean'], '-j2', '-M6144', '-DwarningAsError=true']
+         and relative(process['command'][4]) == str(directory / 'OwnedAudit.lean'), 'Original ALL exact source/arguments')
+    full = [s for s in audit['stages'] if s['kind'] == 'full_inventory_type_axioms']
+    stocks = [s for s in audit['stages'] if s['kind'] == 'stock_replay']
+    need(len(full) == 1 and full[0]['exit_code'] == 0 and full[0]['command'] == process['command']
+         and full[0]['log_sha256'] == digest(side['declarations.log']), 'Original ALL stage/log')
+    need(len(stocks) == 3 and {s['module'] for s in stocks} == set(TARGETS), 'Original triple stock coverage')
+    for stage in stocks:
+        module, result = stage['module'], stage['result']
+        guarded(result, 'returncode')
+        need(result['command'] == [commands['leanchecker'], '--verbose', module]
+             and result == json.loads(side['replay-' + module + '.json'])
+             and result['log_sha256'] == digest(side['replay-' + module + '.log']), 'Original stock command/sidecar')
+    emitted, inventory = [], {}
+    for line in side['declarations.log'].decode('utf-8').splitlines():
+        if line.startswith('P0_QUEUE_DECL '):
+            emitted.append(json.loads(line.split(' ', 1)[1]))
+        elif line.startswith('P0_QUEUE_INVENTORY '):
+            row = json.loads(line.split(' ', 1)[1])
+            need(row['module'] not in inventory, 'Duplicate inventory')
+            inventory[row['module']] = row
+    audit_rows = json.loads(side['declarations.json'])
+    key = lambda row: (row['module'], row['name'])
+    need(sorted(audit_rows, key=key) == sorted(emitted, key=key) == sorted(new_rows, key=key)
+         and set(inventory) == set(TARGETS), 'Original emitted/JSON/census new complete records')
+    counts = {m: sum(r['module'] == m for r in new_rows) for m in TARGETS}
+    need(audit['declaration_counts'] == counts, 'Actual audit derived counts')
+    for module, count in counts.items():
+        names = {r['name'] for r in new_rows if r['module'] == module}
+        inv = inventory[module]
+        need(count > 0 and len(inv['environment']) == len(set(inv['environment'])) == count
+             and len(inv['serialized']) == len(set(inv['serialized'])) == count
+             and names == set(inv['serialized']) == set(inv['environment']), 'Complete ALL inventory')
+        entry = census['modules'][module]
+        need(same({'path': entry['owned_receipt'], 'sha256': entry['owned_receipt_sha256']}, spec['ref'])
+             and entry['declarations_json_sha256'] == digest(side['declarations.json'])
+             and entry['complete_serialized_declarations'] == count, 'Accepted census original audit binding')
+    measured = {'owned_modules': len(census['modules']), 'declarations': len(rows),
+                'distinct_constant_fullnames': len({r['name'] for r in rows}),
+                'original_receipts': len({relative(e['owned_receipt']) for e in census['modules'].values()}),
+                'new_record_counts': counts}
+    need(relative(spec['ref']['path']) not in {relative(e['owned_receipt']) for e in old_census['modules'].values()}, 'New triple audit cannot reuse an old primary receipt locator')
+    need(census['owned_modules'] == measured['owned_modules'] and census['complete_serialized_declarations'] == measured['declarations']
+         and census['distinct_constant_fullnames'] == measured['distinct_constant_fullnames']
+         and census['original_owned_receipts_rehashed'] == measured['original_receipts'], 'Census summaries from original complete records')
+    need([root[k] for k in ('owned_modules', 'declarations', 'distinct_constant_fullnames', 'original_receipts')]
+         == [measured[k] for k in ('owned_modules', 'declarations', 'distinct_constant_fullnames', 'original_receipts')], 'ROOT counts from actual records plus one original triple receipt')
+    expected_added = [len(TARGETS), len(new_rows), len({r['name'] for r in new_rows}), measured['original_receipts'] - 160]
+    integer_fields = ('owned_modules', 'declarations', 'distinct_constant_fullnames', 'original_receipts',
+                      'added_modules', 'added_complete_serialized_declarations', 'added_distinct_constant_fullnames', 'added_original_receipts')
+    need(all(type(root[key]) is int for key in integer_fields)
+         and [root[k] for k in integer_fields[4:]] == expected_added
+         and root['actual_new_module_record_counts'] == counts
+         and all(type(value) is int for value in root['actual_new_module_record_counts'].values()), 'ROOT exact added counts from actual complete records')
+    review = json.loads(load(roles['terminal_review']))
+    need(review['status'] == 'FINITE_RECORD_STAGE_TERMINAL_REVIEW_PASS_NOT_ROOT_ACCEPTANCE'
+         and review['reviewed_collector_sha256'] == roles['collector_source']['sha256'], 'Actual terminal review of exact collector')
+    derived = review['artifact_derived_counts']
+    need([derived[k] for k in ('owned_modules', 'declarations', 'distinct_constant_fullnames', 'unique_owned_receipt_paths')]
+         == [measured[k] for k in ('owned_modules', 'declarations', 'distinct_constant_fullnames', 'original_receipts')]
+         and derived['new_records_by_module'] == counts and derived['old_entries_deep_equal'] is True
+         and derived['old_records_deep_equal'] is True, 'Terminal review actual derived counts/deep equality')
+    return measured
+
+
+def verify_archive(repo, package, expected_root_sha):
+    manifest = json.loads(member(package, 'archive-manifest.json').read_bytes())
+    need(manifest['schema'] == 'after226-three-finite-original-evidence-archive-v1'
+         and manifest['scope'] == SCOPE and manifest['baseline_commit'] == BASE_COMMIT, 'Archive schema/scope/baseline commit')
+    need(pair(manifest['roles']['root_acceptance'])['sha256'] == expected_root_sha, 'Pinned ROOT acceptance SHA')
+    payloads = manifest['payloads']
+    need(len({p['original_path'] for p in payloads}) == len(payloads), 'Duplicate archived original locator')
+    need([row['original_path'] for row in payloads] == sorted(relative(row['original_path']) for row in payloads), 'Canonical exact original locator order')
+    index = {}
+    for ordinal, row in enumerate(payloads):
+        need(set(row) == {'original_path', 'sha256', 'bytes', 'stored_path'}, 'Raw payload row schema')
+        need(row['stored_path'] == 'p/' + str(ordinal).zfill(3) + '-' + row['sha256'] + '.raw', 'Exact finite raw payload member name')
+        raw = member(package, row['stored_path']).read_bytes()
+        need(type(row['bytes']) is int and len(raw) == row['bytes'] <= MAX_RAW and digest(raw) == row['sha256'], 'Exact raw archived bytes/SHA/size')
+        index[relative(row['original_path'])] = (row['sha256'], raw)
+    def load(reference):
+        ref = pair(reference)
+        need(ref['path'] in index and index[ref['path']][0] == ref['sha256'], 'Explicit original absent/wrong SHA')
+        return index[ref['path']][1]
+    expected_payloads = {}
+    def expect(reference):
+        ref = pair(reference)
+        need(ref['path'] not in expected_payloads or expected_payloads[ref['path']] == ref['sha256'], 'Conflicting finite payload references')
+        expected_payloads[ref['path']] = ref['sha256']
+        return load(reference)
+    inputs = json.loads(expect(manifest['archive_inputs']))
+    need(set(inputs) == {'roles', 'reviewed_helpers', 'baseline_publication', 'terminal_execution_cp'}, 'Archived exact parameter fields')
+    need(inputs['roles'] == manifest['roles'] and inputs['reviewed_helpers'] == manifest['reviewed_helpers']
+         and same(inputs['terminal_execution_cp'], manifest['terminal_execution_cp'])
+         and same(inputs['baseline_publication'], manifest['baseline_publication'])
+         and same(manifest['baseline_publication'], BASE_PUBLICATION), 'Archived parameter/manifest exact binding')
+    expect(manifest['baseline_publication'])
+    for reference in manifest['roles'].values():
+        expect(reference)
+    for reference in manifest['reviewed_helpers'].values():
+        expect(reference)
+    expect(manifest['terminal_execution_cp'])
+    intake = json.loads(load(manifest['roles']['intake']))
+    need(set(intake['strict_producers']) == set(TARGETS) and len(intake['audit_receipts']) == 1, 'Finite original producer scope')
+    for spec in intake['strict_producers'].values():
+        need(set(spec) == {'receipt', 'stdout'}, 'Finite original strict reference fields')
+        expect(spec['receipt'])
+        expect(spec['stdout'])
+    spec = intake['audit_receipts'][0]
+    need(set(spec) == {'ref', 'targets', 'sidecars'}, 'Finite original audit fields')
+    expect(spec['ref'])
+    directory = PurePosixPath(relative(spec['ref']['path'])).parent
+    side_names = {'OwnedAudit.lean', 'declarations.json', 'declarations.log', 'audit-process.json'}
+    side_names.update('replay-' + m + '.' + ext for m in TARGETS for ext in ('json', 'log'))
+    need(set(spec['sidecars']) == side_names, 'Finite original audit sidecar set')
+    for name, sha in spec['sidecars'].items():
+        expect({'path': str(directory / name), 'sha256': sha})
+    need({name: value[0] for name, value in index.items()} == expected_payloads, 'Unexpected/missing original payload outside exact current scope')
+    need(same(manifest['terminal_execution_cp'], manifest['roles']['terminal_execution_cp']), 'Archived ROOT terminal CP reference')
+    load(manifest['terminal_execution_cp']).decode('utf-8')
+    helpers = manifest['reviewed_helpers']
+    need(set(helpers) == {'collector', 'collector_peer', 'reviewer', 'reviewer_peer', 'archiver', 'archiver_peer'}, 'Archived helper role set')
+    for reference in helpers.values():
+        load(reference)
+    need(same(helpers['collector'], manifest['roles']['collector_source'])
+         and same(helpers['collector_peer'], manifest['roles']['collector_source_peer']), 'Archived ROOT collector/helper binding')
+    sources = {m: member(repo, m.replace('.', '/') + '.lean').read_bytes() for m in TARGETS}
+    baseline = load_baseline(repo)
+    counts = validate(load, manifest['roles'], baseline, sources)
+    for module, entry in baseline['current_census']['modules'].items():
+        need(digest(member(repo, module.replace('.', '/') + '.lean').read_bytes()) == entry['source_sha256'], 'Inherited accepted source bytes differ in clone: ' + module)
+    need(set(manifest['control_files']) == CONTROL_FILES, 'Exact fixed archive control file set')
+    for name, row in manifest['control_files'].items():
+        raw = member(package, name).read_bytes()
+        need(set(row) == {'sha256', 'bytes'} and type(row['bytes']) is int
+             and digest(raw) == row['sha256'] and len(raw) == row['bytes'], 'Archive control bytes/SHA')
+    expected_files = {p['stored_path'] for p in payloads} | set(manifest['control_files']) | {'archive-manifest.json', 'source-plan.json'}
+    need({p.relative_to(package).as_posix() for p in package.rglob('*') if p.is_file()} == expected_files, 'Unexpected/missing archive file')
+    plan = json.loads(member(package, 'source-plan.json').read_bytes())
+    need(plan['archive_manifest_sha256'] == digest(member(package, 'archive-manifest.json').read_bytes())
+         and plan['target_sources'] == TARGETS and plan['scope'] == SCOPE, 'Source-plan manifest/source/scope binding')
+    need(plan['package_path'] == package.relative_to(repo).as_posix()
+         and same(plan['root_acceptance'], manifest['roles']['root_acceptance']), 'Plan actual package/ROOT reference')
+    stage = sorted([m.replace('.', '/') + '.lean' for m in TARGETS] + ['.gitattributes']
+                   + [plan['package_path'] + '/' + p for p in expected_files])
+    need(plan['stage_paths'] == stage, 'Only three sources, exact archive files and .gitattributes may be staged')
+    need(member(package, 'stage-paths.nul').read_bytes() == b'\x00'.join(path.encode() for path in stage) + b'\x00', 'Exact NUL pathspec')
+    need(member(package, 'root-gitattributes-required.raw').read_bytes() ==
+         (''.join(m.replace('.', '/') + '.lean -text\n' for m in TARGETS) + plan['package_path'] + '/** -text\n').encode(), 'Exactly four new -text rules')
+    before = member(package, 'root-gitattributes-before.raw').read_bytes()
+    rules = member(package, 'root-gitattributes-required.raw').read_bytes()
+    proposed = member(package, 'root-gitattributes-proposed.raw').read_bytes()
+    need(proposed == before + (b'\n' if before and not before.endswith(b'\n') else b'') + rules
+         and digest(before) == plan['gitattributes_before_sha256']
+         and digest(proposed) == plan['gitattributes_proposed_sha256'], 'Attributes exact preimage/four-rule append and plan hashes')
+    need(member(repo, '.gitattributes').read_bytes() == proposed, 'Actual committed .gitattributes differs from exact four-rule proposal')
+    return {'status': 'FINITE_ARCHIVE_BYTES_TYPES_STD3_SOURCE_HASHES_VERIFIED_NO_LEAN_REPLAY',
+            'counts': counts, 'scope': SCOPE, 'full_historical_closure_replayed': False,
+            'current_object_or_provider_replay_claimed': False}
+
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--root", required=True)
+    args = parser.parse_args()
+    print(json.dumps(verify_archive(Path(args.root).resolve(strict=True), Path(__file__).resolve().parent, BOUND_ROOT_SHA), sort_keys=True))
