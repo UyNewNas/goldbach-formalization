@@ -1,0 +1,334 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T20:25:34.923441+00:00",
+  "reviewer": "/root/dispersion_resume/reuse_endpoint_audit",
+  "status": "SOURCE_ONLY_INDEPENDENT_SEMANTIC_REVIEW_NO_VISIBLE_MATHEMATICAL_BLOCKER",
+  "candidate": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3TransposedPrimitiveU.lean",
+    "sha256": "170c1fe16a9f5ed1a930cdca8ff590a1ed8c0789b34369669fd1ee604dc8e701",
+    "source_declaration_count": 9,
+    "definition_count": 1,
+    "saved_snapshot": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/Part3TransposedPrimitiveU.170c1fe16a9f5ed1a930cdca8ff590a1ed8c0789b34369669fd1ee604dc8e701.lean"
+  },
+  "all_complete_source_headers": [
+    {
+      "name": "alpha_l1_le_twice_U",
+      "kind": "theorem",
+      "private": false,
+      "line": 27,
+      "complete_source_header": "theorem alpha_l1_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ n ∈ d.alphaCarrier, ‖d.alpha n‖) ≤ 2 * d.U"
+    },
+    {
+      "name": "coprimeMass_norm_le_twice_U",
+      "kind": "theorem",
+      "private": false,
+      "line": 48,
+      "complete_source_header": "theorem coprimeMass_norm_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (q : ℕ) :\n    ‖coprimeMass d.alphaCarrier d.alpha q‖ ≤ 2 * d.U"
+    },
+    {
+      "name": "actual_principalRow_eq_grouped",
+      "kind": "theorem",
+      "private": false,
+      "line": 62,
+      "complete_source_header": "theorem actual_principalRow_eq_grouped (d : MediumAtom) (m : ℕ) :\n    d.transposedAtom.complexPrincipalRow m =\n      ∑ q ∈ d.physicalFactorModuli,\n        d.groupedFactorGamma q *\n          (if m.Coprime q then coprimeMass d.alphaCarrier d.alpha q else 0) /\n            (q.totient : ℂ)"
+    },
+    {
+      "name": "primitivePairCoefficient",
+      "kind": "def",
+      "private": false,
+      "line": 99,
+      "complete_source_header": "def primitivePairCoefficient (d : MediumAtom) (q r : ℕ) : ℂ"
+    },
+    {
+      "name": "actual_principalRow_norm_sq_eq",
+      "kind": "theorem",
+      "private": false,
+      "line": 104,
+      "complete_source_header": "theorem actual_principalRow_norm_sq_eq (d : MediumAtom) (m : ℕ) :\n    ((‖d.transposedAtom.complexPrincipalRow m‖ ^ 2 : ℝ) : ℂ) =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        primitivePairCoefficient d q r *\n          (if m.Coprime (q * r) then (1 : ℂ) else 0)"
+    },
+    {
+      "name": "actualU_eq_coprime_sum",
+      "kind": "theorem",
+      "private": false,
+      "line": 123,
+      "complete_source_header": "theorem actualU_eq_coprime_sum (d : MediumAtom) :\n    (d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        primitivePairCoefficient d q r *\n          ((∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n            if m.Coprime (q * r) then d.transposedAtom.commonSmoothWeight m else 0 : ℝ) : ℂ)"
+    },
+    {
+      "name": "primitiveZeroMain_eq_grouped",
+      "kind": "theorem",
+      "private": false,
+      "line": 147,
+      "complete_source_header": "theorem primitiveZeroMain_eq_grouped (d : MediumAtom) :\n    primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        primitivePairCoefficient d q r *\n          (((d.V * CommonSmoothCutoff.cutoffMass) * ((q * r).totient : ℝ) /\n            (q * r : ℕ) : ℝ) : ℂ)"
+    },
+    {
+      "name": "actualU_sub_primitive_eq",
+      "kind": "theorem",
+      "private": false,
+      "line": 187,
+      "complete_source_header": "theorem actualU_sub_primitive_eq (d : MediumAtom) :\n    (d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        primitivePairCoefficient d q r *\n          (((∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n            if m.Coprime (q * r) then d.transposedAtom.commonSmoothWeight m else 0) -\n            (d.V * CommonSmoothCutoff.cutoffMass) * ((q * r).totient : ℝ) /\n              (q * r : ℕ) : ℝ) : ℂ)"
+    },
+    {
+      "name": "actualU_sub_primitive_finite_bound",
+      "kind": "theorem",
+      "private": false,
+      "line": 205,
+      "complete_source_header": "theorem actualU_sub_primitive_finite_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n          C * ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n            ‖primitivePairCoefficient d q r‖ * ((q * r).divisors.card : ℝ)"
+    }
+  ],
+  "all_complete_definition_source_blocks": [
+    {
+      "name": "primitivePairCoefficient",
+      "complete_definition_source_block": "def primitivePairCoefficient (d : MediumAtom) (q r : ℕ) : ℂ :=\n  d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\n    coprimeMass d.alphaCarrier d.alpha q * star (coprimeMass d.alphaCarrier d.alpha r) /\n      ((q.totient : ℂ) * (r.totient : ℂ))"
+    }
+  ],
+  "all_proof_bodies_read": true,
+  "independent_semantic_findings": [
+    "alpha_l1_le_twice_U uses exactly the original alphaCarrier interval filter and the original admissible pointwise |alpha|<=1; positive U makes it a subset of Ioc 0 floor(2U), yielding <=2U. coprimeMass only discards terms before applying this bound.",
+    "actual_principalRow_eq_grouped first uses exact transposed-beta extension by zero to return to the original alpha interval. Coprime(m*n,q) splits into coprime(m,q) and coprime(n,q). Full original three-factor complex gamma labels are then grouped exactly by physical modulus; no gamma norm is substituted during this identity.",
+    "primitivePairCoefficient is groupedGamma(q)*conj(groupedGamma(r))*Cq*conj(Cr)/(phi(q)*phi(r)). The squared principal row expands into this coefficient times coprime(m,q*r). This is exact complex Hermitian algebra, valid with total division even for degenerate data.",
+    "actualU_eq_coprime_sum retains the original-V common smoothing and common finite carrier of the transposed atom. Finite sums commute to put the smooth coprime count inside each physical-modulus pair.",
+    "primitiveZeroMain_eq_grouped groups the exact full-label P0. Its scalar is original V times local cutoffMass and its density is phi(q*r)/(phi(q)*phi(r)*(q*r)), exactly matching primitivePairCoefficient times V*localMass*phi(q*r)/(q*r). No external integral scalar is substituted.",
+    "actualU_sub_primitive_eq is the exact difference, with the literal U expression preserved. It does not identify literal U with P0.",
+    "actualU_sub_primitive_finite_bound chooses one positive C before every B,sigma,kappa,c0,d. Physical q,r are positive by the existing subset-cap theorem. The local smooth coprime theorem at modulus q*r, scale V>0 and the actual support-containing carrier gives C*tau_2(q*r). Multiplying by coefficient norms and summing proves the displayed finite envelope; this envelope is a conclusion, not an extra caller assumption."
+  ],
+  "direct_imports_v2": {
+    "module_header": false,
+    "prelude": false,
+    "imports": [
+      {
+        "module": "Init",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": false,
+        "explicit_visibility": null,
+        "implicit": true
+      },
+      {
+        "module": "Init",
+        "is_meta": true,
+        "import_all": false,
+        "is_exported": false,
+        "explicit_visibility": null,
+        "implicit": true
+      },
+      {
+        "module": "ImbalancedChen.Part3TransposedZeroCovariance",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": true,
+        "explicit_visibility": null,
+        "implicit": false
+      },
+      {
+        "module": "ImbalancedChen.Part3SmoothCoprimeError",
+        "is_meta": false,
+        "import_all": false,
+        "is_exported": true,
+        "explicit_visibility": null,
+        "implicit": false
+      }
+    ],
+    "parser_findings": []
+  },
+  "current_direct_source_bindings": {
+    "ImbalancedChen.Part3TransposedZeroCovariance": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2",
+    "ImbalancedChen.Part3SmoothCoprimeError": "dabf4c7f1a84ae97e4a4a9d64be65bb368bd7150502c37a894e4fd743142c87e"
+  },
+  "parent_acceptance_boundary": {
+    "ZeroCovariance2c96": "staged pending parent at this review; no owned/runtime acceptance inferred",
+    "SmoothCoprime_dabf": "staged pending parent at this review; no owned/runtime acceptance inferred"
+  },
+  "source_side_primitive_definitions_and_public_supplier_types": [
+    {
+      "module": "ImbalancedChen.Part3TransposedZeroCovariance",
+      "source_sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2",
+      "name": "coprimeMass",
+      "kind": "def",
+      "private": false,
+      "line": 39,
+      "complete_source_header": "def coprimeMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) (q : ℕ) : R",
+      "complete_definition_source_block": "def coprimeMass {R : Type*} [AddCommMonoid R]\n    (N : Finset ℕ) (beta : ℕ → R) (q : ℕ) : R :=\n  ∑ n ∈ N, if n.Coprime q then beta n else 0"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedZeroCovariance",
+      "source_sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2",
+      "name": "primitiveZeroMain",
+      "kind": "def",
+      "private": false,
+      "line": 440,
+      "complete_source_header": "def primitiveZeroMain (d : MediumAtom) : ℂ",
+      "complete_definition_source_block": "def primitiveZeroMain (d : MediumAtom) : ℂ :=\n  ((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) *\n    ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n      d.complexFactorGamma a * star (d.complexFactorGamma b) *\n        coprimeMass d.alphaCarrier d.alpha (complexFactorModulus a) *\n          star (coprimeMass d.alphaCarrier d.alpha (complexFactorModulus b)) *\n            (((complexFactorModulus a * complexFactorModulus b).totient : ℂ) /\n              (((complexFactorModulus a).totient : ℂ) *\n                ((complexFactorModulus b).totient : ℂ) *\n                  (complexFactorModulus a * complexFactorModulus b : ℕ)))\n\n/-- Zero-mode discrepancy is exactly the original-alpha covariance,\nwith each original complex factor fiber retained by an exact identity. -/"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedZeroCovariance",
+      "source_sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2",
+      "name": "factor_pair_sum_eq_grouped",
+      "kind": "theorem",
+      "private": false,
+      "line": 353,
+      "complete_source_header": "theorem factor_pair_sum_eq_grouped (d : MediumAtom) (f : ℕ → ℕ → ℂ) :\n    (∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n      d.complexFactorGamma a * star (d.complexFactorGamma b) *\n        f (complexFactorModulus a) (complexFactorModulus b)) =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        d.groupedFactorGamma q * star (d.groupedFactorGamma r) * f q r"
+    },
+    {
+      "module": "ImbalancedChen.Part3SmoothCoprimeError",
+      "source_sha256": "dabf4c7f1a84ae97e4a4a9d64be65bb368bd7150502c37a894e4fd743142c87e",
+      "name": "scaledDyadicCutoff_finset_coprime_uniform_error",
+      "kind": "theorem",
+      "private": false,
+      "line": 101,
+      "complete_source_header": "theorem scaledDyadicCutoff_finset_coprime_uniform_error :\n    ∃ C : ℝ, 0 < C ∧ ∀ M : ℝ, 0 < M → ∀ S : Finset ℕ,\n      (∀ m : ℕ, scaledDyadicCutoff M m ≠ 0 → m ∈ S) →\n      ∀ q : ℕ, q ≠ 0 →\n      |(∑ m ∈ S, if m.Coprime q then scaledDyadicCutoff M m else 0) -\n          (M * cutoffMass) * (q.totient : ℝ) / q| ≤ C * q.divisors.card"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedDispersion",
+      "source_sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+      "name": "MediumAtom.transposedAtom",
+      "kind": "def",
+      "private": false,
+      "line": 34,
+      "complete_source_header": "def MediumAtom.transposedAtom (d : MediumAtom) : MediumAtom",
+      "complete_definition_source_block": "def MediumAtom.transposedAtom (d : MediumAtom) : MediumAtom :=\n  { d with\n    U := d.V\n    V := d.U\n    intervalLo := -1\n    intervalHi := (Nat.floor (2 * d.V) : ℝ)\n    alpha := d.beta\n    beta := fun n ↦ if n ∈ d.alphaCarrier then d.alpha n else 0 }"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedDispersion",
+      "source_sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+      "name": "MediumAtom.sum_transposedBeta_mul",
+      "kind": "theorem",
+      "private": false,
+      "line": 67,
+      "complete_source_header": "theorem MediumAtom.sum_transposedBeta_mul (d : MediumAtom) (f : ℕ → ℂ) :\n    (∑ n ∈ d.transposedAtom.betaCarrier, d.transposedAtom.beta n * f n) =\n      ∑ n ∈ d.alphaCarrier, d.alpha n * f n"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedDispersion",
+      "source_sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+      "name": "MediumAtom.transposedSmoothWeight_support_subset",
+      "kind": "theorem",
+      "private": false,
+      "line": 211,
+      "complete_source_header": "theorem MediumAtom.transposedSmoothWeight_support_subset\n    {d : MediumAtom} (hV : 1 ≤ d.V) {n : ℕ}\n    (hn : d.transposedAtom.commonSmoothWeight n ≠ 0) :\n    n ∈ d.transposedAtom.commonSmoothCarrier"
+    },
+    {
+      "module": "ImbalancedChen.Part3ComplexDispersion",
+      "source_sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+      "name": "MediumAtom.complexPrincipalRow",
+      "kind": "def",
+      "private": false,
+      "line": 66,
+      "complete_source_header": "def MediumAtom.complexPrincipalRow (d : MediumAtom) (n : ℕ) : ℂ",
+      "complete_definition_source_block": "def MediumAtom.complexPrincipalRow (d : MediumAtom) (n : ℕ) : ℂ :=\n  ∑ l ∈ d.complexRowLabels,\n    d.complexFactorGamma l.1 * d.beta l.2 *\n      (if (n * l.2).Coprime (complexFactorModulus l.1) then 1 else 0) /\n        (Nat.totient (complexFactorModulus l.1) : ℂ)"
+    },
+    {
+      "module": "ImbalancedChen.Part3ComplexDispersion",
+      "source_sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+      "name": "MediumAtom.complexDispersionU",
+      "kind": "def",
+      "private": false,
+      "line": 182,
+      "complete_source_header": "def MediumAtom.complexDispersionU (d : MediumAtom) (S : Finset ℕ)\n    (w : ℕ → ℝ) : ℝ",
+      "complete_definition_source_block": "def MediumAtom.complexDispersionU (d : MediumAtom) (S : Finset ℕ)\n    (w : ℕ → ℝ) : ℝ :=\n  ∑ n ∈ S, w n * ‖d.complexPrincipalRow n‖ ^ 2\n\n/-- The complex cross term uses its real part, with the primitive centre\nretained. It is not the product of two real surrogate rows. -/"
+    },
+    {
+      "module": "ImbalancedChen.Part3ComplexDispersion",
+      "source_sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+      "name": "complex_norm_sq_sum_eq_double_star",
+      "kind": "theorem",
+      "private": false,
+      "line": 242,
+      "complete_source_header": "theorem complex_norm_sq_sum_eq_double_star {iota : Type*} (S : Finset iota)\n    (f : iota → ℂ) :\n    ((‖∑ i ∈ S, f i‖ ^ 2 : ℝ) : ℂ) =\n      ∑ i ∈ S, ∑ j ∈ S, f i * star (f j)"
+    },
+    {
+      "module": "ImbalancedChen.Part3CommonPoisson",
+      "source_sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+      "name": "cutoffMass",
+      "kind": "def",
+      "private": false,
+      "line": 170,
+      "complete_source_header": "def cutoffMass : ℝ",
+      "complete_definition_source_block": "def cutoffMass : ℝ := ((𝓕 dyadicCutoffSchwartz) 0).re"
+    },
+    {
+      "module": "ImbalancedChen.Part3FactorFiberDivisor",
+      "source_sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+      "name": "MediumAtom.physicalFactorModuli",
+      "kind": "def",
+      "private": false,
+      "line": 59,
+      "complete_source_header": "def MediumAtom.physicalFactorModuli (d : MediumAtom) : Finset ℕ",
+      "complete_definition_source_block": "def MediumAtom.physicalFactorModuli (d : MediumAtom) : Finset ℕ :=\n  d.complexFactorLabels.image complexFactorModulus"
+    },
+    {
+      "module": "ImbalancedChen.Part3FactorFiberDivisor",
+      "source_sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+      "name": "MediumAtom.groupedFactorGamma",
+      "kind": "def",
+      "private": false,
+      "line": 65,
+      "complete_source_header": "def MediumAtom.groupedFactorGamma (d : MediumAtom) (q : ℕ) : ℂ",
+      "complete_definition_source_block": "def MediumAtom.groupedFactorGamma (d : MediumAtom) (q : ℕ) : ℂ :=\n  ∑ r ∈ d.physicalFactorFiber q, d.complexFactorGamma r\n\n/-- The exact complex grouping is performed before any norm is taken. -/"
+    },
+    {
+      "module": "ImbalancedChen.Part3FactorFiberDivisor",
+      "source_sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+      "name": "MediumAtom.sum_factorLabels_eq_grouped",
+      "kind": "theorem",
+      "private": false,
+      "line": 69,
+      "complete_source_header": "theorem MediumAtom.sum_factorLabels_eq_grouped (d : MediumAtom) (F : ℕ → ℂ) :\n    (∑ r ∈ d.complexFactorLabels, d.complexFactorGamma r * F (complexFactorModulus r)) =\n      ∑ q ∈ d.physicalFactorModuli, d.groupedFactorGamma q * F q"
+    },
+    {
+      "module": "ImbalancedChen.Part3FactorFiberDivisor",
+      "source_sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+      "name": "MediumAtom.physicalFactorModuli_subset_cap",
+      "kind": "theorem",
+      "private": false,
+      "line": 181,
+      "complete_source_header": "theorem MediumAtom.physicalFactorModuli_subset_cap\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.physicalFactorModuli ⊆ Finset.Ioc 0 (Nat.floor d.physicalFactorCap)"
+    }
+  ],
+  "pinned_Complex_API": {
+    "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Complex/Basic.lean",
+    "sha256": "e279bd6369e83ebf6716e17a8f38c81c812020753472cac5e7ae2a501790b760",
+    "fixed_mathlib_blob_equal": true,
+    "full_header": "theorem conj_eq_iff_re {z : ℂ} : conj z = z ↔ (z.re : ℂ) = z"
+  },
+  "source_API_review": {
+    "visible_mathematical_or_definite_API_errors_found": [],
+    "relevant_actual_APIs_checked": [
+      "MediumAtom.sum_transposedBeta_mul with original alpha interval",
+      "complex_norm_sq_sum_eq_double_star",
+      "MediumAtom.transposedSmoothWeight_support_subset accepts hV:1<=V",
+      "CommonSmoothCutoff.scaledDyadicCutoff_finset_coprime_uniform_error uses q!=0",
+      "Complex.conj_eq_iff_re direction .mp"
+    ],
+    "strict_linter_and_Decidable_elaboration": "Not verified. Broad simp lists and implicit reduction must be judged by an actual diagnostic; no proactive source edits made.",
+    "forbidden_proof_tokens": []
+  },
+  "sourceDAG_delta": {
+    "relative_to": "staged union of the exact current direct parents, including all their existing imports",
+    "new_local_module": "ImbalancedChen.Part3TransposedPrimitiveU",
+    "new_foreign_modules": [],
+    "method": "Exact header parsed by frozen v2 with sys.dont_write_bytecode=True; sole/two project parents bound by actual SHA. No full census rerun, no pending chain treated as accepted."
+  },
+  "project_pin_file_sha256": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "provider_pins": {
+    "goldbach": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1"
+  },
+  "remaining_unpaid_or_unvalidated": [
+    "Actual strict runtime ownership/elaboration of both candidate and all staged prerequisites.",
+    "Finite coefficient envelope moment payment and power/log payment remain separate; no claim of RestrictedMediumObligation."
+  ],
+  "self_report_preserved": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261016-transposed-primitive-U-self-scope.json",
+    "sha256": "4cb8468ce07fdff0ea1b9b29592a36508c3793a486982d49154c6f0f8e9b4298"
+  },
+  "strict_scope_boundary": {
+    "SOURCE_ONLY": true,
+    "Lean_lake_compiler_kernel_heavy_tools_run": false,
+    "mathematical_sources_modified": false,
+    "no_object_type_axiom_linter_olean_acceptance": true,
+    "no_runtime_submission_or_authorization": true
+  }
+}

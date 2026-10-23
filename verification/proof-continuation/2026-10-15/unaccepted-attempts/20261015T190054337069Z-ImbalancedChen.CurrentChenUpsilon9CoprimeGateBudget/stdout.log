@@ -1,0 +1,124 @@
+ImbalancedChen/CurrentChenUpsilon9CoprimeGateBudget.lean:49:2: error: linarith failed to find a contradiction
+x : ℝ
+hx : 2 ≤ x
+hlog2 : 0 < Real.log 2
+hint : ∫ (t : ℝ) in 2..x, 1 / Real.log t ≤ (x - 2) / Real.log 2
+a✝ : x / Real.log 2 < 2 / Real.log 2 + ∫ (t : ℝ) in 2..x, 1 / Real.log t
+⊢ False
+failed
+ImbalancedChen/CurrentChenUpsilon9CoprimeGateBudget.lean:74:32: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (fun d => d / p) d
+in the target expression
+  p * (d / p) = p * (e / p)
+
+S : Finset ℕ
+Q p : ℕ
+hp : Nat.Prime p
+hS : S ⊆ Finset.Icc 1 Q
+T : Finset ℕ := {d ∈ S | p ∣ d}
+hT : ∀ d ∈ T, 0 < d ∧ p ∣ d
+hquotpos : ∀ d ∈ T, 0 < d / p
+d : ℕ
+hd : d ∈ ↑T
+e : ℕ
+he : e ∈ ↑T
+hde : (fun d => d / p) d = (fun d => d / p) e
+⊢ p * (d / p) = p * (e / p)
+ImbalancedChen/CurrentChenUpsilon9CoprimeGateBudget.lean:152:8: error: `push_neg` has been deprecated. Prefer using `push Not` instead.
+If you'd rather continue using `push_neg` in your project, you can implement it as follows:
+```
+open Lean.Parser.Tactic in
+macro "push_neg" cfg:optConfig loc:(location)? : tactic =>
+  `(tactic| push $cfg:optConfig Not $[$loc]?)
+```
+ImbalancedChen/CurrentChenUpsilon9CoprimeGateBudget.lean:167:4: error: No goals to be solved
+ImbalancedChen/CurrentChenUpsilon9CoprimeGateBudget.lean:169:2: error: linarith failed to find a contradiction
+N : ℕ
+hN : 1 ≤ ↑N
+S : Finset ℕ
+Q : ℕ
+hS : S ⊆ Finset.Icc 1 Q
+t : ℕ × ℕ
+ht : t ∈ chenY9PrimeSelector N (↑N ^ (19 / 125)) (↑N ^ (59 / 250))
+ha : t.1 * t.2 ∈ currentChenUpsilon9PrefixProducts N
+hp₁ : Nat.Prime t.1
+hp₂ : Nat.Prime t.2
+horder : t.1 < t.2
+hH : ↑N ^ (19 / 125) ≤ ↑t.1
+hH₂ : ↑N ^ (19 / 125) ≤ ↑t.2
+hHpos : 0 < ↑N ^ (19 / 125)
+hinv₁ : 1 / (↑t.1 - 1) ≤ 2 / ↑N ^ (19 / 125)
+hinv₂ : 1 / (↑t.2 - 1) ≤ 2 / ↑N ^ (19 / 125)
+hlog : 0 ≤ 1 + Real.log (max 1 ↑Q)
+hpoint :
+  ∀ d ∈ S,
+    (if (t.1 * t.2).Coprime d then 0 else 1 / ↑d.totient) ≤
+      (if t.1 ∣ d then 1 / ↑d.totient else 0) + if t.2 ∣ d then 1 / ↑d.totient else 0
+hbudget₁ : (∑ d ∈ S, if t.1 ∣ d then 1 / ↑d.totient else 0) ≤ 4 / (↑t.1 - 1) * (1 + Real.log (max 1 ↑Q))
+hbudget₂ : (∑ d ∈ S, if t.2 ∣ d then 1 / ↑d.totient else 0) ≤ 4 / (↑t.2 - 1) * (1 + Real.log (max 1 ↑Q))
+hsum :
+  (∑ i ∈ S, if (t.1 * t.2).Coprime i then 0 else 1 / ↑i.totient) ≤
+    (∑ x ∈ S, if t.1 ∣ x then 1 / ↑x.totient else 0) + ∑ x ∈ S, if t.2 ∣ x then 1 / ↑x.totient else 0
+hinv :
+  (1 / (↑t.1 - 1) + 1 / (↑t.2 - 1)) * (1 + Real.log (max 1 ↑Q)) ≤
+    (2 / ↑N ^ (19 / 125) + 2 / ↑N ^ (19 / 125)) * (1 + Real.log (max 1 ↑Q))
+a✝ : 16 / ↑N ^ (19 / 125) * (1 + Real.log (max 1 ↑Q)) < ∑ d ∈ S, if (t.1 * t.2).Coprime d then 0 else 1 / ↑d.totient
+⊢ False
+failed
+ImbalancedChen/CurrentChenUpsilon9CoprimeGateBudget.lean:238:38: error: `simp` made no progress
+ImbalancedChen/CurrentChenUpsilon9CoprimeGateBudget.lean:238:53: error: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hc, if_false, zero_div, mul_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/CurrentChenUpsilon9CoprimeGateBudget.lean:238:72: error: This simp argument is unused:
+  zero_div
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hc, if_true, if_false, mul_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/CurrentChenUpsilon9CoprimeGateBudget.lean:238:82: error: This simp argument is unused:
+  mul_zero
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hc, if_true, if_false, zero_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/CurrentChenUpsilon9CoprimeGateBudget.lean:349:6: error: linarith failed to find a contradiction
+ε : ℝ
+hε : 0 < ε
+hpower✝ : ∀ᶠ (N : ℕ) in atTop, 256 / Real.log 2 * ↑N ^ (106 / 125) * Real.log ↑N ^ 2 ≤ ε * singularNormalization N
+hlog✝ : ∀ᶠ (N : ℕ) in atTop, 1 ≤ Real.log ↑N
+N : ℕ
+hpower : 256 / Real.log 2 * ↑N ^ (106 / 125) * Real.log ↑N ^ 2 ≤ ε * singularNormalization N
+hlog : 1 ≤ Real.log ↑N
+hquot : ∀ a ∈ currentChenUpsilon9PrefixProducts N, 2 ≤ ↑N / ↑a
+hN : 1 ≤ N
+cap : ℕ
+z L : ℝ
+S : Finset ℕ
+hS : S ⊆ Finset.Icc 1 N
+hNr : 1 ≤ ↑N
+hNp : 0 < ↑N
+hH : 0 < ↑N ^ (19 / 125)
+hlog2 : 0 < Real.log 2
+hfactor : 0 ≤ 16 / ↑N ^ (19 / 125) * (1 + Real.log ↑N)
+hfinite :
+  |currentChenUpsilon9CoprimeGateError N cap z L S| ≤
+    16 / ↑N ^ (19 / 125) * (1 + Real.log ↑N) * currentChenUpsilon9LiMainMass N
+hmass :
+  16 / ↑N ^ (19 / 125) * (1 + Real.log ↑N) * currentChenUpsilon9LiMainMass N ≤
+    64 / Real.log 2 * ↑N ^ (106 / 125) * (1 + Real.log ↑N) ^ 2
+halgebra :
+  16 / ↑N ^ (19 / 125) * (1 + Real.log ↑N) * (4 / Real.log 2 * ↑N * (1 + Real.log ↑N)) =
+    64 / Real.log 2 * ↑N ^ (106 / 125) * (1 + Real.log ↑N) ^ 2
+hlogs : (1 + Real.log ↑N) ^ 2 ≤ 4 * Real.log ↑N ^ 2
+hcost :
+  64 / Real.log 2 * ↑N ^ (106 / 125) * (1 + Real.log ↑N) ^ 2 ≤
+    64 / Real.log 2 * ↑N ^ (106 / 125) * (4 * Real.log ↑N ^ 2)
+a✝ : 256 / Real.log 2 * ↑N ^ (106 / 125) * Real.log ↑N ^ 2 < 64 / Real.log 2 * ↑N ^ (106 / 125) * (1 + Real.log ↑N) ^ 2
+⊢ False
+failed

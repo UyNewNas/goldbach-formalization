@@ -1,0 +1,81 @@
+ImbalancedChen/ActualExtendedThirdInitialCutoff.lean:394:61: error: unsolved goals
+e : ℝ
+he0 : 0 < e
+he : e ≤ 1 / 384
+N : ℕ
+hN : 1 < N
+m : ℕ
+z : ℝ := ↑N ^ actualExtendedThirdInitialStopExponent e m
+weight : ℕ → ℝ := fun p => 1 / (↑p - 1)
+hNr : 1 < ↑N
+hz : z ≤ ↑N ^ thirdPrefixRho
+hfail :
+  ∀ p ∈ roughPrimeUniverse N N z (↑N ^ thirdPrefixRho), actualExtendedThirdCompactInitialPolicy e m N false [p] = false
+hstop : ∀ p ∈ roughPrimeUniverse N N 0 z, actualExtendedThirdCompactFirstStop e m N [p]
+hlevel : 0 < thirdPrefixTheta - 2 * e
+R : ℝ := ↑N ^ (thirdPrefixTheta - 2 * e)
+carrier : List ℕ := roughPrimeUniverse N N 0 z
+policy : Bool → List ℕ → Bool := ordinaryParityRosserPolicy false R
+Adm : List ℕ → Prop := ordinaryRosserPrefixAdmissible false R
+hR : 1 < R
+hnil : Adm []
+htail :
+  ∀ (q : ℕ) (pre : List ℕ), Nat.Prime q → List.Pairwise (fun x1 x2 => x1 < x2) (q :: pre) → Adm (q :: pre) → Adm pre
+happend :
+  ∀ (small pre : List ℕ),
+    (∀ p ∈ small ++ pre, Nat.Prime p) →
+      List.Pairwise (fun x1 x2 => x1 < x2) (small ++ pre) → Adm (small ++ pre) → Adm pre
+hstep :
+  ∀ (pre : List ℕ) (positive : Bool) (q : ℕ),
+    Adm pre →
+      positive = evenListLength pre →
+        Nat.Prime q →
+          List.Pairwise (fun x1 x2 => x1 < x2) (q :: pre) → policy (!positive) (q :: pre) = decide (Adm (q :: pre))
+hforward :
+  ∀ (remaining pre : List ℕ) (positive : Bool) (mass : ℝ),
+    Adm pre →
+      positive = evenListLength pre →
+        (∀ p ∈ remaining.reverse ++ pre, Nat.Prime p) →
+          List.Pairwise (fun x1 x2 => x1 < x2) (remaining.reverse ++ pre) →
+            ∀ leaf ∈ firstExitRetainedLeaves policy (fun x => 1) pre positive mass remaining, Adm leaf.selected
+chosen✝ remaining✝ chosen remaining : List ℕ
+p : ℕ
+hsub : chosen.Sublist remaining
+ih :
+  ∀ (pre : List ℕ) (positive : Bool) (mass : ℝ),
+    (∀ p ∈ chosen.reverse ++ pre, Nat.Prime p) →
+      List.Pairwise (fun x1 x2 => x1 < x2) (chosen.reverse ++ pre) →
+        Adm (chosen.reverse ++ pre) →
+          ∃ leaf ∈ firstExitRetainedLeaves policy (fun x => 1) pre positive mass remaining,
+            leaf.selected = chosen.reverse ++ pre
+pre : List ℕ
+positive : Bool
+mass : ℝ
+hprime : ∀ p_1 ∈ (p :: chosen).reverse ++ pre, Nat.Prime p_1
+hsort : List.Pairwise (fun x1 x2 => x1 < x2) ((p :: chosen).reverse ++ pre)
+hfinal : Adm ((p :: chosen).reverse ++ pre)
+hprime' : ∀ q ∈ chosen.reverse ++ p :: pre, Nat.Prime q
+hsort' : List.Pairwise (fun x1 x2 => x1 < x2) (chosen.reverse ++ p :: pre)
+hfinal' : Adm (chosen.reverse ++ p :: pre)
+hnext : Adm (p :: pre)
+⊢ positive = false ∨ ordinaryRosserPrefixAdmissible false R (p :: pre)
+ImbalancedChen/ActualExtendedThirdInitialCutoff.lean:498:4: error: Type mismatch: After simplification, term
+  List.prod_toFinset (fun p => p) (roughPrimeUniverse_nodup N N 0 z)
+ has type
+  @Eq ℕ (∏ p ∈ (roughPrimeUniverse N N 0 z).toFinset, p) (roughPrimeUniverse N N 0 z).prod
+but is expected to have type
+  @Eq ℕ ((roughPrimeUniverse N N 0 z).toFinset.prod id) (roughPrimeUniverse N N 0 z).prod
+ImbalancedChen/ActualExtendedThirdInitialCutoff.lean:328:50: error: This simp argument is unused:
+  oddFirstExitPolicy
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [policy, ordinaryParityRosserPolicy, hfull]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ImbalancedChen/ActualExtendedThirdInitialCutoff.lean:395:72: error: This simp argument is unused:
+  hnext
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [policy, ordinaryParityRosserPolicy, oddFirstExitPolicy]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`

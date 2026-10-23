@@ -1,0 +1,110 @@
+{
+  "status": "AUTHOR_FINITE_PREFIX_FOR_FIRST_STRICT_FEEDBACK_NOT_UNIFORM_PUBLIC_TARGET_NOT_OWNED",
+  "author": "/root/low_aggregate_oct18",
+  "created_utc": "2026-10-18T03:28:17.391263+00:00",
+  "module": "ImbalancedChen.Part3SharedFirstFactorLowConductorAggregate",
+  "source_sha256": "ee91f1d8e53e917d1839b2b6286cd792042d049f630ff6d17dad5bea959eb497",
+  "line_count": 217,
+  "snapshot": ".lake\\proof-continuation\\source-reviews\\drafts\\Part3SharedFirstFactorLowConductorAggregate.ee91f1d8e53e917d1839b2b6286cd792042d049f630ff6d17dad5bea959eb497.lean",
+  "full_source": "import ImbalancedChen.Part3SharedFirstFactorLowConductorSW\n\n/-!\n# The actual low-conductor shared-first-factor zero covariance\n\nThe full physical p and both original two-factor labels are retained.\nThe low-conductor filter is the only change to the character dictionary.\nIts full auxiliary divisor cost is paid by fixed-order harmonic means.\n\nThis initial author prefix contains the literal object and finite divisor\nmoment foundations. The public uniform aggregate bound is not asserted\nuntil its complete proof is added and checked.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset\nopen scoped BigOperators Pointwise\nopen SharedFirstFactorCharacterDictionary\nopen MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n\n/-- The literal original zero covariance restricted to low conductor. -/\ndef MediumAtom.sharedFirstFactorLowConductorZero (d : MediumAtom) (R : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n      ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n          (((p * (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ) *\n            ((p * (u.1 * u.2).gcd (v.1 * v.2)).totient : ℂ))) *\n          (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n          (∑ chi ∈ ((Finset.univ : Finset\n              (DirichletCharacter ℂ (p * (u.1 * u.2).gcd (v.1 * v.2)))).erase 1).filter\n                (fun chi => (chi.conductor : ℝ) ≤ R),\n            auxiliaryCharacterSum d.alphaCarrier d.alpha\n              ((u.1 * u.2) / (u.1 * u.2).gcd (v.1 * v.2))\n              (p * (u.1 * u.2).gcd (v.1 * v.2)) chi *\n            star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n              ((v.1 * v.2) / (u.1 * u.2).gcd (v.1 * v.2))\n              (p * (u.1 * u.2).gcd (v.1 * v.2)) chi))\n\nnamespace SharedFirstFactorLowConductorAggregate\n\nprivate def divisorTau (n : ℕ) : ℝ := (n.divisors.card : ℝ)\n\nprivate theorem divisorTau_nonneg (n : ℕ) : 0 ≤ divisorTau n := by\n  exact Nat.cast_nonneg _\n\n/-- A local finite extraction avoids importing a broader divisor module. -/\nprivate theorem divisors_mul_eq (a b : ℕ) :\n    (a * b).divisors = a.divisors * b.divisors := by\n  ext n\n  simp_rw [Finset.mem_mul, Nat.mem_divisors, Nat.dvd_mul, mul_ne_zero_iff,\n    ← exists_and_left, ← exists_and_right]\n  simp only [and_assoc, and_comm, and_left_comm]\n\nprivate theorem divisorTau_mul_le (a b : ℕ) :\n    divisorTau (a * b) ≤ divisorTau a * divisorTau b := by\n  unfold divisorTau\n  rw [divisors_mul_eq]\n  exact_mod_cast (Finset.card_mul_le (s := a.divisors) (t := b.divisors))\n\nprivate theorem divisorTau_le_of_dvd {a b : ℕ} (hb : b ≠ 0) (hab : a ∣ b) :\n    divisorTau a ≤ divisorTau b := by\n  unfold divisorTau\n  exact_mod_cast Finset.card_le_card (Nat.divisors_subset_of_dvd hb hab)\n\nprivate theorem divisorTau_pow_le (r : ℕ) {n : ℕ} (hn : n ≠ 0) :\n    divisorTau n ^ r ≤ (fouvryTau (2 ^ r) n : ℝ) := by\n  unfold divisorTau\n  have h := fouvryTau_pow_le 2 r hn\n  rw [fouvryTau_two] at h\n  exact_mod_cast h\n\nprivate theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) :\n    0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q := by\n  obtain ⟨hlo, hhi⟩ := Finset.mem_Icc.mp hn\n  have hlower : Q ≤ (n : ℝ) :=\n    (Nat.le_ceil Q).trans (by exact_mod_cast hlo)\n  have hpos : (0 : ℝ) < n := (zero_lt_one.trans_le hQ).trans_le hlower\n  refine ⟨by exact_mod_cast hpos, hlower, ?_⟩\n  exact (show (n : ℝ) ≤ (Nat.floor (2 * Q) : ℝ) by exact_mod_cast hhi).trans\n    (Nat.floor_le (by linarith : 0 ≤ 2 * Q))\n\nprivate theorem factor_subset_Ioc {Q : ℝ} (hQ : 1 ≤ Q) :\n    factorCarrier Q ⊆ Finset.Ioc 0 (Nat.floor (2 * Q)) := by\n  intro n hn\n  exact Finset.mem_Ioc.mpr ⟨(factor_bounds hQ hn).1, (Finset.mem_Icc.mp hn).2⟩\n\nprivate theorem dyadic_divisor_harmonic {Q : ℝ} (hQ : 1 ≤ Q) (r : ℕ) :\n    (∑ n ∈ factorCarrier Q, divisorTau n ^ r / (n : ℝ)) ≤\n      (1 + Real.log (2 * Q)) ^ (2 ^ r) := by\n  calc\n    _ ≤ ∑ n ∈ factorCarrier Q, (fouvryTau (2 ^ r) n : ℝ) / (n : ℝ) := by\n      apply Finset.sum_le_sum\n      intro n hn\n      exact div_le_div_of_nonneg_right\n        (divisorTau_pow_le r (factor_bounds hQ hn).1.ne') (Nat.cast_nonneg _)\n    _ ≤ ∑ n ∈ Finset.Ioc 0 (Nat.floor (2 * Q)),\n        (fouvryTau (2 ^ r) n : ℝ) / (n : ℝ) := by\n      exact Finset.sum_le_sum_of_subset_of_nonneg (factor_subset_Ioc hQ)\n        (fun n _ _ => div_nonneg (Nat.cast_nonneg _) (Nat.cast_nonneg _))\n    _ ≤ _ := sum_fouvryTau_div_le_real _ (by linarith : 1 ≤ 2 * Q)\n\nprivate theorem primitive_p_reciprocal_square (d : MediumAtom)\n    (hQ : 1 ≤ d.Q1) (r : ℕ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, divisorTau p ^ r / (p : ℝ) ^ 2) ≤\n      (1 + Real.log (2 * d.Q1)) ^ (2 ^ r) / d.Q1 := by\n  have hQpos : 0 < d.Q1 := zero_lt_one.trans_le hQ\n  calc\n    _ ≤ ∑ p ∈ d.primitiveFirstFactorCarrier, (divisorTau p ^ r / (p : ℝ)) / d.Q1 := by\n      apply Finset.sum_le_sum\n      intro p hp\n      obtain ⟨hp0, hQp, _⟩ := factor_bounds hQ (Finset.mem_filter.mp hp).1\n      have hpR : (0 : ℝ) < p := by exact_mod_cast hp0\n      have hi : 1 / (p : ℝ) ≤ 1 / d.Q1 := one_div_le_one_div_of_le hQpos hQp\n      calc\n        _ = (divisorTau p ^ r / (p : ℝ)) * (1 / (p : ℝ)) := by ring\n        _ ≤ (divisorTau p ^ r / (p : ℝ)) * (1 / d.Q1) :=\n          mul_le_mul_of_nonneg_left hi (div_nonneg\n            (pow_nonneg (divisorTau_nonneg _) _) hpR.le)\n        _ = _ := by ring\n    _ = (∑ p ∈ d.primitiveFirstFactorCarrier, divisorTau p ^ r / (p : ℝ)) / d.Q1 := by\n      rw [Finset.sum_div]\n    _ ≤ (∑ p ∈ factorCarrier d.Q1, divisorTau p ^ r / (p : ℝ)) / d.Q1 := by\n      apply div_le_div_of_nonneg_right _ hQpos.le\n      exact Finset.sum_le_sum_of_subset_of_nonneg Finset.filter_subset\n        (fun p _ _ => div_nonneg (pow_nonneg (divisorTau_nonneg _) _) (Nat.cast_nonneg _))\n    _ ≤ _ := div_le_div_of_nonneg_right (dyadic_divisor_harmonic hQ r) hQpos.le\n\nprivate theorem two_label_harmonic {Q2 Q3 : ℝ}\n    (hQ2 : 1 ≤ Q2) (hQ3 : 1 ≤ Q3) (r : ℕ) :\n    (∑ u ∈ factorCarrier Q2 ×ˢ factorCarrier Q3,\n      divisorTau (u.1 * u.2) ^ r / ((u.1 * u.2 : ℕ) : ℝ)) ≤\n      (1 + Real.log (2 * Q2)) ^ (2 ^ r) *\n        (1 + Real.log (2 * Q3)) ^ (2 ^ r) := by\n  simp only [Finset.sum_product]\n  calc\n    _ ≤ ∑ a ∈ factorCarrier Q2, ∑ b ∈ factorCarrier Q3,\n        (divisorTau a ^ r / (a : ℝ)) * (divisorTau b ^ r / (b : ℝ)) := by\n      apply Finset.sum_le_sum\n      intro a _\n      apply Finset.sum_le_sum\n      intro b _\n      calc\n        _ ≤ (divisorTau a * divisorTau b) ^ r / ((a * b : ℕ) : ℝ) :=\n          div_le_div_of_nonneg_right\n            (pow_le_pow_left₀ (divisorTau_nonneg _) (divisorTau_mul_le a b) r)\n            (Nat.cast_nonneg _)\n        _ = _ := by\n          simp only [mul_pow, Nat.cast_mul, div_eq_mul_inv, mul_inv_rev]\n          ring\n    _ = (∑ a ∈ factorCarrier Q2, divisorTau a ^ r / (a : ℝ)) *\n        (∑ b ∈ factorCarrier Q3, divisorTau b ^ r / (b : ℝ)) := by\n      rw [Finset.sum_mul_sum]\n    _ ≤ _ := mul_le_mul (dyadic_divisor_harmonic hQ2 r) (dyadic_divisor_harmonic hQ3 r)\n      (Finset.sum_nonneg (fun b _ => div_nonneg\n        (pow_nonneg (divisorTau_nonneg _) _) (Nat.cast_nonneg _)))\n      (pow_nonneg (by linarith [Real.log_nonneg (show 1 ≤ 2 * Q2 by linarith)]) _)\n\n/-- The number of characters with bounded conductor is independent of the ambient level. -/\nprivate theorem card_low_conductor_le {delta r : ℕ} (hdelta : 0 < delta) :\n    ((Finset.univ : Finset (DirichletCharacter ℂ delta)).filter\n      (fun chi => chi.conductor ≤ r)).card ≤ r * r := by\n  classical\n  let : NeZero delta := ⟨hdelta.ne'⟩\n  let low : Finset (DirichletCharacter ℂ delta) :=\n    Finset.univ.filter (fun chi => chi.conductor ≤ r)\n  let lifted : ℕ → Finset (DirichletCharacter ℂ delta) := fun f =>\n    if hfd : f ∣ delta then\n      (Finset.univ : Finset (DirichletCharacter ℂ f)).image\n        (fun psi => DirichletCharacter.changeLevel hfd psi)\n    else ∅\n  have hcover : low ⊆ (Finset.Icc 1 r).biUnion lifted := by\n    intro chi hchi\n    have hbound : chi.conductor ≤ r := (Finset.mem_filter.mp hchi).2\n    apply Finset.mem_biUnion.mpr\n    refine ⟨chi.conductor, Finset.mem_Icc.mpr ⟨?_, hbound⟩, ?_⟩\n    · exact Nat.one_le_iff_ne_zero.mpr chi.conductor_ne_zero\n    · dsimp only [lifted]\n      rw [dif_pos chi.conductor_dvd_level]\n      exact Finset.mem_image.mpr\n        ⟨chi.primitiveCharacter, Finset.mem_univ _, chi.changeLevel_primitiveCharacter⟩\n  have hlifted : ∀ f ∈ Finset.Icc 1 r, (lifted f).card ≤ r := by\n    intro f hf\n    obtain ⟨hfpos, hfr⟩ := Finset.mem_Icc.mp hf\n    let : NeZero f := ⟨by omega⟩\n    by_cases hfd : f ∣ delta\n    · dsimp only [lifted]\n      rw [dif_pos hfd]\n      calc\n        _ ≤ (Finset.univ : Finset (DirichletCharacter ℂ f)).card :=\n          Finset.card_image_le\n        _ = Nat.card (DirichletCharacter ℂ f) := by\n          rw [Finset.card_univ, Nat.card_eq_fintype_card]\n        _ = f.totient :=\n          DirichletCharacter.card_eq_totient_of_hasEnoughRootsOfUnity ℂ f\n        _ ≤ f := Nat.totient_le f\n        _ ≤ r := hfr\n    · dsimp only [lifted]\n      rw [dif_neg hfd, Finset.card_empty]\n      exact Nat.zero_le r\n  calc\n    _ = low.card := rfl\n    _ ≤ ((Finset.Icc 1 r).biUnion lifted).card := Finset.card_le_card hcover\n    _ ≤ ∑ f ∈ Finset.Icc 1 r, (lifted f).card := Finset.card_biUnion_le\n    _ ≤ ∑ _f ∈ Finset.Icc 1 r, r := Finset.sum_le_sum hlifted\n    _ = (Finset.Icc 1 r).card * r := Finset.sum_const_nat (fun _ _ => rfl)\n    _ = r * r := by simp only [Nat.card_Icc, Nat.add_sub_cancel]\n\nend SharedFirstFactorLowConductorAggregate\n\nend\n\nend ImbalancedChen.Part3\n",
+  "declarations": [
+    {
+      "name": "MediumAtom.sharedFirstFactorLowConductorZero",
+      "kind": "def",
+      "private": false,
+      "complete_header": "def MediumAtom.sharedFirstFactorLowConductorZero (d : MediumAtom) (R : ℝ) : ℂ"
+    },
+    {
+      "name": "divisorTau",
+      "kind": "def",
+      "private": true,
+      "complete_header": "private def divisorTau (n : ℕ) : ℝ"
+    },
+    {
+      "name": "divisorTau_nonneg",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem divisorTau_nonneg (n : ℕ) : 0 ≤ divisorTau n"
+    },
+    {
+      "name": "divisors_mul_eq",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem divisors_mul_eq (a b : ℕ) :\n    (a * b).divisors = a.divisors * b.divisors"
+    },
+    {
+      "name": "divisorTau_mul_le",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem divisorTau_mul_le (a b : ℕ) :\n    divisorTau (a * b) ≤ divisorTau a * divisorTau b"
+    },
+    {
+      "name": "divisorTau_le_of_dvd",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem divisorTau_le_of_dvd {a b : ℕ} (hb : b ≠ 0) (hab : a ∣ b) :\n    divisorTau a ≤ divisorTau b"
+    },
+    {
+      "name": "divisorTau_pow_le",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem divisorTau_pow_le (r : ℕ) {n : ℕ} (hn : n ≠ 0) :\n    divisorTau n ^ r ≤ (fouvryTau (2 ^ r) n : ℝ)"
+    },
+    {
+      "name": "factor_bounds",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) :\n    0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q"
+    },
+    {
+      "name": "factor_subset_Ioc",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem factor_subset_Ioc {Q : ℝ} (hQ : 1 ≤ Q) :\n    factorCarrier Q ⊆ Finset.Ioc 0 (Nat.floor (2 * Q))"
+    },
+    {
+      "name": "dyadic_divisor_harmonic",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem dyadic_divisor_harmonic {Q : ℝ} (hQ : 1 ≤ Q) (r : ℕ) :\n    (∑ n ∈ factorCarrier Q, divisorTau n ^ r / (n : ℝ)) ≤\n      (1 + Real.log (2 * Q)) ^ (2 ^ r)"
+    },
+    {
+      "name": "primitive_p_reciprocal_square",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem primitive_p_reciprocal_square (d : MediumAtom)\n    (hQ : 1 ≤ d.Q1) (r : ℕ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, divisorTau p ^ r / (p : ℝ) ^ 2) ≤\n      (1 + Real.log (2 * d.Q1)) ^ (2 ^ r) / d.Q1"
+    },
+    {
+      "name": "two_label_harmonic",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem two_label_harmonic {Q2 Q3 : ℝ}\n    (hQ2 : 1 ≤ Q2) (hQ3 : 1 ≤ Q3) (r : ℕ) :\n    (∑ u ∈ factorCarrier Q2 ×ˢ factorCarrier Q3,\n      divisorTau (u.1 * u.2) ^ r / ((u.1 * u.2 : ℕ) : ℝ)) ≤\n      (1 + Real.log (2 * Q2)) ^ (2 ^ r) *\n        (1 + Real.log (2 * Q3)) ^ (2 ^ r)"
+    },
+    {
+      "name": "card_low_conductor_le",
+      "kind": "theorem",
+      "private": true,
+      "complete_header": "private theorem card_low_conductor_le {delta r : ℕ} (hdelta : 0 < delta) :\n    ((Finset.univ : Finset (DirichletCharacter ℂ delta)).filter\n      (fun chi => chi.conductor ≤ r)).card ≤ r * r"
+    }
+  ],
+  "source_declaration_count": 13,
+  "definitions": 2,
+  "theorems": 11,
+  "sole_import": "ImbalancedChen.Part3SharedFirstFactorLowConductorSW",
+  "parent_sha256": "5df46739cf416fbf9efd7d40ec17c7434a3cde986f805d1c0193d059b0770485",
+  "Char_actual_sha256": "3b056ab1f03ea46cfc446a32b267f40ec58d85fe0974c0a94c6ed35183631cd3",
+  "literal_new_definition_equal_exact_approved_proposal": true,
+  "prefix_contents": "Literal original full low covariance; divisor submultiplicativity and monotonicity; exact fixed-order harmonic divisor means on both original tail label carriers and actual primitive first-factor p (retaining 1/Q1); actual ambient low-character count via union-image.",
+  "remaining_in_same_authorized_module": "Physical divisor pointwise factorization; finite norm aggregate budget; actual geometry fixed-log payment; actual UniformAuxiliarySW discharge and full original public uniform target. None is claimed proved by this prefix.",
+  "relative_import_scope": "sole Low5df closure plus this self, 0 new foreign imports. Count and divisor finite APIs were previously source/header audited in exact proposal; no High/UMoment import.",
+  "finite_count_fragment": {
+    "path": ".lake/proof-continuation/source-reviews/drafts/20261018-low-aggregate-character-count-fragment.lean",
+    "sha256": "a57145fd01ecdc3eae3e1b7cdba3224bb588b760e97795f1fd8c9263d9a8faca",
+    "author": "/root/low_aggregate_oct18/character_count_api",
+    "full_fragment_read_before_integration": true
+  },
+  "no_compile_or_cache_mutation": true,
+  "no_public_uniform_theorem_asserted_yet": true,
+  "freeze": "Current main source frozen for exact first-strict feedback; subsequent authorized proofs will be drafted only in ignored fragments pending release.",
+  "resource_request": "ONE original scoped strict 6144 MiB / j2 / 6656 MiB identity monitor after parent true owned, no install/foreign bootstrap/resource or checker mutation; first feedback only, not acceptance of the final aggregate."
+}

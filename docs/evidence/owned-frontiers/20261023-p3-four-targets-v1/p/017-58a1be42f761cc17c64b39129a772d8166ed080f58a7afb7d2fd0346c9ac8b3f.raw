@@ -1,0 +1,106 @@
+{
+  "schema": "p3_duplicate_metadata_operator_independent_p5_peer_v1",
+  "status": "SOURCEONLY_FULL_SOURCE_PEER_NO_IDENTIFIED_BLOCKER_NOT_EXECUTED",
+  "reviewer": "/root/p5_one_original_lower_cell_sol_high_oct22",
+  "reviewed": {
+    "lean": {
+      "path": "source-reviews/drafts/20261023-P3-historical-duplicate-serialized-proof-metadata-SOURCEONLY.lean.txt",
+      "sha256": "601551ca2addf3c84c19e9bbc2b2037f3e82010bb66895d7aba39f7e31883b82"
+    },
+    "runner": {
+      "path": "source-reviews/drafts/20261023-P3-historical-duplicate-metadata-runner-SOURCEONLY.py.txt",
+      "sha256": "fbb15514849834f10dc1e455a3babbbc5943c7226ea4d925be85a43eb67d5e64"
+    },
+    "map": {
+      "path": "source-reviews/20261023-P3-historical196-duplicate-declaration-records-independent-map.json",
+      "sha256": "29f9fa967fc846081a507a23cb5b419857537f75c1cad48c9db6bfffae9326fd"
+    },
+    "contract": {
+      "path": "source-reviews/20261023-P3-duplicate-proof-metadata-operator-schema-SOURCEONLY.json",
+      "sha256": "66b0980ae57351dc98406536c4fd311b9837f36daa1804928862cf3c7a1622f3"
+    },
+    "fixed_api": {
+      "path": "source-reviews/20261023-P3-duplicate-metadata-fixed-Lean-API-excerpts.json",
+      "sha256": "8867907c01e7cead5ace4d3c636ce4adf02e82988ba88a18335f14ec070ab795"
+    },
+    "runtime": {
+      "path": "runtime.py",
+      "sha256": "81635b52f3b62dfe477a8184bff5ef6dc8de3daee334c6cfd4547cccefe3b9be"
+    },
+    "raw_recheck": {
+      "path": "source-reviews/20261023-P3-historical-duplicate-map-independent-p5-raw-recheck-SOURCEONLY.json",
+      "sha256": "fb6313918fad7ed71e05d038459915815db46c6866ab7d8d3787f633a347fd9a"
+    }
+  },
+  "coverage": {
+    "Lean_lines": 119,
+    "runner_lines": 153,
+    "pairs": 30,
+    "distinct_names": 11,
+    "serialized_modules": 17,
+    "pair_set_regex_exact_frozen_map": true,
+    "imports_exact_requested_serialized_modules": true
+  },
+  "findings": [
+    {
+      "scope": "Serialized provenance",
+      "Lean_lines": [
+        78,
+        112
+      ],
+      "result": "Every requested module is located in env.header.modules; its own moduleData constNames/constants lengths are checked; each target constNames[j] is paired with that same moduleData.constants[j], info.name is checked, and exactly one occurrence is required. No env.find lookup supplies any requested ConstantInfo."
+    },
+    {
+      "scope": "Theorem and proposition",
+      "Lean_lines": [
+        94,
+        110
+      ],
+      "result": "Every serialized copy must match thmInfo, pass native Meta.isProp info.type, and have false unsafe/partial/axiom flags. Full pp.all/deep/proofs/universes/explicit/fullNames/privateNames settings emit the actual info.type and info.levelParams. Missing data, duplicate module/copy, non-theorem, non-Prop and truncation throw."
+    },
+    {
+      "scope": "Exact coverage",
+      "result": "Independent regex extraction matched all thirty distinct (module,name) pairs to frozen map29f9; seventeen ImbalancedChen imports equal the requested module set. Source summary requires 30/11/17, runner requires all exact pairs once and same universe parameter arrays within every same-name group."
+    },
+    {
+      "scope": "Actual source API",
+      "result": "Read local exact native excerpts886790: ModuleData constNames equals constants.map name (Environment109-120); import implementation zips the same arrays (2334) and subsumesInfo checks name/type/levelParams and theorem provenance (2268-2283). Meta.isProp signature is Expr -> MetaM Bool. Full Environment file hash is pinned ee364e...; InferType whole-file SHA was not measured by excerpt author and is not claimed here."
+    },
+    {
+      "scope": "Runner binding",
+      "runner_lines": [
+        36,
+        85
+      ],
+      "result": "Runtime81635, frozen map29f9 and Lean601551 are checked before loading. New output directory is confined to STATE/rounds and must not exist; copied Lean bytes keep exact SHA. Seventeen original receipt refs/source hashes/object parts are reconstructed from frozen map; snapshots compare actual current source/object parts and pins/native tool SHAs before and after."
+    },
+    {
+      "scope": "Single guarded process",
+      "runner_lines": [
+        89,
+        143
+      ],
+      "result": "One original shared flock is held; rt.heavy_lock_fd passed to original runtime.run_owned_lean. Exactly one direct Lean command uses -j2 -M6144 -DwarningAsError=true and original environment/owned-child RSS guard6656. No Runtime.ensure/compile, stock checker, retry, census/acceptance, quota or Git write is invoked. Raw metadata.log/process receipt/hash are preserved; failure is INCOMPLETE and rethrown."
+    },
+    {
+      "scope": "Output consumption",
+      "result": "Only blank lines or exact P3_DUP_META/P3_DUP_META_SUMMARY records are accepted. Runner checks all thirty raw entries, original full-type UTF8 hashes, theorem/Prop/safety, universe parameter agreement, and summary30/11/17 before PASS. Per-copy axiom sets remain supplied by the unchanged original thirty stock/ALL audits, rather than merged-environment collectAxioms."
+    }
+  ],
+  "limitations": [
+    "This is independent source review, not Lean elaboration, native metadata execution or ROOT acceptance.",
+    "Runner uses Python asserts; ROOT must run ordinary python3 without -O/PYTHONOPTIMIZE, consistently with the original runtime.",
+    "The shared lock serializes the single process; ROOT owns preflight queue-idle determination. No claim about current process-idle state is made by this peer.",
+    "Supplemental metadata receipt is not a new owned stock/ALL inventory receipt; do not add it to the original-owned-receipt census.",
+    "V2 must still validate actual PASS/log/guard receipt, exact raw output, all original stock/ALL/full types/axioms/safety and fresh ROOT authority/freeze before writing PROPOSALS."
+  ],
+  "operations": {
+    "runner_ast_parse_only": true,
+    "regex_pair_set_recheck": true,
+    "runner_imported_or_executed": false,
+    "Lean_lake_checker_CI_executed": false,
+    "collector_executed": false,
+    "quota_queried": false,
+    "root_acceptance": null
+  }
+}

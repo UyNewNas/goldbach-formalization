@@ -1,0 +1,806 @@
+--- a/rounds/20261022-EU-next-three-current193-SOURCE-ONLY/20261022-EU-next-three-current193-common-SOURCE-ONLY.txt
++++ b/rounds/20261022-three-frontiers-common-v2-SOURCE-ONLY.py
+@@ -1,430 +1,373 @@
+-"""Unexecuted shared validation/collector. Import defines functions only.
+-
+-This module never starts Lean/checker. Original Runtime initialization retains
+-its provider revision/clean-tree checks. Root must review and bind this source.
+-"""
+-from pathlib import Path
+-import datetime
+-import hashlib
+-import importlib.util
+-import json
+-import os
+-
+-STATE = Path(__file__).resolve().parent.parent
+-ROOT = STATE.parents[1]
+-PARTS = ('.olean', '.olean.private', '.olean.server', '.ilean', '.ir')
+-AXIOMS = {'propext', 'Classical.choice', 'Quot.sound'}
+-TARGETS = {
+-    'ImbalancedChen.Multiplicity': '9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6',
+-    'ImbalancedChen.RationalPowers': '40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06',
+-    'ImbalancedChen.SingularSeries': 'ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3',
+-}
+-REVIEWS = {
+-    'ImbalancedChen.Multiplicity': ('source-reviews/20261022-multiplicity9d1052-complete-source-api-review-HOLD.json', '40c8f133758d5f1183e07c7b4427b83ae8d2383a49441fb794d995bb3bc54183'),
+-    'ImbalancedChen.RationalPowers': ('source-reviews/20261022-rationalpowers40d21d-complete-source-api-review-HOLD.json', '4ff9621163109b697dea06fe4648b3262c8e3e40e051597bebee4d0c4155f85e'),
+-    'ImbalancedChen.SingularSeries': ('source-reviews/20261022-singularseries-ff771-source-mathematical-API-review-HOLD.json', '76c1550598352e9d8c8d60799db77597802133122cd03f975b7f3ed1d5b3c710'),
+-}
+-BASELINE = {'path': 'rounds/three-frontiers-run-20261022-current190-v2/candidate-census.json',
+-    'sha256': 'd2889d2ff857a73a6c225a0ef8f4237c3a203d74eb5dd70f2b69ce70b45c6749'}
+-BASELINE_ACCEPTANCE = {'path': 'source-reviews/20261022-root-three-frontiers-193-terminal-acceptance.json',
+-    'sha256': '3b6455fb5b60033e064284d34803ee0c0ef5a310652b274bfa8c644e5d8b4062'}
+-PROJECT_PARENTS = {
+-    'ImbalancedChen.Multiplicity': {'ImbalancedChen.Counting'},
+-    'ImbalancedChen.RationalPowers': {'ImbalancedChen.Counting'},
+-    'ImbalancedChen.SingularSeries': {'ImbalancedChen.NormalizationGrowth'},
+-}
+-PROTECTED = {
+-    'runtime.py': '81635b52f3b62dfe477a8184bff5ef6dc8de3daee334c6cfd4547cccefe3b9be',
+-    'audit_owned.py': '267d59bfc37e5d5a742b619390f5b42155bb5ab33d923684487acb6b8a7e19e6',
+-    'preflight_current_oct20.py': 'e5c11c36e35582e4f864fa8582e49800027e91cbfab85d71f3456da83abb1947',
+-    'import_walker_v2.py': 'e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914',
+-    'import_walker_v2.e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914.py': 'e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914',
+-    '../../verification/parts/p0/queue/AuditTemplate.lean': 'df79aecf54317dbdc193e9b68ec8e833f6d4d09a92f369ac6985d23d974ff822',
+-    '../../../goldbach-integration/verification/parts/takeover-p0/checker_memory_guard.py': 'a506fcc8bd2a2f1731c1ae32d845be21bc3a35548ce25774aa8bf8b4cb6f7ab7',
+-}
+-
+-
+-def require(condition, message):
+-    if not condition:
+-        raise ValueError(message)
+-
+-
+-def now():
+-    return datetime.datetime.now(datetime.timezone.utc).isoformat()
+-
+-
+-def path(value):
+-    value = str(value).replace('\\', '/')
+-    if os.name == 'nt' and value.startswith('/mnt/') and len(value) > 7:
+-        value = value[5].upper() + ':/' + value[7:]
+-    elif os.name != 'nt' and len(value) >= 3 and value[0].isascii() and value[0].isalpha() and value[1:3] == ':/':
+-        value = '/mnt/' + value[0].lower() + '/' + value[3:]
+-    p = Path(value)
+-    if p.is_absolute():
+-        return p
+-    return (ROOT if value.startswith('.lake/') else STATE) / p
+-
+-
+-def sha(value):
+-    with path(value).open('rb') as stream:
+-        return hashlib.file_digest(stream, 'sha256').hexdigest()
+-
+-
+-def read(value):
+-    return json.loads(path(value).read_text(encoding='utf-8'))
+-
+-
+-def ref(value):
+-    p = path(value).resolve()
+-    return {'path': str(p), 'sha256': sha(p)}
+-
+-
+-def bound(reference):
+-    require(isinstance(reference, dict) and set(reference) == {'path', 'sha256'}, 'Exact path+SHA reference required')
+-    require(sha(reference['path']) == reference['sha256'], 'Hash mismatch: ' + str(reference['path']))
+-    return path(reference['path'])
+-
+-
+-def write_new(value, data):
+-    p = path(value)
+-    p.parent.mkdir(parents=True, exist_ok=True)
+-    with p.open('x', encoding='utf-8', newline='\n') as stream:
+-        stream.write(json.dumps(data, indent=2, ensure_ascii=False) + '\n')
+-    return ref(p)
+-
+-
+-def load(name, value):
+-    spec = importlib.util.spec_from_file_location(name, path(value))
+-    module = importlib.util.module_from_spec(spec)
+-    spec.loader.exec_module(module)
+-    return module
+-
+-
+-def protected():
+-    for name, digest in PROTECTED.items():
+-        require(sha(name) == digest, 'Canonical tool changed: ' + name)
+-    for name, (review, digest) in REVIEWS.items():
+-        require(sha(review) == digest, 'Source review changed: ' + name)
+-        require(sha(ROOT / (name.replace('.', '/') + '.lean')) == TARGETS[name], 'Target source changed')
+-
+-
+-def all_slots(obj):
+-    stem = str(obj)[:-len('.olean')]
+-    return {suffix: sha(stem + suffix) if Path(stem + suffix).is_file() else None for suffix in PARTS}
+-
+-
+-def artifacts():
+-    files = list((STATE / 'cache').glob('*.json'))
+-    files += [p for p in (STATE / 'lib/lean').rglob('*') if p.is_file()]
+-    return {p.relative_to(STATE).as_posix(): sha(p) for p in sorted(files)}
+-
+-
+-def frozen_sources():
+-    files = sorted((ROOT / 'ImbalancedChen').rglob('*.lean'))
+-    require(len(files) == 562, 'Actual source path inventory changed')
+-    return {p.relative_to(ROOT).as_posix(): sha(p) for p in files}
+-
+-
+-def unchanged_non_target(before, after, target=None):
+-    allowed = set()
+-    if target:
+-        stem = 'lib/lean/' + target.replace('.', '/')
+-        allowed = {'cache/' + target + '.json'} | {stem + suffix for suffix in PARTS}
+-    require({p: h for p, h in before.items() if p not in allowed} ==
+-            {p: h for p, h in after.items() if p not in allowed}, 'Non-active-target cache/object mutation')
+-
+-
+-def physical_idle():
+-    lock = Path('/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-integration/.lake/takeover-p0/locks/compiler-0.lock')
+-    st = lock.stat()
+-    identity = f'{os.major(st.st_dev):02x}:{os.minor(st.st_dev):02x}:{st.st_ino}'
+-    processes = []
+-    for proc in Path('/proc').iterdir():
+-        if not proc.name.isdigit():
+-            continue
+-        try:
+-            exe = (proc / 'exe').resolve()
+-            if exe.name in ('lean', 'lean.real', 'leanchecker', 'lake'):
+-                processes.append({'pid': int(proc.name), 'exe': str(exe),
+-                    'cmdline': (proc / 'cmdline').read_bytes().replace(b'\0', b' ').decode(errors='replace')})
+-        except (FileNotFoundError, ProcessLookupError):
+-            continue
+-    locks = [line for line in Path('/proc/locks').read_text().splitlines() if identity in line]
+-    require(not processes and not locks, 'Heavy slot not physically idle')
+-    return {'observed_utc': now(), 'original_lock_path': str(lock),
+-        'original_lock_identity': [os.major(st.st_dev), os.minor(st.st_dev), st.st_ino],
+-        'compiler_processes': processes, 'matching_proc_locks': locks, 'no_lock_acquired': True}
+-
+-
+-def validate_proper(reference, target):
+-    report = read(bound(reference))
+-    require(report['status'] == 'READONLY_PROPER_GRAPH_EXISTING_RECURSIVE_CACHES_EXACT', 'Proper failed')
+-    require(report['target'] == target and report['target_sha256'] == TARGETS[target], 'Wrong proper target')
+-    require(report['target_cache_included'] is False, 'Wrong proper mode')
+-    expected = PROJECT_PARENTS[target]
+-    require(report['proper_project_count'] == 1 + len(expected) and report['checked_project_cache_count'] == len(expected), 'Exact project-parent counts')
+-    rows = report['project_parents']
+-    require(len(rows) == len(expected) and {row['module'] for row in rows} == expected, 'Exact owned project-parent set')
+-    require(report['missing_external'] == report['parser_findings'] == [], 'Proper findings')
+-    baseline = read(bound(BASELINE))
+-    for row in rows:
+-        entry = baseline['modules'][row['module']]
+-        require(row['exact'] is True and row['source_sha256'] == entry['source_sha256'] and
+-            row['object_parts'] == entry['object_parts'] and row['object_sha256'] == entry['object_parts']['.olean'], 'Proper parent differs from accepted193')
+-    require(report['no_compilation'] and report['no_cache_mutated'], 'Unexpected proper mutation')
+-    return report
+-
+-
+-def collect(target, proper_reference):
+-    """A-F complete read-only input collector; only caller persists report."""
+-    require(target in TARGETS, 'Target outside exact three')
+-    protected()
+-    proof_before, artifacts_before = frozen_sources(), artifacts()
+-    proper = validate_proper(proper_reference, target)
+-    runtime = load('three_frontiers_original_runtime', STATE / 'runtime.py')
+-    walker = load('three_frontiers_frozen_walker', STATE / 'import_walker_v2.e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914.py')
+-    rt = runtime.Runtime(ROOT)
+-    graph, visiting = {}, set()
+-
+-    def visit(name):
+-        if name in graph:
+-            return
+-        require(name not in visiting, 'Import cycle: ' + name)
+-        visiting.add(name)
+-        source, obj = rt.paths(name)
+-        if source is None:
+-            rel = Path(name.replace('.', '/')).with_suffix('.lean')
+-            source = next((q for q in [runtime.BIN.parent / 'src/lean' / rel,
+-                runtime.BIN.parent / 'src/lean/lake' / rel] if q.is_file()), None)
+-        head = walker.header_imports(source.read_text()) if source else None
+-        require(not head or not head['parser_findings'], 'Header parser findings: ' + name)
+-        require(name == target or obj.is_file(), 'Missing parent/native main object: ' + name)
+-        graph[name] = {'source_path': str(source) if source else None,
+-            'source_sha256': sha(source) if source else None, 'object_path': str(obj),
+-            'all_five_slots': all_slots(obj), 'header': head,
+-            'absent_source_candidates': [] if source else [str(runtime.PROVIDERS / p['name'] /
+-                Path(name.replace('.', '/')).with_suffix('.lean')) for p in rt.packages] +
+-                [str(runtime.BIN.parent / prefix / Path(name.replace('.', '/')).with_suffix('.lean'))
+-                 for prefix in ('src/lean', 'src/lean/lake')]}
+-        if rt.project(name):
+-            require(name in {target} | PROJECT_PARENTS[target] and head is not None, 'Unexpected project parent')
+-            explicit = list(dict.fromkeys(x['module'] for x in head['imports'] if not x['implicit']))
+-            require(runtime.imports(source) == explicit, 'Original parser mismatch')
+-        if head:
+-            for dep in dict.fromkeys(item['module'] for item in head['imports']):
+-                visit(dep)
+-        visiting.remove(name)
+-
+-    visit(target)
+-    foreign = {name: row for name, row in graph.items() if not rt.project(name)}
+-    original_foreign = {row['module']: row for row in proper['foreign_nodes']}
+-    require(set(foreign) == set(original_foreign), 'Native graph differs from proper')
+-    for name, row in foreign.items():
+-        old = original_foreign[name]
+-        require(row['source_sha256'] == old['source_sha256'] and row['object_path'] == old['object_path'] and
+-                row['all_five_slots']['.olean'] == old['object_sha256'], 'Proper/native input differs: ' + name)
+-    direct = runtime.imports(rt.paths(target)[0])
+-    deps = {name: sha(rt.paths(name)[1]) for name in direct}
+-    binding = rt.binding(target, deps)
+-    cache_path = STATE / 'cache' / (target + '.json')
+-    # Target cache is historical output, never an input qualification. Malformed
+-    # JSON remains a first failure; no deletion, repair, rewriting or fallback.
+-    cache = read(cache_path) if cache_path.is_file() else None
+-    require(not cache_path.is_file() or isinstance(cache, dict), 'Malformed target cache record; HOLD without repair')
+-    target_slots = graph[target]['all_five_slots']
+-    target_artifact = {'cache': ref(cache_path) if cache is not None else None,
+-        'all_five_slots': target_slots, 'saved_json': cache,
+-        'qualification': 'UNQUALIFIED_TARGET_ARTIFACT_NOT_OWNED_EVIDENCE',
+-        'binding_matches_current': cache is not None and cache.get('binding') == binding,
+-        'object_parts_match_current': cache is not None and cache.get('object_parts') == rt.parts(rt.paths(target)[1]),
+-        'warnings_as_errors': cache.get('warnings_as_errors') if cache is not None else None}
+-    baseline = read(bound(BASELINE))
+-    acceptance = read(bound(BASELINE_ACCEPTANCE))
+-    accepted_scopes = {row['module']: row for row in acceptance['scope_reviews']}
+-    owned_parents = {}
+-    require({name for name in graph if rt.project(name)} == {target} | PROJECT_PARENTS[target], 'Project closure outside exact allowlist')
+-    proper_parents = {row['module']: row for row in proper['project_parents']}
+-    for name in sorted(PROJECT_PARENTS[target]):
+-        row, entry, scope = graph[name], baseline['modules'][name], accepted_scopes[name]
+-        parent_cache = STATE / 'cache' / (name + '.json')
+-        saved = read(parent_cache)
+-        parent_deps = {dep: sha(rt.paths(dep)[1]) for dep in runtime.imports(rt.paths(name)[0])}
+-        current_binding = rt.binding(name, parent_deps)
+-        require(row['source_sha256'] == entry['source_sha256'] == scope['source_sha256'], 'Owned parent source')
+-        require({k: v for k, v in row['all_five_slots'].items() if v is not None} == entry['object_parts'], 'Owned parent all slots')
+-        require(sha(parent_cache) == scope['strict_receipt_sha256'] == proper_parents[name]['cache_sha256'], 'Owned parent strict producer changed')
+-        require(saved['status'] == 'PASS' and saved['warnings_as_errors'] is True and saved['binding'] == current_binding and
+-            saved['binding_after'] == current_binding and saved['object_parts'] == entry['object_parts'], 'Parent must take original unchanged cached branch')
+-        require(scope['audit_receipt_sha256'] == entry['owned_receipt_sha256'] and
+-            scope['declarations_json_sha256'] == entry['declarations_json_sha256'], 'Parent owned scope binding')
+-        validate_records(bound({'path': entry['owned_receipt'], 'sha256': entry['owned_receipt_sha256']}),
+-            name, entry['source_sha256'], entry['object_parts'])
+-        owned_parents[name] = dict(row, cache=ref(parent_cache), current_binding=current_binding,
+-            accepted_entry=entry, accepted_scope=scope)
+-    registry = STATE / 'verified-remote-producers.json'
+-    old_path = runtime.OLD / 'cache' / (target + '.json')
+-    old_object = runtime.OLD / 'direct/lib/lean' / Path(target.replace('.', '/')).with_suffix('.olean')
+-    native_bins = {name: sha(runtime.BIN / name) for name in ('lean', 'lean.real', 'leanchecker')}
+-    stable = {'sources562': proof_before, 'pins': rt.pins(), 'native_bins': native_bins,
+-        'protected': PROTECTED, 'foreign_graph': foreign, 'owned_project_parents': owned_parents,
+-        'baseline193': BASELINE, 'baseline193_acceptance': BASELINE_ACCEPTANCE, 'target_header': graph[target]['header'],
+-        'target_binding': binding, 'registry': ref(registry) if registry.is_file() else None,
+-        'old_cache': ref(old_path) if old_path.is_file() else None,
+-        'old_object_all_five_slots': all_slots(old_object),
+-        'native_provider_revisions': {p['name']: p['rev'] for p in rt.packages}}
+-    require(stable['pins'] == proper['pins'], 'Proper pins differ')
+-    require(frozen_sources() == proof_before and artifacts() == artifacts_before, 'Collector input changed during read')
+-    protected()
+-    return {'status': 'EXACT_READONLY_INPUTS_NOT_KERNEL_ACCEPTANCE', 'target': target,
+-        'source_sha256': TARGETS[target], 'proper': proper_reference, 'stable_inputs': stable,
+-        'target_state': target_artifact,
+-        'artifact_map': artifacts_before, 'collector': ref(__file__), 'no_compilation': True}
+-
+-
+-def native_union_check(prepared_refs):
+-    """Hash each root-bound native source and explicit five-slot path once.
+-
+-    Checks the UNION of all three graphs at EVERY stage boundary; no counts or
+-    slots are sampled. Root-bound capture references retain the complete maps.
+-    """
+-    expected, absent_sources = {}, set()
+-
+-    def add(value, digest):
+-        key = str(path(value))
+-        require(key not in expected or expected[key] == digest, 'Conflicting native bindings')
+-        expected[key] = digest
+-
+-    for module, reference in prepared_refs.items():
+-        require(module in TARGETS, 'Foreign preparation target')
+-        stable = read(bound(reference))['stable_inputs']
+-        for row in [*stable['foreign_graph'].values(), *stable['owned_project_parents'].values()]:
+-            if row['source_path'] is not None:
+-                add(row['source_path'], row['source_sha256'])
+-            else:
+-                absent_sources.update(row['absent_source_candidates'])
+-            stem = row['object_path'][:-len('.olean')]
+-            require(set(row['all_five_slots']) == set(PARTS), 'Incomplete slot keys')
+-            for suffix, digest in row['all_five_slots'].items():
+-                add(stem + suffix, digest)
+-        for row in stable['owned_project_parents'].values():
+-            add(row['cache']['path'], row['cache']['sha256'])
+-        for name, digest in stable['native_bins'].items():
+-            add('/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/' + name, digest)
+-        registry = stable['registry']
+-        add(STATE / 'verified-remote-producers.json', registry['sha256'] if registry else None)
+-        old = stable['old_cache']
+-        add(ROOT.parent / 'goldbach-integration/.lake/takeover-p0/cache' / (module + '.json'), old['sha256'] if old else None)
+-        stem = str(ROOT.parent / 'goldbach-integration/.lake/takeover-p0/direct/lib/lean' / module.replace('.', '/'))
+-        for suffix, digest in stable['old_object_all_five_slots'].items():
+-            add(stem + suffix, digest)
+-    for value in absent_sources:
+-        require(not path(value).is_file(), 'Previously unresolved native source appeared')
+-    for value, digest in expected.items():
+-        p = path(value)
+-        require((sha(p) if p.is_file() else None) == digest, 'Native/old/registry input changed: ' + value)
+-    encoded = json.dumps({'paths': expected, 'absent_sources': sorted(absent_sources)}, sort_keys=True).encode()
+-    return {'status': 'ALL_NATIVE_SOURCES_FIVE_SLOTS_EXACT', 'map_sha256': hashlib.sha256(encoded).hexdigest(),
+-        'prepared': prepared_refs, 'paths_checked': len(expected), 'absent_source_paths_checked': len(absent_sources)}
+-
+-
+-def validate_records(receipt_path, module, expected_source, expected_parts=None):
+-    """Independent complete receipt validation, matching original verifier checks."""
+-    rp = path(receipt_path)
+-    receipt = read(rp)
+-    require(receipt['status'] == 'PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS', 'Owned replay failed')
+-    require(receipt['inputs_before'] == receipt['inputs_after'], 'Owned inputs changed')
+-    require(not receipt['external_closure_replay_claimed'] and not receipt['unconditional_main_claimed'], 'Inflated claim')
+-    require(receipt['targets'][module] == expected_source, 'Owned source mismatch')
+-    pieces = receipt['inputs_before']['owned_object_parts'][module]
+-    if expected_parts is not None:
+-        require(pieces == expected_parts, 'Owned/strict objects differ')
+-    require(pieces == {k: v for k, v in all_slots(STATE / 'lib/lean' / (module.replace('.', '/') + '.olean')).items() if v is not None}, 'Current owned objects changed')
+-    inventory_stages = [s for s in receipt['stages'] if s['kind'] == 'full_inventory_type_axioms']
+-    require(len(inventory_stages) == 1 and inventory_stages[0]['exit_code'] == 0, 'Incomplete type stage')
+-    require(sha(rp.parent / 'declarations.log') == inventory_stages[0]['log_sha256'], 'Inventory log hash')
+-    inventories, emitted = {}, {}
+-    for line in (rp.parent / 'declarations.log').read_text().splitlines():
+-        if line.startswith('P0_QUEUE_INVENTORY '):
+-            item = json.loads(line.split(' ', 1)[1])
+-            require(item['module'] not in inventories, 'Duplicate inventory')
+-            inventories[item['module']] = item
+-        if line.startswith('P0_QUEUE_DECL '):
+-            item = json.loads(line.split(' ', 1)[1])
+-            require(item['name'] not in emitted, 'Duplicate emitted name')
+-            emitted[item['name']] = item
+-    records_all = read(rp.parent / 'declarations.json')
+-    require(len(records_all) == len(emitted), 'Emitted/JSON record count differs')
+-    require({r['name']: r for r in records_all} == emitted, 'Emitted/JSON records differ')
+-    records = [row for row in records_all if row['module'] == module]
+-    names = [row['name'] for row in records]
+-    require(len(names) == len(set(names)) > 0, 'Duplicate/empty records')
+-    require(len(records) == receipt['declaration_counts'][module], 'Declaration count differs')
+-    for row in records:
+-        require(row['type'] and '⋯' not in row['type'], 'Truncated type')
+-        require(not (row['unsafe'] or row['partial'] or row['axiom']), 'Unsafe/partial/axiom')
+-        require(set(row['axioms']) <= AXIOMS, 'Forbidden axiom')
+-    inv = inventories[module]
+-    require(len(inv['serialized']) == len(set(inv['serialized'])) == len(names), 'Serialized duplicate/count')
+-    require(len(inv['environment']) == len(set(inv['environment'])) == len(names), 'Environment duplicate/count')
+-    require(set(names) == set(inv['serialized']) == set(inv['environment']), 'Complete inventory mismatch')
+-    stocks = [s for s in receipt['stages'] if s['kind'] == 'stock_replay' and s['module'] == module]
+-    require(len(stocks) == 1, 'Stock invocation count')
+-    stock = stocks[0]['result']
+-    require(stock['status'] == 'PASS' and stock['returncode'] == 0, 'Stock failed')
+-    require(sha(rp.parent / ('replay-' + module + '.log')) == stock['log_sha256'], 'Stock log hash')
+-    return receipt, records, inv
+-
+-
+-def verify_census(reference):
+-    """Portable independent verifier; no importing old top-level operator scripts."""
+-    census = read(bound(reference))
+-    require(census['status'] == 'ALL_CURRENT_OWNED_SOURCES_OBJECTS_COMPLETE_TYPES_AXIOMS_EXACT', 'Census status')
+-    require(not census['external_closure_replayed'] and not census['unconditional_main_proved'], 'Census claims')
+-    total, receipts = 0, set()
+-    for module, entry in census['modules'].items():
+-        require(sha(ROOT / (module.replace('.', '/') + '.lean')) == entry['source_sha256'], 'Census source')
+-        rp = bound({'path': entry['owned_receipt'], 'sha256': entry['owned_receipt_sha256']})
+-        receipt, records, _ = validate_records(rp, module, entry['source_sha256'], entry['object_parts'])
+-        require(sha(rp.parent / 'declarations.json') == entry['declarations_json_sha256'], 'Census declaration hash')
+-        require(len(records) == entry['complete_serialized_declarations'], 'Census complete count')
+-        total += len(records)
+-        receipts.add(str(rp.resolve()))
+-    counts = {'owned_modules': len(census['modules']), 'declarations': total, 'original_receipts': len(receipts)}
+-    require(counts == {'owned_modules': census['owned_modules'], 'declarations': census['complete_serialized_declarations'],
+-        'original_receipts': census['original_owned_receipts_rehashed']}, 'Census totals')
+-    return census, counts
+-
+-
+-def written_names(module):
+-    review = read(REVIEWS[module][0])
+-    if module == 'ImbalancedChen.SingularSeries':
+-        rows = review['all_complete_written_declarations']
+-        names = {'ImbalancedChen.' + row['name'] for row in rows}
+-    else:
+-        rows = review['declarations']
+-        names = {row['name'] for row in rows}
+-    expected = {'ImbalancedChen.Multiplicity': 22, 'ImbalancedChen.RationalPowers': 15, 'ImbalancedChen.SingularSeries': 21}
+-    require(len(rows) == len(names) == expected[module] and all(name.startswith('ImbalancedChen.') for name in names), 'Written-name schema or count')
+-    return names
+-
+-
+-def candidate_census(baseline_reference, audit_refs):
+-    baseline, _ = verify_census(baseline_reference)
+-    modules = dict(baseline['modules'])
+-    for module, reference in audit_refs.items():
+-        require(module in TARGETS and module not in modules, 'Not an exact new target')
+-        rp = bound(reference)
+-        receipt, records, _ = validate_records(rp, module, TARGETS[module])
+-        require(receipt['targets'] == {module: TARGETS[module]}, 'Audit not singleton')
+-        require(written_names(module) <= {row['name'] for row in records}, 'Written declarations missing from complete types')
+-        modules[module] = {'module': module, 'source_sha256': TARGETS[module],
+-            'object_parts': receipt['inputs_before']['owned_object_parts'][module],
+-            'owned_receipt': str(rp), 'owned_receipt_sha256': sha(rp),
+-            'declarations_json_sha256': sha(rp.parent / 'declarations.json'),
+-            'complete_serialized_declarations': len(records)}
+-    return {'status': 'ALL_CURRENT_OWNED_SOURCES_OBJECTS_COMPLETE_TYPES_AXIOMS_EXACT',
+-        'created_utc': now(), 'modules': modules, 'owned_modules': len(modules),
+-        'complete_serialized_declarations': sum(r['complete_serialized_declarations'] for r in modules.values()),
+-        'original_owned_receipts_rehashed': len({str(path(r['owned_receipt']).resolve()) for r in modules.values()}),
+-        'external_closure_replayed': False, 'unconditional_main_proved': False,
+-        'acceptance_status': 'CANDIDATE_ONLY_PENDING_ROOT_INDEPENDENT_ACCEPTANCE'}
++"""Unexecuted shared validation/collector. Import defines functions only.
++
++This module never starts Lean/checker. Original Runtime initialization retains
++its provider revision/clean-tree checks. Root must review and bind this source.
++"""
++from pathlib import Path
++import datetime
++import hashlib
++import importlib.util
++import json
++import os
++
++STATE = Path(__file__).resolve().parent.parent
++ROOT = STATE.parents[1]
++PARTS = ('.olean', '.olean.private', '.olean.server', '.ilean', '.ir')
++AXIOMS = {'propext', 'Classical.choice', 'Quot.sound'}
++TARGETS = {
++    'ImbalancedChen.Counting': '8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa',
++    'ImbalancedChen.NormalizationGrowth': 'c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286',
++    'ImbalancedChen.UniformPrimeTail': '786ed7d70f3f3e89161a9e025d2c8bb0b06db6cddae7200c3fc1c0ca009ebbbf',
++}
++REVIEWS = {
++    'ImbalancedChen.Counting': ('source-reviews/20261022-counting865196-source-ready-needsstrict-CP.json', '6d465d765c98ab4980ae5cff4b830b10e26d48117331d5d698d986ebdc34e4d7'),
++    'ImbalancedChen.NormalizationGrowth': ('source-reviews/20261022-normalization-c4a454-readonly-frontier-CP.json', 'd47f8fc8cf610e92a0d0dbc3222009d750f30981197827f8befd46f74e1f7aff'),
++    'ImbalancedChen.UniformPrimeTail': ('source-reviews/20261022-uniform-prime-tail-frontier-source-review-HOLD.json', '492b07faecba38ce574269842b58dc2ccf119517782d6e10e79ad4c9f14af29a'),
++}
++PROTECTED = {
++    'runtime.py': '81635b52f3b62dfe477a8184bff5ef6dc8de3daee334c6cfd4547cccefe3b9be',
++    'audit_owned.py': '267d59bfc37e5d5a742b619390f5b42155bb5ab33d923684487acb6b8a7e19e6',
++    'preflight_current_oct20.py': 'e5c11c36e35582e4f864fa8582e49800027e91cbfab85d71f3456da83abb1947',
++    'import_walker_v2.py': 'e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914',
++    'import_walker_v2.e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914.py': 'e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914',
++    '../../verification/parts/p0/queue/AuditTemplate.lean': 'df79aecf54317dbdc193e9b68ec8e833f6d4d09a92f369ac6985d23d974ff822',
++    '../../../goldbach-integration/verification/parts/takeover-p0/checker_memory_guard.py': 'a506fcc8bd2a2f1731c1ae32d845be21bc3a35548ce25774aa8bf8b4cb6f7ab7',
++}
++
++
++def require(condition, message):
++    if not condition:
++        raise ValueError(message)
++
++
++def now():
++    return datetime.datetime.now(datetime.timezone.utc).isoformat()
++
++
++def path(value):
++    value = str(value).replace('\\', '/')
++    if os.name == 'nt' and value.startswith('/mnt/') and len(value) > 7:
++        value = value[5].upper() + ':/' + value[7:]
++    elif os.name != 'nt' and len(value) >= 3 and value[0].isascii() and value[0].isalpha() and value[1:3] == ':/':
++        value = '/mnt/' + value[0].lower() + '/' + value[3:]
++    p = Path(value)
++    if p.is_absolute():
++        return p
++    return (ROOT if value.startswith('.lake/') else STATE) / p
++
++
++def sha(value):
++    with path(value).open('rb') as stream:
++        return hashlib.file_digest(stream, 'sha256').hexdigest()
++
++
++def read(value):
++    return json.loads(path(value).read_text(encoding='utf-8'))
++
++
++def ref(value):
++    p = path(value).resolve()
++    return {'path': str(p), 'sha256': sha(p)}
++
++
++def bound(reference):
++    require(isinstance(reference, dict) and set(reference) == {'path', 'sha256'}, 'Exact path+SHA reference required')
++    require(sha(reference['path']) == reference['sha256'], 'Hash mismatch: ' + str(reference['path']))
++    return path(reference['path'])
++
++
++def write_new(value, data):
++    p = path(value)
++    p.parent.mkdir(parents=True, exist_ok=True)
++    with p.open('x', encoding='utf-8', newline='\n') as stream:
++        stream.write(json.dumps(data, indent=2, ensure_ascii=False) + '\n')
++    return ref(p)
++
++
++def load(name, value):
++    spec = importlib.util.spec_from_file_location(name, path(value))
++    module = importlib.util.module_from_spec(spec)
++    spec.loader.exec_module(module)
++    return module
++
++
++def protected():
++    for name, digest in PROTECTED.items():
++        require(sha(name) == digest, 'Canonical tool changed: ' + name)
++    for name, (review, digest) in REVIEWS.items():
++        require(sha(review) == digest, 'Source review changed: ' + name)
++        require(sha(ROOT / (name.replace('.', '/') + '.lean')) == TARGETS[name], 'Target source changed')
++
++
++def all_slots(obj):
++    stem = str(obj)[:-len('.olean')]
++    return {suffix: sha(stem + suffix) if Path(stem + suffix).is_file() else None for suffix in PARTS}
++
++
++def artifacts():
++    files = list((STATE / 'cache').glob('*.json'))
++    files += [p for p in (STATE / 'lib/lean').rglob('*') if p.is_file()]
++    return {p.relative_to(STATE).as_posix(): sha(p) for p in sorted(files)}
++
++
++def frozen_sources():
++    files = sorted((ROOT / 'ImbalancedChen').rglob('*.lean'))
++    require(len(files) == 562, 'Actual source path inventory changed')
++    return {p.relative_to(ROOT).as_posix(): sha(p) for p in files}
++
++
++def unchanged_non_target(before, after, target=None):
++    allowed = set()
++    if target:
++        stem = 'lib/lean/' + target.replace('.', '/')
++        allowed = {'cache/' + target + '.json'} | {stem + suffix for suffix in PARTS}
++    require({p: h for p, h in before.items() if p not in allowed} ==
++            {p: h for p, h in after.items() if p not in allowed}, 'Non-active-target cache/object mutation')
++
++
++def physical_idle():
++    lock = Path('/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-integration/.lake/takeover-p0/locks/compiler-0.lock')
++    st = lock.stat()
++    identity = f'{os.major(st.st_dev):02x}:{os.minor(st.st_dev):02x}:{st.st_ino}'
++    processes = []
++    for proc in Path('/proc').iterdir():
++        if not proc.name.isdigit():
++            continue
++        try:
++            exe = (proc / 'exe').resolve()
++            if exe.name in ('lean', 'lean.real', 'leanchecker', 'lake'):
++                processes.append({'pid': int(proc.name), 'exe': str(exe),
++                    'cmdline': (proc / 'cmdline').read_bytes().replace(b'\0', b' ').decode(errors='replace')})
++        except (FileNotFoundError, ProcessLookupError):
++            continue
++    locks = [line for line in Path('/proc/locks').read_text().splitlines() if identity in line]
++    require(not processes and not locks, 'Heavy slot not physically idle')
++    return {'observed_utc': now(), 'original_lock_path': str(lock),
++        'original_lock_identity': [os.major(st.st_dev), os.minor(st.st_dev), st.st_ino],
++        'compiler_processes': processes, 'matching_proc_locks': locks, 'no_lock_acquired': True}
++
++
++def validate_proper(reference, target):
++    report = read(bound(reference))
++    require(report['status'] == 'READONLY_PROPER_GRAPH_EXISTING_RECURSIVE_CACHES_EXACT', 'Proper failed')
++    require(report['target'] == target and report['target_sha256'] == TARGETS[target], 'Wrong proper target')
++    require(report['target_cache_included'] is False, 'Wrong proper mode')
++    require(report['proper_project_count'] == 1 and report['checked_project_cache_count'] == 0, 'Project parents present')
++    require(report['project_parents'] == report['missing_external'] == report['parser_findings'] == [], 'Proper findings')
++    require(report['no_compilation'] and report['no_cache_mutated'], 'Unexpected proper mutation')
++    return report
++
++
++def collect(target, proper_reference):
++    """A-F complete read-only input collector; only caller persists report."""
++    require(target in TARGETS, 'Target outside exact three')
++    protected()
++    proof_before, artifacts_before = frozen_sources(), artifacts()
++    proper = validate_proper(proper_reference, target)
++    runtime = load('three_frontiers_original_runtime', STATE / 'runtime.py')
++    walker = load('three_frontiers_frozen_walker', STATE / 'import_walker_v2.e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914.py')
++    rt = runtime.Runtime(ROOT)
++    graph, visiting = {}, set()
++
++    def visit(name):
++        if name in graph:
++            return
++        require(name not in visiting, 'Import cycle: ' + name)
++        visiting.add(name)
++        source, obj = rt.paths(name)
++        if source is None:
++            rel = Path(name.replace('.', '/')).with_suffix('.lean')
++            source = next((q for q in [runtime.BIN.parent / 'src/lean' / rel,
++                runtime.BIN.parent / 'src/lean/lake' / rel] if q.is_file()), None)
++        head = walker.header_imports(source.read_text()) if source else None
++        require(not head or not head['parser_findings'], 'Header parser findings: ' + name)
++        require(obj.is_file(), 'Missing main object: ' + name)
++        graph[name] = {'source_path': str(source) if source else None,
++            'source_sha256': sha(source) if source else None, 'object_path': str(obj),
++            'all_five_slots': all_slots(obj), 'header': head,
++            'absent_source_candidates': [] if source else [str(runtime.PROVIDERS / p['name'] /
++                Path(name.replace('.', '/')).with_suffix('.lean')) for p in rt.packages] +
++                [str(runtime.BIN.parent / prefix / Path(name.replace('.', '/')).with_suffix('.lean'))
++                 for prefix in ('src/lean', 'src/lean/lake')]}
++        if rt.project(name):
++            require(name == target and head is not None, 'Unexpected project parent')
++            explicit = list(dict.fromkeys(x['module'] for x in head['imports'] if not x['implicit']))
++            require(runtime.imports(source) == explicit, 'Original parser mismatch')
++        if head:
++            for dep in dict.fromkeys(item['module'] for item in head['imports']):
++                visit(dep)
++        visiting.remove(name)
++
++    visit(target)
++    foreign = {name: row for name, row in graph.items() if name != target}
++    original_foreign = {row['module']: row for row in proper['foreign_nodes']}
++    require(set(foreign) == set(original_foreign), 'Native graph differs from proper')
++    for name, row in foreign.items():
++        old = original_foreign[name]
++        require(row['source_sha256'] == old['source_sha256'] and row['object_path'] == old['object_path'] and
++                row['all_five_slots']['.olean'] == old['object_sha256'], 'Proper/native input differs: ' + name)
++    direct = runtime.imports(rt.paths(target)[0])
++    deps = {name: sha(rt.paths(name)[1]) for name in direct}
++    binding = rt.binding(target, deps)
++    cache_path = STATE / 'cache' / (target + '.json')
++    cache = read(cache_path)
++    target_slots = graph[target]['all_five_slots']
++    require(cache['status'] == 'PASS' and cache['binding'] == binding, 'Target cache missing or binding mismatch')
++    require(cache['object_parts'] == {k: v for k, v in target_slots.items() if v is not None}, 'Target slots mismatch')
++    registry = STATE / 'verified-remote-producers.json'
++    old_path = runtime.OLD / 'cache' / (target + '.json')
++    old_object = runtime.OLD / 'direct/lib/lean' / Path(target.replace('.', '/')).with_suffix('.olean')
++    native_bins = {name: sha(runtime.BIN / name) for name in ('lean', 'lean.real', 'leanchecker')}
++    stable = {'sources562': proof_before, 'pins': rt.pins(), 'native_bins': native_bins,
++        'protected': PROTECTED, 'foreign_graph': foreign, 'target_header': graph[target]['header'],
++        'target_binding': binding, 'registry': ref(registry) if registry.is_file() else None,
++        'old_cache': ref(old_path) if old_path.is_file() else None,
++        'old_object_all_five_slots': all_slots(old_object),
++        'native_provider_revisions': {p['name']: p['rev'] for p in rt.packages}}
++    require(stable['pins'] == proper['pins'], 'Proper pins differ')
++    require(frozen_sources() == proof_before and artifacts() == artifacts_before, 'Collector input changed during read')
++    protected()
++    return {'status': 'EXACT_READONLY_INPUTS_NOT_KERNEL_ACCEPTANCE', 'target': target,
++        'source_sha256': TARGETS[target], 'proper': proper_reference, 'stable_inputs': stable,
++        'target_state': {'cache': ref(cache_path), 'all_five_slots': target_slots},
++        'artifact_map': artifacts_before, 'collector': ref(__file__), 'no_compilation': True}
++
++
++def native_union_check(prepared_refs):
++    """Hash each root-bound native source and explicit five-slot path once.
++
++    Checks the UNION of all three graphs at EVERY stage boundary; no counts or
++    slots are sampled. Root-bound capture references retain the complete maps.
++    """
++    expected, absent_sources = {}, set()
++
++    def add(value, digest):
++        key = str(path(value))
++        require(key not in expected or expected[key] == digest, 'Conflicting native bindings')
++        expected[key] = digest
++
++    for module, reference in prepared_refs.items():
++        require(module in TARGETS, 'Foreign preparation target')
++        stable = read(bound(reference))['stable_inputs']
++        for row in stable['foreign_graph'].values():
++            if row['source_path'] is not None:
++                add(row['source_path'], row['source_sha256'])
++            else:
++                absent_sources.update(row['absent_source_candidates'])
++            stem = row['object_path'][:-len('.olean')]
++            require(set(row['all_five_slots']) == set(PARTS), 'Incomplete slot keys')
++            for suffix, digest in row['all_five_slots'].items():
++                add(stem + suffix, digest)
++        for name, digest in stable['native_bins'].items():
++            add('/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/' + name, digest)
++        registry = stable['registry']
++        add(STATE / 'verified-remote-producers.json', registry['sha256'] if registry else None)
++        old = stable['old_cache']
++        add(ROOT.parent / 'goldbach-integration/.lake/takeover-p0/cache' / (module + '.json'), old['sha256'] if old else None)
++        stem = str(ROOT.parent / 'goldbach-integration/.lake/takeover-p0/direct/lib/lean' / module.replace('.', '/'))
++        for suffix, digest in stable['old_object_all_five_slots'].items():
++            add(stem + suffix, digest)
++    for value in absent_sources:
++        require(not path(value).is_file(), 'Previously unresolved native source appeared')
++    for value, digest in expected.items():
++        p = path(value)
++        require((sha(p) if p.is_file() else None) == digest, 'Native/old/registry input changed: ' + value)
++    encoded = json.dumps({'paths': expected, 'absent_sources': sorted(absent_sources)}, sort_keys=True).encode()
++    return {'status': 'ALL_NATIVE_SOURCES_FIVE_SLOTS_EXACT', 'map_sha256': hashlib.sha256(encoded).hexdigest(),
++        'prepared': prepared_refs, 'paths_checked': len(expected), 'absent_source_paths_checked': len(absent_sources)}
++
++
++def validate_records(receipt_path, module, expected_source, expected_parts=None):
++    """Independent complete receipt validation, matching original verifier checks."""
++    rp = path(receipt_path)
++    receipt = read(rp)
++    require(receipt['status'] == 'PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS', 'Owned replay failed')
++    require(receipt['inputs_before'] == receipt['inputs_after'], 'Owned inputs changed')
++    require(not receipt['external_closure_replay_claimed'] and not receipt['unconditional_main_claimed'], 'Inflated claim')
++    require(receipt['targets'][module] == expected_source, 'Owned source mismatch')
++    pieces = receipt['inputs_before']['owned_object_parts'][module]
++    if expected_parts is not None:
++        require(pieces == expected_parts, 'Owned/strict objects differ')
++    require(pieces == {k: v for k, v in all_slots(STATE / 'lib/lean' / (module.replace('.', '/') + '.olean')).items() if v is not None}, 'Current owned objects changed')
++    inventory_stages = [s for s in receipt['stages'] if s['kind'] == 'full_inventory_type_axioms']
++    require(len(inventory_stages) == 1 and inventory_stages[0]['exit_code'] == 0, 'Incomplete type stage')
++    require(sha(rp.parent / 'declarations.log') == inventory_stages[0]['log_sha256'], 'Inventory log hash')
++    inventories, emitted = {}, {}
++    for line in (rp.parent / 'declarations.log').read_text().splitlines():
++        if line.startswith('P0_QUEUE_INVENTORY '):
++            item = json.loads(line.split(' ', 1)[1])
++            require(item['module'] not in inventories, 'Duplicate inventory')
++            inventories[item['module']] = item
++        if line.startswith('P0_QUEUE_DECL '):
++            item = json.loads(line.split(' ', 1)[1])
++            require(item['name'] not in emitted, 'Duplicate emitted name')
++            emitted[item['name']] = item
++    records_all = read(rp.parent / 'declarations.json')
++    require(len(records_all) == len(emitted), 'Emitted/JSON record count differs')
++    require({r['name']: r for r in records_all} == emitted, 'Emitted/JSON records differ')
++    records = [row for row in records_all if row['module'] == module]
++    names = [row['name'] for row in records]
++    require(len(names) == len(set(names)) > 0, 'Duplicate/empty records')
++    require(len(records) == receipt['declaration_counts'][module], 'Declaration count differs')
++    for row in records:
++        require(row['type'] and '⋯' not in row['type'], 'Truncated type')
++        require(not (row['unsafe'] or row['partial'] or row['axiom']), 'Unsafe/partial/axiom')
++        require(set(row['axioms']) <= AXIOMS, 'Forbidden axiom')
++    inv = inventories[module]
++    require(len(inv['serialized']) == len(set(inv['serialized'])) == len(names), 'Serialized duplicate/count')
++    require(len(inv['environment']) == len(set(inv['environment'])) == len(names), 'Environment duplicate/count')
++    require(set(names) == set(inv['serialized']) == set(inv['environment']), 'Complete inventory mismatch')
++    stocks = [s for s in receipt['stages'] if s['kind'] == 'stock_replay' and s['module'] == module]
++    require(len(stocks) == 1, 'Stock invocation count')
++    stock = stocks[0]['result']
++    require(stock['status'] == 'PASS' and stock['returncode'] == 0, 'Stock failed')
++    require(sha(rp.parent / ('replay-' + module + '.log')) == stock['log_sha256'], 'Stock log hash')
++    return receipt, records, inv
++
++
++def verify_census(reference):
++    """Portable independent verifier; no importing old top-level operator scripts."""
++    census = read(bound(reference))
++    require(census['status'] == 'ALL_CURRENT_OWNED_SOURCES_OBJECTS_COMPLETE_TYPES_AXIOMS_EXACT', 'Census status')
++    require(not census['external_closure_replayed'] and not census['unconditional_main_proved'], 'Census claims')
++    total, receipts = 0, set()
++    for module, entry in census['modules'].items():
++        require(sha(ROOT / (module.replace('.', '/') + '.lean')) == entry['source_sha256'], 'Census source')
++        rp = bound({'path': entry['owned_receipt'], 'sha256': entry['owned_receipt_sha256']})
++        receipt, records, _ = validate_records(rp, module, entry['source_sha256'], entry['object_parts'])
++        require(sha(rp.parent / 'declarations.json') == entry['declarations_json_sha256'], 'Census declaration hash')
++        require(len(records) == entry['complete_serialized_declarations'], 'Census complete count')
++        total += len(records)
++        receipts.add(str(rp.resolve()))
++    counts = {'owned_modules': len(census['modules']), 'declarations': total, 'original_receipts': len(receipts)}
++    require(counts == {'owned_modules': census['owned_modules'], 'declarations': census['complete_serialized_declarations'],
++        'original_receipts': census['original_owned_receipts_rehashed']}, 'Census totals')
++    return census, counts
++
++
++def written_names(module):
++    review = read(REVIEWS[module][0])
++    rows = review['all_written_types_and_proofs_reviewed'] if module.endswith('NormalizationGrowth') else review['declarations']
++    return {'ImbalancedChen.' + row['name'] for row in rows}
++
++
++def candidate_census(baseline_reference, audit_refs):
++    baseline, _ = verify_census(baseline_reference)
++    modules = dict(baseline['modules'])
++    for module, reference in audit_refs.items():
++        require(module in TARGETS and module not in modules, 'Not an exact new target')
++        rp = bound(reference)
++        receipt, records, _ = validate_records(rp, module, TARGETS[module])
++        require(receipt['targets'] == {module: TARGETS[module]}, 'Audit not singleton')
++        require(written_names(module) <= {row['name'] for row in records}, 'Written declarations missing from complete types')
++        modules[module] = {'module': module, 'source_sha256': TARGETS[module],
++            'object_parts': receipt['inputs_before']['owned_object_parts'][module],
++            'owned_receipt': str(rp), 'owned_receipt_sha256': sha(rp),
++            'declarations_json_sha256': sha(rp.parent / 'declarations.json'),
++            'complete_serialized_declarations': len(records)}
++    return {'status': 'ALL_CURRENT_OWNED_SOURCES_OBJECTS_COMPLETE_TYPES_AXIOMS_EXACT',
++        'created_utc': now(), 'modules': modules, 'owned_modules': len(modules),
++        'complete_serialized_declarations': sum(r['complete_serialized_declarations'] for r in modules.values()),
++        'original_owned_receipts_rehashed': len({str(path(r['owned_receipt']).resolve()) for r in modules.values()}),
++        'external_closure_replayed': False, 'unconditional_main_proved': False,
++        'acceptance_status': 'CANDIDATE_ONLY_PENDING_ROOT_INDEPENDENT_ACCEPTANCE'}

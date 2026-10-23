@@ -1,0 +1,141 @@
+{
+  "status": "OFFDIAG167_SOURCE_ONLY_PROJECTION_INFERENCE_REPAIR_UNCOMPILED_HOLD",
+  "created_utc": "2026-10-21T11:15:08.270677+00:00",
+  "target": "ImbalancedChen.Part3ResonanceOffDiagonalCount",
+  "source_path": "ImbalancedChen/Part3ResonanceOffDiagonalCount.lean",
+  "before": {
+    "sha256": "1a0e0aa0d54edc827ef4ded9cfc8db51c009c58d6f5c026cb39f67fbec2e20b3",
+    "bytes": 7209,
+    "LF": 167,
+    "immutable_complete_raw_backup": "rounds/20261021-offdiag1a0e-projection-source-repair-original.lean.txt"
+  },
+  "after": {
+    "sha256": "e3acf8800f2d95539193b809c59408ed4684358887d1086f6d223d3a0791e595",
+    "bytes": 7199,
+    "LF": 167,
+    "complete_raw_candidate_snapshot": "rounds/20261021-offdiag-projection-source-repair-candidate.lean.txt",
+    "compiled": false,
+    "kernel_accepted": false
+  },
+  "failure_chain": {
+    "operator_cp": "source-reviews/20261021-offdiag1a0e-soleheavy-fresh175-operator-terminal-HOLD.json",
+    "operator_cp_sha256": "7a75b0ce167e83f01bf9f449ee29ade9d1124907d6f4dce7182fa8582daa0e12",
+    "terminal_session_id": 78739,
+    "terminal_exit_code": 1,
+    "original_strict_receipt": "runs/20261021T111055279919Z-ImbalancedChen.Part3ResonanceOffDiagonalCount/receipt.json",
+    "original_strict_receipt_sha256": "4a6f3d5892767eedc3bb787e6b435f010590a02ad1c9aff4d0c6b11bdef4a8c4",
+    "original_compiler_log": "runs/20261021T111055279919Z-ImbalancedChen.Part3ResonanceOffDiagonalCount/stdout.log",
+    "original_compiler_log_sha256": "e9f83b6f225fd68c2249f87c9b2e7a13a83ca0f946ddd432411000c8d4288a68",
+    "original_failed_source_sha256": "1a0e0aa0d54edc827ef4ded9cfc8db51c009c58d6f5c026cb39f67fbec2e20b3",
+    "error": "source68:53 congrArg Prod.fst he: expected original z=w while he equates encoded product images."
+  },
+  "repair": {
+    "kind": "Two local projection inference statements only",
+    "before_literal": "        have hfirst : z.1 = w.1 := congrArg Prod.fst he\n        have hquot : (z.2 - z.1) / m = (w.2 - w.1) / m :=\n          congrArg Prod.snd he\n",
+    "after_literal": "        have hfirst := congrArg (fun v : \u2115 \u00d7 \u2115 => v.1) he\n        have hquot :=\n          congrArg (fun v : \u2115 \u00d7 \u2115 => v.2) he\n",
+    "reason": "Infer each projection equality from he with an explicit Nat\u00d7Nat projection function and no expected equality type. This lets Lean infer congrArg endpoints from encoded images before reducing projections; hfirst and hquot retain the original mathematical equalities used by unchanged hdiff/Prod.ext/omega.",
+    "new_hypotheses": false,
+    "conclusion_changed": false
+  },
+  "complete_original_types_byte_exact": [
+    {
+      "name": "increasing_count_le",
+      "visibility": "private",
+      "first_line": 32,
+      "complete_header_and_type": "private theorem increasing_count_le (S : Finset \u2115) (U : \u211d)\n    (hS : \u2200 n \u2208 S, U \u2264 (n : \u211d) \u2227 (n : \u211d) \u2264 2 * U)\n    (m : \u2115) (hm : 0 < m) :\n    ((S \u00d7\u02e2 S).filter (fun z => z.1 < z.2 \u2227 Nat.ModEq m z.1 z.2)).card \u2264\n      S.card * Nat.floor (U / (m : \u211d))",
+      "sha256": "d98047ef9e2df03f1b49b840ed9d409f378e709aae6f0c6c70d6cad55a3637ba",
+      "original_candidate_byte_exact": true
+    },
+    {
+      "name": "finite_count_le",
+      "visibility": "private",
+      "first_line": 85,
+      "complete_header_and_type": "private theorem finite_count_le (S : Finset \u2115) (U : \u211d) (hU : 1 \u2264 U)\n    (hS : \u2200 n \u2208 S, U \u2264 (n : \u211d) \u2227 (n : \u211d) \u2264 2 * U)\n    (m : \u2115) (hm : 0 < m) :\n    (((S \u00d7\u02e2 S).filter (fun z => z.1 \u2260 z.2 \u2227 Nat.ModEq m z.1 z.2)).card : \u211d) \u2264\n      4 * U ^ 2 / (m : \u211d)",
+      "sha256": "cca50fd4bb711798039832e6ceb92fd159838545282c221ec931c9f1f65d27e6",
+      "original_candidate_byte_exact": true
+    },
+    {
+      "name": "dyadic_ordered_offDiagonal_modEq_count_le",
+      "visibility": "public",
+      "first_line": 151,
+      "complete_header_and_type": "theorem dyadic_ordered_offDiagonal_modEq_count_le (U : \u211d) (hU : 1 \u2264 U)\n    (m : \u2115) (hm : 0 < m) :\n    (((Icc (Nat.ceil U) (Nat.floor (2 * U)) \u00d7\u02e2\n        Icc (Nat.ceil U) (Nat.floor (2 * U))).filter\n      (fun z => z.1 \u2260 z.2 \u2227 Nat.ModEq m z.1 z.2)).card : \u211d) \u2264\n        4 * U ^ 2 / (m : \u211d)",
+      "sha256": "c9511e9adf77a4cede3651cbfb2139946c0919cf347a9de2fec2248526d5abc0",
+      "original_candidate_byte_exact": true
+    }
+  ],
+  "preservation": {
+    "imports_complete_raw": "import Mathlib.Algebra.Order.Archimedean.Real.Basic\nimport Mathlib.Algebra.Order.Floor.Semiring\nimport Mathlib.Data.Finset.Prod\nimport Mathlib.Data.Nat.ModEq\nimport Mathlib.Order.Interval.Finset.Nat\nimport Mathlib.Tactic.Linarith\nimport Mathlib.Tactic.NormNum\nimport Mathlib.Tactic.Positivity\nimport Mathlib.Tactic.Ring\nimport Lean.Elab.Tactic.NormCast\nimport Lean.Elab.Tactic.Omega",
+    "imports_raw_sha256": "57916eae849959933823261342e041980ab8e39a2d2b457b2b6bd27d8c9d8f37",
+    "imports_byte_exact": true,
+    "all_three_headers_and_types_byte_exact": true,
+    "all_first_line_locations_unchanged": true,
+    "other_two_complete_declarations_and_proofs_byte_exact": true,
+    "all_other_math_steps_prefix_suffix_byte_exact": true,
+    "prefix_bytes": 2819,
+    "prefix_sha256": "4c3b10f4def6df498d38b0abf9f2ae3ce2c2a04b26041c52ce52bf4296e71575",
+    "unchanged_suffix_bytes": 4245,
+    "suffix_sha256": "9781a16169a43806fae9cb1de02e38b52361b8eebc3a96b81a39395a4e5c3162",
+    "line_count167_LF_no_CR_preserved": true,
+    "original_source_bindings_metadata_path": "rounds/20261021-offdiag1a0e-source-bindings.json",
+    "original_source_bindings_metadata_sha256": "c3dd47d40a91da2098e5b1fc41df44dccc9cef7836f83278d59157ac889e11d5",
+    "original_source_bindings_metadata_unchanged_historical": true
+  },
+  "diff": {
+    "path": "rounds/20261021-offdiag-projection-source-repair.diff",
+    "sha256": "8f27390f7f140b9b9232270d01fb0d43e7d53a8875279ac5f07197bea9c008e2",
+    "bytes": 708,
+    "complete_raw_diff_utf8": "--- rounds/20261021-offdiag1a0e-projection-source-repair-original.lean.txt\n+++ ImbalancedChen/Part3ResonanceOffDiagonalCount.lean\n@@ -65,9 +65,9 @@\n       \u00b7 intro z hz w hw he\n         obtain \u27e8_, hzlt, hzmod\u27e9 := mem_filter.mp hz\n         obtain \u27e8_, hwlt, hwmod\u27e9 := mem_filter.mp hw\n-        have hfirst : z.1 = w.1 := congrArg Prod.fst he\n-        have hquot : (z.2 - z.1) / m = (w.2 - w.1) / m :=\n-          congrArg Prod.snd he\n+        have hfirst := congrArg (fun v : \u2115 \u00d7 \u2115 => v.1) he\n+        have hquot :=\n+          congrArg (fun v : \u2115 \u00d7 \u2115 => v.2) he\n         have hzdvd : m \u2223 z.2 - z.1 :=\n           (Nat.modEq_iff_dvd' hzlt.le).mp hzmod\n         have hwdvd : m \u2223 w.2 - w.1 :=\n"
+  },
+  "raw_inverse": {
+    "path": "rounds/20261021-offdiag-projection-source-repair.raw-inverse.json",
+    "sha256": "3ceb98384329d932fd089e0f6d7df60e1611d0550a1fa7b5a853fa4a03a20359",
+    "full_inverse": {
+      "original_path": "rounds/20261021-offdiag1a0e-projection-source-repair-original.lean.txt",
+      "original_sha256": "1a0e0aa0d54edc827ef4ded9cfc8db51c009c58d6f5c026cb39f67fbec2e20b3",
+      "candidate_snapshot_path": "rounds/20261021-offdiag-projection-source-repair-candidate.lean.txt",
+      "candidate_sha256": "e3acf8800f2d95539193b809c59408ed4684358887d1086f6d223d3a0791e595",
+      "offset_units": "UTF-8 raw bytes",
+      "edits": [
+        {
+          "old_start": 2819,
+          "old_end": 2964,
+          "new_start": 2819,
+          "new_end": 2954,
+          "old_hex": "20202020202020206861766520686669727374203a207a2e31203d20772e31203a3d20636f6e67724172672050726f642e6673742068650a202020202020202068617665206871756f74203a20287a2e32202d207a2e3129202f206d203d2028772e32202d20772e3129202f206d203a3d0a20202020202020202020636f6e67724172672050726f642e736e642068650a",
+          "new_hex": "20202020202020206861766520686669727374203a3d20636f6e6772417267202866756e2076203a20e2849520c39720e28495203d3e20762e31292068650a202020202020202068617665206871756f74203a3d0a20202020202020202020636f6e6772417267202866756e2076203a20e2849520c39720e28495203d3e20762e32292068650a",
+          "expected_old_occurrences": 1,
+          "expected_new_occurrences": 1
+        }
+      ],
+      "raw_forward_exact": true,
+      "raw_reverse_exact": true
+    },
+    "unique_UTF8_anchor_counts_each_one": true,
+    "raw_forward_exact": true,
+    "raw_reverse_exact": true
+  },
+  "execution_scope": {
+    "source_only_authorized_change": true,
+    "backup_snapshot_diff_inverse_before_atomic_source_replace": true,
+    "new_proper_classifier_compiler_checker_helper_invoked": false,
+    "Git_index_stage_commit_inspected_or_modified": false,
+    "archive_verification_runtime_helpers_pins_cache_catalog_modified": false,
+    "actual_generated_count_predicted": null,
+    "main_theorem_proved": false
+  },
+  "preparation_diagnostics": [
+    "After source/snapshots/diff/inverse were successfully written and verified, printing Unicode diff to Windows GBK stdout raised UnicodeEncodeError. No source or artifact rollback/retry required; final verification read exact persisted bytes with UTF8 output. This was a display-only preparation exit, no compiler execution."
+  ],
+  "quota": {
+    "before_used_percent": 36,
+    "before_remaining_percent": 64,
+    "after_used_percent": 36,
+    "after_remaining_percent": 64,
+    "secondary": null,
+    "stop_remaining_lte": 40,
+    "null_is_not_zero": true
+  },
+  "publication": "Original complete bytes backed up immutably before source mutation; snapshots/diff/inverse/source/checkpoint written atomically .tmp -> replace.",
+  "HOLD": true,
+  "next": "Root source/diff review and separate rebind/execution authorization. No compilation performed."
+}

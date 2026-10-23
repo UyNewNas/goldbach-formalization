@@ -1,0 +1,300 @@
+ImbalancedChen/ActualFrozenSelectedPairSlots.lean:74:4: error: Tactic `apply` failed: could not unify the type of `List.Perm.trans hmove
+  (List.Perm.trans (List.Perm.append_left selected (BoxPartition.perm hpart)) ?m.166)`
+  (ac.1 ++ selected ++ ac.2).Perm ?m.165
+with the goal
+  have slots :=
+    have ac := actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: tail);
+    (ac.1, [p 1, p 2], ac.2);
+  (slots.1 ++ slots.2.1 ++ slots.2.2).Perm (p 0 :: p 1 :: p 2 :: tail)
+
+case pos
+α : Type u_1
+D A : ℝ
+yz : Bool
+upper : α → ℕ
+p : Fin 3 → α
+tail : List α
+h✝¹ : 1 ≤ D / (A * ↑(actualSelectedPairProduct yz fun i => upper (p i)))
+h✝ : yz = true
+ac : List α × List α := actualTwoCapacityGreedy (fun i => ↑(upper i)) A ((if yz = true then p 0 else p 1) :: tail)
+selected : List α := if yz = true then [p 1, p 2] else [p 0, p 2]
+hpart :
+  BoxPartition (actualTwoCapacityGreedy (fun i => ↑(upper i)) A ((if yz = true then p 0 else p 1) :: tail)).1
+    (actualTwoCapacityGreedy (fun i => ↑(upper i)) A ((if yz = true then p 0 else p 1) :: tail)).2
+    ((if yz = true then p 0 else p 1) :: tail)
+hmove : (ac.1 ++ selected ++ ac.2).Perm (selected ++ (ac.1 ++ ac.2))
+⊢ have slots :=
+    have ac := actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: tail);
+    (ac.1, [p 1, p 2], ac.2);
+  (slots.1 ++ slots.2.1 ++ slots.2.2).Perm (p 0 :: p 1 :: p 2 :: tail)
+ImbalancedChen/ActualFrozenSelectedPairSlots.lean:79:4: error: Type mismatch: After simplification, term
+  BoxPartition.perm (actualTwoCapacityGreedy_partition (fun i => ↑(upper i)) A (p 0 :: p 1 :: p 2 :: tail))
+ has type
+  ((actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: p 1 :: p 2 :: tail)).1 ++
+        (actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: p 1 :: p 2 :: tail)).2).Perm
+    (p 0 :: p 1 :: p 2 :: tail)
+but is expected to have type
+  ((actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 1 :: tail)).1 ++ [p 0, p 2] ++
+        (actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 1 :: tail)).2).Perm
+    (p 0 :: p 1 :: p 2 :: tail)
+ImbalancedChen/ActualFrozenSelectedPairSlots.lean:63:76: error: unsolved goals
+case neg
+α : Type u_1
+D A : ℝ
+yz : Bool
+upper : α → ℕ
+p : Fin 3 → α
+tail : List α
+h✝ : ¬1 ≤ D / (A * ↑(actualSelectedPairProduct yz fun i => upper (p i)))
+⊢ have slots :=
+    have ab := actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: p 1 :: p 2 :: tail);
+    (ab.1, ab.2, []);
+  (slots.1 ++ slots.2.1 ++ slots.2.2).Perm (p 0 :: p 1 :: p 2 :: tail)
+ImbalancedChen/ActualFrozenSelectedPairSlots.lean:107:83: error: Application type mismatch: The argument
+  hi
+has type
+  i ∈ slots.1
+but is expected to have type
+  i ∈ (actualFrozenSelectedPairSlots D A yz upper p tail).1 ++ (actualFrozenSelectedPairSlots D A yz upper p tail).2.1
+in the application
+  Or.inl hi
+ImbalancedChen/ActualFrozenSelectedPairSlots.lean:111:35: error: Application type mismatch: The argument
+  List.mem_append.mpr (Or.inr hi)
+has type
+  i ∈ ?m.173 ++ slots.2.2
+but is expected to have type
+  i ∈ (actualFrozenSelectedPairSlots D A yz upper p tail).2.2
+in the application
+  Or.inr (List.mem_append.mpr (Or.inr hi))
+ImbalancedChen/ActualFrozenSelectedPairSlots.lean:142:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.map upper (if yz = true then [p 1, p 2] else [p 0, p 2])).prod
+in the target expression
+  ((List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: tail)).1).prod,
+      (List.map upper [p 1, p 2]).prod,
+      (List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: tail)).2).prod) =
+    (((List.map upper
+              (actualTwoCapacityGreedy (fun i => ↑(upper i)) A ((if yz = true then p 0 else p 1) :: tail)).1).prod,
+          (List.map upper
+              (actualTwoCapacityGreedy (fun i => ↑(upper i)) A ((if yz = true then p 0 else p 1) :: tail)).2).prod).1,
+      actualSelectedPairProduct yz fun i => upper (p i),
+      ((List.map upper
+              (actualTwoCapacityGreedy (fun i => ↑(upper i)) A ((if yz = true then p 0 else p 1) :: tail)).1).prod,
+          (List.map upper
+              (actualTwoCapacityGreedy (fun i => ↑(upper i)) A ((if yz = true then p 0 else p 1) :: tail)).2).prod).2)
+
+case pos
+α : Type u_1
+D A : ℝ
+yz : Bool
+upper : α → ℕ
+p : Fin 3 → α
+tail : List α
+hmap :
+  ∀ (input : List α),
+    actualTwoCapacityFactors A (List.map upper input) =
+      ((List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A input).1).prod,
+        (List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A input).2).prod)
+hrest :
+  actualTwoCapacityFactors A ((actualSelectedPairRemainingPrime yz fun i => upper (p i)) :: List.map upper tail) =
+    ((List.map upper
+          (actualTwoCapacityGreedy (fun i => ↑(upper i)) A ((if yz = true then p 0 else p 1) :: tail)).1).prod,
+      (List.map upper
+          (actualTwoCapacityGreedy (fun i => ↑(upper i)) A ((if yz = true then p 0 else p 1) :: tail)).2).prod)
+hfull :
+  actualTwoCapacityFactors A (upper (p 0) :: upper (p 1) :: upper (p 2) :: List.map upper tail) =
+    ((List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: p 1 :: p 2 :: tail)).1).prod,
+      (List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: p 1 :: p 2 :: tail)).2).prod)
+hb :
+  (List.map upper (if yz = true then [p 1, p 2] else [p 0, p 2])).prod =
+    actualSelectedPairProduct yz fun i => upper (p i)
+h✝¹ : 1 ≤ D / (A * ↑(actualSelectedPairProduct yz fun i => upper (p i)))
+h✝ : yz = true
+⊢ ((List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: tail)).1).prod,
+      (List.map upper [p 1, p 2]).prod,
+      (List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: tail)).2).prod) =
+    (((List.map upper
+              (actualTwoCapacityGreedy (fun i => ↑(upper i)) A ((if yz = true then p 0 else p 1) :: tail)).1).prod,
+          (List.map upper
+              (actualTwoCapacityGreedy (fun i => ↑(upper i)) A ((if yz = true then p 0 else p 1) :: tail)).2).prod).1,
+      actualSelectedPairProduct yz fun i => upper (p i),
+      ((List.map upper
+              (actualTwoCapacityGreedy (fun i => ↑(upper i)) A ((if yz = true then p 0 else p 1) :: tail)).1).prod,
+          (List.map upper
+              (actualTwoCapacityGreedy (fun i => ↑(upper i)) A ((if yz = true then p 0 else p 1) :: tail)).2).prod).2)
+ImbalancedChen/ActualFrozenSelectedPairSlots.lean:143:4: error: Type mismatch
+  congrArg (fun ab => (ab.1, ab.2, 1)) (Eq.symm hfull)
+has type
+  (((List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: p 1 :: p 2 :: tail)).1).prod,
+          (List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: p 1 :: p 2 :: tail)).2).prod).1,
+      ((List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: p 1 :: p 2 :: tail)).1).prod,
+          (List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: p 1 :: p 2 :: tail)).2).prod).2,
+      1) =
+    ((actualTwoCapacityFactors A (upper (p 0) :: upper (p 1) :: upper (p 2) :: List.map upper tail)).1,
+      (actualTwoCapacityFactors A (upper (p 0) :: upper (p 1) :: upper (p 2) :: List.map upper tail)).2, 1)
+but is expected to have type
+  (have slots :=
+      have ac := actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 1 :: tail);
+      (ac.1, [p 0, p 2], ac.2);
+    ((List.map upper slots.1).prod, (List.map upper slots.2.1).prod, (List.map upper slots.2.2).prod)) =
+    have ac :=
+      actualTwoCapacityFactors A ((actualSelectedPairRemainingPrime yz fun i => upper (p i)) :: List.map upper tail);
+    (ac.1, actualSelectedPairProduct yz fun i => upper (p i), ac.2)
+ImbalancedChen/ActualFrozenSelectedPairSlots.lean:118:82: error: unsolved goals
+case neg
+α : Type u_1
+D A : ℝ
+yz : Bool
+upper : α → ℕ
+p : Fin 3 → α
+tail : List α
+hmap :
+  ∀ (input : List α),
+    actualTwoCapacityFactors A (List.map upper input) =
+      ((List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A input).1).prod,
+        (List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A input).2).prod)
+hrest :
+  actualTwoCapacityFactors A ((actualSelectedPairRemainingPrime yz fun i => upper (p i)) :: List.map upper tail) =
+    ((List.map upper
+          (actualTwoCapacityGreedy (fun i => ↑(upper i)) A ((if yz = true then p 0 else p 1) :: tail)).1).prod,
+      (List.map upper
+          (actualTwoCapacityGreedy (fun i => ↑(upper i)) A ((if yz = true then p 0 else p 1) :: tail)).2).prod)
+hfull :
+  actualTwoCapacityFactors A (upper (p 0) :: upper (p 1) :: upper (p 2) :: List.map upper tail) =
+    ((List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: p 1 :: p 2 :: tail)).1).prod,
+      (List.map upper (actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: p 1 :: p 2 :: tail)).2).prod)
+hb :
+  (List.map upper (if yz = true then [p 1, p 2] else [p 0, p 2])).prod =
+    actualSelectedPairProduct yz fun i => upper (p i)
+h✝ : ¬1 ≤ D / (A * ↑(actualSelectedPairProduct yz fun i => upper (p i)))
+⊢ (have slots :=
+      have ab := actualTwoCapacityGreedy (fun i => ↑(upper i)) A (p 0 :: p 1 :: p 2 :: tail);
+      (ab.1, ab.2, []);
+    ((List.map upper slots.1).prod, (List.map upper slots.2.1).prod, (List.map upper slots.2.2).prod)) =
+    have ab :=
+      actualTwoCapacityFactors A
+        ((fun i => upper (p i)) 0 :: (fun i => upper (p i)) 1 :: (fun i => upper (p i)) 2 :: List.map upper tail);
+    (ab.1, ab.2, 1)
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+ImbalancedChen/ActualFrozenSelectedPairSlots.lean:267:4: error: unsolved goals
+case false.e_a
+e κ δ x : ℝ
+m : ℕ
+j : ActualExtendedThirdDyadicLabel m
+he0 : 0 < e
+he : e ≤ 1 / 384
+hκ : κ ≤ e / 4
+hδ : δ ≤ e / 32
+hmesh : actualExtendedThirdDyadicStep m ≤ e / 32
+hfull : actualExtendedThirdDyadicHi m j 0 ≤ VariableEnvelope.mu - 4 * e
+t : Fin 3 → ℝ
+ht : t ∈ actualExtendedThirdPhysicalCell m j
+hx : 1 < x
+p : Fin 3 → ℕ
+hp : ∀ (i : Fin 3), 0 < p i
+hs : actualSelectedPrimeCoordinates x p ∈ actualExtendedThirdPhysicalCell m j
+hxpos : 0 < x
+hpow : ∀ (i : Fin 3), x ^ actualSelectedPrimeCoordinates x p i = ↑(p i)
+hk : actualExtendedThirdLeastWinningIndex e m j = if false = true then 7 else 6
+left✝² : 1 / 2 ≤ actualExtendedThirdPairParameter e m j t false
+left✝¹ : actualExtendedThirdPairParameter e m j t false < 5 / 8
+left✝ : actualExtendedThirdPhysicalLevel e m j + e ≤ actualExtendedThirdPairParameter e m j t false
+hcell :
+  ∀ s ∈ actualExtendedThirdPhysicalCell m j,
+    (if false = true then 2 * s 0 + s 1 + s 2 else s 0 + 2 * s 1 + s 2) + e / 4 ≤
+        actualExtendedThirdPairParameter e m j t false ∧
+      actualExtendedThirdPairParameter e m j t false + e / 4 ≤
+        VariableEnvelope.v (if false = true then s 1 + s 2 else s 0 + s 2)
+hgate :
+  (if false = true then
+        2 * actualSelectedPrimeCoordinates x p 0 + actualSelectedPrimeCoordinates x p 1 +
+          actualSelectedPrimeCoordinates x p 2
+      else
+        actualSelectedPrimeCoordinates x p 0 + 2 * actualSelectedPrimeCoordinates x p 1 +
+          actualSelectedPrimeCoordinates x p 2) +
+      e / 4 ≤
+    actualExtendedThirdPairParameter e m j t false
+hend :
+  actualExtendedThirdPairParameter e m j t false + e / 4 ≤
+    VariableEnvelope.v
+      (if false = true then actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2
+      else actualSelectedPrimeCoordinates x p 0 + actualSelectedPrimeCoordinates x p 2)
+hselected :
+  (x ^
+      if false = true then actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2
+      else actualSelectedPrimeCoordinates x p 0 + actualSelectedPrimeCoordinates x p 2) =
+    ↑(actualSelectedPairProduct false p)
+⊢ actualSelectedPrimeCoordinates x p 0 + actualSelectedPrimeCoordinates x p 2 +
+      actualSelectedPrimeCoordinates x p 1 * 2 =
+    if false = true then
+      actualSelectedPrimeCoordinates x p 0 * 2 + actualSelectedPrimeCoordinates x p 2 +
+        actualSelectedPrimeCoordinates x p 1
+    else
+      actualSelectedPrimeCoordinates x p 0 + actualSelectedPrimeCoordinates x p 2 +
+        actualSelectedPrimeCoordinates x p 1 * 2
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+ImbalancedChen/ActualFrozenSelectedPairSlots.lean:272:4: error: unsolved goals
+case true.e_a
+e κ δ x : ℝ
+m : ℕ
+j : ActualExtendedThirdDyadicLabel m
+he0 : 0 < e
+he : e ≤ 1 / 384
+hκ : κ ≤ e / 4
+hδ : δ ≤ e / 32
+hmesh : actualExtendedThirdDyadicStep m ≤ e / 32
+hfull : actualExtendedThirdDyadicHi m j 0 ≤ VariableEnvelope.mu - 4 * e
+t : Fin 3 → ℝ
+ht : t ∈ actualExtendedThirdPhysicalCell m j
+hx : 1 < x
+p : Fin 3 → ℕ
+hp : ∀ (i : Fin 3), 0 < p i
+hs : actualSelectedPrimeCoordinates x p ∈ actualExtendedThirdPhysicalCell m j
+hxpos : 0 < x
+hpow : ∀ (i : Fin 3), x ^ actualSelectedPrimeCoordinates x p i = ↑(p i)
+hk : actualExtendedThirdLeastWinningIndex e m j = if true = true then 7 else 6
+left✝² : 1 / 2 ≤ actualExtendedThirdPairParameter e m j t true
+left✝¹ : actualExtendedThirdPairParameter e m j t true < 5 / 8
+left✝ : actualExtendedThirdPhysicalLevel e m j + e ≤ actualExtendedThirdPairParameter e m j t true
+hcell :
+  ∀ s ∈ actualExtendedThirdPhysicalCell m j,
+    (if true = true then 2 * s 0 + s 1 + s 2 else s 0 + 2 * s 1 + s 2) + e / 4 ≤
+        actualExtendedThirdPairParameter e m j t true ∧
+      actualExtendedThirdPairParameter e m j t true + e / 4 ≤
+        VariableEnvelope.v (if true = true then s 1 + s 2 else s 0 + s 2)
+hgate :
+  (if true = true then
+        2 * actualSelectedPrimeCoordinates x p 0 + actualSelectedPrimeCoordinates x p 1 +
+          actualSelectedPrimeCoordinates x p 2
+      else
+        actualSelectedPrimeCoordinates x p 0 + 2 * actualSelectedPrimeCoordinates x p 1 +
+          actualSelectedPrimeCoordinates x p 2) +
+      e / 4 ≤
+    actualExtendedThirdPairParameter e m j t true
+hend :
+  actualExtendedThirdPairParameter e m j t true + e / 4 ≤
+    VariableEnvelope.v
+      (if true = true then actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2
+      else actualSelectedPrimeCoordinates x p 0 + actualSelectedPrimeCoordinates x p 2)
+hselected :
+  (x ^
+      if true = true then actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2
+      else actualSelectedPrimeCoordinates x p 0 + actualSelectedPrimeCoordinates x p 2) =
+    ↑(actualSelectedPairProduct true p)
+⊢ actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2 +
+      actualSelectedPrimeCoordinates x p 0 * 2 =
+    if True then
+      actualSelectedPrimeCoordinates x p 1 + actualSelectedPrimeCoordinates x p 2 +
+        actualSelectedPrimeCoordinates x p 0 * 2
+    else
+      actualSelectedPrimeCoordinates x p 1 * 2 + actualSelectedPrimeCoordinates x p 2 +
+        actualSelectedPrimeCoordinates x p 0

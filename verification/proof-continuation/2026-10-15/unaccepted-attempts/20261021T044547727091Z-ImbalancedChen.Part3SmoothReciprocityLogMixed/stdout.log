@@ -1,0 +1,137 @@
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:58:43: error: `simp` made no progress
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:122:54: error: Application type mismatch: The argument
+  ∞
+has type
+  ℕ∞ω
+but is expected to have type
+  ℕ∞
+in the application
+  SchwartzMap.smooth f ∞
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:123:31: error: `simp` made no progress
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:183:2: error: Type mismatch: After simplification, term
+  hasDerivAt_fourier 1 1 v
+ has type
+  @HasDerivAt ℝ DenselyNormedField.toNontriviallyNormedField ℂ Complex.addCommGroup
+    instInnerProductSpaceRealComplex.toModule PseudoMetricSpace.toUniformSpace.toTopologicalSpace ⋯
+    (fun y => (fourier 1) ↑y) (2 * ↑Real.pi * Complex.I * (fourier 1) ↑v) v
+but is expected to have type
+  @HasDerivAt ℝ DenselyNormedField.toNontriviallyNormedField ℂ Complex.addCommGroup
+    instInnerProductSpaceRealComplex.toModule PseudoMetricSpace.toUniformSpace.toTopologicalSpace ⋯ phase
+    (2 * ↑Real.pi * Complex.I * (fourier 1) ↑v) v
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:227:31: error: `simp` made no progress
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:240:29: error(lean.unknownIdentifier): Unknown constant `Nat.factorial_le_factorial`
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:260:72: error: `simp` made no progress
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:290:25: error: `ContinuousLinearMap.add_apply` has been deprecated: Use `add_apply` instead
+
+Note: The updated constant is in a different namespace. Dot notation may need to be changed (e.g., from `x.add_apply` to `add_apply x`).
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:400:27: error: Application type mismatch: The argument
+  ∞
+has type
+  ℕ∞ω
+but is expected to have type
+  ℕ∞
+in the application
+  SchwartzMap.smooth cutoffSchwartz ∞
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:402:14: error: Application type mismatch: The argument
+  ∞
+has type
+  ℕ∞ω
+but is expected to have type
+  ℕ∞
+in the application
+  SchwartzMap.smooth F ∞
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:403:50: error: Application type mismatch: The argument
+  ∞
+has type
+  ℕ∞ω
+but is expected to have type
+  ℕ∞
+in the application
+  SchwartzMap.smooth L ∞
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:426:37: error: Application type mismatch: The argument
+  ∞
+has type
+  ℕ∞ω
+but is expected to have type
+  ℕ∞
+in the application
+  SchwartzMap.smooth L ∞
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:434:36: error: Application type mismatch: The argument
+  ∞
+has type
+  ℕ∞ω
+but is expected to have type
+  ℕ∞
+in the application
+  SchwartzMap.smooth L ∞
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:448:51: error: `simp` made no progress
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:467:16: error: Type mismatch
+  pow_le_pow_right₀ hw hmJ
+has type
+  w ^ (j - i) ≤ w ^ J
+but is expected to have type
+  j - i ≤ j
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:468:14: error: No goals to be solved
+ImbalancedChen/Part3SmoothReciprocityLogMixed.lean:477:35: error: unsolved goals
+d : ℕ
+a b c : EuclideanSpace ℝ (Fin d)
+Q : EuclideanSpace ℝ (Fin d) → ℂ
+hQ : ContDiff ℝ ∞ Q
+hQc : HasCompactSupport Q
+J : ℕ
+A : EuclideanSpace ℝ (Fin d) →L[ℝ] ℝ := (innerSL ℝ) a
+B : EuclideanSpace ℝ (Fin d) →L[ℝ] ℝ := (innerSL ℝ) b
+G : EuclideanSpace ℝ (Fin d) →L[ℝ] ℝ := (innerSL ℝ) c
+q : EuclideanSpace ℝ (Fin d) → ℂ := fun t => Q t * ↑(Real.exp (G t))
+hq : ContDiff ℝ ∞ q
+hqc : HasCompactSupport q
+L : 𝓢(EuclideanSpace ℝ (Fin d), ℂ) := hqc.toSchwartzMap hq
+F : 𝓢(ℝ, ℂ) := 𝓕 dyadicCutoffSchwartz
+Cl : ℝ := localizerBound L J
+Cx : ℝ := compositionBound cutoffSchwartz A 0 J
+Cf : ℝ := compositionBound F A J J
+Clx : ℝ := 2 ^ J * Cl * Cx
+Ca : ℝ := 2 ^ J * Clx * Cf
+Cp : ℝ := phaseBound (A + B) J
+K : ℝ := 2 ^ J * Ca * Cp
+hCl : 0 ≤ Cl
+hCx : 0 ≤ Cx
+hCf : 0 ≤ Cf
+hClx : 0 ≤ Clx
+hCa : 0 ≤ Ca
+hCp : 0 ≤ Cp
+hK : 0 ≤ K
+Z u₀ rho₀ R : ℝ
+_hZ : 1 ≤ Z
+hR : 0 ≤ R
+hrho : ∀ t ∈ tsupport Q, |rho₀ * Real.exp (inner ℝ b t)| ≤ R
+j : ℕ
+hj : j ≤ J
+t : EuclideanSpace ℝ (Fin d)
+x : EuclideanSpace ℝ (Fin d) → ℝ := monomial A (u₀ / Z)
+u : EuclideanSpace ℝ (Fin d) → ℝ := monomial A u₀
+v : EuclideanSpace ℝ (Fin d) → ℝ := monomial (A + B) (rho₀ * u₀)
+amplitude : EuclideanSpace ℝ (Fin d) → ℂ := fun s => L s * cutoffSchwartz (x s) * F (u s)
+phasePullback : EuclideanSpace ℝ (Fin d) → ℂ := fun s => phase (v s)
+W : EuclideanSpace ℝ (Fin d) → ℂ := smoothReciprocityLogWeight a b c Q Z u₀ rho₀
+hx : ∀ (s : EuclideanSpace ℝ (Fin d)), x s = u₀ * Real.exp (inner ℝ a s) / Z
+hv : ∀ (s : EuclideanSpace ℝ (Fin d)), v s = rho₀ * Real.exp (inner ℝ b s) * (u₀ * Real.exp (inner ℝ a s))
+hW : W = fun s => amplitude s * phasePullback s
+hxs : ContDiff ℝ ∞ fun s => cutoffSchwartz (x s)
+hus : ContDiff ℝ ∞ fun s => F (u s)
+has : ContDiff ℝ ∞ amplitude
+hps : ContDiff ℝ ∞ phasePullback
+hsupport : tsupport W ⊆ tsupport Q
+ht : t ∈ tsupport Q
+w : ℝ := 1 + |u t|
+p : ℝ := 1 + R
+hw : 1 ≤ w
+hp : 1 ≤ p
+hL : ∀ i ≤ J, ‖iteratedFDeriv ℝ i (⇑L) t‖ ≤ Cl
+hcut : ∀ i ≤ J, ‖iteratedFDeriv ℝ i (fun s => cutoffSchwartz (x s)) t‖ ≤ Cx
+hLC : ∀ i ≤ J, ‖iteratedFDeriv ℝ i (fun s => L s * cutoffSchwartz (x s)) t‖ ≤ Clx
+hF : ∀ i ≤ J, w ^ J * ‖iteratedFDeriv ℝ i (fun s => F (u s)) t‖ ≤ Cf
+hAmplitude : ∀ i ≤ J, w ^ J * ‖iteratedFDeriv ℝ i amplitude t‖ ≤ Ca
+hPhase : ∀ i ≤ J, ‖iteratedFDeriv ℝ i phasePullback t‖ ≤ Cp * p ^ i * w ^ i
+hsum : ∑ i ∈ Finset.range (j + 1), ↑(j.choose i) = 2 ^ j
+⊢ 1 ≤ ?m.1790

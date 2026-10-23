@@ -1,0 +1,434 @@
+{
+  "schema_version": 1,
+  "checkpoint_kind": "independent_source_repair_review",
+  "review_actor": "/root/tail_real_independent_sol_high_oct22",
+  "created_utc": "2026-10-21T23:03:22.1431375Z",
+  "status": "EXPLICIT_IF_SOURCE_REPAIR_REVIEW_UNCOMPILED_HOLD",
+  "result": "no_static_blocker",
+  "HOLD": true,
+  "actual_frozen_source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonPM2FiniteFold.lean",
+    "sha256": "eda9f3c56d44e87fb9cfa17c5420900c58d871d53acf9db5a9236464c333bc32",
+    "bytes": 14829,
+    "lf_lines": 306,
+    "spans": [
+      {
+        "first": 119,
+        "last": 137,
+        "literal_source": "theorem sum_activeLabels (d : MediumAtom) (F : ℕ → ℝ) :\n    (∑ z ∈ activeLabels d, F (labelProduct z)) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n          if d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m ≠ 0 then\n            ∑ n ∈ d.cleanedCommonPProgression p m, F (m * n) else 0 := by\n  simp only [activeLabels, Finset.sum_filter, Finset.sum_product, labelProduct]\n  apply Finset.sum_congr rfl\n  intro p _\n  apply Finset.sum_congr rfl\n  intro m _\n  by_cases hpsi : d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m ≠ 0\n  · rw [if_pos hpsi]\n    simp only [MediumAtom.cleanedCommonPProgression, Finset.sum_filter]\n    apply Finset.sum_congr rfl\n    intro n hn\n    simp only [hpsi, true_and, MediumAtom.cleanedCommonPProgression,\n      Finset.mem_filter, hn, true_and]\n  · simp only [hpsi, false_and, if_false, Finset.sum_const_zero]\n",
+        "normalized_lf_utf8_sha256": "a43133fa0686ccf0fe25d1ffe59ff33775099dc09705789f08c0efa2098a6825"
+      }
+    ]
+  },
+  "proposed_draft": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-commonp-m2-finite-fold-explicit-if-repair.txt",
+    "sha256": "d86216a99d8f6764c2172e9c5d5e67112096d8751383531675ff0bcddc533991",
+    "bytes": 15172,
+    "lf_lines": 314,
+    "spans": [
+      {
+        "first": 119,
+        "last": 145,
+        "literal_source": "theorem sum_activeLabels (d : MediumAtom) (F : ℕ → ℝ) :\n    (∑ z ∈ activeLabels d, F (labelProduct z)) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n          if d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m ≠ 0 then\n            ∑ n ∈ d.cleanedCommonPProgression p m, F (m * n) else 0 := by\n  simp only [activeLabels, Finset.sum_filter, Finset.sum_product, labelProduct]\n  apply Finset.sum_congr rfl\n  intro p _\n  apply Finset.sum_congr rfl\n  intro m _\n  by_cases hpsi : d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m ≠ 0\n  · rw [if_pos hpsi]\n    simp only [MediumAtom.cleanedCommonPProgression, Finset.sum_filter]\n    apply Finset.sum_congr rfl\n    intro n hn\n    simp only [Finset.mem_filter, hn, true_and]\n    by_cases hg : ¬(n : ℤ) ∣ d.residue ∧\n        Int.ModEq p ((m : ℤ) * n) d.residue\n    · rw [if_pos (And.intro hpsi hg), if_pos hg]\n    · have hboth : ¬(d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m ≠ 0 ∧\n          (¬(n : ℤ) ∣ d.residue ∧\n            Int.ModEq p ((m : ℤ) * n) d.residue)) := by\n        intro h\n        exact hg h.2\n      rw [if_neg hboth, if_neg hg]\n  · simp only [hpsi, false_and, if_false, Finset.sum_const_zero]\n",
+        "normalized_lf_utf8_sha256": "304b97ae3b770c4e4b869741ed8c04c58056fc339de1c10fc00972d00b5f7d7f"
+      }
+    ]
+  },
+  "author_CP": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-commonp-m2-finite-fold-explicit-if-source-repair-author-HOLD.json",
+    "sha256": "2cf0cf5516948655628c7f3e5a968c1fadf1415653f16de5289a1caba3cacd58",
+    "bytes": 33819,
+    "lf_lines": 496,
+    "spans": []
+  },
+  "unique_raw_replacement": {
+    "old_lines": [
+      135,
+      136
+    ],
+    "new_lines": [
+      135,
+      144
+    ],
+    "old_literal": "    simp only [hpsi, true_and, MediumAtom.cleanedCommonPProgression,\n      Finset.mem_filter, hn, true_and]\n",
+    "new_literal": "    simp only [Finset.mem_filter, hn, true_and]\n    by_cases hg : ¬(n : ℤ) ∣ d.residue ∧\n        Int.ModEq p ((m : ℤ) * n) d.residue\n    · rw [if_pos (And.intro hpsi hg), if_pos hg]\n    · have hboth : ¬(d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m ≠ 0 ∧\n          (¬(n : ℤ) ∣ d.residue ∧\n            Int.ModEq p ((m : ℤ) * n) d.residue)) := by\n        intro h\n        exact hg h.2\n      rw [if_neg hboth, if_neg hg]\n",
+    "old_literal_sha256": "c79caaf7993fde977fc62c571afeaa20432a9c306ff909150dbb2cec8c996d86",
+    "new_literal_sha256": "3ecae0052b382c825aa2418330584bb7d828923e6b5b229e914c268ed614fe88",
+    "old_occurrences": 1,
+    "new_occurrences": 1,
+    "prefix_bytes": 6317,
+    "suffix_bytes": 8404,
+    "prefix_sha256": "6cba4e5377afb2caeb78f73421f359565623b3c52b1f3dade0b97d95ca105c00",
+    "suffix_sha256": "be12d315b508c1c67a30e7f81f653c2a93fdde4d3eaade768c2036fbb997e2ce",
+    "forward_exact": true,
+    "inverse_exact": true,
+    "forward_sha256": "d86216a99d8f6764c2172e9c5d5e67112096d8751383531675ff0bcddc533991",
+    "inverse_sha256": "eda9f3c56d44e87fb9cfa17c5420900c58d871d53acf9db5a9236464c333bc32",
+    "byte_delta": 343,
+    "scope": "Only actual old135-136 is replaced by draft135-144; every other byte is identical."
+  },
+  "complete_actual_19_headers_and_block_comparison": [
+    {
+      "name": "shiftDifference",
+      "kind": "def",
+      "new_name": "shiftDifference",
+      "complete_actual_header": "def shiftDifference (d : MediumAtom) (v : ℕ) : ℕ :=",
+      "old_header_sha256": "ffedf38d1c930f5cb2ca059d33fafc37e13dccd0e37e72d9ef0857cc1d76a26a",
+      "new_header_sha256": "ffedf38d1c930f5cb2ca059d33fafc37e13dccd0e37e72d9ef0857cc1d76a26a",
+      "header_identical": true,
+      "old_block_sha256": "574b5b0031ca26895328640e96eb5996d7d4d96480d481f93881ce4e545c181b",
+      "new_block_sha256": "574b5b0031ca26895328640e96eb5996d7d4d96480d481f93881ce4e545c181b",
+      "full_block_identical": true
+    },
+    {
+      "name": "tau",
+      "kind": "def",
+      "new_name": "tau",
+      "complete_actual_header": "def tau (v : ℕ) : ℝ :=",
+      "old_header_sha256": "9e289a0a8579eb093358e3243cf27f2e6fa0c281244485790806db335c022153",
+      "new_header_sha256": "9e289a0a8579eb093358e3243cf27f2e6fa0c281244485790806db335c022153",
+      "header_identical": true,
+      "old_block_sha256": "6d2c92e5ef721ad859b7c6e6bc280c34ff2265ea77c12f77f3288d523901a041",
+      "new_block_sha256": "6d2c92e5ef721ad859b7c6e6bc280c34ff2265ea77c12f77f3288d523901a041",
+      "full_block_identical": true
+    },
+    {
+      "name": "fourthDivisorWeight",
+      "kind": "def",
+      "new_name": "fourthDivisorWeight",
+      "complete_actual_header": "def fourthDivisorWeight (d : MediumAtom) (v : ℕ) : ℝ :=",
+      "old_header_sha256": "a70fee9fc281b5d1e907e324da43948d1e6ea940e1897424066e043fc889619f",
+      "new_header_sha256": "a70fee9fc281b5d1e907e324da43948d1e6ea940e1897424066e043fc889619f",
+      "header_identical": true,
+      "old_block_sha256": "b0e4c51e579d90d9fd46f82070dc96eab1781bbb77d118ee264855948f9a8e6e",
+      "new_block_sha256": "b0e4c51e579d90d9fd46f82070dc96eab1781bbb77d118ee264855948f9a8e6e",
+      "full_block_identical": true
+    },
+    {
+      "name": "productCarrier",
+      "kind": "def",
+      "new_name": "productCarrier",
+      "complete_actual_header": "def productCarrier (d : MediumAtom) : Finset ℕ :=",
+      "old_header_sha256": "5bda3929139362f387ec7f5811609e081e8effa87006df06753dd6232058a4fa",
+      "new_header_sha256": "5bda3929139362f387ec7f5811609e081e8effa87006df06753dd6232058a4fa",
+      "header_identical": true,
+      "old_block_sha256": "9a539b75e261a0f839f602618bcb4e8fb8a92bef2063cadf754ae32a50633738",
+      "new_block_sha256": "9a539b75e261a0f839f602618bcb4e8fb8a92bef2063cadf754ae32a50633738",
+      "full_block_identical": true
+    },
+    {
+      "name": "rowSum",
+      "kind": "def",
+      "new_name": "rowSum",
+      "complete_actual_header": "def rowSum (d : MediumAtom) (p m : ℕ) : ℝ :=",
+      "old_header_sha256": "8244198357c74bb7e48838e8443a31ea1b46e03f8a713f98a6eec52b405f0e2d",
+      "new_header_sha256": "8244198357c74bb7e48838e8443a31ea1b46e03f8a713f98a6eec52b405f0e2d",
+      "header_identical": true,
+      "old_block_sha256": "ba4899645891acba9622cb7ab2a1b64a179a40bf64f92082322d06f1c70831b1",
+      "new_block_sha256": "ba4899645891acba9622cb7ab2a1b64a179a40bf64f92082322d06f1c70831b1",
+      "full_block_identical": true
+    },
+    {
+      "name": "moment",
+      "kind": "def",
+      "new_name": "moment",
+      "complete_actual_header": "def moment (d : MediumAtom) : ℝ :=",
+      "old_header_sha256": "6355587bc032b6c623d11412f285d06aa45a652b26dc28859ecbcfd563f0b0d1",
+      "new_header_sha256": "6355587bc032b6c623d11412f285d06aa45a652b26dc28859ecbcfd563f0b0d1",
+      "header_identical": true,
+      "old_block_sha256": "ab0c1cdc4507740d54f651dceb1c73280b5fcefa512de2f72ce4daab8907ab7c",
+      "new_block_sha256": "ab0c1cdc4507740d54f651dceb1c73280b5fcefa512de2f72ce4daab8907ab7c",
+      "full_block_identical": true
+    },
+    {
+      "name": "activeLabels",
+      "kind": "def",
+      "new_name": "activeLabels",
+      "complete_actual_header": "def activeLabels (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ) :=",
+      "old_header_sha256": "60a2a46befbca188b40566d6d2d469fa1368cfda1b7e2730d4807694a44b15a0",
+      "new_header_sha256": "60a2a46befbca188b40566d6d2d469fa1368cfda1b7e2730d4807694a44b15a0",
+      "header_identical": true,
+      "old_block_sha256": "9b4bf9d0af04c415aa0816723e85014b08b66a321a825cf2d73504f36870fd2c",
+      "new_block_sha256": "9b4bf9d0af04c415aa0816723e85014b08b66a321a825cf2d73504f36870fd2c",
+      "full_block_identical": true
+    },
+    {
+      "name": "labelProduct",
+      "kind": "def",
+      "new_name": "labelProduct",
+      "complete_actual_header": "def labelProduct (z : (ℕ × ℕ) × ℕ) : ℕ :=",
+      "old_header_sha256": "a177274e58386851efcf41c621d076b23eabf0b886fce4a244236856e6b845b6",
+      "new_header_sha256": "a177274e58386851efcf41c621d076b23eabf0b886fce4a244236856e6b845b6",
+      "header_identical": true,
+      "old_block_sha256": "155a4bda8a747a0fe535cb505eaca6d3ac92b6f2d3940271c8eee54e6391dd00",
+      "new_block_sha256": "155a4bda8a747a0fe535cb505eaca6d3ac92b6f2d3940271c8eee54e6391dd00",
+      "full_block_identical": true
+    },
+    {
+      "name": "foldedSum",
+      "kind": "def",
+      "new_name": "foldedSum",
+      "complete_actual_header": "def foldedSum (d : MediumAtom) : ℝ :=",
+      "old_header_sha256": "40083ef59ebb46b9c046cb2d180e7925d2b7c2e1a4fd51e32c7b188767d9813f",
+      "new_header_sha256": "40083ef59ebb46b9c046cb2d180e7925d2b7c2e1a4fd51e32c7b188767d9813f",
+      "header_identical": true,
+      "old_block_sha256": "b8a7237db741ef66163bd6f53c1fa3c434313ac7f84fd95f633b43b785ae2631",
+      "new_block_sha256": "b8a7237db741ef66163bd6f53c1fa3c434313ac7f84fd95f633b43b785ae2631",
+      "full_block_identical": true
+    },
+    {
+      "name": "outsideEnergy",
+      "kind": "def",
+      "new_name": "outsideEnergy",
+      "complete_actual_header": "def outsideEnergy (d : MediumAtom) : ℝ :=",
+      "old_header_sha256": "b2dec7878e5b5016c584f32eaa87bc5cb6a06b1325abc4a73a4a7f481b60178f",
+      "new_header_sha256": "b2dec7878e5b5016c584f32eaa87bc5cb6a06b1325abc4a73a4a7f481b60178f",
+      "header_identical": true,
+      "old_block_sha256": "65808d7db37f92f2f0b8e72033aa869c7a3de3684b16d08f6e03f04e0d0081b4",
+      "new_block_sha256": "65808d7db37f92f2f0b8e72033aa869c7a3de3684b16d08f6e03f04e0d0081b4",
+      "full_block_identical": true
+    },
+    {
+      "name": "cleaned_transposedBeta_norm_le_one",
+      "kind": "theorem",
+      "new_name": "cleaned_transposedBeta_norm_le_one",
+      "complete_actual_header": "theorem cleaned_transposedBeta_norm_le_one\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\n    ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ ≤ 1 :=",
+      "old_header_sha256": "27b9142886117fda5ad0e6b17e6d2469735d8621a7c7dbd4adb97a146e55768d",
+      "new_header_sha256": "27b9142886117fda5ad0e6b17e6d2469735d8621a7c7dbd4adb97a146e55768d",
+      "header_identical": true,
+      "old_block_sha256": "f2e6279a9227e479f101947fc7c688ffb60aaaa794a6168ef9da4e9d454d0da5",
+      "new_block_sha256": "f2e6279a9227e479f101947fc7c688ffb60aaaa794a6168ef9da4e9d454d0da5",
+      "full_block_identical": true
+    },
+    {
+      "name": "rowSum_sq_le",
+      "kind": "theorem",
+      "new_name": "rowSum_sq_le",
+      "complete_actual_header": "theorem rowSum_sq_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (p : ℕ) (hp : p ∈ d.primitiveFirstFactorCarrier) (m : ℕ)\n    (hpsi : d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m ≠ 0) :\n    rowSum d p m ^ 2 ≤ (3 * d.U / d.Q1) *\n      ∑ n ∈ d.cleanedCommonPProgression p m, fourthDivisorWeight d (m * n) :=",
+      "old_header_sha256": "9a883eeb7028adcd6ebc12f049857f5895c701a86d19c24144a708a3bc078dde",
+      "new_header_sha256": "9a883eeb7028adcd6ebc12f049857f5895c701a86d19c24144a708a3bc078dde",
+      "header_identical": true,
+      "old_block_sha256": "cbf8731da5819db0c0fed16664cbc93419b27e781dbe56b3c4b722d81c17cc09",
+      "new_block_sha256": "cbf8731da5819db0c0fed16664cbc93419b27e781dbe56b3c4b722d81c17cc09",
+      "full_block_identical": true
+    },
+    {
+      "name": "sum_activeLabels",
+      "kind": "theorem",
+      "new_name": "sum_activeLabels",
+      "complete_actual_header": "theorem sum_activeLabels (d : MediumAtom) (F : ℕ → ℝ) :\n    (∑ z ∈ activeLabels d, F (labelProduct z)) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n          if d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m ≠ 0 then\n            ∑ n ∈ d.cleanedCommonPProgression p m, F (m * n) else 0 :=",
+      "old_header_sha256": "b59a6e7ec0230b050169563fe9abce92601b159c271f7364b3d96e896579a2c9",
+      "new_header_sha256": "b59a6e7ec0230b050169563fe9abce92601b159c271f7364b3d96e896579a2c9",
+      "header_identical": true,
+      "old_block_sha256": "038c8a1958b5873ba492b662a9996676592e1d4bdd3b117537cb149eeecdbc10",
+      "new_block_sha256": "18f36b8c57aac6219f39c87ef7ce3ed1a3fd739a8a0708564e65b98ace6471c1",
+      "full_block_identical": false
+    },
+    {
+      "name": "moment_le_activeLabels",
+      "kind": "theorem",
+      "new_name": "moment_le_activeLabels",
+      "complete_actual_header": "theorem moment_le_activeLabels\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma) :\n    moment d ≤ (3 * d.U / d.Q1) *\n      ∑ z ∈ activeLabels d, fourthDivisorWeight d (labelProduct z) :=",
+      "old_header_sha256": "28f52e484d255620ced26be14c882cd240db9f2156a49123919c73e8500da479",
+      "new_header_sha256": "28f52e484d255620ced26be14c882cd240db9f2156a49123919c73e8500da479",
+      "header_identical": true,
+      "old_block_sha256": "630b576d45666975b3ab75d8d0fef4e14eaf53b3824c0d2c0dfc03b90333f59e",
+      "new_block_sha256": "630b576d45666975b3ab75d8d0fef4e14eaf53b3824c0d2c0dfc03b90333f59e",
+      "full_block_identical": true
+    },
+    {
+      "name": "activeLabel_arithmetic",
+      "kind": "theorem",
+      "new_name": "activeLabel_arithmetic",
+      "complete_actual_header": "theorem activeLabel_arithmetic\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    {z : (ℕ × ℕ) × ℕ} (hz : z ∈ activeLabels d) :\n    labelProduct z ∈ productCarrier d ∧\n      z.1.1 ∈ (shiftDifference d (labelProduct z)).divisors :=",
+      "old_header_sha256": "035a682566d196380ddf36368fb00a20f8554f2a42bc16b06d5938e62f4df28c",
+      "new_header_sha256": "035a682566d196380ddf36368fb00a20f8554f2a42bc16b06d5938e62f4df28c",
+      "header_identical": true,
+      "old_block_sha256": "65444792af0a3a9d1143e29243d9a598c181badd0dda212395e13ca5c67a82ca",
+      "new_block_sha256": "65444792af0a3a9d1143e29243d9a598c181badd0dda212395e13ca5c67a82ca",
+      "full_block_identical": true
+    },
+    {
+      "name": "card_productFiber_le",
+      "kind": "theorem",
+      "new_name": "card_productFiber_le",
+      "complete_actual_header": "theorem card_productFiber_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (v : ℕ) (hv : v ∈ productCarrier d) :\n    ((activeLabels d).filter (fun z => labelProduct z = v)).card ≤\n      v.divisors.card * (shiftDifference d v).divisors.card :=",
+      "old_header_sha256": "a59319876bc8d101ea38d0c69f077ceb5a4aa921a9f65d30ad03391b2ddebeba",
+      "new_header_sha256": "a59319876bc8d101ea38d0c69f077ceb5a4aa921a9f65d30ad03391b2ddebeba",
+      "header_identical": true,
+      "old_block_sha256": "7443b05205e56df6e0d1c0b3126d60f3c3e93d3ae6f653e50204026f79f249fc",
+      "new_block_sha256": "7443b05205e56df6e0d1c0b3126d60f3c3e93d3ae6f653e50204026f79f249fc",
+      "full_block_identical": true
+    },
+    {
+      "name": "sum_activeLabels_le_divisorFold",
+      "kind": "theorem",
+      "new_name": "sum_activeLabels_le_divisorFold",
+      "complete_actual_header": "theorem sum_activeLabels_le_divisorFold\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (F : ℕ → ℝ) (hF : ∀ v, 0 ≤ F v) :\n    (∑ z ∈ activeLabels d, F (labelProduct z)) ≤\n      ∑ v ∈ productCarrier d, tau v * tau (shiftDifference d v) * F v :=",
+      "old_header_sha256": "3fbdc501520d30d8eea1469b5bf760429b18a683a996dbd3d03f788b9db3239d",
+      "new_header_sha256": "3fbdc501520d30d8eea1469b5bf760429b18a683a996dbd3d03f788b9db3239d",
+      "header_identical": true,
+      "old_block_sha256": "7ee5eb4214e763f8f3684ab726fe4e5df1a17489069f8f131e6d82dcae79eb61",
+      "new_block_sha256": "7ee5eb4214e763f8f3684ab726fe4e5df1a17489069f8f131e6d82dcae79eb61",
+      "full_block_identical": true
+    },
+    {
+      "name": "MediumAtom.cleaned_commonP_moment_le_finite_divisor_fold",
+      "kind": "theorem",
+      "new_name": "MediumAtom.cleaned_commonP_moment_le_finite_divisor_fold",
+      "complete_actual_header": "theorem MediumAtom.cleaned_commonP_moment_le_finite_divisor_fold\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma) :\n    CommonPM2FiniteFold.moment d ≤ (3 * d.U / d.Q1) *\n      CommonPM2FiniteFold.foldedSum d :=",
+      "old_header_sha256": "f216d81562a7f4303337762c06103ba1b468f5a5c5e48c479017df460d08968e",
+      "new_header_sha256": "f216d81562a7f4303337762c06103ba1b468f5a5c5e48c479017df460d08968e",
+      "header_identical": true,
+      "old_block_sha256": "5e59c64e995321a79fa0bd54a45f426cc8ba0999fd0a9d02f088d41b82dbf905",
+      "new_block_sha256": "5e59c64e995321a79fa0bd54a45f426cc8ba0999fd0a9d02f088d41b82dbf905",
+      "full_block_identical": true
+    },
+    {
+      "name": "MediumAtom.cleaned_commonP_M2_le_finite_divisor_fold",
+      "kind": "theorem",
+      "new_name": "MediumAtom.cleaned_commonP_M2_le_finite_divisor_fold",
+      "complete_actual_header": "theorem MediumAtom.cleaned_commonP_M2_le_finite_divisor_fold\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      CommonPM2FiniteFold.outsideEnergy d *\n        ((3 * d.U / d.Q1) * CommonPM2FiniteFold.foldedSum d) :=",
+      "old_header_sha256": "64e6088d9df665dcc868dc742452ba4734016a8a6754360f201b1040a1748378",
+      "new_header_sha256": "64e6088d9df665dcc868dc742452ba4734016a8a6754360f201b1040a1748378",
+      "header_identical": true,
+      "old_block_sha256": "ad864bea5e55d4a6eef0a1e700c711cb3d69440d4faea5c78b3411f8d7d503f2",
+      "new_block_sha256": "ad864bea5e55d4a6eef0a1e700c711cb3d69440d4faea5c78b3411f8d7d503f2",
+      "full_block_identical": true
+    }
+  ],
+  "preservation": {
+    "all10_definitions_identical": true,
+    "only_changed_proof": "sum_activeLabels",
+    "other8_full_proofs_identical": true,
+    "all_19_headers_identical": true,
+    "imports_assumptions_names_types_linter_options_other_bytes_identical": true,
+    "theorems": 9,
+    "definitions": 10,
+    "header_count": 19
+  },
+  "actual_API": [
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3CommonPFiniteReduction.lean",
+      "sha256": "8b16b4c39d359d07380ec4074d7c3546196aa41d459f05dbed2f97ed0cca7d3f",
+      "bytes": 5672,
+      "lf_lines": 124,
+      "spans": [
+        {
+          "first": 27,
+          "last": 30,
+          "literal_source": "def MediumAtom.cleanedCommonPProgression (d : MediumAtom) (p m : ℕ) : Finset ℕ :=\n  d.cleanedAlphaAtom.transposedAtom.betaCarrier.filter\n    (fun n => ¬(n : ℤ) ∣ d.residue ∧\n      Int.ModEq p ((m : ℤ) * n) d.residue)\n",
+          "normalized_lf_utf8_sha256": "2a06f73e1656e0cffecb9ea67a051dabe590e27c54303f4b9a685508d594acb4"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\SimpLemmas.lean",
+      "sha256": "fe0dc61e7380da95224dc4a7bb577a9395c5e64fbab93c62afaa2cf7883a8de5",
+      "bytes": 22248,
+      "lf_lines": 445,
+      "spans": [
+        {
+          "first": 249,
+          "last": 251,
+          "literal_source": "\n@[simp] theorem and_true (p : Prop) : (p ∧ True) = p := propext ⟨(·.1), (⟨·, trivial⟩)⟩\n@[simp] theorem true_and (p : Prop) : (True ∧ p) = p := propext ⟨(·.2), (⟨trivial, ·⟩)⟩\n",
+          "normalized_lf_utf8_sha256": "52ef1c37157b9ffa65bbd1d63c5aef2f2e8907a70af20b9d5f4b4c713acf7e64"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Core.lean",
+      "sha256": "8537e234659a281a8f49cc91e2f48c17b6faeacb852d1c4ba3a09b6b5e45ab20",
+      "bytes": 102417,
+      "lf_lines": 2604,
+      "spans": [
+        {
+          "first": 1178,
+          "last": 1186,
+          "literal_source": "theorem if_pos {c : Prop} {h : Decidable c} (hc : c) {α : Sort u} {t e : α} : (ite c t e) = t :=\n  match h with\n  | isTrue  _   => rfl\n  | isFalse hnc => absurd hc hnc\n\ntheorem if_neg {c : Prop} {h : Decidable c} (hnc : ¬c) {α : Sort u} {t e : α} : (ite c t e) = e :=\n  match h with\n  | isTrue hc   => absurd hc hnc\n  | isFalse _   => rfl\n",
+          "normalized_lf_utf8_sha256": "cd7f2a29e46460d7ee84e612eb6c800ad91566fb419fc20226b35b1c9128c323"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Filter.lean",
+      "sha256": "c777e9b830557d7b4f903a0fa81c27bec2d89f546dd4ae146122f4bb4882a06d",
+      "bytes": 8897,
+      "lf_lines": 236,
+      "spans": [
+        {
+          "first": 126,
+          "last": 128,
+          "literal_source": "@[simp, grind =]\ntheorem mem_filter {s : Finset α} {a : α} : a ∈ s.filter p ↔ a ∈ s ∧ p a :=\n  Multiset.mem_filter\n",
+          "normalized_lf_utf8_sha256": "00dbc8f7f6f684494646df8ab01d82ad0f14c50aa610ae5a6d4842fb31ac5d3f"
+        }
+      ]
+    }
+  ],
+  "independent_local_argument": [
+    "Let P be original nonzero commonSmoothWeight and Q be NOT((n:Int) divides residue) AND Int.ModEq p ((m:Int)*n) residue. The literal complete Int gate exactly matches the compiler diagnostic; no natAbs or gate substitution occurs.",
+    "The remaining support simp arguments Finset.mem_filter,hn,true_and remove only membership in the betaCarrier filter. The source of Finset.mem_filter and true_and was directly read. No hpsi/nonzero proof is fed to this simp step.",
+    "In hg:Q branch, And.intro hpsi hg proves exactly P AND Q. The actual if_pos theorem rewrites the left conditional by that proof, and if_pos hg rewrites the right conditional; both sides become F(m*n).",
+    "In hg:NOT Q branch, hboth:NOT(P AND Q) follows by intro h; exact hg h.2. The actual if_neg theorem rewrites left by hboth and right by hg; both sides become0.",
+    "The outer hpsi-negative branch and the entire remaining file are byte-identical. No added assumption, axiom, sorry, option, linter disabling, import or analytic change is introduced.",
+    "This addresses the observed local goal directly. It has not been compiled, elaborated or linted; no successful strict run is claimed."
+  ],
+  "original_failure": {
+    "receipt": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\runs\\20261021T224845749623Z-ImbalancedChen.Part3CommonPM2FiniteFold\\receipt.json",
+      "sha256": "a4fa83295f4608c13e0ff361f2c13e0efaad39b16acdc701b8e0c952690a84ba",
+      "bytes": 4825,
+      "lf_lines": 90,
+      "spans": []
+    },
+    "stdout": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\runs\\20261021T224845749623Z-ImbalancedChen.Part3CommonPM2FiniteFold\\stdout.log",
+      "sha256": "e3ff419eadf22d307fe275c24156eda34b456434d03ab17e1ded931ecab32cf2",
+      "bytes": 1286,
+      "lf_lines": 29,
+      "spans": []
+    },
+    "receipt_status": "FAILED",
+    "exit_code": 1,
+    "source_before": "eda9f3c56d44e87fb9cfa17c5420900c58d871d53acf9db5a9236464c333bc32",
+    "source_after": "eda9f3c56d44e87fb9cfa17c5420900c58d871d53acf9db5a9236464c333bc32",
+    "complete_actual_stdout": "ImbalancedChen/Part3CommonPM2FiniteFold.lean:131:2: error: unsolved goals\ncase pos\nd : MediumAtom\nF : ℕ → ℝ\np : ℕ\na✝¹ : p ∈ d.primitiveFirstFactorCarrier\nm : ℕ\na✝ : m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier\nhpsi : d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m ≠ 0\nn : ℕ\nhn : n ∈ d.cleanedAlphaAtom.transposedAtom.betaCarrier\n⊢ (if d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m ≠ 0 ∧ ¬↑n ∣ d.residue ∧ ↑m * ↑n ≡ d.residue [ZMOD ↑p] then\n      F (m * n)\n    else 0) =\n    if ¬↑n ∣ d.residue ∧ ↑m * ↑n ≡ d.residue [ZMOD ↑p] then F (m * n) else 0\nImbalancedChen/Part3CommonPM2FiniteFold.lean:135:15: error: This simp argument is unused:\n  hpsi\n\nHint: Omit it from the simp argument list.\n  [apply] simp only [true_and, MediumAtom.cleanedCommonPProgression, Finset.mem_filter, hn, true_and]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\nImbalancedChen/Part3CommonPM2FiniteFold.lean:135:31: error: This simp argument is unused:\n  MediumAtom.cleanedCommonPProgression\n\nHint: Omit it from the simp argument list.\n  [apply] simp only [hpsi, true_and, Finset.mem_filter, hn, true_and]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n",
+    "original_records_preserved": true,
+    "strict_failure_is_not_acceptance": true
+  },
+  "future_apply_gate": "Review supports this exact d86216 source as a future root-controlled proof-only repair. It does not authorize an apply or retry. Root must honor the current actual-source freeze and sole-heavy policy, and any later accepted version must be bound to exact source and actual strict/kernel evidence.",
+  "scope_boundaries": [
+    "Only local proof engineering changed. Original finite-fold semantics, ordered labels, signed deletion, weights, outsideEnergy and tau factors are unchanged.",
+    "No analytic M2 supplier, spectral result, original C_K, retained variance or main theorem is proved; these remain OPEN.",
+    "No accepted module/declaration/receipt count is added."
+  ],
+  "static_issues": [],
+  "minimal_further_source_repair": null,
+  "modifications": {
+    "author_CP_edited": false,
+    "new_files_only": [
+      "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-commonp-m2-finite-fold-explicit-if-independent-source-review-HOLD.json"
+    ],
+    "failure_receipt_or_stdout_edited": false,
+    "actual_source_or_other_draft_edited": false
+  },
+  "prohibited_actions_not_run": [
+    "Lean",
+    "Runtime",
+    "Git",
+    "Site",
+    "proper run",
+    "classifier",
+    "census",
+    "heavy pipeline or lock",
+    "agent spawn"
+  ],
+  "quota": {
+    "reset_consumed": false,
+    "stop_remaining_lte": 40,
+    "observed_used_percent": 51,
+    "observed_remaining_percent": 49
+  },
+  "engineering_admission": false,
+  "kernel_acceptance": false
+}

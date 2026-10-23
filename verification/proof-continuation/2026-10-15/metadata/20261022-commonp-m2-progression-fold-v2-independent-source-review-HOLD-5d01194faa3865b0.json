@@ -1,0 +1,315 @@
+{
+  "schema_version": 1,
+  "checkpoint_kind": "independent_source_review",
+  "review_actor": "/root/tail_real_independent_sol_high_oct22",
+  "created_utc": "2026-10-21T23:09:29.4968198Z",
+  "status": "V2_ARBITRARY_RESIDUE_SOURCE_REVIEW_UNCOMPILED_HOLD",
+  "result": "no_static_blocker_in_new_wrapper_parent_failed",
+  "HOLD": true,
+  "source": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPM2ProgressionFoldV2-module-source.txt",
+    "sha256": "985edce294f42870b2581f9b7b8a8fbaafc1f95d2efd9f95ffdfc3e87961f61c",
+    "bytes": 2930,
+    "lf_lines": 62,
+    "spans": [
+      {
+        "first": 1,
+        "last": 2,
+        "literal_source": "import ImbalancedChen.Part3CommonPM2FiniteFold\nimport Mathlib.Data.Int.ModEq\n",
+        "normalized_lf_utf8_sha256": "c4d051f3ae160272d690a8b4cab0003dd04fdfa83dd995b194261165a75a307d"
+      }
+    ]
+  },
+  "author_CP": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-commonp-m2-progression-fold-v2-source-proposal-author-HOLD.json",
+    "sha256": "9f7cfd2ea70333f76bc7e1a856e7efa2d1e6c9fb1cb185592d261b916c56674d",
+    "bytes": 24515,
+    "lf_lines": 373,
+    "spans": []
+  },
+  "complete_actual_declarations": [
+    {
+      "name": "progressionActiveLabels",
+      "kind": "definition",
+      "first": 27,
+      "type_last": 27,
+      "last": 28,
+      "complete_actual_type": "def progressionActiveLabels (d : MediumAtom) (q : ℕ) (r : ℤ) : Finset ((ℕ × ℕ) × ℕ) :=\n",
+      "type_sha256": "27227726c950719637cc0fff985c9e2f464b6baee9e84b758645dca829926fb0",
+      "complete_actual_body": "  (activeLabels d).filter (fun z => Int.ModEq (q : ℤ) (labelProduct z : ℤ) r)\n",
+      "body_sha256": "cab840db39834605bb1b51c0425cbbda0b787f46c7b8735f5afd426e72e860a5",
+      "full_type_body_independently_read": true
+    },
+    {
+      "name": "progressionProductCarrier",
+      "kind": "definition",
+      "first": 30,
+      "type_last": 30,
+      "last": 31,
+      "complete_actual_type": "def progressionProductCarrier (d : MediumAtom) (q : ℕ) (r : ℤ) : Finset ℕ :=\n",
+      "type_sha256": "be7d4e780d328a0015e83dabdca7faf77a33cd07729be23a6d85aa8c3fad68d4",
+      "complete_actual_body": "  (productCarrier d).filter (fun v => Int.ModEq (q : ℤ) (v : ℤ) r)\n",
+      "body_sha256": "47c421e054b17371d2c3741accbe5732de12022105b7485d172c135b5016e66c",
+      "full_type_body_independently_read": true
+    },
+    {
+      "name": "sum_progressionActiveLabels_le_divisorFold",
+      "kind": "theorem",
+      "first": 33,
+      "type_last": 39,
+      "last": 49,
+      "complete_actual_type": "theorem sum_progressionActiveLabels_le_divisorFold\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (q : ℕ) (r : ℤ) (F : ℕ → ℝ) (hF : ∀ v, 0 ≤ F v) :\n    (∑ z ∈ progressionActiveLabels d q r, F (labelProduct z)) ≤\n      ∑ v ∈ progressionProductCarrier d q r,\n        tau v * tau (shiftDifference d v) * F v := by\n",
+      "type_sha256": "119c489d3b10579da08675ab89b12888e54f512274918c0024781492e197484b",
+      "complete_actual_body": "  let Fq : ℕ → ℝ := fun v => if Int.ModEq (q : ℤ) (v : ℤ) r then F v else 0\n  have hFq : ∀ v, 0 ≤ Fq v := by\n    intro v\n    dsimp only [Fq]\n    split_ifs\n    · exact hF v\n    · exact le_rfl\n  have hfold := sum_activeLabels_le_divisorFold hd hsigma Fq hFq\n  simpa only [progressionActiveLabels, progressionProductCarrier,\n    Finset.sum_filter, Fq, mul_ite, mul_zero] using hfold\n",
+      "body_sha256": "ad8b3daf8ca428dde5e806c4baa09d388f9b827cf674966370cc8a76bb8efa7e",
+      "full_type_body_independently_read": true
+    },
+    {
+      "name": "sum_shiftResidueActiveLabels_le_divisorFold",
+      "kind": "theorem",
+      "first": 52,
+      "type_last": 58,
+      "last": 59,
+      "complete_actual_type": "theorem sum_shiftResidueActiveLabels_le_divisorFold\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (q : ℕ) (F : ℕ → ℝ) (hF : ∀ v, 0 ≤ F v) :\n    (∑ z ∈ progressionActiveLabels d q d.residue, F (labelProduct z)) ≤\n      ∑ v ∈ progressionProductCarrier d q d.residue,\n        tau v * tau (shiftDifference d v) * F v := by\n",
+      "type_sha256": "46947c5ba145e0b2900c51d30096409a40044e60a5e09ab022d11375e39d1336",
+      "complete_actual_body": "  exact sum_progressionActiveLabels_le_divisorFold hd hsigma q d.residue F hF\n",
+      "body_sha256": "73c68ac3ac83f9572ab83625bf99531d75897a86e15c0ed67538c360441b978a",
+      "full_type_body_independently_read": true
+    }
+  ],
+  "declaration_counts": {
+    "lf_lines": 62,
+    "complete_proofs": 2,
+    "definitions": 2
+  },
+  "immutable_historical_v1_files": [
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPM2ProgressionFold-module-source.txt",
+      "sha256": "a66e29b50f8a4c09d7072d184954a92d49c68bff8b30c76cae4f743220a7b87e",
+      "bytes": 2365,
+      "lf_lines": 55,
+      "spans": []
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-commonp-m2-progression-fold-source-proposal-author-HOLD.json",
+      "sha256": "25008c3c3c00305edf17662f9aec340171654e8d50a6da7cefde2f929826ceb8",
+      "bytes": 17690,
+      "lf_lines": 273,
+      "spans": []
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-commonp-m2-progression-fold-independent-source-review-HOLD.json",
+      "sha256": "d332864d01da48db02465c8760ac349dae67adcc40319965feb5471ff5b385c1",
+      "bytes": 23779,
+      "lf_lines": 306,
+      "spans": []
+    }
+  ],
+  "historical_v1_all_three_hashes_unchanged": true,
+  "v1_review_is_not_v2_review": true,
+  "historical_parent_source": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-commonp-m2-finite-fold-pure-lean.txt",
+    "sha256": "eda9f3c56d44e87fb9cfa17c5420900c58d871d53acf9db5a9236464c333bc32",
+    "bytes": 14829,
+    "lf_lines": 306,
+    "spans": [
+      {
+        "first": 14,
+        "last": 24,
+        "literal_source": "def shiftDifference (d : MediumAtom) (v : ℕ) : ℕ :=\n  ((v : ℤ) - d.residue).natAbs\n\ndef tau (v : ℕ) : ℝ := (v.divisors.card : ℝ)\n\ndef fourthDivisorWeight (d : MediumAtom) (v : ℕ) : ℝ :=\n  (fouvryTau 4 (shiftDifference d v) : ℝ) ^ 4\n\ndef productCarrier (d : MediumAtom) : Finset ℕ :=\n  (Ioc 0 (Nat.floor (6 * d.scale))).filter (fun v => (v : ℤ) ≠ d.residue)\n\n",
+        "normalized_lf_utf8_sha256": "6b23bfdce0f41208f78f2c4668eade2a7cf67286711bc36056842b6588cf83a0"
+      },
+      {
+        "first": 37,
+        "last": 44,
+        "literal_source": "def activeLabels (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ) :=\n  ((d.primitiveFirstFactorCarrier ×ˢ\n      d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier) ×ˢ\n      d.cleanedAlphaAtom.transposedAtom.betaCarrier).filter\n    (fun z => d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight z.1.2 ≠ 0 ∧\n      z.2 ∈ d.cleanedCommonPProgression z.1.1 z.1.2)\n\ndef labelProduct (z : (ℕ × ℕ) × ℕ) : ℕ := z.1.2 * z.2\n",
+        "normalized_lf_utf8_sha256": "3258a2802392171b74f92d502bfe641486bb8a54151297f022b3874507c8a0d2"
+      },
+      {
+        "first": 249,
+        "last": 254,
+        "literal_source": "theorem sum_activeLabels_le_divisorFold\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (F : ℕ → ℝ) (hF : ∀ v, 0 ≤ F v) :\n    (∑ z ∈ activeLabels d, F (labelProduct z)) ≤\n      ∑ v ∈ productCarrier d, tau v * tau (shiftDifference d v) * F v := by\n",
+        "normalized_lf_utf8_sha256": "d328fe65a00a6c81724cd3a7ae539fb136e578d4ba69c21dc3898dfff1acca3f"
+      }
+    ]
+  },
+  "actual_parent_at_review": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonPM2FiniteFold.lean",
+    "sha256": "eda9f3c56d44e87fb9cfa17c5420900c58d871d53acf9db5a9236464c333bc32",
+    "bytes": 14829,
+    "lf_lines": 306,
+    "spans": [
+      {
+        "first": 14,
+        "last": 24,
+        "literal_source": "def shiftDifference (d : MediumAtom) (v : ℕ) : ℕ :=\n  ((v : ℤ) - d.residue).natAbs\n\ndef tau (v : ℕ) : ℝ := (v.divisors.card : ℝ)\n\ndef fourthDivisorWeight (d : MediumAtom) (v : ℕ) : ℝ :=\n  (fouvryTau 4 (shiftDifference d v) : ℝ) ^ 4\n\ndef productCarrier (d : MediumAtom) : Finset ℕ :=\n  (Ioc 0 (Nat.floor (6 * d.scale))).filter (fun v => (v : ℤ) ≠ d.residue)\n\n",
+        "normalized_lf_utf8_sha256": "6b23bfdce0f41208f78f2c4668eade2a7cf67286711bc36056842b6588cf83a0"
+      },
+      {
+        "first": 37,
+        "last": 44,
+        "literal_source": "def activeLabels (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ) :=\n  ((d.primitiveFirstFactorCarrier ×ˢ\n      d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier) ×ˢ\n      d.cleanedAlphaAtom.transposedAtom.betaCarrier).filter\n    (fun z => d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight z.1.2 ≠ 0 ∧\n      z.2 ∈ d.cleanedCommonPProgression z.1.1 z.1.2)\n\ndef labelProduct (z : (ℕ × ℕ) × ℕ) : ℕ := z.1.2 * z.2\n",
+        "normalized_lf_utf8_sha256": "3258a2802392171b74f92d502bfe641486bb8a54151297f022b3874507c8a0d2"
+      },
+      {
+        "first": 249,
+        "last": 254,
+        "literal_source": "theorem sum_activeLabels_le_divisorFold\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (F : ℕ → ℝ) (hF : ∀ v, 0 ≤ F v) :\n    (∑ z ∈ activeLabels d, F (labelProduct z)) ≤\n      ∑ v ∈ productCarrier d, tau v * tau (shiftDifference d v) * F v := by\n",
+        "normalized_lf_utf8_sha256": "d328fe65a00a6c81724cd3a7ae539fb136e578d4ba69c21dc3898dfff1acca3f"
+      }
+    ]
+  },
+  "signed_deletion_definition": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonPFiniteReduction.lean",
+    "sha256": "8b16b4c39d359d07380ec4074d7c3546196aa41d459f05dbed2f97ed0cca7d3f",
+    "bytes": 5672,
+    "lf_lines": 124,
+    "spans": [
+      {
+        "first": 27,
+        "last": 30,
+        "literal_source": "def MediumAtom.cleanedCommonPProgression (d : MediumAtom) (p m : ℕ) : Finset ℕ :=\n  d.cleanedAlphaAtom.transposedAtom.betaCarrier.filter\n    (fun n => ¬(n : ℤ) ∣ d.residue ∧\n      Int.ModEq p ((m : ℤ) * n) d.residue)\n",
+        "normalized_lf_utf8_sha256": "2a06f73e1656e0cffecb9ea67a051dabe590e27c54303f4b9a685508d594acb4"
+      }
+    ]
+  },
+  "actual_native_API": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib/Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean",
+      "sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "bytes": 51600,
+      "lf_lines": 1138,
+      "spans": [
+        {
+          "first": 324,
+          "last": 334,
+          "literal_source": "@[to_additive]\ntheorem prod_filter (p : ι → Prop) [DecidablePred p] (f : ι → M) :\n    ∏ a ∈ s with p a, f a = ∏ a ∈ s, if p a then f a else 1 :=\n  calc\n    ∏ a ∈ s with p a, f a = ∏ a ∈ s with p a, if p a then f a else 1 :=\n      prod_congr rfl fun a h => by rw [if_pos]; simpa using (mem_filter.1 h).2\n    _ = ∏ a ∈ s, if p a then f a else 1 := by\n      { refine prod_subset (filter_subset _ s) fun x hs h => ?_\n        rw [mem_filter, not_and] at h\n        exact if_neg (by simpa using h hs) }\n\n",
+          "normalized_lf_utf8_sha256": "af57d6f249008e0fa14ecb928332e3c175f402cdef49165f5c6c1c2b45c41cb1"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib/Mathlib/Algebra/Notation/Defs.lean",
+      "sha256": "2243defa37d746ea62688e4a76097de487b2cb3456a3362b243ebee925a56b85",
+      "bytes": 6207,
+      "lf_lines": 181,
+      "spans": [
+        {
+          "first": 104,
+          "last": 115,
+          "literal_source": "section ite\nvariable {α : Type*} (P : Prop) [Decidable P]\n\nsection Mul\nvariable [Mul α]\n\n@[to_additive]\nlemma mul_dite (a : α) (b : P → α) (c : ¬P → α) :\n    (a * if h : P then b h else c h) = if h : P then a * b h else a * c h := by split <;> rfl\n\n@[to_additive]\nlemma mul_ite (a b c : α) : (a * if P then b else c) = if P then a * b else a * c := mul_dite ..\n",
+          "normalized_lf_utf8_sha256": "273c67faac67fbad4b3ddbf1c520f98c402e05d8acf0e395ba8a57033030cf80"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib/Mathlib/Data/Int/ModEq.lean",
+      "sha256": "c1130960b648b5047a673d1f47f4ce653f0cf1174fff41b28a41e4813b89d86c",
+      "bytes": 14443,
+      "lf_lines": 410,
+      "spans": [
+        {
+          "first": 28,
+          "last": 31,
+          "literal_source": "/-- `a ≡ b [ZMOD n]` when `a % n = b % n`. -/\n@[wikidata Q3773677]\ndef Int.ModEq (n a b : ℤ) :=\n  a % n = b % n\n",
+          "normalized_lf_utf8_sha256": "356340ea7dfbc03f81b6b4defd8d6aba5d289784b79d8a232d370a91a0eef70f"
+        },
+        {
+          "first": 100,
+          "last": 101,
+          "literal_source": "theorem modEq_zero_iff_dvd : a ≡ 0 [ZMOD n] ↔ n ∣ a := by\n  rw [ModEq, zero_emod, dvd_iff_emod_eq_zero]\n",
+          "normalized_lf_utf8_sha256": "aa6cd8a95871dc19365927da1449913f313fb20942661cb6e07e5e8afcc7a5dc"
+        },
+        {
+          "first": 353,
+          "last": 354,
+          "literal_source": "@[simp]\ntheorem modEq_zero_iff : a ≡ b [ZMOD 0] ↔ a = b := by rw [ModEq, emod_zero, emod_zero]\n",
+          "normalized_lf_utf8_sha256": "c59aa12fefd86ad98cb24c8fe91de8ed8afc63400196ad46f6636950726a8df4"
+        }
+      ]
+    }
+  ],
+  "complete_independent_audit": [
+    {
+      "declaration": "progressionActiveLabels",
+      "verdict": "source_consistent",
+      "reason": "Adds arbitrary r:Int to the existing ordered-label filter. Original activeLabels is preserved literally; its added gate is Int.ModEq (q:Int) (labelProduct z:Int) r."
+    },
+    {
+      "declaration": "progressionProductCarrier",
+      "verdict": "source_consistent",
+      "reason": "Adds the identical gate Int.ModEq (q:Int) (v:Int) r on the original productCarrier. Original support bounds and signed exclusion v!=a remain."
+    },
+    {
+      "declaration": "sum_progressionActiveLabels_le_divisorFold",
+      "verdict": "source_consistent_relative_to_written_parent",
+      "reason": "q:Nat and r:Int are arbitrary. Fq(v)=if Int.ModEq(q:Int)(v:Int)r then F(v) else0 is nonnegative by hF in the true branch and le_rfl in the false branch. The actual parent type takes hd,hsigma,Fq,hFq and has the unchanged tau(v)*tau(shiftDifference d v) multiplicity. Finset.sum_filter rewrites both target filters to conditionals with the same literal predicate. Fq expansion gives exactly the target left; mul_ite,mul_zero give exactly the target right. No relation between r and d.residue is needed."
+    },
+    {
+      "declaration": "sum_shiftResidueActiveLabels_le_divisorFold",
+      "verdict": "source_consistent",
+      "reason": "The exact invocation hd hsigma q d.residue F hF supplies the explicit binders q,r,F,hF in the new theorem in order. Substituting r=d.residue gives exactly both specialized filters. It imports no V1 wrapper and adds no hypothesis."
+    }
+  ],
+  "type_and_semantic_audit": {
+    "r": "Independent arbitrary integer r; no assumption r=a, positive r or r-coprime condition.",
+    "q": "Every natural q, including0; no positive/prime/rough/gcd premise.",
+    "q_zero": "Direct native Int.modEq_zero_iff makes gate(v:Int)=r. Arbitrary r may lie in the product carrier, so the V1 r=a emptiness observation is not asserted for arbitrary r. At r=a the original signed exclusion is still retained.",
+    "F": "Original arbitrary F:Nat->Real with forall v,0<=F v; Fq nonnegativity is proved, not assumed.",
+    "shift": "Always shiftDifference d v=natAbs((v:Int)-d.residue), so both theorem RHS keep tau(v)*tau(abs(v-a)); the progression target r never replaces a in that weight.",
+    "signed_deletion": "cleanedCommonPProgression retains NOT((n:Int) divides d.residue) AND the original p-congruence; no absolutization or altered gate.",
+    "labels": "Original ordered((p,m),n), smoothing gate, betaCarrier, primitiveFirstFactorCarrier and commonSmoothCarrier remain as written in the parent.",
+    "parent_domain": "Unchanged MediumAdmissible B sigma kappa c0 d and0<sigma; no new analytic premise."
+  },
+  "role_boundary": {
+    "r_zero": "Actual Int.modEq_zero_iff_dvd says Int.ModEq(q:Int)(v:Int)0 iff(q:Int) divides(v:Int). Thus r=0 is a finite divisibility entry for the rough-factor role when q=f; the wrapper proves no roughness or coprimality.",
+    "r_a": "The special r=d.residue theorem recovers V1 finite selection only. v congruent a must not be represented as the required rough-factor divisibility role.",
+    "arbitrary_r": "The finite fold is valid for arbitrary r relative to the parent API. No arbitrary-r analytic M2 estimate is obtained.",
+    "saving": "No x/q, tau(q)^O(1), logarithmic or spectral saving is claimed. The RHS remains the actual finite filtered weighted fold."
+  },
+  "native_sum_filter_provenance": "Finset.sum_filter is generated by @[to_additive] on directly read Finset.prod_filter324-333. Its generated declaration has not been elaborated by this review.",
+  "historical_failure_binding": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-commonpm2eda9-soleheavy-fresh185-operator-terminal-HOLD.json",
+    "sha256": "eaa1977e47067af03caad36b0a0ea7c0fc40a9b7dea55b604b6645e9a02cf67c",
+    "bytes": 93899,
+    "lf_lines": 979,
+    "spans": []
+  },
+  "known_dependency_blocker": "Exact historical parent eda9 is FAILED/HOLD at sum_activeLabels131/135; its already-read original failure record is preserved. A separate source repair does not provide acceptance.",
+  "future_parent_rebinding": "Before any future use, rebind the exact accepted parent source hash and actual accepted evidence and compare these actual definitions/theorem types. Equality of source API spans alone is not kernel acceptance.",
+  "namespace_collision_search": "Read-only rg found no CommonPM2ProgressionFoldV2 or sum_shiftResidueActiveLabels_le_divisorFold in actual ImbalancedChen Lean files.",
+  "static_issues": [],
+  "minimal_new_wrapper_repair": null,
+  "scope_boundaries": [
+    "All62 source lines and all4 complete types/bodies independently read. Import resolution, elaboration, warning checks and kernel acceptance untested.",
+    "Main theorem, analytic M2 and spectral supplier remain OPEN. Source-only work adds no accepted module, declaration or receipt count."
+  ],
+  "modifications": {
+    "old_V1_source_author_review_changed": false,
+    "V2_source_or_author_CP_changed": false,
+    "new_files_only": [
+      "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-commonp-m2-progression-fold-v2-independent-source-review-HOLD.json"
+    ],
+    "actual_source_or_manuscript_changed": false,
+    "parent_or_failure_record_changed": false
+  },
+  "prohibited_actions_not_run": [
+    "Lean",
+    "Runtime",
+    "Git",
+    "Site",
+    "proper run",
+    "census",
+    "classifier",
+    "heavy pipeline or lock",
+    "new agent spawn"
+  ],
+  "quota": {
+    "reset_consumed": false,
+    "observed_remaining_percent": 48,
+    "observed_used_percent": 52,
+    "stop_when_remaining_lte": 40
+  },
+  "engineering_admission": false,
+  "kernel_acceptance": false
+}

@@ -1,0 +1,91 @@
+ImbalancedChen/Part3TransposedPrimitiveV.lean:71:18: error: Tactic `rfl` failed: The left-hand side
+  d.alpha n
+is not definitionally equal to the right-hand side
+  if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0
+
+case pos
+d : MediumAtom
+m q n : ℕ
+a✝ : n ∈ d.alphaCarrier
+h✝¹ : ↑m * ↑n % ↑q = d.residue % ↑q
+h✝ : ↑m * ↑n % ↑q = d.residue % ↑q
+⊢ d.alpha n = if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0
+ImbalancedChen/Part3TransposedPrimitiveV.lean:71:18: error: Tactic `rfl` failed: The left-hand side
+  d.alpha n
+is not definitionally equal to the right-hand side
+  if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0
+
+case neg
+d : MediumAtom
+m q n : ℕ
+a✝ : n ∈ d.alphaCarrier
+h✝¹ : ↑m * ↑n % ↑q = d.residue % ↑q
+h✝ : ¬↑m * ↑n % ↑q = d.residue % ↑q
+⊢ d.alpha n = if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0
+ImbalancedChen/Part3TransposedPrimitiveV.lean:71:18: error: Tactic `rfl` failed: The left-hand side
+  0
+is not definitionally equal to the right-hand side
+  if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0
+
+case pos
+d : MediumAtom
+m q n : ℕ
+a✝ : n ∈ d.alphaCarrier
+h✝¹ : ¬↑m * ↑n % ↑q = d.residue % ↑q
+h✝ : ↑m * ↑n % ↑q = d.residue % ↑q
+⊢ 0 = if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0
+ImbalancedChen/Part3TransposedPrimitiveV.lean:71:18: error: Tactic `rfl` failed: The left-hand side
+  0
+is not definitionally equal to the right-hand side
+  if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0
+
+case neg
+d : MediumAtom
+m q n : ℕ
+a✝ : n ∈ d.alphaCarrier
+h✝¹ : ¬↑m * ↑n % ↑q = d.residue % ↑q
+h✝ : ¬↑m * ↑n % ↑q = d.residue % ↑q
+⊢ 0 = if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+ImbalancedChen/Part3TransposedPrimitiveV.lean:285:19: error: unsolved goals
+C : ℝ
+hC : 0 < C
+hbound :
+  ∀ (M : ℝ),
+    0 < M →
+      ∀ (S : Finset ℕ),
+        (∀ (m : ℕ), CommonSmoothCutoff.scaledDyadicCutoff M ↑m ≠ 0 → m ∈ S) →
+          ∀ (q r n : ℕ),
+            0 < q →
+              r ≠ 0 →
+                n.Coprime q →
+                  ∀ (a : ℤ),
+                    a.gcd ↑q = 1 →
+                      |(∑ m ∈ S,
+                              if m.Coprime r ∧ ↑m * ↑n ≡ a [ZMOD ↑q] then CommonSmoothCutoff.scaledDyadicCutoff M ↑m
+                              else 0) -
+                            M * CommonSmoothCutoff.cutoffMass / ↑q *
+                              ∑ d ∈ r.divisors with d.Coprime q, ↑(ArithmeticFunction.moebius d) / ↑d| ≤
+                        C * ↑(#r.divisors)
+d : MediumAtom
+hV : 1 ≤ d.V
+q r : ℕ
+hq : 0 < q
+hr : r ≠ 0
+ha : d.residue.gcd ↑q = 1
+z : ℝ :=
+  d.V * CommonSmoothCutoff.cutoffMass / ↑q * ∑ e ∈ r.divisors with e.Coprime q, ↑(ArithmeticFunction.moebius e) / ↑e
+n : ℕ
+a✝ : n ∈ d.alphaCarrier
+hn : n.Coprime q
+he :
+  |(∑ m ∈ d.transposedAtom.commonSmoothCarrier,
+          if m.Coprime r ∧ ↑m * ↑n ≡ d.residue [ZMOD ↑q] then d.transposedAtom.commonSmoothWeight m else 0) -
+        z| ≤
+    C * ↑(#r.divisors)
+⊢ ‖d.alpha n‖ * C * ↑(#r.divisors) = C * ↑(#r.divisors) * if n.Coprime q then ‖d.alpha n‖ else 0

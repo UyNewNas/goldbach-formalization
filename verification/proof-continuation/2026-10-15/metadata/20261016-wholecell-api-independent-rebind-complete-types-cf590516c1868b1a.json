@@ -1,0 +1,143 @@
+{
+  "status": "SOURCE_ONLY_CORRECTED_COMPLETE_TYPE_EXTRACTION_EXACT_WHOLECELL_REBIND",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "review_date": "2026-10-16",
+  "candidate": "ImbalancedChen.ActualExtendedThirdWholeCellActions",
+  "source_sha256": "88a90dfae47e617a2d2576048dd9334ddf454d23c8c6e8b9d005498093204332",
+  "old_source_sha256": "d9fc584cb788dc7fbe9d90c2e4ab837420d403fc654733b8fcc05e231ec03867",
+  "superseded_metadata_only": {
+    "prior_report": ".lake/proof-continuation/source-reviews/20261016-wholecell-api-independent-rebind.json",
+    "prior_report_sha256": "ab56a463ebbf583ed92744e551b71aef6911b3be7323a5bd334de82b16072773",
+    "prior_report_preserved": true,
+    "defect": "Old complete_signatures extraction stopped at the first :=, which is inside Rescue statement let W. Thus that metadata was incomplete. The old exact four-range byte rebind itself remains true.",
+    "correction": "Theorem signature extraction now stops at the actual := by proof separator and includes all statement let bindings and the full proposition. Every corrected type is recorded below."
+  },
+  "complete_declarations": [
+    {
+      "name": "wInner_abs_sub",
+      "kind": "theorem",
+      "visibility": "private",
+      "start_line": 23,
+      "signature_last_line": 25,
+      "proof_start_line": 25,
+      "complete_signature": "private theorem wInner_abs_sub {a b c a' b' c' δ : ℝ}\n    (hb : |b - b'| ≤ δ) (hc : |c - c'| ≤ δ) :\n    |wInner a b c - wInner a' b' c'| ≤ 2 * δ"
+    },
+    {
+      "name": "actualExtendedThirdSelectedRescue_wholeCell",
+      "kind": "theorem",
+      "visibility": "public",
+      "start_line": 43,
+      "signature_last_line": 61,
+      "proof_start_line": 61,
+      "complete_signature": "theorem actualExtendedThirdSelectedRescue_wholeCell {e : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j) (swapped : Bool)\n    (hk : actualExtendedThirdLeastWinningIndex e m j = if swapped then 5 else 4) :\n    let W := if swapped then wInner (t 0) (t 2) (t 1) else wInner (t 0) (t 1) (t 2)\n    (W - v (t 0) ≤ e / 4 ∧ 1 / 2 ≤ actualExtendedThirdBaseParameter e m j ∧\n      actualExtendedThirdBaseParameter e m j < 5 / 8 ∧\n      actualExtendedThirdPhysicalLevel e m j + e ≤ actualExtendedThirdBaseParameter e m j ∧\n      ∀ s ∈ actualExtendedThirdPhysicalCell m j,\n        actualExtendedThirdBaseParameter e m j + e / 2 ≤ v (s 0)) ∨\n    (e / 4 < W - v (t 0) ∧ 1 / 2 ≤ actualExtendedThirdRescueParameter e m j t ∧\n      actualExtendedThirdRescueParameter e m j t < 5 / 8 ∧\n      actualExtendedThirdPhysicalLevel e m j + e ≤ actualExtendedThirdRescueParameter e m j t ∧\n      ∀ s ∈ actualExtendedThirdPhysicalCell m j,\n        v (s 0) + e / 16 ≤ actualExtendedThirdRescueParameter e m j t ∧\n          actualExtendedThirdRescueParameter e m j t + e / 16 ≤\n            (if swapped then wInner (s 0) (s 2) (s 1) else wInner (s 0) (s 1) (s 2)))"
+    },
+    {
+      "name": "actualExtendedThirdSelectedPair_wholeCell",
+      "kind": "theorem",
+      "visibility": "public",
+      "start_line": 83,
+      "signature_last_line": 96,
+      "proof_start_line": 96,
+      "complete_signature": "theorem actualExtendedThirdSelectedPair_wholeCell {e : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j) (yz : Bool)\n    (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6) :\n    1 / 2 ≤ actualExtendedThirdPairParameter e m j t yz ∧\n      actualExtendedThirdPairParameter e m j t yz < 5 / 8 ∧\n      actualExtendedThirdPhysicalLevel e m j + e ≤ actualExtendedThirdPairParameter e m j t yz ∧\n      ∀ s ∈ actualExtendedThirdPhysicalCell m j,\n        (if yz then 2 * s 0 + s 1 + s 2 else s 0 + 2 * s 1 + s 2) + e / 4 ≤\n          actualExtendedThirdPairParameter e m j t yz ∧\n        actualExtendedThirdPairParameter e m j t yz + e / 4 ≤\n          v (if yz then s 1 + s 2 else s 0 + s 2)"
+    },
+    {
+      "name": "actualExtendedThirdWholeCellAction_mesh_threshold",
+      "kind": "theorem",
+      "visibility": "public",
+      "start_line": 117,
+      "signature_last_line": 118,
+      "proof_start_line": 118,
+      "complete_signature": "theorem actualExtendedThirdWholeCellAction_mesh_threshold {e : ℝ} (he : 0 < e) :\n    ∃ m₀ : ℕ, ∀ m : ℕ, m₀ ≤ m → actualExtendedThirdDyadicStep m ≤ e / 32"
+    }
+  ],
+  "all_4_complete_types_identical": true,
+  "imports_identical": true,
+  "definitions_unchanged": "No def/abbrev declaration exists in this leaf; only four theorem proof bodies are present.",
+  "exact_four_proof_changes": [
+    {
+      "from": "wInner_abs_sub (hcoords 1) (hcoords 2)",
+      "to": "wInner_abs_sub (a := s 0) (a' := t 0) (hcoords 1) (hcoords 2)",
+      "count": 1,
+      "old_line": 77,
+      "enclosing_declaration": "actualExtendedThirdSelectedRescue_wholeCell",
+      "inside_proof_after_true_statement_separator": true
+    },
+    {
+      "from": "wInner_abs_sub (hcoords 2) (hcoords 1)",
+      "to": "wInner_abs_sub (a := s 0) (a' := t 0) (hcoords 2) (hcoords 1)",
+      "count": 1,
+      "old_line": 78,
+      "enclosing_declaration": "actualExtendedThirdSelectedRescue_wholeCell",
+      "inside_proof_after_true_statement_separator": true
+    },
+    {
+      "from": "cases yz <;> apply abs_le.mpr",
+      "to": "cases yz <;> simp <;> apply abs_le.mpr",
+      "count": 1,
+      "old_line": 107,
+      "enclosing_declaration": "actualExtendedThirdSelectedPair_wholeCell",
+      "inside_proof_after_true_statement_separator": true
+    },
+    {
+      "from": "cases yz <;> linarith [hc0.1",
+      "to": "cases yz <;> simp <;> linarith [hc0.1",
+      "count": 1,
+      "old_line": 112,
+      "enclosing_declaration": "actualExtendedThirdSelectedPair_wholeCell",
+      "inside_proof_after_true_statement_separator": true
+    }
+  ],
+  "forward_bytes_exact": true,
+  "reverse_old_sha_exact": true,
+  "thresholds_and_quantifiers_unchanged": true,
+  "all_changes_inside_proofs": true,
+  "pin_manifest": {
+    "path": "lake-manifest.json",
+    "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+    "git_HEAD_sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+    "bytes_equal_HEAD": true,
+    "matches_owner_v4_declared_provider_pins": true,
+    "boundary": "Manifest/pin source check only; no imported source closure or object acceptance is rebound."
+  },
+  "static_assessment": [
+    {
+      "site": "Both wInner_abs_sub calls",
+      "assessment": "The local helper at lines23-25 quantifies arbitrary a,a-prime with only b/c coordinate bounds. Supplying a=s0,a-prime=t0 selects exactly the original comparison and resolves the missing implicit parameters; no new estimate or premise is added."
+    },
+    {
+      "site": "hsum cases yz",
+      "assessment": "Bare simp after cases yz reduces the Bool-to-Prop equalities and both if expressions in the target; the original abs_le and coordinate linarith proof then has the intended two-coordinate linear difference."
+    },
+    {
+      "site": "hg cases yz",
+      "assessment": "The added simp reduces only the target Bool-if branches before the unchanged four-coordinate weighted linear estimate; all original e/32 and e/4 margins, theta and whole-cell quantifiers remain identical."
+    }
+  ],
+  "real_old_failure_log": {
+    "path": ".lake/proof-continuation/runs/20261015T193253499173Z-ImbalancedChen.ActualExtendedThirdWholeCellActions/stdout.log",
+    "sha256": "d5a778c770aae07606c9a528131e5792e2f47645dc51656ee3442c3c2d39a8be",
+    "reviewer_read": true,
+    "result": "PROOF_FAILED",
+    "diagnostics": [
+      "wInner_abs_sub a and a-prime implicit synthesis failed at old line77 because they are ignored in wInner and absent from hb/hc",
+      "old hsum linarith failed with unnormalized if false=true / if true=true",
+      "old hg linarith failed for the same Bool-if issue"
+    ]
+  },
+  "new_candidate_runtime_result": "NOT_EXECUTED_BY_REVIEWER",
+  "issues_remaining_in_current_target": [],
+  "remaining_gates": [
+    "Exact 88a90dfa still requires separately owned runtime elaboration; static agreement with the diagnosed fix is not a PASS.",
+    "No imported-object closure, kernel replay, or axiom audit is performed or rebound.",
+    "Earlier identifier-only WholeCell report and old failed snapshot remain historical; neither supplies current runtime acceptance."
+  ],
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "frozen_lean_modified": false,
+    "python_bytecode_generated": false,
+    "runtime_pass_claim": false
+  }
+}

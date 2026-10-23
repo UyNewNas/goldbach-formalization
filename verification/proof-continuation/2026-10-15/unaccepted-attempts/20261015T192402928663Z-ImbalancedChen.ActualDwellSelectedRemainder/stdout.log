@@ -1,0 +1,22 @@
+ImbalancedChen/ActualDwellSelectedRemainder.lean:36:14: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+D : ℝ
+front tail : List ℕ
+hfull : actualDwellSupport D (front ++ tail)
+i : ℕ
+hi : i < tail.length
+hs :
+  (List.map (fun p => ↑p) (List.take (front.length + i) (front ++ tail))).prod *
+      (fun p => ↑p) (front ++ tail)[front.length + i] ^ 2 ≤
+    D
+htake : List.take (front.length + i) (front ++ tail) = front ++ List.take i tail
+⊢ front.length + i < (front ++ tail).length
+ImbalancedChen/ActualDwellSelectedRemainder.lean:64:12: error: Type mismatch: After simplification, term
+  hstart
+ has type
+  ↑b₀ * ↑q ^ 2 ≤ D
+but is expected to have type
+  ↑b₀ * (↑q ^ 2 * 1) ≤ D

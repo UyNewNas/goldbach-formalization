@@ -1,0 +1,235 @@
+{
+  "status": "SOURCE_ONLY_AUTHOR_FULL_SCOPE_PENDING_NEW_ADDITION_INDEPENDENT_REVIEW_AND_RUNTIME",
+  "reviewer": "/root/tail_resume (source author)",
+  "created_at_utc": "2026-10-15T21:30:15.698210+00:00",
+  "candidate": {
+    "path": "ImbalancedChen/ActualExtendedThirdCompactUpperRho.lean",
+    "sha256": "5cef3131cb204fbca47d2b704905dbce9c838b4627f9b446caa4edb597afe8f5",
+    "declaration_count": 27,
+    "definition_count": 7,
+    "complete_headers_and_definitions": [
+      {
+        "name": "actualExtendedThirdCompactFirstStop",
+        "kind": "def",
+        "private": false,
+        "complete_source_header": "def actualExtendedThirdCompactFirstStop (e : ℝ) (m N : ℕ) (history : List ℕ) : Prop",
+        "complete_definition": "def actualExtendedThirdCompactFirstStop (e : ℝ) (m N : ℕ) (history : List ℕ) : Prop :=\n  ∃ i : Fin (2 ^ m),\n    actualExtendedThirdDyadicLo m (fun _ => i) 0 ≤\n        primeHistoryLogCoordinates (N : ℝ) 1 history 0 ∧\n      primeHistoryLogCoordinates (N : ℝ) 1 history 0 <\n        actualExtendedThirdDyadicHi m (fun _ => i) 0 ∧\n      actualExtendedThirdDyadicHi m (fun _ => i) 0 ≤ thirdPrefixRho - 4 * e"
+      },
+      {
+        "name": "actualExtendedThirdCompactInitialPolicy",
+        "kind": "def",
+        "private": false,
+        "complete_source_header": "def actualExtendedThirdCompactInitialPolicy (e : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool",
+        "complete_definition": "def actualExtendedThirdCompactInitialPolicy (e : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool :=\n  oddFirstExitPolicy fun history => decide\n    (ordinaryRosserPrefixAdmissible false ((N : ℝ) ^ (thirdPrefixTheta - 2 * e)) history ∧\n      (history.length = 1 → actualExtendedThirdCompactFirstStop e m N history))"
+      },
+      {
+        "name": "actualExtendedThirdCompactRawLevel",
+        "kind": "def",
+        "private": false,
+        "complete_source_header": "def actualExtendedThirdCompactRawLevel (e h : ℝ) (m N : ℕ) (history : List ℕ) : ℝ",
+        "complete_definition": "def actualExtendedThirdCompactRawLevel (e h : ℝ) (m N : ℕ) (history : List ℕ) : ℝ :=\n  (N : ℝ) ^ actualExtendedThirdCompactCellLevel e h m\n    (primeHistoryLogCoordinates (N : ℝ) 3 history)"
+      },
+      {
+        "name": "actualExtendedThirdCompactActive",
+        "kind": "def",
+        "private": false,
+        "complete_source_header": "def actualExtendedThirdCompactActive (e h : ℝ) (m N : ℕ) (history : List ℕ) : Prop",
+        "complete_definition": "def actualExtendedThirdCompactActive (e h : ℝ) (m N : ℕ) (history : List ℕ) : Prop :=\n  ∃ j ∈ actualExtendedThirdCompactCells e h m,\n    primeHistoryLogCoordinates (N : ℝ) 3 history ∈ actualExtendedThirdOwnedCell m j"
+      },
+      {
+        "name": "actualExtendedThirdCompactUpperPolicy",
+        "kind": "def",
+        "private": false,
+        "complete_source_header": "def actualExtendedThirdCompactUpperPolicy (e h : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool",
+        "complete_definition": "def actualExtendedThirdCompactUpperPolicy (e h : ℝ) (m N : ℕ) :\n    Bool → List ℕ → Bool :=\n  thirdCappedUpperPolicy (actualExtendedThirdCompactInitialPolicy e m N)\n    (actualExtendedThirdCompactRawLevel e h m N)"
+      },
+      {
+        "name": "actualExtendedThirdCompactRawLevel_on_cell",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactRawLevel_on_cell {e h : ℝ} {m N : ℕ}\n    {history : List ℕ} {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 history ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactRawLevel e h m N history =\n      (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j"
+      },
+      {
+        "name": "actualExtendedThirdCompactRawLevel_inactive",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactRawLevel_inactive {e h : ℝ} {m N : ℕ}\n    {history : List ℕ} (ha : ¬actualExtendedThirdCompactActive e h m N history) :\n    actualExtendedThirdCompactRawLevel e h m N history =\n      (N : ℝ) ^ (thirdPrefixTheta - 2 * e)"
+      },
+      {
+        "name": "actualExtendedThirdCompactUpperPolicy_through_two",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactUpperPolicy_through_two (e h : ℝ) (m N : ℕ)\n    (positive : Bool) (history : List ℕ) (hlen : history.length ≤ 2) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      actualExtendedThirdCompactInitialPolicy e m N positive history"
+      },
+      {
+        "name": "actualExtendedThirdCompactUpperPolicy_even",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactUpperPolicy_even (e h : ℝ) (m N : ℕ)\n    (history : List ℕ) : actualExtendedThirdCompactUpperPolicy e h m N true history = true"
+      },
+      {
+        "name": "actualExtendedThirdCompactUpperPolicy_inactive",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactUpperPolicy_inactive (e h : ℝ) (m N : ℕ)\n    (positive : Bool) (history : List ℕ)\n    (ha : ¬actualExtendedThirdCompactActive e h m N (rosserAncestor 3 history)) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      actualExtendedThirdCompactInitialPolicy e m N positive history"
+      },
+      {
+        "name": "actualExtendedThirdCompactUpperPolicy_on_cell",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactUpperPolicy_on_cell {e h : ℝ} {m N : ℕ}\n    (positive : Bool) (history : List ℕ) (hlen : 3 ≤ history.length)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 (rosserAncestor 3 history) ∈\n      actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactUpperPolicy e h m N positive history =\n      ordinaryParityRosserPolicy false ((N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j)\n        positive history"
+      },
+      {
+        "name": "actualExtendedThirdCompactFrozenLevel_append",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactFrozenLevel_append (e h : ℝ) (m N : ℕ)\n    (later history : List ℕ) (hlen : 3 ≤ history.length) :\n    actualExtendedThirdCompactRawLevel e h m N (rosserAncestor 3 (later ++ history)) =\n      actualExtendedThirdCompactRawLevel e h m N (rosserAncestor 3 history)"
+      },
+      {
+        "name": "actualExtendedThirdCompactUpperPolicy_empty_cells",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactUpperPolicy_empty_cells (e h : ℝ) (m N : ℕ)\n    (hempty : actualExtendedThirdCompactCells e h m = ∅) :\n    actualExtendedThirdCompactUpperPolicy e h m N = actualExtendedThirdCompactInitialPolicy e m N"
+      },
+      {
+        "name": "actualExtendedThirdCompactFirstStop_of_cell",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactFirstStop_of_cell {e h : ℝ} {m N : ℕ}\n    (p0 p1 p2 : ℕ) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactFirstStop e m N [p0]"
+      },
+      {
+        "name": "actualExtendedThirdCompactInitialPolicy_first_iff",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactInitialPolicy_first_iff (e : ℝ) (m N p : ℕ)\n    (hp : 0 < p) :\n    actualExtendedThirdCompactInitialPolicy e m N false [p] = true ↔\n      (p : ℝ) ^ 3 < (N : ℝ) ^ (thirdPrefixTheta - 2 * e) ∧\n        actualExtendedThirdCompactFirstStop e m N [p]"
+      },
+      {
+        "name": "actualExtendedThirdCompactCell_prime_firstCube",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactCell_prime_firstCube {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp0 : 0 < p0) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    (p0 : ℝ) ^ 3 < (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j"
+      },
+      {
+        "name": "actualExtendedThirdCompactInitialPolicy_first_of_cell",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactInitialPolicy_first_of_cell {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp0 : 0 < p0) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactInitialPolicy e m N false [p0] = true"
+      },
+      {
+        "name": "actualExtendedThirdCompactUpperPolicy_third_iff",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactUpperPolicy_third_iff {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (p0 p1 p2 : ℕ) (hp2 : 0 < p2) (hp21 : p2 < p1) (hp10 : p1 < p0)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 [p2, p1, p0] ∈ actualExtendedThirdOwnedCell m j) :\n    actualExtendedThirdCompactUpperPolicy e h m N false [p2, p1, p0] = true ↔\n      (p0 : ℝ) * p1 * p2 ^ 3 < (N : ℝ) ^ actualExtendedThirdPhysicalLevel e m j"
+      },
+      {
+        "name": "actualExtendedThirdCompactModuli",
+        "kind": "def",
+        "private": false,
+        "complete_source_header": "def actualExtendedThirdCompactModuli (e h : ℝ) (m N cap : ℕ) (w z : ℝ) : Finset ℕ",
+        "complete_definition": "def actualExtendedThirdCompactModuli (e h : ℝ) (m N cap : ℕ) (w z : ℝ) : Finset ℕ :=\n  actualSmallRoughModuli (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z"
+      },
+      {
+        "name": "actualExtendedThirdCompactRho",
+        "kind": "def",
+        "private": false,
+        "complete_source_header": "def actualExtendedThirdCompactRho (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) : ℕ → ℝ",
+        "complete_definition": "def actualExtendedThirdCompactRho (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) : ℕ → ℝ :=\n  actualSmallRoughRho (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z L"
+      },
+      {
+        "name": "actualExtendedThirdCompactRho_eq_firstExitAttachment",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactRho_eq_firstExitAttachment\n    (e h : ℝ) (m N cap : ℕ) (w z L : ℝ) :\n    actualExtendedThirdCompactRho e h m N cap w z L =\n      smallRoughRho (actualSmallRosserSupport N cap w)\n        (firstExitRetainedModuli (actualExtendedThirdCompactUpperPolicy e h m N)\n          (roughPrimeUniverse N cap w z))\n        (fun d => (firstExitRetainedCoefficient (actualExtendedThirdCompactUpperPolicy e h m N)\n          (roughPrimeUniverse N cap w z) d : ℝ))\n        (actualSmallRosserMinus N cap w L) (actualSmallRosserPlus N cap w L)"
+      },
+      {
+        "name": "actualExtendedThirdCompactRoughDensity_eq_policy",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactRoughDensity_eq_policy\n    (e h : ℝ) (m N cap : ℕ) (w z : ℝ) :\n    reciprocalTotientDensity\n        (fixedRoughSupport (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z)\n        (fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false) N cap w z) =\n      firstExitRetainedPolynomial (actualExtendedThirdCompactUpperPolicy e h m N)\n        (fun p : ℕ => 1 / ((p : ℝ) - 1)) [] true 1 (roughPrimeUniverse N cap w z)"
+      },
+      {
+        "name": "actualExtendedThirdCompactRho_majorant",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactRho_majorant (e h : ℝ) (m N cap : ℕ) (w z L : ℝ)\n    (hL : 1 < L) (hwL : w ≤ L) (hwz : w ≤ z) (hzcap : z ≤ (cap : ℝ)) (n : ℤ) :\n    actualSmallRoughIndicator N z n ≤\n      physicalDivisorSum (actualExtendedThirdCompactModuli e h m N cap w z)\n        (actualExtendedThirdCompactRho e h m N cap w z L) n.natAbs"
+      },
+      {
+        "name": "actualExtendedThirdCompactRho_abs_le_one",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactRho_abs_le_one (e h : ℝ) (m N cap : ℕ)\n    (w z L : ℝ) (q : ℕ) : |actualExtendedThirdCompactRho e h m N cap w z L q| ≤ 1"
+      },
+      {
+        "name": "actualExtendedThirdCompactModuli_squarefree",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactModuli_squarefree (e h : ℝ) (m N cap : ℕ)\n    (w z : ℝ) {q : ℕ} (hq : q ∈ actualExtendedThirdCompactModuli e h m N cap w z) :\n    Squarefree q"
+      },
+      {
+        "name": "actualExtendedThirdCompactModuli_coprime_target",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactModuli_coprime_target (e h : ℝ) (m N cap : ℕ)\n    (w z : ℝ) {q : ℕ} (hq : q ∈ actualExtendedThirdCompactModuli e h m N cap w z) :\n    q.Coprime N"
+      },
+      {
+        "name": "actualExtendedThirdCompactRho_empty_cells",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactRho_empty_cells (e h : ℝ) (m N cap : ℕ) (w z L : ℝ)\n    (hempty : actualExtendedThirdCompactCells e h m = ∅) :\n    actualExtendedThirdCompactRho e h m N cap w z L =\n      actualSmallRoughRho (actualExtendedThirdCompactInitialPolicy e m N false) N cap w z L"
+      }
+    ]
+  },
+  "old_candidate_snapshot": {
+    "path": ".lake/proof-continuation/source-reviews/20261016-compact-upper-rho-2fb3-before-initial-admission.lean",
+    "sha256": "2fb3da6e84cd17fa1600e1b68849c13c16894506672e0f6bfdc80f66debbf40e",
+    "all_old_complete_headers_and_definitions_unchanged": true,
+    "old_declaration_count": 24
+  },
+  "direct_imports": [
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdCompactCellCutoff",
+      "source_sha256": "edb8876bd5881b7087e85062e64b05a1a7b0c5c1ed465825c5925dbbed059428"
+    },
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdFirstCubeMargin",
+      "source_sha256": "290bd48ab1ca9b3994c02c3208849ae81dcb3ab24607b92c8c8dc52d1f67786a"
+    },
+    {
+      "module": "ImbalancedChen.ActualUpperPolicyDensity",
+      "source_sha256": "16d81ee162d9ed2a5efad703c9a900b2c5ada622b2613472f70eaef4cbd02ae6"
+    },
+    {
+      "module": "ImbalancedChen.HistoricalUnorderedThirdGeometry",
+      "source_sha256": "4ffa5f89e52a26f621f2e896d2fa4dd3c26508b887967eac696994ef4c54b129"
+    }
+  ],
+  "actual_consumer": [
+    "The following compact rank-two candidate dictionary needs the literal initial singleton admission and the identical original capped rough-prime carrier.",
+    "The original physical small/rough attachment consumes this concrete retained predicate before any test integer is supplied.",
+    "The later exact signed first-exit saving must consume this same initial policy, the same third-ancestor lookup, and the same fixedRoughCoefficient; it is not supplied here."
+  ],
+  "mathematical_review": [
+    "A concrete first stop uses a genuinely owned Ico dyadic first-coordinate label whose upper endpoint passes rho-4e. The initial baseline is this first stop plus the old complete Rosser admissibility test, not the unrestricted ordinary upper policy.",
+    "The third Capped policy splices after rank two. From rank three onward the level is read at rosserAncestor 3, and the actual ancestor is unchanged by prepending later primes.",
+    "Inactive histories restore the full initial Boolean predicate, including its first-stop implication; no signed coefficient monotonicity under deletion is used.",
+    "For a genuinely adopted cell, its first coordinate gives the actual same singleton first stop. Its robust FirstCubeMargin supplies the strict first-cube inequality at the new physical cap. The physical cap is at most the original old exponent, so the actual initial singleton admission is derived.",
+    "At a strictly ordered positive triple the historical full third predicate is equivalent to the inherited first cube and the third own cube. The already proved first-cube supplier removes only that proved inherited conjunct.",
+    "The concrete Rho is the existing actualSmallRoughRho for this concrete upper policy. Existing exact identification preserves original retained modulus support, literal Mobius lookup, sign-sensitive small attachment, target prime deletion, enumeration cap and real cutoffs.",
+    "Every even sign is retained globally, so the exact reciprocal totient density is the same policy first-exit polynomial. Actual majorant, coefficient absolute bound, squarefree support and target coprimality are inherited from their full physical providers."
+  ],
+  "not_proved": [
+    "Identification of this first-stop initial-policy density with the manuscript baseline constant.",
+    "Exact signed original-policy frontier correction equals the same compact actual residual harmonic sum.",
+    "Same-policy arithmetic counting mean or normalized physical progression error.",
+    "Selected-pair factorization/distribution estimate for every carrier modulus, or the complete hUpper claim.",
+    "Imported-object closure replay, kernel type audit, or Lean elaboration of this source."
+  ],
+  "evidence_boundary": {
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "pins_modified": false,
+    "owned_sources_modified": false,
+    "acceptance_claimed": false,
+    "unconditionalMain": false
+  }
+}

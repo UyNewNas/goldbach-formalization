@@ -1,0 +1,428 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T21:35:16.3258749Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_INDEPENDENT_ACTUAL_DIAGNOSTIC_PROOF_API_REBIND_APPROVED_PENDING_RUNTIME",
+  "candidate": {
+    "sha256": "9d41c0858ea52223240405a003fdab49b3fbc9bcf6f8dd84c0a32a96a5295584",
+    "path": "ImbalancedChen/Part3TransposedGCDPoissonMask.lean",
+    "all_complete_headers_and_definition_bodies": [
+      {
+        "name": "MediumAtom.commonFactorPairZeroWeight",
+        "kind": "def",
+        "private": false,
+        "start_line": 32,
+        "complete_source_header": "def MediumAtom.commonFactorPairZeroWeight (d : MediumAtom) (n₁ n₂ : ℕ) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonFactorPairZeroWeight (d : MediumAtom) (n₁ n₂ : ℕ) : ℂ :=\n  ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\n      (if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then\n        ((d.U / (complexFactorModulus a).lcm (complexFactorModulus b)) *\n          CommonSmoothCutoff.cutoffMass : ℝ) else 0 : ℝ)"
+      },
+      {
+        "name": "MediumAtom.commonFactorPairNonzeroWeight",
+        "kind": "def",
+        "private": false,
+        "start_line": 39,
+        "complete_source_header": "def MediumAtom.commonFactorPairNonzeroWeight (d : MediumAtom) (n₁ n₂ : ℕ) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonFactorPairNonzeroWeight (d : MediumAtom) (n₁ n₂ : ℕ) : ℂ :=\n  ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\n      (if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then\n        (∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency\n          (d.U / (complexFactorModulus a).lcm (complexFactorModulus b))\n          ((ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b)\n            n₁ n₂ d.residue : ℝ) /\n              (complexFactorModulus a).lcm (complexFactorModulus b)) h).re else 0 : ℝ)"
+      },
+      {
+        "name": "MediumAtom.commonLargeBetaGCDZeroPart",
+        "kind": "def",
+        "private": false,
+        "start_line": 49,
+        "complete_source_header": "def MediumAtom.commonLargeBetaGCDZeroPart (d : MediumAtom) (Y : ℝ) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonLargeBetaGCDZeroPart (d : MediumAtom) (Y : ℝ) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then\n      d.beta n₁ * star (d.beta n₂) * d.commonFactorPairZeroWeight n₁ n₂ else 0"
+      },
+      {
+        "name": "MediumAtom.commonLargeBetaGCDNonzeroPart",
+        "kind": "def",
+        "private": false,
+        "start_line": 54,
+        "complete_source_header": "def MediumAtom.commonLargeBetaGCDNonzeroPart (d : MediumAtom) (Y : ℝ) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonLargeBetaGCDNonzeroPart (d : MediumAtom) (Y : ℝ) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then\n      d.beta n₁ * star (d.beta n₂) * d.commonFactorPairNonzeroWeight n₁ n₂ else 0"
+      },
+      {
+        "name": "MediumAtom.commonSmallBetaGCDNonzeroPart",
+        "kind": "def",
+        "private": false,
+        "start_line": 59,
+        "complete_source_header": "def MediumAtom.commonSmallBetaGCDNonzeroPart (d : MediumAtom) (Y : ℝ) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonSmallBetaGCDNonzeroPart (d : MediumAtom) (Y : ℝ) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then 0 else\n      d.beta n₁ * star (d.beta n₂) * d.commonFactorPairNonzeroWeight n₁ n₂"
+      },
+      {
+        "name": "MediumAtom.transposedLargePairMass",
+        "kind": "def",
+        "private": false,
+        "start_line": 64,
+        "complete_source_header": "def MediumAtom.transposedLargePairMass (d : MediumAtom) (Y : ℝ) : ℝ",
+        "complete_source_definition": "def MediumAtom.transposedLargePairMass (d : MediumAtom) (Y : ℝ) : ℝ :=\n  ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then\n      ‖d.transposedAtom.beta n₁‖ * ‖d.transposedAtom.beta n₂‖ else 0"
+      },
+      {
+        "name": "factor_modulus_pos",
+        "kind": "theorem",
+        "private": true,
+        "start_line": 71,
+        "complete_source_header": "private theorem factor_modulus_pos\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {a : ℕ × ℕ × ℕ}\n    (ha : a ∈ d.complexFactorLabels) : 0 < complexFactorModulus a"
+      },
+      {
+        "name": "transposedDispersionW_eq_betaPairs",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 78,
+        "complete_source_header": "theorem transposedDispersionW_eq_betaPairs\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (d.transposedAtom.complexDispersionW d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) =\n      ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\n        d.transposedAtom.beta n₁ * star (d.transposedAtom.beta n₂) *\n          d.transposedAtom.commonFactorPairWeight n₁ n₂"
+      },
+      {
+        "name": "transposedDispersionW_eq_large_add_small",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 104,
+        "complete_source_header": "theorem transposedDispersionW_eq_large_add_small\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    (d.transposedAtom.complexDispersionW d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) =\n      d.transposedAtom.commonLargeBetaGCDW Y + d.transposedAtom.commonSmallBetaGCDW Y"
+      },
+      {
+        "name": "transposed_factorPair_eq_zero_add_nonzero",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 122,
+        "complete_source_header": "theorem transposed_factorPair_eq_zero_add_nonzero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (n₁ n₂ : ℕ) :\n    d.transposedAtom.commonFactorPairWeight n₁ n₂ =\n      d.transposedAtom.commonFactorPairZeroWeight n₁ n₂ +\n        d.transposedAtom.commonFactorPairNonzeroWeight n₁ n₂"
+      },
+      {
+        "name": "transposed_largeW_eq_zero_add_nonzero",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 157,
+        "complete_source_header": "theorem transposed_largeW_eq_zero_add_nonzero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    d.transposedAtom.commonLargeBetaGCDW Y =\n      d.transposedAtom.commonLargeBetaGCDZeroPart Y +\n        d.transposedAtom.commonLargeBetaGCDNonzeroPart Y"
+      },
+      {
+        "name": "complexCRTSmoothNonzeroPart_eq_betaPairs",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 175,
+        "complete_source_header": "theorem complexCRTSmoothNonzeroPart_eq_betaPairs (d : MediumAtom) :\n    d.complexCRTSmoothNonzeroPart =\n      ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n        d.beta n₁ * star (d.beta n₂) * d.commonFactorPairNonzeroWeight n₁ n₂"
+      },
+      {
+        "name": "complexCRTSmoothNonzeroPart_eq_large_add_small",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 196,
+        "complete_source_header": "theorem complexCRTSmoothNonzeroPart_eq_large_add_small (d : MediumAtom) (Y : ℝ) :\n    d.complexCRTSmoothNonzeroPart =\n      d.commonLargeBetaGCDNonzeroPart Y + d.commonSmallBetaGCDNonzeroPart Y"
+      },
+      {
+        "name": "transposed_centered_identity_with_large_small",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 211,
+        "complete_source_header": "theorem transposed_centered_identity_with_large_small\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    ((∑ n ∈ d.transposedAtom.commonSmoothCarrier,\n      d.transposedAtom.commonSmoothWeight n * ‖d.transposedAtom.complexCenteredRow n‖ ^ 2 : ℝ) : ℂ) =\n      (d.transposedAtom.complexCRTSmoothZeroPart -\n        2 * (d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) +\n        (d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ)) +\n        (d.transposedAtom.commonLargeBetaGCDNonzeroPart Y +\n          d.transposedAtom.commonSmallBetaGCDNonzeroPart Y)"
+      },
+      {
+        "name": "transposed_largeNonzero_norm_le_W_add_zero",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 228,
+        "complete_source_header": "theorem transposed_largeNonzero_norm_le_W_add_zero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    ‖d.transposedAtom.commonLargeBetaGCDNonzeroPart Y‖ ≤\n      ‖d.transposedAtom.commonLargeBetaGCDW Y‖ +\n        ‖d.transposedAtom.commonLargeBetaGCDZeroPart Y‖"
+      },
+      {
+        "name": "lcm_weight_sum_le",
+        "kind": "theorem",
+        "private": true,
+        "start_line": 241,
+        "complete_source_header": "private theorem lcm_weight_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ / (q.lcm r : ℝ)) ≤\n        (1 + Real.log d.physicalFactorCap) ^ 19"
+      },
+      {
+        "name": "transposed_factorPairZero_norm_le",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 261,
+        "complete_source_header": "theorem transposed_factorPairZero_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (n₁ n₂ : ℕ) :\n    ‖d.transposedAtom.commonFactorPairZeroWeight n₁ n₂‖ ≤\n      |d.V * CommonSmoothCutoff.cutoffMass| * (1 + Real.log d.physicalFactorCap) ^ 19"
+      },
+      {
+        "name": "transposed_largeZero_norm_le_pairMass",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 298,
+        "complete_source_header": "theorem transposed_largeZero_norm_le_pairMass\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    ‖d.transposedAtom.commonLargeBetaGCDZeroPart Y‖ ≤\n      |d.V * CommonSmoothCutoff.cutoffMass| * (1 + Real.log d.physicalFactorCap) ^ 19 *\n        d.transposedLargePairMass Y"
+      },
+      {
+        "name": "transposed_largePairMass_le",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 324,
+        "complete_source_header": "theorem transposed_largePairMass_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Y : ℝ} (hY : 0 < Y) :\n    d.transposedLargePairMass Y ≤\n      (2 * d.U) ^ 2 * Real.sqrt ((1 + Real.log (2 * d.U)) / Y)"
+      },
+      {
+        "name": "betaL2_mul_transposed_largeZero_le",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 351,
+        "complete_source_header": "theorem betaL2_mul_transposed_largeZero_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Y : ℝ} (hY : 0 < Y) :\n    (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n      ‖d.transposedAtom.commonLargeBetaGCDZeroPart Y‖ ≤\n        8 * |CommonSmoothCutoff.cutoffMass| * d.scale ^ 2 *\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n            (1 + Real.log d.physicalFactorCap) ^ 19 *\n              Real.sqrt ((1 + Real.log (2 * d.U)) / Y)"
+      }
+    ],
+    "declaration_count": 20,
+    "definition_count": 6,
+    "complete_current_source_and_proofs_reviewed": "import ImbalancedChen.Part3TransposedZeroCovariance\nimport ImbalancedChen.Part3SignedDivisorDeletion\n\n/-!\n# One actual paired-gcd mask in whole W, raw zero and full Fourier remainder\n\nThe same original-alpha pair and real cutoff are retained in all three\nterms of the transposed Poisson identity. Bounding whole W alone is not\nasserted to bound its Fourier remainder: the raw zero under the same\nmask is kept and paid separately below.\n\nThe actual paired coefficient is original alpha extended by zero, so its\nlarge-gcd mass uses the already proved finite estimate at order one and\nT=2U. The raw zero pays the actual complex factor fibers through tau_3\nand the existing lcm moment, with logarithm exponent nineteen. Its common\nscalar remains original V times the local Fourier-zero cutoffMass.\n\nOnly the two already owned local parents are imported. No new foreign\nmodule, transposed MediumAdmissible assertion or analytical budget premise\nis used. The whole-W large-gcd payment and its genuine alpha cleaning are\nseparate from this finite Poisson and raw-zero leaf.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset\nopen scoped BigOperators\nopen MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n\ndef MediumAtom.commonFactorPairZeroWeight (d : MediumAtom) (n₁ n₂ : ℕ) : ℂ :=\n  ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\n      (if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then\n        ((d.U / (complexFactorModulus a).lcm (complexFactorModulus b)) *\n          CommonSmoothCutoff.cutoffMass : ℝ) else 0 : ℝ)\n\ndef MediumAtom.commonFactorPairNonzeroWeight (d : MediumAtom) (n₁ n₂ : ℕ) : ℂ :=\n  ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\n      (if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then\n        (∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency\n          (d.U / (complexFactorModulus a).lcm (complexFactorModulus b))\n          ((ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b)\n            n₁ n₂ d.residue : ℝ) /\n              (complexFactorModulus a).lcm (complexFactorModulus b)) h).re else 0 : ℝ)\n\ndef MediumAtom.commonLargeBetaGCDZeroPart (d : MediumAtom) (Y : ℝ) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then\n      d.beta n₁ * star (d.beta n₂) * d.commonFactorPairZeroWeight n₁ n₂ else 0\n\ndef MediumAtom.commonLargeBetaGCDNonzeroPart (d : MediumAtom) (Y : ℝ) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then\n      d.beta n₁ * star (d.beta n₂) * d.commonFactorPairNonzeroWeight n₁ n₂ else 0\n\ndef MediumAtom.commonSmallBetaGCDNonzeroPart (d : MediumAtom) (Y : ℝ) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then 0 else\n      d.beta n₁ * star (d.beta n₂) * d.commonFactorPairNonzeroWeight n₁ n₂\n\ndef MediumAtom.transposedLargePairMass (d : MediumAtom) (Y : ℝ) : ℝ :=\n  ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then\n      ‖d.transposedAtom.beta n₁‖ * ‖d.transposedAtom.beta n₂‖ else 0\n\nnamespace TransposedGCDPoissonMask\n\nprivate theorem factor_modulus_pos\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {a : ℕ × ℕ × ℕ}\n    (ha : a ∈ d.complexFactorLabels) : 0 < complexFactorModulus a :=\n  (Finset.mem_Ioc.mp (d.physicalFactorModuli_subset_cap hd\n    (Finset.mem_image_of_mem _ ha))).1\n\ntheorem transposedDispersionW_eq_betaPairs\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (d.transposedAtom.complexDispersionW d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) =\n      ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\n        d.transposedAtom.beta n₁ * star (d.transposedAtom.beta n₂) *\n          d.transposedAtom.commonFactorPairWeight n₁ n₂ := by\n  rw [d.transposedDispersionW_eq_constructedCRT hd]\n  simp only [MediumAtom.complexRowLabels, Finset.sum_product,\n    MediumAtom.complexBetaCoefficient, star_mul]\n  simp_rw [Finset.sum_comm\n    (s := d.transposedAtom.complexFactorLabels) (t := d.transposedAtom.betaCarrier)]\n  simp only [MediumAtom.commonFactorPairWeight, Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro n₁ _\n  apply Finset.sum_congr rfl\n  intro n₂ _\n  apply Finset.sum_congr rfl\n  intro a _\n  apply Finset.sum_congr rfl\n  intro b _\n  rw [show d.transposedAtom.residue = d.residue from rfl]\n  ring\n\n/-- The masked whole W is a literal part of the actual transposed W. -/\ntheorem transposedDispersionW_eq_large_add_small\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    (d.transposedAtom.complexDispersionW d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) =\n      d.transposedAtom.commonLargeBetaGCDW Y + d.transposedAtom.commonSmallBetaGCDW Y := by\n  rw [transposedDispersionW_eq_betaPairs hd]\n  unfold MediumAtom.commonLargeBetaGCDW MediumAtom.commonSmallBetaGCDW\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro n₁ _\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro n₂ _\n  split_ifs <;> simp only [add_zero, zero_add]\n\n/-- The actual original-V smoothing is used on each complete physical lcm.\nNo beta coefficient, gcd mask or frequency is discarded in this identity. -/\ntheorem transposed_factorPair_eq_zero_add_nonzero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (n₁ n₂ : ℕ) :\n    d.transposedAtom.commonFactorPairWeight n₁ n₂ =\n      d.transposedAtom.commonFactorPairZeroWeight n₁ n₂ +\n        d.transposedAtom.commonFactorPairNonzeroWeight n₁ n₂ := by\n  unfold MediumAtom.commonFactorPairWeight MediumAtom.commonFactorPairZeroWeight\n    MediumAtom.commonFactorPairNonzeroWeight\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro a ha\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro b hb\n  change d.complexFactorGamma a * star (d.complexFactorGamma b) *\n    (ComplexCRT.constructedProgressionWeight d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight d.residue\n        (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ : ℂ) = _\n  unfold ComplexCRT.constructedProgressionWeight\n  by_cases hc : ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂\n  · simp only [hc, if_true]\n    have hD : 0 < (complexFactorModulus a).lcm (complexFactorModulus b) :=\n      Nat.pos_of_ne_zero (Nat.lcm_ne_zero (factor_modulus_pos hd ha).ne'\n        (factor_modulus_pos hd hb).ne')\n    have he := CommonSmoothCutoff.scaledDyadicCutoff_finset_progression_eq_main_add_fourier\n      (lt_of_lt_of_le zero_lt_one hd.2.1) d.transposedAtom.commonSmoothCarrier\n      (fun m hm ↦ d.transposedSmoothWeight_support_subset hd.2.1 hm) hD\n      (ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue)\n    simp only [MediumAtom.commonSmoothWeight, MediumAtom.transposedAtom,\n      MediumAtom.complexFactorGamma] at he ⊢\n    rw [he, Complex.ofReal_add]\n    ring\n  · simp only [hc, if_false, Complex.ofReal_zero, mul_zero, add_zero]\n\n/-- Whole W and raw zero have exactly the same actual gcd mask. -/\ntheorem transposed_largeW_eq_zero_add_nonzero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    d.transposedAtom.commonLargeBetaGCDW Y =\n      d.transposedAtom.commonLargeBetaGCDZeroPart Y +\n        d.transposedAtom.commonLargeBetaGCDNonzeroPart Y := by\n  unfold MediumAtom.commonLargeBetaGCDW MediumAtom.commonLargeBetaGCDZeroPart\n    MediumAtom.commonLargeBetaGCDNonzeroPart\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro n₁ _\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro n₂ _\n  by_cases hy : Y < (n₁.gcd n₂ : ℝ)\n  · simp only [if_pos hy, transposed_factorPair_eq_zero_add_nonzero hd, mul_add]\n  · simp only [if_neg hy, add_zero]\n\ntheorem complexCRTSmoothNonzeroPart_eq_betaPairs (d : MediumAtom) :\n    d.complexCRTSmoothNonzeroPart =\n      ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n        d.beta n₁ * star (d.beta n₂) * d.commonFactorPairNonzeroWeight n₁ n₂ := by\n  unfold MediumAtom.complexCRTSmoothNonzeroPart\n  simp only [MediumAtom.complexRowLabels, Finset.sum_product,\n    MediumAtom.complexBetaCoefficient, star_mul]\n  simp_rw [Finset.sum_comm (s := d.complexFactorLabels) (t := d.betaCarrier)]\n  simp only [MediumAtom.commonFactorPairNonzeroWeight, Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro n₁ _\n  apply Finset.sum_congr rfl\n  intro n₂ _\n  apply Finset.sum_congr rfl\n  intro a _\n  apply Finset.sum_congr rfl\n  intro b _\n  ring\n\n/-- The complementary piece has the explicit gcd<=Y branch, and the\nfull signed Poisson remainder is exactly their sum. -/\ntheorem complexCRTSmoothNonzeroPart_eq_large_add_small (d : MediumAtom) (Y : ℝ) :\n    d.complexCRTSmoothNonzeroPart =\n      d.commonLargeBetaGCDNonzeroPart Y + d.commonSmallBetaGCDNonzeroPart Y := by\n  rw [complexCRTSmoothNonzeroPart_eq_betaPairs]\n  unfold MediumAtom.commonLargeBetaGCDNonzeroPart MediumAtom.commonSmallBetaGCDNonzeroPart\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro n₁ _\n  rw [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro n₂ _\n  split_ifs <;> simp only [add_zero, zero_add]\n\n/-- The actual primitive V/U terms stay literal when the full Fourier\nremainder is partitioned by this paired gcd. -/\ntheorem transposed_centered_identity_with_large_small\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    ((∑ n ∈ d.transposedAtom.commonSmoothCarrier,\n      d.transposedAtom.commonSmoothWeight n * ‖d.transposedAtom.complexCenteredRow n‖ ^ 2 : ℝ) : ℂ) =\n      (d.transposedAtom.complexCRTSmoothZeroPart -\n        2 * (d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) +\n        (d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ)) +\n        (d.transposedAtom.commonLargeBetaGCDNonzeroPart Y +\n          d.transposedAtom.commonSmallBetaGCDNonzeroPart Y) := by\n  rw [d.transposed_dispersion_identity_with_commonPoisson hd,\n    complexCRTSmoothNonzeroPart_eq_large_add_small d.transposedAtom Y]\n\n/-- The masked Fourier remainder is bounded only after subtracting the\nraw zero under that same mask. This is not a whole-W substitution. -/\ntheorem transposed_largeNonzero_norm_le_W_add_zero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    ‖d.transposedAtom.commonLargeBetaGCDNonzeroPart Y‖ ≤\n      ‖d.transposedAtom.commonLargeBetaGCDW Y‖ +\n        ‖d.transposedAtom.commonLargeBetaGCDZeroPart Y‖ := by\n  have he : d.transposedAtom.commonLargeBetaGCDNonzeroPart Y =\n      d.transposedAtom.commonLargeBetaGCDW Y - d.transposedAtom.commonLargeBetaGCDZeroPart Y := by\n    rw [transposed_largeW_eq_zero_add_nonzero hd]\n    ring\n  rw [he]\n  exact norm_sub_le _ _\n\nprivate theorem lcm_weight_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ / (q.lcm r : ℝ)) ≤\n        (1 + Real.log d.physicalFactorCap) ^ 19 := by\n  have hh := MathlibNt.AnalyticNumberTheory.LargeSieve.LcmWeightBounds.sum_abs_lcm_weight_le_log\n    3 (d.one_le_physicalFactorCap hd) d.physicalFactorModuli\n    (d.physicalFactorModuli_subset_cap hd) (fun q ↦ ‖d.groupedFactorGamma q‖)\n    (fun q _ ↦ by simpa only [abs_norm] using d.groupedFactorGamma_norm_le_tauThree hd q)\n  convert hh using 1\n  · apply Finset.sum_congr rfl\n    intro q _\n    apply Finset.sum_congr rfl\n    intro r _\n    exact (abs_of_nonneg (by positivity)).symm\n  · norm_num\n\n/-- The complete original complex factor convolution is grouped exactly\nbefore its norm. No multiplicity-one or modulus coprimality is assumed. -/\ntheorem transposed_factorPairZero_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (n₁ n₂ : ℕ) :\n    ‖d.transposedAtom.commonFactorPairZeroWeight n₁ n₂‖ ≤\n      |d.V * CommonSmoothCutoff.cutoffMass| * (1 + Real.log d.physicalFactorCap) ^ 19 := by\n  unfold MediumAtom.commonFactorPairZeroWeight\n  change ‖∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\n      (if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then\n        ((d.V / (complexFactorModulus a).lcm (complexFactorModulus b)) *\n          CommonSmoothCutoff.cutoffMass : ℝ) else 0 : ℝ)‖ ≤ _\n  rw [TransposedZeroCovariance.factor_pair_sum_eq_grouped d (fun q r ↦\n    ((if ComplexCRT.Compatible q r n₁ n₂ then\n      (d.V / (q.lcm r : ℝ)) * CommonSmoothCutoff.cutoffMass else 0 : ℝ) : ℂ))]\n  calc\n    _ ≤ ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        |d.V * CommonSmoothCutoff.cutoffMass| *\n          (‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ / (q.lcm r : ℝ)) := by\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro q _\n      apply (norm_sum_le _ _).trans\n      apply Finset.sum_le_sum\n      intro r _\n      by_cases hc : ComplexCRT.Compatible q r n₁ n₂\n      · simp only [if_pos hc, norm_mul, norm_star, Complex.norm_real, Real.norm_eq_abs,\n          abs_mul, abs_div, abs_of_nonneg\n            (show (0 : ℝ) ≤ (q.lcm r : ℝ) from Nat.cast_nonneg (q.lcm r))]\n        exact le_of_eq (by ring)\n      · simp only [if_neg hc, Complex.ofReal_zero, mul_zero, norm_zero]\n        positivity\n    _ = |d.V * CommonSmoothCutoff.cutoffMass| *\n        ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n          ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ / (q.lcm r : ℝ) := by\n      simp only [Finset.mul_sum]\n    _ ≤ _ := mul_le_mul_of_nonneg_left (lcm_weight_sum_le hd) (abs_nonneg _)\n\ntheorem transposed_largeZero_norm_le_pairMass\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) :\n    ‖d.transposedAtom.commonLargeBetaGCDZeroPart Y‖ ≤\n      |d.V * CommonSmoothCutoff.cutoffMass| * (1 + Real.log d.physicalFactorCap) ^ 19 *\n        d.transposedLargePairMass Y := by\n  unfold MediumAtom.commonLargeBetaGCDZeroPart MediumAtom.transposedLargePairMass\n  simp only [Finset.mul_sum]\n  apply (norm_sum_le _ _).trans\n  apply Finset.sum_le_sum\n  intro n₁ _\n  apply (norm_sum_le _ _).trans\n  apply Finset.sum_le_sum\n  intro n₂ _\n  by_cases hy : Y < (n₁.gcd n₂ : ℝ)\n  · simp only [if_pos hy, norm_mul, norm_star]\n    calc\n      _ ≤ (‖d.transposedAtom.beta n₁‖ * ‖d.transposedAtom.beta n₂‖) *\n          (|d.V * CommonSmoothCutoff.cutoffMass| * (1 + Real.log d.physicalFactorCap) ^ 19) :=\n        mul_le_mul_of_nonneg_left (transposed_factorPairZero_norm_le hd n₁ n₂)\n          (mul_nonneg (norm_nonneg _) (norm_nonneg _))\n      _ = _ := by ring\n  · simp only [if_neg hy, norm_zero, mul_zero, le_refl]\n\n/-- The true original-alpha coefficient is one-bounded on its actual\npaired carrier, including the zero padding of the original interval. -/\ntheorem transposed_largePairMass_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Y : ℝ} (hY : 0 < Y) :\n    d.transposedLargePairMass Y ≤\n      (2 * d.U) ^ 2 * Real.sqrt ((1 + Real.log (2 * d.U)) / Y) := by\n  have hAlpha : ∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1 := by\n    obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, hAlpha, _⟩ := hd\n    exact hAlpha\n  have hN := d.transposedAtom.betaCarrier_subset_twiceV hd.1\n  have hbeta : ∀ n ∈ d.transposedAtom.betaCarrier,\n      |‖d.transposedAtom.beta n‖| ≤ (fouvryTau 1 n : ℝ) := by\n    intro n hn\n    have hn0 := (Finset.mem_Ioc.mp (hN hn)).1\n    rw [abs_norm, fouvryTau_order_one hn0.ne', Nat.cast_one]\n    change ‖if n ∈ d.alphaCarrier then d.alpha n else 0‖ ≤ 1\n    by_cases hm : n ∈ d.alphaCarrier\n    · simpa only [if_pos hm] using hAlpha n hm\n    · simp only [if_neg hm, norm_zero, zero_le_one]\n  have hh := ActualLargeGCDBetaMass.sum_abs_largeGCDPairs_le (k := 1) (by norm_num)\n    (show 1 ≤ 2 * d.U by linarith [hd.1]) hY d.transposedAtom.betaCarrier hN\n    (fun n ↦ ‖d.transposedAtom.beta n‖) hbeta\n  simpa only [MediumAtom.transposedLargePairMass, ActualLargeGCDBetaMass.largeGCDPairs,\n    Finset.sum_filter, Finset.sum_product, abs_mul, abs_norm, one_pow,\n    Nat.sub_self, pow_zero, mul_one] using hh\n\n/-- Actual outside beta-L2 is paid at length 2V. The right side keeps\nthe original X=U*V, the local mass and both explicit logarithm costs. -/\ntheorem betaL2_mul_transposed_largeZero_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {Y : ℝ} (hY : 0 < Y) :\n    (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n      ‖d.transposedAtom.commonLargeBetaGCDZeroPart Y‖ ≤\n        8 * |CommonSmoothCutoff.cutoffMass| * d.scale ^ 2 *\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n            (1 + Real.log d.physicalFactorCap) ^ 19 *\n              Real.sqrt ((1 + Real.log (2 * d.U)) / Y) := by\n  have hV : 0 ≤ d.V := by linarith [hd.2.1]\n  have hcapLog : 0 ≤ 1 + Real.log d.physicalFactorCap :=\n    by linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]\n  have hlogV : 0 ≤ 1 + Real.log (2 * d.V) :=\n    by linarith [Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])]\n  have hz := (transposed_largeZero_norm_le_pairMass hd Y).trans\n    (mul_le_mul_of_nonneg_left (transposed_largePairMass_le hd hY) (by positivity))\n  calc\n    _ ≤ (2 * d.V * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) *\n        (|d.V * CommonSmoothCutoff.cutoffMass| * (1 + Real.log d.physicalFactorCap) ^ 19 *\n          ((2 * d.U) ^ 2 * Real.sqrt ((1 + Real.log (2 * d.U)) / Y))) :=\n      mul_le_mul (mediumAdmissible_beta_norm_sq_sum_le hd) hz (norm_nonneg _) (by positivity)\n    _ = _ := by rw [abs_mul, abs_of_nonneg hV]; unfold MediumAtom.scale; ring\n\nend TransposedGCDPoissonMask\n\nend\n\nend ImbalancedChen.Part3\n"
+  },
+  "baseline": {
+    "complete_actual_diff_read": true,
+    "imports_exact_equal": true,
+    "sha256": "1b9c64bac5d849c70af899a61a5c191a5e2acfc9d7ec7a5a532372d575a741bf",
+    "only_changed_proof_declarations": [
+      "transposedDispersionW_eq_betaPairs",
+      "transposed_factorPair_eq_zero_add_nonzero",
+      "lcm_weight_sum_le",
+      "transposed_factorPairZero_norm_le"
+    ],
+    "other_blocks_exact_equal": true,
+    "exact_old_snapshot": "drafts/Part3TransposedGCDPoissonMask.1b9c64bac5d849c70af899a61a5c191a5e2acfc9d7ec7a5a532372d575a741bf.lean",
+    "complete_header_definition_comparisons": [
+      {
+        "definition_body_exact_equal": true,
+        "name": "MediumAtom.commonFactorPairZeroWeight",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "MediumAtom.commonFactorPairNonzeroWeight",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "MediumAtom.commonLargeBetaGCDZeroPart",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "MediumAtom.commonLargeBetaGCDNonzeroPart",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "MediumAtom.commonSmallBetaGCDNonzeroPart",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "MediumAtom.transposedLargePairMass",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "factor_modulus_pos",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "transposedDispersionW_eq_betaPairs",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": false
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "transposedDispersionW_eq_large_add_small",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "transposed_factorPair_eq_zero_add_nonzero",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": false
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "transposed_largeW_eq_zero_add_nonzero",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "complexCRTSmoothNonzeroPart_eq_betaPairs",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "complexCRTSmoothNonzeroPart_eq_large_add_small",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "transposed_centered_identity_with_large_small",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "transposed_largeNonzero_norm_le_W_add_zero",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "lcm_weight_sum_le",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": false
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "transposed_factorPairZero_norm_le",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": false
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "transposed_largeZero_norm_le_pairMass",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "transposed_largePairMass_le",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "definition_body_exact_equal": true,
+        "name": "betaL2_mul_transposed_largeZero_le",
+        "complete_header_exact_equal": true,
+        "complete_block_equal": true
+      }
+    ]
+  },
+  "author_report": {
+    "sha256": "83ebd5e5d999a34fe0ff7bd4e0f41c86f2310119d479cc3db316788c0deed66b",
+    "path": "20261016-transposed-gcd-poisson-mask-first-diagnostic-self-rebind.json"
+  },
+  "actual_failed_stdout": {
+    "complete_text": "Try this:\n  [apply] ring_nf\n  \n  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.\n    \n  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.\nImbalancedChen/Part3TransposedGCDPoissonMask.lean:85:59: error: unsolved goals\nB : ℕ\nsigma kappa c0 : ℝ\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\nn₁ : ℕ\na✝³ : n₁ ∈ d.transposedAtom.betaCarrier\nn₂ : ℕ\na✝² : n₂ ∈ d.transposedAtom.betaCarrier\na : ℕ × ℕ × ℕ\na✝¹ : a ∈ d.transposedAtom.complexFactorLabels\nb : ℕ × ℕ × ℕ\na✝ : b ∈ d.transposedAtom.complexFactorLabels\n⊢ d.transposedAtom.complexFactorGamma a * d.transposedAtom.beta n₁ * star (d.transposedAtom.beta n₂) *\n        star (d.transposedAtom.complexFactorGamma b) *\n      ↑(ComplexCRT.constructedProgressionWeight d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight\n          d.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂) =\n    d.transposedAtom.complexFactorGamma a * d.transposedAtom.beta n₁ * star (d.transposedAtom.beta n₂) *\n        star (d.transposedAtom.complexFactorGamma b) *\n      ↑(ComplexCRT.constructedProgressionWeight d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight\n          d.transposedAtom.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂)\nTry this:\n  [apply] ring_nf\n  \n  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.\n    \n  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.\nImbalancedChen/Part3TransposedGCDPoissonMask.lean:141:2: error: unsolved goals\ncase pos\nB : ℕ\nsigma kappa c0 : ℝ\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\nn₁ n₂ : ℕ\na : ℕ × ℕ × ℕ\nha : a ∈ d.transposedAtom.complexFactorLabels\nb : ℕ × ℕ × ℕ\nhb : b ∈ d.transposedAtom.complexFactorLabels\nhc : ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂\nhD : 0 < (complexFactorModulus a).lcm (complexFactorModulus b)\nhe :\n  (∑\n      m ∈\n        { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,\n            intervalHi := ↑⌊2 * d.V⌋₊, alpha := d.beta, beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0,\n            gamma1 := d.gamma1, gamma2 := d.gamma2, gamma3 := d.gamma3 }.commonSmoothCarrier,\n      if\n          ↑m ≡ ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue [ZMOD\n            ↑((complexFactorModulus a).lcm (complexFactorModulus b))] then\n        CommonSmoothCutoff.scaledDyadicCutoff d.V ↑m\n      else 0) =\n    d.V / ↑((complexFactorModulus a).lcm (complexFactorModulus b)) * CommonSmoothCutoff.cutoffMass +\n      (∑' (h : ℤ),\n          CommonSmoothCutoff.poissonNonzeroFrequency (d.V / ↑((complexFactorModulus a).lcm (complexFactorModulus b)))\n            (↑(ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue) /\n              ↑((complexFactorModulus a).lcm (complexFactorModulus b)))\n            h).re\n⊢ d.complexFactorGamma a * star (d.complexFactorGamma b) *\n        ↑(d.V * (↑((complexFactorModulus a).lcm (complexFactorModulus b)))⁻¹ * CommonSmoothCutoff.cutoffMass) +\n      d.complexFactorGamma a * star (d.complexFactorGamma b) *\n        ↑(∑' (h : ℤ),\n              CommonSmoothCutoff.poissonNonzeroFrequency\n                (d.V * (↑((complexFactorModulus a).lcm (complexFactorModulus b)))⁻¹)\n                ((↑((complexFactorModulus a).lcm (complexFactorModulus b)))⁻¹ *\n                  ↑(ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue))\n                h).re =\n    ↑(d.V * (↑((complexFactorModulus a).lcm (complexFactorModulus b)))⁻¹ * CommonSmoothCutoff.cutoffMass) *\n          { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,\n                intervalHi := ↑⌊d.V * 2⌋₊, alpha := d.beta,\n                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,\n                gamma3 := d.gamma3 }.complexFactorGamma\n            a *\n        star\n          ({ U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,\n                intervalHi := ↑⌊d.V * 2⌋₊, alpha := d.beta,\n                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,\n                gamma3 := d.gamma3 }.complexFactorGamma\n            b) +\n      ↑(∑' (h : ℤ),\n                CommonSmoothCutoff.poissonNonzeroFrequency\n                  (d.V * (↑((complexFactorModulus a).lcm (complexFactorModulus b)))⁻¹)\n                  ((↑((complexFactorModulus a).lcm (complexFactorModulus b)))⁻¹ *\n                    ↑(ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue))\n                  h).re *\n          { U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,\n                intervalHi := ↑⌊d.V * 2⌋₊, alpha := d.beta,\n                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,\n                gamma3 := d.gamma3 }.complexFactorGamma\n            a *\n        star\n          ({ U := d.V, V := d.U, Q1 := d.Q1, Q2 := d.Q2, Q3 := d.Q3, residue := d.residue, intervalLo := -1,\n                intervalHi := ↑⌊d.V * 2⌋₊, alpha := d.beta,\n                beta := fun n => if n ∈ d.alphaCarrier then d.alpha n else 0, gamma1 := d.gamma1, gamma2 := d.gamma2,\n                gamma3 := d.gamma3 }.complexFactorGamma\n            b)\nImbalancedChen/Part3TransposedGCDPoissonMask.lean:244:51: error: unsolved goals\ncase e'_4\nB : ℕ\nsigma kappa c0 : ℝ\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\nhh :\n  ∑ q ∈ d.physicalFactorModuli,\n      ∑ r ∈ d.physicalFactorModuli, |‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ / ↑(q.lcm r)| ≤\n    (1 + Real.log d.physicalFactorCap) ^ (2 * 3 ^ 2 + 1)\n⊢ (1 + Real.log d.physicalFactorCap) ^ 19 = (1 + Real.log d.physicalFactorCap) ^ (2 * 3 ^ 2 + 1)\nImbalancedChen/Part3TransposedGCDPoissonMask.lean:284:42: error: Application type mismatch: The argument\n  Nat.cast_nonneg (q.lcm r)\nhas type\n  @OfNat.ofNat ?m.258 0 (@Zero.toOfNat0 ?m.258 instMulZeroClassOfSemiring.toZero) ≤ ↑(q.lcm r)\nbut is expected to have type\n  @OfNat.ofNat ?m.253 0 (@Zero.toOfNat0 ?m.253 SubtractionMonoid.toSubNegZeroMonoid.toNegZeroClass.toZero) ≤ ?m.256\nin the application\n  abs_of_nonneg (Nat.cast_nonneg (q.lcm r))\nTry this:\n  [apply] ring_nf\n  \n  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.\n    \n  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.\nImbalancedChen/Part3TransposedGCDPoissonMask.lean:285:24: error: unsolved goals\nB : ℕ\nsigma kappa c0 : ℝ\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\nn₁ n₂ q : ℕ\na✝¹ : q ∈ d.physicalFactorModuli\nr : ℕ\na✝ : r ∈ d.physicalFactorModuli\nhc : ComplexCRT.Compatible q r n₁ n₂\n⊢ ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ * |d.V| * |↑(q.lcm r)|⁻¹ * |CommonSmoothCutoff.cutoffMass| =\n    ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ * |d.V| * |CommonSmoothCutoff.cutoffMass| * (↑(q.lcm r))⁻¹\n",
+    "path": ".lake/proof-continuation/runs/20261015T212514301325Z-ImbalancedChen.Part3TransposedGCDPoissonMask/stdout.log",
+    "sha256": "12f249f3393564bd73eeb2ae51d1c6b5621d25430d1368a47cd22629c030bfae",
+    "fully_read": true
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedZeroCovariance",
+    "ImbalancedChen.Part3SignedDivisorDeletion"
+  ],
+  "direct_dependency_snapshots": [
+    {
+      "module": "ImbalancedChen.Part3TransposedZeroCovariance",
+      "sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2",
+      "current_hash_matches_expected": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SignedDivisorDeletion",
+      "sha256": "0bddcfdb22bdb80cc4d5a888562bccb83ad1c87db6c395d27aef62da1bd366e1",
+      "current_hash_matches_expected": true
+    }
+  ],
+  "sourceDAG_rebind_delta": {
+    "local_module_delta": 0,
+    "foreign_module_delta": 0,
+    "full_tree_rescanned": false,
+    "imports_changed": false
+  },
+  "diagnostic_and_mathematical_review": [
+    {
+      "site": "transposedDispersionW_eq_betaPairs",
+      "assessment": "The actual ring residual differs only between d.residue and d.transposedAtom.residue inside the opaque constructed progression weight. The new explicitly typed equality is rfl from the unchanged transposedAtom definition, so rewriting exposes the same original signed residue to ring. No progression, coefficient or carrier changes."
+    },
+    {
+      "site": "transposed_factorPair_eq_zero_add_nonzero",
+      "assessment": "The actual Poisson residual contains complexFactorGamma of fully expanded transposed records whose irrelevant interval fields normalize differently. Adding the existing complexFactorGamma definition to the same simp-only list reduces it to the unchanged original gamma1*gamma2*gamma3 fields. This preserves every factor label and full signed Poisson frequency term."
+    },
+    {
+      "site": "lcm_weight_sum_le",
+      "assessment": "Actual convert creates the displayed sum equality and a second numerical exponent equality 19=2*3^2+1. The old exact finite sum/absolute-value proof now has its own first branch; norm_num proves only the second exponent branch. The fixed native LcmWeightBounds.sum_abs_lcm_weight_le_log source at j=3 still yields precisely exponent nineteen."
+    },
+    {
+      "site": "transposed_factorPairZero_norm_le",
+      "assessment": "The cast/nonnegative witness in abs_of_nonneg is now explicitly Real: (0:Real)<=(q.lcm r:Real). This resolves the actual ambiguous additive/division instance and removes exactly the absolute value around the same natural lcm denominator. Norms and the original |V*local cutoffMass| are untouched."
+    },
+    {
+      "site": "complete mathematics and scope",
+      "assessment": "The exact old1b9 Mask source and its complete independent mathematical review were previously read. The four actual new proof diffs, full actual stdout and all current header/definition comparisons are checked. The same strict Y<gcd mask occurs in W, raw zero and full Fourier; full nonzero still splits large+small. The k=1,T=2U pair mass, full tau3/lcm exponent19 and actual outside betaL2 cost remain unchanged. This leaf still does not pay masked whole W or the full Fourier remainder by itself."
+    }
+  ],
+  "scope_invariants": {
+    "all_20_types_and_6_defs_same": true,
+    "imports_same": true,
+    "full_original_labels_and_signed_residue_preserved": true,
+    "same_actual_large_small_pair_mask": true,
+    "whole_W_equals_same_raw_zero_plus_full_NZ": true,
+    "full_NZ_equals_large_plus_small": true,
+    "actual_one_bound_pairmass_k1_T2U": true,
+    "actual_lcm_exponent19": true,
+    "actual_outside_betaL2_retained": true,
+    "no_whole_W_or_full_NZ_payment_claim": true,
+    "no_budget_or_domain_change": true,
+    "no_limit_or_linter_change": true
+  },
+  "bidirectional_byte_certificate": {
+    "forward_old_snapshot_to_current": {
+      "byte_for_byte_equal_current": true,
+      "reconstructed_sha256": "9d41c0858ea52223240405a003fdab49b3fbc9bcf6f8dd84c0a32a96a5295584"
+    },
+    "all_checks_pass": true,
+    "replacement": {
+      "old_removed_bytes_base64": "aW5nCgovLS0gVGhlIG1hc2tlZCB3aG9sZSBXIGlzIGEgbGl0ZXJhbCBwYXJ0IG9mIHRoZSBhY3R1YWwgdHJhbnNwb3NlZCBXLiAtLwp0aGVvcmVtIHRyYW5zcG9zZWREaXNwZXJzaW9uV19lcV9sYXJnZV9hZGRfc21hbGwKICAgIHtCIDog4oSVfSB7c2lnbWEga2FwcGEgYzAgOiDihJ19IHtkIDogTWVkaXVtQXRvbX0KICAgIChoZCA6IE1lZGl1bUFkbWlzc2libGUgQiBzaWdtYSBrYXBwYSBjMCBkKSAoWSA6IOKEnSkgOgogICAgKGQudHJhbnNwb3NlZEF0b20uY29tcGxleERpc3BlcnNpb25XIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoQ2FycmllcgogICAgICBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aFdlaWdodCA6IOKEgikgPQogICAgICBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vbkxhcmdlQmV0YUdDRFcgWSArIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21hbGxCZXRhR0NEVyBZIDo9IGJ5CiAgcncgW3RyYW5zcG9zZWREaXNwZXJzaW9uV19lcV9iZXRhUGFpcnMgaGRdCiAgdW5mb2xkIE1lZGl1bUF0b20uY29tbW9uTGFyZ2VCZXRhR0NEVyBNZWRpdW1BdG9tLmNvbW1vblNtYWxsQmV0YUdDRFcKICBydyBb4oaQIEZpbnNldC5zdW1fYWRkX2Rpc3RyaWJdCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyBu4oKBIF8KICBydyBb4oaQIEZpbnNldC5zdW1fYWRkX2Rpc3RyaWJdCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyBu4oKCIF8KICBzcGxpdF9pZnMgPDs+IHNpbXAgb25seSBbYWRkX3plcm8sIHplcm9fYWRkXQoKLy0tIFRoZSBhY3R1YWwgb3JpZ2luYWwtViBzbW9vdGhpbmcgaXMgdXNlZCBvbiBlYWNoIGNvbXBsZXRlIHBoeXNpY2FsIGxjbS4KTm8gYmV0YSBjb2VmZmljaWVudCwgZ2NkIG1hc2sgb3IgZnJlcXVlbmN5IGlzIGRpc2NhcmRlZCBpbiB0aGlzIGlkZW50aXR5LiAtLwp0aGVvcmVtIHRyYW5zcG9zZWRfZmFjdG9yUGFpcl9lcV96ZXJvX2FkZF9ub256ZXJvCiAgICB7QiA6IOKElX0ge3NpZ21hIGthcHBhIGMwIDog4oSdfSB7ZCA6IE1lZGl1bUF0b219CiAgICAoaGQgOiBNZWRpdW1BZG1pc3NpYmxlIEIgc2lnbWEga2FwcGEgYzAgZCkgKG7igoEgbuKCgiA6IOKElSkgOgogICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25GYWN0b3JQYWlyV2VpZ2h0IG7igoEgbuKCgiA9CiAgICAgIGQudHJhbnNwb3NlZEF0b20uY29tbW9uRmFjdG9yUGFpclplcm9XZWlnaHQgbuKCgSBu4oKCICsKICAgICAgICBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vbkZhY3RvclBhaXJOb256ZXJvV2VpZ2h0IG7igoEgbuKCgiA6PSBieQogIHVuZm9sZCBNZWRpdW1BdG9tLmNvbW1vbkZhY3RvclBhaXJXZWlnaHQgTWVkaXVtQXRvbS5jb21tb25GYWN0b3JQYWlyWmVyb1dlaWdodAogICAgTWVkaXVtQXRvbS5jb21tb25GYWN0b3JQYWlyTm9uemVyb1dlaWdodAogIHJ3IFvihpAgRmluc2V0LnN1bV9hZGRfZGlzdHJpYl0KICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogIGludHJvIGEgaGEKICBydyBb4oaQIEZpbnNldC5zdW1fYWRkX2Rpc3RyaWJdCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyBiIGhiCiAgY2hhbmdlIGQuY29tcGxleEZhY3RvckdhbW1hIGEgKiBzdGFyIChkLmNvbXBsZXhGYWN0b3JHYW1tYSBiKSAqCiAgICAoQ29tcGxleENSVC5jb25zdHJ1Y3RlZFByb2dyZXNzaW9uV2VpZ2h0IGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoQ2FycmllcgogICAgICBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aFdlaWdodCBkLnJlc2lkdWUKICAgICAgICAoY29tcGxleEZhY3Rvck1vZHVsdXMgYSkgKGNvbXBsZXhGYWN0b3JNb2R1bHVzIGIpIG7igoEgbuKCgiA6IOKEgikgPSBfCiAgdW5mb2xkIENvbXBsZXhDUlQuY29uc3RydWN0ZWRQcm9ncmVzc2lvbldlaWdodAogIGJ5X2Nhc2VzIGhjIDogQ29tcGxleENSVC5Db21wYXRpYmxlIChjb21wbGV4RmFjdG9yTW9kdWx1cyBhKSAoY29tcGxleEZhY3Rvck1vZHVsdXMgYikgbuKCgSBu4oKCCiAgwrcgc2ltcCBvbmx5IFtoYywgaWZfdHJ1ZV0KICAgIGhhdmUgaEQgOiAwIDwgKGNvbXBsZXhGYWN0b3JNb2R1bHVzIGEpLmxjbSAoY29tcGxleEZhY3Rvck1vZHVsdXMgYikgOj0KICAgICAgTmF0LnBvc19vZl9uZV96ZXJvIChOYXQubGNtX25lX3plcm8gKGZhY3Rvcl9tb2R1bHVzX3BvcyBoZCBoYSkubmUnCiAgICAgICAgKGZhY3Rvcl9tb2R1bHVzX3BvcyBoZCBoYikubmUnKQogICAgaGF2ZSBoZSA6PSBDb21tb25TbW9vdGhDdXRvZmYuc2NhbGVkRHlhZGljQ3V0b2ZmX2ZpbnNldF9wcm9ncmVzc2lvbl9lcV9tYWluX2FkZF9mb3VyaWVyCiAgICAgIChsdF9vZl9sdF9vZl9sZSB6ZXJvX2x0X29uZSBoZC4yLjEpIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoQ2FycmllcgogICAgICAoZnVuIG0gaG0g4oamIGQudHJhbnNwb3NlZFNtb290aFdlaWdodF9zdXBwb3J0X3N1YnNldCBoZC4yLjEgaG0pIGhECiAgICAgIChDb21wbGV4Q1JULnJlc2lkdWUgKGNvbXBsZXhGYWN0b3JNb2R1bHVzIGEpIChjb21wbGV4RmFjdG9yTW9kdWx1cyBiKSBu4oKBIG7igoIgZC5yZXNpZHVlKQogICAgc2ltcCBvbmx5IFtNZWRpdW1BdG9tLmNvbW1vblNtb290aFdlaWdodCwgTWVkaXVtQXRvbS50cmFuc3Bvc2VkQXRvbV0gYXQgaGUg4oqiCiAgICBydyBbaGUsIENvbXBsZXgub2ZSZWFsX2FkZF0KICAgIHJpbmcKICDCtyBzaW1wIG9ubHkgW2hjLCBpZl9mYWxzZSwgQ29tcGxleC5vZlJlYWxfemVybywgbXVsX3plcm8sIGFkZF96ZXJvXQoKLy0tIFdob2xlIFcgYW5kIHJhdyB6ZXJvIGhhdmUgZXhhY3RseSB0aGUgc2FtZSBhY3R1YWwgZ2NkIG1hc2suIC0vCnRoZW9yZW0gdHJhbnNwb3NlZF9sYXJnZVdfZXFfemVyb19hZGRfbm9uemVybwogICAge0IgOiDihJV9IHtzaWdtYSBrYXBwYSBjMCA6IOKEnX0ge2QgOiBNZWRpdW1BdG9tfQogICAgKGhkIDogTWVkaXVtQWRtaXNzaWJsZSBCIHNpZ21hIGthcHBhIGMwIGQpIChZIDog4oSdKSA6CiAgICBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vbkxhcmdlQmV0YUdDRFcgWSA9CiAgICAgIGQudHJhbnNwb3NlZEF0b20uY29tbW9uTGFyZ2VCZXRhR0NEWmVyb1BhcnQgWSArCiAgICAgICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25MYXJnZUJldGFHQ0ROb256ZXJvUGFydCBZIDo9IGJ5CiAgdW5mb2xkIE1lZGl1bUF0b20uY29tbW9uTGFyZ2VCZXRhR0NEVyBNZWRpdW1BdG9tLmNvbW1vbkxhcmdlQmV0YUdDRFplcm9QYXJ0CiAgICBNZWRpdW1BdG9tLmNvbW1vbkxhcmdlQmV0YUdDRE5vbnplcm9QYXJ0CiAgcncgW+KGkCBGaW5zZXQuc3VtX2FkZF9kaXN0cmliXQogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gbuKCgSBfCiAgcncgW+KGkCBGaW5zZXQuc3VtX2FkZF9kaXN0cmliXQogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gbuKCgiBfCiAgYnlfY2FzZXMgaHkgOiBZIDwgKG7igoEuZ2NkIG7igoIgOiDihJ0pCiAgwrcgc2ltcCBvbmx5IFtpZl9wb3MgaHksIHRyYW5zcG9zZWRfZmFjdG9yUGFpcl9lcV96ZXJvX2FkZF9ub256ZXJvIGhkLCBtdWxfYWRkXQogIMK3IHNpbXAgb25seSBbaWZfbmVnIGh5LCBhZGRfemVyb10KCnRoZW9yZW0gY29tcGxleENSVFNtb290aE5vbnplcm9QYXJ0X2VxX2JldGFQYWlycyAoZCA6IE1lZGl1bUF0b20pIDoKICAgIGQuY29tcGxleENSVFNtb290aE5vbnplcm9QYXJ0ID0KICAgICAg4oiRIG7igoEg4oiIIGQuYmV0YUNhcnJpZXIsIOKIkSBu4oKCIOKIiCBkLmJldGFDYXJyaWVyLAogICAgICAgIGQuYmV0YSBu4oKBICogc3RhciAoZC5iZXRhIG7igoIpICogZC5jb21tb25GYWN0b3JQYWlyTm9uemVyb1dlaWdodCBu4oKBIG7igoIgOj0gYnkKICB1bmZvbGQgTWVkaXVtQXRvbS5jb21wbGV4Q1JUU21vb3RoTm9uemVyb1BhcnQKICBzaW1wIG9ubHkgW01lZGl1bUF0b20uY29tcGxleFJvd0xhYmVscywgRmluc2V0LnN1bV9wcm9kdWN0LAogICAgTWVkaXVtQXRvbS5jb21wbGV4QmV0YUNvZWZmaWNpZW50LCBzdGFyX211bF0KICBzaW1wX3J3IFtGaW5zZXQuc3VtX2NvbW0gKHMgOj0gZC5jb21wbGV4RmFjdG9yTGFiZWxzKSAodCA6PSBkLmJldGFDYXJyaWVyKV0KICBzaW1wIG9ubHkgW01lZGl1bUF0b20uY29tbW9uRmFjdG9yUGFpck5vbnplcm9XZWlnaHQsIEZpbnNldC5tdWxfc3VtXQogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gbuKCgSBfCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyBu4oKCIF8KICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogIGludHJvIGEgXwogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gYiBfCiAgcmluZwoKLy0tIFRoZSBjb21wbGVtZW50YXJ5IHBpZWNlIGhhcyB0aGUgZXhwbGljaXQgZ2NkPD1ZIGJyYW5jaCwgYW5kIHRoZQpmdWxsIHNpZ25lZCBQb2lzc29uIHJlbWFpbmRlciBpcyBleGFjdGx5IHRoZWlyIHN1bS4gLS8KdGhlb3JlbSBjb21wbGV4Q1JUU21vb3RoTm9uemVyb1BhcnRfZXFfbGFyZ2VfYWRkX3NtYWxsIChkIDogTWVkaXVtQXRvbSkgKFkgOiDihJ0pIDoKICAgIGQuY29tcGxleENSVFNtb290aE5vbnplcm9QYXJ0ID0KICAgICAgZC5jb21tb25MYXJnZUJldGFHQ0ROb256ZXJvUGFydCBZICsgZC5jb21tb25TbWFsbEJldGFHQ0ROb256ZXJvUGFydCBZIDo9IGJ5CiAgcncgW2NvbXBsZXhDUlRTbW9vdGhOb256ZXJvUGFydF9lcV9iZXRhUGFpcnNdCiAgdW5mb2xkIE1lZGl1bUF0b20uY29tbW9uTGFyZ2VCZXRhR0NETm9uemVyb1BhcnQgTWVkaXVtQXRvbS5jb21tb25TbWFsbEJldGFHQ0ROb256ZXJvUGFydAogIHJ3IFvihpAgRmluc2V0LnN1bV9hZGRfZGlzdHJpYl0KICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogIGludHJvIG7igoEgXwogIHJ3IFvihpAgRmluc2V0LnN1bV9hZGRfZGlzdHJpYl0KICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogIGludHJvIG7igoIgXwogIHNwbGl0X2lmcyA8Oz4gc2ltcCBvbmx5IFthZGRfemVybywgemVyb19hZGRdCgovLS0gVGhlIGFjdHVhbCBwcmltaXRpdmUgVi9VIHRlcm1zIHN0YXkgbGl0ZXJhbCB3aGVuIHRoZSBmdWxsIEZvdXJpZXIKcmVtYWluZGVyIGlzIHBhcnRpdGlvbmVkIGJ5IHRoaXMgcGFpcmVkIGdjZC4gLS8KdGhlb3JlbSB0cmFuc3Bvc2VkX2NlbnRlcmVkX2lkZW50aXR5X3dpdGhfbGFyZ2Vfc21hbGwKICAgIHtCIDog4oSVfSB7c2lnbWEga2FwcGEgYzAgOiDihJ19IHtkIDogTWVkaXVtQXRvbX0KICAgIChoZCA6IE1lZGl1bUFkbWlzc2libGUgQiBzaWdtYSBrYXBwYSBjMCBkKSAoWSA6IOKEnSkgOgogICAgKCjiiJEgbiDiiIggZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhDYXJyaWVyLAogICAgICBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aFdlaWdodCBuICog4oCWZC50cmFuc3Bvc2VkQXRvbS5jb21wbGV4Q2VudGVyZWRSb3cgbuKAliBeIDIgOiDihJ0pIDog4oSCKSA9CiAgICAgIChkLnRyYW5zcG9zZWRBdG9tLmNvbXBsZXhDUlRTbW9vdGhaZXJvUGFydCAtCiAgICAgICAgMiAqIChkLnRyYW5zcG9zZWRBdG9tLmNvbXBsZXhEaXNwZXJzaW9uViBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aENhcnJpZXIKICAgICAgICAgIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoV2VpZ2h0IDog4oSCKSArCiAgICAgICAgKGQudHJhbnNwb3NlZEF0b20uY29tcGxleERpc3BlcnNpb25VIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoQ2FycmllcgogICAgICAgICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhXZWlnaHQgOiDihIIpKSArCiAgICAgICAgKGQudHJhbnNwb3NlZEF0b20uY29tbW9uTGFyZ2VCZXRhR0NETm9uemVyb1BhcnQgWSArCiAgICAgICAgICBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtYWxsQmV0YUdDRE5vbnplcm9QYXJ0IFkpIDo9IGJ5CiAgcncgW2QudHJhbnNwb3NlZF9kaXNwZXJzaW9uX2lkZW50aXR5X3dpdGhfY29tbW9uUG9pc3NvbiBoZCwKICAgIGNvbXBsZXhDUlRTbW9vdGhOb256ZXJvUGFydF9lcV9sYXJnZV9hZGRfc21hbGwgZC50cmFuc3Bvc2VkQXRvbSBZXQoKLy0tIFRoZSBtYXNrZWQgRm91cmllciByZW1haW5kZXIgaXMgYm91bmRlZCBvbmx5IGFmdGVyIHN1YnRyYWN0aW5nIHRoZQpyYXcgemVybyB1bmRlciB0aGF0IHNhbWUgbWFzay4gVGhpcyBpcyBub3QgYSB3aG9sZS1XIHN1YnN0aXR1dGlvbi4gLS8KdGhlb3JlbSB0cmFuc3Bvc2VkX2xhcmdlTm9uemVyb19ub3JtX2xlX1dfYWRkX3plcm8KICAgIHtCIDog4oSVfSB7c2lnbWEga2FwcGEgYzAgOiDihJ19IHtkIDogTWVkaXVtQXRvbX0KICAgIChoZCA6IE1lZGl1bUFkbWlzc2libGUgQiBzaWdtYSBrYXBwYSBjMCBkKSAoWSA6IOKEnSkgOgogICAg4oCWZC50cmFuc3Bvc2VkQXRvbS5jb21tb25MYXJnZUJldGFHQ0ROb256ZXJvUGFydCBZ4oCWIOKJpAogICAgICDigJZkLnRyYW5zcG9zZWRBdG9tLmNvbW1vbkxhcmdlQmV0YUdDRFcgWeKAliArCiAgICAgICAg4oCWZC50cmFuc3Bvc2VkQXRvbS5jb21tb25MYXJnZUJldGFHQ0RaZXJvUGFydCBZ4oCWIDo9IGJ5CiAgaGF2ZSBoZSA6IGQudHJhbnNwb3NlZEF0b20uY29tbW9uTGFyZ2VCZXRhR0NETm9uemVyb1BhcnQgWSA9CiAgICAgIGQudHJhbnNwb3NlZEF0b20uY29tbW9uTGFyZ2VCZXRhR0NEVyBZIC0gZC50cmFuc3Bvc2VkQXRvbS5jb21tb25MYXJnZUJldGFHQ0RaZXJvUGFydCBZIDo9IGJ5CiAgICBydyBbdHJhbnNwb3NlZF9sYXJnZVdfZXFfemVyb19hZGRfbm9uemVybyBoZF0KICAgIHJpbmcKICBydyBbaGVdCiAgZXhhY3Qgbm9ybV9zdWJfbGUgXyBfCgpwcml2YXRlIHRoZW9yZW0gbGNtX3dlaWdodF9zdW1fbGUKICAgIHtCIDog4oSVfSB7c2lnbWEga2FwcGEgYzAgOiDihJ19IHtkIDogTWVkaXVtQXRvbX0KICAgIChoZCA6IE1lZGl1bUFkbWlzc2libGUgQiBzaWdtYSBrYXBwYSBjMCBkKSA6CiAgICAo4oiRIHEg4oiIIGQucGh5c2ljYWxGYWN0b3JNb2R1bGksIOKIkSByIOKIiCBkLnBoeXNpY2FsRmFjdG9yTW9kdWxpLAogICAgICDigJZkLmdyb3VwZWRGYWN0b3JHYW1tYSBx4oCWICog4oCWZC5ncm91cGVkRmFjdG9yR2FtbWEgcuKAliAvIChxLmxjbSByIDog4oSdKSkg4omkCiAgICAgICAgKDEgKyBSZWFsLmxvZyBkLnBoeXNpY2FsRmFjdG9yQ2FwKSBeIDE5IDo9IGJ5CiAgaGF2ZSBoaCA6PSBNYXRobGliTnQuQW5hbHl0aWNOdW1iZXJUaGVvcnkuTGFyZ2VTaWV2ZS5MY21XZWlnaHRCb3VuZHMuc3VtX2Fic19sY21fd2VpZ2h0X2xlX2xvZwogICAgMyAoZC5vbmVfbGVfcGh5c2ljYWxGYWN0b3JDYXAgaGQpIGQucGh5c2ljYWxGYWN0b3JNb2R1bGkKICAgIChkLnBoeXNpY2FsRmFjdG9yTW9kdWxpX3N1YnNldF9jYXAgaGQpIChmdW4gcSDihqYg4oCWZC5ncm91cGVkRmFjdG9yR2FtbWEgceKAlikKICAgIChmdW4gcSBfIOKGpiBieSBzaW1wYSBvbmx5IFthYnNfbm9ybV0gdXNpbmcgZC5ncm91cGVkRmFjdG9yR2FtbWFfbm9ybV9sZV90YXVUaHJlZSBoZCBxKQogIGNvbnZlcnQgaGggdXNpbmcgMQogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gcSBfCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyByIF8KICBleGFjdCAoYWJzX29mX25vbm5lZyAoYnkgcG9zaXRpdml0eSkpLnN5bW0KCi8tLSBUaGUgY29tcGxldGUgb3JpZ2luYWwgY29tcGxleCBmYWN0b3IgY29udm9sdXRpb24gaXMgZ3JvdXBlZCBleGFjdGx5CmJlZm9yZSBpdHMgbm9ybS4gTm8gbXVsdGlwbGljaXR5LW9uZSBvciBtb2R1bHVzIGNvcHJpbWFsaXR5IGlzIGFzc3VtZWQuIC0vCnRoZW9yZW0gdHJhbnNwb3NlZF9mYWN0b3JQYWlyWmVyb19ub3JtX2xlCiAgICB7QiA6IOKElX0ge3NpZ21hIGthcHBhIGMwIDog4oSdfSB7ZCA6IE1lZGl1bUF0b219CiAgICAoaGQgOiBNZWRpdW1BZG1pc3NpYmxlIEIgc2lnbWEga2FwcGEgYzAgZCkgKG7igoEgbuKCgiA6IOKElSkgOgogICAg4oCWZC50cmFuc3Bvc2VkQXRvbS5jb21tb25GYWN0b3JQYWlyWmVyb1dlaWdodCBu4oKBIG7igoLigJYg4omkCiAgICAgIHxkLlYgKiBDb21tb25TbW9vdGhDdXRvZmYuY3V0b2ZmTWFzc3wgKiAoMSArIFJlYWwubG9nIGQucGh5c2ljYWxGYWN0b3JDYXApIF4gMTkgOj0gYnkKICB1bmZvbGQgTWVkaXVtQXRvbS5jb21tb25GYWN0b3JQYWlyWmVyb1dlaWdodAogIGNoYW5nZSDigJbiiJEgYSDiiIggZC5jb21wbGV4RmFjdG9yTGFiZWxzLCDiiJEgYiDiiIggZC5jb21wbGV4RmFjdG9yTGFiZWxzLAogICAgZC5jb21wbGV4RmFjdG9yR2FtbWEgYSAqIHN0YXIgKGQuY29tcGxleEZhY3RvckdhbW1hIGIpICoKICAgICAgKGlmIENvbXBsZXhDUlQuQ29tcGF0aWJsZSAoY29tcGxleEZhY3Rvck1vZHVsdXMgYSkgKGNvbXBsZXhGYWN0b3JNb2R1bHVzIGIpIG7igoEgbuKCgiB0aGVuCiAgICAgICAgKChkLlYgLyAoY29tcGxleEZhY3Rvck1vZHVsdXMgYSkubGNtIChjb21wbGV4RmFjdG9yTW9kdWx1cyBiKSkgKgogICAgICAgICAgQ29tbW9uU21vb3RoQ3V0b2ZmLmN1dG9mZk1hc3MgOiDihJ0pIGVsc2UgMCA6IOKEnSnigJYg4omkIF8KICBydyBbVHJhbnNwb3NlZFplcm9Db3ZhcmlhbmNlLmZhY3Rvcl9wYWlyX3N1bV9lcV9ncm91cGVkIGQgKGZ1biBxIHIg4oamCiAgICAoKGlmIENvbXBsZXhDUlQuQ29tcGF0aWJsZSBxIHIgbuKCgSBu4oKCIHRoZW4KICAgICAgKGQuViAvIChxLmxjbSByIDog4oSdKSkgKiBDb21tb25TbW9vdGhDdXRvZmYuY3V0b2ZmTWFzcyBlbHNlIDAgOiDihJ0pIDog4oSCKSldCiAgY2FsYwogICAgXyDiiaQg4oiRIHEg4oiIIGQucGh5c2ljYWxGYWN0b3JNb2R1bGksIOKIkSByIOKIiCBkLnBoeXNpY2FsRmFjdG9yTW9kdWxpLAogICAgICAgIHxkLlYgKiBDb21tb25TbW9vdGhDdXRvZmYuY3V0b2ZmTWFzc3wgKgogICAgICAgICAgKOKAlmQuZ3JvdXBlZEZhY3RvckdhbW1hIHHigJYgKiDigJZkLmdyb3VwZWRGYWN0b3JHYW1tYSBy4oCWIC8gKHEubGNtIHIgOiDihJ0pKSA6PSBieQogICAgICBhcHBseSAobm9ybV9zdW1fbGUgXyBfKS50cmFucwogICAgICBhcHBseSBGaW5zZXQuc3VtX2xlX3N1bQogICAgICBpbnRybyBxIF8KICAgICAgYXBwbHkgKG5vcm1fc3VtX2xlIF8gXykudHJhbnMKICAgICAgYXBwbHkgRmluc2V0LnN1bV9sZV9zdW0KICAgICAgaW50cm8gciBfCiAgICAgIGJ5X2Nhc2VzIGhjIDogQ29tcGxleENSVC5Db21wYXRpYmxlIHEgciBu4oKBIG7igoIKICAgICAgwrcgc2ltcCBvbmx5IFtpZl9wb3MgaGMsIG5vcm1fbXVsLCBub3JtX3N0YXIsIENvbXBsZXgubm9ybV9yZWFsLCBSZWFsLm5vcm1fZXFfYWJzLAogICAgICAgICAgYWJzX211bCwgYWJzX2RpdiwgYWJzX29mX25vbm5lZyAo",
+      "byte_offset_zero_based": 4816,
+      "new_inserted_bytes_base64": "dyBbc2hvdyBkLnRyYW5zcG9zZWRBdG9tLnJlc2lkdWUgPSBkLnJlc2lkdWUgZnJvbSByZmxdCiAgcmluZwoKLy0tIFRoZSBtYXNrZWQgd2hvbGUgVyBpcyBhIGxpdGVyYWwgcGFydCBvZiB0aGUgYWN0dWFsIHRyYW5zcG9zZWQgVy4gLS8KdGhlb3JlbSB0cmFuc3Bvc2VkRGlzcGVyc2lvbldfZXFfbGFyZ2VfYWRkX3NtYWxsCiAgICB7QiA6IOKElX0ge3NpZ21hIGthcHBhIGMwIDog4oSdfSB7ZCA6IE1lZGl1bUF0b219CiAgICAoaGQgOiBNZWRpdW1BZG1pc3NpYmxlIEIgc2lnbWEga2FwcGEgYzAgZCkgKFkgOiDihJ0pIDoKICAgIChkLnRyYW5zcG9zZWRBdG9tLmNvbXBsZXhEaXNwZXJzaW9uVyBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aENhcnJpZXIKICAgICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhXZWlnaHQgOiDihIIpID0KICAgICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25MYXJnZUJldGFHQ0RXIFkgKyBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtYWxsQmV0YUdDRFcgWSA6PSBieQogIHJ3IFt0cmFuc3Bvc2VkRGlzcGVyc2lvbldfZXFfYmV0YVBhaXJzIGhkXQogIHVuZm9sZCBNZWRpdW1BdG9tLmNvbW1vbkxhcmdlQmV0YUdDRFcgTWVkaXVtQXRvbS5jb21tb25TbWFsbEJldGFHQ0RXCiAgcncgW+KGkCBGaW5zZXQuc3VtX2FkZF9kaXN0cmliXQogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gbuKCgSBfCiAgcncgW+KGkCBGaW5zZXQuc3VtX2FkZF9kaXN0cmliXQogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gbuKCgiBfCiAgc3BsaXRfaWZzIDw7PiBzaW1wIG9ubHkgW2FkZF96ZXJvLCB6ZXJvX2FkZF0KCi8tLSBUaGUgYWN0dWFsIG9yaWdpbmFsLVYgc21vb3RoaW5nIGlzIHVzZWQgb24gZWFjaCBjb21wbGV0ZSBwaHlzaWNhbCBsY20uCk5vIGJldGEgY29lZmZpY2llbnQsIGdjZCBtYXNrIG9yIGZyZXF1ZW5jeSBpcyBkaXNjYXJkZWQgaW4gdGhpcyBpZGVudGl0eS4gLS8KdGhlb3JlbSB0cmFuc3Bvc2VkX2ZhY3RvclBhaXJfZXFfemVyb19hZGRfbm9uemVybwogICAge0IgOiDihJV9IHtzaWdtYSBrYXBwYSBjMCA6IOKEnX0ge2QgOiBNZWRpdW1BdG9tfQogICAgKGhkIDogTWVkaXVtQWRtaXNzaWJsZSBCIHNpZ21hIGthcHBhIGMwIGQpIChu4oKBIG7igoIgOiDihJUpIDoKICAgIGQudHJhbnNwb3NlZEF0b20uY29tbW9uRmFjdG9yUGFpcldlaWdodCBu4oKBIG7igoIgPQogICAgICBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vbkZhY3RvclBhaXJaZXJvV2VpZ2h0IG7igoEgbuKCgiArCiAgICAgICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25GYWN0b3JQYWlyTm9uemVyb1dlaWdodCBu4oKBIG7igoIgOj0gYnkKICB1bmZvbGQgTWVkaXVtQXRvbS5jb21tb25GYWN0b3JQYWlyV2VpZ2h0IE1lZGl1bUF0b20uY29tbW9uRmFjdG9yUGFpclplcm9XZWlnaHQKICAgIE1lZGl1bUF0b20uY29tbW9uRmFjdG9yUGFpck5vbnplcm9XZWlnaHQKICBydyBb4oaQIEZpbnNldC5zdW1fYWRkX2Rpc3RyaWJdCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyBhIGhhCiAgcncgW+KGkCBGaW5zZXQuc3VtX2FkZF9kaXN0cmliXQogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gYiBoYgogIGNoYW5nZSBkLmNvbXBsZXhGYWN0b3JHYW1tYSBhICogc3RhciAoZC5jb21wbGV4RmFjdG9yR2FtbWEgYikgKgogICAgKENvbXBsZXhDUlQuY29uc3RydWN0ZWRQcm9ncmVzc2lvbldlaWdodCBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aENhcnJpZXIKICAgICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhXZWlnaHQgZC5yZXNpZHVlCiAgICAgICAgKGNvbXBsZXhGYWN0b3JNb2R1bHVzIGEpIChjb21wbGV4RmFjdG9yTW9kdWx1cyBiKSBu4oKBIG7igoIgOiDihIIpID0gXwogIHVuZm9sZCBDb21wbGV4Q1JULmNvbnN0cnVjdGVkUHJvZ3Jlc3Npb25XZWlnaHQKICBieV9jYXNlcyBoYyA6IENvbXBsZXhDUlQuQ29tcGF0aWJsZSAoY29tcGxleEZhY3Rvck1vZHVsdXMgYSkgKGNvbXBsZXhGYWN0b3JNb2R1bHVzIGIpIG7igoEgbuKCggogIMK3IHNpbXAgb25seSBbaGMsIGlmX3RydWVdCiAgICBoYXZlIGhEIDogMCA8IChjb21wbGV4RmFjdG9yTW9kdWx1cyBhKS5sY20gKGNvbXBsZXhGYWN0b3JNb2R1bHVzIGIpIDo9CiAgICAgIE5hdC5wb3Nfb2ZfbmVfemVybyAoTmF0LmxjbV9uZV96ZXJvIChmYWN0b3JfbW9kdWx1c19wb3MgaGQgaGEpLm5lJwogICAgICAgIChmYWN0b3JfbW9kdWx1c19wb3MgaGQgaGIpLm5lJykKICAgIGhhdmUgaGUgOj0gQ29tbW9uU21vb3RoQ3V0b2ZmLnNjYWxlZER5YWRpY0N1dG9mZl9maW5zZXRfcHJvZ3Jlc3Npb25fZXFfbWFpbl9hZGRfZm91cmllcgogICAgICAobHRfb2ZfbHRfb2ZfbGUgemVyb19sdF9vbmUgaGQuMi4xKSBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aENhcnJpZXIKICAgICAgKGZ1biBtIGhtIOKGpiBkLnRyYW5zcG9zZWRTbW9vdGhXZWlnaHRfc3VwcG9ydF9zdWJzZXQgaGQuMi4xIGhtKSBoRAogICAgICAoQ29tcGxleENSVC5yZXNpZHVlIChjb21wbGV4RmFjdG9yTW9kdWx1cyBhKSAoY29tcGxleEZhY3Rvck1vZHVsdXMgYikgbuKCgSBu4oKCIGQucmVzaWR1ZSkKICAgIHNpbXAgb25seSBbTWVkaXVtQXRvbS5jb21tb25TbW9vdGhXZWlnaHQsIE1lZGl1bUF0b20udHJhbnNwb3NlZEF0b20sCiAgICAgIE1lZGl1bUF0b20uY29tcGxleEZhY3RvckdhbW1hXSBhdCBoZSDiiqIKICAgIHJ3IFtoZSwgQ29tcGxleC5vZlJlYWxfYWRkXQogICAgcmluZwogIMK3IHNpbXAgb25seSBbaGMsIGlmX2ZhbHNlLCBDb21wbGV4Lm9mUmVhbF96ZXJvLCBtdWxfemVybywgYWRkX3plcm9dCgovLS0gV2hvbGUgVyBhbmQgcmF3IHplcm8gaGF2ZSBleGFjdGx5IHRoZSBzYW1lIGFjdHVhbCBnY2QgbWFzay4gLS8KdGhlb3JlbSB0cmFuc3Bvc2VkX2xhcmdlV19lcV96ZXJvX2FkZF9ub256ZXJvCiAgICB7QiA6IOKElX0ge3NpZ21hIGthcHBhIGMwIDog4oSdfSB7ZCA6IE1lZGl1bUF0b219CiAgICAoaGQgOiBNZWRpdW1BZG1pc3NpYmxlIEIgc2lnbWEga2FwcGEgYzAgZCkgKFkgOiDihJ0pIDoKICAgIGQudHJhbnNwb3NlZEF0b20uY29tbW9uTGFyZ2VCZXRhR0NEVyBZID0KICAgICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25MYXJnZUJldGFHQ0RaZXJvUGFydCBZICsKICAgICAgICBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vbkxhcmdlQmV0YUdDRE5vbnplcm9QYXJ0IFkgOj0gYnkKICB1bmZvbGQgTWVkaXVtQXRvbS5jb21tb25MYXJnZUJldGFHQ0RXIE1lZGl1bUF0b20uY29tbW9uTGFyZ2VCZXRhR0NEWmVyb1BhcnQKICAgIE1lZGl1bUF0b20uY29tbW9uTGFyZ2VCZXRhR0NETm9uemVyb1BhcnQKICBydyBb4oaQIEZpbnNldC5zdW1fYWRkX2Rpc3RyaWJdCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyBu4oKBIF8KICBydyBb4oaQIEZpbnNldC5zdW1fYWRkX2Rpc3RyaWJdCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyBu4oKCIF8KICBieV9jYXNlcyBoeSA6IFkgPCAobuKCgS5nY2QgbuKCgiA6IOKEnSkKICDCtyBzaW1wIG9ubHkgW2lmX3BvcyBoeSwgdHJhbnNwb3NlZF9mYWN0b3JQYWlyX2VxX3plcm9fYWRkX25vbnplcm8gaGQsIG11bF9hZGRdCiAgwrcgc2ltcCBvbmx5IFtpZl9uZWcgaHksIGFkZF96ZXJvXQoKdGhlb3JlbSBjb21wbGV4Q1JUU21vb3RoTm9uemVyb1BhcnRfZXFfYmV0YVBhaXJzIChkIDogTWVkaXVtQXRvbSkgOgogICAgZC5jb21wbGV4Q1JUU21vb3RoTm9uemVyb1BhcnQgPQogICAgICDiiJEgbuKCgSDiiIggZC5iZXRhQ2Fycmllciwg4oiRIG7igoIg4oiIIGQuYmV0YUNhcnJpZXIsCiAgICAgICAgZC5iZXRhIG7igoEgKiBzdGFyIChkLmJldGEgbuKCgikgKiBkLmNvbW1vbkZhY3RvclBhaXJOb256ZXJvV2VpZ2h0IG7igoEgbuKCgiA6PSBieQogIHVuZm9sZCBNZWRpdW1BdG9tLmNvbXBsZXhDUlRTbW9vdGhOb256ZXJvUGFydAogIHNpbXAgb25seSBbTWVkaXVtQXRvbS5jb21wbGV4Um93TGFiZWxzLCBGaW5zZXQuc3VtX3Byb2R1Y3QsCiAgICBNZWRpdW1BdG9tLmNvbXBsZXhCZXRhQ29lZmZpY2llbnQsIHN0YXJfbXVsXQogIHNpbXBfcncgW0ZpbnNldC5zdW1fY29tbSAocyA6PSBkLmNvbXBsZXhGYWN0b3JMYWJlbHMpICh0IDo9IGQuYmV0YUNhcnJpZXIpXQogIHNpbXAgb25seSBbTWVkaXVtQXRvbS5jb21tb25GYWN0b3JQYWlyTm9uemVyb1dlaWdodCwgRmluc2V0Lm11bF9zdW1dCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyBu4oKBIF8KICBhcHBseSBGaW5zZXQuc3VtX2NvbmdyIHJmbAogIGludHJvIG7igoIgXwogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gYSBfCiAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICBpbnRybyBiIF8KICByaW5nCgovLS0gVGhlIGNvbXBsZW1lbnRhcnkgcGllY2UgaGFzIHRoZSBleHBsaWNpdCBnY2Q8PVkgYnJhbmNoLCBhbmQgdGhlCmZ1bGwgc2lnbmVkIFBvaXNzb24gcmVtYWluZGVyIGlzIGV4YWN0bHkgdGhlaXIgc3VtLiAtLwp0aGVvcmVtIGNvbXBsZXhDUlRTbW9vdGhOb256ZXJvUGFydF9lcV9sYXJnZV9hZGRfc21hbGwgKGQgOiBNZWRpdW1BdG9tKSAoWSA6IOKEnSkgOgogICAgZC5jb21wbGV4Q1JUU21vb3RoTm9uemVyb1BhcnQgPQogICAgICBkLmNvbW1vbkxhcmdlQmV0YUdDRE5vbnplcm9QYXJ0IFkgKyBkLmNvbW1vblNtYWxsQmV0YUdDRE5vbnplcm9QYXJ0IFkgOj0gYnkKICBydyBbY29tcGxleENSVFNtb290aE5vbnplcm9QYXJ0X2VxX2JldGFQYWlyc10KICB1bmZvbGQgTWVkaXVtQXRvbS5jb21tb25MYXJnZUJldGFHQ0ROb256ZXJvUGFydCBNZWRpdW1BdG9tLmNvbW1vblNtYWxsQmV0YUdDRE5vbnplcm9QYXJ0CiAgcncgW+KGkCBGaW5zZXQuc3VtX2FkZF9kaXN0cmliXQogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gbuKCgSBfCiAgcncgW+KGkCBGaW5zZXQuc3VtX2FkZF9kaXN0cmliXQogIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgaW50cm8gbuKCgiBfCiAgc3BsaXRfaWZzIDw7PiBzaW1wIG9ubHkgW2FkZF96ZXJvLCB6ZXJvX2FkZF0KCi8tLSBUaGUgYWN0dWFsIHByaW1pdGl2ZSBWL1UgdGVybXMgc3RheSBsaXRlcmFsIHdoZW4gdGhlIGZ1bGwgRm91cmllcgpyZW1haW5kZXIgaXMgcGFydGl0aW9uZWQgYnkgdGhpcyBwYWlyZWQgZ2NkLiAtLwp0aGVvcmVtIHRyYW5zcG9zZWRfY2VudGVyZWRfaWRlbnRpdHlfd2l0aF9sYXJnZV9zbWFsbAogICAge0IgOiDihJV9IHtzaWdtYSBrYXBwYSBjMCA6IOKEnX0ge2QgOiBNZWRpdW1BdG9tfQogICAgKGhkIDogTWVkaXVtQWRtaXNzaWJsZSBCIHNpZ21hIGthcHBhIGMwIGQpIChZIDog4oSdKSA6CiAgICAoKOKIkSBuIOKIiCBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aENhcnJpZXIsCiAgICAgIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoV2VpZ2h0IG4gKiDigJZkLnRyYW5zcG9zZWRBdG9tLmNvbXBsZXhDZW50ZXJlZFJvdyBu4oCWIF4gMiA6IOKEnSkgOiDihIIpID0KICAgICAgKGQudHJhbnNwb3NlZEF0b20uY29tcGxleENSVFNtb290aFplcm9QYXJ0IC0KICAgICAgICAyICogKGQudHJhbnNwb3NlZEF0b20uY29tcGxleERpc3BlcnNpb25WIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoQ2FycmllcgogICAgICAgICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhXZWlnaHQgOiDihIIpICsKICAgICAgICAoZC50cmFuc3Bvc2VkQXRvbS5jb21wbGV4RGlzcGVyc2lvblUgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhDYXJyaWVyCiAgICAgICAgICBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aFdlaWdodCA6IOKEgikpICsKICAgICAgICAoZC50cmFuc3Bvc2VkQXRvbS5jb21tb25MYXJnZUJldGFHQ0ROb256ZXJvUGFydCBZICsKICAgICAgICAgIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21hbGxCZXRhR0NETm9uemVyb1BhcnQgWSkgOj0gYnkKICBydyBbZC50cmFuc3Bvc2VkX2Rpc3BlcnNpb25faWRlbnRpdHlfd2l0aF9jb21tb25Qb2lzc29uIGhkLAogICAgY29tcGxleENSVFNtb290aE5vbnplcm9QYXJ0X2VxX2xhcmdlX2FkZF9zbWFsbCBkLnRyYW5zcG9zZWRBdG9tIFldCgovLS0gVGhlIG1hc2tlZCBGb3VyaWVyIHJlbWFpbmRlciBpcyBib3VuZGVkIG9ubHkgYWZ0ZXIgc3VidHJhY3RpbmcgdGhlCnJhdyB6ZXJvIHVuZGVyIHRoYXQgc2FtZSBtYXNrLiBUaGlzIGlzIG5vdCBhIHdob2xlLVcgc3Vic3RpdHV0aW9uLiAtLwp0aGVvcmVtIHRyYW5zcG9zZWRfbGFyZ2VOb256ZXJvX25vcm1fbGVfV19hZGRfemVybwogICAge0IgOiDihJV9IHtzaWdtYSBrYXBwYSBjMCA6IOKEnX0ge2QgOiBNZWRpdW1BdG9tfQogICAgKGhkIDogTWVkaXVtQWRtaXNzaWJsZSBCIHNpZ21hIGthcHBhIGMwIGQpIChZIDog4oSdKSA6CiAgICDigJZkLnRyYW5zcG9zZWRBdG9tLmNvbW1vbkxhcmdlQmV0YUdDRE5vbnplcm9QYXJ0IFnigJYg4omkCiAgICAgIOKAlmQudHJhbnNwb3NlZEF0b20uY29tbW9uTGFyZ2VCZXRhR0NEVyBZ4oCWICsKICAgICAgICDigJZkLnRyYW5zcG9zZWRBdG9tLmNvbW1vbkxhcmdlQmV0YUdDRFplcm9QYXJ0IFnigJYgOj0gYnkKICBoYXZlIGhlIDogZC50cmFuc3Bvc2VkQXRvbS5jb21tb25MYXJnZUJldGFHQ0ROb256ZXJvUGFydCBZID0KICAgICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25MYXJnZUJldGFHQ0RXIFkgLSBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vbkxhcmdlQmV0YUdDRFplcm9QYXJ0IFkgOj0gYnkKICAgIHJ3IFt0cmFuc3Bvc2VkX2xhcmdlV19lcV96ZXJvX2FkZF9ub256ZXJvIGhkXQogICAgcmluZwogIHJ3IFtoZV0KICBleGFjdCBub3JtX3N1Yl9sZSBfIF8KCnByaXZhdGUgdGhlb3JlbSBsY21fd2VpZ2h0X3N1bV9sZQogICAge0IgOiDihJV9IHtzaWdtYSBrYXBwYSBjMCA6IOKEnX0ge2QgOiBNZWRpdW1BdG9tfQogICAgKGhkIDogTWVkaXVtQWRtaXNzaWJsZSBCIHNpZ21hIGthcHBhIGMwIGQpIDoKICAgICjiiJEgcSDiiIggZC5waHlzaWNhbEZhY3Rvck1vZHVsaSwg4oiRIHIg4oiIIGQucGh5c2ljYWxGYWN0b3JNb2R1bGksCiAgICAgIOKAlmQuZ3JvdXBlZEZhY3RvckdhbW1hIHHigJYgKiDigJZkLmdyb3VwZWRGYWN0b3JHYW1tYSBy4oCWIC8gKHEubGNtIHIgOiDihJ0pKSDiiaQKICAgICAgICAoMSArIFJlYWwubG9nIGQucGh5c2ljYWxGYWN0b3JDYXApIF4gMTkgOj0gYnkKICBoYXZlIGhoIDo9IE1hdGhsaWJOdC5BbmFseXRpY051bWJlclRoZW9yeS5MYXJnZVNpZXZlLkxjbVdlaWdodEJvdW5kcy5zdW1fYWJzX2xjbV93ZWlnaHRfbGVfbG9nCiAgICAzIChkLm9uZV9sZV9waHlzaWNhbEZhY3RvckNhcCBoZCkgZC5waHlzaWNhbEZhY3Rvck1vZHVsaQogICAgKGQucGh5c2ljYWxGYWN0b3JNb2R1bGlfc3Vic2V0X2NhcCBoZCkgKGZ1biBxIOKGpiDigJZkLmdyb3VwZWRGYWN0b3JHYW1tYSBx4oCWKQogICAgKGZ1biBxIF8g4oamIGJ5IHNpbXBhIG9ubHkgW2Fic19ub3JtXSB1c2luZyBkLmdyb3VwZWRGYWN0b3JHYW1tYV9ub3JtX2xlX3RhdVRocmVlIGhkIHEpCiAgY29udmVydCBoaCB1c2luZyAxCiAgwrcgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICAgIGludHJvIHEgXwogICAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICAgIGludHJvIHIgXwogICAgZXhhY3QgKGFic19vZl9ub25uZWcgKGJ5IHBvc2l0aXZpdHkpKS5zeW1tCiAgwrcgbm9ybV9udW0KCi8tLSBUaGUgY29tcGxldGUgb3JpZ2luYWwgY29tcGxleCBmYWN0b3IgY29udm9sdXRpb24gaXMgZ3JvdXBlZCBleGFjdGx5CmJlZm9yZSBpdHMgbm9ybS4gTm8gbXVsdGlwbGljaXR5LW9uZSBvciBtb2R1bHVzIGNvcHJpbWFsaXR5IGlzIGFzc3VtZWQuIC0vCnRoZW9yZW0gdHJhbnNwb3NlZF9mYWN0b3JQYWlyWmVyb19ub3JtX2xlCiAgICB7QiA6IOKElX0ge3NpZ21hIGthcHBhIGMwIDog4oSdfSB7ZCA6IE1lZGl1bUF0b219CiAgICAoaGQgOiBNZWRpdW1BZG1pc3NpYmxlIEIgc2lnbWEga2FwcGEgYzAgZCkgKG7igoEgbuKCgiA6IOKElSkgOgogICAg4oCWZC50cmFuc3Bvc2VkQXRvbS5jb21tb25GYWN0b3JQYWlyWmVyb1dlaWdodCBu4oKBIG7igoLigJYg4omkCiAgICAgIHxkLlYgKiBDb21tb25TbW9vdGhDdXRvZmYuY3V0b2ZmTWFzc3wgKiAoMSArIFJlYWwubG9nIGQucGh5c2ljYWxGYWN0b3JDYXApIF4gMTkgOj0gYnkKICB1bmZvbGQgTWVkaXVtQXRvbS5jb21tb25GYWN0b3JQYWlyWmVyb1dlaWdodAogIGNoYW5nZSDigJbiiJEgYSDiiIggZC5jb21wbGV4RmFjdG9yTGFiZWxzLCDiiJEgYiDiiIggZC5jb21wbGV4RmFjdG9yTGFiZWxzLAogICAgZC5jb21wbGV4RmFjdG9yR2FtbWEgYSAqIHN0YXIgKGQuY29tcGxleEZhY3RvckdhbW1hIGIpICoKICAgICAgKGlmIENvbXBsZXhDUlQuQ29tcGF0aWJsZSAoY29tcGxleEZhY3Rvck1vZHVsdXMgYSkgKGNvbXBsZXhGYWN0b3JNb2R1bHVzIGIpIG7igoEgbuKCgiB0aGVuCiAgICAgICAgKChkLlYgLyAoY29tcGxleEZhY3Rvck1vZHVsdXMgYSkubGNtIChjb21wbGV4RmFjdG9yTW9kdWx1cyBiKSkgKgogICAgICAgICAgQ29tbW9uU21vb3RoQ3V0b2ZmLmN1dG9mZk1hc3MgOiDihJ0pIGVsc2UgMCA6IOKEnSnigJYg4omkIF8KICBydyBbVHJhbnNwb3NlZFplcm9Db3ZhcmlhbmNlLmZhY3Rvcl9wYWlyX3N1bV9lcV9ncm91cGVkIGQgKGZ1biBxIHIg4oamCiAgICAoKGlmIENvbXBsZXhDUlQuQ29tcGF0aWJsZSBxIHIgbuKCgSBu4oKCIHRoZW4KICAgICAgKGQuViAvIChxLmxjbSByIDog4oSdKSkgKiBDb21tb25TbW9vdGhDdXRvZmYuY3V0b2ZmTWFzcyBlbHNlIDAgOiDihJ0pIDog4oSCKSldCiAgY2FsYwogICAgXyDiiaQg4oiRIHEg4oiIIGQucGh5c2ljYWxGYWN0b3JNb2R1bGksIOKIkSByIOKIiCBkLnBoeXNpY2FsRmFjdG9yTW9kdWxpLAogICAgICAgIHxkLlYgKiBDb21tb25TbW9vdGhDdXRvZmYuY3V0b2ZmTWFzc3wgKgogICAgICAgICAgKOKAlmQuZ3JvdXBlZEZhY3RvckdhbW1hIHHigJYgKiDigJZkLmdyb3VwZWRGYWN0b3JHYW1tYSBy4oCWIC8gKHEubGNtIHIgOiDihJ0pKSA6PSBieQogICAgICBhcHBseSAobm9ybV9zdW1fbGUgXyBfKS50cmFucwogICAgICBhcHBseSBGaW5zZXQuc3VtX2xlX3N1bQogICAgICBpbnRybyBxIF8KICAgICAgYXBwbHkgKG5vcm1fc3VtX2xlIF8gXykudHJhbnMKICAgICAgYXBwbHkgRmluc2V0LnN1bV9sZV9zdW0KICAgICAgaW50cm8gciBfCiAgICAgIGJ5X2Nhc2VzIGhjIDogQ29tcGxleENSVC5Db21wYXRpYmxlIHEgciBu4oKBIG7igoIKICAgICAgwrcgc2ltcCBvbmx5IFtpZl9wb3MgaGMsIG5vcm1fbXVsLCBub3JtX3N0YXIsIENvbXBsZXgubm9ybV9yZWFsLCBSZWFsLm5vcm1fZXFfYWJzLAogICAgICAgICAgYWJzX211bCwgYWJzX2RpdiwgYWJzX29mX25vbm5lZwogICAgICAgICAgICAoc2hvdyAoMCA6IOKEnSkg4omkIChxLmxjbSByIDog4oSdKSBmcm9tIA==",
+      "old_removed_byte_count": 9294,
+      "unchanged_suffix_byte_count": 4662,
+      "new_inserted_byte_count": 9466
+    },
+    "inverse_current_to_exact_old": {
+      "byte_for_byte_equal_exact_old_snapshot": true,
+      "reconstructed_sha256": "1b9c64bac5d849c70af899a61a5c191a5e2acfc9d7ec7a5a532372d575a741bf"
+    },
+    "in_memory_only": true
+  },
+  "source_checks": {
+    "no_sorry_admit_axiom_opaque_native_decide": true,
+    "issues_identified": [],
+    "no_limits_or_linter_change": true
+  },
+  "evidence_boundary": {
+    "source_modified": false,
+    "build_invoked": false,
+    "pins_or_checkers_modified": false,
+    "axiom_audit_performed": false,
+    "kernel_replay_performed": false,
+    "bootstrap_invoked": false,
+    "publication_freeze_respected": true,
+    "source_only": true,
+    "lean_invoked": false,
+    "runtime_pass_claimed": false,
+    "lake_invoked": false,
+    "written_artifacts_only": [
+      ".lake/proof-continuation/source-reviews/20261016-transposed-gcd-poisson-mask-first-diagnostic-independent-rebind.json"
+    ]
+  },
+  "remaining_gate": "Only root/runtime owner may perform the original specific bounded exact-source validation; source-only rebind asserts no runtime PASS or ownership.",
+  "pin_snapshots": [
+    {
+      "path": "lean-toolchain",
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "current_hash_matches_frozen_pin_snapshot": true
+    },
+    {
+      "path": "lakefile.toml",
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "current_hash_matches_frozen_pin_snapshot": true
+    },
+    {
+      "path": "lake-manifest.json",
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "current_hash_matches_frozen_pin_snapshot": true
+    }
+  ],
+  "previous_independent_source_review": {
+    "path": "20261016-transposed-gcd-poisson-mask-independent-scope.json",
+    "baseline_source_binding_preserved": true,
+    "sha256": "529db0a4191ddefe0e644d8f7e4cddd2d07ddccbabad1c4589bfd90e6c1ad52e"
+  }
+}

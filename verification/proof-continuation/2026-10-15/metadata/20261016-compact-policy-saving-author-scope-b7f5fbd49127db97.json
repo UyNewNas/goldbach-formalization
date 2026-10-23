@@ -1,0 +1,117 @@
+{
+  "status": "SOURCE_ONLY_AUTHOR_COMPLETE_FINITE_POLICY_SAVING_SCOPE_PENDING_INDEPENDENT_REVIEW_AND_RUNTIME",
+  "reviewer": "/root/tail_resume (source author)",
+  "created_at_utc": "2026-10-15T22:10:10.341288+00:00",
+  "candidate": {
+    "path": "ImbalancedChen/ActualExtendedThirdCompactPolicySaving.lean",
+    "sha256": "c2aadb77a2ea28ddd93732cc9772f4ca832f8b1d4732f72e0a54e46f2ef0de3d",
+    "declaration_count": 9,
+    "definition_count": 1,
+    "complete_headers_and_definitions": [
+      {
+        "name": "compactThirdAdmitted",
+        "kind": "def",
+        "private": true,
+        "complete_source_header": "private def compactThirdAdmitted (Q : List ℕ → ℝ)\n    (candidate : FirstExitDepthState ℕ) : ℝ",
+        "complete_definition": "private def compactThirdAdmitted (Q : List ℕ → ℝ)\n    (candidate : FirstExitDepthState ℕ) : ℝ :=\n  if frozenParityRosserPolicy false 3 Q candidate.positive candidate.selectedPrefix = true then\n    firstExitRetainedPolynomial (frozenParityRosserPolicy false 3 Q)\n      (fun q : ℕ => 1 / ((q : ℝ) - 1)) candidate.selectedPrefix candidate.positive\n      candidate.mass candidate.remaining\n  else 0"
+      },
+      {
+        "name": "compactThirdAdmitted_congr",
+        "kind": "theorem",
+        "private": true,
+        "complete_source_header": "private theorem compactThirdAdmitted_congr (Q Q' : List ℕ → ℝ)\n    (candidate : FirstExitDepthState ℕ) (hlen : candidate.selectedPrefix.length = 3)\n    (hQ : Q candidate.selectedPrefix = Q' candidate.selectedPrefix) :\n    compactThirdAdmitted Q candidate = compactThirdAdmitted Q' candidate"
+      },
+      {
+        "name": "compactThirdAdmitted_three",
+        "kind": "theorem",
+        "private": true,
+        "complete_source_header": "private theorem compactThirdAdmitted_three (Q : List ℕ → ℝ) (N cap : ℕ)\n    (p0 p1 p2 : ℕ) (hp2 : 0 < p2) (h21 : p2 < p1) (h10 : p1 < p0)\n    (mass : ℝ) (hfirst : (p0 : ℝ) ^ 3 < Q [p2, p1, p0]) :\n    compactThirdAdmitted Q\n        {selectedPrefix := [p2, p1, p0], positive := false, mass := mass,\n          remaining := roughPrimeUniverse N cap 0 (p2 : ℝ)} =\n      -mass * actualOwnCubeGatedMinusDensity N cap Q [p2, p1, p0]"
+      },
+      {
+        "name": "compactUpper_ownSplice",
+        "kind": "theorem",
+        "private": true,
+        "complete_source_header": "private theorem compactUpper_ownSplice (e h : ℝ) (m N : ℕ) :\n    firstExitDepthSplicePolicy 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n        (frozenParityRosserPolicy false 3 (actualExtendedThirdCompactRawLevel e h m N)) =\n      actualExtendedThirdCompactUpperPolicy e h m N"
+      },
+      {
+        "name": "compactInitial_ownSplice",
+        "kind": "theorem",
+        "private": true,
+        "complete_source_header": "private theorem compactInitial_ownSplice (e h : ℝ) (m N : ℕ) :\n    firstExitDepthSplicePolicy 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n        (frozenParityRosserPolicy false 3 (fun _ => (N : ℝ) ^ (thirdPrefixTheta - 2 * e))) =\n      actualExtendedThirdCompactInitialPolicy e m N"
+      },
+      {
+        "name": "compactCandidate_cell",
+        "kind": "theorem",
+        "private": true,
+        "complete_source_header": "private theorem compactCandidate_cell {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (frontier : FirstExitDepthState ℕ)\n    (hf : frontier ∈ firstExitDepthFrontier 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n      (fun q : ℕ => 1 / ((q : ℝ) - 1)) [] true 1\n      (roughPrimeUniverse N cap 0 ((N : ℝ) ^ thirdPrefixRho)))\n    (candidate : FirstExitDepthState ℕ)\n    (hc : candidate ∈ firstExitNextSelectionCandidates\n      (fun q : ℕ => 1 / ((q : ℝ) - 1)) frontier.selectedPrefix\n      frontier.positive frontier.mass frontier.remaining)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m)\n    (ht : primeHistoryLogCoordinates (N : ℝ) 3 candidate.selectedPrefix ∈\n      actualExtendedThirdOwnedCell m j) :\n    (compactThirdAdmitted (actualExtendedThirdCompactRawLevel e h m N) candidate -\n      compactThirdAdmitted (fun _ => (N : ℝ) ^ (thirdPrefixTheta - 2 * e)) candidate) *\n        Real.log (N : ℝ) / singularSeries N =\n      (candidate.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n        (actualPrimeTupleOwnCubeMinus N cap (thirdPrefixTheta - 2 * e)\n            (primeHistoryTuple 3 candidate.selectedPrefix) -\n          actualPrimeTupleOwnCubeMinus N cap (actualExtendedThirdPhysicalLevel e m j)\n            (primeHistoryTuple 3 candidate.selectedPrefix))"
+      },
+      {
+        "name": "compactCandidate_partition",
+        "kind": "theorem",
+        "private": true,
+        "complete_source_header": "private theorem compactCandidate_partition {e h : ℝ} {m N cap : ℕ}\n    (hN : 1 < N) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    (frontier : FirstExitDepthState ℕ)\n    (hf : frontier ∈ firstExitDepthFrontier 2 (actualExtendedThirdCompactUpperPolicy e h m N)\n      (fun q : ℕ => 1 / ((q : ℝ) - 1)) [] true 1\n      (roughPrimeUniverse N cap 0 ((N : ℝ) ^ thirdPrefixRho)))\n    (candidate : FirstExitDepthState ℕ)\n    (hc : candidate ∈ firstExitNextSelectionCandidates\n      (fun q : ℕ => 1 / ((q : ℝ) - 1)) frontier.selectedPrefix\n      frontier.positive frontier.mass frontier.remaining) :\n    (compactThirdAdmitted (actualExtendedThirdCompactRawLevel e h m N) candidate -\n      compactThirdAdmitted (fun _ => (N : ℝ) ^ (thirdPrefixTheta - 2 * e)) candidate) *\n        Real.log (N : ℝ) / singularSeries N =\n      ∑ j ∈ actualExtendedThirdCompactCells e h m,\n        (candidate.selectedPrefix.map (fun q : ℕ => 1 / ((q : ℝ) - 1))).prod *\n          (if primeHistoryLogCoordinates (N : ℝ) 3 candidate.selectedPrefix ∈\n              actualExtendedThirdOwnedCell m j then\n            actualPrimeTupleOwnCubeMinus N cap (thirdPrefixTheta - 2 * e)\n                (primeHistoryTuple 3 candidate.selectedPrefix) -\n              actualPrimeTupleOwnCubeMinus N cap (actualExtendedThirdPhysicalLevel e m j)\n                (primeHistoryTuple 3 candidate.selectedPrefix) else 0)"
+      },
+      {
+        "name": "compactFrontierCell_residual",
+        "kind": "theorem",
+        "private": true,
+        "complete_source_header": "private theorem compactFrontierCell_residual {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (hh : 0 < h) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2)\n    {j : ActualExtendedThirdDyadicLabel m} (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    actualExtendedThirdCompactFrontierCellSum e h m N N 0 j\n        (fun p => actualPrimeTupleOwnCubeMinus N N (thirdPrefixTheta - 2 * e) p -\n          actualPrimeTupleOwnCubeMinus N N (actualExtendedThirdPhysicalLevel e m j) p) =\n      actualExtendedThirdCellResidualDensitySum N e h m j"
+      },
+      {
+        "name": "actualExtendedThirdCompactPolicySaving",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdCompactPolicySaving {e h : ℝ} {m N : ℕ}\n    (hN : 1 < N) (hh : 0 < h) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) :\n    (firstExitRetainedPolynomial (actualExtendedThirdCompactUpperPolicy e h m N)\n        (fun q : ℕ => 1 / ((q : ℝ) - 1)) [] true 1\n        (roughPrimeUniverse N N 0 ((N : ℝ) ^ thirdPrefixRho)) -\n      firstExitRetainedPolynomial (actualExtendedThirdCompactInitialPolicy e m N)\n        (fun q : ℕ => 1 / ((q : ℝ) - 1)) [] true 1\n        (roughPrimeUniverse N N 0 ((N : ℝ) ^ thirdPrefixRho))) *\n        Real.log (N : ℝ) / singularSeries N =\n      actualExtendedThirdCompactResidualDensitySum N e h m"
+      }
+    ]
+  },
+  "direct_imports": [
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdCompactFrontier",
+      "source_sha256": "8e15c650d9e5e0b7f72aa16589a4dbf2049687558482d096f48f7fee1635dbe7"
+    },
+    {
+      "module": "ImbalancedChen.ActualExtendedThirdCompactResidualProfile",
+      "source_sha256": "051eea02eb58e1e277adb38f43ecf3306db5d3f05cf1f3be6e98645ebd8bc251"
+    },
+    {
+      "module": "ImbalancedChen.FirstExitCandidateGeometry",
+      "source_sha256": "cefea573a1f17a0bd768327dd4e8939784386ad8171606ab6d87ec8520d092aa"
+    },
+    {
+      "module": "ImbalancedChen.ActualFrozenOwnCubeDensity",
+      "source_sha256": "8dd48bf1b9aba5317c382be8b56cd3af39cea19633eaf55597f261f01a73c9f2"
+    }
+  ],
+  "actual_target": "(P_compactUpper - P_dyadicFirstStopInitial) * log(N) / singularSeries(N) = existing actualExtendedThirdCompactResidualDensitySum N e h m, on the original full roughPrimeUniverse N N 0 (N^rho).",
+  "actual_caller": [
+    "The existing root actual compact residual density sum tends to the same retained cell integral and full ideal; this exact finite identity identifies that limit with the same concrete policy polynomial difference.",
+    "The earlier actualSmallRoughRho physical attachment consumes the same upper policy. Its already existing presieve projection and attachment reserve compare its physical density to this full w=0 polynomial. No w>0 residual identity is asserted here."
+  ],
+  "mathematical_review": [
+    "Both own-test splices use the same actual compactUpper policy as common parent through rank two. Through-two identity makes this exactly the initial dyadic-first-stop parent. Beyond rank two the old constant frozen policy restores the full initial predicate because history length is not one.",
+    "The literal before-test ownCubeSplice identity includes every next candidate independently of new or old admission and keeps each policy-specific continuation.",
+    "Actual candidate geometry derives length three, strictly increasing reverse history, positive product, minimum head, exact strict remaining rough prime universe, odd sign and actual reciprocal prime mass. No caller supplies an inherited admissibility or saving premise.",
+    "The full historical third test is first cube and own cube. Its own-cube strict gate pays total-product cutoff. On active cells the previously proved same physical first-cube margin pays the first cube; the physical level is at most old, so it also pays the old first cube.",
+    "In an admitted branch the actual frozen parity continuation theorem identifies the literal lower Rosser density at Q/history.prod and the exact remaining prime cutoff. At odd rank three the signed mass is negative. Rejected own-cube branches remain zero.",
+    "Thus new-policy minus initial-policy equals positive prime mass times old gated minus density minus new gated minus density. No unproved monotonicity or nonnegative residual is used.",
+    "An inactive candidate has Qnew(history)=Qold(history). The proved recursive ancestor-frozen continuation equality cancels both full admitted continuations without an admissibility hypothesis.",
+    "Actual owned-cell uniqueness splits every active candidate once. No decision fiber is declared Cartesian and no prime wall is removed.",
+    "The existing exact compact candidate-to-tuple carrier equality applies with original cap N: N^rho <= N from rho<1 and N>1, while w=0 satisfies the cutoff. The exact original root residual sums, including both strict own-cube gates, have precisely the resulting tuple summands.",
+    "Only finite list/Finset sums and real normalization are rearranged. Cap N, target deletions, strict Ico ownership, policy parameters and the original dyadic first stop remain unchanged."
+  ],
+  "remaining_gates": [
+    "Lean first compilation, diagnostics repair if needed, and complete owned stock/type/axiom audit for this source and all not-yet-accepted parents.",
+    "The initial dyadic-first-stop policy density still needs its manuscript baseline bound; it is not equated with unrestricted ordinary policy.",
+    "The physical coefficient support and same-policy arithmetic counting mean still require the actual selected-factor/distribution and normalized signed progression-error estimates.",
+    "The existing root residual harmonic convergence is a density result, not a physical counting-error estimate or unconditional hUpper."
+  ],
+  "evidence_boundary": {
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "imported_closure_acceptance_claimed": false,
+    "pins_modified": false,
+    "owned_sources_modified": false,
+    "acceptance_claimed": false
+  }
+}

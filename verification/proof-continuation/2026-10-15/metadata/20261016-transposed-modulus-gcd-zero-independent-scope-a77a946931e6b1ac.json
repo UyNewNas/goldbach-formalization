@@ -1,0 +1,539 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T21:44:14.9656263Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "FULL_SOURCE_ONLY_INDEPENDENT_SAME_MASK_MODULUS_GCD_RAW_ZERO_APPROVED_AFTER_API_REPAIR_PENDING_RUNTIME",
+  "candidate": {
+    "sha256": "6d79ab1c6d41c00f1a7f06d59bb683e36004dfbbf71794746fe85c90f20b9eb5",
+    "theorem_count": 17,
+    "path": "ImbalancedChen/Part3TransposedModulusGCDZero.lean",
+    "complete_current_source_and_proofs_reviewed": "import ImbalancedChen.Part3PairedAlphaDeletion\r\nimport ImbalancedChen.Part3TransposedGCDPoissonMask\r\n\r\n/-!\r\n# A second actual gcd mask and its raw-zero payment\r\n\r\nAfter keeping the original-alpha pair gcd at most Y, this leaf masks the\r\ncommon physical modulus gcd above D. Whole W, raw zero and the complete\r\nsigned Fourier remainder use exactly that same mask. The complementary\r\nFourier piece retains both small gcd conditions explicitly.\r\n\r\nThe raw-zero estimate keeps compatibility until its natural congruence\r\nn1 = n2 modulo gcd(q,r) has been counted on the actual paired carrier.\r\nOriginal alpha is one-bounded there, including the actual zero padding.\r\nThe resulting count is 2U(2U/gcd(q,r)+1). Thus the diagonal is retained\r\nin the honest O(U) term; no divisor set of a zero difference is formed.\r\nThe complete physical Gamma convolution pays tau_3 and H(cap)^19.\r\n\r\nMultiplication by the original beta-L2 gives an actual X^2 bound with\r\ncost (1/D+1/U). At D=X^delta, the original U>=X^sigma gate pays every\r\nfixed requested logarithm. This pays raw zero under this mask, not the\r\nmasked whole W or its Fourier difference. Those whole-W progression\r\nand subsequent small-gcd estimates remain separate obligations.\r\n-/\r\n\r\nnamespace ImbalancedChen.Part3\r\n\r\nnoncomputable section\r\n\r\nopen Classical Finset Filter\r\nopen scoped BigOperators Topology\r\nopen MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\r\n\r\ndef MediumAtom.commonLargeModulusGCDWeight (d : MediumAtom) (D : ℝ) (n₁ n₂ : ℕ) : ℂ :=\r\n  ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\r\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\r\n      (if D < ((complexFactorModulus a).gcd (complexFactorModulus b) : ℝ) then\r\n        (ComplexCRT.constructedProgressionWeight d.commonSmoothCarrier d.commonSmoothWeight\r\n          d.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ : ℂ) else 0)\r\n\r\ndef MediumAtom.commonLargeModulusGCDZeroWeight (d : MediumAtom) (D : ℝ) (n₁ n₂ : ℕ) : ℂ :=\r\n  ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\r\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\r\n      (if D < ((complexFactorModulus a).gcd (complexFactorModulus b) : ℝ) then\r\n        ((if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then\r\n          (d.U / (complexFactorModulus a).lcm (complexFactorModulus b)) *\r\n            CommonSmoothCutoff.cutoffMass else 0 : ℝ) : ℂ) else 0)\r\n\r\ndef MediumAtom.commonModulusGCDNonzeroWeight (d : MediumAtom) (D : ℝ) (large : Bool)\r\n    (n₁ n₂ : ℕ) : ℂ :=\r\n  ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\r\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\r\n      (if decide (D < ((complexFactorModulus a).gcd (complexFactorModulus b) : ℝ)) = large then\r\n        ((if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then\r\n          (∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency\r\n            (d.U / (complexFactorModulus a).lcm (complexFactorModulus b))\r\n            ((ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b)\r\n              n₁ n₂ d.residue : ℝ) /\r\n                (complexFactorModulus a).lcm (complexFactorModulus b)) h).re else 0 : ℝ) : ℂ)\r\n      else 0)\r\n\r\ndef MediumAtom.commonSmallBetaLargeModulusGCDW (d : MediumAtom) (Y D : ℝ) : ℂ :=\r\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\r\n    if Y < (n₁.gcd n₂ : ℝ) then 0 else\r\n      d.beta n₁ * star (d.beta n₂) * d.commonLargeModulusGCDWeight D n₁ n₂\r\n\r\ndef MediumAtom.commonSmallBetaLargeModulusGCDZeroPart (d : MediumAtom) (Y D : ℝ) : ℂ :=\r\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\r\n    if Y < (n₁.gcd n₂ : ℝ) then 0 else\r\n      d.beta n₁ * star (d.beta n₂) * d.commonLargeModulusGCDZeroWeight D n₁ n₂\r\n\r\ndef MediumAtom.commonSmallBetaModulusGCDNonzeroPart (d : MediumAtom) (Y D : ℝ)\r\n    (large : Bool) : ℂ :=\r\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\r\n    if Y < (n₁.gcd n₂ : ℝ) then 0 else\r\n      d.beta n₁ * star (d.beta n₂) * d.commonModulusGCDNonzeroWeight D large n₁ n₂\r\n\r\n/-- This is the exact signed alpha pair mass before any norm. -/\r\ndef MediumAtom.smallBetaCompatiblePairMass (d : MediumAtom) (Y : ℝ) (q r : ℕ) : ℂ :=\r\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\r\n    if Y < (n₁.gcd n₂ : ℝ) then 0 else\r\n      if ComplexCRT.Compatible q r n₁ n₂ then d.beta n₁ * star (d.beta n₂) else 0\r\n\r\nnamespace TransposedModulusGCDZero\r\n\r\nprivate theorem factor_modulus_pos\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) {a : ℕ × ℕ × ℕ}\r\n    (ha : a ∈ d.complexFactorLabels) : 0 < complexFactorModulus a :=\r\n  (Finset.mem_Ioc.mp (d.physicalFactorModuli_subset_cap hd\r\n    (Finset.mem_image_of_mem _ ha))).1\r\n\r\n/-- Poisson is applied on each complete original physical lcm. -/\r\ntheorem transposed_largeModulusWeight_eq_zero_add_nonzero\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (D : ℝ) (n₁ n₂ : ℕ) :\r\n    d.transposedAtom.commonLargeModulusGCDWeight D n₁ n₂ =\r\n      d.transposedAtom.commonLargeModulusGCDZeroWeight D n₁ n₂ +\r\n        d.transposedAtom.commonModulusGCDNonzeroWeight D true n₁ n₂ := by\r\n  unfold MediumAtom.commonLargeModulusGCDWeight MediumAtom.commonLargeModulusGCDZeroWeight\r\n    MediumAtom.commonModulusGCDNonzeroWeight\r\n  rw [← Finset.sum_add_distrib]\r\n  apply Finset.sum_congr rfl\r\n  intro a ha\r\n  rw [← Finset.sum_add_distrib]\r\n  apply Finset.sum_congr rfl\r\n  intro b hb\r\n  by_cases hD : D < ((complexFactorModulus a).gcd (complexFactorModulus b) : ℝ)\r\n  · have hmask : decide (D < ((complexFactorModulus a).gcd (complexFactorModulus b) : ℝ)) = true :=\r\n      decide_eq_true hD\r\n    simp only [if_pos hD, if_pos hmask]\r\n    unfold ComplexCRT.constructedProgressionWeight\r\n    by_cases hc : ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂\r\n    · simp only [if_pos hc]\r\n      have hL : 0 < (complexFactorModulus a).lcm (complexFactorModulus b) :=\r\n        Nat.pos_of_ne_zero (Nat.lcm_ne_zero (factor_modulus_pos hd ha).ne'\r\n          (factor_modulus_pos hd hb).ne')\r\n      have he := CommonSmoothCutoff.scaledDyadicCutoff_finset_progression_eq_main_add_fourier\r\n        (lt_of_lt_of_le zero_lt_one hd.2.1) d.transposedAtom.commonSmoothCarrier\r\n        (fun m hm ↦ d.transposedSmoothWeight_support_subset hd.2.1 hm) hL\r\n        (ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ d.residue)\r\n      simp only [MediumAtom.commonSmoothWeight, MediumAtom.transposedAtom] at he ⊢\r\n      rw [he, Complex.ofReal_add]\r\n      ring\r\n    · simp only [if_neg hc, Complex.ofReal_zero, mul_zero, add_zero]\r\n  · have hmask : decide (D < ((complexFactorModulus a).gcd (complexFactorModulus b) : ℝ)) ≠ true := by\r\n      intro h\r\n      exact hD (of_decide_eq_true h)\r\n    simp only [if_neg hD, if_neg hmask, mul_zero, add_zero]\r\n\r\n/-- The same two gcd gates occur in whole W, raw zero and full Fourier. -/\r\ntheorem transposed_smallBeta_largeModulusW_eq_zero_add_nonzero\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y D : ℝ) :\r\n    d.transposedAtom.commonSmallBetaLargeModulusGCDW Y D =\r\n      d.transposedAtom.commonSmallBetaLargeModulusGCDZeroPart Y D +\r\n        d.transposedAtom.commonSmallBetaModulusGCDNonzeroPart Y D true := by\r\n  unfold MediumAtom.commonSmallBetaLargeModulusGCDW\r\n    MediumAtom.commonSmallBetaLargeModulusGCDZeroPart\r\n    MediumAtom.commonSmallBetaModulusGCDNonzeroPart\r\n  rw [← Finset.sum_add_distrib]\r\n  apply Finset.sum_congr rfl\r\n  intro n₁ _\r\n  rw [← Finset.sum_add_distrib]\r\n  apply Finset.sum_congr rfl\r\n  intro n₂ _\r\n  by_cases hy : Y < (n₁.gcd n₂ : ℝ)\r\n  · simp only [if_pos hy, add_zero]\r\n  · simp only [if_neg hy, transposed_largeModulusWeight_eq_zero_add_nonzero hd, mul_add]\r\n\r\ntheorem smallBeta_nonzero_eq_large_small_modulus (d : MediumAtom) (Y D : ℝ) :\r\n    d.commonSmallBetaGCDNonzeroPart Y =\r\n      d.commonSmallBetaModulusGCDNonzeroPart Y D true +\r\n        d.commonSmallBetaModulusGCDNonzeroPart Y D false := by\r\n  unfold MediumAtom.commonSmallBetaGCDNonzeroPart MediumAtom.commonSmallBetaModulusGCDNonzeroPart\r\n  rw [← Finset.sum_add_distrib]\r\n  apply Finset.sum_congr rfl\r\n  intro n₁ _\r\n  rw [← Finset.sum_add_distrib]\r\n  apply Finset.sum_congr rfl\r\n  intro n₂ _\r\n  by_cases hy : Y < (n₁.gcd n₂ : ℝ)\r\n  · simp only [if_pos hy, add_zero]\r\n  · simp only [if_neg hy, ← mul_add]\r\n    congr 1\r\n    unfold MediumAtom.commonFactorPairNonzeroWeight MediumAtom.commonModulusGCDNonzeroWeight\r\n    rw [← Finset.sum_add_distrib]\r\n    apply Finset.sum_congr rfl\r\n    intro a _\r\n    rw [← Finset.sum_add_distrib]\r\n    apply Finset.sum_congr rfl\r\n    intro b _\r\n    by_cases hD : D < ((complexFactorModulus a).gcd (complexFactorModulus b) : ℝ) <;>\r\n      simp [hD]\r\n\r\ntheorem transposed_largeModulusNonzero_norm_le_W_add_zero\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y D : ℝ) :\r\n    ‖d.transposedAtom.commonSmallBetaModulusGCDNonzeroPart Y D true‖ ≤\r\n      ‖d.transposedAtom.commonSmallBetaLargeModulusGCDW Y D‖ +\r\n        ‖d.transposedAtom.commonSmallBetaLargeModulusGCDZeroPart Y D‖ := by\r\n  have he : d.transposedAtom.commonSmallBetaModulusGCDNonzeroPart Y D true =\r\n      d.transposedAtom.commonSmallBetaLargeModulusGCDW Y D -\r\n        d.transposedAtom.commonSmallBetaLargeModulusGCDZeroPart Y D := by\r\n    rw [transposed_smallBeta_largeModulusW_eq_zero_add_nonzero hd]\r\n    ring\r\n  rw [he]\r\n  exact norm_sub_le _ _\r\n\r\n/-- Both literal primitive terms and all three signed Fourier pieces\r\nrefer to the same actual atom and smoothing. -/\r\ntheorem transposed_centered_identity_with_two_gcd_masks\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y D : ℝ) :\r\n    ((∑ n ∈ d.transposedAtom.commonSmoothCarrier,\r\n      d.transposedAtom.commonSmoothWeight n * ‖d.transposedAtom.complexCenteredRow n‖ ^ 2 : ℝ) : ℂ) =\r\n      (d.transposedAtom.complexCRTSmoothZeroPart -\r\n        2 * (d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\r\n          d.transposedAtom.commonSmoothWeight : ℂ) +\r\n        (d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\r\n          d.transposedAtom.commonSmoothWeight : ℂ)) +\r\n        (d.transposedAtom.commonLargeBetaGCDNonzeroPart Y +\r\n          (d.transposedAtom.commonSmallBetaModulusGCDNonzeroPart Y D true +\r\n            d.transposedAtom.commonSmallBetaModulusGCDNonzeroPart Y D false)) := by\r\n  rw [TransposedGCDPoissonMask.transposed_centered_identity_with_large_small hd,\r\n    smallBeta_nonzero_eq_large_small_modulus d.transposedAtom Y D]\r\n\r\nprivate theorem transposed_beta_norm_le_one\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\r\n    ‖d.transposedAtom.beta n‖ ≤ 1 := by\r\n  have hAlpha : ∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1 := by\r\n    obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, hAlpha, _⟩ := hd\r\n    exact hAlpha\r\n  change ‖if n ∈ d.alphaCarrier then d.alpha n else 0‖ ≤ 1\r\n  by_cases hn : n ∈ d.alphaCarrier\r\n  · simpa only [if_pos hn] using hAlpha n hn\r\n  · simp only [if_neg hn, norm_zero, zero_le_one]\r\n\r\n/-- The progression count is on the actual original-alpha paired carrier.\r\nThe temporary record changes only the residue of the elementary counter. -/\r\nprivate theorem transposed_betaCarrier_modEq_card_le\r\n    {d : MediumAtom} (hU : 1 ≤ d.U) {delta : ℕ} (hdelta : 0 < delta) (b : ℕ) :\r\n    ((d.transposedAtom.betaCarrier.filter (fun n : ℕ ↦ Nat.ModEq delta n b)).card : ℝ) ≤\r\n      2 * d.U / delta + 1 := by\r\n  have hh := PairedAlphaDeletion.betaCarrier_progression_card_le\r\n    (d := { d.transposedAtom with residue := (b : ℤ) }) hU hdelta\r\n    (show (1 : ℕ).Coprime delta by simp)\r\n  change ((d.transposedAtom.betaCarrier.filter\r\n    (fun n : ℕ ↦ Int.ModEq delta ((n : ℤ) * (1 : ℕ)) (b : ℤ))).card : ℝ) ≤\r\n      2 * d.U / delta + 1 at hh\r\n  simpa only [Nat.cast_one, mul_one, Int.natCast_modEq_iff] using hh\r\n\r\n/-- Compatibility is used before taking the coarse count. The O(U)\r\ndiagonal cost remains and will be paid using the actual U lower gate. -/\r\ntheorem transposed_compatiblePairMass_norm_le\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) {q r : ℕ}\r\n    (hdelta : 0 < q.gcd r) :\r\n    ‖d.transposedAtom.smallBetaCompatiblePairMass Y q r‖ ≤\r\n      2 * d.U * (2 * d.U / (q.gcd r : ℝ) + 1) := by\r\n  have hU0 : 0 ≤ d.U := by linarith [hd.1]\r\n  unfold MediumAtom.smallBetaCompatiblePairMass\r\n  have hcard : (d.transposedAtom.betaCarrier.card : ℝ) ≤ 2 * d.U := by\r\n    have hc := Finset.card_le_card (d.transposedAtom.betaCarrier_subset_twiceV hd.1)\r\n    simp only [Nat.card_Ioc, Nat.sub_zero] at hc\r\n    exact (show (d.transposedAtom.betaCarrier.card : ℝ) ≤ (Nat.floor (2 * d.U) : ℝ) by\r\n      exact_mod_cast hc).trans (Nat.floor_le (by linarith [hd.1] : 0 ≤ 2 * d.U))\r\n  calc\r\n    _ ≤ ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\r\n        if Nat.ModEq (q.gcd r) n₁ n₂ then (1 : ℝ) else 0 := by\r\n      apply (norm_sum_le _ _).trans\r\n      apply Finset.sum_le_sum\r\n      intro n₁ _\r\n      apply (norm_sum_le _ _).trans\r\n      apply Finset.sum_le_sum\r\n      intro n₂ _\r\n      by_cases hy : Y < (n₁.gcd n₂ : ℝ)\r\n      · simp only [if_pos hy, norm_zero]\r\n        split_ifs <;> norm_num\r\n      · by_cases hc : ComplexCRT.Compatible q r n₁ n₂\r\n        · simp only [if_neg hy, if_pos hc, if_pos hc.2.2, norm_mul, norm_star]\r\n          simpa only [one_mul] using mul_le_mul\r\n            (transposed_beta_norm_le_one hd n₁) (transposed_beta_norm_le_one hd n₂)\r\n            (norm_nonneg _) zero_le_one\r\n        · simp only [if_neg hy, if_neg hc, norm_zero]\r\n          split_ifs <;> norm_num\r\n    _ = ∑ n₂ ∈ d.transposedAtom.betaCarrier,\r\n        ((d.transposedAtom.betaCarrier.filter\r\n          (fun n₁ : ℕ ↦ Nat.ModEq (q.gcd r) n₁ n₂)).card : ℝ) := by\r\n      rw [Finset.sum_comm]\r\n      apply Finset.sum_congr rfl\r\n      intro n₂ _\r\n      rw [← Finset.sum_filter]\r\n      simp\r\n    _ ≤ ∑ _n₂ ∈ d.transposedAtom.betaCarrier, (2 * d.U / (q.gcd r : ℝ) + 1) :=\r\n      Finset.sum_le_sum (fun n₂ _ ↦ transposed_betaCarrier_modEq_card_le hd.1 hdelta n₂)\r\n    _ = (d.transposedAtom.betaCarrier.card : ℝ) * (2 * d.U / (q.gcd r : ℝ) + 1) := by\r\n      rw [Finset.sum_const, nsmul_eq_mul]\r\n    _ ≤ _ := mul_le_mul_of_nonneg_right hcard (by positivity)\r\n\r\n/-- Exact grouping precedes every norm. The complete physical Gamma is\r\nnot replaced by a one-bounded coefficient. -/\r\ntheorem transposed_largeModulusZero_eq_grouped\r\n    (d : MediumAtom) (Y D : ℝ) :\r\n    d.transposedAtom.commonSmallBetaLargeModulusGCDZeroPart Y D =\r\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\r\n        d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\r\n          (if D < (q.gcd r : ℝ) then\r\n            ((d.V / (q.lcm r : ℝ)) * CommonSmoothCutoff.cutoffMass : ℝ) *\r\n              d.transposedAtom.smallBetaCompatiblePairMass Y q r else 0) := by\r\n  have hg (n₁ n₂ : ℕ) : d.transposedAtom.commonLargeModulusGCDZeroWeight D n₁ n₂ =\r\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\r\n        d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\r\n          (if D < (q.gcd r : ℝ) then\r\n            ((if ComplexCRT.Compatible q r n₁ n₂ then\r\n              (d.V / (q.lcm r : ℝ)) * CommonSmoothCutoff.cutoffMass else 0 : ℝ) : ℂ) else 0) := by\r\n    exact TransposedZeroCovariance.factor_pair_sum_eq_grouped d (fun q r ↦\r\n      if D < (q.gcd r : ℝ) then\r\n        ((if ComplexCRT.Compatible q r n₁ n₂ then\r\n          (d.V / (q.lcm r : ℝ)) * CommonSmoothCutoff.cutoffMass else 0 : ℝ) : ℂ) else 0)\r\n  have hterm (n₁ n₂ : ℕ) :\r\n      (if Y < (n₁.gcd n₂ : ℝ) then 0 else\r\n        d.transposedAtom.beta n₁ * star (d.transposedAtom.beta n₂) *\r\n          d.transposedAtom.commonLargeModulusGCDZeroWeight D n₁ n₂) =\r\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\r\n        d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\r\n          (if D < (q.gcd r : ℝ) then\r\n            ((d.V / (q.lcm r : ℝ)) * CommonSmoothCutoff.cutoffMass : ℝ) *\r\n              (if Y < (n₁.gcd n₂ : ℝ) then 0 else\r\n                if ComplexCRT.Compatible q r n₁ n₂ then\r\n                  d.transposedAtom.beta n₁ * star (d.transposedAtom.beta n₂) else 0) else 0) := by\r\n    by_cases hy : Y < (n₁.gcd n₂ : ℝ)\r\n    · simp [hy]\r\n    · rw [if_neg hy, hg]\r\n      simp only [Finset.mul_sum]\r\n      apply Finset.sum_congr rfl\r\n      intro q _\r\n      apply Finset.sum_congr rfl\r\n      intro r _\r\n      by_cases hD : D < (q.gcd r : ℝ) <;>\r\n        by_cases hc : ComplexCRT.Compatible q r n₁ n₂ <;>\r\n        simp [hy, hD, hc] <;> ring\r\n  have hphysical (q r : ℕ) :\r\n      d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\r\n        (if D < (q.gcd r : ℝ) then\r\n          ((d.V / (q.lcm r : ℝ)) * CommonSmoothCutoff.cutoffMass : ℝ) *\r\n            d.transposedAtom.smallBetaCompatiblePairMass Y q r else 0) =\r\n      ∑ n₁ ∈ d.transposedAtom.betaCarrier, ∑ n₂ ∈ d.transposedAtom.betaCarrier,\r\n        d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\r\n          (if D < (q.gcd r : ℝ) then\r\n            ((d.V / (q.lcm r : ℝ)) * CommonSmoothCutoff.cutoffMass : ℝ) *\r\n              (if Y < (n₁.gcd n₂ : ℝ) then 0 else\r\n                if ComplexCRT.Compatible q r n₁ n₂ then\r\n                  d.transposedAtom.beta n₁ * star (d.transposedAtom.beta n₂) else 0) else 0) := by\r\n    by_cases hD : D < (q.gcd r : ℝ) <;>\r\n      simp [hD, MediumAtom.smallBetaCompatiblePairMass, Finset.mul_sum]\r\n  unfold MediumAtom.commonSmallBetaLargeModulusGCDZeroPart\r\n  simp_rw [hterm, hphysical]\r\n  simp_rw [Finset.sum_comm (s := d.transposedAtom.betaCarrier) (t := d.physicalFactorModuli)]\r\n\r\nprivate theorem lcm_weight_sum_le\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) :\r\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\r\n      ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ / (q.lcm r : ℝ)) ≤\r\n        (1 + Real.log d.physicalFactorCap) ^ 19 := by\r\n  have hh := MathlibNt.AnalyticNumberTheory.LargeSieve.LcmWeightBounds.sum_abs_lcm_weight_le_log\r\n    3 (d.one_le_physicalFactorCap hd) d.physicalFactorModuli\r\n    (d.physicalFactorModuli_subset_cap hd) (fun q ↦ ‖d.groupedFactorGamma q‖)\r\n    (fun q _ ↦ by simpa only [abs_norm] using d.groupedFactorGamma_norm_le_tauThree hd q)\r\n  convert hh using 1\r\n  · apply Finset.sum_congr rfl\r\n    intro q _\r\n    apply Finset.sum_congr rfl\r\n    intro r _\r\n    exact (abs_of_nonneg (div_nonneg\r\n      (mul_nonneg (norm_nonneg _) (norm_nonneg _))\r\n      (show (0 : ℝ) ≤ (q.lcm r : ℝ) from Nat.cast_nonneg (q.lcm r)))).symm\r\n  · norm_num\r\n\r\n/-- The entire masked raw zero, including its diagonal, has a genuine\r\n1/D+1/U saving. Y is arbitrary because its mask is enlarged only here. -/\r\ntheorem transposed_largeModulusZero_norm_le\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) {D : ℝ} (hD : 0 < D) :\r\n    ‖d.transposedAtom.commonSmallBetaLargeModulusGCDZeroPart Y D‖ ≤\r\n      |d.V * CommonSmoothCutoff.cutoffMass| * (4 * d.U ^ 2 / D + 2 * d.U) *\r\n        (1 + Real.log d.physicalFactorCap) ^ 19 := by\r\n  have hU0 : 0 ≤ d.U := by linarith [hd.1]\r\n  rw [transposed_largeModulusZero_eq_grouped]\r\n  calc\r\n    _ ≤ ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\r\n        |d.V * CommonSmoothCutoff.cutoffMass| * (4 * d.U ^ 2 / D + 2 * d.U) *\r\n          (‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ / (q.lcm r : ℝ)) := by\r\n      apply (norm_sum_le _ _).trans\r\n      apply Finset.sum_le_sum\r\n      intro q _\r\n      apply (norm_sum_le _ _).trans\r\n      apply Finset.sum_le_sum\r\n      intro r _\r\n      by_cases hdelta : D < (q.gcd r : ℝ)\r\n      · have hdelta0 : 0 < q.gcd r := by exact_mod_cast hD.trans hdelta\r\n        have hmass := transposed_compatiblePairMass_norm_le hd Y hdelta0\r\n        have hcount : 2 * d.U * (2 * d.U / (q.gcd r : ℝ) + 1) ≤\r\n            4 * d.U ^ 2 / D + 2 * d.U := by\r\n          have hh := div_le_div_of_nonneg_left (show 0 ≤ 2 * d.U by positivity)\r\n            hD hdelta.le\r\n          calc\r\n            _ ≤ 2 * d.U * (2 * d.U / D + 1) :=\r\n              mul_le_mul_of_nonneg_left (add_le_add_right hh 1) (by positivity)\r\n            _ = _ := by ring\r\n        simp only [if_pos hdelta, norm_mul, norm_star, Complex.norm_real,\r\n          Real.norm_eq_abs, abs_mul, abs_div, abs_of_nonneg\r\n            (show (0 : ℝ) ≤ (q.lcm r : ℝ) from Nat.cast_nonneg (q.lcm r))]\r\n        calc\r\n          _ ≤ (‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖) *\r\n              ((|d.V| / (q.lcm r : ℝ) * |CommonSmoothCutoff.cutoffMass|) *\r\n                (4 * d.U ^ 2 / D + 2 * d.U)) :=\r\n            mul_le_mul_of_nonneg_left\r\n              (mul_le_mul_of_nonneg_left (hmass.trans hcount) (by positivity)) (by positivity)\r\n          _ = _ := by ring\r\n      · simp only [if_neg hdelta, mul_zero, norm_zero]\r\n        positivity\r\n    _ = (|d.V * CommonSmoothCutoff.cutoffMass| * (4 * d.U ^ 2 / D + 2 * d.U)) *\r\n        ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\r\n          ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ / (q.lcm r : ℝ) := by\r\n      simp only [Finset.mul_sum]\r\n    _ ≤ _ := mul_le_mul_of_nonneg_left (lcm_weight_sum_le hd) (by positivity)\r\n\r\n/-- This is the actual original-beta outside factor, not an assumed\r\nenergy budget. The diagonal's surviving reciprocal U is explicit. -/\r\ntheorem betaL2_mul_transposed_largeModulusZero_le\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) {D : ℝ} (hD : 0 < D) :\r\n    (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\r\n      ‖d.transposedAtom.commonSmallBetaLargeModulusGCDZeroPart Y D‖ ≤\r\n        8 * |CommonSmoothCutoff.cutoffMass| * d.scale ^ 2 *\r\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\r\n            (1 + Real.log d.physicalFactorCap) ^ 19 * (1 / D + 1 / d.U) := by\r\n  have hU0 : 0 < d.U := zero_lt_one.trans_le hd.1\r\n  have hV0 : 0 ≤ d.V := by linarith [hd.2.1]\r\n  have hHV : 0 ≤ 1 + Real.log (2 * d.V) := by\r\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])]\r\n  have hHC : 0 ≤ 1 + Real.log d.physicalFactorCap := by\r\n    linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]\r\n  calc\r\n    _ ≤ (2 * d.V * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)) *\r\n        (|d.V * CommonSmoothCutoff.cutoffMass| * (4 * d.U ^ 2 / D + 2 * d.U) *\r\n          (1 + Real.log d.physicalFactorCap) ^ 19) :=\r\n      mul_le_mul (mediumAdmissible_beta_norm_sq_sum_le hd)\r\n        (transposed_largeModulusZero_norm_le hd Y hD) (norm_nonneg _) (by positivity)\r\n    _ = |CommonSmoothCutoff.cutoffMass| * d.scale ^ 2 *\r\n        (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\r\n          (1 + Real.log d.physicalFactorCap) ^ 19 * (8 / D + 4 / d.U) := by\r\n      rw [abs_mul, abs_of_nonneg hV0]\r\n      unfold MediumAtom.scale\r\n      field_simp [hD.ne', hU0.ne']\r\n      ring\r\n    _ ≤ _ := by\r\n      have hh : 8 / D + 4 / d.U ≤ 8 * (1 / D + 1 / d.U) := by\r\n        have hi : 0 ≤ 1 / d.U := by positivity\r\n        nlinarith\r\n      convert mul_le_mul_of_nonneg_left hh\r\n        (show 0 ≤ |CommonSmoothCutoff.cutoffMass| * d.scale ^ 2 *\r\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\r\n            (1 + Real.log d.physicalFactorCap) ^ 19 by positivity) using 1 <;> ring\r\n\r\nprivate theorem one_le_scale\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale := by\r\n  unfold MediumAtom.scale\r\n  calc\r\n    1 = (1 : ℝ) * 1 := by norm_num\r\n    _ ≤ d.U * d.V := mul_le_mul hd.1 hd.2.1 zero_le_one (by linarith [hd.1])\r\n\r\nprivate theorem log_bound_from_scale {x z : ℝ} (hx : 0 < x) (hlog : 1 ≤ Real.log x)\r\n    (hz : 0 < z) (hzx : z ≤ 8 * x) :\r\n    1 + Real.log z ≤ (2 + Real.log 8) * Real.log x := by\r\n  have hh := Real.log_le_log hz hzx\r\n  rw [Real.log_mul (by norm_num : (8 : ℝ) ≠ 0) hx.ne'] at hh\r\n  have hp := mul_nonneg\r\n    (show 0 ≤ 1 + Real.log 8 by linarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)])\r\n    (show 0 ≤ Real.log x - 1 by linarith)\r\n  nlinarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\r\n\r\nprivate theorem actual_log_bounds\r\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\r\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\r\n    (hlog : 1 ≤ Real.log d.scale) :\r\n    1 + Real.log (2 * d.V) ≤ (2 + Real.log 8) * Real.log d.scale ∧\r\n      1 + Real.log d.physicalFactorCap ≤ (2 + Real.log 8) * Real.log d.scale := by\r\n  have hx1 := one_le_scale hd\r\n  have hx0 : 0 < d.scale := zero_lt_one.trans_le hx1\r\n  have hVx : d.V ≤ d.scale := le_mul_of_one_le_left (by linarith [hd.2.1]) hd.1\r\n  have hcapx : d.physicalFactorCap ≤ 8 * d.scale :=\r\n    (PairedAlphaDeletion.actual_geometry_bounds hd).2.2.trans\r\n      (mul_le_mul_of_nonneg_left (by\r\n        simpa only [Real.rpow_one] using Real.rpow_le_rpow_of_exponent_le hx1\r\n          (show 1 - 10 * sigma ≤ 1 by linarith)) (by norm_num))\r\n  refine ⟨log_bound_from_scale hx0 hlog (by linarith [hd.2.1]) ?_,\r\n    log_bound_from_scale hx0 hlog (zero_lt_one.trans_le (d.one_le_physicalFactorCap hd)) hcapx⟩\r\n  nlinarith\r\n\r\n/-- A true arbitrary-log payment for the second masked raw zero.\r\nThe one scalar threshold precedes the atom, Y and moving signed residue.\r\nNo whole-W or nonzero-frequency budget is assumed in this theorem. -/\r\ntheorem betaL2_mul_transposed_largeModulusZero_log_payment\r\n    (B : ℕ) (sigma kappa c0 A delta : ℝ) (hsigma : 0 < sigma) (hdelta : 0 < delta) :\r\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\r\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale → ∀ Y : ℝ,\r\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\r\n          ‖d.transposedAtom.commonSmallBetaLargeModulusGCDZeroPart Y (d.scale ^ delta)‖ ≤\r\n            d.scale ^ 2 / Real.log d.scale ^ A := by\r\n  let p : ℕ := (2 ^ B) ^ 2 - 1\r\n  let N : ℕ := p + 19\r\n  let C : ℝ := 2 + Real.log 8\r\n  let E : ℝ := 16 * |CommonSmoothCutoff.cutoffMass| * C ^ N\r\n  let z : ℝ := min sigma delta\r\n  have hz : 0 < z := lt_min hsigma hdelta\r\n  have hC : 1 ≤ C := by dsimp [C]; linarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\r\n  have hE : 0 ≤ E := by dsimp [E]; positivity\r\n  have hevent : ∀ᶠ x : ℝ in atTop,\r\n      E * Real.log x ^ (A + (N : ℝ)) ≤ x ^ z := by\r\n    have hb := ((isLittleO_log_rpow_rpow_atTop (A + (N : ℝ)) hz).const_mul_left E).bound\r\n      (by norm_num : (0 : ℝ) < 1)\r\n    filter_upwards [hb, eventually_ge_atTop (1 : ℝ),\r\n      Real.tendsto_log_atTop.eventually_ge_atTop (1 : ℝ)] with x hx hx1 hlog\r\n    simpa only [Real.norm_eq_abs, one_mul, abs_of_nonneg (by positivity :\r\n      0 ≤ E * Real.log x ^ (A + (N : ℝ))),\r\n      abs_of_nonneg (Real.rpow_nonneg (by linarith : 0 ≤ x) _)] using hx\r\n  obtain ⟨x1, hx1⟩ := eventually_atTop.mp hevent\r\n  obtain ⟨x2, hx2⟩ := eventually_atTop.mp\r\n    (Real.tendsto_log_atTop.eventually_ge_atTop (1 : ℝ))\r\n  refine ⟨max 2 (max x1 x2), lt_of_lt_of_le (by norm_num) (le_max_left _ _),\r\n    fun d hd hx Y ↦ ?_⟩\r\n  have hxScale := one_le_scale hd\r\n  have hx0 : 0 < d.scale := zero_lt_one.trans_le hxScale\r\n  have hU0 : 0 < d.U := zero_lt_one.trans_le hd.1\r\n  have hlog : 1 ≤ Real.log d.scale := hx2 d.scale ((le_max_right x1 x2).trans\r\n    ((le_max_right 2 (max x1 x2)).trans hx))\r\n  have hlog0 : 0 < Real.log d.scale := by linarith\r\n  have hPow : 0 < d.scale ^ z := Real.rpow_pos_of_pos hx0 z\r\n  have hD : 0 < d.scale ^ delta := Real.rpow_pos_of_pos hx0 delta\r\n  have hInv : 1 / d.scale ^ delta + 1 / d.U ≤ 2 / d.scale ^ z := by\r\n    have hzd : d.scale ^ z ≤ d.scale ^ delta :=\r\n      Real.rpow_le_rpow_of_exponent_le hxScale (min_le_right _ _)\r\n    have hzU : d.scale ^ z ≤ d.U :=\r\n      (Real.rpow_le_rpow_of_exponent_le hxScale (min_le_left _ _)).trans\r\n        (PairedAlphaDeletion.actual_geometry_bounds hd).1\r\n    have h1 := div_le_div_of_nonneg_left (by norm_num : (0 : ℝ) ≤ 1) hPow hzd\r\n    have h2 := div_le_div_of_nonneg_left (by norm_num : (0 : ℝ) ≤ 1) hPow hzU\r\n    linarith\r\n  let Q : ℝ := C * Real.log d.scale\r\n  have hQ : 1 ≤ Q := by\r\n    dsimp [Q]\r\n    simpa only [one_mul] using mul_le_mul hC hlog zero_le_one (by linarith : 0 ≤ C)\r\n  have hQ0 : 0 ≤ Q := by linarith\r\n  obtain ⟨hV, hcap⟩ := actual_log_bounds hsigma hd hlog\r\n  change 1 + Real.log (2 * d.V) ≤ Q at hV\r\n  change 1 + Real.log d.physicalFactorCap ≤ Q at hcap\r\n  have hV0 : 0 ≤ 1 + Real.log (2 * d.V) := by\r\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])]\r\n  have hcap0 : 0 ≤ 1 + Real.log d.physicalFactorCap := by\r\n    linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]\r\n  have hLogs : (1 + Real.log (2 * d.V)) ^ p *\r\n      (1 + Real.log d.physicalFactorCap) ^ 19 ≤ Q ^ p * Q ^ 19 :=\r\n    mul_le_mul (pow_le_pow_left₀ hV0 hV p) (pow_le_pow_left₀ hcap0 hcap 19)\r\n      (pow_nonneg hcap0 _) (pow_nonneg hQ0 _)\r\n  have hPay : E * Real.log d.scale ^ N / d.scale ^ z ≤ 1 / Real.log d.scale ^ A := by\r\n    apply (div_le_div_iff₀ hPow (Real.rpow_pos_of_pos hlog0 A)).mpr\r\n    calc\r\n      _ = E * Real.log d.scale ^ (A + (N : ℝ)) := by\r\n        rw [Real.rpow_add hlog0, Real.rpow_natCast]\r\n        ring\r\n      _ ≤ d.scale ^ z := hx1 d.scale ((le_max_left x1 x2).trans\r\n        ((le_max_right 2 (max x1 x2)).trans hx))\r\n      _ = _ := by ring\r\n  have hCoefficient : 0 ≤ 8 * |CommonSmoothCutoff.cutoffMass| * d.scale ^ 2 := by positivity\r\n  calc\r\n    _ ≤ 8 * |CommonSmoothCutoff.cutoffMass| * d.scale ^ 2 *\r\n        (1 + Real.log (2 * d.V)) ^ p *\r\n          (1 + Real.log d.physicalFactorCap) ^ 19 *\r\n            (1 / d.scale ^ delta + 1 / d.U) :=\r\n      betaL2_mul_transposed_largeModulusZero_le hd Y hD\r\n    _ ≤ (8 * |CommonSmoothCutoff.cutoffMass| * d.scale ^ 2) *\r\n        (Q ^ p * Q ^ 19) * (2 / d.scale ^ z) := by\r\n      apply mul_le_mul _ hInv (by positivity) (by positivity)\r\n      simpa only [mul_assoc] using mul_le_mul_of_nonneg_left hLogs hCoefficient\r\n    _ = d.scale ^ 2 * (E * Real.log d.scale ^ N / d.scale ^ z) := by\r\n      rw [← pow_add]\r\n      dsimp only [N, Q, E]\r\n      rw [mul_pow]\r\n      ring\r\n    _ ≤ d.scale ^ 2 * (1 / Real.log d.scale ^ A) :=\r\n      mul_le_mul_of_nonneg_left hPay (sq_nonneg _)\r\n    _ = _ := by ring\r\n\r\nend TransposedModulusGCDZero\r\n\r\nend\r\n\r\nend ImbalancedChen.Part3\r\n",
+    "declaration_count": 24,
+    "definition_count": 7,
+    "all_complete_headers_and_definition_bodies": [
+      {
+        "name": "MediumAtom.commonLargeModulusGCDWeight",
+        "kind": "def",
+        "private": false,
+        "start_line": 34,
+        "complete_source_header": "def MediumAtom.commonLargeModulusGCDWeight (d : MediumAtom) (D : ℝ) (n₁ n₂ : ℕ) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonLargeModulusGCDWeight (d : MediumAtom) (D : ℝ) (n₁ n₂ : ℕ) : ℂ :=\n  ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\n      (if D < ((complexFactorModulus a).gcd (complexFactorModulus b) : ℝ) then\n        (ComplexCRT.constructedProgressionWeight d.commonSmoothCarrier d.commonSmoothWeight\n          d.residue (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ : ℂ) else 0)"
+      },
+      {
+        "name": "MediumAtom.commonLargeModulusGCDZeroWeight",
+        "kind": "def",
+        "private": false,
+        "start_line": 41,
+        "complete_source_header": "def MediumAtom.commonLargeModulusGCDZeroWeight (d : MediumAtom) (D : ℝ) (n₁ n₂ : ℕ) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonLargeModulusGCDZeroWeight (d : MediumAtom) (D : ℝ) (n₁ n₂ : ℕ) : ℂ :=\n  ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\n      (if D < ((complexFactorModulus a).gcd (complexFactorModulus b) : ℝ) then\n        ((if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then\n          (d.U / (complexFactorModulus a).lcm (complexFactorModulus b)) *\n            CommonSmoothCutoff.cutoffMass else 0 : ℝ) : ℂ) else 0)"
+      },
+      {
+        "name": "MediumAtom.commonModulusGCDNonzeroWeight",
+        "kind": "def",
+        "private": false,
+        "start_line": 49,
+        "complete_source_header": "def MediumAtom.commonModulusGCDNonzeroWeight (d : MediumAtom) (D : ℝ) (large : Bool)\n    (n₁ n₂ : ℕ) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonModulusGCDNonzeroWeight (d : MediumAtom) (D : ℝ) (large : Bool)\n    (n₁ n₂ : ℕ) : ℂ :=\n  ∑ a ∈ d.complexFactorLabels, ∑ b ∈ d.complexFactorLabels,\n    d.complexFactorGamma a * star (d.complexFactorGamma b) *\n      (if decide (D < ((complexFactorModulus a).gcd (complexFactorModulus b) : ℝ)) = large then\n        ((if ComplexCRT.Compatible (complexFactorModulus a) (complexFactorModulus b) n₁ n₂ then\n          (∑' h : ℤ, CommonSmoothCutoff.poissonNonzeroFrequency\n            (d.U / (complexFactorModulus a).lcm (complexFactorModulus b))\n            ((ComplexCRT.residue (complexFactorModulus a) (complexFactorModulus b)\n              n₁ n₂ d.residue : ℝ) /\n                (complexFactorModulus a).lcm (complexFactorModulus b)) h).re else 0 : ℝ) : ℂ)\n      else 0)"
+      },
+      {
+        "name": "MediumAtom.commonSmallBetaLargeModulusGCDW",
+        "kind": "def",
+        "private": false,
+        "start_line": 62,
+        "complete_source_header": "def MediumAtom.commonSmallBetaLargeModulusGCDW (d : MediumAtom) (Y D : ℝ) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonSmallBetaLargeModulusGCDW (d : MediumAtom) (Y D : ℝ) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then 0 else\n      d.beta n₁ * star (d.beta n₂) * d.commonLargeModulusGCDWeight D n₁ n₂"
+      },
+      {
+        "name": "MediumAtom.commonSmallBetaLargeModulusGCDZeroPart",
+        "kind": "def",
+        "private": false,
+        "start_line": 67,
+        "complete_source_header": "def MediumAtom.commonSmallBetaLargeModulusGCDZeroPart (d : MediumAtom) (Y D : ℝ) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonSmallBetaLargeModulusGCDZeroPart (d : MediumAtom) (Y D : ℝ) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then 0 else\n      d.beta n₁ * star (d.beta n₂) * d.commonLargeModulusGCDZeroWeight D n₁ n₂"
+      },
+      {
+        "name": "MediumAtom.commonSmallBetaModulusGCDNonzeroPart",
+        "kind": "def",
+        "private": false,
+        "start_line": 72,
+        "complete_source_header": "def MediumAtom.commonSmallBetaModulusGCDNonzeroPart (d : MediumAtom) (Y D : ℝ)\n    (large : Bool) : ℂ",
+        "complete_source_definition": "def MediumAtom.commonSmallBetaModulusGCDNonzeroPart (d : MediumAtom) (Y D : ℝ)\n    (large : Bool) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then 0 else\n      d.beta n₁ * star (d.beta n₂) * d.commonModulusGCDNonzeroWeight D large n₁ n₂"
+      },
+      {
+        "name": "MediumAtom.smallBetaCompatiblePairMass",
+        "kind": "def",
+        "private": false,
+        "start_line": 79,
+        "complete_source_header": "def MediumAtom.smallBetaCompatiblePairMass (d : MediumAtom) (Y : ℝ) (q r : ℕ) : ℂ",
+        "complete_source_definition": "def MediumAtom.smallBetaCompatiblePairMass (d : MediumAtom) (Y : ℝ) (q r : ℕ) : ℂ :=\n  ∑ n₁ ∈ d.betaCarrier, ∑ n₂ ∈ d.betaCarrier,\n    if Y < (n₁.gcd n₂ : ℝ) then 0 else\n      if ComplexCRT.Compatible q r n₁ n₂ then d.beta n₁ * star (d.beta n₂) else 0"
+      },
+      {
+        "name": "factor_modulus_pos",
+        "kind": "theorem",
+        "private": true,
+        "start_line": 86,
+        "complete_source_header": "private theorem factor_modulus_pos\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {a : ℕ × ℕ × ℕ}\n    (ha : a ∈ d.complexFactorLabels) : 0 < complexFactorModulus a"
+      },
+      {
+        "name": "transposed_largeModulusWeight_eq_zero_add_nonzero",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 94,
+        "complete_source_header": "theorem transposed_largeModulusWeight_eq_zero_add_nonzero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (D : ℝ) (n₁ n₂ : ℕ) :\n    d.transposedAtom.commonLargeModulusGCDWeight D n₁ n₂ =\n      d.transposedAtom.commonLargeModulusGCDZeroWeight D n₁ n₂ +\n        d.transposedAtom.commonModulusGCDNonzeroWeight D true n₁ n₂"
+      },
+      {
+        "name": "transposed_smallBeta_largeModulusW_eq_zero_add_nonzero",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 132,
+        "complete_source_header": "theorem transposed_smallBeta_largeModulusW_eq_zero_add_nonzero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y D : ℝ) :\n    d.transposedAtom.commonSmallBetaLargeModulusGCDW Y D =\n      d.transposedAtom.commonSmallBetaLargeModulusGCDZeroPart Y D +\n        d.transposedAtom.commonSmallBetaModulusGCDNonzeroPart Y D true"
+      },
+      {
+        "name": "smallBeta_nonzero_eq_large_small_modulus",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 151,
+        "complete_source_header": "theorem smallBeta_nonzero_eq_large_small_modulus (d : MediumAtom) (Y D : ℝ) :\n    d.commonSmallBetaGCDNonzeroPart Y =\n      d.commonSmallBetaModulusGCDNonzeroPart Y D true +\n        d.commonSmallBetaModulusGCDNonzeroPart Y D false"
+      },
+      {
+        "name": "transposed_largeModulusNonzero_norm_le_W_add_zero",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 176,
+        "complete_source_header": "theorem transposed_largeModulusNonzero_norm_le_W_add_zero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y D : ℝ) :\n    ‖d.transposedAtom.commonSmallBetaModulusGCDNonzeroPart Y D true‖ ≤\n      ‖d.transposedAtom.commonSmallBetaLargeModulusGCDW Y D‖ +\n        ‖d.transposedAtom.commonSmallBetaLargeModulusGCDZeroPart Y D‖"
+      },
+      {
+        "name": "transposed_centered_identity_with_two_gcd_masks",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 192,
+        "complete_source_header": "theorem transposed_centered_identity_with_two_gcd_masks\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y D : ℝ) :\n    ((∑ n ∈ d.transposedAtom.commonSmoothCarrier,\n      d.transposedAtom.commonSmoothWeight n * ‖d.transposedAtom.complexCenteredRow n‖ ^ 2 : ℝ) : ℂ) =\n      (d.transposedAtom.complexCRTSmoothZeroPart -\n        2 * (d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) +\n        (d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ)) +\n        (d.transposedAtom.commonLargeBetaGCDNonzeroPart Y +\n          (d.transposedAtom.commonSmallBetaModulusGCDNonzeroPart Y D true +\n            d.transposedAtom.commonSmallBetaModulusGCDNonzeroPart Y D false))"
+      },
+      {
+        "name": "transposed_beta_norm_le_one",
+        "kind": "theorem",
+        "private": true,
+        "start_line": 208,
+        "complete_source_header": "private theorem transposed_beta_norm_le_one\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\n    ‖d.transposedAtom.beta n‖ ≤ 1"
+      },
+      {
+        "name": "transposed_betaCarrier_modEq_card_le",
+        "kind": "theorem",
+        "private": true,
+        "start_line": 222,
+        "complete_source_header": "private theorem transposed_betaCarrier_modEq_card_le\n    {d : MediumAtom} (hU : 1 ≤ d.U) {delta : ℕ} (hdelta : 0 < delta) (b : ℕ) :\n    ((d.transposedAtom.betaCarrier.filter (fun n : ℕ ↦ Nat.ModEq delta n b)).card : ℝ) ≤\n      2 * d.U / delta + 1"
+      },
+      {
+        "name": "transposed_compatiblePairMass_norm_le",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 236,
+        "complete_source_header": "theorem transposed_compatiblePairMass_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) {q r : ℕ}\n    (hdelta : 0 < q.gcd r) :\n    ‖d.transposedAtom.smallBetaCompatiblePairMass Y q r‖ ≤\n      2 * d.U * (2 * d.U / (q.gcd r : ℝ) + 1)"
+      },
+      {
+        "name": "transposed_largeModulusZero_eq_grouped",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 284,
+        "complete_source_header": "theorem transposed_largeModulusZero_eq_grouped\n    (d : MediumAtom) (Y D : ℝ) :\n    d.transposedAtom.commonSmallBetaLargeModulusGCDZeroPart Y D =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        d.groupedFactorGamma q * star (d.groupedFactorGamma r) *\n          (if D < (q.gcd r : ℝ) then\n            ((d.V / (q.lcm r : ℝ)) * CommonSmoothCutoff.cutoffMass : ℝ) *\n              d.transposedAtom.smallBetaCompatiblePairMass Y q r else 0)"
+      },
+      {
+        "name": "lcm_weight_sum_le",
+        "kind": "theorem",
+        "private": true,
+        "start_line": 342,
+        "complete_source_header": "private theorem lcm_weight_sum_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖d.groupedFactorGamma q‖ * ‖d.groupedFactorGamma r‖ / (q.lcm r : ℝ)) ≤\n        (1 + Real.log d.physicalFactorCap) ^ 19"
+      },
+      {
+        "name": "transposed_largeModulusZero_norm_le",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 364,
+        "complete_source_header": "theorem transposed_largeModulusZero_norm_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) {D : ℝ} (hD : 0 < D) :\n    ‖d.transposedAtom.commonSmallBetaLargeModulusGCDZeroPart Y D‖ ≤\n      |d.V * CommonSmoothCutoff.cutoffMass| * (4 * d.U ^ 2 / D + 2 * d.U) *\n        (1 + Real.log d.physicalFactorCap) ^ 19"
+      },
+      {
+        "name": "betaL2_mul_transposed_largeModulusZero_le",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 413,
+        "complete_source_header": "theorem betaL2_mul_transposed_largeModulusZero_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y : ℝ) {D : ℝ} (hD : 0 < D) :\n    (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n      ‖d.transposedAtom.commonSmallBetaLargeModulusGCDZeroPart Y D‖ ≤\n        8 * |CommonSmoothCutoff.cutoffMass| * d.scale ^ 2 *\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n            (1 + Real.log d.physicalFactorCap) ^ 19 * (1 / D + 1 / d.U)"
+      },
+      {
+        "name": "one_le_scale",
+        "kind": "theorem",
+        "private": true,
+        "start_line": 449,
+        "complete_source_header": "private theorem one_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale"
+      },
+      {
+        "name": "log_bound_from_scale",
+        "kind": "theorem",
+        "private": true,
+        "start_line": 457,
+        "complete_source_header": "private theorem log_bound_from_scale {x z : ℝ} (hx : 0 < x) (hlog : 1 ≤ Real.log x)\n    (hz : 0 < z) (hzx : z ≤ 8 * x) :\n    1 + Real.log z ≤ (2 + Real.log 8) * Real.log x"
+      },
+      {
+        "name": "actual_log_bounds",
+        "kind": "theorem",
+        "private": true,
+        "start_line": 467,
+        "complete_source_header": "private theorem actual_log_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    (hlog : 1 ≤ Real.log d.scale) :\n    1 + Real.log (2 * d.V) ≤ (2 + Real.log 8) * Real.log d.scale ∧\n      1 + Real.log d.physicalFactorCap ≤ (2 + Real.log 8) * Real.log d.scale"
+      },
+      {
+        "name": "betaL2_mul_transposed_largeModulusZero_log_payment",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 488,
+        "complete_source_header": "theorem betaL2_mul_transposed_largeModulusZero_log_payment\n    (B : ℕ) (sigma kappa c0 A delta : ℝ) (hsigma : 0 < sigma) (hdelta : 0 < delta) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale → ∀ Y : ℝ,\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n          ‖d.transposedAtom.commonSmallBetaLargeModulusGCDZeroPart Y (d.scale ^ delta)‖ ≤\n            d.scale ^ 2 / Real.log d.scale ^ A"
+      }
+    ]
+  },
+  "author_report": {
+    "historical_old_self_report": "20261016-transposed-modulus-gcd-zero-self-scope.json",
+    "historical_report_not_overwritten_by_reviewer": true,
+    "historical_old_self_report_sha256": "29014bfd6830614a88f36822b71dc9227a697cf30d1b60ce9f4374e8f5586022",
+    "path": "20261016-transposed-modulus-gcd-zero-api-repair-self-scope.json",
+    "sha256": "403253a97607496afbc4c10babf389733c70d46fb0fdbc8634e82c99cd52f87a"
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3PairedAlphaDeletion",
+    "ImbalancedChen.Part3TransposedGCDPoissonMask"
+  ],
+  "current_parent_snapshots": [
+    {
+      "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+      "current_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "direct_imports": [
+        "ImbalancedChen.Part3SignedDivisorDeletion",
+        "ImbalancedChen.Part3TransposedDispersion"
+      ]
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedGCDPoissonMask",
+      "current_sha256": "9d41c0858ea52223240405a003fdab49b3fbc9bcf6f8dd84c0a32a96a5295584",
+      "direct_imports": [
+        "ImbalancedChen.Part3TransposedZeroCovariance",
+        "ImbalancedChen.Part3SignedDivisorDeletion"
+      ]
+    }
+  ],
+  "author_parent_snapshots_at_freeze": [
+    {
+      "path": "ImbalancedChen/Part3PairedAlphaDeletion.lean",
+      "sha256": "d4f7f6211120148bd9fe10c12cd85549b536b8feea6f7d2f896de31db8a6e912",
+      "status": "actual runtime owned gate not inferred from source review"
+    },
+    {
+      "path": "ImbalancedChen/Part3TransposedGCDPoissonMask.lean",
+      "sha256": "9d41c0858ea52223240405a003fdab49b3fbc9bcf6f8dd84c0a32a96a5295584",
+      "status": "actual runtime owned gate not inferred from source review"
+    }
+  ],
+  "parent_proof_only_rebind_addendum": {
+    "no_runtime_owned_status_inferred": true,
+    "Alpha_author_d4f_to_current9a0": "The sole Nat-power versus Real-power proof repair changes no API/types/definitions. Full exact independent rebind report 20261016-paired-alpha-deletion-third-diagnostic-independent-rebind.json SHAa7eca6457a09e438ca5ac732605c7e01910467ceeee96076e1e9f7826fe01c61 freshly binds current9a0.",
+    "Mask_current9d4": "Already independently source-rebound in 20261016-transposed-gcd-poisson-mask-first-diagnostic-independent-rebind.json SHA16a70ae76f90c55fdc8891bd39cb2f2053ede0bf593bece84b4e2ee96261a1f3."
+  },
+  "sourceDAG_delta": {
+    "basis": "Exact current local Alpha9a0 and Mask9d4 parent source unions; only these two local modules are imported. Their proof-only type-stable rebinds add no foreign nodes.",
+    "local_module_delta": 1,
+    "added_local_modules": [
+      "ImbalancedChen.Part3TransposedModulusGCDZero"
+    ],
+    "added_foreign_modules": [],
+    "foreign_module_delta": 0,
+    "full_tree_rescanned": false
+  },
+  "pin_snapshots": [
+    {
+      "current_frozen_hash_matches": true,
+      "path": "lean-toolchain",
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef"
+    },
+    {
+      "current_frozen_hash_matches": true,
+      "path": "lakefile.toml",
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254"
+    },
+    {
+      "current_frozen_hash_matches": true,
+      "path": "lake-manifest.json",
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+    }
+  ],
+  "seven_definition_review": [
+    "commonLargeModulusGCDWeight is the full actual constructed-progression factor-label convolution under strict D<gcd(q,r).",
+    "commonLargeModulusGCDZeroWeight uses the SAME physical mask, compatibility, original gamma pair, complete physical lcm and local scalar (original V/lcm)*cutoffMass after transposition.",
+    "commonModulusGCDNonzeroWeight keeps the entire nonzero-frequency series and original constructed signed CRT root phase. Bool=true is D<gcd(q,r), Bool=false its literal complementary branch.",
+    "commonSmallBetaLargeModulusGCDW and commonSmallBetaLargeModulusGCDZeroPart share the same ordered actual beta pair and gcd(n1,n2)<=Y gate, including equality.",
+    "commonSmallBetaModulusGCDNonzeroPart retains that same pair gate and Bool physical-gcd selector. False therefore keeps BOTH gcd coordinates small.",
+    "smallBetaCompatiblePairMass is the actual signed beta(n1)*star beta(n2) sum with the same pair gate and true compatibility, BEFORE norm. Neither diagonal nor zero difference is removed."
+  ],
+  "complete_mathematical_and_API_review": [
+    {
+      "sites": "factor_modulus_pos; transposed_largeModulusWeight_eq_zero_add_nonzero",
+      "assessment": "Original physical support proves complete moduli and lcm positive. The owned actual finite progression Poisson identity is used at original V with its actual common carrier/support and original constructed signed residue. Under the same physical and compatibility masks, whole kernel equals actual raw zero plus the complete signed Fourier kernel. No frequency/root phase is discarded."
+    },
+    {
+      "sites": "transposed_smallBeta_largeModulusW_eq_zero_add_nonzero; smallBeta_nonzero_eq_large_small_modulus",
+      "assessment": "Finite Fubini/branch algebra insert exactly the same pair gcd<=Y gate into W/zero/fullNZ and partition the existing small-pair full Fourier object by Bool true/false physical masks. These exact identities hold for all real Y,D."
+    },
+    {
+      "sites": "transposed_largeModulusNonzero_norm_le_W_add_zero; transposed_centered_identity_with_two_gcd_masks",
+      "assessment": "The full masked nonzero term is explicitly W minus raw zero, then norm_sub_le. The centered identity retains literal rawzero-2V+U and all three complete signed Fourier pieces. The whole-W norm remains an OPEN displayed obligation, not silently paid by raw zero."
+    },
+    {
+      "sites": "transposed_beta_norm_le_one; transposed_betaCarrier_modEq_card_le",
+      "assessment": "The actual transposed beta is original alpha on its own carrier and zero elsewhere, so original hd gives its norm<=1. The elementary AP counter changes only a temporary record residue to b and uses product multiplier 1. Its required V>=1 is original U>=1; it does not assert a false transposed or temporary-record admissibility."
+    },
+    {
+      "sites": "transposed_compatiblePairMass_norm_le",
+      "assessment": "Fresh actual Compatible q r n1 n2 definition is n1.Coprime q AND n2.Coprime r AND Nat.ModEq(gcd q r)n1 n2. The third conjunct is retained until the actual congruent-pair count. Norming the signed pair sum gives at most actual carrier.card*(2U/delta+1)<=2U*(2U/delta+1). Only this upper inequality enlarges the pair-gcd gate. The surviving O(U) diagonal is explicitly kept; no divisor set of a zero difference appears."
+    },
+    {
+      "sites": "transposed_largeModulusZero_eq_grouped",
+      "assessment": "The COMPLETE physical Gamma convolution is grouped exactly before norms, with the same strict gcd mask, original V/lcm local scalar and actual signed compatible-pair mass. Finite rearrangement retains original alpha zero-padding, all labels and original signed residue."
+    },
+    {
+      "sites": "lcm_weight_sum_le",
+      "assessment": "The already proved tau3 fibre majorant for actual grouped Gamma is consumed by fixed native sum_abs_lcm_weight_le_log at j=3, giving Hcap^(2*9+1)=Hcap^19. Absolute values are removed only from an explicitly nonnegative REAL norm-product/lcm summand; no gamma one-bound or multiplicity-one assumption is used."
+    },
+    {
+      "sites": "transposed_largeModulusZero_norm_le",
+      "assessment": "At delta>D>0, reciprocal monotonicity gives the genuine count <=4U²/D+2U. The whole same-mask raw zero therefore has norm <=|V*local mass|*(4U²/D+2U)*Hcap^19, uniformly for arbitrary real Y. This is exactly a raw-zero bound."
+    },
+    {
+      "sites": "betaL2_mul_transposed_largeModulusZero_le",
+      "assessment": "Actual ORIGINAL betaL2<=2V*HV^p, p=((2^B)^2-1), multiplies the raw-zero bound. X=UV gives exact coefficients 8/D+4/U, then <=8*(1/D+1/U). Thus the displayed endpoint is 8|local mass|X² HV^p Hcap^19(1/D+1/U). The diagonal reciprocal U is not suppressed."
+    },
+    {
+      "sites": "one_le_scale; log_bound_from_scale; actual_log_bounds",
+      "assessment": "Original U,V>=1 imply X>=1,V<=X. Original geometry gives cap<=8X^(1-10sigma)<=8X when sigma>0. For logX>=1, the explicit nonnegative product (1+log8)*(logX-1) proves both actual log bases <=(2+log8)logX."
+    },
+    {
+      "sites": "betaL2_mul_transposed_largeModulusZero_log_payment",
+      "assessment": "Choose D=X^delta with delta>0 and z=min(sigma,delta)>0. The derived original U>=X^sigma implies 1/D+1/U<=2/X^z. For N=p+19 and E=16|local mass|(2+log8)^N, arbitrary-real log little-o gives E(logX)^(A+N)<=X^z beyond ONE threshold chosen before d, moving signed residue AND every real Y. Positive-denominator cross multiplication and exact rpow addition pay the full actual outside-betaL2 same-mask raw-zero norm by X²/(logX)^A. There is no SW, remaining-budget, residue-nonzero or stronger sigma premise."
+    }
+  ],
+  "fixed_supplier_snapshots": {
+    "compatibility": "Part3ComplexCRTConsumer.lean:81 current source read",
+    "little_o": "Fixed Mathlib Pow/Asymptotics.lean:371 permits arbitrary real log exponent A+N and requires only positive z; all explicit eventual scalar arguments are present.",
+    "elementary_counter": "Current Alpha9a0 betaCarrier_progression_card_le full header and proof-only rebind read; takes hV,q-positive,n.Coprime q only.",
+    "geometry": "Current Alpha9a0 actual_geometry_bounds derives X^sigma<=U and cap<=8X^(1-10sigma) from hd, with no transposed admissibility.",
+    "lcm_weight": {
+      "interface": "sum_abs_lcm_weight_le_log(j,hL,Q,hQ,c,hc) gives exponent2*j^2+1",
+      "line": 107,
+      "j": 3,
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LcmWeightBounds.lean",
+      "sha256": "6be009d9f4d15468db14dca03434e22259f1d26fe137005f888c76227c1d74ea"
+    }
+  },
+  "initial_findings_and_exact_repair": {
+    "only_changed_proof_declarations": [
+      "lcm_weight_sum_le",
+      "transposed_largeModulusZero_norm_le"
+    ],
+    "imports_math_domains_and_thresholds_unchanged": true,
+    "findings": [
+      "The inherited convert proof omitted the separate Hcap^19=Hcap^(2*3^2+1) exponent goal diagnosed in actual Mask.",
+      "The inherited abs_of_nonneg natural-lcm witness had an ambiguous scalar type diagnosed in actual Mask; explicit Real typing is necessary."
+    ],
+    "old_source_snapshot": ".lake\\proof-continuation\\source-reviews\\drafts\\Part3TransposedModulusGCDZero.d3f7fef60e4368e636a6591beee78265c6dbf5f7a877532d0de416f266559f45.lean",
+    "all_24_header_7_definition_comparisons": [
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "MediumAtom.commonLargeModulusGCDWeight"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "MediumAtom.commonLargeModulusGCDZeroWeight"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "MediumAtom.commonModulusGCDNonzeroWeight"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "MediumAtom.commonSmallBetaLargeModulusGCDW"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "MediumAtom.commonSmallBetaLargeModulusGCDZeroPart"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "MediumAtom.commonSmallBetaModulusGCDNonzeroPart"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "MediumAtom.smallBetaCompatiblePairMass"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "factor_modulus_pos"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "transposed_largeModulusWeight_eq_zero_add_nonzero"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "transposed_smallBeta_largeModulusW_eq_zero_add_nonzero"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "smallBeta_nonzero_eq_large_small_modulus"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "transposed_largeModulusNonzero_norm_le_W_add_zero"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "transposed_centered_identity_with_two_gcd_masks"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "transposed_beta_norm_le_one"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "transposed_betaCarrier_modEq_card_le"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "transposed_compatiblePairMass_norm_le"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "transposed_largeModulusZero_eq_grouped"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "lcm_weight_sum_le"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "transposed_largeModulusZero_norm_le"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "betaL2_mul_transposed_largeModulusZero_le"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "one_le_scale"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "log_bound_from_scale"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "actual_log_bounds"
+      },
+      {
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "name": "betaL2_mul_transposed_largeModulusZero_log_payment"
+      }
+    ],
+    "related_actual_Mask_run": ".lake/proof-continuation/runs/20261015T212514301325Z-ImbalancedChen.Part3TransposedGCDPoissonMask/stdout.log",
+    "related_complete_stdout_read": true,
+    "all_identified_source_API_issues_resolved": true,
+    "resolution": "Current6d79 explicitly proves Real norm-product/lcm nonnegativity in the first convert branch, norm_num in the numerical exponent branch, and gives a typed Real lcm nonnegativity witness in the raw-zero absolute-value step.",
+    "old_source_sha256": "d3f7fef60e4368e636a6591beee78265c6dbf5f7a877532d0de416f266559f45",
+    "old_complete_source_and_all_proofs_reviewed": true,
+    "current_leaf_has_not_been_run_by_reviewer": true,
+    "owner_notified_before_modifying_candidate": true
+  },
+  "exact_bidirectional_repair_certificate": {
+    "all_checks_pass": true,
+    "literal_edits_preserving_original_CRLF": [
+      {
+        "old": "  convert hh using 1\r\n  apply Finset.sum_congr rfl\r\n  intro q _\r\n  apply Finset.sum_congr rfl\r\n  intro r _\r\n  exact (abs_of_nonneg (by positivity)).symm",
+        "new": "  convert hh using 1\r\n  · apply Finset.sum_congr rfl\r\n    intro q _\r\n    apply Finset.sum_congr rfl\r\n    intro r _\r\n    exact (abs_of_nonneg (div_nonneg\r\n      (mul_nonneg (norm_nonneg _) (norm_nonneg _))\r\n      (show (0 : ℝ) ≤ (q.lcm r : ℝ) from Nat.cast_nonneg (q.lcm r)))).symm\r\n  · norm_num",
+        "occurrences": 1
+      },
+      {
+        "old": "abs_of_nonneg (Nat.cast_nonneg (q.lcm r))",
+        "new": "abs_of_nonneg\r\n            (show (0 : ℝ) ≤ (q.lcm r : ℝ) from Nat.cast_nonneg (q.lcm r))",
+        "occurrences": 1
+      }
+    ],
+    "forward_d3f7_to_6d79": {
+      "byte_for_byte_equal_current": true,
+      "reconstructed_sha256": "6d79ab1c6d41c00f1a7f06d59bb683e36004dfbbf71794746fe85c90f20b9eb5"
+    },
+    "in_memory_only": true,
+    "inverse_6d79_to_exact_d3f7": {
+      "byte_for_byte_equal_exact_old": true,
+      "reconstructed_sha256": "d3f7fef60e4368e636a6591beee78265c6dbf5f7a877532d0de416f266559f45"
+    }
+  },
+  "quantifier_and_target_scope": {
+    "local_cutoffMass_not_replaced": true,
+    "actual_original_alpha_complex_Gamma_full_physical_carriers_signed_residue_preserved": true,
+    "all_24_complete_headers_7_definitions_17_proofs_captured_and_reviewed": true,
+    "all_real_A": true,
+    "same_mask_raw_zero_paid": true,
+    "only_displayed_original_hd_sigma_positive_delta_positive_gates": true,
+    "RestrictedMediumTarget_completed": false,
+    "same_mask_full_nonzero_paid": false,
+    "both_small_full_Fourier_paid": false,
+    "remaining": [
+      "Pay actual whole W under this small-pair/large-physical mask; its norm remains in the exact Fourier norm inequality.",
+      "The same-mask full signed nonzero Fourier payment does not follow from raw zero alone.",
+      "Both-small gcd/root+slow-phase estimates, remaining coordinates and the original full distribution target remain open."
+    ],
+    "diagonal_OU_and_reciprocal_U_retained_and_paid": true,
+    "same_mask_whole_W_paid": false,
+    "single_threshold_before_d_Y_signed_residue": true
+  },
+  "source_checks": {
+    "issues_identified": [],
+    "no_limit_or_linter_change": true,
+    "no_placeholder_axiom_or_opaque": true
+  },
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "written_artifacts_only": [
+      ".lake/proof-continuation/source-reviews/20261016-transposed-modulus-gcd-zero-independent-scope.json"
+    ],
+    "bootstrap_invoked": false,
+    "axiom_audit_performed": false,
+    "reviewer_modified_author_or_owned_source": false,
+    "pins_checkers_limits_modified": false,
+    "publication_freeze_and_historical_report_immutability_respected": true,
+    "full_tree_rescanned": false,
+    "kernel_replay_performed": false,
+    "runtime_pass_or_ownership_claimed": false,
+    "lake_invoked": false,
+    "build_invoked": false
+  },
+  "remaining_runtime_gate": "Root/runtime owner must bind and accept the exact current parent chain and specifically authorize bounded validation of current6d79. Source-only approval neither compiles this new leaf nor pays its open whole-W/full-NZ obligation."
+}

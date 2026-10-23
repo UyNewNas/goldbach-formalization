@@ -1,0 +1,294 @@
+{
+  "status": "OFFDIAG_E3AC_FRESH177_FOUR_LITERAL_REBASE_PROPOSAL_WRAPPER_UNCHANGED_UNEXECUTED_HOLD",
+  "created_utc": "2026-10-21T17:17:16.394641+00:00",
+  "target": "ImbalancedChen.Part3ResonanceOffDiagonalCount",
+  "source_sha256": "e3acf8800f2d95539193b809c59408ed4684358887d1086f6d223d3a0791e595",
+  "authorization": "Root authorized preparation only: preparedfresh176 ->177 four complete-line literals, full diff/raw inverse/AST guard proof, and full existing wrapper shape review. No pipeline/proper/classifier/compiler/checker/census/Git execution.",
+  "root_reported_state": {
+    "published_HEAD": "c714053",
+    "owned_modules": 177,
+    "complete_serialized_declarations": 4094,
+    "original_owned_receipts": 125,
+    "Git_not_independently_inspected": true
+  },
+  "accepted177_binding": {
+    "root_acceptance": {
+      "path": "source-reviews/20261022-k-frontier6d68-root-actual25-terminal-acceptance.json",
+      "sha256": "2ec41f8e72af3e9506ab0027f144b59512394dc8082a9dc80db33ad11ac9a6a8",
+      "bytes": 1964
+    },
+    "baseline": {
+      "path": "source-reviews/20261021T165705432839Z-k-frontier6d68-fresh-baseline176-runtime-fresh-current-terminal-owned-census.json",
+      "sha256": "b13baaa7fa453b58060a75d9d7d158fdfd5875cf97f0a5955dbf0af1a1b050dc",
+      "bytes": 122251
+    },
+    "previous176_baseline": {
+      "path": "source-reviews/20261021T163544748358Z-generalDc165-baseline175-runtime-fresh-current-terminal-owned-census.json",
+      "sha256": "27012c3c6d8e9a4648ccc8aa263aeaf3951e730c11513a49c22bc14eea0fe47f",
+      "bytes": 121505
+    },
+    "all_previous176_entries_deep_exact": true,
+    "sole_added_module": "ImbalancedChen.FirstExitAdmittedFrontierTuples",
+    "accepted_added_actual_declarations": 25,
+    "Offdiag_not_yet_owned": true,
+    "static_JSON_comparison_only_no_global_census_executed": true
+  },
+  "proposal": {
+    "path": "rounds/20261022-offdiage3ac-owned-census-fresh177-proposal.py",
+    "sha256": "253f2f777b9f8a74769f01b7c80daa8a632f4cfe8cba8c8924f1729ee02b5a47",
+    "bytes": 6686,
+    "old_artifact": {
+      "path": "rounds/20261022-offdiage3ac-owned-census-fresh176-proposal.py",
+      "sha256": "87cd2dc8086c7ca56aaa85fda705ebda1acb38c5812190a5fdeb1f0251d841b4",
+      "bytes": 6678
+    },
+    "diff": {
+      "path": "rounds/20261022-offdiage3ac-owned-census-fresh177-proposal.diff",
+      "sha256": "740c7076f286dc256802fefca6cbbbdfb301ba9139b1437a331102d59b4c1cbe",
+      "bytes": 1860
+    },
+    "raw_inverse": {
+      "path": "rounds/20261022-offdiage3ac-owned-census-fresh177-proposal.raw-inverse.json",
+      "sha256": "6a952e3ed3d0f496fa3796fa59e6bcf9a83dac6635a4fe8b040895890ec60b71",
+      "bytes": 4717
+    },
+    "full_script_utf8": "\"\"\"Rehash the known accepted sources and at most one explicitly audited leaf.\n\nThis performs no compiler invocation or imported-closure replay.\n\"\"\"\nfrom pathlib import Path\nimport argparse\nimport datetime\nimport hashlib\nimport json\n\nSTATE = Path(__file__).resolve().parent.parent\nROOT = STATE.parents[1]\nBASE = STATE / 'source-reviews/20261021T165705432839Z-k-frontier6d68-fresh-baseline176-runtime-fresh-current-terminal-owned-census.json'\nBASE_SHA = 'b13baaa7fa453b58060a75d9d7d158fdfd5875cf97f0a5955dbf0af1a1b050dc'\nMODULE = 'ImbalancedChen.Part3ResonanceOffDiagonalCount'\nSOURCE_SHA = 'e3acf8800f2d95539193b809c59408ed4684358887d1086f6d223d3a0791e595'\n\n\ndef sha(p):\n    return hashlib.sha256(Path(p).read_bytes()).hexdigest()\n\n\ndef read(p):\n    return json.loads(Path(p).read_text(encoding='utf-8'))\n\n\ndef resolve(value):\n    value = str(value).replace('\\\\', '/')\n    if value.startswith('E:/'):\n        value = '/mnt/e/' + value[3:]\n    elif value.startswith('//wsl.localhost/Debian/'):\n        value = '/' + value[len('//wsl.localhost/Debian/'):]\n    result = Path(value)\n    return result if result.is_absolute() else ROOT / result\n\n\ndef main():\n    parser = argparse.ArgumentParser()\n    parser.add_argument('--new-owned-receipt')\n    args = parser.parse_args()\n    assert sha(BASE) == BASE_SHA\n    modules = dict(read(BASE)['modules'])\n    assert len(modules) == 177\n    if args.new_owned_receipt:\n        rp = resolve(args.new_owned_receipt)\n        receipt = read(rp)\n        assert receipt['status'] == 'PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS'\n        assert receipt['targets'] == {MODULE: SOURCE_SHA}\n        assert receipt['inputs_before'] == receipt['inputs_after']\n        assert not receipt['external_closure_replay_claimed'] and not receipt['unconditional_main_claimed']\n        dp = rp.parent / 'declarations.json'\n        records = [r for r in read(dp) if r['module'] == MODULE]\n        assert len(records) == receipt['declaration_counts'][MODULE]\n        modules[MODULE] = {\n            'module': MODULE, 'source_sha256': SOURCE_SHA,\n            'object_parts': receipt['inputs_before']['owned_object_parts'][MODULE],\n            'owned_receipt': str(rp), 'owned_receipt_sha256': sha(rp),\n            'declarations_json_sha256': sha(dp), 'complete_serialized_declarations': len(records)}\n    receipts = {}\n    declarations = {}\n    inventories = {}\n    total = 0\n    for module, entry in modules.items():\n        assert sha(ROOT / (module.replace('.', '/') + '.lean')) == entry['source_sha256']\n        for extension, digest in entry['object_parts'].items():\n            assert sha(STATE / 'lib/lean' / (module.replace('.', '/') + extension)) == digest\n        rp = resolve(entry['owned_receipt'])\n        assert sha(rp) == entry['owned_receipt_sha256']\n        key = str(rp)\n        if key not in receipts:\n            receipt = read(rp)\n            assert receipt['status'] == 'PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS'\n            assert receipt['inputs_before'] == receipt['inputs_after']\n            assert not receipt['external_closure_replay_claimed'] and not receipt['unconditional_main_claimed']\n            receipts[key] = receipt\n            dp = rp.parent / 'declarations.json'\n            declarations[key] = read(dp)\n            log = rp.parent / 'declarations.log'\n            inventory_stage = [s for s in receipt['stages'] if s['kind'] == 'full_inventory_type_axioms']\n            assert len(inventory_stage) == 1 and inventory_stage[0]['exit_code'] == 0\n            assert sha(log) == inventory_stage[0]['log_sha256']\n            inventory = {}\n            for line in log.read_text(encoding='utf-8').splitlines():\n                if line.startswith('P0_QUEUE_INVENTORY '):\n                    value = json.loads(line.split(' ', 1)[1])\n                    assert value['module'] not in inventory\n                    inventory[value['module']] = value\n            inventories[key] = inventory\n        receipt = receipts[key]\n        assert receipt['targets'][module] == entry['source_sha256']\n        assert receipt['inputs_before']['owned_object_parts'][module] == entry['object_parts']\n        stock = [s for s in receipt['stages'] if s['kind'] == 'stock_replay' and s['module'] == module]\n        assert len(stock) == 1 and stock[0]['result']['status'] == 'PASS'\n        assert stock[0]['result']['returncode'] == 0\n        assert sha(rp.parent / 'declarations.json') == entry['declarations_json_sha256']\n        records = [r for r in declarations[key] if r['module'] == module]\n        assert len(records) == entry['complete_serialized_declarations'] == receipt['declaration_counts'][module]\n        names = set()\n        for record in records:\n            assert record['name'] not in names\n            names.add(record['name'])\n            assert record['type'] and '\u22ef' not in record['type']\n            assert not record['unsafe'] and not record['partial'] and not record['axiom']\n            assert set(record['axioms']) <= {'propext', 'Classical.choice', 'Quot.sound'}\n        inventory = inventories[key][module]\n        assert len(inventory['serialized']) == len(set(inventory['serialized']))\n        assert len(names) == len(inventory['environment']) == len(set(inventory['environment']))\n        assert sha(rp.parent / ('replay-' + module + '.log')) == stock[0]['result']['log_sha256']\n        assert names == set(inventory['serialized']) == set(inventory['environment'])\n        total += len(records)\n    stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')\n    result = {\n        'status': 'ALL_CURRENT_OWNED_SOURCES_OBJECTS_COMPLETE_TYPES_AXIOMS_EXACT',\n        'created_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),\n        'owned_modules': len(modules), 'complete_serialized_declarations': total,\n        'modules': modules, 'original_owned_receipts_rehashed': len(receipts),\n        'all_generated_serialized_environment_names_match': True,\n        'all_full_types_safety_transitive_three_axioms_checked': True,\n        'external_closure_replayed': False, 'unconditional_main_proved': False,\n        'no_compiler_invoked': True, 'no_cache_mutated': True,\n        'script_sha256': sha(__file__), 'baseline_sha256': BASE_SHA}\n    output = STATE / 'source-reviews' / (stamp + '-offdiage3ac-fresh177-runtime-fresh-current-terminal-owned-census.json')\n    output.write_text(json.dumps(result, indent=2) + '\\n', encoding='utf-8')\n    print(json.dumps({'report': str(output), 'sha256': sha(output), 'owned_modules': len(modules),\n                      'complete_serialized_declarations': total, 'original_owned_receipts': len(receipts)}))\n\n\nif __name__ == '__main__':\n    main()\n",
+    "full_diff_utf8": "--- rounds/20261022-offdiage3ac-owned-census-fresh176-proposal.py\n+++ rounds/20261022-offdiage3ac-owned-census-fresh177-proposal.py\n@@ -10,8 +10,8 @@\n \n STATE = Path(__file__).resolve().parent.parent\n ROOT = STATE.parents[1]\n-BASE = STATE / 'source-reviews/20261021T163544748358Z-generalDc165-baseline175-runtime-fresh-current-terminal-owned-census.json'\n-BASE_SHA = '27012c3c6d8e9a4648ccc8aa263aeaf3951e730c11513a49c22bc14eea0fe47f'\n+BASE = STATE / 'source-reviews/20261021T165705432839Z-k-frontier6d68-fresh-baseline176-runtime-fresh-current-terminal-owned-census.json'\n+BASE_SHA = 'b13baaa7fa453b58060a75d9d7d158fdfd5875cf97f0a5955dbf0af1a1b050dc'\n MODULE = 'ImbalancedChen.Part3ResonanceOffDiagonalCount'\n SOURCE_SHA = 'e3acf8800f2d95539193b809c59408ed4684358887d1086f6d223d3a0791e595'\n \n@@ -40,7 +40,7 @@\n     args = parser.parse_args()\n     assert sha(BASE) == BASE_SHA\n     modules = dict(read(BASE)['modules'])\n-    assert len(modules) == 176\n+    assert len(modules) == 177\n     if args.new_owned_receipt:\n         rp = resolve(args.new_owned_receipt)\n         receipt = read(rp)\n@@ -119,7 +119,7 @@\n         'external_closure_replayed': False, 'unconditional_main_proved': False,\n         'no_compiler_invoked': True, 'no_cache_mutated': True,\n         'script_sha256': sha(__file__), 'baseline_sha256': BASE_SHA}\n-    output = STATE / 'source-reviews' / (stamp + '-offdiage3ac-fresh176-runtime-fresh-current-terminal-owned-census.json')\n+    output = STATE / 'source-reviews' / (stamp + '-offdiage3ac-fresh177-runtime-fresh-current-terminal-owned-census.json')\n     output.write_text(json.dumps(result, indent=2) + '\\n', encoding='utf-8')\n     print(json.dumps({'report': str(output), 'sha256': sha(output), 'owned_modules': len(modules),\n                       'complete_serialized_declarations': total, 'original_owned_receipts': len(receipts)}))\n",
+    "full_raw_inverse": {
+      "original_path": "rounds/20261022-offdiage3ac-owned-census-fresh176-proposal.py",
+      "original_sha256": "87cd2dc8086c7ca56aaa85fda705ebda1acb38c5812190a5fdeb1f0251d841b4",
+      "proposal_path": "rounds/20261022-offdiage3ac-owned-census-fresh177-proposal.py",
+      "proposal_sha256": "253f2f777b9f8a74769f01b7c80daa8a632f4cfe8cba8c8924f1729ee02b5a47",
+      "offset_units": "UTF8 raw byte offsets",
+      "edits": [
+        {
+          "line": 13,
+          "old_start": 304,
+          "old_end": 433,
+          "new_start": 304,
+          "new_end": 441,
+          "old_hex": "42415345203d205354415445202f2027736f757263652d726576696577732f3230323631303231543136333534343734383335385a2d67656e6572616c44633136352d626173656c696e653137352d72756e74696d652d66726573682d63757272656e742d7465726d696e616c2d6f776e65642d63656e7375732e6a736f6e270a",
+          "new_hex": "42415345203d205354415445202f2027736f757263652d726576696577732f3230323631303231543136353730353433323833395a2d6b2d66726f6e74696572366436382d66726573682d626173656c696e653137362d72756e74696d652d66726573682d63757272656e742d7465726d696e616c2d6f776e65642d63656e7375732e6a736f6e270a",
+          "expected_old_occurrences": 1,
+          "expected_new_occurrences": 1
+        },
+        {
+          "line": 14,
+          "old_start": 433,
+          "old_end": 511,
+          "new_start": 441,
+          "new_end": 519,
+          "old_hex": "424153455f534841203d202732373031326333633664386539613436343863636338616132363361656166333935316537333063313135313361343963323262633134656561306665343766270a",
+          "new_hex": "424153455f534841203d202762313362616161376661343533623538303630613735643964376431353866646664353837356366393766306135393535646266306166316131623035306463270a",
+          "expected_old_occurrences": 1,
+          "expected_new_occurrences": 1
+        },
+        {
+          "line": 43,
+          "old_start": 1337,
+          "old_end": 1368,
+          "new_start": 1345,
+          "new_end": 1376,
+          "old_hex": "20202020617373657274206c656e286d6f64756c657329203d3d203137360a",
+          "new_hex": "20202020617373657274206c656e286d6f64756c657329203d3d203137370a",
+          "expected_old_occurrences": 1,
+          "expected_new_occurrences": 1
+        },
+        {
+          "line": 122,
+          "old_start": 6230,
+          "old_end": 6353,
+          "new_start": 6238,
+          "new_end": 6361,
+          "old_hex": "202020206f7574707574203d205354415445202f2027736f757263652d7265766965777327202f20287374616d70202b20272d6f666664696167653361632d66726573683137362d72756e74696d652d66726573682d63757272656e742d7465726d696e616c2d6f776e65642d63656e7375732e6a736f6e27290a",
+          "new_hex": "202020206f7574707574203d205354415445202f2027736f757263652d7265766965777327202f20287374616d70202b20272d6f666664696167653361632d66726573683137372d72756e74696d652d66726573682d63757272656e742d7465726d696e616c2d6f776e65642d63656e7375732e6a736f6e27290a",
+          "expected_old_occurrences": 1,
+          "expected_new_occurrences": 1
+        }
+      ],
+      "literal_replacements": [
+        {
+          "old": "source-reviews/20261021T163544748358Z-generalDc165-baseline175-runtime-fresh-current-terminal-owned-census.json",
+          "new": "source-reviews/20261021T165705432839Z-k-frontier6d68-fresh-baseline176-runtime-fresh-current-terminal-owned-census.json",
+          "expected_occurrences": 1
+        },
+        {
+          "old": "27012c3c6d8e9a4648ccc8aa263aeaf3951e730c11513a49c22bc14eea0fe47f",
+          "new": "b13baaa7fa453b58060a75d9d7d158fdfd5875cf97f0a5955dbf0af1a1b050dc",
+          "expected_occurrences": 1
+        },
+        {
+          "old": "assert len(modules) == 176",
+          "new": "assert len(modules) == 177",
+          "expected_occurrences": 1
+        },
+        {
+          "old": "-offdiage3ac-fresh176-runtime-fresh-current-terminal-owned-census.json",
+          "new": "-offdiage3ac-fresh177-runtime-fresh-current-terminal-owned-census.json",
+          "expected_occurrences": 1
+        }
+      ],
+      "raw_forward_exact": true,
+      "raw_reverse_exact": true,
+      "inverse_AST_exact": true,
+      "only_AST_constant_changes": [
+        {
+          "line": 14,
+          "old_value": "27012c3c6d8e9a4648ccc8aa263aeaf3951e730c11513a49c22bc14eea0fe47f",
+          "new_value": "b13baaa7fa453b58060a75d9d7d158fdfd5875cf97f0a5955dbf0af1a1b050dc"
+        },
+        {
+          "line": 13,
+          "old_value": "source-reviews/20261021T163544748358Z-generalDc165-baseline175-runtime-fresh-current-terminal-owned-census.json",
+          "new_value": "source-reviews/20261021T165705432839Z-k-frontier6d68-fresh-baseline176-runtime-fresh-current-terminal-owned-census.json"
+        },
+        {
+          "line": 43,
+          "old_value": 176,
+          "new_value": 177
+        },
+        {
+          "line": 122,
+          "old_value": "-offdiage3ac-fresh176-runtime-fresh-current-terminal-owned-census.json",
+          "new_value": "-offdiage3ac-fresh177-runtime-fresh-current-terminal-owned-census.json"
+        }
+      ],
+      "all_guard_and_function_structure_otherwise_exact": true
+    },
+    "AST_parse_only": true,
+    "changed_AST_constant_count": 4,
+    "four_unique_complete_UTF8_lines_only": true,
+    "all_other_bytes_and_guard_AST_function_class_structure_exact": true
+  },
+  "existing_fullwrapper_review": {
+    "artifact": {
+      "path": "rounds/20261022-offdiage3ac-full-inputs-historical174-proposal.py",
+      "sha256": "4288856c47f36586a6c4e5c73307f48aaaacb24fb1a41f4580a50baec9614a40",
+      "bytes": 6551
+    },
+    "complete_text_read": true,
+    "unchanged": true,
+    "replacement_created": false,
+    "summary_tuple_list_defect_found": false,
+    "evidence": {
+      "summary_and_stable_collect_shapes": {
+        "summary": {
+          "constructor": "dict",
+          "tuple_nodes_in_constructor": 0,
+          "keys": [
+            "target",
+            "source_sha256",
+            "proper_sha256",
+            "baseline_sha256",
+            "author_sha256",
+            "review_sha256",
+            "source_bindings_sha256",
+            "project_self_inclusive",
+            "project_parents",
+            "owned_parents",
+            "inherited_NOT_OWNED",
+            "native_modules",
+            "native_roots",
+            "native_present_parts",
+            "native_missing_slots",
+            "native_present_by_suffix",
+            "native_missing_by_suffix",
+            "baseline_owned_modules",
+            "baseline_declarations",
+            "baseline_receipts",
+            "generated_count_predicted",
+            "native_promoted_to_owned",
+            "external_closure_replayed",
+            "unconditional_main_claimed",
+            "no_compiler_invoked",
+            "no_checker_invoked",
+            "no_cache_mutated"
+          ]
+        },
+        "stable": {
+          "constructor": "dict",
+          "tuple_nodes_in_constructor": 0,
+          "keys": [
+            "pins",
+            "source_sha256",
+            "parents",
+            "objects_parts",
+            "owned_parent_bindings",
+            "target_binding",
+            "fullforeign_source_and_main_object",
+            "fullforeign_parts",
+            "native_missing_parts",
+            "historical174_owned_bindings",
+            "historical174_complete_declarations"
+          ]
+        },
+        "runtime_parts": {
+          "return_constructor": "DictComp"
+        },
+        "runtime_pins": {
+          "return_constructor": "DictComp"
+        },
+        "runtime_binding": {
+          "return_constructor": "Dict"
+        }
+      },
+      "collector_summary": "Dict containing scalar/hash/bool/null values and counter-to-dict nested values. No tuple value is emitted into summary.",
+      "rows": "Rows is a list; each appended dict contains scalar/string/dict and missing_parts_actual list. No tuple/list conversion mismatch found.",
+      "stable": "All nested values are dict/list/scalars: pins and target_binding return dicts; binding dependencies passed as dict comprehension; historical records parsed from JSON lists and source/object hashes stored in dicts. Native missing parts built as lists.",
+      "wrapper_summary_compare": "Deletes exactly status and read_only_script_sha256 from persisted classification, then compares ordinary dict to newly collected summary. No normalization is required from examined constructors.",
+      "wrapper_fixed_count_guard": "Tuple expression (summary baseline fields) compares to tuple(174,4037,122) entirely inside assert; it is not serialized into summary.",
+      "persisted_data_summary_equal_classification": true,
+      "persisted_entire_data_in_memory_JSON_roundtrip_exact": true,
+      "no_runtime_claim": "No fresh collector/wrapper call was made. This is AST/source/data static inspection only."
+    },
+    "bindings_rehashed": [
+      {
+        "path": "rounds/20261021-offdiage3ac-readonly-classification-historical174.py",
+        "sha256": "db2687c90c62be9725b97f59235c0ae338612c53f774ddf2bc3bd88dbb473d40",
+        "bytes": 19259
+      },
+      {
+        "path": "rounds/20261021-offdiage3ac-historical174-dependency-classification.json",
+        "sha256": "eb8ebfbc75e1491f8c58b1f2dc74e7487c715668ad9be5214adb7d09ec1e7aa1",
+        "bytes": 1493
+      },
+      {
+        "path": "rounds/20261021-offdiage3ac-historical174-dependency-classification-data.json",
+        "sha256": "faa08bc5ab19d044418ad79e0f8b1336b575896473f7ad779abb8bfaef515a37",
+        "bytes": 13805303
+      },
+      {
+        "path": "runtime.py",
+        "sha256": "81635b52f3b62dfe477a8184bff5ef6dc8de3daee334c6cfd4547cccefe3b9be",
+        "bytes": 19488
+      }
+    ],
+    "all_original_before_after_native5parts_historical174_stocklog_envunique_fulltype_safety_threeaxioms_guards_retained": true
+  },
+  "scope_split": {
+    "historical174_wrapper": "Existing428885 remains historical174/4037/122 plus native2475 fiveparts. No baseline change.",
+    "old_fresh176": "Existing87cd2 proposal preserved as historical prepared176 input. Not current177.",
+    "new_fresh177": "New proposal binds rootaccepted177/4094/125 snapshot b13baa; optional future audited Offdiag leaf remains original guarded target/source behavior. No new generated count predicted.",
+    "earlier_frozen175": "All previous175 metadata/scripts/CPs retained immutable."
+  },
+  "execution_scope": {
+    "pipeline_proper_classifier_compiler_checker_census_audit_Git_executed": false,
+    "source_helpers_cache_pins_catalog_or_existing_CP_proposal_modified": false,
+    "only_new_files": [
+      "rounds/20261022-offdiage3ac-owned-census-fresh177-proposal.py",
+      "rounds/20261022-offdiage3ac-owned-census-fresh177-proposal.diff",
+      "rounds/20261022-offdiage3ac-owned-census-fresh177-proposal.raw-inverse.json",
+      "this CP"
+    ],
+    "actual_generated_declarations_for_Offdiag": null,
+    "unconditional_main_claimed": false
+  },
+  "quota": {
+    "root_supplied_used_percent": 38,
+    "root_supplied_remaining_percent": 62,
+    "stop_if_remaining_lte": 40,
+    "fresh_usage_not_independently_requeried": true
+  },
+  "next": "Root independently reviews four-literal177 proposal and unchanged wrapper evidence. Any soleheavy Offdiag revalidation requires a separate root gate; none is executed here.",
+  "HOLD": true
+}

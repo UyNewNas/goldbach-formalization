@@ -1,0 +1,4378 @@
+{
+  "status": "COMPLETE_NONSOURCE_AUTHOR_STATIC_MATH_PUBLIC_TYPES_ACTUAL_OWNED_API_AND_FOREIGN_SOURCE_REVIEW_READY_FOR_ROOT_EXACT_GATE_NOT_COMPILED",
+  "reviewer": "/root/support_oct20",
+  "created_utc": "2026-10-20T08:51:03.9665729Z",
+  "source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorDifferenceReciprocity.lean",
+    "sha256": "0994505d15621182bc7cacef5425794dfa98cbe046a28e9b42d8ae4735bd8d25",
+    "bytes": 21389,
+    "line_count": 456,
+    "all_source_read_in_full": true,
+    "source_mutated": false
+  },
+  "root_scope": {
+    "path": ".lake/proof-continuation/source-reviews/20261020-shared-difference-reciprocity-root-complete-six-public-source-authoring-scope.json",
+    "sha256": "ccf412d883d4db931ddd79728095c522af9361de07fb051337a31114319ff184"
+  },
+  "proposal": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261018-shared-small-core-difference-reciprocity-three-scale-complete-route-proposal.json",
+    "sha256": "8ffd9d4a5ba6f9379c7012d72e6858a048cbd297eca92a9f7816b2fefb1652e1"
+  },
+  "complete_prior_independent_review": {
+    "path": ".lake/proof-continuation/source-reviews/20261018-shared-small-core-difference-reciprocity-independent-complete-finite-math-api-review.json",
+    "sha256": "4c5fb65d21e717c31e1ab17cfa79f181225f1e6c9188825e2f898e522ddc0043",
+    "general_finite_12step_proof_and_all_public_types_read": true
+  },
+  "six_complete_public_header_checks": [
+    {
+      "name": "sharedDifferenceData_licenses",
+      "complete_expected_header": "theorem sharedDifferenceData_licenses\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) (a : ℤ) :\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    0 < g ∧ 0 < D ∧ 0 < d₁ ∧ 0 < n₁ ∧ 0 < n₂ ∧\n      0 < v₀ ∧ 0 < w₀ ∧ 0 < A ∧ 0 < L ∧\n      N₁ = g * d₁ * n₁ ∧ N₂ = g * n₂ ∧\n      v = D * v₀ ∧ w = D * w₀ ∧ L = delta * v₀ * w₀ ∧\n      v₀.Coprime w₀ ∧ n₁.Coprime delta ∧ v₀.Coprime (n₁ * w₀) ∧\n      (A * n₂ * v₀).Coprime (n₁ * w₀) ∧ (n₁ * L).Coprime A ∧\n      (delta : ℤ) * f = (d₁ : ℤ) * n₁ - n₂ ∧\n      ((n₁ * L : ℕ) : ℤ) ∣\n        ((N₁ : ℤ) * b - a - a * f * (A : ℤ) * delta * v₀ * t)",
+      "complete_actual_header": "theorem sharedDifferenceData_licenses\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) (a : ℤ) :\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    0 < g ∧ 0 < D ∧ 0 < d₁ ∧ 0 < n₁ ∧ 0 < n₂ ∧\n      0 < v₀ ∧ 0 < w₀ ∧ 0 < A ∧ 0 < L ∧\n      N₁ = g * d₁ * n₁ ∧ N₂ = g * n₂ ∧\n      v = D * v₀ ∧ w = D * w₀ ∧ L = delta * v₀ * w₀ ∧\n      v₀.Coprime w₀ ∧ n₁.Coprime delta ∧ v₀.Coprime (n₁ * w₀) ∧\n      (A * n₂ * v₀).Coprime (n₁ * w₀) ∧ (n₁ * L).Coprime A ∧\n      (delta : ℤ) * f = (d₁ : ℤ) * n₁ - n₂ ∧\n      ((n₁ * L : ℕ) : ℤ) ∣\n        ((N₁ : ℤ) * b - a - a * f * (A : ℤ) * delta * v₀ * t)",
+      "whitespace_normalized_exact": true
+    },
+    {
+      "name": "sharedDifferenceReciprocity_circle",
+      "complete_expected_header": "theorem sharedDifferenceReciprocity_circle\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) (a : ℤ) :\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let z := CanonicalReciprocalPhase.wPhaseInverse (n₁ * L) A\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    ((((b : ℝ) / (L : ℝ)) : ℝ) : UnitAddCircle) =\n      (((-(a : ℝ) * (z : ℝ) / (A : ℝ)) : ℝ) : UnitAddCircle) +\n        ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle) +\n          (((((a : ℝ) * (f : ℝ) * (t : ℝ)) / ((n₁ : ℝ) * w₀)) : ℝ) : UnitAddCircle)",
+      "complete_actual_header": "theorem sharedDifferenceReciprocity_circle\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) (a : ℤ) :\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let z := CanonicalReciprocalPhase.wPhaseInverse (n₁ * L) A\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    ((((b : ℝ) / (L : ℝ)) : ℝ) : UnitAddCircle) =\n      (((-(a : ℝ) * (z : ℝ) / (A : ℝ)) : ℝ) : UnitAddCircle) +\n        ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle) +\n          (((((a : ℝ) * (f : ℝ) * (t : ℝ)) / ((n₁ : ℝ) * w₀)) : ℝ) : UnitAddCircle)",
+      "whitespace_normalized_exact": true
+    },
+    {
+      "name": "sharedDifferenceReciprocity_fourier",
+      "complete_expected_header": "theorem sharedDifferenceReciprocity_fourier\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) (a h : ℤ) :\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let z := CanonicalReciprocalPhase.wPhaseInverse (n₁ * L) A\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    fourier h (((b : ℝ) / (L : ℝ) : ℝ) : UnitAddCircle) =\n      fourier h (((-(a : ℝ) * (z : ℝ) / (A : ℝ)) : ℝ) : UnitAddCircle) *\n        fourier h ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle) *\n          fourier h (((((a : ℝ) * (f : ℝ) * (t : ℝ)) / ((n₁ : ℝ) * w₀)) : ℝ) : UnitAddCircle)",
+      "complete_actual_header": "theorem sharedDifferenceReciprocity_fourier\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) (a h : ℤ) :\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let z := CanonicalReciprocalPhase.wPhaseInverse (n₁ * L) A\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    fourier h (((b : ℝ) / (L : ℝ) : ℝ) : UnitAddCircle) =\n      fourier h (((-(a : ℝ) * (z : ℝ) / (A : ℝ)) : ℝ) : UnitAddCircle) *\n        fourier h ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle) *\n          fourier h (((((a : ℝ) * (f : ℝ) * (t : ℝ)) / ((n₁ : ℝ) * w₀)) : ℝ) : UnitAddCircle)",
+      "whitespace_normalized_exact": true
+    },
+    {
+      "name": "fourier_int_div_nat_eq_stdAddChar",
+      "complete_expected_header": "theorem fourier_int_div_nat_eq_stdAddChar\n    (m : ℕ) [NeZero m] (h z : ℤ) :\n    fourier h ((((z : ℝ) / (m : ℝ)) : ℝ) : UnitAddCircle) =\n      ZMod.stdAddChar ((h * z : ℤ) : ZMod m)",
+      "complete_actual_header": "theorem fourier_int_div_nat_eq_stdAddChar\n    (m : ℕ) [NeZero m] (h z : ℤ) :\n    fourier h ((((z : ℝ) / (m : ℝ)) : ℝ) : UnitAddCircle) =\n      ZMod.stdAddChar ((h * z : ℤ) : ZMod m)",
+      "whitespace_normalized_exact": true
+    },
+    {
+      "name": "fourier_inverse_phase_eq_stdAddChar",
+      "complete_expected_header": "theorem fourier_inverse_phase_eq_stdAddChar\n    (m n : ℕ) [NeZero m] (hc : n.Coprime m) (h a : ℤ) :\n    fourier h (((((a : ℝ) *\n      (CanonicalReciprocalPhase.wPhaseInverse n m : ℝ)) / (m : ℝ)) : ℝ) :\n        UnitAddCircle) =\n      ZMod.stdAddChar (((h * a : ℤ) : ZMod m) * (n : ZMod m)⁻¹)",
+      "complete_actual_header": "theorem fourier_inverse_phase_eq_stdAddChar\n    (m n : ℕ) [NeZero m] (hc : n.Coprime m) (h a : ℤ) :\n    fourier h (((((a : ℝ) *\n      (CanonicalReciprocalPhase.wPhaseInverse n m : ℝ)) / (m : ℝ)) : ℝ) :\n        UnitAddCircle) =\n      ZMod.stdAddChar (((h * a : ℤ) : ZMod m) * (n : ZMod m)⁻¹)",
+      "whitespace_normalized_exact": true
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactor_poissonFrequency_eq_differencePhases",
+      "complete_expected_header": "theorem MediumAtom.sharedFirstFactor_poissonFrequency_eq_differencePhases\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) (hl' : l' ∈ d.sharedFirstFactorRows)\n    (hc : ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n      (p * (l'.1.1 * l'.1.2)) l.2 l'.2) (h : ℤ) :\n    let v := l.1.1 * l.1.2\n    let w := l'.1.1 * l'.1.2\n    let N₁ := l.2\n    let N₂ := l'.2\n    let a := d.residue\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let z := CanonicalReciprocalPhase.wPhaseInverse (n₁ * L) A\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    CommonSmoothCutoff.poissonNonzeroFrequency\n      (d.V / (L : ℝ)) ((b : ℝ) / (L : ℝ)) h =\n      if h = 0 then 0 else\n        (d.V / (L : ℝ)) •\n          (𝓕 CommonSmoothCutoff.dyadicCutoffSchwartz) ((d.V / (L : ℝ)) * h) *\n          fourier h (((-(a : ℝ) * (z : ℝ) / (A : ℝ)) : ℝ) : UnitAddCircle) *\n            fourier h ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle) *\n              fourier h (((((a : ℝ) * (f : ℝ) * (t : ℝ)) / ((n₁ : ℝ) * w₀)) : ℝ) : UnitAddCircle)",
+      "complete_actual_header": "theorem MediumAtom.sharedFirstFactor_poissonFrequency_eq_differencePhases\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) (hl' : l' ∈ d.sharedFirstFactorRows)\n    (hc : ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n      (p * (l'.1.1 * l'.1.2)) l.2 l'.2) (h : ℤ) :\n    let v := l.1.1 * l.1.2\n    let w := l'.1.1 * l'.1.2\n    let N₁ := l.2\n    let N₂ := l'.2\n    let a := d.residue\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let z := CanonicalReciprocalPhase.wPhaseInverse (n₁ * L) A\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    CommonSmoothCutoff.poissonNonzeroFrequency\n      (d.V / (L : ℝ)) ((b : ℝ) / (L : ℝ)) h =\n      if h = 0 then 0 else\n        (d.V / (L : ℝ)) •\n          (𝓕 CommonSmoothCutoff.dyadicCutoffSchwartz) ((d.V / (L : ℝ)) * h) *\n          fourier h (((-(a : ℝ) * (z : ℝ) / (A : ℝ)) : ℝ) : UnitAddCircle) *\n            fourier h ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle) *\n              fourier h (((((a : ℝ) * (f : ℝ) * (t : ℝ)) / ((n₁ : ℝ) * w₀)) : ℝ) : UnitAddCircle)",
+      "whitespace_normalized_exact": true
+    }
+  ],
+  "explicit_declaration_count": 11,
+  "public_theorem_count": 6,
+  "private_theorem_count": 5,
+  "new_def_structure_instance_or_primitive_count": 0,
+  "all11_complete_headers_and_source_proof_inventory": [
+    {
+      "name": "nat_lcm_dvd_int",
+      "private": true,
+      "kind": "theorem",
+      "line": 29,
+      "complete_header": "private theorem nat_lcm_dvd_int {m n : ℕ} {E : ℤ}\n    (hm : (m : ℤ) ∣ E) (hn : (n : ℤ) ∣ E) :\n    ((m.lcm n : ℕ) : ℤ) ∣ E",
+      "complete_source_span": "private theorem nat_lcm_dvd_int {m n : ℕ} {E : ℤ}\n    (hm : (m : ℤ) ∣ E) (hn : (n : ℤ) ∣ E) :\n    ((m.lcm n : ℕ) : ℤ) ∣ E := by\n  have h := Int.coe_lcm_dvd_iff.mpr ⟨hm, hn⟩\n  simpa only [Int.lcm, Int.natAbs_natCast] using h\n\n/-- The signed polynomial proof precedes both common-factor lcm merges. -/\n",
+      "span_sha256": "48caae1d799b1e252035eef9a5731d79b6f7c39b6962e08c811479521c8b26df"
+    },
+    {
+      "name": "differenceE_dvd",
+      "private": true,
+      "kind": "theorem",
+      "line": 36,
+      "complete_header": "private theorem differenceE_dvd\n    {g d₁ delta v₀ w₀ n₁ n₂ N₁ N₂ L : ℕ} {a b f t : ℤ}\n    (hN₁ : N₁ = g * d₁ * n₁) (hN₂ : N₂ = g * n₂)\n    (hL : L = delta * v₀ * w₀)\n    (hnδ : n₁.Coprime delta) (hv : v₀.Coprime (n₁ * w₀))\n    (hf : (delta : ℤ) * f = (d₁ : ℤ) * n₁ - n₂)\n    (ht : Int.ModEq (n₁ * w₀ : ℕ)\n      (((g * d₁ * n₂ * v₀ : ℕ) : ℤ) * t) 1)\n    (hb₁ : Int.ModEq (delta * v₀ : ℕ) (b * N₁) a)\n    (hb₂ : Int.ModEq (delta * w₀ : ℕ) (b * N₂) a) :\n    ((n₁ * L : ℕ) : ℤ) ∣\n      ((N₁ : ℤ) * b - a - a * f * (g * d₁ : ℕ) * delta * v₀ * t)",
+      "complete_source_span": "private theorem differenceE_dvd\n    {g d₁ delta v₀ w₀ n₁ n₂ N₁ N₂ L : ℕ} {a b f t : ℤ}\n    (hN₁ : N₁ = g * d₁ * n₁) (hN₂ : N₂ = g * n₂)\n    (hL : L = delta * v₀ * w₀)\n    (hnδ : n₁.Coprime delta) (hv : v₀.Coprime (n₁ * w₀))\n    (hf : (delta : ℤ) * f = (d₁ : ℤ) * n₁ - n₂)\n    (ht : Int.ModEq (n₁ * w₀ : ℕ)\n      (((g * d₁ * n₂ * v₀ : ℕ) : ℤ) * t) 1)\n    (hb₁ : Int.ModEq (delta * v₀ : ℕ) (b * N₁) a)\n    (hb₂ : Int.ModEq (delta * w₀ : ℕ) (b * N₂) a) :\n    ((n₁ * L : ℕ) : ℤ) ∣\n      ((N₁ : ℤ) * b - a - a * f * (g * d₁ : ℕ) * delta * v₀ * t) := by\n  let E : ℤ := (N₁ : ℤ) * b - a - a * f * (g * d₁ : ℕ) * delta * v₀ * t\n  have hN₁Z : (N₁ : ℤ) = (g : ℤ) * d₁ * n₁ := by exact_mod_cast hN₁\n  have hN₂Z : (N₂ : ℤ) = (g : ℤ) * n₂ := by exact_mod_cast hN₂\n  have hb₂w := hb₂.of_dvd\n    (by exact_mod_cast (dvd_mul_left w₀ delta : w₀ ∣ delta * w₀))\n  obtain ⟨s, hs⟩ := ht.dvd\n  obtain ⟨r, hr⟩ := hb₂w.dvd\n  push_cast at hs\n  rw [hN₂Z] at hr\n  have hK : (w₀ : ℤ) ∣ b - a * d₁ * v₀ * t := by\n    refine ⟨(n₁ : ℤ) * b * s - (d₁ : ℤ) * v₀ * t * r, ?_⟩\n    linear_combination b * hs - (d₁ : ℤ) * v₀ * t * hr\n  obtain ⟨k, hk⟩ := hK\n  have hδv : ((delta * v₀ : ℕ) : ℤ) ∣ E := by\n    obtain ⟨j, hj⟩ := hb₁.dvd\n    refine ⟨-j - a * f * (g : ℤ) * d₁ * t, ?_⟩\n    dsimp only [E]\n    push_cast at hj ⊢\n    linear_combination -hj\n  have hnw : ((n₁ * w₀ : ℕ) : ℤ) ∣ E := by\n    refine ⟨(g : ℤ) * d₁ * k - a * s, ?_⟩\n    dsimp only [E]\n    rw [hN₁Z]\n    push_cast\n    linear_combination (g : ℤ) * d₁ * n₁ * hk - a * hs -\n      a * (g : ℤ) * d₁ * v₀ * t * hf\n  have hδw : ((delta * w₀ : ℕ) : ℤ) ∣ E := by\n    obtain ⟨j, hj⟩ := hb₂.dvd\n    refine ⟨-j + (g : ℤ) * f * k, ?_⟩\n    dsimp only [E]\n    rw [hN₁Z]\n    push_cast at hj ⊢\n    rw [hN₂Z] at hj\n    linear_combination -hj + (g : ℤ) * delta * f * hk - (g : ℤ) * b * hf\n  have hδnw : ((delta * n₁ * w₀ : ℕ) : ℤ) ∣ E := by\n    have h := nat_lcm_dvd_int hnw hδw\n    simpa only [Nat.lcm_mul_right, hnδ.lcm_eq_mul,\n      mul_assoc, mul_comm, mul_left_comm] using h\n  have hδnw' : ((delta * (n₁ * w₀) : ℕ) : ℤ) ∣ E := by\n    simpa only [mul_assoc] using hδnw\n  have h := nat_lcm_dvd_int hδv hδnw'\n  rw [Nat.lcm_mul_left, hv.lcm_eq_mul] at h\n  simpa only [hL, mul_assoc, mul_comm, mul_left_comm] using h\n\n",
+      "span_sha256": "c74d697395adf4c22f7ac4cc0c88a8d7fafebaf68f95ffe4344d1b654db0f54e"
+    },
+    {
+      "name": "fourier_add",
+      "private": true,
+      "kind": "theorem",
+      "line": 92,
+      "complete_header": "private theorem fourier_add (h : ℤ) (x y : UnitAddCircle) :\n    fourier h (x + y) = fourier h x * fourier h y",
+      "complete_source_span": "private theorem fourier_add (h : ℤ) (x y : UnitAddCircle) :\n    fourier h (x + y) = fourier h x * fourier h y := by\n  simp only [fourier_apply, zsmul_add, AddCircle.toCircle_add, Circle.coe_mul]\n\n",
+      "span_sha256": "eb88388870de5d45f50e04ad1c56f0d89066682fefdf4adc4821ea87da5b5403"
+    },
+    {
+      "name": "factor_pos",
+      "private": true,
+      "kind": "theorem",
+      "line": 96,
+      "complete_header": "private theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) : 0 < n",
+      "complete_source_span": "private theorem factor_pos {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) : 0 < n := by\n  have hlo := (Finset.mem_Icc.mp hn).1\n  have hceil : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  omega\n\n",
+      "span_sha256": "4799b670afc8616c3a6c8d1441d4b9c982661100a7dc99a50f5996eb34d91499"
+    },
+    {
+      "name": "row_pos",
+      "private": true,
+      "kind": "theorem",
+      "line": 102,
+      "complete_header": "private theorem row_pos\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {l : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows) :\n    0 < l.1.1 * l.1.2 ∧ 0 < l.2",
+      "complete_source_span": "private theorem row_pos\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {l : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows) :\n    0 < l.1.1 * l.1.2 ∧ 0 < l.2 := by\n  obtain ⟨hf, hN⟩ := Finset.mem_product.mp hl\n  obtain ⟨h₂, h₃⟩ := Finset.mem_product.mp hf\n  change l.2 ∈ factorCarrier d.U at hN\n  exact ⟨Nat.mul_pos (factor_pos hd.2.2.2.1 h₂)\n    (factor_pos hd.2.2.2.2.1 h₃), factor_pos hd.1 hN⟩\n\nend SharedDifferenceReciprocity\n\n/-- Every license, including the full E divisibility, follows from the raw tuple. -/\n",
+      "span_sha256": "3b48d6dfeaa693b6759b457945e428e3257cc098dac1129d279c6fd1e6b76840"
+    },
+    {
+      "name": "sharedDifferenceData_licenses",
+      "private": false,
+      "kind": "theorem",
+      "line": 116,
+      "complete_header": "theorem sharedDifferenceData_licenses\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) (a : ℤ) :\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    0 < g ∧ 0 < D ∧ 0 < d₁ ∧ 0 < n₁ ∧ 0 < n₂ ∧\n      0 < v₀ ∧ 0 < w₀ ∧ 0 < A ∧ 0 < L ∧\n      N₁ = g * d₁ * n₁ ∧ N₂ = g * n₂ ∧\n      v = D * v₀ ∧ w = D * w₀ ∧ L = delta * v₀ * w₀ ∧\n      v₀.Coprime w₀ ∧ n₁.Coprime delta ∧ v₀.Coprime (n₁ * w₀) ∧\n      (A * n₂ * v₀).Coprime (n₁ * w₀) ∧ (n₁ * L).Coprime A ∧\n      (delta : ℤ) * f = (d₁ : ℤ) * n₁ - n₂ ∧\n      ((n₁ * L : ℕ) : ℤ) ∣\n        ((N₁ : ℤ) * b - a - a * f * (A : ℤ) * delta * v₀ * t)",
+      "complete_source_span": "theorem sharedDifferenceData_licenses\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) (a : ℤ) :\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    0 < g ∧ 0 < D ∧ 0 < d₁ ∧ 0 < n₁ ∧ 0 < n₂ ∧\n      0 < v₀ ∧ 0 < w₀ ∧ 0 < A ∧ 0 < L ∧\n      N₁ = g * d₁ * n₁ ∧ N₂ = g * n₂ ∧\n      v = D * v₀ ∧ w = D * w₀ ∧ L = delta * v₀ * w₀ ∧\n      v₀.Coprime w₀ ∧ n₁.Coprime delta ∧ v₀.Coprime (n₁ * w₀) ∧\n      (A * n₂ * v₀).Coprime (n₁ * w₀) ∧ (n₁ * L).Coprime A ∧\n      (delta : ℤ) * f = (d₁ : ℤ) * n₁ - n₂ ∧\n      ((n₁ * L : ℕ) : ℤ) ∣\n        ((N₁ : ℤ) * b - a - a * f * (A : ℤ) * delta * v₀ * t) := by\n  let g := N₁.gcd N₂\n  let D := v.gcd w\n  let v₀ := v / D\n  let w₀ := w / D\n  let delta := p * D\n  let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n  let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n  let n₂ := N₂ / g\n  let A := g * d₁\n  let L := (p * v).lcm (p * w)\n  let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n  let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n  let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n  change 0 < g ∧ 0 < D ∧ 0 < d₁ ∧ 0 < n₁ ∧ 0 < n₂ ∧\n    0 < v₀ ∧ 0 < w₀ ∧ 0 < A ∧ 0 < L ∧\n    N₁ = g * d₁ * n₁ ∧ N₂ = g * n₂ ∧\n    v = D * v₀ ∧ w = D * w₀ ∧ L = delta * v₀ * w₀ ∧\n    v₀.Coprime w₀ ∧ n₁.Coprime delta ∧ v₀.Coprime (n₁ * w₀) ∧\n    (A * n₂ * v₀).Coprime (n₁ * w₀) ∧ (n₁ * L).Coprime A ∧\n    (delta : ℤ) * f = (d₁ : ℤ) * n₁ - n₂ ∧\n    ((n₁ * L : ℕ) : ℤ) ∣\n      ((N₁ : ℤ) * b - a - a * f * (A : ℤ) * delta * v₀ * t)\n  have hcan := CanonicalReciprocalData.wGCDData_valid\n    (Nat.mul_pos hp hv) (Nat.mul_pos hp hw) hN₁ hN₂\n  have hg : 0 < g := hcan.d_pos\n  have hd₁ : 0 < d₁ := hcan.d₁_pos\n  have hn₁ : 0 < n₁ := hcan.n₁_pos\n  have hn₂ : 0 < n₂ := hcan.n₂_pos\n  have hN₁eq : N₁ = g * d₁ * n₁ := hcan.N₁_eq\n  have hN₂eq : N₂ = g * n₂ := hcan.N₂_eq\n  have hD : 0 < D := Nat.gcd_pos_of_pos_left w hv\n  have hv₀ : 0 < v₀ :=\n    Nat.div_pos (Nat.le_of_dvd hv (Nat.gcd_dvd_left v w)) hD\n  have hw₀ : 0 < w₀ :=\n    Nat.div_pos (Nat.le_of_dvd hw (Nat.gcd_dvd_right v w)) hD\n  have hA : 0 < A := Nat.mul_pos hg hd₁\n  have hL : 0 < L := Nat.pos_of_ne_zero\n    (Nat.lcm_ne_zero (Nat.mul_pos hp hv).ne' (Nat.mul_pos hp hw).ne')\n  have hveq : v = D * v₀ := (Nat.mul_div_cancel' (Nat.gcd_dvd_left v w)).symm\n  have hweq : w = D * w₀ := (Nat.mul_div_cancel' (Nat.gcd_dvd_right v w)).symm\n  have hvw : v₀.Coprime w₀ := by\n    change (v / D).gcd (w / D) = 1\n    apply Nat.mul_left_cancel hD\n    rw [← Nat.gcd_mul_left, Nat.mul_div_cancel' (Nat.gcd_dvd_left v w),\n      Nat.mul_div_cancel' (Nat.gcd_dvd_right v w), mul_one]\n  have hq : p * v = delta * v₀ := by\n    dsimp only [delta]\n    rw [hveq]\n    ring\n  have hr : p * w = delta * w₀ := by\n    dsimp only [delta]\n    rw [hweq]\n    ring\n  have hLeq : L = delta * v₀ * w₀ := by\n    change (p * v).lcm (p * w) = _\n    rw [hq, hr, Nat.lcm_mul_left, hvw.lcm_eq_mul, mul_assoc]\n  have hgq : g.Coprime (p * v) :=\n    hc.1.of_dvd_left (Nat.gcd_dvd_left N₁ N₂)\n  have hgr : g.Coprime (p * w) :=\n    hc.2.1.of_dvd_left (Nat.gcd_dvd_right N₁ N₂)\n  have hgL : g.Coprime L :=\n    (hgq.mul_right hgr).of_dvd_right (Nat.lcm_dvd_mul (p * v) (p * w))\n  have hd₁L : d₁.Coprime L :=\n    (CanonicalReciprocalData.coprime_of_prime_support hgL.symm hcan.d₁_support).symm\n  have hAL : A.Coprime L := hgL.mul_left hd₁L\n  have hn₁A : n₁.Coprime A := hcan.n₁_d.mul_right hcan.n₁_d₁\n  have hn₁N : n₁ ∣ N₁ := by rw [hN₁eq]; exact dvd_mul_left _ _\n  have hn₂N : n₂ ∣ N₂ := by rw [hN₂eq]; exact dvd_mul_left _ _\n  have hn₁q : n₁.Coprime (delta * v₀) := by\n    rw [← hq]\n    exact hc.1.of_dvd_left hn₁N\n  have hnδ : n₁.Coprime delta := hn₁q.of_dvd_right (dvd_mul_right _ _)\n  have hvn : v₀.Coprime (n₁ * w₀) :=\n    (hn₁q.of_dvd_right (dvd_mul_left _ _)).symm.mul_right hvw\n  have hwL : w₀ ∣ L := by rw [hLeq]; exact dvd_mul_left _ _\n  have hAw : A.Coprime w₀ := hAL.of_dvd_right hwL\n  have hn₂w : n₂.Coprime w₀ := by\n    apply hc.2.1.of_dvd hn₂N\n    rw [hr]\n    exact dvd_mul_left _ _\n  have hInv : (A * n₂ * v₀).Coprime (n₁ * w₀) :=\n    ((hn₁A.symm.mul_right hAw).mul_left\n      (hcan.n₁_n₂.symm.mul_right hn₂w)).mul_left hvn\n  have hRoot : (n₁ * L).Coprime A := hn₁A.mul_left hAL.symm\n  have hcong : Nat.ModEq delta (d₁ * n₁) n₂ := by\n    have h := hcan.n_congruence hc\n    change Nat.ModEq ((p * v).gcd (p * w)) (d₁ * n₁) n₂ at h\n    simpa only [sharedFirstFactor_gcd] using h\n  have hfdiv : (delta : ℤ) ∣ (d₁ : ℤ) * n₁ - n₂ := by\n    simpa only [Nat.cast_mul] using (Int.natCast_modEq_iff.mpr hcong).symm.dvd\n  have hf : (delta : ℤ) * f = (d₁ : ℤ) * n₁ - n₂ :=\n    Int.mul_ediv_cancel' hfdiv\n  have hb := ComplexCRT.residue_spec a hc\n  have hb₁ : Int.ModEq (delta * v₀ : ℕ) (b * N₁) a := by\n    simpa only [hq] using hb.1\n  have hb₂ : Int.ModEq (delta * w₀ : ℕ) (b * N₂) a := by\n    simpa only [hr] using hb.2.1\n  have ht : Int.ModEq (n₁ * w₀ : ℕ) (((A * n₂ * v₀ : ℕ) : ℤ) * t) 1 :=\n    CanonicalReciprocalPhase.wPhaseInverse_spec hInv\n  have hE := SharedDifferenceReciprocity.differenceE_dvd\n    hN₁eq hN₂eq hLeq hnδ hvn hf ht hb₁ hb₂\n  exact ⟨hg, hD, hd₁, hn₁, hn₂, hv₀, hw₀, hA, hL,\n    hN₁eq, hN₂eq, hveq, hweq, hLeq, hvw, hnδ, hvn, hInv, hRoot, hf, hE⟩\n\n/-- Exact root, slow and signed reciprocal phases, including zero difference. -/\n",
+      "span_sha256": "532235508260440527b800a8f97da9b2d9f76245dcb658c71f0bda18c2949cb0"
+    },
+    {
+      "name": "sharedDifferenceReciprocity_circle",
+      "private": false,
+      "kind": "theorem",
+      "line": 248,
+      "complete_header": "theorem sharedDifferenceReciprocity_circle\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) (a : ℤ) :\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let z := CanonicalReciprocalPhase.wPhaseInverse (n₁ * L) A\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    ((((b : ℝ) / (L : ℝ)) : ℝ) : UnitAddCircle) =\n      (((-(a : ℝ) * (z : ℝ) / (A : ℝ)) : ℝ) : UnitAddCircle) +\n        ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle) +\n          (((((a : ℝ) * (f : ℝ) * (t : ℝ)) / ((n₁ : ℝ) * w₀)) : ℝ) : UnitAddCircle)",
+      "complete_source_span": "theorem sharedDifferenceReciprocity_circle\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) (a : ℤ) :\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let z := CanonicalReciprocalPhase.wPhaseInverse (n₁ * L) A\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    ((((b : ℝ) / (L : ℝ)) : ℝ) : UnitAddCircle) =\n      (((-(a : ℝ) * (z : ℝ) / (A : ℝ)) : ℝ) : UnitAddCircle) +\n        ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle) +\n          (((((a : ℝ) * (f : ℝ) * (t : ℝ)) / ((n₁ : ℝ) * w₀)) : ℝ) : UnitAddCircle) := by\n  let g := N₁.gcd N₂\n  let D := v.gcd w\n  let v₀ := v / D\n  let w₀ := w / D\n  let delta := p * D\n  let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n  let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n  let n₂ := N₂ / g\n  let A := g * d₁\n  let L := (p * v).lcm (p * w)\n  let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n  let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n  let z := CanonicalReciprocalPhase.wPhaseInverse (n₁ * L) A\n  let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n  change (((b : ℝ) / (L : ℝ) : ℝ) : UnitAddCircle) =\n    ((-(a : ℝ) * (z : ℝ) / (A : ℝ) : ℝ) : UnitAddCircle) +\n      (((a : ℝ) / ((N₁ : ℝ) * L) : ℝ) : UnitAddCircle) +\n        (((a : ℝ) * (f : ℝ) * (t : ℝ) / ((n₁ : ℝ) * w₀) : ℝ) : UnitAddCircle)\n  have hdata := sharedDifferenceData_licenses hp hv hw hN₁ hN₂ hc a\n  change 0 < g ∧ 0 < D ∧ 0 < d₁ ∧ 0 < n₁ ∧ 0 < n₂ ∧\n    0 < v₀ ∧ 0 < w₀ ∧ 0 < A ∧ 0 < L ∧\n    N₁ = g * d₁ * n₁ ∧ N₂ = g * n₂ ∧\n    v = D * v₀ ∧ w = D * w₀ ∧ L = delta * v₀ * w₀ ∧\n    v₀.Coprime w₀ ∧ n₁.Coprime delta ∧ v₀.Coprime (n₁ * w₀) ∧\n    (A * n₂ * v₀).Coprime (n₁ * w₀) ∧ (n₁ * L).Coprime A ∧\n    (delta : ℤ) * f = (d₁ : ℤ) * n₁ - n₂ ∧\n    ((n₁ * L : ℕ) : ℤ) ∣\n      ((N₁ : ℤ) * b - a - a * f * (A : ℤ) * delta * v₀ * t) at hdata\n  rcases hdata with ⟨_hg, hD, _hd₁, hn₁, _hn₂, hv₀, hw₀, hA, hL,\n    hN₁eq, _hN₂eq, _hveq, _hweq, hLeq, _hvw, _hnδ, _hvn, _hInv, hRoot, _hf, hE⟩\n  obtain ⟨j, hj⟩ := hE\n  have hN₁A : N₁ = A * n₁ := hN₁eq\n  have hN₁Z : (N₁ : ℤ) = (A : ℤ) * n₁ := by exact_mod_cast hN₁A\n  have hz : Int.ModEq A (((n₁ * L : ℕ) : ℤ) * z) 1 :=\n    CanonicalReciprocalPhase.wPhaseInverse_spec hRoot\n  obtain ⟨u, hu⟩ := hz.dvd\n  push_cast at hj hu\n  rw [hN₁Z] at hj\n  have hjmod : Int.ModEq A j (-a * z) := by\n    apply Int.modEq_iff_dvd.mpr\n    refine ⟨-j * u - ((n₁ : ℤ) * b - a * f * delta * v₀ * t) * z, ?_⟩\n    linear_combination -j * hu + z * hj\n  have hjcircle : (((j : ℝ) / (A : ℝ) : ℝ) : UnitAddCircle) =\n      ((-(a : ℝ) * (z : ℝ) / (A : ℝ) : ℝ) : UnitAddCircle) := by\n    simpa only [Int.cast_mul, Int.cast_neg] using\n      CanonicalReciprocalPhase.wPhase_circle_eq_of_modEq hA hjmod\n  have hjR : (A : ℝ) * n₁ * b - a -\n      (a : ℝ) * f * A * delta * v₀ * t = (n₁ : ℝ) * L * j := by\n    exact_mod_cast hj\n  have hN₁R : (N₁ : ℝ) = (A : ℝ) * n₁ := by exact_mod_cast hN₁A\n  have hLR : (L : ℝ) = (delta : ℝ) * v₀ * w₀ := by exact_mod_cast hLeq\n  have hnum : (N₁ : ℝ) * b = (n₁ : ℝ) * L * j + a +\n      (a : ℝ) * f * A * delta * v₀ * t := by\n    rw [hN₁R]\n    linarith [hjR]\n  have hA0 : (A : ℝ) ≠ 0 := by positivity\n  have hN₁0 : (N₁ : ℝ) ≠ 0 := by positivity\n  have hL0 : (L : ℝ) ≠ 0 := by positivity\n  have hn₁0 : (n₁ : ℝ) ≠ 0 := by positivity\n  have hv₀0 : (v₀ : ℝ) ≠ 0 := by positivity\n  have hw₀0 : (w₀ : ℝ) ≠ 0 := by positivity\n  have hdelta0 : (delta : ℝ) ≠ 0 := by dsimp only [delta]; positivity\n  have hreal : (b : ℝ) / L = (j : ℝ) / A +\n      (a : ℝ) / ((N₁ : ℝ) * L) +\n        (a : ℝ) * f * t / ((n₁ : ℝ) * w₀) := by\n    calc\n      (b : ℝ) / L =\n          ((n₁ : ℝ) * L * j + a + (a : ℝ) * f * A * delta * v₀ * t) /\n            ((N₁ : ℝ) * L) := by\n        rw [← hnum]\n        field_simp [hN₁0, hL0]\n        <;> ring\n      _ = (j : ℝ) / A + (a : ℝ) / ((N₁ : ℝ) * L) +\n          (a : ℝ) * f * t / ((n₁ : ℝ) * w₀) := by\n        rw [hN₁R, hLR]\n        field_simp [hA0, hn₁0, hdelta0, hv₀0, hw₀0]\n        <;> ring\n  rw [hreal, AddCircle.coe_add, AddCircle.coe_add, hjcircle]\n\n/-- Fourier transport retains every signed integer frequency and all three phases. -/\n",
+      "span_sha256": "0af39ce65473346dcc50f888267d00b36723977c528c01712149051304f71c69"
+    },
+    {
+      "name": "sharedDifferenceReciprocity_fourier",
+      "private": false,
+      "kind": "theorem",
+      "line": 351,
+      "complete_header": "theorem sharedDifferenceReciprocity_fourier\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) (a h : ℤ) :\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let z := CanonicalReciprocalPhase.wPhaseInverse (n₁ * L) A\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    fourier h (((b : ℝ) / (L : ℝ) : ℝ) : UnitAddCircle) =\n      fourier h (((-(a : ℝ) * (z : ℝ) / (A : ℝ)) : ℝ) : UnitAddCircle) *\n        fourier h ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle) *\n          fourier h (((((a : ℝ) * (f : ℝ) * (t : ℝ)) / ((n₁ : ℝ) * w₀)) : ℝ) : UnitAddCircle)",
+      "complete_source_span": "theorem sharedDifferenceReciprocity_fourier\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) (a h : ℤ) :\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let z := CanonicalReciprocalPhase.wPhaseInverse (n₁ * L) A\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    fourier h (((b : ℝ) / (L : ℝ) : ℝ) : UnitAddCircle) =\n      fourier h (((-(a : ℝ) * (z : ℝ) / (A : ℝ)) : ℝ) : UnitAddCircle) *\n        fourier h ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle) *\n          fourier h (((((a : ℝ) * (f : ℝ) * (t : ℝ)) / ((n₁ : ℝ) * w₀)) : ℝ) : UnitAddCircle) := by\n  have he := sharedDifferenceReciprocity_circle hp hv hw hN₁ hN₂ hc a\n  dsimp only at he ⊢\n  rw [he, SharedDifferenceReciprocity.fourier_add,\n    SharedDifferenceReciprocity.fourier_add]\n\n/-- The actual standard finite additive character has the same positive sign. -/\n",
+      "span_sha256": "d960cf323e440f144b924b8fde55f32ff465329c48a5a8abbd269ef3ea72b0ef"
+    },
+    {
+      "name": "fourier_int_div_nat_eq_stdAddChar",
+      "private": false,
+      "kind": "theorem",
+      "line": 380,
+      "complete_header": "theorem fourier_int_div_nat_eq_stdAddChar\n    (m : ℕ) [NeZero m] (h z : ℤ) :\n    fourier h ((((z : ℝ) / (m : ℝ)) : ℝ) : UnitAddCircle) =\n      ZMod.stdAddChar ((h * z : ℤ) : ZMod m)",
+      "complete_source_span": "theorem fourier_int_div_nat_eq_stdAddChar\n    (m : ℕ) [NeZero m] (h z : ℤ) :\n    fourier h ((((z : ℝ) / (m : ℝ)) : ℝ) : UnitAddCircle) =\n      ZMod.stdAddChar ((h * z : ℤ) : ZMod m) := by\n  rw [fourier_coe_apply, ZMod.stdAddChar_coe]\n  push_cast\n  congr 1\n  ring\n\n/-- The constructed Bezout inverse is precisely the existing `ZMod` inverse. -/\n",
+      "span_sha256": "1ea2e495a943092130ecd08ab018921972f744eb24d8af64ac917d1f6e43b095"
+    },
+    {
+      "name": "fourier_inverse_phase_eq_stdAddChar",
+      "private": false,
+      "kind": "theorem",
+      "line": 390,
+      "complete_header": "theorem fourier_inverse_phase_eq_stdAddChar\n    (m n : ℕ) [NeZero m] (hc : n.Coprime m) (h a : ℤ) :\n    fourier h (((((a : ℝ) *\n      (CanonicalReciprocalPhase.wPhaseInverse n m : ℝ)) / (m : ℝ)) : ℝ) :\n        UnitAddCircle) =\n      ZMod.stdAddChar (((h * a : ℤ) : ZMod m) * (n : ZMod m)⁻¹)",
+      "complete_source_span": "theorem fourier_inverse_phase_eq_stdAddChar\n    (m n : ℕ) [NeZero m] (hc : n.Coprime m) (h a : ℤ) :\n    fourier h (((((a : ℝ) *\n      (CanonicalReciprocalPhase.wPhaseInverse n m : ℝ)) / (m : ℝ)) : ℝ) :\n        UnitAddCircle) =\n      ZMod.stdAddChar (((h * a : ℤ) : ZMod m) * (n : ZMod m)⁻¹) := by\n  let t := CanonicalReciprocalPhase.wPhaseInverse n m\n  have ht : (n : ZMod m) * (t : ZMod m) = 1 := by\n    simpa only [Int.cast_mul, Int.cast_natCast, Int.cast_one] using\n      (ZMod.intCast_eq_intCast_iff ((n : ℤ) * t) 1 m).mpr\n        (CanonicalReciprocalPhase.wPhaseInverse_spec hc)\n  have hinv : (t : ZMod m) = (n : ZMod m)⁻¹ :=\n    (ZMod.inv_eq_of_mul_eq_one m (n : ZMod m) (t : ZMod m) ht).symm\n  have he := fourier_int_div_nat_eq_stdAddChar m h (a * t)\n  simpa only [Int.cast_mul, mul_assoc, hinv] using he\n\n/-- The original shared-row Poisson frequency uses original `V`, literal cutoff and all h. -/\n",
+      "span_sha256": "fbc1a6b6bfacf4a06a1a02c6a50409fcd15eaffb364c674827d034db8f576c10"
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactor_poissonFrequency_eq_differencePhases",
+      "private": false,
+      "kind": "theorem",
+      "line": 407,
+      "complete_header": "theorem MediumAtom.sharedFirstFactor_poissonFrequency_eq_differencePhases\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) (hl' : l' ∈ d.sharedFirstFactorRows)\n    (hc : ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n      (p * (l'.1.1 * l'.1.2)) l.2 l'.2) (h : ℤ) :\n    let v := l.1.1 * l.1.2\n    let w := l'.1.1 * l'.1.2\n    let N₁ := l.2\n    let N₂ := l'.2\n    let a := d.residue\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let z := CanonicalReciprocalPhase.wPhaseInverse (n₁ * L) A\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    CommonSmoothCutoff.poissonNonzeroFrequency\n      (d.V / (L : ℝ)) ((b : ℝ) / (L : ℝ)) h =\n      if h = 0 then 0 else\n        (d.V / (L : ℝ)) •\n          (𝓕 CommonSmoothCutoff.dyadicCutoffSchwartz) ((d.V / (L : ℝ)) * h) *\n          fourier h (((-(a : ℝ) * (z : ℝ) / (A : ℝ)) : ℝ) : UnitAddCircle) *\n            fourier h ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle) *\n              fourier h (((((a : ℝ) * (f : ℝ) * (t : ℝ)) / ((n₁ : ℝ) * w₀)) : ℝ) : UnitAddCircle)",
+      "complete_source_span": "theorem MediumAtom.sharedFirstFactor_poissonFrequency_eq_differencePhases\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier)\n    {l l' : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) (hl' : l' ∈ d.sharedFirstFactorRows)\n    (hc : ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n      (p * (l'.1.1 * l'.1.2)) l.2 l'.2) (h : ℤ) :\n    let v := l.1.1 * l.1.2\n    let w := l'.1.1 * l'.1.2\n    let N₁ := l.2\n    let N₂ := l'.2\n    let a := d.residue\n    let g := N₁.gcd N₂\n    let D := v.gcd w\n    let v₀ := v / D\n    let w₀ := w / D\n    let delta := p * D\n    let d₁ := CanonicalReciprocalData.supportedPart (N₁ / g) g\n    let n₁ := CanonicalReciprocalData.coprimePart (N₁ / g) g\n    let n₂ := N₂ / g\n    let A := g * d₁\n    let L := (p * v).lcm (p * w)\n    let f : ℤ := ((d₁ : ℤ) * n₁ - n₂) / (delta : ℤ)\n    let t := CanonicalReciprocalPhase.wPhaseInverse (A * n₂ * v₀) (n₁ * w₀)\n    let z := CanonicalReciprocalPhase.wPhaseInverse (n₁ * L) A\n    let b := ComplexCRT.residue (p * v) (p * w) N₁ N₂ a\n    CommonSmoothCutoff.poissonNonzeroFrequency\n      (d.V / (L : ℝ)) ((b : ℝ) / (L : ℝ)) h =\n      if h = 0 then 0 else\n        (d.V / (L : ℝ)) •\n          (𝓕 CommonSmoothCutoff.dyadicCutoffSchwartz) ((d.V / (L : ℝ)) * h) *\n          fourier h (((-(a : ℝ) * (z : ℝ) / (A : ℝ)) : ℝ) : UnitAddCircle) *\n            fourier h ((((a : ℝ) / ((N₁ : ℝ) * L)) : ℝ) : UnitAddCircle) *\n              fourier h (((((a : ℝ) * (f : ℝ) * (t : ℝ)) / ((n₁ : ℝ) * w₀)) : ℝ) : UnitAddCircle) := by\n  have hpp : 0 < p := SharedDifferenceReciprocity.factor_pos hd.2.2.1\n    (Finset.mem_filter.mp hp).1\n  have hleft := SharedDifferenceReciprocity.row_pos hd hl\n  have hright := SharedDifferenceReciprocity.row_pos hd hl'\n  have he := sharedDifferenceReciprocity_fourier hpp hleft.1 hright.1\n    hleft.2 hright.2 hc d.residue h\n  dsimp only at he ⊢\n  unfold CommonSmoothCutoff.poissonNonzeroFrequency\n  by_cases hh : h = 0\n  · simp only [hh, if_true]\n  · simp only [if_neg hh]\n    rw [he]\n    ring\n\nend ImbalancedChen.Part3\n",
+      "span_sha256": "7f1ed5ee4029cde104268cc19889ed3988dc70164accb226a9c198b40227aea6"
+    }
+  ],
+  "independent_mathematical_audit": [
+    "All original raw positive integers and actual Compatible construct g,D,v0,w0,delta,d1,n1,n2,A,L,f,t,z,b. supportedPart argument order is (N1/g,g). No inverse, residue, congruence, spectral or phase supplier is added.",
+    "The actual local canonical data gives N1=g*d1*n1, N2=g*n2 and n1 coprime g*d1. The tail quotients are independently constructed as v/D,w/D, not confused with canonical k1/k2. Their positivity and v0 coprime w0 follow from true gcd cancellation. L=delta*v0*w0.",
+    "Compatible gives N1 coprime p*v and N2 coprime p*w. Since g divides both Ns, g coprime L; prime support transfers this to d1 coprime L. n1 coprime delta and v0 coprime n1*w0 follow without asserting delta coprime either tail quotient.",
+    "The inverse-unit proof decomposes (A*n2*v0) coprime n1*w0 into A,n2,v0 against both factors, using exact n1/n2 coprimality and original two CRT unit gates. The root inverse has (n1*L) coprime A. All are proved from existing public canonical APIs.",
+    "Exact canonical n_congruence yields Nat.ModEq delta (d1*n1) n2. Int.ModEq.dvd is right-minus-left, so symmetry correctly gives delta | d1*n1-n2. Signed Int.ediv defines f and Int.mul_ediv_cancel proves delta*f=d1*n1-n2, including negative f and f=0.",
+    "Set K=b-a*d1*v0*t and E=N1*b-a-a*f*A*delta*v0*t. The inverse witness is 1-(A*n2*v0)*t=(n1*w0)*s, the second CRT witness is a-b*N2=w0*r. The proposed K witness n1*b*s-d1*v0*t*r expands exactly to K/w0, so its linear_combination signs are correct.",
+    "First CRT gives delta*v0 | E with witness -j-a*f*g*d1*t. E=A*n1*K+a*((A*n2*v0)*t-1) gives n1*w0 | E with witness A*k-a*s. E=(N2*b-a)+g*delta*f*K gives delta*w0 | E with witness -j+g*f*k. All displayed polynomial linear combinations were independently expanded with Int.ModEq right-minus-left orientation.",
+    "First lcm merge is lcm(n1*w0,delta*w0)=lcm(n1,delta)*w0=delta*n1*w0, using only n1 coprime delta. Second is lcm(delta*v0,delta*(n1*w0))=delta*lcm(v0,n1*w0)=n1*L. Hence n1*L divides E even if delta and w0 overlap. The proof does not combine n1|E and L|E as if those moduli were coprime.",
+    "Writing E=(n1*L)*j and the inverse identity 1-(n1*L)*z=A*u yields -a*z-j=A*(-j*u-(n1*b-a*f*delta*v0*t)*z). Thus j=-a*z mod A with the correct negative root sign. The public positive-modulus circle lemma applies also at A=1.",
+    "The exact real division is b/L=j/A+a/(N1*L)+a*f*t/(n1*w0). All denominators are positive. The root phase, full slow phase a/(N1*L), and signed reciprocal phase are retained, including f=0; no division by f is used.",
+    "Local fourier_add proves character multiplicativity from fourier_apply, zsmul_add, AddCircle.toCircle_add and Circle.coe_mul. Applying it twice transports all signed h with the existing positive exponential sign. No imported private helper is called.",
+    "fourier_coe_apply at UnitAddCircle and ZMod.stdAddChar_coe both have positive exp(2*pi*I*...). push_cast/ring gives the true standard additive character. wPhaseInverse_spec, ZMod.intCast_eq_intCast_iff and protected ZMod.inv_eq_of_mul_eq_one identify the constructed inverse. NeZero m excludes only m=0 and includes m=1.",
+    "The actual row endpoint derives positive p from its full primitive carrier and positive tail/N coordinates from original hd and sharedFirstFactorRows. It instantiates the generic identity pointwise on the original p,v,w,N1,N2,a=d.residue, without asserting transposed MediumAdmissible.",
+    "The literal CommonSmoothCutoff.poissonNonzeroFrequency uses original d.V/L, the actual named dyadicCutoffSchwartz, all integer h and the same h=0 branch. Its positive Fourier factor is replaced by the exact three-factor identity. The complete slow phase and true physical lcm remain; complex row coefficients stay external to this pointwise equality."
+  ],
+  "math_verdict": "No mathematical normalization, sign, divisibility, coprimality, boundary, mask, public-quantifier or original-V mismatch found in the entire frozen source. Lean elaboration remains unperformed.",
+  "actual_six_owned_parent_bindings": [
+    {
+      "module": "ImbalancedChen.Part3ComplexCRTConsumer",
+      "source_sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+      "source_matches_record": true,
+      "receipt_path": ".lake\\proof-continuation\\audits\\20261015T085748716666Z\\receipt.json",
+      "receipt_sha256": "f40e65e248314271ebd2e4905b518a07f05dcf06198e6e172bac438e9db1c611",
+      "receipt_matches_record": true,
+      "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "owned_declaration_count": 25,
+      "declarations_json_sha256": "f6d527096fc02a995688849bdbc0131cb05da524ad6045cdcd381aaeb250bcfe",
+      "current_olean_sha256": "af49ba253a1eb113bd442eaec0ae9b67fc82c809c084066f3b9e319e971e8d70",
+      "current_olean_matches_record": true
+    },
+    {
+      "module": "ImbalancedChen.Part3CommonPoisson",
+      "source_sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+      "source_matches_record": true,
+      "receipt_path": ".lake\\proof-continuation\\audits\\20261015T103752259559Z\\receipt.json",
+      "receipt_sha256": "799b975312dd0474e38fb12b8e7bdc830d52507539d9040505bcd9b47f070a19",
+      "receipt_matches_record": true,
+      "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "owned_declaration_count": 31,
+      "declarations_json_sha256": "09e7bc600ec9a4fc710b9d230d2bf081b6dc2e1d9c947af8d0d784b2300297d1",
+      "current_olean_sha256": "3e0b5afde4cc4655adefa76700f88ed5286543b305ea86b3df9f64d60d3a90ae",
+      "current_olean_matches_record": true
+    },
+    {
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "source_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "source_matches_record": true,
+      "receipt_path": ".lake\\proof-continuation\\audits\\20261015T183115624304Z\\receipt.json",
+      "receipt_sha256": "7ca6f205c8ae812dcacc69301c3fc4afc01b6f3df8df7329505091c179b0adc0",
+      "receipt_matches_record": true,
+      "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "owned_declaration_count": 108,
+      "declarations_json_sha256": "1f53083ba00c588137ebe360855b07f4758ddf5653e8c5f5ae9f82dc9abc459b",
+      "current_olean_sha256": "82e37fd95b03ec7fd97007a2e4f5a82e27c9c0a8adbc72e1249de8326f00a3e6",
+      "current_olean_matches_record": true
+    },
+    {
+      "module": "ImbalancedChen.Part3CanonicalReciprocalPhase",
+      "source_sha256": "212392dfcf1bec5da8ff92b40b16332f68c5b1644c39a5d24eddf7abb7ea76e5",
+      "source_matches_record": true,
+      "receipt_path": ".lake\\proof-continuation\\audits\\20261015T183115624304Z\\receipt.json",
+      "receipt_sha256": "7ca6f205c8ae812dcacc69301c3fc4afc01b6f3df8df7329505091c179b0adc0",
+      "receipt_matches_record": true,
+      "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "owned_declaration_count": 28,
+      "declarations_json_sha256": "1f53083ba00c588137ebe360855b07f4758ddf5653e8c5f5ae9f82dc9abc459b",
+      "current_olean_sha256": "673c056778842a35172ea2bc278f362894e2af34bcb15b1640dee564b3be34db",
+      "current_olean_matches_record": true
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedDispersion",
+      "source_sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+      "source_matches_record": true,
+      "receipt_path": ".lake\\proof-continuation\\audits\\20261015T194819268649Z\\receipt.json",
+      "receipt_sha256": "f142ad8cb72932423da35ec187b0c764d50f9a2952b96658238a5f8624d5c187",
+      "receipt_matches_record": true,
+      "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "owned_declaration_count": 29,
+      "declarations_json_sha256": "8471c9afd56f7b6be790a2b270f9e5be05d8e9b1ea463fc6134933c0efa49c3e",
+      "current_olean_sha256": "0e2146b64d4d38c9d031284d1d72d433f66a47902d47826b412a0c1393749603",
+      "current_olean_matches_record": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "source_matches_record": true,
+      "receipt_path": ".lake\\proof-continuation\\audits\\20261015T230927740441Z\\receipt.json",
+      "receipt_sha256": "ad9c3b6b8f3fd2d65d87f7de96ef19dfb83518b193250d168c04f0bcd571634f",
+      "receipt_matches_record": true,
+      "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+      "owned_declaration_count": 46,
+      "declarations_json_sha256": "7207f8a6f0b5e5c3d64fdd2113d89e2b02c7fbcb0d78450fc70658eeba98eaec",
+      "current_olean_sha256": "a44b42f2a4394fbdbe47ac83e4539de18d3637622d87cb24433dc3bb5f0fe9fc",
+      "current_olean_matches_record": true
+    }
+  ],
+  "consumed_owned_complete_types_flags_and_transitive_axioms": [
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.coprime_of_prime_support",
+      "partial": false,
+      "type": "∀ {u d s : Nat} (hu : Nat.Coprime u d)\n  (hs : ∀ (p : Nat), Nat.Prime p → @Dvd.dvd.{0} Nat Nat.instDvd p s → @Dvd.dvd.{0} Nat Nat.instDvd p d), Nat.Coprime u s",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.coprimePart",
+      "partial": false,
+      "type": "(n d : Nat) → Nat",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart",
+      "partial": false,
+      "type": "(n d : Nat) → Nat",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.wGCDData",
+      "partial": false,
+      "type": "(q r N₁ N₂ : Nat) → ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.wGCDData_valid",
+      "partial": false,
+      "type": "∀ {q r N₁ N₂ : Nat} (hq : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) q)\n  (hr : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) r)\n  (hN₁ : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) N₁)\n  (hN₂ : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) N₂),\n  ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid\n    (ImbalancedChen.Part3.CanonicalReciprocalData.wGCDData q r N₁ N₂) q r N₁ N₂",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid.d_pos",
+      "partial": false,
+      "type": "∀ {v : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData} {q r N₁ N₂ : Nat}\n  (self : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid v q r N₁ N₂),\n  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))\n    (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.d v)",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid.d₁_pos",
+      "partial": false,
+      "type": "∀ {v : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData} {q r N₁ N₂ : Nat}\n  (self : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid v q r N₁ N₂),\n  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))\n    (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.d₁ v)",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid.d₁_support",
+      "partial": false,
+      "type": "∀ {v : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData} {q r N₁ N₂ : Nat}\n  (self : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid v q r N₁ N₂) (p : Nat),\n  Nat.Prime p →\n    @Dvd.dvd.{0} Nat Nat.instDvd p (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.d₁ v) →\n      @Dvd.dvd.{0} Nat Nat.instDvd p (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.d v)",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid.n_congruence",
+      "partial": false,
+      "type": "∀ {v : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData} {q r N₁ N₂ : Nat}\n  (hv : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid v q r N₁ N₂)\n  (hc : ImbalancedChen.Part3.ComplexCRT.Compatible q r N₁ N₂),\n  Nat.ModEq (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.δ v)\n    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n      (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.d₁ v)\n      (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.n₁ v))\n    (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.n₂ v)",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid.N₁_D",
+      "partial": false,
+      "type": "∀ {v : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData} {q r N₁ N₂ : Nat}\n  (hv : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid v q r N₁ N₂)\n  (hc : ImbalancedChen.Part3.ComplexCRT.Compatible q r N₁ N₂),\n  Nat.Coprime N₁ (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.D v)",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid.n₁_d₁",
+      "partial": false,
+      "type": "∀ {v : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData} {q r N₁ N₂ : Nat}\n  (hv : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid v q r N₁ N₂),\n  Nat.Coprime (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.n₁ v)\n    (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.d₁ v)",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid.N₁_eq",
+      "partial": false,
+      "type": "∀ {v : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData} {q r N₁ N₂ : Nat}\n  (self : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid v q r N₁ N₂),\n  @Eq.{1} Nat N₁\n    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n        (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.d v)\n        (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.d₁ v))\n      (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.n₁ v))",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid.n₁_n₂",
+      "partial": false,
+      "type": "∀ {v : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData} {q r N₁ N₂ : Nat}\n  (hv : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid v q r N₁ N₂),\n  Nat.Coprime (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.n₁ v)\n    (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.n₂ v)",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid.n₁_pos",
+      "partial": false,
+      "type": "∀ {v : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData} {q r N₁ N₂ : Nat}\n  (self : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid v q r N₁ N₂),\n  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))\n    (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.n₁ v)",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid.N₂_eq",
+      "partial": false,
+      "type": "∀ {v : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData} {q r N₁ N₂ : Nat}\n  (self : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid v q r N₁ N₂),\n  @Eq.{1} Nat N₂\n    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n      (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.d v)\n      (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.n₂ v))",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid.n₂_pos",
+      "partial": false,
+      "type": "∀ {v : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData} {q r N₁ N₂ : Nat}\n  (self : ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.Valid v q r N₁ N₂),\n  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))\n    (ImbalancedChen.Part3.CanonicalReciprocalData.WGCDData.n₂ v)",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalPhase",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalPhase.wPhase_circle_eq_of_modEq",
+      "partial": false,
+      "type": "∀ {m : Nat} (hm : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) m) {x y : Int}\n  (h : Int.ModEq (@Nat.cast.{0} Int instNatCastInt m) x y),\n  @Eq.{1}\n    (@HasQuotient.Quotient.{0, 0} Real (@AddSubgroup.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup))\n      (@QuotientAddGroup.instHasQuotientAddSubgroup.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup))\n      (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))))\n    (@QuotientAddGroup.mk.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n      (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@Int.cast.{0} Real Real.instIntCast x) (@Nat.cast.{0} Real Real.instNatCast m)))\n    (@QuotientAddGroup.mk.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n      (@AddSubgroup.zmultiples.{0} Real (@AddCommGroup.toAddGroup.{0} Real Real.instAddCommGroup)\n        (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@Int.cast.{0} Real Real.instIntCast y) (@Nat.cast.{0} Real Real.instNatCast m)))",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalPhase",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalPhase.wPhaseInverse",
+      "partial": false,
+      "type": "(n m : Nat) → Int",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3CanonicalReciprocalPhase",
+      "name": "ImbalancedChen.Part3.CanonicalReciprocalPhase.wPhaseInverse_spec",
+      "partial": false,
+      "type": "∀ {n m : Nat} (h : Nat.Coprime n m),\n  Int.ModEq (@Nat.cast.{0} Int instNatCastInt m)\n    (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul) (@Nat.cast.{0} Int instNatCastInt n)\n      (ImbalancedChen.Part3.CanonicalReciprocalPhase.wPhaseInverse n m))\n    (@OfNat.ofNat.{0} Int (nat_lit 1) (@instOfNat (nat_lit 1)))",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3CommonPoisson",
+      "name": "ImbalancedChen.Part3.CommonSmoothCutoff.poissonNonzeroFrequency",
+      "partial": false,
+      "type": "(t x : Real) → (h : Int) → Complex",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [],
+      "module": "ImbalancedChen.Part3ComplexCRTConsumer",
+      "name": "ImbalancedChen.Part3.ComplexCRT.Compatible",
+      "partial": false,
+      "type": "(q r m1 m2 : Nat) → Prop",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3ComplexCRTConsumer",
+      "name": "ImbalancedChen.Part3.ComplexCRT.residue",
+      "partial": false,
+      "type": "(q r m1 m2 : Nat) → (a : Int) → Int",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3ComplexCRTConsumer",
+      "name": "ImbalancedChen.Part3.ComplexCRT.residue_spec",
+      "partial": false,
+      "type": "∀ {q r m1 m2 : Nat} (a : Int) (hc : ImbalancedChen.Part3.ComplexCRT.Compatible q r m1 m2),\n  And\n    (Int.ModEq (@Nat.cast.{0} Int instNatCastInt q)\n      (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)\n        (ImbalancedChen.Part3.ComplexCRT.residue q r m1 m2 a) (@Nat.cast.{0} Int instNatCastInt m1))\n      a)\n    (And\n      (Int.ModEq (@Nat.cast.{0} Int instNatCastInt r)\n        (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)\n          (ImbalancedChen.Part3.ComplexCRT.residue q r m1 m2 a) (@Nat.cast.{0} Int instNatCastInt m2))\n        a)\n      (∀ (n : Int),\n        Iff\n          (And\n            (Int.ModEq (@Nat.cast.{0} Int instNatCastInt q)\n              (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul) n (@Nat.cast.{0} Int instNatCastInt m1))\n              a)\n            (Int.ModEq (@Nat.cast.{0} Int instNatCastInt r)\n              (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul) n (@Nat.cast.{0} Int instNatCastInt m2))\n              a))\n          (Int.ModEq (@Nat.cast.{0} Int instNatCastInt (Nat.lcm q r)) n\n            (ImbalancedChen.Part3.ComplexCRT.residue q r m1 m2 a))))",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "name": "ImbalancedChen.Part3.MediumAtom.primitiveFirstFactorCarrier",
+      "partial": false,
+      "type": "(d : ImbalancedChen.Part3.MediumAtom) → Finset.{0} Nat",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "name": "ImbalancedChen.Part3.MediumAtom.sharedFirstFactorRows",
+      "partial": false,
+      "type": "(d : ImbalancedChen.Part3.MediumAtom) → Finset.{0} (Prod.{0, 0} (Prod.{0, 0} Nat Nat) Nat)",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3TransposedDispersion",
+      "name": "ImbalancedChen.Part3.MediumAtom.transposedAtom",
+      "partial": false,
+      "type": "(d : ImbalancedChen.Part3.MediumAtom) → ImbalancedChen.Part3.MediumAtom",
+      "unsafe": false
+    },
+    {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "name": "ImbalancedChen.Part3.sharedFirstFactor_gcd",
+      "partial": false,
+      "type": "∀ (p v1 v2 : Nat),\n  @Eq.{1} Nat\n    (Nat.gcd (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v1)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v2))\n    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p (Nat.gcd v1 v2))",
+      "unsafe": false
+    }
+  ],
+  "missing_consumed_owned_records": [],
+  "bad_owned_safety_or_axiom_records": [],
+  "fresh_source_DAG": {
+    "proper_existing_project_count": 56,
+    "future_inclusive": 57,
+    "all56_actual_source_header_bindings": [
+      {
+        "module": "ImbalancedChen.Part3CanonicalReciprocalPhase",
+        "path": "ImbalancedChen\\Part3CanonicalReciprocalPhase.lean",
+        "sha256": "212392dfcf1bec5da8ff92b40b16332f68c5b1644c39a5d24eddf7abb7ea76e5",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.Part3CommonPoisson",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.Part3CanonicalReciprocalData",
+          "ImbalancedChen.Part3CommonPoisson"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+        "path": "ImbalancedChen\\Part3CanonicalReciprocalData.lean",
+        "sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Part3ComplexCRTConsumer",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Factorization.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Associated",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.Part3ComplexCRTConsumer"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.Part3ComplexCRTConsumer",
+        "path": "ImbalancedChen\\Part3ComplexCRTConsumer.lean",
+        "sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Part3ComplexDispersion",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Int.ModEq",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.ModEq",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.Part3ComplexDispersion"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.Part3ComplexDispersion",
+        "path": "ImbalancedChen\\Part3ComplexDispersion.lean",
+        "sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Part3DistributionTargets",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.Complex.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Star.BigOperators",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.Part3DistributionTargets"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.Part3DistributionTargets",
+        "path": "ImbalancedChen\\Part3DistributionTargets.lean",
+        "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.RestrictedResidueScale",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.Complex.Exponential",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.RestrictedResidueScale"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.RestrictedResidueScale",
+        "path": "ImbalancedChen\\RestrictedResidueScale.lean",
+        "sha256": "3c58f54f875a46886c28bc224fdf4952d6b53a72ae6f6f2b8debaf7e71c01d0f",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.PanProductGridRanges",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.PanProductGridRanges"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.PanProductGridRanges",
+        "path": "ImbalancedChen\\PanProductGridRanges.lean",
+        "sha256": "88b2c972243ba1e33e89a08b6759c16512620751b7c25206dfa4d767bf79466a",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.PanProductGrid",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.RealHalfProductMassSplit",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.PanProductGrid",
+          "ImbalancedChen.RealHalfProductMassSplit"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.PanProductGrid",
+        "path": "ImbalancedChen\\PanProductGrid.lean",
+        "sha256": "e37bb4d2aa855c86e1601566e9ea6649092ac625c434d8a30476208057fab743",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.PanProductAggregateBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.SelectedGridRanges",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.PanProductAggregateBudget",
+          "ImbalancedChen.SelectedGridRanges"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.PanProductAggregateBudget",
+        "path": "ImbalancedChen\\PanProductAggregateBudget.lean",
+        "sha256": "13b512d4c51a00b217ea72b3033ec50bd48d76c10812184a20d1bc838ef04140",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.PanProductLiuBridge",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.PanProductLiuBridge"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.PanProductLiuBridge",
+        "path": "ImbalancedChen\\PanProductLiuBridge.lean",
+        "sha256": "dd239cb5a36898abe49cdb23d60cc1e3e86dede36bd849c41013f18a99ee2d61",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.PanProductResidueBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.PanProductResidueBudget"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.PanProductResidueBudget",
+        "path": "ImbalancedChen\\PanProductResidueBudget.lean",
+        "sha256": "4b5dcf30d8aebee0779f6dc3e4f1188a6797f9cd5215f71737b8369a79a9fbaf",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.PanProductStrips",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.ResidueSelectorBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.PanProductStrips",
+          "ImbalancedChen.ResidueSelectorBudget"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.PanProductStrips",
+        "path": "ImbalancedChen\\PanProductStrips.lean",
+        "sha256": "eb97d23050e3ec624cde24ef779acc67d7ded44283dc60097edc2d715429863b",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.HalfProductPanFinite",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.PrimeRectanglePrefixes",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.HalfProductPanFinite",
+          "ImbalancedChen.PrimeRectanglePrefixes"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.HalfProductPanFinite",
+        "path": "ImbalancedChen\\HalfProductPanFinite.lean",
+        "sha256": "f392c7642bd00e418c91000a3ed6ef7c4c30194808e974999d4a39699d2b62de",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FiniteSieveModel",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.HalfProductMassFibres",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.FiniteSieveModel",
+          "ImbalancedChen.HalfProductMassFibres"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.FiniteSieveModel",
+        "path": "ImbalancedChen\\FiniteSieveModel.lean",
+        "sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.SieveSourceCoprimality",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.SelbergSieve",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Totient",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Squarefree",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.SieveSourceCoprimality"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.SieveSourceCoprimality",
+        "path": "ImbalancedChen\\SieveSourceCoprimality.lean",
+        "sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.HalfProductSource",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.GCD.BigOperators",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.ModEq",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Prime.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Card",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.HalfProductSource"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.HalfProductSource",
+        "path": "ImbalancedChen\\HalfProductSource.lean",
+        "sha256": "dc6e261ddfdc9a66e966a4ec5c2a129d3f4b7583501c5c82364f2aa4a8af194e",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.BadSourceLocalization",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Prod",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.BadSourceLocalization"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.BadSourceLocalization",
+        "path": "ImbalancedChen\\BadSourceLocalization.lean",
+        "sha256": "0e88326b03a4c20a472014b506d7533495d86801909af4d455de5fcfae6695a7",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.HalfProductGeometry",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Floor.Semiring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Card",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.HalfProductGeometry"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.HalfProductGeometry",
+        "path": "ImbalancedChen\\HalfProductGeometry.lean",
+        "sha256": "d04e31ea73a853c4fa37e881ef30a748b7f83b8a0e930e0cc2ae231dbb629db1",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.OrderedBad",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Convert",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.OrderedBad"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.OrderedBad",
+        "path": "ImbalancedChen\\OrderedBad.lean",
+        "sha256": "a38031995175bd2f847eefd498c929e941400c9cffdf6f78e3e06bd2100764da",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.RationalPowers",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.RationalPowers"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.RationalPowers",
+        "path": "ImbalancedChen\\RationalPowers.lean",
+        "sha256": "40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Counting",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.Counting"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.Counting",
+        "path": "ImbalancedChen\\Counting.lean",
+        "sha256": "8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.Data.Finset.Card",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Prime.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": []
+      },
+      {
+        "module": "ImbalancedChen.HalfProductMassFibres",
+        "path": "ImbalancedChen\\HalfProductMassFibres.lean",
+        "sha256": "f83e431ffdd975af44ae54eaadbae3ce6d609ed265d433dbbd05b4f6fc0f77c7",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.HalfProductSource",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Sqrt",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.PrimeCounting",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.HalfProductSource"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.PrimeRectanglePrefixes",
+        "path": "ImbalancedChen\\PrimeRectanglePrefixes.lean",
+        "sha256": "d74bfbac6032d4de701f13ddf78308d2a584916e144aab5326a1ba4441586b5e",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.RectangleDiscrepancyAssembly",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.SelectedGridRanges",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.CoprimeRecentering",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.RectangleDiscrepancyAssembly",
+          "ImbalancedChen.SelectedGridRanges",
+          "ImbalancedChen.CoprimeRecentering"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.RectangleDiscrepancyAssembly",
+        "path": "ImbalancedChen\\RectangleDiscrepancyAssembly.lean",
+        "sha256": "5af6880e6c3f2c00a846cfccd8842e08f80ed8eb314cfdaa972904c2f987e861",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ActualGridEnvelopes",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.TotientReciprocalBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.TotientReciprocalBudget"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.ActualGridEnvelopes",
+        "path": "ImbalancedChen\\ActualGridEnvelopes.lean",
+        "sha256": "f2171599b210583ee28b316da48b114c74f8742b564d0c1d3a30aaf073aaf528",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.MultiplicativeGridPartition",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.BoundaryGlobalCaps",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.MultiplicativeGridPartition",
+          "ImbalancedChen.BoundaryGlobalCaps"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.MultiplicativeGridPartition",
+        "path": "ImbalancedChen\\MultiplicativeGridPartition.lean",
+        "sha256": "9be180c5c070d8855c9e1fa1acaf30ccda7f87d7ec45410670e2d527a6b18598",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.BoundaryCellContainment",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Log.Base",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Floor.Semiring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Prod",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Interval.Finset.Nat",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.BoundaryCellContainment"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.BoundaryCellContainment",
+        "path": "ImbalancedChen\\BoundaryCellContainment.lean",
+        "sha256": "12a74397730d07769c95cb7e1ab6adc4a3b570daedc49dbc65c0c0defd7ba80d",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.BoundaryGridBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.HalfProductSource",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.BoundaryGridBudget",
+          "ImbalancedChen.HalfProductSource"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.BoundaryGridBudget",
+        "path": "ImbalancedChen\\BoundaryGridBudget.lean",
+        "sha256": "a36da7f8fc558d406e5e00b9790389438846198caa610540da8145471a419245",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.CurvedRegionDiscrepancy",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Max",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Interval.Finset.Nat",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.Harmonic.Bounds",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.CurvedRegionDiscrepancy"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.CurvedRegionDiscrepancy",
+        "path": "ImbalancedChen\\CurvedRegionDiscrepancy.lean",
+        "sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.FiniteSieveModel",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Ring.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.FiniteSieveModel"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.BoundaryGlobalCaps",
+        "path": "ImbalancedChen\\BoundaryGlobalCaps.lean",
+        "sha256": "95eb4934caa7aa8ed308a7094ae46a4d14d6336e2470ee2b58a88ce0b379caae",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.BoundaryCellContainment",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.Real.Sqrt",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.BoundaryCellContainment"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.TotientReciprocalBudget",
+        "path": "ImbalancedChen\\TotientReciprocalBudget.lean",
+        "sha256": "aa80ff2ad79f77405951f1e56e993a851a1b32ad46c970e7914adb94bdb2db86",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.CurvedRegionDiscrepancy",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Totient",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.ArithmeticFunction.Misc",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.Harmonic.Bounds",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.BigOperators.Intervals",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Positivity",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.CurvedRegionDiscrepancy"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.SelectedGridRanges",
+        "path": "ImbalancedChen\\SelectedGridRanges.lean",
+        "sha256": "45909866dd099095795a0abbaba05c3ffe0250a569c694ce57640292b4a3a847",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.ActualGridEnvelopes",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.HalfProductGeometry",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.ActualSieveGate",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.HalfProductGeometry",
+          "ImbalancedChen.ActualSieveGate"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.ActualSieveGate",
+        "path": "ImbalancedChen\\ActualSieveGate.lean",
+        "sha256": "ccfecae8cbaa1dcf1685238e1db0764aa64ec15744502651623f56d9cfa4831a",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.LogCutoffError",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.PowerErrorBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.SieveSourceCoprimality",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Floor.Semiring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.LogCutoffError",
+          "ImbalancedChen.PowerErrorBudget",
+          "ImbalancedChen.SieveSourceCoprimality"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.LogCutoffError",
+        "path": "ImbalancedChen\\LogCutoffError.lean",
+        "sha256": "202d60ddffa0cbf6a0cc3259af4ec3654e4227a5e16523a2db71ba30d1dfcd49",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.SingularSeries",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.BadSourceLocalization",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Topology.Algebra.Order.Field",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.SingularSeries",
+          "ImbalancedChen.BadSourceLocalization"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.SingularSeries",
+        "path": "ImbalancedChen\\SingularSeries.lean",
+        "sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.NormalizationGrowth",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.PSeries",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.PrimeFin",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.NormalizationGrowth"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.NormalizationGrowth",
+        "path": "ImbalancedChen\\NormalizationGrowth.lean",
+        "sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Ring.Parity",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Filter.AtTopBot.Archimedean",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Filter.AtTopBot.Field",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": []
+      },
+      {
+        "module": "ImbalancedChen.PowerErrorBudget",
+        "path": "ImbalancedChen\\PowerErrorBudget.lean",
+        "sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.SingularSeries",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Floor.Semiring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.SingularSeries"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.CoprimeRecentering",
+        "path": "ImbalancedChen\\CoprimeRecentering.lean",
+        "sha256": "45c28d97bd10eccaa99498b2309fb03c9d8efbdd5040e12d7ba33c3702b418c5",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.CurvedRegionDiscrepancy",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Nat.Totient",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.FieldSimp",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.CurvedRegionDiscrepancy"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.ResidueSelectorBudget",
+        "path": "ImbalancedChen\\ResidueSelectorBudget.lean",
+        "sha256": "03715ddc6bae19040f6d30511548a954d08428629a3a7d2e2884a4b8ce5b8e69",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.PrimeRectanglePrefixes",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.PrimeRectanglePrefixes"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.RealHalfProductMassSplit",
+        "path": "ImbalancedChen\\RealHalfProductMassSplit.lean",
+        "sha256": "6516890accb0179098fca79f98791adeddad569a858fc69710b87a8d3b92a3ca",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.RealHalfProductMass",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.PowerErrorBudget",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.RealHalfProductMass",
+          "ImbalancedChen.PowerErrorBudget"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.RealHalfProductMass",
+        "path": "ImbalancedChen\\RealHalfProductMass.lean",
+        "sha256": "90c809c15ce26cd1f4785b5117e2d8a5dcfdc5720480bc690d198d95f33601f3",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.RealHalfProductSource",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.HalfProductMassLimit",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.RealHalfProductSource",
+          "ImbalancedChen.HalfProductMassLimit"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.RealHalfProductSource",
+        "path": "ImbalancedChen\\RealHalfProductSource.lean",
+        "sha256": "0c3211cb72d8f27eb380f57fe5d751f8fc3179cb646c683c1449d450c71c55e7",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.CurrentMainTheorem",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Floor.Semiring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Data.Finset.Prod",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.NormCast",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Lean.Elab.Tactic.Omega",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.CurrentMainTheorem"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.CurrentMainTheorem",
+        "path": "ImbalancedChen\\CurrentMainTheorem.lean",
+        "sha256": "68a2a3aad8ccdc73ed8e5076e31b9984bc659c307d71150920a71b5fc98f067d",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.CurrentNumericalTransfer",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.OrderedBad",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Topology.Instances.EReal.Lemmas",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.CurrentNumericalTransfer",
+          "ImbalancedChen.OrderedBad"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.CurrentNumericalTransfer",
+        "path": "ImbalancedChen\\CurrentNumericalTransfer.lean",
+        "sha256": "acc924036cb6ca73ef660c632d5577462ba5c69b8b5600aef63255264c3a270a",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.AsymptoticTransfer",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.RationalPowers",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.SingularSeries",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.AsymptoticTransfer",
+          "ImbalancedChen.RationalPowers",
+          "ImbalancedChen.SingularSeries"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.AsymptoticTransfer",
+        "path": "ImbalancedChen\\AsymptoticTransfer.lean",
+        "sha256": "ece82cd26ee1030d708e6055395bdb5a6a4cf8b1d8c6072a67a9a59cd36bc560",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Counting",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.Multiplicity",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Filter.AtTopBot.Basic",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.Counting",
+          "ImbalancedChen.Multiplicity"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.Multiplicity",
+        "path": "ImbalancedChen\\Multiplicity.lean",
+        "sha256": "9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Counting",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.AlmostPrime",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.SplitIfs",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.Counting"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.HalfProductMassLimit",
+        "path": "ImbalancedChen\\HalfProductMassLimit.lean",
+        "sha256": "1dbb92a59abc74034d49f52428071aae3ccd9cc05beda8f75f4e693c08f3a4ab",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.HalfProductMassError",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.MassLogIntegral",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Topology.MetricSpace.Pseudo.Defs",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.HalfProductMassError",
+          "ImbalancedChen.MassLogIntegral"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.HalfProductMassError",
+        "path": "ImbalancedChen\\HalfProductMassError.lean",
+        "sha256": "1109367deda15f8255ae1a987ecf3b82225ddfad6c335fd890d7c989d5434ad9",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.HalfProductMassSplit",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.UniformPrimeTail",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.LogCutoffError",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.HalfProductMassSplit",
+          "ImbalancedChen.UniformPrimeTail",
+          "ImbalancedChen.LogCutoffError"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.HalfProductMassSplit",
+        "path": "ImbalancedChen\\HalfProductMassSplit.lean",
+        "sha256": "ba78734851c6114c76234f5b607efc1a15bcac377692e11e361cd4c02032dc16",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.HalfProductMassFibres",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.HalfProductMassFibres"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.UniformPrimeTail",
+        "path": "ImbalancedChen\\UniformPrimeTail.lean",
+        "sha256": "786ed7d70f3f3e89161a9e025d2c8bb0b06db6cddae7200c3fc1c0ca009ebbbf",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Mathlib.Analysis.Asymptotics.Defs",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.Real.Sqrt",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Algebra.Order.Floor.Semiring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.NumberTheory.PrimeCounting",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Order.Filter.AtTopBot.Archimedean",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Linarith",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.NormNum",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Tactic.Ring",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": []
+      },
+      {
+        "module": "ImbalancedChen.MassLogIntegral",
+        "path": "ImbalancedChen\\MassLogIntegral.lean",
+        "sha256": "bf42c021072fc939bdb5f9d5bc9771fa3d5ed1dd69dd5265bda8418f76a01821",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.HalfProductGeometry",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.HalfProductGeometry"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.Part3CommonPoisson",
+        "path": "ImbalancedChen\\Part3CommonPoisson.lean",
+        "sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Part3CommonSmoothCutoff",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.Part3ComplexCRTConsumer",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.Fourier.PoissonSummation",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.Part3CommonSmoothCutoff",
+          "ImbalancedChen.Part3ComplexCRTConsumer"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.Part3CommonSmoothCutoff",
+        "path": "ImbalancedChen\\Part3CommonSmoothCutoff.lean",
+        "sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Part3ComplexDispersion",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.Calculus.BumpFunction.InnerProduct",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.Analysis.Distribution.SchwartzSpace.Fourier",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "Mathlib.MeasureTheory.Measure.Lebesgue.Integral",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.Part3ComplexDispersion"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+        "path": "ImbalancedChen\\Part3SharedFirstFactorDispersion.lean",
+        "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Part3TransposedDispersion",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.Part3TransposedDispersion"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.Part3TransposedDispersion",
+        "path": "ImbalancedChen\\Part3TransposedDispersion.lean",
+        "sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Part3CommonPoisson",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "ImbalancedChen.Part3FactorFiberDivisor",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.Part3CommonPoisson",
+          "ImbalancedChen.Part3FactorFiberDivisor"
+        ]
+      },
+      {
+        "module": "ImbalancedChen.Part3FactorFiberDivisor",
+        "path": "ImbalancedChen\\Part3FactorFiberDivisor.lean",
+        "sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+        "record_exact": true,
+        "header": {
+          "module_header": false,
+          "prelude": false,
+          "imports": [
+            {
+              "module": "Init",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "Init",
+              "is_meta": true,
+              "import_all": false,
+              "is_exported": false,
+              "explicit_visibility": null,
+              "implicit": true
+            },
+            {
+              "module": "ImbalancedChen.Part3ComplexDispersion",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            },
+            {
+              "module": "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean",
+              "is_meta": false,
+              "import_all": false,
+              "is_exported": true,
+              "explicit_visibility": null,
+              "implicit": false
+            }
+          ],
+          "parser_findings": []
+        },
+        "direct_project": [
+          "ImbalancedChen.Part3ComplexDispersion"
+        ]
+      }
+    ],
+    "foreign_header_roots_before_explicit_character_import": [
+      "Init",
+      "Lean.Elab.Tactic.NormCast",
+      "Lean.Elab.Tactic.Omega",
+      "Mathlib.Algebra.BigOperators.Associated",
+      "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+      "Mathlib.Algebra.BigOperators.Intervals",
+      "Mathlib.Algebra.BigOperators.Ring.Finset",
+      "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+      "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+      "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+      "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+      "Mathlib.Algebra.Order.Floor.Semiring",
+      "Mathlib.Algebra.Ring.Parity",
+      "Mathlib.Algebra.Star.BigOperators",
+      "Mathlib.Analysis.Asymptotics.Defs",
+      "Mathlib.Analysis.Calculus.BumpFunction.InnerProduct",
+      "Mathlib.Analysis.Complex.Basic",
+      "Mathlib.Analysis.Complex.Exponential",
+      "Mathlib.Analysis.Distribution.SchwartzSpace.Fourier",
+      "Mathlib.Analysis.Fourier.PoissonSummation",
+      "Mathlib.Analysis.PSeries",
+      "Mathlib.Analysis.Real.Sqrt",
+      "Mathlib.Analysis.SpecialFunctions.Log.Base",
+      "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+      "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+      "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+      "Mathlib.Data.Finset.Card",
+      "Mathlib.Data.Finset.Max",
+      "Mathlib.Data.Finset.Prod",
+      "Mathlib.Data.Int.ModEq",
+      "Mathlib.Data.Nat.Factorization.Basic",
+      "Mathlib.Data.Nat.GCD.BigOperators",
+      "Mathlib.Data.Nat.ModEq",
+      "Mathlib.Data.Nat.Prime.Basic",
+      "Mathlib.Data.Nat.PrimeFin",
+      "Mathlib.Data.Nat.Sqrt",
+      "Mathlib.Data.Nat.Squarefree",
+      "Mathlib.Data.Nat.Totient",
+      "Mathlib.Data.Real.Basic",
+      "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+      "Mathlib.MeasureTheory.Measure.Lebesgue.Integral",
+      "Mathlib.NumberTheory.AlmostPrime",
+      "Mathlib.NumberTheory.ArithmeticFunction.Misc",
+      "Mathlib.NumberTheory.Harmonic.Bounds",
+      "Mathlib.NumberTheory.PrimeCounting",
+      "Mathlib.NumberTheory.SelbergSieve",
+      "Mathlib.Order.Filter.AtTopBot.Archimedean",
+      "Mathlib.Order.Filter.AtTopBot.Basic",
+      "Mathlib.Order.Filter.AtTopBot.Field",
+      "Mathlib.Order.Interval.Finset.Nat",
+      "Mathlib.Tactic.Convert",
+      "Mathlib.Tactic.FieldSimp",
+      "Mathlib.Tactic.Linarith",
+      "Mathlib.Tactic.NormNum",
+      "Mathlib.Tactic.Positivity",
+      "Mathlib.Tactic.Ring",
+      "Mathlib.Tactic.SplitIfs",
+      "Mathlib.Topology.Algebra.Order.Field",
+      "Mathlib.Topology.Instances.EReal.Lemmas",
+      "Mathlib.Topology.MetricSpace.Pseudo.Defs",
+      "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean",
+      "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate"
+    ],
+    "foreign_before_count": 64,
+    "explicit_new_foreign": [
+      "Mathlib.Analysis.SpecialFunctions.Complex.CircleAddChar"
+    ],
+    "foreign_with_authorized_import_count": 65,
+    "missing_project": [],
+    "source_graph_only_not_foreign_object_kernel_acceptance": true
+  },
+  "fresh_pinned_mathlib_source_API_bindings": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Fourier\\AddCircle.lean",
+      "source_sha256": "87fe0972a4370b6fdd14c327855f4e7ab98edf37e9e2ebb5182ab0f676bc16b2",
+      "matches_record": true,
+      "complete_actual_relevant_spans": [
+        {
+          "lines": [
+            123,
+            143
+          ],
+          "utf8": "def fourier (n : ℤ) : C(AddCircle T, ℂ) where\n  toFun x := toCircle (n • x :)\n  continuous_toFun := continuous_induced_dom.comp <| continuous_toCircle.comp <| continuous_zsmul _\n\n@[simp]\ntheorem fourier_apply {n : ℤ} {x : AddCircle T} : fourier n x = toCircle (n • x :) :=\n  rfl\n\n-- simp normal form is `fourier_coe_apply'`\ntheorem fourier_coe_apply {n : ℤ} {x : ℝ} :\n    fourier n (x : AddCircle T) = Complex.exp (2 * π * Complex.I * n * x / T) := by\n  rw [fourier_apply, ← QuotientAddGroup.mk_zsmul, toCircle, Function.Periodic.lift_coe,\n    Circle.coe_exp, Complex.ofReal_mul, Complex.ofReal_div, Complex.ofReal_mul, zsmul_eq_mul,\n    Complex.ofReal_mul, Complex.ofReal_intCast]\n  norm_num\n  congr 1; ring\n\n@[simp]\ntheorem fourier_coe_apply' {n : ℤ} {x : ℝ} :\n    toCircle (n • (x : AddCircle T) :) = Complex.exp (2 * π * Complex.I * n * x / T) := by\n  rw [← fourier_apply]; exact fourier_coe_apply"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Complex\\CircleAddChar.lean",
+      "source_sha256": "ee1e323e0d276bb12f0614141a7f650365c25b787683baa71cb19a7ec898d18e",
+      "matches_record": true,
+      "complete_actual_relevant_spans": [
+        {
+          "lines": [
+            36,
+            59
+          ],
+          "utf8": "open AddCircle\n\nnamespace ZMod\n\n/-!\n### Additive characters valued in the complex circle\n-/\n\nopen scoped Real\n\nvariable {N : ℕ} [NeZero N]\n\n/-- The additive character from `ZMod N` to the unit circle in `ℂ`, sending `j mod N` to\n`exp (2 * π * I * j / N)`. -/\nnoncomputable def toCircle : AddChar (ZMod N) Circle :=\n  toCircle_addChar.compAddMonoidHom toAddCircle\n\nlemma toCircle_intCast (j : ℤ) :\n    toCircle (j : ZMod N) = exp (2 * π * I * j / N) := by\n  rw [toCircle, AddChar.compAddMonoidHom_apply, toCircle_addChar, AddChar.coe_mk,\n    AddCircle.toCircle, toAddCircle_intCast, Function.Periodic.lift_coe, Circle.coe_exp]\n  push_cast\n  ring_nf\n"
+        },
+        {
+          "lines": [
+            81,
+            89
+          ],
+          "utf8": "\n/-- The additive character from `ZMod N` to `ℂ`, sending `j mod N` to `exp (2 * π * I * j / N)`. -/\nnoncomputable def stdAddChar : AddChar (ZMod N) ℂ := Circle.coeHom.compAddChar toCircle\n\nset_option backward.isDefEq.respectTransparency.types false in\nlemma stdAddChar_coe (j : ℤ) :\n    stdAddChar (j : ZMod N) = exp (2 * π * I * j / N) := by simp [stdAddChar, toCircle_intCast]\n\nlemma stdAddChar_apply (j : ZMod N) : stdAddChar j = ↑(toCircle j) := rfl"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\ZMod\\Basic.lean",
+      "source_sha256": "c910cf5089e3f961c495763c0a6c9609bcb8033f500faa1e7e4f0666f7eb5f99",
+      "matches_record": true,
+      "complete_actual_relevant_spans": [
+        {
+          "lines": [
+            492,
+            500
+          ],
+          "utf8": "    rw [Fin.ext_iff]\n    exact Iff.rfl\n\ntheorem intCast_eq_intCast_iff (a b : ℤ) (c : ℕ) : (a : ZMod c) = (b : ZMod c) ↔ a ≡ b [ZMOD c] :=\n  CharP.intCast_eq_intCast (ZMod c) c\n\ntheorem intCast_eq_intCast_iff' (a b : ℤ) (c : ℕ) : (a : ZMod c) = (b : ZMod c) ↔ a % c = b % c :=\n  ZMod.intCast_eq_intCast_iff a b c\n"
+        },
+        {
+          "lines": [
+            770,
+            777
+          ],
+          "utf8": "\ntheorem natCast_ne_zero_iff_odd {n : ℕ} : (n : ZMod 2) ≠ 0 ↔ Odd n := by\n  simp [natCast_eq_zero_iff_even]\n\ntheorem coe_mul_inv_eq_one {n : ℕ} (x : ℕ) (h : Nat.Coprime x n) :\n    ((x : ZMod n) * (x : ZMod n)⁻¹) = 1 := by\n  rw [Nat.Coprime, Nat.gcd_comm, Nat.gcd_rec] at h\n  rw [mul_inv_eq_gcd, val_natCast, h, Nat.cast_one]"
+        },
+        {
+          "lines": [
+            809,
+            811
+          ],
+          "utf8": "lemma isUnit_iff_coprime (m n : ℕ) : IsUnit (m : ZMod n) ↔ m.Coprime n := by\n  refine ⟨fun H ↦ ?_, fun H ↦ (unitOfCoprime m H).isUnit⟩\n  have H' := val_coe_unit_coprime H.unit"
+        },
+        {
+          "lines": [
+            849,
+            855
+          ],
+          "utf8": "theorem inv_mul_of_unit {n : ℕ} (a : ZMod n) (h : IsUnit a) : a⁻¹ * a = 1 := by\n  rw [mul_comm, mul_inv_of_unit a h]\n\n-- TODO: If we changed `⁻¹` so that `ZMod n` is always a `DivisionMonoid`,\n-- then we could use the general lemma `inv_eq_of_mul_eq_one`\nprotected theorem inv_eq_of_mul_eq_one (n : ℕ) (a b : ZMod n) (h : a * b = 1) : a⁻¹ = b :=\n  left_inv_eq_right_inv (inv_mul_of_unit a ⟨⟨a, b, h, mul_comm a b ▸ h⟩, rfl⟩) h"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Int\\ModEq.lean",
+      "source_sha256": "c1130960b648b5047a673d1f47f4ce653f0cf1174fff41b28a41e4813b89d86c",
+      "matches_record": true,
+      "complete_actual_relevant_spans": [
+        {
+          "lines": [
+            109,
+            117
+          ],
+          "utf8": "theorem modEq_iff_dvd : a ≡ b [ZMOD n] ↔ n ∣ b - a := by\n  rw [ModEq, eq_comm]\n  simp [emod_eq_emod_iff_emod_sub_eq_zero, dvd_iff_emod_eq_zero]\n\ntheorem modEq_iff_add_fac {a b n : ℤ} : a ≡ b [ZMOD n] ↔ ∃ t, b = a + n * t := by\n  rw [modEq_iff_dvd]\n  exact exists_congr fun t => sub_eq_iff_eq_add'\n\nalias ⟨ModEq.dvd, modEq_of_dvd⟩ := modEq_iff_dvd"
+        },
+        {
+          "lines": [
+            360,
+            368
+          ],
+          "utf8": "theorem modEq_and_modEq_iff_modEq_lcm {a b m n : ℤ} :\n    a ≡ b [ZMOD m] ∧ a ≡ b [ZMOD n] ↔ a ≡ b [ZMOD m.lcm n] := by\n  simp only [modEq_iff_dvd, coe_lcm_dvd_iff]\n\ntheorem modEq_and_modEq_iff_modEq_mul {a b m n : ℤ} (hmn : m.natAbs.Coprime n.natAbs) :\n    a ≡ b [ZMOD m] ∧ a ≡ b [ZMOD n] ↔ a ≡ b [ZMOD m * n] := by\n  convert! ← modEq_and_modEq_iff_modEq_lcm using 1\n  rw [lcm_eq_mul_iff.mpr (.inr <| .inr hmn), ← natAbs_mul, modEq_natAbs]\n"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Nat\\GCD\\Basic.lean",
+      "source_sha256": "c46b9173200adac93cefa0f8d9ee02306930771a1960796335c32455f719c3ac",
+      "matches_record": true,
+      "complete_actual_relevant_spans": [
+        {
+          "lines": [
+            93,
+            95
+          ],
+          "utf8": "theorem Coprime.lcm_eq_mul {m n : ℕ} (h : Coprime m n) : lcm m n = m * n := by\n  rw [← one_mul (lcm m n), ← h.gcd_eq_one, gcd_mul_lcm]\n"
+        }
+      ]
+    }
+  ],
+  "Int_and_Nat_lcm_actual_core_API": {
+    "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Int\\Gcd.lean",
+    "source_sha256": "18d90a503bfa1938806212c3eeaaba6359cf02cc7f84eb72bf9310c6d076282e",
+    "actual_header": "theorem coe_lcm_dvd_iff {a b c : Int} : (lcm a b : Int) ∣ c ↔ a ∣ c ∧ b ∣ c",
+    "normalization": "Int.lcm is Nat.lcm of natAbs; natural casts simplify by Int.natAbs_natCast. Nat.lcm_mul_left/right and Coprime.lcm_eq_mul are existing APIs, with no coprimality of the repeated common factor required."
+  },
+  "third_foreign_existing_objects": {
+    "explicit_root_source_import_scope": {
+      "module": "Mathlib.Analysis.SpecialFunctions.Complex.CircleAddChar",
+      "fixed_mathlib": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "source_sha256": "ee1e323e0d276bb12f0614141a7f650365c25b787683baa71cb19a7ec898d18e",
+      "authorization": "Source import only. No dependency/pin/version/install/build/bootstrap change. Before any future firstgate, sole runtime must validate exact existing object/source and foreign graph provenance; absence is not acceptance."
+    },
+    "current_parts": [
+      {
+        "part": ".olean",
+        "bytes": 99112,
+        "sha256": "7a2467722d95e0d0e076b8cdd814b874f612c352e581c6b6c55e94bc80cc9c07",
+        "matches_existing_record": true
+      },
+      {
+        "part": ".olean.private",
+        "bytes": 211656,
+        "sha256": "528055af71637a3646d0f7940c85a220cfe9f0ee78daf8fdea5b5da77b94935a",
+        "matches_existing_record": true
+      },
+      {
+        "part": ".olean.server",
+        "bytes": 7784,
+        "sha256": "3472f099b919e655fd7acd85e31792ddabf04a47b37055935532c2cf301ec433",
+        "matches_existing_record": true
+      },
+      {
+        "part": ".ir",
+        "bytes": 2424,
+        "sha256": "032c7dc5b08ef9a8329847b27d1c13bef2c2b7e80b4b11222edebc121787e62a",
+        "matches_existing_record": true
+      },
+      {
+        "part": ".ir.sig",
+        "bytes": 176,
+        "sha256": "7b2cc8d5160f62300b9571e6ecce8d02c07fe3b48b401f2386793b3f6ebf9518",
+        "matches_existing_record": true
+      },
+      {
+        "part": ".trace",
+        "bytes": 287,
+        "sha256": "ec9d784641b285938ec00549e3840c4b8b38c8c24c97b5da1f3ab6870082c25d",
+        "matches_existing_record": true
+      },
+      {
+        "part": ".ilean",
+        "bytes": 22667,
+        "sha256": "2ae8a74b0c5bf9ccc5c793761797348aa1459a533ffe00340d520874906e8931",
+        "matches_existing_record": true
+      }
+    ],
+    "all_match_recorded_existing_bytes": true,
+    "historical_provenance_scope": {
+      "path": "verification/parts/p5/round4/s1lowerrosser/restoration/20261012T123604059717Z-result.json",
+      "sha256": "faab3768a6f8506805d76098f38c813cf314139c1559dfb0010515cad2c77d7b",
+      "action": "restore_required_import",
+      "subject": "AnalyticNumberTheory.LargeSieve.Multiplicative",
+      "same_fixed_source_pin_and_six_object_bytes_sha_before_after_and_now": true,
+      "returncode": 0,
+      "source_imports_guards_unchanged": true,
+      "scope_limit": "This records historical exact import objects; adjacent strict receipt covers only MathlibNt.SieveTheory.LiLiuGoldbachS1LowerRosser. It is not new CircleAddChar strict acceptance."
+    },
+    "ilean_C_not_historically_bound_by_old_record": true,
+    "no_new_foreign_strict_or_closure_acceptance_claim": true,
+    "runtime_must_freshly_validate_foreign_graph_and_exact_existing_object_provenance_before_gate": true
+  },
+  "no_compiler_lake_checker_cache_tools_CI_pins_resources_or_phase_source_mutation": true,
+  "no_new_analytical_supplier": true,
+  "remaining_open": [
+    "actual Lean elaboration and strict owned acceptance of this exact whole source",
+    "genuine 7/32 spectral estimate",
+    "literal floor-tail and coefficient/prefix interfaces",
+    "remaining original three-factor nonzero estimate",
+    "full original C/K quantifiers and hLower/hUpper",
+    "unconditional 1+1.75"
+  ],
+  "support_source_preserved": {
+    "path": "ImbalancedChen/Part3SharedFirstFactorLargeSupportedDeletion.lean",
+    "sha256": "8875548f652bdb17f75fafcb37a9e4936530e28fca8c68654a0c59fca693340a"
+  }
+}

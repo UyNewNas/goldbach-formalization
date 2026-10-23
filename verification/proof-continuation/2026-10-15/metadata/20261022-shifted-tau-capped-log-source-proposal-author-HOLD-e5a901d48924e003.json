@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-shifted-tau-capped-log-source-proposal-author-HOLD",
+  "created_utc": "2026-10-21T20:21:25.1663576Z",
+  "author": "/root/tau_truncation_review_sol_high_oct22",
+  "status": "COMPLETE_SYMBOLIC_FIXED_ORDER_CAPPED_SHIFTED_TAU_LOG_PAYMENT_AS_WRITTEN_UNCOMPILED_HOLD",
+  "HOLD": true,
+  "scope": "One bounded analytic absorption of the exact shifted finite tau payment. Eight full proofs and one explicit auxiliary fixed-order constant, with Ioc/Icc consumers and a uniform fixed-K existence statement. No Cauchy, full M2, medium wrapper, spectrum or main theorem.",
+  "artifact": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-shifted-tau-capped-log-source-proposal.txt",
+    "sha256": "0c3d8e24bd1467cb3bb127c9c35e5dd6a0ef04a1f5a658ead2c5c820f22b1842",
+    "bytes": 8460,
+    "lf_lines": 168,
+    "new_theorems": 8,
+    "new_definitions": 1,
+    "complete_written_proofs": true,
+    "actual_source_read": true,
+    "compiled": false,
+    "kernel_acceptance": "NOT_CHECKED",
+    "engineering_admission": false
+  },
+  "precise_statement": {
+    "fixed_order": "K:Nat with 2<=K",
+    "varying_parameters": "x,kappa:Real; 1<=x; 0<=kappa<=1/(2*(K:Real)); a:Int; abs(a:Real)<=x^(1+kappa).",
+    "carrier": "The actual positive finite Ioc 0 floor(6*x), filtered by (v:Int)!=a; an Icc 1 floor(6*x) variant is also written.",
+    "shift": "((v:Int)-a).natAbs",
+    "constant": "C_K=(26:Real)*(K:Real)*(7:Real)^(K-1)>0",
+    "bound": "sum carrier (native fouvryTau K shift:Real)<=C_K*x*(1+log x)^(K-1)",
+    "uniformity": "The final theorem chooses C>0 after fixed K and BEFORE every scale x, capped kappa and integer center a; all x>=1 are covered, with no further threshold.",
+    "original_shift_range_retained": true,
+    "no_shifted_target_as_hypothesis": true,
+    "no_norm_num_expansion_of_symbolic_order": true
+  },
+  "definition": {
+    "name": "shiftedTauLogConstant",
+    "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.shiftedTauLogConstant",
+    "first": 96,
+    "last": 96,
+    "literal_source": "def shiftedTauLogConstant (K : ℕ) : ℝ := 26 * (K : ℝ) * (7 : ℝ) ^ (K - 1)\n",
+    "normalized_lf_utf8_sha256": "65506677f15071ec1e5cbdaf82bedbd5e31c2cc0c1c7d35c0fe1b27cbb12f8d1"
+  },
+  "complete_written_theorem_types": [
+    {
+      "name_as_written": "capped_shift_exponent_bounds",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.capped_shift_exponent_bounds",
+      "visibility": "public",
+      "first": 40,
+      "type_last": 43,
+      "last": 60,
+      "complete_written_type": "theorem capped_shift_exponent_bounds {K : ℕ} (hK : 2 ≤ K) {κ : ℝ}\n    (hκ : 0 ≤ κ) (hcap : κ ≤ 1 / (2 * (K : ℝ))) :\n    0 ≤ 1 - 1 / (K : ℝ) ∧ 1 - 1 / (K : ℝ) ≤ 1 ∧\n      (1 + κ) * (1 - 1 / (K : ℝ)) ≤ 1 ∧ κ ≤ 1 := by\n",
+      "complete_written_declaration": "theorem capped_shift_exponent_bounds {K : ℕ} (hK : 2 ≤ K) {κ : ℝ}\n    (hκ : 0 ≤ κ) (hcap : κ ≤ 1 / (2 * (K : ℝ))) :\n    0 ≤ 1 - 1 / (K : ℝ) ∧ 1 - 1 / (K : ℝ) ≤ 1 ∧\n      (1 + κ) * (1 - 1 / (K : ℝ)) ≤ 1 ∧ κ ≤ 1 := by\n  have hKR : (2 : ℝ) ≤ K := by exact_mod_cast hK\n  have hKpos : (0 : ℝ) < K := by linarith\n  have hKne : (K : ℝ) ≠ 0 := ne_of_gt hKpos\n  have hinv0 : (0 : ℝ) ≤ 1 / (K : ℝ) := div_nonneg zero_le_one hKpos.le\n  have hinv1 : (1 : ℝ) / (K : ℝ) ≤ 1 :=\n    (div_le_iff₀ hKpos).mpr (by linarith)\n  have hmul : κ * (2 * (K : ℝ)) ≤ 1 :=\n    (le_div_iff₀ (by positivity : (0 : ℝ) < 2 * (K : ℝ))).mp hcap\n  have hαeq : 1 - 1 / (K : ℝ) = ((K : ℝ) - 1) / (K : ℝ) := by\n    field_simp [hKne] <;> ring\n  have hprod : (1 + κ) * (1 - 1 / (K : ℝ)) ≤ 1 := by\n    rw [hαeq, ← mul_div_assoc]\n    apply (div_le_iff₀ hKpos).mpr\n    nlinarith [hmul]\n  have hκ1 : κ ≤ 1 := hcap.trans\n    ((div_le_iff₀ (by positivity : (0 : ℝ) < 2 * (K : ℝ))).mpr (by linarith))\n  exact ⟨by linarith, by linarith, hprod, hκ1⟩\n",
+      "type_normalized_lf_utf8_sha256": "ebe7da7eb5582df398b4b7ad83de02330537eff35151efa9a0ecf5977e4eca29",
+      "full_declaration_normalized_lf_utf8_sha256": "b8ee94e66d7d583c0e9897762784fe8f20e3c27f5b5c25fadb456ec45d1cce34",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "capped_shift_root_le_seven_mul_x",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.capped_shift_root_le_seven_mul_x",
+      "visibility": "public",
+      "first": 62,
+      "type_last": 64,
+      "last": 72,
+      "complete_written_type": "theorem capped_shift_root_le_seven_mul_x {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (hcap : κ ≤ 1 / (2 * (K : ℝ))) :\n    (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) ≤ 7 * x := by\n",
+      "complete_written_declaration": "theorem capped_shift_root_le_seven_mul_x {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (hcap : κ ≤ 1 / (2 * (K : ℝ))) :\n    (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) ≤ 7 * x := by\n  have he := capped_shift_exponent_bounds hK hκ hcap\n  have hx0 : 0 ≤ x := by linarith\n  rw [Real.mul_rpow (by norm_num : (0 : ℝ) ≤ 7) (Real.rpow_nonneg hx0 _),\n    ← Real.rpow_mul hx0]\n  exact mul_le_mul\n    (Real.rpow_le_self_of_one_le (by norm_num : (1 : ℝ) ≤ 7) he.2.1)\n    (Real.rpow_le_self_of_one_le hx he.2.2.1)\n    (Real.rpow_nonneg hx0 _) (by norm_num : (0 : ℝ) ≤ 7)\n",
+      "type_normalized_lf_utf8_sha256": "37e9810e6ceb1476e23a103e6f222b3138c00608e9268f8b4df6fbe34110ab4f",
+      "full_declaration_normalized_lf_utf8_sha256": "94f2bed44e5ae17afcd0f8454b22d3e86e1038f07b77517648c1e81b955da512",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "capped_shift_log_bounds",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.capped_shift_log_bounds",
+      "visibility": "public",
+      "first": 74,
+      "type_last": 77,
+      "last": 93,
+      "complete_written_type": "theorem capped_shift_log_bounds {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (hcap : κ ≤ 1 / (2 * (K : ℝ))) :\n    1 ≤ 1 + Real.log (7 * x ^ (1 + κ)) ∧\n      1 + Real.log (7 * x ^ (1 + κ)) ≤ 7 * (1 + Real.log x) := by\n",
+      "complete_written_declaration": "theorem capped_shift_log_bounds {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (hcap : κ ≤ 1 / (2 * (K : ℝ))) :\n    1 ≤ 1 + Real.log (7 * x ^ (1 + κ)) ∧\n      1 + Real.log (7 * x ^ (1 + κ)) ≤ 7 * (1 + Real.log x) := by\n  have he := capped_shift_exponent_bounds hK hκ hcap\n  have hxpos : 0 < x := by linarith\n  have hT : 1 ≤ x ^ (1 + κ) := Real.one_le_rpow hx (by linarith)\n  have hZ : 1 ≤ 7 * x ^ (1 + κ) := by linarith\n  have hlogx : 0 ≤ Real.log x := Real.log_nonneg hx\n  have hlog7 : Real.log (7 : ℝ) ≤ 6 := by\n    have h := Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ) < 7)\n    linarith\n  have hprod : (1 + κ) * Real.log x ≤ 2 * Real.log x :=\n    mul_le_mul_of_nonneg_right (by linarith [he.2.2.2]) hlogx\n  constructor\n  · have := Real.log_nonneg hZ\n    linarith\n  · rw [Real.log_mul (by norm_num : (7 : ℝ) ≠ 0)\n      (Real.rpow_pos_of_pos hxpos _).ne', Real.log_rpow hxpos]\n    linarith\n",
+      "type_normalized_lf_utf8_sha256": "b6d45ef815f6938500d1f64488f84e31e6906d6934a4e24781b54e20dad99f5f",
+      "full_declaration_normalized_lf_utf8_sha256": "1c8b7cd3f0a59fdd71d67badaa3b92ab83affe7d29c7d7332896b7b254728d3b",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "shiftedTauLogConstant_pos",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.shiftedTauLogConstant_pos",
+      "visibility": "public",
+      "first": 98,
+      "type_last": 99,
+      "last": 102,
+      "complete_written_type": "theorem shiftedTauLogConstant_pos {K : ℕ} (hK : 2 ≤ K) :\n    0 < shiftedTauLogConstant K := by\n",
+      "complete_written_declaration": "theorem shiftedTauLogConstant_pos {K : ℕ} (hK : 2 ≤ K) :\n    0 < shiftedTauLogConstant K := by\n  have hKR : (0 : ℝ) < K := by exact_mod_cast (by omega : 0 < K)\n  unfold shiftedTauLogConstant\n  exact mul_pos (mul_pos (by norm_num) hKR) (pow_pos (by norm_num) _)\n",
+      "type_normalized_lf_utf8_sha256": "e0f49f89ee4a5d10125f9f05c4c2f5b26deeea02b7b12c63a87ebe9466e245ec",
+      "full_declaration_normalized_lf_utf8_sha256": "df1b5cf549051665f790cb97bb344987f014d4a10d74070e82d66327df3635ef",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "capped_shift_payment_le_constant",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.capped_shift_payment_le_constant",
+      "visibility": "public",
+      "first": 105,
+      "type_last": 110,
+      "last": 135,
+      "complete_written_type": "theorem capped_shift_payment_le_constant {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (hcap : κ ≤ 1 / (2 * (K : ℝ))) :\n    2 * (K : ℝ) * (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 1) +\n      (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) *\n        (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 2)) ≤\n      shiftedTauLogConstant K * x * (1 + Real.log x) ^ (K - 1) := by\n",
+      "complete_written_declaration": "theorem capped_shift_payment_le_constant {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (hcap : κ ≤ 1 / (2 * (K : ℝ))) :\n    2 * (K : ℝ) * (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 1) +\n      (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) *\n        (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 2)) ≤\n      shiftedTauLogConstant K * x * (1 + Real.log x) ^ (K - 1) := by\n  let Z : ℝ := 7 * x ^ (1 + κ)\n  let L : ℝ := 1 + Real.log x\n  let LZ : ℝ := 1 + Real.log Z\n  let W : ℝ := (7 * L) ^ (K - 1)\n  have hlogs : 1 ≤ LZ ∧ LZ ≤ 7 * L := capped_shift_log_bounds hK hx hκ hcap\n  have hroot : Z ^ (1 - 1 / (K : ℝ)) ≤ 7 * x :=\n    capped_shift_root_le_seven_mul_x hK hx hκ hcap\n  have htop : LZ ^ (K - 1) ≤ W :=\n    pow_le_pow_left₀ (by linarith [hlogs.1]) hlogs.2 _\n  have hlower : LZ ^ (K - 2) ≤ W :=\n    (pow_le_pow_right₀ hlogs.1 (by omega : K - 2 ≤ K - 1)).trans htop\n  have hfirst : 6 * x * LZ ^ (K - 1) ≤ 6 * x * W :=\n    mul_le_mul_of_nonneg_left htop (by linarith)\n  have hsecond : Z ^ (1 - 1 / (K : ℝ)) * LZ ^ (K - 2) ≤ 7 * x * W :=\n    mul_le_mul hroot hlower (pow_nonneg (by linarith [hlogs.1]) _) (by linarith)\n  change 2 * (K : ℝ) * (6 * x * LZ ^ (K - 1) +\n    Z ^ (1 - 1 / (K : ℝ)) * LZ ^ (K - 2)) ≤ shiftedTauLogConstant K * x * L ^ (K - 1)\n  calc\n    2 * (K : ℝ) * (6 * x * LZ ^ (K - 1) + Z ^ (1 - 1 / (K : ℝ)) * LZ ^ (K - 2)) ≤\n        2 * (K : ℝ) * (6 * x * W + 7 * x * W) :=\n      mul_le_mul_of_nonneg_left (add_le_add hfirst hsecond) (by positivity)\n    _ = shiftedTauLogConstant K * x * L ^ (K - 1) := by\n      dsimp [W, shiftedTauLogConstant]\n      simp only [mul_pow]\n      ring\n",
+      "type_normalized_lf_utf8_sha256": "d2e471763f0813cde7844fab5d1f1059a8f35a2fc4e028ce865be597bd01624b",
+      "full_declaration_normalized_lf_utf8_sha256": "0825b02e0e353f4ccdc976bf262eb77b4f01fa6f0e341bd3cbdc28192477abd1",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "shifted_tau_Ioc_capped_log_sum_le",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.shifted_tau_Ioc_capped_log_sum_le",
+      "visibility": "public",
+      "first": 138,
+      "type_last": 143,
+      "last": 145,
+      "complete_written_type": "theorem shifted_tau_Ioc_capped_log_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (hcap : κ ≤ 1 / (2 * (K : ℝ)))\n    (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Ioc 0 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      shiftedTauLogConstant K * x * (1 + Real.log x) ^ (K - 1) := by\n",
+      "complete_written_declaration": "theorem shifted_tau_Ioc_capped_log_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (hcap : κ ≤ 1 / (2 * (K : ℝ)))\n    (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Ioc 0 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      shiftedTauLogConstant K * x * (1 + Real.log x) ^ (K - 1) := by\n  exact (shifted_tau_Ioc_sum_le hK hx hκ a ha).trans\n    (capped_shift_payment_le_constant hK hx hκ hcap)\n",
+      "type_normalized_lf_utf8_sha256": "bf0ce9c8506ff4754b45083fb13460457aec6e27ec04f87887e6e533c1ebf03e",
+      "full_declaration_normalized_lf_utf8_sha256": "5e03690dda06a75684dd9ba652e87b17c6a4f0efec67810cec7b2357a3e75c8e",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "shifted_tau_Icc_capped_log_sum_le",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.shifted_tau_Icc_capped_log_sum_le",
+      "visibility": "public",
+      "first": 147,
+      "type_last": 152,
+      "last": 154,
+      "complete_written_type": "theorem shifted_tau_Icc_capped_log_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (hcap : κ ≤ 1 / (2 * (K : ℝ)))\n    (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Icc 1 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      shiftedTauLogConstant K * x * (1 + Real.log x) ^ (K - 1) := by\n",
+      "complete_written_declaration": "theorem shifted_tau_Icc_capped_log_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (hcap : κ ≤ 1 / (2 * (K : ℝ)))\n    (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Icc 1 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      shiftedTauLogConstant K * x * (1 + Real.log x) ^ (K - 1) := by\n  exact (shifted_tau_Icc_sum_le hK hx hκ a ha).trans\n    (capped_shift_payment_le_constant hK hx hκ hcap)\n",
+      "type_normalized_lf_utf8_sha256": "17fca20092a04ca50dc94b1a089a40b6a07c641d523c07269497a89f5b835e5f",
+      "full_declaration_normalized_lf_utf8_sha256": "dfca0805d82f862a8493cdf21ca5bb9fada00a55b4b330fcdce3dcec74d86147",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "shifted_tau_uniform_fixed_order",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.shifted_tau_uniform_fixed_order",
+      "visibility": "public",
+      "first": 157,
+      "type_last": 162,
+      "last": 165,
+      "complete_written_type": "theorem shifted_tau_uniform_fixed_order (K : ℕ) (hK : 2 ≤ K) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (x κ : ℝ), 1 ≤ x → 0 ≤ κ → κ ≤ 1 / (2 * (K : ℝ)) →\n      ∀ a : ℤ, |(a : ℝ)| ≤ x ^ (1 + κ) →\n        (∑ v ∈ (Ioc 0 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),\n          (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n          C * x * (1 + Real.log x) ^ (K - 1) := by\n",
+      "complete_written_declaration": "theorem shifted_tau_uniform_fixed_order (K : ℕ) (hK : 2 ≤ K) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (x κ : ℝ), 1 ≤ x → 0 ≤ κ → κ ≤ 1 / (2 * (K : ℝ)) →\n      ∀ a : ℤ, |(a : ℝ)| ≤ x ^ (1 + κ) →\n        (∑ v ∈ (Ioc 0 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),\n          (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n          C * x * (1 + Real.log x) ^ (K - 1) := by\n  refine ⟨shiftedTauLogConstant K, shiftedTauLogConstant_pos hK, ?_⟩\n  intro x κ hx hκ hcap a ha\n  exact shifted_tau_Ioc_capped_log_sum_le hK hx hκ hcap a ha\n",
+      "type_normalized_lf_utf8_sha256": "bf08381c9fb428e879d95c304e944791b3cf5d75bbb6c8f3736c1c5f52245910",
+      "full_declaration_normalized_lf_utf8_sha256": "6b3616307c0ba3b075e4d7ade28a0f515d538d084632c5b10fec163d801a2307",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    }
+  ],
+  "dependencies": {
+    "goldbach_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "future_finite_module": "ImbalancedChen.Part3ShiftedTauFiniteInterval",
+    "finite_source_path": ".lake/proof-continuation/source-reviews/drafts/20261022-shifted-tau-finite-interval-source-proposal.txt",
+    "finite_source_sha256": "3a2c777a96f2758a4ced96f8f78881d88f28e7f2bb011dc82b2d5223a3d3f298",
+    "reused_finite_names": [
+      "ImbalancedChen.Part3.ElementaryShiftedTau.shifted_tau_Ioc_sum_le",
+      "ImbalancedChen.Part3.ElementaryShiftedTau.shifted_tau_Icc_sum_le"
+    ],
+    "dependency_status": "The exact finite source with nine proofs is imported through the future actual module named by parent. No actual module creation, import resolution, serial compilation or kernel acceptance is asserted here.",
+    "native_mathlib_APIs": "Actual pinned rpow product/iteration, logarithm product/rpow, log upper bound and base/exponent power monotonicity signatures were read and are recorded below."
+  },
+  "mathematical_audit": {
+    "constant_verdict": "The requested 26*K*7^(K-1) is sufficient; no larger constant is substituted.",
+    "exponent": "K>=2 gives 0<=alpha=1-1/K<=1. Multiplying kappa<=1/(2K) by the positive 2K gives 2K*kappa<=1. Writing alpha=(K-1)/K proves (1+kappa)*alpha<=1. The same cap implies kappa<=1.",
+    "root": "Use Real.mul_rpow and reverse Real.rpow_mul on Z=7*x^(1+kappa). Since 7>=1,alpha<=1, the first factor 7^alpha<=7. Since x>=1 and (1+kappa)*alpha<=1, the second factor is <=x. Nonnegativity justifies their product bound Z^alpha<=7x.",
+    "log": "x>=1 and kappa>=0 imply x^(1+kappa)>=1, hence Z>=7 and LZ>=1. Actual Real.log_mul and Real.log_rpow give log Z=log 7+(1+kappa)*log x. log 7<=6, kappa<=1 and log x>=0 yield LZ<=7*(1+log x).",
+    "powers": "Write L=1+log x and W=(7L)^(K-1). Base monotonicity gives LZ^(K-1)<=W. Exponent monotonicity at LZ>=1 and K-2<=K-1 gives LZ^(K-2)<=W.",
+    "payment": "The first finite term is <=6xW and the second <=7xW. Multiplication by 2K gives 2K*(6+7)*xW=26*K*7^(K-1)*x*L^(K-1). Both original factors 6 and 7 are retained.",
+    "uniform_fixed_order": "shiftedTauLogConstant_pos proves positivity. shifted_tau_uniform_fixed_order supplies this same C_K uniformly for all x>=1, every kappa in the displayed cap and every integer center in its original x^(1+kappa) range.",
+    "symbolic_order": "All natural exponents remain K-1 or K-2. norm_num is used only on fixed small literals such as 7 and zero/one comparisons. mul_pow distributes a symbolic exponent, and ring rearranges the coefficients without specializing K or expanding a huge power.",
+    "edge_cases": [
+      "K=2 is included; the second finite logarithm exponent is zero before the legitimate monotonicity promotion.",
+      "x=1 is included, giving L=1 and Z=7; all real powers/logarithms remain positive or defined at positive bases.",
+      "kappa=0 and kappa=1/(2K) are both included. No strict cap or larger x threshold is silently imposed.",
+      "The source filter still deletes v=a before evaluating the shifted tau term.",
+      "The chosen constant depends only on fixed K, not on x,kappa,a or requested logarithmic accuracy."
+    ],
+    "author_static_blocker": "No mathematical gap identified in the stated capped fixed-order result. Exact tactic elaboration, rpow/log rewrites, symbolic let reduction, imports and linter behavior remain unexecuted."
+  },
+  "native_api_hash_spans": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Pow\\Real.lean",
+      "raw_sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+      "bytes": 50301,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 414,
+          "last": 419,
+          "literal_source": "theorem rpow_mul {x : ℝ} (hx : 0 ≤ x) (y z : ℝ) : x ^ (y * z) = (x ^ y) ^ z := by\n  rw [← Complex.ofReal_inj, Complex.ofReal_cpow (rpow_nonneg hx _),\n      Complex.ofReal_cpow hx, Complex.ofReal_mul, Complex.cpow_mul, Complex.ofReal_cpow hx] <;>\n    simp only [(Complex.ofReal_mul _ _).symm, (Complex.ofReal_log hx).symm, Complex.ofReal_im,\n      neg_lt_zero, pi_pos, le_of_lt pi_pos]\n\n",
+          "normalized_lf_utf8_sha256": "4a120c7c86d63bdc729699bbea3e1b6cd2d19c9943f57ea2df9ca42a48f34a64"
+        },
+        {
+          "first": 478,
+          "last": 481,
+          "literal_source": "theorem mul_rpow (hx : 0 ≤ x) (hy : 0 ≤ y) : (x * y) ^ z = x ^ z * y ^ z := by\n  iterate 2 rw [Real.rpow_def_of_nonneg]; split_ifs with h_ifs <;> simp_all\n  · rw [log_mul ‹_› ‹_›, add_mul, exp_add, rpow_def_of_pos (hy.lt_of_ne' ‹_›)]\n  all_goals positivity\n",
+          "normalized_lf_utf8_sha256": "d97c5ed007a5a8d865f24d534f90f1ee6ad33914b3590e92b416fa02faa73b51"
+        },
+        {
+          "first": 492,
+          "last": 494,
+          "literal_source": "theorem log_rpow {x : ℝ} (hx : 0 < x) (y : ℝ) : log (x ^ y) = y * log x := by\n  apply exp_injective\n  rw [exp_log (rpow_pos_of_pos hx y), ← exp_log hx, mul_comm, rpow_def_of_pos (exp_pos (log x)) y]\n",
+          "normalized_lf_utf8_sha256": "46860fedfc406ef6111850df11d50d9ff01b9eee346adb036557b19b663f01fe"
+        },
+        {
+          "first": 675,
+          "last": 678,
+          "literal_source": "\ntheorem one_le_rpow {x z : ℝ} (hx : 1 ≤ x) (hz : 0 ≤ z) : 1 ≤ x ^ z := by\n  rw [← one_rpow z]\n  gcongr\n",
+          "normalized_lf_utf8_sha256": "565d660784b204298febc32b695549eeb139cf4983cb2d13c96a842e3e77539b"
+        },
+        {
+          "first": 746,
+          "last": 747,
+          "literal_source": "theorem rpow_le_self_of_one_le (h₁ : 1 ≤ x) (h₂ : y ≤ 1) : x ^ y ≤ x := by\n  simpa only [rpow_one] using rpow_le_rpow_of_exponent_le h₁ h₂\n",
+          "normalized_lf_utf8_sha256": "35c979e8e0ebfe0c41159fc1a20b135a3a1de76ab685476b81aa273f22800016"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Log\\Basic.lean",
+      "raw_sha256": "1f36a9802233e878953d809b16e020beaf0ace5afd4c8279d47b52af6ee186bf",
+      "bytes": 28230,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 133,
+          "last": 135,
+          "literal_source": "theorem log_mul (hx : x ≠ 0) (hy : y ≠ 0) : log (x * y) = log x + log y :=\n  exp_injective <| by\n    rw [exp_log_eq_abs (mul_ne_zero hx hy), exp_add, exp_log_eq_abs hx, exp_log_eq_abs hy, abs_mul]\n",
+          "normalized_lf_utf8_sha256": "9a44f9eefa77145efe6a5076e28ee992c49d796f0957d3ce6cf99596bf1d5b4d"
+        },
+        {
+          "first": 212,
+          "last": 214,
+          "literal_source": "@[bound]\ntheorem log_nonneg (hx : 1 ≤ x) : 0 ≤ log x :=\n  (log_nonneg_iff (zero_lt_one.trans_le hx)).2 hx\n",
+          "normalized_lf_utf8_sha256": "d58117374bfb81b052a790afa82d819188a8e94cadc8227c7f66d8cb8b7fac79"
+        },
+        {
+          "first": 307,
+          "last": 310,
+          "literal_source": "theorem log_le_sub_one_of_pos {x : ℝ} (hx : 0 < x) : log x ≤ x - 1 := by\n  rw [le_sub_iff_add_le]\n  convert! add_one_le_exp (log x)\n  rw [exp_log hx]\n",
+          "normalized_lf_utf8_sha256": "ab01aa45ff76500576c449f0722266ebe1fbcb2e2e4c105c097b5b25b9a2c993"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+      "raw_sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+      "bytes": 63984,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 456,
+          "last": 459,
+          "literal_source": "@[gcongr]\nlemma pow_le_pow_right₀ [ZeroLEOneClass M₀] [PosMulMono M₀] (ha : 1 ≤ a) (hmn : m ≤ n) :\n    a ^ m ≤ a ^ n :=\n  pow_right_mono₀ ha hmn\n",
+          "normalized_lf_utf8_sha256": "6fcc30ffec2a707698f8643d51a8c5e8d607bfc01369e82ff397dbdf0a77ca61"
+        },
+        {
+          "first": 469,
+          "last": 475,
+          "literal_source": "@[mono, gcongr, bound]\ntheorem pow_le_pow_left₀ [PosMulMono M₀] [MulPosMono M₀]\n    (ha : 0 ≤ a) (hab : a ≤ b) : ∀ n, a ^ n ≤ b ^ n\n  | 0 => by simp\n  | 1 => by simpa using hab\n  | n + 2 => by simpa only [pow_succ']\n      using mul_le_mul hab (pow_le_pow_left₀ ha hab _) (pow_succ_nonneg ha _) (ha.trans hab)\n",
+          "normalized_lf_utf8_sha256": "780d8849fc108a1c6ea540be3a03d43fd77afc7dcf43a1ecaffe76d6de637cd5"
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-shifted-tau-finite-interval-source-proposal.txt",
+      "raw_sha256": "3a2c777a96f2758a4ced96f8f78881d88f28e7f2bb011dc82b2d5223a3d3f298",
+      "bytes": 10546,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 132,
+          "last": 138,
+          "literal_source": "theorem shifted_tau_Icc_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Icc 1 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      2 * (K : ℝ) * (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 1) +\n        (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) *\n          (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 2)) := by\n",
+          "normalized_lf_utf8_sha256": "8dd8e92e4da40c7cd61c8098cb219b6bb858f3b45d67daa027ee24d73681bfce"
+        },
+        {
+          "first": 197,
+          "last": 209,
+          "literal_source": "theorem shifted_tau_Ioc_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Ioc 0 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      2 * (K : ℝ) * (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 1) +\n        (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) *\n          (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 2)) := by\n  have hI : Ioc 0 ⌊6 * x⌋₊ = Icc 1 ⌊6 * x⌋₊ := by\n    ext v\n    simp only [Finset.mem_Ioc, Finset.mem_Icc]\n    omega\n  rw [hI]\n  exact shifted_tau_Icc_sum_le hK hx hκ a ha\n",
+          "normalized_lf_utf8_sha256": "c55ec828f667da8367a5a5520914a3fe7904c1da7fb35738b4abfc03863e6f17"
+        }
+      ]
+    }
+  ],
+  "claim_boundaries": {
+    "auxiliary_capped_shifted_tau_bound": "Complete written proof, uncompiled HOLD.",
+    "original_forall_kappa_M2": "NOT_PROVED",
+    "full_M2": "OPEN",
+    "Cauchy_composition": "OUTSIDE_SCOPE",
+    "medium_wrapper": "OUTSIDE_SCOPE",
+    "seven_over_32": "OPEN",
+    "spectrum": "OPEN",
+    "main_theorem": "OPEN",
+    "currentC_changed": false,
+    "currentK_changed": false,
+    "engineering_admission": false
+  },
+  "remaining_outside_scope": [
+    "Independent source review and root-owned serial integration/compilation/kernel acceptance of the finite shifted module and this successor.",
+    "Native divisor-product domination and Cauchy composed with the literal common-p M2 fold and both original outside energies.",
+    "The 131073 moment calculation and any actual medium/internal-parameter wrapper; the original arbitrary-kappa obligation is not discharged by this capped theorem.",
+    "Nonzero 7/32 spectrum, rough/medium distribution, same-policy density and the main theorem."
+  ],
+  "static_review": {
+    "all_168_lines_read": true,
+    "all_eight_full_types_and_bodies_present": true,
+    "no_sorry_new_axiom_or_target_bound_assumption": true,
+    "compiler_or_checker_run": false,
+    "independent_review": "NOT_YET_PERFORMED_FOR_THIS_SOURCE",
+    "kernel_acceptance": "NOT_CHECKED"
+  },
+  "actions": {
+    "writes": [
+      ".lake/proof-continuation/source-reviews/drafts/20261022-shifted-tau-capped-log-source-proposal.txt",
+      ".lake/proof-continuation/source-reviews/20261022-shifted-tau-capped-log-source-proposal-author-HOLD.json"
+    ],
+    "actual_lean_edits": 0,
+    "old_source_edits": 0,
+    "helper_files": 0,
+    "runtime_or_pin_edits": 0,
+    "proof_tools": 0,
+    "compiler_runs": 0,
+    "checker_runs": 0,
+    "proper_runs": 0,
+    "classifier_runs": 0,
+    "census_runs": 0,
+    "git_operations": 0,
+    "external_searches": 0,
+    "new_subagents": 0
+  },
+  "quota": {
+    "fresh_start_used_percent": 45,
+    "fresh_start_remaining_percent": 55,
+    "latest_used_percent": 45,
+    "latest_remaining_percent": 55,
+    "window_duration_mins": 10080,
+    "secondary": null,
+    "stop_any_valid_remaining_percent_lte": 40,
+    "threshold_triggered": false
+  },
+  "stop_condition": "Single bounded capped-log absorption source proposal delivered. HOLD. No autonomous M2/Cauchy/medium/spectrum expansion, actual source edit or proof execution."
+}

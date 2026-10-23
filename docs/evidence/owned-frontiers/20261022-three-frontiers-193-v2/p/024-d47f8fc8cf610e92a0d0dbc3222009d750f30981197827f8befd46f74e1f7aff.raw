@@ -1,0 +1,158 @@
+{
+  "status": "SOURCE_READY_NEEDS_STRICT_OWNED_ADMISSION",
+  "reviewer": "/root/normalization_frontier_sol_medium_oct22",
+  "date": "2026-10-22",
+  "scope": "Read-only actual-source mathematical review and original evidence search; one new compact checkpoint only. No acceptance or new kernel/type/axiom claims.",
+  "source": {
+    "module": "ImbalancedChen.NormalizationGrowth",
+    "path": "ImbalancedChen/NormalizationGrowth.lean",
+    "sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+    "lines": 93,
+    "written_theorems": 7,
+    "actual_serialized_declarations": null,
+    "complete_source_read": true,
+    "project_parents": [],
+    "direct_imports": {
+      "Mathlib.Analysis.SpecialFunctions.Log.Basic": "1f36a9802233e878953d809b16e020beaf0ace5afd4c8279d47b52af6ee186bf",
+      "Mathlib.Algebra.Ring.Parity": "c710e4b51d5ffc9df4e2cc16bad357ab152b1ae5ff05e8fb68a1e3812e6a3b68",
+      "Mathlib.Order.Filter.AtTopBot.Archimedean": "1622cc99d3fa0b54a8a530998decba9df1a15a7367152b657143d76b8ccb63d9",
+      "Mathlib.Order.Filter.AtTopBot.Field": "b6ce875ac37da2745d10f0b6460f3fee16f326dc2824652e1c537fba95725b33"
+    },
+    "source_safety_observation": "All seven declarations have explicit proof bodies. No sorry, axiom declaration, or Hyp wrapper occurs in this source. This source inspection is not a serialized axiom/safety audit."
+  },
+  "baseline": {
+    "accepted_owned_modules": 189,
+    "census": ".lake/proof-continuation/source-reviews/20261022-root-actual-p5-crt-union189-owned-census.json",
+    "census_sha256": "b1b60f69b16d9b616e5f23780e10c7ebee217f35c6b39402a757801646afcc4d",
+    "target_in_accepted_census": false,
+    "actual562_freeze_unchanged": true,
+    "main_1_plus_1_75": "OPEN"
+  },
+  "all_written_types_and_proofs_reviewed": [
+    {
+      "name": "eventually_unit_absorption_of_tendsto",
+      "line": 27,
+      "type": "{H : Nat -> Real} -> Tendsto H atTop atTop -> forall epsilon : Real, 0 < epsilon -> eventually N : Nat in atTop, 1 <= epsilon * H N",
+      "proof": "Positive constant multiplication preserves divergence; the divergent epsilon*H eventually exceeds 1."
+    },
+    {
+      "name": "eventuallyEven_unit_absorption_of_tendsto",
+      "line": 36,
+      "type": "{H : Nat -> Real} -> Tendsto H atTop atTop -> forall epsilon : Real, 0 < epsilon -> eventually N : Nat in atTop, Even N -> 1 <= epsilon * H N",
+      "proof": "Monotone weakening of the preceding all-integer assertion by adding an unused Even N premise."
+    },
+    {
+      "name": "eventuallyEven_unit_absorption_of_eventually_le",
+      "line": 46,
+      "type": "{G H : Nat -> Real} -> Tendsto G atTop atTop -> (eventually N : Nat in atTop, Even N -> G N <= H N) -> forall epsilon : Real, 0 < epsilon -> eventually N : Nat in atTop, Even N -> 1 <= epsilon * H N",
+      "proof": "Intersect eventual absorption for G with the assumed eventual even comparison; multiply G<=H by nonnegative epsilon and use transitivity. No claim concerning H on odd integers."
+    },
+    {
+      "name": "tendsto_self_div_log_sq_atTop",
+      "line": 59,
+      "type": "Tendsto (fun x : Real => x / (Real.log x)^2) atTop atTop",
+      "proof": "Compose Real.tendsto_exp_div_pow_atTop 2 with Real.tendsto_log_atTop. On the eventual domain x>0, exp(log x)=x; congruence transfers the limit. No prime-count hypothesis."
+    },
+    {
+      "name": "tendsto_nat_div_log_sq_atTop",
+      "line": 68,
+      "type": "Tendsto (fun N : Nat => (N : Real) / (Real.log (N : Real))^2) atTop atTop",
+      "proof": "Compose the real-variable limit with tendsto_natCast_atTop_atTop. Exceptional N=0,1 do not obstruct a tail limit."
+    },
+    {
+      "name": "tendsto_pos_mul_nat_div_log_sq_atTop",
+      "line": 73,
+      "type": "{c0 : Real} -> 0 < c0 -> Tendsto (fun N : Nat => c0 * (N : Real) / (Real.log (N : Real))^2) atTop atTop",
+      "proof": "Use const_mul_atTop with explicit hc0; mul_div_assoc matches the stated expression. Positivity of c0 is not derived here."
+    },
+    {
+      "name": "eventuallyEven_unit_absorption_of_log_sq_lower",
+      "line": 84,
+      "type": "{H : Nat -> Real} -> {c0 : Real} -> 0 < c0 -> (eventually N : Nat in atTop, Even N -> c0 * (N : Real) / (Real.log (N : Real))^2 <= H N) -> forall epsilon : Real, 0 < epsilon -> eventually N : Nat in atTop, Even N -> 1 <= epsilon * H N",
+      "proof": "Apply the eventual even lower-comparison lemma to the proved divergent positive multiple of N/log^2 N. Both hc0 and hLower remain explicit caller obligations."
+    }
+  ],
+  "external_zero_sorry_reuse": {
+    "provider": "/home/slava/codex-lean-ve/native-packages/mathlib",
+    "manifest_revision": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "method": "Read fixed local provider files through the Debian WSL filesystem; no external search or new implementation needed.",
+    "apis": [
+      {
+        "file": "Mathlib/Analysis/SpecialFunctions/Exp.lean",
+        "sha256": "df9c7572f9816cccc1a7f8f6b03c2e11200654c18251fc7869c69ae63c20b9a6",
+        "line": 248,
+        "api": "Real.tendsto_exp_div_pow_atTop (n : Nat) : Tendsto (fun x => exp x / x^n) atTop atTop",
+        "proof_read": "Full theorem proof read: exponential domination via natural ceilings and geometric growth; explicit proved body, no sorry in its body."
+      },
+      {
+        "file": "Mathlib/Analysis/SpecialFunctions/Log/Basic.lean",
+        "sha256": "1f36a9802233e878953d809b16e020beaf0ace5afd4c8279d47b52af6ee186bf",
+        "line": 351,
+        "api": "Real.tendsto_log_atTop : Tendsto log atTop atTop",
+        "proof_read": "Uses tendsto_comp_exp_atTop, log_exp, tendsto_id."
+      },
+      {
+        "file": "Mathlib/Order/Filter/AtTopBot/Archimedean.lean",
+        "sha256": "1622cc99d3fa0b54a8a530998decba9df1a15a7367152b657143d76b8ccb63d9",
+        "line": 44,
+        "api": "Filter.tendsto_natCast_atTop_atTop",
+        "proof_read": "Nat.mono_cast.tendsto_atTop_atTop exists_nat_ge."
+      },
+      {
+        "file": "Mathlib/Order/Filter/AtTopBot/Field.lean",
+        "sha256": "b6ce875ac37da2745d10f0b6460f3fee16f326dc2824652e1c537fba95725b33",
+        "line": 72,
+        "api": "Filter.Tendsto.const_mul_atTop (hr : 0 < r) (hf : Tendsto f l atTop) : Tendsto (fun x => r * f x) l atTop",
+        "proof_read": "(tendsto_const_mul_atTop_of_pos hr).2 hf."
+      }
+    ],
+    "limit": "Local source proof reuse only; no claim of a newly audited complete external closure."
+  },
+  "original_evidence": {
+    "audit_search": "Read-only search of audits JSON for exact source hash found no match. All 141 audits/**/receipt.json files searched for target module name: zero mentions. declarations.log name hits were import-list lines, not a target-owned receipt.",
+    "matching_complete_owned_receipt": null,
+    "stock_replay_for_target_found": false,
+    "strict_target_record_found": false,
+    "local_cache": {
+      "path": ".lake/proof-continuation/cache/ImbalancedChen.NormalizationGrowth.json",
+      "sha256": "12c5cd1d99a9bb942600c8a792279fabecf0e38c89f0061fed856fbf0b9e8f2b",
+      "status": "PASS",
+      "scope": "Exact-source/direct-object development reuse only",
+      "warnings_as_errors": false,
+      "observed_current_object_bytes": 49112,
+      "observed_current_object_sha256": "12e44886d5f17db7b59698497868352aaacac28544c1db1c27b2da8410edcef1"
+    },
+    "original_compile_receipt": {
+      "path": "../goldbach-integration/.lake/takeover-p0/cache/ImbalancedChen.NormalizationGrowth.json",
+      "sha256": "b91be8e71d2aa8485dc9d30cbd923e57928b394a33c5d43af2d9b152677b5b4e",
+      "source_matches": true,
+      "object_matches": true,
+      "exit_code": 0,
+      "seconds": 7.174,
+      "warnings_as_errors": false,
+      "scope": "direct current-source compilation; no aggregate/kernel/axiom claim"
+    },
+    "conclusion": "Historical compile success and exact current cache/object match cannot be promoted to owned complete types, std3, safety, inventory, exact-object and stock replay evidence."
+  },
+  "mathematical_boundary": {
+    "module_gap_found": false,
+    "unconditional_fact": "x/(log x)^2 and its natural restriction tend to positive infinity; every fixed positive multiple does too.",
+    "conditional_fact": "A specified H absorbs the additive unit only given its divergence or the explicit eventual even lower comparison by a strictly positive fixed multiple.",
+    "singular_series": "No singular series is defined or lower-bounded in this module. No such bound is inferred by this review. Instantiation with a singular-series normalization must supply its positive constant and eventual lower comparison independently.",
+    "main_status": "No proof of target prime counts or unconditional 1+1.75 follows; main remains OPEN."
+  },
+  "minimum_next_admission_preparation": [
+    "Wait for root sole-heavy scheduling authorization; do not start concurrent Lean/runtime/checker/lock work.",
+    "Freeze/recheck exact c4a454 source, four direct provider source/object bindings, pins and current target object; zero project parents need owned receipts.",
+    "Prepare one source-specific strict gate covering all seven written theorem proof sites and explicit c0/hLower boundary; use measured complete serialized inventory, never infer it from written count.",
+    "Obtain required target stock replay plus complete all-types/std3/safety/inventory/exact-object evidence and current bindings before root considers owned admission. Historical cache PASS alone is insufficient."
+  ],
+  "actions": {
+    "new_files": 1,
+    "actual_source_edits": 0,
+    "cache_edits": 0,
+    "lean_runtime_checker_or_lock_started": false,
+    "git_site_tex_changes": false,
+    "accepted_count_changed": false
+  }
+}

@@ -1,0 +1,1629 @@
+{
+  "status": "INDEPENDENT_COMPLETE219_SOURCE_MATH_SCOPE_AND_API_REVIEW_APPROVE_FOR_ROOT_SPECIFIC_FIRST_GATE_NOT_KERNEL_ACCEPTANCE",
+  "created_utc": "2026-10-20T11:27:38.444985+00:00",
+  "reviewer": "/root/chen7_cofactor_oct20",
+  "author_independence": "Reviewer is not source author /root/support_oct20 and did not modify any Lean source.",
+  "source": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorSmallCorePrimeDifferenceReindex.lean",
+  "source_sha256": "0d22bae8cf2929aee3f7b80cf369d4b7a260cf076545f5fb92263b7fa0270455",
+  "source_bytes": 10412,
+  "source_lines": 219,
+  "entire_actual_saved_source_read_without_truncation": true,
+  "entire_source_literal": "import ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction\nimport ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity\n\n/-!\n# Exact signed difference licenses for the actual first factor\n\nThe literal small paired-gcd cutoff excludes equal original row integers.\nFor every compatible first factor in the original carrier, the signed quotient\nis therefore nonzero and recovers that first factor exactly. The original\ncarrier filters coprimality with the signed residue; it does not assert that\nits members are prime.\n\nThe bound uses the original two row intervals and retains the original Q1,\nthe paired gcd, and the tail-product gcd. No additive counting term is used.\nThis file proves only finite arithmetic licenses. It asserts no weighted sum\nidentity, frequency-window separation, or spectral estimate.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical\n\nnamespace SmallCorePrimeDifferenceReindex\n\nprivate theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) :\n    0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q := by\n  obtain ⟨hlo, hhi⟩ := Finset.mem_Icc.mp hn\n  have hceil : 1 ≤ Nat.ceil Q := by\n    exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  have hnlo : Q ≤ (n : ℝ) :=\n    (Nat.le_ceil Q).trans (by exact_mod_cast hlo)\n  have hnhi : (n : ℝ) ≤ 2 * Q :=\n    (show (n : ℝ) ≤ (Nat.floor (2 * Q) : ℝ) by exact_mod_cast hhi).trans\n      (Nat.floor_le (by linarith : 0 ≤ 2 * Q))\n  exact ⟨by omega, hnlo, hnhi⟩\n\nprivate theorem row_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {l : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows) :\n    0 < l.1.1 * l.1.2 ∧ 0 < l.2 ∧\n      d.U ≤ (l.2 : ℝ) ∧ (l.2 : ℝ) ≤ 2 * d.U := by\n  obtain ⟨hf, hN⟩ := Finset.mem_product.mp hl\n  obtain ⟨h₂, h₃⟩ := Finset.mem_product.mp hf\n  change l.2 ∈ factorCarrier d.U at hN\n  have h₂bounds := factor_bounds hd.2.2.2.1 h₂\n  have h₃bounds := factor_bounds hd.2.2.2.2.1 h₃\n  have hNbounds := factor_bounds hd.1 hN\n  exact ⟨Nat.mul_pos h₂bounds.1 h₃bounds.1, hNbounds.1, hNbounds.2⟩\n\nprivate theorem gcd_mul_difference (N₁ N₂ : ℕ) :\n    ((N₁.gcd N₂ : ℕ) : ℤ) *\n        (((N₁ / N₁.gcd N₂ : ℕ) : ℤ) - ((N₂ / N₁.gcd N₂ : ℕ) : ℤ)) =\n      (N₁ : ℤ) - N₂ := by\n  have hleft : N₁.gcd N₂ * (N₁ / N₁.gcd N₂) = N₁ :=\n    Nat.mul_div_cancel' (Nat.gcd_dvd_left N₁ N₂)\n  have hright : N₁.gcd N₂ * (N₂ / N₁.gcd N₂) = N₂ :=\n    Nat.mul_div_cancel' (Nat.gcd_dvd_right N₁ N₂)\n  have hleftZ : ((N₁.gcd N₂ : ℕ) : ℤ) * (N₁ / N₁.gcd N₂ : ℕ) = N₁ := by\n    exact_mod_cast hleft\n  have hrightZ : ((N₁.gcd N₂ : ℕ) : ℤ) * (N₂ / N₁.gcd N₂ : ℕ) = N₂ := by\n    exact_mod_cast hright\n  rw [mul_sub, hleftZ, hrightZ]\n\nprivate theorem compatible_difference_mul\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) :\n    ((p * v.gcd w : ℕ) : ℤ) *\n        ((((N₁ / N₁.gcd N₂ : ℕ) : ℤ) - ((N₂ / N₁.gcd N₂ : ℕ) : ℤ)) /\n          ((p * v.gcd w : ℕ) : ℤ)) =\n      ((N₁ / N₁.gcd N₂ : ℕ) : ℤ) - ((N₂ / N₁.gcd N₂ : ℕ) : ℤ) := by\n  have hdata := sharedDifferenceData_licenses hp hv hw hN₁ hN₂ hc (0 : ℤ)\n  dsimp only at hdata\n  rcases hdata with ⟨hg, _, _, _, _, _, _, _, _, hN₁eq, _, _, _, _, _, _, _, _, _, hf, _⟩\n  have hsplit :\n      CanonicalReciprocalData.supportedPart (N₁ / N₁.gcd N₂) (N₁.gcd N₂) *\n          CanonicalReciprocalData.coprimePart (N₁ / N₁.gcd N₂) (N₁.gcd N₂) =\n        N₁ / N₁.gcd N₂ := by\n    apply Nat.mul_left_cancel hg\n    calc\n      _ = N₁ := by simpa only [mul_assoc] using hN₁eq.symm\n      _ = N₁.gcd N₂ * (N₁ / N₁.gcd N₂) :=\n        (Nat.mul_div_cancel' (Nat.gcd_dvd_left N₁ N₂)).symm\n  have hsplitZ :\n      (CanonicalReciprocalData.supportedPart (N₁ / N₁.gcd N₂) (N₁.gcd N₂) : ℤ) *\n          CanonicalReciprocalData.coprimePart (N₁ / N₁.gcd N₂) (N₁.gcd N₂) =\n        ((N₁ / N₁.gcd N₂ : ℕ) : ℤ) := by\n    exact_mod_cast hsplit\n  simpa only [hsplitZ] using hf\n\nend SmallCorePrimeDifferenceReindex\n\n/-- Exact arithmetic on the literal compatible first-factor carrier. -/\ntheorem MediumAtom.smallCore_prime_to_signed_difference_licenses\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    {l l' : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) (hl' : l' ∈ d.sharedFirstFactorRows)\n    (hsmall : (l.2.gcd l'.2 : ℝ) ≤ d.scale ^ (sigma / 4)) :\n    let g := l.2.gcd l'.2\n    let D := (l.1.1 * l.1.2).gcd (l'.1.1 * l'.1.2)\n    let Delta : ℤ := ((l.2 / g : ℕ) : ℤ) - ((l'.2 / g : ℕ) : ℤ)\n    let P := d.primitiveFirstFactorCarrier.filter (fun p =>\n      ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n        (p * (l'.1.1 * l'.1.2)) l.2 l'.2)\n    let f : ℕ → ℤ := fun p => Delta / ((p * D : ℕ) : ℤ)\n    0 < g ∧ 0 < D ∧ Delta ≠ 0 ∧\n      (∀ p ∈ P, f p ≠ 0 ∧ ((p * D : ℕ) : ℤ) * f p = Delta ∧\n        Delta.natAbs = p * D * (f p).natAbs ∧\n        p = Delta.natAbs / (D * (f p).natAbs) ∧\n        ((f p).natAbs : ℝ) ≤ d.U / ((g : ℝ) * (D : ℝ) * d.Q1) ∧\n        (0 < f p ↔ 0 < Delta) ∧ (f p < 0 ↔ Delta < 0)) ∧\n      Set.InjOn f (P : Set ℕ) := by\n  let g := l.2.gcd l'.2\n  let D := (l.1.1 * l.1.2).gcd (l'.1.1 * l'.1.2)\n  let Delta : ℤ := ((l.2 / g : ℕ) : ℤ) - ((l'.2 / g : ℕ) : ℤ)\n  let P := d.primitiveFirstFactorCarrier.filter (fun p =>\n    ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n      (p * (l'.1.1 * l'.1.2)) l.2 l'.2)\n  let f : ℕ → ℤ := fun p => Delta / ((p * D : ℕ) : ℤ)\n  have hleft := SmallCorePrimeDifferenceReindex.row_bounds hd hl\n  have hright := SmallCorePrimeDifferenceReindex.row_bounds hd hl'\n  have hg : 0 < g := Nat.gcd_pos_of_pos_left l'.2 hleft.2.1\n  have hD : 0 < D := Nat.gcd_pos_of_pos_left (l'.1.1 * l'.1.2) hleft.1\n  have hQ1 : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1\n  have hx : 1 < d.scale :=\n    (Real.one_lt_exp_iff.mpr (Real.exp_pos (1 : ℝ))).trans hd.2.2.2.2.2.1\n  have hcut : d.scale ^ (sigma / 4) < d.U :=\n    (Real.rpow_lt_rpow_of_exponent_lt hx (by linarith : sigma / 4 < sigma)).trans_le\n      (PairedAlphaDeletion.actual_geometry_bounds hd).1\n  have hne : l.2 ≠ l'.2 := by\n    intro heq\n    have hsmall' : (l'.2 : ℝ) ≤ d.scale ^ (sigma / 4) := by\n      simpa only [heq, Nat.gcd_self] using hsmall\n    linarith [hright.2.2.1]\n  have hDeltaeq : (g : ℤ) * Delta = (l.2 : ℤ) - l'.2 :=\n    SmallCorePrimeDifferenceReindex.gcd_mul_difference l.2 l'.2\n  have hDelta : Delta ≠ 0 := by\n    intro hzero\n    have hN : (l.2 : ℤ) = (l'.2 : ℤ) := by\n      rw [hzero, mul_zero] at hDeltaeq\n      omega\n    exact hne (by exact_mod_cast hN)\n  have hDeltaR : (g : ℝ) * (Delta : ℝ) = (l.2 : ℝ) - l'.2 := by\n    exact_mod_cast hDeltaeq\n  have habsR : (Delta.natAbs : ℝ) = |(Delta : ℝ)| := by\n    rw [← Int.cast_natCast, Int.natCast_natAbs, Int.cast_abs]\n  have hDeltaBound : (g : ℝ) * (Delta.natAbs : ℝ) ≤ d.U := by\n    calc\n      _ = |(g : ℝ) * (Delta : ℝ)| := by\n        rw [habsR, abs_mul, abs_of_nonneg (Nat.cast_nonneg g)]\n      _ = |(l.2 : ℝ) - l'.2| := by rw [hDeltaR]\n      _ ≤ d.U := abs_le.mpr ⟨by linarith [hleft.2.2.1, hright.2.2.2],\n        by linarith [hright.2.2.1, hleft.2.2.2]⟩\n  have hlicenses : ∀ p ∈ P, f p ≠ 0 ∧ ((p * D : ℕ) : ℤ) * f p = Delta ∧\n      Delta.natAbs = p * D * (f p).natAbs ∧\n      p = Delta.natAbs / (D * (f p).natAbs) ∧\n      ((f p).natAbs : ℝ) ≤ d.U / ((g : ℝ) * (D : ℝ) * d.Q1) ∧\n      (0 < f p ↔ 0 < Delta) ∧ (f p < 0 ↔ Delta < 0) := by\n    intro p hp\n    obtain ⟨hpCarrier, hc⟩ := Finset.mem_filter.mp hp\n    have hpFactor := (Finset.mem_filter.mp hpCarrier).1\n    have hpBounds := SmallCorePrimeDifferenceReindex.factor_bounds hd.2.2.1 hpFactor\n    have hidentity : ((p * D : ℕ) : ℤ) * f p = Delta :=\n      SmallCorePrimeDifferenceReindex.compatible_difference_mul hpBounds.1\n        hleft.1 hright.1 hleft.2.1 hright.2.1 hc\n    have hfn : f p ≠ 0 := by\n      intro hzero\n      apply hDelta\n      simpa only [hzero, mul_zero] using hidentity.symm\n    have habs : Delta.natAbs = p * D * (f p).natAbs := by\n      simpa only [Int.natAbs_mul, Int.natAbs_natCast] using\n        (congrArg Int.natAbs hidentity).symm\n    have hden : 0 < D * (f p).natAbs :=\n      Nat.mul_pos hD (Int.natAbs_pos.mpr hfn)\n    have hinverse : p = Delta.natAbs / (D * (f p).natAbs) := by\n      rw [habs, mul_assoc, Nat.mul_div_cancel _ hden]\n    have habsReal : (Delta.natAbs : ℝ) = (p : ℝ) * D * (f p).natAbs := by\n      exact_mod_cast habs\n    have hproduct : (g : ℝ) * p * D * (f p).natAbs ≤ d.U := by\n      calc\n        _ = (g : ℝ) * (Delta.natAbs : ℝ) := by rw [habsReal]; ring\n        _ ≤ d.U := hDeltaBound\n    have hbound : ((f p).natAbs : ℝ) ≤ d.U / ((g : ℝ) * (D : ℝ) * d.Q1) := by\n      apply (le_div_iff₀ (by positivity : 0 < (g : ℝ) * (D : ℝ) * d.Q1)).mpr\n      calc\n        _ = ((g : ℝ) * D * (f p).natAbs) * d.Q1 := by ring\n        _ ≤ ((g : ℝ) * D * (f p).natAbs) * p :=\n          mul_le_mul_of_nonneg_left hpBounds.2.1 (by positivity)\n        _ = (g : ℝ) * p * D * (f p).natAbs := by ring\n        _ ≤ d.U := hproduct\n    have hpD : (0 : ℤ) < (p * D : ℕ) := by\n      exact_mod_cast Nat.mul_pos hpBounds.1 hD\n    have hpos : 0 < f p ↔ 0 < Delta := by\n      calc\n        0 < f p ↔ ((p * D : ℕ) : ℤ) * 0 < ((p * D : ℕ) : ℤ) * f p :=\n          (Int.mul_lt_mul_left hpD).symm\n        _ ↔ 0 < Delta := by rw [mul_zero, hidentity]\n    have hneg : f p < 0 ↔ Delta < 0 := by\n      calc\n        f p < 0 ↔ ((p * D : ℕ) : ℤ) * f p < ((p * D : ℕ) : ℤ) * 0 :=\n          (Int.mul_lt_mul_left hpD).symm\n        _ ↔ Delta < 0 := by rw [mul_zero, hidentity]\n    exact ⟨hfn, hidentity, habs, hinverse, hbound, hpos, hneg⟩\n  refine ⟨hg, hD, hDelta, hlicenses, ?_⟩\n  intro p hp q hq heq\n  calc\n    p = Delta.natAbs / (D * (f p).natAbs) := (hlicenses p hp).2.2.2.1\n    _ = Delta.natAbs / (D * (f q).natAbs) := by rw [heq]\n    _ = q := (hlicenses q hq).2.2.2.1.symm\n\nend\n\nend ImbalancedChen.Part3\n",
+  "owner_inventory": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261020-small-core-prime-difference-reindex-owner-20261020T112900Z\\complete-owner-freeze-source-inventory-and-actual-API-bindings.json",
+    "sha256": "61385ccbeb9a71af12154f8e699db092381c8dd111110f0b022cc45047fa8821"
+  },
+  "root_scope": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261020-actual-small-core-prime-to-signed-f-root-complete-one-source-authoring-scope.json",
+    "sha256": "82a5b7122bfd37d936092ce480c33ff06c1c4616d8dda8a1cd5cc257d82eb0d5"
+  },
+  "all5_complete_headers_and_bodies_full_actual_read": [
+    {
+      "name": "factor_bounds",
+      "source": "ImbalancedChen/Part3SharedFirstFactorSmallCorePrimeDifferenceReindex.lean",
+      "source_sha256": "0d22bae8cf2929aee3f7b80cf369d4b7a260cf076545f5fb92263b7fa0270455",
+      "line": 27,
+      "complete_header": "private theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) :\n    0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q",
+      "complete_declaration_and_proof": "private theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) :\n    0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q := by\n  obtain ⟨hlo, hhi⟩ := Finset.mem_Icc.mp hn\n  have hceil : 1 ≤ Nat.ceil Q := by\n    exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  have hnlo : Q ≤ (n : ℝ) :=\n    (Nat.le_ceil Q).trans (by exact_mod_cast hlo)\n  have hnhi : (n : ℝ) ≤ 2 * Q :=\n    (show (n : ℝ) ≤ (Nat.floor (2 * Q) : ℝ) by exact_mod_cast hhi).trans\n      (Nat.floor_le (by linarith : 0 ≤ 2 * Q))\n  exact ⟨by omega, hnlo, hnhi⟩",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "row_bounds",
+      "source": "ImbalancedChen/Part3SharedFirstFactorSmallCorePrimeDifferenceReindex.lean",
+      "source_sha256": "0d22bae8cf2929aee3f7b80cf369d4b7a260cf076545f5fb92263b7fa0270455",
+      "line": 40,
+      "complete_header": "private theorem row_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {l : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows) :\n    0 < l.1.1 * l.1.2 ∧ 0 < l.2 ∧\n      d.U ≤ (l.2 : ℝ) ∧ (l.2 : ℝ) ≤ 2 * d.U",
+      "complete_declaration_and_proof": "private theorem row_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    {l : (ℕ × ℕ) × ℕ} (hl : l ∈ d.sharedFirstFactorRows) :\n    0 < l.1.1 * l.1.2 ∧ 0 < l.2 ∧\n      d.U ≤ (l.2 : ℝ) ∧ (l.2 : ℝ) ≤ 2 * d.U := by\n  obtain ⟨hf, hN⟩ := Finset.mem_product.mp hl\n  obtain ⟨h₂, h₃⟩ := Finset.mem_product.mp hf\n  change l.2 ∈ factorCarrier d.U at hN\n  have h₂bounds := factor_bounds hd.2.2.2.1 h₂\n  have h₃bounds := factor_bounds hd.2.2.2.2.1 h₃\n  have hNbounds := factor_bounds hd.1 hN\n  exact ⟨Nat.mul_pos h₂bounds.1 h₃bounds.1, hNbounds.1, hNbounds.2⟩",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "gcd_mul_difference",
+      "source": "ImbalancedChen/Part3SharedFirstFactorSmallCorePrimeDifferenceReindex.lean",
+      "source_sha256": "0d22bae8cf2929aee3f7b80cf369d4b7a260cf076545f5fb92263b7fa0270455",
+      "line": 54,
+      "complete_header": "private theorem gcd_mul_difference (N₁ N₂ : ℕ) :\n    ((N₁.gcd N₂ : ℕ) : ℤ) *\n        (((N₁ / N₁.gcd N₂ : ℕ) : ℤ) - ((N₂ / N₁.gcd N₂ : ℕ) : ℤ)) =\n      (N₁ : ℤ) - N₂",
+      "complete_declaration_and_proof": "private theorem gcd_mul_difference (N₁ N₂ : ℕ) :\n    ((N₁.gcd N₂ : ℕ) : ℤ) *\n        (((N₁ / N₁.gcd N₂ : ℕ) : ℤ) - ((N₂ / N₁.gcd N₂ : ℕ) : ℤ)) =\n      (N₁ : ℤ) - N₂ := by\n  have hleft : N₁.gcd N₂ * (N₁ / N₁.gcd N₂) = N₁ :=\n    Nat.mul_div_cancel' (Nat.gcd_dvd_left N₁ N₂)\n  have hright : N₁.gcd N₂ * (N₂ / N₁.gcd N₂) = N₂ :=\n    Nat.mul_div_cancel' (Nat.gcd_dvd_right N₁ N₂)\n  have hleftZ : ((N₁.gcd N₂ : ℕ) : ℤ) * (N₁ / N₁.gcd N₂ : ℕ) = N₁ := by\n    exact_mod_cast hleft\n  have hrightZ : ((N₁.gcd N₂ : ℕ) : ℤ) * (N₂ / N₁.gcd N₂ : ℕ) = N₂ := by\n    exact_mod_cast hright\n  rw [mul_sub, hleftZ, hrightZ]",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "compatible_difference_mul",
+      "source": "ImbalancedChen/Part3SharedFirstFactorSmallCorePrimeDifferenceReindex.lean",
+      "source_sha256": "0d22bae8cf2929aee3f7b80cf369d4b7a260cf076545f5fb92263b7fa0270455",
+      "line": 68,
+      "complete_header": "private theorem compatible_difference_mul\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) :\n    ((p * v.gcd w : ℕ) : ℤ) *\n        ((((N₁ / N₁.gcd N₂ : ℕ) : ℤ) - ((N₂ / N₁.gcd N₂ : ℕ) : ℤ)) /\n          ((p * v.gcd w : ℕ) : ℤ)) =\n      ((N₁ / N₁.gcd N₂ : ℕ) : ℤ) - ((N₂ / N₁.gcd N₂ : ℕ) : ℤ)",
+      "complete_declaration_and_proof": "private theorem compatible_difference_mul\n    {p v w N₁ N₂ : ℕ}\n    (hp : 0 < p) (hv : 0 < v) (hw : 0 < w)\n    (hN₁ : 0 < N₁) (hN₂ : 0 < N₂)\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N₁ N₂) :\n    ((p * v.gcd w : ℕ) : ℤ) *\n        ((((N₁ / N₁.gcd N₂ : ℕ) : ℤ) - ((N₂ / N₁.gcd N₂ : ℕ) : ℤ)) /\n          ((p * v.gcd w : ℕ) : ℤ)) =\n      ((N₁ / N₁.gcd N₂ : ℕ) : ℤ) - ((N₂ / N₁.gcd N₂ : ℕ) : ℤ) := by\n  have hdata := sharedDifferenceData_licenses hp hv hw hN₁ hN₂ hc (0 : ℤ)\n  dsimp only at hdata\n  rcases hdata with ⟨hg, _, _, _, _, _, _, _, _, hN₁eq, _, _, _, _, _, _, _, _, _, hf, _⟩\n  have hsplit :\n      CanonicalReciprocalData.supportedPart (N₁ / N₁.gcd N₂) (N₁.gcd N₂) *\n          CanonicalReciprocalData.coprimePart (N₁ / N₁.gcd N₂) (N₁.gcd N₂) =\n        N₁ / N₁.gcd N₂ := by\n    apply Nat.mul_left_cancel hg\n    calc\n      _ = N₁ := by simpa only [mul_assoc] using hN₁eq.symm\n      _ = N₁.gcd N₂ * (N₁ / N₁.gcd N₂) :=\n        (Nat.mul_div_cancel' (Nat.gcd_dvd_left N₁ N₂)).symm\n  have hsplitZ :\n      (CanonicalReciprocalData.supportedPart (N₁ / N₁.gcd N₂) (N₁.gcd N₂) : ℤ) *\n          CanonicalReciprocalData.coprimePart (N₁ / N₁.gcd N₂) (N₁.gcd N₂) =\n        ((N₁ / N₁.gcd N₂ : ℕ) : ℤ) := by\n    exact_mod_cast hsplit\n  simpa only [hsplitZ] using hf",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "MediumAtom.smallCore_prime_to_signed_difference_licenses",
+      "source": "ImbalancedChen/Part3SharedFirstFactorSmallCorePrimeDifferenceReindex.lean",
+      "source_sha256": "0d22bae8cf2929aee3f7b80cf369d4b7a260cf076545f5fb92263b7fa0270455",
+      "line": 99,
+      "complete_header": "theorem MediumAtom.smallCore_prime_to_signed_difference_licenses\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    {l l' : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) (hl' : l' ∈ d.sharedFirstFactorRows)\n    (hsmall : (l.2.gcd l'.2 : ℝ) ≤ d.scale ^ (sigma / 4)) :\n    let g := l.2.gcd l'.2\n    let D := (l.1.1 * l.1.2).gcd (l'.1.1 * l'.1.2)\n    let Delta : ℤ := ((l.2 / g : ℕ) : ℤ) - ((l'.2 / g : ℕ) : ℤ)\n    let P := d.primitiveFirstFactorCarrier.filter (fun p =>\n      ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n        (p * (l'.1.1 * l'.1.2)) l.2 l'.2)\n    let f : ℕ → ℤ := fun p => Delta / ((p * D : ℕ) : ℤ)\n    0 < g ∧ 0 < D ∧ Delta ≠ 0 ∧\n      (∀ p ∈ P, f p ≠ 0 ∧ ((p * D : ℕ) : ℤ) * f p = Delta ∧\n        Delta.natAbs = p * D * (f p).natAbs ∧\n        p = Delta.natAbs / (D * (f p).natAbs) ∧\n        ((f p).natAbs : ℝ) ≤ d.U / ((g : ℝ) * (D : ℝ) * d.Q1) ∧\n        (0 < f p ↔ 0 < Delta) ∧ (f p < 0 ↔ Delta < 0)) ∧\n      Set.InjOn f (P : Set ℕ)",
+      "complete_declaration_and_proof": "theorem MediumAtom.smallCore_prime_to_signed_difference_licenses\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    {l l' : (ℕ × ℕ) × ℕ}\n    (hl : l ∈ d.sharedFirstFactorRows) (hl' : l' ∈ d.sharedFirstFactorRows)\n    (hsmall : (l.2.gcd l'.2 : ℝ) ≤ d.scale ^ (sigma / 4)) :\n    let g := l.2.gcd l'.2\n    let D := (l.1.1 * l.1.2).gcd (l'.1.1 * l'.1.2)\n    let Delta : ℤ := ((l.2 / g : ℕ) : ℤ) - ((l'.2 / g : ℕ) : ℤ)\n    let P := d.primitiveFirstFactorCarrier.filter (fun p =>\n      ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n        (p * (l'.1.1 * l'.1.2)) l.2 l'.2)\n    let f : ℕ → ℤ := fun p => Delta / ((p * D : ℕ) : ℤ)\n    0 < g ∧ 0 < D ∧ Delta ≠ 0 ∧\n      (∀ p ∈ P, f p ≠ 0 ∧ ((p * D : ℕ) : ℤ) * f p = Delta ∧\n        Delta.natAbs = p * D * (f p).natAbs ∧\n        p = Delta.natAbs / (D * (f p).natAbs) ∧\n        ((f p).natAbs : ℝ) ≤ d.U / ((g : ℝ) * (D : ℝ) * d.Q1) ∧\n        (0 < f p ↔ 0 < Delta) ∧ (f p < 0 ↔ Delta < 0)) ∧\n      Set.InjOn f (P : Set ℕ) := by\n  let g := l.2.gcd l'.2\n  let D := (l.1.1 * l.1.2).gcd (l'.1.1 * l'.1.2)\n  let Delta : ℤ := ((l.2 / g : ℕ) : ℤ) - ((l'.2 / g : ℕ) : ℤ)\n  let P := d.primitiveFirstFactorCarrier.filter (fun p =>\n    ComplexCRT.Compatible (p * (l.1.1 * l.1.2))\n      (p * (l'.1.1 * l'.1.2)) l.2 l'.2)\n  let f : ℕ → ℤ := fun p => Delta / ((p * D : ℕ) : ℤ)\n  have hleft := SmallCorePrimeDifferenceReindex.row_bounds hd hl\n  have hright := SmallCorePrimeDifferenceReindex.row_bounds hd hl'\n  have hg : 0 < g := Nat.gcd_pos_of_pos_left l'.2 hleft.2.1\n  have hD : 0 < D := Nat.gcd_pos_of_pos_left (l'.1.1 * l'.1.2) hleft.1\n  have hQ1 : 0 < d.Q1 := zero_lt_one.trans_le hd.2.2.1\n  have hx : 1 < d.scale :=\n    (Real.one_lt_exp_iff.mpr (Real.exp_pos (1 : ℝ))).trans hd.2.2.2.2.2.1\n  have hcut : d.scale ^ (sigma / 4) < d.U :=\n    (Real.rpow_lt_rpow_of_exponent_lt hx (by linarith : sigma / 4 < sigma)).trans_le\n      (PairedAlphaDeletion.actual_geometry_bounds hd).1\n  have hne : l.2 ≠ l'.2 := by\n    intro heq\n    have hsmall' : (l'.2 : ℝ) ≤ d.scale ^ (sigma / 4) := by\n      simpa only [heq, Nat.gcd_self] using hsmall\n    linarith [hright.2.2.1]\n  have hDeltaeq : (g : ℤ) * Delta = (l.2 : ℤ) - l'.2 :=\n    SmallCorePrimeDifferenceReindex.gcd_mul_difference l.2 l'.2\n  have hDelta : Delta ≠ 0 := by\n    intro hzero\n    have hN : (l.2 : ℤ) = (l'.2 : ℤ) := by\n      rw [hzero, mul_zero] at hDeltaeq\n      omega\n    exact hne (by exact_mod_cast hN)\n  have hDeltaR : (g : ℝ) * (Delta : ℝ) = (l.2 : ℝ) - l'.2 := by\n    exact_mod_cast hDeltaeq\n  have habsR : (Delta.natAbs : ℝ) = |(Delta : ℝ)| := by\n    rw [← Int.cast_natCast, Int.natCast_natAbs, Int.cast_abs]\n  have hDeltaBound : (g : ℝ) * (Delta.natAbs : ℝ) ≤ d.U := by\n    calc\n      _ = |(g : ℝ) * (Delta : ℝ)| := by\n        rw [habsR, abs_mul, abs_of_nonneg (Nat.cast_nonneg g)]\n      _ = |(l.2 : ℝ) - l'.2| := by rw [hDeltaR]\n      _ ≤ d.U := abs_le.mpr ⟨by linarith [hleft.2.2.1, hright.2.2.2],\n        by linarith [hright.2.2.1, hleft.2.2.2]⟩\n  have hlicenses : ∀ p ∈ P, f p ≠ 0 ∧ ((p * D : ℕ) : ℤ) * f p = Delta ∧\n      Delta.natAbs = p * D * (f p).natAbs ∧\n      p = Delta.natAbs / (D * (f p).natAbs) ∧\n      ((f p).natAbs : ℝ) ≤ d.U / ((g : ℝ) * (D : ℝ) * d.Q1) ∧\n      (0 < f p ↔ 0 < Delta) ∧ (f p < 0 ↔ Delta < 0) := by\n    intro p hp\n    obtain ⟨hpCarrier, hc⟩ := Finset.mem_filter.mp hp\n    have hpFactor := (Finset.mem_filter.mp hpCarrier).1\n    have hpBounds := SmallCorePrimeDifferenceReindex.factor_bounds hd.2.2.1 hpFactor\n    have hidentity : ((p * D : ℕ) : ℤ) * f p = Delta :=\n      SmallCorePrimeDifferenceReindex.compatible_difference_mul hpBounds.1\n        hleft.1 hright.1 hleft.2.1 hright.2.1 hc\n    have hfn : f p ≠ 0 := by\n      intro hzero\n      apply hDelta\n      simpa only [hzero, mul_zero] using hidentity.symm\n    have habs : Delta.natAbs = p * D * (f p).natAbs := by\n      simpa only [Int.natAbs_mul, Int.natAbs_natCast] using\n        (congrArg Int.natAbs hidentity).symm\n    have hden : 0 < D * (f p).natAbs :=\n      Nat.mul_pos hD (Int.natAbs_pos.mpr hfn)\n    have hinverse : p = Delta.natAbs / (D * (f p).natAbs) := by\n      rw [habs, mul_assoc, Nat.mul_div_cancel _ hden]\n    have habsReal : (Delta.natAbs : ℝ) = (p : ℝ) * D * (f p).natAbs := by\n      exact_mod_cast habs\n    have hproduct : (g : ℝ) * p * D * (f p).natAbs ≤ d.U := by\n      calc\n        _ = (g : ℝ) * (Delta.natAbs : ℝ) := by rw [habsReal]; ring\n        _ ≤ d.U := hDeltaBound\n    have hbound : ((f p).natAbs : ℝ) ≤ d.U / ((g : ℝ) * (D : ℝ) * d.Q1) := by\n      apply (le_div_iff₀ (by positivity : 0 < (g : ℝ) * (D : ℝ) * d.Q1)).mpr\n      calc\n        _ = ((g : ℝ) * D * (f p).natAbs) * d.Q1 := by ring\n        _ ≤ ((g : ℝ) * D * (f p).natAbs) * p :=\n          mul_le_mul_of_nonneg_left hpBounds.2.1 (by positivity)\n        _ = (g : ℝ) * p * D * (f p).natAbs := by ring\n        _ ≤ d.U := hproduct\n    have hpD : (0 : ℤ) < (p * D : ℕ) := by\n      exact_mod_cast Nat.mul_pos hpBounds.1 hD\n    have hpos : 0 < f p ↔ 0 < Delta := by\n      calc\n        0 < f p ↔ ((p * D : ℕ) : ℤ) * 0 < ((p * D : ℕ) : ℤ) * f p :=\n          (Int.mul_lt_mul_left hpD).symm\n        _ ↔ 0 < Delta := by rw [mul_zero, hidentity]\n    have hneg : f p < 0 ↔ Delta < 0 := by\n      calc\n        f p < 0 ↔ ((p * D : ℕ) : ℤ) * f p < ((p * D : ℕ) : ℤ) * 0 :=\n          (Int.mul_lt_mul_left hpD).symm\n        _ ↔ Delta < 0 := by rw [mul_zero, hidentity]\n    exact ⟨hfn, hidentity, habs, hinverse, hbound, hpos, hneg⟩\n  refine ⟨hg, hD, hDelta, hlicenses, ?_⟩\n  intro p hp q hq heq\n  calc\n    p = Delta.natAbs / (D * (f p).natAbs) := (hlicenses p hp).2.2.2.1\n    _ = Delta.natAbs / (D * (f q).natAbs) := by rw [heq]\n    _ = q := (hlicenses q hq).2.2.2.1.symm",
+      "literal_unicode_substring_exact": true
+    }
+  ],
+  "four_private_helpers_and_one_public_count_exact": true,
+  "public_entire_let_type_literal_exact": true,
+  "no_new_primitive_def": true,
+  "actual_imports_exact": [
+    "ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction",
+    "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity"
+  ],
+  "independent_complete_math_review": [
+    {
+      "lines": [
+        27,
+        38
+      ],
+      "declaration": "factor_bounds",
+      "review": "The original Icc ceil Q floor(2Q) with Q>=1 has n>=ceilQ>=1. The actual floor and ceil bounds give Q<=n<=2Q, with closed endpoints preserved."
+    },
+    {
+      "lines": [
+        40,
+        52
+      ],
+      "declaration": "row_bounds",
+      "review": "The actual rows use original Q2,Q3 factors and transposed.betaCarrier. Its underlying transposed.V equals original.U, so N is in factorCarrier U. hd gives U,Q2,Q3>=1. Both tail factors and original N are positive and U<=N<=2U."
+    },
+    {
+      "lines": [
+        54,
+        66
+      ],
+      "declaration": "gcd_mul_difference",
+      "review": "g divides both N1,N2, including degenerate values, giving exact g*(Ni/g)=Ni. Casting both identities to integers and distributing yields g*Delta=N1-N2."
+    },
+    {
+      "lines": [
+        68,
+        94
+      ],
+      "declaration": "compatible_difference_mul",
+      "review": "The actual complete owned sharedDifferenceData_licenses takes arbitrary positive p,v,w,N1,N2 and actual compatibility, with no Prime premise. Its g>0 and N1=g*d1*n1 identify d1*n1=N1/g by positive g cancellation. This exact split is cast and rewrites BOTH numerator of owned signed f and its RHS, giving p*gcd(v,w)*(Delta/(p*gcd(v,w)))=Delta. Thus the quotient identity is actually proved from owned licenses."
+    },
+    {
+      "lines": [
+        126,
+        150
+      ],
+      "declaration": "public diagonal exclusion",
+      "review": "hd gives scale>exp(exp1)>1. sigma>0 gives sigma/4<sigma and the exact owned geometry gives scale^sigma<=U, so cut=scale^(sigma/4)<U. N1=N2 would give g=N1>=U>cut, contradicting g<=cut. Hence Delta!=0 from gDelta=N1-N2. No AE exception or extra small sigma, kappa or c0 assumptions occur."
+    },
+    {
+      "lines": [
+        151,
+        159
+      ],
+      "declaration": "actual interval difference",
+      "review": "Original Ni in [U,2U] imply |N1-N2|<=U. Since g>0 and gDelta=N1-N2, g*absDelta<=U. This is exact; there is no additive 1 and no replacement of the row carrier by all integers."
+    },
+    {
+      "lines": [
+        160,
+        208
+      ],
+      "declaration": "all p licenses, actual inverse, signed bound",
+      "review": "Actual P is a compatibility filter on primitiveFirstFactorCarrier, whose filter is residue coprimality, with no Prime condition. p>=Q1>=1 and positive tail products give pD*f=Delta. Delta!=0 gives f!=0. natAbs gives absDelta=pD*absf and positive D*absf permits the exact Nat inverse p=absDelta/(D*absf). Combining g*pD*absf<=U with p>=Q1 yields absf<=U/(gD Q1). Positive pD preserves both positive and negative signs; both iff conclusions are retained."
+    },
+    {
+      "lines": [
+        210,
+        215
+      ],
+      "declaration": "fixed-row InjOn",
+      "review": "For the fixed original rows, Delta and D are fixed. Equality of signed f values implies equality of their natAbs, so the actual inverse gives p=q. This proves exactly InjOn f on P. It is not a global tuple injection or a weighted sum identity."
+    }
+  ],
+  "all11_actual_parent_primitives_full_scope_current_hash_and_literal_verified": [
+    {
+      "name": "MediumAtom",
+      "source": "ImbalancedChen/Part3DistributionTargets.lean",
+      "source_sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "line": 36,
+      "complete_header": "structure MediumAtom",
+      "complete_declaration_and_proof": "structure MediumAtom where\n  U : ℝ\n  V : ℝ\n  Q1 : ℝ\n  Q2 : ℝ\n  Q3 : ℝ\n  residue : ℤ\n  intervalLo : ℝ\n  intervalHi : ℝ\n  alpha : ℕ → ℂ\n  beta : ℕ → ℂ\n  gamma1 : ℕ → ℂ\n  gamma2 : ℕ → ℂ\n  gamma3 : ℕ → ℂ",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "MediumAtom.scale",
+      "source": "ImbalancedChen/Part3DistributionTargets.lean",
+      "source_sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "line": 51,
+      "complete_header": "def MediumAtom.scale (d : MediumAtom) : ℝ",
+      "complete_declaration_and_proof": "def MediumAtom.scale (d : MediumAtom) : ℝ := d.U * d.V",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "MediumAtom.betaCarrier",
+      "source": "ImbalancedChen/Part3DistributionTargets.lean",
+      "source_sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "line": 57,
+      "complete_header": "def MediumAtom.betaCarrier (d : MediumAtom) : Finset ℕ",
+      "complete_declaration_and_proof": "def MediumAtom.betaCarrier (d : MediumAtom) : Finset ℕ :=\n  Finset.Icc (Nat.ceil d.V) (Nat.floor (2 * d.V))\n\n/-- Concrete dyadic support `Q ≤ q ≤ 2Q`, including the trivial factor\n`q=1` at `Q=1`. The manuscript writes `q ≍ Q`; the compiler must assign\noverlapping endpoints without multiplicity loss when it chooses its atoms. -/",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "factorCarrier",
+      "source": "ImbalancedChen/Part3DistributionTargets.lean",
+      "source_sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "line": 63,
+      "complete_header": "def factorCarrier (Q : ℝ) : Finset ℕ",
+      "complete_declaration_and_proof": "def factorCarrier (Q : ℝ) : Finset ℕ :=\n  Finset.Icc (Nat.ceil Q) (Nat.floor (2 * Q))\n\n/-- The returned variable has ONE interval and ONE phase, shared by all\nlevels. There is deliberately no level-indexed interval or phase field. -/",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "MediumAdmissible",
+      "source": "ImbalancedChen/Part3DistributionTargets.lean",
+      "source_sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "line": 126,
+      "complete_header": "def MediumAdmissible (B : ℕ) (σ κ c0 : ℝ) (d : MediumAtom) : Prop",
+      "complete_declaration_and_proof": "def MediumAdmissible (B : ℕ) (σ κ c0 : ℝ) (d : MediumAtom) : Prop :=\n  1 ≤ d.U ∧ 1 ≤ d.V ∧ 1 ≤ d.Q1 ∧ 1 ≤ d.Q2 ∧ 1 ≤ d.Q3 ∧\n  Real.exp (Real.exp 1) < d.scale ∧\n  c0 * d.scale ≤ (d.residue.natAbs : ℝ) ∧\n  (d.residue.natAbs : ℝ) ≤ d.scale ^ (1 + κ) ∧\n  d.Q1 < d.U * d.scale ^ (-σ) ∧\n  d.U ^ 2 * d.Q2 * d.Q3 ^ 2 < d.scale ^ (1 - 8 * σ) ∧\n  (d.residue.natAbs : ℝ) ^ (7 / 32 : ℝ) * d.U * d.Q1 * d.Q2 ^ 5 * d.Q3 ^ 2 <\n    d.scale ^ (2 - 15 * σ) ∧\n  d.U ^ (1 + 2 * (7 / 32 : ℝ)) * d.Q1 *\n      d.Q2 ^ (5 - 2 * (7 / 32 : ℝ)) * d.Q3 ^ (2 + 2 * (7 / 32 : ℝ)) <\n    d.scale ^ (2 - 15 * σ) ∧\n  (∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1) ∧\n  (∀ n ∈ d.alphaCarrier, d.alpha n ≠ 0 → ∀ p : ℕ,\n    Nat.Prime p → p ∣ n →\n      d.scale ^ (1 / (Real.log (Real.log d.scale)) ^ 3) < (p : ℝ)) ∧\n  (∀ m ∈ d.betaCarrier, ‖d.beta m‖ ≤ (m.divisors.card : ℝ) ^ B) ∧\n  (∀ q ∈ factorCarrier d.Q1, ‖d.gamma1 q‖ ≤ 1 ∧\n    (d.gamma1 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q2, ‖d.gamma2 q‖ ≤ 1 ∧\n    (d.gamma2 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q3, ‖d.gamma3 q‖ ≤ 1 ∧\n    (d.gamma3 q ≠ 0 → Nat.Coprime q d.residue.natAbs))\n\n/-- Missing uniform signed medium estimate.  This proposition is not proved\nby the low-rank BV or one-long integer-slot results in this Part. -/",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "MediumAtom.transposedAtom",
+      "source": "ImbalancedChen/Part3TransposedDispersion.lean",
+      "source_sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+      "line": 34,
+      "complete_header": "def MediumAtom.transposedAtom (d : MediumAtom) : MediumAtom",
+      "complete_declaration_and_proof": "def MediumAtom.transposedAtom (d : MediumAtom) : MediumAtom :=\n  { d with\n    U := d.V\n    V := d.U\n    intervalLo := -1\n    intervalHi := (Nat.floor (2 * d.V) : ℝ)\n    alpha := d.beta\n    beta := fun n ↦ if n ∈ d.alphaCarrier then d.alpha n else 0 }",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "MediumAtom.primitiveFirstFactorCarrier",
+      "source": "ImbalancedChen/Part3SharedFirstFactorDispersion.lean",
+      "source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "line": 32,
+      "complete_header": "def MediumAtom.primitiveFirstFactorCarrier (d : MediumAtom) : Finset ℕ",
+      "complete_declaration_and_proof": "def MediumAtom.primitiveFirstFactorCarrier (d : MediumAtom) : Finset ℕ :=\n  (factorCarrier d.Q1).filter (fun p ↦ p.Coprime d.residue.natAbs)",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "MediumAtom.sharedFirstFactorRows",
+      "source": "ImbalancedChen/Part3SharedFirstFactorDispersion.lean",
+      "source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "line": 35,
+      "complete_header": "def MediumAtom.sharedFirstFactorRows (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ)",
+      "complete_declaration_and_proof": "def MediumAtom.sharedFirstFactorRows (d : MediumAtom) : Finset ((ℕ × ℕ) × ℕ) :=\n  (factorCarrier d.Q2 ×ˢ factorCarrier d.Q3) ×ˢ d.transposedAtom.betaCarrier",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "Compatible",
+      "source": "ImbalancedChen/Part3ComplexCRTConsumer.lean",
+      "source_sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+      "line": 81,
+      "complete_header": "def Compatible (q r m1 m2 : ℕ) : Prop",
+      "complete_declaration_and_proof": "def Compatible (q r m1 m2 : ℕ) : Prop :=\n  m1.Coprime q ∧ m2.Coprime r ∧ Nat.ModEq (q.gcd r) m1 m2",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "supportedPart",
+      "source": "ImbalancedChen/Part3CanonicalReciprocalData.lean",
+      "source_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "line": 38,
+      "complete_header": "def supportedPart (n d : ℕ) : ℕ",
+      "complete_declaration_and_proof": "def supportedPart (n d : ℕ) : ℕ :=\n  ∏ p ∈ n.primeFactors.filter (fun p => p ∣ d), p ^ n.factorization p\n\n/-- The complementary factor of `n`, containing primes not dividing `d`. -/",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "coprimePart",
+      "source": "ImbalancedChen/Part3CanonicalReciprocalData.lean",
+      "source_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "line": 42,
+      "complete_header": "def coprimePart (n d : ℕ) : ℕ",
+      "complete_declaration_and_proof": "def coprimePart (n d : ℕ) : ℕ :=\n  ∏ p ∈ n.primeFactors.filter (fun p => ¬p ∣ d), p ^ n.factorization p",
+      "literal_unicode_substring_exact": true
+    }
+  ],
+  "all18_native_original_API_full_spans_current_hash_and_literal_verified": [
+    {
+      "name": "le_ceil",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Floor\\Semiring.lean",
+      "source_sha256": "89cec8d921ee572258917b08f64efc19abe2922fb363e5b0af072c231c9ab7d3",
+      "line": 177,
+      "complete_header": "@[bound]\ntheorem le_ceil (a : R) : a ≤ ⌈a⌉₊",
+      "complete_declaration_and_proof": "@[bound]\ntheorem le_ceil (a : R) : a ≤ ⌈a⌉₊ :=\n  ceil_le.1 le_rfl",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "floor_le",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Floor\\Semiring.lean",
+      "source_sha256": "89cec8d921ee572258917b08f64efc19abe2922fb363e5b0af072c231c9ab7d3",
+      "line": 47,
+      "complete_header": "theorem floor_le (ha : 0 ≤ a) : (⌊a⌋₊ : R) ≤ a",
+      "complete_declaration_and_proof": "theorem floor_le (ha : 0 ≤ a) : (⌊a⌋₊ : R) ≤ a :=\n  (le_floor_iff ha).1 le_rfl",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "mul_div_cancel'",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Dvd.lean",
+      "source_sha256": "12cd37a3909fddc05c1f5541662d1a099c083aa1084777ded9d583c7a6780f96",
+      "line": 106,
+      "complete_header": "protected theorem mul_div_cancel' {n m : Nat} (H : n ∣ m) : n * (m / n) = m",
+      "complete_declaration_and_proof": "protected theorem mul_div_cancel' {n m : Nat} (H : n ∣ m) : n * (m / n) = m := by\n  have := mod_add_div m n\n  rwa [mod_eq_zero_of_dvd H, Nat.zero_add] at this",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "gcd_dvd_left",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Gcd.lean",
+      "source_sha256": "672c96102205b59a47742be74c959ed780ba319713baaa8a2eeede2cdc46cbea",
+      "line": 92,
+      "complete_header": "theorem gcd_dvd_left (m n : Nat) : gcd m n ∣ m",
+      "complete_declaration_and_proof": "theorem gcd_dvd_left (m n : Nat) : gcd m n ∣ m := (gcd_dvd m n).left",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "gcd_dvd_right",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Gcd.lean",
+      "source_sha256": "672c96102205b59a47742be74c959ed780ba319713baaa8a2eeede2cdc46cbea",
+      "line": 94,
+      "complete_header": "theorem gcd_dvd_right (m n : Nat) : gcd m n ∣ n",
+      "complete_declaration_and_proof": "theorem gcd_dvd_right (m n : Nat) : gcd m n ∣ n := (gcd_dvd m n).right",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "gcd_pos_of_pos_left",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Gcd.lean",
+      "source_sha256": "672c96102205b59a47742be74c959ed780ba319713baaa8a2eeede2cdc46cbea",
+      "line": 147,
+      "complete_header": "theorem gcd_pos_of_pos_left {m : Nat} (n : Nat) (mpos : 0 < m) : 0 < gcd m n",
+      "complete_declaration_and_proof": "theorem gcd_pos_of_pos_left {m : Nat} (n : Nat) (mpos : 0 < m) : 0 < gcd m n :=\n  pos_of_dvd_of_pos (gcd_dvd_left m n) mpos",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "gcd_self",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Gcd.lean",
+      "source_sha256": "672c96102205b59a47742be74c959ed780ba319713baaa8a2eeede2cdc46cbea",
+      "line": 70,
+      "complete_header": "@[simp] theorem gcd_self (n : Nat) : gcd n n = n",
+      "complete_declaration_and_proof": "@[simp] theorem gcd_self (n : Nat) : gcd n n = n := by\n  cases n <;> simp [gcd_succ]\ninstance : Std.IdempotentOp gcd := ⟨gcd_self⟩",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "mul_left_cancel",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Lemmas.lean",
+      "source_sha256": "8259037db9a9bf223c4d57eb7811ff0b65e4439f98ed0bf3cd301565ff46daad",
+      "line": 582,
+      "complete_header": "protected theorem mul_left_cancel {n m k : Nat} (np : 0 < n) (h : n * m = n * k) : m = k",
+      "complete_declaration_and_proof": "protected theorem mul_left_cancel {n m k : Nat} (np : 0 < n) (h : n * m = n * k) : m = k := by\n  match Nat.lt_trichotomy m k with\n  | Or.inl p =>\n    have r : n * m < n * k := Nat.mul_lt_mul_of_pos_left p np\n    simp [h] at r\n  | Or.inr (Or.inl p) => exact p\n  | Or.inr (Or.inr p) =>\n    have r : n * k < n * m := Nat.mul_lt_mul_of_pos_left p np\n    simp [h] at r",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "mul_div_cancel",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Div\\Basic.lean",
+      "source_sha256": "67f894497257111dff81a5b3bab0f849cc53f31a3c62656333366ad62ab63a58",
+      "line": 419,
+      "complete_header": "protected theorem mul_div_cancel (m : Nat) {n : Nat} (H : 0 < n) : m * n / n = m",
+      "complete_declaration_and_proof": "protected theorem mul_div_cancel (m : Nat) {n : Nat} (H : 0 < n) : m * n / n = m := by\n  let t := add_mul_div_right 0 m H\n  rwa [Nat.zero_add, Nat.zero_div, Nat.zero_add] at t",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "natAbs_natCast",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Int\\Order.lean",
+      "source_sha256": "ffc58334c9afc31592aebe9a4dedc7d3df6187c0a258b16ecc9f3e8ddcd87142",
+      "line": 593,
+      "complete_header": "@[simp, norm_cast] theorem natAbs_natCast (n : Nat) : natAbs ↑n = n",
+      "complete_declaration_and_proof": "@[simp, norm_cast] theorem natAbs_natCast (n : Nat) : natAbs ↑n = n := rfl",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "natAbs_mul",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Int\\Order.lean",
+      "source_sha256": "ffc58334c9afc31592aebe9a4dedc7d3df6187c0a258b16ecc9f3e8ddcd87142",
+      "line": 629,
+      "complete_header": "theorem natAbs_mul (a b : Int) : natAbs (a * b) = natAbs a * natAbs b",
+      "complete_declaration_and_proof": "theorem natAbs_mul (a b : Int) : natAbs (a * b) = natAbs a * natAbs b := by\n  cases a <;> cases b <;>\n    simp only [← Int.mul_def, Int.mul, natAbs_negOfNat] <;> simp only [natAbs]",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "natAbs_pos",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Int\\Order.lean",
+      "source_sha256": "ffc58334c9afc31592aebe9a4dedc7d3df6187c0a258b16ecc9f3e8ddcd87142",
+      "line": 614,
+      "complete_header": "@[simp] theorem natAbs_pos : 0 < natAbs a ↔ a ≠ 0",
+      "complete_declaration_and_proof": "@[simp] theorem natAbs_pos : 0 < natAbs a ↔ a ≠ 0 := by\n  rw [Nat.pos_iff_ne_zero, Ne, natAbs_eq_zero]",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "mul_lt_mul_left",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Int\\DivMod\\Lemmas.lean",
+      "source_sha256": "b68602f75ed3eb6ce8527695e7af87bd2cf0628c40babf72c80295293a545a62",
+      "line": 1682,
+      "complete_header": "@[simp high] protected theorem mul_lt_mul_left {a b c : Int} (ha : 0 < a) : a * b < a * c ↔ b < c where\n  mp hbc",
+      "complete_declaration_and_proof": "@[simp high] protected theorem mul_lt_mul_left {a b c : Int} (ha : 0 < a) : a * b < a * c ↔ b < c where\n  mp hbc := Int.lt_of_mul_lt_mul_left hbc <| Int.le_of_lt ha\n  mpr hbc := Int.mul_lt_mul_of_pos_left hbc ha",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "natCast_natAbs",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Group\\Unbundled\\Int.lean",
+      "source_sha256": "01427c62fa3d774dca25a53828ec2b33cbb97d55798d11146d85824f98ffd7d5",
+      "line": 44,
+      "complete_header": "@[norm_cast] lemma natCast_natAbs (n : ℤ) : (n.natAbs : ℤ) = |n|",
+      "complete_declaration_and_proof": "@[norm_cast] lemma natCast_natAbs (n : ℤ) : (n.natAbs : ℤ) = |n| := n.abs_eq_natAbs.symm",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "cast_abs",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Ring\\Cast.lean",
+      "source_sha256": "9a251f799c3fbae7e6fa42cce52ef3408482a9d06e0eb2a3e296236aef97c6ba",
+      "line": 81,
+      "complete_header": "@[simp, norm_cast]\nlemma cast_abs : (↑|a| : R) = |(a : R)|",
+      "complete_declaration_and_proof": "@[simp, norm_cast]\nlemma cast_abs : (↑|a| : R) = |(a : R)| := by simp [abs_eq_max_neg]",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "rpow_lt_rpow_of_exponent_lt",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Pow\\Real.lean",
+      "source_sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+      "line": 610,
+      "complete_header": "theorem rpow_lt_rpow_of_exponent_lt (hx : 1 < x) (hyz : y < z) : x ^ y < x ^ z",
+      "complete_declaration_and_proof": "theorem rpow_lt_rpow_of_exponent_lt (hx : 1 < x) (hyz : y < z) : x ^ y < x ^ z := by\n  repeat' rw [rpow_def_of_pos (lt_trans zero_lt_one hx)]\n  rw [exp_lt_exp]; exact mul_lt_mul_of_pos_left hyz (log_pos hx)",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "exp_pos",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Complex\\Exponential.lean",
+      "source_sha256": "78ca88512755a04b7346806b8e74fb3930bf14c0ec289107694a33c1947b7821",
+      "line": 283,
+      "complete_header": "@[bound]\ntheorem exp_pos (x : ℝ) : 0 < exp x",
+      "complete_declaration_and_proof": "@[bound]\ntheorem exp_pos (x : ℝ) : 0 < exp x :=\n  (le_total 0 x).elim (lt_of_lt_of_le zero_lt_one ∘ one_le_exp) fun h => by\n    rw [← neg_neg x, Real.exp_neg]\n    exact inv_pos.2 (lt_of_lt_of_le zero_lt_one (one_le_exp (neg_nonneg.2 h)))",
+      "literal_unicode_substring_exact": true
+    },
+    {
+      "name": "one_lt_exp_iff",
+      "source": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\Complex\\Exponential.lean",
+      "source_sha256": "78ca88512755a04b7346806b8e74fb3930bf14c0ec289107694a33c1947b7821",
+      "line": 331,
+      "complete_header": "@[simp]\ntheorem one_lt_exp_iff {x : ℝ} : 1 < exp x ↔ 0 < x",
+      "complete_declaration_and_proof": "@[simp]\ntheorem one_lt_exp_iff {x : ℝ} : 1 < exp x ↔ 0 < x := by rw [← exp_zero, exp_lt_exp]\n\n@[bound] private alias ⟨_, Bound.one_lt_exp_of_pos⟩ := one_lt_exp_iff",
+      "literal_unicode_substring_exact": true
+    }
+  ],
+  "two_consumed_owned_complete_actual_original_records_and_receipt_bindings_full_read": [
+    {
+      "complete_actual_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity",
+        "name": "ImbalancedChen.Part3.sharedDifferenceData_licenses",
+        "partial": false,
+        "type": "∀ {p v w N₁ N₂ : Nat} (hp : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) p)\n  (hv : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) v)\n  (hw : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) w)\n  (hN₁ : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) N₁)\n  (hN₂ : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) N₂)\n  (hc :\n    ImbalancedChen.Part3.ComplexCRT.Compatible (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p w) N₁ N₂)\n  (a : Int),\n  have g : Nat := Nat.gcd N₁ N₂;\n  have D : Nat := Nat.gcd v w;\n  have v₀ : Nat := @HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) v D;\n  have w₀ : Nat := @HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) w D;\n  have delta : Nat := @HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p D;\n  have d₁ : Nat :=\n    ImbalancedChen.Part3.CanonicalReciprocalData.supportedPart\n      (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) N₁ g) g;\n  have n₁ : Nat :=\n    ImbalancedChen.Part3.CanonicalReciprocalData.coprimePart\n      (@HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) N₁ g) g;\n  have n₂ : Nat := @HDiv.hDiv.{0, 0, 0} Nat Nat Nat (@instHDiv.{0} Nat Nat.instDiv) N₂ g;\n  have A : Nat := @HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) g d₁;\n  have L : Nat :=\n    Nat.lcm (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p w);\n  have f : Int :=\n    @HDiv.hDiv.{0, 0, 0} Int Int Int (@instHDiv.{0} Int Int.instDiv)\n      (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub)\n        (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul) (@Nat.cast.{0} Int instNatCastInt d₁)\n          (@Nat.cast.{0} Int instNatCastInt n₁))\n        (@Nat.cast.{0} Int instNatCastInt n₂))\n      (@Nat.cast.{0} Int instNatCastInt delta);\n  have t : Int :=\n    ImbalancedChen.Part3.CanonicalReciprocalPhase.wPhaseInverse\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) A n₂) v₀)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) n₁ w₀);\n  have b : Int :=\n    ImbalancedChen.Part3.ComplexCRT.residue (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p w) N₁ N₂ a;\n  And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) g)\n    (And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) D)\n      (And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) d₁)\n        (And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) n₁)\n          (And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) n₂)\n            (And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) v₀)\n              (And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) w₀)\n                (And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) A)\n                  (And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) L)\n                    (And\n                      (@Eq.{1} Nat N₁\n                        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n                          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) g d₁) n₁))\n                      (And (@Eq.{1} Nat N₂ (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) g n₂))\n                        (And (@Eq.{1} Nat v (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) D v₀))\n                          (And (@Eq.{1} Nat w (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) D w₀))\n                            (And\n                              (@Eq.{1} Nat L\n                                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n                                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) delta v₀) w₀))\n                              (And (Nat.Coprime v₀ w₀)\n                                (And (Nat.Coprime n₁ delta)\n                                  (And\n                                    (Nat.Coprime v₀\n                                      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) n₁ w₀))\n                                    (And\n                                      (Nat.Coprime\n                                        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)\n                                          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) A n₂) v₀)\n                                        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) n₁ w₀))\n                                      (And\n                                        (Nat.Coprime\n                                          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) n₁ L) A)\n                                        (And\n                                          (@Eq.{1} Int\n                                            (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)\n                                              (@Nat.cast.{0} Int instNatCastInt delta) f)\n                                            (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub)\n                                              (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)\n                                                (@Nat.cast.{0} Int instNatCastInt d₁)\n                                                (@Nat.cast.{0} Int instNatCastInt n₁))\n                                              (@Nat.cast.{0} Int instNatCastInt n₂)))\n                                          (@Dvd.dvd.{0} Int Int.instDvd\n                                            (@Nat.cast.{0} Int instNatCastInt\n                                              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) n₁ L))\n                                            (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub)\n                                              (@HSub.hSub.{0, 0, 0} Int Int Int (@instHSub.{0} Int Int.instSub)\n                                                (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)\n                                                  (@Nat.cast.{0} Int instNatCastInt N₁) b)\n                                                a)\n                                              (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)\n                                                (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)\n                                                  (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)\n                                                    (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)\n                                                      (@HMul.hMul.{0, 0, 0} Int Int Int (@instHMul.{0} Int Int.instMul)\n                                                        a f)\n                                                      (@Nat.cast.{0} Int instNatCastInt A))\n                                                    (@Nat.cast.{0} Int instNatCastInt delta))\n                                                  (@Nat.cast.{0} Int instNatCastInt v₀))\n                                                t))))))))))))))))))))))",
+        "unsafe": false
+      },
+      "receipt": ".lake/proof-continuation/audits/20261020T091418335571Z/receipt.json",
+      "receipt_sha256": "a607263c6e94dbe044715d4f69eff8bd7aa9ce1051d0fc92723d7b2d6163c1f9",
+      "declarations_sha256": "2516b2e707950ecfb916f07993d393a841c8c67dbea721e384746aed81e75e43",
+      "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS"
+    },
+    {
+      "complete_actual_owned_record": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+        "name": "ImbalancedChen.Part3.PairedAlphaDeletion.actual_geometry_bounds",
+        "partial": false,
+        "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d),\n  And\n    (@LE.le.{0} Real Real.instLE\n      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n        (ImbalancedChen.Part3.MediumAtom.scale d) sigma)\n      (ImbalancedChen.Part3.MediumAtom.U d))\n    (And\n      (@LE.le.{0} Real Real.instLE (ImbalancedChen.Part3.MediumAtom.V d)\n        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n          (ImbalancedChen.Part3.MediumAtom.scale d)\n          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) sigma)))\n      (@LE.le.{0} Real Real.instLE (ImbalancedChen.Part3.MediumAtom.physicalFactorCap d)\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (@OfNat.ofNat.{0} Real (nat_lit 8)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 8) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6)))))))\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n            (ImbalancedChen.Part3.MediumAtom.scale d)\n            (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                (@OfNat.ofNat.{0} Real (nat_lit 10)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 10) Real.instNatCast\n                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 9) (instOfNatNat (nat_lit 9)))\n                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))))))\n                sigma))))))",
+        "unsafe": false
+      },
+      "receipt": ".lake/proof-continuation/audits/20261015T215420005455Z/receipt.json",
+      "receipt_sha256": "20274662054d91ccbd5b03e0303256a969ea6c011e1d99ed111f5d18bda04ccc",
+      "declarations_sha256": "c5eff2d933dcc470dc864fe28328a6a5f74fa675ed9c7ce7e4d7217014d62e5d",
+      "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS"
+    }
+  ],
+  "all3_original_complete_receipts_before_after_sources_objects_current_verified": [
+    {
+      "path": ".lake/proof-continuation/audits/20261020T104018969633Z/receipt.json",
+      "sha256": "f4171ef1740f083e13cf34130e0e482b7e01b95555e2edc8061d994ab53328cc",
+      "complete_actual_receipt": {
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+        "targets": {
+          "ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction": "13a73ca63c527036752d7bd367ac0c5b37582a0e48047855656418e1987a1c13"
+        },
+        "stages": [
+          {
+            "kind": "stock_replay",
+            "module": "ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction",
+            "result": {
+              "status": "PASS",
+              "command": [
+                "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/leanchecker",
+                "--verbose",
+                "ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction"
+              ],
+              "resource_reason": "20261020-root-fair-gate-7d679157-SmallReduction13a7-actualstrictPASS-fullowned-originalaudit",
+              "child_pid": 17657,
+              "rss_guard": {
+                "limit_mib": 6656,
+                "poll_seconds": 0.05,
+                "samples": 1045,
+                "max_observed_rss_kib": 4161208,
+                "signals": [],
+                "scope": "Periodic owned-child RSS observation; not OS hard cap"
+              },
+              "returncode": 0,
+              "max_rss_kib": 4160784,
+              "guard_error": null,
+              "seconds": 52.611,
+              "log_sha256": "bfc27cd1a9c16ae15aa8f8493746397d2f886325f0b357ccc68787f1468b031b"
+            }
+          },
+          {
+            "kind": "full_inventory_type_axioms",
+            "exit_code": 0,
+            "seconds": 18.137,
+            "max_rss_kib": 4648724,
+            "log_sha256": "c5136706ebb13eaf66f53989ee206343ec50d98ec8664a3aa345a6ae55103a3d",
+            "command": [
+              "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/lean",
+              "-j2",
+              "-M6144",
+              "-DwarningAsError=true",
+              ".lake/proof-continuation/audits/20261020T104018969633Z/OwnedAudit.lean"
+            ]
+          }
+        ],
+        "audit_runner_sha256": "267d59bfc37e5d5a742b619390f5b42155bb5ab33d923684487acb6b8a7e19e6",
+        "scope": "Owned stock replay and complete serialized/type/axiom census only",
+        "external_closure_replay_claimed": false,
+        "unconditional_main_claimed": false,
+        "inputs_before": {
+          "pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "sources": {
+            "ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction": "13a73ca63c527036752d7bd367ac0c5b37582a0e48047855656418e1987a1c13"
+          },
+          "owned_object_parts": {
+            "ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction": {
+              ".olean": "1665facba02d1a5e96c8cc383d533fcd7f927985621d12cebb31c63f1b16a893"
+            }
+          },
+          "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "checker_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+        },
+        "generated_audit_sha256": "40624a2380af76130cd0db2b6bbbd2ba8c675d14f52eabec4886e7faddc77a4f",
+        "inputs_after": {
+          "pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "sources": {
+            "ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction": "13a73ca63c527036752d7bd367ac0c5b37582a0e48047855656418e1987a1c13"
+          },
+          "owned_object_parts": {
+            "ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction": {
+              ".olean": "1665facba02d1a5e96c8cc383d533fcd7f927985621d12cebb31c63f1b16a893"
+            }
+          },
+          "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "checker_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+        },
+        "declaration_counts": {
+          "ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction": 21
+        },
+        "source_template_sha256": "df79aecf54317dbdc193e9b68ec8e833f6d4d09a92f369ac6985d23d974ff822"
+      }
+    },
+    {
+      "path": ".lake/proof-continuation/audits/20261020T091418335571Z/receipt.json",
+      "sha256": "a607263c6e94dbe044715d4f69eff8bd7aa9ce1051d0fc92723d7b2d6163c1f9",
+      "complete_actual_receipt": {
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+        "targets": {
+          "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity": "d421113d3ac6dbf584635db7b113502f2f3cfb19cd35aadb8a54ca3c5d37f87e"
+        },
+        "stages": [
+          {
+            "kind": "stock_replay",
+            "module": "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity",
+            "result": {
+              "status": "PASS",
+              "command": [
+                "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/leanchecker",
+                "--verbose",
+                "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity"
+              ],
+              "resource_reason": "root-6951ea9f-Phased421-actualstrictPASS-originalobject-allgenerated-fulltypes-safety-threeaxioms-quota95",
+              "child_pid": 505,
+              "rss_guard": {
+                "limit_mib": 6656,
+                "poll_seconds": 0.05,
+                "samples": 825,
+                "max_observed_rss_kib": 4128452,
+                "signals": [],
+                "scope": "Periodic owned-child RSS observation; not OS hard cap"
+              },
+              "returncode": 0,
+              "max_rss_kib": 4127480,
+              "guard_error": null,
+              "seconds": 41.531,
+              "log_sha256": "8d0140b7099771ce8daeda1da815fc94742d4b520ebfcb61160bec6a795d7915"
+            }
+          },
+          {
+            "kind": "full_inventory_type_axioms",
+            "exit_code": 0,
+            "seconds": 15.375,
+            "max_rss_kib": 4618252,
+            "log_sha256": "ef60795453c6892989e6176745a2871cc281f8f8a322f7fd14b09e33ea9e8ac9",
+            "command": [
+              "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/lean",
+              "-j2",
+              "-M6144",
+              "-DwarningAsError=true",
+              ".lake/proof-continuation/audits/20261020T091418335571Z/OwnedAudit.lean"
+            ]
+          }
+        ],
+        "audit_runner_sha256": "267d59bfc37e5d5a742b619390f5b42155bb5ab33d923684487acb6b8a7e19e6",
+        "scope": "Owned stock replay and complete serialized/type/axiom census only",
+        "external_closure_replay_claimed": false,
+        "unconditional_main_claimed": false,
+        "inputs_before": {
+          "pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "sources": {
+            "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity": "d421113d3ac6dbf584635db7b113502f2f3cfb19cd35aadb8a54ca3c5d37f87e"
+          },
+          "owned_object_parts": {
+            "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity": {
+              ".olean": "261b4897da159d2849ed5e1d0cdd9ed0b43d6134bac374eb85c6a9414422d97d"
+            }
+          },
+          "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "checker_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+        },
+        "generated_audit_sha256": "60de1786d32b9ee257bf2b97348cde63eb51ad62e34d690e5c6a314eec71dfc5",
+        "inputs_after": {
+          "pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "sources": {
+            "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity": "d421113d3ac6dbf584635db7b113502f2f3cfb19cd35aadb8a54ca3c5d37f87e"
+          },
+          "owned_object_parts": {
+            "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity": {
+              ".olean": "261b4897da159d2849ed5e1d0cdd9ed0b43d6134bac374eb85c6a9414422d97d"
+            }
+          },
+          "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "checker_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+        },
+        "declaration_counts": {
+          "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity": 19
+        },
+        "source_template_sha256": "df79aecf54317dbdc193e9b68ec8e833f6d4d09a92f369ac6985d23d974ff822"
+      }
+    },
+    {
+      "path": ".lake/proof-continuation/audits/20261015T215420005455Z/receipt.json",
+      "sha256": "20274662054d91ccbd5b03e0303256a969ea6c011e1d99ed111f5d18bda04ccc",
+      "complete_actual_receipt": {
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+        "targets": {
+          "ImbalancedChen.Part3PairedAlphaDeletion": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4"
+        },
+        "stages": [
+          {
+            "kind": "stock_replay",
+            "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+            "result": {
+              "status": "PASS",
+              "command": [
+                "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/leanchecker",
+                "--verbose",
+                "ImbalancedChen.Part3PairedAlphaDeletion"
+              ],
+              "resource_reason": "root specific Alpha chain M6144 j2 identity6656; strict215207 source9a0 now original stock replay and complete serialized environment inventory full declaration types flags transitive axioms whitelist; before after source dependencies pins objects immutable; source review never substitutes owned gate",
+              "child_pid": 311,
+              "rss_guard": {
+                "limit_mib": 6656,
+                "poll_seconds": 0.05,
+                "samples": 1582,
+                "max_observed_rss_kib": 4098892,
+                "signals": [],
+                "scope": "Periodic owned-child RSS observation; not OS hard cap"
+              },
+              "returncode": 0,
+              "max_rss_kib": 4098532,
+              "guard_error": null,
+              "seconds": 79.569,
+              "log_sha256": "512204fec61c7813018759728b0ddf2fdf9001331954075c36be568c4bc7068e"
+            }
+          },
+          {
+            "kind": "full_inventory_type_axioms",
+            "exit_code": 0,
+            "seconds": 27.033,
+            "max_rss_kib": 4611516,
+            "log_sha256": "d34b460e9a7757c6605403ff8dfe7d0937e577c194e28c0ed4244508c690fdc1",
+            "command": [
+              "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/bin/lean",
+              "-j2",
+              "-M6144",
+              "-DwarningAsError=true",
+              ".lake/proof-continuation/audits/20261015T215420005455Z/OwnedAudit.lean"
+            ]
+          }
+        ],
+        "audit_runner_sha256": "267d59bfc37e5d5a742b619390f5b42155bb5ab33d923684487acb6b8a7e19e6",
+        "scope": "Owned stock replay and complete serialized/type/axiom census only",
+        "external_closure_replay_claimed": false,
+        "unconditional_main_claimed": false,
+        "inputs_before": {
+          "pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "sources": {
+            "ImbalancedChen.Part3PairedAlphaDeletion": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4"
+          },
+          "owned_object_parts": {
+            "ImbalancedChen.Part3PairedAlphaDeletion": {
+              ".olean": "cf2c170a7a0b7272ca2263bea61fd072b2a3f76a3fe31168c0116cba1c20c489"
+            }
+          },
+          "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "checker_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+        },
+        "generated_audit_sha256": "99adc6cf50bf07da33b4850e52ab6d967f047af13ba24fb3c0e106c158f0995c",
+        "inputs_after": {
+          "pins": {
+            "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+            "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+            "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+          },
+          "sources": {
+            "ImbalancedChen.Part3PairedAlphaDeletion": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4"
+          },
+          "owned_object_parts": {
+            "ImbalancedChen.Part3PairedAlphaDeletion": {
+              ".olean": "cf2c170a7a0b7272ca2263bea61fd072b2a3f76a3fe31168c0116cba1c20c489"
+            }
+          },
+          "lean_real_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550",
+          "checker_sha256": "ed46f21c763051c26f89481096cbaaf5db9665d674d602e3daf3391613ba0e6a"
+        },
+        "declaration_counts": {
+          "ImbalancedChen.Part3PairedAlphaDeletion": 47
+        },
+        "source_template_sha256": "df79aecf54317dbdc193e9b68ec8e833f6d4d09a92f369ac6985d23d974ff822"
+      }
+    }
+  ],
+  "all87_proper_source_cache_PASS_object_and_full_bindings_current_verified": [
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction",
+      "source_sha256": "13a73ca63c527036752d7bd367ac0c5b37582a0e48047855656418e1987a1c13",
+      "cache_sha256": "8527a85e8fb9cd6b50a1e8940623b9b00508f65c5cb1e52b42bb3dfa29df5f7c",
+      "cache_status": "PASS",
+      "object_sha256": "1665facba02d1a5e96c8cc383d533fcd7f927985621d12cebb31c63f1b16a893",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorDifferenceReciprocity",
+      "source_sha256": "d421113d3ac6dbf584635db7b113502f2f3cfb19cd35aadb8a54ca3c5d37f87e",
+      "cache_sha256": "be2dcb5391490f5ab55cc3b156fa5458ea0fc516822df85edd61cb4b97be8bd0",
+      "cache_status": "PASS",
+      "object_sha256": "261b4897da159d2849ed5e1d0cdd9ed0b43d6134bac374eb85c6a9414422d97d",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorEnergyNonzeroReduction",
+      "source_sha256": "c6fc9f63e91c676226f1a858173f75dfa4ce05b38defed4ec8060b802a8c442d",
+      "cache_sha256": "367925ea8844413bd0984ba56f4ca749e0c0e27340aaee2357f8462105d8d0d5",
+      "cache_status": "PASS",
+      "object_sha256": "2a2925b12d17fe90fa9d0c1517187ec027926044d89969af76ddad177adec526",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDNonzero",
+      "source_sha256": "708ca30636c8bb28d0b5c21241b704f0c1cb336c48530c8299974f18ac23d93e",
+      "cache_sha256": "b1e525c30906547e94131bb9548f0a2b31369c1a93ea267b0e78eead7139b2b6",
+      "cache_status": "PASS",
+      "object_sha256": "c8a6727f1bd139274592ec6267f9d00bfe1ee14bec57f5c83f6006b24249db0b",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorLargeSupportedDeletion",
+      "source_sha256": "20f41d2f1138c47b2bb3c027de4058d1d99bedab6000f2e23533e1c3fac989f8",
+      "cache_sha256": "62da288d5e6701d0dc02d3c6e5e03eebbd1481fc1231d9c1c90ef1ce76e8b816",
+      "cache_status": "PASS",
+      "object_sha256": "37e4c5da11eb80131bb4d456216cbdf31dbffc6da49a422b0ddd233ba95b91c1",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3CanonicalReciprocalPhase",
+      "source_sha256": "212392dfcf1bec5da8ff92b40b16332f68c5b1644c39a5d24eddf7abb7ea76e5",
+      "cache_sha256": "49d1fc7ab43235c61b3b3ea23fe504b94a764fb6d1a8ea8b945fe3bd7a0a11b0",
+      "cache_status": "PASS",
+      "object_sha256": "673c056778842a35172ea2bc278f362894e2af34bcb15b1640dee564b3be34db",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "cache_sha256": "3c66dbaef9f452446648160c0a910e7e3175ea5102764e8913cf31bfef1d08c3",
+      "cache_status": "PASS",
+      "object_sha256": "a44b42f2a4394fbdbe47ac83e4539de18d3637622d87cb24433dc3bb5f0fe9fc",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorZeroCovariancePayment",
+      "source_sha256": "b080f4a4c8d27d2880213e1aa0cbe5394a4b1b76fb5da5e1eb27113f680e1a39",
+      "cache_sha256": "71014fa0e4a62f1cc5c40ae349f90d09bc731a515bef45fb50dc6ea593398784",
+      "cache_status": "PASS",
+      "object_sha256": "4ca5098455722e21ba4d3ea62d0f037df9702e140e076449160cbf56a070a306",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorPrimitiveUVPayment",
+      "source_sha256": "631af675eaf29f8452963a2fe544517b2fae9b87cdcb5e38b7e6b2e1f9e1ce64",
+      "cache_sha256": "a15f7fb7f31f1ca28305f4c4726c5176aa7e9148a8bcd16662800e1e03ef93d8",
+      "cache_status": "PASS",
+      "object_sha256": "05c485df6e443d70fc5587811a126ec9f4f7ada3f8425c36a562d817c4a4f99a",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW",
+      "source_sha256": "46a6defd68675b0be26a003d84fc735ac0a7720f51483e4d9e5dfa67b03ac58f",
+      "cache_sha256": "87c78289204ac66a35cda59d5ecc9fef9b04b66e2f34e35ea654836a1da39ab8",
+      "cache_status": "PASS",
+      "object_sha256": "ce54b5ff1959c1bdb837ce9ae0c05459cd47012f03c906ea7c8a20c25475c7b0",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedGCDPoissonMask",
+      "source_sha256": "9d41c0858ea52223240405a003fdab49b3fbc9bcf6f8dd84c0a32a96a5295584",
+      "cache_sha256": "a45bbc421145e1f988800313920a98ec1159eceeaed77255b3dabd482aaffed9",
+      "cache_status": "PASS",
+      "object_sha256": "e587db905aa69588b9322f2850cc5ba692969476015eb9578476df6832e0d09e",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "cache_sha256": "c533c59658fccbe8267112459667cb3c803e54e89b679f5ba1ec5900bee3a5ef",
+      "cache_status": "PASS",
+      "object_sha256": "220bd038ad9935a5ca757c5ad5bbfd8bf10804f622bec27494711a621e144683",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3CanonicalReciprocalData",
+      "source_sha256": "27fbab6bd34d3f06767891e13009f82022375190bffa1ea7ab4f7fe7779c6d8f",
+      "cache_sha256": "742f65d5e6da93810baf0fd825cd0f0e8f4ead71186b1469d2bffeb5ce584e4a",
+      "cache_status": "PASS",
+      "object_sha256": "82e37fd95b03ec7fd97007a2e4f5a82e27c9c0a8adbc72e1249de8326f00a3e6",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3CommonPoisson",
+      "source_sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+      "cache_sha256": "6a1bc4e2d36da1d981dbe964317a99b641fd36f74722f798d8dbefbbe1c8bd85",
+      "cache_status": "PASS",
+      "object_sha256": "3e0b5afde4cc4655adefa76700f88ed5286543b305ea86b3df9f64d60d3a90ae",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedDispersion",
+      "source_sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+      "cache_sha256": "c20403262b8fc965aab07895028a75e801f7e73a9abd398e121eb068389febae",
+      "cache_status": "PASS",
+      "object_sha256": "0e2146b64d4d38c9d031284d1d72d433f66a47902d47826b412a0c1393749603",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorLowConductorAggregate",
+      "source_sha256": "503dc1699ee91b0a3d4d8dcb8b0a7287ca066fa72d5666ebdd52800703846fc8",
+      "cache_sha256": "9681a6485bc77e4d4353ecb2ad1a790f92fc3328e4b78c0a1a4eb8a95fd7a091",
+      "cache_status": "PASS",
+      "object_sha256": "b6358ff5ddc61784a28116f030bd5f1c5154d94b795a13a343dd9ca9f72972ef",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorSmallResidualHighConductorZero",
+      "source_sha256": "cb10abb7e651b3c03a94b589f6c4df4174dad45f6f34fe490bb46aea3225b687",
+      "cache_sha256": "f258a311e588bf5509c77fd6e4fe6321a8d8308d68625476fba5526e9036074e",
+      "cache_status": "PASS",
+      "object_sha256": "f391ece014df7449a36555990c01784577777f72fac3d6e72dcc5996426e857d",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorLargeResidualZero",
+      "source_sha256": "2801c38ab964e3df1850fb0b07cb3adc272c6f80004088aabc95adf360c6afda",
+      "cache_sha256": "3ea0e2c20fb0824b218323eaaf600c12c945666200f016c358d749abd4bff35f",
+      "cache_status": "PASS",
+      "object_sha256": "7c65fa2e6f414c671ac3eebfe3f434ee99b324b40df284915020991c9bfa9ce1",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveVPayment",
+      "source_sha256": "fd11a4e09110eb357cdf28515c5a467c9990236231ede5faa090ca0007f0e200",
+      "cache_sha256": "51d87b7a63fea4ea0b1ecf664d26482a0b4fb363a9fd0ede312fcf9b964b02db",
+      "cache_status": "PASS",
+      "object_sha256": "d1a1fe87cef6e0d0dc8a49d0e534be872e2e7f96a30bab450727916f93111dae",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorPairCount",
+      "source_sha256": "0fb3b9c8af11f17ef73fb422749a2de51b8ac695e08aca6b4599e9e05cf56f30",
+      "cache_sha256": "35606b3bbfe8c7161849771656c5a825bfeb987cbfba17a019ebeba48a55578d",
+      "cache_status": "PASS",
+      "object_sha256": "0e6e985e7c2b514ed1d84ca349a39a2367b4a147ecf2b2f7a55033cc60b1a935",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedZeroCovariance",
+      "source_sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2",
+      "cache_sha256": "ebe5c76f37dab3924aa168554990006e9212a7b96a07b3e464d5c21c6fd6076f",
+      "cache_status": "PASS",
+      "object_sha256": "3b005df47fbf16dcc139274a880125cf3130858faaea41a76d784bf7567bc598",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SignedDivisorDeletion",
+      "source_sha256": "0bddcfdb22bdb80cc4d5a888562bccb83ad1c87db6c395d27aef62da1bd366e1",
+      "cache_sha256": "b4a5ee0df7e9c91301564247ca94de07b5f14758a8fe3211819c8e6e8dc2c62e",
+      "cache_status": "PASS",
+      "object_sha256": "6b525c56397e58854df189255135aea974099dd1af06c28e77a289a109e61dcb",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUMoment",
+      "source_sha256": "10ee3c1507a8074abea88c430cfcd79ec1e6256c0df414462dd43652c0eae310",
+      "cache_sha256": "b3a55e9501772432c8ddb3e158cc18c373bcbd294c9bfff6907f4e83c3fdab95",
+      "cache_status": "PASS",
+      "object_sha256": "d4afc5558094f2db9d0115042ddfcea88a4cbf515e1368447f3e346286ebfab5",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3ComplexCRTConsumer",
+      "source_sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+      "cache_sha256": "e7c08c8a9e32fcf64bd436ff9f8276097cd7bb8c130c1ec45aecf07204dae573",
+      "cache_status": "PASS",
+      "object_sha256": "af49ba253a1eb113bd442eaec0ae9b67fc82c809c084066f3b9e319e971e8d70",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3CommonSmoothCutoff",
+      "source_sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+      "cache_sha256": "bfe24b2620585268590d71926bad5fb78032223bb87a9d3e78dcce66173f18f0",
+      "cache_status": "PASS",
+      "object_sha256": "d549908879b708f4bdce72f7ecf267a2cdd013fe643e1e3af283ca583d7629ec",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3FactorFiberDivisor",
+      "source_sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+      "cache_sha256": "17989db10d0097730445208b5477caa1725823ece272d9163fd306693a31ae60",
+      "cache_status": "PASS",
+      "object_sha256": "acf61ec1b2ce4e68033f27a7a9259802fb597a600354d9d2d5c20f3ae71259c2",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorLowConductorSW",
+      "source_sha256": "5df46739cf416fbf9efd7d40ec17c7434a3cde986f805d1c0193d059b0770485",
+      "cache_sha256": "2a176955fc0ceb2f15e0c48ddc1516c8a764956d95fa4ce29e26c2f3a11c950a",
+      "cache_status": "PASS",
+      "object_sha256": "5d9c8bbf506f18a377c4061172fb1660cbf03dfefdf482a70c3ab96c91613140",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorCharacterDictionary",
+      "source_sha256": "3b056ab1f03ea46cfc446a32b267f40ec58d85fe0974c0a94c6ed35183631cd3",
+      "cache_sha256": "2c5addf3b772ed74a1517f981ec6dd9de312b3c5b4b9ef02d05e97840bb42871",
+      "cache_status": "PASS",
+      "object_sha256": "eba7316b8bfeb93bed7ab688c8457dc75d5b2bbae197bd291a0cc9594ffab068",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorHighConductor",
+      "source_sha256": "2a2f1f4677b5e1210117284cd446a19683be1bfa08eec5bd99247a1be33bfae1",
+      "cache_sha256": "5adea232a96de6967ea09b636aca76e746b2319afa9cae28d087c7c2973ed5cf",
+      "cache_status": "PASS",
+      "object_sha256": "aa79482d2d52605cfdc60a70b7eeceff1300b0984a24edbbf3ac3c6aa41ba6f6",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveVMoment",
+      "source_sha256": "d842ac532a14d6179944fe2b61caf7a56ec17eb140d72471bc198c8d5958f7cd",
+      "cache_sha256": "530b6159199cfafd2239876612e8bc7fad7df4679ee065b8bc29d9fad47967bc",
+      "cache_status": "PASS",
+      "object_sha256": "e0b2fc9240f86fff78a6cc3dc3f4648582957d23482489e666bdaf71c327e4bf",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+      "source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "cache_sha256": "1ded35f0da417d2ed868a5813ec71ad9734a2679efa541a35ea605fc73984bcd",
+      "cache_status": "PASS",
+      "object_sha256": "cf2c170a7a0b7272ca2263bea61fd072b2a3f76a3fe31168c0116cba1c20c489",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3ActualLargeGCDBetaMass",
+      "source_sha256": "a139b7b5121574715696aae718f7c974dafee909005d646b6cf8472d35c46d23",
+      "cache_sha256": "dd4f72b0172330edfb966d3552dfafbd2ea37442a46aad469718309bb60798a2",
+      "cache_status": "PASS",
+      "object_sha256": "462da8e1032d9f4b207a7c2de1b11c8461282027412ce0e29dd02b6820dbff2b",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveU",
+      "source_sha256": "3c1f2c0c17ddcf5d3dfd674376c1f45fb4aea1cde72408c3b1fba11971df3fbb",
+      "cache_sha256": "737bbd37f11cf7c74cdb1c10c585c069953b2843d555b89ed64c8fdd15af1559",
+      "cache_status": "PASS",
+      "object_sha256": "65b8914959cc18fd59fd2be369aec883b4ddbcf78ac2c92f4f76109f540052b2",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3ComplexDispersion",
+      "source_sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+      "cache_sha256": "b7018abf4668ffb7bb35f6f22af3ab500264a984b487c746b05833ef5f5fb75f",
+      "cache_status": "PASS",
+      "object_sha256": "4cc8348bb784f5b7819112b37ca1e3af2019affa8fa72e8d4fa2f4a82d9c8101",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3PolynomialResidueDivisorBound",
+      "source_sha256": "7cbc4c842aa4dbf18ab9644465e4983014c8aaf8bd38f74dd1b37a5574a2feda",
+      "cache_sha256": "ba64143f0f8e32541b16951bab45eff16aa99c2579f7aca19146550bcd50ba9c",
+      "cache_status": "PASS",
+      "object_sha256": "80c87b905dfec82eeb4a49405cef43d4fc698e7fd91f6919afd6ece748537d32",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveV",
+      "source_sha256": "2cb0bab68ef736dc4f2f59e9f33644ef6b8c9aed205762da8ef0be41774390ca",
+      "cache_sha256": "3d5c67ac1c0f4e5469145ff84c7775eafe43f324b4ca1148c1677fe17c220d1b",
+      "cache_status": "PASS",
+      "object_sha256": "7125ca5e89858969cf41dd7e975fc1b11865b31f6f7979f679bfa705f64436a8",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SmoothCoprimeError",
+      "source_sha256": "dabf4c7f1a84ae97e4a4a9d64be65bb368bd7150502c37a894e4fd743142c87e",
+      "cache_sha256": "cfebfbd9ffdd83c48cb3e417187fdafc7c146e526abad2520b3e0e270fc109fc",
+      "cache_status": "PASS",
+      "object_sha256": "37f6a7107eec73494925f691acf23924fc2b5615800fff72c2115a6fabc69b71",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3DistributionTargets",
+      "source_sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "cache_sha256": "50899e53fd76c39bd8c59067ce8dc82aecffb5f46159f4c57a125993171b68d9",
+      "cache_status": "PASS",
+      "object_sha256": "ace5c67f7d4a4b2c317e795b9db54992d6f326e7875cebd71fa66e8272a60220",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3CleanBetaLargeGCDMajorant",
+      "source_sha256": "94826ca0668f613e348ddddfa4683820d7d6a99844a0cf3923f7bb90159b6bbb",
+      "cache_sha256": "21d12578f1629af4fd0f374207e5bb1ae4d0c30564cd568dbbcc007d2813c3d7",
+      "cache_status": "PASS",
+      "object_sha256": "85e51f6bdec1d2bce561e13ac5d2b85648d1775d88078410c2b7c6db2ae31f9b",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3PrimitiveZeroReal",
+      "source_sha256": "ef3396f5130f06a4a8068a3bd5e070bb91c7f260a60a3ff524c67c6e8dfd9741",
+      "cache_sha256": "da4a4296bc0c79edb09f945cdded9fef2525e160cf804e0f037c5f9ed3ba55c4",
+      "cache_status": "PASS",
+      "object_sha256": "1f138663fec1ab8b5ab629505832456ed4802ba6af90e4abaf8da5707fc31fcc",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Part3SmoothProgressionError",
+      "source_sha256": "e85a63019bab532bd2f34996e9e1e59e71def841bde54c8404a637ebb1b17b52",
+      "cache_sha256": "b7d30112fd73db3e25da088e37288243a3ba6bfabac9b2d619ed1bf0dea7ea74",
+      "cache_status": "PASS",
+      "object_sha256": "47f476d1cd57e9631164a07f87b5f8e7cddd904b83424ff8fea847775fb0ba00",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": true,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.RestrictedResidueScale",
+      "source_sha256": "3c58f54f875a46886c28bc224fdf4952d6b53a72ae6f6f2b8debaf7e71c01d0f",
+      "cache_sha256": "e2975a75503553307b2c645035f21fb1d53e0f16b266af996a39bcc90179c778",
+      "cache_status": "PASS",
+      "object_sha256": "6accb864a75392565c12515b51613724121c89d78d79b9ab14d7653852fa768f",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.PanProductGridRanges",
+      "source_sha256": "88b2c972243ba1e33e89a08b6759c16512620751b7c25206dfa4d767bf79466a",
+      "cache_sha256": "12fdcd6ac5d6d85d838d4d303ed51779c70894947c64aaabb6e2c715d6c69aa4",
+      "cache_status": "PASS",
+      "object_sha256": "8a592012f42b417fee17ee20db06d3459302dd6e923ba257c743c0a535bd7e66",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.PanProductGrid",
+      "source_sha256": "e37bb4d2aa855c86e1601566e9ea6649092ac625c434d8a30476208057fab743",
+      "cache_sha256": "dbdf86ee87f1a6fa47ccd7ed718232c0875b2fb823c1c98d87139af9ba58fda8",
+      "cache_status": "PASS",
+      "object_sha256": "033c900f689b93f95ede97e2a69b2a9f945340dc11b46fb58fab1b66a9cb1905",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.RealHalfProductMassSplit",
+      "source_sha256": "6516890accb0179098fca79f98791adeddad569a858fc69710b87a8d3b92a3ca",
+      "cache_sha256": "4a843632911f3737772f26915563808d8c4b5e607e8023a4ccb1f5093bf10f7b",
+      "cache_status": "PASS",
+      "object_sha256": "f9894566be5967ad03927c024c207ca3fabd9e5595ede88362fffe7381223fea",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.PanProductAggregateBudget",
+      "source_sha256": "13b512d4c51a00b217ea72b3033ec50bd48d76c10812184a20d1bc838ef04140",
+      "cache_sha256": "52f51b6f2e822882f13baa9903cf5ec38f57d7338ce21e05737652983ca9b3db",
+      "cache_status": "PASS",
+      "object_sha256": "3fb0381fd22a2bdc959f08ebc824e92f2aca4299813643a85a8d71abfb53a8bf",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.SelectedGridRanges",
+      "source_sha256": "45909866dd099095795a0abbaba05c3ffe0250a569c694ce57640292b4a3a847",
+      "cache_sha256": "8a210daac8ec893849b76c8458d916eaa61b7aa43ee9867a04b63d3bf9ba6b24",
+      "cache_status": "PASS",
+      "object_sha256": "178599e2d96169b3b1d584b87803762d3b55051d3174f76351c4815f57a6d29f",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.RealHalfProductMass",
+      "source_sha256": "90c809c15ce26cd1f4785b5117e2d8a5dcfdc5720480bc690d198d95f33601f3",
+      "cache_sha256": "3412ee5b3f3f8fc89d9d14e8f15c320ea030ac585c7d79fcd004ea86ebb2d3aa",
+      "cache_status": "PASS",
+      "object_sha256": "25611ef2ce2d5599721f05888d0cbfedacaf727de6b6f4ea286b96713b275784",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.PowerErrorBudget",
+      "source_sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+      "cache_sha256": "db582e271a78623e878424bfd5a328378b6b8b1e6db0aaac406254b96e32a3db",
+      "cache_status": "PASS",
+      "object_sha256": "2241bba520345793b723a5f8cc74dc9f3b5d6dcc9d0c561f8c3f5701eed9d202",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.PanProductLiuBridge",
+      "source_sha256": "dd239cb5a36898abe49cdb23d60cc1e3e86dede36bd849c41013f18a99ee2d61",
+      "cache_sha256": "ca55a128d2e31b52e4af6d07b30a80dd38795dca65da34f3c288cbe024a4d217",
+      "cache_status": "PASS",
+      "object_sha256": "282ea9c6ee6069605261275cad59ca7a82dca60f770e265b53889f3eb0800718",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.ActualGridEnvelopes",
+      "source_sha256": "f2171599b210583ee28b316da48b114c74f8742b564d0c1d3a30aaf073aaf528",
+      "cache_sha256": "f0d55cd893b02ed13ba6c1d0fa97eafff5ec6ce6fe1b91e85a18e8dd5d88fed6",
+      "cache_status": "PASS",
+      "object_sha256": "8044561fb6ce0dd6339f83423dd15206422406a251f9808bf48a683919433716",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.HalfProductGeometry",
+      "source_sha256": "d04e31ea73a853c4fa37e881ef30a748b7f83b8a0e930e0cc2ae231dbb629db1",
+      "cache_sha256": "b88942ff9c2a53e969b094e79677664e55a612670c95eafcfabf4efc6498d58b",
+      "cache_status": "PASS",
+      "object_sha256": "0098c098c00919fc5b15389767d7913e8ffdbc77fa2317028b98f91866868f39",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.ActualSieveGate",
+      "source_sha256": "ccfecae8cbaa1dcf1685238e1db0764aa64ec15744502651623f56d9cfa4831a",
+      "cache_sha256": "4bf2b1a1101a3e8946b48c513f45b8faef41091e7f55e99d7aa1f406e808c731",
+      "cache_status": "PASS",
+      "object_sha256": "f9bd4bda795d00c4c58c118ce7462d67fa12f702088de2776ea02d71ef8ffde1",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.RealHalfProductSource",
+      "source_sha256": "0c3211cb72d8f27eb380f57fe5d751f8fc3179cb646c683c1449d450c71c55e7",
+      "cache_sha256": "3612807b228b069e8bfe292a34d5775c44ef966f315ca06338def61efb2d9a81",
+      "cache_status": "PASS",
+      "object_sha256": "85a5f074be9a161387f4d6066700dc3229e9c2c81da312530798b223b1d85cc8",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.HalfProductMassLimit",
+      "source_sha256": "1dbb92a59abc74034d49f52428071aae3ccd9cc05beda8f75f4e693c08f3a4ab",
+      "cache_sha256": "df48f1e9cb59f67224eb494a662b8e6105696907652f93921ae79b82d170633d",
+      "cache_status": "PASS",
+      "object_sha256": "0587e134453f5811a810eb95563e9f5ee08e5f9d5b4368730ce8776fc801d20a",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.SingularSeries",
+      "source_sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+      "cache_sha256": "9858e1f83a364400b124d0ed069856a06396b394ac739137f59da869085fca39",
+      "cache_status": "PASS",
+      "object_sha256": "09b35699dc5eaf32bd81b1ea4c5196abec5925b16c475773c261c839e1142150",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.PanProductResidueBudget",
+      "source_sha256": "4b5dcf30d8aebee0779f6dc3e4f1188a6797f9cd5215f71737b8369a79a9fbaf",
+      "cache_sha256": "a73d367cc9113dde02c1910250e53bc957a7f93e406484eb234f84649039c4f5",
+      "cache_status": "PASS",
+      "object_sha256": "d5ff575623c81448fb3628d16f948a287c0fa3dcb61f32b5c3a5c7b103cd24c6",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.MultiplicativeGridPartition",
+      "source_sha256": "9be180c5c070d8855c9e1fa1acaf30ccda7f87d7ec45410670e2d527a6b18598",
+      "cache_sha256": "1af7f1fe08348842ae92992e980cbdd0b161e6fdcbb6a4935d71eafcfadccbb5",
+      "cache_status": "PASS",
+      "object_sha256": "f08d04f92bbe7164ab8d746736da915d8bbe9880308df7f7fc9007a5ec3f1b11",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.BoundaryGlobalCaps",
+      "source_sha256": "95eb4934caa7aa8ed308a7094ae46a4d14d6336e2470ee2b58a88ce0b379caae",
+      "cache_sha256": "e68f28693fe5d3efcb911981598d3949d01eb0fe11479967089dc286f5ad950f",
+      "cache_status": "PASS",
+      "object_sha256": "37a46bd5b8b56ac80a39cfce88e236307397d88a959eb4364dca2a969edb0609",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.OrderedBad",
+      "source_sha256": "a38031995175bd2f847eefd498c929e941400c9cffdf6f78e3e06bd2100764da",
+      "cache_sha256": "5ca055b6ab291fc7d13f550c022e8a6b12f084e6ea085aea72e6ed9aa298bce7",
+      "cache_status": "PASS",
+      "object_sha256": "1c06aa82a786baabba94ac4f6899f369d074f5f6502c0278f48bc2ada3b7cce2",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.LogCutoffError",
+      "source_sha256": "202d60ddffa0cbf6a0cc3259af4ec3654e4227a5e16523a2db71ba30d1dfcd49",
+      "cache_sha256": "0a4f6342628d998cdb451606a3166f9b0993af5aaac3dc61bc835ef15c8b7c37",
+      "cache_status": "PASS",
+      "object_sha256": "9b1846343405d92dff183ba1a6354ec00efaccd23f87b8200c44f26d48d16331",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.SieveSourceCoprimality",
+      "source_sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+      "cache_sha256": "483b4f3446b18e2e42a6bcffba476a93fbb7e07be20ce2b36a86531eaaf9f17a",
+      "cache_status": "PASS",
+      "object_sha256": "b31818d931630f334bd1acccb51ef626943e9c2e139d7be951116503aaa9926b",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.CurrentMainTheorem",
+      "source_sha256": "68a2a3aad8ccdc73ed8e5076e31b9984bc659c307d71150920a71b5fc98f067d",
+      "cache_sha256": "251a621aeb0312adbbb353dac4b772a24d4dfe69da9ef3eee34273857a2f442d",
+      "cache_status": "PASS",
+      "object_sha256": "ffceaf8aea007c1dbb6d020288e849847794e7e6aa10302b1ca6b9fd5b2537df",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.HalfProductMassError",
+      "source_sha256": "1109367deda15f8255ae1a987ecf3b82225ddfad6c335fd890d7c989d5434ad9",
+      "cache_sha256": "ded98533e707c69fdcbfd84603995299be397a442a979a566b025733e5f32306",
+      "cache_status": "PASS",
+      "object_sha256": "4fe425880a9c568b388a1f75cf36bca55f1ed395259964940e3ccacaa30a78fc",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.MassLogIntegral",
+      "source_sha256": "bf42c021072fc939bdb5f9d5bc9771fa3d5ed1dd69dd5265bda8418f76a01821",
+      "cache_sha256": "bd8741d051a76567713e3fd6216652d087a9d00b925fb6cdcad8fd138f49351b",
+      "cache_status": "PASS",
+      "object_sha256": "1ef54feb5c2d2697719eac2334a5d2542d539f83dc9868dd0c28a75fb5d74154",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.NormalizationGrowth",
+      "source_sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+      "cache_sha256": "12c5cd1d99a9bb942600c8a792279fabecf0e38c89f0061fed856fbf0b9e8f2b",
+      "cache_status": "PASS",
+      "object_sha256": "12e44886d5f17db7b59698497868352aaacac28544c1db1c27b2da8410edcef1",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.PanProductStrips",
+      "source_sha256": "eb97d23050e3ec624cde24ef779acc67d7ded44283dc60097edc2d715429863b",
+      "cache_sha256": "9269dfabc2fa09855c032f34fff9835ee170076c7d48b8f490b45b22342f20a2",
+      "cache_status": "PASS",
+      "object_sha256": "202dc0159b5f4749f064d012fe5b7897ee0b3ccd8c27562f1fa57638d0d351f3",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.ResidueSelectorBudget",
+      "source_sha256": "03715ddc6bae19040f6d30511548a954d08428629a3a7d2e2884a4b8ce5b8e69",
+      "cache_sha256": "aca41855c18ec7d914c639d005e0fb6af209f2245296f67faf83e3d5b7bf0fae",
+      "cache_status": "PASS",
+      "object_sha256": "67c5e7b245dab08eee689d0b965d2c56ee8a04ef2742a0de1fad545af8be9521",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.BoundaryCellContainment",
+      "source_sha256": "12a74397730d07769c95cb7e1ab6adc4a3b570daedc49dbc65c0c0defd7ba80d",
+      "cache_sha256": "09601690331b3b054c73a549bb250d6405f95f58506751be0bc55579f524077f",
+      "cache_status": "PASS",
+      "object_sha256": "6d9a76f92c8bb510d0e7887550b0c2cdb972fe821adb0354e5323a7389adba30",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.RationalPowers",
+      "source_sha256": "40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06",
+      "cache_sha256": "6ba43d8efbf0a96ea3a0c9c2d11b624c522fc9944a63d7521fa3a49d37840880",
+      "cache_status": "PASS",
+      "object_sha256": "6cabb79e4990a879873ecf5cc7f8deda8cdeb6c257b793927fe0f40b566b4dea",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.BadSourceLocalization",
+      "source_sha256": "0e88326b03a4c20a472014b506d7533495d86801909af4d455de5fcfae6695a7",
+      "cache_sha256": "468dc0cf40761dc1f4c202ef6173f2f9dda7af4a0cb4e0798bfdc5c40da50234",
+      "cache_status": "PASS",
+      "object_sha256": "ae5bd040391e37faad01afa949e372600ef95c291215c16d68f68f77a7799e59",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.HalfProductSource",
+      "source_sha256": "dc6e261ddfdc9a66e966a4ec5c2a129d3f4b7583501c5c82364f2aa4a8af194e",
+      "cache_sha256": "b589480942d791dc666f6e86f97182f046328e07649bb4df503e4cd2b5e60a72",
+      "cache_status": "PASS",
+      "object_sha256": "e8e3c3900d6bf35767cfeaace22f52749154338d98f356206e515560a9af0635",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.CurrentNumericalTransfer",
+      "source_sha256": "acc924036cb6ca73ef660c632d5577462ba5c69b8b5600aef63255264c3a270a",
+      "cache_sha256": "666a7ae66a498f1d5223e58a7082b3631ee6d4ff47e8c2b46887a78f98739760",
+      "cache_status": "PASS",
+      "object_sha256": "dba62ec9b9ec2cdeb604c994f146ea6969a0bcbfde67963e90bd95b40054e984",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.HalfProductMassSplit",
+      "source_sha256": "ba78734851c6114c76234f5b607efc1a15bcac377692e11e361cd4c02032dc16",
+      "cache_sha256": "e1b41bc5d95551e3bb8f4c019f8d40f53844b64b65cb7d7835303eaadfd99844",
+      "cache_status": "PASS",
+      "object_sha256": "2fb207493a4a604bbca37cc54202c081ae000ff06230364fd8eef16f6d0c1185",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.UniformPrimeTail",
+      "source_sha256": "786ed7d70f3f3e89161a9e025d2c8bb0b06db6cddae7200c3fc1c0ca009ebbbf",
+      "cache_sha256": "0a422578cdb9fc5296dc69159d5d0bd5b7f57904021d11a84e34629891da3aa4",
+      "cache_status": "PASS",
+      "object_sha256": "7fa70cded38e1e11168ccf1eb0dee4cae481c9a698d3520480441c5532dbbe98",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.HalfProductPanFinite",
+      "source_sha256": "f392c7642bd00e418c91000a3ed6ef7c4c30194808e974999d4a39699d2b62de",
+      "cache_sha256": "c156efb56ab80b36c863f329aa7738e64794b3159d72977656491e80dff96f19",
+      "cache_status": "PASS",
+      "object_sha256": "ece75c968733e5b01be26317a7a9dced044111dad501159801bf5096108c8151",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.PrimeRectanglePrefixes",
+      "source_sha256": "d74bfbac6032d4de701f13ddf78308d2a584916e144aab5326a1ba4441586b5e",
+      "cache_sha256": "2d30044d3317e0b9e72b6423c7f151147b38056025cd1f0731a56b86e422b6c7",
+      "cache_status": "PASS",
+      "object_sha256": "324bc0a2f0ea6996b39b6a38675c51ef53ea371129a12c259bffffb562a79fde",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.BoundaryGridBudget",
+      "source_sha256": "a36da7f8fc558d406e5e00b9790389438846198caa610540da8145471a419245",
+      "cache_sha256": "78cc074968501b8bb476e34cbe78b847fa8d481288be15fb8804642bd6b31898",
+      "cache_status": "PASS",
+      "object_sha256": "59145ad590fa326d1fc666f207aa78180b44d6d0f5d79d90dac96e66b656c5a6",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Counting",
+      "source_sha256": "8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa",
+      "cache_sha256": "1cabfb6023b99505ab292d46b9bd81f06372cde697c0f413167d10547417232c",
+      "cache_status": "PASS",
+      "object_sha256": "3ba19b992217dc7cefe42fc28364905a1f83c479ed1a227a94d09725fa9513f8",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.AsymptoticTransfer",
+      "source_sha256": "ece82cd26ee1030d708e6055395bdb5a6a4cf8b1d8c6072a67a9a59cd36bc560",
+      "cache_sha256": "9dac8a0ec238e287bbab2e01782b0807ebc8b133b5bfcfff7396fc5ce515c8c8",
+      "cache_status": "PASS",
+      "object_sha256": "34bf4ca29753fe7cdc0256cc58a4a804c88e2d44f7b1f0f0cc10d584ce3af89d",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.HalfProductMassFibres",
+      "source_sha256": "f83e431ffdd975af44ae54eaadbae3ce6d609ed265d433dbbd05b4f6fc0f77c7",
+      "cache_sha256": "707ce8d47b6022fcc2b2150b069fd760fd3f448a91a18be519832e2edc5288d6",
+      "cache_status": "PASS",
+      "object_sha256": "41d3e29f54a7ef4e191f57bfa1b5c9a23aaa9bf7159fe85f4369fbae197fd396",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.FiniteSieveModel",
+      "source_sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+      "cache_sha256": "68502ccd1ddcac7f9f5df4d43a9483238627355f39fa5281cbb8bac753a1444a",
+      "cache_status": "PASS",
+      "object_sha256": "2b3fd7589702d14452e1064daef7bff3ab9d688440ca814809745f4f73e8f615",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.RectangleDiscrepancyAssembly",
+      "source_sha256": "5af6880e6c3f2c00a846cfccd8842e08f80ed8eb314cfdaa972904c2f987e861",
+      "cache_sha256": "8af38b5a52965cb502080c7489d6b1fd77852673542a7f71ef1c00562e6d0c23",
+      "cache_status": "PASS",
+      "object_sha256": "123a6e2a34494782d1adec01935a456e5f301505942d25dd11fea961944b97b1",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.CoprimeRecentering",
+      "source_sha256": "45c28d97bd10eccaa99498b2309fb03c9d8efbdd5040e12d7ba33c3702b418c5",
+      "cache_sha256": "aa89c8b90b34dd897a5c952e064f5612f9dd3b3a97e3faed5cc9efcda872394a",
+      "cache_status": "PASS",
+      "object_sha256": "984964000ca61288896fa4db232848426c7e548ac7d813f1eaff58c0425fabc4",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.CurvedRegionDiscrepancy",
+      "source_sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+      "cache_sha256": "15a66b17c38d0e0e30ff32e0469b4564de29b5ef93fbba9625f422fc4529f9a9",
+      "cache_status": "PASS",
+      "object_sha256": "e2ed1389c18411729b0f7f2177905d8de93e90d051abcd624f945e285bcd0562",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.Multiplicity",
+      "source_sha256": "9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6",
+      "cache_sha256": "34660622ad7c1717b8d8977c4161d5c3db865e87a6e382536b9fef3df6fe7e0a",
+      "cache_status": "PASS",
+      "object_sha256": "2f421673793f153c6dccfcc8463657c8f76d73342f2994e33eb04ed1266ff180",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    },
+    {
+      "module": "ImbalancedChen.TotientReciprocalBudget",
+      "source_sha256": "aa80ff2ad79f77405951f1e56e993a851a1b32ad46c970e7914adb94bdb2db86",
+      "cache_sha256": "425d20b10f80e421a3c58bbaa6d075518b80252066c1417d724cbc19be3d95fb",
+      "cache_status": "PASS",
+      "object_sha256": "752ee429a6ca6bf2f735b859a60c66d3ebcb9016e49f29d5f7c5bbcf7c74522f",
+      "complete_current_binding_equal_owner": true,
+      "cache_optional_binding_after_present": false,
+      "cache_after_equal_when_present": true
+    }
+  ],
+  "actual_DAG_bound": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261020-small-core-prime-difference-reindex-owner-20261020T112900Z\\actual-all87-owned-parent-DAG-bindings.json",
+    "sha256": "48bbba8edc888f8b684558b465519ca68996ce8dc13cd596bf49dcc12872a629",
+    "proper": 87,
+    "inclusive_new": 88,
+    "new_foreign_imports": 0
+  },
+  "actual_firstfactor_carrier_has_no_Prime_gate": true,
+  "defects_found": [],
+  "no_new_analytic_supplier_or_unproved_finite_estimate": true,
+  "no_sign_zero_endpoint_multiset_or_primitive_carrier_loss": true,
+  "specific_implementation_API_issue_found": false,
+  "source_scan_sorry_axiom_unsafe_partial_admit_empty": true,
+  "acceptance_boundary": "Uncompiled source mathematical and actual API review only. Root must give first specific strict gate, followed by original owned replay/full type/axiom inventory. No new module acceptance or foreign closure replay claimed. This proves a finite fixed-row arithmetic transport license, not frequency-window separation, weighted core sum equality, full NZ spectral estimate, actual seventh mean, or 1+1.75 main theorem.",
+  "quota_guard_and_usage_actually_read_twice": true,
+  "latest_used_percent": 10,
+  "latest_remaining_percent": 90,
+  "hard_stop_remaining_at_most": 50,
+  "only_mutation": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261020-small-core-prime-difference-reindex-0d22-complete-independent-chen7-review.json",
+  "no_Lean_old_report_tool_cache_compile_or_spawn_mutation": true,
+  "held_Multiplicity_current_sha256": "476d36c7e1ee433ddf427460d5ab7638d2a9eec5e63deea4e69d75ce4a9f9498",
+  "HOLD_after_review": true
+}

@@ -1,0 +1,107 @@
+{
+  "audit_id": "20261021-external-formalization-reuse-bounded-audit-HOLD",
+  "date": "2026-10-21",
+  "status": "BOUNDED_PRIMARY_SOURCE_SEARCH_NO_EXACT_REUSE_FOR_TARGET_GAPS_HOLD",
+  "scope": {
+    "target": "Full original 1+1.75 formalization; prioritize checked 0-sorry external proof artifacts for P3 theta=7/32, reciprocal Kloosterman/large-sieve, Shiu shifted-divisor moments, and original Chen/P4 sharp K.",
+    "search_limit": "Four primary-source GitHub/web search queries; one bounded pass; no packages, builds, clones, downloads, compiler/checker runs, foreign Git mutations, or subagents.",
+    "previous_audit_index_read_first": [
+      ".lake/proof-continuation/source-reviews/20261016-external-reuse-update-independent.json",
+      ".lake/proof-continuation/source-reviews/20261015-external-weil-scope.json",
+      ".lake/proof-continuation/source-reviews/20261018-external-three-factor-nonzero-primary-source-gap-audit.json",
+      ".lake/proof-continuation/source-reviews/20261021-four-upstream-HEAD-bounded-incremental-external-reuse-review.json",
+      ".lake/proof-continuation/source-reviews/20261021-actual-medium-critical-path-Weil-large-sieve-cost-audit.json"
+    ],
+    "local_project_pins": {
+      "lean_toolchain": "leanprover/lean4:v4.33.0-rc1",
+      "mathlib_commit_from_lake_manifest": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "goldbach_provider_commit_from_lake_manifest": "09b97db5764ade1246bfb77206baa1b124760958",
+      "mathlib_source_materialized_in_workspace": false,
+      "note": "The manifest pins Mathlib but its source checkout is absent under .lake/packages in this workspace. No dependency was fetched; targeted API findings below are from the already-recorded source audits at the fixed provider pin."
+    }
+  },
+  "queries": [
+    {
+      "query": "site:github.com Lean4 Shiu theorem shifted divisor sum formalization",
+      "result": "No exact Shiu or shifted-divisor-moment Lean theorem found. Search results included a Chen theorem repository but its listed contents did not identify Shiu."
+    },
+    {
+      "query": "site:github.com Lean4 Kloosterman reciprocal large sieve Bombieri Vinogradov formalization",
+      "result": "No exact completed reciprocal Kloosterman large-sieve theorem matching the local moving/factorized weighted target found."
+    },
+    {
+      "query": "site:github.com Lean4 Chen theorem Goldbach formalization proof completed",
+      "result": "Found lixiang90/chen_theorem, a concrete standalone Chen 1+2 formalization candidate; see candidate record. Also saw goldbach-lean, whose advertised completed quantitative result is 1+1.9, not the target 1+1.75."
+    },
+    {
+      "query": "site:github.com Lean4 \"Shiu\" \"Lean\" shifted primes",
+      "result": "No exact Shiu formalization found."
+    }
+  ],
+  "external_candidate": {
+    "classification": "EXTERNAL_CLAIM_AND_SOURCE_INSPECTED_BUT_KERNEL_CI_UNVERIFIED_HERE",
+    "repository": "lixiang90/chen_theorem",
+    "immutable_commit": "11dcca8fc3ab340358503278c46d72aef072a6e7",
+    "fixed_versions": {
+      "lean": "leanprover/lean4:v4.32.2",
+      "mathlib": "v4.32.2"
+    },
+    "direct_sources": [
+      "https://github.com/lixiang90/chen_theorem/blob/11dcca8fc3ab340358503278c46d72aef072a6e7/formal/ChenTheorem/Main.lean#L945",
+      "https://github.com/lixiang90/chen_theorem/blob/11dcca8fc3ab340358503278c46d72aef072a6e7/formal/AuditAll.lean",
+      "https://github.com/lixiang90/chen_theorem/blob/11dcca8fc3ab340358503278c46d72aef072a6e7/formal/lakefile.toml",
+      "https://github.com/lixiang90/chen_theorem/blob/main/formal/README.md",
+      "https://github.com/lixiang90/chen_theorem/blob/main/formal/STATUS.md"
+    ],
+    "full_public_statement": "theorem chenCount_lower : ∀ᶠ x : ℕ in atTop, Even x → 0.67 * (x : ℝ) * chenConst x / (Real.log x) ^ 2 ≤ (chenCount x : ℝ)",
+    "also_listed_public_statement": "theorem chenCountShift_lower (h : ℕ) (hh : Even h) (h0 : 0 < h) : ∀ᶠ x : ℕ in atTop, 0.67 * (x : ℝ) * chenConst h / (Real.log x) ^ 2 ≤ (chenCountShift h x : ℝ)",
+    "relation_to_requested_target": "The source states quantitative and qualitative classical Chen 1+2 results plus a shifted twin analogue. It does not state the original 1+1.75 theorem, P3 at theta=7/32, a Shiu shifted-divisor moment, or the local reciprocal-Kloosterman/factorized-modulus large-sieve gap. The standalone project pins Lean/Mathlib v4.32.2, while this workspace uses Lean 4.33.0-rc1 and a different Mathlib git commit, so direct import/reuse would require compatibility work.",
+    "direct_assumptions": "The displayed chenCount_lower theorem has no explicit analytic hypotheses; its proof is inside the external project's source closure.",
+    "verification_boundary": "README/STATUS claim no sorry placeholders, no extra mathematical axioms, a complete build, and exhaustive collectAxioms checks over 9,571 declarations. AuditAll.lean contains code intended to compute the closure. Those are repository-authored claims and audit source, not observed execution output in this audit. No external build, kernel replay, or axiom output was run/read here; therefore this is not accepted as certified reuse."
+  },
+  "local_reuse_findings": {
+    "classification": "PRIOR_PINNED_SOURCE_AUDITS_RECORDED_LOCALLY; NOT_REBUILT_OR_REPLAYED_IN_THIS_AUDIT",
+    "existing_actual_provider_apis_at_commit_09b97db5764ade1246bfb77206baa1b124760958": [
+      {
+        "name": "completeKloosterman_weil",
+        "source": "https://github.com/subfish-zhou/goldbach-lean/blob/09b97db5764ade1246bfb77206baa1b124760958/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryCompleteWeil.lean#L31",
+        "scope": "Complete Kloosterman Weil bound for each positive modulus."
+      },
+      {
+        "name": "reciprocalInterval_fouvry",
+        "source": "https://github.com/subfish-zhou/goldbach-lean/blob/09b97db5764ade1246bfb77206baa1b124760958/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryCompleteWeil.lean#L48",
+        "scope": "Unweighted reciprocal phase interval bound."
+      },
+      {
+        "name": "reciprocalProgression_fouvry",
+        "source": "https://github.com/subfish-zhou/goldbach-lean/blob/09b97db5764ade1246bfb77206baa1b124760958/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryProgressionWeil.lean#L114",
+        "scope": "Unweighted reciprocal phase progression bound."
+      },
+      {
+        "name": "direct_wellFactorable_signedError_kscale",
+        "source": "https://github.com/subfish-zhou/goldbach-lean/blob/71bd63b9793eddddba0fb67aae344f7fcd870b70/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuFouvryKC2.lean#L45",
+        "scope": "Signed well-factorable distribution endpoint with explicit scale, level, coefficient, and residue-size hypotheses; prior audit records it as insufficient for the current three-gamma/moving-residue target."
+      }
+    ],
+    "exact_gap_from_prior_reviews": "Prior audits explicitly record no supplied moving signed residue, joint smooth coefficient, or theta=7/32 averaged inverse-fraction theorem. Existing AP/Fourier and finite interfaces already in the local project should continue to be reused; this audit proposes no duplication or port.",
+    "mathlib_e4c91783_specific_result": "No new analytic Shiu/Kloosterman API was source-checked against Mathlib commit e4c91783 because its source checkout is not materialized locally and downloads were excluded. The positive pinned reuse items above are APIs from the goldbach-lean provider package, not claims about Mathlib itself."
+  },
+  "recommendation": {
+    "decision": "NO_EXACT_IMPORTABLE_EXTERNAL_ARTIFACT_FOUND_FOR_THE_HIGHLIGHTED_GAPS",
+    "next_step": "Retain and build on the already checked local finite/Fourier/AP APIs and the pinned provider's Weil interfaces. Treat lixiang90/chen_theorem as a possible mathematical reference for a separate Chen 1+2 route only; do not import or count it as verified closure of 1+1.75, P3 theta=7/32, Shiu moments, reciprocal large-sieve, or sharp K. Advance only if a target-matching artifact supplies a fixed commit, exact theorem types, compatible dependencies, and independently available kernel/axiom evidence."
+  },
+  "mutation_and_verification_boundary": {
+    "written_file": ".lake/proof-continuation/source-reviews/20261021-external-formalization-reuse-bounded-audit-HOLD.json",
+    "only_intended_workspace_write": true,
+    "packages_downloaded_or_built": false,
+    "clone_or_compiler_or_checker_run": false,
+    "foreign_git_mutations": false,
+    "HOLD": true
+  },
+  "usage_before_write": {
+    "primary_used_percent": 33,
+    "primary_remaining_percent": 67,
+    "secondary": null,
+    "secondary_null_means_unavailable": true
+  }
+}

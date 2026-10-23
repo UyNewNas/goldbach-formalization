@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "review_date_local": "2026-10-15",
+  "reviewer": "/root/u5_independent_review",
+  "status": "SOURCE_SEMANTICS_PASS",
+  "scope": "Independent read-only source semantics. No Lean compilation, object replay or declaration-level axiom audit performed. Runtime acceptance is not inferred.",
+  "primary": {
+    "path": "ImbalancedChen/CurrentChenTrueLiNormalization.lean",
+    "sha256": "6b09a435506c6cb6385dc4d482dadf931ba96e2e7336ce50d8e416a285b96d39"
+  },
+  "supplier_provenance": {
+    "provider_git_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+    "files": [
+      {
+        "path": "MathlibNt/SieveTheory/Distribution/BombieriVinogradov.lean",
+        "sha256": "4b4373503523f966367ae3852989a16cb64de632ec10489ca3ce8a3acdf403fc",
+        "pin_blob_sha256": "4b4373503523f966367ae3852989a16cb64de632ec10489ca3ce8a3acdf403fc",
+        "equals_pin_blob": true
+      },
+      {
+        "path": "MathlibNt/SieveTheory/Arithmetic/LiuLogarithmicIntegral.lean",
+        "sha256": "ee642f76f8c11c05dcaf88fc0e3cefcc73fa419862355e88d438106a1b03d8f8",
+        "pin_blob_sha256": "ee642f76f8c11c05dcaf88fc0e3cefcc73fa419862355e88d438106a1b03d8f8",
+        "equals_pin_blob": true
+      },
+      {
+        "path": "MathlibNt/SieveTheory/LiuLogarithmicIntegral.lean",
+        "sha256": "ef18e343d2e7ad020724a39ed9a59d2c790eb4334a1e3f48b50b2b4be5a6334f",
+        "pin_blob_sha256": "ef18e343d2e7ad020724a39ed9a59d2c790eb4334a1e3f48b50b2b4be5a6334f",
+        "equals_pin_blob": true
+      }
+    ]
+  },
+  "fixed_actual_li": {
+    "file": "MathlibNt/SieveTheory/Distribution/BombieriVinogradov.lean",
+    "lines": [
+      21,
+      27
+    ],
+    "definition": "trueLogarithmicIntegral(x)=liuLogarithmicIntegral(2/log2,x)=2/log2+integral_2^x 1/log(t) dt",
+    "scope": "This is the exact normalized genuine li used by the actual ordinary BV/AP supplier, not a newly substituted x/log(x) center."
+  },
+  "exact_remainder": {
+    "file": "MathlibNt/SieveTheory/Arithmetic/LiuLogarithmicIntegral.lean",
+    "lines": [
+      22,
+      35,
+      82,
+      94,
+      109,
+      134
+    ],
+    "gates": "x>=2; integrability of 1/log and 1/log^2 is proved on the actual interval.",
+    "identity": "liuLi(kappa,x)-x/logx = kappa-2/log2+integral_2^x 1/log(t)^2 dt",
+    "consumer": "At primary lines 94-100 kappa=2/log2 exactly cancels the additive constant."
+  },
+  "checks": [
+    {
+      "file": "ImbalancedChen/CurrentChenTrueLiNormalization.lean",
+      "lines": [
+        23,
+        82
+      ],
+      "finding": "For x>=4, 2<=sqrt(x)<=x is paid. Both subintervals are genuinely interval-integrable. On [2,sqrt(x)], log(t)>=log2>0 gives bound sqrt(x)/log2^2. On [sqrt(x),x], log(t)>=log(x)/2>0 gives bound 4*x/log(x)^2. Adjacent interval addition is licensed; x=4 makes the first interval degenerate legally."
+    },
+    {
+      "file": "ImbalancedChen/CurrentChenTrueLiNormalization.lean",
+      "lines": [
+        86,
+        133
+      ],
+      "finding": "The actual exact remainder gives normalized ratio between 1 and 1+(1/log2^2)*(logx/sqrtx)+4/logx. Every multiplication/division uses positivity from x>=4. The square-root identity is used with positive x and sqrt(x)."
+    },
+    {
+      "file": "ImbalancedChen/CurrentChenTrueLiNormalization.lean",
+      "lines": [
+        137,
+        157
+      ],
+      "finding": "A genuine leading-one natural limit is proved by composing Nat.cast->infinity with the standard scalar log=o(x^(1/2)) and 1/logx->0 results, then squeezing with bounds valid eventually N>=4. No PNT or li asymptotic input is assumed."
+    },
+    {
+      "file": "ImbalancedChen/CurrentChenTrueLiNormalization.lean",
+      "lines": [
+        160,
+        171
+      ],
+      "finding": "For each epsilon>0, the normalized limit supplies the strict upper bound; N>=2 separately pays N>0 and logN>0 before solving for actual trueLi <=(1+epsilon)*N/logN."
+    }
+  ],
+  "small_N_boundary": "No normalized bound is asserted for x<4. The limit uses an eventual N>=4 filter; the final inequality additionally uses N>=2. Totalized log/division at N=0 or 1 is never used to justify an algebraic cancellation.",
+  "hidden_target_or_asymptotic_premises": [],
+  "substantive_findings": []
+}

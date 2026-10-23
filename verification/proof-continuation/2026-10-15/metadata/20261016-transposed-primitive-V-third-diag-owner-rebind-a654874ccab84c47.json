@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T21:57:14.854744+00:00",
+  "reviewer": "/root/primitive_center",
+  "status": "SOURCE_ONLY_OWNER_V_THIRD_ACTUAL_DIAGNOSTIC_REBIND",
+  "module": "ImbalancedChen.Part3TransposedPrimitiveV",
+  "previous_source_sha256": "ded50814e41dd21a5b1e95494050adb4979bf6c8263c677917dd9e6f4cadef0f",
+  "current_source_sha256": "2cb0bab68ef736dc4f2f59e9f33644ef6b8c9aed205762da8ef0be41774390ca",
+  "all_complete_source_headers": [
+    {
+      "name": "active_grouped_residue_gcd",
+      "kind": "theorem",
+      "complete_source_header": "theorem active_grouped_residue_gcd\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {q : ℕ}\n    (hG : d.groupedFactorGamma q ≠ 0) : Int.gcd d.residue q = 1"
+    },
+    {
+      "name": "progressionMass",
+      "kind": "def",
+      "complete_source_header": "def progressionMass (d : MediumAtom) (m q : ℕ) : ℂ"
+    },
+    {
+      "name": "actual_progressionRow_eq_grouped",
+      "kind": "theorem",
+      "complete_source_header": "theorem actual_progressionRow_eq_grouped (d : MediumAtom) (m : ℕ) :\n    d.transposedAtom.complexProgressionRow m =\n      ∑ q ∈ d.physicalFactorModuli, d.groupedFactorGamma q * progressionMass d m q"
+    },
+    {
+      "name": "mixedPairCoefficient",
+      "kind": "def",
+      "complete_source_header": "def mixedPairCoefficient (d : MediumAtom) (q r : ℕ) : ℂ"
+    },
+    {
+      "name": "mixedProgressionMass",
+      "kind": "def",
+      "complete_source_header": "def mixedProgressionMass (d : MediumAtom) (q r : ℕ) : ℂ"
+    },
+    {
+      "name": "actualMixedTerm",
+      "kind": "def",
+      "complete_source_header": "def actualMixedTerm (d : MediumAtom) : ℂ"
+    },
+    {
+      "name": "actual_row_product_eq_pair",
+      "kind": "theorem",
+      "complete_source_header": "theorem actual_row_product_eq_pair (d : MediumAtom) (m : ℕ) :\n    d.transposedAtom.complexProgressionRow m *\n        star (d.transposedAtom.complexPrincipalRow m) =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        mixedPairCoefficient d q r *\n          ∑ n ∈ d.alphaCarrier, d.alpha n *\n            (if m.Coprime r ∧ Int.ModEq q ((m : ℤ) * n) d.residue\n              then (1 : ℂ) else 0)"
+    },
+    {
+      "name": "actualMixedTerm_eq_row_sum",
+      "kind": "theorem",
+      "complete_source_header": "theorem actualMixedTerm_eq_row_sum (d : MediumAtom) :\n    actualMixedTerm d =\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        (d.transposedAtom.commonSmoothWeight m : ℂ) *\n          (d.transposedAtom.complexProgressionRow m *\n            star (d.transposedAtom.complexPrincipalRow m))"
+    },
+    {
+      "name": "actualV_eq_re",
+      "kind": "theorem",
+      "complete_source_header": "theorem actualV_eq_re (d : MediumAtom) :\n    d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight = (actualMixedTerm d).re"
+    },
+    {
+      "name": "actualV_sub_primitive_norm_le",
+      "kind": "theorem",
+      "complete_source_header": "theorem actualV_sub_primitive_norm_le (d : MediumAtom) :\n    ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n      d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        ‖actualMixedTerm d - primitiveZeroMain d‖"
+    },
+    {
+      "name": "primitiveZeroMain_eq_mixed_main",
+      "kind": "theorem",
+      "complete_source_header": "theorem primitiveZeroMain_eq_mixed_main\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        mixedPairCoefficient d q r *\n          (coprimeMass d.alphaCarrier d.alpha q *\n            (((d.V * CommonSmoothCutoff.cutoffMass / q) *\n              ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n                (ArithmeticFunction.moebius e : ℝ) / e : ℝ) : ℂ))"
+    },
+    {
+      "name": "actualMixedTerm_sub_primitive_eq",
+      "kind": "theorem",
+      "complete_source_header": "theorem actualMixedTerm_sub_primitive_eq\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    actualMixedTerm d - primitiveZeroMain d =\n      ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n        mixedPairCoefficient d q r *\n          (mixedProgressionMass d q r - coprimeMass d.alphaCarrier d.alpha q *\n            (((d.V * CommonSmoothCutoff.cutoffMass / q) *\n              ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n                (ArithmeticFunction.moebius e : ℝ) / e : ℝ) : ℂ))"
+    },
+    {
+      "name": "mixedProgressionMass_sub_main_uniform_bound",
+      "kind": "theorem",
+      "complete_source_header": "theorem mixedProgressionMass_sub_main_uniform_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ d : MediumAtom, 1 ≤ d.V → ∀ q r : ℕ,\n      0 < q → r ≠ 0 → Int.gcd d.residue q = 1 →\n      ‖mixedProgressionMass d q r - coprimeMass d.alphaCarrier d.alpha q *\n        (((d.V * CommonSmoothCutoff.cutoffMass / q) *\n          ∑ e ∈ r.divisors.filter (fun e ↦ e.Coprime q),\n            (ArithmeticFunction.moebius e : ℝ) / e : ℝ) : ℂ)‖ ≤\n        C * coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n          (r.divisors.card : ℝ)"
+    },
+    {
+      "name": "actualV_sub_primitive_finite_bound",
+      "kind": "theorem",
+      "complete_source_header": "theorem actualV_sub_primitive_finite_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        C * ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n          ‖mixedPairCoefficient d q r‖ *\n            coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n              (r.divisors.card : ℝ)"
+    }
+  ],
+  "source_declaration_count": 14,
+  "definition_count": 4,
+  "all_complete_headers_exact_unchanged": true,
+  "all_four_complete_definition_blocks_exact_unchanged": true,
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedPrimitiveU",
+    "ImbalancedChen.Part3PrimitiveZeroReal"
+  ],
+  "direct_imports_exact_unchanged": true,
+  "actual_failed_log": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/runs/20261015T215012712767Z-ImbalancedChen.Part3TransposedPrimitiveV/stdout.log",
+    "sha256": "77d7dc6f2cd84e15c151652cdb2c4e7a54f9e86611cfb378b2ee379fd5bd72b6",
+    "entire_log_read": true,
+    "text": "ImbalancedChen/Part3TransposedPrimitiveV.lean:72:4: error: unsolved goals\ncase pos\nd : MediumAtom\nm q n : ℕ\na✝ : n ∈ d.alphaCarrier\nhc : ↑m * ↑n % ↑q = d.residue % ↑q\n⊢ d.alpha n = if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0\nImbalancedChen/Part3TransposedPrimitiveV.lean:73:4: error: unsolved goals\ncase neg\nd : MediumAtom\nm q n : ℕ\na✝ : n ∈ d.alphaCarrier\nhc : ¬↑m * ↑n % ↑q = d.residue % ↑q\n⊢ 0 = if ↑m * ↑n % ↑q = d.residue % ↑q then d.alpha n else 0\n"
+  },
+  "actual_proof_only_changes": [
+    "Do not unfold Int.ModEq or rewrite Nat.cast_mul inside either actual ite guard. After the unchanged finite zero-padding sum, unfold only progressionMass, then compare each original alpha point.",
+    "Case split on the original Int.ModEq guard. In each branch separately prove the original raw cast-product modular equality or its negation by simpa only [Int.ModEq,Nat.cast_mul] using the branch proof. Apply if_pos/if_neg to each ORIGINAL guard with its own original Decidable instance, then mul_one/mul_zero. This avoids transporting a dependent Decidable argument while rewriting an ite condition."
+  ],
+  "byte_reconstruction": {
+    "old_snapshot": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261016-V-third-diag-original-ded5.lean.txt",
+    "offset_zero_based": 2916,
+    "old_removed_byte_count": 250,
+    "new_inserted_byte_count": 485,
+    "old_removed_bytes_base64": "c2ltcCBvbmx5IFtwcm9ncmVzc2lvbk1hc3MsIEludC5Nb2RFcSwgTmF0LmNhc3RfbXVsLCBtdWxfaXRlLCBtdWxfb25lLCBtdWxfemVyb10KICAgIGFwcGx5IEZpbnNldC5zdW1fY29uZ3IgcmZsCiAgICBpbnRybyBuIF8KICAgIGJ5X2Nhc2VzIGhjIDogKG0gOiDihKQpICogbiAlIChxIDog4oSkKSA9IGQucmVzaWR1ZSAlIChxIDog4oSkKQogICAgwrcgc2ltcCBvbmx5IFtpZl9wb3MgaGNdCiAgICDCtyBzaW1wIG9ubHkgW2lmX25lZyBoYw==",
+    "new_inserted_bytes_base64": "dW5mb2xkIHByb2dyZXNzaW9uTWFzcwogICAgYXBwbHkgRmluc2V0LnN1bV9jb25nciByZmwKICAgIGludHJvIG4gXwogICAgYnlfY2FzZXMgaGMgOiBJbnQuTW9kRXEgcSAoKG0gOiDihKQpICogbikgZC5yZXNpZHVlCiAgICDCtyBoYXZlIGhjJyA6ICgoKG0gKiBuIDog4oSVKSA6IOKEpCkgJSAocSA6IOKEpCkgPSBkLnJlc2lkdWUgJSAocSA6IOKEpCkpIDo9IGJ5CiAgICAgICAgc2ltcGEgb25seSBbSW50Lk1vZEVxLCBOYXQuY2FzdF9tdWxdIHVzaW5nIGhjCiAgICAgIHJ3IFtpZl9wb3MgaGMnLCBpZl9wb3MgaGMsIG11bF9vbmVdCiAgICDCtyBoYXZlIGhjJyA6IMKsKCgobSAqIG4gOiDihJUpIDog4oSkKSAlIChxIDog4oSkKSA9IGQucmVzaWR1ZSAlIChxIDog4oSkKSkgOj0gYnkKICAgICAgICBzaW1wYSBvbmx5IFtJbnQuTW9kRXEsIE5hdC5jYXN0X211bF0gdXNpbmcgaGMKICAgICAgcncgW2lmX25lZyBoYycsIGlmX25lZyBoYywgbXVsX3plcm8=",
+    "forward_byte_equal_current": true,
+    "forward_reconstructed_sha256": "2cb0bab68ef736dc4f2f59e9f33644ef6b8c9aed205762da8ef0be41774390ca",
+    "inverse_byte_equal_exact_old": true,
+    "inverse_reconstructed_sha256": "ded50814e41dd21a5b1e95494050adb4979bf6c8263c677917dd9e6f4cadef0f"
+  },
+  "scope_and_mathematics": "All fourteen complete source declaration types and four complete definition blocks unchanged. Original alpha/beta/gamma coefficients, full carriers, literal mixed V, real P0 theorem, local cutoffMass, primitive residue only for active grouped coefficients, universal finite bound with actual U^2 counting cost, and all domains/thresholds unchanged. No equality of U or V with P0 added. No remaining-budget premise.",
+  "owned_parents_not_modified": [
+    "ImbalancedChen.Part3TransposedPrimitiveU 3c1f owned",
+    "ImbalancedChen.Part3PrimitiveZeroReal ef3396 owned"
+  ],
+  "no_limits_or_linter_change": true,
+  "sourceDAG_delta": {
+    "local_added_modules": [],
+    "foreign_added_modules": [],
+    "direct_imports_unchanged": true
+  },
+  "lean_validation": "NOT RUN after repair; same specifically authorized 6144/RSS6656/j2 by runtime_resume only; original FAILED receipt retained",
+  "prior_diagnostic_rebind_preserved": {
+    "owner_report": "20261016-transposed-primitive-V-first-diag-owner-rebind.json",
+    "owner_report_sha256": "f07f7bd35fbb358d78c1f3ba502fadcc651348cb7606c0b7c93ef23287775aa6",
+    "independent_report": "20261016-transposed-primitive-V-first-diag-independent-rebind.json",
+    "independent_report_sha256": "7a7f711e33fffb7430f7255aba71a9cdd95d3f6c3904e4d24f134a9c0cd62398"
+  },
+  "fixed_API_actual_read": {
+    "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Int/ModEq.lean",
+    "sha256": "c1130960b648b5047a673d1f47f4ce653f0cf1174fff41b28a41e4813b89d86c",
+    "definition": "Int.ModEq n a b := a % n = b % n",
+    "explicit_decidable_instance": "Decidable (ModEq n a b) := decEq (a % n) (b % n)",
+    "foreign_import_delta": 0,
+    "old_norm_branch_error_resolved_by_previous_real_rewrite": true
+  }
+}

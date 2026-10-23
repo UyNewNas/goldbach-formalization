@@ -1,0 +1,414 @@
+{
+  "schema_version": 1,
+  "checkpoint_kind": "bounded_independent_source_review",
+  "review_actor": "/root/tail_real_precision_sol_high_oct22",
+  "created_utc": "2026-10-21T23:40:48.7904459Z",
+  "status": "UNCOMPILED_W_ONLY_VARIANCE_BRIDGE_SOURCE_REVIEW_HOLD",
+  "result": "no_static_blocker_in_written_bridge",
+  "HOLD": true,
+  "source": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPWVarianceBridge-module-source.txt",
+    "sha256": "31a1264a2727681448e3ca97cbd0c92ba823d47de3dc52279cdee4ed5f635905",
+    "bytes": 7243,
+    "lf_lines": 153,
+    "spans": [
+      {
+        "first": 1,
+        "last": 2,
+        "literal_source": "import ImbalancedChen.Part3CommonPPairMaskRestoration\nimport Mathlib.Tactic\n",
+        "normalized_lf_utf8_sha256": "8408c19b7bc966625c136a8b963a0183e862ee972b01efec8bd1d33939a0869e"
+      },
+      {
+        "first": 17,
+        "last": 33,
+        "literal_source": "def originalVariance (d : MediumAtom) : ℝ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n      d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n        ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2\n\n/-- K_H squared, but the ORIGINAL P times original principal in the cross term. -/\ndef hybridRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℝ :=\n  ‖keptProgressionRow d H p m‖ ^ 2 -\n    2 * ((d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexProgressionRow m *\n      star ((d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexPrincipalRow m)).re +\n    ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexPrincipalRow m‖ ^ 2\n\ndef hybridVariance (d : MediumAtom) (H : ℝ) : ℝ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n      d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m * hybridRow d H p m\n",
+        "normalized_lf_utf8_sha256": "63126a2b7fe80c8bdabda47865f55df207486104616eb97001a964b42337a1dc"
+      },
+      {
+        "first": 106,
+        "last": 112,
+        "literal_source": "theorem originalVariance_sub_hybrid_le_M2\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {H : ℝ} (hH : 0 < H) :\n    CommonPM2FiniteFold.outsideEnergy d *\n      |originalVariance d - hybridVariance d H| ≤\n        2 * CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d / H := by\n  let G : ℕ → ℕ → Label → Label → ℂ := fun _ _ _ _ => 1\n",
+        "normalized_lf_utf8_sha256": "caeb4580af476dc86d8656db3d84f2567743d71e67cd26d986a16f32cbaecf52"
+      }
+    ]
+  },
+  "author_CP": {
+    "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261022-commonp-W-only-variance-bridge-source-proposal-author-HOLD.json",
+    "sha256": "8e50d9d2d6f1cb83e6dd20e8171d42c022de2e472b91d9a44c37204704f39127",
+    "bytes": 11622,
+    "lf_lines": 102,
+    "spans": []
+  },
+  "complete_written_declarations": [
+    {
+      "name": "originalVariance",
+      "first": 17,
+      "last": 21,
+      "complete_written_header": "def originalVariance (d : MediumAtom) : ℝ",
+      "full_declaration_sha256": "1b0aab44e9383de9a03ddabe0add29fde8c6bd1faef81c569f2aed571a11356f",
+      "full_type_body_read": true
+    },
+    {
+      "name": "hybridRow",
+      "first": 24,
+      "last": 28,
+      "complete_written_header": "def hybridRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℝ",
+      "full_declaration_sha256": "bfd4b6781348c547aaff4d8777792521dbbc0ad1892afe7924419d3f1f042ba8",
+      "full_type_body_read": true
+    },
+    {
+      "name": "hybridVariance",
+      "first": 30,
+      "last": 33,
+      "complete_written_header": "def hybridVariance (d : MediumAtom) (H : ℝ) : ℝ",
+      "full_declaration_sha256": "c811f298f9205f8cfe7af94ec948411500d2227c3694e57bfcf4dc2e211a83b5",
+      "full_type_body_read": true
+    },
+    {
+      "name": "coeff_sum_split",
+      "first": 35,
+      "last": 51,
+      "complete_written_header": "private theorem coeff_sum_split (d : MediumAtom) (H : ℝ) (p m : ℕ) :\n    (∑ l ∈ labels d p m, coeff d p m l) =\n      keptProgressionRow d H p m + tailRow d H p m",
+      "full_declaration_sha256": "3731144775feb4509d8059da04c54c75a9e9b225f961578c67ca41f551a6894e",
+      "full_type_body_read": true
+    },
+    {
+      "name": "kept_coeff_sum",
+      "first": 53,
+      "last": 66,
+      "complete_written_header": "private theorem kept_coeff_sum (d : MediumAtom) (H : ℝ) (p m : ℕ) :\n    (∑ l ∈ labels d p m, if keep d H m l then coeff d p m l else 0) =\n      keptProgressionRow d H p m",
+      "full_declaration_sha256": "d789f2cf101e298762b83351b759004f6a62b7eb4264037998b5baa8ebb99987",
+      "full_type_body_read": true
+    },
+    {
+      "name": "coeff_sum_eq_progression",
+      "first": 68,
+      "last": 76,
+      "complete_written_header": "private theorem coeff_sum_eq_progression {B : ℕ} {sigma kappa c0 : ℝ}\n    {d : MediumAtom} (hd : MediumAdmissible B sigma kappa c0 d)\n    {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (H : ℝ) (m : ℕ) :\n    (∑ l ∈ labels d p m, coeff d p m l) =\n      (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexProgressionRow m",
+      "full_declaration_sha256": "1e6708e47737670f97ee004f1ca6962731d6d6e1632d3663c52945259a5b73c8",
+      "full_type_body_read": true
+    },
+    {
+      "name": "pairForm_one_re",
+      "first": 78,
+      "last": 81,
+      "complete_written_header": "private theorem pairForm_one_re {ι : Type*} (s : Finset ι) (c : ι → ℂ) :\n    (pairForm s c (fun _ _ => 1)).re = ‖∑ i ∈ s, c i‖ ^ 2",
+      "full_declaration_sha256": "5a7a739dd64b0fde7fcaea0e55f01aff71f4862160fea19b64ecc12f3ca4a919",
+      "full_type_body_read": true
+    },
+    {
+      "name": "fullPair_one_re",
+      "first": 83,
+      "last": 89,
+      "complete_written_header": "private theorem fullPair_one_re {B : ℕ} {sigma kappa c0 : ℝ}\n    {d : MediumAtom} (hd : MediumAdmissible B sigma kappa c0 d)\n    {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (H : ℝ) (m : ℕ) :\n    (fullPair d (fun _ _ _ _ => 1) p m).re =\n      ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexProgressionRow m‖ ^ 2",
+      "full_declaration_sha256": "86a47ae507ed2647805ef31f81e37fa19a4c566cd542d2912842d93a494c97e4",
+      "full_type_body_read": true
+    },
+    {
+      "name": "keptPair_one_re",
+      "first": 91,
+      "last": 94,
+      "complete_written_header": "private theorem keptPair_one_re (d : MediumAtom) (H : ℝ) (p m : ℕ) :\n    (keptPair d H (fun _ _ _ _ => 1) p m).re = ‖keptProgressionRow d H p m‖ ^ 2",
+      "full_declaration_sha256": "aa6386387b0467847ca63b6e92c6e3d217d787c507bfd329556f1e6a5dc59d91",
+      "full_type_body_read": true
+    },
+    {
+      "name": "row_variance_defect",
+      "first": 96,
+      "last": 103,
+      "complete_written_header": "private theorem row_variance_defect (d : MediumAtom) (H : ℝ) (p m : ℕ) :\n    ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 -\n      hybridRow d H p m =\n        ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexProgressionRow m‖ ^ 2 -\n          ‖keptProgressionRow d H p m‖ ^ 2",
+      "full_declaration_sha256": "50178df881c5d4906875b95cc211113421f311463b1174b70d99462afadad011",
+      "full_type_body_read": true
+    },
+    {
+      "name": "originalVariance_sub_hybrid_le_M2",
+      "first": 106,
+      "last": 151,
+      "complete_written_header": "theorem originalVariance_sub_hybrid_le_M2\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {H : ℝ} (hH : 0 < H) :\n    CommonPM2FiniteFold.outsideEnergy d *\n      |originalVariance d - hybridVariance d H| ≤\n        2 * CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d / H",
+      "full_declaration_sha256": "78cf4c1d3a18a5efd034fe6d15636a44939d6fe72d14f5ab5ae1b32e86145343",
+      "full_type_body_read": true
+    }
+  ],
+  "declaration_counts": {
+    "lf_lines": 154,
+    "private_complete_proofs": 7,
+    "public_complete_proofs": 1,
+    "definitions": 3
+  },
+  "independence": "Reviewer did not author the W-only bridge or PairMaskRestoration. The reviewer previously authored RealPrecision; it is checked here only as an unchanged written API for the author mathematical logarithmic corollary, not as an independent acceptance of that dependency.",
+  "source_parent_API_bindings": [
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPPairMaskRestoration-module-source.txt",
+      "sha256": "30ff8c812dd011de3af11e34c0ddaaa14411f0455f633ad0069c76931d3dc516",
+      "bytes": 13023,
+      "lf_lines": 219,
+      "spans": [
+        {
+          "first": 16,
+          "last": 34,
+          "literal_source": "abbrev Label := ℕ × ℕ × ℕ\ndef labels (d : MediumAtom) (p m : ℕ) : Finset Label :=\n  d.cleanedCommonPProgression p m ×ˢ (factorCarrier d.Q2 ×ˢ factorCarrier d.Q3)\ndef coeff (d : MediumAtom) (p m : ℕ) (l : Label) : ℂ :=\n  if Int.ModEq (p * l.2.1 * l.2.2) ((m : ℤ) * l.1) d.residue\n  then d.gamma2 l.2.1 * d.gamma3 l.2.2 * d.cleanedAlphaAtom.transposedAtom.beta l.1 else 0\ndef keep (d : MediumAtom) (H : ℝ) (m : ℕ) (l : Label) : Prop :=\n  (fouvryTau 4 (CommonPM2FiniteFold.shiftDifference d (m * l.1)) : ℝ) ≤ H\ndef pairForm {ι : Type*} (s : Finset ι) (c : ι → ℂ) (G : ι → ι → ℂ) : ℂ :=\n  ∑ i ∈ s, ∑ j ∈ s, G i j * c i * star (c j)\ndef fullPair (d : MediumAtom) (G : ℕ → ℕ → Label → Label → ℂ) (p m : ℕ) : ℂ :=\n  pairForm (labels d p m) (coeff d p m) (G p m)\ndef keptPair (d : MediumAtom) (H : ℝ) (G : ℕ → ℕ → Label → Label → ℂ)\n    (p m : ℕ) : ℂ :=\n  pairForm (labels d p m) (fun l => if keep d H m l then coeff d p m l else 0) (G p m)\n\n/-- Absolute masses, not norms of cancelling row sums. -/\ntheorem finite_pair_restore_le {ι : Type*} (s : Finset ι) (c : ι → ℂ)\n    (k : ι → Prop) [DecidablePred k] (G : ι → ι → ℂ)\n",
+          "normalized_lf_utf8_sha256": "9f5c84d3e9ecb2a8628ccddfcf29c725a0233e76bf6adb9cd6ba4d2bd8db0c21"
+        },
+        {
+          "first": 179,
+          "last": 188,
+          "literal_source": "theorem literal_commonP_pair_mask_restoration {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {H : ℝ} (hH : 0 < H)\n    (G : ℕ → ℕ → Label → Label → ℂ)\n    (hG : ∀ p ∈ d.primitiveFirstFactorCarrier,\n      ∀ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n      ∀ l ∈ labels d p m, ∀ l' ∈ labels d p m, ‖G p m l l'‖ ≤ 1) :\n    CommonPM2FiniteFold.outsideEnergy d *\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n        d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m * ‖fullPair d G p m - keptPair d H G p m‖) ≤\n      2 * CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d / H := by\n",
+          "normalized_lf_utf8_sha256": "1d5a58129df043b22ee517b7447fd5fb9ada4e35d4403bf0f75c39cfcc44fa6a"
+        }
+      ]
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPM2TailCutoff-module-source.txt",
+      "sha256": "b83a5197e71923944f22dd0714c558f89624f3d6f42f39c16e101cc4bfec957b",
+      "bytes": 15908,
+      "lf_lines": 334,
+      "spans": [
+        {
+          "first": 40,
+          "last": 42,
+          "literal_source": "def truncatedCenteredRow (d : MediumAtom) (H : ℝ) (p m : ℕ) : ℂ :=\n  keptProgressionRow d H p m -\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexPrincipalRow m\n",
+          "normalized_lf_utf8_sha256": "2f5d7daee66cb303385b1812f13f26fd4444611c5421bc231a33089a389fc5d6"
+        },
+        {
+          "first": 240,
+          "last": 245,
+          "literal_source": "theorem centeredRow_sub_truncated_eq_tail\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    (H : ℝ) {p : ℕ} (hp : p ∈ d.primitiveFirstFactorCarrier) (m : ℕ) :\n    (d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m -\n      truncatedCenteredRow d H p m = tailRow d H p m := by\n",
+          "normalized_lf_utf8_sha256": "6deb54df1a4dad584be3fdb7370d51665887bb4617c4b5b41d7b176e17f0b41d"
+        }
+      ]
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPM2TailLogSaving-module-source.txt",
+      "sha256": "1955c521eb0e8eca3c619d4bb69f777903c3659e0a8a2e79ab6b56585ad23615",
+      "bytes": 4368,
+      "lf_lines": 87,
+      "spans": [
+        {
+          "first": 24,
+          "last": 24,
+          "literal_source": "def cutoffExponent (B A : ℕ) : ℕ := 131073 + betaLogExponent B + 2 * A\n",
+          "normalized_lf_utf8_sha256": "2b77bf73bbfaf2a7a75aa5ea4075eee251390484054158036e5503e2d486738a"
+        },
+        {
+          "first": 26,
+          "last": 37,
+          "literal_source": "theorem centered_tail_energy_le_log_budget\n    {B A : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d *\n      (∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n          d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n            ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m -\n              truncatedCenteredRow d\n                ((1 + Real.log d.scale) ^ cutoffExponent B A) p m‖ ^ 2) ≤\n      m2PolylogConstant B * d.scale ^ 2 / (1 + Real.log d.scale) ^ (2 * A) := by\n",
+          "normalized_lf_utf8_sha256": "015fa15f5a0e44c0f9f4e6d8569f1f7099fe0607af5a796c2cfd221c237fd0b8"
+        }
+      ]
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPM2TailRealLogSaving-module-source.txt",
+      "sha256": "249e74d65f253d6318bcfbba1628365e7dfb6335ed24d171c5e387bb377330e6",
+      "bytes": 4446,
+      "lf_lines": 88,
+      "spans": [
+        {
+          "first": 28,
+          "last": 34,
+          "literal_source": "theorem rpow_two_mul_le_pow_two_ceil {L : ℝ} (hL : 1 ≤ L) (A : ℝ) :\n    Real.rpow L (2 * A) ≤ L ^ (2 * Nat.ceil A) := by\n  have hexponent : 2 * A ≤ ((2 * Nat.ceil A : ℕ) : ℝ) := by\n    simpa only [Nat.cast_mul, Nat.cast_ofNat] using\n      mul_le_mul_of_nonneg_left (Nat.le_ceil A) (by norm_num : (0 : ℝ) ≤ 2)\n  simpa only [Real.rpow_natCast] using\n    Real.rpow_le_rpow_of_exponent_le hL hexponent\n",
+          "normalized_lf_utf8_sha256": "dbc08c03ba974ba6ac4d8e171123ccbe2d86723165e4a5aa5f9224113d269a58"
+        },
+        {
+          "first": 36,
+          "last": 48,
+          "literal_source": "theorem centered_tail_energy_le_real_log_budget\n    {B : ℕ} {A sigma kappa c0 : ℝ} {d : MediumAtom}\n    (_hA : 0 ≤ A)\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d *\n      (∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n          d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n            ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m -\n              truncatedCenteredRow d\n                ((1 + Real.log d.scale) ^ cutoffExponent B (Nat.ceil A)) p m‖ ^ 2) ≤\n      m2PolylogConstant B * d.scale ^ 2 / Real.rpow (1 + Real.log d.scale) (2 * A) := by\n",
+          "normalized_lf_utf8_sha256": "8983eef307c43956a2b3477076c5f88133dda05f96ea4b284b8bdf2e84dd5a9f"
+        },
+        {
+          "first": 69,
+          "last": 82,
+          "literal_source": "theorem constant_pos_and_uniform (B : ℕ) :\n    let C_B : ℝ := m2PolylogConstant B\n    0 < C_B ∧ ∀ (A : ℝ), 0 ≤ A →\n      ∀ (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d → 0 < sigma → 0 ≤ kappa →\n          kappa ≤ 1 / (2 * (kshift : ℝ)) →\n        CommonPM2FiniteFold.outsideEnergy d *\n          (∑ p ∈ d.primitiveFirstFactorCarrier,\n            ∑ m ∈ d.cleanedAlphaAtom.transposedAtom.commonSmoothCarrier,\n              d.cleanedAlphaAtom.transposedAtom.commonSmoothWeight m *\n                ‖(d.cleanedAlphaAtom.q1SliceAtom p).transposedAtom.complexCenteredRow m -\n                  truncatedCenteredRow d\n                    ((1 + Real.log d.scale) ^ cutoffExponent B (Nat.ceil A)) p m‖ ^ 2) ≤\n          C_B * d.scale ^ 2 / Real.rpow (1 + Real.log d.scale) (2 * A) := by\n",
+          "normalized_lf_utf8_sha256": "3322edd4f278d0604229ec686f201e4ecd746537c8db30c8ec94cfe4115997fe"
+        }
+      ]
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/drafts/20261022-Part3CommonPM2PolylogMajorant-module-source.txt",
+      "sha256": "f6502dc7f0084f729f817ebd244de18b6b6ef015d7aca92a038e9e20ea646a39",
+      "bytes": 7736,
+      "lf_lines": 165,
+      "spans": [
+        {
+          "first": 26,
+          "last": 33,
+          "literal_source": "def m2PolylogConstant (B : ℕ) : ℝ :=\n  12 * mixedMomentConstant * (2 : ℝ) ^ betaLogExponent B\n\ntheorem m2PolylogConstant_pos (B : ℕ) : 0 < m2PolylogConstant B := by\n  unfold m2PolylogConstant\n  exact mul_pos\n    (mul_pos (by norm_num) mixedMomentConstant_pos_and_mixedSum_le.1)\n    (pow_pos (by norm_num) _)\n",
+          "normalized_lf_utf8_sha256": "5e8e55b41d83d92a85635bb4c2faedb2a90b8fae4688c26c767547e17ab5ceee"
+        },
+        {
+          "first": 110,
+          "last": 116,
+          "literal_source": "theorem MediumAtom.cleaned_commonP_M2_le_capped_polylog\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma)\n    (hkappa : 0 ≤ kappa) (hcap : kappa ≤ 1 / (2 * (kshift : ℝ))) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      m2PolylogConstant B * d.scale ^ 2 *\n        (1 + Real.log d.scale) ^ (131073 + betaLogExponent B) := by\n",
+          "normalized_lf_utf8_sha256": "e568069782bac2d3f2e95c18a87d0d3b2a6e97bbf94319dbe54fda7d08c03a05"
+        }
+      ]
+    }
+  ],
+  "actual_semantic_bindings": [
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ComplexDispersion.lean",
+      "sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+      "bytes": 13464,
+      "lf_lines": 287,
+      "spans": [
+        {
+          "first": 60,
+          "last": 73,
+          "literal_source": "def MediumAtom.complexProgressionRow (d : MediumAtom) (n : ℕ) : ℂ :=\n  ∑ l ∈ d.complexRowLabels, d.complexFactorGamma l.1 * d.beta l.2 *\n    (if (((n * l.2 : ℕ) : ℤ) % (complexFactorModulus l.1 : ℤ) =\n      d.residue % (complexFactorModulus l.1 : ℤ)) then 1 else 0)\n\n/-- The full primitive-coprime centre on the same labels and modulus. -/\ndef MediumAtom.complexPrincipalRow (d : MediumAtom) (n : ℕ) : ℂ :=\n  ∑ l ∈ d.complexRowLabels,\n    d.complexFactorGamma l.1 * d.beta l.2 *\n      (if (n * l.2).Coprime (complexFactorModulus l.1) then 1 else 0) /\n        (Nat.totient (complexFactorModulus l.1) : ℂ)\n\ndef MediumAtom.complexCenteredRow (d : MediumAtom) (n : ℕ) : ℂ :=\n  d.complexProgressionRow n - d.complexPrincipalRow n\n",
+          "normalized_lf_utf8_sha256": "2129231a897562a36900283d106c9e247a3f1211957be3de65dd88d4ec36b87e"
+        },
+        {
+          "first": 173,
+          "last": 205,
+          "literal_source": "def MediumAtom.complexDispersionW (d : MediumAtom) (S : Finset ℕ)\n    (w : ℕ → ℝ) : ℝ :=\n  ∑ n ∈ S, w n * ‖d.complexProgressionRow n‖ ^ 2\n\ndef MediumAtom.complexDispersionV (d : MediumAtom) (S : Finset ℕ)\n    (w : ℕ → ℝ) : ℝ :=\n  ∑ n ∈ S, w n *\n    (d.complexProgressionRow n * star (d.complexPrincipalRow n)).re\n\ndef MediumAtom.complexDispersionU (d : MediumAtom) (S : Finset ℕ)\n    (w : ℕ → ℝ) : ℝ :=\n  ∑ n ∈ S, w n * ‖d.complexPrincipalRow n‖ ^ 2\n\n/-- The complex cross term uses its real part, with the primitive centre\nretained. It is not the product of two real surrogate rows. -/\ntheorem MediumAtom.complex_dispersion_identity (d : MediumAtom)\n    (S : Finset ℕ) (w : ℕ → ℝ) :\n    (∑ n ∈ S, w n * ‖d.complexCenteredRow n‖ ^ 2) =\n      d.complexDispersionW S w - 2 * d.complexDispersionV S w +\n        d.complexDispersionU S w := by\n  unfold MediumAtom.complexCenteredRow MediumAtom.complexDispersionW\n    MediumAtom.complexDispersionV MediumAtom.complexDispersionU\n  simp_rw [← Complex.normSq_eq_norm_sq, Complex.normSq_sub, starRingEnd_apply]\n  rw [Finset.mul_sum, ← Finset.sum_sub_distrib, ← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro n _\n  ring\n\ntheorem MediumAtom.complex_dispersion_nonneg (d : MediumAtom)\n    (S : Finset ℕ) (w : ℕ → ℝ) (hw : ∀ n ∈ S, 0 ≤ w n) :\n    0 ≤ d.complexDispersionW S w - 2 * d.complexDispersionV S w +\n      d.complexDispersionU S w := by\n  rw [← MediumAtom.complex_dispersion_identity]\n",
+          "normalized_lf_utf8_sha256": "19235afe8e57f51708ad7e375d127d2ac153ca3ecd04b50a6fe13b30fabc730d"
+        },
+        {
+          "first": 242,
+          "last": 253,
+          "literal_source": "theorem complex_norm_sq_sum_eq_double_star {iota : Type*} (S : Finset iota)\n    (f : iota → ℂ) :\n    ((‖∑ i ∈ S, f i‖ ^ 2 : ℝ) : ℂ) =\n      ∑ i ∈ S, ∑ j ∈ S, f i * star (f j) := by\n  calc\n    _ = (∑ i ∈ S, f i) * star (∑ i ∈ S, f i) := by\n      rw [Complex.ofReal_pow]\n      exact (Complex.mul_conj' _).symm\n    _ = _ := by\n      rw [star_sum]\n      simp only [Finset.sum_mul, Finset.mul_sum]\n      exact Finset.sum_comm\n",
+          "normalized_lf_utf8_sha256": "56aeaafe0e1ade360a0ca1329920e4d22499a63e89a6ccfd984b580f6cbd0199"
+        }
+      ]
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3SharedFirstFactorDispersion.lean",
+      "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "bytes": 29327,
+      "lf_lines": 592,
+      "spans": [
+        {
+          "first": 224,
+          "last": 253,
+          "literal_source": "theorem MediumAtom.signedError_norm_sq_le_sharedFirstFactorSmoothRows\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    ‖d.signedError‖ ^ 2 ≤\n      (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          ∑ p ∈ d.primitiveFirstFactorCarrier,\n            ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n              d.transposedAtom.commonSmoothWeight m *\n                ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2 := by\n  apply (d.signedError_norm_sq_le_sharedFirstFactorRows hd).trans\n  apply mul_le_mul_of_nonneg_left _ (by positivity)\n  exact Finset.sum_le_sum (fun p _ ↦ q1Slice_rows_le_commonSmooth d hd.2.1 p)\n\ntheorem MediumAtom.sharedFirstFactorSmoothRows_eq_dispersion (d : MediumAtom) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      ∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n        d.transposedAtom.commonSmoothWeight m *\n          ‖(d.q1SliceAtom p).transposedAtom.complexCenteredRow m‖ ^ 2) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ((d.q1SliceAtom p).transposedAtom.complexDispersionW\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight -\n          2 * (d.q1SliceAtom p).transposedAtom.complexDispersionV\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight +\n          (d.q1SliceAtom p).transposedAtom.complexDispersionU\n            d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight) := by\n  apply Finset.sum_congr rfl\n  intro p _\n  exact MediumAtom.complex_dispersion_identity _ _ _\n\n",
+          "normalized_lf_utf8_sha256": "db4e1359dd5091c7857b81b680c6a5cbdab7438b4722e281c8aefdcbe9e2a5b7"
+        }
+      ]
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonSmoothCutoff.lean",
+      "sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+      "bytes": 9757,
+      "lf_lines": 220,
+      "spans": [
+        {
+          "first": 157,
+          "last": 164,
+          "literal_source": "def MediumAtom.commonSmoothCarrier (d : MediumAtom) : Finset ℕ :=\n  Finset.Icc 0 (Nat.ceil (3 * d.U))\n\ndef MediumAtom.commonSmoothWeight (d : MediumAtom) (n : ℕ) : ℝ :=\n  CommonSmoothCutoff.scaledDyadicCutoff d.U (n : ℝ)\n\ntheorem MediumAtom.commonSmoothWeight_nonneg (d : MediumAtom) (n : ℕ) :\n    0 ≤ d.commonSmoothWeight n := CommonSmoothCutoff.scaledDyadicCutoff_nonneg _ _\n",
+          "normalized_lf_utf8_sha256": "204e92bcacd5bdf275fea31073fd774f720231b1a4a7cdc329f9347eaa834049"
+        }
+      ]
+    },
+    {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3CommonPM2FiniteFold.lean",
+      "sha256": "d86216a99d8f6764c2172e9c5d5e67112096d8751383531675ff0bcddc533991",
+      "bytes": 15172,
+      "lf_lines": 314,
+      "spans": [
+        {
+          "first": 51,
+          "last": 53,
+          "literal_source": "def outsideEnergy (d : MediumAtom) : ℝ :=\n  (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n    (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)\n",
+          "normalized_lf_utf8_sha256": "0e1eed20baf82dbc60aa09f484222c54d438c510b585deee67273beea7ead913"
+        }
+      ]
+    }
+  ],
+  "direct_native_API_bindings": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib/Mathlib/Analysis/Complex/Norm.lean",
+      "sha256": "815efa05d2282b0b234139eac16d614f1128d69e39cf02249df887934ccc9741",
+      "bytes": 15446,
+      "lf_lines": 390,
+      "spans": [
+        {
+          "first": 37,
+          "last": 41,
+          "literal_source": "@[bound]\ntheorem abs_re_le_norm (z : ℂ) : |z.re| ≤ ‖z‖ := by\n  rw [mul_self_le_mul_self_iff (abs_nonneg z.re) (Complex.norm_nonneg _), abs_mul_abs_self,\n    norm_mul_self_eq_normSq]\n  apply re_sq_le_normSq\n",
+          "normalized_lf_utf8_sha256": "36927d10cffabc62d50e8104162c9df14af6570c64ade481c3339550c51270b2"
+        },
+        {
+          "first": 146,
+          "last": 148,
+          "literal_source": "\nlemma normSq_eq_norm_sq (z : ℂ) : normSq z = ‖z‖ ^ 2 := by\n  simp [norm_def, sq, Real.mul_self_sqrt (normSq_nonneg _)]\n",
+          "normalized_lf_utf8_sha256": "2fe6e1d7e4fd028d0b3617eac85ae92e129a832b4bbd159102f9400d60cba8fe"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib/Mathlib/Data/Complex/Basic.lean",
+      "sha256": "e279bd6369e83ebf6716e17a8f38c81c812020753472cac5e7ae2a501790b760",
+      "bytes": 30091,
+      "lf_lines": 881,
+      "spans": [
+        {
+          "first": 671,
+          "last": 674,
+          "literal_source": "theorem normSq_sub (z w : ℂ) : normSq (z - w) = normSq z + normSq w - 2 * (z * conj w).re := by\n  rw [sub_eq_add_neg, normSq_add]\n  simp only [map_neg, mul_neg, neg_re, normSq_neg]\n  ring\n",
+          "normalized_lf_utf8_sha256": "21c017f6e15c32dbd36342dd04c04b3b0fd1d13c5a08eb5c96b1d4aab2f30e7f"
+        }
+      ]
+    }
+  ],
+  "definition_audit": {
+    "outside": "Original outsideEnergy occurs once. Its nonnegativity follows from the two actual sums of squares.",
+    "carriers": "Exact primitiveFirstFactorCarrier and cleaned/transposed commonSmoothCarrier, unchanged; no active subset or multiplicity quotient.",
+    "D": "originalVariance=sum original psi*norm(P-J)^2; actual complexCenteredRow=P-J on the identical cleaned,q1-sliced,transposed atom.",
+    "Dhybrid": "hybridVariance=sum original psi*(norm(K_H)^2-2Re(P*star J)+norm(J)^2). P in V remains the ORIGINAL progression row; J in both V and U is the identical ORIGINAL principal."
+  },
+  "proof_audit": [
+    "coeff_sum_split and kept_coeff_sum expand exact ordered(n,r,s) labels and split the same full physical congruence and d4 threshold. Every coefficient and gamma factor stays literal; equality cases go to keep<=H.",
+    "coeff_sum_eq_progression uses the PUBLIC TailCutoff centeredRow_sub_truncated_eq_tail. After unfolding centered=P-J and truncated=K-J, linear_combination -ht proves K+tail=P. No private parent lemma or new progression identity is assumed.",
+    "pairForm_one_re applies Complex.re to actual complex_norm_sq_sum_eq_double_star, reverses orientation, and simplifies G=1. fullPair and keptPair therefore have real parts norm(P)^2 and norm(K)^2.",
+    "row_variance_defect uses native Complex.normSq_eq_norm_sq and normSq_sub with the same star principal. Ring cancellation gives norm(P-J)^2-hybridRow=norm(P)^2-norm(K)^2. This is exactly D-Dhybrid=W-W_H after original psi summation.",
+    "The main hdiff unfolds both double sums, distributes subtraction and factors the same psi. Sub_re and the exact pair identities identify the difference with sum psi*Re(fullPair-keptPair), G=1.",
+    "Triangle inequality for the two real sums, abs_mul, psi>=0, and native Complex.abs_re_le_norm bound the absolute total difference by sum psi*norm(fullPair-keptPair). Eout>=0 permits multiplication without a sign reversal.",
+    "The existing literal_commonP_pair_mask_restoration at G identically1 has norm bound exactly1 and gives precisely2*Eout*moment/H. There is no added Q1 ratio, second Eout, principal factor or square of H."
+  ],
+  "domain_audit": {
+    "finite_theorem": "For every original MediumAdmissible B sigma kappa c0 d and every real H>0. No hsigma,hkappa,hcap,SW,retained-variance or spectral estimate is added as a premise.",
+    "G": "Specialized to1 to identify literal W. A nontrivial pair selector needs its own exact identification before calling it original W.",
+    "constant": "Exactly2, independent of the atom and H."
+  },
+  "retained_variance_check": {
+    "correct_distinction": "Dret=sum psi*norm(K-J)^2=W_H-2V_H+U, whereas Dhybrid=W_H-2V+U with original V. Dhybrid-Dret=-2*sum psi*Re(tail*star J).",
+    "nonnegativity": "D is nonnegative. No nonnegativity of Dhybrid is proved or used; the source explicitly says it may be signed.",
+    "principal_supplier": "No principal estimate is needed for this W-only finite error. A comparison with actual Dret would require an additional tail-principal cross estimate and principal-energy payment; none is supplied.",
+    "not_identified_with_retained_centered_variance": true
+  },
+  "logarithmic_author_corollary_check": {
+    "status": "Mathematical consequence only; NOT a new Lean theorem in154LF source.",
+    "scope": "No cap removal and no automatic transfer from a squared tail H^-2 bound to this W-only H^-1 bridge.",
+    "argument": "Under the separate capped polylog hypotheses, Eout*moment<=C_B*x^2*L^P. Taking N=ceil(A), H=L^(P+2N), the finite2/H bridge gives2*C_B*x^2/L^(2N), then the exact RealPrecision denominator comparison gives2*C_B*x^2/Real.rpow L(2A). C_B is B-only before A and atoms. Finite bridge itself imports neither log-saving theorem."
+  },
+  "static_issues": [],
+  "minimal_repair": null,
+  "remaining_obstacles": [
+    "No upper bound for signed hybridVariance, retained-centered variance, original principal variance, CRT/Poisson nonzero part or complementary signed spectral mass.",
+    "No general-q analytic M2, spectral7/32 estimate, medium theorem or main theorem is supplied.",
+    "All future parent sources and this wrapper remain uncompiled; old source/API review does not establish import resolution, elaboration, strict linter or kernel acceptance."
+  ],
+  "modifications": "Only this new independent CP. No draft/author/parent/actual evidence changed.",
+  "kernel_acceptance": false,
+  "engineering_admission": false,
+  "prohibited_actions_not_run": [
+    "Lean",
+    "Runtime",
+    "proper",
+    "classifier",
+    "census",
+    "Git",
+    "Site",
+    "new agents"
+  ],
+  "timebox": {
+    "maximum_minutes": 5,
+    "started_utc": "2026-10-21T23:38:52Z"
+  },
+  "quota": {
+    "reset_consumed": false,
+    "last_observed_remaining_percent": 47,
+    "last_observed_used_percent": 53,
+    "stop_when_remaining_lte": 40
+  }
+}

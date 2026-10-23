@@ -1,0 +1,32 @@
+ImbalancedChen/Part3ComplexCRTFiniteFourier.lean:180:6: error: Type mismatch: After simplification, term
+  complexDispersionW_eq_constructedCRT hd S w
+ has type
+  ↑(d.complexDispersionW S w) =
+    ∑ l ∈ d.complexRowLabels,
+      ∑ l' ∈ d.complexRowLabels,
+        d.complexBetaCoefficient l * star (d.complexBetaCoefficient l') *
+          ↑(ComplexCRT.constructedProgressionWeight S w d.residue (complexFactorModulus l.1) (complexFactorModulus l'.1)
+              l.2 l'.2)
+but is expected to have type
+  ↑(d.complexDispersionW S w) =
+    ∑ l ∈ d.complexRowLabels.attach,
+      ∑ l' ∈ d.complexRowLabels.attach,
+        d.complexBetaCoefficient ↑l * star (d.complexBetaCoefficient ↑l') *
+          ↑(ComplexCRT.constructedProgressionWeight S w d.residue (complexFactorModulus (↑l).1)
+              (complexFactorModulus (↑l').1) (↑l).2 (↑l').2)
+ImbalancedChen/Part3ComplexCRTFiniteFourier.lean:198:6: error: unsolved goals
+case neg
+B : ℕ
+sigma kappa c0 : ℝ
+d : MediumAtom
+hd : MediumAdmissible B sigma kappa c0 d
+S : Finset ℕ
+w : ℕ → ℝ
+l : ↥d.complexRowLabels
+a✝¹ : l ∈ d.complexRowLabels.attach
+l' : ↥d.complexRowLabels
+a✝ : l' ∈ d.complexRowLabels.attach
+this : NeZero ((complexFactorModulus (↑l).1).lcm (complexFactorModulus (↑l').1)) :=
+  { out := actual_pair_lcm_ne_zero hd l.property l'.property }
+hc : ¬ComplexCRT.Compatible (complexFactorModulus (↑l).1) (complexFactorModulus (↑l').1) (↑l).2 (↑l').2
+⊢ d.complexBetaCoefficient ↑l * star (d.complexBetaCoefficient ↑l') * ↑0 = 0

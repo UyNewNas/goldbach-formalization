@@ -1,0 +1,212 @@
+{
+  "audit_id": "20261021-external-chen-fixedcommit-evidence-review-HOLD",
+  "date": "2026-10-21",
+  "status": "HOLD_FIXED_COMMIT_UNVERIFIED_VARIANT_EXTERNALLY_KERNEL_ACCEPTED_NO_TARGET_GAP_CLOSURE",
+  "scope": {
+    "candidate": "lixiang90/chen_theorem",
+    "requested_commit": "11dcca8fc3ab340358503278c46d72aef072a6e7",
+    "bounded_passes": 1,
+    "policy": "Read-only primary GitHub API/source and already-existing local audit; no clone/download/build/compiler/checker/install/foreign mutation; one local atomic JSON checkpoint.",
+    "source_tree": {
+      "entries": 502,
+      "truncated": false,
+      "all_lean_blob_bytes": 5160216,
+      "workflow_files": [],
+      "note": "Metadata listing only; selected textual source files read; no repository archive fetched. Source closure was targeted, not a claim that every source file was reviewed."
+    }
+  },
+  "prior_checkpoint": {
+    "path": ".lake/proof-continuation/source-reviews/20261021-external-formalization-reuse-bounded-audit-HOLD.json",
+    "expected_sha256": "b1ff9db8eb02392311d3a26129ed7156c9e25c49b3da33dc1bed005abb9a989a",
+    "observed_sha256": "b1ff9db8eb02392311d3a26129ed7156c9e25c49b3da33dc1bed005abb9a989a",
+    "correction": "Mathlib source checkout exists at supplied UNC path \\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib. Earlier absent claim applied only to local .lake/packages; this audit makes no claim of global source absence."
+  },
+  "requested_commit_source": {
+    "versions": {
+      "lean": "leanprover/lean4:v4.32.2",
+      "mathlib": {
+        "url": "https://github.com/leanprover-community/mathlib4",
+        "type": "git",
+        "subDir": null,
+        "scope": "",
+        "rev": "905b95818eb32af7874a58b427f50c1711a5e96c",
+        "name": "mathlib",
+        "manifestFile": "lake-manifest.json",
+        "inputRev": "v4.32.2",
+        "inherited": false,
+        "configFile": "lakefile.lean"
+      }
+    },
+    "definitions": "def IsP2 (n : ℕ) : Prop :=\n  n.Prime ∨ ∃ p q : ℕ, p.Prime ∧ q.Prime ∧ n = p * q\n\n/-- `P_x(1,2)` : the number of primes `p ≤ x` such that `x - p` is a prime\nor a product of two primes. -/\nnoncomputable def chenCount (x : ℕ) : ℕ :=\n  ((Finset.range (x + 1)).filter fun p => p.Prime ∧ IsP2 (x - p)).card\n\n/-- `x_h(1,2)` : the number of primes `p ≤ x` such that `p + h` is a prime\nor a product of two primes. -/\nnoncomputable def chenCountShift (h x : ℕ) : ℕ :=\n  ((Finset.range (x + 1)).filter fun p => p.Prime ∧ IsP2 (p + h)).card\n\n/-- The twin-prime constant `∏_{p > 2} (1 - 1/(p-1)²)`. -/\nnoncomputable def twinConst : ℝ :=\n  ∏' p : Nat.Primes, if 2 < (p : ℕ) then 1 - (1 : ℝ) / ((p : ℕ) - 1) ^ 2 else 1\n\n/-- The singular series\n`C_x = ∏_{p ∣ x, p > 2} (p-1)/(p-2) · ∏_{p > 2} (1 - 1/(p-1)²)`. -/\nnoncomputable def chenConst (x : ℕ) : ℝ :=\n  (∏ p ∈ x.primeFactors.filter (2 < ·), ((p : ℝ) - 1) / ((p : ℝ) - 2)) * twinConst\n",
+    "semantic_verdict": "Actual finite count of primes p<=x with x-p prime or a product of two primes, and usual twin-prime singular product. This is a genuine Chen 1+2 statement, with no replacement count or extra explicit analytic hypotheses in its public type.",
+    "main_theorem_types": [
+      {
+        "name": "Chen.chenCount_lower",
+        "type": "theorem chenCount_lower :\n    ∀ᶠ x : ℕ in atTop, Even x →\n      0.67 * (x : ℝ) * chenConst x / (Real.log x) ^ 2 ≤ (chenCount x : ℝ)",
+        "source_line": 109
+      },
+      {
+        "name": "Chen.chen_theorem",
+        "type": "theorem chen_theorem :\n    ∀ᶠ x : ℕ in atTop, Even x →\n      ∃ p m : ℕ, p.Prime ∧ IsP2 m ∧ p + m = x",
+        "source_line": 142
+      },
+      {
+        "name": "Chen.chenCountShift_lower",
+        "type": "theorem chenCountShift_lower (h : ℕ) (hh : Even h) (h0 : 0 < h) :\n    ∀ᶠ x : ℕ in atTop,\n      0.67 * (x : ℝ) * chenConst h / (Real.log x) ^ 2 ≤\n        (chenCountShift h x : ℝ)",
+        "source_line": 175
+      },
+      {
+        "name": "Chen.chen_twin",
+        "type": "theorem chen_twin (h : ℕ) (hh : Even h) (h0 : 0 < h) :\n    {p : ℕ | p.Prime ∧ IsP2 (p + h)}.Infinite",
+        "source_line": 246
+      }
+    ],
+    "line_correction": "chenCount_lower is at line109 in this immutable source, not the prior review's line945 link.",
+    "proof_dependencies": {
+      "main": "key_inequality, sieved_lower_bound, sieveOmega_le, eventually_rpow_091_le_singular_error; key inequality uses explicit witness counts and exceptional tails.",
+      "analytic": "MainEstimates imports Lemma7.PrimeNumberTheorem, Lemma8.PrimeReciprocal and Lemma9.RichertBombieri. Richert imports calibrated Rosser bounds, count profiles and BombieriVinogradov.FinalEstimate. FinalEstimate.bombieriVinogradov = statement_of_primitiveZeroFreeRegion Chen.primitive_zero_free_region. ZeroFreeRegion imports RealSiegelReduction and RealCharacterSiegel and supplies primitive_zero_free_region as theorem.",
+      "BV": "Chen.BombieriVinogradov.Statement is classical max over reduced-residue von-Mangoldt AP error summed over q<=Q, with Q<=sqrt(x)/log(x)^B and arbitrary logarithmic saving A. It is not the local reciprocal-phase moving/factorized-modulus signed theorem.",
+      "sieve": "CalibratedRosserBounds states eventual sharp 2 exp(gamma)/s upper and 2 exp(gamma)log(s-1)/s lower polynomial bounds, on compact s-ranges 1<a<=b<=3 and 2<a<=b<=4, finite odd-prime sets and positive error.",
+      "Shiu": "No Shiu API identified in selected definitions, MainEstimates, Richert/BV and LargeSieve files or source tree names. DivisorSquareMean defines an ordinary unshifted tau^2 mean O(X log^3 X); its weighted interval theorem explicitly assumes that mean. This is not Shiu's arbitrary shifted-divisor mixed moment. Full absence from uninspected source bodies is not asserted.",
+      "ChenU10_U11": "No exact ChenU10/ChenU11 named interface in selected files or tree names; no demonstrated type/constant bridge to the local sharp-K obligations. The classical 0.67 Chen count does not by itself discharge those obligations."
+    },
+    "audit_program": {
+      "path": "formal/AuditAll.lean",
+      "allowed_axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "behavior": "Imports public entry; iterates all constants whose module starts ChenTheorem including private helpers; collectAxioms rejects extras and zero checked; prints pass count only if no failures.",
+      "execution_observed": false,
+      "authored_claim": "README/STATUS claim 9571 declarations across415 modules, all standard axioms. No actual requested-commit AuditAll output was located."
+    }
+  },
+  "requested_commit_external_evidence": {
+    "actions_runs": {
+      "endpoint": "https://api.github.com/repos/lixiang90/chen_theorem/actions/runs?head_sha=11dcca8fc3ab340358503278c46d72aef072a6e7&per_page=100",
+      "total_count": 0
+    },
+    "check_runs": {
+      "endpoint": "https://api.github.com/repos/lixiang90/chen_theorem/commits/11dcca8fc3ab340358503278c46d72aef072a6e7/check-runs",
+      "total_count": 0
+    },
+    "statuses": {
+      "endpoint": "https://api.github.com/repos/lixiang90/chen_theorem/commits/11dcca8fc3ab340358503278c46d72aef072a6e7/status",
+      "total_count": 0,
+      "state": "pending",
+      "interpretation": "Empty statuses; pending aggregate is not a failed or running proof job."
+    },
+    "verdict": "Actual full axiom audit of all9571 declarations at11dcca is not externally observable in inspected evidence. Keep exact-commit certification unverified."
+  },
+  "externally_verified_variant": {
+    "discovery": "Requested-commit formal/LEAN_EVAL.md links this official run but its text still says pending; actual official run and bot comment now show acceptance.",
+    "repository": "lixiang90/chen_theorem",
+    "submission_sha": "947f7990ef9b9a0f1bd021f5ed489020d42e0d5b",
+    "source_url": "https://github.com/lixiang90/chen_theorem/blob/947f7990ef9b9a0f1bd021f5ed489020d42e0d5b/Submission.lean",
+    "source_statement": "import ChallengeDeps\nimport Submission.ChenTheorem.Main\n\nnamespace Submission\n\ntheorem chen_theorem :\n    {p : ℕ | p.Prime ∧ LeanEval.NumberTheory.ChenTheorem.HasAtMostTwoPrimeFactors (p + 2)}.Infinite := by\n  apply (Chen.chen_twin 2 (by decide) (by norm_num)).mono\n  intro p hp\n  refine ⟨hp.1, ?_⟩\n  rcases hp.2 with hprime | ⟨a, b, ha, hb, hab⟩\n  · exact Or.inl ⟨p + 2, hprime, rfl⟩\n  · exact Or.inr ⟨a, b, ha, hb, hab⟩\n\nend Submission\n",
+    "provenance_source_commit": "3264ad6acafa64ada18a309f48350d9acfd261ef",
+    "benchmark_commit": "6b4b87b672f5301f24983a12fda65dac608453ce",
+    "versions": {
+      "lean": "v4.33.0",
+      "mathlib": "6f1ef4e5dd604a435bddba4747b13970cd65d2a1"
+    },
+    "official_run": "https://github.com/leanprover/lean-eval-submissions/actions/runs/34135760424",
+    "official_job": "https://github.com/leanprover/lean-eval-submissions/actions/runs/34135760424/job/101792559198",
+    "official_run_result": "completed/success",
+    "issue_result": "https://github.com/leanprover/lean-eval-submissions/issues/1696#issuecomment-5573441275",
+    "actual_log_evidence": [
+      "2026-09-07T15:20:21.4225458Z   \"submission_ref\": \"947f7990ef9b9a0f1bd021f5ed489020d42e0d5b\",",
+      "2026-09-07T16:30:09.0243338Z Build completed successfully (9120 jobs).",
+      "2026-09-07T16:30:09.0244715Z Exporting #[Nat, String, String.mk, Char, Char.ofNat, List, Quot, Quot.mk, Quot.lift, Quot.ind, chen_theorem, propext, Quot.sound, Classical.choice, Nat.add, Nat.sub, Nat.mul, Nat.pow, Nat.gcd, Nat.div, Nat.mod, Nat.beq, Nat.ble, Nat.land, Nat.lor, Nat.xor, Nat.shiftLeft, Nat.shiftRight, String.ofList] from Solution",
+      "2026-09-07T16:30:09.0246020Z Running nanoda kernel on solution",
+      "2026-09-07T16:30:09.0246379Z Nanoda kernel accepts the solution",
+      "2026-09-07T16:30:09.0246755Z Running Lean default kernel on solution.",
+      "2026-09-07T16:30:09.0247157Z Lean default kernel accepts the solution",
+      "2026-09-07T16:30:09.0247524Z Your solution is okay!"
+    ],
+    "evidence_classification": "Observed actual third-party CI output: frozen submission SHA, 9120-job build, export includes final chen_theorem and three standard axioms, nanoda acceptance, Lean default-kernel acceptance, final comparator acceptance. This is stronger than repository prose or grep0sorry.",
+    "certified_scope": "Official fixed-shift2 infinitude theorem. Independent kernel acceptance applies to its exported transitive proof closure. This does not certify every unused declaration or all9571 declarations, nor source at11dcca, nor local 1+1.75/P3/Shiu/reciprocal/sharp-K targets.",
+    "identity_limits": "Variant rebases modules under Submission/ and applies seven compatibility adjustments per authored provenance; no equality of all proof blobs between11dcca and947f799 was established. Official workflow head5500ae2 is evaluator code, not submitted proof SHA."
+  },
+  "reuse_candidates": [
+    {
+      "name": "Chen.LargeSieve.additive_large_sieve",
+      "module": "ChenTheorem.LargeSieve.Additive",
+      "line": 443,
+      "scope": "Arbitrary complex finite Ioc coefficient sequence; bound (X^2+pi*N)*sum norms squared over reduced Farey fractions. Candidate general primitive; no reciprocal Kloosterman factorization estimate.",
+      "trust": "Source inspected at11dcca; no standalone axiom output observed."
+    },
+    {
+      "name": "Chen.LargeSieve.large_sieve_character",
+      "module": "ChenTheorem.LargeSieve.Character",
+      "line": 456,
+      "scope": "Totient weighted primitive Dirichlet character large sieve, arbitrary complex Ioc coefficients; X^2+pi*N.",
+      "trust": "Source inspected at11dcca; no standalone axiom output observed."
+    },
+    {
+      "name": "Chen.LargeSieve.large_sieve_character_dyadic",
+      "module": "ChenTheorem.LargeSieve.Character",
+      "line": 478,
+      "scope": "Existential positive constant; primitive characters on D<q<=Q, weight1/phi(q); bound C*(Q+N/D)*sum norms squared, 1<=D<=Q.",
+      "trust": "Source inspected at11dcca; no standalone axiom output observed."
+    },
+    {
+      "name": "Chen.BombieriVinogradov.bombieriVinogradov",
+      "module": "ChenTheorem.Lemma9.BombieriVinogradov.FinalEstimate",
+      "line": 251,
+      "scope": "Classical level1/2 AP distribution only.",
+      "trust": "Source theorem and explicit zero-free-region dependency inspected; same-SHA axiom run unavailable."
+    },
+    {
+      "name": "Chen.LinearSieve.eventually_rosser_upper_polynomial_calibrated / Chen.LinearSieve.eventually_rosser_lower_polynomial_calibrated",
+      "module": "ChenTheorem.Lemma9.LinearSieve.CalibratedRosserBounds",
+      "scope": "Dimension-one Rosser profile candidates; exact local predicate and sharp-K coefficient bridge still required.",
+      "trust": "Source inspected only."
+    }
+  ],
+  "recommendation": {
+    "decision": "Retain HOLD for original target gaps; update external evidence classification because an independently kernel-accepted Chen fixed-shift2 variant really exists.",
+    "useful_next_authorized_work": "If later reuse is requested, prioritize immutable947f799 variant and its exact CI evidence over README claims; compare needed primitive types and complete version compatibility/proof closure audits before import. Do not infer 1+1.75 or moving reciprocal/Shiu/sharp-K closure from classical Chen1+2.",
+    "no_port_or_pin_change": true
+  },
+  "usage": {
+    "before": {
+      "primary_used_percent": 33,
+      "primary_remaining_percent": 67,
+      "secondary": null
+    },
+    "before_write": {
+      "primary_used_percent": 33,
+      "primary_remaining_percent": 67,
+      "secondary": null
+    },
+    "secondary_null_means_unavailable": true,
+    "stop_threshold": "Stop if remaining<=40 or used>=60; neither reached."
+  },
+  "boundary": {
+    "only_intended_write": ".lake/proof-continuation/source-reviews/20261021-external-chen-fixedcommit-evidence-review-HOLD.json",
+    "no_builds_compilers_checkers_installs_clones": true,
+    "no_foreign_mutation": true,
+    "HOLD": true
+  },
+  "inspected_sources": [
+    "https://github.com/lixiang90/chen_theorem/blob/11dcca8fc3ab340358503278c46d72aef072a6e7/formal/AuditAll.lean",
+    "https://github.com/lixiang90/chen_theorem/blob/11dcca8fc3ab340358503278c46d72aef072a6e7/formal/ChenTheorem/Main.lean",
+    "https://github.com/lixiang90/chen_theorem/blob/11dcca8fc3ab340358503278c46d72aef072a6e7/formal/ChenTheorem/Defs.lean",
+    "https://github.com/lixiang90/chen_theorem/blob/11dcca8fc3ab340358503278c46d72aef072a6e7/formal/ChenTheorem/MainEstimates.lean",
+    "https://github.com/lixiang90/chen_theorem/blob/11dcca8fc3ab340358503278c46d72aef072a6e7/formal/ChenTheorem/Lemma9/RichertBombieri.lean",
+    "https://github.com/lixiang90/chen_theorem/blob/11dcca8fc3ab340358503278c46d72aef072a6e7/formal/ChenTheorem/Lemma9/BombieriVinogradov/Basic.lean",
+    "https://github.com/lixiang90/chen_theorem/blob/11dcca8fc3ab340358503278c46d72aef072a6e7/formal/ChenTheorem/Lemma9/BombieriVinogradov/FinalEstimate.lean",
+    "https://github.com/lixiang90/chen_theorem/blob/11dcca8fc3ab340358503278c46d72aef072a6e7/formal/ChenTheorem/LargeSieve/Additive.lean",
+    "https://github.com/lixiang90/chen_theorem/blob/11dcca8fc3ab340358503278c46d72aef072a6e7/formal/ChenTheorem/LargeSieve/Character.lean",
+    "https://github.com/lixiang90/chen_theorem/blob/11dcca8fc3ab340358503278c46d72aef072a6e7/formal/ChenTheorem/Lemma6/ZeroFreeRegion.lean",
+    "https://github.com/lixiang90/chen_theorem/blob/11dcca8fc3ab340358503278c46d72aef072a6e7/formal/ChenTheorem/Lemma9/LinearSieve/CalibratedRosserBounds.lean",
+    "https://github.com/lixiang90/chen_theorem/blob/11dcca8fc3ab340358503278c46d72aef072a6e7/formal/ChenTheorem/Lemma6/DivisorSquareMean.lean"
+  ],
+  "freshness": {
+    "prior_checkpoint_hash_before_and_after_equal": true,
+    "prior_checkpoint_sha256": "b1ff9db8eb02392311d3a26129ed7156c9e25c49b3da33dc1bed005abb9a989a",
+    "github_source_read_at_immutable_sha": true
+  }
+}

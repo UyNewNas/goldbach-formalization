@@ -1,0 +1,225 @@
+{
+  "schema": "independent-actual-diagnostic-proof-only-rebind-v1",
+  "status": "SOURCE_ONLY_NONAUTHOR_EXACT_REBIND_NO_CONFIRMED_REMAINING_MATH_OR_FIXED_API_FINDING",
+  "reviewer": "/root/lower_resume (independent of repair author /root)",
+  "reviewed_at_utc": "2026-10-15T22:02:11.846024+00:00",
+  "project_head_at_review": "6d8f6c9ce343316e1afa8fe36847ec259d8d155f",
+  "candidate": "ImbalancedChen/ActualPrimeTupleNormalization.lean",
+  "old_actual_failed_sha256": "ee2f0f12ef232b770dcc7136d8ce74f27fc830cad73ab78641fe18f1cabc5db0",
+  "current_sha256": "c5c280a89f5bb833bbfc68ffbe07fea70f43330bf2c35ab81568274dd3de2ee7",
+  "old_source_snapshot": {
+    "path": ".lake/proof-continuation/source-reviews/drafts/20261016-TupleNormalization-DistinctProduct-original-pre-repair.json",
+    "sha256": "b5eb15ed360a41c1bf4d8ad137e2988e057ffa6cf67b2cd9e84833cf61d0e1d3",
+    "method": "Independent pre-repair exact bytes captured only while current old source hash matched; report uses the base64 bytes, not a Git text conversion."
+  },
+  "actual_failure_evidence": {
+    "receipt_path": ".lake/proof-continuation/runs/20261015T215319804371Z-ImbalancedChen.ActualPrimeTupleNormalization/receipt.json",
+    "receipt_sha256": "e6b38b0cbf4d3dae9d8ea07975ceaed9ebfc3d03e1f27ead7dd2408a9f008224",
+    "status": "FAILED",
+    "old_source_binding_before_after_matches": true,
+    "stdout_path": ".lake/proof-continuation/runs/20261015T215319804371Z-ImbalancedChen.ActualPrimeTupleNormalization/stdout.log",
+    "stdout_sha256": "df552630ca410256058a1cc939ad441efcf6bdf7bf2a7c0a41541882087dd1a4",
+    "complete_stdout_read": "ImbalancedChen/ActualPrimeTupleNormalization.lean:52:36: error: Type mismatch\n  List.toFinset_card_le\nhas type\n  ∀ (l : List ?m.125), l.toFinset.card ≤ l.length\nbut is expected to have type\n  ps.permutations.toFinset.card ≤ ps.permutations.length\n",
+    "old_failures_preserved": true
+  },
+  "author_rebind_evidence": {
+    "path": ".lake/proof-continuation/source-reviews/20261016-ActualPrimeTupleNormalization-first-diagnostic-root-owner-rebind.json",
+    "sha256": "50ba0949c81a5da884e2434a522d9dc13fcc3e494cd34e68c5401ef96d855e3a"
+  },
+  "literal_byte_patches_independently_checked": [
+    {
+      "old": "List.toFinset_card_le\n",
+      "new": "List.toFinset_card_le ps.permutations\n",
+      "occurrences": 1
+    }
+  ],
+  "forward_old_to_current_exact_bytes": true,
+  "inverse_current_to_old_exact_bytes": true,
+  "complete_types_and_definition_comparison": {
+    "method": "Theorems use actual := by marker, not first :=; definitions use top-level assignment outside brackets. Every complete header and full definition compared old/new and with root owner report.",
+    "declaration_count": 7,
+    "definition_count": 2,
+    "all_complete_headers_and_full_definitions_identical": true,
+    "all_complete_current_declarations_and_proofs": [
+      {
+        "name": "actualPrimeTupleCoefficient",
+        "kind": "def",
+        "private": false,
+        "start_line": 26,
+        "complete_source_header": "def actualPrimeTupleCoefficient (T : Finset (List ℕ)) (n : ℕ) : ℕ",
+        "complete_definition": "def actualPrimeTupleCoefficient (T : Finset (List ℕ)) (n : ℕ) : ℕ :=\n(T.filter (fun ps => ps.prod = n)).card"
+      },
+      {
+        "name": "actualNormalizedPrimeTupleCoefficient",
+        "kind": "def",
+        "private": false,
+        "start_line": 30,
+        "complete_source_header": "def actualNormalizedPrimeTupleCoefficient (T : Finset (List ℕ)) (m n : ℕ) : ℝ",
+        "complete_definition": "def actualNormalizedPrimeTupleCoefficient (T : Finset (List ℕ)) (m n : ℕ) : ℝ :=\n(actualPrimeTupleCoefficient T n : ℝ) / (m.factorial : ℝ)"
+      },
+      {
+        "name": "actualPrimeTupleCoefficient_le_factorial",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 35,
+        "complete_source_header": "theorem actualPrimeTupleCoefficient_le_factorial (T : Finset (List ℕ)) (m n : ℕ)\n    (hlen : ∀ ps ∈ T, ps.length = m)\n    (hprime : ∀ ps ∈ T, ∀ p ∈ ps, Nat.Prime p) :\n    actualPrimeTupleCoefficient T n ≤ m.factorial",
+        "complete_proof_body_after_by": "by_cases hne : (T.filter (fun ps => ps.prod = n)).Nonempty\n  · obtain ⟨ps, hps⟩ := hne\n    obtain ⟨hpsT, hpsprod⟩ := Finset.mem_filter.mp hps\n    have hperm (qs : List ℕ) (hqs : qs ∈ T.filter (fun qs => qs.prod = n)) :\n        qs.Perm ps := by\n      obtain ⟨hqsT, hqsprod⟩ := Finset.mem_filter.mp hqs\n      exact (Nat.primeFactorsList_unique hqsprod (hprime qs hqsT)).trans\n        (Nat.primeFactorsList_unique hpsprod (hprime ps hpsT)).symm\n    calc\n      actualPrimeTupleCoefficient T n ≤ ps.permutations.toFinset.card := by\n        apply Finset.card_le_card\n        intro qs hqs\n        exact List.mem_toFinset.mpr (List.mem_permutations.mpr (hperm qs hqs))\n      _ ≤ ps.permutations.length := List.toFinset_card_le ps.permutations\n      _ = m.factorial := by rw [List.length_permutations, hlen ps hpsT]\n  · simp only [actualPrimeTupleCoefficient,\n      Finset.not_nonempty_iff_eq_empty.mp hne, Finset.card_empty]\n    exact Nat.zero_le _"
+      },
+      {
+        "name": "actualNormalizedPrimeTupleCoefficient_mem_Icc",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 60,
+        "complete_source_header": "theorem actualNormalizedPrimeTupleCoefficient_mem_Icc\n    (T : Finset (List ℕ)) (m n : ℕ)\n    (hlen : ∀ ps ∈ T, ps.length = m)\n    (hprime : ∀ ps ∈ T, ∀ p ∈ ps, Nat.Prime p) :\n    actualNormalizedPrimeTupleCoefficient T m n ∈ Set.Icc (0 : ℝ) 1",
+        "complete_proof_body_after_by": "have hfact : (0 : ℝ) < m.factorial := by exact_mod_cast Nat.factorial_pos m\n  unfold actualNormalizedPrimeTupleCoefficient\n  refine ⟨div_nonneg (Nat.cast_nonneg _) hfact.le, (div_le_one hfact).mpr ?_⟩\n  exact_mod_cast actualPrimeTupleCoefficient_le_factorial T m n hlen hprime"
+      },
+      {
+        "name": "actualNormalizedPrimeTupleCoefficient_abs_le_one",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 70,
+        "complete_source_header": "theorem actualNormalizedPrimeTupleCoefficient_abs_le_one\n    (T : Finset (List ℕ)) (m n : ℕ)\n    (hlen : ∀ ps ∈ T, ps.length = m)\n    (hprime : ∀ ps ∈ T, ∀ p ∈ ps, Nat.Prime p) :\n    |actualNormalizedPrimeTupleCoefficient T m n| ≤ 1",
+        "complete_proof_body_after_by": "have h := actualNormalizedPrimeTupleCoefficient_mem_Icc T m n hlen hprime\n  rw [abs_of_nonneg h.1]\n  exact h.2"
+      },
+      {
+        "name": "factorial_mul_actualNormalizedPrimeTupleCoefficient",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 80,
+        "complete_source_header": "theorem factorial_mul_actualNormalizedPrimeTupleCoefficient\n    (T : Finset (List ℕ)) (m n : ℕ) :\n    (m.factorial : ℝ) * actualNormalizedPrimeTupleCoefficient T m n =\n      (actualPrimeTupleCoefficient T n : ℝ)",
+        "complete_proof_body_after_by": "have hfact : (m.factorial : ℝ) ≠ 0 := by exact_mod_cast Nat.factorial_ne_zero m\n  unfold actualNormalizedPrimeTupleCoefficient\n  calc\n    _ = (actualPrimeTupleCoefficient T n : ℝ) * m.factorial / m.factorial := by ring\n    _ = _ := mul_div_cancel_right₀ _ hfact"
+      },
+      {
+        "name": "actualPrimeTuple_threeGroup_scalar_identity",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 92,
+        "complete_source_header": "theorem actualPrimeTuple_threeGroup_scalar_identity\n    (c : ℝ) (T₁ T₂ T₃ : Finset (List ℕ)) (m₁ m₂ m₃ n₁ n₂ n₃ : ℕ) :\n    c * (actualPrimeTupleCoefficient T₁ n₁ : ℝ) *\n        (actualPrimeTupleCoefficient T₂ n₂ : ℝ) * (actualPrimeTupleCoefficient T₃ n₃ : ℝ) =\n      (c * (m₁.factorial : ℝ) * (m₂.factorial : ℝ) * (m₃.factorial : ℝ)) *\n        actualNormalizedPrimeTupleCoefficient T₁ m₁ n₁ *\n        actualNormalizedPrimeTupleCoefficient T₂ m₂ n₂ *\n        actualNormalizedPrimeTupleCoefficient T₃ m₃ n₃",
+        "complete_proof_body_after_by": "rw [← factorial_mul_actualNormalizedPrimeTupleCoefficient T₁ m₁ n₁,\n    ← factorial_mul_actualNormalizedPrimeTupleCoefficient T₂ m₂ n₂,\n    ← factorial_mul_actualNormalizedPrimeTupleCoefficient T₃ m₃ n₃]\n  ring"
+      }
+    ]
+  },
+  "direct_imports_before_after": [
+    "ImbalancedChen.ActualSelectedPairFactorization"
+  ],
+  "direct_parents_current_binding": [
+    {
+      "module": "ImbalancedChen.ActualSelectedPairFactorization",
+      "path": "ImbalancedChen/ActualSelectedPairFactorization.lean",
+      "current_source_sha256": "7be80dba6eeb2914036052df24512c4d0bd28722f108112eac0a6fcd3811fa69",
+      "old_failed_receipt_direct_source_sha256": "7be80dba6eeb2914036052df24512c4d0bd28722f108112eac0a6fcd3811fa69",
+      "unchanged_parent_source": true
+    }
+  ],
+  "fixed_API_source_evidence": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Finset/Card.lean",
+      "file_sha256": "174ec68882bf10567b17c3f4d278d6647cef92574dadfa8f7f0821b949967c8f",
+      "lines": [
+        184,
+        211
+      ],
+      "role": "List.toFinset_card_le has the explicit section variable (l : List alpha); exact argument is ps.permutations",
+      "literal_fixed_source_excerpt": "\nsection ToMultiset\n\nvariable [DecidableEq α] (m : Multiset α) (l : List α)\n\ntheorem Multiset.card_toFinset : #m.toFinset = Multiset.card m.dedup :=\n  rfl\n\ntheorem Multiset.toFinset_card_le : #m.toFinset ≤ Multiset.card m :=\n  card_le_card <| dedup_le _\n\ntheorem Multiset.toFinset_card_of_nodup {m : Multiset α} (h : m.Nodup) :\n    #m.toFinset = Multiset.card m :=\n  congr_arg card <| Multiset.dedup_eq_self.mpr h\n\ntheorem Multiset.dedup_card_eq_card_iff_nodup {m : Multiset α} :\n    card m.dedup = card m ↔ m.Nodup :=\n  .trans ⟨fun h ↦ eq_of_le_of_card_le (dedup_le m) h.ge, congr_arg _⟩ dedup_eq_self\n\ntheorem Multiset.toFinset_card_eq_card_iff_nodup {m : Multiset α} :\n    #m.toFinset = card m ↔ m.Nodup := dedup_card_eq_card_iff_nodup\n\ntheorem List.card_toFinset : #l.toFinset = l.dedup.length :=\n  rfl\n\ntheorem List.toFinset_card_le : #l.toFinset ≤ l.length :=\n  Multiset.toFinset_card_le ⟦l⟧\n"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/List/Permutation.lean",
+      "file_sha256": "b01b977ee7dc7e23721282e365293f2daa26971fd6c2f717bc410fb9885e04ec",
+      "lines": [
+        284,
+        289
+      ],
+      "role": "List.length_permutations gives factorial of the actual list length, even with repeated values",
+      "literal_fixed_source_excerpt": "    permutations, length, length, IH2, Nat.succ_add, Nat.factorial_succ, Nat.mul_comm (_ + 1),\n    ← Nat.succ_eq_add_one, ← IH1, Nat.add_comm (_ * _), Nat.add_assoc, Nat.mul_succ, Nat.mul_comm]\n\ntheorem length_permutations (l : List α) : length (permutations l) = (length l)! :=\n  length_permutationsAux l []\n"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/List/Permutation.lean",
+      "file_sha256": "b01b977ee7dc7e23721282e365293f2daa26971fd6c2f717bc410fb9885e04ec",
+      "lines": [
+        311,
+        316
+      ],
+      "role": "List.mem_permutations iff List.Perm",
+      "literal_fixed_source_excerpt": "  · exact Or.inr (Or.inl m)\n\n@[simp]\ntheorem mem_permutations {s t : List α} : s ∈ permutations t ↔ s ~ t :=\n  ⟨perm_of_mem_permutations, mem_permutations_of_perm_lemma mem_permutationsAux_of_perm⟩\n"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Nat/Factors.lean",
+      "file_sha256": "3e64e2c8ba907c05209966a7bba8754cf2ab33f328a3010667ffe58c95e0bca3",
+      "lines": [
+        166,
+        181
+      ],
+      "role": "Nat.primeFactorsList_unique handles arbitrary prime lists, retaining multiplicities",
+      "literal_fixed_source_excerpt": "\n/-- **Fundamental theorem of arithmetic** -/\ntheorem primeFactorsList_unique {n : ℕ} {l : List ℕ} (h₁ : prod l = n) (h₂ : ∀ p ∈ l, Prime p) :\n    l ~ primeFactorsList n := by\n  refine perm_of_prod_eq_prod ?_ ?_ ?_\n  · rw [h₁]\n    refine (prod_primeFactorsList ?_).symm\n    rintro rfl\n    rw [prod_eq_zero_iff] at h₁\n    exact Prime.ne_zero (h₂ 0 h₁) rfl\n  · simp_rw [← prime_iff]\n    exact h₂\n  · simp_rw [← prime_iff]\n    exact fun p => prime_of_mem_primeFactorsList\n\ntheorem Prime.primeFactorsList_pow {p : ℕ} (hp : p.Prime) (n : ℕ) :"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/List/Lemmas.lean",
+      "file_sha256": "0724ebc7c72c87ad6d480dba407c43cc60393e7a0facfbaa6670045f66f636ac",
+      "lines": [
+        350,
+        359
+      ],
+      "role": "Pinned List.mem_cons expands all cons cells; not_mem_nil and or_false remove the exact leftover nil membership",
+      "literal_fixed_source_excerpt": "/-! ### mem -/\n\n@[simp, grind ←] theorem not_mem_nil {a : α} : ¬ a ∈ [] := nofun\n\n@[simp, grind =] theorem mem_cons : a ∈ b :: l ↔ a = b ∨ a ∈ l :=\n  ⟨fun h => by cases h <;> simp [Membership.mem, *],\n   fun | Or.inl rfl => by constructor | Or.inr h => by constructor; assumption⟩\n\ntheorem eq_or_mem_of_mem_cons {a b : α} {l : List α} :\n    a ∈ b :: l → a = b ∨ a ∈ l := List.mem_cons.mp"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/List/Perm.lean",
+      "file_sha256": "c778ecb634cad13616e994adb18f7028a0ea3c229e747a0fee02e033108a8d39",
+      "lines": [
+        526,
+        550
+      ],
+      "role": "List.Perm.eq_of_pairwise: canonical order plus same prime multiset gives exact ordered list equality",
+      "literal_fixed_source_excerpt": "/--\nIf two lists are sorted by an antisymmetric relation, and permutations of each other,\nthey must be equal.\n-/\ntheorem Perm.eq_of_pairwise : ∀ {l₁ l₂ : List α}\n    (_ : ∀ a b, a ∈ l₁ → b ∈ l₂ → le a b → le b a → a = b)\n    (_ : l₁.Pairwise le) (_ : l₂.Pairwise le) (_ : l₁ ~ l₂), l₁ = l₂\n  | [], [], _, _, _, _ => rfl\n  | [], b :: l₂, _, _, _, h => by simp_all\n  | a :: l₁, [], _, _, _, h => by simp_all\n  | a :: l₁, b :: l₂, w, h₁, h₂, h => by\n    have am : a ∈ b :: l₂ := h.subset mem_cons_self\n    have bm : b ∈ a :: l₁ := h.symm.subset mem_cons_self\n    have ab : a = b := by\n      simp only [mem_cons] at am\n      rcases am with rfl | am\n      · rfl\n      · simp only [mem_cons] at bm\n        rcases bm with rfl | bm\n        · rfl\n        · exact w _ _ mem_cons_self mem_cons_self\n            (rel_of_pairwise_cons h₁ bm) (rel_of_pairwise_cons h₂ am)\n    subst ab\n    simp only [perm_cons] at h\n    have := Perm.eq_of_pairwise"
+    }
+  ],
+  "mathematical_review": [
+    "The literal coefficient counts product fibres of the actual finite ordered-list carrier T. All lists are assumed to have m slots and prime entries; disjoint prime intervals and squarefree products are not required.",
+    "For a nonempty fibre pick its actual representative ps. Prime factor uniqueness proves every qs in the same fibre is a permutation of that same prime multiset, retaining repetitions. This gives subset of ps.permutations.toFinset. The cardinal is bounded by the actual LIST length, which equals m! even if repeated values cause duplicate permutation lists. Empty fibres cost zero.",
+    "The only API repair applies List.toFinset_card_le to the explicit actual list ps.permutations. The old diagnostic states precisely that this list argument was missing. There is no change to the finite inequality or coefficient domain.",
+    "m! is positive for every natural m, including m=0. Thus the real normalized coefficient is in [0,1] on every n, including repeated-prime products and n outside support; abs<=1 follows from nonnegativity.",
+    "Multiplying once by m! restores the actual coefficient exactly. The three-group scalar identity moves exactly the three group factorials into c, while retaining any repeated-label symmetry factor already in c. It does not assert any original policy assignment is a Cartesian box, nor supply a distribution or arithmetic mean."
+  ],
+  "proper_source_DAG_rebind_boundary": {
+    "imports_identical": true,
+    "relative_local_delta": 0,
+    "relative_foreign_delta": 0,
+    "existing_graph_shape_unchanged": true,
+    "new_foreign_modules": [],
+    "full_foreign_closure_walk_rerun": false,
+    "note": "Exact proof-only changes leave all complete types, definitions, imports, constants and thresholds identical. Parent current hashes also equal the actual failed receipt. Existing proper source graph shape is unchanged; no old object is rebound by this review."
+  },
+  "pins_fresh_and_identical_to_failed_receipt": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "providers_fresh_HEAD_and_tracked_source_clean": [
+    {
+      "name": "goldbach",
+      "actual_head": "09b97db5764ade1246bfb77206baa1b124760958",
+      "manifest_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+      "git_diff_HEAD_tracked_exit_code": 0
+    },
+    {
+      "name": "mathlib",
+      "actual_head": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "manifest_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "git_diff_HEAD_tracked_exit_code": 0
+    }
+  ],
+  "source_forbidden_token_or_option_hits": [],
+  "findings": [],
+  "acceptance_boundary": {
+    "source_only": true,
+    "lean_or_lake_invoked": false,
+    "source_modified_by_reviewer": false,
+    "objects_installed_or_rebound": false,
+    "foreign_bootstrap": false,
+    "pins_limits_linter_changed": false,
+    "new_candidate_strict_pass_claimed": false,
+    "owned_or_cache_acceptance_claimed": false,
+    "transitive_axioms_replayed": false,
+    "note": "Root has authorized only original 6144/j2/6656 fair retries after both author and independent reports. This review supplies exact source rebind evidence, not an elaboration or acceptance result."
+  }
+}

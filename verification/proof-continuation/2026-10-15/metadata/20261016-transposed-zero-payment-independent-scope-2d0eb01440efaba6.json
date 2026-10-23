@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T20:40:20.7641428Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_INDEPENDENT_ACTUAL_ZERO_LOG_PAYMENT_APPROVED_PENDING_RUNTIME",
+  "candidate": {
+    "path": "ImbalancedChen\\Part3TransposedZeroPayment.lean",
+    "sha256": "ef4c73083a24957ded2d095f5e5cbb3092d305701ba840c049fde7be9a5a7bf8",
+    "frozen_hash_matches": true,
+    "declaration_count": 2,
+    "definition_count": 0,
+    "all_complete_headers": [
+      {
+        "name": "ImbalancedChen.Part3.TransposedZeroPayment.actual_log_cost_le_log_pow",
+        "kind": "theorem",
+        "start_line": 32,
+        "signature_last_line": 38,
+        "complete_source_header": "theorem actual_log_cost_le_log_pow (p s : ℕ)\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    (hlog : 1 ≤ Real.log d.scale) :\n    (1 + Real.log (2 * d.V)) ^ p *\n      (1 + Real.log d.physicalFactorCap) ^ s ≤\n        (2 + Real.log 8) ^ (p + s) * Real.log d.scale ^ (p + s)"
+      },
+      {
+        "name": "ImbalancedChen.Part3.TransposedZeroPayment.actual_betaL2_mul_rawZero_log_payment",
+        "kind": "theorem",
+        "start_line": 74,
+        "signature_last_line": 81,
+        "complete_source_header": "theorem actual_betaL2_mul_rawZero_log_payment {ι : Type*} (F : ι → MediumAtom)\n    (B C0 : ℕ) (sigma kappa c0 A : ℝ) (hA : 0 < A) (hsigma : 0 < sigma)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ i, x0 ≤ (F i).scale →\n      (∑ n ∈ (F i).betaCarrier, ‖(F i).beta n‖ ^ 2) *\n        ‖(F i).transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain (F i)‖ ≤\n          (F i).scale ^ 2 / Real.log (F i).scale ^ A"
+      }
+    ],
+    "complete_source_proof_bodies_reviewed": "import ImbalancedChen.Part3TransposedZeroCovariance\nimport ImbalancedChen.Part3TransposedPrimitiveUPayment\n\n/-!\n# Actual logarithmic payment of the transposed zero covariance\n\nThe owned covariance theorem permits every positive SW exponent. Both\nactual fixed logarithm costs are bounded by a fixed constant times a power\nof log X. Choosing the SW exponent before the family member absorbs those\ncosts, and two further logarithms absorb the fixed coefficient and the\nabsolute value of the local Fourier-zero mass.\n\nThere is no power saving available in the raw zero estimate before SW is\nused. This proof therefore spends additional SW logarithms, rather than an\nunavailable spare power of X. All constants and thresholds precede every\nfamily member; the original B, C0, alpha, beta, gamma labels and scales are\nretained. No remaining error budget or mass normalization is assumed.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Filter Topology\nopen scoped BigOperators\nopen TransposedZeroCovariance TransposedPrimitiveUPayment\n\nnamespace TransposedZeroPayment\n\n/-- Fixed logarithm costs on the actual original lengths and physical cap.\nThe logarithmic lower gate is supplied by the final uniform threshold. -/\ntheorem actual_log_cost_le_log_pow (p s : ℕ)\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    (hlog : 1 ≤ Real.log d.scale) :\n    (1 + Real.log (2 * d.V)) ^ p *\n      (1 + Real.log d.physicalFactorCap) ^ s ≤\n        (2 + Real.log 8) ^ (p + s) * Real.log d.scale ^ (p + s) := by\n  let D : ℝ := 2 + Real.log 8\n  have hD : 0 < D := by\n    dsimp [D]\n    linarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\n  have hx0 : 0 < d.scale := zero_lt_one.trans_le (one_le_scale hd)\n  have hbase (y : ℝ) (hy : 0 < y) (hyX : y ≤ 8 * d.scale) :\n      1 + Real.log y ≤ D * Real.log d.scale := by\n    have hh := Real.log_le_log hy hyX\n    rw [Real.log_mul (by norm_num : (8 : ℝ) ≠ 0) hx0.ne'] at hh\n    have hprod : 0 ≤ (1 + Real.log 8) * (Real.log d.scale - 1) :=\n      mul_nonneg\n        (by linarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)])\n        (sub_nonneg.mpr hlog)\n    dsimp [D]\n    nlinarith\n  have hlogV : 1 + Real.log (2 * d.V) ≤ D * Real.log d.scale := by\n    apply hbase _ (by linarith [hd.2.1])\n    calc\n      2 * d.V ≤ 2 * d.scale := mul_le_mul_of_nonneg_left (V_le_scale hd) (by norm_num)\n      _ ≤ _ := by nlinarith [hx0]\n  have hlogCap : 1 + Real.log d.physicalFactorCap ≤ D * Real.log d.scale :=\n    hbase _ (zero_lt_one.trans_le (d.one_le_physicalFactorCap hd))\n      (physicalFactorCap_le_eight_scale hsigma hd)\n  have hV0 : 0 ≤ 1 + Real.log (2 * d.V) := by\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])]\n  have hcap0 : 0 ≤ 1 + Real.log d.physicalFactorCap := by\n    linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]\n  calc\n    _ ≤ (D * Real.log d.scale) ^ p * (D * Real.log d.scale) ^ s :=\n      mul_le_mul (pow_le_pow_left₀ hV0 hlogV p) (pow_le_pow_left₀ hcap0 hlogCap s)\n        (pow_nonneg hcap0 s) (by positivity)\n    _ = _ := by rw [← pow_add, mul_pow]; rfl\n\n/-- The actual beta moment times the complete raw-zero discrepancy is paid\nat every requested logarithmic order, uniformly before the family member. -/\ntheorem actual_betaL2_mul_rawZero_log_payment {ι : Type*} (F : ι → MediumAtom)\n    (B C0 : ℕ) (sigma kappa c0 A : ℝ) (hA : 0 < A) (hsigma : 0 < sigma)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ i, x0 ≤ (F i).scale →\n      (∑ n ∈ (F i).betaCarrier, ‖(F i).beta n‖ ^ 2) *\n        ‖(F i).transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain (F i)‖ ≤\n          (F i).scale ^ 2 / Real.log (F i).scale ^ A := by\n  let p : ℕ := (2 ^ B) ^ 2 - 1\n  let s : ℕ := 2 * (3 * (2 ^ C0 + 1)) ^ 2 + 1\n  let n : ℕ := p + s\n  let R : ℝ := A + (n : ℝ) + 2\n  have hR : 0 < R := by dsimp [R]; positivity\n  obtain ⟨C, hC, xSW, hxSW, hbound⟩ :=\n    actual_betaL2_mul_rawZero_SW_bound F B C0 sigma kappa c0 R hR hadmissible hSW\n  let D : ℝ := 2 + Real.log 8\n  have hD : 0 < D := by\n    dsimp [D]\n    linarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\n  let K : ℝ := C * |CommonSmoothCutoff.cutoffMass| * D ^ n\n  have hK0 : 0 ≤ K := by dsimp [K]; positivity\n  obtain ⟨xLog, hxLog⟩ := eventually_atTop.mp\n    (Real.tendsto_log_atTop.eventually_ge_atTop (max 1 K))\n  refine ⟨max xSW xLog, lt_of_lt_of_le hxSW (le_max_left _ _), fun i hx ↦ ?_⟩\n  let x : ℝ := (F i).scale\n  let L : ℝ := Real.log x\n  have hL : max 1 K ≤ L := hxLog ((le_max_right _ _).trans hx)\n  have hL1 : 1 ≤ L := (le_max_left _ _).trans hL\n  have hLpos : 0 < L := zero_lt_one.trans_le hL1\n  have hKsq : K ≤ L ^ 2 := by\n    have hKL : K ≤ L := (le_max_right _ _).trans hL\n    have hLsq : L ≤ L ^ 2 := by nlinarith\n    exact hKL.trans hLsq\n  have hcost :\n      (1 + Real.log (2 * (F i).V)) ^ p *\n        (1 + Real.log (F i).physicalFactorCap) ^ s ≤ D ^ n * L ^ n := by\n    exact actual_log_cost_le_log_pow p s hsigma (hadmissible i) hL1\n  have hpay :\n      C * |CommonSmoothCutoff.cutoffMass| * x ^ 2 *\n          (1 + Real.log (2 * (F i).V)) ^ p *\n            (1 + Real.log (F i).physicalFactorCap) ^ s / L ^ R ≤ x ^ 2 / L ^ A := by\n    apply (div_le_div_iff₀ (Real.rpow_pos_of_pos hLpos R)\n      (Real.rpow_pos_of_pos hLpos A)).mpr\n    calc\n      _ = C * |CommonSmoothCutoff.cutoffMass| * x ^ 2 *\n          ((1 + Real.log (2 * (F i).V)) ^ p *\n            (1 + Real.log (F i).physicalFactorCap) ^ s) * L ^ A := by ring\n      _ ≤ C * |CommonSmoothCutoff.cutoffMass| * x ^ 2 * (D ^ n * L ^ n) * L ^ A :=\n        mul_le_mul_of_nonneg_right\n          (mul_le_mul_of_nonneg_left hcost (by positivity))\n          (Real.rpow_nonneg hLpos.le A)\n      _ = K * x ^ 2 * (L ^ n * L ^ A) := by dsimp [K]; ring\n      _ ≤ L ^ 2 * x ^ 2 * (L ^ n * L ^ A) :=\n        mul_le_mul_of_nonneg_right\n          (mul_le_mul_of_nonneg_right hKsq (sq_nonneg x)) (by positivity)\n      _ = x ^ 2 * L ^ R := by\n        dsimp [R]\n        simp only [Real.rpow_add hLpos, Real.rpow_natCast]\n        ring\n  exact (hbound i ((le_max_left _ _).trans hx)).trans hpay\n\nend TransposedZeroPayment\n\nend\n\nend ImbalancedChen.Part3\n"
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedZeroCovariance",
+    "ImbalancedChen.Part3TransposedPrimitiveUPayment"
+  ],
+  "direct_dependency_snapshots": [
+    {
+      "module": "ImbalancedChen.Part3TransposedZeroCovariance",
+      "sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2",
+      "expected": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "sha256": "9ecef420fe8a489d392a46561840d03117f2b218b53d70d81bd28f3ed0b86d7d",
+      "expected": "9ecef420fe8a489d392a46561840d03117f2b218b53d70d81bd28f3ed0b86d7d"
+    }
+  ],
+  "sourceDAG_delta": {
+    "basis": "Relative to parent union containing exact owned ZeroCovariance2c96 and staged UPayment9ece. Both current direct dependency hashes freshly match; no new direct foreign import.",
+    "added_local_modules": [
+      "ImbalancedChen.Part3TransposedZeroPayment"
+    ],
+    "local_module_delta": 1,
+    "added_foreign_modules": [],
+    "foreign_module_delta": 0,
+    "full_tree_rescanned": false
+  },
+  "fixed_log_cost_review": [
+    "The logarithm comparison uses only the actual original V<=X and cap<=8X. The latter is a proved consequence of the original medium geometry and sigma>0, through the existing UPayment public helper.",
+    "For every positive y<=8X and logX>=1, log monotonicity gives logy<=log8+logX. The source explicitly proves (1+log8)*(logX-1)>=0 before nlinarith, obtaining 1+logy<=(2+log8)*logX.",
+    "Both bases 1+log(2V) and 1+log(cap) are nonnegative by the original V>=1 and cap>=1 gates. Natural-power monotonicity, multiplication, pow_add and mul_pow give the exact cost D^(p+s)*(logX)^(p+s), with no hidden growing constant.",
+    "The helper exposes logX>=1 as a temporary analytic gate; the final family theorem supplies it from one uniform threshold. It is not a new caller restriction on the final domain."
+  ],
+  "actual_SW_and_constant_payment_review": [
+    "The source fixes p=(2^B)^2-1, s=2*(3*(2^C0+1))^2+1 and n=p+s before all family members. It chooses the positive real SW exponent R=A+(n:Real)+2. The endpoint already assumes A>0, which makes R>0 without any max-A construction or extra gate.",
+    "The actual owned beta-L2 times rawZero-minus-primitiveZeroMain SW theorem is invoked at this R, on the same arbitrary original family F, fixed B/C0, original alpha/beta/gamma data and original UniformAuxiliarySW F C0. Its C and xSW are obtained before i.",
+    "K=C*abs(local cutoffMass)*D^n is a fixed real constant. Real.tendsto_log_atTop chooses one xLog such that logX>=max(1,K). Thus K<=logX<=(logX)^2; no division by K, C or cutoffMass occurs, so zero cutoffMass is harmless.",
+    "The final hpay proof cross-multiplies two strictly positive real-rpow denominators. It inserts the proved actual logarithm cost, uses K<=(logX)^2, and then expands R=A+n+2 with Real.rpow_add and Real.rpow_natCast. The resulting product is exactly X^2*(logX)^R.",
+    "No spare positive power of X is assumed or spent. Every fixed logarithm loss and the constant are paid by the stronger SW logarithm exponent actually supplied by UniformAuxiliarySW."
+  ],
+  "complete_type_and_family_quantifier_audit": {
+    "all_2_complete_headers_captured": true,
+    "definitions": 0,
+    "family": "Arbitrary original F : iota -> MediumAtom; same fixed B and C0.",
+    "target_exponent": "Every real A>0.",
+    "additional_payment_gate": "Only sigma>0, already explicit in RestrictedMediumObligation.",
+    "constant_scope": "R, then C/xSW, then K/xLog are fixed before every i.",
+    "final_threshold": "x0=max(xSW,xLog)>1, before every family index i and every moving signed residue.",
+    "no_error_or_mass_normalization_budget_premise": true,
+    "no_U_or_V_equals_P0_premise": true,
+    "no_domain_or_carrier_shrink": true,
+    "no_cleaned_or_surrogate_family": true,
+    "no_c0_positive_strengthening": true,
+    "no_small_sigma_strengthening": true,
+    "actual_endpoint": "Original beta L2 * norm(actual transposed rawZero - actual primitiveZeroMain) <= X^2/(logX)^A.",
+    "remaining_nonzero_frequencies_unestimated": true
+  },
+  "source_API_review": {
+    "source_headers_read": [
+      "actual_betaL2_mul_rawZero_SW_bound in ZeroCovariance2c96: arbitrary positive real SW exponent and original family constants before i",
+      "UPayment.V_le_scale",
+      "UPayment.physicalFactorCap_le_eight_scale",
+      "Real.rpow_add: positive base required",
+      "Real.rpow_natCast: converts natural and real exponents",
+      "Real.rpow_pos_of_pos: positive denominator for every real exponent",
+      "Real.tendsto_log_atTop.eventually_ge_atTop",
+      "div_le_div_iff₀: positive-denominator cross multiplication"
+    ],
+    "fixed_mathlib_source": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+    "no_new_foreign_API_provider": true
+  },
+  "source_checks": {
+    "two_theorems_zero_definitions": true,
+    "direct_dependency_hashes_match": true,
+    "no_sorry_admit_axiom_opaque_native_decide": true,
+    "issues_identified": []
+  },
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "bootstrap_invoked": false,
+    "build_invoked": false,
+    "kernel_replay_performed": false,
+    "axiom_audit_performed": false,
+    "runtime_elaboration_result": "NOT_EXECUTED_BY_REVIEWER",
+    "source_modified": false,
+    "dependencies_modified": false,
+    "pins_modified": false,
+    "full_tree_rescanned": false,
+    "written_artifacts_only": [
+      ".lake/proof-continuation/source-reviews/20261016-transposed-zero-payment-independent-scope.json"
+    ]
+  },
+  "remaining_gates": [
+    "Owner-controlled elaboration of the exact frozen ZeroPayment candidate and exact dependency acceptance.",
+    "Any separately required kernel replay, axiom audit and source/import acceptance.",
+    "No nonzero W frequency estimate or final RestrictedMediumTarget is claimed by this source-only payment audit."
+  ]
+}

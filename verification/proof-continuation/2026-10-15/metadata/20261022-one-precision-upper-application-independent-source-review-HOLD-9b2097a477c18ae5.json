@@ -1,0 +1,558 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-one-precision-upper-application-independent-source-review-HOLD",
+  "created_utc": "2026-10-21T21:14:18.8443753Z",
+  "reviewer": "/root/e1_interval_review_sol_high_oct22",
+  "author": "/root/elementary_tau_truncation_sol_xhigh_oct22",
+  "status": "INDEPENDENT_COMPLETE_TWO_PROOF_ONE_PRECISION_CONDITIONAL_UPPER_ASSEMBLY_SOURCE_REVIEW_NO_STATIC_BLOCKER_UNCOMPILED_HOLD",
+  "verdict": "no_static_blocker",
+  "HOLD": true,
+  "scope": "Independent static review of both complete new type/body proofs in the frozen165LF proposal, its complete author and interface-audit package, actual full149LF assembly and145LF actual upper-input context, and precise actual APIs. Only a new review checkpoint is written. No supplier, signed outer extension, analytic or kernel completion is inferred.",
+  "source": {
+    "path": ".lake/proof-continuation/source-reviews/drafts/20261022-RealUpperCountingOnePrecision-module-source.txt",
+    "sha256": "e143f611cbd3a3faa9dd6e6d25c460602285eca5eb7de2860a25dca4f36d5fc0",
+    "bytes": 8123,
+    "lf_lines": 165
+  },
+  "author_checkpoint": {
+    "path": ".lake/proof-continuation/source-reviews/20261022-one-precision-upper-application-source-proposal-author-HOLD.json",
+    "sha256": "c0968c4858866338b8e7ceba462c8b4aad7b1b9b9a373c05655c2b0e640ad9fe",
+    "bytes": 50357,
+    "lf_lines": 385
+  },
+  "interface_audit_checkpoint": {
+    "path": ".lake/proof-continuation/source-reviews/20261022-one-precision-upper-application-interface-audit-HOLD.json",
+    "sha256": "718f494b9fcf9d3064b2f6ce08d105b4b51e4f4ffccce3812ef3094e5c78c537",
+    "bytes": 90504,
+    "lf_lines": 660
+  },
+  "complete_new_proof_reviews": [
+    {
+      "name": "finiteSourceMass_nonneg_of_indicator_outer",
+      "fully_qualified_name": "ImbalancedChen.finiteSourceMass_nonneg_of_indicator_outer",
+      "first": 25,
+      "type_last": 28,
+      "last": 35,
+      "complete_written_type": "theorem finiteSourceMass_nonneg_of_indicator_outer\n    (A S : Finset ℕ) (weight : ℕ → ℝ)\n    (houter : ∀ m ∈ S, (if m ∈ A then (1 : ℝ) else 0) ≤ weight m) :\n    0 ≤ finiteSourceMass S weight := by\n",
+      "complete_declaration_source": "theorem finiteSourceMass_nonneg_of_indicator_outer\n    (A S : Finset ℕ) (weight : ℕ → ℝ)\n    (houter : ∀ m ∈ S, (if m ∈ A then (1 : ℝ) else 0) ≤ weight m) :\n    0 ≤ finiteSourceMass S weight := by\n  classical\n  unfold finiteSourceMass\n  apply Finset.sum_nonneg\n  intro m hm\n  have hindicator : (0 : ℝ) ≤ (if m ∈ A then (1 : ℝ) else 0) := by\n    split_ifs <;> norm_num\n  exact hindicator.trans (houter m hm)\n",
+      "type_sha256": "d311ce40efb0ec1e4729d2d067eb8171816a1b60a08eefa43fa832961aa6dc6e",
+      "full_declaration_sha256": "e05086e202f878f6698c733481680b2e63d549eff0126d13054c02cd8bc2f470",
+      "complete_type_and_body_read": true,
+      "verdict": "no_static_blocker",
+      "review": "Actual finiteSourceMass is the sum of weight over S. For each support point, its source indicator is0or1 and nonnegative. Transitivity with houter proves weight>=0 on S and actual Finset.sum_nonneg gives mass>=0. No source coverage, nonempty S, global weight positivity or rho sign is assumed."
+    },
+    {
+      "name": "eventually_RealB_le_currentK_log_of_one_precision_outer_inputs",
+      "fully_qualified_name": "ImbalancedChen.eventually_RealB_le_currentK_log_of_one_precision_outer_inputs",
+      "first": 39,
+      "type_last": 76,
+      "last": 162,
+      "complete_written_type": "theorem eventually_RealB_le_currentK_log_of_one_precision_outer_inputs\n    {b sieveExponent : ℝ}\n    (hb : 0 < b) (hb1 : b < 1) (hsieve : sieveExponent < 1)\n    (kappaMax : ℝ → ℝ)\n    (hAtPrecision : ∀ delta : ℝ, 0 < delta → delta ≤ 1 →\n      ∃ (Q : ℕ → Finset ℕ) (rho : ℕ → ℕ → ℝ),\n        ∃ kappa : ℝ, 0 < kappa ∧\n          kappa ≤ min (kappaMax delta) (1 / (2 : ℝ) ^ (19 : ℕ)) ∧\n        ∃ kappaTrim : ℝ, 0 < kappaTrim ∧\n          kappaTrim < kappa / (4 * (1 + kappa)) ∧\n        ∃ (S : ℕ → Finset ℕ) (weight : ℕ → ℕ → ℝ),\n          ∀ᶠ N : ℕ in atTop, Even N →\n            let T := manuscriptHalfProductCutoff kappaTrim N;\n            (∀ m ∈ S N, m ≤ N) ∧\n            realHalfProductSource b N T ⊆ S N ∧\n            (∀ m ∈ S N,\n              (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) ≤\n                weight N m) ∧\n            (∀ n : ℕ,\n              (if Nat.Coprime n\n                  (sieveProduct N (Nat.ceil ((N : ℝ) ^ sieveExponent)))\n                then (1 : ℝ) else 0) ≤\n                physicalDivisorSum (Q N) (rho N) n) ∧\n            finiteSourceMass (S N) (weight N) ≤\n              (Real.log (1 / b) + delta) * ((N : ℝ) / Real.log (N : ℝ)) ∧\n            physicalDensitySum (Q N) (rho N) ≤\n              (currentK + delta) * (singularSeries N / Real.log (N : ℝ)) ∧\n            |∑ d ∈ Q N, rho N d *\n                ((finiteCoprimeMass (S N) (weight N) d -\n                    finiteSourceMass (S N) (weight N)) / (Nat.totient d : ℝ))| ≤\n              delta * singularNormalization N ∧\n            |∑ d ∈ Q N, rho N d *\n                finitePrimitiveDiscrepancy (S N) (weight N) N d| ≤\n              delta * singularNormalization N) :\n    ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N : ℕ in atTop, Even N →\n        (RealB b N : ℝ) ≤\n          (currentK * Real.log (1 / b) + epsilon) * singularNormalization N := by\n",
+      "complete_declaration_source": "theorem eventually_RealB_le_currentK_log_of_one_precision_outer_inputs\n    {b sieveExponent : ℝ}\n    (hb : 0 < b) (hb1 : b < 1) (hsieve : sieveExponent < 1)\n    (kappaMax : ℝ → ℝ)\n    (hAtPrecision : ∀ delta : ℝ, 0 < delta → delta ≤ 1 →\n      ∃ (Q : ℕ → Finset ℕ) (rho : ℕ → ℕ → ℝ),\n        ∃ kappa : ℝ, 0 < kappa ∧\n          kappa ≤ min (kappaMax delta) (1 / (2 : ℝ) ^ (19 : ℕ)) ∧\n        ∃ kappaTrim : ℝ, 0 < kappaTrim ∧\n          kappaTrim < kappa / (4 * (1 + kappa)) ∧\n        ∃ (S : ℕ → Finset ℕ) (weight : ℕ → ℕ → ℝ),\n          ∀ᶠ N : ℕ in atTop, Even N →\n            let T := manuscriptHalfProductCutoff kappaTrim N;\n            (∀ m ∈ S N, m ≤ N) ∧\n            realHalfProductSource b N T ⊆ S N ∧\n            (∀ m ∈ S N,\n              (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) ≤\n                weight N m) ∧\n            (∀ n : ℕ,\n              (if Nat.Coprime n\n                  (sieveProduct N (Nat.ceil ((N : ℝ) ^ sieveExponent)))\n                then (1 : ℝ) else 0) ≤\n                physicalDivisorSum (Q N) (rho N) n) ∧\n            finiteSourceMass (S N) (weight N) ≤\n              (Real.log (1 / b) + delta) * ((N : ℝ) / Real.log (N : ℝ)) ∧\n            physicalDensitySum (Q N) (rho N) ≤\n              (currentK + delta) * (singularSeries N / Real.log (N : ℝ)) ∧\n            |∑ d ∈ Q N, rho N d *\n                ((finiteCoprimeMass (S N) (weight N) d -\n                    finiteSourceMass (S N) (weight N)) / (Nat.totient d : ℝ))| ≤\n              delta * singularNormalization N ∧\n            |∑ d ∈ Q N, rho N d *\n                finitePrimitiveDiscrepancy (S N) (weight N) N d| ≤\n              delta * singularNormalization N) :\n    ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N : ℕ in atTop, Even N →\n        (RealB b N : ℝ) ≤\n          (currentK * Real.log (1 / b) + epsilon) * singularNormalization N := by\n  intro epsilon hepsilon\n  let J : ℝ := Real.log (1 / b)\n  have hJ : 0 < J := by\n    apply Real.log_pos\n    exact (one_lt_div hb).mpr hb1\n  have hK : 0 < currentK := by norm_num [currentK]\n  let budgetDenominator : ℝ := currentK + J + 5\n  have hdenominator : 0 < budgetDenominator := by\n    dsimp [budgetDenominator]\n    linarith\n  let delta : ℝ := min 1 (epsilon / budgetDenominator)\n  have hdelta : 0 < delta := lt_min zero_lt_one (div_pos hepsilon hdenominator)\n  have hdeltaOne : delta ≤ 1 := min_le_left _ _\n  have hdeltaBudget : delta * budgetDenominator ≤ epsilon :=\n    (le_div_iff₀ hdenominator).mp (min_le_right _ _)\n  have hcoefficient : (J + delta) * (currentK + delta) + 4 * delta ≤\n      currentK * J + epsilon := by\n    have hsquare : delta * delta ≤ delta := by\n      simpa only [mul_one] using mul_le_mul_of_nonneg_left hdeltaOne hdelta.le\n    dsimp only [budgetDenominator] at hdeltaBudget\n    nlinarith only [hsquare, hdeltaBudget]\n  obtain ⟨Q, rho, _kappa, _hkappa, _hmediumCap,\n    kappaTrim, hkappaTrim, _htrimGap, S, weight, hprecision⟩ :=\n    hAtPrecision delta hdelta hdeltaOne\n  have hcap : ∀ᶠ N : ℕ in atTop,\n      (Nat.ceil ((N : ℝ) ^ sieveExponent) : ℝ) ≤ delta * singularNormalization N := by\n    simpa only [one_mul, pow_zero, mul_one] using\n      eventually_ceil_powerLog_le_singularNormalization 1 sieveExponent 0\n        (by norm_num) hsieve delta hdelta\n  have hcutoff : ∀ᶠ N : ℕ in atTop,\n      manuscriptHalfProductCutoff kappaTrim N + 1 ≤ delta * singularNormalization N := by\n    simpa only [manuscriptHalfProductCutoff, pow_zero, mul_one] using\n      eventually_powerLog_add_one_le_singularNormalization 2 (1 - kappaTrim) 0\n        (by linarith) delta hdelta\n  filter_upwards [hprecision, hcap, hcutoff, eventually_ge_atTop (2 : ℕ)]\n    with N hprecisionN hcapN hcutoffN hN\n  intro hEven\n  rcases hprecisionN hEven with\n    ⟨hSN, hsourceN, houterN, hmajorN, hmassN, hdensityN, hcoprimeN, hdistributionN⟩\n  have hN1 : (1 : ℝ) < (N : ℝ) := by exact_mod_cast (show 1 < N by omega)\n  have hmassScale : 0 < (N : ℝ) / Real.log (N : ℝ) :=\n    div_pos (lt_trans zero_lt_one hN1) (Real.log_pos hN1)\n  have hdensityScale := densityScale_pos hN\n  have hnormalization : 0 ≤ singularNormalization N := by\n    rw [← sourceMassScale_mul_densityScale N]\n    exact (mul_pos hmassScale hdensityScale).le\n  have hmassNonneg : 0 ≤ finiteSourceMass (S N) (weight N) :=\n    finiteSourceMass_nonneg_of_indicator_outer\n      (realHalfProductSource b N (manuscriptHalfProductCutoff kappaTrim N))\n      (S N) (weight N) houterN\n  have hmain :\n      finiteSourceMass (S N) (weight N) * physicalDensitySum (Q N) (rho N) ≤\n        ((J + delta) * (currentK + delta)) * singularNormalization N := by\n    calc\n      finiteSourceMass (S N) (weight N) * physicalDensitySum (Q N) (rho N) ≤\n          finiteSourceMass (S N) (weight N) *\n            ((currentK + delta) * (singularSeries N / Real.log (N : ℝ))) :=\n        mul_le_mul_of_nonneg_left hdensityN hmassNonneg\n      _ ≤ ((J + delta) * ((N : ℝ) / Real.log (N : ℝ))) *\n          ((currentK + delta) * (singularSeries N / Real.log (N : ℝ))) :=\n        mul_le_mul_of_nonneg_right hmassN\n          (mul_nonneg (add_nonneg hK.le hdelta.le) hdensityScale.le)\n      _ = ((J + delta) * (currentK + delta)) * singularNormalization N := by\n        rw [← sourceMassScale_mul_densityScale N]\n        ring\n  have hcoprimeUpper := (le_abs_self\n    (∑ d ∈ Q N, rho N d *\n      ((finiteCoprimeMass (S N) (weight N) d - finiteSourceMass (S N) (weight N)) /\n        (Nat.totient d : ℝ)))).trans hcoprimeN\n  have hdistributionUpper := (le_abs_self\n    (∑ d ∈ Q N, rho N d *\n      finitePrimitiveDiscrepancy (S N) (weight N) N d)).trans hdistributionN\n  have hfinite := RealB_cast_le_same_rho_outer_main_add_errors N\n    (Nat.ceil ((N : ℝ) ^ sieveExponent)) (S N) (Q N) (weight N) (rho N) hb1\n    (manuscriptHalfProductCutoff_nonneg kappaTrim N)\n    hSN hsourceN houterN hmajorN\n  calc\n    (RealB b N : ℝ) ≤\n        ((J + delta) * (currentK + delta)) * singularNormalization N +\n          delta * singularNormalization N + delta * singularNormalization N +\n          delta * singularNormalization N + delta * singularNormalization N :=\n      hfinite.trans (add_le_add (add_le_add (add_le_add (add_le_add hmain\n        hcoprimeUpper) hdistributionUpper) hcapN) hcutoffN)\n    _ = ((J + delta) * (currentK + delta) + 4 * delta) * singularNormalization N := by ring\n    _ ≤ (currentK * J + epsilon) * singularNormalization N :=\n      mul_le_mul_of_nonneg_right hcoefficient hnormalization\n",
+      "type_sha256": "70720f48a6a6d4bb574790c69d176749899d54df329650ab79f4f8afafc168cd",
+      "full_declaration_sha256": "c89fb49ee1b8b81fbaae603814d08fe24a0b522939fb08fb0fcd2c283badb20c",
+      "complete_type_and_body_read": true,
+      "verdict": "no_static_blocker",
+      "review": "After epsilon>0 choose delta=min(1,epsilon/(currentK+J+5)), J=log(1/b)>0 and currentK>0. This gives delta>0,delta<=1,delta*(K+J+5)<=epsilon and delta^2<=delta, so the exact main coefficient plus four delta costs fits K*J+epsilon. Obtain one Q/rho/medium-kappa/trim/S/weight tuple only at this precision; intersect its one eventual event with both endpoint budgets and N>=2. LetT reduces to the exact selected cutoff. Derive mass>=0 with the helper. Bound mass*density by first using nonnegative mass and then nonnegative density upper scale. Replace the two literal signed whole-modulus sums by their absolute bounds. Apply the actual finite outer bridge with original hSN, exact T,z and same Q/rho/S/weight. Add the two error and two endpoint costs; multiply the coefficient budget by the proved nonnegative unchanged singularNormalization. The final target is the actual hUpper formula, but all hAtPrecision suppliers remain hypotheses."
+    }
+  ],
+  "original_header_binding": {
+    "first": 39,
+    "last": 76,
+    "canonical_original38LF_header": "theorem eventually_RealB_le_currentK_log_of_one_precision_outer_inputs\n    {b sieveExponent : ℝ}\n    (hb : 0 < b) (hb1 : b < 1) (hsieve : sieveExponent < 1)\n    (kappaMax : ℝ → ℝ)\n    (hAtPrecision : ∀ delta : ℝ, 0 < delta → delta ≤ 1 →\n      ∃ (Q : ℕ → Finset ℕ) (rho : ℕ → ℕ → ℝ),\n        ∃ kappa : ℝ, 0 < kappa ∧\n          kappa ≤ min (kappaMax delta) (1 / (2 : ℝ) ^ (19 : ℕ)) ∧\n        ∃ kappaTrim : ℝ, 0 < kappaTrim ∧\n          kappaTrim < kappa / (4 * (1 + kappa)) ∧\n        ∃ (S : ℕ → Finset ℕ) (weight : ℕ → ℕ → ℝ),\n          ∀ᶠ N : ℕ in atTop, Even N →\n            let T := manuscriptHalfProductCutoff kappaTrim N;\n            (∀ m ∈ S N, m ≤ N) ∧\n            realHalfProductSource b N T ⊆ S N ∧\n            (∀ m ∈ S N,\n              (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) ≤\n                weight N m) ∧\n            (∀ n : ℕ,\n              (if Nat.Coprime n\n                  (sieveProduct N (Nat.ceil ((N : ℝ) ^ sieveExponent)))\n                then (1 : ℝ) else 0) ≤\n                physicalDivisorSum (Q N) (rho N) n) ∧\n            finiteSourceMass (S N) (weight N) ≤\n              (Real.log (1 / b) + delta) * ((N : ℝ) / Real.log (N : ℝ)) ∧\n            physicalDensitySum (Q N) (rho N) ≤\n              (currentK + delta) * (singularSeries N / Real.log (N : ℝ)) ∧\n            |∑ d ∈ Q N, rho N d *\n                ((finiteCoprimeMass (S N) (weight N) d -\n                    finiteSourceMass (S N) (weight N)) / (Nat.totient d : ℝ))| ≤\n              delta * singularNormalization N ∧\n            |∑ d ∈ Q N, rho N d *\n                finitePrimitiveDiscrepancy (S N) (weight N) N d| ≤\n              delta * singularNormalization N) :\n    ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N : ℕ in atTop, Even N →\n        (RealB b N : ℝ) ≤\n          (currentK * Real.log (1 / b) + epsilon) * singularNormalization N\n",
+    "canonical_header_sha256": "9d5fb2bb8fc4c903bc6125a108ab8e66a65f7405ecd3cb178227ef5e4eacca7e",
+    "matches_interface_audit_header_byte_exact": true,
+    "only_proof_delimiter_removed_for_comparison": true,
+    "original_all_suppliers_retained": true
+  },
+  "actual_API_hash_span_evidence": [
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RealUpperCountingAssembly.lean",
+        "sha256": "56bab762d3f765f5080a441910a8696e297bcd72801e13f4338b0ed7142a9a96",
+        "bytes": 8031,
+        "lf_lines": 149
+      },
+      "role": "Exact actual original proof template and same epsilon/currentK target",
+      "all_expected_hash_spans_match": true,
+      "spans": [
+        {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RealUpperCountingAssembly.lean",
+          "raw_file_sha256": "56bab762d3f765f5080a441910a8696e297bcd72801e13f4338b0ed7142a9a96",
+          "first": 39,
+          "last": 79,
+          "role": "Exact actual original proof template and same epsilon/currentK target",
+          "literal_source": "theorem eventually_RealB_le_currentK_log_of_same_rho_inputs\n    {b kappa sieveExponent : ℝ}\n    (hb : 0 < b) (hb1 : b < 1) (hkappa : 0 < kappa)\n    (hsieve : sieveExponent < 1)\n    (Q : ℝ → ℕ → Finset ℕ) (rho : ℝ → ℕ → ℕ → ℝ)\n    (hmajor : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N → ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N (Nat.ceil ((N : ℝ) ^ sieveExponent)))\n        then (1 : ℝ) else 0) ≤ physicalDivisorSum (Q delta N) (rho delta N) n)\n    (hdensity : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →\n      physicalDensitySum (Q delta N) (rho delta N) ≤\n        (currentK + delta) * (singularSeries N / Real.log (N : ℝ)))\n    (hcoprime : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →\n      |realPhysicalCoprimeCorrection b N (manuscriptHalfProductCutoff kappa N)\n        (Q delta N) (rho delta N)| ≤ delta * singularNormalization N)\n    (hdistribution : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →\n      |realPhysicalDistributionError b N (manuscriptHalfProductCutoff kappa N)\n        (Q delta N) (rho delta N)| ≤ delta * singularNormalization N) :\n    ∀ epsilon : ℝ, 0 < epsilon → ∀ᶠ N : ℕ in atTop, Even N →\n      (RealB b N : ℝ) ≤\n        (currentK * Real.log (1 / b) + epsilon) * singularNormalization N := by\n  intro epsilon hepsilon\n  let J : ℝ := Real.log (1 / b)\n  have hJ : 0 < J := by\n    apply Real.log_pos\n    exact (one_lt_div hb).mpr hb1\n  have hK : 0 < currentK := by norm_num [currentK]\n  let budgetDenominator : ℝ := currentK + J + 5\n  have hdenominator : 0 < budgetDenominator := by\n    dsimp [budgetDenominator]\n    linarith\n  let delta : ℝ := min 1 (epsilon / budgetDenominator)\n  have hdelta : 0 < delta := lt_min zero_lt_one (div_pos hepsilon hdenominator)\n  have hdeltaOne : delta ≤ 1 := min_le_left _ _\n  have hdeltaBudget : delta * budgetDenominator ≤ epsilon :=\n    (le_div_iff₀ hdenominator).mp (min_le_right _ _)\n  have hcoefficient : (J + delta) * (currentK + delta) + 4 * delta ≤\n      currentK * J + epsilon := by\n    have hsquare : delta * delta ≤ delta := by\n      simpa only [mul_one] using mul_le_mul_of_nonneg_left hdeltaOne hdelta.le\n    dsimp only [budgetDenominator] at hdeltaBudget\n    nlinarith only [hsquare, hdeltaBudget]\n",
+          "span_normalized_lf_utf8_sha256": "130650adfdf9f5a515f02f518137cea29fd6e39bfb460c9b6435b7f80cc6046b",
+          "actual_source_read": true
+        },
+        {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RealUpperCountingAssembly.lean",
+          "raw_file_sha256": "56bab762d3f765f5080a441910a8696e297bcd72801e13f4338b0ed7142a9a96",
+          "first": 85,
+          "last": 145,
+          "role": "Exact actual original proof template and same epsilon/currentK target",
+          "literal_source": "  have hcap : ∀ᶠ N : ℕ in atTop,\n      (Nat.ceil ((N : ℝ) ^ sieveExponent) : ℝ) ≤ delta * singularNormalization N := by\n    simpa only [one_mul, pow_zero, mul_one] using\n      eventually_ceil_powerLog_le_singularNormalization 1 sieveExponent 0\n        (by norm_num) hsieve delta hdelta\n  have hcutoff : ∀ᶠ N : ℕ in atTop,\n      manuscriptHalfProductCutoff kappa N + 1 ≤ delta * singularNormalization N := by\n    simpa only [manuscriptHalfProductCutoff, pow_zero, mul_one] using\n      eventually_powerLog_add_one_le_singularNormalization 2 (1 - kappa) 0\n        (by linarith) delta hdelta\n  filter_upwards [hmajor delta hdelta, hdensity delta hdelta, hcoprime delta hdelta,\n    hdistribution delta hdelta, hmass, hcap, hcutoff, eventually_ge_atTop (2 : ℕ)]\n    with N hmajorN hdensityN hcoprimeN hdistributionN hmassN hcapN hcutoffN hN\n  intro hEven\n  have hN1 : (1 : ℝ) < (N : ℝ) := by exact_mod_cast (show 1 < N by omega)\n  have hmassScale : 0 < (N : ℝ) / Real.log (N : ℝ) :=\n    div_pos (lt_trans zero_lt_one hN1) (Real.log_pos hN1)\n  have hdensityScale := densityScale_pos hN\n  have hnormalization : 0 ≤ singularNormalization N := by\n    rw [← sourceMassScale_mul_densityScale N]\n    exact (mul_pos hmassScale hdensityScale).le\n  have hsource :\n      ((realHalfProductSource b N (manuscriptHalfProductCutoff kappa N)).card : ℝ) ≤\n        (J + delta) * ((N : ℝ) / Real.log (N : ℝ)) :=\n    (div_le_iff₀ hmassScale).mp hmassN.le\n  have hmain :\n      ((realHalfProductSource b N (manuscriptHalfProductCutoff kappa N)).card : ℝ) *\n        physicalDensitySum (Q delta N) (rho delta N) ≤\n        ((J + delta) * (currentK + delta)) * singularNormalization N := by\n    calc\n      ((realHalfProductSource b N (manuscriptHalfProductCutoff kappa N)).card : ℝ) *\n          physicalDensitySum (Q delta N) (rho delta N) ≤\n          ((realHalfProductSource b N (manuscriptHalfProductCutoff kappa N)).card : ℝ) *\n            ((currentK + delta) * (singularSeries N / Real.log (N : ℝ))) :=\n        mul_le_mul_of_nonneg_left (hdensityN hEven) (Nat.cast_nonneg _)\n      _ ≤ ((J + delta) * ((N : ℝ) / Real.log (N : ℝ))) *\n          ((currentK + delta) * (singularSeries N / Real.log (N : ℝ))) :=\n        mul_le_mul_of_nonneg_right hsource\n          (mul_nonneg (add_nonneg hK.le hdelta.le) hdensityScale.le)\n      _ = ((J + delta) * (currentK + delta)) * singularNormalization N := by\n        rw [← sourceMassScale_mul_densityScale N]\n        ring\n  have hcoprimeUpper := (le_abs_self\n    (realPhysicalCoprimeCorrection b N (manuscriptHalfProductCutoff kappa N)\n      (Q delta N) (rho delta N))).trans (hcoprimeN hEven)\n  have hdistributionUpper := (le_abs_self\n    (realPhysicalDistributionError b N (manuscriptHalfProductCutoff kappa N)\n      (Q delta N) (rho delta N))).trans (hdistributionN hEven)\n  have hfinite := RealB_cast_le_same_rho_main_add_errors N\n    (Nat.ceil ((N : ℝ) ^ sieveExponent)) (Q delta N) (rho delta N) hb1\n    (manuscriptHalfProductCutoff_nonneg kappa N) (hmajorN hEven)\n  calc\n    (RealB b N : ℝ) ≤\n        ((J + delta) * (currentK + delta)) * singularNormalization N +\n          delta * singularNormalization N + delta * singularNormalization N +\n          delta * singularNormalization N + delta * singularNormalization N :=\n      hfinite.trans (add_le_add (add_le_add (add_le_add (add_le_add hmain\n        hcoprimeUpper) hdistributionUpper) hcapN) hcutoffN)\n    _ = ((J + delta) * (currentK + delta) + 4 * delta) * singularNormalization N := by ring\n    _ ≤ (currentK * J + epsilon) * singularNormalization N :=\n      mul_le_mul_of_nonneg_right hcoefficient hnormalization\n",
+          "span_normalized_lf_utf8_sha256": "3af41a777bc5f8fe86d1deda987615d69f4c2f0c08ef6c4e4ea6f84962997c64",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RealPhysicalUpperWeightBridge.lean",
+        "sha256": "d12f225b912eae31c725341abab2a97ea7cce7b87998c630472e99f7bf2c1561",
+        "bytes": 25051,
+        "lf_lines": 520
+      },
+      "role": "Actual outer same-rho finite theorem, exact binder order and four error/cap/cutoff terms",
+      "all_expected_hash_spans_match": true,
+      "spans": [
+        {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RealPhysicalUpperWeightBridge.lean",
+          "raw_file_sha256": "d12f225b912eae31c725341abab2a97ea7cce7b87998c630472e99f7bf2c1561",
+          "first": 336,
+          "last": 383,
+          "role": "Actual outer same-rho finite theorem, exact binder order and four error/cap/cutoff terms",
+          "literal_source": "theorem RealB_cast_le_same_rho_outer_main_add_errors\n    {b T : ℝ} (N z : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hSN : ∀ m ∈ S, m ≤ N)\n    (hsource : realHalfProductSource b N T ⊆ S)\n    (houter : ∀ m ∈ S,\n      (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) ≤ weight m)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        (∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d) +\n        (z : ℝ) + (T + 1) := by\n  classical\n  have hnonneg : ∀ n : ℕ, 0 ≤ physicalDivisorSum Q rho n := by\n    intro n\n    have h := hmajor n\n    split_ifs at h with hcop\n    · exact zero_le_one.trans h\n    · exact h\n  have hsum :\n      (∑ m ∈ realHalfProductSource b N T,\n        physicalDivisorSum Q rho (N - m)) ≤\n      ∑ m ∈ S, weight m * physicalDivisorSum Q rho (N - m) := by\n    calc\n      (∑ m ∈ realHalfProductSource b N T,\n          physicalDivisorSum Q rho (N - m)) =\n          ∑ m ∈ realHalfProductSource b N T,\n            (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) *\n              physicalDivisorSum Q rho (N - m) := by\n        apply Finset.sum_congr rfl\n        intro m hm\n        simp only [hm, if_pos, one_mul]\n      _ = ∑ m ∈ S,\n          (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) *\n            physicalDivisorSum Q rho (N - m) := by\n        apply Finset.sum_subset hsource\n        intro m hmS hmSource\n        simp only [if_neg hmSource, zero_mul]\n      _ ≤ _ := Finset.sum_le_sum fun m hm =>\n        mul_le_mul_of_nonneg_right (houter m hm) (hnonneg (N - m))\n  have h := (RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff\n    N z Q rho hb hT hmajor).trans\n      (add_le_add (add_le_add hsum (le_refl (z : ℝ))) (le_refl (T + 1)))\n",
+          "span_normalized_lf_utf8_sha256": "717dac363deb7d7a7aac4e5d2e7292e238992a1eb6df031cebd962f845b78066",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurvedRegionDiscrepancy.lean",
+        "sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+        "bytes": 16096,
+        "lf_lines": 329
+      },
+      "role": "Actual finiteSourceMass and both literal weighted errors",
+      "all_expected_hash_spans_match": true,
+      "spans": [
+        {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurvedRegionDiscrepancy.lean",
+          "raw_file_sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+          "first": 35,
+          "last": 53,
+          "role": "Actual finiteSourceMass and both literal weighted errors",
+          "literal_source": "\n/-- The total weight on the common finite carrier. -/\ndef finiteSourceMass (S : Finset ℕ) (w : ℕ → ℝ) : ℝ :=\n  ∑ m ∈ S, w m\n\n/-- The literal weighted sum in the residue class `a` modulo `d`. -/\ndef finiteCongruenceMass (S : Finset ℕ) (w : ℕ → ℝ) (a d : ℕ) : ℝ :=\n  ∑ m ∈ S with Nat.ModEq d m a, w m\n\n/-- The literal weighted sum restricted to integers coprime to `d`. -/\ndef finiteCoprimeMass (S : Finset ℕ) (w : ℕ → ℝ) (d : ℕ) : ℝ :=\n  ∑ m ∈ S with Nat.Coprime m d, w m\n\n/-- The actual coprime-normalized discrepancy. Its definition also makes\nsense for nonprimitive classes and for Lean's totalized division at zero. -/\ndef finitePrimitiveDiscrepancy\n    (S : Finset ℕ) (w : ℕ → ℝ) (a d : ℕ) : ℝ :=\n  finiteCongruenceMass S w a d - finiteCoprimeMass S w d / (Nat.totient d : ℝ)\n\n",
+          "span_normalized_lf_utf8_sha256": "52309090d620d380c124712eb5269034950a50cdec37950ee442c93dcc30bb5b",
+          "actual_source_read": true
+        },
+        {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurvedRegionDiscrepancy.lean",
+          "raw_file_sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+          "first": 160,
+          "last": 168,
+          "role": "Actual finiteSourceMass and both literal weighted errors",
+          "literal_source": "theorem finiteCongruenceMass_nonneg\n    (S : Finset ℕ) (w : ℕ → ℝ) (a d : ℕ) (hw : ∀ m ∈ S, 0 ≤ w m) :\n    0 ≤ finiteCongruenceMass S w a d := by\n  exact Finset.sum_nonneg fun m hm => hw m (Finset.mem_filter.mp hm).1\n\ntheorem finiteCoprimeMass_nonneg\n    (S : Finset ℕ) (w : ℕ → ℝ) (d : ℕ) (hw : ∀ m ∈ S, 0 ≤ w m) :\n    0 ≤ finiteCoprimeMass S w d := by\n  exact Finset.sum_nonneg fun m hm => hw m (Finset.mem_filter.mp hm).1\n",
+          "span_normalized_lf_utf8_sha256": "0ccd9da7aa5d43a9daecf26afcd131655913b90106106e4f035813a0cacfcc45",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\PowerErrorBudget.lean",
+        "sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+        "bytes": 7787,
+        "lf_lines": 161
+      },
+      "role": "Positive selected trim and sieveExponent<1 give two actual endpoint payments",
+      "all_expected_hash_spans_match": true,
+      "spans": [
+        {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\PowerErrorBudget.lean",
+          "raw_file_sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+          "first": 92,
+          "last": 104,
+          "role": "Positive selected trim and sieveExponent<1 give two actual endpoint payments",
+          "literal_source": "theorem eventually_powerLog_add_one_le_singularNormalization\n    (c theta : ℝ) (k : ℕ) (htheta : theta < 1) :\n    ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N : ℕ in atTop,\n        c * (N : ℝ) ^ theta * (Real.log (N : ℝ)) ^ k + 1 ≤\n          epsilon * singularNormalization N := by\n  intro epsilon hepsilon\n  filter_upwards\n    [eventually_powerLog_le_singularNormalization c theta k htheta\n      (epsilon / 2) (half_pos hepsilon),\n      eventually_singularNormalization_unit_absorption (epsilon / 2) (half_pos hepsilon)]\n    with N hpower hunit\n  linarith\n",
+          "span_normalized_lf_utf8_sha256": "649baf037c28f151849b69c7182563cdc6c135a6136999700e1f16aa186ecd73",
+          "actual_source_read": true
+        },
+        {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\PowerErrorBudget.lean",
+          "raw_file_sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+          "first": 117,
+          "last": 126,
+          "role": "Positive selected trim and sieveExponent<1 give two actual endpoint payments",
+          "literal_source": "theorem eventually_ceil_powerLog_le_singularNormalization\n    (c theta : ℝ) (k : ℕ) (hc : 0 ≤ c) (htheta : theta < 1) :\n    ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N : ℕ in atTop,\n        (Nat.ceil (c * (N : ℝ) ^ theta * (Real.log (N : ℝ)) ^ k) : ℝ) ≤\n          epsilon * singularNormalization N := by\n  intro epsilon hepsilon\n  filter_upwards\n    [eventually_powerLog_add_one_le_singularNormalization c theta k htheta\n      epsilon hepsilon, eventually_ge_atTop (1 : ℕ)] with N herror hN\n",
+          "span_normalized_lf_utf8_sha256": "6cfef0cd2ce8cc8398277fc3c0a47bd2bd917c6f35d9417d9413fac9d02a5727",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualUpperDensityAssembly.lean",
+        "sha256": "659aa3d8cfa50345f912ba070e30cd57a6caa1738e4146d1c051a7506f944cec",
+        "bytes": 11482,
+        "lf_lines": 212
+      },
+      "role": "Exact normalization product and density scale positivity at N>=2",
+      "all_expected_hash_spans_match": true,
+      "spans": [
+        {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualUpperDensityAssembly.lean",
+          "raw_file_sha256": "659aa3d8cfa50345f912ba070e30cd57a6caa1738e4146d1c051a7506f944cec",
+          "first": 29,
+          "last": 38,
+          "role": "Exact normalization product and density scale positivity at N>=2",
+          "literal_source": "theorem sourceMassScale_mul_densityScale (N : ℕ) :\n    ((N : ℝ) / Real.log (N : ℝ)) *\n        (singularSeries N / Real.log (N : ℝ)) = singularNormalization N := by\n  simp only [singularNormalization, div_eq_mul_inv]\n  ring\n\ntheorem densityScale_pos {N : ℕ} (hN : 2 ≤ N) :\n    0 < singularSeries N / Real.log (N : ℝ) := by\n  have hN1 : (1 : ℝ) < (N : ℝ) := by exact_mod_cast (show 1 < N by omega)\n  exact div_pos (singularSeries_pos N) (Real.log_pos hN1)\n",
+          "span_normalized_lf_utf8_sha256": "939189de4630c37a75c05b1394f39c311fea3fe3052219fa1de461970561af96",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RealHalfProductMassSplit.lean",
+        "sha256": "6516890accb0179098fca79f98791adeddad569a858fc69710b87a8d3b92a3ca",
+        "bytes": 42302,
+        "lf_lines": 871
+      },
+      "role": "Actual positive/total trim cutoff and hT",
+      "all_expected_hash_spans_match": true,
+      "spans": [
+        {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RealHalfProductMassSplit.lean",
+          "raw_file_sha256": "6516890accb0179098fca79f98791adeddad569a858fc69710b87a8d3b92a3ca",
+          "first": 318,
+          "last": 323,
+          "role": "Actual positive/total trim cutoff and hT",
+          "literal_source": "def manuscriptHalfProductCutoff (κ : ℝ) (N : ℕ) : ℝ :=\n  2 * (N : ℝ) ^ (1 - κ)\n\ntheorem manuscriptHalfProductCutoff_nonneg (κ : ℝ) (N : ℕ) :\n    0 ≤ manuscriptHalfProductCutoff κ N := by\n  exact mul_nonneg (by norm_num) (Real.rpow_nonneg (Nat.cast_nonneg N) _)\n",
+          "span_normalized_lf_utf8_sha256": "5c7dd39d47240f8143b05a3d5fe1116873c8547832647458fe26f1b6326d83ec",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentNumericalTransfer.lean",
+        "sha256": "acc924036cb6ca73ef660c632d5577462ba5c69b8b5600aef63255264c3a270a",
+        "bytes": 7668,
+        "lf_lines": 174
+      },
+      "role": "Actual unchanged currentK and currentC",
+      "all_expected_hash_spans_match": true,
+      "spans": [
+        {
+          "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentNumericalTransfer.lean",
+          "raw_file_sha256": "acc924036cb6ca73ef660c632d5577462ba5c69b8b5600aef63255264c3a270a",
+          "first": 25,
+          "last": 29,
+          "role": "Actual unchanged currentK and currentC",
+          "literal_source": "/-- The upper bad-semiprime coefficient in Theorem 1.1 (10 October 2026). -/\ndef currentK : ℝ := 8452171 / 1250000\n\n/-- The lower `D_{1,2}` coefficient in Theorem 1.1 (10 October 2026). -/\ndef currentC : ℝ := 49044063 / 25000000\n",
+          "span_normalized_lf_utf8_sha256": "e16cabd74dddb969b59cc54080b5da40de4c95c8e2b6f14b1850e7646390cf71",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\BigOperators\\Group\\Finset.lean",
+        "sha256": "6a8daafb9e3b8b6ac48a696661c99a2d10dce57f48907ae18280914bf0ac639f",
+        "bytes": 36509,
+        "lf_lines": 752
+      },
+      "role": "Actual @[to_additive sum_nonneg] generator; supplies the exact finite nonnegative-sum premise used by new helper",
+      "all_expected_hash_spans_match": true,
+      "spans": [
+        {
+          "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\BigOperators\\Group\\Finset.lean",
+          "raw_file_sha256": "6a8daafb9e3b8b6ac48a696661c99a2d10dce57f48907ae18280914bf0ac639f",
+          "first": 147,
+          "last": 153,
+          "role": "Actual @[to_additive sum_nonneg] generator; supplies the exact finite nonnegative-sum premise used by new helper",
+          "literal_source": "@[to_additive sum_nonneg]\ntheorem one_le_prod' [MulLeftMono N] (h : ∀ i ∈ s, 1 ≤ f i) : 1 ≤ ∏ i ∈ s, f i :=\n  le_trans (by rw [prod_const_one]) (prod_le_prod' h)\n\n@[to_additive Finset.sum_nonneg']\ntheorem one_le_prod'' [MulLeftMono N] (h : ∀ i : ι, 1 ≤ f i) : 1 ≤ ∏ i ∈ s, f i :=\n  Finset.one_le_prod' fun i _ ↦ h i\n",
+          "span_normalized_lf_utf8_sha256": "1638a93e34bd81b68d4f094bf88d3d879ea8c9b10fa5481e600a1dee621f3dec",
+          "actual_source_read": true
+        }
+      ]
+    },
+    {
+      "artifact": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+        "sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+        "bytes": 63984,
+        "lf_lines": 1480
+      },
+      "role": "Actual le_div_iff0 positive denominator direction for delta budget",
+      "all_expected_hash_spans_match": true,
+      "spans": [
+        {
+          "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\GroupWithZero\\Basic.lean",
+          "raw_file_sha256": "5ae904bb6c2caab184fbeb514e648544f96ad657860f307d43bbc2217ce535cb",
+          "first": 1133,
+          "last": 1139,
+          "role": "Actual le_div_iff0 positive denominator direction for delta budget",
+          "literal_source": "/-- See `le_div_iff₀'` for a version with multiplication on the other side. -/\nlemma le_div_iff₀ (hc : 0 < c) : a ≤ b / c ↔ a * c ≤ b := by\n  rw [div_eq_mul_inv, le_mul_inv_iff₀ hc]\n\n/-- See `div_le_iff₀'` for a version with multiplication on the other side. -/\nlemma div_le_iff₀ (hc : 0 < c) : b / c ≤ a ↔ b ≤ a * c := by\n  rw [div_eq_mul_inv, mul_inv_le_iff₀ hc]\n",
+          "span_normalized_lf_utf8_sha256": "d93279ad875c840abc4e1405c5c7b49641cf4226c79f6236e89470255085abdd",
+          "actual_source_read": true
+        }
+      ]
+    }
+  ],
+  "supplementary_complete_API_and_boundary_context": [
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RealPhysicalUpperWeightBridge.lean",
+      "raw_file_sha256": "d12f225b912eae31c725341abab2a97ea7cce7b87998c630472e99f7bf2c1561",
+      "first": 336,
+      "last": 386,
+      "role": "Complete actual called finite outer declaration including proof tail384-386; retains hSN and both signed errors.",
+      "literal_source": "theorem RealB_cast_le_same_rho_outer_main_add_errors\n    {b T : ℝ} (N z : ℕ) (S Q : Finset ℕ) (weight rho : ℕ → ℝ)\n    (hb : b < 1) (hT : 0 ≤ T)\n    (hSN : ∀ m ∈ S, m ≤ N)\n    (hsource : realHalfProductSource b N T ⊆ S)\n    (houter : ∀ m ∈ S,\n      (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) ≤ weight m)\n    (hmajor : ∀ n : ℕ,\n      (if Nat.Coprime n (sieveProduct N z) then (1 : ℝ) else 0) ≤\n        physicalDivisorSum Q rho n) :\n    (RealB b N : ℝ) ≤\n      finiteSourceMass S weight * physicalDensitySum Q rho +\n        (∑ d ∈ Q, rho d *\n          ((finiteCoprimeMass S weight d - finiteSourceMass S weight) /\n            (Nat.totient d : ℝ))) +\n        (∑ d ∈ Q, rho d * finitePrimitiveDiscrepancy S weight N d) +\n        (z : ℝ) + (T + 1) := by\n  classical\n  have hnonneg : ∀ n : ℕ, 0 ≤ physicalDivisorSum Q rho n := by\n    intro n\n    have h := hmajor n\n    split_ifs at h with hcop\n    · exact zero_le_one.trans h\n    · exact h\n  have hsum :\n      (∑ m ∈ realHalfProductSource b N T,\n        physicalDivisorSum Q rho (N - m)) ≤\n      ∑ m ∈ S, weight m * physicalDivisorSum Q rho (N - m) := by\n    calc\n      (∑ m ∈ realHalfProductSource b N T,\n          physicalDivisorSum Q rho (N - m)) =\n          ∑ m ∈ realHalfProductSource b N T,\n            (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) *\n              physicalDivisorSum Q rho (N - m) := by\n        apply Finset.sum_congr rfl\n        intro m hm\n        simp only [hm, if_pos, one_mul]\n      _ = ∑ m ∈ S,\n          (if m ∈ realHalfProductSource b N T then (1 : ℝ) else 0) *\n            physicalDivisorSum Q rho (N - m) := by\n        apply Finset.sum_subset hsource\n        intro m hmS hmSource\n        simp only [if_neg hmSource, zero_mul]\n      _ ≤ _ := Finset.sum_le_sum fun m hm =>\n        mul_le_mul_of_nonneg_right (houter m hm) (hnonneg (N - m))\n  have h := (RealB_cast_le_sum_physicalDivisorSum_add_cap_cutoff\n    N z Q rho hb hT hmajor).trans\n      (add_le_add (add_le_add hsum (le_refl (z : ℝ))) (le_refl (T + 1)))\n  rw [sum_weight_mul_physicalDivisorSum_eq_same_rho_main_add_errors\n    N S Q weight rho hSN] at h\n  exact h\n",
+      "span_normalized_lf_utf8_sha256": "7b4985590a911a35739241e44420e401d5808bf1f4640343264733b06375753e",
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\PowerErrorBudget.lean",
+      "raw_file_sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+      "first": 117,
+      "last": 127,
+      "role": "Complete actual ceil budget declaration including proof tail127.",
+      "literal_source": "theorem eventually_ceil_powerLog_le_singularNormalization\n    (c theta : ℝ) (k : ℕ) (hc : 0 ≤ c) (htheta : theta < 1) :\n    ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N : ℕ in atTop,\n        (Nat.ceil (c * (N : ℝ) ^ theta * (Real.log (N : ℝ)) ^ k) : ℝ) ≤\n          epsilon * singularNormalization N := by\n  intro epsilon hepsilon\n  filter_upwards\n    [eventually_powerLog_add_one_le_singularNormalization c theta k htheta\n      epsilon hepsilon, eventually_ge_atTop (1 : ℕ)] with N herror hN\n  exact (Nat.ceil_lt_add_one (powerLog_nonneg hc k N hN)).le.trans herror\n",
+      "span_normalized_lf_utf8_sha256": "cecaee50a275580714bdc4b519b8f01aa152fb619cda7c96b5d9bb8e873c11c2",
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualUpperCountingInputs.lean",
+      "raw_file_sha256": "b89d2c71bc253103320fa5296e9583f77fca365f842dac1502116a98b62826e8",
+      "first": 1,
+      "last": 145,
+      "role": "Complete actual attached construction context; it does not instantiate the new outer supplier.",
+      "literal_source": "import ImbalancedChen.RealUpperCountingAssembly\nimport ImbalancedChen.EnlargedSelbergCap\n\n/-!\n# Proved geometric inputs for the actual attached upper coefficient\n\nThe majorant and coprime correction in the real counting assembly are\ndischarged for the literal small/rough coefficient. The sieve cutoff and\nthe manuscript product cutoff retain their exact natural rounding.\nOnly the actual density bound and signed distribution estimate remain\nanalytic premises of the final assembly below.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\nopen Filter Topology\n\n/-- A positive exponent gap pays the natural ceiling at the manuscript's\nliteral lower product cutoff `2 * N^(1-kappa)`. -/\ntheorem eventually_manuscript_sieve_gate\n    {b kappa theta : ℝ} (hb : 0 < b) (htheta : 0 ≤ theta)\n    (hgap : theta < (1 - kappa) * (b / (1 + b))) :\n    ∀ᶠ N : ℕ in atTop,\n      0 < manuscriptHalfProductCutoff kappa N ∧\n        (Nat.ceil ((N : ℝ) ^ theta) : ℝ) ≤\n          (manuscriptHalfProductCutoff kappa N) ^ (b / (1 + b)) := by\n  have halpha : 0 ≤ b / (1 + b) := div_nonneg hb.le (by linarith)\n  filter_upwards [eventually_floor_rpow_add_one_le_rpow htheta hgap,\n    eventually_ge_atTop (1 : ℕ)] with N hround hN\n  have hNpos : (0 : ℝ) < (N : ℝ) := by exact_mod_cast (show 0 < N by omega)\n  have hpow : 0 < (N : ℝ) ^ (1 - kappa) := Real.rpow_pos_of_pos hNpos _\n  refine ⟨mul_pos (by norm_num) hpow, ?_⟩\n  calc\n    (Nat.ceil ((N : ℝ) ^ theta) : ℝ) ≤\n        (Nat.floor ((N : ℝ) ^ theta) : ℝ) + 1 := by\n      exact_mod_cast Nat.ceil_le_floor_add_one ((N : ℝ) ^ theta)\n    _ ≤ (N : ℝ) ^ ((1 - kappa) * (b / (1 + b))) := hround\n    _ = ((N : ℝ) ^ (1 - kappa)) ^ (b / (1 + b)) :=\n      Real.rpow_mul hNpos.le _ _\n    _ ≤ (manuscriptHalfProductCutoff kappa N) ^ (b / (1 + b)) := by\n      apply Real.rpow_le_rpow hpow.le _ halpha\n      change (N : ℝ) ^ (1 - kappa) ≤ 2 * (N : ℝ) ^ (1 - kappa)\n      linarith\n\n/-- The exact finite modulus set of the attached coefficient. -/\ndef attachedUpperModuli (nu r epsilon : ℝ) (retain : ℕ → List ℕ → Bool)\n    (cap : ℕ → ℕ) (N : ℕ) : Finset ℕ :=\n  actualSmallRoughModuli (retain N) N (cap N)\n    ((N : ℝ) ^ (nu * epsilon ^ 2)) ((N : ℝ) ^ (nu * r))\n\n/-- The same coefficient is used for the majorant, density and error. -/\ndef attachedUpperCoefficient (nu r epsilon : ℝ) (retain : ℕ → List ℕ → Bool)\n    (cap : ℕ → ℕ) (N d : ℕ) : ℝ :=\n  actualSmallRoughRho (retain N) N (cap N)\n    ((N : ℝ) ^ (nu * epsilon ^ 2)) ((N : ℝ) ^ (nu * r))\n    ((N : ℝ) ^ (nu * epsilon)) d\n\ntheorem attachedUpperCoefficient_majorant\n    {nu r epsilon : ℝ} (hnu : 0 < nu) (hepsilon : 0 < epsilon)\n    (hepsilonOne : epsilon ≤ 1) (hepsilonR : epsilon ^ 2 ≤ r)\n    (retain : ℕ → List ℕ → Bool) (cap : ℕ → ℕ)\n    {N : ℕ} (hN : 2 ≤ N) (hcap : (N : ℝ) ^ (nu * r) ≤ (cap N : ℝ))\n    (n : ℕ) :\n    (if Nat.Coprime n (sieveProduct N (Nat.ceil ((N : ℝ) ^ (nu * r))))\n      then (1 : ℝ) else 0) ≤\n        physicalDivisorSum (attachedUpperModuli nu r epsilon retain cap N)\n          (attachedUpperCoefficient nu r epsilon retain cap N) n := by\n  have hNreal : (1 : ℝ) < (N : ℝ) := by exact_mod_cast (show 1 < N by omega)\n  have hepsSquare : epsilon ^ 2 ≤ epsilon := by nlinarith\n  exact actualSmallRoughRho_sieveProduct_majorant (retain N) N (cap N) _ _ _\n    (Real.one_lt_rpow hNreal (mul_pos hnu hepsilon))\n    (Real.rpow_le_rpow_of_exponent_le hNreal.le\n      (mul_le_mul_of_nonneg_left hepsSquare hnu.le))\n    (Real.rpow_le_rpow_of_exponent_le hNreal.le\n      (mul_le_mul_of_nonneg_left hepsilonR hnu.le)) hcap n\n\n/-- No estimate is needed for this correction: it is exactly zero beyond\nthe proved roughness threshold, for every policy and enumeration cap. -/\ntheorem eventually_attachedUpper_coprimeCorrection_eq_zero\n    {b kappa nu r epsilon : ℝ} (hb : 0 < b) (hnu : 0 < nu)\n    (hr : 0 ≤ r) (hepsilonR : epsilon ^ 2 ≤ r)\n    (hgap : nu * r < (1 - kappa) * (b / (1 + b)))\n    (retain : ℕ → List ℕ → Bool) (cap : ℕ → ℕ) :\n    ∀ᶠ N : ℕ in atTop,\n      realPhysicalCoprimeCorrection b N (manuscriptHalfProductCutoff kappa N)\n        (attachedUpperModuli nu r epsilon retain cap N)\n        (attachedUpperCoefficient nu r epsilon retain cap N) = 0 := by\n  filter_upwards [eventually_manuscript_sieve_gate hb (mul_nonneg hnu.le hr) hgap,\n    eventually_ge_atTop (1 : ℕ)] with N hgate hN\n  have hNreal : (1 : ℝ) ≤ (N : ℝ) := by exact_mod_cast hN\n  apply realPhysicalCoprimeCorrection_eq_zero_of_gate _ _ hb hgate.1 hgate.2\n  intro d hd _hactive\n  exact actualSmallRoughModuli_dvd_sieveProduct_ceil (retain N) N (cap N) _ _\n    (Real.rpow_le_rpow_of_exponent_le hNreal\n      (mul_le_mul_of_nonneg_left hepsilonR hnu.le)) hd\n\n/-- The actual construction discharges two of the four same-weight inputs.\nThis is still conditional on the actual density and signed distribution\nestimates; it does not claim that either analytic input has been proved. -/\ntheorem eventually_RealB_le_currentK_log_of_actual_density_distribution\n    {b kappa nu r : ℝ} (hb : 0 < b) (hb1 : b < 1) (hkappa : 0 < kappa)\n    (hnu : 0 < nu) (hr : 0 < r) (hsieve : nu * r < 1)\n    (hgap : nu * r < (1 - kappa) * (b / (1 + b)))\n    (epsilon : ℝ → ℝ) (retain : ℝ → ℕ → List ℕ → Bool)\n    (cap : ℝ → ℕ → ℕ)\n    (hepsilon : ∀ delta : ℝ, 0 < delta →\n      0 < epsilon delta ∧ epsilon delta ≤ 1 ∧ (epsilon delta) ^ 2 ≤ r)\n    (hcap : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop,\n      (N : ℝ) ^ (nu * r) ≤ (cap delta N : ℝ))\n    (hdensity : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →\n      physicalDensitySum (attachedUpperModuli nu r (epsilon delta) (retain delta) (cap delta) N)\n        (attachedUpperCoefficient nu r (epsilon delta) (retain delta) (cap delta) N) ≤\n          (currentK + delta) * (singularSeries N / Real.log (N : ℝ)))\n    (hdistribution : ∀ delta : ℝ, 0 < delta → ∀ᶠ N : ℕ in atTop, Even N →\n      |realPhysicalDistributionError b N (manuscriptHalfProductCutoff kappa N)\n        (attachedUpperModuli nu r (epsilon delta) (retain delta) (cap delta) N)\n        (attachedUpperCoefficient nu r (epsilon delta) (retain delta) (cap delta) N)| ≤\n          delta * singularNormalization N) :\n    ∀ tolerance : ℝ, 0 < tolerance → ∀ᶠ N : ℕ in atTop, Even N →\n      (RealB b N : ℝ) ≤\n        (currentK * Real.log (1 / b) + tolerance) * singularNormalization N := by\n  apply eventually_RealB_le_currentK_log_of_same_rho_inputs hb hb1 hkappa hsieve\n    (fun delta => attachedUpperModuli nu r (epsilon delta) (retain delta) (cap delta))\n    (fun delta => attachedUpperCoefficient nu r (epsilon delta) (retain delta) (cap delta))\n  · intro delta hdelta\n    obtain ⟨heps, hepsOne, hepsR⟩ := hepsilon delta hdelta\n    filter_upwards [hcap delta hdelta, eventually_ge_atTop (2 : ℕ)] with N hcover hN\n    intro _hEven n\n    exact attachedUpperCoefficient_majorant hnu heps hepsOne hepsR\n      (retain delta) (cap delta) hN hcover n\n  · exact hdensity\n  · intro delta hdelta\n    filter_upwards [eventually_attachedUpper_coprimeCorrection_eq_zero hb hnu hr.le\n      (hepsilon delta hdelta).2.2 hgap (retain delta) (cap delta)] with N hzero\n    intro _hEven\n    rw [hzero, abs_zero]\n    apply mul_nonneg hdelta.le\n    have hseries := (singularSeries_pos N).le\n    unfold singularNormalization\n    positivity\n  · exact hdistribution\n\nend\nend ImbalancedChen\n",
+      "span_normalized_lf_utf8_sha256": "b89d2c71bc253103320fa5296e9583f77fca365f842dac1502116a98b62826e8",
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentMainTheorem.lean",
+      "raw_file_sha256": "68a2a3aad8ccdc73ed8e5076e31b9984bc659c307d71150920a71b5fc98f067d",
+      "first": 96,
+      "last": 102,
+      "role": "Actual unchanged RealB definition.",
+      "literal_source": "def realBadPrimes (b : ℝ) (N : ℕ) : Finset ℕ := by\n  classical\n  exact (Finset.range N).filter fun p =>\n    Nat.Prime p ∧ RealBadReceiver b (N - p)\n\n/-- Real-exponent bad-representation count. -/\ndef RealB (b : ℝ) (N : ℕ) : ℕ := (realBadPrimes b N).card\n",
+      "span_normalized_lf_utf8_sha256": "84ebd3665e245a1bce04fb660050ab35f52215aa851ba958130dda7f608c4c52",
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentMainTheorem.lean",
+      "raw_file_sha256": "68a2a3aad8ccdc73ed8e5076e31b9984bc659c307d71150920a71b5fc98f067d",
+      "first": 278,
+      "last": 301,
+      "role": "Actual original hUpper/hLower consumer; epsilon coefficient and normalization target unchanged.",
+      "literal_source": "theorem current_theorem_1_1_of_manuscript_bounds\n    {b : ℝ} (hbLower : (1 : ℝ) / 2 < b) (hbUpper : b < 1)\n    (hLower : ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N in Filter.atTop, Even N →\n        (currentC - epsilon) * singularNormalization N ≤ (D12 N : ℝ))\n    (hUpper : ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N in Filter.atTop, Even N →\n        (RealB b N : ℝ) ≤\n          (currentK * Real.log (1 / b) + epsilon) *\n            singularNormalization N) :\n    ((currentC - currentK * Real.log (1 / b) : ℝ) : EReal) ≤\n      Filter.liminf\n        (fun N : ℕ =>\n          (((RealDb b N : ℝ) / singularNormalization N : ℝ) : EReal))\n        evenNatAtTop := by\n  have _hb : (1 : ℝ) / 2 < b ∧ b < 1 := ⟨hbLower, hbUpper⟩\n  apply ereal_le_even_liminf_of_eventually_ge\n  intro delta hdelta\n  have hTransfer := eventually_real_transfer_of_bounds\n    (eventually_singularNormalization_pos.mono (fun _ hN _ => hN))\n    hLower hUpper hdelta\n  refine (eventually_singularNormalization_pos.and hTransfer).mono ?_\n  rintro N ⟨hH, hN⟩ hEven\n  exact (le_div_iff₀ hH).2 (hN hEven)\n",
+      "span_normalized_lf_utf8_sha256": "7592b5ede911450dfb04459bce31af38976c974438481914ad33f207a6c48dc2",
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\SingularSeries.lean",
+      "raw_file_sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+      "first": 120,
+      "last": 125,
+      "role": "Actual singularSeries positivity and exact singularNormalization definition.",
+      "literal_source": "theorem singularSeries_pos (N : ℕ) : 0 < singularSeries N :=\n  twinPrimeConstant_pos.trans_le (twinPrimeConstant_le_singularSeries N)\n\n/-- The manuscript's actual `H(N) = C(N) N / (log N)^2`. -/\nnoncomputable def singularNormalization (N : ℕ) : ℝ :=\n  singularSeries N * (N : ℝ) / (Real.log (N : ℝ)) ^ 2\n",
+      "span_normalized_lf_utf8_sha256": "c8aa3e93f2f7b85a373682aee293c803c1ec510728cff42fc4cbeebe0dcff9e4",
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RestrictedResidueScale.lean",
+      "raw_file_sha256": "3c58f54f875a46886c28bc224fdf4952d6b53a72ae6f6f2b8debaf7e71c01d0f",
+      "first": 26,
+      "last": 38,
+      "role": "Medium versus trim geometric gap context; not a new supplier.",
+      "literal_source": "theorem restrictedResidueScale_power_gap {κ κ₀ : ℝ} (hκ : 0 < κ)\n    (hκ₀ : κ₀ < κ / (1 + κ)) :\n    0 < 1 - κ₀ ∧ 1 < (1 - κ₀) * (1 + κ) := by\n  have hden : 0 < 1 + κ := by linarith\n  have hmul := (lt_div_iff₀ hden).mp hκ₀\n  have hgap : 1 < (1 - κ₀) * (1 + κ) := by nlinarith\n  constructor\n  · by_contra h\n    have hn : 1 - κ₀ ≤ 0 := le_of_not_gt h\n    have := mul_nonpos_of_nonpos_of_nonneg hn hden.le\n    linarith\n  · exact hgap\n\n",
+      "span_normalized_lf_utf8_sha256": "b75bc39697886c0df811f92dad4c10b84235093ea7b23c17880fa30857359784",
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RestrictedResidueScale.lean",
+      "raw_file_sha256": "3c58f54f875a46886c28bc224fdf4952d6b53a72ae6f6f2b8debaf7e71c01d0f",
+      "first": 98,
+      "last": 108,
+      "role": "Actual separate medium/trim threshold type and full proof.",
+      "literal_source": "theorem exists_manuscript_restrictedResidueScale_threshold\n    {c C κ κ₀ : ℝ} (hc : 0 < c) (hC : 0 < C) (hκ : 0 < κ)\n    (hκ₀ : κ₀ < κ / (4 * (1 + κ))) :\n    0 < C⁻¹ ∧ ∃ N₀ : ℕ, 2 ≤ N₀ ∧ ∀ N : ℕ, N₀ ≤ N → ∀ x : ℝ,\n      c * (N : ℝ) ^ (1 - κ₀) ≤ x → x ≤ C * (N : ℝ) →\n      1 < x ∧ C⁻¹ * x ≤ (N : ℝ) ∧ (N : ℝ) ≤ x ^ (1 + κ) := by\n  have hden : 0 < 1 + κ := by linarith\n  have hsmall : κ / (4 * (1 + κ)) ≤ κ / (1 + κ) := by\n    exact div_le_div_of_nonneg_left hκ.le hden (by linarith)\n  exact ⟨inv_pos.mpr hC,\n    exists_restrictedResidueScale_threshold hc hC hκ (hκ₀.trans_le hsmall)⟩\n",
+      "span_normalized_lf_utf8_sha256": "43446738e9157f220045f46c2784ed92c789c953f36e81bb4f0e771d6a6ea35b",
+      "actual_source_read": true
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3DistributionTargets.lean",
+      "raw_file_sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "first": 150,
+      "last": 163,
+      "role": "Original full-kappa medium obligation remains unchanged/open.",
+      "literal_source": "/-- Missing uniform signed medium estimate.  This proposition is not proved\nby the low-rank BV or one-long integer-slot results in this Part. -/\ndef RestrictedMediumTarget {ι : Type*} (F : ι → MediumAtom) : Prop :=\n  ∀ A : ℝ, 0 < A → ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n    ∀ i : ι, x0 ≤ (F i).scale →\n      ‖(F i).signedError‖ ≤ C * (F i).scale / (Real.log (F i).scale) ^ A\n\n/-- Exact unclosed theorem type, including the fixed family SW constants. -/\ndef RestrictedMediumObligation {ι : Type*} (F : ι → MediumAtom)\n    (B C0 : ℕ) (σ κ c0 : ℝ) : Prop :=\n  0 < σ → σ < 1 / 100 → 0 < c0 → 0 ≤ κ → κ ≤ σ / 100 →\n  (∀ i : ι, MediumAdmissible B σ κ c0 (F i)) →\n  UniformAuxiliarySW F C0 → RestrictedMediumTarget F\n\n",
+      "span_normalized_lf_utf8_sha256": "c6a7d474ca7c47928eacee98463887c718607a637c066b5c83c5ed5af41dbe14",
+      "actual_source_read": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Algebra/Order/Field/Basic.lean",
+      "raw_file_sha256": "1d6672beae57890d355067ff20de13b715bece8e87e0d088b7e959e773025f57",
+      "first": 41,
+      "last": 47,
+      "role": "Actual one_lt_div with positive denominator for J>0.",
+      "literal_source": "theorem one_le_div (hb : 0 < b) : 1 ≤ a / b ↔ b ≤ a := by rw [le_div_iff₀ hb, one_mul]\n\ntheorem div_le_one (hb : 0 < b) : a / b ≤ 1 ↔ a ≤ b := by rw [div_le_iff₀ hb, one_mul]\n\ntheorem one_lt_div (hb : 0 < b) : 1 < a / b ↔ b < a := by rw [lt_div_iff₀ hb, one_mul]\n\ntheorem div_lt_one (hb : 0 < b) : a / b < 1 ↔ a < b := by rw [div_lt_iff₀ hb, one_mul]\n",
+      "span_normalized_lf_utf8_sha256": "c7e4a54462091ae7e5a5f97ddbc8516f4fb983c2e9de57f5bae84dcae98e5234",
+      "actual_source_read": true
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib/Analysis/SpecialFunctions/Log/Basic.lean",
+      "raw_file_sha256": "1f36a9802233e878953d809b16e020beaf0ace5afd4c8279d47b52af6ee186bf",
+      "first": 181,
+      "last": 189,
+      "role": "Actual Real.log_pos API and proof.",
+      "literal_source": "theorem log_pos_iff (hx : 0 ≤ x) : 0 < log x ↔ 1 < x := by\n  rcases hx.eq_or_lt with (rfl | hx)\n  · simp [zero_le_one]\n  rw [← log_one]\n  exact log_lt_log_iff zero_lt_one hx\n\n@[bound]\ntheorem log_pos (hx : 1 < x) : 0 < log x :=\n  (log_pos_iff (lt_trans zero_lt_one hx).le).2 hx\n",
+      "span_normalized_lf_utf8_sha256": "415ed09e8265187f8f7ab55b154985a22f6f349c6f5327de4d813edd5937ed50",
+      "actual_source_read": true
+    }
+  ],
+  "exact_existing_proof_fragment_reuse": [
+    {
+      "purpose": "Entire delta/epsilon coefficient-budget proof byte-identical",
+      "old_file": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RealUpperCountingAssembly.lean",
+      "old_span": [
+        59,
+        79
+      ],
+      "new_span": [
+        77,
+        97
+      ],
+      "byte_exact": true,
+      "sha256": "ef70a77249dbe43ab3341479a9fc95e27fc3ac2da115fb3b352e621bf885a4c4"
+    },
+    {
+      "purpose": "Entire positive scale/normalization proof byte-identical",
+      "old_file": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RealUpperCountingAssembly.lean",
+      "old_span": [
+        99,
+        105
+      ],
+      "new_span": [
+        116,
+        122
+      ],
+      "byte_exact": true,
+      "sha256": "494f665ed74439a92c983dcfc74601d31dc198ecdf55b659bca2315cca68f28d"
+    },
+    {
+      "purpose": "Entire final four-budget assembly byte-identical",
+      "old_file": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\RealUpperCountingAssembly.lean",
+      "old_span": [
+        136,
+        145
+      ],
+      "new_span": [
+        153,
+        162
+      ],
+      "byte_exact": true,
+      "sha256": "dd0085367707bc3a8d5b1eba7f82749c37b5fdab122d3489193f9249edcb4f68"
+    },
+    {
+      "purpose": "Both endpoint absorption proofs preserve actual API application, with kappa renamed kappaTrim",
+      "old_span": [
+        85,
+        94
+      ],
+      "new_span": [
+        101,
+        110
+      ],
+      "only_identifier_rename": "kappa -> kappaTrim",
+      "new_sha256": "7366e7cec616c638aca428ef8d7a377148c0020618e7b493bf061d2db483baa2",
+      "match": true
+    }
+  ],
+  "mathematical_checks": {
+    "quantifier_order": "Fixed b,sieveExponent,kappaMax. For each final epsilon>0 first choose delta>0,delta<=1. Only then obtain one Q:N->FinsetNat,rho:N->Nat->Real, positive medium kappa, positive trim,S,weight. All witnesses and absorption constants are fixed before arbitrary eventually large N. The same Q/rho/S/weight occurs in every mass,density,correction,distribution and finite-bridge call.",
+    "existential_shape": "The nested conjunction/existential destructuring matches the original hAtPrecision header. hprecisionN hEven beta-reduces its letT; the eight conjuncts are obtained in the exact original order. No separate errorwise rho or policy is selected.",
+    "kappa_roles": "kappaMax(delta) is an allowed medium upper cap, and medium kappa<=min(kappaMax delta,2^-19). kappaTrim is distinct and satisfies0<trim<medium/[4*(1+medium)]. The local counting algebra only needs trim positivity; underscore-named medium/cap/gap witnesses intentionally retain future compatibility premises without proving the analytic licence.",
+    "no_uniform_infimum": "Each selected trim may depend on delta and may tend to0 over precisions. It is fixed positive for that invocation before N, so existing sublinear endpoint absorption applies. No positive infimum over all delta or uniform threshold over all delta is asserted.",
+    "hSN": "Original forall m in S_N,m<=N is retained and passed to the actual finite outer bridge. No signed-integer/natAbs outer extension is used. Root separate future signed-bridge package is explicitly outside this audit.",
+    "nonnegative_mass": "Indicator in{0,1} and houter imply nonnegative weights pointwise onS, hence finiteSourceMass>=0. No nonempty-source, division by mass, rho>=0 or actual physicalDensitySum>=0 assumption is needed.",
+    "main_product_signs": "Multiply hdensityN by proved mass>=0. Then multiply hmassN by the nonnegative upper density scale(currentK+delta)*(singularSeries/logN), using N>=2 and currentK,delta>=0. This is valid even for signed rho and signed actual density.",
+    "unchanged_normalization": "For N>=2, N/logN>0 and singularSeries/logN>0. Actual sourceMassScale_mul_densityScale is exactly their product=singularNormalization, whose actual definition is singularSeries*N/(logN)^2. The final coefficient budget is multiplied only after this scale is shown nonnegative.",
+    "exact_signed_errors": "le_abs_self applies to each entire original signed modulus sum, using exactly the supplied sameQ/rho/S/weight bound. No sum of absolute local discrepancies, coefficient change or sharp-source correction replaces the weighted aggregate.",
+    "endpoint_budgets": "hsieve<1 pays Nat.ceil(N^sieveExponent) with c=1,k=0. trim>0 gives1-trim<1 and pays exactly2*N^(1-trim)+1 with c=2,k=0. Each costs one delta*singularNormalization, with the actual rounding unchanged.",
+    "coefficient_budget": "J=log(1/b)>0 because0<b<1; currentK>0. delta=min1(epsilon/(currentK+J+5)) yields delta*(currentK+J+5)<=epsilon and delta^2<=delta. Therefore(J+delta)*(currentK+delta)+4delta<=currentK*J+epsilon exactly, with no changed constant.",
+    "four_terms": "One coprime correction, one distribution sum, one natural sieve-ceiling endpoint, and one trim+1 endpoint: exactly four delta budgets. The finite bridge output association matches all four nested add_le_add applications.",
+    "target": "The conclusion is exactly forall epsilon>0,eventually all even N,(RealB b N:Real)<=(currentK*log(1/b)+epsilon)*singularNormalization N. CurrentMainTheorem hUpper283-287 uses this formula; RealB,currentK and epsilon scale are unchanged.",
+    "domain": "Conditional count is valid for0<b<1, matching actual assembly. Original main theorem still requires1/2<b<1 separately; it has not been weakened or supplied here.",
+    "no_target_hypothesis": "hAtPrecision retains actual support, coverage, outer indicator domination, physical majorant, mass,density and two literal weighted aggregate-error gates. It contains neither RealB upper conclusion nor hUpper as a premise. This is a conditional implication only; retention of these strong suppliers is not their construction."
+  },
+  "edge_case_audit": [
+    "epsilon arbitrary positive, including larger than the denominator: delta=1 is allowed by the original delta<=1 contract and the same coefficient budget.",
+    "delta can be arbitrarily small; denominator is strictly positive and no division by delta, trim or source mass occurs.",
+    "Empty outer carrier and zero source mass: helper and product estimates remain valid.",
+    "Signed physical coefficients and density: only the exact needed source-mass and density-upper-bound nonnegativity are used.",
+    "N=0,1 and log zero cases are excluded by the one eventual N>=2 intersection; final theorem remains eventual for all even N.",
+    "sieveExponent may be any real<1, including nonpositive values; actual ceil power-log lemma has exactly this domain.",
+    "kappaMax is not independently proved positive. Existence of a positive medium witness in hAtPrecision forces the relevant positive cap; no actual policy/cap provider is claimed."
+  ],
+  "interface_audit_consistency": {
+    "complete_original_header_preserved": true,
+    "full_author_and_interface_CP_metadata_source_and_quantifier_context_reviewed": true,
+    "manuscript_parameter_order": "Fixed policy/beta/rough/rank/moment orders precede medium kappa narrowing, then separate complete trim, then target N. The abstract existential interface retains compatibility but does not prove that licensed construction.",
+    "paper_outer_ge_N": "Known audit boundary remains: original finite bridge is natural N-m and requiresS<=N. No illegal clipping or new signed bridge is assumed.",
+    "actual_upper_inputs": "Actual attached majorant and sharp-source zero coprime correction do not furnish the arbitrary weighted outer mass/correction/distribution suppliers in this header.",
+    "original_full_kappa_obligation": "Unchanged/open; capped internal application is not a proof for every originally allowed kappa."
+  },
+  "advisory_context_note": "Author API slices336-383 for the finite bridge and117-126 for the ceil budget are legitimate context slices, not their entire proof tails. This review directly read complete declarations through386 and127 respectively; no static blocker follows from the earlier slice endpoints.",
+  "proof_obstructions": [],
+  "minimum_repair": "NONE_IDENTIFIED_STATICALLY",
+  "lint_and_elaboration": "No concrete syntax/type/API obstruction or explicit unused parameter identified by source inspection. No Lean elaborator, linter or import resolver was run.",
+  "claim_boundaries": {
+    "conditional_two_proof_assembly": "Complete written source; no identified static blocker, UNCOMPILED/HOLD",
+    "hAtPrecision_provider": "OPEN",
+    "actual_hUpper_supplier": "NOT_CONSTRUCTED",
+    "same_policy_density_and_compiler_budget": "OPEN",
+    "licensed_outer_mass": "OPEN",
+    "weighted_outer_coprime_and_distribution": "OPEN",
+    "signed_outer_extension": "OUTSIDE_THIS_PACKAGE",
+    "M2": "OPEN",
+    "original_forall_kappa": "OPEN",
+    "spectrum": "OPEN",
+    "seven_over_32": "OPEN",
+    "hLower": "OPEN",
+    "current_main": "OPEN",
+    "kernel_acceptance": "NOT_CHECKED",
+    "engineering_admission": false
+  },
+  "pins": {
+    "goldbach": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "lean_toolchain": "leanprover/lean4:v4.33.0-rc1",
+    "runtime_or_pin_modified": false
+  },
+  "quota": {
+    "fresh_start_used_percent": 47,
+    "fresh_start_remaining_percent": 53,
+    "fresh_latest_used_percent": 47,
+    "fresh_latest_remaining_percent": 53,
+    "window_duration_mins": 10080,
+    "secondary": null,
+    "stop_any_valid_remaining_percent_lte": 40,
+    "threshold_triggered": false
+  },
+  "actions": {
+    "writes": [
+      ".lake/proof-continuation/source-reviews/20261022-one-precision-upper-application-independent-source-review-HOLD.json"
+    ],
+    "old_source_or_CP_edits": 0,
+    "actual_Lean_edits": 0,
+    "proof_tools": 0,
+    "compiler_runs": 0,
+    "checker_runs": 0,
+    "linter_runs": 0,
+    "Runtime_operations": 0,
+    "proper_runs": 0,
+    "classifier_runs": 0,
+    "census_runs": 0,
+    "Git_operations": 0,
+    "Site_operations": 0,
+    "new_subagents": 0
+  },
+  "stop_condition": "Bounded independent review complete. HOLD; no original165LF modification, actual integration, signed-bridge work or proof execution."
+}

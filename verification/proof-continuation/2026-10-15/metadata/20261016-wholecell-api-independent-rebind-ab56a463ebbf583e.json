@@ -1,0 +1,80 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_EXACT_FOUR_PROOF_SITE_DIAGNOSTIC_REBIND",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "review_date": "2026-10-16",
+  "candidate": "ImbalancedChen.ActualExtendedThirdWholeCellActions",
+  "old_source_sha256": "d9fc584cb788dc7fbe9d90c2e4ab837420d403fc654733b8fcc05e231ec03867",
+  "source_sha256": "88a90dfae47e617a2d2576048dd9334ddf454d23c8c6e8b9d005498093204332",
+  "old_exact_snapshot": ".lake/proof-continuation/source-reviews/20261016-wholecell-d9fc-before-api-repair.lean",
+  "four_exact_substitutions": [
+    {
+      "from": "wInner_abs_sub (hcoords 1) (hcoords 2)",
+      "to": "wInner_abs_sub (a := s 0) (a' := t 0) (hcoords 1) (hcoords 2)",
+      "count": 1
+    },
+    {
+      "from": "wInner_abs_sub (hcoords 2) (hcoords 1)",
+      "to": "wInner_abs_sub (a := s 0) (a' := t 0) (hcoords 2) (hcoords 1)",
+      "count": 1
+    },
+    {
+      "from": "cases yz <;> apply abs_le.mpr",
+      "to": "cases yz <;> simp <;> apply abs_le.mpr",
+      "count": 1
+    },
+    {
+      "from": "cases yz <;> linarith [hc0.1",
+      "to": "cases yz <;> simp <;> linarith [hc0.1",
+      "count": 1
+    }
+  ],
+  "forward_new_bytes_exact": true,
+  "reverse_old_sha_exact": true,
+  "all_4_complete_signatures_and_imports_unchanged": true,
+  "complete_signatures": [
+    "private theorem wInner_abs_sub {a b c a' b' c' δ : ℝ}\n    (hb : |b - b'| ≤ δ) (hc : |c - c'| ≤ δ) :\n    |wInner a b c - wInner a' b' c'| ≤ 2 * δ",
+    "theorem actualExtendedThirdSelectedRescue_wholeCell {e : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j) (swapped : Bool)\n    (hk : actualExtendedThirdLeastWinningIndex e m j = if swapped then 5 else 4) :\n    let W",
+    "theorem actualExtendedThirdSelectedPair_wholeCell {e : ℝ} {m : ℕ}\n    {j : ActualExtendedThirdDyadicLabel m} (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 32)\n    (hfull : actualExtendedThirdDyadicHi m j 0 ≤ mu - 4 * e)\n    {t : Fin 3 → ℝ} (ht : t ∈ actualExtendedThirdPhysicalCell m j) (yz : Bool)\n    (hk : actualExtendedThirdLeastWinningIndex e m j = if yz then 7 else 6) :\n    1 / 2 ≤ actualExtendedThirdPairParameter e m j t yz ∧\n      actualExtendedThirdPairParameter e m j t yz < 5 / 8 ∧\n      actualExtendedThirdPhysicalLevel e m j + e ≤ actualExtendedThirdPairParameter e m j t yz ∧\n      ∀ s ∈ actualExtendedThirdPhysicalCell m j,\n        (if yz then 2 * s 0 + s 1 + s 2 else s 0 + 2 * s 1 + s 2) + e / 4 ≤\n          actualExtendedThirdPairParameter e m j t yz ∧\n        actualExtendedThirdPairParameter e m j t yz + e / 4 ≤\n          v (if yz then s 1 + s 2 else s 0 + s 2)",
+    "theorem actualExtendedThirdWholeCellAction_mesh_threshold {e : ℝ} (he : 0 < e) :\n    ∃ m₀ : ℕ, ∀ m : ℕ, m₀ ≤ m → actualExtendedThirdDyadicStep m ≤ e / 32"
+  ],
+  "real_old_failure_log": {
+    "path": ".lake/proof-continuation/runs/20261015T193253499173Z-ImbalancedChen.ActualExtendedThirdWholeCellActions/stdout.log",
+    "sha256": "d5a778c770aae07606c9a528131e5792e2f47645dc51656ee3442c3c2d39a8be",
+    "reviewer_read": true,
+    "result": "PROOF_FAILED",
+    "diagnostics": [
+      "wInner_abs_sub a and a-prime implicit synthesis failed at old line77 because they are ignored in wInner and absent from hb/hc",
+      "old hsum linarith failed with unnormalized if false=true / if true=true",
+      "old hg linarith failed for the same Bool-if issue"
+    ]
+  },
+  "independent_static_assessment": [
+    {
+      "site": "Both wInner_abs_sub calls",
+      "assessment": "The local helper at lines23-25 quantifies arbitrary a,a-prime with only b/c coordinate bounds. Supplying a=s0,a-prime=t0 selects exactly the original comparison and resolves the missing implicit parameters; no new estimate or premise is added."
+    },
+    {
+      "site": "hsum cases yz",
+      "assessment": "Bare simp after cases yz reduces the Bool-to-Prop equalities and both if expressions in the target; the original abs_le and coordinate linarith proof then has the intended two-coordinate linear difference."
+    },
+    {
+      "site": "hg cases yz",
+      "assessment": "The added simp reduces only the target Bool-if branches before the unchanged four-coordinate weighted linear estimate; all original e/32 and e/4 margins, theta and whole-cell quantifiers remain identical."
+    }
+  ],
+  "issues_remaining_in_current_target": [],
+  "remaining_gates": [
+    "Exact 88a90dfa still requires separately owned runtime elaboration; static agreement with the diagnosed fix is not a PASS.",
+    "No imported-object closure, kernel replay, or axiom audit is performed or rebound.",
+    "Earlier identifier-only WholeCell report and old failed snapshot remain historical; neither supplies current runtime acceptance."
+  ],
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "frozen_lean_modified": false,
+    "python_bytecode_generated": false,
+    "runtime_pass_claim": false
+  }
+}

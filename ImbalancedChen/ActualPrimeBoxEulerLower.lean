@@ -1,6 +1,5 @@
 import ImbalancedChen.ActualPrimeBoxMass
-import ImbalancedChen.FullPowerEulerNormalization
-import ImbalancedChen.RoughPowerParameters
+import ImbalancedChen.CurrentChenFixedEulerNormalization
 import ImbalancedChen.SieveDimensionComparison
 
 /-!
@@ -30,8 +29,8 @@ theorem actualSmallEulerProduct_antitone_cutoff
     (N cap : ℕ) (hEven : Even N) (x y : ℝ)
     (hxy : x ≤ y) (hycap : y ≤ (cap : ℝ)) :
     actualSmallEulerProduct N cap y ≤ actualSmallEulerProduct N cap x := by
-  rw [actualSmallEulerProduct_eq_finiteSieveDensity N cap y hycap,
-    actualSmallEulerProduct_eq_finiteSieveDensity N cap x (hxy.trans hycap)]
+  rw [currentChen_model_actualEuler_eq_finite N cap y hycap,
+    currentChen_model_actualEuler_eq_finite N cap x (hxy.trans hycap)]
   exact finiteSieveDensity_antitone hEven (Nat.ceil_mono hxy)
 
 /-- The actual tuple mass weighted by the strict Euler ratio at one
@@ -65,9 +64,37 @@ theorem actualPrimeBoxEulerMass_ge_endpoint_ratio
   have hV := actualSmallEulerProduct_antitone_cutoff N cap hEven
     (p j : ℝ) ((N : ℝ) ^ b j) hpb hbcap
   have hratio := div_le_div_of_nonneg_right hV
-    (actualSmallEulerProduct_pos N cap ((N : ℝ) ^ u) hEven).le
+    (currentChen_model_actualEuler_pos N cap ((N : ℝ) ^ u) hEven).le
   simpa only [mul_comm] using
     mul_le_mul_of_nonneg_right hratio (actualPrimeBoxWeight_nonneg hp)
+
+/-- Two already proved fixed normalizations cancel with their actual common
+singular series and log. This uses only the public literal Euler endpoint. -/
+private theorem primeBoxEuler_tendsto_finiteDensity_power_ratio {a b : ℝ}
+    (ha : 0 < a) (hb : 0 < b) :
+    Tendsto (fun N : ℕ =>
+      finiteSieveDensity N (Nat.ceil ((N : ℝ) ^ a)) /
+        finiteSieveDensity N (Nat.ceil ((N : ℝ) ^ b)))
+      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 (b / a)) := by
+  have hden : 2 * Real.exp (-Real.eulerMascheroniConstant) / b ≠ 0 := by positivity
+  have hlim := (tendsto_currentChen_actualEuler_fixed_normalized ha).div
+    (tendsto_currentChen_actualEuler_fixed_normalized hb) hden
+  have hconstant :
+      (2 * Real.exp (-Real.eulerMascheroniConstant) / a) /
+        (2 * Real.exp (-Real.eulerMascheroniConstant) / b) = b / a := by
+    field_simp [ha.ne', hb.ne', Real.exp_ne_zero]
+  rw [hconstant] at hlim
+  apply hlim.congr'
+  simp only [Filter.EventuallyEq, Filter.eventually_inf_principal, Pi.div_apply]
+  filter_upwards [eventually_ge_atTop (2 : ℕ)] with N hN
+  intro _hEven
+  have hN1 : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)
+  rw [currentChen_model_actualEuler_eq_finite N
+      (Nat.ceil ((N : ℝ) ^ a)) ((N : ℝ) ^ a) (Nat.le_ceil _),
+    currentChen_model_actualEuler_eq_finite N
+      (Nat.ceil ((N : ℝ) ^ b)) ((N : ℝ) ^ b) (Nat.le_ceil _),
+    div_div_div_cancel_right₀ (singularSeries_pos N).ne',
+    mul_div_mul_right _ _ (Real.log_pos hN1).ne']
 
 /-- A genuine lower asymptotic for the weighted actual box. The threshold
 is chosen before the varying even target and every covering natural cap.
@@ -81,7 +108,7 @@ theorem exists_actualPrimeBoxEulerMass_lower_threshold
         (u / b j) * (∏ i, Real.log (b i / a i)) - eta ≤
           actualPrimeBoxEulerMass N cap a b u j := by
   have hbj : 0 < b j := (ha j).trans (hab j)
-  have hratio := tendsto_finiteSieveDensity_power_ratio hbj hu
+  have hratio := primeBoxEuler_tendsto_finiteDensity_power_ratio hbj hu
   have hmass := (tendsto_actualPrimeBoxMass a b ha hab).mono_left
     (inf_le_left :
       atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N} ≤ atTop)
@@ -103,8 +130,8 @@ theorem exists_actualPrimeBoxEulerMass_lower_threshold
     (Real.rpow_le_rpow_of_exponent_le hNreal hbu).trans hcap
   have hbound := actualPrimeBoxEulerMass_ge_endpoint_ratio N cap (by omega)
     hEven a b u j hbu hcap
-  rw [actualSmallEulerProduct_eq_finiteSieveDensity N cap ((N : ℝ) ^ b j) hbcap,
-    actualSmallEulerProduct_eq_finiteSieveDensity N cap ((N : ℝ) ^ u) hcap] at hbound
+  rw [currentChen_model_actualEuler_eq_finite N cap ((N : ℝ) ^ b j) hbcap,
+    currentChen_model_actualEuler_eq_finite N cap ((N : ℝ) ^ u) hcap] at hbound
   exact (hN1 N ((le_max_left _ _).trans hN) ⟨hNpos, hEven⟩).le.trans hbound
 
 end

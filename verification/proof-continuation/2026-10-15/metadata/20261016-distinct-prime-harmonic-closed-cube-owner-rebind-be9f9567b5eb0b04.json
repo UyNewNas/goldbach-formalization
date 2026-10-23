@@ -1,0 +1,138 @@
+{
+  "status": "SOURCE_ONLY_ROOT_AUTHOR_ACTUAL_DIAGNOSTIC_CLOSED_CUBE_API_CORRECTION_PENDING_INDEPENDENT_REBIND",
+  "reviewer": "/root (source author)",
+  "created_at_utc": "2026-10-15T21:39:18.083294+00:00",
+  "candidate": "ImbalancedChen/ActualExtendedThirdDistinctPrimeHarmonic.lean",
+  "old_actual_failed_sha256": "cb52ae6a298b96776b97030b85643702af18d1d0a34cc774df5bc3c777dbd20a",
+  "intermediate_source_review_rejected_sha256": "6b75b48e2592f99b33c6994a5c6edc4c180622ad042271876bd5ab9294bc15c9",
+  "current_sha256": "02b816d6df4a835132d6210d02362b72ad44a0b012ddd58e179fd65901c37ae2",
+  "reason": "Actual first diagnostic required an expected Set for ContinuousOn. Independent actual API read identified that the two real sandwich calls require pi Icc, not logPrimeBox=pi Ico. Global continuity supplies exactly pi Icc; the intermediate 6b75 is source-review rejected, never retried or accepted.",
+  "actual_diagnostic_binding": {
+    "path": ".lake/proof-continuation/runs/20261015T213059326606Z-ImbalancedChen.ActualExtendedThirdDistinctPrimeHarmonic/stdout.log",
+    "sha256": "9769f81ff24a864b732a8517cdf3c5dd9a1ed351e40abf2d86a122197ab70521",
+    "complete_stdout": "ImbalancedChen/ActualExtendedThirdDistinctPrimeHarmonic.lean:149:13: error: don't know how to synthesize implicit argument `s`\n  @Continuous.continuousOn (Fin 3 → ℝ) ℝ Pi.topologicalSpace PseudoMetricSpace.toUniformSpace.toTopologicalSpace\n    (actualExtendedThirdCompactHarmonicProfile e h (actualExtendedThirdPhysicalLevel e m j)) ?m.96\n    (continuous_actualExtendedThirdCompactHarmonicProfile hh e (actualExtendedThirdPhysicalLevel e m j))\ncontext:\ne h : ℝ\nm : ℕ\nhh : 0 < h\nj : ActualExtendedThirdDyadicLabel m\nhj : j ∈ actualExtendedThirdCompactCells e h m\nhhrho : h ≤ thirdPrefixRho\nhab : h / 2 < thirdPrefixRho + 1\nf : (Fin 3 → ℝ) → ℝ := ⋯\n⊢ Set (Fin 3 → ℝ)\nImbalancedChen/ActualExtendedThirdDistinctPrimeHarmonic.lean:149:7: error: failed to infer `have` declaration type\nImbalancedChen/ActualExtendedThirdDistinctPrimeHarmonic.lean:142:61: error: unsolved goals\ne h : ℝ\nm : ℕ\nhh : 0 < h\nj : ActualExtendedThirdDyadicLabel m\nhj : j ∈ actualExtendedThirdCompactCells e h m\nhhrho : h ≤ thirdPrefixRho\nhab : h / 2 < thirdPrefixRho + 1\nf : (Fin 3 → ℝ) → ℝ := actualExtendedThirdCompactHarmonicProfile e h (actualExtendedThirdPhysicalLevel e m j)\n⊢ Tendsto (fun N => actualExtendedThirdDistinctCellPrimeSum N e h m j) atTop\n    (𝓝 (actualExtendedThirdRetainedCellIntegral e m j))\n",
+    "cause": "Only an implicit Set s of Continuous.continuousOn was not inferable at a standalone have; later failure was cascade."
+  },
+  "fixed_API_read": {
+    "path": "ImbalancedChen/ActualPrimeIcoCellTestFunctions.lean:71-80",
+    "sha256": "e829a635b884f476441dab6281433bfef93950250f2138eb9a657e8a2ccb53f5",
+    "required_hf": "ContinuousOn f (Set.univ.pi (fun _ : Fin d => Set.Icc a b))",
+    "all_lines_read": true
+  },
+  "exact_patch_from_actual_failed": {
+    "old": "  have hf := (continuous_actualExtendedThirdCompactHarmonicProfile hh e\n    (actualExtendedThirdPhysicalLevel e m j)).continuousOn",
+    "new": "  have hf : ContinuousOn f\n      (Set.univ.pi (fun _ : Fin 3 => Set.Icc (h / 2) (thirdPrefixRho + 1))) :=\n    (continuous_actualExtendedThirdCompactHarmonicProfile hh e\n      (actualExtendedThirdPhysicalLevel e m j)).continuousOn",
+    "forward_exact_bytes": true,
+    "inverse_exact_bytes": true
+  },
+  "exact_patch_from_intermediate": {
+    "old": "(logPrimeBox (fun _ : Fin 3 => h / 2) (fun _ => thirdPrefixRho + 1)) :=",
+    "new": "(Set.univ.pi (fun _ : Fin 3 => Set.Icc (h / 2) (thirdPrefixRho + 1))) :=",
+    "forward_exact_bytes": true,
+    "inverse_exact_bytes": true
+  },
+  "all_complete_unchanged_headers_and_definitions": [
+    {
+      "name": "actualExtendedThirdDistinctCellPrimeRegion",
+      "kind": "def",
+      "private": false,
+      "complete_source_header": "def actualExtendedThirdDistinctCellPrimeRegion (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : Set (Fin 3 → ℝ)",
+      "complete_definition": "def actualExtendedThirdDistinctCellPrimeRegion (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : Set (Fin 3 → ℝ) :=\n  actualExtendedThirdCompactCellPrimeRegion m j ∩\n    primeAffineGateRegion actualExtendedThirdCompactOrderForms (fun _ => 0)"
+    },
+    {
+      "name": "measurableSet_actualExtendedThirdDistinctCellPrimeRegion",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem measurableSet_actualExtendedThirdDistinctCellPrimeRegion (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) :\n    MeasurableSet (actualExtendedThirdDistinctCellPrimeRegion m j) :=\n  (measurableSet_actualExtendedThirdCompactCellPrimeRegion m j).inter\n    (measurableSet_primeAffineGateRegion actualExtendedThirdCompactOrderForms (fun _ => 0))"
+    },
+    {
+      "name": "actualExtendedThirdDistinctCellPrimeRegion_sandwich",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualExtendedThirdDistinctCellPrimeRegion_sandwich {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    primeAffineGateRegion actualExtendedThirdCompactCellForms\n        (actualExtendedThirdCompactCellBounds m j) ⊆ actualExtendedThirdDistinctCellPrimeRegion m j ∧\n      ∀ t ∈ actualExtendedThirdDistinctCellPrimeRegion m j, ∀ i,\n        actualExtendedThirdCompactCellForms i t ≤ actualExtendedThirdCompactCellBounds m j i"
+    },
+    {
+      "name": "actualExtendedThirdDistinctCellPrimeRegion_prime_order",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualExtendedThirdDistinctCellPrimeRegion_prime_order {N m : ℕ}\n    (hN : 1 < N) {a b : Fin 3 → ℝ} {p : Fin 3 → ℕ}\n    (hp : p ∈ actualPrimeBoxTuples N a b) {j : ActualExtendedThirdDyadicLabel m}\n    (ht : actualPrimeTupleLog N p ∈ actualExtendedThirdDistinctCellPrimeRegion m j) :\n    p 1 < p 0 ∧ p 2 < p 1"
+    },
+    {
+      "name": "actualExtendedThirdDistinctCellPrimeRegion_totient",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualExtendedThirdDistinctCellPrimeRegion_totient {N m : ℕ}\n    (hN : 1 < N) {a b : Fin 3 → ℝ} {p : Fin 3 → ℕ}\n    (hp : p ∈ actualPrimeBoxTuples N a b) {j : ActualExtendedThirdDyadicLabel m}\n    (ht : actualPrimeTupleLog N p ∈ actualExtendedThirdDistinctCellPrimeRegion m j) :\n    (Nat.totient (∏ i : Fin 3, p i) : ℝ) =\n      ((p 0 : ℝ) - 1) * ((p 1 : ℝ) - 1) * ((p 2 : ℝ) - 1)"
+    },
+    {
+      "name": "actualExtendedThirdDistinctCellPrimeRegion_weight",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualExtendedThirdDistinctCellPrimeRegion_weight {N m : ℕ}\n    (hN : 1 < N) {a b : Fin 3 → ℝ} {p : Fin 3 → ℕ}\n    (hp : p ∈ actualPrimeBoxTuples N a b) {j : ActualExtendedThirdDyadicLabel m}\n    (ht : actualPrimeTupleLog N p ∈ actualExtendedThirdDistinctCellPrimeRegion m j) :\n    (∏ i : Fin 3, 1 / ((p i : ℝ) - 1)) = 1 / (Nat.totient (∏ i : Fin 3, p i) : ℝ)"
+    },
+    {
+      "name": "integral_actualExtendedThirdDistinctCellPrimeRegion",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem integral_actualExtendedThirdDistinctCellPrimeRegion {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) (g : (Fin 3 → ℝ) → ℝ) :\n    (∫ t in logPrimeBox (fun _ : Fin 3 => h / 2) (fun _ => thirdPrefixRho + 1) ∩\n      actualExtendedThirdDistinctCellPrimeRegion m j, g t) =\n      ∫ t in logPrimeBox (fun _ : Fin 3 => h / 2) (fun _ => thirdPrefixRho + 1) ∩\n        actualExtendedThirdCompactCellPrimeRegion m j, g t"
+    },
+    {
+      "name": "actualExtendedThirdDistinctCellPrimeSum",
+      "kind": "def",
+      "private": false,
+      "complete_source_header": "def actualExtendedThirdDistinctCellPrimeSum (N : ℕ) (e h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : ℝ",
+      "complete_definition": "def actualExtendedThirdDistinctCellPrimeSum (N : ℕ) (e h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : ℝ :=\n  actualPrimeBoxTestSum N (fun _ : Fin 3 => h / 2) (fun _ => thirdPrefixRho + 1)\n    ((actualExtendedThirdDistinctCellPrimeRegion m j).indicator\n      (actualExtendedThirdCompactHarmonicProfile e h (actualExtendedThirdPhysicalLevel e m j)))"
+    },
+    {
+      "name": "tendsto_actualExtendedThirdDistinctCellPrimeSum",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem tendsto_actualExtendedThirdDistinctCellPrimeSum {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    Tendsto (fun N : ℕ => actualExtendedThirdDistinctCellPrimeSum N e h m j) atTop\n      (𝓝 (actualExtendedThirdRetainedCellIntegral e m j))"
+    },
+    {
+      "name": "actualExtendedThirdDistinctCompactPrimeSum",
+      "kind": "def",
+      "private": false,
+      "complete_source_header": "def actualExtendedThirdDistinctCompactPrimeSum (N : ℕ) (e h : ℝ) (m : ℕ) : ℝ",
+      "complete_definition": "def actualExtendedThirdDistinctCompactPrimeSum (N : ℕ) (e h : ℝ) (m : ℕ) : ℝ :=\n  ∑ j ∈ actualExtendedThirdCompactCells e h m, actualExtendedThirdDistinctCellPrimeSum N e h m j"
+    },
+    {
+      "name": "tendsto_actualExtendedThirdDistinctCompactPrimeSum",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem tendsto_actualExtendedThirdDistinctCompactPrimeSum {e h : ℝ}\n    (hh : 0 < h) (he0 : 0 ≤ e) (he : e ≤ 1 / 384) (m : ℕ) :\n    Tendsto (fun N : ℕ => actualExtendedThirdDistinctCompactPrimeSum N e h m) atTop\n      (𝓝 (actualExtendedThirdCompactCellFunctional e h m))"
+    },
+    {
+      "name": "tendsto_actualExtendedThirdCompactPrimeSum_sub_distinct",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem tendsto_actualExtendedThirdCompactPrimeSum_sub_distinct {e h : ℝ}\n    (hh : 0 < h) (he0 : 0 ≤ e) (he : e ≤ 1 / 384) (m : ℕ) :\n    Tendsto (fun N : ℕ => actualExtendedThirdCompactPrimeSum N e h m -\n      actualExtendedThirdDistinctCompactPrimeSum N e h m) atTop (𝓝 0)"
+    },
+    {
+      "name": "exists_actualExtendedThirdDistinctCompactPrimeSum_approx_ideal",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem exists_actualExtendedThirdDistinctCompactPrimeSum_approx_ideal {ε : ℝ} (hε : 0 < ε) :\n    ∃ h : ℝ, 0 < h ∧ ∃ e : ℝ, 0 < e ∧ e ≤ 1 / 384 ∧ ∃ m : ℕ,\n      ∀ᶠ N : ℕ in atTop,\n        |actualExtendedThirdDistinctCompactPrimeSum N e h m - actualExtendedThirdIdealFunctional| ≤ ε"
+    }
+  ],
+  "declaration_count": 13,
+  "definition_count": 3,
+  "imports_types_definitions_pins_limits_and_linter_unchanged": true,
+  "source_successor_bindings": [
+    {
+      "path": "ImbalancedChen/ActualExtendedThirdDistinctProductHarmonic.lean",
+      "sha256": "75f52840ccf119eafa31e6ba1376c4fcf1946bef0c814ef23bbe41aad6aa6064",
+      "boundary": "Proof-only parent rebind, not compilation or closure acceptance."
+    },
+    {
+      "path": "ImbalancedChen/ActualExtendedThirdCompactResidualProfile.lean",
+      "sha256": "051eea02eb58e1e277adb38f43ecf3306db5d3f05cf1f3be6e98645ebd8bc251",
+      "boundary": "Proof-only parent rebind, not compilation or closure acceptance."
+    }
+  ],
+  "evidence_boundary": {
+    "lean_invoked": false,
+    "new_compile_or_owned_receipt_claimed": false,
+    "mathematical_statement_or_definition_changed": false,
+    "foreign_or_source_DAG_delta": 0
+  }
+}

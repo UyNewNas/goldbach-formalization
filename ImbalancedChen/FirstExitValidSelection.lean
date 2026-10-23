@@ -15,7 +15,7 @@ open scoped List
 
 /-- Chosen labels are listed in their processing order; the incoming prefix
 is stored in the tree's reverse processing order. -/
-def FirstExitValidSelection {α : Type*}
+noncomputable def FirstExitValidSelection {α : Type*}
     (retained : Bool → List α → Bool) (pre : List α) (positive : Bool) : List α → Prop
   | [] => True
   | p :: ps => retained (!positive) (p :: pre) = true ∧

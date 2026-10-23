@@ -1,0 +1,341 @@
+{
+  "status": "COMPLETE_FINITE_CRT_SPACING_SOURCE_PROPOSAL_UNCOMPILED_HOLD",
+  "created_utc": "2026-10-21T23:13:54.0556852Z",
+  "author": "/root/e1_interval_review_sol_high_oct22",
+  "HOLD": true,
+  "intended_module": "ImbalancedChen.Part3ElementaryCRTSpacing",
+  "artifact": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-Part3ElementaryCRTSpacing-module-source.txt",
+    "sha256": "3efe260ca0e39d4316ebffece2598b95ff3dba3c70e352dd927600959a8fd5b0",
+    "bytes": 2938
+  },
+  "lf_lines": 71,
+  "lf_cap": 180,
+  "proofs": 1,
+  "definitions": 0,
+  "imports": [
+    "ImbalancedChen.Part3ElementaryE1RealEndpoint",
+    "Mathlib.Data.Int.ModEq",
+    "Mathlib.Data.Finset.Max"
+  ],
+  "mathematical_route": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-elementary-E1-general-progression-range-mathematical-review-HOLD.json",
+    "sha256": "f068b3b2d04f989e80ddcce692b63eae25f8f8c2b0dfb4ced9533e799ef6de55",
+    "bytes": 12781
+  },
+  "complete_public_type_as_written": "theorem card_real_supported_modEq_dvd_le_lcm (S : Finset ℕ) {a b : ℝ}\n    {q d : ℕ} {r : ℤ} (hab : a ≤ b) (hq : 0 < q) (hd : 0 < d)\n    (hS : ∀ n ∈ S, a ≤ (n : ℝ) ∧ (n : ℝ) ≤ b)\n    (hmod : ∀ n ∈ S, Int.ModEq (q : ℤ) (n : ℤ) r)\n    (hdiv : ∀ n ∈ S, d ∣ n) :\n    (S.card : ℝ) ≤ (b - a) / (Nat.lcm d q : ℝ) + 1 ",
+  "type_sha256": "798656a8e8e125c93c947a5ce48478d7a76174094f8c367469e1114f6d9f11d8",
+  "complete_declaration_sha256": "1d8623cdae151f44d57a4d3b9c3e2203a7a50b4810f94d49ae68fa367c1c9627",
+  "source_span": {
+    "first": 17,
+    "last": 68
+  },
+  "full_source_body_read": true,
+  "finite_domain": {
+    "residue": "Every integer r, including negative r and nonprimitive or incompatible residue classes.",
+    "arithmetic": "Every n in S has Int.ModEq (q:Int) (n:Int) r and d|n.",
+    "support": "Every n in S satisfies a<=n<=b.",
+    "conclusion": "(S.card:Real) <= (b-a)/(Nat.lcm d q:Real)+1.",
+    "no_extra_assumptions": [
+      "No gcd(r,q)=1.",
+      "No CRT solution/existence assumption.",
+      "No interval length lower bound or positive length.",
+      "No natural rounding of a or b.",
+      "No shifted-divisor mean, spectral bound or target-shaped hypothesis."
+    ],
+    "q_d": "Natural q,d with 0<q and 0<d, equivalently q,d>=1.",
+    "S": "Any Finset Nat.",
+    "endpoints": "Any real a<=b. No nonnegative lower endpoint is assumed."
+  },
+  "complete_argument": [
+    "Split S.Nonempty. If empty, card=0 and b-a>=0 imply the claimed upper bound.",
+    "For nonempty S choose its actual minimum n0. Map every n to n-n0 in Nat. The minimum property ensures no truncated-subtraction loss. Reconstruction (n-n0)+n0=n proves injection, so image T has the same cardinality.",
+    "The real image lies in [0,b-a]: n<=b and n0>=a imply n-n0<=b-a, using the actual Nat-to-Real cast-sub theorem with n0<=n. Thus negative a is harmless and no rounded endpoints appear.",
+    "Both n and n0 are d-multiples, so d divides n-n0. Their common arbitrary signed residue implies n0 congruent n modulo q; ModEq.dvd gives (q:Int)|((n:Int)-(n0:Int)). Actual cast-sub and cast-divisibility APIs give q|(n-n0) in Nat.",
+    "Nat.lcm_dvd combines these two facts. Nat.lcm_pos hd hq gives positive spacing. All T points are multiples of this spacing.",
+    "Apply the already accepted real_supported_multiples_card_le to T, endpoints 0 and b-a, and divisor Nat.lcm d q. The full divisible filter equals T. Rewrite its card by injectivity, obtaining exactly (b-a)/lcm+1."
+  ],
+  "reuse_search": {
+    "bounded_scope": "Pinned Data/Finset and Order/Interval/Finset spacing/cardinality search; no suitable direct general spacing lemma identified there. No global nonexistence claim.",
+    "chosen_reuse": "Reuse the accepted real-supported multiples bound directly after a finite minimum translation; do not reconstruct CRT representatives or reprove ceiling/floor cardinality."
+  },
+  "accepted_parent_API": {
+    "selector": "Exactly name ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.real_supported_multiples_card_le",
+    "source_span": {
+      "last": 80,
+      "first": 40,
+      "literal_source": "theorem real_supported_multiples_card_le (S : Finset ℕ) {a b : ℝ} {d : ℕ}\n    (ha : 0 ≤ a) (hab : a ≤ b) (hd : 0 < d)\n    (hS : ∀ n ∈ S, a ≤ (n : ℝ) ∧ (n : ℝ) ≤ b) :\n    ((S.filter (fun n => d ∣ n)).card : ℝ) ≤ (b - a) / (d : ℝ) + 1 := by\n  have hdR : (0 : ℝ) < d := by exact_mod_cast hd\n  have hmaps : Set.MapsTo (fun n : ℕ => n / d) (S.filter (fun n => d ∣ n))\n      (Icc ⌈a / (d : ℝ)⌉₊ ⌊b / (d : ℝ)⌋₊) := by\n    intro n hn\n    obtain ⟨hnS, hdn⟩ := Finset.mem_filter.mp hn\n    have hq : ((n / d : ℕ) : ℝ) = (n : ℝ) / (d : ℝ) :=\n      Nat.cast_div_charZero hdn\n    apply Finset.mem_Icc.mpr\n    constructor\n    · apply Nat.ceil_le.mpr\n      rw [hq]\n      exact div_le_div_of_nonneg_right (hS n hnS).1 hdR.le\n    · apply Nat.le_floor\n      rw [hq]\n      exact div_le_div_of_nonneg_right (hS n hnS).2 hdR.le\n  have hinj : (S.filter (fun n => d ∣ n) : Set ℕ).InjOn (fun n => n / d) := by\n    intro n hn m hm hnm\n    have hdn : d ∣ n := (Finset.mem_filter.mp hn).2\n    have hdm : d ∣ m := (Finset.mem_filter.mp hm).2\n    calc\n      n = (n / d) * d := (Nat.div_mul_cancel hdn).symm\n      _ = (m / d) * d := congrArg (fun q : ℕ => q * d) hnm\n      _ = m := Nat.div_mul_cancel hdm\n  have hcard : (S.filter (fun n => d ∣ n)).card ≤\n      (Icc ⌈a / (d : ℝ)⌉₊ ⌊b / (d : ℝ)⌋₊).card :=\n    Finset.card_le_card_of_injOn (fun n : ℕ => n / d) hmaps hinj\n  have hcardR :\n      ((S.filter (fun n => d ∣ n)).card : ℝ) ≤\n        ((Icc ⌈a / (d : ℝ)⌉₊ ⌊b / (d : ℝ)⌋₊).card : ℝ) := by\n    exact_mod_cast hcard\n  have hquot := card_nat_ceiling_floor_le_length_add_one\n    (div_nonneg ha hdR.le) (div_le_div_of_nonneg_right hab hdR.le)\n  calc\n    ((S.filter (fun n => d ∣ n)).card : ℝ) ≤\n        ((Icc ⌈a / (d : ℝ)⌉₊ ⌊b / (d : ℝ)⌋₊).card : ℝ) := hcardR\n    _ ≤ b / (d : ℝ) - a / (d : ℝ) + 1 := hquot\n    _ = (b - a) / (d : ℝ) + 1 := by rw [sub_div]\n",
+      "span_sha256": "577a4b5fa7dce00e14cef4f7a2e943f7f421a2af49d98769056c192f1ead12b4"
+    },
+    "original_declarations": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\audits\\20261021T230227269340Z\\declarations.json",
+      "sha256": "06d30c445dde417d2caca66e6e33fb93482aaa546b42f443fe3e1b300c2fd54c",
+      "bytes": 34825
+    },
+    "root_acceptance": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261022-realendpoint5c38-root-actual19-terminal-acceptance.json",
+      "sha256": "fd6671bff08058f94cf60040ab210f7e12841c87d3c9bc16befbd9472617075c",
+      "bytes": 2830
+    },
+    "verification": "Complete actual pp.all type/safety/three-standard-axiom record read. Existing root acceptance is referenced; no new parent replay or census is run.",
+    "complete_actual_record": {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3ElementaryE1RealEndpoint",
+      "name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.real_supported_multiples_card_le",
+      "partial": false,
+      "type": "∀ (S : Finset.{0} Nat) {a b : Real} {d : Nat}\n  (ha : @LE.le.{0} Real Real.instLE (@OfNat.ofNat.{0} Real (nat_lit 0) (@Zero.toOfNat0.{0} Real Real.instZero)) a)\n  (hab : @LE.le.{0} Real Real.instLE a b)\n  (hd : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) d)\n  (hS :\n    ∀ (n : Nat),\n      @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat)) S n →\n        And (@LE.le.{0} Real Real.instLE a (@Nat.cast.{0} Real Real.instNatCast n))\n          (@LE.le.{0} Real Real.instLE (@Nat.cast.{0} Real Real.instNatCast n) b)),\n  @LE.le.{0} Real Real.instLE\n    (@Nat.cast.{0} Real Real.instNatCast\n      (@Finset.card.{0} Nat\n        (@Finset.filter.{0} Nat (fun (n : Nat) => @Dvd.dvd.{0} Nat Nat.instDvd d n) (Nat.decidable_dvd d) S)))\n    (@HAdd.hAdd.{0, 0, 0} Real Real Real (@instHAdd.{0} Real Real.instAdd)\n      (@HDiv.hDiv.{0, 0, 0} Real Real Real (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n        (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub) b a)\n        (@Nat.cast.{0} Real Real.instNatCast d))\n      (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)))",
+      "unsafe": false
+    },
+    "original_owned_receipt": {
+      "path": "E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261021T230227269340Z/receipt.json",
+      "sha256": "0f0e7d214f6b287ae045a3885131bdc1a7b8403ae447c14368459c0fee6f684e",
+      "bytes": 3921
+    },
+    "actual_source": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3ElementaryE1RealEndpoint.lean",
+      "sha256": "5c386ee17594c075b81b15d56143284fd0f77364f87129d0a96632f17064f8ad",
+      "bytes": 10764
+    },
+    "current_census186": {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261021T230728902004Z-realendpoint5c38-fresh-baseline185-runtime-fresh-current-terminal-owned-census.json",
+      "sha256": "10da5d9ff4135d9a124253bb811dcc6dcde9bfacec31e12ee0f093ae4efeb0c3",
+      "bytes": 128997
+    }
+  },
+  "actual_native_API": [
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Max.lean",
+        "sha256": "6a67c04a5ad263999707cf927121c15edf11bd66f7b5b48652c0e0e660a0d58c",
+        "bytes": 23182
+      },
+      "first": 176,
+      "last": 199,
+      "role": "min prime: membership, minimum inequality and proof-irrelevant nonempty witness",
+      "literal_source": "\n/-- Given a nonempty finset `s` in a linear order `α`, then `s.min' H` is its minimum, as an\nelement of `α`, where `H` is a proof of nonemptiness. Without this assumption, use instead `s.min`,\ntaking values in `WithTop α`. -/\ndef min' (s : Finset α) (H : s.Nonempty) : α :=\n  inf' s H id\n\n/-- Given a nonempty finset `s` in a linear order `α`, then `s.max' H` is its maximum, as an\nelement of `α`, where `H` is a proof of nonemptiness. Without this assumption, use instead `s.max`,\ntaking values in `WithBot α`. -/\ndef max' (s : Finset α) (H : s.Nonempty) : α :=\n  sup' s H id\n\nvariable (s : Finset α) (H : s.Nonempty) {x : α}\n\ntheorem min'_mem : s.min' H ∈ s :=\n  mem_of_min <| by simp only [Finset.min, min', id_eq, coe_inf', Function.comp_def]\n\ntheorem min'_le (x) (H2 : x ∈ s) : s.min' ⟨x, H2⟩ ≤ x :=\n  min_le_of_eq H2 (WithTop.coe_untop _ _).symm\n\ntheorem le_min' (x) (H2 : ∀ y ∈ s, x ≤ y) : x ≤ s.min' H :=\n  H2 _ <| min'_mem _ _\n\n",
+      "normalized_lf_span_sha256": "f48756a3472a3e6e0a0cec508f469f9150023b9b0c0ba26b4dc0aa295dca1449",
+      "actual_file_and_span_read": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Int\\ModEq.lean",
+        "sha256": "c1130960b648b5047a673d1f47f4ce653f0cf1174fff41b28a41e4813b89d86c",
+        "bytes": 14443
+      },
+      "first": 62,
+      "last": 85,
+      "role": "Int ModEq arbitrary signed residue: symmetry and transitivity",
+      "literal_source": "\nvariable {m n a b c d : ℤ}\n\ninstance : Decidable (ModEq n a b) := decEq (a % n) (b % n)\n\nnamespace ModEq\n\n@[refl, simp]\nprotected theorem refl (a : ℤ) : a ≡ a [ZMOD n] :=\n  @rfl _ _\n\nprotected theorem rfl : a ≡ a [ZMOD n] :=\n  ModEq.refl _\n\ninstance : Std.Refl (ModEq n) :=\n  ⟨ModEq.refl⟩\n\n@[symm]\nprotected theorem symm : a ≡ b [ZMOD n] → b ≡ a [ZMOD n] :=\n  Eq.symm\n\n@[trans]\nprotected theorem trans : a ≡ b [ZMOD n] → b ≡ c [ZMOD n] → a ≡ c [ZMOD n] :=\n  Eq.trans\n",
+      "normalized_lf_span_sha256": "4bd7d27aaf24d09b2d667795aeb335300d904cb4734fd8d0b7f502f5d25488c8",
+      "actual_file_and_span_read": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Int\\ModEq.lean",
+        "sha256": "c1130960b648b5047a673d1f47f4ce653f0cf1174fff41b28a41e4813b89d86c",
+        "bytes": 14443
+      },
+      "first": 109,
+      "last": 118,
+      "role": "ModEq.dvd has b-a direction; use n0 congruent n",
+      "literal_source": "theorem modEq_iff_dvd : a ≡ b [ZMOD n] ↔ n ∣ b - a := by\n  rw [ModEq, eq_comm]\n  simp [emod_eq_emod_iff_emod_sub_eq_zero, dvd_iff_emod_eq_zero]\n\ntheorem modEq_iff_add_fac {a b n : ℤ} : a ≡ b [ZMOD n] ↔ ∃ t, b = a + n * t := by\n  rw [modEq_iff_dvd]\n  exact exists_congr fun t => sub_eq_iff_eq_add'\n\nalias ⟨ModEq.dvd, modEq_of_dvd⟩ := modEq_iff_dvd\n\n",
+      "normalized_lf_span_sha256": "bad8d21e1210b8b5de81cc5bf7a6eb553037108ac2b3ebdf1fe51c66fc86b7e5",
+      "actual_file_and_span_read": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Lcm.lean",
+        "sha256": "c4accc5e10306750e0c990d43eebf4b02bf8444bb3a56be6c4aef663bcf5018c",
+        "bytes": 10816
+      },
+      "first": 89,
+      "last": 108,
+      "role": "Nat.lcm_pos and Nat.lcm_dvd",
+      "literal_source": "theorem lcm_pos : 0 < m → 0 < n → 0 < lcm m n := by\n  simpa [← Nat.pos_iff_ne_zero] using lcm_ne_zero\n\ntheorem le_lcm_left (m : Nat) (hn : 0 < n) : m ≤ lcm m n :=\n  (Nat.eq_zero_or_pos m).elim (by rintro rfl; simp)\n    (fun hm => le_of_dvd (lcm_pos hm hn) (dvd_lcm_left m n))\n\ntheorem le_lcm_right (n : Nat) (hm : 0 < m)  : n ≤ lcm m n :=\n  (Nat.eq_zero_or_pos n).elim (by rintro rfl; simp)\n    (fun hn => le_of_dvd (lcm_pos hm hn) (dvd_lcm_right m n))\n\ntheorem lcm_dvd {m n k : Nat} (H1 : m ∣ k) (H2 : n ∣ k) : lcm m n ∣ k := by\n  match eq_zero_or_pos k with\n  | .inl h => rw [h]; exact Nat.dvd_zero _\n  | .inr kpos =>\n    apply Nat.dvd_of_mul_dvd_mul_left (gcd_pos_of_pos_left n (pos_of_dvd_of_pos H1 kpos))\n    rw [gcd_mul_lcm, ← gcd_mul_right, Nat.mul_comm n k]\n    exact dvd_gcd (Nat.mul_dvd_mul_left _ H2) (Nat.mul_dvd_mul_right H1 _)\n\ntheorem lcm_dvd_iff {m n k : Nat} : lcm m n ∣ k ↔ m ∣ k ∧ n ∣ k :=\n",
+      "normalized_lf_span_sha256": "9363bd2005a4a4ad0ae1ed310fde4f1171bc26c15132cbb764de42bd8c23194d",
+      "actual_file_and_span_read": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Dvd.lean",
+        "sha256": "12cd37a3909fddc05c1f5541662d1a099c083aa1084777ded9d583c7a6780f96",
+        "bytes": 6888
+      },
+      "first": 128,
+      "last": 132,
+      "role": "Nat.dvd_sub for two natural multiples",
+      "literal_source": "theorem dvd_sub {k m n : Nat} (h₁ : k ∣ m) (h₂ : k ∣ n) : k ∣ m - n :=\n  if H : n ≤ m then\n    (Nat.dvd_add_iff_left h₂).2 <| by rwa [Nat.sub_add_cancel H]\n  else\n    Nat.sub_eq_zero_of_le (Nat.le_of_not_le H) ▸ Nat.dvd_zero k\n",
+      "normalized_lf_span_sha256": "db55926f16dfb3708490fc5643c43463f596c4dd1f6ec5f0489cb2514e8444ae",
+      "actual_file_and_span_read": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Int\\LemmasAux.lean",
+        "sha256": "0825a8f73573a8c6d26e2a9f2c7d13161f2c0fd6d59726fd4ed55c0e00ff6ef8",
+        "bytes": 8921
+      },
+      "first": 55,
+      "last": 60,
+      "role": "Int.natCast_sub with n0<=n",
+      "literal_source": "@[norm_cast] theorem natCast_inj {m n : Nat} : (m : Int) = (n : Int) ↔ m = n := ofNat_inj\n\n@[norm_cast]\nprotected theorem natCast_sub {n m : Nat} : n ≤ m → (↑(m - n) : Int) = ↑m - ↑n := ofNat_sub\n\ntheorem natCast_ne_zero {n : Nat} : (n : Int) ≠ 0 ↔ n ≠ 0 := by omega\n",
+      "normalized_lf_span_sha256": "051e5190c764dcfeea86591e06d9e3d7b1c3a7f70be0f214cc96260e9b4db8e9",
+      "actual_file_and_span_read": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Int\\DivMod\\Lemmas.lean",
+        "sha256": "b68602f75ed3eb6ce8527695e7af87bd2cf0628c40babf72c80295293a545a62",
+        "bytes": 123362
+      },
+      "first": 162,
+      "last": 174,
+      "role": "Int.natCast_dvd_natCast.mp converts cast divisibility to natural divisibility",
+      "literal_source": "@[norm_cast] theorem natCast_dvd_natCast {m n : Nat} : (↑m : Int) ∣ ↑n ↔ m ∣ n where\n  mp := by\n    rintro ⟨a, h⟩\n    obtain rfl | hm := m.eq_zero_or_pos\n    · simpa using h\n    have ha : 0 ≤ a := Int.not_lt.1 fun ha ↦ by\n      simpa [← h, Int.not_lt.2 (Int.natCast_nonneg _)]\n        using Int.mul_neg_of_pos_of_neg (natCast_pos.2 hm) ha\n    match a, ha with\n    | (a : Nat), _ =>\n      norm_cast at h\n      exact ⟨a, h⟩\n  mpr := by rintro ⟨a, rfl⟩; simp [Int.dvd_mul_right]\n",
+      "normalized_lf_span_sha256": "158b29cd011d7f25c00aced1595594e2def6c2c2a54bcfd2bc1f1eeca7d9df09",
+      "actual_file_and_span_read": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Basic.lean",
+        "sha256": "92edcd298633bc57f70cf6c9cea73a3b6f984b91b3c8cc8fcc72f57bada0ee36",
+        "bytes": 47163
+      },
+      "first": 991,
+      "last": 992,
+      "role": "Natural subtraction reconstruction proves translation injectivity",
+      "literal_source": "@[simp] protected theorem sub_add_cancel {n m : Nat} (h : m ≤ n) : n - m + m = n := by\n  rw [Nat.add_comm, Nat.add_sub_of_le h]\n",
+      "normalized_lf_span_sha256": "c9aafcafdcc262cfacee296138e5b5257ff97273d736dfcc7911cc6753a467e5",
+      "actual_file_and_span_read": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Int\\Cast\\Basic.lean",
+        "sha256": "f844c670a3e5f09565d6d3648e740f64aba02d5cf308aa0d81770ffd7499a9a2",
+        "bytes": 4073
+      },
+      "first": 31,
+      "last": 37,
+      "role": "Nat.cast_sub into Real, with minimum <= support point",
+      "literal_source": "namespace Nat\n\nvariable {R : Type u} [AddGroupWithOne R]\n\n@[simp, norm_cast]\ntheorem cast_sub {m n} (h : m ≤ n) : ((n - m : ℕ) : R) = n - m :=\n  eq_sub_of_add_eq <| by rw [← cast_add, Nat.sub_add_cancel h]\n",
+      "normalized_lf_span_sha256": "63f7fdb493d64f18e27887bd14b7a57222e7570fb00bc8d6fbde455a5e6083c0",
+      "actual_file_and_span_read": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Card.lean",
+        "sha256": "174ec68882bf10567b17c3f4d278d6647cef92574dadfa8f7f0821b949967c8f",
+        "bytes": 40628
+      },
+      "first": 236,
+      "last": 237,
+      "role": "card_image_of_injOn",
+      "literal_source": "theorem card_image_of_injOn [DecidableEq β] (H : Set.InjOn f s) : #(s.image f) = #s := by\n  simp only [card, image_val_of_injOn H, card_map]\n",
+      "normalized_lf_span_sha256": "c8a44bd0e101b876764a71f317d6dc2a19240aad608205906ace4c9dfd83f744",
+      "actual_file_and_span_read": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Filter.lean",
+        "sha256": "c777e9b830557d7b4f903a0fa81c27bec2d89f546dd4ae146122f4bb4882a06d",
+        "bytes": 8897
+      },
+      "first": 155,
+      "last": 156,
+      "role": "filter_eq_self from every translated point divisible by lcm",
+      "literal_source": "@[simp]\nlemma filter_eq_self : s.filter p = s ↔ ∀ x ∈ s, p x := by simp [Finset.ext_iff]\n",
+      "normalized_lf_span_sha256": "2a2e76695e6a07a871374bbe259649f888d0e566b98db4931d98920f5f406446",
+      "actual_file_and_span_read": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Image.lean",
+        "sha256": "d7b7e2a714868a3998939bac8f909bbf5b6b0c6895a11fdb8891e39c3ebe326d",
+        "bytes": 32819
+      },
+      "first": 293,
+      "last": 298,
+      "role": "mem_image exposes the original supported natural point",
+      "literal_source": "@[simp, grind =]\ntheorem mem_image : b ∈ s.image f ↔ ∃ a ∈ s, f a = b := by\n  simp only [mem_def, image_val, mem_dedup, Multiset.mem_map]\n\ntheorem mem_image_of_mem (f : α → β) {a} (h : a ∈ s) : f a ∈ s.image f :=\n  mem_image.2 ⟨_, h, rfl⟩\n",
+      "normalized_lf_span_sha256": "fa7e94a33816d025c6a2d39c86e3a1b1e336eb84198d449d9abb7e54c62d75fd",
+      "actual_file_and_span_read": true
+    },
+    {
+      "file": {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Empty.lean",
+        "sha256": "eafc3dc35b044c7ebddefe9742ced8b270f7f3bc29d7822b811574d8f60a28e3",
+        "bytes": 7604
+      },
+      "first": 149,
+      "last": 151,
+      "role": "Empty support branch",
+      "literal_source": "@[simp, push]\ntheorem not_nonempty_iff_eq_empty {s : Finset α} : ¬s.Nonempty ↔ s = ∅ :=\n  nonempty_iff_ne_empty.not.trans not_not\n",
+      "normalized_lf_span_sha256": "0f128f9a955d92ffe47f998d85572f0d1a99df3ef52f288a914fa893374d8949",
+      "actual_file_and_span_read": true
+    }
+  ],
+  "pins": [
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\lean-toolchain",
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "bytes": 29
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\lakefile.toml",
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "bytes": 394
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\lake-manifest.json",
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "bytes": 3872
+    }
+  ],
+  "edge_cases": [
+    "S empty, even if a,b are negative.",
+    "a=b: at most one supported point; the +1 term is retained.",
+    "a<0: translation uses n0 rather than an unsigned floor of a.",
+    "n0=0 and n=0 are allowed; the translated point 0 is divisible by the positive spacing.",
+    "d=1 or q=1.",
+    "Noncoprime d,q are paid by lcm, not d*q.",
+    "Negative r is never converted to Nat.",
+    "An incompatible congruence/divisibility system yields empty S and needs no separate CRT construction."
+  ],
+  "static_verdict": "no_static_blocker",
+  "obstruction": null,
+  "kernel_status": "UNCOMPILED; no elaborator, linter or kernel result inferred",
+  "remaining_open": [
+    "Compatibility gcd(d,q)|r refinement is not added in this minimal package.",
+    "No weighted divisor interchange or progression dK mean is proved here.",
+    "No full Shiu/general-q M2 range, retained variance, nonzero7/32 spectrum, original C/K or main theorem closure."
+  ],
+  "actions": {
+    "Lean_Runtime_compiler_checker_proper_classifier_census_export_Git_Site": 0,
+    "new_TXT": 1,
+    "new_author_CP": 1,
+    "new_agents": 0,
+    "actual_source_edits": 0
+  },
+  "quota": {
+    "fresh_used_percent": 52,
+    "stop_remaining_lte": 40,
+    "fresh_remaining_percent": 48
+  },
+  "timing": {
+    "within_ten_minutes": true,
+    "deadline_utc": "2026-10-21T23:19:50Z",
+    "started_utc": "2026-10-21T23:09:50Z"
+  },
+  "next": "HOLD for independent source review. No actual integration or proof pipeline authorized.",
+  "global_name_check": {
+    "new_public_names": [
+      "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.card_real_supported_modEq_dvd_le_lcm"
+    ],
+    "method": "rg exact name on actual ImbalancedChen/**/*.lean; no compiler.",
+    "actual_project_same_name_matches": 0
+  }
+}

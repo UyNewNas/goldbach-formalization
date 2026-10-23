@@ -1,0 +1,76 @@
+{
+  "status": "ROOT_COMPLETE_LITERAL_MASK_SIX_FINITE_PLUS_FINAL_PUBLIC_TYPES_ONE_SOURCE_AUTHORING_SCOPE_NOT_COMPILE_GATE",
+  "reviewer": "/root",
+  "created_utc": "2026-10-20T08:34:24.275550+00:00",
+  "sole_source": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SharedFirstFactorLargeSupportedDeletion.lean",
+  "sole_author": "/root/support_oct20",
+  "proposal": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261018-large-supported-part-same-p-thin-pair-W-zero-NZ-complete-proposal.json",
+    "sha256": "2f807ac4d898f4f4d25268fc49962e70bdf9481d89012dcd884da0d93280778e"
+  },
+  "independent_review": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261018-large-supported-deletion-2f807-full-proposal-independent-review.json",
+    "sha256": "27403cea87a4a15966af336c9ae68baf02956683eff128cc2f3f7e965244d8d2"
+  },
+  "root_full_proposal_math_publictypes_APIs_and_masks_read": true,
+  "sole_imports": [
+    "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDW",
+    "ImbalancedChen.Part3TransposedGCDPoissonMask",
+    "ImbalancedChen.Part3CanonicalReciprocalData",
+    "ImbalancedChen.Part3TransposedPrimitiveUPayment"
+  ],
+  "four_literal_public_primitives": [
+    "def smallPairedLargeSupportedMask (Ybeta Ysupport : ℝ) (N1 N2 : ℕ) : Prop :=\n  ((N1.gcd N2 : ℝ) ≤ Ybeta) ∧\n    Ysupport < (CanonicalReciprocalData.supportedPart\n      (N1 / N1.gcd N2) (N1.gcd N2) : ℝ)",
+    "def MediumAtom.sharedSmallPairedLargeSupportedW (d : MediumAtom) (Ybeta Ysupport : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    (∑ N1 ∈ d.transposedAtom.betaCarrier,\n      (∑ N2 ∈ d.transposedAtom.betaCarrier,\n        (if smallPairedLargeSupportedMask Ybeta Ysupport N1 N2 then\n          d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n            (d.q1SliceAtom p).transposedAtom.commonFactorPairWeight N1 N2\n        else 0)))",
+    "def MediumAtom.sharedSmallPairedLargeSupportedZero (d : MediumAtom) (Ybeta Ysupport : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    (∑ N1 ∈ d.transposedAtom.betaCarrier,\n      (∑ N2 ∈ d.transposedAtom.betaCarrier,\n        (if smallPairedLargeSupportedMask Ybeta Ysupport N1 N2 then\n          d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n            (d.q1SliceAtom p).transposedAtom.commonFactorPairZeroWeight N1 N2\n        else 0)))",
+    "def MediumAtom.sharedSmallPairedLargeSupportedNonzero (d : MediumAtom) (Ybeta Ysupport : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    (∑ N1 ∈ d.transposedAtom.betaCarrier,\n      (∑ N2 ∈ d.transposedAtom.betaCarrier,\n        (if smallPairedLargeSupportedMask Ybeta Ysupport N1 N2 then\n          d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n            (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2\n        else 0)))"
+  ],
+  "all_six_finite_public_headers": [
+    "theorem canonicalSupportedPart_square_witness (N2 : ℕ) {N1 : ℕ} (hN1 : 0 < N1) :\n  ∃ b : ℕ, 0 < b ∧\n    CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2) ≤ b ^ 2 ∧\n      b ^ 2 ∣ N1",
+    "theorem card_squareDivisorThinCarrier_le {T Y : ℝ} (hT : 0 ≤ T) (hY : 0 < Y)\n    (N : Finset ℕ) (hN : N ⊆ Finset.Ioc 0 (Nat.floor T)) :\n    (((N.filter (fun n => ∃ b : ℕ, 0 < b ∧ b ^ 2 ∣ n ∧ Y < (b : ℝ) ^ 2)).card : ℝ)) ≤\n      2 * T / Real.sqrt Y",
+    "theorem card_sharedPrimitiveLargeSupportedPairs_le {T Y : ℝ}\n    (hT : 0 ≤ T) (hY : 0 < Y) {p : ℕ} (hp : 0 < p)\n    (N : Finset ℕ) (hN : N ⊆ Finset.Ioc 0 (Nat.floor T)) (Ybeta : ℝ) :\n    (((N ×ˢ N).filter (fun z => z.1.Coprime p ∧ z.2.Coprime p ∧\n      Nat.ModEq p z.1 z.2 ∧ smallPairedLargeSupportedMask Ybeta Y z.1 z.2)).card : ℝ) ≤\n        (2 * T / Real.sqrt Y) * (T / (p : ℝ) + 1)",
+    "theorem sharedSmallPairedLargeSupportedZero_bound\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Ybeta : ℝ) {Ysupport : ℝ}\n    (hY : 0 < Ysupport) :\n    ‖d.sharedSmallPairedLargeSupportedZero Ybeta Ysupport‖ ≤\n      16 * |CommonSmoothCutoff.cutoffMass| * d.V *\n        (1 + Real.log (4 * d.Q2 * d.Q3)) ^ 9 *\n          (d.U ^ 2 / d.Q1 + d.U) / Real.sqrt Ysupport",
+    "theorem cleanedAlpha_sharedSmallPairedLargeSupportedW_bound (kappa : ℝ)\n    {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → ∀ Ybeta Ysupport : ℝ,\n        0 < Ysupport →\n          ‖d.cleanedAlphaAtom.sharedSmallPairedLargeSupportedW Ybeta Ysupport‖ ≤\n            C * d.scale ^ epsilon * (4 * d.V / d.Q1 + 1) *\n              (d.U ^ 2 + d.Q1 * d.U) / Real.sqrt Ysupport",
+    "theorem sharedSmallPairedLargeSupportedW_eq_zero_add_nonzero\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Ybeta Ysupport : ℝ) :\n    d.sharedSmallPairedLargeSupportedW Ybeta Ysupport =\n      d.sharedSmallPairedLargeSupportedZero Ybeta Ysupport +\n        d.sharedSmallPairedLargeSupportedNonzero Ybeta Ysupport"
+  ],
+  "complete_final_public_type": "theorem actual_betaL2_gamma1L2_cleaned_sharedLargeSupported_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale → ∀ Ybeta : ℝ,\n      (∑ n ∈ d.betaCarrier, (‖d.beta n‖ ^ 2)) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, (‖d.gamma1 p‖ ^ 2)) *\n          (‖d.cleanedAlphaAtom.sharedSmallPairedLargeSupportedW\n              Ybeta (d.scale ^ (sigma / 4))‖ +\n            ‖d.cleanedAlphaAtom.sharedSmallPairedLargeSupportedZero\n              Ybeta (d.scale ^ (sigma / 4))‖ +\n            ‖d.cleanedAlphaAtom.sharedSmallPairedLargeSupportedNonzero\n              Ybeta (d.scale ^ (sigma / 4))‖) ≤\n              d.scale ^ 2 / (Real.log d.scale) ^ A",
+  "root_math_rederived": [
+    "Actualg<=Ybeta AND Ysupport<supportedPart(N1/g,g) is deleted before any tailD split. Keep the same asymmetric mask in originalphysicalW/rawZero/fullintegerNZ; no signed-subsumnorm monotonicity or reality/positivity assumption.",
+    "Native finite proof reuse: s=c²a squarefreea supported on g, hencea|g. b=c*a gives b²=a*s>=s andb²|g*s|N1; neverstrict b²>s. Invoke onlypositive actualN1. Generic square-support proof may be namespace-extracted from exact09b97 licensed source, no unbuilt oldWGCD/phase import.",
+    "For NsubsetIoc0floorT, b²|n andY<b² implyb>sqrtY. Actual finite square-divisor density yields2T/sqrtY including0<Y<1/emptyintervals; native proof presence withoutolean is not kernelacceptance.",
+    "Keep both p-unit gates and Nat.ModEq pN1N2; inject orderedpairs into thin-first-coordinate times quotient N2/p. ModEq+sameN1+samequotient recoversN2. Bound2T/sqrtY*(T/p+1), preserving1/p and diagonal/compoundp.",
+    "Locally reconstruct existing ownedprivate wholeW pointwise proof via publictauFour/residue/cleaning APIs. No mangled private references or finallargegcd endpoint for anothermask. Rawzero uses exactcomplex tailfibers/normG<=tau2 andlcm(pv,pw)=p*lcm(v,w), trueV/p Htail9.",
+    "Summingfull primitivep via p>=Q1/card<=2Q1 pays actualrawW andrawZero. Multiply original betaL2*gamma1L2<=4VQ1Hbeta^eB before normalizing; originalgeometry Q1<=U<=V gives statedX²/sqrtY fixedlogs. Cleaning changes alpha only.",
+    "Publicsame-mask factorpair identity givesNZ=W-Z andthreenormsum<=2(Wnorm+Znorm). Ysupport=X^(sigma/4),epsilon=sigma/32,logcostsigma/32 leavegenuineX^(2-sigma/16). One scalarlogthreshold precedes everyd AND anyrealYbeta. No SW/newanalytic estimate/highergeometry premise."
+  ],
+  "native_extraction_scope": {
+    "repository_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+    "native_HEAD_matches_pin": true,
+    "LargeSupport": {
+      "path": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryLargeSupport.lean",
+      "sha256": "ef580af4abaac65d7db868c3cc060414a19af89ad6c0ca1af006edfe98753276",
+      "complete_source_read": true,
+      "current_bytes_match_exact_pinned_git_blob": true,
+      "native_olean_exists": false
+    },
+    "LargeSupportDensity": {
+      "path": "MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvryLargeSupportDensity.lean",
+      "sha256": "09e327646a4c68a197bc02970018f6dc4b52b65b02c94262d32753df98d221c4",
+      "complete_source_read": true,
+      "current_bytes_match_exact_pinned_git_blob": true,
+      "native_olean_exists": false
+    },
+    "reuse_method": "Prefer namespace-local extraction of the three generic prime-support square-witness proofs and the finite square-divisor set/cardinality proofs from these exact pinned source blobs. Instantiate with the already-owned LOCAL CanonicalReciprocalData.supportedPart. Do not import their old WGCD/phase family, install new objects, call original provider WGCD types, or claim original object kernel replay/0-sorry closure from source presence.",
+    "native_existing_full_headers": [
+      "theorem Nat.sq_mul_squarefree_of_pos {n : ℕ} (hn : 0 < n) : ∃ a b : ℕ, 0 < a ∧ 0 < b ∧ b ^ 2 * a = n ∧ Squarefree a",
+      "theorem squarefree_dvd_of_prime_support {a d : ℕ} (ha : Squarefree a) (hd : 0 < d) (hs : ∀ p : ℕ, p.Prime → p ∣ a → p ∣ d) : a ∣ d",
+      "theorem exists_square_dvd_of_supported_mul_dvd {s d n : ℕ} (hs : 0 < s) (hd : 0 < d) (hsd : ∀ p : ℕ, p.Prime → p ∣ s → p ∣ d) (hn : d * s ∣ n) : ∃ b : ℕ, 0 < b ∧ s ≤ b ^ 2 ∧ b ^ 2 ∣ n",
+      "theorem card_largeSquareDivisorSet_le_real {T Z : ℝ} (hT : 0 ≤ T) (hZ : 0 < Z) : ((largeSquareDivisorSet (Nat.floor T) Z).card : ℝ) ≤ 2 * T / Z",
+      "theorem Nat.Ioc_filter_dvd_card_eq_div (n p : ℕ) : #{x ∈ Ioc 0 n | p ∣ x} = n / p",
+      "theorem LcmWeightBounds.sum_abs_lcm_weight_le_log (j : ℕ) {L : ℝ} (hL : 1 ≤ L) (Q : Finset ℕ) (hQ : Q ⊆ Ioc 0 (Nat.floor L)) (c : ℕ → ℝ) (hc : ∀ q ∈ Q, |c q| ≤ (fouvryTau j q : ℝ)) : (∑ q ∈ Q, ∑ r ∈ Q, |c q * c r / (q.lcm r : ℝ)|) ≤ (1 + Real.log L) ^ (2 * j ^ 2 + 1)"
+    ]
+  },
+  "source_limits": "Complete ONE source with four literal public objects, all six finite endpoints and full finalbothoutside threenorm logendpoint; pure finite privatehelper primitives/lemmas allowed with fullinventory. No sorry/axiom/partial/unsafe/newanalytic supplier. Do notmodify any otherLean/pins/CI/tools/cache/resources or compile. Current rootssource/ownedreceipt must remain exact. Fullnonauthor actualsource review precedes separate firstgate.",
+  "no_new_foreign": "Use only proposed four alreadyowned roots and their existingclosure, newforeigndelta0; do not import unbuilt native LargeSupport/LargeSupportDensity oldchain or unaccepted NZcandidate.",
+  "remaining_full_nonzero_main_not_claimed": true
+}

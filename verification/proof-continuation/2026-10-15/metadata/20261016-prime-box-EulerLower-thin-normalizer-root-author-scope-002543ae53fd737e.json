@@ -1,0 +1,680 @@
+{
+  "status": "ROOT_AUTHOR_NEW_THIN_EULER_IMPORT_AND_PROVED_PUBLIC_API_SCOPE_SOURCE_ONLY",
+  "created_utc": "2026-10-16T00:05:47.650558+00:00",
+  "author": "/root",
+  "module": "ImbalancedChen.ActualPrimeBoxEulerLower",
+  "old_source_sha256": "adc0657ea574d58a0364423062c556119a06380b6edcdb31d6175ca3f99083cb",
+  "new_source_sha256": "c5a5b3d160d00556eaec65c78f7f6bebc7144f7fe76ab2e5ddf772f7adbe7dab",
+  "old_snapshot": ".lake\\proof-continuation\\source-reviews\\drafts\\ActualPrimeBoxEulerLower.adc0657ea574d58a0364423062c556119a06380b6edcdb31d6175ca3f99083cb.lean",
+  "full_new_source": "import ImbalancedChen.ActualPrimeBoxMass\nimport ImbalancedChen.CurrentChenFixedEulerNormalization\nimport ImbalancedChen.SieveDimensionComparison\n\n/-!\n# Lower mass of actual prime boxes with a boundary Euler ratio\n\nThe sum below is over actual prime tuples, with the same target exclusions\nas the one-prime mass supplier. A specified coordinate supplies the strict\nlower Euler cutoff. Monotonicity bounds this ratio throughout the box by\nits value at that coordinate's upper endpoint. The full power Euler ratio\nand the proved tuple mass then give one eventual lower bound, uniformly in\nevery enumeration cap covering the outer cutoff.\n\nThis does not assert that the box satisfies the Rosser boundary predicate.\nThat finite geometric inclusion must be proved when inserting such a box\ninto the exact positive boundary expansion.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen scoped BigOperators\nopen Filter Topology\n\n/-- A covered actual Euler product decreases as its strict cutoff grows. -/\ntheorem actualSmallEulerProduct_antitone_cutoff\n    (N cap : ℕ) (hEven : Even N) (x y : ℝ)\n    (hxy : x ≤ y) (hycap : y ≤ (cap : ℝ)) :\n    actualSmallEulerProduct N cap y ≤ actualSmallEulerProduct N cap x := by\n  rw [currentChen_model_actualEuler_eq_finite N cap y hycap,\n    currentChen_model_actualEuler_eq_finite N cap x (hxy.trans hycap)]\n  exact finiteSieveDensity_antitone hEven (Nat.ceil_mono hxy)\n\n/-- The actual tuple mass weighted by the strict Euler ratio at one\ncoordinate. To use it as a Rosser boundary contribution, this coordinate\nmust separately be shown to be the least selected prime. -/\ndef actualPrimeBoxEulerMass {k : ℕ} (N cap : ℕ) (a b : Fin k → ℝ)\n    (u : ℝ) (j : Fin k) : ℝ :=\n  ∑ p ∈ actualPrimeBoxTuples N a b,\n    (∏ i, 1 / ((p i : ℝ) - 1)) *\n      (actualSmallEulerProduct N cap (p j : ℝ) /\n        actualSmallEulerProduct N cap ((N : ℝ) ^ u))\n\n/-- The ratio at the coordinate's upper endpoint is a simultaneous lower\nbound throughout the actual box. Only that coordinate needs to lie below\nthe outer cutoff for this numerical inequality. -/\ntheorem actualPrimeBoxEulerMass_ge_endpoint_ratio\n    {k : ℕ} (N cap : ℕ) (hN : 1 < N) (hEven : Even N)\n    (a b : Fin k → ℝ) (u : ℝ) (j : Fin k)\n    (hbu : b j ≤ u) (hcap : (N : ℝ) ^ u ≤ (cap : ℝ)) :\n    (actualSmallEulerProduct N cap ((N : ℝ) ^ b j) /\n        actualSmallEulerProduct N cap ((N : ℝ) ^ u)) *\n      actualPrimeBoxMass N a b ≤ actualPrimeBoxEulerMass N cap a b u j := by\n  have hN1 : (1 : ℝ) ≤ N := by exact_mod_cast (show 1 ≤ N by omega)\n  have hbcap : (N : ℝ) ^ b j ≤ (cap : ℝ) :=\n    (Real.rpow_le_rpow_of_exponent_le hN1 hbu).trans hcap\n  rw [actualPrimeBoxMass, actualPrimeBoxEulerMass, Finset.mul_sum]\n  apply Finset.sum_le_sum\n  intro p hp\n  have hpb : (p j : ℝ) ≤ (N : ℝ) ^ b j :=\n    ((mem_actualPrimeBoxTuples_iff.mp hp) j).2.2.2.le\n  have hV := actualSmallEulerProduct_antitone_cutoff N cap hEven\n    (p j : ℝ) ((N : ℝ) ^ b j) hpb hbcap\n  have hratio := div_le_div_of_nonneg_right hV\n    (currentChen_model_actualEuler_pos N cap ((N : ℝ) ^ u) hEven).le\n  simpa only [mul_comm] using\n    mul_le_mul_of_nonneg_right hratio (actualPrimeBoxWeight_nonneg hp)\n\n/-- Two already proved fixed normalizations cancel with their actual common\nsingular series and log. This uses only the public literal Euler endpoint. -/\nprivate theorem primeBoxEuler_tendsto_finiteDensity_power_ratio {a b : ℝ}\n    (ha : 0 < a) (hb : 0 < b) :\n    Tendsto (fun N : ℕ =>\n      finiteSieveDensity N (Nat.ceil ((N : ℝ) ^ a)) /\n        finiteSieveDensity N (Nat.ceil ((N : ℝ) ^ b)))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 (b / a)) := by\n  have hden : 2 * Real.exp (-Real.eulerMascheroniConstant) / b ≠ 0 := by positivity\n  have hlim := (tendsto_currentChen_actualEuler_fixed_normalized ha).div\n    (tendsto_currentChen_actualEuler_fixed_normalized hb) hden\n  have hconstant :\n      (2 * Real.exp (-Real.eulerMascheroniConstant) / a) /\n        (2 * Real.exp (-Real.eulerMascheroniConstant) / b) = b / a := by\n    field_simp [ha.ne', hb.ne', Real.exp_ne_zero]\n  rw [hconstant] at hlim\n  apply hlim.congr'\n  simp only [Filter.EventuallyEq, Filter.eventually_inf_principal, Pi.div_apply]\n  filter_upwards [eventually_ge_atTop (2 : ℕ)] with N hN\n  intro _hEven\n  have hN1 : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)\n  rw [currentChen_model_actualEuler_eq_finite N\n      (Nat.ceil ((N : ℝ) ^ a)) ((N : ℝ) ^ a) (Nat.le_ceil _),\n    currentChen_model_actualEuler_eq_finite N\n      (Nat.ceil ((N : ℝ) ^ b)) ((N : ℝ) ^ b) (Nat.le_ceil _),\n    div_div_div_cancel_right₀ (singularSeries_pos N).ne',\n    mul_div_mul_right _ _ (Real.log_pos hN1).ne']\n\n/-- A genuine lower asymptotic for the weighted actual box. The threshold\nis chosen before the varying even target and every covering natural cap.\nThe only analytic inputs are the proved Euler-ratio and prime-tuple limits. -/\ntheorem exists_actualPrimeBoxEulerMass_lower_threshold\n    {k : ℕ} (a b : Fin k → ℝ) (ha : ∀ i, 0 < a i) (hab : ∀ i, a i < b i)\n    (u : ℝ) (hu : 0 < u) (j : Fin k) (hbu : b j ≤ u)\n    (eta : ℝ) (heta : 0 < eta) :\n    ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n      ∀ cap : ℕ, (N : ℝ) ^ u ≤ (cap : ℝ) →\n        (u / b j) * (∏ i, Real.log (b i / a i)) - eta ≤\n          actualPrimeBoxEulerMass N cap a b u j := by\n  have hbj : 0 < b j := (ha j).trans (hab j)\n  have hratio := primeBoxEuler_tendsto_finiteDensity_power_ratio hbj hu\n  have hmass := (tendsto_actualPrimeBoxMass a b ha hab).mono_left\n    (inf_le_left :\n      atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N} ≤ atTop)\n  have hlim := hratio.mul hmass\n  have hnear : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      (u / b j) * (∏ i, Real.log (b i / a i)) - eta <\n        (finiteSieveDensity N (Nat.ceil ((N : ℝ) ^ b j)) /\n          finiteSieveDensity N (Nat.ceil ((N : ℝ) ^ u))) *\n          actualPrimeBoxMass N a b :=\n    (tendsto_order.mp hlim).1 _ (by linarith)\n  rw [Filter.eventually_inf_principal] at hnear\n  obtain ⟨N1, hN1⟩ := eventually_atTop.mp hnear\n  refine ⟨max N1 2, le_max_right _ _, ?_⟩\n  intro N hN hEven cap hcap\n  have hN2 : 2 ≤ N := (le_max_right _ _).trans hN\n  have hNpos : 0 < N := by omega\n  have hNreal : (1 : ℝ) ≤ N := by exact_mod_cast (show 1 ≤ N by omega)\n  have hbcap : (N : ℝ) ^ b j ≤ (cap : ℝ) :=\n    (Real.rpow_le_rpow_of_exponent_le hNreal hbu).trans hcap\n  have hbound := actualPrimeBoxEulerMass_ge_endpoint_ratio N cap (by omega)\n    hEven a b u j hbu hcap\n  rw [currentChen_model_actualEuler_eq_finite N cap ((N : ℝ) ^ b j) hbcap,\n    currentChen_model_actualEuler_eq_finite N cap ((N : ℝ) ^ u) hcap] at hbound\n  exact (hN1 N ((le_max_left _ _).trans hN) ⟨hNpos, hEven⟩).le.trans hbound\n\nend\n\nend ImbalancedChen\n",
+  "original_four_public_declarations_unchanged_headers": [
+    {
+      "complete_header": "theorem actualSmallEulerProduct_antitone_cutoff\n    (N cap : ℕ) (hEven : Even N) (x y : ℝ)\n    (hxy : x ≤ y) (hycap : y ≤ (cap : ℝ)) :\n    actualSmallEulerProduct N cap y ≤ actualSmallEulerProduct N cap x",
+      "kind": "theorem"
+    },
+    {
+      "complete_header": "def actualPrimeBoxEulerMass {k : ℕ} (N cap : ℕ) (a b : Fin k → ℝ)\n    (u : ℝ) (j : Fin k) : ℝ",
+      "kind": "def"
+    },
+    {
+      "complete_header": "theorem actualPrimeBoxEulerMass_ge_endpoint_ratio\n    {k : ℕ} (N cap : ℕ) (hN : 1 < N) (hEven : Even N)\n    (a b : Fin k → ℝ) (u : ℝ) (j : Fin k)\n    (hbu : b j ≤ u) (hcap : (N : ℝ) ^ u ≤ (cap : ℝ)) :\n    (actualSmallEulerProduct N cap ((N : ℝ) ^ b j) /\n        actualSmallEulerProduct N cap ((N : ℝ) ^ u)) *\n      actualPrimeBoxMass N a b ≤ actualPrimeBoxEulerMass N cap a b u j",
+      "kind": "theorem"
+    },
+    {
+      "complete_header": "theorem exists_actualPrimeBoxEulerMass_lower_threshold\n    {k : ℕ} (a b : Fin k → ℝ) (ha : ∀ i, 0 < a i) (hab : ∀ i, a i < b i)\n    (u : ℝ) (hu : 0 < u) (j : Fin k) (hbu : b j ≤ u)\n    (eta : ℝ) (heta : 0 < eta) :\n    ∃ N0 : ℕ, 2 ≤ N0 ∧ ∀ N : ℕ, N0 ≤ N → Even N →\n      ∀ cap : ℕ, (N : ℝ) ^ u ≤ (cap : ℝ) →\n        (u / b j) * (∏ i, Real.log (b i / a i)) - eta ≤\n          actualPrimeBoxEulerMass N cap a b u j",
+      "kind": "theorem"
+    }
+  ],
+  "original_primitive_definition_unchanged": "def actualPrimeBoxEulerMass {k : ℕ} (N cap : ℕ) (a b : Fin k → ℝ)\n    (u : ℝ) (j : Fin k) : ℝ :=\n  ∑ p ∈ actualPrimeBoxTuples N a b,\n    (∏ i, 1 / ((p i : ℝ) - 1)) *\n      (actualSmallEulerProduct N cap (p j : ℝ) /\n        actualSmallEulerProduct N cap ((N : ℝ) ^ u))",
+  "new_private_theorem_complete_source": "/-- Two already proved fixed normalizations cancel with their actual common\nsingular series and log. This uses only the public literal Euler endpoint. -/\nprivate theorem primeBoxEuler_tendsto_finiteDensity_power_ratio {a b : ℝ}\n    (ha : 0 < a) (hb : 0 < b) :\n    Tendsto (fun N : ℕ =>\n      finiteSieveDensity N (Nat.ceil ((N : ℝ) ^ a)) /\n        finiteSieveDensity N (Nat.ceil ((N : ℝ) ^ b)))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 (b / a)) := by\n  have hden : 2 * Real.exp (-Real.eulerMascheroniConstant) / b ≠ 0 := by positivity\n  have hlim := (tendsto_currentChen_actualEuler_fixed_normalized ha).div\n    (tendsto_currentChen_actualEuler_fixed_normalized hb) hden\n  have hconstant :\n      (2 * Real.exp (-Real.eulerMascheroniConstant) / a) /\n        (2 * Real.exp (-Real.eulerMascheroniConstant) / b) = b / a := by\n    field_simp [ha.ne', hb.ne', Real.exp_ne_zero]\n  rw [hconstant] at hlim\n  apply hlim.congr'\n  simp only [Filter.EventuallyEq, Filter.eventually_inf_principal, Pi.div_apply]\n  filter_upwards [eventually_ge_atTop (2 : ℕ)] with N hN\n  intro _hEven\n  have hN1 : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)\n  rw [currentChen_model_actualEuler_eq_finite N\n      (Nat.ceil ((N : ℝ) ^ a)) ((N : ℝ) ^ a) (Nat.le_ceil _),\n    currentChen_model_actualEuler_eq_finite N\n      (Nat.ceil ((N : ℝ) ^ b)) ((N : ℝ) ^ b) (Nat.le_ceil _),\n    div_div_div_cancel_right₀ (singularSeries_pos N).ne',\n    mul_div_mul_right _ _ (Real.log_pos hN1).ne']\n\n",
+  "literal_replacements": [
+    [
+      "import ImbalancedChen.FullPowerEulerNormalization\nimport ImbalancedChen.RoughPowerParameters\n",
+      "import ImbalancedChen.CurrentChenFixedEulerNormalization\n"
+    ],
+    [
+      "actualSmallEulerProduct_eq_finiteSieveDensity",
+      "currentChen_model_actualEuler_eq_finite"
+    ],
+    [
+      "actualSmallEulerProduct_pos",
+      "currentChen_model_actualEuler_pos"
+    ],
+    [
+      "have hratio := tendsto_finiteSieveDensity_power_ratio hbj hu",
+      "have hratio := primeBoxEuler_tendsto_finiteDensity_power_ratio hbj hu"
+    ]
+  ],
+  "helper_insertion_before_literal": "/-- A genuine lower asymptotic for the weighted actual box.",
+  "old_OOM_preserved": "No old receipt or source evidence changed. New-source dependency scope differs, so this is not permission to repeat unchanged adc065 OOM or raise limits.",
+  "mathematical_assessment": [
+    "Public actualEuler normalized Tendsto supplier in alreadyowned CurrentChenFixedEulerNormalization is divided at a,b>0. Both exact2exp(-gamma)/exponent constants cancel to b/a. singularSeries_pos and eventual N>=2 make the shared singular series and log cancellable.",
+    "Actual strict real cap with covering naturalceil is converted by alreadyowned currentChen_model_actualEuler_eq_finite; no floor+one surrogate. The resulting private theorem is exactly old finite-density power ratio type, not a new analytic premise.",
+    "Existing actual tuple mass, coordinateEuler lower bound, positivity and targeteven/covering cap conditions retain all4 publicheaders/1def exactly. Existing three proofs change only public symbol mapping, ratio call. New helper has a concrete proof.",
+    "Imports now Mass+CurrentFixedEuler+SieveDimensionComparison. Remove old FullPowerEuler/ActualSmallEulerNorm/RosserEndpointBridge/RoughPower chain; use alreadyowned fixed normalizer and endpoint dictionary. No accepted source/pin/original LaTeX changed."
+  ],
+  "bounded_project_DAG": {
+    "old_count": 68,
+    "new_count": 64,
+    "added_local": [
+      "ImbalancedChen.CurrentChenFixedEulerNormalization",
+      "ImbalancedChen.CurrentChenRosserEndpointDictionary"
+    ],
+    "removed_local": [
+      "ImbalancedChen.ActualSmallEulerNormalization",
+      "ImbalancedChen.FixedRoughCoefficients",
+      "ImbalancedChen.FullPowerEulerNormalization",
+      "ImbalancedChen.RosserEndpointBridge",
+      "ImbalancedChen.RoughAbsoluteDensity",
+      "ImbalancedChen.RoughPowerParameters"
+    ],
+    "new_project_nodes": {
+      "ImbalancedChen.ActualPrimeBoxEulerLower": {
+        "sha256": "c5a5b3d160d00556eaec65c78f7f6bebc7144f7fe76ab2e5ddf772f7adbe7dab",
+        "imports": [
+          "ImbalancedChen.ActualPrimeBoxMass",
+          "ImbalancedChen.CurrentChenFixedEulerNormalization",
+          "ImbalancedChen.SieveDimensionComparison"
+        ]
+      },
+      "ImbalancedChen.ActualPrimeBoxMass": {
+        "sha256": "94c5186517af878ac3ffc38f19914ff848b40a2185ba9df1803efc444afb0e1a",
+        "imports": [
+          "ImbalancedChen.ActualPrimeReciprocalMass",
+          "Mathlib.Algebra.BigOperators.Ring.Finset",
+          "Mathlib.Order.Fin.Basic",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.Data.Nat.GCD.BigOperators",
+          "ImbalancedChen.FinitePrimeGeometryCore"
+        ]
+      },
+      "ImbalancedChen.ActualPrimeReciprocalMass": {
+        "sha256": "f2cb90c3751d4bbc1208e9f1694f820befa948bddf1c396ca564c10ccd1e1108",
+        "imports": [
+          "ImbalancedChen.ChenPrimeHarmonicFinite",
+          "ImbalancedChen.RoughPrimeUniverse",
+          "ImbalancedChen.PowerErrorBudget",
+          "MathlibNt.SieveTheory.Arithmetic.PrimeReciprocalLogScale"
+        ]
+      },
+      "ImbalancedChen.ChenPrimeHarmonicFinite": {
+        "sha256": "8b7b1d6d7b7b9847ade96917beac79be4d695c2444a27c38b3f9e1b878174f38",
+        "imports": [
+          "ImbalancedChen.ChenQuotientPrimeSource",
+          "ImbalancedChen.ChenInitialCorrectionBudget",
+          "ImbalancedChen.RoughSquareException"
+        ]
+      },
+      "ImbalancedChen.ChenQuotientPrimeSource": {
+        "sha256": "538fc0e9a0c9fe55f3746ac31aaffc7375125d49dc58161d22e9abad53b97a8c",
+        "imports": [
+          "ImbalancedChen.ChenInitialPrimeSource"
+        ]
+      },
+      "ImbalancedChen.ChenInitialPrimeSource": {
+        "sha256": "330fab9edc70b63f56fb28b7b83748427b269c42da54ee67dd14a812a36720f2",
+        "imports": [
+          "ImbalancedChen.QuotientChenElevenSum",
+          "ImbalancedChen.FiniteSieveModel",
+          "ImbalancedChen.CoprimeRecentering"
+        ]
+      },
+      "ImbalancedChen.QuotientChenElevenSum": {
+        "sha256": "da37649fd96b1e216424a255cf72e947a29577750640739587bf763026da9c96",
+        "imports": [
+          "ImbalancedChen.QuotientChenSummedBridge"
+        ]
+      },
+      "ImbalancedChen.QuotientChenSummedBridge": {
+        "sha256": "3ae498ccb6c6e214184e5ffb56889afb1957f3e7666d09acd71bf9a841d35d17",
+        "imports": [
+          "ImbalancedChen.QuotientChenPositiveBound",
+          "ImbalancedChen.RoughSquareException"
+        ]
+      },
+      "ImbalancedChen.QuotientChenPositiveBound": {
+        "sha256": "a7e99b14a66b55e0e5100321d169680a112fb8ef2c1c6ff8754aab88185b28a6",
+        "imports": [
+          "ImbalancedChen.QuotientChenWeightCases",
+          "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset"
+        ]
+      },
+      "ImbalancedChen.QuotientChenWeightCases": {
+        "sha256": "0a46a07615bd68b25b56d2655f08fc6c7f87fea7ad0fa3d56f7a584299c31835",
+        "imports": [
+          "ImbalancedChen.QuotientChenNinthSwitch",
+          "ImbalancedChen.Multiplicity",
+          "Mathlib.Data.Nat.Choose.Basic"
+        ]
+      },
+      "ImbalancedChen.QuotientChenNinthSwitch": {
+        "sha256": "702981a5101c248640cbc7b7356f7b0fd666add84edae31a4b7cec554cdba0d2",
+        "imports": [
+          "ImbalancedChen.QuotientChenInitialCounts",
+          "ImbalancedChen.QuotientChenSwitchGeometry",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.Tactic.NormNum"
+        ]
+      },
+      "ImbalancedChen.QuotientChenInitialCounts": {
+        "sha256": "5d44f2769051957cf1723b4421930ee8caed5fda6054b0404a5a9c77fe038859",
+        "imports": [
+          "ImbalancedChen.QuotientChenFourCounts"
+        ]
+      },
+      "ImbalancedChen.QuotientChenFourCounts": {
+        "sha256": "dbf594ed81b0ba34cd36f8f7ee04ea1fc95a3446a7c8142db4c057b99fb8c216",
+        "imports": [
+          "ImbalancedChen.QuotientChenFourPrime",
+          "Mathlib.Data.Finset.Card",
+          "Mathlib.Data.Finset.Prod"
+        ]
+      },
+      "ImbalancedChen.QuotientChenFourPrime": {
+        "sha256": "e2966ad01dec7cd6e9725c6c830f685b1cef6414121d268b0203bf743a394c72",
+        "imports": [
+          "Mathlib.Data.Nat.Squarefree",
+          "Mathlib.Data.Finset.Prod",
+          "Mathlib.Data.Real.Basic",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.QuotientChenSwitchGeometry": {
+        "sha256": "0a9f384144b847a3030bad2c7821e1995be56dff2f8ff0ec3cfbff3d1c692a9b",
+        "imports": [
+          "ImbalancedChen.QuotientChenFourCounts",
+          "Mathlib.Analysis.SpecialFunctions.Sqrt",
+          "Mathlib.Data.Nat.Find"
+        ]
+      },
+      "ImbalancedChen.Multiplicity": {
+        "sha256": "9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6",
+        "imports": [
+          "ImbalancedChen.Counting",
+          "Mathlib.NumberTheory.AlmostPrime",
+          "Mathlib.Tactic.SplitIfs"
+        ]
+      },
+      "ImbalancedChen.Counting": {
+        "sha256": "8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa",
+        "imports": [
+          "Mathlib.Data.Finset.Card",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Real.Basic",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.RoughSquareException": {
+        "sha256": "02723bf89057e5979946c2e591d76aa93517e455cf88a1f67598719ff14f4e30",
+        "imports": [
+          "Mathlib.Algebra.BigOperators.Intervals",
+          "Mathlib.Algebra.BigOperators.Ring.Finset",
+          "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Real.Archimedean",
+          "Mathlib.Order.Interval.Finset.Nat",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Positivity",
+          "Mathlib.Tactic.Ring",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.FiniteSieveModel": {
+        "sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+        "imports": [
+          "ImbalancedChen.SieveSourceCoprimality",
+          "Mathlib.NumberTheory.SelbergSieve",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.Data.Nat.Squarefree",
+          "Mathlib.Tactic.NormNum",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.SieveSourceCoprimality": {
+        "sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+        "imports": [
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Data.Nat.GCD.BigOperators",
+          "Mathlib.Data.Nat.ModEq",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.HalfProductSource": {
+        "sha256": "dc6e261ddfdc9a66e966a4ec5c2a129d3f4b7583501c5c82364f2aa4a8af194e",
+        "imports": [
+          "ImbalancedChen.BadSourceLocalization",
+          "Mathlib.Data.Finset.Prod"
+        ]
+      },
+      "ImbalancedChen.BadSourceLocalization": {
+        "sha256": "0e88326b03a4c20a472014b506d7533495d86801909af4d455de5fcfae6695a7",
+        "imports": [
+          "ImbalancedChen.HalfProductGeometry",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.HalfProductGeometry": {
+        "sha256": "d04e31ea73a853c4fa37e881ef30a748b7f83b8a0e930e0cc2ae231dbb629db1",
+        "imports": [
+          "ImbalancedChen.OrderedBad",
+          "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+          "Mathlib.Tactic.Convert",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.OrderedBad": {
+        "sha256": "a38031995175bd2f847eefd498c929e941400c9cffdf6f78e3e06bd2100764da",
+        "imports": [
+          "ImbalancedChen.RationalPowers"
+        ]
+      },
+      "ImbalancedChen.RationalPowers": {
+        "sha256": "40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06",
+        "imports": [
+          "ImbalancedChen.Counting",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+        ]
+      },
+      "ImbalancedChen.CoprimeRecentering": {
+        "sha256": "45c28d97bd10eccaa99498b2309fb03c9d8efbdd5040e12d7ba33c3702b418c5",
+        "imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.Tactic.FieldSimp"
+        ]
+      },
+      "ImbalancedChen.CurvedRegionDiscrepancy": {
+        "sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+        "imports": [
+          "ImbalancedChen.FiniteSieveModel",
+          "Mathlib.Algebra.BigOperators.Ring.Finset",
+          "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.ChenInitialCorrectionBudget": {
+        "sha256": "983e6ae56fcfecd1eeea5144c5c02c43b6535e25e51b657b2e830954eba4b264",
+        "imports": [
+          "ImbalancedChen.ChenInitialPrimeSource",
+          "ImbalancedChen.TotientReciprocalBudget",
+          "ImbalancedChen.BoundaryArbitraryLog",
+          "Mathlib.Analysis.SpecialFunctions.Log.Basic"
+        ]
+      },
+      "ImbalancedChen.TotientReciprocalBudget": {
+        "sha256": "aa80ff2ad79f77405951f1e56e993a851a1b32ad46c970e7914adb94bdb2db86",
+        "imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.NumberTheory.ArithmeticFunction.Misc",
+          "Mathlib.NumberTheory.Harmonic.Bounds",
+          "Mathlib.Algebra.BigOperators.Intervals",
+          "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Positivity",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.BoundaryArbitraryLog": {
+        "sha256": "2694e8398198c9edeab5f0c4bad70c514a22de21a0cec6edec33c2faec742167",
+        "imports": [
+          "ImbalancedChen.CurvedDiscrepancyReduction",
+          "ImbalancedChen.LogMeshGridCount"
+        ]
+      },
+      "ImbalancedChen.CurvedDiscrepancyReduction": {
+        "sha256": "cb277ada2fb933a5c8a6908978e72973ec703f281a678a87f39d58591a36e0d6",
+        "imports": [
+          "ImbalancedChen.RectangleDiscrepancyAssembly",
+          "ImbalancedChen.BoundaryLogMesh",
+          "ImbalancedChen.LogCutoffError"
+        ]
+      },
+      "ImbalancedChen.RectangleDiscrepancyAssembly": {
+        "sha256": "5af6880e6c3f2c00a846cfccd8842e08f80ed8eb314cfdaa972904c2f987e861",
+        "imports": [
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.TotientReciprocalBudget"
+        ]
+      },
+      "ImbalancedChen.ActualGridEnvelopes": {
+        "sha256": "f2171599b210583ee28b316da48b114c74f8742b564d0c1d3a30aaf073aaf528",
+        "imports": [
+          "ImbalancedChen.MultiplicativeGridPartition",
+          "ImbalancedChen.BoundaryGlobalCaps"
+        ]
+      },
+      "ImbalancedChen.MultiplicativeGridPartition": {
+        "sha256": "9be180c5c070d8855c9e1fa1acaf30ccda7f87d7ec45410670e2d527a6b18598",
+        "imports": [
+          "ImbalancedChen.BoundaryCellContainment",
+          "Mathlib.Analysis.SpecialFunctions.Log.Base",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Prod",
+          "Mathlib.Order.Interval.Finset.Nat"
+        ]
+      },
+      "ImbalancedChen.BoundaryCellContainment": {
+        "sha256": "12a74397730d07769c95cb7e1ab6adc4a3b570daedc49dbc65c0c0defd7ba80d",
+        "imports": [
+          "ImbalancedChen.BoundaryGridBudget",
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.BoundaryGridBudget": {
+        "sha256": "a36da7f8fc558d406e5e00b9790389438846198caa610540da8145471a419245",
+        "imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Finset.Max",
+          "Mathlib.Order.Interval.Finset.Nat",
+          "Mathlib.NumberTheory.Harmonic.Bounds",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.BoundaryGlobalCaps": {
+        "sha256": "95eb4934caa7aa8ed308a7094ae46a4d14d6336e2470ee2b58a88ce0b379caae",
+        "imports": [
+          "ImbalancedChen.BoundaryCellContainment",
+          "Mathlib.Analysis.Real.Sqrt"
+        ]
+      },
+      "ImbalancedChen.BoundaryLogMesh": {
+        "sha256": "364d2571fcbf6c00e5aaa9b70a04c9ddee49a12d5725f70b0a13571fdfa3be81",
+        "imports": [
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.PowerErrorBudget",
+          "ImbalancedChen.TotientReciprocalBudget"
+        ]
+      },
+      "ImbalancedChen.PowerErrorBudget": {
+        "sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+        "imports": [
+          "ImbalancedChen.SingularSeries",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.SingularSeries": {
+        "sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "imports": [
+          "ImbalancedChen.NormalizationGrowth",
+          "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+          "Mathlib.Analysis.PSeries",
+          "Mathlib.Data.Nat.PrimeFin",
+          "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.NormalizationGrowth": {
+        "sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+        "imports": [
+          "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+          "Mathlib.Algebra.Ring.Parity",
+          "Mathlib.Order.Filter.AtTopBot.Archimedean",
+          "Mathlib.Order.Filter.AtTopBot.Field"
+        ]
+      },
+      "ImbalancedChen.LogCutoffError": {
+        "sha256": "202d60ddffa0cbf6a0cc3259af4ec3654e4227a5e16523a2db71ba30d1dfcd49",
+        "imports": [
+          "ImbalancedChen.SingularSeries",
+          "ImbalancedChen.BadSourceLocalization",
+          "Mathlib.Topology.Algebra.Order.Field",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.LogMeshGridCount": {
+        "sha256": "b71b3e65f1ede581fbd881843b45cdeea9196ac15aa2fb7623eb7636bf366aaf",
+        "imports": [
+          "ImbalancedChen.BoundaryLogMesh"
+        ]
+      },
+      "ImbalancedChen.RoughPrimeUniverse": {
+        "sha256": "3d716d89548e2e453e96c598481db2f62ae1c76e7f092a960e490a4b70688e58",
+        "imports": [
+          "ImbalancedChen.RetainedModuli",
+          "Mathlib.Data.Finset.Interval",
+          "Mathlib.Data.Finset.Sort",
+          "Mathlib.Tactic"
+        ]
+      },
+      "ImbalancedChen.RetainedModuli": {
+        "sha256": "ec5df61712426350f0a93f36501ce2f2ca4bf49c9ee13c611920342e67386274",
+        "imports": [
+          "ImbalancedChen.FirstExitTree",
+          "Mathlib.Algebra.BigOperators.Group.Finset.Basic"
+        ]
+      },
+      "ImbalancedChen.FirstExitTree": {
+        "sha256": "6ab5eeb136969f76afc8fcc83dfa211985e0b7ffe85e89dab0702f381ad42a6b",
+        "imports": [
+          "Mathlib.Algebra.Order.BigOperators.Group.List",
+          "Mathlib.Data.List.Prime",
+          "Mathlib.Data.List.Sublists",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Real.Basic",
+          "Mathlib.NumberTheory.ArithmeticFunction.Moebius",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.FinitePrimeGeometryCore": {
+        "sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+        "imports": [
+          "ImbalancedChen.FirstExitDepthSplice",
+          "ImbalancedChen.FirstExitPresieveProjection",
+          "ImbalancedChen.RoughPrimeUniverse",
+          "ImbalancedChen.LogPrimeBoxMesh",
+          "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser",
+          "Mathlib.Data.List.GetD",
+          "Mathlib.Data.List.OfFn",
+          "Mathlib.Order.Fin.Basic",
+          "Mathlib.Algebra.BigOperators.Fin",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+        ]
+      },
+      "ImbalancedChen.FirstExitDepthSplice": {
+        "sha256": "66803fd4584aa34babb84845e6b84e41417476b2d4499d882d2f61734bd27af6",
+        "imports": [
+          "ImbalancedChen.FirstExitTree"
+        ]
+      },
+      "ImbalancedChen.FirstExitPresieveProjection": {
+        "sha256": "41a96b9f75048b250e96553a783d4f03350de3d1b17c7dcc5da9aa9028eab694",
+        "imports": [
+          "ImbalancedChen.FirstExitTree"
+        ]
+      },
+      "ImbalancedChen.LogPrimeBoxMesh": {
+        "sha256": "87a74de7869ba717f40441baf074d47271444d8641fcea63d21a39bfc3f6be7d",
+        "imports": [
+          "ImbalancedChen.LogPrimeBoxIntegral",
+          "Mathlib.Analysis.SpecificLimits.Basic",
+          "Mathlib.Order.Interval.Set.Union",
+          "Mathlib.Tactic"
+        ]
+      },
+      "ImbalancedChen.LogPrimeBoxIntegral": {
+        "sha256": "0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28",
+        "imports": [
+          "Mathlib.MeasureTheory.Integral.Pi",
+          "Mathlib.Analysis.SpecialFunctions.Integrals.Basic"
+        ]
+      },
+      "ImbalancedChen.CurrentChenFixedEulerNormalization": {
+        "sha256": "a13617949aaa7ee57345788f287ec486980dcb65bcb1d0e8ff00fb7e34e12b74",
+        "imports": [
+          "ImbalancedChen.EulerNormalizationLimit",
+          "ImbalancedChen.CenterEulerTail",
+          "MathlibNt.SieveTheory.Arithmetic.MertensTheorem",
+          "ImbalancedChen.CurrentChenRosserEndpointDictionary"
+        ]
+      },
+      "ImbalancedChen.EulerNormalizationLimit": {
+        "sha256": "bdcd1eca2fd8901baa8ac580d6f26dc7f3c473fc3cbbacb1fc0981ea2e7e873e",
+        "imports": [
+          "ImbalancedChen.CenterPrimeTail",
+          "ImbalancedChen.PowerErrorBudget",
+          "Mathlib.Order.Filter.AtTopBot.Finset",
+          "Mathlib.Topology.Algebra.InfiniteSum.Defs",
+          "Mathlib.Topology.MetricSpace.Pseudo.Defs",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.CenterPrimeTail": {
+        "sha256": "371000889add32a5e24e64784d1b63b4f3544915a20a728390c9ce1134c05073",
+        "imports": [
+          "ImbalancedChen.FiniteSieveEuler",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Nat.Factorization.Basic",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ]
+      },
+      "ImbalancedChen.FiniteSieveEuler": {
+        "sha256": "d1eb27002ef3da1327a4574067241a26fd825a6e50c1cd9b530b4ace21db42f7",
+        "imports": [
+          "ImbalancedChen.FiniteSieveModel",
+          "ImbalancedChen.SingularSeries",
+          "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Ring"
+        ]
+      },
+      "ImbalancedChen.CenterEulerTail": {
+        "sha256": "1961b35cce071a6f8d1ef3e1e23aaa0bab05085982aaaac67ac786af03acdf8c",
+        "imports": [
+          "ImbalancedChen.EulerNormalizationLimit",
+          "ImbalancedChen.ChenInitialCorrectionBudget"
+        ]
+      },
+      "ImbalancedChen.CurrentChenRosserEndpointDictionary": {
+        "sha256": "10f54a74f1f304d5a50415224cbf913d1821fc3f0592efbb444a38e3091c9bc5",
+        "imports": [
+          "ImbalancedChen.ActualSmallRosserDensity",
+          "ImbalancedChen.ChenInitialPrimeSource",
+          "ImbalancedChen.FiniteSieveEuler",
+          "MathlibNt.SieveTheory.Switching.SuzukiPrimeSums",
+          "MathlibNt.SieveTheory.Arithmetic.MertensTheorem"
+        ]
+      },
+      "ImbalancedChen.ActualSmallRosserDensity": {
+        "sha256": "9cfe1beef1a9ef09b88abf3c5593edebafc882e95639c50579cf4dc77b4d5ac8",
+        "imports": [
+          "ImbalancedChen.ActualSmallRosser",
+          "ImbalancedChen.SmallRoughMainTerm",
+          "MathlibNt.SieveTheory.LiLiuPrereqWFFundamentalLemma",
+          "MathlibNt.SieveTheory.LiLiuFouvryG9ProgressionDensityDimension"
+        ]
+      },
+      "ImbalancedChen.ActualSmallRosser": {
+        "sha256": "0dbcd4e45ededb9edfb601d8249cc554b3e53291985c09557ed2a9f5d4fb2cdf",
+        "imports": [
+          "ImbalancedChen.RoughPrimeUniverse",
+          "ImbalancedChen.SmallRoughAttachment",
+          "MathlibNt.SieveTheory.LiLiuPrereqWFSmallRosser",
+          "Mathlib.Data.Nat.GCD.BigOperators",
+          "Mathlib.Data.Int.Basic"
+        ]
+      },
+      "ImbalancedChen.SmallRoughAttachment": {
+        "sha256": "8f69bb4f62110e54aeb69c371d4767253d8520d9d904e3dc97e578beaedfccba",
+        "imports": [
+          "ImbalancedChen.PhysicalUpperWeightBridge",
+          "Mathlib.Data.Nat.PrimeFin"
+        ]
+      },
+      "ImbalancedChen.PhysicalUpperWeightBridge": {
+        "sha256": "7c179a6733bd163f5b8e8410a718effa609baa8a10b64b266caa36bf656e77a3",
+        "imports": [
+          "ImbalancedChen.FiniteSieveModel",
+          "ImbalancedChen.SignSensitiveAttachment"
+        ]
+      },
+      "ImbalancedChen.SignSensitiveAttachment": {
+        "sha256": "d34b8483983bf4243479bee70cd4bcd07fbf286abafe982021ca4625a3ab63bc",
+        "imports": [
+          "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+          "Mathlib.Algebra.BigOperators.Ring.Finset",
+          "Mathlib.Data.Real.Basic",
+          "Mathlib.Tactic.NormNum"
+        ]
+      },
+      "ImbalancedChen.SmallRoughMainTerm": {
+        "sha256": "3a3cdd6bc284237634da7744167e280c9ee56dc33555899ed98cc88e7e691b08",
+        "imports": [
+          "ImbalancedChen.SmallRoughAttachment",
+          "Mathlib.Tactic"
+        ]
+      },
+      "ImbalancedChen.SieveDimensionComparison": {
+        "sha256": "cf2369c8ba786bc022140ba469efe3ab6c5dfeeb7976fcbf8ddf9eff1a97a4ec",
+        "imports": [
+          "ImbalancedChen.FiniteSieveEuler",
+          "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Ring"
+        ]
+      }
+    },
+    "added_foreign_header_roots": [
+      "MathlibNt.SieveTheory.Switching.SuzukiPrimeSums"
+    ],
+    "removed_foreign_header_roots": [
+      "MathlibNt.SieveTheory.LiLiuGoldbachB8FibreSieve"
+    ],
+    "scope": "Project header graph stopping at foreign roots only; no full importedclosure replay or automatic compiler/foreign authorization."
+  },
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "runtime_gate": "NONE YET. Needs full non-author math/source/API review and specific root first scope plus fresh all-direct-parent-owned and exact recursive cache. Original runtime/resources/checkers untouched.",
+  "not_acceptance": true,
+  "main_theorem_proved": false
+}

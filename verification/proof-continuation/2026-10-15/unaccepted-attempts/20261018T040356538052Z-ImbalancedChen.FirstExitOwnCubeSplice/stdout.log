@@ -1,0 +1,48 @@
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.
+ImbalancedChen/FirstExitOwnCubeSplice.lean:79:17: error: unsolved goals
+case cons
+α : Type u_1
+retained : Bool → List α → Bool
+h : α → ℝ
+pre : List α
+positive : Bool
+mass : ℝ
+q : α
+qs : List α
+ih :
+  firstExitRetainedPolynomial retained h pre positive mass qs =
+    signedTreeCoefficient positive mass +
+      (List.map
+          (fun state =>
+            if retained state.positive state.selectedPrefix = true then
+              firstExitRetainedPolynomial retained h state.selectedPrefix state.positive state.mass state.remaining
+            else 0)
+          (firstExitNextSelectionCandidates h pre positive mass qs)).sum
+⊢ (signedTreeCoefficient positive mass +
+        (List.map
+            (fun state =>
+              if retained state.positive state.selectedPrefix = true then
+                firstExitRetainedPolynomial retained h state.selectedPrefix state.positive state.mass state.remaining
+              else 0)
+            (firstExitNextSelectionCandidates h pre positive mass qs)).sum +
+      if retained (!positive) (q :: pre) = true then
+        firstExitRetainedPolynomial retained h (q :: pre) (!positive) (mass * h q) qs
+      else 0) =
+    (signedTreeCoefficient positive mass +
+        if retained (!positive) (q :: pre) = true then
+          firstExitRetainedPolynomial retained h (q :: pre) (!positive) (mass * h q) qs
+        else 0) +
+      (List.map
+          (fun state =>
+            if retained state.positive state.selectedPrefix = true then
+              firstExitRetainedPolynomial retained h state.selectedPrefix state.positive state.mass state.remaining
+            else 0)
+          (List.rec []
+            (fun q qs rest =>
+              { selectedPrefix := q :: pre, positive := !positive, mass := mass * h q, remaining := qs } :: rest)
+            qs)).sum

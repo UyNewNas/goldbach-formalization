@@ -1,0 +1,91 @@
+{
+  "status": "HOLD",
+  "date": "2026-10-22",
+  "author": "/root/p3_shifted_moment_route_sol_max_oct22",
+  "scope": "一次有界数学审查；heavy=0；只处理指定共同p移位tau4二次矩。",
+  "verdict": "指定M2在固定Appendix已经列明的classical Shiu边界内有完整纸面证明，保留原全sigma/kappa范围、移动a、真实beta/gamma1能量及全部有序配对。关键是先保留p做进程Cauchy，再按非零乘积差的除数重数合并p；并非用一个q=1矩代替p平均。HOLD仅表示此新矩及其经典移位矩供应未在当前Lean接口实现或认证，不表示发现原稿反例，也不表示P3或任何谱norm已经完成。",
+  "source_binding": {
+    "state": ".lake/proof-continuation/source-reviews/20261022-p3-rough-common-factor-deletion-feasibility-HOLD.json",
+    "state_sha256_independently_verified": "d2b0e7bdc504f69519bd0966fdef0810ccc792eed2caea0598bb193690f258cc",
+    "manuscript_pin": "ba6ec11d800eccc54406490631895e174de85766",
+    "manuscript_read_method": "native Windows git show，只读固定pin；没有由WSL读取managed worktree Git。",
+    "appendix": "paper/source/modules/distribution-medium-completion-20261010.txt，第3节、第4节(10)、第10节(ii)",
+    "appendix_git_blob_independently_verified": "19f9672bc9b6d455045213c5e23e10433a9569d2",
+    "elementary_branch_read_at_pin": "proof-library/source/q1-elementary-shifted-moments-20261010.txt，E1/E3及其固定kappa cap；本证明不用该受限分支。",
+    "local_sha256": {
+      "ImbalancedChen/Part3DistributionTargets.lean": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "ImbalancedChen/Part3PairedAlphaDeletion.lean": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "ImbalancedChen/Part3SharedFirstFactorDispersion.lean": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "ImbalancedChen/Part3CommonSmoothCutoff.lean": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+      "ImbalancedChen/Part3TransposedDispersion.lean": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+      "ImbalancedChen/Part3SharedFirstFactorLargePairedGCDW.lean": "46a6defd68675b0be26a003d84fc735ac0a7720f51483e4d9e5dfa67b03ac58f"
+    }
+  },
+  "precise_theorem": {
+    "quantifiers": "对每个固定B∈N、0<sigma<1/100、0≤kappa≤sigma/100、c0>0，存在C>0、E∈N、x0>1，先于所有MediumAtom d；若hd:MediumAdmissible B sigma kappa c0 d且x=d.scale≥x0，则下述M2(d)≤C*x^2*(1+log x)^E。C和x0对a、各尺度、区间及所有系数统一；无SW假设。",
+    "definitions": "U=d.U，V=d.V，Q=d.Q1，x=UV，a=d.residue，e=d.cleanedAlphaAtom，b(n)=||e.transposedAtom.beta n||，P=d.primitiveFirstFactorCarrier，psi(m)=e.transposedAtom.commonSmoothWeight m，T(m,n)=tau4(|mn-a|)，L=1+log x。tau=tau2为普通正整数除数函数，tau4=fouvryTau 4。",
+    "outside_exactly_once": "Eout=(sum_{m∈d.betaCarrier}||d.beta m||^2)*(sum_{p∈P}||d.gamma1 p||^2)，原beta未置为1、未截断或重新归一化。cleanedAlphaAtom只改alpha，故这两个外层能量不变。",
+    "M2": "M2=Eout*R；R=sum_{p∈P}sum_{m∈e.transposedAtom.commonSmoothCarrier}psi(m)*(sum_{n∈e.transposedAtom.betaCarrier, n∤a, mn≡a mod p}b(n)*T(m,n)^2)^2。",
+    "one_explicit_exponent": "令KB=((2^B)^2-1)，可取E=KB+2^25+1=KB+33554433。只需指数固定，不主张此粗指数最优。"
+  },
+  "complete_proof": [
+    {
+      "step": "1. 实际载体与非零移位",
+      "argument": "hd及cleanedAlpha定义给0≤b(n)≤1，且transposed betaCarrier位于U≤n≤2U，n≥1。平滑载体字面上是Icc 0 (ceil(3V))，确实包含0；但0≤psi≤1且psi≠0时V/2≤m≤3V。因V≥1，m≥1，故有效项的整数v=mn满足1≤v≤6UV=6x，不能把ceil端点直接当3V。先去掉psi=0的零项即可。n∤a保证mn-a≠0；无需(n,a)=1，全部tau只在正natAbs上使用。"
+    },
+    {
+      "step": "2. 保留实际共同p，处理同余退化",
+      "argument": "P是Q≤p≤2Q且gcd(p,|a|)=1的整数因子集合；p不要求是素数，包含允许的p=1。由于Q≥1，p>0。固定(p,m)，令A(p,m)为精确内层n集合。若A为空则该行是0；若非空，任取n0∈A，由mn0≡a mod p得gcd(mn0,p)=gcd(a,p)=1，故gcd(m,p)=1。于是所有n∈A占据同一个模p余类；这同时排除非单位造成的多余类退化。"
+    },
+    {
+      "step": "3. 进程基数和逐行Cauchy",
+      "argument": "正整数区间[1,2U]中一个模p余类至多有floor(2U)/p+1个点，故#A≤2U/p+1≤2U/Q+1。原hd给Q<U*x^(-sigma)<U，因为x>1且sigma>0；这对原全部kappa成立。因此#A≤3U/Q。对S(p,m)=sum_A b(n)T(m,n)^2作有限Cauchy，再用b^2≤1，得到S(p,m)^2≤(3U/Q)*sum_A T(m,n)^4。这个结论对空行及p=1也成立，包含n1=n2的对角配对。"
+    },
+    {
+      "step": "4. 共同p的除数重数，而非丢弃其平均",
+      "argument": "将上式乘psi并求和，用psi≤1及步骤1，得到R≤(3U/Q)*sum_{p∈P,1≤m≤3V,1≤n≤2U,n∤a,p|(mn-a)}tau4(|mn-a|)^4。按v=mn合并。固定v≥1，正整数有序分解(m,n)的个数恰为tau(v)，受限载体只会减少它。因v≠a，固定v的可用p是正整数|v-a|的不同正除数，其个数≤tau(|v-a|)；P为Finset，不存在额外p标签重数。允许进一步删去n∤a门，但必须保留v≠a。因此R≤(3U/Q)*sum_{1≤v≤6x,v≠a}tau(v)*tau(|v-a|)*tau4(|v-a|)^4。Q的逆因子来自实际p进程，绝非q=1矩自行提供。"
+    },
+    {
+      "step": "5. 固定除数阶数与移动a矩",
+      "argument": "每个素幂r^j上tau4(r^j)=(j+1)(j+2)(j+3)/6≤(j+1)^3，因为6(j+1)^2-(j+2)(j+3)=5j^2+7j≥0；乘过素数即tau4(t)≤tau(t)^3。于是上一求和≤H=sum_{1≤v≤6x,v≠a}tau(v)*tau(|v-a|)^13。普通除数均值及tau(v)^2≤tau4(v)给sum_{v≤6x}tau(v)^2≪x*L^3。下面证明sum_{v≤6x,v≠a}tau(|v-a|)^26≪x*L^(2^26-1)，统一于原移动a范围；Cauchy随即给H≪x*L^((3+2^26-1)/2)=x*L^(2^25+1)。"
+    },
+    {
+      "step": "6. 所需26阶矩的完整经典输入核对",
+      "argument": "原范围给kappa<1，故|a|≤x^(1+kappa)≤x^2。v≠a的像|v-a|分成至多两个正整数区间，各长≤6x，位置≤6x+x^2≤7x^2。对任一区间I，若左端X<8x，则I⊂[1,14x]，用tau(t)^26≤tau_(2^26)(t)及普通除数均值，得O(x*L^(2^26-1))。若X≥8x，将I包入[X,X+8x)，取Shiu的固定参数alpha_Sh=1/4、eta_Sh=1/8、模数q=1、长度Y=8x。对所有充分大x，X≤7x^2保证X^(1/8)≤8x≤X，且1<Y^(3/4)。函数f(t)=tau(t)^26非负乘性；f(r^j)≤(2^26)^j，且对每个固定epsilon>0有f(t)≪_epsilon t^epsilon，满足Shiu增长条件。Shiu给O(Y/log X * exp(2^26*sum_{r≤X,r prime}1/r))=O(x*L^(2^26-1))，最后用普通素数调和和界。所有参数与26先固定，常数及阈值与a、X及原子统一。只相加至多两段；未令epsilon依赖x。这正是固定Appendix(10)在f=1的具体使用；无需要对单个m或p施加更强的短进程定理。"
+    },
+    {
+      "step": "7. 原beta/gamma1能量支付",
+      "argument": "公开sharedFirstFactor_outside_le给Eout≤4*V*Q*(1+log(2V))^KB。U≥1给V≤x，故该式≤C_B*V*Q*L^KB。结合步骤3至6，M2=Eout*R≤C_B*V*Q*(U/Q)*x*L^(KB+2^25+1)=C_B*x^2*L^E。Q严格抵消一次，原beta能量和gamma1能量各只出现一次。没有beta one-bounded假设，没有gcd删除、目标M2或谱norm假设回灌；roughness和SW甚至未用于此矩。证毕。"
+    }
+  ],
+  "classical_boundary_and_external_check": {
+    "fixed_source_role": "Appendix第3节保留一般beta并区分classical与elementary分支；第4节(10)允许固定多项式位置，第10节(ii)已明列primitive Shiu及普通除数均值。本证明仅使用该边界，无第三技术。",
+    "primary_research_crosscheck": "已实际打开并核对Thomas Wright的原始研究论文A Shiu Theorem for Larger and Smoother Functions，固定arXiv:2508.17217v1，第1节Theorem 1.1所明确重述的classical Shiu。只用其固定函数的经典式，不用该文变化函数的新定理。",
+    "url": "https://arxiv.org/html/2508.17217v1#S1",
+    "exact_used_type": "非负乘性f满足固定素幂指数界与所有固定epsilon的次幂界；固定0<alpha_Sh,eta_Sh<1/2，X^eta_Sh≤Y≤X、q<Y^(1-alpha_Sh)、gcd(r,q)=1时，进程和≪Y/(phi(q)log X)*exp(sum_{prime l≤X,l∤q}f(l)/l)。这里q=1。",
+    "source_honesty": "1980原论文出版者全文未读通；不据其目录或预览声称核对了原定理全文。精确交叉核对来自上述研究论文的显式定理重述，证明所依赖的经典输入已经由固定Appendix指定。",
+    "not_elementary_E3": "不能将这里的26阶矩换成仅有E1/E3且仍宣称原全kappa：该替代的固定cap可能极小。本证明无需选更小kappa，也无需让任何epsilon随x变化。"
+  },
+  "lean_junctions_and_remaining_gap": {
+    "already_public_and_read": [
+      "mediumAdmissible_cleanedAlphaAtom与MediumAtom.cleanedAlpha_transposedBeta_ne_zero_not_dvd：保留原alpha的一致1界及n∤a门。",
+      "CommonSmoothCutoff.scaledDyadicCutoff_nonneg、scaledDyadicCutoff_le_one、scaledDyadicCutoff_tsupport_subset：删除psi=0及导出正m和3V端点。",
+      "PairedAlphaDeletion.card_product_modEq_le(K,q,n,a,hn)：取K=floor(2U)、q=p、其系数n参数换为本证明m，再缩小到精确A(p,m)。",
+      "MediumAtom.sharedFirstFactor_outside_le：最后支付真实Eout。"
+    ],
+    "finite_new_lemmas_can_be_implemented_without_new_analysis": [
+      "从一个实际产品同余和P的primitive门推出m.Coprime p；用gcd在同余下不变和乘积互素分解即可。LargePairedGCDW有同内容的private证明，不能引用mangled private名。",
+      "对精确A(p,m)作带b权的有限Cauchy，证明R≤(3U/Q)*H；所需载体收缩、v=mn纤维注入正除数、p注入|v-a|正除数和tau4≤tau^3均为有限/整数算术。新公开总归约尚未写入Lean。",
+      "合并H的普通tau平方均值、26阶移位矩以及原outside界，完成M2；这是标量乘法和Cauchy，未涉及谱模块。"
+    ],
+    "exact_new_analytic_formal_supplier": "需要认证的类型可缩为：存在C26>0、x26>1，对所有实x≥x26、整数a且|a|≤x^2，sum_{v∈Ioc 0 (floor(6x)),(v:Z)≠a}tau(|(v:Z)-a|)^26≤C26*x*(1+log x)^(2^26-1)。上述步骤6已给纸面证明；当前被审阅的已验收接口未给该供应。可以正式化classical Shiu到此特例，或独立证明同类型；不能把它伪称当前已经compiled/0sorry，也不能从pointwise固定x^epsilon界推出它。",
+    "manuscript_versus_interface": "对这个精确M2没有剩余原稿数学缺口：固定经典边界加本报告的共同p有限归约足够。当前差距是缺少该经典特例的正式供应及组合归约；原稿S3截断段本身不是当前完整W的现成Lean定理。此报告不实现后续rough删除，也不扩大到whole谱、A=1谱返回或main结论。",
+    "preserved_parameters": "0<sigma<1/100、全部0≤kappa≤sigma/100、最终1+1.75和原系数类均未改变；阈值可统一增加。"
+  },
+  "run_discipline": {
+    "only_new_artifact": ".lake/proof-continuation/source-reviews/20261022-p3-common-p-shifted-moment-route-review-HOLD.json",
+    "no_engineering_work": "未运行compiler、project checker、proper、classifier、census或cache操作；无Lean、Git、原稿或已有报告变更。Git仅用于固定pin只读取文。未派生子agent。",
+    "quota_observed": "本轮各次读取均为used40%、remaining60%；没有有效窗口remaining≤40%。",
+    "stop": "一次审查完成后HOLD并停止；数学结论仅为上述M2纸面证明，形式化供应仍待后续授权工作。"
+  }
+}

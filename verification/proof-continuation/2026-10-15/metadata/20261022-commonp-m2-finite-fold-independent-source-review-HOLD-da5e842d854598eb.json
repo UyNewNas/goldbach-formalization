@@ -1,0 +1,370 @@
+{
+  "status": "HOLD_SOURCE_ONLY_NOT_COMPILED",
+  "date": "2026-10-22",
+  "reviewer": "/root/commonp_m2_fold_review_sol_high_oct22",
+  "verdict": "no_static_blocker",
+  "conclusion": "Independent bounded mathematics and Lean-source review finds no concrete static blocker in the 19 declarations and supplied proof bodies of the pinned finite common-p fold. The literal R and Eout are preserved, and the finite argument is mathematically valid. This is not elaboration, kernel, owned-supplier, analytic M2, Shiu, spectral, or main-theorem acceptance.",
+  "source_binding": {
+    "draft": {
+      "path": ".lake/proof-continuation/source-reviews/drafts/20261022-commonp-m2-finite-fold-source-proposal.txt",
+      "sha256": "728704ea418c05ee0ff51542d9f6b59bcd4cf45de12b5e94a99cb577957075bc",
+      "lf_count": 383,
+      "definitions": 10,
+      "theorems": 9,
+      "full_file_read": true,
+      "hash_independently_matched": true
+    },
+    "author_checkpoint": {
+      "path": ".lake/proof-continuation/source-reviews/20261022-commonp-m2-finite-fold-source-proposal-author-HOLD.json",
+      "sha256": "9114a6473d5d4cc070c8bba36d6abb81d4e610f22d651caa444aec545094b9ec",
+      "full_file_read": true,
+      "hash_independently_matched": true
+    },
+    "paper_independent": {
+      "path": ".lake/proof-continuation/source-reviews/20261022-p3-common-p-shifted-moment-independent-math-review-HOLD.json",
+      "sha256": "e0a1a297aa848e7d178088a337f32ead9f5c652fa2b454aa7c7d7b15bc6f1fb9",
+      "full_file_read": true,
+      "hash_independently_matched": true
+    },
+    "geometry": {
+      "path": "ImbalancedChen/Part3CommonPFiniteReduction.lean",
+      "sha256": "4b2d7e668fa944acd4ac4bf0d9bf2cb18dd0b31d69b679c69fa223e35605c86c",
+      "full_file_read": true,
+      "hash_independently_matched": true,
+      "status": "Current source only; not an owned supplier. Source review does not change that status."
+    },
+    "pins": {
+      "mathlib": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "goldbach": "09b97db5764ade1246bfb77206baa1b124760958",
+      "toolchain": "leanprover/lean4:v4.33.0-rc1",
+      "evidence": "Read lakefile.toml, lake-manifest.json and lean-toolchain. Actual native API files were read and hashed; no Git identity or recursive dependency audit was run."
+    }
+  },
+  "literal_target_audit": {
+    "R": "sum p in original primitiveFirstFactorCarrier, sum m in cleanedAlphaAtom.transposedAtom.commonSmoothCarrier, psi(m)*(sum n in cleanedCommonPProgression p m, norm(cleanedAlphaAtom.transposedAtom.beta n)*fouvryTau(4,natAbs((m:Z)*n-a))^2)^2",
+    "result": "R <= (3*U/Q1)*sum v in Ioc 0 (Nat.floor(6*scale)), (v:Z)!=a, tau(v)*tau(natAbs((v:Z)-a))*fouvryTau(4,natAbs((v:Z)-a))^4",
+    "Eout": "(sum m in original d.betaCarrier, norm(d.beta m)^2)*(sum p in original d.primitiveFirstFactorCarrier, norm(d.gamma1 p)^2)",
+    "comparison": "Definitions 52-91 expand to the exact R and Eout in the independent paper report and the earlier rough-deletion feasibility report's M2 statement. Nat.cast_mul identifies shiftDifference d (m*n) with natAbs((m:Z)*n-a). No existing owned definition of this R or formal equality bridge is claimed.",
+    "coefficient_normalization": "Only the cleaned/transposed beta is bounded by one, via the original alpha norm bound on original alphaCarrier and zero off that carrier. Original beta is not normalized. Original gamma1 and beta energies remain in Eout.",
+    "signed_terms": "The finite statements concern an already nonnegative norm majorant. No signed W submask is bounded by deleting signed summands. Removing psi uses its nonnegativity and upper bound one after row Cauchy."
+  },
+  "declaration_review": [
+    {
+      "name": "shiftDifference",
+      "lines": [
+        52,
+        53
+      ],
+      "finding": "Correct signed integer difference before natAbs."
+    },
+    {
+      "name": "tau",
+      "lines": [
+        55,
+        55
+      ],
+      "finding": "Actual divisor-cardinality tau, cast to real; zero value never used as a positive divisor count."
+    },
+    {
+      "name": "fourthDivisorWeight",
+      "lines": [
+        57,
+        58
+      ],
+      "finding": "Exactly tau4 of the signed difference, raised to fourth power; nonnegative."
+    },
+    {
+      "name": "productCarrier",
+      "lines": [
+        60,
+        61
+      ],
+      "finding": "Positive product range up to floor(6*scale), explicitly excluding v=a."
+    },
+    {
+      "name": "rowSum",
+      "lines": [
+        64,
+        67
+      ],
+      "finding": "Exact cleaned/transposed coefficient and original signed filtered row, with tau4 squared."
+    },
+    {
+      "name": "moment",
+      "lines": [
+        69,
+        72
+      ],
+      "finding": "Exact original p carrier and transposed common-smooth m carrier, weighted by actual psi."
+    },
+    {
+      "name": "activeLabels",
+      "lines": [
+        75,
+        80
+      ],
+      "finding": "All three labels retained. Filters remove only psi=0 rows and impose the literal row gates."
+    },
+    {
+      "name": "labelProduct",
+      "lines": [
+        82,
+        82
+      ],
+      "finding": "Ordered factorization product m*n."
+    },
+    {
+      "name": "foldedSum",
+      "lines": [
+        84,
+        86
+      ],
+      "finding": "Pays both factorization multiplicity tau(v) and modulus multiplicity tau(|v-a|)."
+    },
+    {
+      "name": "outsideEnergy",
+      "lines": [
+        89,
+        91
+      ],
+      "finding": "Exact original beta and gamma1 energies, each once."
+    },
+    {
+      "name": "cleaned_transposedBeta_norm_le_one",
+      "lines": [
+        93,
+        104
+      ],
+      "finding": "12 initial conjunction fields lead to the original alpha norm field. change is definitionally consistent with cleaning/transposition. Membership and divisor-deletion cases are complete."
+    },
+    {
+      "name": "rowSum_sq_le",
+      "lines": [
+        107,
+        154
+      ],
+      "finding": "Nonempty branch obtains the fifth geometry conjunct via .2.2.2.2. Cauchy uses f=1, g=b*tau4^2; the subsequent b^2<=1 gives tau4^4. Cardinal and summand multiplications use nonnegative factors. Empty branch gives 0<=0."
+    },
+    {
+      "name": "sum_activeLabels",
+      "lines": [
+        157,
+        175
+      ],
+      "finding": "sum_filter and sum_product preserve all labels. The psi split matches the RHS conditional; row membership becomes precisely the nested betaCarrier filter. No gate or multiplicity is lost."
+    },
+    {
+      "name": "moment_le_activeLabels",
+      "lines": [
+        177,
+        211
+      ],
+      "finding": "Only psi=0 terms vanish. For psi!=0, multiply the row bound by psi>=0 and then use psi<=1 against a nonnegative row bound. hd implies U,Q1>=1, so the real quotient has the required sign."
+    },
+    {
+      "name": "activeLabel_arithmetic",
+      "lines": [
+        214,
+        256
+      ],
+      "finding": "betaCarrier reduces to Icc ceil(U) floor(2U). Geometry supplies m>0 and m<=3V; n>=U>=1 and n<=2U imply 0<mn<=6UV. If mn=a then n divides a, contradicting the signed deletion gate. hmod.symm.dvd has orientation p|mn-a; Int.natCast_dvd transports exactly to p|natAbs(mn-a). Both divisors and divisorsAntidiagonal receive their required nonzero target."
+    },
+    {
+      "name": "card_productFiber_le",
+      "lines": [
+        260,
+        283
+      ],
+      "finding": "On a product-v fiber the image ((m,n),p) belongs to divisorsAntidiagonal(v) x divisors(|v-a|). The supplied Prod.ext/congrArg proof recovers p,m,n. map_div_right_divisors and card_map give the exact antidiagonal cardinality tau(v)."
+    },
+    {
+      "name": "sum_activeLabels_le_divisorFold",
+      "lines": [
+        287,
+        309
+      ],
+      "finding": "The inverse fiberwise equality matches the sum over labels with summand F(labelProduct z); F is inferred from this occurrence. Inside each fiber, its product equality makes F constant. The cardinal bound is multiplied only by F(v)>=0; casts give exactly tau(v)*tau(|v-a|)*F(v)."
+    },
+    {
+      "name": "MediumAtom.cleaned_commonP_moment_le_finite_divisor_fold",
+      "lines": [
+        315,
+        327
+      ],
+      "finding": "Composition of the two finite inequalities with the nonnegative scalar 3U/Q1. foldedSum unfolds definitionally to the required generic F specialization."
+    },
+    {
+      "name": "MediumAtom.cleaned_commonP_M2_le_finite_divisor_fold",
+      "lines": [
+        330,
+        340
+      ],
+      "finding": "Multiplies the finite R inequality by the exact Eout once. Eout nonnegativity is a product of sums of squares. No outside upper bound, target M2 estimate, or new coefficient bound is a premise."
+    }
+  ],
+  "invariant_audit": {
+    "nonzero_and_zero_cases": "m=0 is excluded only on psi!=0 support; n=0 is excluded by the transposed betaCarrier and U>=1. v=0 and v=a are excluded before divisor membership. Empty rows and psi=0 rows are explicitly handled. hd gives Q1>=1; p>=Q1>=1 in geometry, so no division-by-zero substitution is used.",
+    "p_scope": "p is any member of the literal original Finset. No primality assumption occurs. p=1 and composite p are included when present. The finite injection is per atom and does not assert disjoint global dyadic carrier coverage.",
+    "kappa_scope": "No new kappa cap or sign condition is introduced. The only hypotheses are unchanged MediumAdmissible and sigma>0. Thus the finite step covers the full original kappa range and indeed does not use its numerical bound.",
+    "roughness_and_transposition": "Original roughness and all medium gates remain inside hd. No stronger roughness, SW, or transposed MediumAdmissible is assumed. Geometry uses the generic cutoff support theorem at original V.",
+    "ordered_pair_accounting": "Cauchy bounds the original full square, including its diagonal and both ordered off-diagonal terms. After Cauchy, each remaining (p,m,n) label is injected separately. Ordered (m,n) factorizations and different p values are paid independently.",
+    "support_endpoint": "m<=3V is inferred from true psi!=0 support, not from m<=ceil(3V). Consequently the 6*scale endpoint is justified before widening the sum.",
+    "no_target_premise": "No R bound, folded bound, analytic shifted moment, M2, Shiu, or spectral theorem appears among the proof hypotheses. The generic F lemma assumes only pointwise nonnegativity.",
+    "outside_factor": "Eout uses original d.beta and d.gamma1 and occurs once on each side of the final consumer. Its separately available upper bound is read but is not applied or duplicated here."
+  },
+  "api_review": {
+    "count": 23,
+    "all_actual_spans_read": true,
+    "all_literal_source_spans_match_author_checkpoint": true,
+    "all_whole_file_sha256_match_author_checkpoint": true,
+    "all_normalized_lf_utf8_span_sha256_independently_match_author_checkpoint": true,
+    "bindings": [
+      [
+        "MediumAtom.cleanedCommonPProgression",
+        27,
+        30
+      ],
+      [
+        "MediumAtom.cleaned_commonP_progression_geometry",
+        57,
+        120
+      ],
+      [
+        "cleanedAlpha / divisorAlpha / cleanedAlphaAtom / divisorAlphaAtom",
+        36,
+        48
+      ],
+      [
+        "PairedAlphaDeletion.betaCarrier_progression_card_le",
+        133,
+        156
+      ],
+      [
+        "MediumAtom.transposedAtom",
+        34,
+        41
+      ],
+      [
+        "MediumAtom.transposedAtom_betaCarrier",
+        63,
+        64
+      ],
+      [
+        "MediumAtom.primitiveFirstFactorCarrier",
+        32,
+        33
+      ],
+      [
+        "MediumAtom.sharedFirstFactor_outside_le",
+        255,
+        280
+      ],
+      [
+        "MediumAtom.scale / alphaCarrier / betaCarrier / factorCarrier",
+        51,
+        64
+      ],
+      [
+        "MediumAdmissible",
+        126,
+        147
+      ],
+      [
+        "CommonSmoothCutoff.scaledDyadicCutoff_nonneg / scaledDyadicCutoff_le_one",
+        73,
+        77
+      ],
+      [
+        "CommonSmoothCutoff.scaledDyadicCutoff_tsupport_subset",
+        84,
+        94
+      ],
+      [
+        "MediumAtom.commonSmoothCarrier / commonSmoothWeight / commonSmoothWeight_nonneg",
+        157,
+        164
+      ],
+      [
+        "fouvryTau",
+        19,
+        19
+      ],
+      [
+        "fouvryTau_two",
+        37,
+        41
+      ],
+      [
+        "Nat.mem_divisors",
+        108,
+        112
+      ],
+      [
+        "Nat.mem_divisorsAntidiagonal",
+        124,
+        126
+      ],
+      [
+        "Nat.map_div_right_divisors",
+        365,
+        367
+      ],
+      [
+        "Int.natCast_dvd",
+        72,
+        73
+      ],
+      [
+        "Int.modEq_iff_dvd / Int.ModEq.dvd",
+        109,
+        117
+      ],
+      [
+        "Finset.card_le_card_of_injOn",
+        427,
+        432
+      ],
+      [
+        "Finset.sum_mul_sq_le_sq_mul_sq",
+        159,
+        163
+      ],
+      [
+        "Finset.sum_fiberwise_of_maps_to generated by to_additive",
+        255,
+        261
+      ]
+    ],
+    "binding_details": "Exact paths, file hashes, span hashes and complete source types are bound by the independently matched author checkpoint 9114a6473d5d4cc070c8bba36d6abb81d4e610f22d651caa444aec545094b9ec. The 23 listed spans were reread from those actual files, not accepted solely from the checkpoint.",
+    "additional_reads": [
+      "Full MediumAdmissible through its final gamma3 gate; the author's 126-147 excerpt stops before the final line.",
+      "Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean: neighboring multiplicative fiber lemmas and the to_additive source, checking binder order and equality direction.",
+      "Mathlib/Algebra/Order/Floor/Defs.lean:140-144, Nat.le_floor accepts the real upper bound directly.",
+      "Mathlib/Data/Finset/Card.lean:268, card_map takes the embedding explicitly as used.",
+      "Mathlib/Algebra/Order/GroupWithZero/Basic.lean:715, sq_le_sq₀ has the expected nonnegative iff form.",
+      "Actual Mathlib source uses of Int.natAbs_ne_zero.mpr in GroupTheory/FiniteAbelian/Basic.lean:101, Data/Nat/Init.lean:410 and Topology/Instances/AddCircle/Defs.lean:270.",
+      "ImbalancedChen/Part3SmoothCoprimeError.lean:132-139, geometry's coprime_of_product_congruent is public and has the required signature.",
+      "ImbalancedChen/Part3SharedFirstFactorLargePairedGCDW.lean:1-121, comparison with actual cleaned/transposed tau-four majorants.",
+      "Target formula in source-reviews/20261022-p3-rough-common-factor-deletion-feasibility-HOLD.json:40-42 and route report definitions/statement."
+    ]
+  },
+  "static_findings": [],
+  "unknowns_and_scope": {
+    "elaboration": "Unknown. No Lean, lake, compiler, checker or kernel command was run. Definitional reductions, simp behavior, metavariable inference, generated to_additive availability and imports have only been inspected statically.",
+    "upstream": "The 124-LF geometry source is not owned. This review neither certifies its dependencies nor promotes it.",
+    "analytic_boundary": "The final folded weight remains tau(v)*tau(|v-a|)*tau4(|v-a|)^4. tau4<=tau^3, ordinary tau-square means, the uniform shifted tau^26/Shiu supplier, scalar logarithmic M2 composition, rough deletion and nonzero 7/32 spectral control remain outside this proposal.",
+    "acceptance": "no_static_blocker means no specific blocker found in this bounded review. It does not mean compiled, 0sorry, axiom-audited, kernel-verified, owned, analytic M2 accepted, P3 complete, or main theorem accepted."
+  },
+  "discipline": {
+    "new_artifacts": 1,
+    "actual_Lean_changes": 0,
+    "draft_changes": 0,
+    "compiler_checker_proper_classifier_census_runs": 0,
+    "git_commands_or_mutations": 0,
+    "external_searches": 0,
+    "subagents": 0,
+    "allowed_operations": "Read-only source/report/manifest reads, targeted text searches, SHA256 and LF counts, and creation of this JSON only. One broad read-only native Mathlib text search was interrupted after the needed Int.natAbs_ne_zero.mpr source uses were found.",
+    "quota": "Fresh observation used42%, remaining58%; last observation used43%, remaining57%. No effective window at or below 40% remaining observed.",
+    "stop": "Bounded review complete; HOLD and stop."
+  }
+}

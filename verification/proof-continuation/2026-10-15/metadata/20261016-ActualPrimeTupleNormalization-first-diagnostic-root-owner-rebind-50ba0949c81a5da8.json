@@ -1,0 +1,83 @@
+{
+  "status": "SOURCE_ONLY_ROOT_AUTHOR_ACTUAL_DIAGNOSTIC_PROOF_API_REPAIR_PENDING_NONAUTHOR_REVIEW",
+  "reviewer": "/root (source author of repair)",
+  "created_at_utc": "2026-10-15T21:59:56.177569+00:00",
+  "candidate": "ImbalancedChen/ActualPrimeTupleNormalization.lean",
+  "old_actual_failed_sha256": "ee2f0f12ef232b770dcc7136d8ce74f27fc830cad73ab78641fe18f1cabc5db0",
+  "current_sha256": "c5c280a89f5bb833bbfc68ffbe07fea70f43330bf2c35ab81568274dd3de2ee7",
+  "actual_diagnostic": {
+    "path": ".lake/proof-continuation/runs/20261015T215319804371Z-ImbalancedChen.ActualPrimeTupleNormalization/stdout.log",
+    "sha256": "df552630ca410256058a1cc939ad441efcf6bdf7bf2a7c0a41541882087dd1a4",
+    "complete_stdout": "ImbalancedChen/ActualPrimeTupleNormalization.lean:52:36: error: Type mismatch\n  List.toFinset_card_le\nhas type\n  ∀ (l : List ?m.125), l.toFinset.card ≤ l.length\nbut is expected to have type\n  ps.permutations.toFinset.card ≤ ps.permutations.length\n"
+  },
+  "literal_byte_patches": [
+    {
+      "old": "List.toFinset_card_le\n",
+      "new": "List.toFinset_card_le ps.permutations\n"
+    }
+  ],
+  "forward_exact_bytes": true,
+  "inverse_exact_bytes": true,
+  "old_matches_HEAD_exact_bytes": true,
+  "all_complete_unchanged_types_and_definitions": [
+    {
+      "name": "actualPrimeTupleCoefficient",
+      "kind": "def",
+      "private": false,
+      "complete_source_header": "def actualPrimeTupleCoefficient (T : Finset (List ℕ)) (n : ℕ) : ℕ",
+      "complete_definition": "def actualPrimeTupleCoefficient (T : Finset (List ℕ)) (n : ℕ) : ℕ :=\n  (T.filter (fun ps => ps.prod = n)).card"
+    },
+    {
+      "name": "actualNormalizedPrimeTupleCoefficient",
+      "kind": "def",
+      "private": false,
+      "complete_source_header": "def actualNormalizedPrimeTupleCoefficient (T : Finset (List ℕ)) (m n : ℕ) : ℝ",
+      "complete_definition": "def actualNormalizedPrimeTupleCoefficient (T : Finset (List ℕ)) (m n : ℕ) : ℝ :=\n  (actualPrimeTupleCoefficient T n : ℝ) / (m.factorial : ℝ)"
+    },
+    {
+      "name": "actualPrimeTupleCoefficient_le_factorial",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualPrimeTupleCoefficient_le_factorial (T : Finset (List ℕ)) (m n : ℕ)\n    (hlen : ∀ ps ∈ T, ps.length = m)\n    (hprime : ∀ ps ∈ T, ∀ p ∈ ps, Nat.Prime p) :\n    actualPrimeTupleCoefficient T n ≤ m.factorial"
+    },
+    {
+      "name": "actualNormalizedPrimeTupleCoefficient_mem_Icc",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualNormalizedPrimeTupleCoefficient_mem_Icc\n    (T : Finset (List ℕ)) (m n : ℕ)\n    (hlen : ∀ ps ∈ T, ps.length = m)\n    (hprime : ∀ ps ∈ T, ∀ p ∈ ps, Nat.Prime p) :\n    actualNormalizedPrimeTupleCoefficient T m n ∈ Set.Icc (0 : ℝ) 1"
+    },
+    {
+      "name": "actualNormalizedPrimeTupleCoefficient_abs_le_one",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualNormalizedPrimeTupleCoefficient_abs_le_one\n    (T : Finset (List ℕ)) (m n : ℕ)\n    (hlen : ∀ ps ∈ T, ps.length = m)\n    (hprime : ∀ ps ∈ T, ∀ p ∈ ps, Nat.Prime p) :\n    |actualNormalizedPrimeTupleCoefficient T m n| ≤ 1"
+    },
+    {
+      "name": "factorial_mul_actualNormalizedPrimeTupleCoefficient",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem factorial_mul_actualNormalizedPrimeTupleCoefficient\n    (T : Finset (List ℕ)) (m n : ℕ) :\n    (m.factorial : ℝ) * actualNormalizedPrimeTupleCoefficient T m n =\n      (actualPrimeTupleCoefficient T n : ℝ)"
+    },
+    {
+      "name": "actualPrimeTuple_threeGroup_scalar_identity",
+      "kind": "theorem",
+      "private": false,
+      "complete_source_header": "theorem actualPrimeTuple_threeGroup_scalar_identity\n    (c : ℝ) (T₁ T₂ T₃ : Finset (List ℕ)) (m₁ m₂ m₃ n₁ n₂ n₃ : ℕ) :\n    c * (actualPrimeTupleCoefficient T₁ n₁ : ℝ) *\n        (actualPrimeTupleCoefficient T₂ n₂ : ℝ) * (actualPrimeTupleCoefficient T₃ n₃ : ℝ) =\n      (c * (m₁.factorial : ℝ) * (m₂.factorial : ℝ) * (m₃.factorial : ℝ)) *\n        actualNormalizedPrimeTupleCoefficient T₁ m₁ n₁ *\n        actualNormalizedPrimeTupleCoefficient T₂ m₂ n₂ *\n        actualNormalizedPrimeTupleCoefficient T₃ m₃ n₃"
+    }
+  ],
+  "declaration_count": 7,
+  "definition_count": 2,
+  "imports_before_and_after": [
+    "import ImbalancedChen.ActualSelectedPairFactorization"
+  ],
+  "pins_fresh_sha256": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "mathematical_change": false,
+  "limits_or_linter_change": false,
+  "foreign_or_source_DAG_delta": 0,
+  "evidence_boundary": "No Lean invoked; not a strict pass, stock kernel receipt, owned acceptance or imported closure replay.",
+  "mathematical_reason": "Only pass the actual list explicitly to the same proved cardinal inequality; all factorial normalization, original scalar and all-integer coefficient claims unchanged."
+}

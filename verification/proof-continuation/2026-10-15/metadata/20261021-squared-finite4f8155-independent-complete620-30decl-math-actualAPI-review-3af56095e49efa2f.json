@@ -1,0 +1,1531 @@
+{
+  "status": "INDEPENDENT_COMPLETE620_ALL30_DECLARATIONS_SIX_DEFS_FINITE806_NO_MATH_OR_CONCRETE_API_BLOCKER_UNCOMPILED_HOLD_FOR_ROOT_GATE",
+  "reviewer": "/root/density_gap_oct21",
+  "created_utc": "2026-10-21T02:43:41.326338+00:00",
+  "actual_source": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3SharedFirstFactorSmallCoreSquaredFinite.lean",
+    "sha256": "4f815510a2c5dd12f94c75472ef60d0082a865f73ade1e96755060704d941a97",
+    "bytes": 28310,
+    "LF_lines": 620,
+    "complete_source": "import ImbalancedChen.Part3SharedFirstFactorSmallCoreSmoothFrequency\n\n/-!\n# Exact squared finite decomposition of the original smooth small core\n\nThe ordered original labels and signed frequencies are retained. The actual\nsmall paired-gcd gate removes equal N labels, and CRT compatibility supplies\nthe original common first-factor congruence. The tail gcd is reindexed as a\nunique positive divisor of the original right tail product.\n\nThe resonant union is the equality relation of the rational unsigned slopes\n|h|/s. Its finite Gram sum is positive. The complementary block is retained\nwith its sign, and a single Cauchy inequality is applied only to the outer\nlabels. No spectral cancellation, resonance payment, auxiliary outside\nmoment or main theorem closure is asserted here.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Finset CommonSmoothCutoff\nopen scoped BigOperators\n\ndef MediumAtom.smallCoreSquaredOuterCarrier (d : MediumAtom) :\n    Finset ((ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) :=\n  let Pairs := (d.primitiveFirstFactorCarrier ×ˢ\n    (d.transposedAtom.betaCarrier ×ˢ d.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)\n  let Tails := (factorCarrier d.Q3) ×ˢ\n    ((factorCarrier d.Q3) ×ˢ factorCarrier d.Q2)\n  Pairs ×ˢ Tails.biUnion (fun t =>\n    (t.2.1 * t.2.2).divisors.image (fun D => (t, D)))\n\ndef MediumAtom.smallCoreSquaredInnerCarrier (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : Finset (ℕ × ℤ) :=\n  factorCarrier d.Q2 ×ˢ\n    CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n      (d.sharedSmoothFrequencyBound Z o.2.2)\n\ndef MediumAtom.smallCoreSquaredRowTerm (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) (u : ℕ × ℤ) : ℂ :=\n  let p := o.1.1\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  let v := o.2.1.1 * u.1\n  let w := o.2.1.2.1 * o.2.1.2.2\n  let D := o.2.2\n  let q := p * v\n  let q' := p * w\n  let L := q.lcm q'\n  if v.gcd w = D ∧ ComplexCRT.Compatible q q' N1 N2 then\n    d.gamma2 u.1 *\n      (((CommonSmoothCutoff.poissonSmoothLowPass\n          ((d.V / (L : ℝ)) * (u.2 : ℝ) / Z) : ℂ) *\n        CommonSmoothCutoff.poissonNonzeroFrequency (d.V / (L : ℝ))\n          ((ComplexCRT.residue q q' N1 N2 d.residue : ℝ) / (L : ℝ)) u.2).re : ℂ)\n  else 0\n\ndef MediumAtom.smallCoreSquaredOuterCoefficient (d : MediumAtom)\n    (Ybeta Ysupport : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart\n        (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n    d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n      d.gamma3 o.2.1.1 * star (d.gamma3 o.2.1.2.1) * star (d.gamma2 o.2.1.2.2)\n  else 0\n\ndef MediumAtom.smallCoreSquaredBlock (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  ∑ u ∈ d.smallCoreSquaredInnerCarrier Z o,\n    ∑ v ∈ d.smallCoreSquaredInnerCarrier Z o,\n      if decide (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n          u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) = resonant then\n        d.smallCoreSquaredRowTerm Z o u * star (d.smallCoreSquaredRowTerm Z o v)\n      else 0\n\ndef MediumAtom.smallCoreSquaredCauchyMass (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) : ℝ :=\n  (d.smallCoreSquaredOuterCarrier.card : ℝ) *\n    ∑ o ∈ d.smallCoreSquaredOuterCarrier, (d.smallCoreSquaredBlock Z resonant o).re\n\nnamespace SharedFirstFactorSmallCoreSquaredFinite\n\nprivate def maskedBeta (d : MediumAtom) (Ybeta Ysupport : ℝ) (N1 N2 : ℕ) : ℂ :=\n  if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart\n        (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n    d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2)\n  else 0\n\nprivate def smoothFrequencyAtom (d : MediumAtom) (Z : ℝ)\n    (p N1 N2 r s r' s' : ℕ) (h : ℤ) : ℂ :=\n  let L := (p * (r * s)).lcm (p * (r' * s'))\n  (poissonSmoothLowPass ((d.V / (L : ℝ)) * (h : ℝ) / Z) : ℂ) *\n    poissonNonzeroFrequency (d.V / (L : ℝ))\n      ((ComplexCRT.residue (p * (r * s)) (p * (r' * s')) N1 N2 d.residue : ℝ) /\n        (L : ℝ)) h\n\nprivate theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) :\n    0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q := by\n  obtain ⟨hlo, hhi⟩ := Finset.mem_Icc.mp hn\n  have hc : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  exact ⟨by omega, (Nat.le_ceil Q).trans (by exact_mod_cast hlo),\n    (show (n : ℝ) ≤ (Nat.floor (2 * Q) : ℝ) by exact_mod_cast hhi).trans\n      (Nat.floor_le (by linarith : 0 ≤ 2 * Q))⟩\n\nprivate theorem clean_transposed_beta_norm_le {B : ℕ} {sigma kappa c0 : ℝ}\n    {d : MediumAtom} (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\n    ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ ≤ 1 := by\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, hAlpha, _⟩ :=\n    mediumAdmissible_cleanedAlphaAtom hd\n  change ‖if n ∈ d.alphaCarrier then d.cleanedAlpha n else 0‖ ≤ 1\n  by_cases hn : n ∈ d.alphaCarrier\n  · have hnBound := hAlpha n hn\n    change ‖d.cleanedAlpha n‖ ≤ 1 at hnBound\n    simpa only [if_pos hn] using hnBound\n  · simp only [if_neg hn, norm_zero, zero_le_one]\n\nprivate theorem outer_tail_memberships (d : MediumAtom)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ))\n    (ho : o ∈ d.smallCoreSquaredOuterCarrier) :\n    o.2.1.1 ∈ factorCarrier d.Q3 ∧\n      o.2.1.2.1 ∈ factorCarrier d.Q3 ∧ o.2.1.2.2 ∈ factorCarrier d.Q2 := by\n  change o ∈ ((d.primitiveFirstFactorCarrier ×ˢ\n    (d.transposedAtom.betaCarrier ×ˢ d.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)) ×ˢ\n    ((factorCarrier d.Q3) ×ˢ ((factorCarrier d.Q3) ×ˢ factorCarrier d.Q2)).biUnion\n      (fun t => (t.2.1 * t.2.2).divisors.image (fun D => (t, D))) at ho\n  obtain ⟨t, ht, hImage⟩ := Finset.mem_biUnion.mp (Finset.mem_product.mp ho).2\n  obtain ⟨D, _hD, he⟩ := Finset.mem_image.mp hImage\n  have het : t = o.2.1 := congrArg Prod.fst he\n  rw [← het]\n  exact ⟨(Finset.mem_product.mp ht).1,\n    (Finset.mem_product.mp (Finset.mem_product.mp ht).2).1,\n    (Finset.mem_product.mp (Finset.mem_product.mp ht).2).2⟩\n\nprivate theorem cleaned_squared_outerCoefficient_norm_le_one\n    (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom)\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    (Ybeta Ysupport : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ))\n    (ho : o ∈ d.cleanedAlphaAtom.smallCoreSquaredOuterCarrier) :\n    ‖d.cleanedAlphaAtom.smallCoreSquaredOuterCoefficient Ybeta Ysupport o‖ ≤ 1 := by\n  obtain ⟨hr, hr', hs'⟩ := outer_tail_memberships d.cleanedAlphaAtom o ho\n  have hdKeep := hd\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, hGamma2, hGamma3⟩ := hdKeep\n  have h1 := clean_transposed_beta_norm_le hd o.1.2.1\n  have h2 := clean_transposed_beta_norm_le hd o.1.2.2\n  have h3 := (hGamma3 o.2.1.1 hr).1\n  have h4 := (hGamma3 o.2.1.2.1 hr').1\n  have h5 := (hGamma2 o.2.1.2.2 hs').1\n  unfold MediumAtom.smallCoreSquaredOuterCoefficient\n  split_ifs\n  · simp only [norm_mul, norm_star]\n    calc\n      _ ≤ 1 * 1 * 1 * 1 * 1 := by gcongr\n      _ = _ := by norm_num\n  · simp only [norm_zero, zero_le_one]\n\nprivate theorem sum_divisor_images {T : Type*} [DecidableEq T]\n    (S : Finset T) (w : T → ℕ) (f : T × ℕ → ℂ) :\n    (∑ q ∈ S.biUnion (fun t => (w t).divisors.image (fun D => (t, D))), f q) =\n      ∑ t ∈ S, ∑ D ∈ (w t).divisors, f (t, D) := by\n  have hdisj : Set.PairwiseDisjoint (↑S)\n      (fun t => (w t).divisors.image (fun D => (t, D))) := by\n    intro t _ t' _ hne\n    apply Finset.disjoint_left.mpr\n    intro q hq hq'\n    obtain ⟨D, _hD, he⟩ := Finset.mem_image.mp hq\n    obtain ⟨D', _hD', he'⟩ := Finset.mem_image.mp hq'\n    exact hne (congrArg Prod.fst (he.trans he'.symm))\n  rw [Finset.sum_biUnion hdisj]\n  apply Finset.sum_congr rfl\n  intro t _\n  rw [Finset.sum_image]\n  intro D _ D' _ he\n  exact congrArg Prod.snd he\n\nprivate theorem outer_sum_expansion (d : MediumAtom)\n    (f : ((ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) → ℂ) :\n    (∑ o ∈ d.smallCoreSquaredOuterCarrier, f o) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ N1 ∈ d.transposedAtom.betaCarrier, ∑ N2 ∈ d.transposedAtom.betaCarrier,\n          if N1 ≠ N2 ∧ Nat.ModEq p N1 N2 then\n            ∑ r ∈ factorCarrier d.Q3, ∑ r' ∈ factorCarrier d.Q3,\n              ∑ s' ∈ factorCarrier d.Q2, ∑ D ∈ (r' * s').divisors,\n                f ((p, N1, N2), ((r, r', s'), D))\n          else 0 := by\n  unfold MediumAtom.smallCoreSquaredOuterCarrier\n  rw [Finset.sum_product]\n  simp_rw [sum_divisor_images]\n  simp only [Finset.sum_filter, Finset.sum_product]\n\nprivate theorem move_left_s_last (R S : Finset ℕ) (f : ℕ → ℕ → ℕ → ℕ → ℂ) :\n    (∑ r ∈ R, ∑ s ∈ S, ∑ r' ∈ R, ∑ s' ∈ S, f r s r' s') =\n      ∑ r ∈ R, ∑ r' ∈ R, ∑ s' ∈ S, ∑ s ∈ S, f r s r' s' := by\n  apply Finset.sum_congr rfl\n  intro r _\n  rw [Finset.sum_comm (s := S) (t := R)]\n  apply Finset.sum_congr rfl\n  intro r' _\n  exact Finset.sum_comm\n\nprivate theorem outerCoefficient_factor (d : MediumAtom) (Ybeta Ysupport : ℝ)\n    (p N1 N2 r r' s' D : ℕ) :\n    d.smallCoreSquaredOuterCoefficient Ybeta Ysupport ((p, N1, N2), ((r, r', s'), D)) =\n      maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n        star (d.gamma2 s') := by\n  unfold MediumAtom.smallCoreSquaredOuterCoefficient maskedBeta\n  split_ifs <;> ring\n\nprivate theorem rowTerm_factor (d : MediumAtom) (Z : ℝ)\n    (p N1 N2 r s r' s' D : ℕ) (h : ℤ) :\n    d.smallCoreSquaredRowTerm Z ((p, N1, N2), ((r, r', s'), D)) (s, h) =\n      if (r * s).gcd (r' * s') = D ∧\n          ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n        d.gamma2 s * ((smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n      else 0 := rfl\n\nprivate theorem divisor_frequency_sum (d : MediumAtom) (Z : ℝ)\n    (p N1 N2 r s r' s' : ℕ) (hw : 0 < r' * s') :\n    (∑ D ∈ (r' * s').divisors,\n      ∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow (d.sharedSmoothFrequencyBound Z D),\n        d.smallCoreSquaredRowTerm Z ((p, N1, N2), ((r, r', s'), D)) (s, h)) =\n      d.gamma2 s *\n        (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n          ((∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n              (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))),\n            smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n        else 0) := by\n  let D0 : ℕ := (r * s).gcd (r' * s')\n  have hmem : D0 ∈ (r' * s').divisors :=\n    Nat.mem_divisors.mpr ⟨Nat.gcd_dvd_right _ _, hw.ne'⟩\n  rw [Finset.sum_eq_single D0]\n  · simp_rw [rowTerm_factor]\n    by_cases hc : ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2\n    · simp only [D0, eq_self_iff_true, true_and, if_pos hc, Finset.mul_sum,\n        Complex.re_sum, Complex.ofReal_sum]\n    · simp only [D0, eq_self_iff_true, true_and, if_neg hc, Finset.sum_const_zero,\n        mul_zero]\n  · intro D _ hne\n    apply Finset.sum_eq_zero\n    intro h _\n    rw [rowTerm_factor, if_neg]\n    intro hc\n    exact hne hc.1.symm\n  · intro hnot\n    exact (hnot hmem).elim\n\nprivate theorem row_divisor_reindex (d : MediumAtom) (Z Ybeta Ysupport : ℝ)\n    (p N1 N2 r r' s' : ℕ) (hw : 0 < r' * s') :\n    (∑ D ∈ (r' * s').divisors,\n      d.smallCoreSquaredOuterCoefficient Ybeta Ysupport ((p, N1, N2), ((r, r', s'), D)) *\n        ∑ u ∈ d.smallCoreSquaredInnerCarrier Z ((p, N1, N2), ((r, r', s'), D)),\n          d.smallCoreSquaredRowTerm Z ((p, N1, N2), ((r, r', s'), D)) u) =\n      ∑ s ∈ factorCarrier d.Q2,\n        (maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n            star (d.gamma2 s')) *\n          (d.gamma2 s *\n            (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n              ((∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n                  (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))),\n                smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n            else 0)) := by\n  let C : ℂ := maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n    star (d.gamma2 s')\n  simp_rw [outerCoefficient_factor]\n  simp only [MediumAtom.smallCoreSquaredInnerCarrier, Finset.sum_product]\n  change (∑ D ∈ (r' * s').divisors, C *\n      ∑ s ∈ factorCarrier d.Q2,\n        ∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n            (d.sharedSmoothFrequencyBound Z D),\n          d.smallCoreSquaredRowTerm Z ((p, N1, N2), ((r, r', s'), D)) (s, h)) = _\n  rw [← Finset.mul_sum, Finset.sum_comm]\n  rw [Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro s _\n  rw [divisor_frequency_sum d Z p N1 N2 r s r' s' hw]\n\nprivate theorem unfiltered_pair_reindex (d : MediumAtom)\n    (hQ2 : 1 ≤ d.Q2) (hQ3 : 1 ≤ d.Q3)\n    (Z Ybeta Ysupport : ℝ) (p N1 N2 : ℕ) :\n    maskedBeta d Ybeta Ysupport N1 N2 * d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 =\n      ∑ r ∈ factorCarrier d.Q3, ∑ r' ∈ factorCarrier d.Q3,\n        ∑ s' ∈ factorCarrier d.Q2, ∑ D ∈ (r' * s').divisors,\n          d.smallCoreSquaredOuterCoefficient Ybeta Ysupport ((p, N1, N2), ((r, r', s'), D)) *\n            ∑ u ∈ d.smallCoreSquaredInnerCarrier Z ((p, N1, N2), ((r, r', s'), D)),\n              d.smallCoreSquaredRowTerm Z ((p, N1, N2), ((r, r', s'), D)) u := by\n  symm\n  calc\n    _ = ∑ r ∈ factorCarrier d.Q3, ∑ r' ∈ factorCarrier d.Q3,\n        ∑ s' ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q2,\n          (maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n              star (d.gamma2 s')) *\n            (d.gamma2 s *\n              (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n                ((∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n                    (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))),\n                  smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n              else 0)) := by\n      apply Finset.sum_congr rfl\n      intro r _\n      apply Finset.sum_congr rfl\n      intro r' hr'\n      apply Finset.sum_congr rfl\n      intro s' hs'\n      exact row_divisor_reindex d Z Ybeta Ysupport p N1 N2 r r' s'\n        (Nat.mul_pos (factor_bounds hQ3 hr').1 (factor_bounds hQ2 hs').1)\n    _ = ∑ r ∈ factorCarrier d.Q3, ∑ s ∈ factorCarrier d.Q2,\n        ∑ r' ∈ factorCarrier d.Q3, ∑ s' ∈ factorCarrier d.Q2,\n          (maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n              star (d.gamma2 s')) *\n            (d.gamma2 s *\n              (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n                ((∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n                    (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))),\n                  smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n              else 0)) := (move_left_s_last _ _ _).symm\n    _ = _ := by\n      unfold MediumAtom.sharedSmallPairSmoothFrequencyKernel\n      simp only [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro r _\n      apply Finset.sum_congr rfl\n      intro s _\n      apply Finset.sum_congr rfl\n      intro r' _\n      apply Finset.sum_congr rfl\n      intro s' _\n      change (maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n          star (d.gamma2 s')) *\n        (d.gamma2 s *\n          (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n            ((∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n                (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))),\n              smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n          else 0)) = _\n      unfold smoothFrequencyAtom\n      by_cases hc : ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2\n      · simp only [if_pos hc, star_mul]\n        ring\n      · simp only [if_neg hc, Complex.ofReal_zero, mul_zero]\n\nprivate theorem compatible_mod_firstFactor {p v w N1 N2 : ℕ}\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N1 N2) : Nat.ModEq p N1 N2 := by\n  have he := hc.2.2\n  rw [sharedFirstFactor_gcd] at he\n  exact he.of_dvd (dvd_mul_right p (v.gcd w))\n\nprivate theorem kernel_eq_zero_of_not_modEq (d : MediumAtom) (Z : ℝ)\n    (p N1 N2 : ℕ) (hnot : ¬ Nat.ModEq p N1 N2) :\n    d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 = 0 := by\n  unfold MediumAtom.sharedSmallPairSmoothFrequencyKernel\n  apply Finset.sum_eq_zero\n  intro r _\n  apply Finset.sum_eq_zero\n  intro s _\n  apply Finset.sum_eq_zero\n  intro r' _\n  apply Finset.sum_eq_zero\n  intro s' _\n  have hc : ¬ ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 :=\n    fun he => hnot (compatible_mod_firstFactor he)\n  rw [if_neg hc]\n  simp only [Complex.ofReal_zero, mul_zero]\n\nprivate theorem small_mask_ne_diagonal\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    {N1 N2 : ℕ} (hN1 : N1 ∈ d.transposedAtom.betaCarrier)\n    (hsmall : (N1.gcd N2 : ℝ) ≤ d.scale ^ (sigma / 4)) : N1 ≠ N2 := by\n  have hx : 1 < d.scale :=\n    (Real.one_lt_exp_iff.mpr (Real.exp_pos (1 : ℝ))).trans hd.2.2.2.2.2.1\n  have hcut : d.scale ^ (sigma / 4) < d.U :=\n    (Real.rpow_lt_rpow_of_exponent_lt hx (by linarith : sigma / 4 < sigma)).trans_le\n      (PairedAlphaDeletion.actual_geometry_bounds hd).1\n  change N1 ∈ factorCarrier d.U at hN1\n  have hlo := (factor_bounds hd.1 hN1).2.1\n  intro heq\n  have hNsmall : (N1 : ℝ) ≤ d.scale ^ (sigma / 4) := by\n    simpa only [heq, Nat.gcd_self] using hsmall\n  linarith\n\nprivate theorem pair_zero_outside\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    {p N1 N2 : ℕ} (hN1 : N1 ∈ d.transposedAtom.betaCarrier)\n    (hnot : ¬ (N1 ≠ N2 ∧ Nat.ModEq p N1 N2)) (Z : ℝ) :\n    maskedBeta d (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) N1 N2 *\n      d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 = 0 := by\n  unfold maskedBeta\n  split_ifs with hmask\n  · have hne := small_mask_ne_diagonal hsigma hd hN1 hmask.1\n    have hmod : ¬ Nat.ModEq p N1 N2 := fun hm => hnot ⟨hne, hm⟩\n    rw [kernel_eq_zero_of_not_modEq d Z p N1 N2 hmod, mul_zero]\n  · exact zero_mul _\n\nprivate theorem cleaned_actualSmooth_squared_reindex\n    (B : ℕ) (sigma kappa c0 : ℝ) (hsigma : 0 < sigma)\n    (d : MediumAtom) (hd : MediumAdmissible B sigma kappa c0 d)\n    (Z : ℝ) (_hZ : 0 < Z) :\n          let e := d.cleanedAlphaAtom\n          let Y := d.scale ^ (sigma / 4)\n          (e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n              (∑ o ∈ e.smallCoreSquaredOuterCarrier,\n                e.smallCoreSquaredOuterCoefficient Y Y o *\n                  (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n                    e.smallCoreSquaredRowTerm Z o u))) := by\n  dsimp only\n  let e := d.cleanedAlphaAtom\n  let Y := d.scale ^ (sigma / 4)\n  have he : MediumAdmissible B sigma kappa c0 e := mediumAdmissible_cleanedAlphaAtom hd\n  rw [outer_sum_expansion]\n  change (∑ p ∈ e.primitiveFirstFactorCarrier,\n    ∑ N1 ∈ e.transposedAtom.betaCarrier, ∑ N2 ∈ e.transposedAtom.betaCarrier,\n      if (N1.gcd N2 : ℝ) ≤ Y ∧\n          (CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Y then\n        e.transposedAtom.beta N1 * star (e.transposedAtom.beta N2) *\n          e.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 else 0) = _\n  apply Finset.sum_congr rfl\n  intro p _\n  apply Finset.sum_congr rfl\n  intro N1 hN1\n  apply Finset.sum_congr rfl\n  intro N2 _\n  have hmasked : (if (N1.gcd N2 : ℝ) ≤ Y ∧\n      (CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Y then\n      e.transposedAtom.beta N1 * star (e.transposedAtom.beta N2) *\n        e.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 else 0) =\n      maskedBeta e Y Y N1 N2 * e.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 := by\n    unfold maskedBeta\n    split_ifs <;> simp only [zero_mul]\n  rw [hmasked]\n  by_cases hp : N1 ≠ N2 ∧ Nat.ModEq p N1 N2\n  · rw [if_pos hp]\n    exact unfiltered_pair_reindex e he.2.2.2.1 he.2.2.2.2.1 Z Y Y p N1 N2\n  · rw [if_neg hp]\n    exact pair_zero_outside hsigma he hN1 hp Z\n\nprivate theorem unsigned_slope_eq_iff {s1 s2 : ℕ}\n    (hs1 : 0 < s1) (hs2 : 0 < s2) (h1 h2 : ℤ) :\n    (h1.natAbs : ℚ) / (s1 : ℚ) = (h2.natAbs : ℚ) / (s2 : ℚ) ↔\n      h1 * (s2 : ℤ) = h2 * (s1 : ℤ) ∨ h1 * (s2 : ℤ) = -(h2 * (s1 : ℤ)) := by\n  have hs1q : (s1 : ℚ) ≠ 0 := by exact_mod_cast hs1.ne'\n  have hs2q : (s2 : ℚ) ≠ 0 := by exact_mod_cast hs2.ne'\n  rw [div_eq_div_iff hs1q hs2q]\n  constructor\n  · intro he\n    have hNat : h1.natAbs * s2 = h2.natAbs * s1 := by exact_mod_cast he\n    apply Int.natAbs_eq_natAbs_iff.mp\n    simpa only [Int.natAbs_mul, Int.natAbs_natCast] using hNat\n  · intro he\n    have hAbs := Int.natAbs_eq_natAbs_iff.mpr he\n    have hNat : h1.natAbs * s2 = h2.natAbs * s1 := by\n      simpa only [Int.natAbs_mul, Int.natAbs_natCast] using hAbs\n    exact_mod_cast hNat\n\nprivate theorem fiber_gram_nonnegative {T S : Type*}\n    [DecidableEq T] [DecidableEq S] (I : Finset T) (f : T → S) (z : T → ℂ) :\n    0 ≤ (∑ u ∈ I, ∑ v ∈ I, if f u = f v then z u * star (z v) else 0).re := by\n  let J := I.image f\n  have he : (∑ u ∈ I, ∑ v ∈ I, if f u = f v then z u * star (z v) else 0) =\n      ∑ t ∈ J, ((‖∑ u ∈ I.filter (fun u => f u = t), z u‖ ^ 2 : ℝ) : ℂ) := by\n    rw [← Finset.sum_fiberwise_of_maps_to (s := I) (t := J) (g := f)\n      (fun u hu => Finset.mem_image_of_mem f hu)\n      (fun u => ∑ v ∈ I, if f u = f v then z u * star (z v) else 0)]\n    apply Finset.sum_congr rfl\n    intro t _\n    rw [complex_norm_sq_sum_eq_double_star]\n    apply Finset.sum_congr rfl\n    intro u hu\n    rw [Finset.sum_filter]\n    apply Finset.sum_congr rfl\n    intro v _\n    have hfu := (Finset.mem_filter.mp hu).2\n    by_cases hfv : f v = t\n    · rw [if_pos (hfu.trans hfv.symm), if_pos hfv]\n    · rw [if_neg (by intro h; exact hfv (h.symm.trans hfu)), if_neg hfv]\n  rw [he]\n  simp only [Complex.re_sum, Complex.ofReal_re]\n  exact Finset.sum_nonneg (fun _ _ => sq_nonneg _)\n\nprivate theorem squared_row_gram_partition\n    (d : MediumAtom) (hQ2 : 1 ≤ d.Q2) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) :\n    (0 ≤ (d.smallCoreSquaredBlock Z true o).re) ∧\n      ((d.smallCoreSquaredBlock Z true o).re +\n          (d.smallCoreSquaredBlock Z false o).re =\n        ‖∑ u ∈ d.smallCoreSquaredInnerCarrier Z o,\n            d.smallCoreSquaredRowTerm Z o u‖ ^ 2) := by\n  let I := d.smallCoreSquaredInnerCarrier Z o\n  let z := d.smallCoreSquaredRowTerm Z o\n  let f : ℕ × ℤ → ℚ := fun u => (u.2.natAbs : ℚ) / (u.1 : ℚ)\n  have hpos (u : ℕ × ℤ) (hu : u ∈ I) : 0 < u.1 := by\n    change u ∈ factorCarrier d.Q2 ×ˢ\n      CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n        (d.sharedSmoothFrequencyBound Z o.2.2) at hu\n    exact (factor_bounds hQ2 (Finset.mem_product.mp hu).1).1\n  have htrue : d.smallCoreSquaredBlock Z true o =\n      ∑ u ∈ I, ∑ v ∈ I, if f u = f v then z u * star (z v) else 0 := by\n    unfold MediumAtom.smallCoreSquaredBlock\n    apply Finset.sum_congr rfl\n    intro u hu\n    apply Finset.sum_congr rfl\n    intro v hv\n    have hiff : f u = f v ↔\n        u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n          u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ)) :=\n      unsigned_slope_eq_iff (hpos u hu) (hpos v hv) u.2 v.2\n    by_cases h : f u = f v\n    · have hp := hiff.mp h\n      simp [h, hp]\n    · have hp : ¬ (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n          u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) := fun he => h (hiff.mpr he)\n      simp [h, hp]\n  have hcomplex : d.smallCoreSquaredBlock Z true o + d.smallCoreSquaredBlock Z false o =\n      ∑ u ∈ I, ∑ v ∈ I, z u * star (z v) := by\n    unfold MediumAtom.smallCoreSquaredBlock\n    rw [← Finset.sum_add_distrib]\n    apply Finset.sum_congr rfl\n    intro u _\n    rw [← Finset.sum_add_distrib]\n    apply Finset.sum_congr rfl\n    intro v _\n    by_cases hp : u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n        u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))\n    · simp [hp]\n    · simp [hp]\n  refine ⟨?_, ?_⟩\n  · rw [htrue]\n    exact fiber_gram_nonnegative I f z\n  · rw [← Complex.add_re, hcomplex]\n    simpa only [Complex.ofReal_re] using\n      (congrArg Complex.re (complex_norm_sq_sum_eq_double_star I z)).symm\n\nprivate theorem cleaned_squared_outer_Cauchy\n    (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom)\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    (Ybeta Ysupport Z : ℝ) :\n    let e := d.cleanedAlphaAtom\n    ‖∑ o ∈ e.smallCoreSquaredOuterCarrier,\n        e.smallCoreSquaredOuterCoefficient Ybeta Ysupport o *\n          (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n            e.smallCoreSquaredRowTerm Z o u)‖ ^ 2 ≤\n      e.smallCoreSquaredCauchyMass Z true +\n        e.smallCoreSquaredCauchyMass Z false := by\n  dsimp only\n  let e := d.cleanedAlphaAtom\n  let O := e.smallCoreSquaredOuterCarrier\n  let C := e.smallCoreSquaredOuterCoefficient Ybeta Ysupport\n  let F := fun o => ∑ u ∈ e.smallCoreSquaredInnerCarrier Z o, e.smallCoreSquaredRowTerm Z o u\n  have hC : ∑ o ∈ O, ‖C o‖ ^ 2 ≤ (O.card : ℝ) := by\n    calc\n      _ ≤ ∑ _o ∈ O, (1 : ℝ) := by\n        apply Finset.sum_le_sum\n        intro o ho\n        have hbound := cleaned_squared_outerCoefficient_norm_le_one B sigma kappa c0 d hd\n          Ybeta Ysupport o ho\n        simpa only [one_pow] using\n          (sq_le_sq₀ (norm_nonneg (C o)) (by norm_num : (0 : ℝ) ≤ 1)).2 hbound\n      _ = _ := by simp\n  have hF : 0 ≤ ∑ o ∈ O, ‖F o‖ ^ 2 := Finset.sum_nonneg (fun _ _ => sq_nonneg _)\n  have hGram : (∑ o ∈ O, ‖F o‖ ^ 2) =\n      ∑ o ∈ O, ((e.smallCoreSquaredBlock Z true o).re +\n        (e.smallCoreSquaredBlock Z false o).re) := by\n    apply Finset.sum_congr rfl\n    intro o _\n    exact (squared_row_gram_partition e hd.2.2.2.1 Z o).2.symm\n  calc\n    _ ≤ (∑ o ∈ O, ‖C o‖ ^ 2) * ∑ o ∈ O, ‖F o‖ ^ 2 :=\n      complex_finset_cauchy_norm_sq O C F\n    _ ≤ (O.card : ℝ) * ∑ o ∈ O, ‖F o‖ ^ 2 :=\n      mul_le_mul_of_nonneg_right hC hF\n    _ = _ := by\n      rw [hGram, Finset.sum_add_distrib, mul_add]\n      rfl\n\nend SharedFirstFactorSmallCoreSquaredFinite\n\nopen SharedFirstFactorSmallCoreSquaredFinite\n\ntheorem actual_smallSupported_squared_resonance_Cauchy\n    (B : ℕ) (sigma kappa c0 : ℝ) (hsigma : 0 < sigma)\n    (d : MediumAtom) (hd : MediumAdmissible B sigma kappa c0 d) :\n    ∀ Z : ℝ, 0 < Z →\n          let e := d.cleanedAlphaAtom\n          let Y := d.scale ^ (sigma / 4)\n          (e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n              (∑ o ∈ e.smallCoreSquaredOuterCarrier,\n                e.smallCoreSquaredOuterCoefficient Y Y o *\n                  (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n                    e.smallCoreSquaredRowTerm Z o u))) ∧\n            (0 ≤ e.smallCoreSquaredCauchyMass Z true) ∧\n            (‖e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z‖ ^ 2 ≤\n              e.smallCoreSquaredCauchyMass Z true +\n                e.smallCoreSquaredCauchyMass Z false) := by\n  intro Z hZ\n  dsimp only\n  let e := d.cleanedAlphaAtom\n  let Y := d.scale ^ (sigma / 4)\n  have heq : e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n      ∑ o ∈ e.smallCoreSquaredOuterCarrier,\n        e.smallCoreSquaredOuterCoefficient Y Y o *\n          (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o, e.smallCoreSquaredRowTerm Z o u) :=\n    cleaned_actualSmooth_squared_reindex B sigma kappa c0 hsigma d hd Z hZ\n  refine ⟨heq, ?_, ?_⟩\n  · unfold MediumAtom.smallCoreSquaredCauchyMass\n    exact mul_nonneg (Nat.cast_nonneg _)\n      (Finset.sum_nonneg (fun o _ => (squared_row_gram_partition e hd.2.2.2.1 Z o).1))\n  · rw [heq]\n    exact cleaned_squared_outer_Cauchy B sigma kappa c0 d hd Y Y Z\n\nend\n\nend ImbalancedChen.Part3\n",
+    "all620lines_actually_read_untruncated_two_spans": [
+      [
+        1,
+        320
+      ],
+      [
+        321,
+        620
+      ]
+    ]
+  },
+  "author_freeze": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261021-squared-finite-author-freeze.json",
+    "sha256": "33f74a18cc98498cb4fef4b9486f645dfd8c372b7768f9b897bd75a10ea14e23",
+    "bytes": 160581,
+    "whole_source_all30_headers_bodies_exact": true
+  },
+  "exact_scope": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261021-squared-finite-one-source-root-authoring-scope.json",
+    "sha256": "10b5a853fa42ada3da3adaf4583b10af25a7d80a8e1fca1469725acd0db4f8f4",
+    "allowed": "Write ONE new Lean file with genuine full proofs of exact six literal definitions and ONE finite806 public endpoint, plus necessary private finite proof helpers. Faithful coercion/type/namespace annotations allowed only if semantically equivalent and all deviations reported in complete freeze inventory. Suggested private interfaces are proof guidance, not assumptions or mandatory count; new necessary private helpers must be ordinary proved and fully inventoried. Read frozen parent snapshot and actual alreadyowned ancestor/native sources for genuine APIs."
+  },
+  "all30_independently_parsed_complete_true_headers_and_complete_bodies_with_math_API_review": [
+    {
+      "name": "MediumAtom.smallCoreSquaredOuterCarrier",
+      "kind": "def",
+      "private": false,
+      "char_range": [
+        909,
+        1379
+      ],
+      "byte_range": [
+        909,
+        1413
+      ],
+      "lines": [
+        25,
+        33
+      ],
+      "complete_true_header": "def MediumAtom.smallCoreSquaredOuterCarrier (d : MediumAtom) :\n    Finset ((ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ))",
+      "complete_body_after_assignment": "\n  let Pairs := (d.primitiveFirstFactorCarrier ×ˢ\n    (d.transposedAtom.betaCarrier ×ˢ d.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)\n  let Tails := (factorCarrier d.Q3) ×ˢ\n    ((factorCarrier d.Q3) ×ˢ factorCarrier d.Q2)\n  Pairs ×ˢ Tails.biUnion (fun t =>\n    (t.2.1 * t.2.2).divisors.image (fun D => (t, D)))",
+      "complete_literal_declaration": "def MediumAtom.smallCoreSquaredOuterCarrier (d : MediumAtom) :\n    Finset ((ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) :=\n  let Pairs := (d.primitiveFirstFactorCarrier ×ˢ\n    (d.transposedAtom.betaCarrier ×ˢ d.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)\n  let Tails := (factorCarrier d.Q3) ×ˢ\n    ((factorCarrier d.Q3) ×ˢ factorCarrier d.Q2)\n  Pairs ×ˢ Tails.biUnion (fun t =>\n    (t.2.1 * t.2.2).divisors.image (fun D => (t, D)))",
+      "header_sha256": "cf1ffd53e2791e6569345c1bf879d83ba087baf637825cd0c73f1611ef7b658a",
+      "declaration_sha256": "30d651db490b237ac292fa7e9518d0a60425953d8ea4e70aa9707d4a2d0e6863",
+      "independent_complete_body_math_API_judgment": "Actual primitive-p/N carrier with offdiagonal/common-p ModEq and full tagged(r,rprime,sprime,D) tails. Tagged divisor images preserve original labels."
+    },
+    {
+      "name": "MediumAtom.smallCoreSquaredInnerCarrier",
+      "kind": "def",
+      "private": false,
+      "char_range": [
+        1381,
+        1633
+      ],
+      "byte_range": [
+        1415,
+        1696
+      ],
+      "lines": [
+        35,
+        39
+      ],
+      "complete_true_header": "def MediumAtom.smallCoreSquaredInnerCarrier (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : Finset (ℕ × ℤ)",
+      "complete_body_after_assignment": "\n  factorCarrier d.Q2 ×ˢ\n    CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n      (d.sharedSmoothFrequencyBound Z o.2.2)",
+      "complete_literal_declaration": "def MediumAtom.smallCoreSquaredInnerCarrier (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : Finset (ℕ × ℤ) :=\n  factorCarrier d.Q2 ×ˢ\n    CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n      (d.sharedSmoothFrequencyBound Z o.2.2)",
+      "header_sha256": "58c4b81915c849fc1a5f7002de753621b590fa103d22516fe29a9eb855296a0a",
+      "declaration_sha256": "15960fdcd500865d2d10d98b29bde70bb17d54396a1436cd809233be19730d83",
+      "independent_complete_body_math_API_judgment": "One unchanged original signed window H_D, never a new rowceil or h-cardinality bound."
+    },
+    {
+      "name": "MediumAtom.smallCoreSquaredRowTerm",
+      "kind": "def",
+      "private": false,
+      "char_range": [
+        1635,
+        2279
+      ],
+      "byte_range": [
+        1698,
+        2387
+      ],
+      "lines": [
+        41,
+        58
+      ],
+      "complete_true_header": "def MediumAtom.smallCoreSquaredRowTerm (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) (u : ℕ × ℤ) : ℂ",
+      "complete_body_after_assignment": "\n  let p := o.1.1\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  let v := o.2.1.1 * u.1\n  let w := o.2.1.2.1 * o.2.1.2.2\n  let D := o.2.2\n  let q := p * v\n  let q' := p * w\n  let L := q.lcm q'\n  if v.gcd w = D ∧ ComplexCRT.Compatible q q' N1 N2 then\n    d.gamma2 u.1 *\n      (((CommonSmoothCutoff.poissonSmoothLowPass\n          ((d.V / (L : ℝ)) * (u.2 : ℝ) / Z) : ℂ) *\n        CommonSmoothCutoff.poissonNonzeroFrequency (d.V / (L : ℝ))\n          ((ComplexCRT.residue q q' N1 N2 d.residue : ℝ) / (L : ℝ)) u.2).re : ℂ)\n  else 0",
+      "complete_literal_declaration": "def MediumAtom.smallCoreSquaredRowTerm (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) (u : ℕ × ℤ) : ℂ :=\n  let p := o.1.1\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  let v := o.2.1.1 * u.1\n  let w := o.2.1.2.1 * o.2.1.2.2\n  let D := o.2.2\n  let q := p * v\n  let q' := p * w\n  let L := q.lcm q'\n  if v.gcd w = D ∧ ComplexCRT.Compatible q q' N1 N2 then\n    d.gamma2 u.1 *\n      (((CommonSmoothCutoff.poissonSmoothLowPass\n          ((d.V / (L : ℝ)) * (u.2 : ℝ) / Z) : ℂ) *\n        CommonSmoothCutoff.poissonNonzeroFrequency (d.V / (L : ℝ))\n          ((ComplexCRT.residue q q' N1 N2 d.residue : ℝ) / (L : ℝ)) u.2).re : ℂ)\n  else 0",
+      "header_sha256": "89d7766e40ea754cb43327355203022ded2a49165e66d83da99f40366b2fd686",
+      "declaration_sha256": "3f5447024c3271219afa64ffe0fcfae64803b27aab38f86917c6f3b4adf73f53",
+      "independent_complete_body_math_API_judgment": "Exact gcdD AND actual CRT masks; gamma2(s) multiplies cast Re(chi*Poisson). Actual L and CRT phase preserved; arbitrary complex factors remain outside Re."
+    },
+    {
+      "name": "MediumAtom.smallCoreSquaredOuterCoefficient",
+      "kind": "def",
+      "private": false,
+      "char_range": [
+        2281,
+        2746
+      ],
+      "byte_range": [
+        2389,
+        2888
+      ],
+      "lines": [
+        60,
+        70
+      ],
+      "complete_true_header": "def MediumAtom.smallCoreSquaredOuterCoefficient (d : MediumAtom)\n    (Ybeta Ysupport : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ",
+      "complete_body_after_assignment": "\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart\n        (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n    d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n      d.gamma3 o.2.1.1 * star (d.gamma3 o.2.1.2.1) * star (d.gamma2 o.2.1.2.2)\n  else 0",
+      "complete_literal_declaration": "def MediumAtom.smallCoreSquaredOuterCoefficient (d : MediumAtom)\n    (Ybeta Ysupport : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart\n        (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n    d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n      d.gamma3 o.2.1.1 * star (d.gamma3 o.2.1.2.1) * star (d.gamma2 o.2.1.2.2)\n  else 0",
+      "header_sha256": "805057abf906ea8f6f723fc656d5d10250b113505455e810f620d28ff37c7b61",
+      "declaration_sha256": "61261608ef6aa794bd3b5f964e2998c50ed57bb046e88d3e1dae6e92549c9623",
+      "independent_complete_body_math_API_judgment": "Original paired-gcd/supportedPart gates; original cleaned beta pair and gamma3/conjugate gamma3/conjugate gamma2 factors."
+    },
+    {
+      "name": "MediumAtom.smallCoreSquaredBlock",
+      "kind": "def",
+      "private": false,
+      "char_range": [
+        2748,
+        3177
+      ],
+      "byte_range": [
+        2890,
+        3361
+      ],
+      "lines": [
+        72,
+        79
+      ],
+      "complete_true_header": "def MediumAtom.smallCoreSquaredBlock (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ",
+      "complete_body_after_assignment": "\n  ∑ u ∈ d.smallCoreSquaredInnerCarrier Z o,\n    ∑ v ∈ d.smallCoreSquaredInnerCarrier Z o,\n      if decide (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n          u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) = resonant then\n        d.smallCoreSquaredRowTerm Z o u * star (d.smallCoreSquaredRowTerm Z o v)\n      else 0",
+      "complete_literal_declaration": "def MediumAtom.smallCoreSquaredBlock (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  ∑ u ∈ d.smallCoreSquaredInnerCarrier Z o,\n    ∑ v ∈ d.smallCoreSquaredInnerCarrier Z o,\n      if decide (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n          u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) = resonant then\n        d.smallCoreSquaredRowTerm Z o u * star (d.smallCoreSquaredRowTerm Z o v)\n      else 0",
+      "header_sha256": "006c69be65e058e7391bc9ce3d1cafbd157d323c76ddb2eb866eba92371bc512",
+      "declaration_sha256": "afdf67de2659b8e5963771d34d14d0f103bd28987f6ffd3bb1d17ffc6cbea760",
+      "independent_complete_body_math_API_judgment": "Literal same/opposite-slope Boolean union counted once; false keeps its sign."
+    },
+    {
+      "name": "MediumAtom.smallCoreSquaredCauchyMass",
+      "kind": "def",
+      "private": false,
+      "char_range": [
+        3179,
+        3404
+      ],
+      "byte_range": [
+        3363,
+        3598
+      ],
+      "lines": [
+        81,
+        84
+      ],
+      "complete_true_header": "def MediumAtom.smallCoreSquaredCauchyMass (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) : ℝ",
+      "complete_body_after_assignment": "\n  (d.smallCoreSquaredOuterCarrier.card : ℝ) *\n    ∑ o ∈ d.smallCoreSquaredOuterCarrier, (d.smallCoreSquaredBlock Z resonant o).re",
+      "complete_literal_declaration": "def MediumAtom.smallCoreSquaredCauchyMass (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) : ℝ :=\n  (d.smallCoreSquaredOuterCarrier.card : ℝ) *\n    ∑ o ∈ d.smallCoreSquaredOuterCarrier, (d.smallCoreSquaredBlock Z resonant o).re",
+      "header_sha256": "34ef9bdf4070030ea904a04645a946351fb8cb327f7219fc8f6f1d81ad682acd",
+      "declaration_sha256": "c78d3b94e54de3bc9e4f974c74fc1ac0627a2f856bcb92470e41f1316989f1d8",
+      "independent_complete_body_math_API_judgment": "Exactly card(O) times real-block sum, matching one outer Cauchy."
+    },
+    {
+      "name": "maskedBeta",
+      "kind": "def",
+      "private": true,
+      "char_range": [
+        3457,
+        3742
+      ],
+      "byte_range": [
+        3651,
+        3952
+      ],
+      "lines": [
+        88,
+        93
+      ],
+      "complete_true_header": "private def maskedBeta (d : MediumAtom) (Ybeta Ysupport : ℝ) (N1 N2 : ℕ) : ℂ",
+      "complete_body_after_assignment": "\n  if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart\n        (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n    d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2)\n  else 0",
+      "complete_literal_declaration": "private def maskedBeta (d : MediumAtom) (Ybeta Ysupport : ℝ) (N1 N2 : ℕ) : ℂ :=\n  if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart\n        (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n    d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2)\n  else 0",
+      "header_sha256": "88a2ea20da8dd009cf30a8c2a480d4792b1818e63d4058c1169c67b4b365040e",
+      "declaration_sha256": "f3b9f51ea56cd00f77ad30224d78f9fe8c97c2c5749a2151c27f024429045de9",
+      "independent_complete_body_math_API_judgment": "Ordinary private original pair-mask factorization, no added hypothesis."
+    },
+    {
+      "name": "smoothFrequencyAtom",
+      "kind": "def",
+      "private": true,
+      "char_range": [
+        3744,
+        4094
+      ],
+      "byte_range": [
+        3954,
+        4324
+      ],
+      "lines": [
+        95,
+        101
+      ],
+      "complete_true_header": "private def smoothFrequencyAtom (d : MediumAtom) (Z : ℝ)\n    (p N1 N2 r s r' s' : ℕ) (h : ℤ) : ℂ",
+      "complete_body_after_assignment": "\n  let L := (p * (r * s)).lcm (p * (r' * s'))\n  (poissonSmoothLowPass ((d.V / (L : ℝ)) * (h : ℝ) / Z) : ℂ) *\n    poissonNonzeroFrequency (d.V / (L : ℝ))\n      ((ComplexCRT.residue (p * (r * s)) (p * (r' * s')) N1 N2 d.residue : ℝ) /\n        (L : ℝ)) h",
+      "complete_literal_declaration": "private def smoothFrequencyAtom (d : MediumAtom) (Z : ℝ)\n    (p N1 N2 r s r' s' : ℕ) (h : ℤ) : ℂ :=\n  let L := (p * (r * s)).lcm (p * (r' * s'))\n  (poissonSmoothLowPass ((d.V / (L : ℝ)) * (h : ℝ) / Z) : ℂ) *\n    poissonNonzeroFrequency (d.V / (L : ℝ))\n      ((ComplexCRT.residue (p * (r * s)) (p * (r' * s')) N1 N2 d.residue : ℝ) /\n        (L : ℝ)) h",
+      "header_sha256": "5b7a95e2ac0c241be5e07d75f33c7cc2e10428fda03d6bb609898f18e0a8a5cc",
+      "declaration_sha256": "454eda70931a1c941a2f6470a2e3a4c3b04dc117cbb74438bc7ddabab750bfd1",
+      "independent_complete_body_math_API_judgment": "Private exact unchanged chi-Poisson atom with original L/residue and signed h."
+    },
+    {
+      "name": "factor_bounds",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        4096,
+        4539
+      ],
+      "byte_range": [
+        4326,
+        4807
+      ],
+      "lines": [
+        103,
+        110
+      ],
+      "complete_true_header": "private theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) :\n    0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q",
+      "complete_body_after_assignment": " by\n  obtain ⟨hlo, hhi⟩ := Finset.mem_Icc.mp hn\n  have hc : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  exact ⟨by omega, (Nat.le_ceil Q).trans (by exact_mod_cast hlo),\n    (show (n : ℝ) ≤ (Nat.floor (2 * Q) : ℝ) by exact_mod_cast hhi).trans\n      (Nat.floor_le (by linarith : 0 ≤ 2 * Q))⟩",
+      "complete_literal_declaration": "private theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) :\n    0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q := by\n  obtain ⟨hlo, hhi⟩ := Finset.mem_Icc.mp hn\n  have hc : 1 ≤ Nat.ceil Q := by exact_mod_cast hQ.trans (Nat.le_ceil Q)\n  exact ⟨by omega, (Nat.le_ceil Q).trans (by exact_mod_cast hlo),\n    (show (n : ℝ) ≤ (Nat.floor (2 * Q) : ℝ) by exact_mod_cast hhi).trans\n      (Nat.floor_le (by linarith : 0 ≤ 2 * Q))⟩",
+      "header_sha256": "67712b9af8d572b605cf0034f76d638b123a65bcab1e84a51d28c42508bfc342",
+      "declaration_sha256": "8863e5f66463287fbe363c02da2328b527cc4cfea62be6f97c73672b24ffa743",
+      "independent_complete_body_math_API_judgment": "Closed factorCarrier=Icc ceil Q floor2Q; Q>=1 gives positive n and Q<=n<=2Q."
+    },
+    {
+      "name": "clean_transposed_beta_norm_le",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        4541,
+        5116
+      ],
+      "byte_range": [
+        4809,
+        5418
+      ],
+      "lines": [
+        112,
+        122
+      ],
+      "complete_true_header": "private theorem clean_transposed_beta_norm_le {B : ℕ} {sigma kappa c0 : ℝ}\n    {d : MediumAtom} (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\n    ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ ≤ 1",
+      "complete_body_after_assignment": " by\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, hAlpha, _⟩ :=\n    mediumAdmissible_cleanedAlphaAtom hd\n  change ‖if n ∈ d.alphaCarrier then d.cleanedAlpha n else 0‖ ≤ 1\n  by_cases hn : n ∈ d.alphaCarrier\n  · have hnBound := hAlpha n hn\n    change ‖d.cleanedAlpha n‖ ≤ 1 at hnBound\n    simpa only [if_pos hn] using hnBound\n  · simp only [if_neg hn, norm_zero, zero_le_one]",
+      "complete_literal_declaration": "private theorem clean_transposed_beta_norm_le {B : ℕ} {sigma kappa c0 : ℝ}\n    {d : MediumAtom} (hd : MediumAdmissible B sigma kappa c0 d) (n : ℕ) :\n    ‖d.cleanedAlphaAtom.transposedAtom.beta n‖ ≤ 1 := by\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, hAlpha, _⟩ :=\n    mediumAdmissible_cleanedAlphaAtom hd\n  change ‖if n ∈ d.alphaCarrier then d.cleanedAlpha n else 0‖ ≤ 1\n  by_cases hn : n ∈ d.alphaCarrier\n  · have hnBound := hAlpha n hn\n    change ‖d.cleanedAlpha n‖ ≤ 1 at hnBound\n    simpa only [if_pos hn] using hnBound\n  · simp only [if_neg hn, norm_zero, zero_le_one]",
+      "header_sha256": "96104305eacd1c80773c6d6650568db054659b8b92e4ae523bb1673347797313",
+      "declaration_sha256": "3f038e0fdfc1b074f0d93500e80c49bbdc1b7b00cdbc63c40aef670273968c9a",
+      "independent_complete_body_math_API_judgment": "Actual cleaned admissibility alpha field13 and transposed-beta indicator give norm<=1 for all n, outside carrier0."
+    },
+    {
+      "name": "outer_tail_memberships",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        5118,
+        6065
+      ],
+      "byte_range": [
+        5420,
+        6429
+      ],
+      "lines": [
+        124,
+        140
+      ],
+      "complete_true_header": "private theorem outer_tail_memberships (d : MediumAtom)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ))\n    (ho : o ∈ d.smallCoreSquaredOuterCarrier) :\n    o.2.1.1 ∈ factorCarrier d.Q3 ∧\n      o.2.1.2.1 ∈ factorCarrier d.Q3 ∧ o.2.1.2.2 ∈ factorCarrier d.Q2",
+      "complete_body_after_assignment": " by\n  change o ∈ ((d.primitiveFirstFactorCarrier ×ˢ\n    (d.transposedAtom.betaCarrier ×ˢ d.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)) ×ˢ\n    ((factorCarrier d.Q3) ×ˢ ((factorCarrier d.Q3) ×ˢ factorCarrier d.Q2)).biUnion\n      (fun t => (t.2.1 * t.2.2).divisors.image (fun D => (t, D))) at ho\n  obtain ⟨t, ht, hImage⟩ := Finset.mem_biUnion.mp (Finset.mem_product.mp ho).2\n  obtain ⟨D, _hD, he⟩ := Finset.mem_image.mp hImage\n  have het : t = o.2.1 := congrArg Prod.fst he\n  rw [← het]\n  exact ⟨(Finset.mem_product.mp ht).1,\n    (Finset.mem_product.mp (Finset.mem_product.mp ht).2).1,\n    (Finset.mem_product.mp (Finset.mem_product.mp ht).2).2⟩",
+      "complete_literal_declaration": "private theorem outer_tail_memberships (d : MediumAtom)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ))\n    (ho : o ∈ d.smallCoreSquaredOuterCarrier) :\n    o.2.1.1 ∈ factorCarrier d.Q3 ∧\n      o.2.1.2.1 ∈ factorCarrier d.Q3 ∧ o.2.1.2.2 ∈ factorCarrier d.Q2 := by\n  change o ∈ ((d.primitiveFirstFactorCarrier ×ˢ\n    (d.transposedAtom.betaCarrier ×ˢ d.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)) ×ˢ\n    ((factorCarrier d.Q3) ×ˢ ((factorCarrier d.Q3) ×ˢ factorCarrier d.Q2)).biUnion\n      (fun t => (t.2.1 * t.2.2).divisors.image (fun D => (t, D))) at ho\n  obtain ⟨t, ht, hImage⟩ := Finset.mem_biUnion.mp (Finset.mem_product.mp ho).2\n  obtain ⟨D, _hD, he⟩ := Finset.mem_image.mp hImage\n  have het : t = o.2.1 := congrArg Prod.fst he\n  rw [← het]\n  exact ⟨(Finset.mem_product.mp ht).1,\n    (Finset.mem_product.mp (Finset.mem_product.mp ht).2).1,\n    (Finset.mem_product.mp (Finset.mem_product.mp ht).2).2⟩",
+      "header_sha256": "2d9420ccd95a2d27a071e4b99ee43558b89786f3379da325e7b2e2052e0f2d0d",
+      "declaration_sha256": "f28bcde8b4981465d0e155ed0daebea78ecf00c52e877e8a78c9736f07dd4787",
+      "independent_complete_body_math_API_judgment": "Product/biUnion/image membership recovers full tail t by Prod.fst. No false injectivity of product w."
+    },
+    {
+      "name": "cleaned_squared_outerCoefficient_norm_le_one",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        6067,
+        7060
+      ],
+      "byte_range": [
+        6431,
+        7470
+      ],
+      "lines": [
+        142,
+        163
+      ],
+      "complete_true_header": "private theorem cleaned_squared_outerCoefficient_norm_le_one\n    (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom)\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    (Ybeta Ysupport : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ))\n    (ho : o ∈ d.cleanedAlphaAtom.smallCoreSquaredOuterCarrier) :\n    ‖d.cleanedAlphaAtom.smallCoreSquaredOuterCoefficient Ybeta Ysupport o‖ ≤ 1",
+      "complete_body_after_assignment": " by\n  obtain ⟨hr, hr', hs'⟩ := outer_tail_memberships d.cleanedAlphaAtom o ho\n  have hdKeep := hd\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, hGamma2, hGamma3⟩ := hdKeep\n  have h1 := clean_transposed_beta_norm_le hd o.1.2.1\n  have h2 := clean_transposed_beta_norm_le hd o.1.2.2\n  have h3 := (hGamma3 o.2.1.1 hr).1\n  have h4 := (hGamma3 o.2.1.2.1 hr').1\n  have h5 := (hGamma2 o.2.1.2.2 hs').1\n  unfold MediumAtom.smallCoreSquaredOuterCoefficient\n  split_ifs\n  · simp only [norm_mul, norm_star]\n    calc\n      _ ≤ 1 * 1 * 1 * 1 * 1 := by gcongr\n      _ = _ := by norm_num\n  · simp only [norm_zero, zero_le_one]",
+      "complete_literal_declaration": "private theorem cleaned_squared_outerCoefficient_norm_le_one\n    (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom)\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    (Ybeta Ysupport : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ))\n    (ho : o ∈ d.cleanedAlphaAtom.smallCoreSquaredOuterCarrier) :\n    ‖d.cleanedAlphaAtom.smallCoreSquaredOuterCoefficient Ybeta Ysupport o‖ ≤ 1 := by\n  obtain ⟨hr, hr', hs'⟩ := outer_tail_memberships d.cleanedAlphaAtom o ho\n  have hdKeep := hd\n  obtain ⟨_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, hGamma2, hGamma3⟩ := hdKeep\n  have h1 := clean_transposed_beta_norm_le hd o.1.2.1\n  have h2 := clean_transposed_beta_norm_le hd o.1.2.2\n  have h3 := (hGamma3 o.2.1.1 hr).1\n  have h4 := (hGamma3 o.2.1.2.1 hr').1\n  have h5 := (hGamma2 o.2.1.2.2 hs').1\n  unfold MediumAtom.smallCoreSquaredOuterCoefficient\n  split_ifs\n  · simp only [norm_mul, norm_star]\n    calc\n      _ ≤ 1 * 1 * 1 * 1 * 1 := by gcongr\n      _ = _ := by norm_num\n  · simp only [norm_zero, zero_le_one]",
+      "header_sha256": "98bb3cdc3d7df70b78e7041f12a5ea2a3e3a9e1d2bcdf274455f0d7ee9cee069",
+      "declaration_sha256": "4c0283f250ebef008c56154c2134a6768d3a3b01c6ef5660deabde2b2daf8deb",
+      "independent_complete_body_math_API_judgment": "Actual gamma2/gamma3 and cleaned-beta unit norms yield outer coefficient<=1. No original outside W factor."
+    },
+    {
+      "name": "sum_divisor_images",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        7062,
+        7788
+      ],
+      "byte_range": [
+        7472,
+        8231
+      ],
+      "lines": [
+        165,
+        182
+      ],
+      "complete_true_header": "private theorem sum_divisor_images {T : Type*} [DecidableEq T]\n    (S : Finset T) (w : T → ℕ) (f : T × ℕ → ℂ) :\n    (∑ q ∈ S.biUnion (fun t => (w t).divisors.image (fun D => (t, D))), f q) =\n      ∑ t ∈ S, ∑ D ∈ (w t).divisors, f (t, D)",
+      "complete_body_after_assignment": " by\n  have hdisj : Set.PairwiseDisjoint (↑S)\n      (fun t => (w t).divisors.image (fun D => (t, D))) := by\n    intro t _ t' _ hne\n    apply Finset.disjoint_left.mpr\n    intro q hq hq'\n    obtain ⟨D, _hD, he⟩ := Finset.mem_image.mp hq\n    obtain ⟨D', _hD', he'⟩ := Finset.mem_image.mp hq'\n    exact hne (congrArg Prod.fst (he.trans he'.symm))\n  rw [Finset.sum_biUnion hdisj]\n  apply Finset.sum_congr rfl\n  intro t _\n  rw [Finset.sum_image]\n  intro D _ D' _ he\n  exact congrArg Prod.snd he",
+      "complete_literal_declaration": "private theorem sum_divisor_images {T : Type*} [DecidableEq T]\n    (S : Finset T) (w : T → ℕ) (f : T × ℕ → ℂ) :\n    (∑ q ∈ S.biUnion (fun t => (w t).divisors.image (fun D => (t, D))), f q) =\n      ∑ t ∈ S, ∑ D ∈ (w t).divisors, f (t, D) := by\n  have hdisj : Set.PairwiseDisjoint (↑S)\n      (fun t => (w t).divisors.image (fun D => (t, D))) := by\n    intro t _ t' _ hne\n    apply Finset.disjoint_left.mpr\n    intro q hq hq'\n    obtain ⟨D, _hD, he⟩ := Finset.mem_image.mp hq\n    obtain ⟨D', _hD', he'⟩ := Finset.mem_image.mp hq'\n    exact hne (congrArg Prod.fst (he.trans he'.symm))\n  rw [Finset.sum_biUnion hdisj]\n  apply Finset.sum_congr rfl\n  intro t _\n  rw [Finset.sum_image]\n  intro D _ D' _ he\n  exact congrArg Prod.snd he",
+      "header_sha256": "bebf7256fd730da7ebd24524a341dc61e31317ebca156a78774fc52023d35986",
+      "declaration_sha256": "d5e24d7ee3d4d255ce8c425dc0a6d3e921cc2b24a6eda4fef4f669a5885a4ef4",
+      "independent_complete_body_math_API_judgment": "Images for distinct full t disjoint by fst; D-image injective by snd. Native sum_biUnion/sum_image signatures fit."
+    },
+    {
+      "name": "outer_sum_expansion",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        7790,
+        8476
+      ],
+      "byte_range": [
+        8233,
+        8979
+      ],
+      "lines": [
+        184,
+        197
+      ],
+      "complete_true_header": "private theorem outer_sum_expansion (d : MediumAtom)\n    (f : ((ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) → ℂ) :\n    (∑ o ∈ d.smallCoreSquaredOuterCarrier, f o) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ N1 ∈ d.transposedAtom.betaCarrier, ∑ N2 ∈ d.transposedAtom.betaCarrier,\n          if N1 ≠ N2 ∧ Nat.ModEq p N1 N2 then\n            ∑ r ∈ factorCarrier d.Q3, ∑ r' ∈ factorCarrier d.Q3,\n              ∑ s' ∈ factorCarrier d.Q2, ∑ D ∈ (r' * s').divisors,\n                f ((p, N1, N2), ((r, r', s'), D))\n          else 0",
+      "complete_body_after_assignment": " by\n  unfold MediumAtom.smallCoreSquaredOuterCarrier\n  rw [Finset.sum_product]\n  simp_rw [sum_divisor_images]\n  simp only [Finset.sum_filter, Finset.sum_product]",
+      "complete_literal_declaration": "private theorem outer_sum_expansion (d : MediumAtom)\n    (f : ((ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) → ℂ) :\n    (∑ o ∈ d.smallCoreSquaredOuterCarrier, f o) =\n      ∑ p ∈ d.primitiveFirstFactorCarrier,\n        ∑ N1 ∈ d.transposedAtom.betaCarrier, ∑ N2 ∈ d.transposedAtom.betaCarrier,\n          if N1 ≠ N2 ∧ Nat.ModEq p N1 N2 then\n            ∑ r ∈ factorCarrier d.Q3, ∑ r' ∈ factorCarrier d.Q3,\n              ∑ s' ∈ factorCarrier d.Q2, ∑ D ∈ (r' * s').divisors,\n                f ((p, N1, N2), ((r, r', s'), D))\n          else 0 := by\n  unfold MediumAtom.smallCoreSquaredOuterCarrier\n  rw [Finset.sum_product]\n  simp_rw [sum_divisor_images]\n  simp only [Finset.sum_filter, Finset.sum_product]",
+      "header_sha256": "78df2170f7fbbc7f94a8c0606b7a0f4e62f412802fc999ded96253c670baebdf",
+      "declaration_sha256": "41846fdc0f4f21530aed93199a6f4454695bdf9d518175c85d984dcab1b475b9",
+      "independent_complete_body_math_API_judgment": "Exact sum_product/filter expansion on all original labels."
+    },
+    {
+      "name": "move_left_s_last",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        8478,
+        8821
+      ],
+      "byte_range": [
+        8981,
+        9376
+      ],
+      "lines": [
+        199,
+        207
+      ],
+      "complete_true_header": "private theorem move_left_s_last (R S : Finset ℕ) (f : ℕ → ℕ → ℕ → ℕ → ℂ) :\n    (∑ r ∈ R, ∑ s ∈ S, ∑ r' ∈ R, ∑ s' ∈ S, f r s r' s') =\n      ∑ r ∈ R, ∑ r' ∈ R, ∑ s' ∈ S, ∑ s ∈ S, f r s r' s'",
+      "complete_body_after_assignment": " by\n  apply Finset.sum_congr rfl\n  intro r _\n  rw [Finset.sum_comm (s := S) (t := R)]\n  apply Finset.sum_congr rfl\n  intro r' _\n  exact Finset.sum_comm",
+      "complete_literal_declaration": "private theorem move_left_s_last (R S : Finset ℕ) (f : ℕ → ℕ → ℕ → ℕ → ℂ) :\n    (∑ r ∈ R, ∑ s ∈ S, ∑ r' ∈ R, ∑ s' ∈ S, f r s r' s') =\n      ∑ r ∈ R, ∑ r' ∈ R, ∑ s' ∈ S, ∑ s ∈ S, f r s r' s' := by\n  apply Finset.sum_congr rfl\n  intro r _\n  rw [Finset.sum_comm (s := S) (t := R)]\n  apply Finset.sum_congr rfl\n  intro r' _\n  exact Finset.sum_comm",
+      "header_sha256": "be40ddd185df059ec7bc67ff0940c1a708c5de1e2f84e4f0625a1a8ee8060d4c",
+      "declaration_sha256": "4e255351b6787d987243d2553cdc7c0b552799afe784006fc89aa1c2bd7340e4",
+      "independent_complete_body_math_API_judgment": "Finite sum_comm moves only left s to last, without loss or weight separation."
+    },
+    {
+      "name": "outerCoefficient_factor",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        8823,
+        9212
+      ],
+      "byte_range": [
+        9378,
+        9771
+      ],
+      "lines": [
+        209,
+        215
+      ],
+      "complete_true_header": "private theorem outerCoefficient_factor (d : MediumAtom) (Ybeta Ysupport : ℝ)\n    (p N1 N2 r r' s' D : ℕ) :\n    d.smallCoreSquaredOuterCoefficient Ybeta Ysupport ((p, N1, N2), ((r, r', s'), D)) =\n      maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n        star (d.gamma2 s')",
+      "complete_body_after_assignment": " by\n  unfold MediumAtom.smallCoreSquaredOuterCoefficient maskedBeta\n  split_ifs <;> ring",
+      "complete_literal_declaration": "private theorem outerCoefficient_factor (d : MediumAtom) (Ybeta Ysupport : ℝ)\n    (p N1 N2 r r' s' D : ℕ) :\n    d.smallCoreSquaredOuterCoefficient Ybeta Ysupport ((p, N1, N2), ((r, r', s'), D)) =\n      maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n        star (d.gamma2 s') := by\n  unfold MediumAtom.smallCoreSquaredOuterCoefficient maskedBeta\n  split_ifs <;> ring",
+      "header_sha256": "5f64c0f6d8090b8855b104e392bfbc282a98d956b3275c97d05ebb2c929b73a5",
+      "declaration_sha256": "6740f359792b278177d0aa5b810e0ba588ba68b7f2266333f109c8ada8fb9e0d",
+      "independent_complete_body_math_API_judgment": "Case splitting and ring give exact maskedBeta factorization, independent of D."
+    },
+    {
+      "name": "rowTerm_factor",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        9214,
+        9588
+      ],
+      "byte_range": [
+        9773,
+        10157
+      ],
+      "lines": [
+        217,
+        223
+      ],
+      "complete_true_header": "private theorem rowTerm_factor (d : MediumAtom) (Z : ℝ)\n    (p N1 N2 r s r' s' D : ℕ) (h : ℤ) :\n    d.smallCoreSquaredRowTerm Z ((p, N1, N2), ((r, r', s'), D)) (s, h) =\n      if (r * s).gcd (r' * s') = D ∧\n          ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n        d.gamma2 s * ((smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n      else 0",
+      "complete_body_after_assignment": " rfl",
+      "complete_literal_declaration": "private theorem rowTerm_factor (d : MediumAtom) (Z : ℝ)\n    (p N1 N2 r s r' s' D : ℕ) (h : ℤ) :\n    d.smallCoreSquaredRowTerm Z ((p, N1, N2), ((r, r', s'), D)) (s, h) =\n      if (r * s).gcd (r' * s') = D ∧\n          ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n        d.gamma2 s * ((smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n      else 0 := rfl",
+      "header_sha256": "0f258655d85fb4dd14315fef0e2157d63b8659544f770331f37e16d41bc310cd",
+      "declaration_sha256": "9a9705c91c69a5b64c53abd5678addac542a3e7b40eb6d224250cf14cd35dc90",
+      "independent_complete_body_math_API_judgment": "Definitional rfl to the actual private frequency atom and row masks."
+    },
+    {
+      "name": "divisor_frequency_sum",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        9590,
+        10892
+      ],
+      "byte_range": [
+        10159,
+        11492
+      ],
+      "lines": [
+        225,
+        253
+      ],
+      "complete_true_header": "private theorem divisor_frequency_sum (d : MediumAtom) (Z : ℝ)\n    (p N1 N2 r s r' s' : ℕ) (hw : 0 < r' * s') :\n    (∑ D ∈ (r' * s').divisors,\n      ∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow (d.sharedSmoothFrequencyBound Z D),\n        d.smallCoreSquaredRowTerm Z ((p, N1, N2), ((r, r', s'), D)) (s, h)) =\n      d.gamma2 s *\n        (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n          ((∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n              (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))),\n            smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n        else 0)",
+      "complete_body_after_assignment": " by\n  let D0 : ℕ := (r * s).gcd (r' * s')\n  have hmem : D0 ∈ (r' * s').divisors :=\n    Nat.mem_divisors.mpr ⟨Nat.gcd_dvd_right _ _, hw.ne'⟩\n  rw [Finset.sum_eq_single D0]\n  · simp_rw [rowTerm_factor]\n    by_cases hc : ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2\n    · simp only [D0, eq_self_iff_true, true_and, if_pos hc, Finset.mul_sum,\n        Complex.re_sum, Complex.ofReal_sum]\n    · simp only [D0, eq_self_iff_true, true_and, if_neg hc, Finset.sum_const_zero,\n        mul_zero]\n  · intro D _ hne\n    apply Finset.sum_eq_zero\n    intro h _\n    rw [rowTerm_factor, if_neg]\n    intro hc\n    exact hne hc.1.symm\n  · intro hnot\n    exact (hnot hmem).elim",
+      "complete_literal_declaration": "private theorem divisor_frequency_sum (d : MediumAtom) (Z : ℝ)\n    (p N1 N2 r s r' s' : ℕ) (hw : 0 < r' * s') :\n    (∑ D ∈ (r' * s').divisors,\n      ∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow (d.sharedSmoothFrequencyBound Z D),\n        d.smallCoreSquaredRowTerm Z ((p, N1, N2), ((r, r', s'), D)) (s, h)) =\n      d.gamma2 s *\n        (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n          ((∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n              (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))),\n            smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n        else 0) := by\n  let D0 : ℕ := (r * s).gcd (r' * s')\n  have hmem : D0 ∈ (r' * s').divisors :=\n    Nat.mem_divisors.mpr ⟨Nat.gcd_dvd_right _ _, hw.ne'⟩\n  rw [Finset.sum_eq_single D0]\n  · simp_rw [rowTerm_factor]\n    by_cases hc : ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2\n    · simp only [D0, eq_self_iff_true, true_and, if_pos hc, Finset.mul_sum,\n        Complex.re_sum, Complex.ofReal_sum]\n    · simp only [D0, eq_self_iff_true, true_and, if_neg hc, Finset.sum_const_zero,\n        mul_zero]\n  · intro D _ hne\n    apply Finset.sum_eq_zero\n    intro h _\n    rw [rowTerm_factor, if_neg]\n    intro hc\n    exact hne hc.1.symm\n  · intro hnot\n    exact (hnot hmem).elim",
+      "header_sha256": "f90097ed15784a8b7bc08c1724d76b1be322b8217a28c099d6fba83e4a8e1399",
+      "declaration_sha256": "e31d8655ef43810eef352239dc5b2ea48a0fcfd09470ae70fb3008d51143e3f2",
+      "independent_complete_body_math_API_judgment": "Unique D0=gcd(rs,w) belongs to divisors of positive w; all other D rows0. Surviving original H_D0 exactly unchanged. Re/cast distribute finite sums inside gamma2."
+    },
+    {
+      "name": "row_divisor_reindex",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        10894,
+        12424
+      ],
+      "byte_range": [
+        11494,
+        13062
+      ],
+      "lines": [
+        255,
+        283
+      ],
+      "complete_true_header": "private theorem row_divisor_reindex (d : MediumAtom) (Z Ybeta Ysupport : ℝ)\n    (p N1 N2 r r' s' : ℕ) (hw : 0 < r' * s') :\n    (∑ D ∈ (r' * s').divisors,\n      d.smallCoreSquaredOuterCoefficient Ybeta Ysupport ((p, N1, N2), ((r, r', s'), D)) *\n        ∑ u ∈ d.smallCoreSquaredInnerCarrier Z ((p, N1, N2), ((r, r', s'), D)),\n          d.smallCoreSquaredRowTerm Z ((p, N1, N2), ((r, r', s'), D)) u) =\n      ∑ s ∈ factorCarrier d.Q2,\n        (maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n            star (d.gamma2 s')) *\n          (d.gamma2 s *\n            (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n              ((∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n                  (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))),\n                smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n            else 0))",
+      "complete_body_after_assignment": " by\n  let C : ℂ := maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n    star (d.gamma2 s')\n  simp_rw [outerCoefficient_factor]\n  simp only [MediumAtom.smallCoreSquaredInnerCarrier, Finset.sum_product]\n  change (∑ D ∈ (r' * s').divisors, C *\n      ∑ s ∈ factorCarrier d.Q2,\n        ∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n            (d.sharedSmoothFrequencyBound Z D),\n          d.smallCoreSquaredRowTerm Z ((p, N1, N2), ((r, r', s'), D)) (s, h)) = _\n  rw [← Finset.mul_sum, Finset.sum_comm]\n  rw [Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro s _\n  rw [divisor_frequency_sum d Z p N1 N2 r s r' s' hw]",
+      "complete_literal_declaration": "private theorem row_divisor_reindex (d : MediumAtom) (Z Ybeta Ysupport : ℝ)\n    (p N1 N2 r r' s' : ℕ) (hw : 0 < r' * s') :\n    (∑ D ∈ (r' * s').divisors,\n      d.smallCoreSquaredOuterCoefficient Ybeta Ysupport ((p, N1, N2), ((r, r', s'), D)) *\n        ∑ u ∈ d.smallCoreSquaredInnerCarrier Z ((p, N1, N2), ((r, r', s'), D)),\n          d.smallCoreSquaredRowTerm Z ((p, N1, N2), ((r, r', s'), D)) u) =\n      ∑ s ∈ factorCarrier d.Q2,\n        (maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n            star (d.gamma2 s')) *\n          (d.gamma2 s *\n            (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n              ((∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n                  (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))),\n                smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n            else 0)) := by\n  let C : ℂ := maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n    star (d.gamma2 s')\n  simp_rw [outerCoefficient_factor]\n  simp only [MediumAtom.smallCoreSquaredInnerCarrier, Finset.sum_product]\n  change (∑ D ∈ (r' * s').divisors, C *\n      ∑ s ∈ factorCarrier d.Q2,\n        ∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n            (d.sharedSmoothFrequencyBound Z D),\n          d.smallCoreSquaredRowTerm Z ((p, N1, N2), ((r, r', s'), D)) (s, h)) = _\n  rw [← Finset.mul_sum, Finset.sum_comm]\n  rw [Finset.mul_sum]\n  apply Finset.sum_congr rfl\n  intro s _\n  rw [divisor_frequency_sum d Z p N1 N2 r s r' s' hw]",
+      "header_sha256": "0e0549b923b36ccb7227d2ad91d288ac2b5af92c08c74c23a2ffee2ce0e4d247",
+      "declaration_sha256": "cfb5f0ac22a19055690852cc830c1b4a01cafe9a2a9c0764d7b8c90098cbdc3f",
+      "independent_complete_body_math_API_judgment": "Finite D/s interchange with one coefficient C independent of D/s, then exact unique-D lemma."
+    },
+    {
+      "name": "unfiltered_pair_reindex",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        12426,
+        15544
+      ],
+      "byte_range": [
+        13064,
+        16262
+      ],
+      "lines": [
+        285,
+        347
+      ],
+      "complete_true_header": "private theorem unfiltered_pair_reindex (d : MediumAtom)\n    (hQ2 : 1 ≤ d.Q2) (hQ3 : 1 ≤ d.Q3)\n    (Z Ybeta Ysupport : ℝ) (p N1 N2 : ℕ) :\n    maskedBeta d Ybeta Ysupport N1 N2 * d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 =\n      ∑ r ∈ factorCarrier d.Q3, ∑ r' ∈ factorCarrier d.Q3,\n        ∑ s' ∈ factorCarrier d.Q2, ∑ D ∈ (r' * s').divisors,\n          d.smallCoreSquaredOuterCoefficient Ybeta Ysupport ((p, N1, N2), ((r, r', s'), D)) *\n            ∑ u ∈ d.smallCoreSquaredInnerCarrier Z ((p, N1, N2), ((r, r', s'), D)),\n              d.smallCoreSquaredRowTerm Z ((p, N1, N2), ((r, r', s'), D)) u",
+      "complete_body_after_assignment": " by\n  symm\n  calc\n    _ = ∑ r ∈ factorCarrier d.Q3, ∑ r' ∈ factorCarrier d.Q3,\n        ∑ s' ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q2,\n          (maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n              star (d.gamma2 s')) *\n            (d.gamma2 s *\n              (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n                ((∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n                    (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))),\n                  smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n              else 0)) := by\n      apply Finset.sum_congr rfl\n      intro r _\n      apply Finset.sum_congr rfl\n      intro r' hr'\n      apply Finset.sum_congr rfl\n      intro s' hs'\n      exact row_divisor_reindex d Z Ybeta Ysupport p N1 N2 r r' s'\n        (Nat.mul_pos (factor_bounds hQ3 hr').1 (factor_bounds hQ2 hs').1)\n    _ = ∑ r ∈ factorCarrier d.Q3, ∑ s ∈ factorCarrier d.Q2,\n        ∑ r' ∈ factorCarrier d.Q3, ∑ s' ∈ factorCarrier d.Q2,\n          (maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n              star (d.gamma2 s')) *\n            (d.gamma2 s *\n              (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n                ((∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n                    (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))),\n                  smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n              else 0)) := (move_left_s_last _ _ _).symm\n    _ = _ := by\n      unfold MediumAtom.sharedSmallPairSmoothFrequencyKernel\n      simp only [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro r _\n      apply Finset.sum_congr rfl\n      intro s _\n      apply Finset.sum_congr rfl\n      intro r' _\n      apply Finset.sum_congr rfl\n      intro s' _\n      change (maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n          star (d.gamma2 s')) *\n        (d.gamma2 s *\n          (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n            ((∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n                (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))),\n              smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n          else 0)) = _\n      unfold smoothFrequencyAtom\n      by_cases hc : ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2\n      · simp only [if_pos hc, star_mul]\n        ring\n      · simp only [if_neg hc, Complex.ofReal_zero, mul_zero]",
+      "complete_literal_declaration": "private theorem unfiltered_pair_reindex (d : MediumAtom)\n    (hQ2 : 1 ≤ d.Q2) (hQ3 : 1 ≤ d.Q3)\n    (Z Ybeta Ysupport : ℝ) (p N1 N2 : ℕ) :\n    maskedBeta d Ybeta Ysupport N1 N2 * d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 =\n      ∑ r ∈ factorCarrier d.Q3, ∑ r' ∈ factorCarrier d.Q3,\n        ∑ s' ∈ factorCarrier d.Q2, ∑ D ∈ (r' * s').divisors,\n          d.smallCoreSquaredOuterCoefficient Ybeta Ysupport ((p, N1, N2), ((r, r', s'), D)) *\n            ∑ u ∈ d.smallCoreSquaredInnerCarrier Z ((p, N1, N2), ((r, r', s'), D)),\n              d.smallCoreSquaredRowTerm Z ((p, N1, N2), ((r, r', s'), D)) u := by\n  symm\n  calc\n    _ = ∑ r ∈ factorCarrier d.Q3, ∑ r' ∈ factorCarrier d.Q3,\n        ∑ s' ∈ factorCarrier d.Q2, ∑ s ∈ factorCarrier d.Q2,\n          (maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n              star (d.gamma2 s')) *\n            (d.gamma2 s *\n              (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n                ((∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n                    (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))),\n                  smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n              else 0)) := by\n      apply Finset.sum_congr rfl\n      intro r _\n      apply Finset.sum_congr rfl\n      intro r' hr'\n      apply Finset.sum_congr rfl\n      intro s' hs'\n      exact row_divisor_reindex d Z Ybeta Ysupport p N1 N2 r r' s'\n        (Nat.mul_pos (factor_bounds hQ3 hr').1 (factor_bounds hQ2 hs').1)\n    _ = ∑ r ∈ factorCarrier d.Q3, ∑ s ∈ factorCarrier d.Q2,\n        ∑ r' ∈ factorCarrier d.Q3, ∑ s' ∈ factorCarrier d.Q2,\n          (maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n              star (d.gamma2 s')) *\n            (d.gamma2 s *\n              (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n                ((∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n                    (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))),\n                  smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n              else 0)) := (move_left_s_last _ _ _).symm\n    _ = _ := by\n      unfold MediumAtom.sharedSmallPairSmoothFrequencyKernel\n      simp only [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro r _\n      apply Finset.sum_congr rfl\n      intro s _\n      apply Finset.sum_congr rfl\n      intro r' _\n      apply Finset.sum_congr rfl\n      intro s' _\n      change (maskedBeta d Ybeta Ysupport N1 N2 * d.gamma3 r * star (d.gamma3 r') *\n          star (d.gamma2 s')) *\n        (d.gamma2 s *\n          (if ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 then\n            ((∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n                (d.sharedSmoothFrequencyBound Z ((r * s).gcd (r' * s'))),\n              smoothFrequencyAtom d Z p N1 N2 r s r' s' h).re : ℂ)\n          else 0)) = _\n      unfold smoothFrequencyAtom\n      by_cases hc : ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2\n      · simp only [if_pos hc, star_mul]\n        ring\n      · simp only [if_neg hc, Complex.ofReal_zero, mul_zero]",
+      "header_sha256": "f1308ebb1fee3cafa396d26b1caa56cbb6caa0930e46f5e592b8ce4adb10775c",
+      "declaration_sha256": "5afa99acea0a1dbe6fcf76579c232df6be446218ccdc11ac7ebf80e736ae86a2",
+      "independent_complete_body_math_API_judgment": "Exact actual smooth kernel reindex by finite permutations, star_mul and ring. Re never crosses arbitrary complex beta/gamma."
+    },
+    {
+      "name": "compatible_mod_firstFactor",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        15546,
+        15788
+      ],
+      "byte_range": [
+        16264,
+        16508
+      ],
+      "lines": [
+        349,
+        353
+      ],
+      "complete_true_header": "private theorem compatible_mod_firstFactor {p v w N1 N2 : ℕ}\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N1 N2) : Nat.ModEq p N1 N2",
+      "complete_body_after_assignment": " by\n  have he := hc.2.2\n  rw [sharedFirstFactor_gcd] at he\n  exact he.of_dvd (dvd_mul_right p (v.gcd w))",
+      "complete_literal_declaration": "private theorem compatible_mod_firstFactor {p v w N1 N2 : ℕ}\n    (hc : ComplexCRT.Compatible (p * v) (p * w) N1 N2) : Nat.ModEq p N1 N2 := by\n  have he := hc.2.2\n  rw [sharedFirstFactor_gcd] at he\n  exact he.of_dvd (dvd_mul_right p (v.gcd w))",
+      "header_sha256": "ce7600fd1762a19e4ce29a0ee6813375b5f10d0aff99b25d1d957f288918d03a",
+      "declaration_sha256": "741d4498d369d21045b180c0acb6d05cc5e1047bbeabfe468787cbbb2eadfa56",
+      "independent_complete_body_math_API_judgment": "Actual Compatible third field ModEq gcd(pv,pw), owned shared gcd and native of_dvd give ModEq p for any p. Dot notation is used in native of_dvd examples too."
+    },
+    {
+      "name": "kernel_eq_zero_of_not_modEq",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        15790,
+        16372
+      ],
+      "byte_range": [
+        16510,
+        17098
+      ],
+      "lines": [
+        355,
+        370
+      ],
+      "complete_true_header": "private theorem kernel_eq_zero_of_not_modEq (d : MediumAtom) (Z : ℝ)\n    (p N1 N2 : ℕ) (hnot : ¬ Nat.ModEq p N1 N2) :\n    d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 = 0",
+      "complete_body_after_assignment": " by\n  unfold MediumAtom.sharedSmallPairSmoothFrequencyKernel\n  apply Finset.sum_eq_zero\n  intro r _\n  apply Finset.sum_eq_zero\n  intro s _\n  apply Finset.sum_eq_zero\n  intro r' _\n  apply Finset.sum_eq_zero\n  intro s' _\n  have hc : ¬ ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 :=\n    fun he => hnot (compatible_mod_firstFactor he)\n  rw [if_neg hc]\n  simp only [Complex.ofReal_zero, mul_zero]",
+      "complete_literal_declaration": "private theorem kernel_eq_zero_of_not_modEq (d : MediumAtom) (Z : ℝ)\n    (p N1 N2 : ℕ) (hnot : ¬ Nat.ModEq p N1 N2) :\n    d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 = 0 := by\n  unfold MediumAtom.sharedSmallPairSmoothFrequencyKernel\n  apply Finset.sum_eq_zero\n  intro r _\n  apply Finset.sum_eq_zero\n  intro s _\n  apply Finset.sum_eq_zero\n  intro r' _\n  apply Finset.sum_eq_zero\n  intro s' _\n  have hc : ¬ ComplexCRT.Compatible (p * (r * s)) (p * (r' * s')) N1 N2 :=\n    fun he => hnot (compatible_mod_firstFactor he)\n  rw [if_neg hc]\n  simp only [Complex.ofReal_zero, mul_zero]",
+      "header_sha256": "11ccf5d20d87870e6c2e5178fb58261aeca06ac0eba65dcb278aab0d8ddc6da0",
+      "declaration_sha256": "804a5a8e5a6a06d59504673c812c8536338ab91ac1dc1f919eed1292fef82104",
+      "independent_complete_body_math_API_judgment": "If common-p ModEq fails, actual Compatible fails at every row, hence actual kernel0."
+    },
+    {
+      "name": "small_mask_ne_diagonal",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        16374,
+        17155
+      ],
+      "byte_range": [
+        17100,
+        17903
+      ],
+      "lines": [
+        372,
+        387
+      ],
+      "complete_true_header": "private theorem small_mask_ne_diagonal\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    {N1 N2 : ℕ} (hN1 : N1 ∈ d.transposedAtom.betaCarrier)\n    (hsmall : (N1.gcd N2 : ℝ) ≤ d.scale ^ (sigma / 4)) : N1 ≠ N2",
+      "complete_body_after_assignment": " by\n  have hx : 1 < d.scale :=\n    (Real.one_lt_exp_iff.mpr (Real.exp_pos (1 : ℝ))).trans hd.2.2.2.2.2.1\n  have hcut : d.scale ^ (sigma / 4) < d.U :=\n    (Real.rpow_lt_rpow_of_exponent_lt hx (by linarith : sigma / 4 < sigma)).trans_le\n      (PairedAlphaDeletion.actual_geometry_bounds hd).1\n  change N1 ∈ factorCarrier d.U at hN1\n  have hlo := (factor_bounds hd.1 hN1).2.1\n  intro heq\n  have hNsmall : (N1 : ℝ) ≤ d.scale ^ (sigma / 4) := by\n    simpa only [heq, Nat.gcd_self] using hsmall\n  linarith",
+      "complete_literal_declaration": "private theorem small_mask_ne_diagonal\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    {N1 N2 : ℕ} (hN1 : N1 ∈ d.transposedAtom.betaCarrier)\n    (hsmall : (N1.gcd N2 : ℝ) ≤ d.scale ^ (sigma / 4)) : N1 ≠ N2 := by\n  have hx : 1 < d.scale :=\n    (Real.one_lt_exp_iff.mpr (Real.exp_pos (1 : ℝ))).trans hd.2.2.2.2.2.1\n  have hcut : d.scale ^ (sigma / 4) < d.U :=\n    (Real.rpow_lt_rpow_of_exponent_lt hx (by linarith : sigma / 4 < sigma)).trans_le\n      (PairedAlphaDeletion.actual_geometry_bounds hd).1\n  change N1 ∈ factorCarrier d.U at hN1\n  have hlo := (factor_bounds hd.1 hN1).2.1\n  intro heq\n  have hNsmall : (N1 : ℝ) ≤ d.scale ^ (sigma / 4) := by\n    simpa only [heq, Nat.gcd_self] using hsmall\n  linarith",
+      "header_sha256": "db7a52701d541d13fd830cf0215998214f716e235d824c1823c75282fde400a6",
+      "declaration_sha256": "5fec6f5fe48514f0c095333deb04980bacb77a04d6352df859c016ed937db631",
+      "independent_complete_body_math_API_judgment": "Original X>exp(exp1)>1, sigma>0, X^sigma<=U and N>=U exclude gcd(N,N)<=X^(sigma/4). No new threshold."
+    },
+    {
+      "name": "pair_zero_outside",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        17157,
+        17814
+      ],
+      "byte_range": [
+        17905,
+        18584
+      ],
+      "lines": [
+        389,
+        401
+      ],
+      "complete_true_header": "private theorem pair_zero_outside\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    {p N1 N2 : ℕ} (hN1 : N1 ∈ d.transposedAtom.betaCarrier)\n    (hnot : ¬ (N1 ≠ N2 ∧ Nat.ModEq p N1 N2)) (Z : ℝ) :\n    maskedBeta d (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) N1 N2 *\n      d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 = 0",
+      "complete_body_after_assignment": " by\n  unfold maskedBeta\n  split_ifs with hmask\n  · have hne := small_mask_ne_diagonal hsigma hd hN1 hmask.1\n    have hmod : ¬ Nat.ModEq p N1 N2 := fun hm => hnot ⟨hne, hm⟩\n    rw [kernel_eq_zero_of_not_modEq d Z p N1 N2 hmod, mul_zero]\n  · exact zero_mul _",
+      "complete_literal_declaration": "private theorem pair_zero_outside\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    {p N1 N2 : ℕ} (hN1 : N1 ∈ d.transposedAtom.betaCarrier)\n    (hnot : ¬ (N1 ≠ N2 ∧ Nat.ModEq p N1 N2)) (Z : ℝ) :\n    maskedBeta d (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4)) N1 N2 *\n      d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 = 0 := by\n  unfold maskedBeta\n  split_ifs with hmask\n  · have hne := small_mask_ne_diagonal hsigma hd hN1 hmask.1\n    have hmod : ¬ Nat.ModEq p N1 N2 := fun hm => hnot ⟨hne, hm⟩\n    rw [kernel_eq_zero_of_not_modEq d Z p N1 N2 hmod, mul_zero]\n  · exact zero_mul _",
+      "header_sha256": "41dc8d118008b057641e8a5943ba0ea4c6e1e200d57f075b80268c3baeb0baa0",
+      "declaration_sha256": "16d179ff24a5ca7464ca276133f266cf20ff28f1262e0f51d40af9576ebcfff8",
+      "independent_complete_body_math_API_judgment": "Active original small mask excludes diagonal; any remaining failed pair filter is failed ModEq and kernel0. Inactive mask0."
+    },
+    {
+      "name": "cleaned_actualSmooth_squared_reindex",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        17816,
+        19729
+      ],
+      "byte_range": [
+        18586,
+        20551
+      ],
+      "lines": [
+        403,
+        443
+      ],
+      "complete_true_header": "private theorem cleaned_actualSmooth_squared_reindex\n    (B : ℕ) (sigma kappa c0 : ℝ) (hsigma : 0 < sigma)\n    (d : MediumAtom) (hd : MediumAdmissible B sigma kappa c0 d)\n    (Z : ℝ) (_hZ : 0 < Z) :\n          let e := d.cleanedAlphaAtom\n          let Y := d.scale ^ (sigma / 4)\n          (e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n              (∑ o ∈ e.smallCoreSquaredOuterCarrier,\n                e.smallCoreSquaredOuterCoefficient Y Y o *\n                  (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n                    e.smallCoreSquaredRowTerm Z o u)))",
+      "complete_body_after_assignment": " by\n  dsimp only\n  let e := d.cleanedAlphaAtom\n  let Y := d.scale ^ (sigma / 4)\n  have he : MediumAdmissible B sigma kappa c0 e := mediumAdmissible_cleanedAlphaAtom hd\n  rw [outer_sum_expansion]\n  change (∑ p ∈ e.primitiveFirstFactorCarrier,\n    ∑ N1 ∈ e.transposedAtom.betaCarrier, ∑ N2 ∈ e.transposedAtom.betaCarrier,\n      if (N1.gcd N2 : ℝ) ≤ Y ∧\n          (CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Y then\n        e.transposedAtom.beta N1 * star (e.transposedAtom.beta N2) *\n          e.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 else 0) = _\n  apply Finset.sum_congr rfl\n  intro p _\n  apply Finset.sum_congr rfl\n  intro N1 hN1\n  apply Finset.sum_congr rfl\n  intro N2 _\n  have hmasked : (if (N1.gcd N2 : ℝ) ≤ Y ∧\n      (CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Y then\n      e.transposedAtom.beta N1 * star (e.transposedAtom.beta N2) *\n        e.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 else 0) =\n      maskedBeta e Y Y N1 N2 * e.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 := by\n    unfold maskedBeta\n    split_ifs <;> simp only [zero_mul]\n  rw [hmasked]\n  by_cases hp : N1 ≠ N2 ∧ Nat.ModEq p N1 N2\n  · rw [if_pos hp]\n    exact unfiltered_pair_reindex e he.2.2.2.1 he.2.2.2.2.1 Z Y Y p N1 N2\n  · rw [if_neg hp]\n    exact pair_zero_outside hsigma he hN1 hp Z",
+      "complete_literal_declaration": "private theorem cleaned_actualSmooth_squared_reindex\n    (B : ℕ) (sigma kappa c0 : ℝ) (hsigma : 0 < sigma)\n    (d : MediumAtom) (hd : MediumAdmissible B sigma kappa c0 d)\n    (Z : ℝ) (_hZ : 0 < Z) :\n          let e := d.cleanedAlphaAtom\n          let Y := d.scale ^ (sigma / 4)\n          (e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n              (∑ o ∈ e.smallCoreSquaredOuterCarrier,\n                e.smallCoreSquaredOuterCoefficient Y Y o *\n                  (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n                    e.smallCoreSquaredRowTerm Z o u))) := by\n  dsimp only\n  let e := d.cleanedAlphaAtom\n  let Y := d.scale ^ (sigma / 4)\n  have he : MediumAdmissible B sigma kappa c0 e := mediumAdmissible_cleanedAlphaAtom hd\n  rw [outer_sum_expansion]\n  change (∑ p ∈ e.primitiveFirstFactorCarrier,\n    ∑ N1 ∈ e.transposedAtom.betaCarrier, ∑ N2 ∈ e.transposedAtom.betaCarrier,\n      if (N1.gcd N2 : ℝ) ≤ Y ∧\n          (CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Y then\n        e.transposedAtom.beta N1 * star (e.transposedAtom.beta N2) *\n          e.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 else 0) = _\n  apply Finset.sum_congr rfl\n  intro p _\n  apply Finset.sum_congr rfl\n  intro N1 hN1\n  apply Finset.sum_congr rfl\n  intro N2 _\n  have hmasked : (if (N1.gcd N2 : ℝ) ≤ Y ∧\n      (CanonicalReciprocalData.supportedPart (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Y then\n      e.transposedAtom.beta N1 * star (e.transposedAtom.beta N2) *\n        e.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 else 0) =\n      maskedBeta e Y Y N1 N2 * e.sharedSmallPairSmoothFrequencyKernel Z p N1 N2 := by\n    unfold maskedBeta\n    split_ifs <;> simp only [zero_mul]\n  rw [hmasked]\n  by_cases hp : N1 ≠ N2 ∧ Nat.ModEq p N1 N2\n  · rw [if_pos hp]\n    exact unfiltered_pair_reindex e he.2.2.2.1 he.2.2.2.2.1 Z Y Y p N1 N2\n  · rw [if_neg hp]\n    exact pair_zero_outside hsigma he hN1 hp Z",
+      "header_sha256": "8df27ae61707b61958f902265878d21f4bf93a2a8bff8e2b7cc9cb7bd7f192a6",
+      "declaration_sha256": "c21c9f95124bd372058e7856f778278d1f7e281deb2dc94e9f4a0b01cb22c924",
+      "independent_complete_body_math_API_judgment": "Actual cleaned admissibility and finite outer expansion prove original smooth sum equality on valid pairs, zero outside. Private hZ only renamed _hZ; public type unchanged."
+    },
+    {
+      "name": "unsigned_slope_eq_iff",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        19731,
+        20516
+      ],
+      "byte_range": [
+        20553,
+        21372
+      ],
+      "lines": [
+        445,
+        461
+      ],
+      "complete_true_header": "private theorem unsigned_slope_eq_iff {s1 s2 : ℕ}\n    (hs1 : 0 < s1) (hs2 : 0 < s2) (h1 h2 : ℤ) :\n    (h1.natAbs : ℚ) / (s1 : ℚ) = (h2.natAbs : ℚ) / (s2 : ℚ) ↔\n      h1 * (s2 : ℤ) = h2 * (s1 : ℤ) ∨ h1 * (s2 : ℤ) = -(h2 * (s1 : ℤ))",
+      "complete_body_after_assignment": " by\n  have hs1q : (s1 : ℚ) ≠ 0 := by exact_mod_cast hs1.ne'\n  have hs2q : (s2 : ℚ) ≠ 0 := by exact_mod_cast hs2.ne'\n  rw [div_eq_div_iff hs1q hs2q]\n  constructor\n  · intro he\n    have hNat : h1.natAbs * s2 = h2.natAbs * s1 := by exact_mod_cast he\n    apply Int.natAbs_eq_natAbs_iff.mp\n    simpa only [Int.natAbs_mul, Int.natAbs_natCast] using hNat\n  · intro he\n    have hAbs := Int.natAbs_eq_natAbs_iff.mpr he\n    have hNat : h1.natAbs * s2 = h2.natAbs * s1 := by\n      simpa only [Int.natAbs_mul, Int.natAbs_natCast] using hAbs\n    exact_mod_cast hNat",
+      "complete_literal_declaration": "private theorem unsigned_slope_eq_iff {s1 s2 : ℕ}\n    (hs1 : 0 < s1) (hs2 : 0 < s2) (h1 h2 : ℤ) :\n    (h1.natAbs : ℚ) / (s1 : ℚ) = (h2.natAbs : ℚ) / (s2 : ℚ) ↔\n      h1 * (s2 : ℤ) = h2 * (s1 : ℤ) ∨ h1 * (s2 : ℤ) = -(h2 * (s1 : ℤ)) := by\n  have hs1q : (s1 : ℚ) ≠ 0 := by exact_mod_cast hs1.ne'\n  have hs2q : (s2 : ℚ) ≠ 0 := by exact_mod_cast hs2.ne'\n  rw [div_eq_div_iff hs1q hs2q]\n  constructor\n  · intro he\n    have hNat : h1.natAbs * s2 = h2.natAbs * s1 := by exact_mod_cast he\n    apply Int.natAbs_eq_natAbs_iff.mp\n    simpa only [Int.natAbs_mul, Int.natAbs_natCast] using hNat\n  · intro he\n    have hAbs := Int.natAbs_eq_natAbs_iff.mpr he\n    have hNat : h1.natAbs * s2 = h2.natAbs * s1 := by\n      simpa only [Int.natAbs_mul, Int.natAbs_natCast] using hAbs\n    exact_mod_cast hNat",
+      "header_sha256": "e3f0a7d24055527ace0570cd7441f6659f9387e3dd2e3a5262e47343444b37dc",
+      "declaration_sha256": "d1c3e0d30f255d3caf61c36a790f70b9e781c9319c7dd669a3487e31a9cff0a3",
+      "independent_complete_body_math_API_judgment": "Positive rational denominator cross multiplication and native integer natAbs equality yield exact same-or-opposite slope. This remains valid for h=0; actual original window still retains signed nonzero h."
+    },
+    {
+      "name": "fiber_gram_nonnegative",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        20518,
+        21599
+      ],
+      "byte_range": [
+        21374,
+        22503
+      ],
+      "lines": [
+        463,
+        486
+      ],
+      "complete_true_header": "private theorem fiber_gram_nonnegative {T S : Type*}\n    [DecidableEq T] [DecidableEq S] (I : Finset T) (f : T → S) (z : T → ℂ) :\n    0 ≤ (∑ u ∈ I, ∑ v ∈ I, if f u = f v then z u * star (z v) else 0).re",
+      "complete_body_after_assignment": " by\n  let J := I.image f\n  have he : (∑ u ∈ I, ∑ v ∈ I, if f u = f v then z u * star (z v) else 0) =\n      ∑ t ∈ J, ((‖∑ u ∈ I.filter (fun u => f u = t), z u‖ ^ 2 : ℝ) : ℂ) := by\n    rw [← Finset.sum_fiberwise_of_maps_to (s := I) (t := J) (g := f)\n      (fun u hu => Finset.mem_image_of_mem f hu)\n      (fun u => ∑ v ∈ I, if f u = f v then z u * star (z v) else 0)]\n    apply Finset.sum_congr rfl\n    intro t _\n    rw [complex_norm_sq_sum_eq_double_star]\n    apply Finset.sum_congr rfl\n    intro u hu\n    rw [Finset.sum_filter]\n    apply Finset.sum_congr rfl\n    intro v _\n    have hfu := (Finset.mem_filter.mp hu).2\n    by_cases hfv : f v = t\n    · rw [if_pos (hfu.trans hfv.symm), if_pos hfv]\n    · rw [if_neg (by intro h; exact hfv (h.symm.trans hfu)), if_neg hfv]\n  rw [he]\n  simp only [Complex.re_sum, Complex.ofReal_re]\n  exact Finset.sum_nonneg (fun _ _ => sq_nonneg _)",
+      "complete_literal_declaration": "private theorem fiber_gram_nonnegative {T S : Type*}\n    [DecidableEq T] [DecidableEq S] (I : Finset T) (f : T → S) (z : T → ℂ) :\n    0 ≤ (∑ u ∈ I, ∑ v ∈ I, if f u = f v then z u * star (z v) else 0).re := by\n  let J := I.image f\n  have he : (∑ u ∈ I, ∑ v ∈ I, if f u = f v then z u * star (z v) else 0) =\n      ∑ t ∈ J, ((‖∑ u ∈ I.filter (fun u => f u = t), z u‖ ^ 2 : ℝ) : ℂ) := by\n    rw [← Finset.sum_fiberwise_of_maps_to (s := I) (t := J) (g := f)\n      (fun u hu => Finset.mem_image_of_mem f hu)\n      (fun u => ∑ v ∈ I, if f u = f v then z u * star (z v) else 0)]\n    apply Finset.sum_congr rfl\n    intro t _\n    rw [complex_norm_sq_sum_eq_double_star]\n    apply Finset.sum_congr rfl\n    intro u hu\n    rw [Finset.sum_filter]\n    apply Finset.sum_congr rfl\n    intro v _\n    have hfu := (Finset.mem_filter.mp hu).2\n    by_cases hfv : f v = t\n    · rw [if_pos (hfu.trans hfv.symm), if_pos hfv]\n    · rw [if_neg (by intro h; exact hfv (h.symm.trans hfu)), if_neg hfv]\n  rw [he]\n  simp only [Complex.re_sum, Complex.ofReal_re]\n  exact Finset.sum_nonneg (fun _ _ => sq_nonneg _)",
+      "header_sha256": "dd579d4a1afcf5c263e9d01bcca0d16422bd7f8370d807175900a37829592c9f",
+      "declaration_sha256": "90932234d29e4eeca88d7dfc1664b643482ecb8075691206d3733ffd5dced0e0",
+      "independent_complete_body_math_API_judgment": "Group actual finite I by image f(I). Each fiber double-star sum equals cast norm-square by actual owned API. Real part nonnegative, no cancellation or joint-weight supplier."
+    },
+    {
+      "name": "squared_row_gram_partition",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        21601,
+        23751
+      ],
+      "byte_range": [
+        22505,
+        24780
+      ],
+      "lines": [
+        488,
+        539
+      ],
+      "complete_true_header": "private theorem squared_row_gram_partition\n    (d : MediumAtom) (hQ2 : 1 ≤ d.Q2) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) :\n    (0 ≤ (d.smallCoreSquaredBlock Z true o).re) ∧\n      ((d.smallCoreSquaredBlock Z true o).re +\n          (d.smallCoreSquaredBlock Z false o).re =\n        ‖∑ u ∈ d.smallCoreSquaredInnerCarrier Z o,\n            d.smallCoreSquaredRowTerm Z o u‖ ^ 2)",
+      "complete_body_after_assignment": " by\n  let I := d.smallCoreSquaredInnerCarrier Z o\n  let z := d.smallCoreSquaredRowTerm Z o\n  let f : ℕ × ℤ → ℚ := fun u => (u.2.natAbs : ℚ) / (u.1 : ℚ)\n  have hpos (u : ℕ × ℤ) (hu : u ∈ I) : 0 < u.1 := by\n    change u ∈ factorCarrier d.Q2 ×ˢ\n      CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n        (d.sharedSmoothFrequencyBound Z o.2.2) at hu\n    exact (factor_bounds hQ2 (Finset.mem_product.mp hu).1).1\n  have htrue : d.smallCoreSquaredBlock Z true o =\n      ∑ u ∈ I, ∑ v ∈ I, if f u = f v then z u * star (z v) else 0 := by\n    unfold MediumAtom.smallCoreSquaredBlock\n    apply Finset.sum_congr rfl\n    intro u hu\n    apply Finset.sum_congr rfl\n    intro v hv\n    have hiff : f u = f v ↔\n        u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n          u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ)) :=\n      unsigned_slope_eq_iff (hpos u hu) (hpos v hv) u.2 v.2\n    by_cases h : f u = f v\n    · have hp := hiff.mp h\n      simp [h, hp]\n    · have hp : ¬ (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n          u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) := fun he => h (hiff.mpr he)\n      simp [h, hp]\n  have hcomplex : d.smallCoreSquaredBlock Z true o + d.smallCoreSquaredBlock Z false o =\n      ∑ u ∈ I, ∑ v ∈ I, z u * star (z v) := by\n    unfold MediumAtom.smallCoreSquaredBlock\n    rw [← Finset.sum_add_distrib]\n    apply Finset.sum_congr rfl\n    intro u _\n    rw [← Finset.sum_add_distrib]\n    apply Finset.sum_congr rfl\n    intro v _\n    by_cases hp : u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n        u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))\n    · simp [hp]\n    · simp [hp]\n  refine ⟨?_, ?_⟩\n  · rw [htrue]\n    exact fiber_gram_nonnegative I f z\n  · rw [← Complex.add_re, hcomplex]\n    simpa only [Complex.ofReal_re] using\n      (congrArg Complex.re (complex_norm_sq_sum_eq_double_star I z)).symm",
+      "complete_literal_declaration": "private theorem squared_row_gram_partition\n    (d : MediumAtom) (hQ2 : 1 ≤ d.Q2) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) :\n    (0 ≤ (d.smallCoreSquaredBlock Z true o).re) ∧\n      ((d.smallCoreSquaredBlock Z true o).re +\n          (d.smallCoreSquaredBlock Z false o).re =\n        ‖∑ u ∈ d.smallCoreSquaredInnerCarrier Z o,\n            d.smallCoreSquaredRowTerm Z o u‖ ^ 2) := by\n  let I := d.smallCoreSquaredInnerCarrier Z o\n  let z := d.smallCoreSquaredRowTerm Z o\n  let f : ℕ × ℤ → ℚ := fun u => (u.2.natAbs : ℚ) / (u.1 : ℚ)\n  have hpos (u : ℕ × ℤ) (hu : u ∈ I) : 0 < u.1 := by\n    change u ∈ factorCarrier d.Q2 ×ˢ\n      CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n        (d.sharedSmoothFrequencyBound Z o.2.2) at hu\n    exact (factor_bounds hQ2 (Finset.mem_product.mp hu).1).1\n  have htrue : d.smallCoreSquaredBlock Z true o =\n      ∑ u ∈ I, ∑ v ∈ I, if f u = f v then z u * star (z v) else 0 := by\n    unfold MediumAtom.smallCoreSquaredBlock\n    apply Finset.sum_congr rfl\n    intro u hu\n    apply Finset.sum_congr rfl\n    intro v hv\n    have hiff : f u = f v ↔\n        u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n          u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ)) :=\n      unsigned_slope_eq_iff (hpos u hu) (hpos v hv) u.2 v.2\n    by_cases h : f u = f v\n    · have hp := hiff.mp h\n      simp [h, hp]\n    · have hp : ¬ (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n          u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) := fun he => h (hiff.mpr he)\n      simp [h, hp]\n  have hcomplex : d.smallCoreSquaredBlock Z true o + d.smallCoreSquaredBlock Z false o =\n      ∑ u ∈ I, ∑ v ∈ I, z u * star (z v) := by\n    unfold MediumAtom.smallCoreSquaredBlock\n    rw [← Finset.sum_add_distrib]\n    apply Finset.sum_congr rfl\n    intro u _\n    rw [← Finset.sum_add_distrib]\n    apply Finset.sum_congr rfl\n    intro v _\n    by_cases hp : u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n        u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))\n    · simp [hp]\n    · simp [hp]\n  refine ⟨?_, ?_⟩\n  · rw [htrue]\n    exact fiber_gram_nonnegative I f z\n  · rw [← Complex.add_re, hcomplex]\n    simpa only [Complex.ofReal_re] using\n      (congrArg Complex.re (complex_norm_sq_sum_eq_double_star I z)).symm",
+      "header_sha256": "41a68fa20ca4ec9670626a18707628f698e60f95c96f0f7a73512d1edfb5b2f9",
+      "declaration_sha256": "392027154f24648470473d22be40139e78bd234d1406cafffbfdbccf5b81bc0c",
+      "independent_complete_body_math_API_judgment": "Positive actual s identifies literal true predicate with rational unsigned slope. Fiber PSD and Boolean complement give true>=0 and true+false=full norm². No false PSD or Hermitian/parity assumption."
+    },
+    {
+      "name": "cleaned_squared_outer_Cauchy",
+      "kind": "theorem",
+      "private": true,
+      "char_range": [
+        23753,
+        25502
+      ],
+      "byte_range": [
+        24782,
+        26633
+      ],
+      "lines": [
+        541,
+        581
+      ],
+      "complete_true_header": "private theorem cleaned_squared_outer_Cauchy\n    (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom)\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    (Ybeta Ysupport Z : ℝ) :\n    let e := d.cleanedAlphaAtom\n    ‖∑ o ∈ e.smallCoreSquaredOuterCarrier,\n        e.smallCoreSquaredOuterCoefficient Ybeta Ysupport o *\n          (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n            e.smallCoreSquaredRowTerm Z o u)‖ ^ 2 ≤\n      e.smallCoreSquaredCauchyMass Z true +\n        e.smallCoreSquaredCauchyMass Z false",
+      "complete_body_after_assignment": " by\n  dsimp only\n  let e := d.cleanedAlphaAtom\n  let O := e.smallCoreSquaredOuterCarrier\n  let C := e.smallCoreSquaredOuterCoefficient Ybeta Ysupport\n  let F := fun o => ∑ u ∈ e.smallCoreSquaredInnerCarrier Z o, e.smallCoreSquaredRowTerm Z o u\n  have hC : ∑ o ∈ O, ‖C o‖ ^ 2 ≤ (O.card : ℝ) := by\n    calc\n      _ ≤ ∑ _o ∈ O, (1 : ℝ) := by\n        apply Finset.sum_le_sum\n        intro o ho\n        have hbound := cleaned_squared_outerCoefficient_norm_le_one B sigma kappa c0 d hd\n          Ybeta Ysupport o ho\n        simpa only [one_pow] using\n          (sq_le_sq₀ (norm_nonneg (C o)) (by norm_num : (0 : ℝ) ≤ 1)).2 hbound\n      _ = _ := by simp\n  have hF : 0 ≤ ∑ o ∈ O, ‖F o‖ ^ 2 := Finset.sum_nonneg (fun _ _ => sq_nonneg _)\n  have hGram : (∑ o ∈ O, ‖F o‖ ^ 2) =\n      ∑ o ∈ O, ((e.smallCoreSquaredBlock Z true o).re +\n        (e.smallCoreSquaredBlock Z false o).re) := by\n    apply Finset.sum_congr rfl\n    intro o _\n    exact (squared_row_gram_partition e hd.2.2.2.1 Z o).2.symm\n  calc\n    _ ≤ (∑ o ∈ O, ‖C o‖ ^ 2) * ∑ o ∈ O, ‖F o‖ ^ 2 :=\n      complex_finset_cauchy_norm_sq O C F\n    _ ≤ (O.card : ℝ) * ∑ o ∈ O, ‖F o‖ ^ 2 :=\n      mul_le_mul_of_nonneg_right hC hF\n    _ = _ := by\n      rw [hGram, Finset.sum_add_distrib, mul_add]\n      rfl",
+      "complete_literal_declaration": "private theorem cleaned_squared_outer_Cauchy\n    (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom)\n    (hd : MediumAdmissible B sigma kappa c0 d)\n    (Ybeta Ysupport Z : ℝ) :\n    let e := d.cleanedAlphaAtom\n    ‖∑ o ∈ e.smallCoreSquaredOuterCarrier,\n        e.smallCoreSquaredOuterCoefficient Ybeta Ysupport o *\n          (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n            e.smallCoreSquaredRowTerm Z o u)‖ ^ 2 ≤\n      e.smallCoreSquaredCauchyMass Z true +\n        e.smallCoreSquaredCauchyMass Z false := by\n  dsimp only\n  let e := d.cleanedAlphaAtom\n  let O := e.smallCoreSquaredOuterCarrier\n  let C := e.smallCoreSquaredOuterCoefficient Ybeta Ysupport\n  let F := fun o => ∑ u ∈ e.smallCoreSquaredInnerCarrier Z o, e.smallCoreSquaredRowTerm Z o u\n  have hC : ∑ o ∈ O, ‖C o‖ ^ 2 ≤ (O.card : ℝ) := by\n    calc\n      _ ≤ ∑ _o ∈ O, (1 : ℝ) := by\n        apply Finset.sum_le_sum\n        intro o ho\n        have hbound := cleaned_squared_outerCoefficient_norm_le_one B sigma kappa c0 d hd\n          Ybeta Ysupport o ho\n        simpa only [one_pow] using\n          (sq_le_sq₀ (norm_nonneg (C o)) (by norm_num : (0 : ℝ) ≤ 1)).2 hbound\n      _ = _ := by simp\n  have hF : 0 ≤ ∑ o ∈ O, ‖F o‖ ^ 2 := Finset.sum_nonneg (fun _ _ => sq_nonneg _)\n  have hGram : (∑ o ∈ O, ‖F o‖ ^ 2) =\n      ∑ o ∈ O, ((e.smallCoreSquaredBlock Z true o).re +\n        (e.smallCoreSquaredBlock Z false o).re) := by\n    apply Finset.sum_congr rfl\n    intro o _\n    exact (squared_row_gram_partition e hd.2.2.2.1 Z o).2.symm\n  calc\n    _ ≤ (∑ o ∈ O, ‖C o‖ ^ 2) * ∑ o ∈ O, ‖F o‖ ^ 2 :=\n      complex_finset_cauchy_norm_sq O C F\n    _ ≤ (O.card : ℝ) * ∑ o ∈ O, ‖F o‖ ^ 2 :=\n      mul_le_mul_of_nonneg_right hC hF\n    _ = _ := by\n      rw [hGram, Finset.sum_add_distrib, mul_add]\n      rfl",
+      "header_sha256": "0204cb4350301844a3b619052eab5a2ebc43b83f1d2d4274cd041bb4540f4371",
+      "declaration_sha256": "a942aaaa905c2ea4a741c506fbd8b36cf770d02c0d6cb4c7cf7478a4c8767826",
+      "independent_complete_body_math_API_judgment": "Actual complex Cauchy only over o, sum norm C²<=cardO, row Gram equality. Coefficient1; no h/s Cauchy or original W."
+    },
+    {
+      "name": "actual_smallSupported_squared_resonance_Cauchy",
+      "kind": "theorem",
+      "private": false,
+      "char_range": [
+        25595,
+        27103
+      ],
+      "byte_range": [
+        26726,
+        28278
+      ],
+      "lines": [
+        587,
+        616
+      ],
+      "complete_true_header": "theorem actual_smallSupported_squared_resonance_Cauchy\n    (B : ℕ) (sigma kappa c0 : ℝ) (hsigma : 0 < sigma)\n    (d : MediumAtom) (hd : MediumAdmissible B sigma kappa c0 d) :\n    ∀ Z : ℝ, 0 < Z →\n          let e := d.cleanedAlphaAtom\n          let Y := d.scale ^ (sigma / 4)\n          (e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n              (∑ o ∈ e.smallCoreSquaredOuterCarrier,\n                e.smallCoreSquaredOuterCoefficient Y Y o *\n                  (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n                    e.smallCoreSquaredRowTerm Z o u))) ∧\n            (0 ≤ e.smallCoreSquaredCauchyMass Z true) ∧\n            (‖e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z‖ ^ 2 ≤\n              e.smallCoreSquaredCauchyMass Z true +\n                e.smallCoreSquaredCauchyMass Z false)",
+      "complete_body_after_assignment": " by\n  intro Z hZ\n  dsimp only\n  let e := d.cleanedAlphaAtom\n  let Y := d.scale ^ (sigma / 4)\n  have heq : e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n      ∑ o ∈ e.smallCoreSquaredOuterCarrier,\n        e.smallCoreSquaredOuterCoefficient Y Y o *\n          (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o, e.smallCoreSquaredRowTerm Z o u) :=\n    cleaned_actualSmooth_squared_reindex B sigma kappa c0 hsigma d hd Z hZ\n  refine ⟨heq, ?_, ?_⟩\n  · unfold MediumAtom.smallCoreSquaredCauchyMass\n    exact mul_nonneg (Nat.cast_nonneg _)\n      (Finset.sum_nonneg (fun o _ => (squared_row_gram_partition e hd.2.2.2.1 Z o).1))\n  · rw [heq]\n    exact cleaned_squared_outer_Cauchy B sigma kappa c0 d hd Y Y Z",
+      "complete_literal_declaration": "theorem actual_smallSupported_squared_resonance_Cauchy\n    (B : ℕ) (sigma kappa c0 : ℝ) (hsigma : 0 < sigma)\n    (d : MediumAtom) (hd : MediumAdmissible B sigma kappa c0 d) :\n    ∀ Z : ℝ, 0 < Z →\n          let e := d.cleanedAlphaAtom\n          let Y := d.scale ^ (sigma / 4)\n          (e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n              (∑ o ∈ e.smallCoreSquaredOuterCarrier,\n                e.smallCoreSquaredOuterCoefficient Y Y o *\n                  (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n                    e.smallCoreSquaredRowTerm Z o u))) ∧\n            (0 ≤ e.smallCoreSquaredCauchyMass Z true) ∧\n            (‖e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z‖ ^ 2 ≤\n              e.smallCoreSquaredCauchyMass Z true +\n                e.smallCoreSquaredCauchyMass Z false) := by\n  intro Z hZ\n  dsimp only\n  let e := d.cleanedAlphaAtom\n  let Y := d.scale ^ (sigma / 4)\n  have heq : e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n      ∑ o ∈ e.smallCoreSquaredOuterCarrier,\n        e.smallCoreSquaredOuterCoefficient Y Y o *\n          (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o, e.smallCoreSquaredRowTerm Z o u) :=\n    cleaned_actualSmooth_squared_reindex B sigma kappa c0 hsigma d hd Z hZ\n  refine ⟨heq, ?_, ?_⟩\n  · unfold MediumAtom.smallCoreSquaredCauchyMass\n    exact mul_nonneg (Nat.cast_nonneg _)\n      (Finset.sum_nonneg (fun o _ => (squared_row_gram_partition e hd.2.2.2.1 Z o).1))\n  · rw [heq]\n    exact cleaned_squared_outer_Cauchy B sigma kappa c0 d hd Y Y Z",
+      "header_sha256": "6ecbbbf90cf6a04f590a7ef4ff411bee46791ab746a69ba59d86fa1fbbdd3473",
+      "declaration_sha256": "a0a2e751cf94052af04217a6671346dcc02751f814597edbeb7b8c1ed8bba63b",
+      "independent_complete_body_math_API_judgment": "Exact806 public finite endpoint for every original admissible d and all Z>0, with exact e,Y and all three conjunctions. No A/x0/extra premise or resonance payment claim."
+    }
+  ],
+  "explicit_counts": {
+    "total": 30,
+    "public_definitions": 6,
+    "public_theorems": 1,
+    "private_definitions": 2,
+    "private_proved_theorems": 21
+  },
+  "all6_original634_literal_definitions": [
+    "def MediumAtom.smallCoreSquaredOuterCarrier (d : MediumAtom) :\n    Finset ((ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) :=\n  let Pairs := (d.primitiveFirstFactorCarrier ×ˢ\n    (d.transposedAtom.betaCarrier ×ˢ d.transposedAtom.betaCarrier)).filter\n      (fun t => t.2.1 ≠ t.2.2 ∧ Nat.ModEq t.1 t.2.1 t.2.2)\n  let Tails := (factorCarrier d.Q3) ×ˢ\n    ((factorCarrier d.Q3) ×ˢ factorCarrier d.Q2)\n  Pairs ×ˢ Tails.biUnion (fun t =>\n    (t.2.1 * t.2.2).divisors.image (fun D => (t, D)))",
+    "def MediumAtom.smallCoreSquaredInnerCarrier (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : Finset (ℕ × ℤ) :=\n  factorCarrier d.Q2 ×ˢ\n    CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n      (d.sharedSmoothFrequencyBound Z o.2.2)",
+    "def MediumAtom.smallCoreSquaredRowTerm (d : MediumAtom) (Z : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) (u : ℕ × ℤ) : ℂ :=\n  let p := o.1.1\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  let v := o.2.1.1 * u.1\n  let w := o.2.1.2.1 * o.2.1.2.2\n  let D := o.2.2\n  let q := p * v\n  let q' := p * w\n  let L := q.lcm q'\n  if v.gcd w = D ∧ ComplexCRT.Compatible q q' N1 N2 then\n    d.gamma2 u.1 *\n      (((CommonSmoothCutoff.poissonSmoothLowPass\n          ((d.V / (L : ℝ)) * (u.2 : ℝ) / Z) : ℂ) *\n        CommonSmoothCutoff.poissonNonzeroFrequency (d.V / (L : ℝ))\n          ((ComplexCRT.residue q q' N1 N2 d.residue : ℝ) / (L : ℝ)) u.2).re : ℂ)\n  else 0",
+    "def MediumAtom.smallCoreSquaredOuterCoefficient (d : MediumAtom)\n    (Ybeta Ysupport : ℝ)\n    (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  let N1 := o.1.2.1\n  let N2 := o.1.2.2\n  if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n      (CanonicalReciprocalData.supportedPart\n        (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n    d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n      d.gamma3 o.2.1.1 * star (d.gamma3 o.2.1.2.1) * star (d.gamma2 o.2.1.2.2)\n  else 0",
+    "def MediumAtom.smallCoreSquaredBlock (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) (o : (ℕ × ℕ × ℕ) × ((ℕ × ℕ × ℕ) × ℕ)) : ℂ :=\n  ∑ u ∈ d.smallCoreSquaredInnerCarrier Z o,\n    ∑ v ∈ d.smallCoreSquaredInnerCarrier Z o,\n      if decide (u.2 * (v.1 : ℤ) = v.2 * (u.1 : ℤ) ∨\n          u.2 * (v.1 : ℤ) = -(v.2 * (u.1 : ℤ))) = resonant then\n        d.smallCoreSquaredRowTerm Z o u * star (d.smallCoreSquaredRowTerm Z o v)\n      else 0",
+    "def MediumAtom.smallCoreSquaredCauchyMass (d : MediumAtom) (Z : ℝ)\n    (resonant : Bool) : ℝ :=\n  (d.smallCoreSquaredOuterCarrier.card : ℝ) *\n    ∑ o ∈ d.smallCoreSquaredOuterCarrier, (d.smallCoreSquaredBlock Z resonant o).re"
+  ],
+  "ONE_full806_publictype": "theorem actual_smallSupported_squared_resonance_Cauchy\n    (B : ℕ) (sigma kappa c0 : ℝ) (hsigma : 0 < sigma)\n    (d : MediumAtom) (hd : MediumAdmissible B sigma kappa c0 d) :\n    ∀ Z : ℝ, 0 < Z →\n          let e := d.cleanedAlphaAtom\n          let Y := d.scale ^ (sigma / 4)\n          (e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n              (∑ o ∈ e.smallCoreSquaredOuterCarrier,\n                e.smallCoreSquaredOuterCoefficient Y Y o *\n                  (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n                    e.smallCoreSquaredRowTerm Z o u))) ∧\n            (0 ≤ e.smallCoreSquaredCauchyMass Z true) ∧\n            (‖e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z‖ ^ 2 ≤\n              e.smallCoreSquaredCauchyMass Z true +\n                e.smallCoreSquaredCauchyMass Z false)",
+  "finite806_publictype_sha256": "6ecbbbf90cf6a04f590a7ef4ff411bee46791ab746a69ba59d86fa1fbbdd3473",
+  "all_original_binders_e_Y_allZ_positive_exact_no_threshold": true,
+  "private_interface_spelling_deviation": {
+    "name": "cleaned_actualSmooth_squared_reindex",
+    "deviation": "Private unused proof binder hZ renamed _hZ only; same0<Z proof binder/type/order/let chains. Three other suggested private interfaces literal."
+  },
+  "actual_owned_Smooth_parent": {
+    "acceptance_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261021-smooth2c542-root-actual51-terminal-acceptance.json",
+    "acceptance_sha256": "7f2a1c115326e72586a92b8fbab8bed8fb4f3527354deb1d944fad21a0eed740",
+    "source_sha256": "2c542a1aad86b505798e83cc1564ee751b763921c6f9dda6289750307328f9fd",
+    "actual_four_complete_literal_definitions": [
+      {
+        "lines": [
+          25,
+          26
+        ],
+        "complete_literal": "def CommonSmoothCutoff.poissonSmoothLowPass (u : ℝ) : ℝ :=\n  CommonSmoothCutoff.dyadicBump (3 / 2 + u / 2)"
+      },
+      {
+        "lines": [
+          28,
+          29
+        ],
+        "complete_literal": "def MediumAtom.sharedSmoothFrequencyBound (d : MediumAtom) (Z : ℝ) (D : ℕ) : ℕ :=\n  Nat.ceil (64 * Z * d.Q1 * d.Q3 ^ 2 * d.Q2 ^ 2 / ((D : ℝ) * d.V))"
+      },
+      {
+        "lines": [
+          31,
+          49
+        ],
+        "complete_literal": "def MediumAtom.sharedSmallPairSmoothFrequencyKernel (d : MediumAtom)\n    (Z : ℝ) (p N1 N2 : ℕ) : ℂ :=\n  ∑ r ∈ factorCarrier d.Q3, ∑ s ∈ factorCarrier d.Q2,\n    ∑ r' ∈ factorCarrier d.Q3, ∑ s' ∈ factorCarrier d.Q2,\n      let v := r * s\n      let w := r' * s'\n      let D := v.gcd w\n      let L := (p * v).lcm (p * w)\n      d.gamma2 s * d.gamma3 r * star (d.gamma2 s' * d.gamma3 r') *\n        (if ComplexCRT.Compatible (p * v) (p * w) N1 N2 then\n          (∑ h ∈ CommonSmoothCutoff.poissonNonzeroFrequencyWindow\n              (d.sharedSmoothFrequencyBound Z D),\n            (CommonSmoothCutoff.poissonSmoothLowPass\n              ((d.V / (L : ℝ)) * (h : ℝ) / Z) : ℂ) *\n              CommonSmoothCutoff.poissonNonzeroFrequency\n                (d.V / (L : ℝ))\n                ((ComplexCRT.residue (p * v) (p * w) N1 N2 d.residue : ℝ) /\n                  (L : ℝ)) h).re\n        else 0 : ℝ)"
+      },
+      {
+        "lines": [
+          51,
+          60
+        ],
+        "complete_literal": "def MediumAtom.sharedSmallPairedSmallSupportedNonzeroSmooth (d : MediumAtom)\n    (Ybeta Ysupport Z : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ N1 ∈ d.transposedAtom.betaCarrier, ∑ N2 ∈ d.transposedAtom.betaCarrier,\n      if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n          (CanonicalReciprocalData.supportedPart\n            (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n        d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n          d.sharedSmallPairSmoothFrequencyKernel Z p N1 N2\n      else 0"
+      }
+    ],
+    "original_strict_owned_declarations_hashes_actual_matched": true,
+    "object_sha256": "b122d31dda2df9e3554078c3446e76884c6c98ad5435bdcbffd3870bc22a8aba",
+    "owned_receipt": {
+      "path": ".lake\\proof-continuation\\audits\\20261021T021003985485Z\\receipt.json",
+      "sha256": "03bfe91554fc44077250f36fc03a1e396907d5a0208ace30290c204e18e6dc09"
+    },
+    "complete_declarations": {
+      "path": ".lake\\proof-continuation\\audits\\20261021T021003985485Z\\declarations.json",
+      "sha256": "d6e2d753a049a65044699292f7e8c33acc75554f72cff89f4798a10af6385d17"
+    },
+    "trust_boundary": "39 actualowned inherited parents versus47 exact normaltrust cached NOTowned; native parts/source identity checked, full external closure kernel replay NOTclaimed.",
+    "final_parent_log_payment_theorem_not_used_as_analytic_premise": true
+  },
+  "targeted12_complete_actual_owned_API_records_with_original_receipt_source_object_bindings": [
+    {
+      "module": "ImbalancedChen.Part3ComplexDispersion",
+      "actual_owned_census_record": {
+        "module": "ImbalancedChen.Part3ComplexDispersion",
+        "source_sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+        "object_parts": {
+          ".olean": "4cc8348bb784f5b7819112b37ca1e3af2019affa8fa72e8d4fa2f4a82d9c8101"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261015T081026885778Z/receipt.json",
+        "owned_receipt_sha256": "1566c830505e6459171e6fcbef5e74cdbff62485e21d91c5bc9502610b0c79a1",
+        "declarations_json_sha256": "081dab56a35a899142b56cc59420ea3db5b7dbec5335728b2d4effc996e88d75",
+        "complete_serialized_declarations": 30
+      },
+      "current_source_sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+      "current_objects": {
+        ".olean": {
+          "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/Part3ComplexDispersion.olean",
+          "sha256": "4cc8348bb784f5b7819112b37ca1e3af2019affa8fa72e8d4fa2f4a82d9c8101",
+          "bytes": 522160
+        }
+      },
+      "original_receipt": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261015T081026885778Z/receipt.json",
+        "sha256": "1566c830505e6459171e6fcbef5e74cdbff62485e21d91c5bc9502610b0c79a1",
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS"
+      },
+      "declarations": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261015T081026885778Z/declarations.json",
+        "sha256": "081dab56a35a899142b56cc59420ea3db5b7dbec5335728b2d4effc996e88d75",
+        "whole_original_cohort_count": 30,
+        "selected_module_count": 30
+      },
+      "complete_targeted_true_serialized_records": [
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3ComplexDispersion",
+          "name": "ImbalancedChen.Part3.complex_finset_cauchy_norm_sq",
+          "partial": false,
+          "type": "∀ {iota : Type u_1} (S : Finset.{u_1} iota) (f g : iota → Complex),\n  @LE.le.{0} Real Real.instLE\n    (@HPow.hPow.{0, 0, 0} Real Nat Real\n      (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n      (@Norm.norm.{0} Complex Complex.instNorm\n        (@Finset.sum.{u_1, 0} iota Complex Complex.instAddCommMonoid S fun (i : iota) =>\n          @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul) (f i) (g i)))\n      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n    (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n      (@Finset.sum.{u_1, 0} iota Real Real.instAddCommMonoid S fun (i : iota) =>\n        @HPow.hPow.{0, 0, 0} Real Nat Real\n          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n          (@Norm.norm.{0} Complex Complex.instNorm (f i)) (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))\n      (@Finset.sum.{u_1, 0} iota Real Real.instAddCommMonoid S fun (i : iota) =>\n        @HPow.hPow.{0, 0, 0} Real Nat Real\n          (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n          (@Norm.norm.{0} Complex Complex.instNorm (g i))\n          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))",
+          "unsafe": false
+        },
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3ComplexDispersion",
+          "name": "ImbalancedChen.Part3.complex_norm_sq_sum_eq_double_star",
+          "partial": false,
+          "type": "∀ {iota : Type u_1} (S : Finset.{u_1} iota) (f : iota → Complex),\n  @Eq.{1} Complex\n    (Complex.ofReal\n      (@HPow.hPow.{0, 0, 0} Real Nat Real\n        (@instHPow.{0, 0} Real Nat (@NPow.toPow.{0} Real (@Monoid.toNPow.{0} Real Real.instMonoid)))\n        (@Norm.norm.{0} Complex Complex.instNorm\n          (@Finset.sum.{u_1, 0} iota Complex Complex.instAddCommMonoid S fun (i : iota) => f i))\n        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))\n    (@Finset.sum.{u_1, 0} iota Complex Complex.instAddCommMonoid S fun (i : iota) =>\n      @Finset.sum.{u_1, 0} iota Complex Complex.instAddCommMonoid S fun (j : iota) =>\n        @HMul.hMul.{0, 0, 0} Complex Complex Complex (@instHMul.{0} Complex Complex.instMul) (f i)\n          (@Star.star.{0} Complex\n            (@InvolutiveStar.toStar.{0} Complex\n              (@StarAddMonoid.toInvolutiveStar.{0} Complex\n                (@AddCommMonoid.toAddMonoid.{0} Complex\n                  (@NonUnitalNonAssocSemiring.toAddCommMonoid.{0} Complex\n                    (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring.{0} Complex\n                      (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing.{0} Complex\n                        (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Complex Complex.instNonUnitalCommRing)))))\n                (@StarRing.toStarAddMonoid.{0} Complex\n                  (@NonUnitalNonAssocRing.toNonUnitalNonAssocSemiring.{0} Complex\n                    (@NonUnitalNonAssocCommRing.toNonUnitalNonAssocRing.{0} Complex\n                      (@NonUnitalCommRing.toNonUnitalNonAssocCommRing.{0} Complex Complex.instNonUnitalCommRing)))\n                  Complex.instStarRing)))\n            (f j)))",
+          "unsafe": false
+        }
+      ],
+      "mechanical_all_original_cohort_flags_checked": true,
+      "new_kernel_replay": false
+    },
+    {
+      "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+      "actual_owned_census_record": {
+        "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+        "source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+        "object_parts": {
+          ".olean": "cf2c170a7a0b7272ca2263bea61fd072b2a3f76a3fe31168c0116cba1c20c489"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261015T215420005455Z/receipt.json",
+        "owned_receipt_sha256": "20274662054d91ccbd5b03e0303256a969ea6c011e1d99ed111f5d18bda04ccc",
+        "declarations_json_sha256": "c5eff2d933dcc470dc864fe28328a6a5f74fa675ed9c7ce7e4d7217014d62e5d",
+        "complete_serialized_declarations": 47
+      },
+      "current_source_sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "current_objects": {
+        ".olean": {
+          "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/Part3PairedAlphaDeletion.olean",
+          "sha256": "cf2c170a7a0b7272ca2263bea61fd072b2a3f76a3fe31168c0116cba1c20c489",
+          "bytes": 1707848
+        }
+      },
+      "original_receipt": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261015T215420005455Z/receipt.json",
+        "sha256": "20274662054d91ccbd5b03e0303256a969ea6c011e1d99ed111f5d18bda04ccc",
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS"
+      },
+      "declarations": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261015T215420005455Z/declarations.json",
+        "sha256": "c5eff2d933dcc470dc864fe28328a6a5f74fa675ed9c7ce7e4d7217014d62e5d",
+        "whole_original_cohort_count": 47,
+        "selected_module_count": 47
+      },
+      "complete_targeted_true_serialized_records": [
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+          "name": "ImbalancedChen.Part3.mediumAdmissible_cleanedAlphaAtom",
+          "partial": false,
+          "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d),\n  ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 (ImbalancedChen.Part3.MediumAtom.cleanedAlphaAtom d)",
+          "unsafe": false
+        },
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3PairedAlphaDeletion",
+          "name": "ImbalancedChen.Part3.PairedAlphaDeletion.actual_geometry_bounds",
+          "partial": false,
+          "type": "∀ {B : Nat} {sigma kappa c0 : Real} {d : ImbalancedChen.Part3.MediumAtom}\n  (hd : ImbalancedChen.Part3.MediumAdmissible B sigma kappa c0 d),\n  And\n    (@LE.le.{0} Real Real.instLE\n      (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n        (ImbalancedChen.Part3.MediumAtom.scale d) sigma)\n      (ImbalancedChen.Part3.MediumAtom.U d))\n    (And\n      (@LE.le.{0} Real Real.instLE (ImbalancedChen.Part3.MediumAtom.V d)\n        (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n          (ImbalancedChen.Part3.MediumAtom.scale d)\n          (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n            (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne)) sigma)))\n      (@LE.le.{0} Real Real.instLE (ImbalancedChen.Part3.MediumAtom.physicalFactorCap d)\n        (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n          (@OfNat.ofNat.{0} Real (nat_lit 8)\n            (@instOfNatAtLeastTwo.{0} Real (nat_lit 8) Real.instNatCast\n              (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))\n                (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6)))))))\n          (@HPow.hPow.{0, 0, 0} Real Real Real (@instHPow.{0, 0} Real Real Real.instPow)\n            (ImbalancedChen.Part3.MediumAtom.scale d)\n            (@HSub.hSub.{0, 0, 0} Real Real Real (@instHSub.{0} Real Real.instSub)\n              (@OfNat.ofNat.{0} Real (nat_lit 1) (@One.toOfNat1.{0} Real Real.instOne))\n              (@HMul.hMul.{0, 0, 0} Real Real Real (@instHMul.{0} Real Real.instMul)\n                (@OfNat.ofNat.{0} Real (nat_lit 10)\n                  (@instOfNatAtLeastTwo.{0} Real (nat_lit 10) Real.instNatCast\n                    (@Nat.instAtLeastTwoHAddOfNat (@OfNat.ofNat.{0} Nat (nat_lit 9) (instOfNatNat (nat_lit 9)))\n                      (@Nat.instNeZeroSucc (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))))))\n                sigma))))))",
+          "unsafe": false
+        }
+      ],
+      "mechanical_all_original_cohort_flags_checked": true,
+      "new_kernel_replay": false
+    },
+    {
+      "module": "ImbalancedChen.Part3ComplexCRTConsumer",
+      "actual_owned_census_record": {
+        "module": "ImbalancedChen.Part3ComplexCRTConsumer",
+        "source_sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+        "object_parts": {
+          ".olean": "af49ba253a1eb113bd442eaec0ae9b67fc82c809c084066f3b9e319e971e8d70"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261015T085748716666Z/receipt.json",
+        "owned_receipt_sha256": "f40e65e248314271ebd2e4905b518a07f05dcf06198e6e172bac438e9db1c611",
+        "declarations_json_sha256": "f6d527096fc02a995688849bdbc0131cb05da524ad6045cdcd381aaeb250bcfe",
+        "complete_serialized_declarations": 25
+      },
+      "current_source_sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+      "current_objects": {
+        ".olean": {
+          "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/Part3ComplexCRTConsumer.olean",
+          "sha256": "af49ba253a1eb113bd442eaec0ae9b67fc82c809c084066f3b9e319e971e8d70",
+          "bytes": 504152
+        }
+      },
+      "original_receipt": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261015T085748716666Z/receipt.json",
+        "sha256": "f40e65e248314271ebd2e4905b518a07f05dcf06198e6e172bac438e9db1c611",
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS"
+      },
+      "declarations": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261015T085748716666Z/declarations.json",
+        "sha256": "f6d527096fc02a995688849bdbc0131cb05da524ad6045cdcd381aaeb250bcfe",
+        "whole_original_cohort_count": 25,
+        "selected_module_count": 25
+      },
+      "complete_targeted_true_serialized_records": [
+        {
+          "axiom": false,
+          "axioms": [],
+          "module": "ImbalancedChen.Part3ComplexCRTConsumer",
+          "name": "ImbalancedChen.Part3.ComplexCRT.Compatible",
+          "partial": false,
+          "type": "(q r m1 m2 : Nat) → Prop",
+          "unsafe": false
+        }
+      ],
+      "mechanical_all_original_cohort_flags_checked": true,
+      "new_kernel_replay": false
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "actual_owned_census_record": {
+        "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+        "source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+        "object_parts": {
+          ".olean": "a44b42f2a4394fbdbe47ac83e4539de18d3637622d87cb24433dc3bb5f0fe9fc"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261015T230927740441Z/receipt.json",
+        "owned_receipt_sha256": "ad9c3b6b8f3fd2d65d87f7de96ef19dfb83518b193250d168c04f0bcd571634f",
+        "declarations_json_sha256": "7207f8a6f0b5e5c3d64fdd2113d89e2b02c7fbcb0d78450fc70658eeba98eaec",
+        "complete_serialized_declarations": 46
+      },
+      "current_source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "current_objects": {
+        ".olean": {
+          "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorDispersion.olean",
+          "sha256": "a44b42f2a4394fbdbe47ac83e4539de18d3637622d87cb24433dc3bb5f0fe9fc",
+          "bytes": 825960
+        }
+      },
+      "original_receipt": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261015T230927740441Z/receipt.json",
+        "sha256": "ad9c3b6b8f3fd2d65d87f7de96ef19dfb83518b193250d168c04f0bcd571634f",
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS"
+      },
+      "declarations": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261015T230927740441Z/declarations.json",
+        "sha256": "7207f8a6f0b5e5c3d64fdd2113d89e2b02c7fbcb0d78450fc70658eeba98eaec",
+        "whole_original_cohort_count": 46,
+        "selected_module_count": 46
+      },
+      "complete_targeted_true_serialized_records": [
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+          "name": "ImbalancedChen.Part3.sharedFirstFactor_gcd",
+          "partial": false,
+          "type": "∀ (p v1 v2 : Nat),\n  @Eq.{1} Nat\n    (Nat.gcd (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v1)\n      (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p v2))\n    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) p (Nat.gcd v1 v2))",
+          "unsafe": false
+        }
+      ],
+      "mechanical_all_original_cohort_flags_checked": true,
+      "new_kernel_replay": false
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedDispersion",
+      "actual_owned_census_record": {
+        "module": "ImbalancedChen.Part3TransposedDispersion",
+        "source_sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+        "object_parts": {
+          ".olean": "0e2146b64d4d38c9d031284d1d72d433f66a47902d47826b412a0c1393749603"
+        },
+        "owned_receipt": ".lake/proof-continuation/audits/20261015T194819268649Z/receipt.json",
+        "owned_receipt_sha256": "f142ad8cb72932423da35ec187b0c764d50f9a2952b96658238a5f8624d5c187",
+        "declarations_json_sha256": "8471c9afd56f7b6be790a2b270f9e5be05d8e9b1ea463fc6134933c0efa49c3e",
+        "complete_serialized_declarations": 29
+      },
+      "current_source_sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+      "current_objects": {
+        ".olean": {
+          "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/Part3TransposedDispersion.olean",
+          "sha256": "0e2146b64d4d38c9d031284d1d72d433f66a47902d47826b412a0c1393749603",
+          "bytes": 634744
+        }
+      },
+      "original_receipt": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261015T194819268649Z/receipt.json",
+        "sha256": "f142ad8cb72932423da35ec187b0c764d50f9a2952b96658238a5f8624d5c187",
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS"
+      },
+      "declarations": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261015T194819268649Z/declarations.json",
+        "sha256": "8471c9afd56f7b6be790a2b270f9e5be05d8e9b1ea463fc6134933c0efa49c3e",
+        "whole_original_cohort_count": 52,
+        "selected_module_count": 29
+      },
+      "complete_targeted_true_serialized_records": [
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3TransposedDispersion",
+          "name": "ImbalancedChen.Part3.MediumAtom.transposedAtom",
+          "partial": false,
+          "type": "(d : ImbalancedChen.Part3.MediumAtom) → ImbalancedChen.Part3.MediumAtom",
+          "unsafe": false
+        }
+      ],
+      "mechanical_all_original_cohort_flags_checked": true,
+      "new_kernel_replay": false
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorSmallCoreSmoothFrequency",
+      "actual_owned_census_record": {
+        "module": "ImbalancedChen.Part3SharedFirstFactorSmallCoreSmoothFrequency",
+        "source_sha256": "2c542a1aad86b505798e83cc1564ee751b763921c6f9dda6289750307328f9fd",
+        "object_parts": {
+          ".olean": "b122d31dda2df9e3554078c3446e76884c6c98ad5435bdcbffd3870bc22a8aba"
+        },
+        "owned_receipt": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261021T021003985485Z/receipt.json",
+        "owned_receipt_sha256": "03bfe91554fc44077250f36fc03a1e396907d5a0208ace30290c204e18e6dc09",
+        "declarations_json_sha256": "d6e2d753a049a65044699292f7e8c33acc75554f72cff89f4798a10af6385d17",
+        "complete_serialized_declarations": 51
+      },
+      "current_source_sha256": "2c542a1aad86b505798e83cc1564ee751b763921c6f9dda6289750307328f9fd",
+      "current_objects": {
+        ".olean": {
+          "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorSmallCoreSmoothFrequency.olean",
+          "sha256": "b122d31dda2df9e3554078c3446e76884c6c98ad5435bdcbffd3870bc22a8aba",
+          "bytes": 1747288
+        }
+      },
+      "original_receipt": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261021T021003985485Z/receipt.json",
+        "sha256": "03bfe91554fc44077250f36fc03a1e396907d5a0208ace30290c204e18e6dc09",
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS"
+      },
+      "declarations": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261021T021003985485Z/declarations.json",
+        "sha256": "d6e2d753a049a65044699292f7e8c33acc75554f72cff89f4798a10af6385d17",
+        "whole_original_cohort_count": 51,
+        "selected_module_count": 51
+      },
+      "complete_targeted_true_serialized_records": [
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3SharedFirstFactorSmallCoreSmoothFrequency",
+          "name": "ImbalancedChen.Part3.CommonSmoothCutoff.poissonSmoothLowPass",
+          "partial": false,
+          "type": "(u : Real) → Real",
+          "unsafe": false
+        },
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3SharedFirstFactorSmallCoreSmoothFrequency",
+          "name": "ImbalancedChen.Part3.MediumAtom.sharedSmoothFrequencyBound",
+          "partial": false,
+          "type": "(d : ImbalancedChen.Part3.MediumAtom) → (Z : Real) → (D : Nat) → Nat",
+          "unsafe": false
+        },
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3SharedFirstFactorSmallCoreSmoothFrequency",
+          "name": "ImbalancedChen.Part3.MediumAtom.sharedSmallPairSmoothFrequencyKernel",
+          "partial": false,
+          "type": "(d : ImbalancedChen.Part3.MediumAtom) → (Z : Real) → (p N1 N2 : Nat) → Complex",
+          "unsafe": false
+        },
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3SharedFirstFactorSmallCoreSmoothFrequency",
+          "name": "ImbalancedChen.Part3.MediumAtom.sharedSmallPairedSmallSupportedNonzeroSmooth",
+          "partial": false,
+          "type": "(d : ImbalancedChen.Part3.MediumAtom) → (Ybeta Ysupport Z : Real) → Complex",
+          "unsafe": false
+        }
+      ],
+      "mechanical_all_original_cohort_flags_checked": true,
+      "new_kernel_replay": false
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorSmallCoreFourierTruncation",
+      "actual_owned_census_record": {
+        "module": "ImbalancedChen.Part3SharedFirstFactorSmallCoreFourierTruncation",
+        "source_sha256": "14e7d51db4f2b507dc06ff16d16f1d1c34479a7b9c090b7a12615aa089af5a02",
+        "object_parts": {
+          ".olean": "c6b4ec6f7f74f8d11263f590eb5d3e885141ecdfd46097ff9f1a8a08fd1c6842"
+        },
+        "owned_receipt": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261021T005950215767Z/receipt.json",
+        "owned_receipt_sha256": "3b00cd2e4e3eee050a073642179e6acc7c636e50e9ed888517cb8d5007c7f155",
+        "declarations_json_sha256": "a00f62597c59af814bbfc44e0809344a3f5081bf969687c9c11729d0966bbdd5",
+        "complete_serialized_declarations": 33
+      },
+      "current_source_sha256": "14e7d51db4f2b507dc06ff16d16f1d1c34479a7b9c090b7a12615aa089af5a02",
+      "current_objects": {
+        ".olean": {
+          "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/lib/lean/ImbalancedChen/Part3SharedFirstFactorSmallCoreFourierTruncation.olean",
+          "sha256": "c6b4ec6f7f74f8d11263f590eb5d3e885141ecdfd46097ff9f1a8a08fd1c6842",
+          "bytes": 1621480
+        }
+      },
+      "original_receipt": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261021T005950215767Z/receipt.json",
+        "sha256": "3b00cd2e4e3eee050a073642179e6acc7c636e50e9ed888517cb8d5007c7f155",
+        "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS"
+      },
+      "declarations": {
+        "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261021T005950215767Z/declarations.json",
+        "sha256": "a00f62597c59af814bbfc44e0809344a3f5081bf969687c9c11729d0966bbdd5",
+        "whole_original_cohort_count": 33,
+        "selected_module_count": 33
+      },
+      "complete_targeted_true_serialized_records": [
+        {
+          "axiom": false,
+          "axioms": [
+            "propext",
+            "Classical.choice",
+            "Quot.sound"
+          ],
+          "module": "ImbalancedChen.Part3SharedFirstFactorSmallCoreFourierTruncation",
+          "name": "ImbalancedChen.Part3.CommonSmoothCutoff.poissonNonzeroFrequencyWindow",
+          "partial": false,
+          "type": "(H : Nat) → Finset.{0} Int",
+          "unsafe": false
+        }
+      ],
+      "mechanical_all_original_cohort_flags_checked": true,
+      "new_kernel_replay": false
+    }
+  ],
+  "mechanical_safety_type_axiom_flag_boundary": {
+    "whole_original_cohort_flags_checked": 284,
+    "selected_module_flags": 261,
+    "targeted_complete_records": 12,
+    "no_fresh_semantic_read_of_all284_records_claim": true,
+    "no_new_kernel_replay": true
+  },
+  "complete_actual_project_API_source_proof_spans_read": [
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ComplexDispersion.lean",
+      "sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+      "individually_owned_in_bound_census": true,
+      "complete_actual_spans": [
+        {
+          "lines": [
+            128,
+            139
+          ],
+          "literal": "theorem complex_finset_cauchy_norm_sq {iota : Type*} (S : Finset iota)\n    (f g : iota → ℂ) :\n    ‖∑ i ∈ S, f i * g i‖ ^ 2 ≤\n      (∑ i ∈ S, ‖f i‖ ^ 2) * ∑ i ∈ S, ‖g i‖ ^ 2 := by\n  have hnorm : ‖∑ i ∈ S, f i * g i‖ ≤ ∑ i ∈ S, ‖f i‖ * ‖g i‖ := by\n    simpa only [norm_mul] using norm_sum_le S (fun i => f i * g i)\n  have hsum : 0 ≤ ∑ i ∈ S, ‖f i‖ * ‖g i‖ :=\n    Finset.sum_nonneg (fun _ _ => mul_nonneg (norm_nonneg _) (norm_nonneg _))\n  calc\n    _ ≤ (∑ i ∈ S, ‖f i‖ * ‖g i‖) ^ 2 :=\n      (sq_le_sq₀ (norm_nonneg _) hsum).2 hnorm\n    _ ≤ _ := Finset.sum_mul_sq_le_sq_mul_sq S (fun i => ‖f i‖) (fun i => ‖g i‖)"
+        },
+        {
+          "lines": [
+            242,
+            253
+          ],
+          "literal": "theorem complex_norm_sq_sum_eq_double_star {iota : Type*} (S : Finset iota)\n    (f : iota → ℂ) :\n    ((‖∑ i ∈ S, f i‖ ^ 2 : ℝ) : ℂ) =\n      ∑ i ∈ S, ∑ j ∈ S, f i * star (f j) := by\n  calc\n    _ = (∑ i ∈ S, f i) * star (∑ i ∈ S, f i) := by\n      rw [Complex.ofReal_pow]\n      exact (Complex.mul_conj' _).symm\n    _ = _ := by\n      rw [star_sum]\n      simp only [Finset.sum_mul, Finset.mul_sum]\n      exact Finset.sum_comm"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3PairedAlphaDeletion.lean",
+      "sha256": "9a0d874bee5e98bd9db21e54fc5512e7929efdf5e8c29add9b6558bde893e7b4",
+      "individually_owned_in_bound_census": true,
+      "complete_actual_spans": [
+        {
+          "lines": [
+            38,
+            45
+          ],
+          "literal": "def MediumAtom.cleanedAlpha (d : MediumAtom) (n : ℕ) : ℂ :=\n  if (n : ℤ) ∣ d.residue then 0 else d.alpha n\n\ndef MediumAtom.divisorAlpha (d : MediumAtom) (n : ℕ) : ℂ :=\n  if (n : ℤ) ∣ d.residue then d.alpha n else 0\n\ndef MediumAtom.cleanedAlphaAtom (d : MediumAtom) : MediumAtom :=\n  { d with alpha := d.cleanedAlpha }"
+        },
+        {
+          "lines": [
+            71,
+            89
+          ],
+          "literal": "theorem mediumAdmissible_cleanedAlphaAtom\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    MediumAdmissible B sigma kappa c0 d.cleanedAlphaAtom := by\n  obtain ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    hAlpha, hRough, hBeta, hGamma1, hGamma2, hGamma3⟩ := hd\n  refine ⟨hU, hV, hQ1, hQ2, hQ3, hx, ha0, ha1, hg1, hg2, hg3, hg4,\n    ?_, ?_, hBeta, hGamma1, hGamma2, hGamma3⟩\n  · intro n hn\n    change ‖d.cleanedAlpha n‖ ≤ 1\n    by_cases h : (n : ℤ) ∣ d.residue\n    · simp only [MediumAtom.cleanedAlpha, if_pos h, norm_zero, zero_le_one]\n    · simpa only [MediumAtom.cleanedAlpha, if_neg h] using hAlpha n hn\n  · intro n hn hnz p hp hpn\n    apply hRough n hn _ p hp hpn\n    change d.cleanedAlpha n ≠ 0 at hnz\n    by_cases h : (n : ℤ) ∣ d.residue\n    · exact (hnz (by simp only [MediumAtom.cleanedAlpha, if_pos h])).elim\n    · simpa only [MediumAtom.cleanedAlpha, if_neg h] using hnz"
+        },
+        {
+          "lines": [
+            438,
+            474
+          ],
+          "literal": "theorem actual_geometry_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.scale ^ sigma ≤ d.U ∧ d.V ≤ d.scale ^ (1 - sigma) ∧\n      d.physicalFactorCap ≤ 8 * d.scale ^ (1 - 10 * sigma) := by\n  have hx1 := one_le_scale hd\n  have hx : 0 < d.scale := zero_lt_one.trans_le hx1\n  have hdKeep := hd\n  obtain ⟨hU, hV, hQ1, _, _, _, _, _, hg1, _⟩ := hdKeep\n  have hlow : d.scale ^ sigma ≤ d.U := by\n    apply le_of_lt\n    calc\n      _ ≤ d.Q1 * d.scale ^ sigma := le_mul_of_one_le_left (by positivity) hQ1\n      _ < (d.U * d.scale ^ (-sigma)) * d.scale ^ sigma :=\n        mul_lt_mul_of_pos_right hg1 (Real.rpow_pos_of_pos hx _)\n      _ = d.U := by\n        rw [mul_assoc, ← Real.rpow_add hx, neg_add_cancel, Real.rpow_zero, mul_one]\n  have hpow : 0 < d.scale ^ sigma := Real.rpow_pos_of_pos hx _\n  refine ⟨hlow, ?_, ?_⟩\n  · calc\n      d.V ≤ d.scale / d.scale ^ sigma := (le_div_iff₀ hpow).mpr (by\n        calc\n          _ = d.scale ^ sigma * d.V := mul_comm _ _\n          _ ≤ d.U * d.V := mul_le_mul_of_nonneg_right hlow (by linarith)\n          _ = d.scale := rfl)\n      _ = _ := by rw [Real.rpow_sub hx, Real.rpow_one]\n  · calc\n      _ ≤ (8 * d.scale ^ (1 - 9 * sigma)) / d.scale ^ sigma :=\n        (le_div_iff₀ hpow).mpr (by\n          calc\n            _ = d.scale ^ sigma * d.physicalFactorCap := mul_comm _ _\n            _ ≤ d.U * d.physicalFactorCap := mul_le_mul_of_nonneg_right hlow\n              (by linarith [d.one_le_physicalFactorCap hd])\n            _ ≤ _ := d.U_mul_physicalFactorCap_le hd)\n      _ = _ := by\n        rw [mul_div_assoc, ← Real.rpow_sub hx,\n          show 1 - 9 * sigma - sigma = 1 - 10 * sigma by ring]"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3ComplexCRTConsumer.lean",
+      "sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+      "individually_owned_in_bound_census": true,
+      "complete_actual_spans": [
+        {
+          "lines": [
+            81,
+            82
+          ],
+          "literal": "def Compatible (q r m1 m2 : ℕ) : Prop :=\n  m1.Coprime q ∧ m2.Coprime r ∧ Nat.ModEq (q.gcd r) m1 m2"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3SharedFirstFactorDispersion.lean",
+      "sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "individually_owned_in_bound_census": true,
+      "complete_actual_spans": [
+        {
+          "lines": [
+            399,
+            400
+          ],
+          "literal": "theorem sharedFirstFactor_gcd (p v1 v2 : ℕ) :\n    (p * v1).gcd (p * v2) = p * v1.gcd v2 := Nat.gcd_mul_left p v1 v2"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3TransposedDispersion.lean",
+      "sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+      "individually_owned_in_bound_census": true,
+      "complete_actual_spans": [
+        {
+          "lines": [
+            34,
+            41
+          ],
+          "literal": "def MediumAtom.transposedAtom (d : MediumAtom) : MediumAtom :=\n  { d with\n    U := d.V\n    V := d.U\n    intervalLo := -1\n    intervalHi := (Nat.floor (2 * d.V) : ℝ)\n    alpha := d.beta\n    beta := fun n ↦ if n ∈ d.alphaCarrier then d.alpha n else 0 }"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3DistributionTargets.lean",
+      "sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+      "individually_owned_in_bound_census": false,
+      "complete_actual_spans": [
+        {
+          "lines": [
+            63,
+            64
+          ],
+          "literal": "def factorCarrier (Q : ℝ) : Finset ℕ :=\n  Finset.Icc (Nat.ceil Q) (Nat.floor (2 * Q))"
+        },
+        {
+          "lines": [
+            126,
+            148
+          ],
+          "literal": "def MediumAdmissible (B : ℕ) (σ κ c0 : ℝ) (d : MediumAtom) : Prop :=\n  1 ≤ d.U ∧ 1 ≤ d.V ∧ 1 ≤ d.Q1 ∧ 1 ≤ d.Q2 ∧ 1 ≤ d.Q3 ∧\n  Real.exp (Real.exp 1) < d.scale ∧\n  c0 * d.scale ≤ (d.residue.natAbs : ℝ) ∧\n  (d.residue.natAbs : ℝ) ≤ d.scale ^ (1 + κ) ∧\n  d.Q1 < d.U * d.scale ^ (-σ) ∧\n  d.U ^ 2 * d.Q2 * d.Q3 ^ 2 < d.scale ^ (1 - 8 * σ) ∧\n  (d.residue.natAbs : ℝ) ^ (7 / 32 : ℝ) * d.U * d.Q1 * d.Q2 ^ 5 * d.Q3 ^ 2 <\n    d.scale ^ (2 - 15 * σ) ∧\n  d.U ^ (1 + 2 * (7 / 32 : ℝ)) * d.Q1 *\n      d.Q2 ^ (5 - 2 * (7 / 32 : ℝ)) * d.Q3 ^ (2 + 2 * (7 / 32 : ℝ)) <\n    d.scale ^ (2 - 15 * σ) ∧\n  (∀ n ∈ d.alphaCarrier, ‖d.alpha n‖ ≤ 1) ∧\n  (∀ n ∈ d.alphaCarrier, d.alpha n ≠ 0 → ∀ p : ℕ,\n    Nat.Prime p → p ∣ n →\n      d.scale ^ (1 / (Real.log (Real.log d.scale)) ^ 3) < (p : ℝ)) ∧\n  (∀ m ∈ d.betaCarrier, ‖d.beta m‖ ≤ (m.divisors.card : ℝ) ^ B) ∧\n  (∀ q ∈ factorCarrier d.Q1, ‖d.gamma1 q‖ ≤ 1 ∧\n    (d.gamma1 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q2, ‖d.gamma2 q‖ ≤ 1 ∧\n    (d.gamma2 q ≠ 0 → Nat.Coprime q d.residue.natAbs)) ∧\n  (∀ q ∈ factorCarrier d.Q3, ‖d.gamma3 q‖ ≤ 1 ∧\n    (d.gamma3 q ≠ 0 → Nat.Coprime q d.residue.natAbs))"
+        }
+      ]
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/Part3SharedFirstFactorSmallCoreFourierTruncation.lean",
+      "sha256": "14e7d51db4f2b507dc06ff16d16f1d1c34479a7b9c090b7a12615aa089af5a02",
+      "individually_owned_in_bound_census": true,
+      "complete_actual_spans": [
+        {
+          "lines": [
+            22,
+            24
+          ],
+          "literal": "def CommonSmoothCutoff.poissonNonzeroFrequencyWindow (H : ℕ) : Finset ℤ :=\n  ((Finset.Icc 1 H).image (fun n : ℕ => (n : ℤ))) ∪\n    ((Finset.Icc 1 H).image (fun n : ℕ => -(n : ℤ)))"
+        }
+      ]
+    }
+  ],
+  "complete_actual_native_API_source_proof_spans_read": [
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean",
+      "sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "complete_actual_spans": [
+        {
+          "lines": [
+            90,
+            97
+          ],
+          "literal": "/-- If a function is injective on a finset, products over the original finset or its image coincide.\nSee also `prod_image_of_pairwise_eq_one` for a version with weaker assumptions. -/\n@[to_additive (attr := simp) /-- If a function is injective on a finset, sums over the original\nfinset or its image coincide.\nSee also `sum_image_of_pairwise_eq_zero` for a version with weaker assumptions. -/]\ntheorem prod_image [DecidableEq ι] {s : Finset κ} {g : κ → ι} :\n    Set.InjOn g s → ∏ x ∈ s.image g, f x = ∏ x ∈ s, f (g x) :=\n  fold_image"
+        },
+        {
+          "lines": [
+            216,
+            224
+          ],
+          "literal": "/-- Given a finite family of pairwise disjoint finsets, the product over their union is the product\nof the products over the sets.\nSee also `prod_biUnion_of_pairwise_eq_one` for a version with weaker assumptions. -/\n@[to_additive /-- Given a finite family of pairwise disjoint finsets, the sum over their union is\nthe sum of the sums over the sets.\nSee also `sum_biUnion_of_pairwise_eq_zero` for a version with weaker assumptions. -/]\ntheorem prod_biUnion [DecidableEq ι] {s : Finset κ} {t : κ → Finset ι}\n    (hs : Set.PairwiseDisjoint (↑s) t) : ∏ x ∈ s.biUnion t, f x = ∏ x ∈ s, ∏ i ∈ t x, f i := by\n  rw [← disjiUnion_eq_biUnion _ _ hs, prod_disjiUnion]"
+        },
+        {
+          "lines": [
+            254,
+            261
+          ],
+          "literal": "\n@[to_additive]\nlemma prod_fiberwise_of_maps_to {g : ι → κ} (h : ∀ i ∈ s, g i ∈ t) (f : ι → M) :\n    ∏ j ∈ t, ∏ i ∈ s with g i = j, f i = ∏ i ∈ s, f i := by\n  rw [← prod_disjiUnion, disjiUnion_filter_eq_of_maps_to h]\n  #adaptation_note /-- 2025-09-12 (kmill) copied from private lemma pairwiseDisjoint_fibers -/\n  intro x' hx y' hy hne\n  simp_rw [disjoint_left, mem_filter]; rintro i ⟨_, rfl⟩ ⟨_, rfl⟩; exact hne rfl"
+        },
+        {
+          "lines": [
+            323,
+            333
+          ],
+          "literal": "\n@[to_additive]\ntheorem prod_filter (p : ι → Prop) [DecidablePred p] (f : ι → M) :\n    ∏ a ∈ s with p a, f a = ∏ a ∈ s, if p a then f a else 1 :=\n  calc\n    ∏ a ∈ s with p a, f a = ∏ a ∈ s with p a, if p a then f a else 1 :=\n      prod_congr rfl fun a h => by rw [if_pos]; simpa using (mem_filter.1 h).2\n    _ = ∏ a ∈ s, if p a then f a else 1 := by\n      { refine prod_subset (filter_subset _ s) fun x hs h => ?_\n        rw [mem_filter, not_and] at h\n        exact if_neg (by simpa using h hs) }"
+        }
+      ],
+      "scope": "Exact to_additive source of sum_image, sum_biUnion, sum_fiberwise_of_maps_to and sum_filter; not newly serialized native fulltypes.",
+      "native_kernel_replay": false
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/BigOperators/Group/Finset/Sigma.lean",
+      "sha256": "795e36343a20dfc70b670f0b03c4c4e92a119e04d2d33904dd4438f78a30c764",
+      "complete_actual_spans": [
+        {
+          "lines": [
+            78,
+            82
+          ],
+          "literal": "@[to_additive /-- The sum over a product set equals the sum of the fiberwise sums. For rewriting\nin the reverse direction, use `Finset.sum_product'` -/]\ntheorem prod_product (s : Finset γ) (t : Finset α) (f : γ × α → β) :\n    ∏ x ∈ s ×ˢ t, f x = ∏ x ∈ s, ∏ y ∈ t, f (x, y) :=\n  prod_finset_product (s ×ˢ t) s (fun _a => t) fun _p => mem_product"
+        },
+        {
+          "lines": [
+            119,
+            123
+          ],
+          "literal": "\n@[to_additive]\ntheorem prod_comm {s : Finset γ} {t : Finset α} {f : γ → α → β} :\n    (∏ x ∈ s, ∏ y ∈ t, f x y) = ∏ y ∈ t, ∏ x ∈ s, f x y :=\n  prod_comm' fun _ _ => Iff.rfl"
+        }
+      ],
+      "scope": "to_additive sum_product/sum_comm signatures and named s/t parameters.",
+      "native_kernel_replay": false
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Complex/BigOperators.lean",
+      "sha256": "c7f8b975f885dfe8e2a3866c7aecd0f7c16223863419d554634cf6ca861c1a6d",
+      "complete_actual_spans": [
+        {
+          "lines": [
+            28,
+            30
+          ],
+          "literal": "@[simp, norm_cast]\ntheorem ofReal_sum (f : α → ℝ) : ((∑ i ∈ s, f i : ℝ) : ℂ) = ∑ i ∈ s, (f i : ℂ) :=\n  map_sum ofRealHom _ _"
+        },
+        {
+          "lines": [
+            43,
+            45
+          ],
+          "literal": "@[simp]\ntheorem re_sum (f : α → ℂ) : (∑ i ∈ s, f i).re = ∑ i ∈ s, (f i).re :=\n  map_sum reAddGroupHom f s"
+        }
+      ],
+      "scope": "Actual ofReal_sum/re_sum full declarations/proofs.",
+      "native_kernel_replay": false
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/Int/Order.lean",
+      "sha256": "ffc58334c9afc31592aebe9a4dedc7d3df6187c0a258b16ecc9f3e8ddcd87142",
+      "complete_actual_spans": [
+        {
+          "lines": [
+            592,
+            593
+          ],
+          "literal": "\n@[simp, norm_cast] theorem natAbs_natCast (n : Nat) : natAbs ↑n = n := rfl"
+        },
+        {
+          "lines": [
+            628,
+            640
+          ],
+          "literal": "\ntheorem natAbs_mul (a b : Int) : natAbs (a * b) = natAbs a * natAbs b := by\n  cases a <;> cases b <;>\n    simp only [← Int.mul_def, Int.mul, natAbs_negOfNat] <;> simp only [natAbs]\n\ntheorem natAbs_eq_natAbs_iff {a b : Int} : a.natAbs = b.natAbs ↔ a = b ∨ a = -b := by\n  constructor <;> intro h\n  · cases Int.natAbs_eq a with\n    | inl h₁ | inr h₁ =>\n      cases Int.natAbs_eq b with\n      | inl h₂ | inr h₂ => rw [h₁, h₂]; simp [h]\n  · cases h with (subst a; try rfl)\n    | inr h => rw [Int.natAbs_neg]"
+        }
+      ],
+      "scope": "Actual natAbs_cast/mul/equality-or-negation full proofs.",
+      "native_kernel_replay": false
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Nat/ModEq.lean",
+      "sha256": "678c7d5030c056efb633aaab3a1b44ceec599332b9f70f694b08f4cce27d1fea",
+      "complete_actual_spans": [
+        {
+          "lines": [
+            128,
+            129
+          ],
+          "literal": "lemma of_dvd (d : m ∣ n) (h : a ≡ b [MOD n]) : a ≡ b [MOD m] :=\n  modEq_of_dvd <| Int.ofNat_dvd.mpr d |>.trans h.dvd"
+        },
+        {
+          "lines": [
+            134,
+            135
+          ],
+          "literal": "protected theorem mul_left (c : ℕ) (h : a ≡ b [MOD n]) : c * a ≡ c * b [MOD n] :=\n  (h.mul_left' _).of_dvd (dvd_mul_left _ _)"
+        },
+        {
+          "lines": [
+            357,
+            360
+          ],
+          "literal": "theorem dvd_iff (h : a ≡ b [MOD m]) (hdm : d ∣ m) : d ∣ a ↔ d ∣ b := by\n  simp only [← modEq_zero_iff_dvd]\n  replace h := h.of_dvd hdm\n  exact ⟨h.symm.trans, h.trans⟩"
+        }
+      ],
+      "scope": "Actual of_dvd type and native h.of_dvd use.",
+      "native_kernel_replay": false
+    }
+  ],
+  "native_scope": {
+    "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "Lean": "4.33.0-rc1",
+    "native_generated_additive_signatures_are_source_bound_not_new_serialized_exports": true,
+    "full_external_closure_replay": false
+  },
+  "mathematical_conclusion": "Exact finite actualSmooth reindex, true unsigned-slope Gram PSD and coefficient1 outer Cauchy are mathematically correct. Unique D and all original signed frequency terms are retained; Re remains in correct relation to arbitrary complex coefficients. No actual source/API type mismatch or mathematical blocker was found.",
+  "critical_invariants": {
+    "actual_CRT_Re": "Actual coprimality/coprimality/gcd-ModEq Compatible, actual CRT residue/L and both original Poisson mesh factors remain inside the unchanged atom; finite Re/cast summation only, no Re commuting through beta/gamma.",
+    "uniqueD_and_signedwindows": "D0=gcd(rs,w) divides positive actual w. Every other divisor row is0, retaining precisely original H_D0 window. Window is union positive1..H and negative1..H, never replaced by abs h or a frequency count.",
+    "PSD": "Finite rational natAbs(h)/s fibers exactly equal the OR predicate for positive s, even if h=0; actual unchanged signed window is nonzero. Each fiber norm² proves true real-part>=0. False remains signed.",
+    "Cauchy": "Actual finite complex Cauchy only over o plus unit cleaned coefficient bound gives coefficient1/cardO. No h/s Cauchy, W, spectral or jointweight supplier.",
+    "uniformity": "Original B/sigma/kappa/c0/hsigma/d/hd, e,Y and allZ>0 retained; no A/x0/new c0,kappa sign/eta/SW/atom factorization premise."
+  },
+  "nonblocking_author_metadata_advisory": {
+    "listed_path": "ImbalancedChen/Part3SharedDispersion.lean",
+    "actual_path": "ImbalancedChen/Part3SharedFirstFactorDispersion.lean:399-400",
+    "actual_source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+    "source_or_import_problem": false,
+    "old_freeze_not_modified": true
+  },
+  "initial_report_script_diagnostic_correction": "The first read-only report script assumed each declarations.json contained one module. Actual original TransposedDispersion audit cohort has52 records, including29 of the selected module. Corrected module filtering yields261 selected-module records and284 full original cohort flags. This was only a report-script count assertion, not a Lean/API failure; no Lean source or old metadata changed and no artifact was written by the failed attempt.",
+  "mathematical_blockers_found": [],
+  "concrete_API_type_blockers_found": [],
+  "runtime_boundary": "No compiler or checker run. Actual elaboration/coercions/rewrite matching/strict unused-argument lint, stock replay and ALL generated fulltype/safety/transitive3axiom checking still require root specific first gate. No PASS or generated count predicted.",
+  "ownership_boundary": {
+    "actual_parent_API_census_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261021T021137954826Z-runtime-fresh-current-terminal-owned-census.json",
+    "actual_parent_API_census_sha256": "55e294a2d24f76573f4cd7fd537dcd3cbdaf3cb4b8f319d181251239d1240319",
+    "bound_parent_census_modules": 162,
+    "latest_root_reported_modules": 163,
+    "latest_root_reported_declarations": 3799,
+    "Tuple_included": true,
+    "SquaredFinite_owned": false,
+    "inherited_DistributionTargets_or_other_cached_parents_not_promoted_owned": true
+  },
+  "unchanged_final_scope": {
+    "full_original1113_endpoint": "theorem actual_smallSupported_squared_resonance_Cauchy_and_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        ∀ Z : ℝ, 0 < Z →\n          let e := d.cleanedAlphaAtom\n          let Y := d.scale ^ (sigma / 4)\n          (e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z =\n              (∑ o ∈ e.smallCoreSquaredOuterCarrier,\n                e.smallCoreSquaredOuterCoefficient Y Y o *\n                  (∑ u ∈ e.smallCoreSquaredInnerCarrier Z o,\n                    e.smallCoreSquaredRowTerm Z o u))) ∧\n            (0 ≤ e.smallCoreSquaredCauchyMass Z true) ∧\n            (‖e.sharedSmallPairedSmallSupportedNonzeroSmooth Y Y Z‖ ^ 2 ≤\n              e.smallCoreSquaredCauchyMass Z true +\n                e.smallCoreSquaredCauchyMass Z false) ∧\n            ((∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n              (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n                Real.sqrt (e.smallCoreSquaredCauchyMass Z true) ≤\n                  d.scale ^ 2 / (Real.log d.scale) ^ A)",
+    "resonance_log_payment_unproved_by_this_file": true,
+    "nonzero_complement_root_Mellin_spectral_gap_open": true,
+    "main_C_K_hLower_hUpper_Cor_three_counts_unchanged": true,
+    "unconditional_main_claimed": false
+  },
+  "quota": {
+    "actual_start_used": 19,
+    "periodic_latest_used": 20,
+    "latest_remaining": 80,
+    "hardstop_remaining_at_most": 50,
+    "null_secondary_unavailable_not_zero": true
+  },
+  "restrictions": {
+    "ONE_new_ignored_atomic_JSON": true,
+    "no_Lean_tool_catalog_pin_cache_CI_resource_automation_edit": true,
+    "no_compile_checker_or_gate": true,
+    "no_subagent_or_new_task": true,
+    "no_external_search": true
+  },
+  "HOLD": true
+}

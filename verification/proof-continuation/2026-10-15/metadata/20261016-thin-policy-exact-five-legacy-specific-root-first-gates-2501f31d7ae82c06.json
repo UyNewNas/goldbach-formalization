@@ -1,0 +1,805 @@
+{
+  "status": "ROOT_EXACT_FIVE_MINIMAL_PROJECT_LEAF_FIRST_GATES",
+  "created_utc": "2026-10-16T00:02:52.543052+00:00",
+  "reviewer": "/root",
+  "not_source_author": true,
+  "full_root_review": "Root previously actually read all969 source lines, including initial truncated Generic/OwnCube passages then separately reread. Current report ce3 and its math/graph/cache/analytic-boundary sections independently assessed; all51 real headers/4 full definitions now rebound to exact current literal source. Generic includes inline@[simp]; OwnCube equation definition has both branches and final theorem is a direct proof term.",
+  "independent_full_review": {
+    "path": "20261016-thin-bridge-five-legacy-independent-source-API-scope.json",
+    "sha256": "ce3e5ca57697418a2b497ec4b07fdc0d99302d54bd2891a84970ff7e033f765e"
+  },
+  "targets": [
+    {
+      "module": "ImbalancedChen.SmallRoughDensityError",
+      "source_sha256": "95854fdf8ac0e0b47368e71fb6a1fae20178bee004c384b80103f9abe45d40ab",
+      "lines": 103,
+      "declarations": [
+        {
+          "name": "signAttachedValue_density_error",
+          "kind": "theorem",
+          "private": false,
+          "line": 21,
+          "complete_header": "theorem signAttachedValue_density_error\n    {c lo hi V delta : ℝ}\n    (hlo : V - delta ≤ lo) (hloV : lo ≤ V)\n    (hVhi : V ≤ hi) (hhi : hi ≤ V + delta) :\n    0 ≤ signAttachedValue c lo hi - c * V ∧\n      signAttachedValue c lo hi - c * V ≤ |c| * delta",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem signAttachedValue_density_error\n    {c lo hi V delta : ℝ}\n    (hlo : V - delta ≤ lo) (hloV : lo ≤ V)\n    (hVhi : V ≤ hi) (hhi : hi ≤ V + delta) :\n    0 ≤ signAttachedValue c lo hi - c * V ∧\n      signAttachedValue c lo hi - c * V ≤ |c| * delta := by\n  by_cases hc : 0 ≤ c\n  · rw [signAttachedValue, if_pos hc, abs_of_nonneg hc]\n    constructor\n    · nlinarith [mul_nonneg hc (sub_nonneg.mpr hVhi)]\n    · nlinarith [mul_le_mul_of_nonneg_left hhi hc]\n  · have hc0 : c ≤ 0 := le_of_not_ge hc\n    rw [signAttachedValue, if_neg hc, abs_of_nonpos hc0]\n    constructor\n    · nlinarith [mul_le_mul_of_nonpos_left hloV hc0]\n    · nlinarith [mul_le_mul_of_nonpos_left hlo hc0]",
+          "full_source_sha256": "4781cef4d68580ce4d8fbd313f5c5d37b3ad74155f6545d3b0fa84c2c67b32bb"
+        },
+        {
+          "name": "signSensitiveReciprocalTotientDensity_sub_eq",
+          "kind": "theorem",
+          "private": false,
+          "line": 39,
+          "complete_header": "theorem signSensitiveReciprocalTotientDensity_sub_eq\n    (rough : Finset ℕ) (c : ℕ → ℝ) (lo hi V : ℝ) :\n    signSensitiveReciprocalTotientDensity rough c lo hi -\n        V * reciprocalTotientDensity rough c =\n      ∑ d ∈ rough, (signAttachedValue (c d) lo hi - c d * V) /\n        (Nat.totient d : ℝ)",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem signSensitiveReciprocalTotientDensity_sub_eq\n    (rough : Finset ℕ) (c : ℕ → ℝ) (lo hi V : ℝ) :\n    signSensitiveReciprocalTotientDensity rough c lo hi -\n        V * reciprocalTotientDensity rough c =\n      ∑ d ∈ rough, (signAttachedValue (c d) lo hi - c d * V) /\n        (Nat.totient d : ℝ) := by\n  unfold signSensitiveReciprocalTotientDensity reciprocalTotientDensity\n  rw [Finset.mul_sum, ← Finset.sum_sub_distrib]\n  apply Finset.sum_congr rfl\n  intro d hd\n  unfold signAttachedValue\n  by_cases hc : 0 ≤ c d <;> simp only [hc, if_true, if_false] <;> ring",
+          "full_source_sha256": "e751506ac45aa122cb3ed8a4feee49e3953f87b6f0bc9134affbd556a450f3c8"
+        },
+        {
+          "name": "signSensitiveReciprocalTotientDensity_error",
+          "kind": "theorem",
+          "private": false,
+          "line": 54,
+          "complete_header": "theorem signSensitiveReciprocalTotientDensity_error\n    (rough : Finset ℕ) (c : ℕ → ℝ) {lo hi V delta : ℝ}\n    (hlo : V - delta ≤ lo) (hloV : lo ≤ V)\n    (hVhi : V ≤ hi) (hhi : hi ≤ V + delta) :\n    0 ≤ signSensitiveReciprocalTotientDensity rough c lo hi -\n        V * reciprocalTotientDensity rough c ∧\n      signSensitiveReciprocalTotientDensity rough c lo hi -\n          V * reciprocalTotientDensity rough c ≤\n        delta * reciprocalTotientDensity rough (fun d => |c d|)",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem signSensitiveReciprocalTotientDensity_error\n    (rough : Finset ℕ) (c : ℕ → ℝ) {lo hi V delta : ℝ}\n    (hlo : V - delta ≤ lo) (hloV : lo ≤ V)\n    (hVhi : V ≤ hi) (hhi : hi ≤ V + delta) :\n    0 ≤ signSensitiveReciprocalTotientDensity rough c lo hi -\n        V * reciprocalTotientDensity rough c ∧\n      signSensitiveReciprocalTotientDensity rough c lo hi -\n          V * reciprocalTotientDensity rough c ≤\n        delta * reciprocalTotientDensity rough (fun d => |c d|) := by\n  rw [signSensitiveReciprocalTotientDensity_sub_eq]\n  constructor\n  · apply Finset.sum_nonneg\n    intro d hd\n    exact div_nonneg (signAttachedValue_density_error (c := c d) hlo hloV hVhi hhi).1\n      (Nat.cast_nonneg _)\n  · unfold reciprocalTotientDensity\n    rw [Finset.mul_sum]\n    apply Finset.sum_le_sum\n    intro d hd\n    calc\n      (signAttachedValue (c d) lo hi - c d * V) / (Nat.totient d : ℝ) ≤\n          (|c d| * delta) / (Nat.totient d : ℝ) :=\n        div_le_div_of_nonneg_right\n          (signAttachedValue_density_error (c := c d) hlo hloV hVhi hhi).2\n          (Nat.cast_nonneg _)\n      _ = delta * (|c d| / (Nat.totient d : ℝ)) := by ring",
+          "full_source_sha256": "3d989374d5288bbe1b87a19a829658c93d1c701072f9c4f59b75dcdf523dd104"
+        },
+        {
+          "name": "physicalDensitySum_smallRoughRho_error",
+          "kind": "theorem",
+          "private": false,
+          "line": 82,
+          "complete_header": "theorem physicalDensitySum_smallRoughRho_error\n    {w : ℝ} {small rough : Finset ℕ}\n    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)\n    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)\n    (c betaMinus betaPlus : ℕ → ℝ) {V delta : ℝ}\n    (hlo : V - delta ≤ reciprocalTotientDensity small betaMinus)\n    (hloV : reciprocalTotientDensity small betaMinus ≤ V)\n    (hVhi : V ≤ reciprocalTotientDensity small betaPlus)\n    (hhi : reciprocalTotientDensity small betaPlus ≤ V + delta) :\n    0 ≤ physicalDensitySum (smallRoughModuli small rough)\n          (smallRoughRho small rough c betaMinus betaPlus) -\n        V * reciprocalTotientDensity rough c ∧\n      physicalDensitySum (smallRoughModuli small rough)\n          (smallRoughRho small rough c betaMinus betaPlus) -\n          V * reciprocalTotientDensity rough c ≤\n        delta * reciprocalTotientDensity rough (fun d => |c d|)",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem physicalDensitySum_smallRoughRho_error\n    {w : ℝ} {small rough : Finset ℕ}\n    (hsmall : ∀ d ∈ small, SmallPrimeSupportedAt w d)\n    (hrough : ∀ d ∈ rough, RoughPrimeSupportedAt w d)\n    (c betaMinus betaPlus : ℕ → ℝ) {V delta : ℝ}\n    (hlo : V - delta ≤ reciprocalTotientDensity small betaMinus)\n    (hloV : reciprocalTotientDensity small betaMinus ≤ V)\n    (hVhi : V ≤ reciprocalTotientDensity small betaPlus)\n    (hhi : reciprocalTotientDensity small betaPlus ≤ V + delta) :\n    0 ≤ physicalDensitySum (smallRoughModuli small rough)\n          (smallRoughRho small rough c betaMinus betaPlus) -\n        V * reciprocalTotientDensity rough c ∧\n      physicalDensitySum (smallRoughModuli small rough)\n          (smallRoughRho small rough c betaMinus betaPlus) -\n          V * reciprocalTotientDensity rough c ≤\n        delta * reciprocalTotientDensity rough (fun d => |c d|) := by\n  rw [physicalDensitySum_smallRoughRho_eq_signSensitive hsmall hrough]\n  exact signSensitiveReciprocalTotientDensity_error rough c hlo hloV hVhi hhi",
+          "full_source_sha256": "64b9f9697c5cc0122cd394be10d77f27d2eae67560ada651ce7ed3a92a43e6b8"
+        }
+      ]
+    },
+    {
+      "module": "ImbalancedChen.ActualPrimePresieveSplit",
+      "source_sha256": "dc6170c527cdde252ecdaa00997841522a4aa469adf799eaae4549e1310ced41",
+      "lines": 114,
+      "declarations": [
+        {
+          "name": "roughPrimeUniverse_split",
+          "kind": "theorem",
+          "private": false,
+          "line": 21,
+          "complete_header": "theorem roughPrimeUniverse_split (N cap : ℕ) (w z : ℝ) (hwz : w ≤ z) :\n    roughPrimeUniverse N cap 0 z =\n      roughPrimeUniverse N cap w z ++ roughPrimeUniverse N cap 0 w",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem roughPrimeUniverse_split (N cap : ℕ) (w z : ℝ) (hwz : w ≤ z) :\n    roughPrimeUniverse N cap 0 z =\n      roughPrimeUniverse N cap w z ++ roughPrimeUniverse N cap 0 w := by\n  classical\n  have hcross : ∀ p ∈ roughPrimeUniverse N cap w z,\n      ∀ q ∈ roughPrimeUniverse N cap 0 w, p > q := by\n    intro p hp q hq\n    have hpw := mem_roughPrimeUniverse_lower hp\n    have hqw := mem_roughPrimeUniverse_upper hq\n    have hqp : (q : ℝ) < p := hqw.trans_le hpw\n    exact_mod_cast hqp\n  have hgt : (roughPrimeUniverse N cap w z ++\n      roughPrimeUniverse N cap 0 w).Pairwise (· > ·) := by\n    rw [List.pairwise_append]\n    exact ⟨roughPrimeUniverse_pairwise_gt N cap w z,\n      roughPrimeUniverse_pairwise_gt N cap 0 w, hcross⟩\n  have hcarrier : (roughPrimeUniverse N cap w z ++\n      roughPrimeUniverse N cap 0 w).toFinset = roughPrimeFinset N cap 0 z := by\n    ext p\n    simp only [List.mem_toFinset, List.mem_append,\n      mem_roughPrimeUniverse, mem_roughPrimeFinset]\n    constructor\n    · rintro (hp | hp)\n      · exact ⟨hp.1, hp.2.1, hp.2.2.1, Nat.cast_nonneg _, hp.2.2.2.2⟩\n      · exact ⟨hp.1, hp.2.1, hp.2.2.1, hp.2.2.2.1,\n          hp.2.2.2.2.trans_le hwz⟩\n    · intro hp\n      by_cases hpw : (p : ℝ) < w\n      · exact Or.inr ⟨hp.1, hp.2.1, hp.2.2.1, hp.2.2.2.1, hpw⟩\n      · exact Or.inl ⟨hp.1, hp.2.1, hp.2.2.1,\n          le_of_not_gt hpw, hp.2.2.2.2⟩\n  change (roughPrimeFinset N cap 0 z).sort (· ≥ ·) = _\n  rw [← hcarrier]\n  exact (List.toFinset_sort (r := (· ≥ ·)) hgt.nodup).mpr\n    (hgt.imp fun h => h.le)",
+          "full_source_sha256": "ecf8cd00213d164d1b69160979059cfab5289744ff7cf0449155e8f293d9b5d5"
+        },
+        {
+          "name": "roughPrimeUniverse_small_eulerProduct",
+          "kind": "theorem",
+          "private": false,
+          "line": 58,
+          "complete_header": "theorem roughPrimeUniverse_small_eulerProduct (N cap : ℕ) (w : ℝ) :\n    ((roughPrimeUniverse N cap 0 w).map\n      (fun p : ℕ => 1 - 1 / ((p : ℝ) - 1))).prod =\n        actualSmallEulerProduct N cap w",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem roughPrimeUniverse_small_eulerProduct (N cap : ℕ) (w : ℝ) :\n    ((roughPrimeUniverse N cap 0 w).map\n      (fun p : ℕ => 1 - 1 / ((p : ℝ) - 1))).prod =\n        actualSmallEulerProduct N cap w := by\n  unfold actualSmallEulerProduct actualSmallPrimeFinset\n  rw [← roughPrimeUniverse_toFinset N cap 0 w]\n  exact (List.prod_toFinset (fun p : ℕ => (1 : ℝ) - 1 / ((p : ℝ) - 1))\n    (roughPrimeUniverse_nodup N cap 0 w)).symm",
+          "full_source_sha256": "01a34dc6be25dee6da58d8fc215b4a873a190fc477e3154dcd8042b301c25aee"
+        },
+        {
+          "name": "reciprocalTotientPrimeWeight_mem_Icc",
+          "kind": "theorem",
+          "private": false,
+          "line": 69,
+          "complete_header": "theorem reciprocalTotientPrimeWeight_mem_Icc {p : ℕ} (hp : p.Prime) :\n    0 ≤ (1 : ℝ) / ((p : ℝ) - 1) ∧\n      (1 : ℝ) / ((p : ℝ) - 1) ≤ 1",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem reciprocalTotientPrimeWeight_mem_Icc {p : ℕ} (hp : p.Prime) :\n    0 ≤ (1 : ℝ) / ((p : ℝ) - 1) ∧\n      (1 : ℝ) / ((p : ℝ) - 1) ≤ 1 := by\n  have hp2 : (2 : ℝ) ≤ p := by exact_mod_cast hp.two_le\n  have hden : (0 : ℝ) < (p : ℝ) - 1 := by linarith\n  exact ⟨div_nonneg zero_le_one hden.le, (div_le_one hden).mpr (by linarith)⟩",
+          "full_source_sha256": "5faa5c20b304d3f773bcecdda4e01cc85df794c04cb613a65991d687cdb83cac"
+        },
+        {
+          "name": "primeFactors_prod_reciprocalTotient",
+          "kind": "theorem",
+          "private": false,
+          "line": 77,
+          "complete_header": "theorem primeFactors_prod_reciprocalTotient {d : ℕ} (hd : Squarefree d) :\n    (∏ p ∈ d.primeFactors, (1 : ℝ) / ((p : ℝ) - 1)) =\n      1 / (Nat.totient d : ℝ)",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem primeFactors_prod_reciprocalTotient {d : ℕ} (hd : Squarefree d) :\n    (∏ p ∈ d.primeFactors, (1 : ℝ) / ((p : ℝ) - 1)) =\n      1 / (Nat.totient d : ℝ) := by\n  have ht : Nat.totient d = ∏ p ∈ d.primeFactors, (p - 1) := by\n    rw [Nat.totient_eq_div_primeFactors_mul, Nat.prod_primeFactors_of_squarefree hd,\n      Nat.div_self (Nat.pos_of_ne_zero hd.ne_zero), one_mul]\n  rw [ht, Nat.cast_prod, Finset.prod_div_distrib]\n  simp only [Finset.prod_const_one]\n  congr 1\n  apply Finset.prod_congr rfl\n  intro p hp\n  simpa only [Nat.cast_one] using (Nat.cast_sub (R := ℝ) (Nat.one_le_iff_ne_zero.mpr\n    (Nat.prime_of_mem_primeFactors hp).ne_zero)).symm",
+          "full_source_sha256": "4ca26d4bf23ea88252d2f40fcfbb1da4458db1694ac1316814df5e865e6431ad"
+        },
+        {
+          "name": "oddFirstExitRetainedPolynomial_eq_fixedRoughDensity",
+          "kind": "theorem",
+          "private": false,
+          "line": 93,
+          "complete_header": "theorem oddFirstExitRetainedPolynomial_eq_fixedRoughDensity\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) :\n    oddFirstExitRetainedPolynomial retainOdd\n        (fun p => 1 / ((p : ℝ) - 1)) (roughPrimeUniverse N cap w z) =\n      reciprocalTotientDensity (fixedRoughSupport retainOdd N cap w z)\n        (fixedRoughCoefficient retainOdd N cap w z)",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem oddFirstExitRetainedPolynomial_eq_fixedRoughDensity\n    (retainOdd : List ℕ → Bool) (N cap : ℕ) (w z : ℝ) :\n    oddFirstExitRetainedPolynomial retainOdd\n        (fun p => 1 / ((p : ℝ) - 1)) (roughPrimeUniverse N cap w z) =\n      reciprocalTotientDensity (fixedRoughSupport retainOdd N cap w z)\n        (fixedRoughCoefficient retainOdd N cap w z) := by\n  rw [oddFirstExitRetainedPolynomial_eq_leaves_sum,\n    roughPrimeRetainedLeaves_sum_eq_retainedModuli_sum,\n    oddFirstExitRetainedModuli_independent retainOdd\n      (fun p => 1 / ((p : ℝ) - 1)) (fun _ => 1)]\n  unfold reciprocalTotientDensity\n  apply Finset.sum_congr rfl\n  intro d hd\n  rw [primeFactors_prod_reciprocalTotient\n    (fixedRoughSupport_squarefree retainOdd N cap w z hd),\n    oddFirstExitRetainedCoefficient_independent retainOdd\n      (fun p => 1 / ((p : ℝ) - 1)) (fun _ => 1)]\n  simp only [fixedRoughCoefficient, div_eq_mul_inv, one_mul]",
+          "full_source_sha256": "8f28f0a5bcc4024bef673581c3a33c96f3c509285b51bd422fe423598f74aae9"
+        }
+      ]
+    },
+    {
+      "module": "ImbalancedChen.FirstExitGenericModuli",
+      "source_sha256": "aeb5adad90208c1e09e186c1008529b113c6b0f8b0870fb82d3b8056bee6efaf",
+      "lines": 335,
+      "declarations": [
+        {
+          "name": "firstExitRootLeaves",
+          "kind": "def",
+          "private": false,
+          "line": 21,
+          "complete_header": "def firstExitRootLeaves {α : Type*} (retained : Bool → List α → Bool)\n    (h : α → ℝ) (carrier : List α) : List (FirstExitLeaf α)",
+          "body_delimiter": "assignment",
+          "proof_style": "assignment",
+          "complete_definition": "def firstExitRootLeaves {α : Type*} (retained : Bool → List α → Bool)\n    (h : α → ℝ) (carrier : List α) : List (FirstExitLeaf α) :=\n  firstExitRetainedLeaves retained h [] true 1 carrier",
+          "full_source": "def firstExitRootLeaves {α : Type*} (retained : Bool → List α → Bool)\n    (h : α → ℝ) (carrier : List α) : List (FirstExitLeaf α) :=\n  firstExitRetainedLeaves retained h [] true 1 carrier",
+          "full_source_sha256": "dd2c8f3a17662ad4fa354905d773753d3334b48e34d9c6a3e791e38fa40f4e0f"
+        },
+        {
+          "name": "firstExitRootLeaves_nodup",
+          "kind": "theorem",
+          "private": false,
+          "line": 25,
+          "complete_header": "theorem firstExitRootLeaves_nodup {α : Type*} (retained : Bool → List α → Bool)\n    (h : α → ℝ) (carrier : List α) (hcarrier : carrier.Nodup) :\n    (firstExitRootLeaves retained h carrier).Nodup",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitRootLeaves_nodup {α : Type*} (retained : Bool → List α → Bool)\n    (h : α → ℝ) (carrier : List α) (hcarrier : carrier.Nodup) :\n    (firstExitRootLeaves retained h carrier).Nodup := by\n  exact firstExitRetainedLeaves_nodup retained h [] carrier true 1 (by simpa using hcarrier)",
+          "full_source_sha256": "a2b56554c0e79896300b59dba744761a288dbe3564a2aad86b49e924a951a640"
+        },
+        {
+          "name": "mem_firstExitRootLeaves_mass_eq_selected_prod",
+          "kind": "theorem",
+          "private": false,
+          "line": 30,
+          "complete_header": "theorem mem_firstExitRootLeaves_mass_eq_selected_prod\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (leaf : FirstExitLeaf α)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    leaf.mass = (leaf.selected.map h).prod",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitRootLeaves_mass_eq_selected_prod\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (leaf : FirstExitLeaf α)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    leaf.mass = (leaf.selected.map h).prod := by\n  exact firstExitRetainedLeaves_mass_eq_selected_prod\n    retained h [] carrier true 1 (by simp) leaf hleaf",
+          "full_source_sha256": "abba57241c28db6c19f1068482345001f22d5a2ffd9342601967a61d22569b07"
+        },
+        {
+          "name": "mem_firstExitRootLeaves_positive_eq_evenListLength",
+          "kind": "theorem",
+          "private": false,
+          "line": 38,
+          "complete_header": "theorem mem_firstExitRootLeaves_positive_eq_evenListLength\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (leaf : FirstExitLeaf α)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    leaf.positive = evenListLength leaf.selected",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitRootLeaves_positive_eq_evenListLength\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (leaf : FirstExitLeaf α)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    leaf.positive = evenListLength leaf.selected := by\n  exact firstExitRetainedLeaves_positive_eq_evenListLength\n    retained h [] carrier true 1 (by simp [evenListLength])\n      leaf hleaf",
+          "full_source_sha256": "2adb0c599e32e0fb199697d4b3cafe09f8b52451d88407b90faac65fe13b5b83"
+        },
+        {
+          "name": "mem_firstExitRootLeaves_selected_reverse_sublist",
+          "kind": "theorem",
+          "private": false,
+          "line": 47,
+          "complete_header": "theorem mem_firstExitRootLeaves_selected_reverse_sublist\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (leaf : FirstExitLeaf α)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    leaf.selected.reverse <+ carrier",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitRootLeaves_selected_reverse_sublist\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (leaf : FirstExitLeaf α)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    leaf.selected.reverse <+ carrier := by\n  simpa [firstExitRootLeaves] using\n    firstExitRetainedLeaves_selected_reverse_sublist\n      retained h [] carrier true 1 leaf hleaf",
+          "full_source_sha256": "aa4966a5e69804efe57448c68b3392a7a1fc1230983e7c341b845f8a39c95d1a"
+        },
+        {
+          "name": "mem_firstExitRootLeaves_selected_nodup",
+          "kind": "theorem",
+          "private": false,
+          "line": 56,
+          "complete_header": "theorem mem_firstExitRootLeaves_selected_nodup\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (huniverse : carrier.Nodup)\n    (leaf : FirstExitLeaf α)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    leaf.selected.Nodup",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitRootLeaves_selected_nodup\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (huniverse : carrier.Nodup)\n    (leaf : FirstExitLeaf α)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    leaf.selected.Nodup := by\n  have hreverse : leaf.selected.reverse.Nodup :=\n    huniverse.sublist\n      (mem_firstExitRootLeaves_selected_reverse_sublist\n        retained h carrier leaf hleaf)\n  simpa using hreverse",
+          "full_source_sha256": "479fcbf6f363143133226a4f05d3e8a5cbfd7ac1b304e39a3b0e3297a51ce200"
+        },
+        {
+          "name": "mem_firstExitRootLeaves_selected_prime",
+          "kind": "theorem",
+          "private": false,
+          "line": 68,
+          "complete_header": "theorem mem_firstExitRootLeaves_selected_prime\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    ∀ p ∈ leaf.selected, Nat.Prime p",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitRootLeaves_selected_prime\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    ∀ p ∈ leaf.selected, Nat.Prime p := by\n  intro p hp\n  have hsub : leaf.selected.reverse <+ carrier :=\n    mem_firstExitRootLeaves_selected_reverse_sublist\n      retained h carrier leaf hleaf\n  apply hprime p\n  apply hsub.subset\n  simpa using hp",
+          "full_source_sha256": "d116de4fd7858b16dfc24a9277b39f00ed36309d06768b2a8da49eecfbe9989b"
+        },
+        {
+          "name": "mem_firstExitRootLeaves_primeFactors_selectedProd",
+          "kind": "theorem",
+          "private": false,
+          "line": 82,
+          "complete_header": "theorem mem_firstExitRootLeaves_primeFactors_selectedProd\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (huniverse : carrier.Nodup)\n    (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    leaf.selected.prod.primeFactors = leaf.selected.toFinset",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitRootLeaves_primeFactors_selectedProd\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (huniverse : carrier.Nodup)\n    (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    leaf.selected.prod.primeFactors = leaf.selected.toFinset := by\n  have hnodup : leaf.selected.Nodup :=\n    mem_firstExitRootLeaves_selected_nodup\n      retained h carrier huniverse leaf hleaf\n  have hprod :\n      (∏ p ∈ leaf.selected.toFinset, p) = leaf.selected.prod := by\n    simpa using List.prod_toFinset (fun p : ℕ => p) hnodup\n  rw [← hprod]\n  exact Nat.primeFactors_prod fun p hp =>\n    mem_firstExitRootLeaves_selected_prime\n      retained h carrier hprime leaf hleaf p (List.mem_toFinset.mp hp)",
+          "full_source_sha256": "e5914026a3e55be3e9c22819995669d39f3e2c55e5ea2466e553b22661608f8e"
+        },
+        {
+          "name": "mem_firstExitRootLeaves_selectedProd_squarefree",
+          "kind": "theorem",
+          "private": false,
+          "line": 100,
+          "complete_header": "theorem mem_firstExitRootLeaves_selectedProd_squarefree\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (huniverse : carrier.Nodup)\n    (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    Squarefree leaf.selected.prod",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitRootLeaves_selectedProd_squarefree\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (huniverse : carrier.Nodup)\n    (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    Squarefree leaf.selected.prod := by\n  exact list_prod_squarefree_of_nodup_primes leaf.selected\n    (mem_firstExitRootLeaves_selected_nodup\n      retained h carrier huniverse leaf hleaf)\n    (mem_firstExitRootLeaves_selected_prime\n      retained h carrier hprime leaf hleaf)",
+          "full_source_sha256": "adbb7064d4f3412bc4c0fc8e83a25ece5e2a452133697f6c297374b5ba5b3adc"
+        },
+        {
+          "name": "mem_firstExitRootLeaves_moebius_selectedProd",
+          "kind": "theorem",
+          "private": false,
+          "line": 113,
+          "complete_header": "theorem mem_firstExitRootLeaves_moebius_selectedProd\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (huniverse : carrier.Nodup)\n    (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    ArithmeticFunction.moebius leaf.selected.prod =\n      (-1 : ℤ) ^ leaf.selected.length",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitRootLeaves_moebius_selectedProd\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (huniverse : carrier.Nodup)\n    (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    ArithmeticFunction.moebius leaf.selected.prod =\n      (-1 : ℤ) ^ leaf.selected.length := by\n  exact moebius_list_prod_eq_negOnePow_length leaf.selected\n    (mem_firstExitRootLeaves_selected_nodup\n      retained h carrier huniverse leaf hleaf)\n    (mem_firstExitRootLeaves_selected_prime\n      retained h carrier hprime leaf hleaf)",
+          "full_source_sha256": "4344f1b34018ac78f75a19151ae882e06c5b289d9b1ff57630258c3395199819"
+        },
+        {
+          "name": "firstExitRootLeaves_selected_eq_of_prod_eq",
+          "kind": "theorem",
+          "private": false,
+          "line": 127,
+          "complete_header": "theorem firstExitRootLeaves_selected_eq_of_prod_eq\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (huniverse : carrier.Nodup)\n    (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    (leaf₁ leaf₂ : FirstExitLeaf ℕ)\n    (hleaf₁ : leaf₁ ∈ firstExitRootLeaves retained h carrier)\n    (hleaf₂ : leaf₂ ∈ firstExitRootLeaves retained h carrier)\n    (hprod : leaf₁.selected.prod = leaf₂.selected.prod) :\n    leaf₁.selected = leaf₂.selected",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitRootLeaves_selected_eq_of_prod_eq\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (huniverse : carrier.Nodup)\n    (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    (leaf₁ leaf₂ : FirstExitLeaf ℕ)\n    (hleaf₁ : leaf₁ ∈ firstExitRootLeaves retained h carrier)\n    (hleaf₂ : leaf₂ ∈ firstExitRootLeaves retained h carrier)\n    (hprod : leaf₁.selected.prod = leaf₂.selected.prod) :\n    leaf₁.selected = leaf₂.selected := by\n  have hsub₁ : leaf₁.selected.reverse <+ carrier :=\n    mem_firstExitRootLeaves_selected_reverse_sublist\n      retained h carrier leaf₁ hleaf₁\n  have hsub₂ : leaf₂.selected.reverse <+ carrier :=\n    mem_firstExitRootLeaves_selected_reverse_sublist\n      retained h carrier leaf₂ hleaf₂\n  have hprime₁ : ∀ p ∈ leaf₁.selected.reverse, _root_.Prime p := by\n    intro p hp\n    exact Nat.prime_iff.mp (hprime p (hsub₁.subset hp))\n  have hprime₂ : ∀ p ∈ leaf₂.selected.reverse, _root_.Prime p := by\n    intro p hp\n    exact Nat.prime_iff.mp (hprime p (hsub₂.subset hp))\n  have hprodReverse :\n      leaf₁.selected.reverse.prod = leaf₂.selected.reverse.prod := by\n    simpa only [List.prod_reverse] using hprod\n  have hperm : leaf₁.selected.reverse ~ leaf₂.selected.reverse :=\n    perm_of_prod_eq_prod hprodReverse hprime₁ hprime₂\n  have hreverseEq : leaf₁.selected.reverse = leaf₂.selected.reverse :=\n    (huniverse.perm_iff_eq_of_sublist hsub₁ hsub₂).1 hperm\n  exact List.reverse_injective hreverseEq",
+          "full_source_sha256": "8757ebc3f59022abf165012717ef9b7474d74ad01950e5ca1f37dbf8c9766698"
+        },
+        {
+          "name": "firstExitRootLeaves_eq_of_selected_prod_eq",
+          "kind": "theorem",
+          "private": false,
+          "line": 157,
+          "complete_header": "theorem firstExitRootLeaves_eq_of_selected_prod_eq\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (huniverse : carrier.Nodup)\n    (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    (leaf₁ leaf₂ : FirstExitLeaf ℕ)\n    (hleaf₁ : leaf₁ ∈ firstExitRootLeaves retained h carrier)\n    (hleaf₂ : leaf₂ ∈ firstExitRootLeaves retained h carrier)\n    (hprod : leaf₁.selected.prod = leaf₂.selected.prod) :\n    leaf₁ = leaf₂",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitRootLeaves_eq_of_selected_prod_eq\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (huniverse : carrier.Nodup)\n    (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    (leaf₁ leaf₂ : FirstExitLeaf ℕ)\n    (hleaf₁ : leaf₁ ∈ firstExitRootLeaves retained h carrier)\n    (hleaf₂ : leaf₂ ∈ firstExitRootLeaves retained h carrier)\n    (hprod : leaf₁.selected.prod = leaf₂.selected.prod) :\n    leaf₁ = leaf₂ := by\n  have hselected : leaf₁.selected = leaf₂.selected :=\n    firstExitRootLeaves_selected_eq_of_prod_eq\n      retained h carrier huniverse hprime leaf₁ leaf₂ hleaf₁ hleaf₂ hprod\n  have hpositive : leaf₁.positive = leaf₂.positive := by\n    rw [mem_firstExitRootLeaves_positive_eq_evenListLength\n        retained h carrier leaf₁ hleaf₁,\n      mem_firstExitRootLeaves_positive_eq_evenListLength\n        retained h carrier leaf₂ hleaf₂,\n      hselected]\n  have hmass : leaf₁.mass = leaf₂.mass := by\n    rw [mem_firstExitRootLeaves_mass_eq_selected_prod\n        retained h carrier leaf₁ hleaf₁,\n      mem_firstExitRootLeaves_mass_eq_selected_prod\n        retained h carrier leaf₂ hleaf₂,\n      hselected]\n  exact FirstExitLeaf.ext hselected hpositive hmass",
+          "full_source_sha256": "5265665293fa0c33c25f0aecc83c7ba34602db0f9c34c54e43451dbc31914d3d"
+        },
+        {
+          "name": "firstExitRootLeaves_selectedProd_injOn",
+          "kind": "theorem",
+          "private": false,
+          "line": 183,
+          "complete_header": "theorem firstExitRootLeaves_selectedProd_injOn\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (huniverse : carrier.Nodup)\n    (hprime : ∀ p ∈ carrier, Nat.Prime p) :\n    Set.InjOn (fun leaf : FirstExitLeaf ℕ => leaf.selected.prod)\n      {leaf | leaf ∈ firstExitRootLeaves retained h carrier}",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitRootLeaves_selectedProd_injOn\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (huniverse : carrier.Nodup)\n    (hprime : ∀ p ∈ carrier, Nat.Prime p) :\n    Set.InjOn (fun leaf : FirstExitLeaf ℕ => leaf.selected.prod)\n      {leaf | leaf ∈ firstExitRootLeaves retained h carrier} := by\n  intro leaf₁ hleaf₁ leaf₂ hleaf₂ hprod\n  exact firstExitRootLeaves_eq_of_selected_prod_eq\n    retained h carrier huniverse hprime leaf₁ leaf₂ hleaf₁ hleaf₂ hprod",
+          "full_source_sha256": "8e291fd761d50a212c0e09a35f980b63fd43633f10b9ba10b0152f90a996d02c"
+        },
+        {
+          "name": "mem_firstExitRootLeaves_value_eq_signed_selected_prod",
+          "kind": "theorem",
+          "private": false,
+          "line": 193,
+          "complete_header": "theorem mem_firstExitRootLeaves_value_eq_signed_selected_prod\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (leaf : FirstExitLeaf α)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    leaf.value = signedTreeCoefficient (evenListLength leaf.selected)\n      (leaf.selected.map h).prod",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitRootLeaves_value_eq_signed_selected_prod\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (leaf : FirstExitLeaf α)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    leaf.value = signedTreeCoefficient (evenListLength leaf.selected)\n      (leaf.selected.map h).prod := by\n  unfold FirstExitLeaf.value\n  rw [mem_firstExitRootLeaves_positive_eq_evenListLength\n      retained h carrier leaf hleaf,\n    mem_firstExitRootLeaves_mass_eq_selected_prod\n      retained h carrier leaf hleaf]",
+          "full_source_sha256": "95152fdce83007ff5534d6bd431a782d29bf481cda5093741f8b53eaac248b64"
+        },
+        {
+          "name": "mem_firstExitRootLeaves_value_eq_moebius_mul_selected_prod",
+          "kind": "theorem",
+          "private": false,
+          "line": 205,
+          "complete_header": "theorem mem_firstExitRootLeaves_value_eq_moebius_mul_selected_prod\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (huniverse : carrier.Nodup)\n    (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    leaf.value =\n      (ArithmeticFunction.moebius leaf.selected.prod : ℝ) *\n        (leaf.selected.map h).prod",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitRootLeaves_value_eq_moebius_mul_selected_prod\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (huniverse : carrier.Nodup)\n    (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    (leaf : FirstExitLeaf ℕ)\n    (hleaf : leaf ∈ firstExitRootLeaves retained h carrier) :\n    leaf.value =\n      (ArithmeticFunction.moebius leaf.selected.prod : ℝ) *\n        (leaf.selected.map h).prod := by\n  calc\n    leaf.value = signedTreeCoefficient (evenListLength leaf.selected)\n        (leaf.selected.map h).prod :=\n      mem_firstExitRootLeaves_value_eq_signed_selected_prod\n        retained h carrier leaf hleaf\n    _ = (-1 : ℝ) ^ leaf.selected.length *\n        (leaf.selected.map h).prod :=\n      signedTreeCoefficient_evenListLength_eq_negOnePow\n        leaf.selected (leaf.selected.map h).prod\n    _ = (ArithmeticFunction.moebius leaf.selected.prod : ℝ) *\n        (leaf.selected.map h).prod := by\n      rw [mem_firstExitRootLeaves_moebius_selectedProd\n        retained h carrier huniverse hprime leaf hleaf]\n      simp only [Int.cast_pow, Int.cast_neg, Int.cast_one]",
+          "full_source_sha256": "3b52a61f57bfb52aaa48170c125b74d988a5f7f0bcd81c6153d332801d8c0412"
+        },
+        {
+          "name": "firstExitRetainedModuli",
+          "kind": "def",
+          "private": false,
+          "line": 230,
+          "complete_header": "def firstExitRetainedModuli (retained : Bool → List ℕ → Bool)\n    (carrier : List ℕ) : Finset ℕ",
+          "body_delimiter": "assignment",
+          "proof_style": "assignment",
+          "complete_definition": "def firstExitRetainedModuli (retained : Bool → List ℕ → Bool)\n    (carrier : List ℕ) : Finset ℕ :=\n  ((firstExitRootLeaves retained (fun _ => 1) carrier).map\n    fun leaf => leaf.selected.prod).toFinset",
+          "full_source": "def firstExitRetainedModuli (retained : Bool → List ℕ → Bool)\n    (carrier : List ℕ) : Finset ℕ :=\n  ((firstExitRootLeaves retained (fun _ => 1) carrier).map\n    fun leaf => leaf.selected.prod).toFinset",
+          "full_source_sha256": "6817ca371a8c1b6ddb1b395638b58a9353d104d3fc00e5190fca7543e7b65ce8"
+        },
+        {
+          "name": "firstExitRetainedModuli_eq",
+          "kind": "theorem",
+          "private": false,
+          "line": 236,
+          "complete_header": "theorem firstExitRetainedModuli_eq (retained : Bool → List ℕ → Bool)\n    (h : ℕ → ℝ) (carrier : List ℕ) :\n    firstExitRetainedModuli retained carrier =\n      ((firstExitRootLeaves retained h carrier).map\n        fun leaf => leaf.selected.prod).toFinset",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitRetainedModuli_eq (retained : Bool → List ℕ → Bool)\n    (h : ℕ → ℝ) (carrier : List ℕ) :\n    firstExitRetainedModuli retained carrier =\n      ((firstExitRootLeaves retained h carrier).map\n        fun leaf => leaf.selected.prod).toFinset := by\n  have htop := congrArg (fun xs : List (List ℕ) => (xs.map List.prod).toFinset)\n    (firstExitRetainedLeaves_selected_independent retained (fun _ => 1) h\n      [] carrier true 1 1)\n  simpa only [List.map_map, Function.comp_def, firstExitRetainedModuli,\n    firstExitRootLeaves] using htop",
+          "full_source_sha256": "1bdbdf53265dda051b1a7a6d1d3e3493f54551e286295c0e158e9b1602be64ba"
+        },
+        {
+          "name": "mem_firstExitRetainedModuli",
+          "kind": "theorem",
+          "private": false,
+          "line": 247,
+          "complete_header": "@[simp] theorem mem_firstExitRetainedModuli\n    (retained : Bool → List ℕ → Bool) (carrier : List ℕ) (d : ℕ) :\n    d ∈ firstExitRetainedModuli retained carrier ↔\n      ∃ leaf ∈ firstExitRootLeaves retained (fun _ => 1) carrier,\n        leaf.selected.prod = d",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "@[simp] theorem mem_firstExitRetainedModuli\n    (retained : Bool → List ℕ → Bool) (carrier : List ℕ) (d : ℕ) :\n    d ∈ firstExitRetainedModuli retained carrier ↔\n      ∃ leaf ∈ firstExitRootLeaves retained (fun _ => 1) carrier,\n        leaf.selected.prod = d := by\n  simp [firstExitRetainedModuli]",
+          "full_source_sha256": "b39c40cad63fe9a25fceece92c00ef8b34a1f32e8faaf641eb4a8e6b769032ff"
+        },
+        {
+          "name": "firstExitRetainedModuli_squarefree",
+          "kind": "theorem",
+          "private": false,
+          "line": 254,
+          "complete_header": "theorem firstExitRetainedModuli_squarefree\n    (retained : Bool → List ℕ → Bool) (carrier : List ℕ)\n    (hnodup : carrier.Nodup) (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    {d : ℕ} (hd : d ∈ firstExitRetainedModuli retained carrier) : Squarefree d",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitRetainedModuli_squarefree\n    (retained : Bool → List ℕ → Bool) (carrier : List ℕ)\n    (hnodup : carrier.Nodup) (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    {d : ℕ} (hd : d ∈ firstExitRetainedModuli retained carrier) : Squarefree d := by\n  rcases (mem_firstExitRetainedModuli retained carrier d).mp hd with ⟨leaf, hleaf, rfl⟩\n  exact mem_firstExitRootLeaves_selectedProd_squarefree retained (fun _ => 1)\n    carrier hnodup hprime leaf hleaf",
+          "full_source_sha256": "0343a63fcd83735a3a3e639ab8c7aad3e97968ebc7139ef7e804e722bdcc5883"
+        },
+        {
+          "name": "firstExitRetainedModuli_primeFactors_mem",
+          "kind": "theorem",
+          "private": false,
+          "line": 262,
+          "complete_header": "theorem firstExitRetainedModuli_primeFactors_mem\n    (retained : Bool → List ℕ → Bool) (carrier : List ℕ)\n    (hnodup : carrier.Nodup) (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    {d p : ℕ} (hd : d ∈ firstExitRetainedModuli retained carrier)\n    (hp : p ∈ d.primeFactors) : p ∈ carrier",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitRetainedModuli_primeFactors_mem\n    (retained : Bool → List ℕ → Bool) (carrier : List ℕ)\n    (hnodup : carrier.Nodup) (hprime : ∀ p ∈ carrier, Nat.Prime p)\n    {d p : ℕ} (hd : d ∈ firstExitRetainedModuli retained carrier)\n    (hp : p ∈ d.primeFactors) : p ∈ carrier := by\n  rcases (mem_firstExitRetainedModuli retained carrier d).mp hd with ⟨leaf, hleaf, rfl⟩\n  rw [mem_firstExitRootLeaves_primeFactors_selectedProd retained (fun _ => 1)\n    carrier hnodup hprime leaf hleaf] at hp\n  exact (mem_firstExitRootLeaves_selected_reverse_sublist retained (fun _ => 1)\n    carrier leaf hleaf).subset (by simpa using List.mem_toFinset.mp hp)",
+          "full_source_sha256": "2499df90fdab88b84cd6c125f81068e2af2f437e776970df26b5fabb42b7bc0d"
+        },
+        {
+          "name": "firstExitRetainedCoefficient",
+          "kind": "def",
+          "private": false,
+          "line": 274,
+          "complete_header": "def firstExitRetainedCoefficient (retained : Bool → List ℕ → Bool)\n    (carrier : List ℕ) (d : ℕ) : ℤ",
+          "body_delimiter": "assignment",
+          "proof_style": "assignment",
+          "complete_definition": "def firstExitRetainedCoefficient (retained : Bool → List ℕ → Bool)\n    (carrier : List ℕ) (d : ℕ) : ℤ :=\n  if d ∈ firstExitRetainedModuli retained carrier then ArithmeticFunction.moebius d else 0",
+          "full_source": "def firstExitRetainedCoefficient (retained : Bool → List ℕ → Bool)\n    (carrier : List ℕ) (d : ℕ) : ℤ :=\n  if d ∈ firstExitRetainedModuli retained carrier then ArithmeticFunction.moebius d else 0",
+          "full_source_sha256": "4b56bd7ad4b04333958a9b03e7e580c5161fc732c59fc553edb612295dc5375b"
+        },
+        {
+          "name": "firstExitRetainedCoefficient_abs_le_one",
+          "kind": "theorem",
+          "private": false,
+          "line": 278,
+          "complete_header": "theorem firstExitRetainedCoefficient_abs_le_one\n    (retained : Bool → List ℕ → Bool) (carrier : List ℕ) (d : ℕ) :\n    |firstExitRetainedCoefficient retained carrier d| ≤ 1",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitRetainedCoefficient_abs_le_one\n    (retained : Bool → List ℕ → Bool) (carrier : List ℕ) (d : ℕ) :\n    |firstExitRetainedCoefficient retained carrier d| ≤ 1 := by\n  unfold firstExitRetainedCoefficient\n  split\n  · exact ArithmeticFunction.abs_moebius_le_one\n  · norm_num",
+          "full_source_sha256": "c70f17854e5db8b52ada8ed9f6133e382fc14d487ec677d886551434bd445882"
+        },
+        {
+          "name": "firstExitRootLeaves_selectedProd_map_nodup",
+          "kind": "theorem",
+          "private": false,
+          "line": 287,
+          "complete_header": "theorem firstExitRootLeaves_selectedProd_map_nodup\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (hnodup : carrier.Nodup) (hprime : ∀ p ∈ carrier, Nat.Prime p) :\n    ((firstExitRootLeaves retained h carrier).map fun leaf => leaf.selected.prod).Nodup",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitRootLeaves_selectedProd_map_nodup\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (hnodup : carrier.Nodup) (hprime : ∀ p ∈ carrier, Nat.Prime p) :\n    ((firstExitRootLeaves retained h carrier).map fun leaf => leaf.selected.prod).Nodup := by\n  refine (List.nodup_map_iff_inj_on (firstExitRootLeaves_nodup retained h carrier hnodup)).2 ?_\n  intro leaf₁ hleaf₁ leaf₂ hleaf₂ hprod\n  exact firstExitRootLeaves_eq_of_selected_prod_eq\n    retained h carrier hnodup hprime leaf₁ leaf₂ hleaf₁ hleaf₂ hprod",
+          "full_source_sha256": "fbc759ffe89fd2e365b6a7b720621178188f30b89238b23893aea025ea8fd481"
+        },
+        {
+          "name": "firstExitRetainedPolynomial_eq_retainedModuli_sum",
+          "kind": "theorem",
+          "private": false,
+          "line": 298,
+          "complete_header": "theorem firstExitRetainedPolynomial_eq_retainedModuli_sum\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (hnodup : carrier.Nodup) (hprime : ∀ p ∈ carrier, Nat.Prime p) :\n    firstExitRetainedPolynomial retained h [] true 1 carrier =\n      ∑ d ∈ firstExitRetainedModuli retained carrier,\n        (firstExitRetainedCoefficient retained carrier d : ℝ) *\n          d.primeFactors.prod h",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitRetainedPolynomial_eq_retainedModuli_sum\n    (retained : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (hnodup : carrier.Nodup) (hprime : ∀ p ∈ carrier, Nat.Prime p) :\n    firstExitRetainedPolynomial retained h [] true 1 carrier =\n      ∑ d ∈ firstExitRetainedModuli retained carrier,\n        (firstExitRetainedCoefficient retained carrier d : ℝ) *\n          d.primeFactors.prod h := by\n  rw [firstExitRetainedPolynomial_eq_leaves_sum]\n  let leaves := firstExitRootLeaves retained h carrier\n  let weight : ℕ → ℝ := fun d =>\n    (firstExitRetainedCoefficient retained carrier d : ℝ) * d.primeFactors.prod h\n  have hvalues : leaves.map FirstExitLeaf.value =\n      (leaves.map (fun leaf => leaf.selected.prod)).map weight := by\n    rw [List.map_map]\n    apply List.map_congr_left\n    intro leaf hleaf\n    have hselected := mem_firstExitRootLeaves_selected_nodup retained h carrier\n      hnodup leaf hleaf\n    have hweights : leaf.selected.prod.primeFactors.prod h = (leaf.selected.map h).prod := by\n      rw [mem_firstExitRootLeaves_primeFactors_selectedProd\n        retained h carrier hnodup hprime leaf hleaf]\n      exact List.prod_toFinset h hselected\n    have hmem : leaf.selected.prod ∈ firstExitRetainedModuli retained carrier := by\n      rw [firstExitRetainedModuli_eq retained h carrier]\n      exact List.mem_toFinset.mpr (List.mem_map.mpr ⟨leaf, hleaf, rfl⟩)\n    change leaf.value = (firstExitRetainedCoefficient retained carrier leaf.selected.prod : ℝ) *\n      leaf.selected.prod.primeFactors.prod h\n    rw [firstExitRetainedCoefficient, if_pos hmem, hweights]\n    exact mem_firstExitRootLeaves_value_eq_moebius_mul_selected_prod\n      retained h carrier hnodup hprime leaf hleaf\n  change (leaves.map FirstExitLeaf.value).sum = _\n  rw [hvalues, firstExitRetainedModuli_eq retained h carrier]\n  exact (List.sum_toFinset weight\n    (firstExitRootLeaves_selectedProd_map_nodup retained h carrier hnodup hprime)).symm",
+          "full_source_sha256": "b657fe91a0fa6aeb35e5adaa92430747f80af3d644883c8f6180a07ab3ba995b"
+        }
+      ]
+    },
+    {
+      "module": "ImbalancedChen.FirstExitOwnCubeSplice",
+      "source_sha256": "87ea2fe58bad781139c27b8bad55380c9c81c006990819be4858720e5035ec13",
+      "lines": 175,
+      "declarations": [
+        {
+          "name": "firstExitNextSelectionCandidates",
+          "kind": "def",
+          "private": false,
+          "line": 23,
+          "complete_header": "def firstExitNextSelectionCandidates {α : Type*} (h : α → ℝ)\n    (pre : List α) (positive : Bool) (mass : ℝ) :\n    List α → List (FirstExitDepthState α)",
+          "body_delimiter": "recursive_equations",
+          "proof_style": "recursive_equations",
+          "complete_definition": "def firstExitNextSelectionCandidates {α : Type*} (h : α → ℝ)\n    (pre : List α) (positive : Bool) (mass : ℝ) :\n    List α → List (FirstExitDepthState α)\n  | [] => []\n  | q :: qs =>\n      {selectedPrefix := q :: pre, positive := !positive,\n        mass := mass * h q, remaining := qs} ::\n      firstExitNextSelectionCandidates h pre positive mass qs",
+          "full_source": "def firstExitNextSelectionCandidates {α : Type*} (h : α → ℝ)\n    (pre : List α) (positive : Bool) (mass : ℝ) :\n    List α → List (FirstExitDepthState α)\n  | [] => []\n  | q :: qs =>\n      {selectedPrefix := q :: pre, positive := !positive,\n        mass := mass * h q, remaining := qs} ::\n      firstExitNextSelectionCandidates h pre positive mass qs",
+          "full_source_sha256": "92c318e84da1af8280f0b6aa92443e7b12cbc31fd0f1732e5e09784fa955799d"
+        },
+        {
+          "name": "firstExitNextSelectionCandidates_selected_length",
+          "kind": "theorem",
+          "private": false,
+          "line": 34,
+          "complete_header": "theorem firstExitNextSelectionCandidates_selected_length\n    {α : Type*} (h : α → ℝ) (pre remaining : List α)\n    (positive : Bool) (mass : ℝ) (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitNextSelectionCandidates h pre positive mass remaining) :\n    state.selectedPrefix.length = pre.length + 1",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitNextSelectionCandidates_selected_length\n    {α : Type*} (h : α → ℝ) (pre remaining : List α)\n    (positive : Bool) (mass : ℝ) (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitNextSelectionCandidates h pre positive mass remaining) :\n    state.selectedPrefix.length = pre.length + 1 := by\n  induction remaining with\n  | nil => simp [firstExitNextSelectionCandidates] at hstate\n  | cons q qs ih =>\n      simp only [firstExitNextSelectionCandidates, List.mem_cons] at hstate\n      rcases hstate with hfirst | hlater\n      · subst state\n        rfl\n      · exact ih hlater",
+          "full_source_sha256": "10beff9cc3b4b2e378782557992709846d6fe2364e4593acd0ba764d887f8ff1"
+        },
+        {
+          "name": "firstExitRetainedPolynomial_eq_skipAll_add_nextSelections",
+          "kind": "theorem",
+          "private": false,
+          "line": 50,
+          "complete_header": "theorem firstExitRetainedPolynomial_eq_skipAll_add_nextSelections\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial retained h pre positive mass remaining =\n      signedTreeCoefficient positive mass +\n        ((firstExitNextSelectionCandidates h pre positive mass remaining).map\n          (fun state => if retained state.positive state.selectedPrefix = true then\n            firstExitRetainedPolynomial retained h state.selectedPrefix state.positive\n              state.mass state.remaining else 0)).sum",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitRetainedPolynomial_eq_skipAll_add_nextSelections\n    {α : Type*} (retained : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial retained h pre positive mass remaining =\n      signedTreeCoefficient positive mass +\n        ((firstExitNextSelectionCandidates h pre positive mass remaining).map\n          (fun state => if retained state.positive state.selectedPrefix = true then\n            firstExitRetainedPolynomial retained h state.selectedPrefix state.positive\n              state.mass state.remaining else 0)).sum := by\n  induction remaining with\n  | nil => simp [firstExitRetainedPolynomial, firstExitNextSelectionCandidates]\n  | cons q qs ih =>\n      simp only [firstExitRetainedPolynomial, firstExitNextSelectionCandidates,\n        List.map_cons, List.sum_cons]\n      rw [ih]\n      ring",
+          "full_source_sha256": "625387e04a25de61405089e4cb80ad53fcb5347fcb99d6c31898540b5fd2278b"
+        },
+        {
+          "name": "firstExitRetainedPolynomial_sub_eq_nextSelection_sum",
+          "kind": "theorem",
+          "private": false,
+          "line": 69,
+          "complete_header": "theorem firstExitRetainedPolynomial_sub_eq_nextSelection_sum\n    {α : Type*} (newPolicy oldPolicy : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial newPolicy h pre positive mass remaining -\n      firstExitRetainedPolynomial oldPolicy h pre positive mass remaining =\n        ((firstExitNextSelectionCandidates h pre positive mass remaining).map\n          (fun state =>\n            (if newPolicy state.positive state.selectedPrefix = true then\n              firstExitRetainedPolynomial newPolicy h state.selectedPrefix state.positive\n                state.mass state.remaining else 0) -\n            (if oldPolicy state.positive state.selectedPrefix = true then\n              firstExitRetainedPolynomial oldPolicy h state.selectedPrefix state.positive\n                state.mass state.remaining else 0))).sum",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitRetainedPolynomial_sub_eq_nextSelection_sum\n    {α : Type*} (newPolicy oldPolicy : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial newPolicy h pre positive mass remaining -\n      firstExitRetainedPolynomial oldPolicy h pre positive mass remaining =\n        ((firstExitNextSelectionCandidates h pre positive mass remaining).map\n          (fun state =>\n            (if newPolicy state.positive state.selectedPrefix = true then\n              firstExitRetainedPolynomial newPolicy h state.selectedPrefix state.positive\n                state.mass state.remaining else 0) -\n            (if oldPolicy state.positive state.selectedPrefix = true then\n              firstExitRetainedPolynomial oldPolicy h state.selectedPrefix state.positive\n                state.mass state.remaining else 0))).sum := by\n  have hsum (states : List (FirstExitDepthState α)) :\n      (states.map (fun state => if newPolicy state.positive state.selectedPrefix = true then\n        firstExitRetainedPolynomial newPolicy h state.selectedPrefix state.positive\n          state.mass state.remaining else 0)).sum -\n      (states.map (fun state => if oldPolicy state.positive state.selectedPrefix = true then\n        firstExitRetainedPolynomial oldPolicy h state.selectedPrefix state.positive\n          state.mass state.remaining else 0)).sum =\n      (states.map (fun state =>\n        (if newPolicy state.positive state.selectedPrefix = true then\n          firstExitRetainedPolynomial newPolicy h state.selectedPrefix state.positive\n            state.mass state.remaining else 0) -\n        (if oldPolicy state.positive state.selectedPrefix = true then\n          firstExitRetainedPolynomial oldPolicy h state.selectedPrefix state.positive\n            state.mass state.remaining else 0))).sum := by\n    induction states with\n    | nil => simp\n    | cons state states ih =>\n        simp only [List.map_cons, List.sum_cons]\n        rw [← ih]\n        ring\n  rw [firstExitRetainedPolynomial_eq_skipAll_add_nextSelections,\n    firstExitRetainedPolynomial_eq_skipAll_add_nextSelections,\n    add_sub_add_left_eq_sub]\n  exact hsum _",
+          "full_source_sha256": "a6f0415cb1dcbc805f95b9f16488044b48619d33021c119a40a6093f5a64d560"
+        },
+        {
+          "name": "firstExitRetainedPolynomial_depthSplice_sub_eq_nextSelection_sum",
+          "kind": "theorem",
+          "private": false,
+          "line": 111,
+          "complete_header": "theorem firstExitRetainedPolynomial_depthSplice_sub_eq_nextSelection_sum\n    {α : Type*} (r : ℕ) (parent newPolicy oldPolicy : Bool → List α → Bool)\n    (h : α → ℝ) (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent newPolicy)\n        h pre positive mass remaining -\n      firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent oldPolicy)\n        h pre positive mass remaining =\n      ((firstExitDepthFrontier r parent h pre positive mass remaining).map\n        (fun frontier =>\n          ((firstExitNextSelectionCandidates h frontier.selectedPrefix\n            frontier.positive frontier.mass frontier.remaining).map\n              (fun candidate =>\n                (if newPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial newPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0) -\n                (if oldPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial oldPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0))).sum)).sum",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitRetainedPolynomial_depthSplice_sub_eq_nextSelection_sum\n    {α : Type*} (r : ℕ) (parent newPolicy oldPolicy : Bool → List α → Bool)\n    (h : α → ℝ) (pre remaining : List α) (positive : Bool) (mass : ℝ) :\n    firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent newPolicy)\n        h pre positive mass remaining -\n      firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent oldPolicy)\n        h pre positive mass remaining =\n      ((firstExitDepthFrontier r parent h pre positive mass remaining).map\n        (fun frontier =>\n          ((firstExitNextSelectionCandidates h frontier.selectedPrefix\n            frontier.positive frontier.mass frontier.remaining).map\n              (fun candidate =>\n                (if newPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial newPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0) -\n                (if oldPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial oldPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0))).sum)).sum := by\n  have hsum (states : List (FirstExitDepthState α)) :\n      (states.map (fun state => firstExitRetainedPolynomial newPolicy h state.selectedPrefix\n        state.positive state.mass state.remaining)).sum -\n      (states.map (fun state => firstExitRetainedPolynomial oldPolicy h state.selectedPrefix\n        state.positive state.mass state.remaining)).sum =\n      (states.map (fun state => firstExitRetainedPolynomial newPolicy h state.selectedPrefix\n        state.positive state.mass state.remaining -\n          firstExitRetainedPolynomial oldPolicy h state.selectedPrefix\n            state.positive state.mass state.remaining)).sum := by\n    induction states with\n    | nil => simp\n    | cons state states ih =>\n        simp only [List.map_cons, List.sum_cons]\n        rw [← ih]\n        ring\n  rw [firstExitRetainedPolynomial_depthSplice_eq_terminal_add_frontier,\n    firstExitRetainedPolynomial_depthSplice_eq_terminal_add_frontier,\n    add_sub_add_left_eq_sub, hsum]\n  simp_rw [firstExitRetainedPolynomial_sub_eq_nextSelection_sum]",
+          "full_source_sha256": "7cd98d156d6202b5cf58fc4ec4afafc6e42ed3af4dabed3dc8d4278abd11ddbc"
+        },
+        {
+          "name": "firstExitRetainedPolynomial_ownCubeSplice_root_sub_eq",
+          "kind": "theorem",
+          "private": false,
+          "line": 152,
+          "complete_header": "theorem firstExitRetainedPolynomial_ownCubeSplice_root_sub_eq\n    {α : Type*} (r : ℕ) (parent newPolicy oldPolicy : Bool → List α → Bool)\n    (h : α → ℝ) (carrier : List α) :\n    firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent newPolicy)\n        h [] true 1 carrier -\n      firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent oldPolicy)\n        h [] true 1 carrier =\n      ((firstExitDepthFrontier r parent h [] true 1 carrier).map\n        (fun frontier =>\n          ((firstExitNextSelectionCandidates h frontier.selectedPrefix\n            frontier.positive frontier.mass frontier.remaining).map\n              (fun candidate =>\n                (if newPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial newPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0) -\n                (if oldPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial oldPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0))).sum)).sum",
+          "body_delimiter": "assignment",
+          "proof_style": "direct_term",
+          "complete_definition": null,
+          "full_source": "theorem firstExitRetainedPolynomial_ownCubeSplice_root_sub_eq\n    {α : Type*} (r : ℕ) (parent newPolicy oldPolicy : Bool → List α → Bool)\n    (h : α → ℝ) (carrier : List α) :\n    firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent newPolicy)\n        h [] true 1 carrier -\n      firstExitRetainedPolynomial (firstExitDepthSplicePolicy r parent oldPolicy)\n        h [] true 1 carrier =\n      ((firstExitDepthFrontier r parent h [] true 1 carrier).map\n        (fun frontier =>\n          ((firstExitNextSelectionCandidates h frontier.selectedPrefix\n            frontier.positive frontier.mass frontier.remaining).map\n              (fun candidate =>\n                (if newPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial newPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0) -\n                (if oldPolicy candidate.positive candidate.selectedPrefix = true then\n                  firstExitRetainedPolynomial oldPolicy h candidate.selectedPrefix\n                    candidate.positive candidate.mass candidate.remaining else 0))).sum)).sum :=\n  firstExitRetainedPolynomial_depthSplice_sub_eq_nextSelection_sum\n    r parent newPolicy oldPolicy h [] carrier true 1",
+          "full_source_sha256": "72c5dd3f05e96a3fc18a511205d1b9dcebba178e658a1b06bfc0da04138acb83"
+        }
+      ]
+    },
+    {
+      "module": "ImbalancedChen.FirstExitFrontierInvariants",
+      "source_sha256": "44ad360ca47574571eeb514613a0328069b98aa424eb7d2383fa76dd6f7da153",
+      "lines": 242,
+      "declarations": [
+        {
+          "name": "firstExitDepthFrontier_of_rank_le_length",
+          "kind": "theorem",
+          "private": false,
+          "line": 21,
+          "complete_header": "theorem firstExitDepthFrontier_of_rank_le_length\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ)\n    (hk : k ≤ pre.length) :\n    firstExitDepthFrontier k parent h pre positive mass remaining =\n      [{selectedPrefix := pre, positive := positive, mass := mass, remaining := remaining}]",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitDepthFrontier_of_rank_le_length\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ)\n    (hk : k ≤ pre.length) :\n    firstExitDepthFrontier k parent h pre positive mass remaining =\n      [{selectedPrefix := pre, positive := positive, mass := mass, remaining := remaining}] := by\n  cases remaining <;> simp [firstExitDepthFrontier, hk]",
+          "full_source_sha256": "87c3f53ee08ae4bd1bd6e563227659661bec392aa1fdeddef736c2633a4ea2b7"
+        },
+        {
+          "name": "firstExitDepthFrontier_toLeaf_mem",
+          "kind": "theorem",
+          "private": false,
+          "line": 31,
+          "complete_header": "theorem firstExitDepthFrontier_toLeaf_mem\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ)\n    (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitDepthFrontier k parent h pre positive mass remaining) :\n    ({selected := state.selectedPrefix, positive := state.positive, mass := state.mass} :\n      FirstExitLeaf α) ∈ firstExitRetainedLeaves parent h pre positive mass remaining",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitDepthFrontier_toLeaf_mem\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ)\n    (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitDepthFrontier k parent h pre positive mass remaining) :\n    ({selected := state.selectedPrefix, positive := state.positive, mass := state.mass} :\n      FirstExitLeaf α) ∈ firstExitRetainedLeaves parent h pre positive mass remaining := by\n  induction remaining generalizing pre positive mass with\n  | nil =>\n      by_cases hk : k ≤ pre.length\n      · simp only [firstExitDepthFrontier, if_pos hk, List.mem_singleton] at hstate\n        subst state\n        exact firstExitRetainedLeaves_skipAll_mem parent h pre [] positive mass\n      · simp [firstExitDepthFrontier, hk] at hstate\n  | cons p ps ih =>\n      by_cases hk : k ≤ pre.length\n      · rw [firstExitDepthFrontier_of_rank_le_length k parent h pre (p :: ps)\n          positive mass hk, List.mem_singleton] at hstate\n        subst state\n        exact firstExitRetainedLeaves_skipAll_mem parent h pre (p :: ps) positive mass\n      · by_cases hr : parent (!positive) (p :: pre) = true\n        · rw [firstExitDepthFrontier, if_neg hk, if_pos hr, List.mem_append] at hstate\n          rw [firstExitRetainedLeaves, if_pos hr, List.mem_append]\n          rcases hstate with hskip | hselect\n          · exact Or.inl (ih pre positive mass hskip)\n          · exact Or.inr (ih (p :: pre) (!positive) (mass * h p) hselect)\n        · rw [firstExitDepthFrontier, if_neg hk, if_neg hr, List.append_nil] at hstate\n          rw [firstExitRetainedLeaves, if_neg hr, List.append_nil]\n          exact ih pre positive mass hstate",
+          "full_source_sha256": "fad6a5b5ad9461862b2d14c2067f5eb28caf3ccb8935905e39be8eafd127da3b"
+        },
+        {
+          "name": "firstExitDepthFrontier_selected_remaining_sublist",
+          "kind": "theorem",
+          "private": false,
+          "line": 63,
+          "complete_header": "theorem firstExitDepthFrontier_selected_remaining_sublist\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ)\n    (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitDepthFrontier k parent h pre positive mass remaining) :\n    state.selectedPrefix.reverse ++ state.remaining <+ pre.reverse ++ remaining",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitDepthFrontier_selected_remaining_sublist\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ)\n    (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitDepthFrontier k parent h pre positive mass remaining) :\n    state.selectedPrefix.reverse ++ state.remaining <+ pre.reverse ++ remaining := by\n  induction remaining generalizing pre positive mass with\n  | nil =>\n      by_cases hk : k ≤ pre.length\n      · simp only [firstExitDepthFrontier, if_pos hk, List.mem_singleton] at hstate\n        subst state\n        exact List.Sublist.refl _\n      · simp [firstExitDepthFrontier, hk] at hstate\n  | cons p ps ih =>\n      by_cases hk : k ≤ pre.length\n      · rw [firstExitDepthFrontier_of_rank_le_length k parent h pre (p :: ps)\n          positive mass hk, List.mem_singleton] at hstate\n        subst state\n        exact List.Sublist.refl _\n      · have hskip (hs : state ∈ firstExitDepthFrontier k parent h pre positive mass ps) :\n            state.selectedPrefix.reverse ++ state.remaining <+ pre.reverse ++ p :: ps :=\n          (ih pre positive mass hs).trans\n            ((List.Sublist.refl _).append (List.sublist_cons_self p ps))\n        by_cases hr : parent (!positive) (p :: pre) = true\n        · rw [firstExitDepthFrontier, if_neg hk, if_pos hr, List.mem_append] at hstate\n          rcases hstate with hs | hs\n          · exact hskip hs\n          · simpa [List.reverse_cons, List.append_assoc] using\n              ih (p :: pre) (!positive) (mass * h p) hs\n        · rw [firstExitDepthFrontier, if_neg hk, if_neg hr, List.append_nil] at hstate\n          exact hskip hstate",
+          "full_source_sha256": "4a4e967d90819dde3b5126723e2dddb4f7b07f7c7be7557a648825c5d4c93d0d"
+        },
+        {
+          "name": "firstExitDepthFrontier_exists_last_selection",
+          "kind": "theorem",
+          "private": false,
+          "line": 97,
+          "complete_header": "theorem firstExitDepthFrontier_exists_last_selection\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ)\n    (hpre : pre.length < k) (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitDepthFrontier k parent h pre positive mass remaining) :\n    ∃ before q tail, remaining = before ++ q :: state.remaining ∧\n      state.selectedPrefix = q :: tail",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem firstExitDepthFrontier_exists_last_selection\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (pre remaining : List α) (positive : Bool) (mass : ℝ)\n    (hpre : pre.length < k) (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitDepthFrontier k parent h pre positive mass remaining) :\n    ∃ before q tail, remaining = before ++ q :: state.remaining ∧\n      state.selectedPrefix = q :: tail := by\n  induction remaining generalizing pre positive mass with\n  | nil => simp [firstExitDepthFrontier, Nat.not_le_of_gt hpre] at hstate\n  | cons p ps ih =>\n      have hk : ¬k ≤ pre.length := Nat.not_le_of_gt hpre\n      have hskip (hs : state ∈ firstExitDepthFrontier k parent h pre positive mass ps) :\n          ∃ before q tail, p :: ps = before ++ q :: state.remaining ∧\n            state.selectedPrefix = q :: tail := by\n        obtain ⟨before, q, tail, hrem, hsel⟩ := ih pre positive mass hpre hs\n        exact ⟨p :: before, q, tail, by simp [hrem], hsel⟩\n      by_cases hr : parent (!positive) (p :: pre) = true\n      · rw [firstExitDepthFrontier, if_neg hk, if_pos hr, List.mem_append] at hstate\n        rcases hstate with hs | hs\n        · exact hskip hs\n        · by_cases hnext : k ≤ (p :: pre).length\n          · rw [firstExitDepthFrontier_of_rank_le_length k parent h (p :: pre) ps\n              (!positive) (mass * h p) hnext, List.mem_singleton] at hs\n            subst state\n            exact ⟨[], p, pre, rfl, rfl⟩\n          · obtain ⟨before, q, tail, hrem, hsel⟩ :=\n              ih (p :: pre) (!positive) (mass * h p) (Nat.lt_of_not_ge hnext) hs\n            exact ⟨p :: before, q, tail, by simp [hrem], hsel⟩\n      · rw [firstExitDepthFrontier, if_neg hk, if_neg hr, List.append_nil] at hstate\n        exact hskip hstate",
+          "full_source_sha256": "06d27194816b70dd7ee0376c6e056b347282825c54040a98e3b16baebed1a3fc"
+        },
+        {
+          "name": "mem_firstExitDepthFrontier_mass_eq_selected_prod",
+          "kind": "theorem",
+          "private": false,
+          "line": 128,
+          "complete_header": "theorem mem_firstExitDepthFrontier_mass_eq_selected_prod\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitDepthFrontier k parent h [] true 1 carrier) :\n    state.mass = (state.selectedPrefix.map h).prod",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitDepthFrontier_mass_eq_selected_prod\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitDepthFrontier k parent h [] true 1 carrier) :\n    state.mass = (state.selectedPrefix.map h).prod := by\n  exact firstExitRetainedLeaves_mass_eq_selected_prod parent h [] carrier true 1\n    (by simp) _ (firstExitDepthFrontier_toLeaf_mem k parent h [] carrier true 1 state hstate)",
+          "full_source_sha256": "b971c68d9f1dee944c446c44b9710718715e58f0e5f553eb5375fbb48f61d2a2"
+        },
+        {
+          "name": "mem_firstExitDepthFrontier_positive_eq_evenListLength",
+          "kind": "theorem",
+          "private": false,
+          "line": 136,
+          "complete_header": "theorem mem_firstExitDepthFrontier_positive_eq_evenListLength\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitDepthFrontier k parent h [] true 1 carrier) :\n    state.positive = evenListLength state.selectedPrefix",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitDepthFrontier_positive_eq_evenListLength\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitDepthFrontier k parent h [] true 1 carrier) :\n    state.positive = evenListLength state.selectedPrefix := by\n  exact firstExitRetainedLeaves_positive_eq_evenListLength parent h [] carrier true 1\n    rfl _ (firstExitDepthFrontier_toLeaf_mem k parent h [] carrier true 1 state hstate)",
+          "full_source_sha256": "6d892cbf78ce36faa9814dbaea6d911cc3a2d534609e8f1bb0c3acf9a8f7d960"
+        },
+        {
+          "name": "mem_firstExitDepthFrontier_selected_reverse_sublist",
+          "kind": "theorem",
+          "private": false,
+          "line": 144,
+          "complete_header": "theorem mem_firstExitDepthFrontier_selected_reverse_sublist\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitDepthFrontier k parent h [] true 1 carrier) :\n    state.selectedPrefix.reverse <+ carrier",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitDepthFrontier_selected_reverse_sublist\n    {α : Type*} (k : ℕ) (parent : Bool → List α → Bool) (h : α → ℝ)\n    (carrier : List α) (state : FirstExitDepthState α)\n    (hstate : state ∈ firstExitDepthFrontier k parent h [] true 1 carrier) :\n    state.selectedPrefix.reverse <+ carrier := by\n  simpa using firstExitRetainedLeaves_selected_reverse_sublist parent h [] carrier true 1\n    _ (firstExitDepthFrontier_toLeaf_mem k parent h [] carrier true 1 state hstate)",
+          "full_source_sha256": "cbf1ff9dd5a0d03bc7e98c8be26a7de8c1c0f3c94a6ba7066b5c9a4f7590e154"
+        },
+        {
+          "name": "mem_firstExitDepthFrontier_selected_gt_remaining",
+          "kind": "theorem",
+          "private": false,
+          "line": 154,
+          "complete_header": "theorem mem_firstExitDepthFrontier_selected_gt_remaining\n    (k : ℕ) (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (hcarrier : carrier.Pairwise (· > ·))\n    (state : FirstExitDepthState ℕ)\n    (hstate : state ∈ firstExitDepthFrontier k parent h [] true 1 carrier) :\n    ∀ p ∈ state.selectedPrefix, ∀ q ∈ state.remaining, q < p",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitDepthFrontier_selected_gt_remaining\n    (k : ℕ) (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (hcarrier : carrier.Pairwise (· > ·))\n    (state : FirstExitDepthState ℕ)\n    (hstate : state ∈ firstExitDepthFrontier k parent h [] true 1 carrier) :\n    ∀ p ∈ state.selectedPrefix, ∀ q ∈ state.remaining, q < p := by\n  have hsub : state.selectedPrefix.reverse ++ state.remaining <+ carrier := by\n    simpa using firstExitDepthFrontier_selected_remaining_sublist\n      k parent h [] carrier true 1 state hstate\n  have hpair := List.pairwise_append.mp (hcarrier.sublist hsub)\n  intro p hp q hq\n  exact hpair.2.2 p (by simpa using hp) q hq",
+          "full_source_sha256": "19b821455d5d3c5a5bf99c5faa085e81d7c71aac20c43443ce695fb9cd1be53e"
+        },
+        {
+          "name": "decreasingList_suffix_eq_filter_lt",
+          "kind": "theorem",
+          "private": false,
+          "line": 169,
+          "complete_header": "theorem decreasingList_suffix_eq_filter_lt (before after : List ℕ) (q : ℕ)\n    (hcarrier : (before ++ q :: after).Pairwise (· > ·)) :\n    after = (before ++ q :: after).filter (fun p => p < q)",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem decreasingList_suffix_eq_filter_lt (before after : List ℕ) (q : ℕ)\n    (hcarrier : (before ++ q :: after).Pairwise (· > ·)) :\n    after = (before ++ q :: after).filter (fun p => p < q) := by\n  have hp := List.pairwise_append.mp hcarrier\n  have hbefore : before.filter (fun p => p < q) = [] := by\n    apply List.filter_eq_nil_iff.mpr\n    intro p hpmem\n    have hqp : q < p := hp.2.2 p hpmem q (by simp)\n    simpa using (show ¬p < q by omega)\n  have hafter : after.filter (fun p => p < q) = after := by\n    apply List.filter_eq_self.mpr\n    intro p hpmem\n    exact decide_eq_true ((List.pairwise_cons.mp hp.2.1).1 p hpmem)\n  simp [List.filter_append, hbefore, hafter]",
+          "full_source_sha256": "48b06037c72c625e4593308e9f0bb221649393300821d041990389c5fd7fa6ef"
+        },
+        {
+          "name": "mem_firstExitDepthFrontier_remaining_eq_filter",
+          "kind": "theorem",
+          "private": false,
+          "line": 186,
+          "complete_header": "theorem mem_firstExitDepthFrontier_remaining_eq_filter\n    (k : ℕ) (hk : 0 < k) (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (hcarrier : carrier.Pairwise (· > ·))\n    (state : FirstExitDepthState ℕ)\n    (hstate : state ∈ firstExitDepthFrontier k parent h [] true 1 carrier) :\n    ∃ q tail, state.selectedPrefix = q :: tail ∧ q ∈ carrier ∧\n      state.remaining = carrier.filter (fun p => p < q)",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitDepthFrontier_remaining_eq_filter\n    (k : ℕ) (hk : 0 < k) (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (carrier : List ℕ) (hcarrier : carrier.Pairwise (· > ·))\n    (state : FirstExitDepthState ℕ)\n    (hstate : state ∈ firstExitDepthFrontier k parent h [] true 1 carrier) :\n    ∃ q tail, state.selectedPrefix = q :: tail ∧ q ∈ carrier ∧\n      state.remaining = carrier.filter (fun p => p < q) := by\n  obtain ⟨before, q, tail, hrem, hsel⟩ :=\n    firstExitDepthFrontier_exists_last_selection k parent h [] carrier true 1 hk state hstate\n  refine ⟨q, tail, hsel, ?_, ?_⟩\n  · simp [hrem]\n  · rw [hrem] at hcarrier ⊢\n    exact decreasingList_suffix_eq_filter_lt before state.remaining q hcarrier",
+          "full_source_sha256": "1c027a61c28f2ac4a24a9d3627de8f3598d3fbbe2a6e5007fff6bc0034babd5a"
+        },
+        {
+          "name": "roughPrimeUniverse_filter_lt_eq",
+          "kind": "theorem",
+          "private": false,
+          "line": 202,
+          "complete_header": "theorem roughPrimeUniverse_filter_lt_eq\n    (N cap : ℕ) (w z : ℝ) (q : ℕ) (hq : (q : ℝ) ≤ z) :\n    (roughPrimeUniverse N cap w z).filter (fun p => p < q) =\n      roughPrimeUniverse N cap w (q : ℝ)",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem roughPrimeUniverse_filter_lt_eq\n    (N cap : ℕ) (w z : ℝ) (q : ℕ) (hq : (q : ℝ) ≤ z) :\n    (roughPrimeUniverse N cap w z).filter (fun p => p < q) =\n      roughPrimeUniverse N cap w (q : ℝ) := by\n  classical\n  have hgt := (roughPrimeUniverse_pairwise_gt N cap w z).filter (fun p => p < q)\n  have hset : ((roughPrimeUniverse N cap w z).filter (fun p => p < q)).toFinset =\n      roughPrimeFinset N cap w (q : ℝ) := by\n    ext p\n    simp only [List.mem_toFinset, List.mem_filter, mem_roughPrimeUniverse,\n      decide_eq_true_eq, mem_roughPrimeFinset]\n    constructor\n    · rintro ⟨hp, hpq⟩\n      exact ⟨hp.1, hp.2.1, hp.2.2.1, hp.2.2.2.1, by exact_mod_cast hpq⟩\n    · intro hp\n      exact ⟨⟨hp.1, hp.2.1, hp.2.2.1, hp.2.2.2.1, hp.2.2.2.2.trans_le hq⟩,\n        by exact_mod_cast hp.2.2.2.2⟩\n  unfold roughPrimeUniverse\n  rw [← hset]\n  exact ((List.toFinset_sort (r := (· ≥ ·)) hgt.nodup).mpr\n    (hgt.imp fun h => h.le)).symm",
+          "full_source_sha256": "b23eae96212002de8fe9835aaeab627824d5899eadbe147b57cb1b1e6a9965fd"
+        },
+        {
+          "name": "mem_firstExitDepthFrontier_roughPrime_remaining",
+          "kind": "theorem",
+          "private": false,
+          "line": 226,
+          "complete_header": "theorem mem_firstExitDepthFrontier_roughPrime_remaining\n    (k : ℕ) (hk : 0 < k) (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (N cap : ℕ) (w z : ℝ) (state : FirstExitDepthState ℕ)\n    (hstate : state ∈ firstExitDepthFrontier k parent h [] true 1\n      (roughPrimeUniverse N cap w z)) :\n    ∃ q tail, state.selectedPrefix = q :: tail ∧\n      q ∈ roughPrimeUniverse N cap w z ∧\n      state.remaining = roughPrimeUniverse N cap w (q : ℝ)",
+          "body_delimiter": "assignment",
+          "proof_style": "tactic_by",
+          "complete_definition": null,
+          "full_source": "theorem mem_firstExitDepthFrontier_roughPrime_remaining\n    (k : ℕ) (hk : 0 < k) (parent : Bool → List ℕ → Bool) (h : ℕ → ℝ)\n    (N cap : ℕ) (w z : ℝ) (state : FirstExitDepthState ℕ)\n    (hstate : state ∈ firstExitDepthFrontier k parent h [] true 1\n      (roughPrimeUniverse N cap w z)) :\n    ∃ q tail, state.selectedPrefix = q :: tail ∧\n      q ∈ roughPrimeUniverse N cap w z ∧\n      state.remaining = roughPrimeUniverse N cap w (q : ℝ) := by\n  obtain ⟨q, tail, hsel, hq, hrem⟩ := mem_firstExitDepthFrontier_remaining_eq_filter\n    k hk parent h (roughPrimeUniverse N cap w z)\n    (roughPrimeUniverse_pairwise_gt N cap w z) state hstate\n  exact ⟨q, tail, hsel, hq, hrem.trans\n    (roughPrimeUniverse_filter_lt_eq N cap w z q (mem_roughPrimeUniverse_upper hq).le)⟩",
+          "full_source_sha256": "f46deb3fbf7db1d5d3cd7b22582482184e42078ee435c3bc36f1499c62566c01"
+        }
+      ]
+    }
+  ],
+  "math_assessment": {
+    "ImbalancedChen.SmallRoughDensityError": [
+      "All four proofs read. signAttachedValue splits on the actual sign of c, retaining upper small density for c>=0 and lower for c<0. The ideal error is nonnegative and bounded by |c|*delta.",
+      "The common displayed rough carrier, original signed main density, and absolute rough density as the error multiplier remain exact; no replacement of absolute rough mass by signed rough mass occurs.",
+      "The final physical rho statement only transports the existing cutoff-separated finite main-term identity. Its small-density sandwich is explicit caller data; it proves neither the sandwich nor a bound for delta or absolute rough mass. All four non-analytic hypotheses remain visible in the full header.",
+      "Totient d may be zero under total division in intermediate generic statements; the proofs only use its nonnegative real cast, so they add no silent d>0 premise."
+    ],
+    "ImbalancedChen.ActualPrimePresieveSplit": [
+      "All five proofs read. The prime split keeps the same N and cap, target-prime exclusion, literal real w/z endpoints, and decreasing order. The only split gate is w<=z. The rough side includes p=w and the small side uses p<w, so no boundary is lost or duplicated.",
+      "The cap is never removed: range cap remains on both sides. This also permits truncated caps, non-even N, and arbitrary real cutoffs satisfying the displayed split order.",
+      "The local reciprocal-totient weight is in [0,1] from prime>=2, including prime2 with value1; no even-target shortcut is used.",
+      "The exact product reciprocal-totient identity uses squarefree d, includes d=1 via empty product, and excludes d=0 only through the actual squarefree premise.",
+      "The retained polynomial is reindexed by the same fixed natural modulus support and original signed Mobius coefficient. Its topology and coefficient independence are supplied by finite proved public APIs. No asymptotic density theorem is invoked."
+    ],
+    "ImbalancedChen.FirstExitGenericModuli": [
+      "All24 declarations, three definitions, and21 tactic proofs read, including the inline @[simp] membership theorem missed by an initial no-attribute declaration count.",
+      "firstExitRootLeaves is the actual generic retained recursion at []/true/1; selected reverse sublist, sign parity, and mass are proved from its literal records.",
+      "Primality and Nodup of the original carrier are explicit premises exactly where product squarefreeness, Mobius parity, and product injection are used. No decreasing-prime or parity-only policy restriction is silently added.",
+      "Product equality gives permutation of the two prime lists, then equality from the two literal reverse sublists of the same Nodup carrier. The stored sign and mass follow the same selected list, so equality of records and multiplicity-free modulus reindexing are proved.",
+      "firstExitRetainedModuli fixes the natural product support at unit local weights before evaluation; the imported finite topology independence theorem keeps exactly the same retained policy and selected labels for every h.",
+      "firstExitRetainedCoefficient is exactly Mobius on that fixed support and zero off it; its absolute bound is unconditional. The final finite polynomial identity retains all original leaf signs, weights and supported moduli, using actual injection to remove multiplicity."
+    ],
+    "ImbalancedChen.FirstExitOwnCubeSplice": [
+      "All six declarations read: one full recursive equation definition with both [] and q::qs clauses, four tactic proofs, and one direct proof term.",
+      "Next-selection candidates enumerate every remaining position after arbitrary skips, independent of old and new admissions. Each candidate preserves the actual inherited history, flips its sign once, multiplies its mass by h q once, and stores the literal suffix.",
+      "The skip-all value cancels exactly, while each new and old admission indicator and its own potentially different continuation remain visible. New-admitted/old-rejected branches are retained.",
+      "The own-test difference uses the shared parent rank r frontier and next-selection candidates for rank r+1, never the already-filtered old rank r+1 frontier. Exhausted terminal branches cancel through the existing finite decomposition.",
+      "No sign, ordering, primality, cap, threshold, density or distribution estimate is introduced; the statements hold for arbitrary finite List alpha, real local weights and both policies."
+    ],
+    "ImbalancedChen.FirstExitFrontierInvariants": [
+      "All12 tactic proofs read. At rank already reached the incoming state is retained unchanged; from below rank the recursion produces an actual last selected element and literal following suffix.",
+      "The proof embeds every frontier state as a skip-all retained leaf of the same original parent tree; mass, parity, and reversed selected-sublist invariants follow from proved public finite APIs.",
+      "The joint selected.reverse++remaining sublist is retained, giving strict selected>remaining order only from the explicit original Pairwise(>) premise.",
+      "For a strictly decreasing list the exact suffix is its filter p<q. The actual rough-prime specialization keeps N, cap, lower real cutoff w, target exclusions and strict endpoint q.",
+      "The generic carrier filter lemma has the explicit q<=z gate; the final positive-rank frontier supplies q<z from actual membership. No cap enlargement, q-prime replacement or boundary-null assertion appears."
+    ]
+  },
+  "scope": "ONLY these exact five source hashes. Each individually: runtime must fully read target/report/actually-used public APIs, fresh actual frozen resolver confirms all existing direct and recursive caches exact, missingexternal0, then ONE serial fairM6144/j2/RSS6656 strict first; ifPASS full original-object stock/environment/serialized inventory/all complete elaborated types/safety flags/transitiveaxioms only propext/Classical.choice/Quot.sound. No automatic additional parent, legacy28 bootstrap, newforeign, resource or checker change.",
+  "runtime_readonly_prerequisite": {
+    "path": ".lake\\proof-continuation\\preflights\\20261016-thin-bridge-five-legacy-235427721283.json",
+    "sha256": "6190469dd980b2be7a6ebf29d1c0174a1d89fdaa8d78de49796205408d42a705",
+    "scope": "READ_ONLY actual v1 frozen resolver cache comparison; no compiler, copy, install or old reuse invoked; not full importedclosure",
+    "targets": {
+      "ImbalancedChen.SmallRoughDensityError": {
+        "source_sha256": "95854fdf8ac0e0b47368e71fb6a1fae20178bee004c384b80103f9abe45d40ab",
+        "cache_exists": false,
+        "object_exists": false,
+        "current_exact": false,
+        "direct_parents": {
+          "ImbalancedChen.SmallRoughMainTerm": {
+            "object_sha256": "9364cedb23c8f6a20d4a8440391e3840a2a3b2f45ba95d222f7f8d02dbf3f5d7",
+            "current_exact": true,
+            "source_sha256": "3a3cdd6bc284237634da7744167e280c9ee56dc33555899ed98cc88e7e691b08"
+          }
+        },
+        "unmet_direct": []
+      },
+      "ImbalancedChen.ActualPrimePresieveSplit": {
+        "source_sha256": "dc6170c527cdde252ecdaa00997841522a4aa469adf799eaae4549e1310ced41",
+        "cache_exists": false,
+        "object_exists": false,
+        "current_exact": false,
+        "direct_parents": {
+          "ImbalancedChen.ActualSmallRosserDensity": {
+            "object_sha256": "264654ef8e12a8837120424defd966812a9f98a63c06f8e4ef3d7a1bf2b8d626",
+            "current_exact": true,
+            "source_sha256": "9cfe1beef1a9ef09b88abf3c5593edebafc882e95639c50579cf4dc77b4d5ac8"
+          },
+          "ImbalancedChen.FixedRoughCoefficients": {
+            "object_sha256": "c6425c281cb60e4883f2aeee9890599a07d73c9dcf58bcefc61db77f46f9b723",
+            "current_exact": true,
+            "source_sha256": "24bc451c0234f867cb85539b0d93d37e02c68e6f8d0bf6cf82f081e75e3d892b"
+          }
+        },
+        "unmet_direct": []
+      },
+      "ImbalancedChen.FirstExitGenericModuli": {
+        "source_sha256": "aeb5adad90208c1e09e186c1008529b113c6b0f8b0870fb82d3b8056bee6efaf",
+        "cache_exists": false,
+        "object_exists": false,
+        "current_exact": false,
+        "direct_parents": {
+          "ImbalancedChen.FixedRoughCoefficients": {
+            "object_sha256": "c6425c281cb60e4883f2aeee9890599a07d73c9dcf58bcefc61db77f46f9b723",
+            "current_exact": true,
+            "source_sha256": "24bc451c0234f867cb85539b0d93d37e02c68e6f8d0bf6cf82f081e75e3d892b"
+          },
+          "ImbalancedChen.FirstExitPresieveProjection": {
+            "object_sha256": "e73de4fd2301dfaccf68b84cf18ccd6a4400532fe81479f7162760c34c0543a5",
+            "current_exact": true,
+            "source_sha256": "41a96b9f75048b250e96553a783d4f03350de3d1b17c7dcc5da9aa9028eab694"
+          }
+        },
+        "unmet_direct": []
+      },
+      "ImbalancedChen.FirstExitOwnCubeSplice": {
+        "source_sha256": "87ea2fe58bad781139c27b8bad55380c9c81c006990819be4858720e5035ec13",
+        "cache_exists": false,
+        "object_exists": false,
+        "current_exact": false,
+        "direct_parents": {
+          "ImbalancedChen.FirstExitDepthSplice": {
+            "object_sha256": "866bc0304ce6c0cd308dda8afaa4798d99c470965173ca5268911dac80c6e892",
+            "current_exact": true,
+            "source_sha256": "66803fd4584aa34babb84845e6b84e41417476b2d4499d882d2f61734bd27af6"
+          }
+        },
+        "unmet_direct": []
+      },
+      "ImbalancedChen.FirstExitFrontierInvariants": {
+        "source_sha256": "44ad360ca47574571eeb514613a0328069b98aa424eb7d2383fa76dd6f7da153",
+        "cache_exists": false,
+        "object_exists": false,
+        "current_exact": false,
+        "direct_parents": {
+          "ImbalancedChen.FirstExitDepthSplice": {
+            "object_sha256": "866bc0304ce6c0cd308dda8afaa4798d99c470965173ca5268911dac80c6e892",
+            "current_exact": true,
+            "source_sha256": "66803fd4584aa34babb84845e6b84e41417476b2d4499d882d2f61734bd27af6"
+          },
+          "ImbalancedChen.RoughPrimeUniverse": {
+            "object_sha256": "ea7c5bd6b6be5083610cbb8c69c04e1c97a4e1696b1b86118017e3f42799d9ec",
+            "current_exact": true,
+            "source_sha256": "3d716d89548e2e453e96c598481db2f62ae1c76e7f092a960e490a4b70688e58"
+          }
+        },
+        "unmet_direct": []
+      }
+    },
+    "five_own_cache_objects_missing": true,
+    "all_six_distinct_direct_parents_recursive_current_cache_exact": true,
+    "all_twenty_ancestor_project_sources_current_exact": true,
+    "additional_uncompiled_direct_or_recursive_project_prerequisites": [],
+    "missing_external": [],
+    "distinction": "This binds the actual read-only runtime resolver report only. Existing exact caches are not promoted to new strict/stock/owned acceptance. The five source modules themselves remain uncompiled; only root can grant their five individual concrete gates."
+  },
+  "dependency_boundary": "ActualSmallRosserDensity has previously present foreign fundamental-lemma imports and a separate asymptotic sandwich theorem. These five sources invoke its actualSmallEulerProduct definition only; none invokes the fundamental lemma or that sandwich theorem. SmallRoughDensityError leaves the sandwich and absolute rough density costs explicit. We do not label the entire transitive import environment analysis-free or kernel-axiom-audited.",
+  "next_only_when_owned": "After exact helper prerequisites actually owned, existing3e7 gates separately permit helper6394 then consumer9b68. No analytic main theorem or future descendant acceptance inferred.",
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "not_acceptance": true,
+  "main_theorem_proved": false
+}

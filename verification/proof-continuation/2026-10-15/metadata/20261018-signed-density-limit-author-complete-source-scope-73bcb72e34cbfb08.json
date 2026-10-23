@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "author": "/root/signed_density_oct18",
+  "status": "SOURCE_ONLY_TWO_EXACT_SIGNED_CORRECTION_ENDPOINTS_FROZEN_PENDING_NONAUTHOR_REVIEW_PARENT_ACCEPTANCE_AND_RUNTIME",
+  "root_authorization": "Unique module and two public endpoints authorized explicitly after proposal691ca2d01718450b5ae1d11f02a77dd52685b596a9d2f71cf954cfe167d61c9f; no extra module/source, foreign import, compiler, cache, CI or pin mutation.",
+  "source": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdCompactSignedDensityLimit.lean",
+    "sha256": "26ac1c2f72117fa6a771e9a96d73a940ad9d7dc7ad1c4f7ad4ed87d805b8537c",
+    "bytes": 5684,
+    "lines": 107,
+    "source_declarations": 2,
+    "primitive_definitions": 0,
+    "direct_imports": [
+      "ImbalancedChen.ActualExtendedThirdCompactPolicySaving",
+      "ImbalancedChen.ActualExtendedThirdInitialCutoff"
+    ],
+    "direct_parent_source_hashes": {
+      "ImbalancedChen.ActualExtendedThirdCompactPolicySaving": "199f13bb5c6809b06de5f5b7aad19a0a3de0b2f6e47eb2aa6464d58c49e6e8da",
+      "ImbalancedChen.ActualExtendedThirdInitialCutoff": "69c928f10c84e647febf141fd23d100194ac61f3c7bed86579de99b7bc21259a"
+    },
+    "frozen_for_review": true
+  },
+  "complete_public_types": [
+    {
+      "name": "tendsto_actualExtendedThirdCompactSignedDensityCorrection",
+      "line": 32,
+      "complete_public_type": "theorem tendsto_actualExtendedThirdCompactSignedDensityCorrection {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) :\n    Tendsto (fun N : ℕ =>\n      (reciprocalTotientDensity\n          (fixedRoughSupport (actualExtendedThirdCompactUpperPolicy e h m N false)\n            N N 0 ((N : ℝ) ^ thirdPrefixRho))\n          (fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false)\n            N N 0 ((N : ℝ) ^ thirdPrefixRho)) -\n        actualSmallRosserPlusDensity N N\n          ((N : ℝ) ^ actualExtendedThirdInitialStopExponent e m)\n          ((N : ℝ) ^ (thirdPrefixTheta - 2 * e))) *\n        Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (actualExtendedThirdCompactCellFunctional e h m))"
+    },
+    {
+      "name": "exists_actualExtendedThirdCompactSignedDensityCorrection_approx_ideal",
+      "line": 59,
+      "complete_public_type": "theorem exists_actualExtendedThirdCompactSignedDensityCorrection_approx_ideal\n    {ε : ℝ} (hε : 0 < ε) :\n    ∃ h : ℝ, 0 < h ∧ ∃ e : ℝ, 0 < e ∧ e ≤ 1 / 384 ∧ ∃ m : ℕ,\n      actualExtendedThirdDyadicStep m ≤ e / 2 ∧\n        ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n          |(reciprocalTotientDensity\n              (fixedRoughSupport (actualExtendedThirdCompactUpperPolicy e h m N false)\n                N N 0 ((N : ℝ) ^ thirdPrefixRho))\n              (fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false)\n                N N 0 ((N : ℝ) ^ thirdPrefixRho)) -\n            actualSmallRosserPlusDensity N N\n              ((N : ℝ) ^ actualExtendedThirdInitialStopExponent e m)\n              ((N : ℝ) ^ (thirdPrefixTheta - 2 * e))) *\n            Real.log (N : ℝ) / singularSeries N -\n              actualExtendedThirdIdealFunctional| ≤ ε"
+    }
+  ],
+  "full_source": "import ImbalancedChen.ActualExtendedThirdCompactPolicySaving\nimport ImbalancedChen.ActualExtendedThirdInitialCutoff\n\n/-!\n# The actual signed third-policy correction has its proved integral limit\n\nThe first term is the literal reciprocal-totient sum of the original\nupper policy's signed Mobius coefficient on its actual retained support.\nThe subtracted term is the same initial policy's ordinary plus density at\nits exact floor-grid cutoff. The ambient cap remains N, with w=0 and\nz=N^rho. Its old level is theta-2e; no cube test or arithmetic wall is\nremoved.\n\nThe finite same-policy identity and the original-cap residual limit\nprove convergence. Choosing a positive cutoff, buffer, and fine mesh\nbefore the target gives arbitrary accuracy against the unbuffered third\nfunctional. This does not evaluate the initial baseline, attach a\npositive presieve, pay progression errors, or identify the complete\nfourth/fifth policy or its final numerical constant.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen Set Filter Topology\nopen scoped Classical BigOperators\n\n/-- The original signed coefficient, with its exact initial-policy\nbaseline subtracted, has the actual retained-cell integral as its limit.\nNo arithmetic mean or signed-density estimate is a premise. -/\ntheorem tendsto_actualExtendedThirdCompactSignedDensityCorrection {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) (he0 : 0 < e) (he : e ≤ 1 / 384)\n    (hmesh : actualExtendedThirdDyadicStep m ≤ e / 2) :\n    Tendsto (fun N : ℕ =>\n      (reciprocalTotientDensity\n          (fixedRoughSupport (actualExtendedThirdCompactUpperPolicy e h m N false)\n            N N 0 ((N : ℝ) ^ thirdPrefixRho))\n          (fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false)\n            N N 0 ((N : ℝ) ^ thirdPrefixRho)) -\n        actualSmallRosserPlusDensity N N\n          ((N : ℝ) ^ actualExtendedThirdInitialStopExponent e m)\n          ((N : ℝ) ^ (thirdPrefixTheta - 2 * e))) *\n        Real.log (N : ℝ) / singularSeries N)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (actualExtendedThirdCompactCellFunctional e h m)) := by\n  have hlim := tendsto_actualExtendedThirdCompactResidualDensitySum hh he0.le he m\n  apply hlim.congr'\n  have hlarge : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}, 1 < N :=\n    (eventually_gt_atTop 1).filter_mono inf_le_left\n  filter_upwards [hlarge] with N hN\n  rw [actualExtendedThirdCompactRoughDensity_eq_policy,\n    ← actualExtendedThirdInitialPolicy_eq_actualPlus he0 he hN m]\n  exact actualExtendedThirdCompactPolicySaving hN hh he0 he hmesh\n\n/-- One legal finite policy is fixed before N. Its literal normalized\nsigned correction approximates the original unbuffered third functional\nto arbitrary accuracy on all sufficiently large positive even targets. -/\ntheorem exists_actualExtendedThirdCompactSignedDensityCorrection_approx_ideal\n    {ε : ℝ} (hε : 0 < ε) :\n    ∃ h : ℝ, 0 < h ∧ ∃ e : ℝ, 0 < e ∧ e ≤ 1 / 384 ∧ ∃ m : ℕ,\n      actualExtendedThirdDyadicStep m ≤ e / 2 ∧\n        ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n          |(reciprocalTotientDensity\n              (fixedRoughSupport (actualExtendedThirdCompactUpperPolicy e h m N false)\n                N N 0 ((N : ℝ) ^ thirdPrefixRho))\n              (fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy e h m N false)\n                N N 0 ((N : ℝ) ^ thirdPrefixRho)) -\n            actualSmallRosserPlusDensity N N\n              ((N : ℝ) ^ actualExtendedThirdInitialStopExponent e m)\n              ((N : ℝ) ^ (thirdPrefixTheta - 2 * e))) *\n            Real.log (N : ℝ) / singularSeries N -\n              actualExtendedThirdIdealFunctional| ≤ ε := by\n  obtain ⟨h, hh, e₀, he₀, he₀cap, m₀, hb⟩ :=\n    actualExtendedThirdCompactCellFunctional_uniform_approx (half_pos hε)\n  have hepos : 0 < e₀ / 2 := half_pos he₀\n  have hecap : e₀ / 2 ≤ 1 / 384 := (by linarith : e₀ / 2 ≤ e₀).trans he₀cap\n  obtain ⟨m₁, hm₁⟩ := Filter.eventually_atTop.mp\n    (tendsto_actualExtendedThirdDyadicStep.eventually (gt_mem_nhds (half_pos hepos)))\n  let m : ℕ := max m₀ m₁\n  have hmesh : actualExtendedThirdDyadicStep m ≤ (e₀ / 2) / 2 :=\n    (hm₁ m (le_max_right m₀ m₁)).le\n  have hcont : |actualExtendedThirdCompactCellFunctional (e₀ / 2) h m -\n      actualExtendedThirdIdealFunctional| ≤ ε / 2 :=\n    hb (e₀ / 2) hepos.le (by linarith) m (le_max_left m₀ m₁)\n  have hArith : ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n      |(reciprocalTotientDensity\n          (fixedRoughSupport (actualExtendedThirdCompactUpperPolicy (e₀ / 2) h m N false)\n            N N 0 ((N : ℝ) ^ thirdPrefixRho))\n          (fixedRoughCoefficient (actualExtendedThirdCompactUpperPolicy (e₀ / 2) h m N false)\n            N N 0 ((N : ℝ) ^ thirdPrefixRho)) -\n        actualSmallRosserPlusDensity N N\n          ((N : ℝ) ^ actualExtendedThirdInitialStopExponent (e₀ / 2) m)\n          ((N : ℝ) ^ (thirdPrefixTheta - 2 * (e₀ / 2)))) *\n        Real.log (N : ℝ) / singularSeries N -\n          actualExtendedThirdCompactCellFunctional (e₀ / 2) h m| < ε / 2 := by\n    simpa only [Real.dist_eq] using Metric.tendsto_nhds.mp\n      (tendsto_actualExtendedThirdCompactSignedDensityCorrection hh hepos hecap hmesh)\n        (ε / 2) (half_pos hε)\n  refine ⟨h, hh, e₀ / 2, hepos, hecap, m, hmesh, ?_⟩\n  filter_upwards [hArith] with N hN\n  apply (abs_sub_le _ (actualExtendedThirdCompactCellFunctional (e₀ / 2) h m) _).trans\n  exact (add_le_add hN.le hcont).trans (by linarith)\n\nend\n\nend ImbalancedChen\n",
+  "actual_API_used": [
+    {
+      "source": "ActualExtendedThirdCompactUpperRho.lean",
+      "public_theorem": "actualExtendedThirdCompactRoughDensity_eq_policy",
+      "role": "Rewrites original reciprocalTotientDensity of exact retained support and signed fixedRoughCoefficient to the identical retained polynomial; no positive or abs coefficient is substituted."
+    },
+    {
+      "source": "ActualExtendedThirdInitialCutoff.lean",
+      "public_theorem": "actualExtendedThirdInitialPolicy_eq_actualPlus",
+      "role": "Rewrites same initial retained polynomial to actualSmallRosserPlusDensity at the literal floor-grid qcut. Holds for N>1, e>0,e<=1/384, with no density-bound premise."
+    },
+    {
+      "source": "ActualExtendedThirdCompactPolicySaving.lean",
+      "public_theorem": "actualExtendedThirdCompactPolicySaving",
+      "role": "Exact finite normalized difference of these same two policies equals original-cap residual density sum; hh>0, e>0,e<=1/384 and step<=e/2."
+    },
+    {
+      "source": "ActualExtendedThirdCompactResidualProfile.lean",
+      "public_theorem": "tendsto_actualExtendedThirdCompactResidualDensitySum",
+      "role": "Actual cap N arithmetic residual tends to CompactCellFunctional along positive-even atTop; only geometric h/e parameters are premises."
+    },
+    {
+      "source": "ActualExtendedThirdCompactCellConvergence.lean",
+      "public_theorem": "actualExtendedThirdCompactCellFunctional_uniform_approx",
+      "role": "For desired epsilon/2 obtains h>0,e0>0,e0<=1/384,m0 and uniform approximation for 0<=e<=e0,m>=m0, before N is varied."
+    },
+    {
+      "source": "ActualExtendedThirdDyadicCoverage.lean:36",
+      "public_theorem": "tendsto_actualExtendedThirdDyadicStep",
+      "role": "Choose m1 after positive e=e0/2 so all m>=m1 have step<e/2; m=max m0 m1 preserves both integral approximation and exact finite policy mesh obligation."
+    }
+  ],
+  "proof_of_first_endpoint": [
+    "Original-cap residual limit has source parameter e,h,m fixed before N.",
+    "Positive-even filter inherits eventual N>1 from atTop.",
+    "At each such N use exact actual rough density equality and exact qcut initial plus equality; actual PolicySaving gives literal equality to residual sum.",
+    "Tendsto.congr transports proved limit, without assuming a signed-density estimate."
+  ],
+  "proof_of_second_endpoint": [
+    "For epsilon>0 get h,e0,m0 from compact functional uniform approximation at epsilon/2.",
+    "Set e=e0/2>0, retaining e<=1/384. Choose m1 from proved dyadic step->0 at threshold e/2; set m=maxm0m1.",
+    "Use the first endpoint for that ONE h,e,m to obtain eventual arithmetic error <epsilon/2.",
+    "Triangle inequality with functional error<=epsilon/2 yields desired <=epsilon. All choices precede target N; no N-dependent coefficient policy or threshold reversal."
+  ],
+  "semantics_preserved": [
+    "Upper density uses exact fixedRoughSupport and literal signed Mobius fixedRoughCoefficient from the same actual upper policy.",
+    "Both support/coefficient receive the same e,h,m,N,cap=N,w=0,z=N^(19/96).",
+    "Baseline is exact actualSmallRosserPlusDensity N N at N^actualExtendedThirdInitialStopExponent(e,m), not rho-4e or an independent baseline bound.",
+    "Baseline level remains N^(299/500-2e); same inherited own-cube tests and exact half-open owned cells are retained via existing finite identities.",
+    "The physical real-infimum cap and original-cap arithmetic sums are used; no fixed rational certificate cap is substituted.",
+    "Filter remains atTop inf principal{N|0<N and Even N}."
+  ],
+  "scope_exclusions": [
+    "Parents listed by source hash are not declared accepted merely by import/source review. Runtime must wait for actual accepted parents and fresh binding/cache checks.",
+    "No full fourth/fifth refined policy, adopted currentK, baseline limit/value, positive-presieve physical density, or distribution estimate is claimed.",
+    "No external work is re-proved here; existing actual finite and harmonic results are consumed directly.",
+    "No Lean compilation/checker or complete environment/axiom replay was executed by author."
+  ],
+  "relative_DAG": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261018-signed-density-limit-author-relative-project-dag.json",
+    "sha256": "fdbf186748aad9c6a2303df797afff3977d5ceb8af70a01c78c5543ac9f47980",
+    "existing_project_module_count": 193,
+    "external_header_root_count": 111,
+    "self_delta": 1,
+    "foreign_delta": 0
+  },
+  "pins_checker_runtime_CI_owned_source_changes": false,
+  "Lean_or_checker_execution": false,
+  "changed_Lean_sources": [
+    "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualExtendedThirdCompactSignedDensityLimit.lean"
+  ]
+}

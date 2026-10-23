@@ -1,0 +1,149 @@
+{
+  "status": "SOURCE_ONLY_ROOT_AUTHOR_FULL_SEMANTIC_SCOPE_PENDING_INDEPENDENT_REVIEW_AND_DEPENDENCY_GATES",
+  "reviewer": "/root (source author)",
+  "created_at_utc": "2026-10-15T21:38:24.625586+00:00",
+  "candidate": {
+    "path": "ImbalancedChen/ActualExtendedThirdCompactResidualProfile.lean",
+    "sha256": "051eea02eb58e1e277adb38f43ecf3306db5d3f05cf1f3be6e98645ebd8bc251",
+    "declaration_count": 12,
+    "definition_count": 2,
+    "all_complete_headers_and_definitions": [
+      {
+        "name": "actualPrimeTupleOwnCubeMinus_cap_congr",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualPrimeTupleOwnCubeMinus_cap_congr {k N cap₁ cap₂ : ℕ}\n    (hEven : Even N) (p : Fin (k + 1) → ℕ) (lam : ℝ)\n    (hc₁ : (p (Fin.last k) : ℝ) ≤ cap₁)\n    (hc₂ : (p (Fin.last k) : ℝ) ≤ cap₂) :\n    actualPrimeTupleOwnCubeMinus N cap₁ lam p =\n      actualPrimeTupleOwnCubeMinus N cap₂ lam p"
+      },
+      {
+        "name": "primeTupleMinusProfile_eq_extendedThirdFactor",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem primeTupleMinusProfile_eq_extendedThirdFactor (lam : ℝ) (t : Fin 3 → ℝ)\n    (hz : 0 < t 2) :\n    primeTupleMinusProfile lam t =\n      4 * actualExtendedThirdLowerFactor ((lam - t 0 - t 1 - t 2) / t 2) / t 2"
+      },
+      {
+        "name": "primeTupleMinusProfile_ownCube_gate",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem primeTupleMinusProfile_ownCube_gate (lam : ℝ) (t : Fin 3 → ℝ)\n    (hz : 0 < t 2) :\n    (if primeTupleOwnCubeForm t < lam then primeTupleMinusProfile lam t else 0) =\n      primeTupleMinusProfile lam t"
+      },
+      {
+        "name": "primeTupleMinusProfile_sub_eq_compactHarmonicProfile",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem primeTupleMinusProfile_sub_eq_compactHarmonicProfile {h : ℝ} (hh : 0 < h)\n    (e lam : ℝ) (t : Fin 3 → ℝ) (hz : h ≤ t 2) :\n    primeTupleMinusProfile (thirdPrefixTheta - 2 * e) t - primeTupleMinusProfile lam t =\n      actualExtendedThirdCompactHarmonicProfile e h lam t"
+      },
+      {
+        "name": "actualExtendedThirdOwnCubeMinusSum_cap_eq",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThirdOwnCubeMinusSum_cap_eq {N : ℕ} (hN : 1 < N)\n    (hEven : Even N) (h : ℝ) (m : ℕ) (j : ActualExtendedThirdDyadicLabel m) (lam : ℝ) :\n    actualPrimeBoxOwnCubeMinusSum 2 N N (h / 2) (thirdPrefixRho + 1) lam\n        (actualExtendedThirdDistinctCellPrimeRegion m j) =\n      actualPrimeBoxOwnCubeMinusSum 2 N (Nat.ceil ((N : ℝ) ^ (thirdPrefixRho + 1)))\n        (h / 2) (thirdPrefixRho + 1) lam (actualExtendedThirdDistinctCellPrimeRegion m j)"
+      },
+      {
+        "name": "tendsto_actualExtendedThirdOwnCubeMinusSum_error",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem tendsto_actualExtendedThirdOwnCubeMinusSum_error {h : ℝ} {m : ℕ}\n    (hh : 0 < h) (hab : h / 2 < thirdPrefixRho + 1)\n    (j : ActualExtendedThirdDyadicLabel m) (lam : ℝ) :\n    Tendsto (fun N : ℕ =>\n      actualPrimeBoxOwnCubeMinusSum 2 N N (h / 2) (thirdPrefixRho + 1) lam\n        (actualExtendedThirdDistinctCellPrimeRegion m j) -\n      actualPrimeBoxTestSum N (fun _ : Fin 3 => h / 2) (fun _ => thirdPrefixRho + 1)\n        (fun t => if t ∈ actualExtendedThirdDistinctCellPrimeRegion m j then\n          (if primeTupleOwnCubeForm t < lam then primeTupleMinusProfile lam t else 0) else 0))\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N}) (𝓝 0)"
+      },
+      {
+        "name": "actualExtendedThirdCellResidualDensitySum",
+        "kind": "def",
+        "private": false,
+        "complete_source_header": "def actualExtendedThirdCellResidualDensitySum (N : ℕ) (e h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : ℝ",
+        "complete_definition": "def actualExtendedThirdCellResidualDensitySum (N : ℕ) (e h : ℝ) (m : ℕ)\n    (j : ActualExtendedThirdDyadicLabel m) : ℝ :=\n  actualPrimeBoxOwnCubeMinusSum 2 N N (h / 2) (thirdPrefixRho + 1)\n      (thirdPrefixTheta - 2 * e) (actualExtendedThirdDistinctCellPrimeRegion m j) -\n    actualPrimeBoxOwnCubeMinusSum 2 N N (h / 2) (thirdPrefixRho + 1)\n      (actualExtendedThirdPhysicalLevel e m j) (actualExtendedThirdDistinctCellPrimeRegion m j)"
+      },
+      {
+        "name": "actualExtendedThird_gated_profile_difference",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem actualExtendedThird_gated_profile_difference {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) (N : ℕ) :\n    actualPrimeBoxTestSum N (fun _ : Fin 3 => h / 2) (fun _ => thirdPrefixRho + 1)\n        (fun t => if t ∈ actualExtendedThirdDistinctCellPrimeRegion m j then\n          (if primeTupleOwnCubeForm t < thirdPrefixTheta - 2 * e then\n            primeTupleMinusProfile (thirdPrefixTheta - 2 * e) t else 0) else 0) -\n      actualPrimeBoxTestSum N (fun _ : Fin 3 => h / 2) (fun _ => thirdPrefixRho + 1)\n        (fun t => if t ∈ actualExtendedThirdDistinctCellPrimeRegion m j then\n          (if primeTupleOwnCubeForm t < actualExtendedThirdPhysicalLevel e m j then\n            primeTupleMinusProfile (actualExtendedThirdPhysicalLevel e m j) t else 0) else 0) =\n      actualExtendedThirdDistinctCellPrimeSum N e h m j"
+      },
+      {
+        "name": "tendsto_actualExtendedThirdCellResidualDensitySum",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem tendsto_actualExtendedThirdCellResidualDensitySum {e h : ℝ} {m : ℕ}\n    (hh : 0 < h) {j : ActualExtendedThirdDyadicLabel m}\n    (hj : j ∈ actualExtendedThirdCompactCells e h m) :\n    Tendsto (fun N : ℕ => actualExtendedThirdCellResidualDensitySum N e h m j)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (actualExtendedThirdRetainedCellIntegral e m j))"
+      },
+      {
+        "name": "actualExtendedThirdCompactResidualDensitySum",
+        "kind": "def",
+        "private": false,
+        "complete_source_header": "def actualExtendedThirdCompactResidualDensitySum (N : ℕ) (e h : ℝ) (m : ℕ) : ℝ",
+        "complete_definition": "def actualExtendedThirdCompactResidualDensitySum (N : ℕ) (e h : ℝ) (m : ℕ) : ℝ :=\n  ∑ j ∈ actualExtendedThirdCompactCells e h m,\n    actualExtendedThirdCellResidualDensitySum N e h m j"
+      },
+      {
+        "name": "tendsto_actualExtendedThirdCompactResidualDensitySum",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem tendsto_actualExtendedThirdCompactResidualDensitySum {e h : ℝ}\n    (hh : 0 < h) (he0 : 0 ≤ e) (he : e ≤ 1 / 384) (m : ℕ) :\n    Tendsto (fun N : ℕ => actualExtendedThirdCompactResidualDensitySum N e h m)\n      (atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N})\n      (𝓝 (actualExtendedThirdCompactCellFunctional e h m))"
+      },
+      {
+        "name": "exists_actualExtendedThirdCompactResidualDensitySum_approx_ideal",
+        "kind": "theorem",
+        "private": false,
+        "complete_source_header": "theorem exists_actualExtendedThirdCompactResidualDensitySum_approx_ideal\n    {ε : ℝ} (hε : 0 < ε) :\n    ∃ h : ℝ, 0 < h ∧ ∃ e : ℝ, 0 < e ∧ e ≤ 1 / 384 ∧ ∃ m : ℕ,\n      ∀ᶠ N : ℕ in atTop ⊓ Filter.principal {N : ℕ | 0 < N ∧ Even N},\n        |actualExtendedThirdCompactResidualDensitySum N e h m -\n          actualExtendedThirdIdealFunctional| ≤ ε"
+      }
+    ]
+  },
+  "direct_imports": [
+    {
+      "path": "ImbalancedChen/ActualExtendedThirdDistinctPrimeHarmonic.lean",
+      "sha256": "6b75b48e2592f99b33c6994a5c6edc4c180622ad042271876bd5ab9294bc15c9"
+    },
+    {
+      "path": "ImbalancedChen/ActualPrimeBoxOwnCubeResidual.lean",
+      "sha256": "dd140158236b1d012384e790cf9e62f6bd24f02494f554bae7402c96f4bfd559"
+    }
+  ],
+  "dependency_gate": {
+    "DistinctPrimeHarmonic": "current proof-only repaired 6b75; independent review and exact strict/owned receipt still required",
+    "OwnCubeResidual": "dd140 source exists but current object absent. Runtime read-only gate reported three actual project frontiers and additional conservatively blocked descendants plus five uninstalled exact reuse candidates. Not an owned/cached dependency and no broad rebuild is authorized by this report.",
+    "relative_source_scope": "logical union of the two existing parents plus one candidate, no new direct foreign import; this does not erase their missing object gates"
+  },
+  "mathematical_review": [
+    {
+      "site": "actual cap equality",
+      "assessment": "The actual finite lower Rosser density has the same fixed b8 mainSum whenever either ambient prime cap covers the actual sifting cutoff. Even N is retained. The original strict own-cube gate does not depend on cap, so the exact actual gated density is cap-independent under these proved coverage premises."
+    },
+    {
+      "site": "normalization and gate",
+      "assessment": "The exact coefficient 2 exp(-gamma)/z equals 4/(2 exp(gamma) z), yielding the already literal extended factor. When the strict own-cube gate fails, the extracted ratio is <=2 and the clamped lower factor is exactly zero, including equality. This is pointwise; no prime-wall null assumption."
+    },
+    {
+      "site": "original cap N",
+      "assessment": "Every selected atom has true prime positivity and log_N(p2)<=rho from the existing strict cell region. The actual rpow/log inverse and rho<1 give p2<=N. The temporary ceil(N^(rho+1)) cap covers p2 directly by the original prime box bound. Thus both actual lower densities on every selected atom equal those at original cap N."
+    },
+    {
+      "site": "uniform arithmetic error",
+      "assessment": "Reuse the existing actual own-cube uniform weighted-error theorem on the fixed h/2 to rho+1 cube with a proved ceiling coverage. Transfer back by exact selected-atom cap equality for sufficiently large positive even N. No caller uniform-convergence premise, supplied density bound, or missing own-cube legality is introduced."
+    },
+    {
+      "site": "true residual density profile",
+      "assessment": "The original strict own-cube gates are retained in both arithmetic lower sums. Their two gated limiting tests differ pointwise by exactly the same original CompactHarmonicProfile on every selected atom. Signed finite sum algebra preserves the original weights; no separate inequality between lower bounds is asserted."
+    },
+    {
+      "site": "actual cell and compact limits",
+      "assessment": "The two actual arithmetic error limits, their exact profile difference, and the independently proved actual strict-prime harmonic limit give the actual lower-density difference limit to the original RetainedCellIntegral. Only the fixed finite CompactCells family is summed. Uniform compact analytic approximation fixes h>0, e>0 and m before even N to recover the same original ideal."
+    }
+  ],
+  "scope_boundaries": {
+    "density_of_literal_lower_coefficients_used": true,
+    "arithmetic_cap_is_original_N": true,
+    "strict_gate_and_endpoint_equalities_retained": true,
+    "full_signed_first_exit_coefficient_dictionary_proved": false,
+    "physical_counting_remainder_paid": false,
+    "full_same_policy_count_mean_proved": false,
+    "full_hLower_or_hUpper_proved": false
+  },
+  "evidence_boundary": {
+    "all_12_complete_headers_read": true,
+    "all_2_complete_definitions_read": true,
+    "all_10_complete_proofs_read": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "new_kernel_or_axiom_audit_claimed": false,
+    "pins_modified": false,
+    "limits_changed": false,
+    "imported_closure_acceptance_claimed": false,
+    "unaccepted_dependency_promoted": false
+  }
+}

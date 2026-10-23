@@ -1,0 +1,1035 @@
+{
+  "status": "COMPLETE_NONAUTHOR_READONLY_ZERO794_FULL_SOURCE_EXACT_THREE_PATCH_TWO_PUBLIC_TYPES_MATH_REVIEW_NOT_ACCEPTANCE",
+  "reviewer": "/root/low_aggregate_oct18",
+  "created_utc": "2026-10-18T04:51:44.145981+00:00",
+  "module": "ImbalancedChen.Part3SharedFirstFactorZeroCovariancePayment",
+  "source_sha256": "794b1a57a62a8eab98050fb0cc05b8d83be8b478257cdf44dc030d5b9b127449",
+  "source_lines": 517,
+  "source_bytes": 25964,
+  "owner_report_sha256": "8f568ce6d1c3e09f2c856178625fd1b852c961d9afe358cc3cd851668933a2f3",
+  "source_declarations": 14,
+  "source_primitive_definitions": 0,
+  "all_fourteen_complete_headers": [
+    {
+      "name": "MediumAtom.sharedFirstFactorZeroCovariance_eq_three_regions",
+      "private": false,
+      "kind": "theorem",
+      "line": 29,
+      "complete_header": "theorem MediumAtom.sharedFirstFactorZeroCovariance_eq_three_regions\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y R : ℝ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      ((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n        TransposedZeroCovariance.primitiveZeroMain (d.q1SliceAtom p))) =\n      d.sharedFirstFactorLowConductorZero R +\n        d.sharedFirstFactorSmallResidualHighConductorZero Y R +\n          d.sharedFirstFactorLargeResidualHighConductorZero Y R",
+      "full_body_sha256": "40e5c66cc9e1b242d8353691361834fb5482b072496186267f0a24776c920588",
+      "full_definition": null
+    },
+    {
+      "name": "one_le_scale",
+      "private": true,
+      "kind": "theorem",
+      "line": 81,
+      "complete_header": "private theorem one_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale",
+      "full_body_sha256": "7fa0edf0a71cd44f02929ea7ae6c65a417b97f6c2a753c1a15feb773ff547b34",
+      "full_definition": null
+    },
+    {
+      "name": "U_le_scale",
+      "private": true,
+      "kind": "theorem",
+      "line": 88,
+      "complete_header": "private theorem U_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : d.U ≤ d.scale",
+      "full_body_sha256": "cdec8ca8ab1b2046dccb2304b731cd35bf1ff2493fdae2dd5cca848a6116f48a",
+      "full_definition": null
+    },
+    {
+      "name": "V_le_scale",
+      "private": true,
+      "kind": "theorem",
+      "line": 93,
+      "complete_header": "private theorem V_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : d.V ≤ d.scale",
+      "full_body_sha256": "47339e6448c864cf05f0aac259c3bd0af4e188d86d06861be868c5c739b51cb0",
+      "full_definition": null
+    },
+    {
+      "name": "factor_scale_bounds",
+      "private": true,
+      "kind": "theorem",
+      "line": 99,
+      "complete_header": "private theorem factor_scale_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.Q1 ≤ d.scale ∧ d.Q2 ≤ d.scale ∧ d.Q3 ≤ d.scale",
+      "full_body_sha256": "0284a6aede61aeba91d26ca8bf2887a4a08e14360e4dbd0a05c89c9a361a702f",
+      "full_definition": null
+    },
+    {
+      "name": "log_envelopes",
+      "private": true,
+      "kind": "theorem",
+      "line": 141,
+      "complete_header": "private theorem log_envelopes\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d)\n    (hlog : 1 ≤ Real.log d.scale) :\n    (0 ≤ 1 + Real.log (2 * d.V) ∧\n      1 + Real.log (2 * d.V) ≤ 10 * Real.log d.scale) ∧\n    (0 ≤ 1 + Real.log (4 * d.Q2 * d.Q3) ∧\n      1 + Real.log (4 * d.Q2 * d.Q3) ≤ 10 * Real.log d.scale) ∧\n    (0 ≤ 1 + Real.log (32 * d.U * d.Q1 * d.Q2 * d.Q3) ∧\n      1 + Real.log (32 * d.U * d.Q1 * d.Q2 * d.Q3) ≤ 10 * Real.log d.scale)",
+      "full_body_sha256": "f61b385de80f6a87c54c30999261af587aad8a226bc33f1f094f452a3fa19b6e",
+      "full_definition": null
+    },
+    {
+      "name": "log_product_bound",
+      "private": true,
+      "kind": "theorem",
+      "line": 198,
+      "complete_header": "private theorem log_product_bound {t L1 L2 : ℝ}\n    (ht : 0 ≤ t) (h1 : 0 ≤ L1) (h1t : L1 ≤ 10 * t)\n    (h2 : 0 ≤ L2) (h2t : L2 ≤ 10 * t) (e k : ℕ) :\n    L1 ^ e * L2 ^ k ≤ 10 ^ (e + k) * t ^ (e + k)",
+      "full_body_sha256": "b5ec3ad0801d23256cf5fc3fa4af8891e53a54ed1453c9d2514dc67fe8fd5315",
+      "full_definition": null
+    },
+    {
+      "name": "inverse_log_payment",
+      "private": true,
+      "kind": "theorem",
+      "line": 208,
+      "complete_header": "private theorem inverse_log_payment {t : ℝ} (ht : 1 ≤ t) (A : ℝ) (E : ℕ) :\n    t ^ E / t ^ (A + (E : ℝ) + 1) ≤ 1 / t ^ A",
+      "full_body_sha256": "7382f7de66bfc435243794f228f7cd76b593f1eb03a16639ac6348cb29f56824",
+      "full_definition": null
+    },
+    {
+      "name": "power_log_payment",
+      "private": true,
+      "kind": "theorem",
+      "line": 219,
+      "complete_header": "private theorem power_log_payment {X t delta A : ℝ} {E : ℕ}\n    (hX : 0 < X) (ht : 0 < t) (hpay : t ^ (A + (E : ℝ)) ≤ X ^ delta) :\n    t ^ E * X ^ (-delta) ≤ 1 / t ^ A",
+      "full_body_sha256": "ac381d4cc0258265638fadbbea97ead60ad6e82b10851201447db56eb26235de",
+      "full_definition": null
+    },
+    {
+      "name": "exists_log_power_threshold",
+      "private": true,
+      "kind": "theorem",
+      "line": 232,
+      "complete_header": "private theorem exists_log_power_threshold (P : ℝ) {delta : ℝ} (hdelta : 0 < delta) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ X : ℝ, x0 ≤ X →\n      1 ≤ Real.log X ∧ (Real.log X) ^ P ≤ X ^ delta",
+      "full_body_sha256": "6a585e9f52940f3e46b060c4a397d671a518ca61dd311b5da2d5652da1c6f4bc",
+      "full_definition": null
+    },
+    {
+      "name": "first_factor_relative_bound",
+      "private": true,
+      "kind": "theorem",
+      "line": 250,
+      "complete_header": "private theorem first_factor_relative_bound\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.Q1 / d.U ≤ d.scale ^ (-sigma)",
+      "full_body_sha256": "a3d48c644445b73bd946add87ad2f94986afaaebaf4cd05657246641eb21f685",
+      "full_definition": null
+    },
+    {
+      "name": "small_relative_power_bound",
+      "private": true,
+      "kind": "theorem",
+      "line": 260,
+      "complete_header": "private theorem small_relative_power_bound\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.Q1 ^ (1 + sigma / 16) * (d.scale ^ (sigma / 4)) ^ (1 + sigma / 16) / d.U ≤\n      d.scale ^ (-(sigma / 4))",
+      "full_body_sha256": "acaea7137eb536cd9b1027c796a79049d03c6378c1823ec744896a397bef0e53",
+      "full_definition": null
+    },
+    {
+      "name": "large_relative_power_bound",
+      "private": true,
+      "kind": "theorem",
+      "line": 305,
+      "complete_header": "private theorem large_relative_power_bound\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    1 / d.scale ^ (sigma / 4) + d.Q1 / d.U ≤ 2 * d.scale ^ (-(sigma / 4))",
+      "full_body_sha256": "907e589b5cb7ab827799eb32b225a49489c7aa668621b64177adf74257373212",
+      "full_definition": null
+    },
+    {
+      "name": "uniformAuxiliarySW_sharedFirstFactorZeroCovariance",
+      "private": false,
+      "kind": "theorem",
+      "line": 324,
+      "complete_header": "theorem uniformAuxiliarySW_sharedFirstFactorZeroCovariance\n    {ι : Type*} (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hsigma_small : sigma < 1 / 100)\n    (hc0 : 0 < c0) (hkappa : 0 ≤ kappa) (hkappa_small : kappa ≤ sigma / 100)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∀ A : ℝ, 0 < A →\n      ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n        ∀ i : ι, x0 ≤ (F i).scale →\n          ((∑ m ∈ (F i).betaCarrier, ‖(F i).beta m‖ ^ 2) *\n            (∑ p ∈ (F i).primitiveFirstFactorCarrier, ‖(F i).gamma1 p‖ ^ 2)) *\n            ‖∑ p ∈ (F i).primitiveFirstFactorCarrier,\n              (((F i).q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n                TransposedZeroCovariance.primitiveZeroMain ((F i).q1SliceAtom p))‖ ≤\n              C * (F i).scale ^ 2 / (Real.log (F i).scale) ^ A",
+      "full_body_sha256": "1bffefeebc669aa9e75561ccd05e075334c8a66545d6ee9bb5e110d70fc12290",
+      "full_definition": null
+    }
+  ],
+  "new_old_two_complete_public_header_deltas": [
+    {
+      "name": "MediumAtom.sharedFirstFactorZeroCovariance_eq_three_regions",
+      "old_complete_header": "theorem MediumAtom.sharedFirstFactorZeroCovariance_eq_three_regions\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y R : ℝ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      (d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n        TransposedZeroCovariance.primitiveZeroMain (d.q1SliceAtom p)) =\n      d.sharedFirstFactorLowConductorZero R +\n        d.sharedFirstFactorSmallResidualHighConductorZero Y R +\n          d.sharedFirstFactorLargeResidualHighConductorZero Y R",
+      "new_complete_header": "theorem MediumAtom.sharedFirstFactorZeroCovariance_eq_three_regions\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (Y R : ℝ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      ((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n        TransposedZeroCovariance.primitiveZeroMain (d.q1SliceAtom p))) =\n      d.sharedFirstFactorLowConductorZero R +\n        d.sharedFirstFactorSmallResidualHighConductorZero Y R +\n          d.sharedFirstFactorLargeResidualHighConductorZero Y R"
+    },
+    {
+      "name": "uniformAuxiliarySW_sharedFirstFactorZeroCovariance",
+      "old_complete_header": "theorem uniformAuxiliarySW_sharedFirstFactorZeroCovariance\n    {ι : Type*} (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hsigma_small : sigma < 1 / 100)\n    (hc0 : 0 < c0) (hkappa : 0 ≤ kappa) (hkappa_small : kappa ≤ sigma / 100)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∀ A : ℝ, 0 < A →\n      ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n        ∀ i : ι, x0 ≤ (F i).scale →\n          ((∑ m ∈ (F i).betaCarrier, ‖(F i).beta m‖ ^ 2) *\n            (∑ p ∈ (F i).primitiveFirstFactorCarrier, ‖(F i).gamma1 p‖ ^ 2)) *\n            ‖∑ p ∈ (F i).primitiveFirstFactorCarrier,\n              ((F i).q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n                TransposedZeroCovariance.primitiveZeroMain ((F i).q1SliceAtom p)‖ ≤\n              C * (F i).scale ^ 2 / (Real.log (F i).scale) ^ A",
+      "new_complete_header": "theorem uniformAuxiliarySW_sharedFirstFactorZeroCovariance\n    {ι : Type*} (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hsigma_small : sigma < 1 / 100)\n    (hc0 : 0 < c0) (hkappa : 0 ≤ kappa) (hkappa_small : kappa ≤ sigma / 100)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∀ A : ℝ, 0 < A →\n      ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n        ∀ i : ι, x0 ≤ (F i).scale →\n          ((∑ m ∈ (F i).betaCarrier, ‖(F i).beta m‖ ^ 2) *\n            (∑ p ∈ (F i).primitiveFirstFactorCarrier, ‖(F i).gamma1 p‖ ^ 2)) *\n            ‖∑ p ∈ (F i).primitiveFirstFactorCarrier,\n              (((F i).q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n                TransposedZeroCovariance.primitiveZeroMain ((F i).q1SliceAtom p))‖ ≤\n              C * (F i).scale ^ 2 / (Real.log (F i).scale) ^ A"
+    }
+  ],
+  "changed_headers": [
+    "MediumAtom.sharedFirstFactorZeroCovariance_eq_three_regions",
+    "uniformAuxiliarySW_sharedFirstFactorZeroCovariance"
+  ],
+  "exact_three_patches": [
+    {
+      "old": "      (d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n        TransposedZeroCovariance.primitiveZeroMain (d.q1SliceAtom p)) =",
+      "new": "      ((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n        TransposedZeroCovariance.primitiveZeroMain (d.q1SliceAtom p))) =",
+      "site": "public finite identity complete header, lines33-34"
+    },
+    {
+      "old": "              ((F i).q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n                TransposedZeroCovariance.primitiveZeroMain ((F i).q1SliceAtom p)‖ ≤",
+      "new": "              (((F i).q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n                TransposedZeroCovariance.primitiveZeroMain ((F i).q1SliceAtom p))‖ ≤",
+      "site": "public uniform actual outside payment complete header, lines336-337"
+    },
+    {
+      "old": "        (d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n          TransposedZeroCovariance.primitiveZeroMain (d.q1SliceAtom p)‖ ≤",
+      "new": "        ((d.q1SliceAtom p).transposedAtom.complexCRTSmoothZeroPart -\n          TransposedZeroCovariance.primitiveZeroMain (d.q1SliceAtom p))‖ ≤",
+      "site": "local htriangle proof statement, lines494-495"
+    }
+  ],
+  "forward_inverse_reconstruction_exact": true,
+  "reconstructed_old_sha256": "ff5a33c336ad8099ff80ac53e773f67c1a4cb202674f9ed3e0d8f78e12b23a99",
+  "only_six_parenthesis_bytes_added": true,
+  "all_other_bytes_unchanged": true,
+  "old_type_not_elaborated_no_kernel_type_equivalence_claim": true,
+  "actual_parent_API_bindings": {
+    "Part3SharedFirstFactorLowConductorAggregate": {
+      "source_sha256": "503dc1699ee91b0a3d4d8dcb8b0a7287ca066fa72d5666ebdd52800703846fc8",
+      "actual_public_types": [
+        "theorem uniformAuxiliarySW_sharedFirstFactorLowConductorZero\n    {ι : Type*} (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hsigma_small : sigma < 1 / 100)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∀ A L : ℝ, 0 < A → 0 ≤ L →\n      ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n        ∀ i : ι, x0 ≤ (F i).scale →\n          ‖(F i).sharedFirstFactorLowConductorZero\n              ((Real.log (F i).scale) ^ L)‖ ≤\n            C * (F i).V * (F i).U ^ 2 /\n              ((F i).Q1 * (Real.log (F i).scale) ^ A)"
+      ]
+    },
+    "Part3SharedFirstFactorSmallResidualHighConductorZero": {
+      "source_sha256": "cb10abb7e651b3c03a94b589f6c4df4174dad45f6f34fe490bb46aea3225b687",
+      "actual_public_types": [
+        "theorem actual_smallResidualHighConductorZero_bound\n    {eta : ℝ} (heta : 0 < eta) (heta1 : eta < 1) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d →\n        ∀ Y R : ℝ, 1 ≤ Y → 1 ≤ R →\n          ‖d.sharedFirstFactorSmallResidualHighConductorZero Y R‖ ≤\n            C * d.V * (1 + Real.log (32 * d.U * d.Q1 * d.Q2 * d.Q3)) ^ 20 *\n              (d.U ^ 2 / (d.Q1 * R ^ (1 - eta)) +\n                d.Q1 ^ eta * Y ^ (1 + eta) * d.U)",
+        "theorem actual_outside_mul_smallResidualHighConductorZero_bound\n    {eta : ℝ} (heta : 0 < eta) (heta1 : eta < 1) :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d →\n        ∀ Y R : ℝ, 1 ≤ Y → 1 ≤ R →\n          ((∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n              (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)) *\n            ‖d.sharedFirstFactorSmallResidualHighConductorZero Y R‖ ≤\n              C * d.scale ^ 2 *\n                (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n                (1 + Real.log (32 * d.U * d.Q1 * d.Q2 * d.Q3)) ^ 20 *\n                (1 / R ^ (1 - eta) +\n                  d.Q1 ^ (1 + eta) * Y ^ (1 + eta) / d.U)"
+      ]
+    },
+    "Part3SharedFirstFactorLargeResidualZero": {
+      "source_sha256": "2801c38ab964e3df1850fb0b07cb3adc272c6f80004088aabc95adf360c6afda",
+      "actual_public_types": [
+        "theorem actual_outside_mul_largeResidualHighConductorZero_bound :\n    ∃ C : ℝ, 0 < C ∧\n      ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n        MediumAdmissible B sigma kappa c0 d → ∀ Y R : ℝ, 1 ≤ Y →\n          ((∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n              (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2)) *\n            ‖d.sharedFirstFactorLargeResidualHighConductorZero Y R‖ ≤\n              C * d.scale ^ 2 *\n                (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n                (1 + Real.log (4 * d.Q2 * d.Q3)) ^ 8 *\n                (1 / Y + d.Q1 / d.U)"
+      ]
+    }
+  },
+  "actual_region_full_primitive_definitions": {
+    "Part3SharedFirstFactorLowConductorAggregate": {
+      "MediumAtom.sharedFirstFactorLowConductorZero": "def MediumAtom.sharedFirstFactorLowConductorZero (d : MediumAtom) (R : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n      ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n          (((p * (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ) *\n            ((p * (u.1 * u.2).gcd (v.1 * v.2)).totient : ℂ))) *\n          (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n          (∑ chi ∈ ((Finset.univ : Finset\n              (DirichletCharacter ℂ (p * (u.1 * u.2).gcd (v.1 * v.2)))).erase 1).filter\n                (fun chi => (chi.conductor : ℝ) ≤ R),\n            auxiliaryCharacterSum d.alphaCarrier d.alpha\n              ((u.1 * u.2) / (u.1 * u.2).gcd (v.1 * v.2))\n              (p * (u.1 * u.2).gcd (v.1 * v.2)) chi *\n            star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n              ((v.1 * v.2) / (u.1 * u.2).gcd (v.1 * v.2))\n              (p * (u.1 * u.2).gcd (v.1 * v.2)) chi))"
+    },
+    "Part3SharedFirstFactorSmallResidualHighConductorZero": {
+      "MediumAtom.sharedFirstFactorSmallResidualHighConductorZero": "def MediumAtom.sharedFirstFactorSmallResidualHighConductorZero\n    (d : MediumAtom) (Y R : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n      ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        if ((u.1 * u.2).gcd (v.1 * v.2) : ℝ) ≤ Y then\n          (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n            (((p * (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ) *\n              ((p * (u.1 * u.2).gcd (v.1 * v.2)).totient : ℂ))) *\n            (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n            (∑ chi ∈ ((Finset.univ : Finset\n                (DirichletCharacter ℂ (p * (u.1 * u.2).gcd (v.1 * v.2)))).erase 1).filter\n                  (fun chi ↦ R < (chi.conductor : ℝ)),\n              auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((u.1 * u.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi *\n              star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((v.1 * v.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi))\n        else 0"
+    },
+    "Part3SharedFirstFactorLargeResidualZero": {
+      "MediumAtom.sharedFirstFactorLargeResidualHighConductorZero": "def MediumAtom.sharedFirstFactorLargeResidualHighConductorZero\n    (d : MediumAtom) (Y R : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ u ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n      ∑ v ∈ factorCarrier d.Q2 ×ˢ factorCarrier d.Q3,\n        if Y < ((u.1 * u.2).gcd (v.1 * v.2) : ℝ) then\n          (((d.V * CommonSmoothCutoff.cutoffMass : ℝ) : ℂ) /\n            (((p * (u.1 * u.2).lcm (v.1 * v.2) : ℕ) : ℂ) *\n              ((p * (u.1 * u.2).gcd (v.1 * v.2)).totient : ℂ))) *\n            (d.gamma2 u.1 * d.gamma3 u.2) * star (d.gamma2 v.1 * d.gamma3 v.2) *\n            (∑ chi ∈ ((Finset.univ : Finset\n                (DirichletCharacter ℂ (p * (u.1 * u.2).gcd (v.1 * v.2)))).erase 1).filter\n                  (fun chi ↦ R < (chi.conductor : ℝ)),\n              auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((u.1 * u.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi *\n              star (auxiliaryCharacterSum d.alphaCarrier d.alpha\n                ((v.1 * v.2) / (u.1 * u.2).gcd (v.1 * v.2))\n                (p * (u.1 * u.2).gcd (v.1 * v.2)) chi))\n        else 0"
+    }
+  },
+  "complete_independent_mathematical_review": {
+    "literal_shared_center": "All three corrected sites bind the ENTIRE rawZero(q1SliceAtom p)-primitiveZeroMain(q1SliceAtom p) inside the original finite p sum. Both original public statements and local triangle refer to the same actual p-specific center. No primitiveZeroMain(d), unsliced object, carrier, coefficient, phase, cutoff, residue or parameter is substituted.",
+    "exact_complex_partition": "Before any norm, actual owned character dictionary is partitioned by conductor<=R versus R<conductor. All residual gcds occur in Low. High uses the disjoint and exhaustive residual comparisons D<=Y and Y<D. The shared composite natural p and full level p*D remain identical; original gamma2/gamma3 stars, full auxiliary masks and physical p*lcm*phi(pD) denominator match all three actual primitive definitions.",
+    "fixed_parameter_quantifiers": "eta=sigma/16 lies in(0,1) from0<sigma<1/100; Y=X^(sigma/4)>=1; eB=((2^B)^2-1); H0=(A+eB+21)/(1-eta)>=0 and R=(logX)^H0>=1 after a uniform scalar threshold. All three existing region constants precede d and all labels. Public C and x0 are selected before i; no scale-tendsto or individual-atom constant is added.",
+    "low_payment": "Request Low original SW at exponent A+eB+1. Its true VU^2/Q1 multiplied by original betaL2*primitiveGamma1L2<=4VQ1 Hbeta^eB equals4X^2 Hbeta^eB/logX^(A+eB+1). Hbeta<=10logX and logX>=1 give constant4CL*10^eB times X^2/logX^A. Actual tau(pv)^C0 payment stays in the owned Low parent; no new supplier appears.",
+    "small_payment": "Actual outside Small endpoint retains logH^20 times [R^-(1-eta)+Q1^(1+eta)Y^(1+eta)/U]. The low-conductor cutoff choice exactly gives R^(1-eta)=logX^(A+eB+21). The second relative term is (Q1Y/U)*(Q1Y)^eta; original Q1/U<X^-sigma gives first<=X^-3sigma/4, and original U<=X gives Q1Y<=X, hence total<=X^-11sigma/16<=X^-sigma/4. The one scalar threshold pays all fixed log powers. Both contributions sum to2, giving2CS*10^(eB+20).",
+    "large_payment": "Actual outside Large endpoint keeps logT^8 and [1/Y+Q1/U]. With Y=X^(sigma/4) this is<=2X^-sigma/4; same threshold at A+eB+20 also pays the smaller eB+8 power. Constant2CG*10^(eB+8) suffices. R is retained as arbitrary real in the actual large object and public API.",
+    "logs_and_geometry": "All length/factor logs are bounded using only Qj,U,V<=X, original Q1/U and original medium U^2Q2Q3^2<X^(1-8sigma). Log envelopes10logX are generous and valid for logX>=1. No auxiliary support truncation, cap positivity beyond original admissibility, stronger sigma gate, Xepsilon coefficient shortcut or remaining-error premise is introduced.",
+    "sum_and_endpoint": "Take the norm only after the exact complex three-region identity. Multiply triangle by the same nonnegative actual W and add the three established payments. C=4CL10^eB+2CS10^(eB+20)+2CG10^(eB+8)>0, threshold max(xLow,xPower)>1, uniform before i. This concludes RAW zero covariance only; primitive UV and complete nonzero frequencies remain separate."
+  },
+  "static_API_observation_not_actual_diagnostic": "The final htriangle uses add_le_add_right(norm_add_le...) to add the third norm. Because imported project namespaces have exposed addition-lemma name-order surprises in the actual UV diagnostic, a future elaboration-only mismatch can be repaired explicitly by add_le_add (norm_add_le _ _) le_rfl under root proof scope. This is not a mathematical blocker, not an actual Zero compiler diagnostic, and reviewer did not change the source.",
+  "fresh_header_DAG": {
+    "proper_project_parents": 63,
+    "with_self": 64,
+    "foreign_roots_including_Init": 62,
+    "new_foreign": [],
+    "missing_project": [],
+    "nodes": {
+      "ImbalancedChen.Part3SharedFirstFactorZeroCovariancePayment": {
+        "source_sha256": "794b1a57a62a8eab98050fb0cc05b8d83be8b478257cdf44dc030d5b9b127449",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3SharedFirstFactorLowConductorAggregate",
+          "ImbalancedChen.Part3SharedFirstFactorSmallResidualHighConductorZero",
+          "ImbalancedChen.Part3SharedFirstFactorLargeResidualZero"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3SharedFirstFactorLowConductorAggregate": {
+        "source_sha256": "503dc1699ee91b0a3d4d8dcb8b0a7287ca066fa72d5666ebdd52800703846fc8",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3SharedFirstFactorLowConductorSW"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3SharedFirstFactorLowConductorSW": {
+        "source_sha256": "5df46739cf416fbf9efd7d40ec17c7434a3cde986f805d1c0193d059b0770485",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3SharedFirstFactorCharacterDictionary"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3SharedFirstFactorCharacterDictionary": {
+        "source_sha256": "3b056ab1f03ea46cfc446a32b267f40ec58d85fe0974c0a94c6ed35183631cd3",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3SharedFirstFactorDispersion",
+          "ImbalancedChen.Part3TransposedZeroCovariance"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3SharedFirstFactorDispersion": {
+        "source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3TransposedDispersion"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3TransposedDispersion": {
+        "source_sha256": "2814901466ecb6b979bc45c8a8bcda277aa4ae59e8609b84b1b8e9e1839a5786",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3CommonPoisson",
+          "ImbalancedChen.Part3FactorFiberDivisor"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3CommonPoisson": {
+        "source_sha256": "9672e3f5a763b2a6950ddfd067607342c77f11aee81e74664f766233dfa05630",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3CommonSmoothCutoff",
+          "ImbalancedChen.Part3ComplexCRTConsumer",
+          "Mathlib.Analysis.Fourier.PoissonSummation"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3CommonSmoothCutoff": {
+        "source_sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3ComplexDispersion",
+          "Mathlib.Analysis.Calculus.BumpFunction.InnerProduct",
+          "Mathlib.Analysis.Distribution.SchwartzSpace.Fourier",
+          "Mathlib.MeasureTheory.Measure.Lebesgue.Integral"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3ComplexDispersion": {
+        "source_sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3DistributionTargets",
+          "Mathlib.Analysis.Complex.Basic",
+          "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+          "Mathlib.Algebra.Star.BigOperators"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3DistributionTargets": {
+        "source_sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RestrictedResidueScale",
+          "Mathlib.Analysis.Complex.Exponential"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.RestrictedResidueScale": {
+        "source_sha256": "3c58f54f875a46886c28bc224fdf4952d6b53a72ae6f6f2b8debaf7e71c01d0f",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PanProductGridRanges"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.PanProductGridRanges": {
+        "source_sha256": "88b2c972243ba1e33e89a08b6759c16512620751b7c25206dfa4d767bf79466a",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PanProductGrid",
+          "ImbalancedChen.RealHalfProductMassSplit"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.PanProductGrid": {
+        "source_sha256": "e37bb4d2aa855c86e1601566e9ea6649092ac625c434d8a30476208057fab743",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PanProductAggregateBudget",
+          "ImbalancedChen.SelectedGridRanges"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.PanProductAggregateBudget": {
+        "source_sha256": "13b512d4c51a00b217ea72b3033ec50bd48d76c10812184a20d1bc838ef04140",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PanProductLiuBridge"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.PanProductLiuBridge": {
+        "source_sha256": "dd239cb5a36898abe49cdb23d60cc1e3e86dede36bd849c41013f18a99ee2d61",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PanProductResidueBudget",
+          "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.PanProductResidueBudget": {
+        "source_sha256": "4b5dcf30d8aebee0779f6dc3e4f1188a6797f9cd5215f71737b8369a79a9fbaf",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PanProductStrips",
+          "ImbalancedChen.ResidueSelectorBudget"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.PanProductStrips": {
+        "source_sha256": "eb97d23050e3ec624cde24ef779acc67d7ded44283dc60097edc2d715429863b",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductPanFinite",
+          "ImbalancedChen.PrimeRectanglePrefixes"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.HalfProductPanFinite": {
+        "source_sha256": "f392c7642bd00e418c91000a3ed6ef7c4c30194808e974999d4a39699d2b62de",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FiniteSieveModel",
+          "ImbalancedChen.HalfProductMassFibres"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.FiniteSieveModel": {
+        "source_sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.SieveSourceCoprimality",
+          "Mathlib.NumberTheory.SelbergSieve",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.Data.Nat.Squarefree",
+          "Mathlib.Tactic.NormNum",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.SieveSourceCoprimality": {
+        "source_sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Data.Nat.GCD.BigOperators",
+          "Mathlib.Data.Nat.ModEq",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.HalfProductSource": {
+        "source_sha256": "dc6e261ddfdc9a66e966a4ec5c2a129d3f4b7583501c5c82364f2aa4a8af194e",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.BadSourceLocalization",
+          "Mathlib.Data.Finset.Prod"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.BadSourceLocalization": {
+        "source_sha256": "0e88326b03a4c20a472014b506d7533495d86801909af4d455de5fcfae6695a7",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductGeometry",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.HalfProductGeometry": {
+        "source_sha256": "d04e31ea73a853c4fa37e881ef30a748b7f83b8a0e930e0cc2ae231dbb629db1",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.OrderedBad",
+          "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+          "Mathlib.Tactic.Convert",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.OrderedBad": {
+        "source_sha256": "a38031995175bd2f847eefd498c929e941400c9cffdf6f78e3e06bd2100764da",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RationalPowers"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.RationalPowers": {
+        "source_sha256": "40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Counting",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Counting": {
+        "source_sha256": "8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Data.Finset.Card",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Real.Basic",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.HalfProductMassFibres": {
+        "source_sha256": "f83e431ffdd975af44ae54eaadbae3ce6d609ed265d433dbbd05b4f6fc0f77c7",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+          "Mathlib.Data.Nat.Sqrt",
+          "Mathlib.NumberTheory.PrimeCounting"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.PrimeRectanglePrefixes": {
+        "source_sha256": "d74bfbac6032d4de701f13ddf78308d2a584916e144aab5326a1ba4441586b5e",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RectangleDiscrepancyAssembly",
+          "ImbalancedChen.SelectedGridRanges",
+          "ImbalancedChen.CoprimeRecentering"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.RectangleDiscrepancyAssembly": {
+        "source_sha256": "5af6880e6c3f2c00a846cfccd8842e08f80ed8eb314cfdaa972904c2f987e861",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.TotientReciprocalBudget"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualGridEnvelopes": {
+        "source_sha256": "f2171599b210583ee28b316da48b114c74f8742b564d0c1d3a30aaf073aaf528",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.MultiplicativeGridPartition",
+          "ImbalancedChen.BoundaryGlobalCaps"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.MultiplicativeGridPartition": {
+        "source_sha256": "9be180c5c070d8855c9e1fa1acaf30ccda7f87d7ec45410670e2d527a6b18598",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.BoundaryCellContainment",
+          "Mathlib.Analysis.SpecialFunctions.Log.Base",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Prod",
+          "Mathlib.Order.Interval.Finset.Nat"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.BoundaryCellContainment": {
+        "source_sha256": "12a74397730d07769c95cb7e1ab6adc4a3b570daedc49dbc65c0c0defd7ba80d",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.BoundaryGridBudget",
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.BoundaryGridBudget": {
+        "source_sha256": "a36da7f8fc558d406e5e00b9790389438846198caa610540da8145471a419245",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Finset.Max",
+          "Mathlib.Order.Interval.Finset.Nat",
+          "Mathlib.NumberTheory.Harmonic.Bounds",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.CurvedRegionDiscrepancy": {
+        "source_sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.FiniteSieveModel",
+          "Mathlib.Algebra.BigOperators.Ring.Finset",
+          "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.BoundaryGlobalCaps": {
+        "source_sha256": "95eb4934caa7aa8ed308a7094ae46a4d14d6336e2470ee2b58a88ce0b379caae",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.BoundaryCellContainment",
+          "Mathlib.Analysis.Real.Sqrt"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.TotientReciprocalBudget": {
+        "source_sha256": "aa80ff2ad79f77405951f1e56e993a851a1b32ad46c970e7914adb94bdb2db86",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.NumberTheory.ArithmeticFunction.Misc",
+          "Mathlib.NumberTheory.Harmonic.Bounds",
+          "Mathlib.Algebra.BigOperators.Intervals",
+          "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Positivity",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.SelectedGridRanges": {
+        "source_sha256": "45909866dd099095795a0abbaba05c3ffe0250a569c694ce57640292b4a3a847",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.HalfProductGeometry",
+          "ImbalancedChen.ActualSieveGate"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ActualSieveGate": {
+        "source_sha256": "ccfecae8cbaa1dcf1685238e1db0764aa64ec15744502651623f56d9cfa4831a",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.LogCutoffError",
+          "ImbalancedChen.PowerErrorBudget",
+          "ImbalancedChen.SieveSourceCoprimality",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.LogCutoffError": {
+        "source_sha256": "202d60ddffa0cbf6a0cc3259af4ec3654e4227a5e16523a2db71ba30d1dfcd49",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.SingularSeries",
+          "ImbalancedChen.BadSourceLocalization",
+          "Mathlib.Topology.Algebra.Order.Field",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.SingularSeries": {
+        "source_sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.NormalizationGrowth",
+          "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+          "Mathlib.Analysis.PSeries",
+          "Mathlib.Data.Nat.PrimeFin",
+          "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.NormalizationGrowth": {
+        "source_sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+          "Mathlib.Algebra.Ring.Parity",
+          "Mathlib.Order.Filter.AtTopBot.Archimedean",
+          "Mathlib.Order.Filter.AtTopBot.Field"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.PowerErrorBudget": {
+        "source_sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.SingularSeries",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.CoprimeRecentering": {
+        "source_sha256": "45c28d97bd10eccaa99498b2309fb03c9d8efbdd5040e12d7ba33c3702b418c5",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.Tactic.FieldSimp"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.ResidueSelectorBudget": {
+        "source_sha256": "03715ddc6bae19040f6d30511548a954d08428629a3a7d2e2884a4b8ce5b8e69",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.PrimeRectanglePrefixes"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.RealHalfProductMassSplit": {
+        "source_sha256": "6516890accb0179098fca79f98791adeddad569a858fc69710b87a8d3b92a3ca",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RealHalfProductMass",
+          "ImbalancedChen.PowerErrorBudget"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.RealHalfProductMass": {
+        "source_sha256": "90c809c15ce26cd1f4785b5117e2d8a5dcfdc5720480bc690d198d95f33601f3",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.RealHalfProductSource",
+          "ImbalancedChen.HalfProductMassLimit"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.RealHalfProductSource": {
+        "source_sha256": "0c3211cb72d8f27eb380f57fe5d751f8fc3179cb646c683c1449d450c71c55e7",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.CurrentMainTheorem",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Prod",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.CurrentMainTheorem": {
+        "source_sha256": "68a2a3aad8ccdc73ed8e5076e31b9984bc659c307d71150920a71b5fc98f067d",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.CurrentNumericalTransfer",
+          "ImbalancedChen.OrderedBad",
+          "Mathlib.Topology.Instances.EReal.Lemmas"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.CurrentNumericalTransfer": {
+        "source_sha256": "acc924036cb6ca73ef660c632d5577462ba5c69b8b5600aef63255264c3a270a",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.AsymptoticTransfer",
+          "ImbalancedChen.RationalPowers",
+          "ImbalancedChen.SingularSeries",
+          "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Linarith"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.AsymptoticTransfer": {
+        "source_sha256": "ece82cd26ee1030d708e6055395bdb5a6a4cf8b1d8c6072a67a9a59cd36bc560",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Counting",
+          "ImbalancedChen.Multiplicity",
+          "Mathlib.Order.Filter.AtTopBot.Basic"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Multiplicity": {
+        "source_sha256": "9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Counting",
+          "Mathlib.NumberTheory.AlmostPrime",
+          "Mathlib.Tactic.SplitIfs"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.HalfProductMassLimit": {
+        "source_sha256": "1dbb92a59abc74034d49f52428071aae3ccd9cc05beda8f75f4e693c08f3a4ab",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductMassError",
+          "ImbalancedChen.MassLogIntegral",
+          "Mathlib.Topology.MetricSpace.Pseudo.Defs"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.HalfProductMassError": {
+        "source_sha256": "1109367deda15f8255ae1a987ecf3b82225ddfad6c335fd890d7c989d5434ad9",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductMassSplit",
+          "ImbalancedChen.UniformPrimeTail",
+          "ImbalancedChen.LogCutoffError"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.HalfProductMassSplit": {
+        "source_sha256": "ba78734851c6114c76234f5b607efc1a15bcac377692e11e361cd4c02032dc16",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductMassFibres"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.UniformPrimeTail": {
+        "source_sha256": "786ed7d70f3f3e89161a9e025d2c8bb0b06db6cddae7200c3fc1c0ca009ebbbf",
+        "imports": [
+          "Init",
+          "Init",
+          "Mathlib.Analysis.Asymptotics.Defs",
+          "Mathlib.Analysis.Real.Sqrt",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.NumberTheory.PrimeCounting",
+          "Mathlib.Order.Filter.AtTopBot.Archimedean",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.MassLogIntegral": {
+        "source_sha256": "bf42c021072fc939bdb5f9d5bc9771fa3d5ed1dd69dd5265bda8418f76a01821",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.HalfProductGeometry"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3ComplexCRTConsumer": {
+        "source_sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3ComplexDispersion",
+          "Mathlib.Data.Int.ModEq",
+          "Mathlib.Data.Nat.ModEq"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3FactorFiberDivisor": {
+        "source_sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3ComplexDispersion",
+          "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3TransposedZeroCovariance": {
+        "source_sha256": "2c96c741270f050abcc2e5d9b877e2f7fb350f79d8e681ece225c88fb3e015e2",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3TransposedDispersion"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3SharedFirstFactorSmallResidualHighConductorZero": {
+        "source_sha256": "cb10abb7e651b3c03a94b589f6c4df4174dad45f6f34fe490bb46aea3225b687",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3SharedFirstFactorCharacterDictionary",
+          "ImbalancedChen.Part3SharedFirstFactorHighConductor"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3SharedFirstFactorHighConductor": {
+        "source_sha256": "2a2f1f4677b5e1210117284cd446a19683be1bfa08eec5bd99247a1be33bfae1",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3SharedFirstFactorDispersion",
+          "ImbalancedChen.Part3PolynomialResidueDivisorBound"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3PolynomialResidueDivisorBound": {
+        "source_sha256": "7cbc4c842aa4dbf18ab9644465e4983014c8aaf8bd38f74dd1b37a5574a2feda",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3CleanBetaLargeGCDMajorant",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3CleanBetaLargeGCDMajorant": {
+        "source_sha256": "94826ca0668f613e348ddddfa4683820d7d6a99844a0cf3923f7bb90159b6bbb",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3CommonSmoothCutoff",
+          "ImbalancedChen.Part3FactorFiberDivisor",
+          "ImbalancedChen.Part3ComplexCRTConsumer"
+        ],
+        "parser_findings": []
+      },
+      "ImbalancedChen.Part3SharedFirstFactorLargeResidualZero": {
+        "source_sha256": "2801c38ab964e3df1850fb0b07cb3adc272c6f80004088aabc95adf360c6afda",
+        "imports": [
+          "Init",
+          "Init",
+          "ImbalancedChen.Part3SharedFirstFactorCharacterDictionary"
+        ],
+        "parser_findings": []
+      }
+    },
+    "foreign_boundary": [
+      "Init",
+      "Lean.Elab.Tactic.NormCast",
+      "Lean.Elab.Tactic.Omega",
+      "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+      "Mathlib.Algebra.BigOperators.Intervals",
+      "Mathlib.Algebra.BigOperators.Ring.Finset",
+      "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+      "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+      "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+      "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+      "Mathlib.Algebra.Order.Floor.Semiring",
+      "Mathlib.Algebra.Ring.Parity",
+      "Mathlib.Algebra.Star.BigOperators",
+      "Mathlib.Analysis.Asymptotics.Defs",
+      "Mathlib.Analysis.Calculus.BumpFunction.InnerProduct",
+      "Mathlib.Analysis.Complex.Basic",
+      "Mathlib.Analysis.Complex.Exponential",
+      "Mathlib.Analysis.Distribution.SchwartzSpace.Fourier",
+      "Mathlib.Analysis.Fourier.PoissonSummation",
+      "Mathlib.Analysis.PSeries",
+      "Mathlib.Analysis.Real.Sqrt",
+      "Mathlib.Analysis.SpecialFunctions.Log.Base",
+      "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+      "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+      "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+      "Mathlib.Data.Finset.Card",
+      "Mathlib.Data.Finset.Max",
+      "Mathlib.Data.Finset.Prod",
+      "Mathlib.Data.Int.ModEq",
+      "Mathlib.Data.Nat.GCD.BigOperators",
+      "Mathlib.Data.Nat.ModEq",
+      "Mathlib.Data.Nat.Prime.Basic",
+      "Mathlib.Data.Nat.PrimeFin",
+      "Mathlib.Data.Nat.Sqrt",
+      "Mathlib.Data.Nat.Squarefree",
+      "Mathlib.Data.Nat.Totient",
+      "Mathlib.Data.Real.Basic",
+      "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+      "Mathlib.MeasureTheory.Measure.Lebesgue.Integral",
+      "Mathlib.NumberTheory.AlmostPrime",
+      "Mathlib.NumberTheory.ArithmeticFunction.Misc",
+      "Mathlib.NumberTheory.Harmonic.Bounds",
+      "Mathlib.NumberTheory.PrimeCounting",
+      "Mathlib.NumberTheory.SelbergSieve",
+      "Mathlib.Order.Filter.AtTopBot.Archimedean",
+      "Mathlib.Order.Filter.AtTopBot.Basic",
+      "Mathlib.Order.Filter.AtTopBot.Field",
+      "Mathlib.Order.Interval.Finset.Nat",
+      "Mathlib.Tactic.Convert",
+      "Mathlib.Tactic.FieldSimp",
+      "Mathlib.Tactic.Linarith",
+      "Mathlib.Tactic.NormNum",
+      "Mathlib.Tactic.Positivity",
+      "Mathlib.Tactic.Ring",
+      "Mathlib.Tactic.SplitIfs",
+      "Mathlib.Topology.Algebra.Order.Field",
+      "Mathlib.Topology.Instances.EReal.Lemmas",
+      "Mathlib.Topology.MetricSpace.Pseudo.Defs",
+      "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean",
+      "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate"
+    ]
+  },
+  "non_author_gate_recommendation": "The complete current794b same-goal source is mathematically suitable for ONE original-resource NEW strict trial, only after root specifically authorizes that exact hash AND sole runtime has independently verified every exact existing project/foreign prerequisite and the three direct Low/Small/Large parents have actually passed strict/replay/full serialized type/safety/transitive-standard-axiom audits. PASS strict alone is not acceptance. This review does not activate or reuse any previous gate, bootstrap prerequisites, or upgrade any candidate parent.",
+  "Energy_c6fc_and_UV631_unchanged": true,
+  "no_source_Lean_build_checker_cache_pin_CI_resource_or_linter_mutation": true,
+  "not_kernel_acceptance_or_main_completion": true
+}

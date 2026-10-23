@@ -1,0 +1,271 @@
+{
+  "status": "SOURCE_ONLY_AUTHOR_REVIEW_PENDING_NONAUTHOR_REVIEW_AND_RUNTIME",
+  "reviewer": "/root/lower_resume (source author)",
+  "created_at_utc": "2026-10-15T22:38:00.475649+00:00",
+  "module": "ImbalancedChen.CurrentChenUpsilon8CoprimeGateBudget",
+  "source_sha256": "c4f5a801eadd6128f088b99cd8128602aeba1d0d8fa2a24906cd3e9cd387e761",
+  "no_Lean_or_build_invoked": true,
+  "no_kernel_owned_or_cache_acceptance_claimed": true,
+  "bytecode_writes_disabled": true,
+  "path": "ImbalancedChen/CurrentChenUpsilon8CoprimeGateBudget.lean",
+  "declaration_count": 10,
+  "definition_count": 3,
+  "theorem_count": 7,
+  "all_complete_headers_definitions_and_proofs": [
+    {
+      "name": "currentChenUpsilon8_prime_inverse_totient_le",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 33,
+      "complete_source_header": "private theorem currentChenUpsilon8_prime_inverse_totient_le\n    {p : ℕ} (hp : Nat.Prime p) {H : ℝ} (hH : 0 < H) (hHp : H ≤ p) :\n    1 / ((p : ℝ) - 1) ≤ 2 / H",
+      "complete_proof_body_after_by": "have hp2 : (2 : ℝ) ≤ p := by exact_mod_cast hp.two_le\n  have hh : H / 2 ≤ (p : ℝ) - 1 := by linarith\n  calc\n    _ ≤ 1 / (H / 2) := one_div_le_one_div_of_le (half_pos hH) hh\n    _ = _ := by field_simp [hH.ne']"
+    },
+    {
+      "name": "currentChenUpsilon8_noncoprime_reciprocalTotient_sum_le",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 44,
+      "complete_source_header": "theorem currentChenUpsilon8_noncoprime_reciprocalTotient_sum_le\n    {N a : ℕ} (hN : (1 : ℝ) ≤ N)\n    (ha : a ∈ currentChenUpsilon8PrefixProducts N)\n    (S : Finset ℕ) (Q : ℕ) (hS : S ⊆ Finset.Icc 1 Q) :\n    (∑ d ∈ S, if Nat.Coprime a d then 0 else 1 / (Nat.totient d : ℝ)) ≤\n      (16 / (N : ℝ) ^ (417 / 5000 : ℝ)) * (1 + Real.log (max 1 (Q : ℝ)))",
+      "complete_proof_body_after_by": "obtain ⟨t, ht, rfl⟩ := Finset.mem_image.mp ha\n  obtain ⟨hp₁, hp₂, horder⟩ := chenY9PrimeSelector_ordered_prime_data\n    (show t ∈ chenY9PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n      ((N : ℝ) ^ (1 / 3 : ℝ)) from ht)\n  have hH := (Finset.mem_filter.mp ht).2.1\n  have hH₂ : (N : ℝ) ^ (417 / 5000 : ℝ) ≤ t.2 :=\n    hH.trans (by exact_mod_cast horder.le)\n  have hHpos : 0 < (N : ℝ) ^ (417 / 5000 : ℝ) :=\n    Real.rpow_pos_of_pos (zero_lt_one.trans_le hN) _\n  have hinv₁ := currentChenUpsilon8_prime_inverse_totient_le hp₁ hHpos hH\n  have hinv₂ := currentChenUpsilon8_prime_inverse_totient_le hp₂ hHpos hH₂\n  have hlog : 0 ≤ 1 + Real.log (max 1 (Q : ℝ)) := by\n    have := Real.log_nonneg (le_max_left 1 (Q : ℝ))\n    linarith\n  have hpoint : ∀ d ∈ S,\n      (if Nat.Coprime (t.1 * t.2) d then (0 : ℝ) else 1 / (Nat.totient d : ℝ)) ≤\n        (if t.1 ∣ d then 1 / (Nat.totient d : ℝ) else 0) +\n          (if t.2 ∣ d then 1 / (Nat.totient d : ℝ) else 0) := by\n    intro d _\n    by_cases hc : Nat.Coprime (t.1 * t.2) d\n    · rw [if_pos hc]\n      positivity\n    · have hd : t.1 ∣ d ∨ t.2 ∣ d := by\n        by_contra hn\n        push Not at hn\n        exact hc (Nat.coprime_mul_iff_left.mpr\n          ⟨hp₁.coprime_iff_not_dvd.mpr hn.1, hp₂.coprime_iff_not_dvd.mpr hn.2⟩)\n      rw [if_neg hc]\n      rcases hd with hd | hd\n      · rw [if_pos hd]\n        have hh : 0 ≤ (if t.2 ∣ d then 1 / (Nat.totient d : ℝ) else 0) := by positivity\n        linarith\n      · rw [if_pos hd]\n        have hh : 0 ≤ (if t.1 ∣ d then 1 / (Nat.totient d : ℝ) else 0) := by positivity\n        linarith\n  have hbudget₁ := currentChenUpsilon9_dvd_reciprocalTotient_sum_le S Q t.1 hp₁ hS\n  have hbudget₂ := currentChenUpsilon9_dvd_reciprocalTotient_sum_le S Q t.2 hp₂ hS\n  have hsum := Finset.sum_le_sum hpoint\n  rw [Finset.sum_add_distrib] at hsum\n  have hsumBudget := hsum.trans (add_le_add hbudget₁ hbudget₂)\n  have hinv := mul_le_mul_of_nonneg_right (add_le_add hinv₁ hinv₂) hlog\n  calc\n    _ ≤ (4 / ((t.1 : ℝ) - 1)) * (1 + Real.log (max 1 (Q : ℝ))) +\n        (4 / ((t.2 : ℝ) - 1)) * (1 + Real.log (max 1 (Q : ℝ))) := hsumBudget\n    _ = 4 * ((1 / ((t.1 : ℝ) - 1) + 1 / ((t.2 : ℝ) - 1)) *\n        (1 + Real.log (max 1 (Q : ℝ)))) := by ring\n    _ ≤ 4 * ((2 / (N : ℝ) ^ (417 / 5000 : ℝ) + 2 / (N : ℝ) ^ (417 / 5000 : ℝ)) *\n        (1 + Real.log (max 1 (Q : ℝ)))) :=\n      mul_le_mul_of_nonneg_left hinv (by norm_num)\n    _ = _ := by ring"
+    },
+    {
+      "name": "currentChenUpsilon8LiMainMass",
+      "kind": "def",
+      "private": false,
+      "start_line": 102,
+      "complete_source_header": "def currentChenUpsilon8LiMainMass (N : ℕ) : ℝ",
+      "complete_definition": "def currentChenUpsilon8LiMainMass (N : ℕ) : ℝ :=\n∑ a ∈ currentChenUpsilon8PrefixProducts N,\n    liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ))"
+    },
+    {
+      "name": "currentChenUpsilon8CoprimeMainDefect",
+      "kind": "def",
+      "private": false,
+      "start_line": 108,
+      "complete_source_header": "def currentChenUpsilon8CoprimeMainDefect (N d : ℕ) : ℝ",
+      "complete_definition": "def currentChenUpsilon8CoprimeMainDefect (N d : ℕ) : ℝ :=\n∑ a ∈ currentChenUpsilon8PrefixProducts N,\n    if Nat.Coprime a d then 0 else\n      liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ))"
+    },
+    {
+      "name": "currentChenUpsilon8CoprimeGateError",
+      "kind": "def",
+      "private": false,
+      "start_line": 113,
+      "complete_source_header": "def currentChenUpsilon8CoprimeGateError (N cap : ℕ) (z L : ℝ) (S : Finset ℕ) : ℝ",
+      "complete_definition": "def currentChenUpsilon8CoprimeGateError (N cap : ℕ) (z L : ℝ) (S : Finset ℕ) : ℝ :=\n∑ d ∈ S, actualSmallRosserPlus N cap z L d *\n    (currentChenUpsilon8CoprimeMainDefect N d / (Nat.totient d : ℝ))"
+    },
+    {
+      "name": "currentChenUpsilon8CoprimeMainDefect_eq_same_coefficient",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 119,
+      "complete_source_header": "theorem currentChenUpsilon8CoprimeMainDefect_eq_same_coefficient {N : ℕ}\n    (hN : (1 : ℝ) ≤ N) (d : ℕ) :\n    currentChenUpsilon8CoprimeMainDefect N d =\n      ∑ a ∈ Finset.Ioc (currentChenUpsilon8PanLower N) (currentChenUpsilon8PanUpper N),\n        currentChenUpsilon8ProductCoefficient N a *\n          (if Nat.Coprime a d then 0 else\n            liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ)))",
+      "complete_proof_body_after_by": "exact (currentChenUpsilon8ProductCoefficient_sum hN _).symm"
+    },
+    {
+      "name": "currentChenUpsilon8_abs_coprimeGateError_le_mass",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 130,
+      "complete_source_header": "theorem currentChenUpsilon8_abs_coprimeGateError_le_mass\n    {N : ℕ} (hN : (1 : ℝ) ≤ N)\n    (hquot : ∀ a ∈ currentChenUpsilon8PrefixProducts N, 2 ≤ (N : ℝ) / (a : ℝ))\n    (cap : ℕ) (z L : ℝ) (S : Finset ℕ) (Q : ℕ) (hS : S ⊆ Finset.Icc 1 Q) :\n    |currentChenUpsilon8CoprimeGateError N cap z L S| ≤\n      ((16 / (N : ℝ) ^ (417 / 5000 : ℝ)) * (1 + Real.log (max 1 (Q : ℝ)))) *\n        currentChenUpsilon8LiMainMass N",
+      "complete_proof_body_after_by": "have hli : ∀ a ∈ currentChenUpsilon8PrefixProducts N,\n      0 ≤ liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ)) := by\n    intro a ha\n    exact liuLogarithmicIntegral_nonneg _ (by positivity) (hquot a ha)\n  have hdef : ∀ d, 0 ≤ currentChenUpsilon8CoprimeMainDefect N d := by\n    intro d\n    apply Finset.sum_nonneg\n    intro a ha\n    split_ifs\n    · exact le_refl 0\n    · exact hli a ha\n  have habs : |currentChenUpsilon8CoprimeGateError N cap z L S| ≤\n      ∑ d ∈ S, currentChenUpsilon8CoprimeMainDefect N d / (Nat.totient d : ℝ) := by\n    apply (Finset.abs_sum_le_sum_abs _ _).trans\n    apply Finset.sum_le_sum\n    intro d _\n    rw [abs_mul, abs_of_nonneg (div_nonneg (hdef d) (Nat.cast_nonneg _))]\n    exact mul_le_of_le_one_left (div_nonneg (hdef d) (Nat.cast_nonneg _))\n      (actualSmallRosserPlus_abs_le_one N cap z L d)\n  have hswap : (∑ d ∈ S,\n      currentChenUpsilon8CoprimeMainDefect N d / (Nat.totient d : ℝ)) =\n      ∑ a ∈ currentChenUpsilon8PrefixProducts N,\n        liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ)) *\n          ∑ d ∈ S, if Nat.Coprime a d then 0 else 1 / (Nat.totient d : ℝ) := by\n    simp only [currentChenUpsilon8CoprimeMainDefect, Finset.sum_div]\n    rw [Finset.sum_comm]\n    apply Finset.sum_congr rfl\n    intro a _\n    rw [Finset.mul_sum]\n    apply Finset.sum_congr rfl\n    intro d _\n    split_ifs <;> ring\n  rw [hswap] at habs\n  apply habs.trans\n  rw [currentChenUpsilon8LiMainMass, Finset.mul_sum]\n  apply Finset.sum_le_sum\n  intro a ha\n  simpa only [mul_comm] using mul_le_mul_of_nonneg_left\n    (currentChenUpsilon8_noncoprime_reciprocalTotient_sum_le hN ha S Q hS) (hli a ha)"
+    },
+    {
+      "name": "eventually_currentChenUpsilon8_li_arguments_two",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 178,
+      "complete_source_header": "theorem eventually_currentChenUpsilon8_li_arguments_two :\n    ∀ᶠ N : ℕ in atTop, ∀ a ∈ currentChenUpsilon8PrefixProducts N,\n      2 ≤ (N : ℝ) / (a : ℝ)",
+      "complete_proof_body_after_by": "have hlarge : ∀ᶠ N : ℕ in atTop, (2 : ℝ) ≤ (N : ℝ) ^ (1 / 3 : ℝ) :=\n    ((tendsto_rpow_atTop (by norm_num : (0 : ℝ) < 1 / 3)).comp\n      tendsto_natCast_atTop_atTop).eventually (eventually_ge_atTop 2)\n  filter_upwards [hlarge, eventually_ge_atTop (1 : ℕ)] with N hlarge hN\n  intro a ha\n  have hNr : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  exact hlarge.trans (currentChenUpsilon8_li_argument_power_lower hNr ha)"
+    },
+    {
+      "name": "currentChenUpsilon8_liMainMass_le_linear_log",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 190,
+      "complete_source_header": "theorem currentChenUpsilon8_liMainMass_le_linear_log {N : ℕ}\n    (hN : (1 : ℝ) ≤ N)\n    (hquot : ∀ a ∈ currentChenUpsilon8PrefixProducts N, 2 ≤ (N : ℝ) / (a : ℝ)) :\n    currentChenUpsilon8LiMainMass N ≤\n      (4 / Real.log 2) * (N : ℝ) * (1 + Real.log (N : ℝ))",
+      "complete_proof_body_after_by": "have hlog2 : 0 < Real.log (2 : ℝ) := Real.log_pos (by norm_num)\n  have hsubset : currentChenUpsilon8PrefixProducts N ⊆ Finset.Icc 1 N := by\n    intro a ha\n    have hap := (currentChenUpsilon8PrefixProducts_data ha).1\n    have haN : (a : ℝ) ≤ N :=\n      (currentChenUpsilon8PrefixProducts_power_bounds hN ha).2.le.trans\n        (Real.rpow_le_self_of_one_le hN (by norm_num))\n    exact Finset.mem_Icc.mpr ⟨hap, by exact_mod_cast haN⟩\n  have hweight : ∀ a ∈ currentChenUpsilon8PrefixProducts N,\n      1 / (a : ℝ) ≤ 1 / (Nat.totient a : ℝ) := by\n    intro a ha\n    have hphi : (0 : ℝ) < Nat.totient a := by\n      exact_mod_cast Nat.totient_pos.mpr (currentChenUpsilon8PrefixProducts_data ha).1\n    exact one_div_le_one_div_of_le hphi (by exact_mod_cast Nat.totient_le a)\n  calc\n    _ ≤ ∑ a ∈ currentChenUpsilon8PrefixProducts N,\n        ((N : ℝ) / (a : ℝ)) / Real.log 2 :=\n      Finset.sum_le_sum (fun a ha => currentChenUpsilon9_li_le_linear (hquot a ha))\n    _ = ((N : ℝ) / Real.log 2) *\n        ∑ a ∈ currentChenUpsilon8PrefixProducts N, 1 / (a : ℝ) := by\n      rw [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro a _\n      ring\n    _ ≤ ((N : ℝ) / Real.log 2) *\n        ∑ a ∈ currentChenUpsilon8PrefixProducts N, 1 / (Nat.totient a : ℝ) :=\n      mul_le_mul_of_nonneg_left (Finset.sum_le_sum hweight) (div_nonneg (Nat.cast_nonneg N) hlog2.le)\n    _ ≤ ((N : ℝ) / Real.log 2) * (4 * (1 + Real.log (N : ℝ))) := by\n      have h := sum_reciprocal_totient_subset_le_log _ N hsubset\n      rw [max_eq_right hN] at h\n      exact mul_le_mul_of_nonneg_left h (div_nonneg (Nat.cast_nonneg N) hlog2.le)\n    _ = _ := by ring"
+    },
+    {
+      "name": "eventually_currentChenUpsilon8_abs_coprimeGateError_le_singularNormalization",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 230,
+      "complete_source_header": "theorem eventually_currentChenUpsilon8_abs_coprimeGateError_le_singularNormalization\n    (ε : ℝ) (hε : 0 < ε) :\n    ∀ᶠ N : ℕ in atTop, ∀ cap : ℕ, ∀ z L : ℝ, ∀ S : Finset ℕ,\n      S ⊆ Finset.Icc 1 N →\n      |currentChenUpsilon8CoprimeGateError N cap z L S| ≤\n        ε * singularNormalization N",
+      "complete_proof_body_after_by": "have hpower := eventually_powerLog_le_singularNormalization\n    (256 / Real.log 2) (4583 / 5000) 2 (by norm_num) ε hε\n  have hlog : ∀ᶠ N : ℕ in atTop, (1 : ℝ) ≤ Real.log (N : ℝ) :=\n    (Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually (eventually_ge_atTop 1)\n  filter_upwards [hpower, hlog, eventually_currentChenUpsilon8_li_arguments_two,\n    eventually_ge_atTop (1 : ℕ)] with N hpower hlog hquot hN\n  intro cap z L S hS\n  have hNr : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  have hNp : (0 : ℝ) < N := zero_lt_one.trans_le hNr\n  have hH : 0 < (N : ℝ) ^ (417 / 5000 : ℝ) := Real.rpow_pos_of_pos hNp _\n  have hlog2 : 0 < Real.log (2 : ℝ) := Real.log_pos (by norm_num)\n  have hfactor : 0 ≤ (16 / (N : ℝ) ^ (417 / 5000 : ℝ)) * (1 + Real.log (N : ℝ)) := by positivity\n  have hfinite := currentChenUpsilon8_abs_coprimeGateError_le_mass hNr hquot cap z L S N hS\n  rw [max_eq_right hNr] at hfinite\n  have hmass := mul_le_mul_of_nonneg_left\n    (currentChenUpsilon8_liMainMass_le_linear_log hNr hquot) hfactor\n  have halgebra :\n      ((16 / (N : ℝ) ^ (417 / 5000 : ℝ)) * (1 + Real.log (N : ℝ))) *\n        ((4 / Real.log 2) * (N : ℝ) * (1 + Real.log (N : ℝ))) =\n      (64 / Real.log 2) * (N : ℝ) ^ (4583 / 5000 : ℝ) * (1 + Real.log (N : ℝ)) ^ 2 := by\n    rw [show (4583 / 5000 : ℝ) = 1 - 417 / 5000 by norm_num,\n      Real.rpow_sub hNp, Real.rpow_one]\n    ring\n  have hlogs : (1 + Real.log (N : ℝ)) ^ 2 ≤ 4 * Real.log (N : ℝ) ^ 2 := by\n    nlinarith [sq_nonneg (Real.log (N : ℝ) - 1)]\n  have hcost := mul_le_mul_of_nonneg_left hlogs\n    (show 0 ≤ (64 / Real.log 2) * (N : ℝ) ^ (4583 / 5000 : ℝ) by positivity)\n  rw [halgebra] at hmass\n  calc\n    _ ≤ (64 / Real.log 2) * (N : ℝ) ^ (4583 / 5000 : ℝ) *\n        (1 + Real.log (N : ℝ)) ^ 2 := hfinite.trans hmass\n    _ ≤ (256 / Real.log 2) * (N : ℝ) ^ (4583 / 5000 : ℝ) * Real.log (N : ℝ) ^ 2 := by\n      calc\n        _ ≤ (64 / Real.log 2) * (N : ℝ) ^ (4583 / 5000 : ℝ) *\n            (4 * Real.log (N : ℝ) ^ 2) := hcost\n        _ = _ := by ring\n    _ ≤ _ := hpower"
+    }
+  ],
+  "type_extraction": "Theorems split only at actual := by; definitions use top-level assignment outside all bracketed named arguments.",
+  "full_current_source": "import ImbalancedChen.CurrentChenUpsilon8ProductPan\n\n/-!\n# Paying the literal eighth coprimality gate\n\nThe actual eighth zero-one product coefficient is independent of the\nsieve modulus. Its Pan main term keeps the true `Coprime a d` gate.\nThe two genuine prime factors are both at least N^(417/5000), so the\nproved reciprocal-totient divisor estimate pays their non-coprime mass.\nThe cofactor need not be coprime to either prime.\n\nThe same signed upper Rosser coefficient is retained throughout. Its\nabsolute gate correction costs O(N^(4583/5000) (log N)^2), paid by the\nexisting power error budget. All li positivity and moving-argument\nconditions are established from the actual eighth source before the\nfinal threshold; they are not caller hypotheses. That threshold precedes\ncap, z, L and the positive-modulus set chosen through N.\n\nThis leaf supplies no count majorant, density value, harmonic mean or\nadopted upper constant. The already owned generic prime-divisor estimate\nand the crude true-li bound are reused rather than reproved.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen Filter Topology\nopen scoped BigOperators\nopen Classical\nopen MathlibNt.SieveTheory.LiuWeight\n\nprivate theorem currentChenUpsilon8_prime_inverse_totient_le\n    {p : ℕ} (hp : Nat.Prime p) {H : ℝ} (hH : 0 < H) (hHp : H ≤ p) :\n    1 / ((p : ℝ) - 1) ≤ 2 / H := by\n  have hp2 : (2 : ℝ) ≤ p := by exact_mod_cast hp.two_le\n  have hh : H / 2 ≤ (p : ℝ) - 1 := by linarith\n  calc\n    _ ≤ 1 / (H / 2) := one_div_le_one_div_of_le (half_pos hH) hh\n    _ = _ := by field_simp [hH.ne']\n\n/-- The literal eighth product label pays the whole non-coprime divisor mass.\nNo equality between the Pan coprime gate and the presieve is assumed. -/\ntheorem currentChenUpsilon8_noncoprime_reciprocalTotient_sum_le\n    {N a : ℕ} (hN : (1 : ℝ) ≤ N)\n    (ha : a ∈ currentChenUpsilon8PrefixProducts N)\n    (S : Finset ℕ) (Q : ℕ) (hS : S ⊆ Finset.Icc 1 Q) :\n    (∑ d ∈ S, if Nat.Coprime a d then 0 else 1 / (Nat.totient d : ℝ)) ≤\n      (16 / (N : ℝ) ^ (417 / 5000 : ℝ)) * (1 + Real.log (max 1 (Q : ℝ))) := by\n  obtain ⟨t, ht, rfl⟩ := Finset.mem_image.mp ha\n  obtain ⟨hp₁, hp₂, horder⟩ := chenY9PrimeSelector_ordered_prime_data\n    (show t ∈ chenY9PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n      ((N : ℝ) ^ (1 / 3 : ℝ)) from ht)\n  have hH := (Finset.mem_filter.mp ht).2.1\n  have hH₂ : (N : ℝ) ^ (417 / 5000 : ℝ) ≤ t.2 :=\n    hH.trans (by exact_mod_cast horder.le)\n  have hHpos : 0 < (N : ℝ) ^ (417 / 5000 : ℝ) :=\n    Real.rpow_pos_of_pos (zero_lt_one.trans_le hN) _\n  have hinv₁ := currentChenUpsilon8_prime_inverse_totient_le hp₁ hHpos hH\n  have hinv₂ := currentChenUpsilon8_prime_inverse_totient_le hp₂ hHpos hH₂\n  have hlog : 0 ≤ 1 + Real.log (max 1 (Q : ℝ)) := by\n    have := Real.log_nonneg (le_max_left 1 (Q : ℝ))\n    linarith\n  have hpoint : ∀ d ∈ S,\n      (if Nat.Coprime (t.1 * t.2) d then (0 : ℝ) else 1 / (Nat.totient d : ℝ)) ≤\n        (if t.1 ∣ d then 1 / (Nat.totient d : ℝ) else 0) +\n          (if t.2 ∣ d then 1 / (Nat.totient d : ℝ) else 0) := by\n    intro d _\n    by_cases hc : Nat.Coprime (t.1 * t.2) d\n    · rw [if_pos hc]\n      positivity\n    · have hd : t.1 ∣ d ∨ t.2 ∣ d := by\n        by_contra hn\n        push Not at hn\n        exact hc (Nat.coprime_mul_iff_left.mpr\n          ⟨hp₁.coprime_iff_not_dvd.mpr hn.1, hp₂.coprime_iff_not_dvd.mpr hn.2⟩)\n      rw [if_neg hc]\n      rcases hd with hd | hd\n      · rw [if_pos hd]\n        have hh : 0 ≤ (if t.2 ∣ d then 1 / (Nat.totient d : ℝ) else 0) := by positivity\n        linarith\n      · rw [if_pos hd]\n        have hh : 0 ≤ (if t.1 ∣ d then 1 / (Nat.totient d : ℝ) else 0) := by positivity\n        linarith\n  have hbudget₁ := currentChenUpsilon9_dvd_reciprocalTotient_sum_le S Q t.1 hp₁ hS\n  have hbudget₂ := currentChenUpsilon9_dvd_reciprocalTotient_sum_le S Q t.2 hp₂ hS\n  have hsum := Finset.sum_le_sum hpoint\n  rw [Finset.sum_add_distrib] at hsum\n  have hsumBudget := hsum.trans (add_le_add hbudget₁ hbudget₂)\n  have hinv := mul_le_mul_of_nonneg_right (add_le_add hinv₁ hinv₂) hlog\n  calc\n    _ ≤ (4 / ((t.1 : ℝ) - 1)) * (1 + Real.log (max 1 (Q : ℝ))) +\n        (4 / ((t.2 : ℝ) - 1)) * (1 + Real.log (max 1 (Q : ℝ))) := hsumBudget\n    _ = 4 * ((1 / ((t.1 : ℝ) - 1) + 1 / ((t.2 : ℝ) - 1)) *\n        (1 + Real.log (max 1 (Q : ℝ)))) := by ring\n    _ ≤ 4 * ((2 / (N : ℝ) ^ (417 / 5000 : ℝ) + 2 / (N : ℝ) ^ (417 / 5000 : ℝ)) *\n        (1 + Real.log (max 1 (Q : ℝ)))) :=\n      mul_le_mul_of_nonneg_left hinv (by norm_num)\n    _ = _ := by ring\n\n/-- The literal ungated li main mass of the same actual product image. -/\ndef currentChenUpsilon8LiMainMass (N : ℕ) : ℝ :=\n  ∑ a ∈ currentChenUpsilon8PrefixProducts N,\n    liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ))\n\n/-- The exact non-coprime part of that main mass, before applying the\nsame signed upper Rosser coefficient as in the count sieve. -/\ndef currentChenUpsilon8CoprimeMainDefect (N d : ℕ) : ℝ :=\n  ∑ a ∈ currentChenUpsilon8PrefixProducts N,\n    if Nat.Coprime a d then 0 else\n      liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ))\n\ndef currentChenUpsilon8CoprimeGateError (N cap : ℕ) (z L : ℝ) (S : Finset ℕ) : ℝ :=\n  ∑ d ∈ S, actualSmallRosserPlus N cap z L d *\n    (currentChenUpsilon8CoprimeMainDefect N d / (Nat.totient d : ℝ))\n\n/-- The defect is the same zero-one coefficient in the actual Pan source\nwindow.  Its coprimality gate is visible and unchanged. -/\ntheorem currentChenUpsilon8CoprimeMainDefect_eq_same_coefficient {N : ℕ}\n    (hN : (1 : ℝ) ≤ N) (d : ℕ) :\n    currentChenUpsilon8CoprimeMainDefect N d =\n      ∑ a ∈ Finset.Ioc (currentChenUpsilon8PanLower N) (currentChenUpsilon8PanUpper N),\n        currentChenUpsilon8ProductCoefficient N a *\n          (if Nat.Coprime a d then 0 else\n            liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ))) := by\n  exact (currentChenUpsilon8ProductCoefficient_sum hN _).symm\n\n/-- Finite payment with the actual signed Rosser coefficient.  Positivity\nis used only for the genuine li mass, never imposed on the coefficient. -/\ntheorem currentChenUpsilon8_abs_coprimeGateError_le_mass\n    {N : ℕ} (hN : (1 : ℝ) ≤ N)\n    (hquot : ∀ a ∈ currentChenUpsilon8PrefixProducts N, 2 ≤ (N : ℝ) / (a : ℝ))\n    (cap : ℕ) (z L : ℝ) (S : Finset ℕ) (Q : ℕ) (hS : S ⊆ Finset.Icc 1 Q) :\n    |currentChenUpsilon8CoprimeGateError N cap z L S| ≤\n      ((16 / (N : ℝ) ^ (417 / 5000 : ℝ)) * (1 + Real.log (max 1 (Q : ℝ)))) *\n        currentChenUpsilon8LiMainMass N := by\n  have hli : ∀ a ∈ currentChenUpsilon8PrefixProducts N,\n      0 ≤ liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ)) := by\n    intro a ha\n    exact liuLogarithmicIntegral_nonneg _ (by positivity) (hquot a ha)\n  have hdef : ∀ d, 0 ≤ currentChenUpsilon8CoprimeMainDefect N d := by\n    intro d\n    apply Finset.sum_nonneg\n    intro a ha\n    split_ifs\n    · exact le_refl 0\n    · exact hli a ha\n  have habs : |currentChenUpsilon8CoprimeGateError N cap z L S| ≤\n      ∑ d ∈ S, currentChenUpsilon8CoprimeMainDefect N d / (Nat.totient d : ℝ) := by\n    apply (Finset.abs_sum_le_sum_abs _ _).trans\n    apply Finset.sum_le_sum\n    intro d _\n    rw [abs_mul, abs_of_nonneg (div_nonneg (hdef d) (Nat.cast_nonneg _))]\n    exact mul_le_of_le_one_left (div_nonneg (hdef d) (Nat.cast_nonneg _))\n      (actualSmallRosserPlus_abs_le_one N cap z L d)\n  have hswap : (∑ d ∈ S,\n      currentChenUpsilon8CoprimeMainDefect N d / (Nat.totient d : ℝ)) =\n      ∑ a ∈ currentChenUpsilon8PrefixProducts N,\n        liuLogarithmicIntegral (2 / Real.log 2) ((N : ℝ) / (a : ℝ)) *\n          ∑ d ∈ S, if Nat.Coprime a d then 0 else 1 / (Nat.totient d : ℝ) := by\n    simp only [currentChenUpsilon8CoprimeMainDefect, Finset.sum_div]\n    rw [Finset.sum_comm]\n    apply Finset.sum_congr rfl\n    intro a _\n    rw [Finset.mul_sum]\n    apply Finset.sum_congr rfl\n    intro d _\n    split_ifs <;> ring\n  rw [hswap] at habs\n  apply habs.trans\n  rw [currentChenUpsilon8LiMainMass, Finset.mul_sum]\n  apply Finset.sum_le_sum\n  intro a ha\n  simpa only [mul_comm] using mul_le_mul_of_nonneg_left\n    (currentChenUpsilon8_noncoprime_reciprocalTotient_sum_le hN ha S Q hS) (hli a ha)\n\n/-- The actual product powers put every li argument above two eventually. -/\ntheorem eventually_currentChenUpsilon8_li_arguments_two :\n    ∀ᶠ N : ℕ in atTop, ∀ a ∈ currentChenUpsilon8PrefixProducts N,\n      2 ≤ (N : ℝ) / (a : ℝ) := by\n  have hlarge : ∀ᶠ N : ℕ in atTop, (2 : ℝ) ≤ (N : ℝ) ^ (1 / 3 : ℝ) :=\n    ((tendsto_rpow_atTop (by norm_num : (0 : ℝ) < 1 / 3)).comp\n      tendsto_natCast_atTop_atTop).eventually (eventually_ge_atTop 2)\n  filter_upwards [hlarge, eventually_ge_atTop (1 : ℕ)] with N hlarge hN\n  intro a ha\n  have hNr : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  exact hlarge.trans (currentChenUpsilon8_li_argument_power_lower hNr ha)\n\n/-- A crude proved main-mass bound is sufficient for the gate error. -/\ntheorem currentChenUpsilon8_liMainMass_le_linear_log {N : ℕ}\n    (hN : (1 : ℝ) ≤ N)\n    (hquot : ∀ a ∈ currentChenUpsilon8PrefixProducts N, 2 ≤ (N : ℝ) / (a : ℝ)) :\n    currentChenUpsilon8LiMainMass N ≤\n      (4 / Real.log 2) * (N : ℝ) * (1 + Real.log (N : ℝ)) := by\n  have hlog2 : 0 < Real.log (2 : ℝ) := Real.log_pos (by norm_num)\n  have hsubset : currentChenUpsilon8PrefixProducts N ⊆ Finset.Icc 1 N := by\n    intro a ha\n    have hap := (currentChenUpsilon8PrefixProducts_data ha).1\n    have haN : (a : ℝ) ≤ N :=\n      (currentChenUpsilon8PrefixProducts_power_bounds hN ha).2.le.trans\n        (Real.rpow_le_self_of_one_le hN (by norm_num))\n    exact Finset.mem_Icc.mpr ⟨hap, by exact_mod_cast haN⟩\n  have hweight : ∀ a ∈ currentChenUpsilon8PrefixProducts N,\n      1 / (a : ℝ) ≤ 1 / (Nat.totient a : ℝ) := by\n    intro a ha\n    have hphi : (0 : ℝ) < Nat.totient a := by\n      exact_mod_cast Nat.totient_pos.mpr (currentChenUpsilon8PrefixProducts_data ha).1\n    exact one_div_le_one_div_of_le hphi (by exact_mod_cast Nat.totient_le a)\n  calc\n    _ ≤ ∑ a ∈ currentChenUpsilon8PrefixProducts N,\n        ((N : ℝ) / (a : ℝ)) / Real.log 2 :=\n      Finset.sum_le_sum (fun a ha => currentChenUpsilon9_li_le_linear (hquot a ha))\n    _ = ((N : ℝ) / Real.log 2) *\n        ∑ a ∈ currentChenUpsilon8PrefixProducts N, 1 / (a : ℝ) := by\n      rw [Finset.mul_sum]\n      apply Finset.sum_congr rfl\n      intro a _\n      ring\n    _ ≤ ((N : ℝ) / Real.log 2) *\n        ∑ a ∈ currentChenUpsilon8PrefixProducts N, 1 / (Nat.totient a : ℝ) :=\n      mul_le_mul_of_nonneg_left (Finset.sum_le_sum hweight) (div_nonneg (Nat.cast_nonneg N) hlog2.le)\n    _ ≤ ((N : ℝ) / Real.log 2) * (4 * (1 + Real.log (N : ℝ))) := by\n      have h := sum_reciprocal_totient_subset_le_log _ N hsubset\n      rw [max_eq_right hN] at h\n      exact mul_le_mul_of_nonneg_left h (div_nonneg (Nat.cast_nonneg N) hlog2.le)\n    _ = _ := by ring\n\n/-- Every actual signed upper Rosser coprimality correction, on arbitrary\npositive moduli through N chosen after N, has negligible normalized cost. -/\ntheorem eventually_currentChenUpsilon8_abs_coprimeGateError_le_singularNormalization\n    (ε : ℝ) (hε : 0 < ε) :\n    ∀ᶠ N : ℕ in atTop, ∀ cap : ℕ, ∀ z L : ℝ, ∀ S : Finset ℕ,\n      S ⊆ Finset.Icc 1 N →\n      |currentChenUpsilon8CoprimeGateError N cap z L S| ≤\n        ε * singularNormalization N := by\n  have hpower := eventually_powerLog_le_singularNormalization\n    (256 / Real.log 2) (4583 / 5000) 2 (by norm_num) ε hε\n  have hlog : ∀ᶠ N : ℕ in atTop, (1 : ℝ) ≤ Real.log (N : ℝ) :=\n    (Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually (eventually_ge_atTop 1)\n  filter_upwards [hpower, hlog, eventually_currentChenUpsilon8_li_arguments_two,\n    eventually_ge_atTop (1 : ℕ)] with N hpower hlog hquot hN\n  intro cap z L S hS\n  have hNr : (1 : ℝ) ≤ N := by exact_mod_cast hN\n  have hNp : (0 : ℝ) < N := zero_lt_one.trans_le hNr\n  have hH : 0 < (N : ℝ) ^ (417 / 5000 : ℝ) := Real.rpow_pos_of_pos hNp _\n  have hlog2 : 0 < Real.log (2 : ℝ) := Real.log_pos (by norm_num)\n  have hfactor : 0 ≤ (16 / (N : ℝ) ^ (417 / 5000 : ℝ)) * (1 + Real.log (N : ℝ)) := by positivity\n  have hfinite := currentChenUpsilon8_abs_coprimeGateError_le_mass hNr hquot cap z L S N hS\n  rw [max_eq_right hNr] at hfinite\n  have hmass := mul_le_mul_of_nonneg_left\n    (currentChenUpsilon8_liMainMass_le_linear_log hNr hquot) hfactor\n  have halgebra :\n      ((16 / (N : ℝ) ^ (417 / 5000 : ℝ)) * (1 + Real.log (N : ℝ))) *\n        ((4 / Real.log 2) * (N : ℝ) * (1 + Real.log (N : ℝ))) =\n      (64 / Real.log 2) * (N : ℝ) ^ (4583 / 5000 : ℝ) * (1 + Real.log (N : ℝ)) ^ 2 := by\n    rw [show (4583 / 5000 : ℝ) = 1 - 417 / 5000 by norm_num,\n      Real.rpow_sub hNp, Real.rpow_one]\n    ring\n  have hlogs : (1 + Real.log (N : ℝ)) ^ 2 ≤ 4 * Real.log (N : ℝ) ^ 2 := by\n    nlinarith [sq_nonneg (Real.log (N : ℝ) - 1)]\n  have hcost := mul_le_mul_of_nonneg_left hlogs\n    (show 0 ≤ (64 / Real.log 2) * (N : ℝ) ^ (4583 / 5000 : ℝ) by positivity)\n  rw [halgebra] at hmass\n  calc\n    _ ≤ (64 / Real.log 2) * (N : ℝ) ^ (4583 / 5000 : ℝ) *\n        (1 + Real.log (N : ℝ)) ^ 2 := hfinite.trans hmass\n    _ ≤ (256 / Real.log 2) * (N : ℝ) ^ (4583 / 5000 : ℝ) * Real.log (N : ℝ) ^ 2 := by\n      calc\n        _ ≤ (64 / Real.log 2) * (N : ℝ) ^ (4583 / 5000 : ℝ) *\n            (4 * Real.log (N : ℝ) ^ 2) := hcost\n        _ = _ := by ring\n    _ ≤ _ := hpower\n\nend\n\nend ImbalancedChen\n",
+  "parent": {
+    "path": "ImbalancedChen/CurrentChenUpsilon8ProductPan.lean",
+    "sha256": "80621797c21adc263fc702e07a13c0b0b543a40f34ca2658a7fa281e1af12b11",
+    "owned_receipt_path": ".lake/proof-continuation/audits/20261015T215816603875Z/receipt.json",
+    "owned_receipt_sha256": "8b85641b9088d2ad7895bae539ca0e23a9bb3c2a7c343573e40141c5746a5e29",
+    "status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+    "scope": "This is the parent own-object acceptance only, not full importedclosure replay."
+  },
+  "reused_generic_gate_source": {
+    "path": "ImbalancedChen/CurrentChenUpsilon9CoprimeGateBudget.lean",
+    "sha256": "26412eaa03d9ea681c2726dd955ea7d5848d7f9342fd6804f00cc881e97ba821",
+    "owned_receipt_path": ".lake/proof-continuation/audits/20261015T190546514074Z/receipt.json",
+    "owned_receipt_sha256": "095d8572453bb36aac176472d685b4db38ebd61753a297984bb70cc9468e161b"
+  },
+  "relative_DAG_delta": {
+    "new_local": [
+      "ImbalancedChen.CurrentChenUpsilon8CoprimeGateBudget"
+    ],
+    "new_foreign": []
+  },
+  "semantic_review": [
+    "The sole parent is the genuinely owned actual U8 product/Pan leaf 80621797. The new definitions use its literal product image, exact modulus-independent zero-one coefficient and original Pan window. No ninth-source set or artificial coefficient replaces it.",
+    "Unfolding actual U8 product membership supplies its actual selector pair. The generic ordered-prime data theorem applies definitionally because chenY8PrimeSelector and chenY9PrimeSelector have the same predicate at these parameters. Actual p1>=N^(417/5000), strict p1<N^(1/3)<=p2 give both genuine primes the same positive lower bound. Their possible common divisor with d is retained, never equated with a presieve gate.",
+    "For positive moduli in any S subset Icc 1 Q, non-coprimality of p1*p2 with d forces p1|d or p2|d. The already owned generic prime-divisor reciprocal-totient bound is applied twice. It was proved with totient_super_multiplicative and does not assume a prime is coprime to its modulus cofactor. The local elementary reciprocal inequality uses p>=2 and p>=H. This proves the actual finite budget 16*N^(-417/5000)*(1+log(max1Q)).",
+    "LiMainMass8 is the literal ungated true-li sum on actual Products8. Defect8 is precisely its non-coprime part. Its same-coefficient window identity is the already proved U8ProductCoefficient_sum with the defect test; the original Coprime a d remains visible.",
+    "GateError8 contains the very same actual signed upper Rosser coefficient as a future count sieve. The proof bounds its absolute value using abs(actuallambda)<=1, nonnegativity of the actual true-li terms and finite Fubini. No individual lambda is assumed positive and no sign-sensitive term is dropped. The finite mass estimate is multiplied only by genuine nonnegative li values.",
+    "Every actual a satisfies N/a>=N^(1/3), by the owned literal U8 endpoint proof. The real power tends to infinity, uniformly putting every actual li argument above two beyond a threshold chosen before a. Thus li positivity is internally paid for the final theorem, although the intermediate finite estimates expose the natural argument>=2 condition.",
+    "Actual Products8 subset Icc 1 N follows from positivity and a<N^(2/3)<=N for N>=1. The generic proved crude true-li upper bound and phi(a)<=a in the correct inverse direction, plus the finite reciprocal-totient sum, give LiMainMass8<=(4/log2)*N*(1+log N). This is an error estimate only, not the leading-one asymptotic.",
+    "For S subset Icc 1 N, the absolute gate error is at most (256/log2)*N^(4583/5000)*(log N)^2 for large N. The identity 4583/5000=1-417/5000 is exact, and theta<1 is paid by norm_num. The existing genuine PowerErrorBudget proves arbitrary epsilon*singularNormalization; no core bound, current main term, parity, hLower/hUpper or adopted constant is a caller premise.",
+    "The final quantifier order is epsilon>0, eventually N, then every cap,z,L,S with only S subset positive moduli through N. It therefore allows the actual cap/roughness/level/modulus set to be chosen after N. The source-independent density factor8 and all finite-count/Pan/harmonic assembly obligations remain separate and are not claimed by this leaf."
+  ],
+  "fixed_API_source_evidence": [
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenMeanLedger.lean",
+      "file_sha256": "30597d5f381031fc7d7e794fe105a11d6981053b34a1406d46f40bf7840dc0c8",
+      "lines": [
+        115,
+        125
+      ],
+      "role": "The actual U8 selector and generic Y9 selector have identical predicates; original literal endpoints are supplied by U8ProductPan",
+      "literal_source_excerpt": "def chenY8PrimeSelector (N : ℕ) (A C : ℝ) : Finset (ℕ × ℕ) :=\n  (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N).filter fun t =>\n    A ≤ (t.1 : ℝ) ∧ (t.1 : ℝ) < C ∧ C ≤ (t.2 : ℝ) ∧\n    (t.2 : ℝ) < Real.sqrt ((N : ℝ) / (t.1 : ℝ))\n\n/-- Actual ninth selector. Its quotient cutoff is kept separately below\nand is not identified with the second prime. -/\ndef chenY9PrimeSelector (N : ℕ) (H D : ℝ) : Finset (ℕ × ℕ) :=\n  (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N).filter fun t =>\n    H ≤ (t.1 : ℝ) ∧ (t.1 : ℝ) < D ∧ D ≤ (t.2 : ℝ) ∧\n    (t.2 : ℝ) < Real.sqrt ((N : ℝ) / (t.1 : ℝ))"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenUpsilon9ProductCoefficient.lean",
+      "file_sha256": "6c61547d4733119f3f9944799ccba369f8e54ed3f008275983653ea8277ec59d",
+      "lines": [
+        26,
+        33
+      ],
+      "role": "Generic ordered-prime data, applied definitionally to the actual U8 selector",
+      "literal_source_excerpt": "theorem chenY9PrimeSelector_ordered_prime_data {N : ℕ} {H D : ℝ}\n    {t : ℕ × ℕ} (ht : t ∈ chenY9PrimeSelector N H D) :\n    Nat.Prime t.1 ∧ Nat.Prime t.2 ∧ t.1 < t.2 := by\n  obtain ⟨hc, _, hfirst, hsecond, _⟩ := Finset.mem_filter.mp ht\n  obtain ⟨hc₁, hc₂⟩ := Finset.mem_product.mp hc\n  refine ⟨(mem_chenAdditivePrimeCarrier.mp hc₁).2.1,\n    (mem_chenAdditivePrimeCarrier.mp hc₂).2.1, ?_⟩\n  exact_mod_cast hfirst.trans_le hsecond"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenUpsilon8ProductPan.lean",
+      "file_sha256": "80621797c21adc263fc702e07a13c0b0b543a40f34ca2658a7fa281e1af12b11",
+      "lines": [
+        99,
+        144
+      ],
+      "role": "Actual U8 product power bounds and exact same zero-one coefficient identity",
+      "literal_source_excerpt": "theorem currentChenUpsilon8PrefixProducts_power_bounds {N a : ℕ}\n    (hN : (1 : ℝ) ≤ N) (ha : a ∈ currentChenUpsilon8PrefixProducts N) :\n    (N : ℝ) ^ (6251 / 15000 : ℝ) ≤ (a : ℝ) ∧\n      (a : ℝ) < (N : ℝ) ^ (2 / 3 : ℝ) := by\n  obtain ⟨t, ht, rfl⟩ := Finset.mem_image.mp ha\n  exact currentChenUpsilon8_multiplier_power_bounds hN ht\n\ndef currentChenUpsilon8PanLower (N : ℕ) : ℕ :=\n  Nat.ceil ((N : ℝ) ^ (6251 / 15000 : ℝ)) - 1\n\ndef currentChenUpsilon8PanUpper (N : ℕ) : ℕ :=\n  Nat.ceil ((N : ℝ) ^ (2 / 3 : ℝ)) - 1\n\ntheorem currentChenUpsilon8PrefixProducts_subset_pan_interval {N : ℕ}\n    (hN : (1 : ℝ) ≤ N) :\n    currentChenUpsilon8PrefixProducts N ⊆\n      Finset.Ioc (currentChenUpsilon8PanLower N) (currentChenUpsilon8PanUpper N) := by\n  intro a ha\n  obtain ⟨hlo, hhi⟩ := currentChenUpsilon8PrefixProducts_power_bounds hN ha\n  have hceil : Nat.ceil ((N : ℝ) ^ (6251 / 15000 : ℝ)) ≤ a := Nat.ceil_le.mpr hlo\n  have hceilpos : 1 ≤ Nat.ceil ((N : ℝ) ^ (6251 / 15000 : ℝ)) :=\n    Nat.one_le_ceil_iff.mpr (Real.rpow_pos_of_pos (zero_lt_one.trans_le hN) _)\n  have hceilhi : a < Nat.ceil ((N : ℝ) ^ (2 / 3 : ℝ)) := Nat.lt_ceil.mpr hhi\n  apply Finset.mem_Ioc.mpr\n  dsimp [currentChenUpsilon8PanLower, currentChenUpsilon8PanUpper]\n  omega\n\n/-- Exact source-coefficient identity on the actual Pan window. -/\ntheorem currentChenUpsilon8ProductCoefficient_sum {N : ℕ}\n    (hN : (1 : ℝ) ≤ N) (G : ℕ → ℝ) :\n    (∑ a ∈ Finset.Ioc (currentChenUpsilon8PanLower N) (currentChenUpsilon8PanUpper N),\n      currentChenUpsilon8ProductCoefficient N a * G a) =\n        ∑ a ∈ currentChenUpsilon8PrefixProducts N, G a := by\n  have hfilter :\n      (Finset.Ioc (currentChenUpsilon8PanLower N) (currentChenUpsilon8PanUpper N)).filter\n        (fun a => a ∈ currentChenUpsilon8PrefixProducts N) =\n          currentChenUpsilon8PrefixProducts N := by\n    ext a\n    simp only [Finset.mem_filter]\n    exact ⟨fun h => h.2,\n      fun ha => ⟨currentChenUpsilon8PrefixProducts_subset_pan_interval hN ha, ha⟩⟩\n  rw [← hfilter, Finset.sum_filter]\n  apply Finset.sum_congr rfl\n  intro a _\n  by_cases ha : a ∈ currentChenUpsilon8PrefixProducts N <;>\n    simp only [currentChenUpsilon8ProductCoefficient, ha, if_true, if_false, one_mul, zero_mul]"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenUpsilon8ProductPan.lean",
+      "file_sha256": "80621797c21adc263fc702e07a13c0b0b543a40f34ca2658a7fa281e1af12b11",
+      "lines": [
+        218,
+        229
+      ],
+      "role": "Actual U8 moving li argument lower bound N^(1/3)",
+      "literal_source_excerpt": "theorem currentChenUpsilon8_li_argument_power_lower {N a : ℕ}\n    (hN : (1 : ℝ) ≤ N) (ha : a ∈ currentChenUpsilon8PrefixProducts N) :\n    (N : ℝ) ^ (1 / 3 : ℝ) ≤ (N : ℝ) / (a : ℝ) := by\n  have hNp : (0 : ℝ) < N := zero_lt_one.trans_le hN\n  have hap : (0 : ℝ) < a := by exact_mod_cast (currentChenUpsilon8PrefixProducts_data ha).1\n  apply (le_div_iff₀ hap).mpr\n  calc\n    _ ≤ (N : ℝ) ^ (1 / 3 : ℝ) * (N : ℝ) ^ (2 / 3 : ℝ) :=\n      mul_le_mul_of_nonneg_left (currentChenUpsilon8PrefixProducts_power_bounds hN ha).2.le\n        (Real.rpow_nonneg hNp.le _)\n    _ = _ := by\n      rw [← Real.rpow_add hNp, show (1 / 3 : ℝ) + 2 / 3 = 1 by norm_num, Real.rpow_one]"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenUpsilon9CoprimeGateBudget.lean",
+      "file_sha256": "26412eaa03d9ea681c2726dd955ea7d5848d7f9342fd6804f00cc881e97ba821",
+      "lines": [
+        34,
+        118
+      ],
+      "role": "Already proved generic true-li linear bound and actual prime-divisor reciprocal-totient sum, no arbitrary distribution premise",
+      "literal_source_excerpt": "    liuLogarithmicIntegral (2 / Real.log 2) x ≤ x / Real.log 2 := by\n  have hlog2 : 0 < Real.log (2 : ℝ) := Real.log_pos (by norm_num)\n  have hint : (∫ t in (2 : ℝ)..x, 1 / Real.log t) ≤\n      (x - 2) / Real.log 2 := by\n    calc\n      _ ≤ ∫ _t in (2 : ℝ)..x, 1 / Real.log 2 := by\n        apply intervalIntegral.integral_mono_on hx\n          (liuLogarithmicIntegrand_intervalIntegrable hx) intervalIntegrable_const\n        intro t ht\n        exact one_div_le_one_div_of_le hlog2\n          (Real.log_le_log (by norm_num : (0 : ℝ) < 2) ht.1)\n      _ = _ := by\n        simp only [intervalIntegral.integral_const, smul_eq_mul]\n        ring\n  unfold liuLogarithmicIntegral\n  calc\n    _ ≤ 2 / Real.log 2 + (x - 2) / Real.log 2 := add_le_add (le_refl _) hint\n    _ = _ := by ring\n\n/-- A prime-divisible positive-modulus sum loses a factor `phi p`.\nThe cofactor need not be coprime to p: totient is supermultiplicative. -/\ntheorem currentChenUpsilon9_dvd_reciprocalTotient_sum_le\n    (S : Finset ℕ) (Q p : ℕ) (hp : Nat.Prime p)\n    (hS : S ⊆ Finset.Icc 1 Q) :\n    (∑ d ∈ S, if p ∣ d then 1 / (Nat.totient d : ℝ) else 0) ≤\n      (4 / ((p : ℝ) - 1)) * (1 + Real.log (max 1 (Q : ℝ))) := by\n  let T := S.filter (fun d => p ∣ d)\n  have hT : ∀ d ∈ T, 0 < d ∧ p ∣ d := by\n    intro d hd\n    obtain ⟨hdS, hpd⟩ := Finset.mem_filter.mp hd\n    exact ⟨lt_of_lt_of_le Nat.zero_lt_one (Finset.mem_Icc.mp (hS hdS)).1, hpd⟩\n  have hquotpos : ∀ d ∈ T, 0 < d / p := by\n    intro d hd\n    apply Nat.pos_of_ne_zero\n    intro hz\n    have heq := Nat.mul_div_cancel' (hT d hd).2\n    rw [hz, mul_zero] at heq\n    exact (hT d hd).1.ne' heq.symm\n  have hinj : Set.InjOn (fun d : ℕ => d / p) (T : Set ℕ) := by\n    intro d hd e he hde\n    calc\n      d = p * (d / p) := (Nat.mul_div_cancel' (hT d hd).2).symm\n      _ = p * (e / p) := congrArg (fun m : ℕ => p * m) hde\n      _ = e := Nat.mul_div_cancel' (hT e he).2\n  have hquot : T.image (fun d => d / p) ⊆ Finset.Icc 1 Q := by\n    intro m hm\n    obtain ⟨d, hd, rfl⟩ := Finset.mem_image.mp hm\n    exact Finset.mem_Icc.mpr ⟨hquotpos d hd,\n      (Nat.div_le_self d p).trans (Finset.mem_Icc.mp (hS (Finset.mem_filter.mp hd).1)).2⟩\n  have hpφ : (0 : ℝ) < Nat.totient p := by\n    exact_mod_cast Nat.totient_pos.mpr hp.pos\n  have hterm : ∀ d ∈ T, 1 / (Nat.totient d : ℝ) ≤\n      (1 / (Nat.totient p : ℝ)) * (1 / (Nat.totient (d / p) : ℝ)) := by\n    intro d hd\n    have hmφ : (0 : ℝ) < Nat.totient (d / p) := by\n      exact_mod_cast Nat.totient_pos.mpr (hquotpos d hd)\n    have hsuper : (Nat.totient p : ℝ) * (Nat.totient (d / p) : ℝ) ≤\n        (Nat.totient d : ℝ) := by\n      have h := Nat.totient_super_multiplicative p (d / p)\n      rw [Nat.mul_div_cancel' (hT d hd).2] at h\n      exact_mod_cast h\n    calc\n      _ ≤ 1 / ((Nat.totient p : ℝ) * (Nat.totient (d / p) : ℝ)) :=\n        one_div_le_one_div_of_le (mul_pos hpφ hmφ) hsuper\n      _ = _ := by simp only [one_div, mul_inv_rev]; ring\n  have hpcast : (Nat.totient p : ℝ) = (p : ℝ) - 1 := by\n    rw [Nat.totient_prime hp, Nat.cast_sub hp.one_le, Nat.cast_one]\n  calc\n    _ = ∑ d ∈ T, 1 / (Nat.totient d : ℝ) := by simp only [T, Finset.sum_filter]\n    _ ≤ ∑ d ∈ T,\n        (1 / (Nat.totient p : ℝ)) * (1 / (Nat.totient (d / p) : ℝ)) :=\n      Finset.sum_le_sum hterm\n    _ = (1 / (Nat.totient p : ℝ)) *\n        ∑ m ∈ T.image (fun d => d / p), 1 / (Nat.totient m : ℝ) := by\n      rw [Finset.mul_sum, Finset.sum_image hinj]\n    _ ≤ (1 / (Nat.totient p : ℝ)) *\n        (4 * (1 + Real.log (max 1 (Q : ℝ)))) :=\n      mul_le_mul_of_nonneg_left (sum_reciprocal_totient_subset_le_log _ Q hquot)\n        (one_div_nonneg.mpr hpφ.le)\n    _ = _ := by rw [hpcast]; ring\n\nprivate theorem currentChenUpsilon9_prime_inverse_totient_le\n    {p : ℕ} (hp : Nat.Prime p) {H : ℝ} (hH : 0 < H) (hHp : H ≤ p) :\n    1 / ((p : ℝ) - 1) ≤ 2 / H := by\n  have hp2 : (2 : ℝ) ≤ p := by exact_mod_cast hp.two_le"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Data/Nat/Totient.lean",
+      "file_sha256": "943c40005c794e014241782a406445e6dcc2a88f369f8388188ba37a58ee82ea",
+      "lines": [
+        340,
+        354
+      ],
+      "role": "Fixed actual Nat.totient_super_multiplicative; cofactor coprimality is unnecessary",
+      "literal_source_excerpt": "  rw [shuffle, shuffle]\n  rotate_left\n  repeat' apply prod_primeFactors_dvd\n  simp only [prod_primeFactors_gcd_mul_prod_primeFactors_mul]\n  rw [eq_comm, mul_comm, ← mul_assoc, ← Nat.mul_div_assoc]\n  exact mul_dvd_mul (prod_primeFactors_dvd a) (prod_primeFactors_dvd b)\n\ntheorem totient_super_multiplicative (a b : ℕ) : φ a * φ b ≤ φ (a * b) := by\n  let d := a.gcd b\n  rcases eq_zero_or_pos a with (rfl | ha0)\n  · simp\n  have hd0 : 0 < d := Nat.gcd_pos_of_pos_left _ ha0\n  apply le_of_mul_le_mul_right _ hd0\n  grw [← totient_gcd_mul_totient_mul a b, mul_comm, d.totient_le]\n"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ActualSmallRosser.lean",
+      "file_sha256": "0dbcd4e45ededb9edfb601d8249cc554b3e53291985c09557ed2a9f5d4fb2cdf",
+      "lines": [
+        117,
+        125
+      ],
+      "role": "Actual signed upper Rosser absolute bound for all cap,z,L,d",
+      "literal_source_excerpt": "  ActualSmallRosserProvider.upperWeight (actualSmallPrimeProduct N cap w) L\n\ntheorem actualSmallRosserMinus_abs_le_one (N cap : ℕ) (w L : ℝ) (d : ℕ) :\n    |actualSmallRosserMinus N cap w L d| ≤ 1 :=\n  MathlibNt.SieveTheory.LiLiuPrereqWF.SmallRosser.lowerWeight_boundedOne _ _ d\n\ntheorem actualSmallRosserPlus_abs_le_one (N cap : ℕ) (w L : ℝ) (d : ℕ) :\n    |actualSmallRosserPlus N cap w L d| ≤ 1 :=\n  MathlibNt.SieveTheory.LiLiuPrereqWF.SmallRosser.upperWeight_boundedOne _ _ d"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/goldbach/MathlibNt/SieveTheory/Arithmetic/LiuLogarithmicIntegral.lean",
+      "file_sha256": "ee642f76f8c11c05dcaf88fc0e3cefcc73fa419862355e88d438106a1b03d8f8",
+      "lines": [
+        69,
+        81
+      ],
+      "role": "Genuine true-li nonnegativity at x>=2 and nonnegative actual normalization constant",
+      "literal_source_excerpt": "  apply intervalIntegral.integral_nonneg hx\n  intro t ht\n  exact liuLogarithmicIntegrand_nonneg ht.1\n\n/-- A nonnegative additive normalization makes the genuine logarithmic integral\nnonnegative throughout its source range. -/\nlemma liuLogarithmicIntegral_nonneg (κ : ℝ) (hκ : 0 ≤ κ)\n    {x : ℝ} (hx : 2 ≤ x) :\n    0 ≤ liuLogarithmicIntegral κ x := by\n  unfold liuLogarithmicIntegral\n  exact add_nonneg hκ (liuLogarithmicIntegral_integral_nonneg hx)\n\n/-- The squared logarithmic density is interval integrable above `2`. -/"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/TotientReciprocalBudget.lean",
+      "file_sha256": "aa80ff2ad79f77405951f1e56e993a851a1b32ad46c970e7914adb94bdb2db86",
+      "lines": [
+        235,
+        241
+      ],
+      "role": "Finite actual reciprocal-totient subset bound",
+      "literal_source_excerpt": "/-- The same budget applies to any selected positive moduli below the cap. -/\ntheorem sum_reciprocal_totient_subset_le_log (S : Finset ℕ) (D : ℕ)\n    (hS : S ⊆ Finset.Icc 1 D) :\n    (∑ d ∈ S, 1 / (Nat.totient d : ℝ)) ≤\n      4 * (1 + Real.log (max 1 (D : ℝ))) := by\n  refine le_trans ?_ (sum_reciprocal_totient_le_log D)\n  exact Finset.sum_le_sum_of_subset_of_nonneg hS (fun d _ _ => by positivity)"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Analysis/SpecialFunctions/Pow/Real.lean",
+      "file_sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+      "lines": [
+        742,
+        749
+      ],
+      "role": "Actual rpow<=self at N>=1, exponent2/3<=1",
+      "literal_source_excerpt": "theorem rpow_le_self_of_le_one (h₁ : 0 ≤ x) (h₂ : x ≤ 1) (h₃ : 1 ≤ y) : x ^ y ≤ x := by\n  simpa only [rpow_one]\n    using rpow_le_rpow_of_exponent_ge_of_imp h₁ h₂ h₃ fun _ ↦ (absurd · (one_pos.trans_le h₃).ne')\n\ntheorem rpow_le_self_of_one_le (h₁ : 1 ≤ x) (h₂ : y ≤ 1) : x ^ y ≤ x := by\n  simpa only [rpow_one] using rpow_le_rpow_of_exponent_le h₁ h₂\n\ntheorem self_lt_rpow_of_lt_one (h₁ : 0 < x) (h₂ : x < 1) (h₃ : y < 1) : x < x ^ y := by"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/PowerErrorBudget.lean",
+      "file_sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+      "lines": [
+        45,
+        91
+      ],
+      "role": "Proved sublinear power/log error budget in the original normalization",
+      "literal_source_excerpt": "    simpa only [Real.rpow_natCast] using\n      (isLittleO_log_rpow_rpow_atTop (k : ℝ) hdelta).tendsto_div_nhds_zero\n  exact hreal.comp tendsto_natCast_atTop_atTop\n\n/-- A fixed sublinear real power times a fixed logarithm power has\narbitrarily small normalized upper cost. No sign hypothesis on `c` or\nlower bound on `theta` is needed for this upper estimate. -/\ntheorem eventually_powerLog_le_singularNormalization\n    (c theta : ℝ) (k : ℕ) (htheta : theta < 1) :\n    ∀ epsilon : ℝ, 0 < epsilon →\n      ∀ᶠ N : ℕ in atTop,\n        c * (N : ℝ) ^ theta * (Real.log (N : ℝ)) ^ k ≤\n          epsilon * singularNormalization N := by\n  intro epsilon hepsilon\n  have hdecay : Tendsto (fun N : ℕ =>\n      c * ((Real.log (N : ℝ)) ^ (k + 2) / (N : ℝ) ^ (1 - theta)))\n      atTop (𝓝 0) := by\n    simpa only [mul_zero] using\n      (tendsto_nat_log_pow_div_rpow (k + 2) (sub_pos.mpr htheta)).const_mul c\n  have hsmall : ∀ᶠ N : ℕ in atTop,\n      c * ((Real.log (N : ℝ)) ^ (k + 2) / (N : ℝ) ^ (1 - theta)) <\n        epsilon * twinPrimeConstant :=\n    hdecay.eventually (gt_mem_nhds (mul_pos hepsilon twinPrimeConstant_pos))\n  filter_upwards [hsmall, eventually_ge_atTop (2 : ℕ)] with N hsmallN hN\n  have hNreal : (1 : ℝ) < (N : ℝ) := by\n    exact_mod_cast (show 1 < N by omega)\n  have hNpos : (0 : ℝ) < (N : ℝ) := lt_trans zero_lt_one hNreal\n  have hlog : Real.log (N : ℝ) ≠ 0 := ne_of_gt (Real.log_pos hNreal)\n  have hpow : (N : ℝ) ^ theta ≠ 0 := ne_of_gt (Real.rpow_pos_of_pos hNpos theta)\n  have hbase : 0 ≤ (N : ℝ) / (Real.log (N : ℝ)) ^ 2 :=\n    div_nonneg (Nat.cast_nonneg N) (sq_nonneg _)\n  calc\n    c * (N : ℝ) ^ theta * (Real.log (N : ℝ)) ^ k =\n        (c * ((Real.log (N : ℝ)) ^ (k + 2) / (N : ℝ) ^ (1 - theta))) *\n          ((N : ℝ) / (Real.log (N : ℝ)) ^ 2) := by\n      rw [Real.rpow_sub hNpos, Real.rpow_one, pow_add]\n      field_simp [ne_of_gt hNpos, hlog, hpow] <;> ring\n    _ ≤ (epsilon * twinPrimeConstant) *\n        ((N : ℝ) / (Real.log (N : ℝ)) ^ 2) :=\n      mul_le_mul_of_nonneg_right hsmallN.le hbase\n    _ = epsilon *\n        (twinPrimeConstant * (N : ℝ) / (Real.log (N : ℝ)) ^ 2) := by ring\n    _ ≤ epsilon * singularNormalization N :=\n      mul_le_mul_of_nonneg_left (singularNormalization_lower N) hepsilon.le\n\n/-- The same power-logarithm error with its additive unit. The unit is\nabsorbed using the proved divergence of the actual normalization. -/"
+    }
+  ],
+  "explicit_existing_PowerErrorBudget_import_path": [
+    "CurrentChenUpsilon8ProductPan",
+    "CurrentChenUpsilon8PrimeSource",
+    "CurrentChenUpsilon9PrimeSource",
+    "CurrentChenMeanLedger",
+    "CurrentChenSummedBridge",
+    "PowerErrorBudget"
+  ],
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "provider_current_checks": [
+    {
+      "name": "goldbach",
+      "manifest_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+      "actual_HEAD": "09b97db5764ade1246bfb77206baa1b124760958",
+      "git_diff_HEAD_tracked_exit_code": 0
+    },
+    {
+      "name": "mathlib",
+      "manifest_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "actual_HEAD": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "git_diff_HEAD_tracked_exit_code": 0
+    }
+  ],
+  "forbidden_or_option_hits": [],
+  "findings": [],
+  "evidence_boundary": "Source author review only. Independent full-source review, actual strict first compile and complete original owned types/inventory/axiom acceptance are separate gates. No count core, density, Pan budget, hLower/hUpper or adopted constant is a caller premise or claimed conclusion."
+}

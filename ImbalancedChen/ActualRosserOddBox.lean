@@ -1,4 +1,4 @@
-import ImbalancedChen.ActualRosserBoundaryExpansion
+import ImbalancedChen.ActualSmallRosser
 import ImbalancedChen.ActualPrimeBoxMass
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.List.FinRange
@@ -92,6 +92,42 @@ private theorem odd_box_upper_le {k : ℕ} {a b : Fin (2 * k + 1) → ℝ} {u : 
     (fun i => (hsep i).trans (hab i.castSucc).le)
   exact fun i => (hb (Fin.zero_le i)).trans hbu
 
+private theorem odd_boundaryChain_of_realBounds
+    {k : ℕ} (p : Fin (2 * k + 1) → ℕ) (R : ℝ)
+    (hlsorted : (List.ofFn (fun i : Fin (2 * k) => p i.castSucc)).SortedGT)
+    (htotalReal : (∏ i : Fin (2 * k), (p i.castSucc : ℝ)) < R)
+    (hprefixReal : ∀ i : Fin (2 * k), Even i.val →
+      (∏ j : Fin (2 * k) with j.val < i.val, (p j.castSucc : ℝ)) *
+        (p i.castSucc : ℝ) ^ 3 < R)
+    (hshellReal : R ≤ (∏ i : Fin (2 * k), (p i.castSucc : ℝ)) *
+      (p (Fin.last (2 * k)) : ℝ) ^ 3) :
+    LinearSieve.UpperRosserBoundaryChain (Nat.ceil R)
+      (p (Fin.last (2 * k))) (List.ofFn (fun i : Fin (2 * k) => p i.castSucc)) := by
+  let l := List.ofFn (fun i : Fin (2 * k) => p i.castSucc)
+  have hllen : l.length = 2 * k := List.length_ofFn
+  have hlprod : (l.prod : ℝ) = ∏ i : Fin (2 * k), (p i.castSucc : ℝ) := by
+    simp only [l, List.prod_ofFn, Nat.cast_prod]
+  have hltake (r : ℕ) : ((l.take r).prod : ℝ) =
+      ∏ i : Fin (2 * k) with i.val < r, (p i.castSucc : ℝ) := by
+    simp only [l, List.prod_take_ofFn, Nat.cast_prod]
+  have hlget (i : Fin l.length) :
+      (l.get i : ℝ) = (p (Fin.cast hllen i).castSucc : ℝ) := by
+    simp only [l, List.get_ofFn]
+  change LinearSieve.UpperRosserBoundaryChain (Nat.ceil R) (p (Fin.last (2 * k))) l
+  refine ⟨hlsorted, ?_, ?_, ?_, ?_⟩
+  · rw [hllen]
+    exact ⟨k, by omega⟩
+  · apply Nat.lt_ceil.mpr
+    rw [hlprod]
+    exact htotalReal
+  · intro i hi
+    apply Nat.lt_ceil.mpr
+    rw [Nat.cast_mul, Nat.cast_pow, hltake, hlget]
+    exact hprefixReal (Fin.cast hllen i) hi
+  · apply Nat.ceil_le.mpr
+    rw [Nat.cast_mul, Nat.cast_pow, hlprod]
+    exact hshellReal
+
 /-- All prefix tests and the terminal crossing are verified at the same
 literal `ceil (N ^ beta)` used by the actual small Rosser coefficient.
 Only finite geometric inequalities are assumed; no density estimate is used. -/
@@ -108,8 +144,11 @@ theorem actualRosserOddBox_mem_boundary
     (hcap : (N : ℝ) ^ u ≤ (cap : ℝ))
     {p : Fin (2 * k + 1) → ℕ} (hp : p ∈ actualPrimeBoxTuples N a b) :
     p (Fin.last (2 * k)) ∈ actualSmallPrimeFinset N cap ((N : ℝ) ^ u) ∧
-      actualRosserOddTail p ∈ actualUpperRosserBoundarySets N cap
-        ((N : ℝ) ^ u) ((N : ℝ) ^ beta) (p (Fin.last (2 * k))) ∧
+      actualRosserOddTail p ∈
+        (((actualSmallPrimeFinset N cap ((N : ℝ) ^ u)).filter
+          (fun q => p (Fin.last (2 * k)) < q)).powerset.filter
+            (LinearSieve.UpperRosserBoundarySet (Nat.ceil ((N : ℝ) ^ beta))
+              (p (Fin.last (2 * k))))) ∧
       (actualRosserOddTail p).card = 2 * k := by
   have hNreal : (1 : ℝ) < N := by exact_mod_cast hN
   have hNpos : (0 : ℝ) < N := zero_lt_one.trans hNreal
@@ -182,24 +221,16 @@ theorem actualRosserOddBox_mem_boundary
     exact List.pairwise_ofFn.mpr (fun _ _ hij => hanti (Fin.castSucc_lt_castSucc_iff.mpr hij))
   have hlfinset : l.toFinset = actualRosserOddTail p := by
     ext r
-    simp [l, actualRosserOddTail, List.mem_ofFn]
+    simp only [l, List.mem_toFinset, List.mem_ofFn, actualRosserOddTail,
+      Finset.mem_image, Finset.mem_univ, true_and]
   have hsort : (actualRosserOddTail p).sort (· ≥ ·) = l := by
     rw [← hlfinset]
     exact (List.toFinset_sort (r := (· ≥ ·)) (List.nodup_ofFn.mpr hlinj)).mpr
       hlsorted.sortedGE.pairwise
   have hchain : LinearSieve.UpperRosserBoundaryChain (Nat.ceil ((N : ℝ) ^ beta))
-      (p (Fin.last (2 * k))) l := by
-    refine ⟨hlsorted, ?_, ?_, ?_, ?_⟩
-    · simp [l]
-    · apply Nat.lt_ceil.mpr
-      simpa [l, List.prod_ofFn, Nat.cast_prod] using htotalReal
-    · intro i hi
-      have hil : i.val < 2 * k := by simpa [l] using i.isLt
-      apply Nat.lt_ceil.mpr
-      simpa [l, List.prod_take_ofFn, List.get_ofFn, Nat.cast_mul, Nat.cast_pow,
-        Nat.cast_prod] using hprefixReal ⟨i.val, hil⟩ hi
-    · apply Nat.ceil_le.mpr
-      simpa [l, List.prod_ofFn, Nat.cast_prod, Nat.cast_mul, Nat.cast_pow] using hshellReal
+      (p (Fin.last (2 * k))) l :=
+    odd_boundaryChain_of_realBounds p ((N : ℝ) ^ beta)
+      hlsorted htotalReal hprefixReal hshellReal
   have hqnot : p (Fin.last (2 * k)) ∉ actualRosserOddTail p := by
     intro hq
     obtain ⟨i, _, hi⟩ := Finset.mem_image.mp hq

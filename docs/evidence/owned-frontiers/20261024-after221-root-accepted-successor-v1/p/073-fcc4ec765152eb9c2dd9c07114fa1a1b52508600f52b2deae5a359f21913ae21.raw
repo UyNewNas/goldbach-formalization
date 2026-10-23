@@ -1,0 +1,151 @@
+"""SOURCEONLY ROOT after216 V1 fresh-input capture for the five-target terminal collector.
+
+Run only after ROOT confirms compiler/cache activity is idle and all authorized
+source/cache mutations have stopped. Requires the complete ROOT-supplied
+original-evidence intake path and SHA256. Captures the exact current source map
+and full imported compiler/cachelib graph as independent ROOT inputs. This
+script does not run Lean/checkers/auditors, invoke the collector, or create an
+authority, proposal, acceptance, or signature.
+"""
+from pathlib import Path
+import sys, hashlib, json, datetime, importlib.util, importlib.machinery, argparse
+sys.dont_write_bytecode = True
+
+COLLECTOR_REL = 'source-reviews/drafts/20261023-next-five-after216-terminal-collector-V1-complete-original-intake-root-full-graph-DRAFT-SOURCEONLY.py.txt'
+COLLECTOR_SHA = '6876eac8501e7a6549023afa62b7546cfb6c7b9e9a534d5580641024ff7e8762'
+SOURCE_PARENT_REL = 'source-reviews/drafts/20261023-next-three-after216-terminal-collector-V1-complete-original-intake-root-full-graph-DRAFT-SOURCEONLY.py.txt'
+SOURCE_PARENT_SHA = '55c0f584305e9c2cb7aaef4111aaa9704c311ec505f1f2087d56a3a1c98e24a7'
+BASELINE_SHA = '5b515a353ed5f5a9a0ec51f5821e1dff366103d14d46f201cf18e5ede6fe634d'
+ACCEPTANCE_SHA = '0862d6b4324b07b22aa033009c50a9665b1703c60cd657be3b90acdb9be83797'
+BASELINE_RECORDS_SHA = '43a58470a04ef841561b062861634be60bc15e3c27d2f801857cc2b1d34eb61f'
+HISTORICAL_FREEZE_SHA = 'd005e346296849b618267aed34f88655d2bcdfeb031f99e24be045b0b4bb0946'
+SOURCE_FREEZE_OUT = 'rounds/20261023-root-next-five-after216-fresh-all-current-source-freeze-v1.json'
+GRAPH_FREEZE_OUT = 'rounds/20261023-root-next-five-after216-full-compiler-cachelib-freeze-v1.json'
+CAPTURE_POINTER_OUT = 'rounds/20261023-root-next-five-after216-fresh-capture-refs-v1.json'
+RESOURCE_REASON = 'ROOT_next_five_after216_readonly_full_graph_complete_original_evidence'
+
+def need(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+def load_collector(path):
+    loader = importlib.machinery.SourceFileLoader('root_next_five_after216_capture_collector_defs', str(path))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--root', required=True)
+    parser.add_argument('--intake', required=True, help='ROOT-complete after216 five-target intake path, relative to .lake/proof-continuation')
+    parser.add_argument('--intake-sha256', required=True, help='SHA256 of the exact ROOT-supplied intake bytes')
+    args = parser.parse_args()
+    root = Path(args.root).resolve()
+    state = root / '.lake/proof-continuation'
+    for output in (SOURCE_FREEZE_OUT, GRAPH_FREEZE_OUT, CAPTURE_POINTER_OUT):
+        need(not (state / output).exists(), 'After216 capture requires all fresh absent output paths: ' + output)
+    collector_path = state / COLLECTOR_REL
+    need(sha(collector_path) == COLLECTOR_SHA, 'Pinned five-target after216 collector draft changed')
+    need(sha(state / SOURCE_PARENT_REL) == SOURCE_PARENT_SHA, 'Pinned full-graph source parent changed')
+    x = load_collector(collector_path)
+    need(tuple(x.TARGET_MODULES) == ('ImbalancedChen.Part4ActualThirdFiniteDensityReserve', 'ImbalancedChen.Part3ActualModeJointBetaPositiveCount', 'ImbalancedChen.Part4ActualThirdOriginalCompactDomain', 'ImbalancedChen.Part3ActualClosedTCountLicense', 'ImbalancedChen.Part3ActualRestrictedChartWeightCount'),
+        'Five-target after216 canonical order changed')
+    qp = state / x.QUALIFIER
+    need(sha(qp) == x.QUALIFIER_SHA, 'Pinned normal-import qualifier changed')
+    q = x.load_definitions(qp)
+    _, c = q.load_tools()
+    need(c.ROOT.resolve() == root and c.STATE.resolve() == state, 'Wrong repository/state')
+    need(c.sha(state / x.COMMON) == x.COMMON_SHA, 'Pinned common helper changed')
+    for path, expected in c.PROTECTED.items():
+        need(c.sha(path) == expected, 'Protected runtime/audit/template/helper changed: ' + path)
+    c.physical_idle()
+
+    need(len(args.intake_sha256) == 64 and all(ch in '0123456789abcdef' for ch in args.intake_sha256),
+         'ROOT must supply a lowercase SHA256 for its complete intake')
+    intake_ref = {'path': args.intake, 'sha256': args.intake_sha256}
+    need(c.path(args.intake).name.endswith('-v1.json'), 'Only the new complete ROOT after216 V1 intake may be captured')
+    need(c.sha(c.bound(intake_ref)) == args.intake_sha256, 'ROOT intake hash mismatch')
+    intake = x.read_complete_intake(c, intake_ref)
+    targets = {module: intake['targets'][module] for module in x.TARGET_MODULES}
+
+    baseline, accepted, baseline_counts = x.verify_root_accepted_baseline(c)
+    need(baseline['owned_modules'] == 216 and accepted['owned_modules'] == 216,
+         'Pinned ROOT-accepted 216-module baseline changed')
+    need(c.sha(c.bound(x.BASELINE)) == BASELINE_SHA
+         and c.sha(c.bound(x.ACCEPTANCE)) == ACCEPTANCE_SHA
+         and c.sha(c.bound(x.BASELINE_COMPLETE)) == BASELINE_RECORDS_SHA
+         and c.sha(c.bound(x.HISTORICAL_FREEZE)) == HISTORICAL_FREEZE_SHA,
+         'Pinned ROOT-accepted baseline/history refs changed')
+
+    q.TARGETS = dict(targets)
+    sources_before = q.source_map(c)
+    need(all(sources_before[module.replace('.', '/') + '.lean'] == digest
+             for module, digest in targets.items()), 'Intake target source hashes differ from current source map')
+    artifacts_before = c.artifacts()
+    original, walker, rt = q.runtime(c, {'resource_reason': RESOURCE_REASON})
+    classification = x.project_classification(original, rt, targets, baseline)
+    graph_stable, graph_raw = q.graph_capture(c, original, walker, rt, classification, baseline)
+
+    audit_inputs = []
+    for audit_key in x.AUDIT_GROUPS:
+        spec = intake['audit_receipts'][audit_key]
+        audit = c.read(c.bound(spec['ref']))
+        need(audit['inputs_before'] == audit['inputs_after'], 'Original audit inputs changed during its run: ' + audit_key)
+        need(audit['inputs_after']['sources'] == spec['targets'], 'Original audit source map differs: ' + audit_key)
+        need(audit['inputs_after']['pins'] == rt.pins(), 'Original audit project pins differ: ' + audit_key)
+        audit_inputs.append(audit['inputs_after'])
+
+    need(q.source_map(c) == sources_before and c.artifacts() == artifacts_before,
+         'Input sources/artifact list changed during full graph capture')
+    graph_check, raw_check = q.graph_capture(c, original, walker, rt, classification, baseline)
+    need(graph_stable == graph_check and graph_raw == raw_check, 'Full compiler/cachelib graph drift during capture')
+    for path, expected in c.PROTECTED.items():
+        need(c.sha(path) == expected, 'Protected input changed during capture: ' + path)
+    c.physical_idle()
+
+    freeze = {
+        'status': 'ROOT_FROZEN_COMPILER_CACHELIB_INPUTS',
+        'created_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        'scope': 'ROOT read-only exact five-target after216 source and full imported compiler/cachelib graph capture; normal imported-environment trust; no compiler/checker/audit invocation',
+        'targets': targets,
+        'complete_original_evidence_intake': intake_ref,
+        'audit_inputs': audit_inputs,
+        'graph_stable': graph_stable,
+        'graph_raw': graph_raw,
+        'resource_reason': RESOURCE_REASON,
+        'source_count': len(sources_before),
+        'graph_modules': len(graph_stable['graph']),
+        'capture_script_sha256': sha(__file__),
+        'normal_import_trust': True,
+        'external_closure_replayed': False,
+        'main_proved': False,
+    }
+    source_ref = c.write_new(state / SOURCE_FREEZE_OUT, sources_before)
+    graph_ref = c.write_new(state / GRAPH_FREEZE_OUT, freeze)
+    pointer = {
+        'status': 'ROOT_NEXT_FIVE_AFTER216_V1_FRESH_INPUTS_CAPTURED_NOT_ACCEPTED',
+        'source_freeze': source_ref,
+        'compiler_cachelib_freeze': graph_ref,
+        'complete_original_evidence_intake': intake_ref,
+        'source_count': len(sources_before),
+        'graph_modules': len(graph_stable['graph']),
+        'resource_reason': RESOURCE_REASON,
+        'classification': classification,
+        'capture_script': c.ref(Path(__file__)),
+        'baseline_acceptance': x.ACCEPTANCE,
+        'terminal_acceptance': None,
+        'authority_created': False,
+        'proposal_created': False,
+        'signed': False,
+    }
+    out = c.write_new(state / CAPTURE_POINTER_OUT, pointer)
+    print(json.dumps({'status': pointer['status'], 'references': out,
+                      'source_count': len(sources_before), 'graph_modules': len(graph_stable['graph']),
+                      'terminal_acceptance': None, 'authority_created': False, 'signed': False}))
+
+if __name__ == '__main__':
+    main()

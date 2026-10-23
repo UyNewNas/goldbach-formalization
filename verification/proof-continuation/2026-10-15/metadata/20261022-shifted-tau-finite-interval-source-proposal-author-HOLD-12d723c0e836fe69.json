@@ -1,0 +1,410 @@
+{
+  "schema_version": 1,
+  "audit_id": "20261022-shifted-tau-finite-interval-source-proposal-author-HOLD",
+  "created_utc": "2026-10-21T20:14:06.8153110Z",
+  "author": "/root/tau_truncation_review_sol_high_oct22",
+  "status": "COMPLETE_FINITE_SHIFTED_NATIVE_TAU_INTERVAL_PAYMENT_AS_WRITTEN_FUTURE_E1_DEPENDENCY_UNCOMPILED_HOLD",
+  "HOLD": true,
+  "scope": "One finite shifted tau interval consumer. Nine complete proof bodies and two carrier/shift definitions. Positive and negative sign images are separately injected and paid by the actual real-supported E1 declaration. No BigO, capped-kappa absorption, M2, spectral or main theorem is attempted.",
+  "artifact": {
+    "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-shifted-tau-finite-interval-source-proposal.txt",
+    "sha256": "3a2c777a96f2758a4ced96f8f78881d88f28e7f2bb011dc82b2d5223a3d3f298",
+    "bytes": 10546,
+    "lf_lines": 212,
+    "new_theorems": 9,
+    "new_definitions": 2,
+    "complete_written_proofs": true,
+    "actual_source_read": true,
+    "compiled": false,
+    "kernel_acceptance": "NOT_CHECKED",
+    "engineering_admission": false
+  },
+  "precise_target": {
+    "parameters": "K:Nat,K>=2; x,kappa:Real,x>=1,kappa>=0; a:Int,abs(a:Real)<=x^(1+kappa).",
+    "carrier": "(Finset.Icc 1 (Nat.floor (6*x))).filter(fun v:Nat => (v:Int)!=a), and an explicitly proved equal Ioc 0 floor(6*x) version.",
+    "shift": "n=((v:Int)-a).natAbs",
+    "Z": "7*x^(1+kappa)",
+    "L": "1+Real.log Z",
+    "conclusion": "sum carrier (native fouvryTau K n:Real) <= 2*K*(6*x*L^(K-1)+Z^(1-1/K)*L^(K-2))",
+    "zero_excluded_before_tau": true,
+    "shift_range_is_original_near_linear": true,
+    "no_abs_a_le_x_squared_substitution": true,
+    "no_upper_kappa_cap": true,
+    "constants_6_7_2_preserved": true,
+    "target_bound_not_assumed": true
+  },
+  "dependencies": {
+    "goldbach_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+    "mathlib_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+    "future_E1_module": "ImbalancedChen.Part3ElementaryE1RealEndpoint",
+    "E1_source_path": ".lake/proof-continuation/source-reviews/drafts/20261022-e1-real-endpoint-adapter-source-proposal.txt",
+    "E1_source_sha256": "3313e74df9d2e2c1ae36f320d1291bcf38d573f8046f1940e71f53017deb14b0",
+    "E1_exact_reused_name": "ImbalancedChen.Part3.ElementaryTauTruncation.IntervalPayment.sum_fouvryTau_E1_real_support",
+    "E1_state": "Root confirms this future exact module name. The source is under independent review; import resolution, integration and kernel acceptance are not asserted.",
+    "native_import": "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryHighOmegaConvolution",
+    "int_import": "Mathlib.Data.Int.Lemmas",
+    "root_module_update": "Root separately reports Interval79a2 and Strict31e9 actually created, still UNCOMPILED/unowned. This author performs no actual module mutation or acceptance inference.",
+    "finite_fold_path": ".lake/proof-continuation/source-reviews/drafts/20261022-commonp-m2-finite-fold-source-proposal.txt",
+    "finite_fold_sha256": "728704ea418c05ee0ff51542d9f6b59bcd4cf45de12b5e94a99cb577957075bc",
+    "route_audit_path": ".lake/proof-continuation/source-reviews/20261022-main-internal-kappa-elementary-route-audit-HOLD.json",
+    "route_audit_sha256": "c01c5101e49d3aded741d5eca130aedfecc27583eb7da84f1f1b652978a59c54",
+    "binding": "The new Ioc corollary has exactly the productCarrier d interval/filter shape when x=d.scale,a=d.residue. It does not prove the residue-range hypothesis from MediumAdmissible or compose the full fold, outside energies or moment orders."
+  },
+  "native_shift_inventory": {
+    "requested_HighOmega": "Actual full source read. It contains Rankin/global divisor means, not the shift primitives.",
+    "actual_shift_file": "LiLiuPrereqFouvryHighOmegaConvolution.lean",
+    "fiber_API": "highOmega_shift_fiber_card_le (S:Finset Nat)(a:Int)(d:Nat): card(S.filter(fun t=>natAbs(t-a)=d))<=2",
+    "sum_API": "highOmega_shift_sum_le uses that at-most-two multiplicity to pay a global positive prefix.",
+    "existing_shifted_tau_limit": "highOmega_shifted_tau_sum_le requires abs(a:Real)<=x, and gives a global-prefix bound. It is not used by enlarging x to the shift scale.",
+    "reuse_decision": "The actual global at-most-two APIs were read and retained as provenance. Applying them separately to two intervals would introduce an unwanted factor four. The required sign restrictions are instead injected with the existing mathlib sign-specific natAbs iff theorems; no abs fiber-cardinality theorem is reproved.",
+    "complete_written_native_proofs_no_new_admission": "The actual fiber and sum source spans contain full proofs. No compiler or recursive dependency acceptance check was run."
+  },
+  "definitions": [
+    {
+      "name": "shiftedAbs",
+      "first": 43,
+      "last": 43,
+      "literal_source": "def shiftedAbs (a : ℤ) (v : ℕ) : ℕ := ((v : ℤ) - a).natAbs\n",
+      "sha256": "455f5d42e836ffa82507976490a5184bd62d6fb43b0052fa2f9be2e650b287e1"
+    },
+    {
+      "name": "shiftedSource",
+      "first": 45,
+      "last": 46,
+      "literal_source": "def shiftedSource (x : ℝ) (a : ℤ) : Finset ℕ :=\n  (Icc 1 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a)\n",
+      "sha256": "f4264b1df4527bcf68f766a26b5385cc7d0b7ea5f931abc3bfa0b14591e2ff7f"
+    }
+  ],
+  "complete_written_theorem_types": [
+    {
+      "name_as_written": "shiftedSource_info",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.shiftedSource_info",
+      "visibility": "public",
+      "first": 48,
+      "type_last": 51,
+      "last": 58,
+      "complete_written_type": "theorem shiftedSource_info {x : ℝ} (hx : 1 ≤ x) {a : ℤ} {v : ℕ}\n    (hv : v ∈ shiftedSource x a) :\n    1 ≤ (v : ℝ) ∧ (v : ℝ) ≤ 6 * x ∧ (v : ℤ) ≠ a ∧\n      1 ≤ (shiftedAbs a v : ℝ) := by\n",
+      "complete_written_declaration": "theorem shiftedSource_info {x : ℝ} (hx : 1 ≤ x) {a : ℤ} {v : ℕ}\n    (hv : v ∈ shiftedSource x a) :\n    1 ≤ (v : ℝ) ∧ (v : ℝ) ≤ 6 * x ∧ (v : ℤ) ≠ a ∧\n      1 ≤ (shiftedAbs a v : ℝ) := by\n  obtain ⟨hvI, hvne⟩ := Finset.mem_filter.mp hv\n  obtain ⟨hv1, hvH⟩ := Finset.mem_Icc.mp hvI\n  have hvR : (v : ℝ) ≤ (⌊6 * x⌋₊ : ℝ) := by exact_mod_cast hvH\n  have hn0 : shiftedAbs a v ≠ 0 := Int.natAbs_ne_zero.mpr (sub_ne_zero.mpr hvne)\n  have hn1 : 1 ≤ shiftedAbs a v := by omega\n  exact ⟨by exact_mod_cast hv1, hvR.trans (Nat.floor_le (by linarith)), hvne,\n    by exact_mod_cast hn1⟩\n",
+      "type_normalized_lf_utf8_sha256": "978fecef9975657574307199609e7f70e55638dff704daafe3162a8b4dc6a0e2",
+      "full_declaration_normalized_lf_utf8_sha256": "1d8044b8600b6c9c639cc9783908caca8eb0fe2d7fb4e184efbe41083b551392",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "shiftedAbs_real_of_le",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.shiftedAbs_real_of_le",
+      "visibility": "public",
+      "first": 60,
+      "type_last": 61,
+      "last": 64,
+      "complete_written_type": "theorem shiftedAbs_real_of_le {a : ℤ} {v : ℕ} (h : a ≤ (v : ℤ)) :\n    (shiftedAbs a v : ℝ) = (v : ℝ) - (a : ℝ) := by\n",
+      "complete_written_declaration": "theorem shiftedAbs_real_of_le {a : ℤ} {v : ℕ} (h : a ≤ (v : ℤ)) :\n    (shiftedAbs a v : ℝ) = (v : ℝ) - (a : ℝ) := by\n  have hz : (shiftedAbs a v : ℤ) = (v : ℤ) - a :=\n    Int.natAbs_of_nonneg (sub_nonneg.mpr h)\n  exact_mod_cast hz\n",
+      "type_normalized_lf_utf8_sha256": "2e36f1799a864bb5b3a26b1d1fd2d31907c83c39e9669f89597bdfe7bd595ee2",
+      "full_declaration_normalized_lf_utf8_sha256": "97d22348f54214cae6c3fc5a9be572a49959cfbb9c9ad3a35cfcba9729ec8c14",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "shiftedAbs_real_of_ge",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.shiftedAbs_real_of_ge",
+      "visibility": "public",
+      "first": 66,
+      "type_last": 67,
+      "last": 71,
+      "complete_written_type": "theorem shiftedAbs_real_of_ge {a : ℤ} {v : ℕ} (h : (v : ℤ) ≤ a) :\n    (shiftedAbs a v : ℝ) = (a : ℝ) - (v : ℝ) := by\n",
+      "complete_written_declaration": "theorem shiftedAbs_real_of_ge {a : ℤ} {v : ℕ} (h : (v : ℤ) ≤ a) :\n    (shiftedAbs a v : ℝ) = (a : ℝ) - (v : ℝ) := by\n  have hz : (shiftedAbs a v : ℤ) = -((v : ℤ) - a) :=\n    Int.ofNat_natAbs_of_nonpos (sub_nonpos.mpr h)\n  have hR : (shiftedAbs a v : ℝ) = -((v : ℝ) - (a : ℝ)) := by exact_mod_cast hz\n  linarith\n",
+      "type_normalized_lf_utf8_sha256": "63f8ad4417b17eb39919f8f169cc8c5777a86d1ffb0c49e4fa2ae490bc73e2f4",
+      "full_declaration_normalized_lf_utf8_sha256": "d5dfd19919be030c20d1b1fa8c351c076e1565089c326bc1203fc84d6ca53ef1",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "shiftedAbs_injOn_nonneg",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.shiftedAbs_injOn_nonneg",
+      "visibility": "public",
+      "first": 73,
+      "type_last": 74,
+      "last": 79,
+      "complete_written_type": "theorem shiftedAbs_injOn_nonneg (S : Finset ℕ) (a : ℤ)\n    (hS : ∀ v ∈ S, a ≤ (v : ℤ)) : Set.InjOn (shiftedAbs a) S := by\n",
+      "complete_written_declaration": "theorem shiftedAbs_injOn_nonneg (S : Finset ℕ) (a : ℤ)\n    (hS : ∀ v ∈ S, a ≤ (v : ℤ)) : Set.InjOn (shiftedAbs a) S := by\n  intro v hv w hw heq\n  have hdiff : (v : ℤ) - a = (w : ℤ) - a :=\n    (Int.natAbs_inj_of_nonneg_of_nonneg\n      (sub_nonneg.mpr (hS v hv)) (sub_nonneg.mpr (hS w hw))).mp heq\n  exact_mod_cast (sub_right_cancel hdiff)\n",
+      "type_normalized_lf_utf8_sha256": "b03fedb03ec60c96631442111371a3bec87d2a9ef1df52e87816096788cf18f9",
+      "full_declaration_normalized_lf_utf8_sha256": "22954de935c6eea3c2a0d2c5388703defddefa2d19ad767c20bbeb6374cdda80",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "shiftedAbs_injOn_nonpos",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.shiftedAbs_injOn_nonpos",
+      "visibility": "public",
+      "first": 81,
+      "type_last": 82,
+      "last": 87,
+      "complete_written_type": "theorem shiftedAbs_injOn_nonpos (S : Finset ℕ) (a : ℤ)\n    (hS : ∀ v ∈ S, (v : ℤ) ≤ a) : Set.InjOn (shiftedAbs a) S := by\n",
+      "complete_written_declaration": "theorem shiftedAbs_injOn_nonpos (S : Finset ℕ) (a : ℤ)\n    (hS : ∀ v ∈ S, (v : ℤ) ≤ a) : Set.InjOn (shiftedAbs a) S := by\n  intro v hv w hw heq\n  have hdiff : (v : ℤ) - a = (w : ℤ) - a :=\n    (Int.natAbs_inj_of_nonpos_of_nonpos\n      (sub_nonpos.mpr (hS v hv)) (sub_nonpos.mpr (hS w hw))).mp heq\n  exact_mod_cast (sub_right_cancel hdiff)\n",
+      "type_normalized_lf_utf8_sha256": "d2baca3179108f2af03889eea4d91d297cabf6465de35d2048f71d841151fc2b",
+      "full_declaration_normalized_lf_utf8_sha256": "b1a38a218400e032ef543943ba3451d52c9c7b694f01ecf54e597c7a158cff8d",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "clamped_interval_geometry",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.clamped_interval_geometry",
+      "visibility": "public",
+      "first": 90,
+      "type_last": 93,
+      "last": 102,
+      "complete_written_type": "theorem clamped_interval_geometry {c H Z : ℝ} (hH : 0 ≤ H) (hZ : 1 ≤ Z)\n    (hcZ : c + H ≤ Z) :\n    1 ≤ max 1 c ∧ max 1 c ≤ max 1 (c + H) ∧\n      max 1 (c + H) ≤ Z ∧ max 1 (c + H) - max 1 c ≤ H := by\n",
+      "complete_written_declaration": "theorem clamped_interval_geometry {c H Z : ℝ} (hH : 0 ≤ H) (hZ : 1 ≤ Z)\n    (hcZ : c + H ≤ Z) :\n    1 ≤ max 1 c ∧ max 1 c ≤ max 1 (c + H) ∧\n      max 1 (c + H) ≤ Z ∧ max 1 (c + H) - max 1 c ≤ H := by\n  have hlo : 1 ≤ max 1 c := le_max_left _ _\n  have hc : c ≤ max 1 c := le_max_right _ _\n  have horder : max 1 c ≤ max 1 (c + H) := by\n    apply max_le\n    · exact le_max_left _ _\n    · exact (by linarith : c ≤ c + H).trans (le_max_right _ _)\n  have hupper : max 1 (c + H) ≤ max 1 c + H := by\n    apply max_le <;> linarith\n  exact ⟨hlo, horder, max_le hZ hcZ, by linarith⟩\n",
+      "type_normalized_lf_utf8_sha256": "6958d10cb7e5460da0222749eac0d2f88fa658beb3b3b4f61aa07e499d8d54e4",
+      "full_declaration_normalized_lf_utf8_sha256": "a8aa96f2518f066de1a9330e85f31bc900570d6f01b5c1055ba5c6fab9492eea",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "sum_image_in_clamped_interval_le",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.sum_image_in_clamped_interval_le",
+      "visibility": "public",
+      "first": 105,
+      "type_last": 111,
+      "last": 129,
+      "complete_written_type": "theorem sum_image_in_clamped_interval_le (S : Finset ℕ) (f : ℕ → ℕ)\n    {K : ℕ} (hK : 2 ≤ K) {c H Z : ℝ} (hH : 0 ≤ H) (hZ : 2 ≤ Z)\n    (hcZ : c + H ≤ Z) (hinj : Set.InjOn f S)\n    (hS : ∀ v ∈ S, max 1 c ≤ (f v : ℝ) ∧ (f v : ℝ) ≤ max 1 (c + H)) :\n    (∑ v ∈ S, (fouvryTau K (f v) : ℝ)) ≤\n      (K : ℝ) * (H * (1 + Real.log Z) ^ (K - 1) +\n        Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)) := by\n",
+      "complete_written_declaration": "theorem sum_image_in_clamped_interval_le (S : Finset ℕ) (f : ℕ → ℕ)\n    {K : ℕ} (hK : 2 ≤ K) {c H Z : ℝ} (hH : 0 ≤ H) (hZ : 2 ≤ Z)\n    (hcZ : c + H ≤ Z) (hinj : Set.InjOn f S)\n    (hS : ∀ v ∈ S, max 1 c ≤ (f v : ℝ) ∧ (f v : ℝ) ≤ max 1 (c + H)) :\n    (∑ v ∈ S, (fouvryTau K (f v) : ℝ)) ≤\n      (K : ℝ) * (H * (1 + Real.log Z) ^ (K - 1) +\n        Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)) := by\n  have hg := clamped_interval_geometry hH (by linarith : 1 ≤ Z) hcZ\n  have himage : ∀ n ∈ S.image f,\n      max 1 c ≤ (n : ℝ) ∧ (n : ℝ) ≤ max 1 (c + H) := by\n    intro n hn\n    obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp hn\n    exact hS v hv\n  have he1 := sum_fouvryTau_E1_real_support (S.image f) hK hg.1 hg.2.1 hZ hg.2.2.1 himage\n  have hL : 0 ≤ 1 + Real.log Z := by\n    have := Real.log_nonneg (by linarith : 1 ≤ Z)\n    linarith\n  calc\n    (∑ v ∈ S, (fouvryTau K (f v) : ℝ)) =\n        ∑ n ∈ S.image f, (fouvryTau K n : ℝ) := (Finset.sum_image hinj).symm\n    _ ≤ (K : ℝ) * ((max 1 (c + H) - max 1 c) * (1 + Real.log Z) ^ (K - 1) +\n        Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)) := he1\n    _ ≤ _ := mul_le_mul_of_nonneg_left\n      (add_le_add_right (mul_le_mul_of_nonneg_right hg.2.2.2 (pow_nonneg hL _)) _)\n      (Nat.cast_nonneg K)\n",
+      "type_normalized_lf_utf8_sha256": "a36a0126c05b9efc1ffd5aa167520c9828417ad2c00a2abb3280b6900eec8f92",
+      "full_declaration_normalized_lf_utf8_sha256": "2883dac0ce381fe6fbd16e865edc1e20557876974e3e093912e94852514ac3f6",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "shifted_tau_Icc_sum_le",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.shifted_tau_Icc_sum_le",
+      "visibility": "public",
+      "first": 132,
+      "type_last": 138,
+      "last": 194,
+      "complete_written_type": "theorem shifted_tau_Icc_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Icc 1 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      2 * (K : ℝ) * (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 1) +\n        (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) *\n          (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 2)) := by\n",
+      "complete_written_declaration": "theorem shifted_tau_Icc_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Icc 1 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      2 * (K : ℝ) * (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 1) +\n        (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) *\n          (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 2)) := by\n  let T : ℝ := x ^ (1 + κ)\n  let Z : ℝ := 7 * T\n  let M : ℝ := 6 * x * (1 + Real.log Z) ^ (K - 1) +\n    Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)\n  let S := shiftedSource x a\n  let P := S.filter (fun v => a < (v : ℤ))\n  let N := S.filter (fun v => ¬a < (v : ℤ))\n  change (∑ v ∈ S, (fouvryTau K (shiftedAbs a v) : ℝ)) ≤ 2 * (K : ℝ) * M\n  have hxT : x ≤ T := by\n    calc\n      x = x ^ (1 : ℝ) := (Real.rpow_one x).symm\n      _ ≤ T := Real.rpow_le_rpow_of_exponent_le hx (by linarith)\n  have hT1 : 1 ≤ T := hx.trans hxT\n  have hZ : 2 ≤ Z := by dsimp [Z]; linarith\n  have haT : -T ≤ (a : ℝ) ∧ (a : ℝ) ≤ T := abs_le.mp ha\n  have hPsign : ∀ v ∈ P, a ≤ (v : ℤ) := by\n    intro v hv\n    exact (Finset.mem_filter.mp hv).2.le\n  have hNsign : ∀ v ∈ N, (v : ℤ) ≤ a := by\n    intro v hv\n    exact le_of_not_gt (Finset.mem_filter.mp hv).2\n  have hp : (∑ v ∈ P, (fouvryTau K (shiftedAbs a v) : ℝ)) ≤ (K : ℝ) * M := by\n    apply sum_image_in_clamped_interval_le P (shiftedAbs a) hK\n      (c := -(a : ℝ)) (H := 6 * x) (Z := Z) (by linarith) hZ\n      (by dsimp [Z]; linarith [haT.1]) (shiftedAbs_injOn_nonneg P a hPsign)\n    intro v hv\n    have hi := shiftedSource_info hx (Finset.mem_filter.mp hv).1\n    have he := shiftedAbs_real_of_le (hPsign v hv)\n    constructor\n    · exact max_le hi.2.2.2 (by linarith [hi.1])\n    · exact (by linarith [hi.2.1] : (shiftedAbs a v : ℝ) ≤ -(a : ℝ) + 6 * x).trans\n        (le_max_right _ _)\n  have hn : (∑ v ∈ N, (fouvryTau K (shiftedAbs a v) : ℝ)) ≤ (K : ℝ) * M := by\n    apply sum_image_in_clamped_interval_le N (shiftedAbs a) hK\n      (c := (a : ℝ) - 6 * x) (H := 6 * x) (Z := Z) (by linarith) hZ\n      (by dsimp [Z]; linarith [haT.2]) (shiftedAbs_injOn_nonpos N a hNsign)\n    intro v hv\n    have hi := shiftedSource_info hx (Finset.mem_filter.mp hv).1\n    have he := shiftedAbs_real_of_ge (hNsign v hv)\n    constructor\n    · exact max_le hi.2.2.2 (by linarith [hi.2.1])\n    · have hu : (shiftedAbs a v : ℝ) ≤ (a : ℝ) := by linarith [hi.1]\n      exact hu.trans (by simpa only [sub_add_cancel] using\n        (le_max_right (1 : ℝ) (a : ℝ)))\n  have hsplit :\n      (∑ v ∈ P, (fouvryTau K (shiftedAbs a v) : ℝ)) +\n        (∑ v ∈ N, (fouvryTau K (shiftedAbs a v) : ℝ)) =\n      ∑ v ∈ S, (fouvryTau K (shiftedAbs a v) : ℝ) :=\n    Finset.sum_filter_add_sum_filter_not S (fun v => a < (v : ℤ))\n      (fun v => (fouvryTau K (shiftedAbs a v) : ℝ))\n  calc\n    (∑ v ∈ S, (fouvryTau K (shiftedAbs a v) : ℝ)) =\n        (∑ v ∈ P, (fouvryTau K (shiftedAbs a v) : ℝ)) +\n          (∑ v ∈ N, (fouvryTau K (shiftedAbs a v) : ℝ)) := hsplit.symm\n    _ ≤ (K : ℝ) * M + (K : ℝ) * M := add_le_add hp hn\n    _ = 2 * (K : ℝ) * M := by ring\n",
+      "type_normalized_lf_utf8_sha256": "8dd8e92e4da40c7cd61c8098cb219b6bb858f3b45d67daa027ee24d73681bfce",
+      "full_declaration_normalized_lf_utf8_sha256": "ff15bdff4ebd82d7b64bd8540eeace036dcbabf18af1d1511dc6c6fa2412cc96",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    },
+    {
+      "name_as_written": "shifted_tau_Ioc_sum_le",
+      "fully_qualified_name": "ImbalancedChen.Part3.ElementaryShiftedTau.shifted_tau_Ioc_sum_le",
+      "visibility": "public",
+      "first": 197,
+      "type_last": 203,
+      "last": 209,
+      "complete_written_type": "theorem shifted_tau_Ioc_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Ioc 0 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      2 * (K : ℝ) * (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 1) +\n        (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) *\n          (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 2)) := by\n",
+      "complete_written_declaration": "theorem shifted_tau_Ioc_sum_le {K : ℕ} (hK : 2 ≤ K) {x κ : ℝ}\n    (hx : 1 ≤ x) (hκ : 0 ≤ κ) (a : ℤ) (ha : |(a : ℝ)| ≤ x ^ (1 + κ)) :\n    (∑ v ∈ (Ioc 0 ⌊6 * x⌋₊).filter (fun v => (v : ℤ) ≠ a),\n      (fouvryTau K ((v : ℤ) - a).natAbs : ℝ)) ≤\n      2 * (K : ℝ) * (6 * x * (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 1) +\n        (7 * x ^ (1 + κ)) ^ (1 - 1 / (K : ℝ)) *\n          (1 + Real.log (7 * x ^ (1 + κ))) ^ (K - 2)) := by\n  have hI : Ioc 0 ⌊6 * x⌋₊ = Icc 1 ⌊6 * x⌋₊ := by\n    ext v\n    simp only [Finset.mem_Ioc, Finset.mem_Icc]\n    omega\n  rw [hI]\n  exact shifted_tau_Icc_sum_le hK hx hκ a ha\n",
+      "type_normalized_lf_utf8_sha256": "92091ebd1adc6f52ff168fc777f88f957db76cdf6b25083364e302e78dd57e6c",
+      "full_declaration_normalized_lf_utf8_sha256": "c55ec828f667da8367a5a5520914a3fe7904c1da7fb35738b4abfc03863e6f17",
+      "proof_status": "COMPLETE_AS_WRITTEN_UNCOMPILED_SOURCE_PROPOSAL"
+    }
+  ],
+  "mathematical_argument": {
+    "source_support": "Icc membership gives v>=1 and v<=floor(6x)<=6x. Integer v!=a implies natAbs(v-a)>=1. Zero is removed in shiftedSource before either sign image or E1 invocation.",
+    "positive_image": "For a<v, natAbs(v-a)=v-a. It lies in [max 1(-a),max 1(-a+6x)], using integer positivity and 0<=v<=6x.",
+    "negative_image": "For not(a<v), v<=a and natAbs(v-a)=a-v. Since shiftedSource already excludes equality, its image is positive. It lies in [max 1(a-6x),max 1((a-6x)+6x)]=[max 1(a-6x),max 1 a].",
+    "injections": "On each sign, the existing Int.natAbs_inj_of_nonneg_of_nonneg or nonpos counterpart converts equal absolute values to equal signed differences; subtracting the same a and Nat.cast injectivity recover v=w.",
+    "clamp_geometry": "For H>=0, lower=max 1 c and upper=max 1(c+H) satisfy lower>=1, lower<=upper, upper-lower<=H. If c+H<=Z and Z>=1 then upper<=Z. This handles empty sign sources without an extra nonempty hypothesis.",
+    "exact_seven": "x>=1,kappa>=0 imply x<=T=x^(1+kappa) and T>=1. The original shift bound gives -T<=a<=T. Therefore -a+6x<=T+6T=7T and a<=T<=7T; both clamped upper endpoints are <=7T. No 8 or restriction kappa<=1 is used.",
+    "E1_payment": "Finite sum_image preserves each sign-branch sum exactly. Apply the real-supported E1 theorem to the actual image set. Replace its true interval width by H=6x using nonnegativity of the log power. This pays one factor K for each sign.",
+    "recombination": "sum_filter_add_sum_filter_not partitions the original nonzero-shift source exactly. Add the two K payments to obtain the precise factor 2*K. Images may overlap between signs; they are charged separately, preserving original multiplicity.",
+    "finite_fold_adapter": "An explicit Ioc/Icc equality rewrites the final Ioc carrier to the main Icc statement. No finite-fold identity or outside energy is changed.",
+    "edge_cases": [
+      "x=1 and arbitrary nonnegative kappa give T=1,Z=7; all geometric bounds still hold.",
+      "kappa=0 is included. Arbitrarily large nonnegative kappa is also included; no asymptotic absorption is claimed.",
+      "a may be negative, zero or positive. An empty sign branch is handled by its empty finite image and the clamped interval.",
+      "v=a is excluded in the source even when it belongs to the raw interval; no tau(0) evaluation is used.",
+      "K=2 is included, with the second log exponent K-2=0.",
+      "The natural floor endpoint is handled by its actual floor inequality, not an enlarged interval or hidden endpoint allowance."
+    ],
+    "mathematical_scope_complete_as_written": true,
+    "author_static_blocker": "No mathematical gap identified in this stated finite consumer. Exact Lean syntax/elaboration, casts, let-unification, linter behavior and the future E1 import remain unexecuted."
+  },
+  "native_api_hash_spans": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvryHighOmega.lean",
+      "raw_sha256": "409bd722d3230cc9fa2f07c1914b47d8ee48e80e04b1f22696f7fe912c2f1243",
+      "bytes": 4952,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 1,
+          "last": 16,
+          "literal_source": "import MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryBetaCleanError\n\n/-!\n# Exponential saving from high distinct-prime-factor beta support\n\nThe cutoff is real. The elementary Rankin weight is `2 ^ omega(n)`;\nits absorption only doubles the fixed divisor order, with no power of the\nambient scale lost.\n-/\n\nnoncomputable section\nopen Classical Finset\n\nnamespace MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n\ndef betaLowOmega (β : ℕ → ℝ) (ξ : ℝ) (n : ℕ) : ℝ :=\n",
+          "normalized_lf_utf8_sha256": "aab670540323cf0e2e76a07939f341d4b76b8b3387355f3d3378f057e062e346"
+        },
+        {
+          "first": 92,
+          "last": 123,
+          "literal_source": "  calc\n    _ ≤ ∑ n ∈ N, (fouvryTau (k + 1) n : ℝ) :=\n      sum_le_sum (fun n _ => by exact_mod_cast fouvryTau_le_succ k n)\n    _ ≤ ∑ n ∈ Ioc 0 ⌊x⌋₊, (fouvryTau (k + 1) n : ℝ) :=\n      sum_le_sum_of_subset_of_nonneg hN (fun _ _ _ => Nat.cast_nonneg _)\n    _ ≤ _ := by simpa using sum_fouvryTau_le_real (k := k + 1) (by omega) hx\n\ntheorem sum_abs_betaHighOmega_le (k : ℕ) {T : ℝ} (hT : 1 ≤ T)\n    (N : Finset ℕ) (hN : N ⊆ Ioc 0 ⌊T⌋₊) (β : ℕ → ℝ)\n    (hβ : ∀ n ∈ N, |β n| ≤ (fouvryTau k n : ℝ)) (ξ : ℝ) :\n    (∑ n ∈ N, |betaHighOmega β ξ n|) ≤\n      (2 : ℝ) ^ (-ξ) * T * (1 + Real.log T) ^ (2 * k) := by\n  calc\n    _ ≤ ∑ n ∈ N, (2 : ℝ) ^ (-ξ) * fouvryTau (2 * k) n :=\n      sum_le_sum (fun _ hn => abs_betaHighOmega_le_rankin k hβ ξ hn)\n    _ = (2 : ℝ) ^ (-ξ) * ∑ n ∈ N, (fouvryTau (2 * k) n : ℝ) := (mul_sum ..).symm\n    _ ≤ (2 : ℝ) ^ (-ξ) * (T * (1 + Real.log T) ^ (2 * k)) :=\n      mul_le_mul_of_nonneg_left (highOmega_sum_tau_le (2 * k) hT N hN)\n        (Real.rpow_nonneg (by norm_num) _)\n    _ = _ := by ring\n\nend MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvry\n\n",
+          "normalized_lf_utf8_sha256": "3c0adae5838ce7f9cb975c545d471f603cd67f223d62a7df26f37886ab550a8c"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\goldbach\\MathlibNt\\AnalyticNumberTheory\\LargeSieve\\LiLiuPrereqFouvryHighOmegaConvolution.lean",
+      "raw_sha256": "45a65374f34da216bdd160c5df03d047699b1c4959268b1a9c1840962434d25c",
+      "bytes": 6632,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 50,
+          "last": 101,
+          "literal_source": "theorem highOmega_shift_fiber_card_le (S : Finset ℕ) (a : ℤ) (d : ℕ) :\n    (S.filter (fun t : ℕ => ((t : ℤ) - a).natAbs = d)).card ≤ 2 := by\n  have hsub : S.filter (fun t : ℕ => ((t : ℤ) - a).natAbs = d) ⊆\n      {(a + (d : ℤ)).toNat, (a - (d : ℤ)).toNat} := by\n    intro t ht\n    have he : |(t : ℤ) - a| = (d : ℤ) := by\n      rw [← Int.natCast_natAbs, (mem_filter.mp ht).2]\n    rcases le_total 0 ((t : ℤ) - a) with h | h\n    · rw [abs_of_nonneg h] at he\n      have ht' : t = (a + (d : ℤ)).toNat := by omega\n      simp [ht']\n    · rw [abs_of_nonpos h] at he\n      have ht' : t = (a - (d : ℤ)).toNat := by omega\n      simp [ht']\n  exact (card_le_card hsub).trans ((card_insert_le ..).trans (by simp))\n\ntheorem highOmega_shift_sum_le (S : Finset ℕ) (a : ℤ) (Y : ℕ)\n    (hY : ∀ t ∈ S, ((t : ℤ) - a).natAbs ≤ Y)\n    (F : ℕ → ℝ) (hF : ∀ d, 0 ≤ F d) (hF0 : F 0 = 0) :\n    (∑ t ∈ S, F ((t : ℤ) - a).natAbs) ≤ 2 * ∑ d ∈ Ioc 0 Y, F d := by\n  have hmap : ∀ t ∈ S, ((t : ℤ) - a).natAbs ∈ Icc 0 Y :=\n    fun t ht => mem_Icc.mpr ⟨Nat.zero_le _, hY t ht⟩\n  rw [← sum_fiberwise_of_maps_to' hmap]\n  calc\n    _ ≤ ∑ d ∈ Icc 0 Y, 2 * F d := by\n      apply sum_le_sum\n      intro d _\n      simp only [sum_const, nsmul_eq_mul]\n      exact mul_le_mul_of_nonneg_right\n        (by exact_mod_cast highOmega_shift_fiber_card_le S a d) (hF d)\n    _ = 2 * ∑ d ∈ Ioc 0 Y, F d := by\n      rw [← mul_sum]\n      congr 1\n      symm\n      apply sum_subset\n      · intro d hd\n        exact mem_Icc.mpr ⟨Nat.zero_le _, (mem_Ioc.mp hd).2⟩\n      · intro d hd hn\n        have hd0 : d = 0 := by\n          simp only [mem_Icc, mem_Ioc] at hd hn\n          omega\n        simpa only [hd0] using hF0\n\ntheorem highOmega_shifted_tau_sum_le (r s : ℕ) {x : ℝ} (hx : 1 ≤ x)\n    (a : ℤ) (ha : |(a : ℝ)| ≤ x) :\n    (∑ t ∈ Ioc 0 ⌊x⌋₊,\n      (fouvryTau r t : ℝ) * fouvryTau s ((t : ℤ) - a).natAbs) ≤\n      5 * x * (1 + Real.log (2 * x)) ^ (r ^ 2 + s ^ 2) := by\n  let H : ℝ := 1 + Real.log (2 * x)\n  have hH : 1 ≤ H := by\n    have := Real.log_nonneg (show 1 ≤ 2 * x by linarith)\n    dsimp [H]\n",
+          "normalized_lf_utf8_sha256": "d9c0476e04aaadb2169ec019cb049ff67359de21a7ee38552ea00f9bb80069d0"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Int\\Lemmas.lean",
+      "raw_sha256": "bbaef1cd08f146a8ab0125221eb704808fe24d7583b9cebb50516c0238cc9b44",
+      "bytes": 4262,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 51,
+          "last": 65,
+          "literal_source": "theorem natAbs_inj_of_nonneg_of_nonneg {a b : ℤ} (ha : 0 ≤ a) (hb : 0 ≤ b) :\n    natAbs a = natAbs b ↔ a = b := by rw [← sq_eq_sq₀ ha hb, ← natAbs_eq_iff_sq_eq]\n\ntheorem natAbs_inj_of_nonpos_of_nonpos {a b : ℤ} (ha : a ≤ 0) (hb : b ≤ 0) :\n    natAbs a = natAbs b ↔ a = b := by\n  simpa only [Int.natAbs_neg, neg_inj] using\n    natAbs_inj_of_nonneg_of_nonneg (neg_nonneg_of_nonpos ha) (neg_nonneg_of_nonpos hb)\n\ntheorem natAbs_inj_of_nonneg_of_nonpos {a b : ℤ} (ha : 0 ≤ a) (hb : b ≤ 0) :\n    natAbs a = natAbs b ↔ a = -b := by\n  simpa only [Int.natAbs_neg] using natAbs_inj_of_nonneg_of_nonneg ha (neg_nonneg_of_nonpos hb)\n\ntheorem natAbs_inj_of_nonpos_of_nonneg {a b : ℤ} (ha : a ≤ 0) (hb : 0 ≤ b) :\n    natAbs a = natAbs b ↔ -a = b := by\n  simpa only [Int.natAbs_neg] using natAbs_inj_of_nonneg_of_nonneg (neg_nonneg_of_nonpos ha) hb\n",
+          "normalized_lf_utf8_sha256": "a637f5231f255bb75a07b918708cc59b4b7382c3dea1e168de9538e1a88dad3b"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Int\\Order.lean",
+      "raw_sha256": "ffc58334c9afc31592aebe9a4dedc7d3df6187c0a258b16ecc9f3e8ddcd87142",
+      "bytes": 60947,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 642,
+          "last": 650,
+          "literal_source": "theorem natAbs_of_nonneg {a : Int} (H : 0 ≤ a) : (natAbs a : Int) = a :=\n  match a, eq_ofNat_of_zero_le H with\n  | _, ⟨_, rfl⟩ => rfl\n\ntheorem ofNat_natAbs_of_nonneg {a : Int} (h : 0 ≤ a) : (natAbs a : Int) = a :=\n  natAbs_of_nonneg h\n\ntheorem ofNat_natAbs_of_nonpos {a : Int} (H : a ≤ 0) : (natAbs a : Int) = -a := by\n  rw [← natAbs_neg, natAbs_of_nonneg (Int.neg_nonneg_of_nonpos H)]\n",
+          "normalized_lf_utf8_sha256": "a2982889f0b9bf50448c7f2ce2ceb03f3b9100867f955e9d41c530a3408665c5"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\BigOperators\\Group\\Finset\\Basic.lean",
+      "raw_sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "bytes": 51600,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 92,
+          "last": 98,
+          "literal_source": "@[to_additive (attr := simp) /-- If a function is injective on a finset, sums over the original\nfinset or its image coincide.\nSee also `sum_image_of_pairwise_eq_zero` for a version with weaker assumptions. -/]\ntheorem prod_image [DecidableEq ι] {s : Finset κ} {g : κ → ι} :\n    Set.InjOn g s → ∏ x ∈ s.image g, f x = ∏ x ∈ s, f (g x) :=\n  fold_image\n\n",
+          "normalized_lf_utf8_sha256": "70ea8aff3ff98197f6ff0855c4b1b2fb694f473754d12a50b4a6e173995f21b2"
+        },
+        {
+          "first": 143,
+          "last": 149,
+          "literal_source": "@[to_additive]\ntheorem prod_filter_mul_prod_filter_not\n    (s : Finset ι) (p : ι → Prop) [DecidablePred p] [∀ x, Decidable (¬p x)] (f : ι → M) :\n    (∏ x ∈ s with p x, f x) * ∏ x ∈ s with ¬p x, f x = ∏ x ∈ s, f x := by\n  have := Classical.decEq ι\n  rw [← prod_union (disjoint_filter_filter_not s s p), filter_union_filter_not_eq]\n\n",
+          "normalized_lf_utf8_sha256": "daefacc0203ad96de32154af7e8cb070e7f32cc2c9662208344b60faa5dbf29f"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Analysis\\SpecialFunctions\\Pow\\Real.lean",
+      "raw_sha256": "1f4e64fc28a20f4e19291a94dafd68daa82588b46f6ee5b9203df373ba595fa3",
+      "bytes": 50301,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 615,
+          "last": 619,
+          "literal_source": "theorem rpow_le_rpow_of_exponent_le (hx : 1 ≤ x) (hyz : y ≤ z) : x ^ y ≤ x ^ z := by\n  repeat' rw [rpow_def_of_pos (lt_of_lt_of_le zero_lt_one hx)]\n  rw [exp_le_exp]; gcongr; exact log_nonneg hx\n\ntheorem strictAntiOn_rpow_Ioi_of_exponent_neg {r : ℝ} (hr : r < 0) :\n",
+          "normalized_lf_utf8_sha256": "cd5ca6e307d7c231ef6700d27091b708b90a2a7f2ea2f53a59a7cf035cc1ad00"
+        }
+      ]
+    },
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\Floor\\Semiring.lean",
+      "raw_sha256": "89cec8d921ee572258917b08f64efc19abe2922fb363e5b0af072c231c9ab7d3",
+      "bytes": 15993,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 47,
+          "last": 48,
+          "literal_source": "theorem floor_le (ha : 0 ≤ a) : (⌊a⌋₊ : R) ≤ a :=\n  (le_floor_iff ha).1 le_rfl\n",
+          "normalized_lf_utf8_sha256": "f61ac8b4c392fba9e977a64fdebfb5f1d3fe334ca6be41d38d819b22adc01bf6"
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-e1-real-endpoint-adapter-source-proposal.txt",
+      "raw_sha256": "3313e74df9d2e2c1ae36f320d1291bcf38d573f8046f1940e71f53017deb14b0",
+      "bytes": 50983,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 981,
+          "last": 993,
+          "literal_source": "theorem sum_fouvryTau_E1_real_support (S : Finset ℕ) {K : ℕ}\n    (hK : 2 ≤ K) {a b Z : ℝ} (ha : 1 ≤ a) (hab : a ≤ b)\n    (hZ : 2 ≤ Z) (hbZ : b ≤ Z)\n    (hS : ∀ n ∈ S, a ≤ (n : ℝ) ∧ (n : ℝ) ≤ b) :\n    (∑ n ∈ S, (fouvryTau K n : ℝ)) ≤\n      (K : ℝ) * ((b - a) * (1 + Real.log Z) ^ (K - 1) +\n        Z ^ (1 - 1 / (K : ℝ)) * (1 + Real.log Z) ^ (K - 2)) := by\n  have hZ1 : 1 ≤ Z := by linarith\n  have hfin := sum_fouvryTau_real_support_floor_payment S hK ha hab hZ hbZ hS\n  have hmean := native_floor_tau_payment hK (realDeletionRadius_bounds hK hZ1).1\n    (realDeletionRadius_bounds hK hZ1).2 (sub_nonneg.mpr hab)\n  rw [← realDeletionRadius_eq_manuscript hK Z]\n  exact hfin.trans (mul_le_mul_of_nonneg_left hmean (Nat.cast_nonneg K))\n",
+          "normalized_lf_utf8_sha256": "0a5fda22ba0b5877d8bb87b86ae88bffbb6729e789f40307fad2cf7aab50b92f"
+        }
+      ]
+    },
+    {
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\drafts\\20261022-commonp-m2-finite-fold-source-proposal.txt",
+      "raw_sha256": "728704ea418c05ee0ff51542d9f6b59bcd4cf45de12b5e94a99cb577957075bc",
+      "bytes": 19511,
+      "actual_source_read": true,
+      "spans": [
+        {
+          "first": 52,
+          "last": 61,
+          "literal_source": "def shiftDifference (d : MediumAtom) (v : ℕ) : ℕ :=\n  ((v : ℤ) - d.residue).natAbs\n\ndef tau (v : ℕ) : ℝ := (v.divisors.card : ℝ)\n\ndef fourthDivisorWeight (d : MediumAtom) (v : ℕ) : ℝ :=\n  (fouvryTau 4 (shiftDifference d v) : ℝ) ^ 4\n\ndef productCarrier (d : MediumAtom) : Finset ℕ :=\n  (Ioc 0 (Nat.floor (6 * d.scale))).filter (fun v => (v : ℤ) ≠ d.residue)\n",
+          "normalized_lf_utf8_sha256": "33c70879b02726b18d40fcf6dc9f29ccbc4f6c690bb3ac6f824612fb7a046eab"
+        },
+        {
+          "first": 315,
+          "last": 340,
+          "literal_source": "theorem MediumAtom.cleaned_commonP_moment_le_finite_divisor_fold\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma) :\n    CommonPM2FiniteFold.moment d ≤ (3 * d.U / d.Q1) *\n      CommonPM2FiniteFold.foldedSum d := by\n  apply (CommonPM2FiniteFold.moment_le_activeLabels hd hsigma).trans\n  apply mul_le_mul_of_nonneg_left\n    (CommonPM2FiniteFold.sum_activeLabels_le_divisorFold hd hsigma\n      (CommonPM2FiniteFold.fourthDivisorWeight d)\n      (fun _ => by unfold CommonPM2FiniteFold.fourthDivisorWeight; positivity))\n  exact div_nonneg\n    (mul_nonneg (by norm_num) (zero_le_one.trans hd.1))\n    (zero_le_one.trans hd.2.2.1)\n\n/-- The literal M2 outside factor is retained exactly once. -/\ntheorem MediumAtom.cleaned_commonP_M2_le_finite_divisor_fold\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (hsigma : 0 < sigma) :\n    CommonPM2FiniteFold.outsideEnergy d * CommonPM2FiniteFold.moment d ≤\n      CommonPM2FiniteFold.outsideEnergy d *\n        ((3 * d.U / d.Q1) * CommonPM2FiniteFold.foldedSum d) := by\n  apply mul_le_mul_of_nonneg_left\n    (d.cleaned_commonP_moment_le_finite_divisor_fold hd hsigma)\n  unfold CommonPM2FiniteFold.outsideEnergy\n  exact mul_nonneg (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n    (Finset.sum_nonneg (fun _ _ => sq_nonneg _))\n",
+          "normalized_lf_utf8_sha256": "d4e15e7163c640529235ec4dc06427d9ed93d73a05aa4ee852c2d882c3def757"
+        }
+      ]
+    }
+  ],
+  "generated_API_note": "Finset.sum_image and sum_filter_add_sum_filter_not are generated additive counterparts of the explicitly read prod_image and prod_filter_mul_prod_filter_not declarations, with the same finite injectivity/partition hypotheses.",
+  "static_review": {
+    "all_212_lines_read": true,
+    "all_nine_full_types_and_proofs_present": true,
+    "no_sorry_axiom_or_assumed_shifted_bound": true,
+    "kernel_acceptance": "NOT_CHECKED",
+    "independent_review": "NOT_YET_PERFORMED_FOR_NEW_SOURCE",
+    "actual_Lean_mutation": false
+  },
+  "remaining_outside_scope": [
+    "Independent review and root-owned integration/compilation/kernel acceptance of the real-endpoint E1 module and this consumer.",
+    "Derive the original residue-range hypothesis from the exact actual MediumAdmissible context and select permissible internal parameters without changing its original public obligation.",
+    "Capped-kappa power/log absorption, constants/threshold uniformity and the requested 131073 moment composition.",
+    "Compose native divisor-product powers and Cauchy with the literal common-p finite fold, preserving actual coefficients and both outside energies.",
+    "M2, nonzero 7/32 spectral supplier, full spectrum/rough distribution, same-policy density, original forall-kappa and the main theorem."
+  ],
+  "actions": {
+    "writes": [
+      ".lake/proof-continuation/source-reviews/drafts/20261022-shifted-tau-finite-interval-source-proposal.txt",
+      ".lake/proof-continuation/source-reviews/20261022-shifted-tau-finite-interval-source-proposal-author-HOLD.json"
+    ],
+    "actual_lean_edits": 0,
+    "old_source_edits": 0,
+    "helper_files": 0,
+    "runtime_or_pin_edits": 0,
+    "proof_tools": 0,
+    "compiler_runs": 0,
+    "checker_runs": 0,
+    "proper_runs": 0,
+    "classifier_runs": 0,
+    "census_runs": 0,
+    "git_operations": 0,
+    "external_searches": 0,
+    "new_subagents": 0
+  },
+  "quota": {
+    "fresh_start_used_percent": 45,
+    "fresh_start_remaining_percent": 55,
+    "latest_used_percent": 45,
+    "latest_remaining_percent": 55,
+    "window_duration_mins": 10080,
+    "secondary": null,
+    "stop_any_valid_remaining_percent_lte": 40,
+    "threshold_triggered": false
+  },
+  "stop_condition": "Single bounded finite shifted interval source proposal delivered. HOLD. No autonomous capped-kappa/M2/spectrum expansion, actual source mutation, or proof execution."
+}

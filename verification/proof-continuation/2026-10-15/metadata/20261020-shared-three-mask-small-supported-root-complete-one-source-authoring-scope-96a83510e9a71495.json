@@ -1,0 +1,55 @@
+{
+  "status": "ROOT_COMPLETE_MATHEMATICAL_SCOPE_ONE_NEW_SOURCE_AUTHORING_ALLOWED_ONLY_AFTER_EXPLICIT_PUBLICATION_RELEASE_NOT_COMPILE_OR_ACCEPTANCE",
+  "created_utc": "2026-10-20T09:39:28.577698+00:00",
+  "owner": "/root/support_oct20",
+  "one_module": "ImbalancedChen.Part3SharedFirstFactorSmallPairedSupportedReduction",
+  "only_imports": [
+    "ImbalancedChen.Part3SharedFirstFactorEnergyNonzeroReduction",
+    "ImbalancedChen.Part3SharedFirstFactorLargePairedGCDNonzero",
+    "ImbalancedChen.Part3SharedFirstFactorLargeSupportedDeletion"
+  ],
+  "complete_literal_public_definition": [
+    "def MediumAtom.sharedSmallPairedSmallSupportedNonzero (d : MediumAtom)\n    (Ybeta Ysupport : ℝ) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    ∑ N1 ∈ d.transposedAtom.betaCarrier, ∑ N2 ∈ d.transposedAtom.betaCarrier,\n      if (N1.gcd N2 : ℝ) ≤ Ybeta ∧\n          (CanonicalReciprocalData.supportedPart\n            (N1 / N1.gcd N2) (N1.gcd N2) : ℝ) ≤ Ysupport then\n        d.transposedAtom.beta N1 * star (d.transposedAtom.beta N2) *\n          (d.q1SliceAtom p).transposedAtom.commonFactorPairNonzeroWeight N1 N2\n      else 0"
+  ],
+  "four_complete_public_types": [
+    "theorem MediumAtom.sharedFirstFactorNonzero_eq_threePairedSupportMasks\n    (d : MediumAtom) (Ybeta Ysupport : ℝ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier,\n      (d.q1SliceAtom p).transposedAtom.complexCRTSmoothNonzeroPart) =\n        d.sharedLargePairedGCDNonzero Ybeta +\n          d.sharedSmallPairedLargeSupportedNonzero Ybeta Ysupport +\n            d.sharedSmallPairedSmallSupportedNonzero Ybeta Ysupport",
+    "theorem actual_signedError_sq_cleanedAlpha_sq_difference_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) (hc0 : 0 < c0) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n        |‖d.signedError‖ ^ 2 - ‖d.cleanedAlphaAtom.signedError‖ ^ 2| ≤\n          d.scale ^ 2 / (Real.log d.scale) ^ A",
+    "theorem actual_betaL2_gamma1L2_cleaned_deletedPairedSupportedNonzero_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          (‖d.cleanedAlphaAtom.sharedLargePairedGCDNonzero\n              (d.scale ^ (sigma / 4))‖ +\n            ‖d.cleanedAlphaAtom.sharedSmallPairedLargeSupportedNonzero\n              (d.scale ^ (sigma / 4)) (d.scale ^ (sigma / 4))‖) ≤\n                2 * (d.scale ^ 2 / (Real.log d.scale) ^ A)",
+    "theorem uniformAuxiliarySW_signedError_sq_le_cleanedSmallPairedSupportedNonzero_add_log_payment\n    {ι : Type*} (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hsigma_small : sigma < 1 / 100)\n    (hc0 : 0 < c0) (hkappa : 0 ≤ kappa) (hkappa_small : kappa ≤ sigma / 100)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∀ A : ℝ, 0 < A →\n      ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n        ∀ i : ι, x0 ≤ (F i).scale →\n          ‖(F i).signedError‖ ^ 2 ≤\n            (∑ n ∈ (F i).betaCarrier, ‖(F i).beta n‖ ^ 2) *\n              (∑ p ∈ (F i).primitiveFirstFactorCarrier, ‖(F i).gamma1 p‖ ^ 2) *\n                ((F i).cleanedAlphaAtom.sharedSmallPairedSmallSupportedNonzero\n                  ((F i).scale ^ (sigma / 4)) ((F i).scale ^ (sigma / 4))).re +\n                    C * (F i).scale ^ 2 / (Real.log (F i).scale) ^ A"
+  ],
+  "required_new_private_crude_helper_to_prove": "private theorem cleanedAlpha_signedError_crude_subpower (B : ℕ) (sigma kappa c0 : ℝ) (hsigma : 0 < sigma) : ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom, MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale → ‖d.cleanedAlphaAtom.signedError‖ ≤ C * d.scale ^ (1 + sigma / 4)",
+  "complete_new_crude_helper_route": [
+    "Take eta=sigma/8. Reproduce only the finite beta_norm_subpower proof from PairedAlphaDeletion: MediumAdmissible gives beta<=tau2^B; fouvryTau_pow_le and the public PolynomialResidueDivisorBound.fouvryTau_le_const_rpow at order 2^B yield sup_actual_beta<=Cbeta*X^eta, uniform before d.",
+    "Expand the exact original signedError_eq_complexCenteredRows for cleanedAlphaAtom. Its complex centered row is unchanged by alpha cleaning. Split the literal complexPrimitiveKernel into the original progression indicator and original primitive-coprime mean; retain every ordered complex factor label and both original carriers until the triangle inequality.",
+    "For every active cleaned-alpha n, n does not divide signed a. Thus mn-a is nonzero for every original m. The public owned absoluteFactorModulusRow_le_tauFour can be transported with a local auxiliary beta=1 record exactly as in the already owned W proof; this changes no actual coefficient and assumes nothing about original beta<=1.",
+    "For m<=2V and n<=2U, |mn-a|<=7*X^max(1,1+kappa). The same public fixed-order divisor subpower theorem supplies tau4(|mn-a|)<=Ctau*X^eta. Therefore the complete progression contribution is <=(2U)(2V) Cbeta*Ctau X^(2eta)=4 Cbeta Ctau X^(1+2eta).",
+    "Group the exact three physical complex gamma fibers before their norm. Public groupedFactorGamma_norm_le_tauThree, physicalFactorModuli_subset_cap and sum_fouvryTau_div_totient_le_real give sum_q ||Gamma(q)||/phi(q)<=Hcap^6. The primitive mean contribution is <=(2U)(2V) Cbeta X^eta Hcap^6. No unit or sign is removed before the nonnegative envelope.",
+    "The already owned eventually_actual_log_cost_le_rpow with natural powers 0 and 6, exponent eta, pays Hcap^6<=X^eta. Thus Cclean=4*Cbeta*(Ctau+1) gives ||Sclean||<=Cclean X^(1+sigma/4) after one atom-uniform threshold. This is an elementary finite/subpower proof to implement; it is not an existing accepted theorem and is not a new supplier premise.",
+    "Use the owned alpha deletion power endpoint Delta<=D X^(1-sigma/2), which requires original c0>0. Reverse triangle and factorization of real norm squares give |normS²-normSclean²|<=(2normSclean+Delta)Delta <=2*Cclean*D X^(2-sigma/4)+D²X^(2-sigma) <=(2*Cclean*D+D²)X^(2-sigma/4). Scalar const-rpow-to-logBudget at delta=sigma/4 yields the new unit-coefficient squared cleaning payment."
+  ],
+  "root_complete_math_review": "Read literal definition, four complete endpoint types, detailed finite progression and grouped-phi mean proof, subpower exponents and exact unit coefficient squared transfer. Reviewed independent complete API/source rederivation d7da7. No new supplier premise; must actually implement helper and all endpoints. Root has not claimed to have independently replayed all foreign objects.",
+  "independent_complete_review": {
+    "path": ".lake/proof-continuation/source-reviews/20261020-shared-three-mask-small-supported-complete-math-api-independent-review.json",
+    "sha256": "d7da7a65769b1bdf9dd95590b4910fefda4cc61de7e44f342fbac5e4dcbe1fbb"
+  },
+  "original_proposal": {
+    "path": ".lake/proof-continuation/source-reviews/20261020-shared-three-mask-small-supported-next-interface-complete-readonly-proposal.json",
+    "sha256": "07f27b7a992bd48fe4fab7b5c4a74767e4f58d61f93bad01c65192bdc69683cc"
+  },
+  "parent_rebind": "Support proposal59c -> fully accepted e9f741(111); current source20f41 is exactly e9 minus one finalLF byte; formatting-only strict/owned recertification in progress. Preserve original proposal and independent review unchanged. Require actual current20f4 owned111 before final source gate.",
+  "three_mask_identity": "same original p,N1,N2 and star orientation; exhaustive originalg>Ybeta / g<=Ybeta and supported>Ysupport / g<=Ybeta and supported<=Ysupport; actual literal kernel unchanged",
+  "must_preserve": [
+    "all exact endpoint hypotheses and quantifier order",
+    "signed residue a and real projection before arbitrary complex coefficient",
+    "original sigma/4 cutoffs, C0 auxiliarySW and both outside second moments",
+    "new crude helper proved from finite tau4 progression and grouped tau3/phi mean, no assumed bound",
+    "cleaned square comparison preserves core coefficient1, no coarse factor2 shortcut",
+    "CE+3 fixed uniform before atom/family index",
+    "no sorry/custom axiom/unsafe/hidden supplier/strengthened hypothesis/new foreign import",
+    "whole source freeze for root nonauthor full review and independent review before first actual compiler gate"
+  ],
+  "open_gap": "This finite reduction supplies no small-core spectral7/32 estimate, no fullNZ/C/K/hLower/hUpper/main closure.",
+  "compiler_policy": "Author must not invoke Lean/lake/checker, install dependencies, alter pins, frozen runtime/audit/parser, CI, automation, manuscript or memory limits. Sole runtime remains sole heavy owner.",
+  "publication_freeze_still_in_force": true,
+  "quota_guard": "Actual latest used6/remaining94; check before starting; hard conditional stop<=50, do not auto-resume or reset credits."
+}

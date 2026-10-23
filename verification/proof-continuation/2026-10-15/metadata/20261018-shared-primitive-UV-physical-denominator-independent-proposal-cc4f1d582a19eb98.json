@@ -1,0 +1,124 @@
+{
+  "status": "READ_ONLY_ACTUAL_SHARED_PRIMITIVE_UV_CORE_GAP_PROPOSAL_NOT_LEAN_IMPLEMENTATION_NOT_ACCEPTED",
+  "author": "/root/low_aggregate_oct18",
+  "created_utc": "2026-10-18T04:17:35.106740+00:00",
+  "verdict": "A genuine same-p finite coefficient bridge suffices. The existing per-slice final log bound does not contain the needed common-p normalization. U has a true raw 1/Q1 harmonic gain; V has only a single totient denominator and does NOT have a fictitious raw 1/p² gain. Its larger raw scale is nevertheless paid by the original medium geometry. UniformAuxiliarySW is unnecessary for these U/V counting errors; no additional supplier or bad-support premise is needed.",
+  "proposed_module": "ImbalancedChen.Part3SharedFirstFactorPrimitiveUVPayment",
+  "minimal_two_existing_direct_parents": [
+    "ImbalancedChen.Part3SharedFirstFactorDispersion",
+    "ImbalancedChen.Part3TransposedPrimitiveVPayment"
+  ],
+  "literal_proposed_UV_object": "def MediumAtom.sharedPrimitiveUVError (d : MediumAtom) : ℂ :=\n  ∑ p ∈ d.primitiveFirstFactorCarrier,\n    (((d.q1SliceAtom p).transposedAtom.complexDispersionU\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n      TransposedZeroCovariance.primitiveZeroMain (d.q1SliceAtom p)) -\n      2 * (((d.q1SliceAtom p).transposedAtom.complexDispersionV\n        d.transposedAtom.commonSmoothCarrier d.transposedAtom.commonSmoothWeight : ℂ) -\n          TransposedZeroCovariance.primitiveZeroMain (d.q1SliceAtom p))",
+  "complete_proposed_public_payment_type": "theorem actual_betaL2_gamma1L2_sharedPrimitiveUV_log_payment\n    (B : ℕ) (sigma kappa c0 A : ℝ) (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) *\n          ‖d.sharedPrimitiveUVError‖ ≤\n            3 * (d.scale ^ 2 / (Real.log d.scale) ^ A)",
+  "actual_centered_identity": {
+    "reference": "Part3SharedFirstFactorDispersion:526 MediumAtom.sharedFirstFactor_centered_identity",
+    "equation": "SharedEnergy_asComplex = Σp[rawZero_p -2*V_p +U_p +NZ_p] = Σp(rawZero_p-P0_p) + Σp[(U_p-P0_p)-2*(V_p-P0_p)] + Σp NZ_p.",
+    "outside": "The exact multiplier is B2(d)*G1L2(d), with B2=Σ original betaCarrier norm beta² and G1L2=Σ primitive p norm original gamma1². The owned upper envelope is 4*V*Q1*(1+log(2V))^eB, eB=(2^B)^2-1.",
+    "do_not_identify": "P0_p is primitiveZeroMain(d.q1SliceAtom p), not one original primitiveZeroMain(d). q1SliceAtom changes only gamma1 to its p Kronecker label: alpha, beta, U,V,Q2,Q3,residue, interval and common smoothing remain literal original values."
+  },
+  "old_ZeroUVPayment": {
+    "source_sha256": "5b504d5018577a4210e02e852ba819204422b9e4eaaf30ca0ede4e023003f3e8",
+    "complete_all_four_public_types": [
+      "theorem actual_energy_sub_nonzero_abs_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    |(∑ m ∈ d.transposedAtom.commonSmoothCarrier,\n      d.transposedAtom.commonSmoothWeight m *\n        ‖d.transposedAtom.complexCenteredRow m‖ ^ 2) -\n          d.transposedAtom.complexCRTSmoothNonzeroPart.re| ≤\n      ‖d.transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain d‖ +\n        2 * ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ +\n            ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n              d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖",
+      "theorem actual_betaL2_mul_zero_UV_log_payment {ι : Type*} (F : ι → MediumAtom)\n    (B C0 : ℕ) (sigma kappa c0 A : ℝ) (hA : 0 < A) (hsigma : 0 < sigma)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ i, x0 ≤ (F i).scale →\n      (∑ n ∈ (F i).betaCarrier, ‖(F i).beta n‖ ^ 2) *\n        (‖(F i).transposedAtom.complexCRTSmoothZeroPart - primitiveZeroMain (F i)‖ +\n          2 * ‖((F i).transposedAtom.complexDispersionV\n            (F i).transposedAtom.commonSmoothCarrier\n              (F i).transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain (F i)‖ +\n            ‖((F i).transposedAtom.complexDispersionU\n              (F i).transposedAtom.commonSmoothCarrier\n                (F i).transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain (F i)‖) ≤\n                  4 * ((F i).scale ^ 2 / Real.log (F i).scale ^ A)",
+      "theorem actual_betaL2_mul_energy_sub_nonzero_log_payment {ι : Type*}\n    (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 A : ℝ)\n    (hA : 0 < A) (hsigma : 0 < sigma)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ i, x0 ≤ (F i).scale →\n      (∑ n ∈ (F i).betaCarrier, ‖(F i).beta n‖ ^ 2) *\n        |(∑ m ∈ (F i).transposedAtom.commonSmoothCarrier,\n          (F i).transposedAtom.commonSmoothWeight m *\n            ‖(F i).transposedAtom.complexCenteredRow m‖ ^ 2) -\n              (F i).transposedAtom.complexCRTSmoothNonzeroPart.re| ≤\n                4 * ((F i).scale ^ 2 / Real.log (F i).scale ^ A)",
+      "theorem actual_signedError_sq_le_nonzero_add_log_payment {ι : Type*}\n    (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 A : ℝ)\n    (hA : 0 < A) (hsigma : 0 < sigma)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ i, x0 ≤ (F i).scale →\n      ‖(F i).signedError‖ ^ 2 ≤\n        (∑ n ∈ (F i).betaCarrier, ‖(F i).beta n‖ ^ 2) *\n          (F i).transposedAtom.complexCRTSmoothNonzeroPart.re +\n            4 * ((F i).scale ^ 2 / Real.log (F i).scale ^ A)"
+    ],
+    "scope_audit": "Each owned old bound pays original betaL2 only, with no primitive gamma1L2 multiplier and no Σp same-p normalization. actual_signedError_sq_le_nonzero_add_log_payment concerns the unsliced full three-factor route.",
+    "why_not_direct_slice": "Applying the final old log bound to every d_p and then multiplying G1L2 incurs card(P)*G1L2 ≲Q1². Q1 may be a power of scale; no fixed extra log exponent pays this. Old per-slice U/V power exponents multiplied by Q1² also need not stay below2 at the actual small sigma.",
+    "what_can_be_reused": "The actual finite U/V expansions and counting-error suppliers are sufficient and already proved; refine their grouped coefficient envelopes before taking away the physical denominators. Existing U/V power/log asymptotic APIs then pay the sharpened shared scales."
+  },
+  "finite_bridge": {
+    "preferred_generic_weighted_slice_bridge": "For p in the actual carrier and every f:Nat→Real with f>=0, Σq∈(d_p).physicalFactorModuli norm((d_p).groupedFactorGamma q)*f(q) <= Σu∈factorCarrier Q2×factorCarrier Q3 norm(gamma2 u1*gamma3 u2)*f(p*u1*u2).",
+    "proof_basis": "Unfold the actual groupedFactorGamma as its original label fiber, apply norm_sum_le, finite fiberwise summation, and collapse gamma1 of d_p by its exact Kronecker condition. physicalFactorModuli of the slice is the original full Q1×Q2×Q3 image, so do not incorrectly redefine it as just p times the tail image; the inactive coefficients must actually be removed by this finite identity/inequality.",
+    "uniform_physical_denominators": "For v=u1*u2>0 retain the full φ(pv) and use 1/φ(pv)<=tau(pv)/(pv)<=tau(p)tau(v)/(pv). This holds for composite p,v with common factors. No multiplicativity φ(pv)=φ(p)φ(v) is assumed.",
+    "norm_masses": "The actual owned coprimeMass_norm_le_twice_U and coprimeNormMass_le_twice_U pay the two original alpha masses by 4U²; the same alpha carrier and both interval endpoints remain in every slice.",
+    "active_residue": "The owned actualV_sub_primitive_finite_bound already discharges the active q primitive-residue gate. It can be applied to d_p using the owned mediumAdmissible_q1SliceAtom; no new gcd(a,q)=1 premise is introduced. A direct-label reproof must keep the original gamma zero cases and the p.Coprime residue gate."
+  },
+  "U_sharp_shared_finite_envelope": {
+    "actual_coefficient": "primitivePairCoefficient(d_p,q,r)=Gamma_p(q)*star Gamma_p(r)*Mass_alpha(q)*star Mass_alpha(r)/(phi(q)*phi(r)). Actual uniform smooth coprime-count error costs C*tau(q*r).",
+    "physical_pointwise": "At q=p*v,r=p*w, tau(qr)<=tau(q)tau(r), so norm coefficient*tau(qr) <=4U² * [tau(p)^4/p²] * [tau(v)^2/v] * [tau(w)^2/w] before the original tail label norms. This keeps p² in the denominator; it does not require p prime.",
+    "moment_Ap": "A_p=Σq norm Gamma_p(q)*tau(q)/phi(q) <=tau(p)^2/p * H2^4*H3^4, Hj=1+log(2Qj), by the actual weighted-slice bridge and native fixed-order harmonic divisor means at order4 on EACH original tail factor.",
+    "kernel_bound": "The proof of owned actualU_finite_envelope_le contains the sharper algebraic intermediate ∑q,r norm primitivePairCoefficient*tau(qr) <=4U²*A_p², before replacing A_p by the old full-cap log bound. Reuse/prove that explicit finite inequality, rather than calling its already-coarsened conclusion.",
+    "sum_p": "Σp∈actual primitive carrier tau(p)^4/p² <= H1^16/Q1. Thus Σp norm(U_p-P0_p) <=C_U U²/Q1 * H1^16*H2^8*H3^8 <=C_U U²/Q1 * H^32, H=1+log P, P=8Q1Q2Q3. All factors are genuine fixed moments, no X^epsilon."
+  },
+  "V_sharp_shared_finite_envelope": {
+    "actual_coefficient": "mixedPairCoefficient(d_p,q,r)=Gamma_p(q)*star Gamma_p(r)*star Mass_alpha(r)/phi(r). The actual mixed progression discrepancy costs C*NormMass_alpha(q)*tau(r). There is only ONE totient denominator.",
+    "physical_pointwise": "At q=p*v,r=p*w the envelope is <=4C U² * norm GammaTail(v)*norm GammaTail(w) * tau(p*w)/phi(p*w), hence <=4C U² * [tau(p)^2/p] * norm GammaTail(v)*norm GammaTail(w)*tau(w)^2/w. Do not insert a second 1/p.",
+    "moments": "The weighted slice moment A_p above contributes tau(p)^2/p *H2^4 H3^4. The unweighted slice gamma norm sum can be bounded by the actual original tail-label cardinal <=(2Q2)*(2Q3)=T=4Q2Q3. Therefore each p error <=C_V U²*T*tau(p)^2/p *H2^4 H3^4.",
+    "sum_p": "Σp tau(p)^2/p<=H1^4. Thus Σp norm(V_p-P0_p)<=C_V U²*T*H1^4*H2^4*H3^4<=C_V U²*T*H^12.",
+    "safe_alternative": "If using the already drafted exact two-factor complex grouping G(v) instead of a fresh carrier-cardinality bound, norm G(v)<=tau(v), Σv<=T tau(v)<=T H_T and Σw tau(w)^3/w<=H_T^8 yield the equally sufficient conservative H^13. This does not use unowned private G symbols; extract the finite argument locally or expose a separately authorized public finite API."
+  },
+  "combined_finite_target": "Σp[norm(U_p-P0_p)+2*norm(V_p-P0_p)] <=C U² [ H^32/Q1 + T*H^13 ]. The norm of the literal shared complex UV object is <= this sum by finite triangle and norm(2z)=2norm z. A simpler single H^32*(1/Q1+T) envelope is also sufficient since H>=1.",
+  "actual_outside_scale_payment": {
+    "U": "B2*G1L2*Σp norm(U_p-P0_p) <=4C_U V*U²*Hbeta^eB*H^32 =4C_U X*U*fixedLogs. The owned U_le_scale_half gives U<=X^(1/2); absorb fixed logs by X^(1/4), obtaining C X^(7/4), then every requested logarithmic decay.",
+    "V": "B2*G1L2*Σp norm(V_p-P0_p) <=4C_V V*Q1*U²*T*Hbeta^eB*H^13 =4C_V X*(U Q1 T)*fixedLogs. Since P=2Q1T, the owned U_mul_physicalFactorCap_le gives U Q1 T=(U P)/2<=4X^(1-9sigma). Therefore the true V shared outside cost is <=16C_V X^(2-9sigma)*fixedLogs. Absorb fixed logs by X^sigma to get C X^(2-8sigma), then every log budget.",
+    "no_extra_geometry": "Only the original Q1<U X^-sigma, U²Q2Q3²<X^(1-8sigma), Qj>=1 and sigma>0 are used, exactly through already owned U_le_scale_half and U_mul_physicalFactorCap_le. No stronger sigma or aux support assumption is needed.",
+    "quantifier_order": "The finite counting constants precede all atoms/moduli/residues. The log threshold is selected from fixed B,sigma,kappa,c0,A before d, so one threshold works for F(i) with every varying original field. UniformAuxiliarySW is not needed for U/V; it remains needed in the separate low-conductor raw-zero estimate."
+  },
+  "actual_owned_APIs": [
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveU",
+      "source_sha256": "3c1f2c0c17ddcf5d3dfd674376c1f45fb4aea1cde72408c3b1fba11971df3fbb",
+      "full_public_header": "theorem actualU_sub_primitive_finite_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n          C * ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n            ‖primitivePairCoefficient d q r‖ * ((q * r).divisors.card : ℝ)"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveV",
+      "source_sha256": "2cb0bab68ef736dc4f2f59e9f33644ef6b8c9aed205762da8ef0be41774390ca",
+      "full_public_header": "theorem actualV_sub_primitive_finite_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        C * ∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n          ‖mixedPairCoefficient d q r‖ *\n            coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n              (r.divisors.card : ℝ)"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveU",
+      "source_sha256": "3c1f2c0c17ddcf5d3dfd674376c1f45fb4aea1cde72408c3b1fba11971df3fbb",
+      "full_public_header": "theorem coprimeMass_norm_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (q : ℕ) :\n    ‖coprimeMass d.alphaCarrier d.alpha q‖ ≤ 2 * d.U"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveVMoment",
+      "source_sha256": "d842ac532a14d6179944fe2b61caf7a56ec17eb140d72471bc198c8d5958f7cd",
+      "full_public_header": "theorem coprimeNormMass_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (q : ℕ) :\n    coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q ≤ 2 * d.U"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "full_public_header": "theorem U_le_scale_half\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.U ≤ d.scale ^ (1 / 2 : ℝ)"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "full_public_header": "theorem eventually_actual_log_cost_le_rpow (p s : ℕ) (sigma : ℝ)\n    (hsigma : 0 < sigma) {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ (B : ℕ) (kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (1 + Real.log (2 * d.V)) ^ p *\n        (1 + Real.log d.physicalFactorCap) ^ s ≤ d.scale ^ epsilon"
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUPayment",
+      "source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+      "full_public_header": "theorem eventually_const_rpow_two_le_logBudget (C A : ℝ) (hC : 0 ≤ C)\n    {delta : ℝ} (hdelta : 0 < delta) :\n    ∀ᶠ x : ℝ in atTop, C * x ^ (2 - delta) ≤ x ^ 2 / (Real.log x) ^ A"
+    },
+    {
+      "module": "ImbalancedChen.Part3SignedDivisorDeletion",
+      "source_sha256": "0bddcfdb22bdb80cc4d5a888562bccb83ad1c87db6c395d27aef62da1bd366e1",
+      "full_public_header": "theorem MediumAtom.U_mul_physicalFactorCap_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.U * d.physicalFactorCap ≤ 8 * d.scale ^ (1 - 9 * sigma)"
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "full_public_header": "theorem mediumAdmissible_q1SliceAtom\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {p : ℕ}\n    (hp : p ∈ d.primitiveFirstFactorCarrier) :\n    MediumAdmissible B sigma kappa c0 (d.q1SliceAtom p)"
+    },
+    {
+      "module": "ImbalancedChen.Part3SharedFirstFactorDispersion",
+      "source_sha256": "6d86424370c150c89dd06ef1fb1c56c79caa4dc5474f4c3061eb64536ca1564d",
+      "full_public_header": "theorem MediumAtom.sharedFirstFactor_outside_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ m ∈ d.betaCarrier, ‖d.beta m‖ ^ 2) *\n      (∑ p ∈ d.primitiveFirstFactorCarrier, ‖d.gamma1 p‖ ^ 2) ≤\n        4 * d.V * d.Q1 * (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1)"
+    }
+  ],
+  "minimal_DAG": {
+    "existing_parent_union_projects": 68,
+    "foreign_boundary_count_including_Init": 65,
+    "missing_project": [],
+    "proposed_new_self_only_projects": 69,
+    "new_foreign": [],
+    "report": ".lake\\proof-continuation\\source-reviews\\20261018-shared-primitive-UV-proposal-parent-project-dag.json",
+    "report_sha256": "445c202ebe035f815d131217340ef59792b45078175a8cd6f547c60fc7e390f4",
+    "why_not_top_ZeroUVPayment_import": "The old ZeroUVPayment module was fully read for semantic comparison, but its unsliced raw-zero payment chain is unnecessary for the refined U/V finite bridge. The narrower already-owned VPayment parent contains U/V finite APIs and the genuine geometry/log asymptotics."
+  },
+  "no_new_Lean_source_or_compile_or_checker_or_pin_mutation": true,
+  "Low_503_original_bytes_frozen": true,
+  "acceptance_scope": "Source/math/API proposal only, no U/V same-p Lean theorem asserted or accepted. Do not count the raw-zero three-block assembly as full centered energy; this literal UV residual and the full nonzero Poisson remainder remain necessary until actually proved and checked."
+}

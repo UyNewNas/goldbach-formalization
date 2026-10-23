@@ -1,0 +1,534 @@
+{
+  "status": "AUTHOR_COMPLETE_NEW_SOURCE_FROZEN_FOR_ROOT_AND_NONAUTHOR_FULL_REVIEW_NOT_COMPILED_NOT_OWNED",
+  "created_utc": "2026-10-20T09:11:10.475623+00:00",
+  "author": "/root/chen7_cofactor_oct20",
+  "source": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenUpsilon7PrimeSemiprimeSource.lean",
+  "source_sha256": "2d5170f6e89772b6d8f6e83be9b6f6f846a6b4605e8b0dc9aa0aba6822d76de4",
+  "lines": 371,
+  "bytes": 18411,
+  "whole_source_text": "import ImbalancedChen.CurrentChenUpsilon9PrimeSource\n\n/-!\n# Exact prime, semiprime and unit branches of the current seventh source\n\nThe literal seventh quotient is rough at the second selected prime. Its\ncofactor need not be prime: the current lower exponent is below one fourth.\nThe actual exponent nevertheless gives `5 * (59 / 250) > 1`, so every\ncofactor is strictly below the cube of the second prime. This leaves one,\na prime, or an ordered product of two primes, including prime squares.\n\nAll branches retain the original outer pair, its strict square-root cap\nwith centre `N`, and the original primitive additive prime. No squarefree\nreceiver assumption, mean estimate, numerical sieve constant or analytic\nsupplier occurs here. The unit and diagonal branches are retained exactly.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen scoped BigOperators\nopen Classical\n\nprivate theorem currentChenSeventh_rough_lt_cube_classification\n    {q y : ℕ} (hq : 0 < q) (hrough : ChenPrimeRough (y : ℝ) q)\n    (hsmall : q < y ^ 3) :\n    q = 1 ∨ Nat.Prime q ∨ ∃ r s : ℕ,\n      Nat.Prime r ∧ Nat.Prime s ∧ y ≤ r ∧ r ≤ s ∧ q = r * s := by\n  by_cases hone : q = 1\n  · exact Or.inl hone\n  by_cases hprime : Nat.Prime q\n  · exact Or.inr (Or.inl hprime)\n  let r := Nat.minFac q\n  let s := q / r\n  have hr : Nat.Prime r := Nat.minFac_prime hone\n  have hmul : r * s = q := Nat.mul_div_cancel' (Nat.minFac_dvd q)\n  have hrs : r ≤ s := Nat.minFac_le_div hq hprime\n  have hyr : y ≤ r := by\n    exact_mod_cast hrough r hr (Nat.minFac_dvd q)\n  have hspos : 0 < s := hr.pos.trans_le hrs\n  have hsone : s ≠ 1 := by\n    have hr2 := hr.two_le\n    omega\n  have hs : Nat.Prime s := by\n    by_contra hsnot\n    have ht : Nat.Prime (Nat.minFac s) := Nat.minFac_prime hsone\n    have hsq : s ∣ q := by\n      rw [← hmul]\n      exact dvd_mul_left s r\n    have hyt : y ≤ Nat.minFac s := by\n      exact_mod_cast hrough (Nat.minFac s) ht ((Nat.minFac_dvd s).trans hsq)\n    have hysq : y ^ 2 ≤ s :=\n      (pow_le_pow_left' hyt 2).trans (Nat.minFac_sq_le_self hspos hsnot)\n    have hcube : y ^ 3 ≤ q := by\n      calc\n        y ^ 3 = y * y ^ 2 := by ring\n        _ ≤ r * s := Nat.mul_le_mul hyr hysq\n        _ = q := hmul\n    exact (not_le_of_gt hsmall) hcube\n  exact Or.inr (Or.inr ⟨r, s, hr, hs, hyr, hrs, hmul.symm⟩)\n\n/-- The current seventh rough cofactor has at most two prime factors with\nmultiplicity. The inclusive lower wall allows both `r = p₂` and `r = s`. -/\ntheorem currentChenUpsilon7_quotient_classification {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))) {q : ℕ}\n    (hq : q ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)) :\n    q < t.2 ^ 3 ∧\n      (q = 1 ∨ Nat.Prime q ∨ ∃ r s : ℕ,\n        Nat.Prime r ∧ Nat.Prime s ∧ t.2 ≤ r ∧ r ≤ s ∧ q = r * s) := by\n  obtain ⟨hc, hD, h₁₂, _hcap⟩ := Finset.mem_filter.mp ht\n  obtain ⟨hc₁, hc₂⟩ := Finset.mem_product.mp hc\n  have hp₁ := (mem_chenAdditivePrimeCarrier.mp hc₁).2.1\n  have hp₂ := (mem_chenAdditivePrimeCarrier.mp hc₂).2.1\n  have hb : 0 < t.1 * t.2 := mul_pos hp₁.pos hp₂.pos\n  obtain ⟨hqsource, hrough⟩ := Finset.mem_filter.mp hq\n  obtain ⟨_P, _hP, _hmul, hlt, hqpos, _hquot⟩ :=\n    currentChenUpsilon9_quotient_witness hb hqsource\n  have hN : (1 : ℝ) < N := by\n    exact_mod_cast lt_trans hp₁.one_lt (mem_chenAdditivePrimeCarrier.mp hc₁).1\n  have hDpow : ((N : ℝ) ^ (59 / 250 : ℝ)) ^ 5 =\n      (N : ℝ) ^ (59 / 50 : ℝ) := by\n    rw [← Real.rpow_mul_natCast (Nat.cast_nonneg N) (59 / 250 : ℝ) 5]\n    congr 1\n    norm_num\n  have hNpow : (N : ℝ) < ((N : ℝ) ^ (59 / 250 : ℝ)) ^ 5 := by\n    rw [hDpow]\n    calc\n      (N : ℝ) = (N : ℝ) ^ (1 : ℝ) := (Real.rpow_one _).symm\n      _ < (N : ℝ) ^ (59 / 50 : ℝ) :=\n        Real.rpow_lt_rpow_of_exponent_lt hN (by norm_num)\n  have hDfive : ((N : ℝ) ^ (59 / 250 : ℝ)) ^ 5 ≤ (t.1 : ℝ) ^ 5 :=\n    pow_le_pow_left₀ (Real.rpow_nonneg (Nat.cast_nonneg N) _) hD 5\n  have h₁₂R : (t.1 : ℝ) ≤ (t.2 : ℝ) := by exact_mod_cast h₁₂.le\n  have hfirst : (t.1 : ℝ) ^ 5 ≤ (t.1 : ℝ) * (t.2 : ℝ) ^ 4 := by\n    calc\n      (t.1 : ℝ) ^ 5 = (t.1 : ℝ) * (t.1 : ℝ) ^ 4 := by ring\n      _ ≤ (t.1 : ℝ) * (t.2 : ℝ) ^ 4 :=\n        mul_le_mul_of_nonneg_left\n          (pow_le_pow_left₀ (Nat.cast_nonneg _) h₁₂R 4) (Nat.cast_nonneg _)\n  have hNprod : (N : ℝ) < (t.1 : ℝ) * (t.2 : ℝ) ^ 4 :=\n    hNpow.trans_le (hDfive.trans hfirst)\n  have hqsmall : q < t.2 ^ 3 := by\n    by_contra hnot\n    have hlower : t.2 ^ 3 ≤ q := Nat.le_of_not_gt hnot\n    have hlowerR : (t.2 : ℝ) ^ 3 ≤ (q : ℝ) := by exact_mod_cast hlower\n    have hltR : (t.1 : ℝ) * (t.2 : ℝ) * (q : ℝ) < (N : ℝ) := by\n      exact_mod_cast hlt\n    have hprod : (t.1 : ℝ) * (t.2 : ℝ) ^ 4 ≤\n        (t.1 : ℝ) * (t.2 : ℝ) * (q : ℝ) := by\n      calc\n        (t.1 : ℝ) * (t.2 : ℝ) ^ 4 =\n            ((t.1 : ℝ) * (t.2 : ℝ)) * (t.2 : ℝ) ^ 3 := by ring\n        _ ≤ _ := mul_le_mul_of_nonneg_left hlowerR\n          (mul_nonneg (Nat.cast_nonneg _) (Nat.cast_nonneg _))\n    exact (not_lt_of_ge hprod) (hltR.trans hNprod)\n  exact ⟨hqsmall, currentChenSeventh_rough_lt_cube_classification hqpos hrough hqsmall⟩\n\nprivate theorem currentChenSeventh_sifted_mem_iff {N b q : ℕ}\n    (hb : 0 < b) (z : ℝ) :\n    q ∈ chenSiftedQuotientPrimeSource N b z ↔\n      b * q < N ∧ N - b * q ∈ chenAdditivePrimeCarrier N ∧ ChenPrimeRough z q := by\n  constructor\n  · intro hq\n    obtain ⟨hqsource, hrough⟩ := Finset.mem_filter.mp hq\n    obtain ⟨P, hP, hmul, hlt, _hqpos, _hquot⟩ :=\n      currentChenUpsilon9_quotient_witness hb hqsource\n    have hPN := (mem_chenAdditivePrimeCarrier.mp hP).1\n    have hrecover : N - b * q = P := by omega\n    exact ⟨hlt, by simpa only [hrecover] using hP, hrough⟩\n  · rintro ⟨hlt, hP, hrough⟩\n    have hreceiver : N - (N - b * q) = b * q := Nat.sub_sub_self hlt.le\n    have hdiv : b ∣ N - (N - b * q) := by\n      rw [hreceiver]\n      exact dvd_mul_right b q\n    have hquot : (N - (N - b * q)) / b = q := by\n      rw [hreceiver]\n      exact Nat.mul_div_cancel_left q hb\n    exact Finset.mem_filter.mpr\n      ⟨Finset.mem_image.mpr ⟨N - b * q,\n        mem_chenQuotientPrimeCarrier.mpr ⟨hP, hdiv⟩, hquot⟩, hrough⟩\n\nprivate theorem currentChenSeventh_rough_prime_mul_iff {r s : ℕ} {z : ℝ}\n    (hr : Nat.Prime r) (hs : Nat.Prime s) (hrs : r ≤ s) :\n    ChenPrimeRough z (r * s) ↔ z ≤ (r : ℝ) := by\n  constructor\n  · intro h\n    exact h r hr (dvd_mul_right r s)\n  · intro h q hq hdiv\n    rcases hq.dvd_mul.mp hdiv with hdr | hds\n    · have heq : q = r := (Nat.prime_dvd_prime_iff_eq hq hr).mp hdr\n      simpa only [heq] using h\n    · have heq : q = s := (Nat.prime_dvd_prime_iff_eq hq hs).mp hds\n      subst q\n      exact h.trans (by exact_mod_cast hrs)\n\nprivate theorem currentChenSeventh_prime_factor_mem_carrier {N b q r : ℕ}\n    (hb : 0 < b) (hq : q ∈ chenQuotientPrimeSource N b)\n    (hr : Nat.Prime r) (hrq : r ∣ q) : r ∈ chenAdditivePrimeCarrier N := by\n  obtain ⟨_P, _hP, _hmul, hlt, hqpos, _hquot⟩ :=\n    currentChenUpsilon9_quotient_witness hb hq\n  have hqle : q ≤ b * q := by\n    simpa only [one_mul] using Nat.mul_le_mul_right q (Nat.succ_le_iff.mpr hb)\n  have hrle : r ≤ q := Nat.le_of_dvd hqpos hrq\n  exact mem_chenAdditivePrimeCarrier.mpr\n    ⟨hrle.trans_lt (hqle.trans_lt hlt), hr,\n      (chenQuotientPrimeSource_data hq).2.2.of_dvd_left hrq⟩\n\ndef currentChenUpsilon7PrimeTriples (N : ℕ) : Finset (Σ _ : ℕ × ℕ, ℕ) :=\n  (chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))).sigma fun t =>\n    (chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)).filter Nat.Prime\n\ndef currentChenUpsilon7UnitFibres (N : ℕ) : Finset (ℕ × ℕ) :=\n  (chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))).filter fun t =>\n    1 ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)\n\ndef currentChenUpsilon7SemiprimeQuadruples (N : ℕ) :\n    Finset (Σ _ : ℕ × ℕ, ℕ × ℕ) :=\n  (chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))).sigma fun t =>\n    (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N).filter fun u =>\n      t.2 ≤ u.1 ∧ u.1 ≤ u.2 ∧\n        u.1 * u.2 ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)\n\ntheorem mem_currentChenUpsilon7PrimeTriples_iff {N p₁ p₂ q : ℕ} :\n    (⟨(p₁, p₂), q⟩ : Σ _ : ℕ × ℕ, ℕ) ∈ currentChenUpsilon7PrimeTriples N ↔\n      p₁ ∈ chenAdditivePrimeCarrier N ∧ p₂ ∈ chenAdditivePrimeCarrier N ∧\n      (N : ℝ) ^ (59 / 250 : ℝ) ≤ (p₁ : ℝ) ∧ p₁ < p₂ ∧\n      (p₂ : ℝ) < Real.sqrt ((N : ℝ) / (p₁ : ℝ)) ∧\n      Nat.Prime q ∧ p₂ ≤ q ∧ p₁ * p₂ * q < N ∧\n      N - p₁ * p₂ * q ∈ chenAdditivePrimeCarrier N := by\n  simp only [currentChenUpsilon7PrimeTriples, Finset.mem_sigma,\n    chenY7PrimeSelector, Finset.mem_filter, Finset.mem_product]\n  constructor\n  · rintro ⟨⟨⟨h₁, h₂⟩, hD, h₁₂, hcap⟩, hq, hprime⟩\n    have hb : 0 < p₁ * p₂ := mul_pos\n      (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n      (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos\n    obtain ⟨hlt, hP, hcut⟩ := (currentChenUpsilon9_prime_mem_iff hb hprime _).mp hq\n    exact ⟨h₁, h₂, hD, h₁₂, hcap, hprime, by exact_mod_cast hcut, hlt, hP⟩\n  · rintro ⟨h₁, h₂, hD, h₁₂, hcap, hprime, hcut, hlt, hP⟩\n    have hb : 0 < p₁ * p₂ := mul_pos\n      (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n      (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos\n    exact ⟨⟨⟨h₁, h₂⟩, hD, h₁₂, hcap⟩,\n      (currentChenUpsilon9_prime_mem_iff hb hprime _).mpr\n        ⟨hlt, hP, by exact_mod_cast hcut⟩, hprime⟩\n\ntheorem mem_currentChenUpsilon7SemiprimeQuadruples_iff {N p₁ p₂ r s : ℕ} :\n    (⟨(p₁, p₂), (r, s)⟩ : Σ _ : ℕ × ℕ, ℕ × ℕ) ∈\n        currentChenUpsilon7SemiprimeQuadruples N ↔\n      p₁ ∈ chenAdditivePrimeCarrier N ∧ p₂ ∈ chenAdditivePrimeCarrier N ∧\n      (N : ℝ) ^ (59 / 250 : ℝ) ≤ (p₁ : ℝ) ∧ p₁ < p₂ ∧\n      (p₂ : ℝ) < Real.sqrt ((N : ℝ) / (p₁ : ℝ)) ∧\n      Nat.Prime r ∧ Nat.Prime s ∧ p₂ ≤ r ∧ r ≤ s ∧\n      p₁ * p₂ * (r * s) < N ∧\n      N - p₁ * p₂ * (r * s) ∈ chenAdditivePrimeCarrier N := by\n  simp only [currentChenUpsilon7SemiprimeQuadruples, Finset.mem_sigma,\n    chenY7PrimeSelector, Finset.mem_filter, Finset.mem_product]\n  constructor\n  · rintro ⟨⟨⟨h₁, h₂⟩, hD, h₁₂, hcap⟩, ⟨hrc, hsc⟩, hcut, hrs, hsource⟩\n    have hb : 0 < p₁ * p₂ := mul_pos\n      (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n      (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos\n    obtain ⟨hlt, hP, _hrough⟩ := (currentChenSeventh_sifted_mem_iff hb _).mp hsource\n    exact ⟨h₁, h₂, hD, h₁₂, hcap,\n      (mem_chenAdditivePrimeCarrier.mp hrc).2.1,\n      (mem_chenAdditivePrimeCarrier.mp hsc).2.1, hcut, hrs, hlt, hP⟩\n  · rintro ⟨h₁, h₂, hD, h₁₂, hcap, hr, hs, hcut, hrs, hlt, hP⟩\n    have hb : 0 < p₁ * p₂ := mul_pos\n      (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n      (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos\n    have hsource : r * s ∈ chenSiftedQuotientPrimeSource N (p₁ * p₂) (p₂ : ℝ) :=\n      (currentChenSeventh_sifted_mem_iff hb _).mpr\n        ⟨hlt, hP, (currentChenSeventh_rough_prime_mul_iff hr hs hrs).mpr\n          (by exact_mod_cast hcut)⟩\n    have hraw := (Finset.mem_filter.mp hsource).1\n    have hrc := currentChenSeventh_prime_factor_mem_carrier hb hraw hr (dvd_mul_right r s)\n    have hsc := currentChenSeventh_prime_factor_mem_carrier hb hraw hs (dvd_mul_left s r)\n    exact ⟨⟨⟨h₁, h₂⟩, hD, h₁₂, hcap⟩, ⟨hrc, hsc⟩, hcut, hrs, hsource⟩\n\nprivate def currentChenSeventhSemiprimePairs (N : ℕ) (t : ℕ × ℕ) : Finset (ℕ × ℕ) :=\n  (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N).filter fun u =>\n    t.2 ≤ u.1 ∧ u.1 ≤ u.2 ∧\n      u.1 * u.2 ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)\n\nprivate theorem currentChenSeventh_pairs_mul_injective {N : ℕ} {t a c : ℕ × ℕ}\n    (ha : a ∈ currentChenSeventhSemiprimePairs N t)\n    (hc : c ∈ currentChenSeventhSemiprimePairs N t)\n    (hmul : a.1 * a.2 = c.1 * c.2) : a = c := by\n  obtain ⟨hac, _hca, haorder, _haF⟩ := Finset.mem_filter.mp ha\n  obtain ⟨hcc, _hccut, hcorder, _hcF⟩ := Finset.mem_filter.mp hc\n  obtain ⟨ha₁, ha₂⟩ := Finset.mem_product.mp hac\n  obtain ⟨hc₁, hc₂⟩ := Finset.mem_product.mp hcc\n  obtain ⟨hfirst, hsecond⟩ := ordered_prime_factors_unique\n    (mem_chenAdditivePrimeCarrier.mp ha₁).2.1\n    (mem_chenAdditivePrimeCarrier.mp ha₂).2.1\n    (mem_chenAdditivePrimeCarrier.mp hc₁).2.1\n    (mem_chenAdditivePrimeCarrier.mp hc₂).2.1 haorder hcorder hmul\n  exact Prod.ext hfirst hsecond\n\nprivate theorem currentChenSeventh_composite_eq_pairs_image {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))) :\n    (chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)).filter\n        (fun q => q ≠ 1 ∧ ¬ Nat.Prime q) =\n      (currentChenSeventhSemiprimePairs N t).image (fun u => u.1 * u.2) := by\n  obtain ⟨hc, _hD, _h₁₂, _hcap⟩ := Finset.mem_filter.mp ht\n  obtain ⟨hc₁, hc₂⟩ := Finset.mem_product.mp hc\n  have hb : 0 < t.1 * t.2 := mul_pos\n    (mem_chenAdditivePrimeCarrier.mp hc₁).2.1.pos\n    (mem_chenAdditivePrimeCarrier.mp hc₂).2.1.pos\n  ext q\n  constructor\n  · intro hq\n    obtain ⟨hqF, hqone, hqnotprime⟩ := Finset.mem_filter.mp hq\n    rcases (currentChenUpsilon7_quotient_classification ht hqF).2 with\n      hone | hprime | ⟨r, s, hr, hs, hcut, hrs, hprod⟩\n    · exact (hqone hone).elim\n    · exact (hqnotprime hprime).elim\n    · have hraw := (Finset.mem_filter.mp hqF).1\n      have hrd : r ∣ q := by\n        rw [hprod]\n        exact dvd_mul_right r s\n      have hsd : s ∣ q := by\n        rw [hprod]\n        exact dvd_mul_left s r\n      have hrc := currentChenSeventh_prime_factor_mem_carrier hb hraw hr hrd\n      have hsc := currentChenSeventh_prime_factor_mem_carrier hb hraw hs hsd\n      refine Finset.mem_image.mpr ⟨(r, s), ?_, hprod.symm⟩\n      exact Finset.mem_filter.mpr\n        ⟨Finset.mem_product.mpr ⟨hrc, hsc⟩, hcut, hrs, by simpa only [hprod] using hqF⟩\n  · intro hq\n    obtain ⟨⟨r, s⟩, hpairs, rfl⟩ := Finset.mem_image.mp hq\n    obtain ⟨hc, _hcut, _hrs, hF⟩ := Finset.mem_filter.mp hpairs\n    obtain ⟨hrc, hsc⟩ := Finset.mem_product.mp hc\n    have hr := (mem_chenAdditivePrimeCarrier.mp hrc).2.1\n    have hs := (mem_chenAdditivePrimeCarrier.mp hsc).2.1\n    have hprod : 4 ≤ r * s := Nat.mul_le_mul hr.two_le hs.two_le\n    exact Finset.mem_filter.mpr\n      ⟨hF, by omega, Nat.not_prime_mul hr.ne_one hs.ne_one⟩\n\nprivate theorem currentChenSeventh_row_card_partition {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))) :\n    let F := chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)\n    F.card = (F.filter Nat.Prime).card +\n      (currentChenSeventhSemiprimePairs N t).card + if 1 ∈ F then 1 else 0 := by\n  intro F\n  let G := F.filter (fun q => ¬ Nat.Prime q)\n  have hunitset : G.filter (fun q => q = 1) = if 1 ∈ F then {1} else ∅ := by\n    ext q\n    by_cases hq : q = 1\n    · subst q\n      by_cases hu : 1 ∈ F <;> simp [G, hu]\n    · by_cases hu : 1 ∈ F <;> simp [hq, hu]\n  have hcompset : G.filter (fun q => q ≠ 1) =\n      F.filter (fun q => q ≠ 1 ∧ ¬ Nat.Prime q) := by\n    ext q\n    simp only [G, Finset.mem_filter]\n    constructor\n    · rintro ⟨⟨hq, hnot⟩, hneq⟩\n      exact ⟨hq, hneq, hnot⟩\n    · rintro ⟨hq, hneq, hnot⟩\n      exact ⟨⟨hq, hnot⟩, hneq⟩\n  have hcompcard : (G.filter (fun q => q ≠ 1)).card =\n      (currentChenSeventhSemiprimePairs N t).card := by\n    rw [hcompset, currentChenSeventh_composite_eq_pairs_image ht]\n    apply Finset.card_image_of_injOn\n    intro a ha c hc heq\n    exact currentChenSeventh_pairs_mul_injective ha hc heq\n  have hunitcard : (G.filter (fun q => q = 1)).card = if 1 ∈ F then 1 else 0 := by\n    rw [hunitset]\n    by_cases hu : 1 ∈ F <;> simp only [hu, if_true, if_false,\n      Finset.card_singleton, Finset.card_empty]\n  have hprimepart := Finset.card_filter_add_card_filter_not (s := F) Nat.Prime\n  change (F.filter Nat.Prime).card + G.card = F.card at hprimepart\n  have hunitpart := Finset.card_filter_add_card_filter_not (s := G) (fun q => q = 1)\n  rw [hunitcard, hcompcard] at hunitpart\n  omega\n\n/-- The original seventh Upsilon splits exactly into its prime, ordered\nsemiprime and unit fibres. No mean bound or branch omission occurs. -/\ntheorem currentChenUpsilon7_eq_primeTriples_add_semiprimeQuadruples_add_unitFibres\n    (N : ℕ) :\n    currentChenUpsilon7 N =\n      ((currentChenUpsilon7PrimeTriples N).card : ℝ) +\n        ((currentChenUpsilon7SemiprimeQuadruples N).card : ℝ) +\n        ((currentChenUpsilon7UnitFibres N).card : ℝ) := by\n  rw [currentChenUpsilon7_eq_siftedQuotientPrimeSource]\n  have hprimecount : ((currentChenUpsilon7PrimeTriples N).card : ℝ) =\n      ∑ t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)),\n        (((chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)).filter Nat.Prime).card : ℝ) := by\n    simp only [currentChenUpsilon7PrimeTriples, Finset.card_sigma, Nat.cast_sum]\n  have hsemicount : ((currentChenUpsilon7SemiprimeQuadruples N).card : ℝ) =\n      ∑ t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)),\n        ((currentChenSeventhSemiprimePairs N t).card : ℝ) := by\n    simp only [currentChenUpsilon7SemiprimeQuadruples, currentChenSeventhSemiprimePairs,\n      Finset.card_sigma, Nat.cast_sum]\n  have hunitcount : ((currentChenUpsilon7UnitFibres N).card : ℝ) =\n      ∑ t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)),\n        if 1 ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)\n          then (1 : ℝ) else 0 := by\n    simp only [currentChenUpsilon7UnitFibres, Finset.card_eq_sum_ones,\n      Finset.sum_filter, Nat.cast_sum, Nat.cast_ite, Nat.cast_one, Nat.cast_zero]\n  rw [hprimecount, hsemicount, hunitcount]\n  simp only [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro t ht\n  exact_mod_cast currentChenSeventh_row_card_partition ht\n\nend\n\nend ImbalancedChen\n",
+  "root_authoring_scope": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261020-current-chen-seventh-prime-semiprime-root-complete-math-one-source-authoring-scope.json",
+    "sha256": "9c5604a815cd9c294aed7ea345f48ae39aff670d5ad30fbc371f60c8307a5339"
+  },
+  "complete_independent_proposal_review": {
+    "path": ".lake\\proof-continuation\\source-reviews\\20261020-current-chen-seventh-cofactor-finite-branch-full-independent-review.json",
+    "sha256": "c8ed93068d1e6f518bc08f4f1fdac214ec6a8a212075181ea4e069db598bd0c3"
+  },
+  "sole_import": [
+    "ImbalancedChen.CurrentChenUpsilon9PrimeSource"
+  ],
+  "public_primitives_match_all_three_literal_scoped_bodies": true,
+  "public_theorems_match_all_four_complete_scoped_headers": true,
+  "declaration_count": 15,
+  "theorem_count": 11,
+  "private_theorem_count": 7,
+  "definition_count": 4,
+  "public_definitions": 3,
+  "private_finite_carrier_definitions": 1,
+  "all_complete_headers_and_bodies": [
+    {
+      "name": "currentChenSeventh_rough_lt_cube_classification",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 25,
+      "complete_header": "private theorem currentChenSeventh_rough_lt_cube_classification\n    {q y : ℕ} (hq : 0 < q) (hrough : ChenPrimeRough (y : ℝ) q)\n    (hsmall : q < y ^ 3) :\n    q = 1 ∨ Nat.Prime q ∨ ∃ r s : ℕ,\n      Nat.Prime r ∧ Nat.Prime s ∧ y ≤ r ∧ r ≤ s ∧ q = r * s",
+      "complete_body_after_assignment": "by\n  by_cases hone : q = 1\n  · exact Or.inl hone\n  by_cases hprime : Nat.Prime q\n  · exact Or.inr (Or.inl hprime)\n  let r := Nat.minFac q\n  let s := q / r\n  have hr : Nat.Prime r := Nat.minFac_prime hone\n  have hmul : r * s = q := Nat.mul_div_cancel' (Nat.minFac_dvd q)\n  have hrs : r ≤ s := Nat.minFac_le_div hq hprime\n  have hyr : y ≤ r := by\n    exact_mod_cast hrough r hr (Nat.minFac_dvd q)\n  have hspos : 0 < s := hr.pos.trans_le hrs\n  have hsone : s ≠ 1 := by\n    have hr2 := hr.two_le\n    omega\n  have hs : Nat.Prime s := by\n    by_contra hsnot\n    have ht : Nat.Prime (Nat.minFac s) := Nat.minFac_prime hsone\n    have hsq : s ∣ q := by\n      rw [← hmul]\n      exact dvd_mul_left s r\n    have hyt : y ≤ Nat.minFac s := by\n      exact_mod_cast hrough (Nat.minFac s) ht ((Nat.minFac_dvd s).trans hsq)\n    have hysq : y ^ 2 ≤ s :=\n      (pow_le_pow_left' hyt 2).trans (Nat.minFac_sq_le_self hspos hsnot)\n    have hcube : y ^ 3 ≤ q := by\n      calc\n        y ^ 3 = y * y ^ 2 := by ring\n        _ ≤ r * s := Nat.mul_le_mul hyr hysq\n        _ = q := hmul\n    exact (not_le_of_gt hsmall) hcube\n  exact Or.inr (Or.inr ⟨r, s, hr, hs, hyr, hrs, hmul.symm⟩)",
+      "complete_source_span": "private theorem currentChenSeventh_rough_lt_cube_classification\n    {q y : ℕ} (hq : 0 < q) (hrough : ChenPrimeRough (y : ℝ) q)\n    (hsmall : q < y ^ 3) :\n    q = 1 ∨ Nat.Prime q ∨ ∃ r s : ℕ,\n      Nat.Prime r ∧ Nat.Prime s ∧ y ≤ r ∧ r ≤ s ∧ q = r * s := by\n  by_cases hone : q = 1\n  · exact Or.inl hone\n  by_cases hprime : Nat.Prime q\n  · exact Or.inr (Or.inl hprime)\n  let r := Nat.minFac q\n  let s := q / r\n  have hr : Nat.Prime r := Nat.minFac_prime hone\n  have hmul : r * s = q := Nat.mul_div_cancel' (Nat.minFac_dvd q)\n  have hrs : r ≤ s := Nat.minFac_le_div hq hprime\n  have hyr : y ≤ r := by\n    exact_mod_cast hrough r hr (Nat.minFac_dvd q)\n  have hspos : 0 < s := hr.pos.trans_le hrs\n  have hsone : s ≠ 1 := by\n    have hr2 := hr.two_le\n    omega\n  have hs : Nat.Prime s := by\n    by_contra hsnot\n    have ht : Nat.Prime (Nat.minFac s) := Nat.minFac_prime hsone\n    have hsq : s ∣ q := by\n      rw [← hmul]\n      exact dvd_mul_left s r\n    have hyt : y ≤ Nat.minFac s := by\n      exact_mod_cast hrough (Nat.minFac s) ht ((Nat.minFac_dvd s).trans hsq)\n    have hysq : y ^ 2 ≤ s :=\n      (pow_le_pow_left' hyt 2).trans (Nat.minFac_sq_le_self hspos hsnot)\n    have hcube : y ^ 3 ≤ q := by\n      calc\n        y ^ 3 = y * y ^ 2 := by ring\n        _ ≤ r * s := Nat.mul_le_mul hyr hysq\n        _ = q := hmul\n    exact (not_le_of_gt hsmall) hcube\n  exact Or.inr (Or.inr ⟨r, s, hr, hs, hyr, hrs, hmul.symm⟩)",
+      "source_span_sha256": "4dc84df2b6a91a2f71952df4eda8312479c430de1c4d57a79bd669619eb06fbe"
+    },
+    {
+      "name": "currentChenUpsilon7_quotient_classification",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 65,
+      "complete_header": "theorem currentChenUpsilon7_quotient_classification {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))) {q : ℕ}\n    (hq : q ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)) :\n    q < t.2 ^ 3 ∧\n      (q = 1 ∨ Nat.Prime q ∨ ∃ r s : ℕ,\n        Nat.Prime r ∧ Nat.Prime s ∧ t.2 ≤ r ∧ r ≤ s ∧ q = r * s)",
+      "complete_body_after_assignment": "by\n  obtain ⟨hc, hD, h₁₂, _hcap⟩ := Finset.mem_filter.mp ht\n  obtain ⟨hc₁, hc₂⟩ := Finset.mem_product.mp hc\n  have hp₁ := (mem_chenAdditivePrimeCarrier.mp hc₁).2.1\n  have hp₂ := (mem_chenAdditivePrimeCarrier.mp hc₂).2.1\n  have hb : 0 < t.1 * t.2 := mul_pos hp₁.pos hp₂.pos\n  obtain ⟨hqsource, hrough⟩ := Finset.mem_filter.mp hq\n  obtain ⟨_P, _hP, _hmul, hlt, hqpos, _hquot⟩ :=\n    currentChenUpsilon9_quotient_witness hb hqsource\n  have hN : (1 : ℝ) < N := by\n    exact_mod_cast lt_trans hp₁.one_lt (mem_chenAdditivePrimeCarrier.mp hc₁).1\n  have hDpow : ((N : ℝ) ^ (59 / 250 : ℝ)) ^ 5 =\n      (N : ℝ) ^ (59 / 50 : ℝ) := by\n    rw [← Real.rpow_mul_natCast (Nat.cast_nonneg N) (59 / 250 : ℝ) 5]\n    congr 1\n    norm_num\n  have hNpow : (N : ℝ) < ((N : ℝ) ^ (59 / 250 : ℝ)) ^ 5 := by\n    rw [hDpow]\n    calc\n      (N : ℝ) = (N : ℝ) ^ (1 : ℝ) := (Real.rpow_one _).symm\n      _ < (N : ℝ) ^ (59 / 50 : ℝ) :=\n        Real.rpow_lt_rpow_of_exponent_lt hN (by norm_num)\n  have hDfive : ((N : ℝ) ^ (59 / 250 : ℝ)) ^ 5 ≤ (t.1 : ℝ) ^ 5 :=\n    pow_le_pow_left₀ (Real.rpow_nonneg (Nat.cast_nonneg N) _) hD 5\n  have h₁₂R : (t.1 : ℝ) ≤ (t.2 : ℝ) := by exact_mod_cast h₁₂.le\n  have hfirst : (t.1 : ℝ) ^ 5 ≤ (t.1 : ℝ) * (t.2 : ℝ) ^ 4 := by\n    calc\n      (t.1 : ℝ) ^ 5 = (t.1 : ℝ) * (t.1 : ℝ) ^ 4 := by ring\n      _ ≤ (t.1 : ℝ) * (t.2 : ℝ) ^ 4 :=\n        mul_le_mul_of_nonneg_left\n          (pow_le_pow_left₀ (Nat.cast_nonneg _) h₁₂R 4) (Nat.cast_nonneg _)\n  have hNprod : (N : ℝ) < (t.1 : ℝ) * (t.2 : ℝ) ^ 4 :=\n    hNpow.trans_le (hDfive.trans hfirst)\n  have hqsmall : q < t.2 ^ 3 := by\n    by_contra hnot\n    have hlower : t.2 ^ 3 ≤ q := Nat.le_of_not_gt hnot\n    have hlowerR : (t.2 : ℝ) ^ 3 ≤ (q : ℝ) := by exact_mod_cast hlower\n    have hltR : (t.1 : ℝ) * (t.2 : ℝ) * (q : ℝ) < (N : ℝ) := by\n      exact_mod_cast hlt\n    have hprod : (t.1 : ℝ) * (t.2 : ℝ) ^ 4 ≤\n        (t.1 : ℝ) * (t.2 : ℝ) * (q : ℝ) := by\n      calc\n        (t.1 : ℝ) * (t.2 : ℝ) ^ 4 =\n            ((t.1 : ℝ) * (t.2 : ℝ)) * (t.2 : ℝ) ^ 3 := by ring\n        _ ≤ _ := mul_le_mul_of_nonneg_left hlowerR\n          (mul_nonneg (Nat.cast_nonneg _) (Nat.cast_nonneg _))\n    exact (not_lt_of_ge hprod) (hltR.trans hNprod)\n  exact ⟨hqsmall, currentChenSeventh_rough_lt_cube_classification hqpos hrough hqsmall⟩",
+      "complete_source_span": "theorem currentChenUpsilon7_quotient_classification {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))) {q : ℕ}\n    (hq : q ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)) :\n    q < t.2 ^ 3 ∧\n      (q = 1 ∨ Nat.Prime q ∨ ∃ r s : ℕ,\n        Nat.Prime r ∧ Nat.Prime s ∧ t.2 ≤ r ∧ r ≤ s ∧ q = r * s) := by\n  obtain ⟨hc, hD, h₁₂, _hcap⟩ := Finset.mem_filter.mp ht\n  obtain ⟨hc₁, hc₂⟩ := Finset.mem_product.mp hc\n  have hp₁ := (mem_chenAdditivePrimeCarrier.mp hc₁).2.1\n  have hp₂ := (mem_chenAdditivePrimeCarrier.mp hc₂).2.1\n  have hb : 0 < t.1 * t.2 := mul_pos hp₁.pos hp₂.pos\n  obtain ⟨hqsource, hrough⟩ := Finset.mem_filter.mp hq\n  obtain ⟨_P, _hP, _hmul, hlt, hqpos, _hquot⟩ :=\n    currentChenUpsilon9_quotient_witness hb hqsource\n  have hN : (1 : ℝ) < N := by\n    exact_mod_cast lt_trans hp₁.one_lt (mem_chenAdditivePrimeCarrier.mp hc₁).1\n  have hDpow : ((N : ℝ) ^ (59 / 250 : ℝ)) ^ 5 =\n      (N : ℝ) ^ (59 / 50 : ℝ) := by\n    rw [← Real.rpow_mul_natCast (Nat.cast_nonneg N) (59 / 250 : ℝ) 5]\n    congr 1\n    norm_num\n  have hNpow : (N : ℝ) < ((N : ℝ) ^ (59 / 250 : ℝ)) ^ 5 := by\n    rw [hDpow]\n    calc\n      (N : ℝ) = (N : ℝ) ^ (1 : ℝ) := (Real.rpow_one _).symm\n      _ < (N : ℝ) ^ (59 / 50 : ℝ) :=\n        Real.rpow_lt_rpow_of_exponent_lt hN (by norm_num)\n  have hDfive : ((N : ℝ) ^ (59 / 250 : ℝ)) ^ 5 ≤ (t.1 : ℝ) ^ 5 :=\n    pow_le_pow_left₀ (Real.rpow_nonneg (Nat.cast_nonneg N) _) hD 5\n  have h₁₂R : (t.1 : ℝ) ≤ (t.2 : ℝ) := by exact_mod_cast h₁₂.le\n  have hfirst : (t.1 : ℝ) ^ 5 ≤ (t.1 : ℝ) * (t.2 : ℝ) ^ 4 := by\n    calc\n      (t.1 : ℝ) ^ 5 = (t.1 : ℝ) * (t.1 : ℝ) ^ 4 := by ring\n      _ ≤ (t.1 : ℝ) * (t.2 : ℝ) ^ 4 :=\n        mul_le_mul_of_nonneg_left\n          (pow_le_pow_left₀ (Nat.cast_nonneg _) h₁₂R 4) (Nat.cast_nonneg _)\n  have hNprod : (N : ℝ) < (t.1 : ℝ) * (t.2 : ℝ) ^ 4 :=\n    hNpow.trans_le (hDfive.trans hfirst)\n  have hqsmall : q < t.2 ^ 3 := by\n    by_contra hnot\n    have hlower : t.2 ^ 3 ≤ q := Nat.le_of_not_gt hnot\n    have hlowerR : (t.2 : ℝ) ^ 3 ≤ (q : ℝ) := by exact_mod_cast hlower\n    have hltR : (t.1 : ℝ) * (t.2 : ℝ) * (q : ℝ) < (N : ℝ) := by\n      exact_mod_cast hlt\n    have hprod : (t.1 : ℝ) * (t.2 : ℝ) ^ 4 ≤\n        (t.1 : ℝ) * (t.2 : ℝ) * (q : ℝ) := by\n      calc\n        (t.1 : ℝ) * (t.2 : ℝ) ^ 4 =\n            ((t.1 : ℝ) * (t.2 : ℝ)) * (t.2 : ℝ) ^ 3 := by ring\n        _ ≤ _ := mul_le_mul_of_nonneg_left hlowerR\n          (mul_nonneg (Nat.cast_nonneg _) (Nat.cast_nonneg _))\n    exact (not_lt_of_ge hprod) (hltR.trans hNprod)\n  exact ⟨hqsmall, currentChenSeventh_rough_lt_cube_classification hqpos hrough hqsmall⟩",
+      "source_span_sha256": "1fb0ac2b3e8c163ae581d450ec3a994be266ed4e743fa0e1c7a136b3769da1f7"
+    },
+    {
+      "name": "currentChenSeventh_sifted_mem_iff",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 119,
+      "complete_header": "private theorem currentChenSeventh_sifted_mem_iff {N b q : ℕ}\n    (hb : 0 < b) (z : ℝ) :\n    q ∈ chenSiftedQuotientPrimeSource N b z ↔\n      b * q < N ∧ N - b * q ∈ chenAdditivePrimeCarrier N ∧ ChenPrimeRough z q",
+      "complete_body_after_assignment": "by\n  constructor\n  · intro hq\n    obtain ⟨hqsource, hrough⟩ := Finset.mem_filter.mp hq\n    obtain ⟨P, hP, hmul, hlt, _hqpos, _hquot⟩ :=\n      currentChenUpsilon9_quotient_witness hb hqsource\n    have hPN := (mem_chenAdditivePrimeCarrier.mp hP).1\n    have hrecover : N - b * q = P := by omega\n    exact ⟨hlt, by simpa only [hrecover] using hP, hrough⟩\n  · rintro ⟨hlt, hP, hrough⟩\n    have hreceiver : N - (N - b * q) = b * q := Nat.sub_sub_self hlt.le\n    have hdiv : b ∣ N - (N - b * q) := by\n      rw [hreceiver]\n      exact dvd_mul_right b q\n    have hquot : (N - (N - b * q)) / b = q := by\n      rw [hreceiver]\n      exact Nat.mul_div_cancel_left q hb\n    exact Finset.mem_filter.mpr\n      ⟨Finset.mem_image.mpr ⟨N - b * q,\n        mem_chenQuotientPrimeCarrier.mpr ⟨hP, hdiv⟩, hquot⟩, hrough⟩",
+      "complete_source_span": "private theorem currentChenSeventh_sifted_mem_iff {N b q : ℕ}\n    (hb : 0 < b) (z : ℝ) :\n    q ∈ chenSiftedQuotientPrimeSource N b z ↔\n      b * q < N ∧ N - b * q ∈ chenAdditivePrimeCarrier N ∧ ChenPrimeRough z q := by\n  constructor\n  · intro hq\n    obtain ⟨hqsource, hrough⟩ := Finset.mem_filter.mp hq\n    obtain ⟨P, hP, hmul, hlt, _hqpos, _hquot⟩ :=\n      currentChenUpsilon9_quotient_witness hb hqsource\n    have hPN := (mem_chenAdditivePrimeCarrier.mp hP).1\n    have hrecover : N - b * q = P := by omega\n    exact ⟨hlt, by simpa only [hrecover] using hP, hrough⟩\n  · rintro ⟨hlt, hP, hrough⟩\n    have hreceiver : N - (N - b * q) = b * q := Nat.sub_sub_self hlt.le\n    have hdiv : b ∣ N - (N - b * q) := by\n      rw [hreceiver]\n      exact dvd_mul_right b q\n    have hquot : (N - (N - b * q)) / b = q := by\n      rw [hreceiver]\n      exact Nat.mul_div_cancel_left q hb\n    exact Finset.mem_filter.mpr\n      ⟨Finset.mem_image.mpr ⟨N - b * q,\n        mem_chenQuotientPrimeCarrier.mpr ⟨hP, hdiv⟩, hquot⟩, hrough⟩",
+      "source_span_sha256": "5f39202d7f8556f93c842641c130d463c4437ba6b54b9a199d8bb01c16b61150"
+    },
+    {
+      "name": "currentChenSeventh_rough_prime_mul_iff",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 143,
+      "complete_header": "private theorem currentChenSeventh_rough_prime_mul_iff {r s : ℕ} {z : ℝ}\n    (hr : Nat.Prime r) (hs : Nat.Prime s) (hrs : r ≤ s) :\n    ChenPrimeRough z (r * s) ↔ z ≤ (r : ℝ)",
+      "complete_body_after_assignment": "by\n  constructor\n  · intro h\n    exact h r hr (dvd_mul_right r s)\n  · intro h q hq hdiv\n    rcases hq.dvd_mul.mp hdiv with hdr | hds\n    · have heq : q = r := (Nat.prime_dvd_prime_iff_eq hq hr).mp hdr\n      simpa only [heq] using h\n    · have heq : q = s := (Nat.prime_dvd_prime_iff_eq hq hs).mp hds\n      subst q\n      exact h.trans (by exact_mod_cast hrs)",
+      "complete_source_span": "private theorem currentChenSeventh_rough_prime_mul_iff {r s : ℕ} {z : ℝ}\n    (hr : Nat.Prime r) (hs : Nat.Prime s) (hrs : r ≤ s) :\n    ChenPrimeRough z (r * s) ↔ z ≤ (r : ℝ) := by\n  constructor\n  · intro h\n    exact h r hr (dvd_mul_right r s)\n  · intro h q hq hdiv\n    rcases hq.dvd_mul.mp hdiv with hdr | hds\n    · have heq : q = r := (Nat.prime_dvd_prime_iff_eq hq hr).mp hdr\n      simpa only [heq] using h\n    · have heq : q = s := (Nat.prime_dvd_prime_iff_eq hq hs).mp hds\n      subst q\n      exact h.trans (by exact_mod_cast hrs)",
+      "source_span_sha256": "769c46c7dff88575241b6ff83dcccceab12af4437c783ae6c41e7d2b04306fee"
+    },
+    {
+      "name": "currentChenSeventh_prime_factor_mem_carrier",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 157,
+      "complete_header": "private theorem currentChenSeventh_prime_factor_mem_carrier {N b q r : ℕ}\n    (hb : 0 < b) (hq : q ∈ chenQuotientPrimeSource N b)\n    (hr : Nat.Prime r) (hrq : r ∣ q) : r ∈ chenAdditivePrimeCarrier N",
+      "complete_body_after_assignment": "by\n  obtain ⟨_P, _hP, _hmul, hlt, hqpos, _hquot⟩ :=\n    currentChenUpsilon9_quotient_witness hb hq\n  have hqle : q ≤ b * q := by\n    simpa only [one_mul] using Nat.mul_le_mul_right q (Nat.succ_le_iff.mpr hb)\n  have hrle : r ≤ q := Nat.le_of_dvd hqpos hrq\n  exact mem_chenAdditivePrimeCarrier.mpr\n    ⟨hrle.trans_lt (hqle.trans_lt hlt), hr,\n      (chenQuotientPrimeSource_data hq).2.2.of_dvd_left hrq⟩",
+      "complete_source_span": "private theorem currentChenSeventh_prime_factor_mem_carrier {N b q r : ℕ}\n    (hb : 0 < b) (hq : q ∈ chenQuotientPrimeSource N b)\n    (hr : Nat.Prime r) (hrq : r ∣ q) : r ∈ chenAdditivePrimeCarrier N := by\n  obtain ⟨_P, _hP, _hmul, hlt, hqpos, _hquot⟩ :=\n    currentChenUpsilon9_quotient_witness hb hq\n  have hqle : q ≤ b * q := by\n    simpa only [one_mul] using Nat.mul_le_mul_right q (Nat.succ_le_iff.mpr hb)\n  have hrle : r ≤ q := Nat.le_of_dvd hqpos hrq\n  exact mem_chenAdditivePrimeCarrier.mpr\n    ⟨hrle.trans_lt (hqle.trans_lt hlt), hr,\n      (chenQuotientPrimeSource_data hq).2.2.of_dvd_left hrq⟩",
+      "source_span_sha256": "69ed0575ee2a40996abff38e78647cf5b582048223b4bf2d93c44cd207325017"
+    },
+    {
+      "name": "currentChenUpsilon7PrimeTriples",
+      "kind": "def",
+      "private": false,
+      "start_line": 169,
+      "complete_header": "def currentChenUpsilon7PrimeTriples (N : ℕ) : Finset (Σ _ : ℕ × ℕ, ℕ)",
+      "complete_body_after_assignment": "(chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))).sigma fun t =>\n    (chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)).filter Nat.Prime",
+      "complete_source_span": "def currentChenUpsilon7PrimeTriples (N : ℕ) : Finset (Σ _ : ℕ × ℕ, ℕ) :=\n  (chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))).sigma fun t =>\n    (chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)).filter Nat.Prime",
+      "source_span_sha256": "f72a06a93bd4fa98e21289c0c6a1686e2d3300d439926760b72a45e1ec7b44b2"
+    },
+    {
+      "name": "currentChenUpsilon7UnitFibres",
+      "kind": "def",
+      "private": false,
+      "start_line": 173,
+      "complete_header": "def currentChenUpsilon7UnitFibres (N : ℕ) : Finset (ℕ × ℕ)",
+      "complete_body_after_assignment": "(chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))).filter fun t =>\n    1 ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)",
+      "complete_source_span": "def currentChenUpsilon7UnitFibres (N : ℕ) : Finset (ℕ × ℕ) :=\n  (chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))).filter fun t =>\n    1 ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)",
+      "source_span_sha256": "17615794c3eb7abe730a0c127717d6232d6f4bc4bb65142b88687937af8de356"
+    },
+    {
+      "name": "currentChenUpsilon7SemiprimeQuadruples",
+      "kind": "def",
+      "private": false,
+      "start_line": 177,
+      "complete_header": "def currentChenUpsilon7SemiprimeQuadruples (N : ℕ) :\n    Finset (Σ _ : ℕ × ℕ, ℕ × ℕ)",
+      "complete_body_after_assignment": "(chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))).sigma fun t =>\n    (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N).filter fun u =>\n      t.2 ≤ u.1 ∧ u.1 ≤ u.2 ∧\n        u.1 * u.2 ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)",
+      "complete_source_span": "def currentChenUpsilon7SemiprimeQuadruples (N : ℕ) :\n    Finset (Σ _ : ℕ × ℕ, ℕ × ℕ) :=\n  (chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))).sigma fun t =>\n    (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N).filter fun u =>\n      t.2 ≤ u.1 ∧ u.1 ≤ u.2 ∧\n        u.1 * u.2 ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)",
+      "source_span_sha256": "405c5729baf83820809b5999feb104b712f3064e53794ea97dd0bcdb08471cd9"
+    },
+    {
+      "name": "mem_currentChenUpsilon7PrimeTriples_iff",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 184,
+      "complete_header": "theorem mem_currentChenUpsilon7PrimeTriples_iff {N p₁ p₂ q : ℕ} :\n    (⟨(p₁, p₂), q⟩ : Σ _ : ℕ × ℕ, ℕ) ∈ currentChenUpsilon7PrimeTriples N ↔\n      p₁ ∈ chenAdditivePrimeCarrier N ∧ p₂ ∈ chenAdditivePrimeCarrier N ∧\n      (N : ℝ) ^ (59 / 250 : ℝ) ≤ (p₁ : ℝ) ∧ p₁ < p₂ ∧\n      (p₂ : ℝ) < Real.sqrt ((N : ℝ) / (p₁ : ℝ)) ∧\n      Nat.Prime q ∧ p₂ ≤ q ∧ p₁ * p₂ * q < N ∧\n      N - p₁ * p₂ * q ∈ chenAdditivePrimeCarrier N",
+      "complete_body_after_assignment": "by\n  simp only [currentChenUpsilon7PrimeTriples, Finset.mem_sigma,\n    chenY7PrimeSelector, Finset.mem_filter, Finset.mem_product]\n  constructor\n  · rintro ⟨⟨⟨h₁, h₂⟩, hD, h₁₂, hcap⟩, hq, hprime⟩\n    have hb : 0 < p₁ * p₂ := mul_pos\n      (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n      (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos\n    obtain ⟨hlt, hP, hcut⟩ := (currentChenUpsilon9_prime_mem_iff hb hprime _).mp hq\n    exact ⟨h₁, h₂, hD, h₁₂, hcap, hprime, by exact_mod_cast hcut, hlt, hP⟩\n  · rintro ⟨h₁, h₂, hD, h₁₂, hcap, hprime, hcut, hlt, hP⟩\n    have hb : 0 < p₁ * p₂ := mul_pos\n      (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n      (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos\n    exact ⟨⟨⟨h₁, h₂⟩, hD, h₁₂, hcap⟩,\n      (currentChenUpsilon9_prime_mem_iff hb hprime _).mpr\n        ⟨hlt, hP, by exact_mod_cast hcut⟩, hprime⟩",
+      "complete_source_span": "theorem mem_currentChenUpsilon7PrimeTriples_iff {N p₁ p₂ q : ℕ} :\n    (⟨(p₁, p₂), q⟩ : Σ _ : ℕ × ℕ, ℕ) ∈ currentChenUpsilon7PrimeTriples N ↔\n      p₁ ∈ chenAdditivePrimeCarrier N ∧ p₂ ∈ chenAdditivePrimeCarrier N ∧\n      (N : ℝ) ^ (59 / 250 : ℝ) ≤ (p₁ : ℝ) ∧ p₁ < p₂ ∧\n      (p₂ : ℝ) < Real.sqrt ((N : ℝ) / (p₁ : ℝ)) ∧\n      Nat.Prime q ∧ p₂ ≤ q ∧ p₁ * p₂ * q < N ∧\n      N - p₁ * p₂ * q ∈ chenAdditivePrimeCarrier N := by\n  simp only [currentChenUpsilon7PrimeTriples, Finset.mem_sigma,\n    chenY7PrimeSelector, Finset.mem_filter, Finset.mem_product]\n  constructor\n  · rintro ⟨⟨⟨h₁, h₂⟩, hD, h₁₂, hcap⟩, hq, hprime⟩\n    have hb : 0 < p₁ * p₂ := mul_pos\n      (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n      (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos\n    obtain ⟨hlt, hP, hcut⟩ := (currentChenUpsilon9_prime_mem_iff hb hprime _).mp hq\n    exact ⟨h₁, h₂, hD, h₁₂, hcap, hprime, by exact_mod_cast hcut, hlt, hP⟩\n  · rintro ⟨h₁, h₂, hD, h₁₂, hcap, hprime, hcut, hlt, hP⟩\n    have hb : 0 < p₁ * p₂ := mul_pos\n      (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n      (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos\n    exact ⟨⟨⟨h₁, h₂⟩, hD, h₁₂, hcap⟩,\n      (currentChenUpsilon9_prime_mem_iff hb hprime _).mpr\n        ⟨hlt, hP, by exact_mod_cast hcut⟩, hprime⟩",
+      "source_span_sha256": "413c1e583ba68c3d11c512ca34863e1feab360277072728f59e3975e3925302f"
+    },
+    {
+      "name": "mem_currentChenUpsilon7SemiprimeQuadruples_iff",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 208,
+      "complete_header": "theorem mem_currentChenUpsilon7SemiprimeQuadruples_iff {N p₁ p₂ r s : ℕ} :\n    (⟨(p₁, p₂), (r, s)⟩ : Σ _ : ℕ × ℕ, ℕ × ℕ) ∈\n        currentChenUpsilon7SemiprimeQuadruples N ↔\n      p₁ ∈ chenAdditivePrimeCarrier N ∧ p₂ ∈ chenAdditivePrimeCarrier N ∧\n      (N : ℝ) ^ (59 / 250 : ℝ) ≤ (p₁ : ℝ) ∧ p₁ < p₂ ∧\n      (p₂ : ℝ) < Real.sqrt ((N : ℝ) / (p₁ : ℝ)) ∧\n      Nat.Prime r ∧ Nat.Prime s ∧ p₂ ≤ r ∧ r ≤ s ∧\n      p₁ * p₂ * (r * s) < N ∧\n      N - p₁ * p₂ * (r * s) ∈ chenAdditivePrimeCarrier N",
+      "complete_body_after_assignment": "by\n  simp only [currentChenUpsilon7SemiprimeQuadruples, Finset.mem_sigma,\n    chenY7PrimeSelector, Finset.mem_filter, Finset.mem_product]\n  constructor\n  · rintro ⟨⟨⟨h₁, h₂⟩, hD, h₁₂, hcap⟩, ⟨hrc, hsc⟩, hcut, hrs, hsource⟩\n    have hb : 0 < p₁ * p₂ := mul_pos\n      (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n      (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos\n    obtain ⟨hlt, hP, _hrough⟩ := (currentChenSeventh_sifted_mem_iff hb _).mp hsource\n    exact ⟨h₁, h₂, hD, h₁₂, hcap,\n      (mem_chenAdditivePrimeCarrier.mp hrc).2.1,\n      (mem_chenAdditivePrimeCarrier.mp hsc).2.1, hcut, hrs, hlt, hP⟩\n  · rintro ⟨h₁, h₂, hD, h₁₂, hcap, hr, hs, hcut, hrs, hlt, hP⟩\n    have hb : 0 < p₁ * p₂ := mul_pos\n      (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n      (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos\n    have hsource : r * s ∈ chenSiftedQuotientPrimeSource N (p₁ * p₂) (p₂ : ℝ) :=\n      (currentChenSeventh_sifted_mem_iff hb _).mpr\n        ⟨hlt, hP, (currentChenSeventh_rough_prime_mul_iff hr hs hrs).mpr\n          (by exact_mod_cast hcut)⟩\n    have hraw := (Finset.mem_filter.mp hsource).1\n    have hrc := currentChenSeventh_prime_factor_mem_carrier hb hraw hr (dvd_mul_right r s)\n    have hsc := currentChenSeventh_prime_factor_mem_carrier hb hraw hs (dvd_mul_left s r)\n    exact ⟨⟨⟨h₁, h₂⟩, hD, h₁₂, hcap⟩, ⟨hrc, hsc⟩, hcut, hrs, hsource⟩",
+      "complete_source_span": "theorem mem_currentChenUpsilon7SemiprimeQuadruples_iff {N p₁ p₂ r s : ℕ} :\n    (⟨(p₁, p₂), (r, s)⟩ : Σ _ : ℕ × ℕ, ℕ × ℕ) ∈\n        currentChenUpsilon7SemiprimeQuadruples N ↔\n      p₁ ∈ chenAdditivePrimeCarrier N ∧ p₂ ∈ chenAdditivePrimeCarrier N ∧\n      (N : ℝ) ^ (59 / 250 : ℝ) ≤ (p₁ : ℝ) ∧ p₁ < p₂ ∧\n      (p₂ : ℝ) < Real.sqrt ((N : ℝ) / (p₁ : ℝ)) ∧\n      Nat.Prime r ∧ Nat.Prime s ∧ p₂ ≤ r ∧ r ≤ s ∧\n      p₁ * p₂ * (r * s) < N ∧\n      N - p₁ * p₂ * (r * s) ∈ chenAdditivePrimeCarrier N := by\n  simp only [currentChenUpsilon7SemiprimeQuadruples, Finset.mem_sigma,\n    chenY7PrimeSelector, Finset.mem_filter, Finset.mem_product]\n  constructor\n  · rintro ⟨⟨⟨h₁, h₂⟩, hD, h₁₂, hcap⟩, ⟨hrc, hsc⟩, hcut, hrs, hsource⟩\n    have hb : 0 < p₁ * p₂ := mul_pos\n      (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n      (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos\n    obtain ⟨hlt, hP, _hrough⟩ := (currentChenSeventh_sifted_mem_iff hb _).mp hsource\n    exact ⟨h₁, h₂, hD, h₁₂, hcap,\n      (mem_chenAdditivePrimeCarrier.mp hrc).2.1,\n      (mem_chenAdditivePrimeCarrier.mp hsc).2.1, hcut, hrs, hlt, hP⟩\n  · rintro ⟨h₁, h₂, hD, h₁₂, hcap, hr, hs, hcut, hrs, hlt, hP⟩\n    have hb : 0 < p₁ * p₂ := mul_pos\n      (mem_chenAdditivePrimeCarrier.mp h₁).2.1.pos\n      (mem_chenAdditivePrimeCarrier.mp h₂).2.1.pos\n    have hsource : r * s ∈ chenSiftedQuotientPrimeSource N (p₁ * p₂) (p₂ : ℝ) :=\n      (currentChenSeventh_sifted_mem_iff hb _).mpr\n        ⟨hlt, hP, (currentChenSeventh_rough_prime_mul_iff hr hs hrs).mpr\n          (by exact_mod_cast hcut)⟩\n    have hraw := (Finset.mem_filter.mp hsource).1\n    have hrc := currentChenSeventh_prime_factor_mem_carrier hb hraw hr (dvd_mul_right r s)\n    have hsc := currentChenSeventh_prime_factor_mem_carrier hb hraw hs (dvd_mul_left s r)\n    exact ⟨⟨⟨h₁, h₂⟩, hD, h₁₂, hcap⟩, ⟨hrc, hsc⟩, hcut, hrs, hsource⟩",
+      "source_span_sha256": "442f16cf5a0ccb5b77310b1938a999204299e4d6d349e0c01a966b310bcad843"
+    },
+    {
+      "name": "currentChenSeventhSemiprimePairs",
+      "kind": "def",
+      "private": true,
+      "start_line": 241,
+      "complete_header": "private def currentChenSeventhSemiprimePairs (N : ℕ) (t : ℕ × ℕ) : Finset (ℕ × ℕ)",
+      "complete_body_after_assignment": "(chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N).filter fun u =>\n    t.2 ≤ u.1 ∧ u.1 ≤ u.2 ∧\n      u.1 * u.2 ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)",
+      "complete_source_span": "private def currentChenSeventhSemiprimePairs (N : ℕ) (t : ℕ × ℕ) : Finset (ℕ × ℕ) :=\n  (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N).filter fun u =>\n    t.2 ≤ u.1 ∧ u.1 ≤ u.2 ∧\n      u.1 * u.2 ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)",
+      "source_span_sha256": "5b34def00c080070daf60e9caa5931a8261271891160a180150613892f59b2dc"
+    },
+    {
+      "name": "currentChenSeventh_pairs_mul_injective",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 246,
+      "complete_header": "private theorem currentChenSeventh_pairs_mul_injective {N : ℕ} {t a c : ℕ × ℕ}\n    (ha : a ∈ currentChenSeventhSemiprimePairs N t)\n    (hc : c ∈ currentChenSeventhSemiprimePairs N t)\n    (hmul : a.1 * a.2 = c.1 * c.2) : a = c",
+      "complete_body_after_assignment": "by\n  obtain ⟨hac, _hca, haorder, _haF⟩ := Finset.mem_filter.mp ha\n  obtain ⟨hcc, _hccut, hcorder, _hcF⟩ := Finset.mem_filter.mp hc\n  obtain ⟨ha₁, ha₂⟩ := Finset.mem_product.mp hac\n  obtain ⟨hc₁, hc₂⟩ := Finset.mem_product.mp hcc\n  obtain ⟨hfirst, hsecond⟩ := ordered_prime_factors_unique\n    (mem_chenAdditivePrimeCarrier.mp ha₁).2.1\n    (mem_chenAdditivePrimeCarrier.mp ha₂).2.1\n    (mem_chenAdditivePrimeCarrier.mp hc₁).2.1\n    (mem_chenAdditivePrimeCarrier.mp hc₂).2.1 haorder hcorder hmul\n  exact Prod.ext hfirst hsecond",
+      "complete_source_span": "private theorem currentChenSeventh_pairs_mul_injective {N : ℕ} {t a c : ℕ × ℕ}\n    (ha : a ∈ currentChenSeventhSemiprimePairs N t)\n    (hc : c ∈ currentChenSeventhSemiprimePairs N t)\n    (hmul : a.1 * a.2 = c.1 * c.2) : a = c := by\n  obtain ⟨hac, _hca, haorder, _haF⟩ := Finset.mem_filter.mp ha\n  obtain ⟨hcc, _hccut, hcorder, _hcF⟩ := Finset.mem_filter.mp hc\n  obtain ⟨ha₁, ha₂⟩ := Finset.mem_product.mp hac\n  obtain ⟨hc₁, hc₂⟩ := Finset.mem_product.mp hcc\n  obtain ⟨hfirst, hsecond⟩ := ordered_prime_factors_unique\n    (mem_chenAdditivePrimeCarrier.mp ha₁).2.1\n    (mem_chenAdditivePrimeCarrier.mp ha₂).2.1\n    (mem_chenAdditivePrimeCarrier.mp hc₁).2.1\n    (mem_chenAdditivePrimeCarrier.mp hc₂).2.1 haorder hcorder hmul\n  exact Prod.ext hfirst hsecond",
+      "source_span_sha256": "8b47e3666b7062df48bb988722a68414c92da4dcaf610c8d4d7fb6bc7b04fadf"
+    },
+    {
+      "name": "currentChenSeventh_composite_eq_pairs_image",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 261,
+      "complete_header": "private theorem currentChenSeventh_composite_eq_pairs_image {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))) :\n    (chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)).filter\n        (fun q => q ≠ 1 ∧ ¬ Nat.Prime q) =\n      (currentChenSeventhSemiprimePairs N t).image (fun u => u.1 * u.2)",
+      "complete_body_after_assignment": "by\n  obtain ⟨hc, _hD, _h₁₂, _hcap⟩ := Finset.mem_filter.mp ht\n  obtain ⟨hc₁, hc₂⟩ := Finset.mem_product.mp hc\n  have hb : 0 < t.1 * t.2 := mul_pos\n    (mem_chenAdditivePrimeCarrier.mp hc₁).2.1.pos\n    (mem_chenAdditivePrimeCarrier.mp hc₂).2.1.pos\n  ext q\n  constructor\n  · intro hq\n    obtain ⟨hqF, hqone, hqnotprime⟩ := Finset.mem_filter.mp hq\n    rcases (currentChenUpsilon7_quotient_classification ht hqF).2 with\n      hone | hprime | ⟨r, s, hr, hs, hcut, hrs, hprod⟩\n    · exact (hqone hone).elim\n    · exact (hqnotprime hprime).elim\n    · have hraw := (Finset.mem_filter.mp hqF).1\n      have hrd : r ∣ q := by\n        rw [hprod]\n        exact dvd_mul_right r s\n      have hsd : s ∣ q := by\n        rw [hprod]\n        exact dvd_mul_left s r\n      have hrc := currentChenSeventh_prime_factor_mem_carrier hb hraw hr hrd\n      have hsc := currentChenSeventh_prime_factor_mem_carrier hb hraw hs hsd\n      refine Finset.mem_image.mpr ⟨(r, s), ?_, hprod.symm⟩\n      exact Finset.mem_filter.mpr\n        ⟨Finset.mem_product.mpr ⟨hrc, hsc⟩, hcut, hrs, by simpa only [hprod] using hqF⟩\n  · intro hq\n    obtain ⟨⟨r, s⟩, hpairs, rfl⟩ := Finset.mem_image.mp hq\n    obtain ⟨hc, _hcut, _hrs, hF⟩ := Finset.mem_filter.mp hpairs\n    obtain ⟨hrc, hsc⟩ := Finset.mem_product.mp hc\n    have hr := (mem_chenAdditivePrimeCarrier.mp hrc).2.1\n    have hs := (mem_chenAdditivePrimeCarrier.mp hsc).2.1\n    have hprod : 4 ≤ r * s := Nat.mul_le_mul hr.two_le hs.two_le\n    exact Finset.mem_filter.mpr\n      ⟨hF, by omega, Nat.not_prime_mul hr.ne_one hs.ne_one⟩",
+      "complete_source_span": "private theorem currentChenSeventh_composite_eq_pairs_image {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))) :\n    (chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)).filter\n        (fun q => q ≠ 1 ∧ ¬ Nat.Prime q) =\n      (currentChenSeventhSemiprimePairs N t).image (fun u => u.1 * u.2) := by\n  obtain ⟨hc, _hD, _h₁₂, _hcap⟩ := Finset.mem_filter.mp ht\n  obtain ⟨hc₁, hc₂⟩ := Finset.mem_product.mp hc\n  have hb : 0 < t.1 * t.2 := mul_pos\n    (mem_chenAdditivePrimeCarrier.mp hc₁).2.1.pos\n    (mem_chenAdditivePrimeCarrier.mp hc₂).2.1.pos\n  ext q\n  constructor\n  · intro hq\n    obtain ⟨hqF, hqone, hqnotprime⟩ := Finset.mem_filter.mp hq\n    rcases (currentChenUpsilon7_quotient_classification ht hqF).2 with\n      hone | hprime | ⟨r, s, hr, hs, hcut, hrs, hprod⟩\n    · exact (hqone hone).elim\n    · exact (hqnotprime hprime).elim\n    · have hraw := (Finset.mem_filter.mp hqF).1\n      have hrd : r ∣ q := by\n        rw [hprod]\n        exact dvd_mul_right r s\n      have hsd : s ∣ q := by\n        rw [hprod]\n        exact dvd_mul_left s r\n      have hrc := currentChenSeventh_prime_factor_mem_carrier hb hraw hr hrd\n      have hsc := currentChenSeventh_prime_factor_mem_carrier hb hraw hs hsd\n      refine Finset.mem_image.mpr ⟨(r, s), ?_, hprod.symm⟩\n      exact Finset.mem_filter.mpr\n        ⟨Finset.mem_product.mpr ⟨hrc, hsc⟩, hcut, hrs, by simpa only [hprod] using hqF⟩\n  · intro hq\n    obtain ⟨⟨r, s⟩, hpairs, rfl⟩ := Finset.mem_image.mp hq\n    obtain ⟨hc, _hcut, _hrs, hF⟩ := Finset.mem_filter.mp hpairs\n    obtain ⟨hrc, hsc⟩ := Finset.mem_product.mp hc\n    have hr := (mem_chenAdditivePrimeCarrier.mp hrc).2.1\n    have hs := (mem_chenAdditivePrimeCarrier.mp hsc).2.1\n    have hprod : 4 ≤ r * s := Nat.mul_le_mul hr.two_le hs.two_le\n    exact Finset.mem_filter.mpr\n      ⟨hF, by omega, Nat.not_prime_mul hr.ne_one hs.ne_one⟩",
+      "source_span_sha256": "5ac57ff7116d0d114dea224222d088d9bbd2dff092cf4143aa23609ff799d9cc"
+    },
+    {
+      "name": "currentChenSeventh_row_card_partition",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 301,
+      "complete_header": "private theorem currentChenSeventh_row_card_partition {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))) :\n    let F",
+      "complete_body_after_assignment": "chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)\n    F.card = (F.filter Nat.Prime).card +\n      (currentChenSeventhSemiprimePairs N t).card + if 1 ∈ F then 1 else 0 := by\n  intro F\n  let G := F.filter (fun q => ¬ Nat.Prime q)\n  have hunitset : G.filter (fun q => q = 1) = if 1 ∈ F then {1} else ∅ := by\n    ext q\n    by_cases hq : q = 1\n    · subst q\n      by_cases hu : 1 ∈ F <;> simp [G, hu]\n    · by_cases hu : 1 ∈ F <;> simp [hq, hu]\n  have hcompset : G.filter (fun q => q ≠ 1) =\n      F.filter (fun q => q ≠ 1 ∧ ¬ Nat.Prime q) := by\n    ext q\n    simp only [G, Finset.mem_filter]\n    constructor\n    · rintro ⟨⟨hq, hnot⟩, hneq⟩\n      exact ⟨hq, hneq, hnot⟩\n    · rintro ⟨hq, hneq, hnot⟩\n      exact ⟨⟨hq, hnot⟩, hneq⟩\n  have hcompcard : (G.filter (fun q => q ≠ 1)).card =\n      (currentChenSeventhSemiprimePairs N t).card := by\n    rw [hcompset, currentChenSeventh_composite_eq_pairs_image ht]\n    apply Finset.card_image_of_injOn\n    intro a ha c hc heq\n    exact currentChenSeventh_pairs_mul_injective ha hc heq\n  have hunitcard : (G.filter (fun q => q = 1)).card = if 1 ∈ F then 1 else 0 := by\n    rw [hunitset]\n    by_cases hu : 1 ∈ F <;> simp only [hu, if_true, if_false,\n      Finset.card_singleton, Finset.card_empty]\n  have hprimepart := Finset.card_filter_add_card_filter_not (s := F) Nat.Prime\n  change (F.filter Nat.Prime).card + G.card = F.card at hprimepart\n  have hunitpart := Finset.card_filter_add_card_filter_not (s := G) (fun q => q = 1)\n  rw [hunitcard, hcompcard] at hunitpart\n  omega",
+      "complete_source_span": "private theorem currentChenSeventh_row_card_partition {N : ℕ} {t : ℕ × ℕ}\n    (ht : t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ))) :\n    let F := chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)\n    F.card = (F.filter Nat.Prime).card +\n      (currentChenSeventhSemiprimePairs N t).card + if 1 ∈ F then 1 else 0 := by\n  intro F\n  let G := F.filter (fun q => ¬ Nat.Prime q)\n  have hunitset : G.filter (fun q => q = 1) = if 1 ∈ F then {1} else ∅ := by\n    ext q\n    by_cases hq : q = 1\n    · subst q\n      by_cases hu : 1 ∈ F <;> simp [G, hu]\n    · by_cases hu : 1 ∈ F <;> simp [hq, hu]\n  have hcompset : G.filter (fun q => q ≠ 1) =\n      F.filter (fun q => q ≠ 1 ∧ ¬ Nat.Prime q) := by\n    ext q\n    simp only [G, Finset.mem_filter]\n    constructor\n    · rintro ⟨⟨hq, hnot⟩, hneq⟩\n      exact ⟨hq, hneq, hnot⟩\n    · rintro ⟨hq, hneq, hnot⟩\n      exact ⟨⟨hq, hnot⟩, hneq⟩\n  have hcompcard : (G.filter (fun q => q ≠ 1)).card =\n      (currentChenSeventhSemiprimePairs N t).card := by\n    rw [hcompset, currentChenSeventh_composite_eq_pairs_image ht]\n    apply Finset.card_image_of_injOn\n    intro a ha c hc heq\n    exact currentChenSeventh_pairs_mul_injective ha hc heq\n  have hunitcard : (G.filter (fun q => q = 1)).card = if 1 ∈ F then 1 else 0 := by\n    rw [hunitset]\n    by_cases hu : 1 ∈ F <;> simp only [hu, if_true, if_false,\n      Finset.card_singleton, Finset.card_empty]\n  have hprimepart := Finset.card_filter_add_card_filter_not (s := F) Nat.Prime\n  change (F.filter Nat.Prime).card + G.card = F.card at hprimepart\n  have hunitpart := Finset.card_filter_add_card_filter_not (s := G) (fun q => q = 1)\n  rw [hunitcard, hcompcard] at hunitpart\n  omega",
+      "source_span_sha256": "20738659a6ee8ceb173b6296b77fdf9cfbdafc2c343fd6f0a790c2929924e86c"
+    },
+    {
+      "name": "currentChenUpsilon7_eq_primeTriples_add_semiprimeQuadruples_add_unitFibres",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 341,
+      "complete_header": "theorem currentChenUpsilon7_eq_primeTriples_add_semiprimeQuadruples_add_unitFibres\n    (N : ℕ) :\n    currentChenUpsilon7 N =\n      ((currentChenUpsilon7PrimeTriples N).card : ℝ) +\n        ((currentChenUpsilon7SemiprimeQuadruples N).card : ℝ) +\n        ((currentChenUpsilon7UnitFibres N).card : ℝ)",
+      "complete_body_after_assignment": "by\n  rw [currentChenUpsilon7_eq_siftedQuotientPrimeSource]\n  have hprimecount : ((currentChenUpsilon7PrimeTriples N).card : ℝ) =\n      ∑ t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)),\n        (((chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)).filter Nat.Prime).card : ℝ) := by\n    simp only [currentChenUpsilon7PrimeTriples, Finset.card_sigma, Nat.cast_sum]\n  have hsemicount : ((currentChenUpsilon7SemiprimeQuadruples N).card : ℝ) =\n      ∑ t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)),\n        ((currentChenSeventhSemiprimePairs N t).card : ℝ) := by\n    simp only [currentChenUpsilon7SemiprimeQuadruples, currentChenSeventhSemiprimePairs,\n      Finset.card_sigma, Nat.cast_sum]\n  have hunitcount : ((currentChenUpsilon7UnitFibres N).card : ℝ) =\n      ∑ t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)),\n        if 1 ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)\n          then (1 : ℝ) else 0 := by\n    simp only [currentChenUpsilon7UnitFibres, Finset.card_eq_sum_ones,\n      Finset.sum_filter, Nat.cast_sum, Nat.cast_ite, Nat.cast_one, Nat.cast_zero]\n  rw [hprimecount, hsemicount, hunitcount]\n  simp only [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro t ht\n  exact_mod_cast currentChenSeventh_row_card_partition ht",
+      "complete_source_span": "theorem currentChenUpsilon7_eq_primeTriples_add_semiprimeQuadruples_add_unitFibres\n    (N : ℕ) :\n    currentChenUpsilon7 N =\n      ((currentChenUpsilon7PrimeTriples N).card : ℝ) +\n        ((currentChenUpsilon7SemiprimeQuadruples N).card : ℝ) +\n        ((currentChenUpsilon7UnitFibres N).card : ℝ) := by\n  rw [currentChenUpsilon7_eq_siftedQuotientPrimeSource]\n  have hprimecount : ((currentChenUpsilon7PrimeTriples N).card : ℝ) =\n      ∑ t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)),\n        (((chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)).filter Nat.Prime).card : ℝ) := by\n    simp only [currentChenUpsilon7PrimeTriples, Finset.card_sigma, Nat.cast_sum]\n  have hsemicount : ((currentChenUpsilon7SemiprimeQuadruples N).card : ℝ) =\n      ∑ t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)),\n        ((currentChenSeventhSemiprimePairs N t).card : ℝ) := by\n    simp only [currentChenUpsilon7SemiprimeQuadruples, currentChenSeventhSemiprimePairs,\n      Finset.card_sigma, Nat.cast_sum]\n  have hunitcount : ((currentChenUpsilon7UnitFibres N).card : ℝ) =\n      ∑ t ∈ chenY7PrimeSelector N ((N : ℝ) ^ (59 / 250 : ℝ)),\n        if 1 ∈ chenSiftedQuotientPrimeSource N (t.1 * t.2) (t.2 : ℝ)\n          then (1 : ℝ) else 0 := by\n    simp only [currentChenUpsilon7UnitFibres, Finset.card_eq_sum_ones,\n      Finset.sum_filter, Nat.cast_sum, Nat.cast_ite, Nat.cast_one, Nat.cast_zero]\n  rw [hprimecount, hsemicount, hunitcount]\n  simp only [← Finset.sum_add_distrib]\n  apply Finset.sum_congr rfl\n  intro t ht\n  exact_mod_cast currentChenSeventh_row_card_partition ht",
+      "source_span_sha256": "f88e89e399db62761a6f762d59fd4c93ba5bdba1214acdeb14a9d07d3b6a00a1"
+    }
+  ],
+  "author_actual_complete_saved_source_read": true,
+  "author_math_selfreview": [
+    "Generic minFac classifier uses multiplicity, not primeFactors.card. r=minFac q is prime, s=q/r, r<=s follows from actual Nat.minFac_le_div. If s is composite, its smallest prime divisor remains a divisor of original q and the same p2 roughness forces p2^3<=q. Thus no supplier classification or squarefree assumption is used.",
+    "Actual cubic bound retains the original p1,p2 carrier, lower wall and actual b*q=N-P<N. Only the exponent comparison is in Real: N<N^(59/50)=D^5<=p1^5<=p1*p2^4. If q>=p2^3, positivity forces the contradicted actual product comparison. The original strict sqrt cap remains in all literal source definitions and public dictionaries; it is not replaced by the smaller receiver centre.",
+    "The general private source dictionary reconstructs target P=N-b*q by exact natural double subtraction and exact division. It has only b>0 and no analytic input. Prime dictionary consumes the exact owned ninth prime_mem_iff at the original b and cutoff.",
+    "The semiprime roughness dictionary uses prime-divisor-of-product, allowing r=s and r=p2. Each inner prime is proved in the finite primitive carrier from q<N, prime-factor divisibility and the actual q coprimality to N; these facts are not additional premises in the public dictionary.",
+    "Private ordered-pair multiplication injectivity consumes ordered_prime_factors_unique already transitively imported. Prime squares count once. The composite image is exactly F.filter(q!=1 and notPrime q), with nonunit/nonprime derived from two actual prime factors.",
+    "Private row-card partition is two exact filter-complement partitions and the injective composite image; one unit is kept precisely when 1 belongs to the original row. Finite sums restore the original currentChenUpsilon7 equality via the exact mean-ledger source identity and dependent-sum cardinalities. Every outer pair remains labelled.",
+    "All statements hold for every N, including empty small-N selectors. No Even-N condition, asymptotic threshold, analytic mean, current C/K or hidden final-count hypothesis was inserted.",
+    "Unit example N76/P61/p1=3/p2=5/q1 and squarefree composite example N1363786/P3/p1=29/p2=31/r37/s41 from independent review explain why neither units nor the full composite branch may be discarded. These are explanatory examples, not new Lean numerical certificates."
+  ],
+  "actual_API_selfreview": {
+    "owned_import": "ImbalancedChen.CurrentChenUpsilon9PrimeSource",
+    "owned_receipt": ".lake\\proof-continuation\\audits\\20261015T183933777150Z\\receipt.json",
+    "owned_receipt_sha256": "260ccef491eef9e07c5c9fbd7dad0f804a40e7224dd148f2b6eb00fde7947845",
+    "owned_full_declarations_sha256": "76934682f68201a3385da1f26aa09d357b6f7d9fd658e54a7d8e992a662090ab",
+    "full_types_safety_axioms_read": {
+      "ImbalancedChen.currentChenUpsilon9_quotient_witness": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.CurrentChenUpsilon9PrimeSource",
+        "name": "ImbalancedChen.currentChenUpsilon9_quotient_witness",
+        "partial": false,
+        "type": "∀ {N b q : Nat} (hb : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) b)\n  (hq :\n    @Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n      (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n      (ImbalancedChen.chenQuotientPrimeSource N b) q),\n  @Exists.{1} Nat fun (P : Nat) =>\n    And\n      (@Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n        (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n        (ImbalancedChen.chenAdditivePrimeCarrier N) P)\n      (And\n        (@Eq.{1} Nat (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) b q)\n          (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) N P))\n        (And (@LT.lt.{0} Nat instLTNat (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) b q) N)\n          (And (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) q)\n            (@LT.lt.{0} Real Real.instLT (@Nat.cast.{0} Real Real.instNatCast q)\n              (@HDiv.hDiv.{0, 0, 0} Real Real Real\n                (@instHDiv.{0} Real (@DivInvMonoid.toDiv.{0} Real Real.instDivInvMonoid))\n                (@Nat.cast.{0} Real Real.instNatCast N) (@Nat.cast.{0} Real Real.instNatCast b))))))",
+        "unsafe": false
+      },
+      "ImbalancedChen.currentChenUpsilon9_prime_mem_iff": {
+        "axiom": false,
+        "axioms": [
+          "propext",
+          "Classical.choice",
+          "Quot.sound"
+        ],
+        "module": "ImbalancedChen.CurrentChenUpsilon9PrimeSource",
+        "name": "ImbalancedChen.currentChenUpsilon9_prime_mem_iff",
+        "partial": false,
+        "type": "∀ {N b q : Nat} (hb : @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) b)\n  (hqprime : Nat.Prime q) (z : Real),\n  Iff\n    (@Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n      (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n      (ImbalancedChen.chenSiftedQuotientPrimeSource N b z) q)\n    (And (@LT.lt.{0} Nat instLTNat (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) b q) N)\n      (And\n        (@Membership.mem.{0, 0} Nat (Finset.{0} Nat)\n          (@SetLike.instMembership.{0, 0} (Finset.{0} Nat) Nat (@Finset.instSetLike.{0} Nat))\n          (ImbalancedChen.chenAdditivePrimeCarrier N)\n          (@HSub.hSub.{0, 0, 0} Nat Nat Nat (@instHSub.{0} Nat instSubNat) N\n            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) b q)))\n        (@LE.le.{0} Real Real.instLE z (@Nat.cast.{0} Real Real.instNatCast q))))",
+        "unsafe": false
+      }
+    },
+    "native_minFac_source": {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Nat\\Prime\\Defs.lean",
+      "sha256": "617c1a2a927a2a282092f11c8d254036454e7ffa2eab12f8dd16880cf83d0d61",
+      "actual_complete_lines_read": [
+        287,
+        373
+      ],
+      "used": [
+        "Nat.minFac_prime",
+        "Nat.minFac_dvd",
+        "Nat.minFac_le_div",
+        "Nat.minFac_sq_le_self"
+      ],
+      "new_import_required": false
+    },
+    "other_source_APIs_actual_read": [
+      "ordered_prime_factors_unique in OrderedBad.lean:43-51",
+      "ChenPrimeRough and ChenQuotient in QuotientChenFourPrime.lean:26-36",
+      "chenQuotientPrimeSource_data and source image dictionary",
+      "Nat protected le_of_not_gt in fixed Lean Init/Data/Nat/Basic.lean:438",
+      "Real.rpow_mul_natCast in fixed mathlib Pow/Real.lean:518",
+      "Real.rpow_lt_rpow_of_exponent_lt in fixed mathlib Pow/Real.lean:610",
+      "Finset.card_image_of_injOn in fixed mathlib Data/Finset/Card.lean:236",
+      "Exact existing eighth/ninth source card_sigma and filter partition proof patterns"
+    ]
+  },
+  "proper_project_DAG": {
+    "proper_nodes": 31,
+    "inclusive_new_leaf": 32,
+    "foreign_boundaries": 43,
+    "new_foreign_delta": [],
+    "all_scoped_source_hashes_and_all_recorded_current_object_parts_rechecked": true,
+    "nodes": {
+      "ImbalancedChen.CurrentChenUpsilon9PrimeSource": {
+        "source_sha256": "51d36a5e2ac2e9230293a7b54231bf63a80f7344b4c6e8f32c80352c920022d4",
+        "cache_sha256": "e05490498edd8661f02a690a00892993ffd68eecd4337c23b2fce2535c539fd5",
+        "all_recorded_current_object_parts": {
+          ".olean": "584f61f0eabb638d807815b7c54d8d83969a96c826b404752fe2e813a945fb8c"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.CurrentChenMeanLedger": {
+        "source_sha256": "30597d5f381031fc7d7e794fe105a11d6981053b34a1406d46f40bf7840dc0c8",
+        "cache_sha256": "8a7d080bff4a0bfd448b4803d39657a9d0ecd43787b4fced27ce58210f8e6d7c",
+        "all_recorded_current_object_parts": {
+          ".olean": "1ddb7c1f850ad945ea093de5f98930e606654d286b7de19359df7c77c784cb9d"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.CurrentChenSummedBridge": {
+        "source_sha256": "e7897e67a0a51db8e2d0dc410a1240dea62774f5b94782bc30ddf9055a7be832",
+        "cache_sha256": "e00129f332299367f639df09956896d5a731a95e7a5effb47883e96919bcbd23",
+        "all_recorded_current_object_parts": {
+          ".olean": "9845c1276217cb9d6d9169820b83aa7c22f94c2b24bd45a7804cf66a78534c2d"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.CurrentChenPairedDeletion": {
+        "source_sha256": "6101bf1057504895d2413bf814249deabdd12a3e53a0b21067a68df03dee4794",
+        "cache_sha256": "f2c7a5ba13fdce532559e7f67ba7ef7d7a205993010ece59ed8822ffcb714a11",
+        "all_recorded_current_object_parts": {
+          ".olean": "b9ed1645403f497bc42ff403f3eec2583c85c084e99045c7e5b9a2dd22ff202f"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.CurrentChenPointwise": {
+        "source_sha256": "17ade795542a81bac8b659b7d24b96ab76cba45e5f3850db5fe0bc04d47a9ee8",
+        "cache_sha256": "f726c60a5581218e9d22292160c8a3005f53f2b6d6e760aa25176232b5dfb8e8",
+        "all_recorded_current_object_parts": {
+          ".olean": "294fb5685aea67315fa16811afb79c7d43550ccd5cb131ee71b63c47801dfd1f"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.QuotientChenWeightCases": {
+        "source_sha256": "0a46a07615bd68b25b56d2655f08fc6c7f87fea7ad0fa3d56f7a584299c31835",
+        "cache_sha256": "155134984a9d4706547582e4ee605c810fe7f13a38c6e4d5e08e8a74aeb7fabc",
+        "all_recorded_current_object_parts": {
+          ".olean": "4d5faf0d0949d26ee8aee0bb5a01eee8f5509c6231cf01d5e9cee45ae4b6681d"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.QuotientChenNinthSwitch": {
+        "source_sha256": "702981a5101c248640cbc7b7356f7b0fd666add84edae31a4b7cec554cdba0d2",
+        "cache_sha256": "e71b14e949fdfe7da62a02b37204cd2cafca223a43d9385331e02a56eb1032bd",
+        "all_recorded_current_object_parts": {
+          ".olean": "92a60b5bd45313a6b581fca84b2cacfc509ea8b8918a21a9421ca696fbab150f"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.QuotientChenInitialCounts": {
+        "source_sha256": "5d44f2769051957cf1723b4421930ee8caed5fda6054b0404a5a9c77fe038859",
+        "cache_sha256": "ff9ac084b38283a174361e4bde9f3df40760409fd2c17cb326145f0e44e127ee",
+        "all_recorded_current_object_parts": {
+          ".olean": "3afd65eaf59508eb1dfa9e6e78d61800f1159ef92eadd19db6da645db321d433"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.QuotientChenFourCounts": {
+        "source_sha256": "dbf594ed81b0ba34cd36f8f7ee04ea1fc95a3446a7c8142db4c057b99fb8c216",
+        "cache_sha256": "95c2f520d60115e70c37a673a47786371f4878c4ba77a7748ff0bc9ee43d8c1c",
+        "all_recorded_current_object_parts": {
+          ".olean": "531dbaf3eed76ce8b3711df37d70e48d78f74f739a75ec21b67ec327f1fd2fe4"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.QuotientChenFourPrime": {
+        "source_sha256": "e2966ad01dec7cd6e9725c6c830f685b1cef6414121d268b0203bf743a394c72",
+        "cache_sha256": "bdf1a415907c019c95e03a757ddcf3520fbf4a123dab6dd09c859ef0b7a7d328",
+        "all_recorded_current_object_parts": {
+          ".olean": "f539719150c13eb8853c8ba45b9a80dcc9b9a62f2734f9944b7b60bb780bb6ce"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.QuotientChenSwitchGeometry": {
+        "source_sha256": "0a9f384144b847a3030bad2c7821e1995be56dff2f8ff0ec3cfbff3d1c692a9b",
+        "cache_sha256": "3976e66da2a7a2562edc177f05fe54dad36b79664f888d3bd176c3ba1de7f4c3",
+        "all_recorded_current_object_parts": {
+          ".olean": "23ac92a205b53f41e85a3c587c616ed03c1953d91b84fbf5939954bcf9a0a687"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.Multiplicity": {
+        "source_sha256": "9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6",
+        "cache_sha256": "34660622ad7c1717b8d8977c4161d5c3db865e87a6e382536b9fef3df6fe7e0a",
+        "all_recorded_current_object_parts": {
+          ".olean": "2f421673793f153c6dccfcc8463657c8f76d73342f2994e33eb04ed1266ff180"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.Counting": {
+        "source_sha256": "8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa",
+        "cache_sha256": "1cabfb6023b99505ab292d46b9bd81f06372cde697c0f413167d10547417232c",
+        "all_recorded_current_object_parts": {
+          ".olean": "3ba19b992217dc7cefe42fc28364905a1f83c479ed1a227a94d09725fa9513f8"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.QuotientChenSummedBridge": {
+        "source_sha256": "3ae498ccb6c6e214184e5ffb56889afb1957f3e7666d09acd71bf9a841d35d17",
+        "cache_sha256": "d2ebfb93c25a52cedad5d9a99a25fe4ccee66e56d0ebd687084037a8b2140b28",
+        "all_recorded_current_object_parts": {
+          ".olean": "a370524788e69a6dbf18741fd50926e1b49c0ed1bb3ba12ccfb43d576ce3cbd1"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.QuotientChenPositiveBound": {
+        "source_sha256": "a7e99b14a66b55e0e5100321d169680a112fb8ef2c1c6ff8754aab88185b28a6",
+        "cache_sha256": "81b4fa85d89115ee9afc30f04c421032aebd4a6804a500718628e2894a77e3ae",
+        "all_recorded_current_object_parts": {
+          ".olean": "1aa3317c62e197ee624cf430aafdf712d325c15d6b18a2f698e9279320f9f5ce"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.RoughSquareException": {
+        "source_sha256": "02723bf89057e5979946c2e591d76aa93517e455cf88a1f67598719ff14f4e30",
+        "cache_sha256": "5fa155c89a7dcccb501723c720854ba4417c5506cdee0517637f9fb2c7c55dc6",
+        "all_recorded_current_object_parts": {
+          ".olean": "d1fec004c4230467624fe9a11f3e2ff7c46abd9cc6362b70f7b8a12b596d43ee"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.PowerErrorBudget": {
+        "source_sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+        "cache_sha256": "db582e271a78623e878424bfd5a328378b6b8b1e6db0aaac406254b96e32a3db",
+        "all_recorded_current_object_parts": {
+          ".olean": "2241bba520345793b723a5f8cc74dc9f3b5d6dcc9d0c561f8c3f5701eed9d202"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.SingularSeries": {
+        "source_sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "cache_sha256": "9858e1f83a364400b124d0ed069856a06396b394ac739137f59da869085fca39",
+        "all_recorded_current_object_parts": {
+          ".olean": "09b35699dc5eaf32bd81b1ea4c5196abec5925b16c475773c261c839e1142150"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.NormalizationGrowth": {
+        "source_sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+        "cache_sha256": "12c5cd1d99a9bb942600c8a792279fabecf0e38c89f0061fed856fbf0b9e8f2b",
+        "all_recorded_current_object_parts": {
+          ".olean": "12e44886d5f17db7b59698497868352aaacac28544c1db1c27b2da8410edcef1"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.ChenQuotientPrimeSource": {
+        "source_sha256": "538fc0e9a0c9fe55f3746ac31aaffc7375125d49dc58161d22e9abad53b97a8c",
+        "cache_sha256": "dcf0639cd8bc1adf817aac1a00ef175af8665e8fb6f135f6a9609a43455fe47e",
+        "all_recorded_current_object_parts": {
+          ".olean": "0da65e565ed9005124cd0634924e13cbda9f413afde482d11ac293ab293bbba4"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.ChenInitialPrimeSource": {
+        "source_sha256": "330fab9edc70b63f56fb28b7b83748427b269c42da54ee67dd14a812a36720f2",
+        "cache_sha256": "b437f4791aad7afd82509a1b895d82143f50da10c620002051f3f356b14f1f10",
+        "all_recorded_current_object_parts": {
+          ".olean": "36bef2cb3bbe15c7246ff94b016ce41384ed5a99a62ed500ea94482ae47f491f"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.QuotientChenElevenSum": {
+        "source_sha256": "da37649fd96b1e216424a255cf72e947a29577750640739587bf763026da9c96",
+        "cache_sha256": "9c7963e067abecd018273c9c995ea6c13e7c9a7bf7330b3ddd9e81ed74df290c",
+        "all_recorded_current_object_parts": {
+          ".olean": "e791098df299b80936c4f9857add8d2d412eec8fe65f005b25add5663ce2cfb4"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.FiniteSieveModel": {
+        "source_sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+        "cache_sha256": "68502ccd1ddcac7f9f5df4d43a9483238627355f39fa5281cbb8bac753a1444a",
+        "all_recorded_current_object_parts": {
+          ".olean": "2b3fd7589702d14452e1064daef7bff3ab9d688440ca814809745f4f73e8f615"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.SieveSourceCoprimality": {
+        "source_sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+        "cache_sha256": "483b4f3446b18e2e42a6bcffba476a93fbb7e07be20ce2b36a86531eaaf9f17a",
+        "all_recorded_current_object_parts": {
+          ".olean": "b31818d931630f334bd1acccb51ef626943e9c2e139d7be951116503aaa9926b"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.HalfProductSource": {
+        "source_sha256": "dc6e261ddfdc9a66e966a4ec5c2a129d3f4b7583501c5c82364f2aa4a8af194e",
+        "cache_sha256": "b589480942d791dc666f6e86f97182f046328e07649bb4df503e4cd2b5e60a72",
+        "all_recorded_current_object_parts": {
+          ".olean": "e8e3c3900d6bf35767cfeaace22f52749154338d98f356206e515560a9af0635"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.BadSourceLocalization": {
+        "source_sha256": "0e88326b03a4c20a472014b506d7533495d86801909af4d455de5fcfae6695a7",
+        "cache_sha256": "468dc0cf40761dc1f4c202ef6173f2f9dda7af4a0cb4e0798bfdc5c40da50234",
+        "all_recorded_current_object_parts": {
+          ".olean": "ae5bd040391e37faad01afa949e372600ef95c291215c16d68f68f77a7799e59"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.HalfProductGeometry": {
+        "source_sha256": "d04e31ea73a853c4fa37e881ef30a748b7f83b8a0e930e0cc2ae231dbb629db1",
+        "cache_sha256": "b88942ff9c2a53e969b094e79677664e55a612670c95eafcfabf4efc6498d58b",
+        "all_recorded_current_object_parts": {
+          ".olean": "0098c098c00919fc5b15389767d7913e8ffdbc77fa2317028b98f91866868f39"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.OrderedBad": {
+        "source_sha256": "a38031995175bd2f847eefd498c929e941400c9cffdf6f78e3e06bd2100764da",
+        "cache_sha256": "5ca055b6ab291fc7d13f550c022e8a6b12f084e6ea085aea72e6ed9aa298bce7",
+        "all_recorded_current_object_parts": {
+          ".olean": "1c06aa82a786baabba94ac4f6899f369d074f5f6502c0278f48bc2ada3b7cce2"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.RationalPowers": {
+        "source_sha256": "40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06",
+        "cache_sha256": "6ba43d8efbf0a96ea3a0c9c2d11b624c522fc9944a63d7521fa3a49d37840880",
+        "all_recorded_current_object_parts": {
+          ".olean": "6cabb79e4990a879873ecf5cc7f8deda8cdeb6c257b793927fe0f40b566b4dea"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.CoprimeRecentering": {
+        "source_sha256": "45c28d97bd10eccaa99498b2309fb03c9d8efbdd5040e12d7ba33c3702b418c5",
+        "cache_sha256": "aa89c8b90b34dd897a5c952e064f5612f9dd3b3a97e3faed5cc9efcda872394a",
+        "all_recorded_current_object_parts": {
+          ".olean": "984964000ca61288896fa4db232848426c7e548ac7d813f1eaff58c0425fabc4"
+        },
+        "cache_status": "PASS"
+      },
+      "ImbalancedChen.CurvedRegionDiscrepancy": {
+        "source_sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+        "cache_sha256": "15a66b17c38d0e0e30ff32e0469b4564de29b5ef93fbba9625f422fc4529f9a9",
+        "all_recorded_current_object_parts": {
+          ".olean": "e2ed1389c18411729b0f7f2177905d8de93e90d051abcd624f945e285bcd0562"
+        },
+        "cache_status": "PASS"
+      }
+    },
+    "full_foreign_object_closure_replay_claimed": false
+  },
+  "quota": {
+    "actual_get_usage_limits_reads": true,
+    "last_observed_used_percent": 5,
+    "remaining_percent": 95,
+    "secondary": null,
+    "threshold_triggered": false,
+    "next_new_batch_requires_fresh_read": true
+  },
+  "mutations": {
+    "only_Lean_source_written": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\CurrentChenUpsilon7PrimeSemiprimeSource.lean",
+    "existing_Lean_sources_changed": false,
+    "manuscript_changed": false,
+    "cache_changed": false,
+    "compiler_or_checker_started": false,
+    "subagents_spawned": false
+  },
+  "requires": [
+    "Root and independent nonauthor full-source review tied to exact source hash",
+    "Fresh exact proper31/foreign43 current-object preflight before a separate first compile gate",
+    "Sole runtime owner strict compile then unchanged complete owned audit; author has not run Lean"
+  ],
+  "frozen": true,
+  "whole_seventh_mean_proved": false,
+  "current_C_K_proved": false,
+  "full_main_theorem_proved": false
+}

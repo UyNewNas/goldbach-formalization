@@ -1,0 +1,48 @@
+{
+  "status": "HOLD_INPUTS_STATICALLY_REVIEWED_CLASSIFIER_UNEXECUTED",
+  "date": "2026-10-22",
+  "scope": "只读审查 Offdiag8826 classifier 提案的输入和 guards；未 import/run classifier、collect、proper、census、compiler 或 checker；未改任何旧文件或 Lean 源码。",
+  "reviewed_inputs": {
+    "proposal": {
+      "path": ".lake/proof-continuation/source-reviews/20261022-offdiag8826-ONEproper-PASS-readonly-classifier-input-proposals-HOLD.json",
+      "sha256": "282c3510a51d42ab396bdbd2d390f2848786443051d56f57a5e3ccf531ecf978"
+    },
+    "classifier": {
+      "path": ".lake/proof-continuation/rounds/20261022-offdiag8826-readonly-classification-historical174-proposal.py",
+      "sha256": "679c6b8507382c160b8fac910e3feecae954636aa503d031e2f5e87dd11dc859",
+      "rawdiff_sha256": "93e8a1d58b5a796d3eccb0031cf857ebd3ae12f9029d5e2ee208e6d1c6cb8fb0",
+      "raw_inverse_sha256": "af36bdc0b546e3c9b0d2cbcee0eced36ccefab1cd4876a25e53eb73d310c763c"
+    },
+    "current_source_bindings": {
+      "path": ".lake/proof-continuation/rounds/20261022-offdiag8826-derived-source-bindings.json",
+      "sha256": "aa221c5e5d7e0af8c159215eedeedaf14b4345bbb3f6991e5a4582cbd1d62282"
+    }
+  },
+  "independent_static_checks": {
+    "rawdiff": "完整classifier raw diff及raw inverse按UTF-8 byte offsets正向和逆向重建一致；32 edits，旧/新脚本长度19259/24074字节，sha均与inverse记录相符。",
+    "function_ast": "对旧e3ac与新提案脚本分别只作AST解析，path、sha、read、exact、source_path、verify_baseline六函数AST完全一致；变化限collect与main。",
+    "collect_spans": "collect中原prefix和suffix分别以author/meta绑定行及TARGET source hash断言为界；独立重算SHA分别为843bedb2b2c3ab692c1b6e04b0ccb87b9f8d863e690c68a0b29025dac8195c5e、63ed618aaa119bf04f43b13936f5b4eb52ae510b464674356cc42577fac8d983，均与AST proof记录相同；提案collect确实以前缀开始、以后缀结束。",
+    "source_chain": "旧1a0e source与e3ac历史副本的单一字节替换正逆精确：7209→7199 bytes，均167 LF、无CR；再由e3ac经单一typed block逆换接到当前8826 source，7199→7247 bytes，均167 LF、无CR。当前Lean源 SHA为8826a1ca9fdbebcbe2f5a44cac43b02ac0510c568e916eefa09fff64194e4546。root typed record SHA 21d6b7ad2039252121c10eda2c3f5fd13e182052d748f32bb4c6b4cdf7b6d29e、typed proposal SHA 095bef7a332c8023843bcc8174cd2a0a9c2d305fe149b0964262d37a5db91d01、inverse SHA a2bfaaea764365eec782735c864127162ef6335edf8d22e4daaa9305216c0f16均与引用相符。",
+    "headers_and_bindings": "当前源三条完整声明头/类型逐字匹配bindings和typed proposal，line/hash相符。17条native API及4条original-range spans跨14个Lean源文件逐文件重算file hash、span hash和excerpt，全部相符；11个direct-import源和3个lake/toolchain/manifest pin文件hash相符。",
+    "proper_and_guards": "一次且零retry的proper输入路径与SHA 73e40726aa7bc488103c0442b20b476e3297bbd1079485f8dd71c0158d2fc4d9相符：status为READONLY_PROPER_GRAPH_EXISTING_RECURSIVE_CACHES_EXACT，target SHA=8826，project count=1、checked project cache=0、project_parents空、target_cache_included=false、missing_external/parser_findings空；foreign_nodes正好2475，每条带module/source/object hash及object path，foreign roots=12。collector原guards仍逐行存在：固定PARTS五项并逐节点校验source/object路径及hash、.olean hash、parts集合和各后缀的present/missing盘点；但classifier未运行，故本次没有产出2475项的五槽实际分布。",
+    "historical_and_latest_ledgers": "旧BASE 00445cc0bc388a70374ed800d7d634332199280bd52415c46b83a240774a04e仍引用完整174模块、4037 declarations、122 receipts；verify_baseline AST未变，保留源/object part和receipt重哈希、full serialized types、环境inventory/stock replay、safety检查及{propext, Classical.choice, Quot.sound}三axiom白名单。current178另行绑定：census SHA dd13aa5bd6e909ed336591a173f48b8221a1b94a5f301ecde41ea87d5b8a4544（178/4109/126，safety及三axiom标志为true）；root acceptance SHA d88e34e233c3689723cde7150f5b00ba1740ed45db45d0e2ac2718de192b7d9c明确绑定该census。历史174与当前178没有混作同一库存。"
+  },
+  "blockers": [
+    "这是未执行classifier提案；因本任务明确禁止执行，实际 dependency classification、当前target实际 declaration count及其kernel acceptance 均未知。不得宣称本Lean定理已被内核接受或据此改变状态。",
+    "虽proper记录确认0 checked project caches与2475 native nodes，五后缀的完整实际盘点只在未执行collector中有代码保障，本轮没有其运行结果。"
+  ],
+  "non_blocking_findings": [
+    "没有发现raw diff正逆、当前源绑定、完整声明头、API hash/span或历史/当前census绑定之间的静态不一致。",
+    "e3ac→1a0e历史副本链、失败terminal/receipt/compiler-log SHA绑定、历史174和当前178证据均保留；typed root明示kernel_accepted=false且compiler_checkpoints_invoked=0。"
+  ],
+  "completion_boundary": {
+    "classifier_imported_or_executed": false,
+    "collect_executed": false,
+    "proper_or_census_executed": false,
+    "compiler_or_checker_run": false,
+    "old_files_or_lean_changed": false,
+    "actual_target_declaration_count": "unknown",
+    "kernel_acceptance_claimed": false,
+    "quota_snapshot": "40% used / 60% remaining; stop threshold is remaining <=40%"
+  }
+}

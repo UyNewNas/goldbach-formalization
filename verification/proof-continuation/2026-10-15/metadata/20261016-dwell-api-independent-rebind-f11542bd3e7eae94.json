@@ -1,0 +1,65 @@
+{
+  "status": "SOURCE_ONLY_INDEPENDENT_EXACT_DIAGNOSTIC_API_REBIND",
+  "reviewer": "/root/tail_resume/greedy_review",
+  "review_date": "2026-10-16",
+  "candidate": "ImbalancedChen.ActualDwellSelectedRemainder",
+  "old_sha256": "bb57c44fb8b597a00909ebbac3a30ff6cc455ce1e1a8066ef939c145b1c24575",
+  "source_sha256": "788ae86987601b677fa52b71e36f9ba3953eb44f12d316c1c4b42cc956d51759",
+  "old_exact_snapshot": ".lake/proof-continuation/source-reviews/20261016-dwell-bb57-before-api-repair.lean",
+  "two_exact_substitutions": [
+    {
+      "from": "  have hget : (front ++ tail)[front.length + i] = tail[i] := by",
+      "to": "  have hget : (front ++ tail)[front.length + i]'(by\n      simp only [List.length_append]; omega) = tail[i] := by",
+      "count": 1
+    },
+    {
+      "from": "      List.getElem_cons_zero, one_mul, mul_comm] using hstart",
+      "to": "      List.getElem_cons_zero, one_mul, mul_one, mul_comm] using hstart",
+      "count": 1
+    }
+  ],
+  "forward_exact_bytes_equal": true,
+  "reverse_exact_old_sha_equal": true,
+  "imports_and_all_declaration_signatures_unchanged": true,
+  "declaration_count": 14,
+  "complete_signatures": [
+    "theorem actualDwell_original_tail_square {D : ℝ} (front tail : List ℕ)\n    (hfull : actualDwellSupport D (front ++ tail))\n    (i : ℕ) (hi : i < tail.length) :\n    (front.prod : ℝ) * ((tail.take i).map (fun p : ℕ => (p : ℝ))).prod *\n      (tail[i] : ℝ) ^ 2 ≤ D",
+    "theorem actualDwell_selected_prefix_budget {D : ℝ} (front tail : List ℕ)\n    (hfront : 0 < front.prod) (hfull : actualDwellSupport D (front ++ tail)) :\n    actualDwellSupport (D / front.prod) tail",
+    "private theorem actualDwell_selected_one_start_budget {D : ℝ}\n    (front tail : List ℕ) (b₀ q : ℕ) (hb : 0 < b₀)\n    (hprod : front.prod = b₀ * q)\n    (hfull : actualDwellSupport D (front ++ tail))\n    (hstart : (b₀ : ℝ) * (q : ℝ) ^ 2 ≤ D) :\n    actualDwellSupport (D / b₀) (q :: tail)",
+    "theorem actualDwell_selected_p2_budget {D : ℝ} (p₁ p₂ : ℕ) (tail : List ℕ)\n    (hp₂ : 0 < p₂) (hfull : actualDwellSupport D (p₁ :: p₂ :: tail))\n    (hgate : (p₁ : ℝ) ^ 2 * p₂ ≤ D) :\n    actualDwellSupport (D / p₂) (p₁ :: tail)",
+    "theorem actualDwell_selected_p1p3_budget {D : ℝ} (p₁ p₂ p₃ : ℕ)\n    (tail : List ℕ) (hp₁ : 0 < p₁) (hp₃ : 0 < p₃)\n    (hfull : actualDwellSupport D (p₁ :: p₂ :: p₃ :: tail))\n    (hgate : (p₁ : ℝ) * (p₂ : ℝ) ^ 2 * p₃ ≤ D) :\n    actualDwellSupport (D / (p₁ * p₃ : ℕ)) (p₂ :: tail)",
+    "theorem actualDwell_selected_p2p3_budget {D : ℝ} (p₁ p₂ p₃ : ℕ)\n    (tail : List ℕ) (hp₂ : 0 < p₂) (hp₃ : 0 < p₃)\n    (hfull : actualDwellSupport D (p₁ :: p₂ :: p₃ :: tail))\n    (hgate : (p₁ : ℝ) ^ 2 * p₂ * p₃ ≤ D) :\n    actualDwellSupport (D / (p₂ * p₃ : ℕ)) (p₁ :: tail)",
+    "private theorem actualSelectedRemainder_allocate {D A : ℝ} (hA : 1 ≤ A)\n    (b₀ : ℕ) (hb : 0 < b₀) (remainder : List ℕ)\n    (hC : 1 ≤ D / (A * b₀))\n    (hbudget : actualDwellSupport (D / b₀) remainder) :\n    (actualTwoCapacityFactors A remainder).1 * (actualTwoCapacityFactors A remainder).2 =\n      remainder.prod ∧\n      ((actualTwoCapacityFactors A remainder).1 : ℝ) ≤ A ∧\n      ((actualTwoCapacityFactors A remainder).2 : ℝ) ≤ D / (A * b₀)",
+    "theorem actualDwell_selected_prefix_allocate {D A : ℝ} (hA : 1 ≤ A)\n    (front tail : List ℕ) (hfront : 0 < front.prod)\n    (hfull : actualDwellSupport D (front ++ tail))\n    (hC : 1 ≤ D / (A * front.prod)) :\n    (actualTwoCapacityFactors A tail).1 * front.prod *\n        (actualTwoCapacityFactors A tail).2 = (front ++ tail).prod ∧\n      ((actualTwoCapacityFactors A tail).1 : ℝ) ≤ A ∧\n      ((actualTwoCapacityFactors A tail).2 : ℝ) ≤ D / (A * front.prod)",
+    "private theorem actualSelectedOneStart_allocate {D A : ℝ} (hA : 1 ≤ A)\n    (front tail : List ℕ) (b₀ q : ℕ) (hb : 0 < b₀)\n    (hprod : front.prod = b₀ * q)\n    (hfull : actualDwellSupport D (front ++ tail))\n    (hstart : (b₀ : ℝ) * (q : ℝ) ^ 2 ≤ D)\n    (hC : 1 ≤ D / (A * b₀)) :\n    (actualTwoCapacityFactors A (q :: tail)).1 * b₀ *\n        (actualTwoCapacityFactors A (q :: tail)).2 = (front ++ tail).prod ∧\n      ((actualTwoCapacityFactors A (q :: tail)).1 : ℝ) ≤ A ∧\n      ((actualTwoCapacityFactors A (q :: tail)).2 : ℝ) ≤ D / (A * b₀)",
+    "theorem actualDwell_selected_p2_allocate {D A : ℝ} (hA : 1 ≤ A)\n    (p₁ p₂ : ℕ) (tail : List ℕ) (hp₂ : 0 < p₂)\n    (hfull : actualDwellSupport D (p₁ :: p₂ :: tail))\n    (hgate : (p₁ : ℝ) ^ 2 * p₂ ≤ D) (hC : 1 ≤ D / (A * p₂)) :\n    (actualTwoCapacityFactors A (p₁ :: tail)).1 * p₂ *\n        (actualTwoCapacityFactors A (p₁ :: tail)).2 = (p₁ :: p₂ :: tail).prod ∧\n      ((actualTwoCapacityFactors A (p₁ :: tail)).1 : ℝ) ≤ A ∧\n      ((actualTwoCapacityFactors A (p₁ :: tail)).2 : ℝ) ≤ D / (A * p₂)",
+    "theorem actualDwell_selected_p1p3_allocate {D A : ℝ} (hA : 1 ≤ A)\n    (p₁ p₂ p₃ : ℕ) (tail : List ℕ) (hp₁ : 0 < p₁) (hp₃ : 0 < p₃)\n    (hfull : actualDwellSupport D (p₁ :: p₂ :: p₃ :: tail))\n    (hgate : (p₁ : ℝ) * (p₂ : ℝ) ^ 2 * p₃ ≤ D)\n    (hC : 1 ≤ D / (A * (p₁ * p₃ : ℕ))) :\n    (actualTwoCapacityFactors A (p₂ :: tail)).1 * (p₁ * p₃) *\n        (actualTwoCapacityFactors A (p₂ :: tail)).2 = (p₁ :: p₂ :: p₃ :: tail).prod ∧\n      ((actualTwoCapacityFactors A (p₂ :: tail)).1 : ℝ) ≤ A ∧\n      ((actualTwoCapacityFactors A (p₂ :: tail)).2 : ℝ) ≤ D / (A * (p₁ * p₃ : ℕ))",
+    "theorem actualDwell_selected_p2p3_allocate {D A : ℝ} (hA : 1 ≤ A)\n    (p₁ p₂ p₃ : ℕ) (tail : List ℕ) (hp₂ : 0 < p₂) (hp₃ : 0 < p₃)\n    (hfull : actualDwellSupport D (p₁ :: p₂ :: p₃ :: tail))\n    (hgate : (p₁ : ℝ) ^ 2 * p₂ * p₃ ≤ D)\n    (hC : 1 ≤ D / (A * (p₂ * p₃ : ℕ))) :\n    (actualTwoCapacityFactors A (p₁ :: tail)).1 * (p₂ * p₃) *\n        (actualTwoCapacityFactors A (p₁ :: tail)).2 = (p₁ :: p₂ :: p₃ :: tail).prod ∧\n      ((actualTwoCapacityFactors A (p₁ :: tail)).1 : ℝ) ≤ A ∧\n      ((actualTwoCapacityFactors A (p₁ :: tail)).2 : ℝ) ≤ D / (A * (p₂ * p₃ : ℕ))",
+    "theorem actualPrimeVector_squarefree (input : List ℕ)\n    (hprime : ∀ p ∈ input, Nat.Prime p) (hnodup : input.Nodup) :\n    Squarefree input.prod",
+    "theorem actualPrimeVector_threeFactors_coprime (input : List ℕ)\n    (hprime : ∀ p ∈ input, Nat.Prime p) (hnodup : input.Nodup)\n    (a b c : ℕ) (hprod : a * b * c = input.prod) :\n    Nat.Coprime a b ∧ Nat.Coprime a c ∧ Nat.Coprime b c"
+  ],
+  "independent_assessment": [
+    {
+      "location": "actualDwell_original_tail_square, lines 36-38",
+      "assessment": "The new explicit GetElem validity proof has exactly the original front.length+i < (front++tail).length goal. List.length_append plus original hi:i<tail.length closes it by omega. This makes proof elaboration independent of automatic index synthesis. GetElem proof irrelevance preserves the old expression; List.getElem_append_right and Nat.add_sub_cancel_left remain the same exact index identity."
+    },
+    {
+      "location": "actualDwell_selected_remainder_support, zero branch",
+      "assessment": "The only change adds mul_one to the existing simp-only normalization of the starting-square gate. It changes no arithmetic premise, inequality, selected product, or tail-prefix test."
+    }
+  ],
+  "semantic_rebind": "All old mathematical source conclusions rebind to the exact new target because all imports, declaration types, definitions, thresholds and remaining proof bytes are unchanged. This is static evidence only; it does not claim the diagnosed repair has passed Lean.",
+  "issues": [],
+  "remaining_gates": [
+    "Separately authorized runtime must elaborate exact 788ae869 and validate its dependency objects.",
+    "No imported closure, kernel replay or axiom acceptance is inferred from the two-byte-range proof repair."
+  ],
+  "evidence_boundary": {
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "build_invoked": false,
+    "frozen_lean_modified": false,
+    "python_bytecode_generated": false,
+    "runtime_pass_claimed": false
+  }
+}

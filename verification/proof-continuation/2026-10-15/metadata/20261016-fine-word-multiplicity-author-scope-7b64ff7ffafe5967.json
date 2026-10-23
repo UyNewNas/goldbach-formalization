@@ -1,0 +1,175 @@
+{
+  "status": "SOURCE_ONLY_AUTHOR_LITERAL_ORIGINAL_WORD_MULTIPLICITY_CANDIDATE_NOT_COMPILED",
+  "reviewer": "/root/tail_resume/greedy_review; source author, not independent review",
+  "module": "ImbalancedChen.ActualPrimeFineWordMultiplicity",
+  "source": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\ActualPrimeFineWordMultiplicity.lean",
+  "source_sha256": "9f8128f0c717b6748908d2f9f3fb67159ca9346d5a1477267065f62365118c74",
+  "complete_declarations": [
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord",
+      "kind": "def",
+      "line": 22,
+      "complete_signature": "def actualPrimeFineLabelBlocksOfWord : List ℕ → List (ℕ × ℕ)",
+      "complete_definition": "def actualPrimeFineLabelBlocksOfWord : List ℕ → List (ℕ × ℕ)\n  | [] => []\n  | i :: input =>\n      match actualPrimeFineLabelBlocksOfWord input with\n      | [] => [(i, 1)]\n      | (j, m) :: blocks =>\n          if i = j then (j, m + 1) :: blocks else (i, 1) :: (j, m) :: blocks"
+    },
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_word",
+      "kind": "theorem",
+      "line": 30,
+      "complete_signature": "theorem actualPrimeFineLabelBlocksOfWord_word (input : List ℕ) :\n    actualPrimeLabelBlocksWord (actualPrimeFineLabelBlocksOfWord input) = input"
+    },
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_positive",
+      "kind": "theorem",
+      "line": 57,
+      "complete_signature": "theorem actualPrimeFineLabelBlocksOfWord_positive (input : List ℕ) :\n    ∀ b ∈ actualPrimeFineLabelBlocksOfWord input, 0 < b.2"
+    },
+    {
+      "name": "actualPrimeLabelBlocksWord_label_mem",
+      "kind": "theorem",
+      "line": 80,
+      "complete_signature": "theorem actualPrimeLabelBlocksWord_label_mem (blocks : List (ℕ × ℕ))\n    (hpositive : ∀ b ∈ blocks, 0 < b.2) (b : ℕ × ℕ) (hb : b ∈ blocks) :\n    b.1 ∈ actualPrimeLabelBlocksWord blocks"
+    },
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_order",
+      "kind": "theorem",
+      "line": 88,
+      "complete_signature": "theorem actualPrimeFineLabelBlocksOfWord_order (input : List ℕ)\n    (horder : input.Pairwise (· ≥ ·)) :\n    (actualPrimeFineLabelBlocksOfWord input).Pairwise (fun b c => c.1 < b.1)"
+    },
+    {
+      "name": "actualPrimeLabelBlocksWord_count",
+      "kind": "theorem",
+      "line": 123,
+      "complete_signature": "theorem actualPrimeLabelBlocksWord_count (blocks : List (ℕ × ℕ))\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    ∀ b ∈ blocks, (actualPrimeLabelBlocksWord blocks).count b.1 = b.2"
+    },
+    {
+      "name": "actualPrimeLabelBlocksFactorial_eq_wordCounts",
+      "kind": "theorem",
+      "line": 143,
+      "complete_signature": "theorem actualPrimeLabelBlocksFactorial_eq_wordCounts (blocks : List (ℕ × ℕ))\n    (hpositive : ∀ b ∈ blocks, 0 < b.2)\n    (hlabels : blocks.Pairwise (fun b c => b.1 ≠ c.1)) :\n    actualPrimeLabelBlocksFactorial blocks =\n      ∏ i ∈ (actualPrimeLabelBlocksWord blocks).toFinset,\n        ((actualPrimeLabelBlocksWord blocks).count i).factorial"
+    },
+    {
+      "name": "actualPrimeFineWordMultiplicity",
+      "kind": "def",
+      "line": 178,
+      "complete_signature": "def actualPrimeFineWordMultiplicity (input : List ℕ) : ℕ",
+      "complete_definition": "def actualPrimeFineWordMultiplicity (input : List ℕ) : ℕ :=\n  ∏ i ∈ input.toFinset, (input.count i).factorial"
+    },
+    {
+      "name": "actualPrimeFineLabelBlocksOfWord_factorial",
+      "kind": "theorem",
+      "line": 181,
+      "complete_signature": "theorem actualPrimeFineLabelBlocksOfWord_factorial (input : List ℕ)\n    (horder : input.Pairwise (· ≥ ·)) :\n    actualPrimeLabelBlocksFactorial (actualPrimeFineLabelBlocksOfWord input) =\n      actualPrimeFineWordMultiplicity input"
+    },
+    {
+      "name": "actualPrimeFineWord_literal_multiplicity",
+      "kind": "theorem",
+      "line": 193,
+      "complete_signature": "theorem actualPrimeFineWord_literal_multiplicity {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (input : List ℕ) (horder : input.Pairwise (· ≥ ·)) (n : ℕ) :\n    (if Squarefree n then (actualPrimeTupleCoefficient\n        (actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input) n : ℝ) else 0) =\n      (actualPrimeFineWordMultiplicity input : ℝ) *\n        (if n ∈ ((actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input).filter\n          List.SortedGT).image List.prod then 1 else 0)"
+    },
+    {
+      "name": "actualPrimeFineWord_original_scalar",
+      "kind": "theorem",
+      "line": 207,
+      "complete_signature": "theorem actualPrimeFineWord_original_scalar {N : ℕ} (hN : 1 ≤ N)\n    {τ : ℝ} (hτ : 0 ≤ τ) (input : List ℕ) (horder : input.Pairwise (· ≥ ·))\n    (r : ℕ) (c : ℝ) (H : ℕ → ℝ) :\n    (c / (actualPrimeFineWordMultiplicity input : ℝ)) *\n        (∑ ps ∈ actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input,\n          (ArithmeticFunction.moebius (r * ps.prod) : ℝ) * H ps.prod) =\n      c * ∑ n ∈ ((actualPrimeSlotBox (actualPrimeFineLabelFinset N τ) input).filter\n        List.SortedGT).image List.prod,\n        (ArithmeticFunction.moebius (r * n) : ℝ) * H n"
+    }
+  ],
+  "theorem_count": 9,
+  "definition_count": 2,
+  "source_lines": 224,
+  "direct_project_imports": [
+    "ImbalancedChen.ActualPrimeFineLabelSortedSelector"
+  ],
+  "new_direct_foreign_imports": [],
+  "relative_scope": "Only new self over exact2f6 source-parent union plus implicit Init. No full imported closure or full properDAG replay claimed.",
+  "frozen_source_chain_bindings": {
+    "ActualPrimeMultiLabelNormalization": {
+      "source_sha256": "14a4404a11f1e3b915c54d5aebbda6e22e2c2919e5931943b1ac8eb11d4c770f",
+      "unchanged_frozen_source_candidate": true,
+      "acceptance": "not inferred owned"
+    },
+    "ActualPrimeDisjointLabelProducts": {
+      "source_sha256": "30c9cc4ae1f639481f981b73f9b910d0d09edfd45d5c020cb55fa10c808e2906",
+      "unchanged_frozen_source_candidate": true,
+      "acceptance": "not inferred owned"
+    },
+    "ActualPrimeFineLabelSortedSelector": {
+      "source_sha256": "2f6ef63e58b72f090d8d2a8ddc96aaaa19571ab1bcf49c860ef37c3f9d391cab",
+      "unchanged_frozen_source_candidate": true,
+      "acceptance": "not inferred owned"
+    }
+  },
+  "mathematical_audit": [
+    "Run-length blocks are computed by structural recursion on the original list, coalescing its next equal head label. No caller block decomposition, core action, fibre identity or distribution licence is supplied.",
+    "Word(blocksOfWord J)=J for every original word J, with each computed block multiplicity positive.",
+    "If original J is weakly decreasing, computed block labels are strictly decreasing. This pays the2f6 sorting-order requirement from the original weak order, not a new independent assignment assumption.",
+    "For pairwise distinct block labels, occurrence count of each block label in its expanded word is exactly its block multiplicity, proved by count_append and absence from all other blocks.",
+    "The product of block multiplicity factorials is exactly product over the original word label-set of factorial(J.count label). Positivity proves the label-set equality; pairwise distinctness makes the label list Nodup, allowing the exact List.prod_toFinset identity.",
+    "The actual original-word squarefree tuple coefficient equals literal M_J times its actual sorted squarefree product indicator. The original tuple carrier uses the same-N prime exclusions and original half-open power intervals.",
+    "The original c/M_J times complete Cartesian tuple mu(r*fullproduct)H(fullproduct) equals c times the actual sorted squarefree product sum. No diagonal, arithmetic wall, sign, occurrence factorial, or original scalar is dropped."
+  ],
+  "fixed_API_checks": [
+    {
+      "path": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/List/Basic.lean",
+      "lines": "706-711,1407",
+      "API": "replicate_succ is rfl, so reconstruction change targets reduce definitionally; Nodup is Pairwise not-equal"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/List/Count.lean",
+      "sha256": "434faadcbbc425cba5b93d1d5547ec060eece7826afc1d20b1f73e67d357ee1a",
+      "lines": "312-313,348-355,365-371",
+      "API": "count_append, count_eq_zero and count_replicate_self match the exact count proof"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/List/Pairwise.lean",
+      "sha256": "0dbf6798e805477e651b1ff6fe472f5fb14beb37d6883167d36a81cba9c122ed",
+      "lines": "114-118",
+      "API": "pairwise_map gives Nodup of distinct block labels"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/lean-4.33.0-rc1-linux/src/lean/Init/Data/List/Lemmas.lean",
+      "sha256": "0724ebc7c72c87ad6d480dba407c43cc60393e7a0facfbaa6670045f66f636ac",
+      "lines": "1164-1165",
+      "API": "map_congr_left takes pointwise equality on actual list membership"
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/Algebra/BigOperators/Group/Finset/Basic.lean",
+      "sha256": "1305c143ee5528281992dc083faa3c881c2e7c0f3d09b127de4f58987182d1f2",
+      "lines": "1054-1059",
+      "API": "List.prod_toFinset f hnodup has exact needed product equality orientation"
+    }
+  ],
+  "manuscript_reference": {
+    "repository": "../chen-imbalanced-semiprimes",
+    "commit": "ba6ec11d800eccc54406490631895e174de85766",
+    "path": "proof-library/source/imbalanced-chen-transfer.tex",
+    "lines": "1086-1118",
+    "scope": "Literal M_J=product over labels present of occurrence-count factorial, original sorted squarefree A_J, original scalar and mu retained exactly once."
+  },
+  "remaining_gates": [
+    "Actual strict proof/API compilation and imported owned acceptance of this new chain; every current result remains source candidate until runtime receipts.",
+    "Connect the actual retained original J family and its computed same-policy whole-box slot assignment to these scalar identities, then compose the existing three-group normalization without double factorial restoration.",
+    "Only H of full product is transported; no claim for arbitrary coordinate-dependent tuple weight.",
+    "No arithmetic distribution error, signed mean, harmonic-density identity, numerical estimate, or final Chen constant is proved here."
+  ],
+  "pins": {
+    "lake-manifest.json": {
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "bytes_equal_HEAD": true
+    },
+    "lean-toolchain": {
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "bytes_equal_HEAD": true
+    },
+    "lakefile.toml": {
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "bytes_equal_HEAD": true
+    }
+  },
+  "public_names": "All11 public names scanned against other current project sources; no duplicates.",
+  "lean_invoked": false,
+  "build_invoked": false,
+  "frozen_source_modified": false,
+  "checker_or_pins_modified": false,
+  "candidate_freeze": "9f8128f0c717b6748908d2f9f3fb67159ca9346d5a1477267065f62365118c74; no edits without independent finding or actual diagnostic."
+}

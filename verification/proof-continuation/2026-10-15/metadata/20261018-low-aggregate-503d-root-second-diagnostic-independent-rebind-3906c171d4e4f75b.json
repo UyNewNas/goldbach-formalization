@@ -1,0 +1,119 @@
+{
+  "status": "ROOT_NONAUTHOR_ACTUAL_SECOND_FULL_DIAGNOSTIC_SINGLE_SEQUENCE_STYLE_REBIND",
+  "created_utc": "2026-10-18T04:10:07.789667+00:00",
+  "module": "ImbalancedChen.Part3SharedFirstFactorLowConductorAggregate",
+  "source_sha256": "503dc1699ee91b0a3d4d8dcb8b0a7287ca066fa72d5666ebdd52800703846fc8",
+  "source_lines": 745,
+  "owner_sha256": "8d770035d116430be077cdfdc0a7820e35314ebcca8dc5a6e9985d4dddff3dda",
+  "complete_headers": [
+    {
+      "kind": "def",
+      "name": "MediumAtom.sharedFirstFactorLowConductorZero",
+      "header": "def MediumAtom.sharedFirstFactorLowConductorZero (d : MediumAtom) (R : ℝ) : ℂ"
+    },
+    {
+      "kind": "def",
+      "name": "divisorTau",
+      "header": "private def divisorTau (n : ℕ) : ℝ"
+    },
+    {
+      "kind": "theorem",
+      "name": "divisorTau_nonneg",
+      "header": "private theorem divisorTau_nonneg (n : ℕ) : 0 ≤ divisorTau n"
+    },
+    {
+      "kind": "theorem",
+      "name": "divisors_mul_eq",
+      "header": "private theorem divisors_mul_eq (a b : ℕ) :\n    (a * b).divisors = a.divisors * b.divisors"
+    },
+    {
+      "kind": "theorem",
+      "name": "divisorTau_mul_le",
+      "header": "private theorem divisorTau_mul_le (a b : ℕ) :\n    divisorTau (a * b) ≤ divisorTau a * divisorTau b"
+    },
+    {
+      "kind": "theorem",
+      "name": "divisorTau_le_of_dvd",
+      "header": "private theorem divisorTau_le_of_dvd {a b : ℕ} (hb : b ≠ 0) (hab : a ∣ b) :\n    divisorTau a ≤ divisorTau b"
+    },
+    {
+      "kind": "theorem",
+      "name": "divisorTau_pow_le",
+      "header": "private theorem divisorTau_pow_le (r : ℕ) {n : ℕ} (hn : n ≠ 0) :\n    divisorTau n ^ r ≤ (fouvryTau (2 ^ r) n : ℝ)"
+    },
+    {
+      "kind": "theorem",
+      "name": "factor_bounds",
+      "header": "private theorem factor_bounds {Q : ℝ} (hQ : 1 ≤ Q) {n : ℕ}\n    (hn : n ∈ factorCarrier Q) :\n    0 < n ∧ Q ≤ (n : ℝ) ∧ (n : ℝ) ≤ 2 * Q"
+    },
+    {
+      "kind": "theorem",
+      "name": "factor_subset_Ioc",
+      "header": "private theorem factor_subset_Ioc {Q : ℝ} (hQ : 1 ≤ Q) :\n    factorCarrier Q ⊆ Finset.Ioc 0 (Nat.floor (2 * Q))"
+    },
+    {
+      "kind": "theorem",
+      "name": "dyadic_divisor_harmonic",
+      "header": "private theorem dyadic_divisor_harmonic {Q : ℝ} (hQ : 1 ≤ Q) (r : ℕ) :\n    (∑ n ∈ factorCarrier Q, divisorTau n ^ r / (n : ℝ)) ≤\n      (1 + Real.log (2 * Q)) ^ (2 ^ r)"
+    },
+    {
+      "kind": "theorem",
+      "name": "primitive_p_reciprocal_square",
+      "header": "private theorem primitive_p_reciprocal_square (d : MediumAtom)\n    (hQ : 1 ≤ d.Q1) (r : ℕ) :\n    (∑ p ∈ d.primitiveFirstFactorCarrier, divisorTau p ^ r / (p : ℝ) ^ 2) ≤\n      (1 + Real.log (2 * d.Q1)) ^ (2 ^ r) / d.Q1"
+    },
+    {
+      "kind": "theorem",
+      "name": "two_label_harmonic",
+      "header": "private theorem two_label_harmonic {Q2 Q3 : ℝ}\n    (hQ2 : 1 ≤ Q2) (hQ3 : 1 ≤ Q3) (r : ℕ) :\n    (∑ u ∈ factorCarrier Q2 ×ˢ factorCarrier Q3,\n      divisorTau (u.1 * u.2) ^ r / ((u.1 * u.2 : ℕ) : ℝ)) ≤\n      (1 + Real.log (2 * Q2)) ^ (2 ^ r) *\n        (1 + Real.log (2 * Q3)) ^ (2 ^ r)"
+    },
+    {
+      "kind": "theorem",
+      "name": "card_low_conductor_le",
+      "header": "private theorem card_low_conductor_le {delta r : ℕ} (hdelta : 0 < delta) :\n    ((Finset.univ : Finset (DirichletCharacter ℂ delta)).filter\n      (fun chi => chi.conductor ≤ r)).card ≤ r * r"
+    },
+    {
+      "kind": "theorem",
+      "name": "card_low_conductor_real_le",
+      "header": "private theorem card_low_conductor_real_le {delta : ℕ} (hdelta : 0 < delta)\n    {R : ℝ} (hR : 1 ≤ R) :\n    ((((Finset.univ : Finset (DirichletCharacter ℂ delta)).erase 1).filter\n      (fun chi => (chi.conductor : ℝ) ≤ R)).card : ℝ) ≤ R ^ 2"
+    },
+    {
+      "kind": "theorem",
+      "name": "physical_divisor_weight",
+      "header": "private theorem physical_divisor_weight (C0 : ℕ) {p v1 v2 : ℕ}\n    (hp : 0 < p) (hv1 : 0 < v1) (hv2 : 0 < v2) :\n    (divisorTau (p * v1) ^ C0 * divisorTau (p * v2) ^ C0) /\n        ((p : ℝ) * (v1.lcm v2 : ℝ) * ((p * v1.gcd v2).totient : ℝ)) ≤\n      (divisorTau p ^ (2 * C0 + 1) / (p : ℝ) ^ 2) *\n        (divisorTau v1 ^ (C0 + 1) / (v1 : ℝ)) *\n        (divisorTau v2 ^ C0 / (v2 : ℝ))"
+    },
+    {
+      "kind": "theorem",
+      "name": "low_character_pair_bound",
+      "header": "private theorem low_character_pair_bound (d : MediumAtom) (C0 : ℕ)\n    {E R : ℝ} (hE : 0 ≤ E) (hR : 1 ≤ R) (hU : 0 ≤ d.U)\n    (hpoint : ∀ k delta : ℕ, 1 ≤ k → 1 ≤ delta →\n      ∀ chi : DirichletCharacter ℂ delta, chi ≠ 1 → (chi.conductor : ℝ) ≤ R →\n        ‖auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi‖ ≤\n          E * d.U * divisorTau (k * delta) ^ C0)\n    {p v1 v2 : ℕ} (hp : 0 < p) (hv1 : 0 < v1) (hv2 : 0 < v2) :\n    ‖∑ chi ∈ ((Finset.univ : Finset\n        (DirichletCharacter ℂ (p * v1.gcd v2))).erase 1).filter\n          (fun chi => (chi.conductor : ℝ) ≤ R),\n      auxiliaryCharacterSum d.alphaCarrier d.alpha (v1 / v1.gcd v2)\n          (p * v1.gcd v2) chi *\n        star (auxiliaryCharacterSum d.alphaCarrier d.alpha (v2 / v1.gcd v2)\n          (p * v1.gcd v2) chi)‖ ≤\n      R ^ 2 * (E * d.U) ^ 2 * divisorTau (p * v1) ^ C0 *\n        divisorTau (p * v2) ^ C0"
+    },
+    {
+      "kind": "theorem",
+      "name": "finite_low_zero_bound",
+      "header": "private theorem finite_low_zero_bound\n    {B C0 : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) {E R : ℝ}\n    (hE : 0 ≤ E) (hR : 1 ≤ R)\n    (hpoint : ∀ k delta : ℕ, 1 ≤ k → 1 ≤ delta →\n      ∀ chi : DirichletCharacter ℂ delta, chi ≠ 1 → (chi.conductor : ℝ) ≤ R →\n        ‖auxiliaryCharacterSum d.alphaCarrier d.alpha k delta chi‖ ≤\n          E * d.U * divisorTau (k * delta) ^ C0) :\n    ‖d.sharedFirstFactorLowConductorZero R‖ ≤\n      |CommonSmoothCutoff.cutoffMass| * d.V * (E * d.U) ^ 2 * R ^ 2 *\n        ((1 + Real.log (2 * d.Q1)) ^ (2 ^ (2 * C0 + 1)) / d.Q1) *\n        ((1 + Real.log (2 * d.Q2)) ^ (2 ^ (C0 + 1)) *\n          (1 + Real.log (2 * d.Q3)) ^ (2 ^ (C0 + 1))) *\n        ((1 + Real.log (2 * d.Q2)) ^ (2 ^ C0) *\n          (1 + Real.log (2 * d.Q3)) ^ (2 ^ C0))"
+    },
+    {
+      "kind": "theorem",
+      "name": "admissible_factor_scale_bounds",
+      "header": "private theorem admissible_factor_scale_bounds\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.Q1 ≤ d.scale ∧ d.Q2 ≤ d.scale ∧ d.Q3 ≤ d.scale"
+    },
+    {
+      "kind": "theorem",
+      "name": "harmonic_envelope_log_bound",
+      "header": "private theorem harmonic_envelope_log_bound {X Q : ℝ}\n    (hX : 0 < X) (hlog : 1 ≤ Real.log X) (hQ : 1 ≤ Q) (hQX : Q ≤ X) :\n    1 + Real.log (2 * Q) ≤ 3 * Real.log X"
+    },
+    {
+      "kind": "theorem",
+      "name": "divisor_moment_log_payment",
+      "header": "private theorem divisor_moment_log_payment {X Q1 Q2 Q3 : ℝ}\n    (hX : 0 < X) (hlog : 1 ≤ Real.log X)\n    (hQ1 : 1 ≤ Q1) (hQ2 : 1 ≤ Q2) (hQ3 : 1 ≤ Q3)\n    (hQ1X : Q1 ≤ X) (hQ2X : Q2 ≤ X) (hQ3X : Q3 ≤ X)\n    (a b c : ℕ) :\n    ((1 + Real.log (2 * Q1)) ^ a / Q1) *\n        ((1 + Real.log (2 * Q2)) ^ b * (1 + Real.log (2 * Q3)) ^ b) *\n        ((1 + Real.log (2 * Q2)) ^ c * (1 + Real.log (2 * Q3)) ^ c) ≤\n      3 ^ (a + 2 * (b + c)) * (Real.log X) ^ (a + 2 * (b + c)) / Q1"
+    },
+    {
+      "kind": "theorem",
+      "name": "uniformAuxiliarySW_sharedFirstFactorLowConductorZero",
+      "header": "theorem uniformAuxiliarySW_sharedFirstFactorLowConductorZero\n    {ι : Type*} (F : ι → MediumAtom) (B C0 : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) (hsigma_small : sigma < 1 / 100)\n    (hadmissible : ∀ i, MediumAdmissible B sigma kappa c0 (F i))\n    (hSW : UniformAuxiliarySW F C0) :\n    ∀ A L : ℝ, 0 < A → 0 ≤ L →\n      ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧\n        ∀ i : ι, x0 ≤ (F i).scale →\n          ‖(F i).sharedFirstFactorLowConductorZero\n              ((Real.log (F i).scale) ^ L)‖ ≤\n            C * (F i).V * (F i).U ^ 2 /\n              ((F i).Q1 * (Real.log (F i).scale) ^ A)"
+    }
+  ],
+  "read_scope": "Root completeprevious732andall6proofpatches to744accounted; now exactsingleliteralrw-sequencepatch displayed/read and actualcomplete3line040611stdout read. Independentlyreversecurrent745->exactold3ad744hashthenforwardbyteequality; all21headers2defs/import/math unchanged.",
+  "assessment": "The actual strict-linter requestsordinary sequentialrwthenring instead of all-goals sequence. Same rpow denominator identity, nooptionrelaxationorstatementchange.",
+  "runtime_gate": "Original6831 sameFULLfairserial6144strict503d theniffPASScompleteowned afterfreshLow5dfactualowned/propercacheexact/0foreignmissing. Preserve3ad/213bFAILED, no prefixowned/count, noaddedchain/foreign/bootstrap/resources/checker/pins/CI change.",
+  "not_acceptance": true
+}

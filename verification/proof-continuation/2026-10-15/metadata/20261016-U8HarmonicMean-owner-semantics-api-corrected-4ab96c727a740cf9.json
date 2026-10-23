@@ -1,0 +1,297 @@
+{
+  "status": "SOURCE_ONLY_AUTHOR_REVIEW_PENDING_NONAUTHOR_AND_RUNTIME_GATES",
+  "author": "/root/lower_resume",
+  "created_utc": "2026-10-15T23:48:09.614614+00:00",
+  "module": "ImbalancedChen.CurrentChenUpsilon8HarmonicMean",
+  "source_sha256": "1a8603ea81187b6b84202cc0dbdb1e5ab69a9ebb5e2aaf94aafe7c1c975d4394",
+  "no_Lean_or_build_invoked": true,
+  "no_kernel_owned_or_cache_acceptance_claimed": true,
+  "bytecode_writes_disabled": true,
+  "full_source": "import ImbalancedChen.CurrentChenUpsilon8TrueLiMass\nimport ImbalancedChen.CurrentChenUpsilon9HarmonicMean\n\n/-!\n# The literal eighth logarithmic reciprocal-totient mass\n\nThe actual eighth selector is exactly the mixed affine region\nx0 < 1/3, 1/3 <= x1, x0 + 2*x1 < 1 in the original cube [417/5000,1/2).\nIts weak second-prime wall is retained in every arithmetic sum. The\nalready proved affine sandwich supplies the actual prime-test limit.\n\nThe eighth logarithmic gap is at least 1/3. A continuous extension with\nthat cutoff agrees pointwise with the unmodified kernel on the actual\nregion. The limit below is the literal two-dimensional integral of that\nunmodified kernel; no numerical enclosure or ordinary count mean is an\ninput or a conclusion of this leaf.\n-/\n\nnamespace ImbalancedChen\n\nnoncomputable section\n\nopen Filter Topology MeasureTheory Set\nopen scoped BigOperators\nopen Classical\n\ndef currentChenUpsilon8HarmonicRegion : Set (Fin 2 → ℝ) :=\n  {x | x 0 < 1 / 3 ∧ 1 / 3 ≤ x 1 ∧ x 0 + 2 * x 1 < 1}\n\ndef currentChenUpsilon8HarmonicBounds : Fin 3 → ℝ := ![1 / 3, -(1 / 3), 1]\n\ntheorem measurableSet_currentChenUpsilon8HarmonicRegion :\n    MeasurableSet currentChenUpsilon8HarmonicRegion := by\n  exact (measurableSet_lt (continuous_apply 0).measurable measurable_const).inter\n    ((measurableSet_le measurable_const (continuous_apply 1).measurable).inter\n      (measurableSet_lt\n        ((continuous_apply 0).add (continuous_const.mul (continuous_apply 1))).measurable\n        measurable_const))\n\nprivate theorem currentChenUpsilon8HarmonicRegion_sandwich :\n    primeAffineGateRegion currentChenUpsilon9HarmonicForms\n        currentChenUpsilon8HarmonicBounds ⊆ currentChenUpsilon8HarmonicRegion ∧\n      ∀ x ∈ currentChenUpsilon8HarmonicRegion, ∀ j,\n        currentChenUpsilon9HarmonicForms j x ≤ currentChenUpsilon8HarmonicBounds j := by\n  constructor\n  · intro x hx\n    have h0 := hx (0 : Fin 3)\n    have h1 := hx (1 : Fin 3)\n    have h2 := hx (2 : Fin 3)\n    change x 0 < 1 / 3 at h0\n    change -x 1 < -(1 / 3 : ℝ) at h1\n    change x 0 + 2 * x 1 < 1 at h2\n    exact ⟨h0, by linarith only [h1], h2⟩\n  · intro x hx j\n    change x 0 < 1 / 3 ∧ 1 / 3 ≤ x 1 ∧ x 0 + 2 * x 1 < 1 at hx\n    fin_cases j\n    · change x 0 ≤ 1 / 3\n      exact hx.1.le\n    · change -x 1 ≤ -(1 / 3 : ℝ)\n      linarith only [hx.2.1]\n    · change x 0 + 2 * x 1 ≤ 1\n      exact hx.2.2.le\n\n/-- A continuous ambient extension using the actual eighth gap bound. -/\ndef currentChenUpsilon8HarmonicKernel (x : Fin 2 → ℝ) : ℝ :=\n  1 / max (1 / 3 : ℝ) (1 - x 0 - x 1)\n\ntheorem continuous_currentChenUpsilon8HarmonicKernel :\n    Continuous currentChenUpsilon8HarmonicKernel := by\n  apply continuous_const.div\n    (continuous_const.max ((continuous_const.sub (continuous_apply 0)).sub (continuous_apply 1)))\n  intro x\n  exact ne_of_gt (lt_of_lt_of_le (by norm_num : (0 : ℝ) < 1 / 3) (le_max_left _ _))\n\ntheorem currentChenUpsilon8HarmonicKernel_eq {x : Fin 2 → ℝ}\n    (hx : x ∈ currentChenUpsilon8HarmonicRegion) :\n    currentChenUpsilon8HarmonicKernel x = 1 / (1 - x 0 - x 1) := by\n  unfold currentChenUpsilon8HarmonicKernel\n  change x 0 < 1 / 3 ∧ 1 / 3 ≤ x 1 ∧ x 0 + 2 * x 1 < 1 at hx\n  have hgap : (1 / 3 : ℝ) ≤ 1 - x 0 - x 1 := by\n    linarith only [hx.1, hx.2.2]\n  rw [max_eq_right hgap]\n\nprivate theorem currentChenUpsilon8_log_region_iff {N : ℕ} (hN : 2 ≤ N)\n    (p : Fin 2 → ℕ) (hp : ∀ i, 0 < p i) :\n    actualPrimeTupleLog N p ∈ currentChenUpsilon8HarmonicRegion ↔\n      (p 0 : ℝ) < (N : ℝ) ^ (1 / 3 : ℝ) ∧\n        (N : ℝ) ^ (1 / 3 : ℝ) ≤ (p 1 : ℝ) ∧\n          (p 1 : ℝ) < Real.sqrt ((N : ℝ) / (p 0 : ℝ)) := by\n  have hNr : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)\n  have hNn : 1 < N := by omega\n  have hfirst : actualPrimeTupleLog N p 0 < (1 / 3 : ℝ) ↔\n      (p 0 : ℝ) < (N : ℝ) ^ (1 / 3 : ℝ) := by\n    rw [← Real.rpow_lt_rpow_left_iff hNr, actualPrimeTupleLog_rpow hNn p hp]\n  have hsecond : (1 / 3 : ℝ) ≤ actualPrimeTupleLog N p 1 ↔\n      (N : ℝ) ^ (1 / 3 : ℝ) ≤ (p 1 : ℝ) := by\n    rw [← Real.rpow_le_rpow_left_iff hNr, actualPrimeTupleLog_rpow hNn p hp]\n  have hcap := currentChenUpsilon9_sqrt_log_iff hN (hp 0) (hp 1)\n  change ((actualPrimeTupleLog N p 0 < 1 / 3) ∧\n      1 / 3 ≤ actualPrimeTupleLog N p 1 ∧\n        actualPrimeTupleLog N p 0 + 2 * actualPrimeTupleLog N p 1 < 1) ↔ _\n  exact and_congr hfirst (and_congr hsecond hcap.symm)\n\n/-- Exact dictionary with the original eighth endpoints and target masks. -/\ntheorem currentChenUpsilon8_tuple_mem_iff {N : ℕ} (hN : 2 ≤ N) (p : Fin 2 → ℕ) :\n    (p 0, p 1) ∈ chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n        ((N : ℝ) ^ (1 / 3 : ℝ)) ↔\n      p ∈ (actualPrimeBoxTuples N (fun _ : Fin 2 => (417 / 5000 : ℝ))\n        (fun _ => (1 / 2 : ℝ))).filter\n          (fun p => actualPrimeTupleLog N p ∈ currentChenUpsilon8HarmonicRegion) := by\n  have hNr : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)\n  have hNp : (0 : ℝ) < N := zero_lt_one.trans hNr\n  have hpow : (N : ℝ) ^ (1 / 2 : ℝ) < N := by\n    simpa only [Real.rpow_one] using\n      Real.rpow_lt_rpow_of_exponent_lt hNr (by norm_num : (1 / 2 : ℝ) < 1)\n  constructor\n  · intro ht\n    obtain ⟨hc, hH, hfirst, hsecond, hcap⟩ := Finset.mem_filter.mp ht\n    obtain ⟨hc0, hc1⟩ := Finset.mem_product.mp hc\n    have hp0 := mem_chenAdditivePrimeCarrier.mp hc0\n    have hp1 := mem_chenAdditivePrimeCarrier.mp hc1\n    have hpos : ∀ i, 0 < p i := by\n      intro i\n      fin_cases i\n      · exact hp0.2.1.pos\n      · exact hp1.2.1.pos\n    have hp0One : (1 : ℝ) ≤ p 0 := by exact_mod_cast hp0.2.1.one_le\n    have hupper0 : (p 0 : ℝ) < (N : ℝ) ^ (1 / 2 : ℝ) :=\n      hfirst.trans_le (Real.rpow_le_rpow_of_exponent_le hNr.le (by norm_num))\n    have hupper1 : (p 1 : ℝ) < (N : ℝ) ^ (1 / 2 : ℝ) := by\n      calc\n        _ < Real.sqrt ((N : ℝ) / (p 0 : ℝ)) := hcap\n        _ ≤ Real.sqrt (N : ℝ) := Real.sqrt_le_sqrt (div_le_self hNp.le hp0One)\n        _ = _ := Real.sqrt_eq_rpow _\n    refine Finset.mem_filter.mpr ⟨mem_actualPrimeBoxTuples_iff.mpr ?_,\n      (currentChenUpsilon8_log_region_iff hN p hpos).mpr ⟨hfirst, hsecond, hcap⟩⟩\n    intro i\n    fin_cases i\n    · exact ⟨hp0.2.1, hp0.2.1.coprime_iff_not_dvd.mp hp0.2.2, hH, hupper0⟩\n    · exact ⟨hp1.2.1, hp1.2.1.coprime_iff_not_dvd.mp hp1.2.2,\n        (Real.rpow_le_rpow_of_exponent_le hNr.le (by norm_num)).trans hsecond, hupper1⟩\n  · intro hp\n    obtain ⟨hbox, hregion⟩ := Finset.mem_filter.mp hp\n    have hi := mem_actualPrimeBoxTuples_iff.mp hbox\n    have hpos := fun i => (hi i).1.pos\n    obtain ⟨hfirst, hsecond, hcap⟩ :=\n      (currentChenUpsilon8_log_region_iff hN p hpos).mp hregion\n    have hcarrier (i : Fin 2) : p i ∈ chenAdditivePrimeCarrier N := by\n      apply mem_chenAdditivePrimeCarrier.mpr\n      refine ⟨?_, (hi i).1, (hi i).1.coprime_iff_not_dvd.mpr (hi i).2.1⟩\n      exact_mod_cast (hi i).2.2.2.trans hpow\n    exact Finset.mem_filter.mpr\n      ⟨Finset.mem_product.mpr ⟨hcarrier 0, hcarrier 1⟩, (hi 0).2.2.1,\n        hfirst, hsecond, hcap⟩\n\n/-- Actual prime-factor separation and product injectivity pay the exact\nreciprocal-totient test transport before any limit is used. -/\ntheorem currentChenUpsilon8LogTotientMass_eq_actualPrimeBox {N : ℕ} (hN : 2 ≤ N) :\n    currentChenUpsilon8LogTotientMass N =\n      actualPrimeBoxTestSum N (fun _ : Fin 2 => (417 / 5000 : ℝ)) (fun _ => (1 / 2 : ℝ))\n        (currentChenUpsilon8HarmonicRegion.indicator currentChenUpsilon8HarmonicKernel) := by\n  let T := (actualPrimeBoxTuples N (fun _ : Fin 2 => (417 / 5000 : ℝ))\n    (fun _ => (1 / 2 : ℝ))).filter\n      (fun p => actualPrimeTupleLog N p ∈ currentChenUpsilon8HarmonicRegion)\n  unfold currentChenUpsilon8LogTotientMass currentChenUpsilon8PrefixProducts\n  rw [Finset.sum_image (chenY8PrimeSelector_multiplier_injOn N _ _)]\n  calc\n    _ = ∑ p ∈ T, (∏ i, 1 / ((p i : ℝ) - 1)) *\n        currentChenUpsilon8HarmonicKernel (actualPrimeTupleLog N p) := by\n      refine Finset.sum_bij (fun t _ => ![t.1, t.2]) ?_ ?_ ?_ ?_\n      · intro t ht\n        exact (currentChenUpsilon8_tuple_mem_iff hN ![t.1, t.2]).mp ht\n      · intro t _ u _ htu\n        apply Prod.ext\n        · simpa using congrFun htu 0\n        · simpa using congrFun htu 1\n      · intro p hp\n        refine ⟨(p 0, p 1), (currentChenUpsilon8_tuple_mem_iff hN p).mpr hp, ?_⟩\n        funext i\n        fin_cases i <;> rfl\n      · intro t ht\n        have ht9 : t ∈ chenY9PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n            ((N : ℝ) ^ (1 / 3 : ℝ)) := ht\n        obtain ⟨hp, hq, horder⟩ := chenY9PrimeSelector_ordered_prime_data ht9\n        have hregion := (Finset.mem_filter.mp\n          ((currentChenUpsilon8_tuple_mem_iff hN ![t.1, t.2]).mp ht)).2\n        rw [currentChenUpsilon8HarmonicKernel_eq hregion,\n          chen_prime_pair_totient_cast hp hq horder.ne,\n          Nat.cast_mul, Real.log_mul (by exact_mod_cast hp.ne_zero) (by exact_mod_cast hq.ne_zero)]\n        simp only [actualPrimeTupleLog, Fin.prod_univ_two, Matrix.cons_val_zero,\n          Matrix.cons_val_one, div_eq_mul_inv, mul_inv_rev, one_mul]\n        ring\n    _ = _ := by\n      unfold T actualPrimeBoxTestSum\n      rw [Finset.sum_filter]\n      apply Finset.sum_congr rfl\n      intro p _\n      by_cases hr : actualPrimeTupleLog N p ∈ currentChenUpsilon8HarmonicRegion\n      · rw [if_pos hr, Set.indicator_of_mem hr]\n      · rw [if_neg hr, Set.indicator_of_notMem hr, mul_zero]\n\n/-- The true eighth two-dimensional integral with its unmodified kernel. -/\ndef currentChenUpsilon8HarmonicIntegral : ℝ :=\n  ∫ x in logPrimeBox (fun _ : Fin 2 => (417 / 5000 : ℝ)) (fun _ => (1 / 2 : ℝ)) ∩\n      currentChenUpsilon8HarmonicRegion,\n    (1 / (1 - x 0 - x 1)) * ∏ i, 1 / x i\n\ntheorem tendsto_currentChenUpsilon8LogTotientMass :\n    Tendsto currentChenUpsilon8LogTotientMass atTop (𝓝 currentChenUpsilon8HarmonicIntegral) := by\n  have hlim := tendsto_actualPrimeBoxTestSum_cube_affineSandwich\n    (by norm_num : (0 : ℝ) < 417 / 5000) (by norm_num : (417 / 5000 : ℝ) < 1 / 2)\n    currentChenUpsilon9HarmonicForms currentChenUpsilon8HarmonicBounds\n    currentChenUpsilon9HarmonicForms_ne_zero currentChenUpsilon8HarmonicRegion\n    measurableSet_currentChenUpsilon8HarmonicRegion currentChenUpsilon8HarmonicRegion_sandwich.1\n    currentChenUpsilon8HarmonicRegion_sandwich.2 currentChenUpsilon8HarmonicKernel\n    continuous_currentChenUpsilon8HarmonicKernel.continuousOn\n  have hJ : (∫ x in logPrimeBox (fun _ : Fin 2 => (417 / 5000 : ℝ))\n        (fun _ => (1 / 2 : ℝ)) ∩ currentChenUpsilon8HarmonicRegion,\n      currentChenUpsilon8HarmonicKernel x * ∏ i, 1 / x i) =\n        currentChenUpsilon8HarmonicIntegral := by\n    unfold currentChenUpsilon8HarmonicIntegral\n    apply setIntegral_congr_fun\n      ((measurableSet_logPrimeBox _ _).inter measurableSet_currentChenUpsilon8HarmonicRegion)\n    intro x hx\n    rw [currentChenUpsilon8HarmonicKernel_eq hx.2]\n  rw [hJ] at hlim\n  apply hlim.congr'\n  filter_upwards [eventually_ge_atTop (2 : ℕ)] with N hN\n  exact (currentChenUpsilon8LogTotientMass_eq_actualPrimeBox hN).symm\n\nend\n\nend ImbalancedChen\n",
+  "complete_declarations": [
+    {
+      "name": "currentChenUpsilon8HarmonicRegion",
+      "kind": "def",
+      "private": false,
+      "start_line": 27,
+      "complete_source_header": "def currentChenUpsilon8HarmonicRegion : Set (Fin 2 → ℝ)",
+      "complete_definition": "def currentChenUpsilon8HarmonicRegion : Set (Fin 2 → ℝ) :=\n{x | x 0 < 1 / 3 ∧ 1 / 3 ≤ x 1 ∧ x 0 + 2 * x 1 < 1}"
+    },
+    {
+      "name": "currentChenUpsilon8HarmonicBounds",
+      "kind": "def",
+      "private": false,
+      "start_line": 30,
+      "complete_source_header": "def currentChenUpsilon8HarmonicBounds : Fin 3 → ℝ",
+      "complete_definition": "def currentChenUpsilon8HarmonicBounds : Fin 3 → ℝ :=\n![1 / 3, -(1 / 3), 1]"
+    },
+    {
+      "name": "measurableSet_currentChenUpsilon8HarmonicRegion",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 32,
+      "complete_source_header": "theorem measurableSet_currentChenUpsilon8HarmonicRegion :\n    MeasurableSet currentChenUpsilon8HarmonicRegion",
+      "complete_proof_body_after_by": "exact (measurableSet_lt (continuous_apply 0).measurable measurable_const).inter\n    ((measurableSet_le measurable_const (continuous_apply 1).measurable).inter\n      (measurableSet_lt\n        ((continuous_apply 0).add (continuous_const.mul (continuous_apply 1))).measurable\n        measurable_const))"
+    },
+    {
+      "name": "currentChenUpsilon8HarmonicRegion_sandwich",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 40,
+      "complete_source_header": "private theorem currentChenUpsilon8HarmonicRegion_sandwich :\n    primeAffineGateRegion currentChenUpsilon9HarmonicForms\n        currentChenUpsilon8HarmonicBounds ⊆ currentChenUpsilon8HarmonicRegion ∧\n      ∀ x ∈ currentChenUpsilon8HarmonicRegion, ∀ j,\n        currentChenUpsilon9HarmonicForms j x ≤ currentChenUpsilon8HarmonicBounds j",
+      "complete_proof_body_after_by": "constructor\n  · intro x hx\n    have h0 := hx (0 : Fin 3)\n    have h1 := hx (1 : Fin 3)\n    have h2 := hx (2 : Fin 3)\n    change x 0 < 1 / 3 at h0\n    change -x 1 < -(1 / 3 : ℝ) at h1\n    change x 0 + 2 * x 1 < 1 at h2\n    exact ⟨h0, by linarith only [h1], h2⟩\n  · intro x hx j\n    change x 0 < 1 / 3 ∧ 1 / 3 ≤ x 1 ∧ x 0 + 2 * x 1 < 1 at hx\n    fin_cases j\n    · change x 0 ≤ 1 / 3\n      exact hx.1.le\n    · change -x 1 ≤ -(1 / 3 : ℝ)\n      linarith only [hx.2.1]\n    · change x 0 + 2 * x 1 ≤ 1\n      exact hx.2.2.le"
+    },
+    {
+      "name": "currentChenUpsilon8HarmonicKernel",
+      "kind": "def",
+      "private": false,
+      "start_line": 65,
+      "complete_source_header": "def currentChenUpsilon8HarmonicKernel (x : Fin 2 → ℝ) : ℝ",
+      "complete_definition": "def currentChenUpsilon8HarmonicKernel (x : Fin 2 → ℝ) : ℝ :=\n1 / max (1 / 3 : ℝ) (1 - x 0 - x 1)"
+    },
+    {
+      "name": "continuous_currentChenUpsilon8HarmonicKernel",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 68,
+      "complete_source_header": "theorem continuous_currentChenUpsilon8HarmonicKernel :\n    Continuous currentChenUpsilon8HarmonicKernel",
+      "complete_proof_body_after_by": "apply continuous_const.div\n    (continuous_const.max ((continuous_const.sub (continuous_apply 0)).sub (continuous_apply 1)))\n  intro x\n  exact ne_of_gt (lt_of_lt_of_le (by norm_num : (0 : ℝ) < 1 / 3) (le_max_left _ _))"
+    },
+    {
+      "name": "currentChenUpsilon8HarmonicKernel_eq",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 75,
+      "complete_source_header": "theorem currentChenUpsilon8HarmonicKernel_eq {x : Fin 2 → ℝ}\n    (hx : x ∈ currentChenUpsilon8HarmonicRegion) :\n    currentChenUpsilon8HarmonicKernel x = 1 / (1 - x 0 - x 1)",
+      "complete_proof_body_after_by": "unfold currentChenUpsilon8HarmonicKernel\n  change x 0 < 1 / 3 ∧ 1 / 3 ≤ x 1 ∧ x 0 + 2 * x 1 < 1 at hx\n  have hgap : (1 / 3 : ℝ) ≤ 1 - x 0 - x 1 := by\n    linarith only [hx.1, hx.2.2]\n  rw [max_eq_right hgap]"
+    },
+    {
+      "name": "currentChenUpsilon8_log_region_iff",
+      "kind": "theorem",
+      "private": true,
+      "start_line": 84,
+      "complete_source_header": "private theorem currentChenUpsilon8_log_region_iff {N : ℕ} (hN : 2 ≤ N)\n    (p : Fin 2 → ℕ) (hp : ∀ i, 0 < p i) :\n    actualPrimeTupleLog N p ∈ currentChenUpsilon8HarmonicRegion ↔\n      (p 0 : ℝ) < (N : ℝ) ^ (1 / 3 : ℝ) ∧\n        (N : ℝ) ^ (1 / 3 : ℝ) ≤ (p 1 : ℝ) ∧\n          (p 1 : ℝ) < Real.sqrt ((N : ℝ) / (p 0 : ℝ))",
+      "complete_proof_body_after_by": "have hNr : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)\n  have hNn : 1 < N := by omega\n  have hfirst : actualPrimeTupleLog N p 0 < (1 / 3 : ℝ) ↔\n      (p 0 : ℝ) < (N : ℝ) ^ (1 / 3 : ℝ) := by\n    rw [← Real.rpow_lt_rpow_left_iff hNr, actualPrimeTupleLog_rpow hNn p hp]\n  have hsecond : (1 / 3 : ℝ) ≤ actualPrimeTupleLog N p 1 ↔\n      (N : ℝ) ^ (1 / 3 : ℝ) ≤ (p 1 : ℝ) := by\n    rw [← Real.rpow_le_rpow_left_iff hNr, actualPrimeTupleLog_rpow hNn p hp]\n  have hcap := currentChenUpsilon9_sqrt_log_iff hN (hp 0) (hp 1)\n  change ((actualPrimeTupleLog N p 0 < 1 / 3) ∧\n      1 / 3 ≤ actualPrimeTupleLog N p 1 ∧\n        actualPrimeTupleLog N p 0 + 2 * actualPrimeTupleLog N p 1 < 1) ↔ _\n  exact and_congr hfirst (and_congr hsecond hcap.symm)"
+    },
+    {
+      "name": "currentChenUpsilon8_tuple_mem_iff",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 105,
+      "complete_source_header": "theorem currentChenUpsilon8_tuple_mem_iff {N : ℕ} (hN : 2 ≤ N) (p : Fin 2 → ℕ) :\n    (p 0, p 1) ∈ chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n        ((N : ℝ) ^ (1 / 3 : ℝ)) ↔\n      p ∈ (actualPrimeBoxTuples N (fun _ : Fin 2 => (417 / 5000 : ℝ))\n        (fun _ => (1 / 2 : ℝ))).filter\n          (fun p => actualPrimeTupleLog N p ∈ currentChenUpsilon8HarmonicRegion)",
+      "complete_proof_body_after_by": "have hNr : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)\n  have hNp : (0 : ℝ) < N := zero_lt_one.trans hNr\n  have hpow : (N : ℝ) ^ (1 / 2 : ℝ) < N := by\n    simpa only [Real.rpow_one] using\n      Real.rpow_lt_rpow_of_exponent_lt hNr (by norm_num : (1 / 2 : ℝ) < 1)\n  constructor\n  · intro ht\n    obtain ⟨hc, hH, hfirst, hsecond, hcap⟩ := Finset.mem_filter.mp ht\n    obtain ⟨hc0, hc1⟩ := Finset.mem_product.mp hc\n    have hp0 := mem_chenAdditivePrimeCarrier.mp hc0\n    have hp1 := mem_chenAdditivePrimeCarrier.mp hc1\n    have hpos : ∀ i, 0 < p i := by\n      intro i\n      fin_cases i\n      · exact hp0.2.1.pos\n      · exact hp1.2.1.pos\n    have hp0One : (1 : ℝ) ≤ p 0 := by exact_mod_cast hp0.2.1.one_le\n    have hupper0 : (p 0 : ℝ) < (N : ℝ) ^ (1 / 2 : ℝ) :=\n      hfirst.trans_le (Real.rpow_le_rpow_of_exponent_le hNr.le (by norm_num))\n    have hupper1 : (p 1 : ℝ) < (N : ℝ) ^ (1 / 2 : ℝ) := by\n      calc\n        _ < Real.sqrt ((N : ℝ) / (p 0 : ℝ)) := hcap\n        _ ≤ Real.sqrt (N : ℝ) := Real.sqrt_le_sqrt (div_le_self hNp.le hp0One)\n        _ = _ := Real.sqrt_eq_rpow _\n    refine Finset.mem_filter.mpr ⟨mem_actualPrimeBoxTuples_iff.mpr ?_,\n      (currentChenUpsilon8_log_region_iff hN p hpos).mpr ⟨hfirst, hsecond, hcap⟩⟩\n    intro i\n    fin_cases i\n    · exact ⟨hp0.2.1, hp0.2.1.coprime_iff_not_dvd.mp hp0.2.2, hH, hupper0⟩\n    · exact ⟨hp1.2.1, hp1.2.1.coprime_iff_not_dvd.mp hp1.2.2,\n        (Real.rpow_le_rpow_of_exponent_le hNr.le (by norm_num)).trans hsecond, hupper1⟩\n  · intro hp\n    obtain ⟨hbox, hregion⟩ := Finset.mem_filter.mp hp\n    have hi := mem_actualPrimeBoxTuples_iff.mp hbox\n    have hpos := fun i => (hi i).1.pos\n    obtain ⟨hfirst, hsecond, hcap⟩ :=\n      (currentChenUpsilon8_log_region_iff hN p hpos).mp hregion\n    have hcarrier (i : Fin 2) : p i ∈ chenAdditivePrimeCarrier N := by\n      apply mem_chenAdditivePrimeCarrier.mpr\n      refine ⟨?_, (hi i).1, (hi i).1.coprime_iff_not_dvd.mpr (hi i).2.1⟩\n      exact_mod_cast (hi i).2.2.2.trans hpow\n    exact Finset.mem_filter.mpr\n      ⟨Finset.mem_product.mpr ⟨hcarrier 0, hcarrier 1⟩, (hi 0).2.2.1,\n        hfirst, hsecond, hcap⟩"
+    },
+    {
+      "name": "currentChenUpsilon8LogTotientMass_eq_actualPrimeBox",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 158,
+      "complete_source_header": "theorem currentChenUpsilon8LogTotientMass_eq_actualPrimeBox {N : ℕ} (hN : 2 ≤ N) :\n    currentChenUpsilon8LogTotientMass N =\n      actualPrimeBoxTestSum N (fun _ : Fin 2 => (417 / 5000 : ℝ)) (fun _ => (1 / 2 : ℝ))\n        (currentChenUpsilon8HarmonicRegion.indicator currentChenUpsilon8HarmonicKernel)",
+      "complete_proof_body_after_by": "let T := (actualPrimeBoxTuples N (fun _ : Fin 2 => (417 / 5000 : ℝ))\n    (fun _ => (1 / 2 : ℝ))).filter\n      (fun p => actualPrimeTupleLog N p ∈ currentChenUpsilon8HarmonicRegion)\n  unfold currentChenUpsilon8LogTotientMass currentChenUpsilon8PrefixProducts\n  rw [Finset.sum_image (chenY8PrimeSelector_multiplier_injOn N _ _)]\n  calc\n    _ = ∑ p ∈ T, (∏ i, 1 / ((p i : ℝ) - 1)) *\n        currentChenUpsilon8HarmonicKernel (actualPrimeTupleLog N p) := by\n      refine Finset.sum_bij (fun t _ => ![t.1, t.2]) ?_ ?_ ?_ ?_\n      · intro t ht\n        exact (currentChenUpsilon8_tuple_mem_iff hN ![t.1, t.2]).mp ht\n      · intro t _ u _ htu\n        apply Prod.ext\n        · simpa using congrFun htu 0\n        · simpa using congrFun htu 1\n      · intro p hp\n        refine ⟨(p 0, p 1), (currentChenUpsilon8_tuple_mem_iff hN p).mpr hp, ?_⟩\n        funext i\n        fin_cases i <;> rfl\n      · intro t ht\n        have ht9 : t ∈ chenY9PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n            ((N : ℝ) ^ (1 / 3 : ℝ)) := ht\n        obtain ⟨hp, hq, horder⟩ := chenY9PrimeSelector_ordered_prime_data ht9\n        have hregion := (Finset.mem_filter.mp\n          ((currentChenUpsilon8_tuple_mem_iff hN ![t.1, t.2]).mp ht)).2\n        rw [currentChenUpsilon8HarmonicKernel_eq hregion,\n          chen_prime_pair_totient_cast hp hq horder.ne,\n          Nat.cast_mul, Real.log_mul (by exact_mod_cast hp.ne_zero) (by exact_mod_cast hq.ne_zero)]\n        simp only [actualPrimeTupleLog, Fin.prod_univ_two, Matrix.cons_val_zero,\n          Matrix.cons_val_one, div_eq_mul_inv, mul_inv_rev, one_mul]\n        ring\n    _ = _ := by\n      unfold T actualPrimeBoxTestSum\n      rw [Finset.sum_filter]\n      apply Finset.sum_congr rfl\n      intro p _\n      by_cases hr : actualPrimeTupleLog N p ∈ currentChenUpsilon8HarmonicRegion\n      · rw [if_pos hr, Set.indicator_of_mem hr]\n      · rw [if_neg hr, Set.indicator_of_notMem hr, mul_zero]"
+    },
+    {
+      "name": "currentChenUpsilon8HarmonicIntegral",
+      "kind": "def",
+      "private": false,
+      "start_line": 203,
+      "complete_source_header": "def currentChenUpsilon8HarmonicIntegral : ℝ",
+      "complete_definition": "def currentChenUpsilon8HarmonicIntegral : ℝ :=\n∫ x in logPrimeBox (fun _ : Fin 2 => (417 / 5000 : ℝ)) (fun _ => (1 / 2 : ℝ)) ∩\n      currentChenUpsilon8HarmonicRegion,\n    (1 / (1 - x 0 - x 1)) * ∏ i, 1 / x i"
+    },
+    {
+      "name": "tendsto_currentChenUpsilon8LogTotientMass",
+      "kind": "theorem",
+      "private": false,
+      "start_line": 208,
+      "complete_source_header": "theorem tendsto_currentChenUpsilon8LogTotientMass :\n    Tendsto currentChenUpsilon8LogTotientMass atTop (𝓝 currentChenUpsilon8HarmonicIntegral)",
+      "complete_proof_body_after_by": "have hlim := tendsto_actualPrimeBoxTestSum_cube_affineSandwich\n    (by norm_num : (0 : ℝ) < 417 / 5000) (by norm_num : (417 / 5000 : ℝ) < 1 / 2)\n    currentChenUpsilon9HarmonicForms currentChenUpsilon8HarmonicBounds\n    currentChenUpsilon9HarmonicForms_ne_zero currentChenUpsilon8HarmonicRegion\n    measurableSet_currentChenUpsilon8HarmonicRegion currentChenUpsilon8HarmonicRegion_sandwich.1\n    currentChenUpsilon8HarmonicRegion_sandwich.2 currentChenUpsilon8HarmonicKernel\n    continuous_currentChenUpsilon8HarmonicKernel.continuousOn\n  have hJ : (∫ x in logPrimeBox (fun _ : Fin 2 => (417 / 5000 : ℝ))\n        (fun _ => (1 / 2 : ℝ)) ∩ currentChenUpsilon8HarmonicRegion,\n      currentChenUpsilon8HarmonicKernel x * ∏ i, 1 / x i) =\n        currentChenUpsilon8HarmonicIntegral := by\n    unfold currentChenUpsilon8HarmonicIntegral\n    apply setIntegral_congr_fun\n      ((measurableSet_logPrimeBox _ _).inter measurableSet_currentChenUpsilon8HarmonicRegion)\n    intro x hx\n    rw [currentChenUpsilon8HarmonicKernel_eq hx.2]\n  rw [hJ] at hlim\n  apply hlim.congr'\n  filter_upwards [eventually_ge_atTop (2 : ℕ)] with N hN\n  exact (currentChenUpsilon8LogTotientMass_eq_actualPrimeBox hN).symm"
+    }
+  ],
+  "declaration_count": 12,
+  "definition_count": 4,
+  "proof_count": 8,
+  "direct_imports": [
+    "ImbalancedChen.CurrentChenUpsilon8TrueLiMass",
+    "ImbalancedChen.CurrentChenUpsilon9HarmonicMean"
+  ],
+  "parent_records": [
+    {
+      "module": "ImbalancedChen.CurrentChenUpsilon8TrueLiMass",
+      "source_sha256": "9f009161174abeb734c21154ebc368a9ae3354b157fc2da42e199e76d307554c",
+      "full_source_closure_resolved": 6692,
+      "actual_strict_receipt": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/runs/20261015T233823169915Z-ImbalancedChen.CurrentChenUpsilon8TrueLiMass/receipt.json",
+      "receipt_sha256": "8ea20fcbe4f26eaaa8add13f139ded72672618ba6b21796dcfcde6e6e8a2603e",
+      "actual_strict_status": "PASS",
+      "full_owned_gate": "Runtime has reported strict PASS; this report does not infer full-owned acceptance from that receipt."
+    },
+    {
+      "module": "ImbalancedChen.CurrentChenUpsilon9HarmonicMean",
+      "source_sha256": "1e50dc27e37d79eccd1b6cd3974963d78ebca651c369e85e2f524b6126d7cc35",
+      "full_source_closure_resolved": 6344,
+      "actual_owned_receipt": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/audits/20261015T203514598065Z/receipt.json",
+      "receipt_sha256": "a458dad0f146bc67ce9beefa3a97c1df58afd81b08487411229924ed99698e34",
+      "owned_declarations": 31,
+      "current_object_sha256": "5c5b32e440dc773d72566f7f3b51da3d0505804afa27e5575c600d83371b329d"
+    }
+  ],
+  "mathematical_review": [
+    "The source defines the actual U8 mixed affine region x0<1/3, 1/3<=x1, x0+2*x1<1, and its new bound vector. It reuses ONLY the already owned generic U9 affine forms/proved nonzero fact and generic sqrt-log equivalence; no U9 geometric region, kernel cutoff or harmonic limit is transferred.",
+    "The lower open affine gate is contained in the actual mixed region, and that region is contained in the closed affine constraints. This preserves the weak x1>=1/3 wall arithmetically. The existing proved affine sandwich treats such walls before any integral null-wall argument; no prime atom is discarded as a measure-zero event.",
+    "The ambient eighth kernel is 1/max(1/3,1-x0-x1), continuous because its denominator is >=1/3>0. The actual region gives 1-x0-x1>1/3 by x0<1/3 and x0+2*x1<1, so it agrees pointwise with the unmodified original gap reciprocal. The ninth cutoff191/500 would be invalid here and is not used.",
+    "For actual positive coordinates and N>=2, exponent monotonicity plus the owned generic sqrt-log iff proves the exact selector region dictionary. The actual cube [417/5000,1/2) adds no arithmetic restriction: p1<N^(1/3)<N^(1/2) and p2<sqrt(N/p1)<=sqrt(N). Conversely this cube puts both primes below N, restoring the actual additive prime carrier with its same target-coprimality mask.",
+    "The original p1 lower cutoff is weak and retained, p1 upper cutoff1/3 strict, p2 lower cutoff1/3 weak, and the moving square-root cutoff strict. The actual source/product image is used throughout, with no artificial rectangle or permutation multiplicity substituted.",
+    "Owned actual U8 product injection pays Finset.sum_image. The pair-to-Fin2 bijection is explicit on the actual selector/filtered box. Original band separation supplies p1<p2, so the proven exact prime-pair totient product and genuine log(p1*p2) identity give precisely the original reciprocal-totient/log-gap summand. No caller injection, phi approximation or product coefficient bound is assumed.",
+    "The final theorem obtains the genuine prime-box test limit from the existing public affine-sandwich theorem with the actual eighth constants. Set-integral congruence replaces the continuous extension pointwise on the exact measurable intersection, so the target J8 is literally integral[1/((1-x0-x1)*x0*x1)] on the actual original two-dimensional domain, without any clipped kernel in its definition.",
+    "The final quantifiers are a Tendsto statement for the actual LogTotientMass8 itself. It assumes no harmonic limit, count bound, density mean, Pan aggregate budget or hUpper/hLower. It neither assembles an ordinary U8 count mean nor proves an adopted numerical row/current C/K. Those remain later separately gated work.",
+    "Exactly12decl4defs8proof and exactly two approved direct parents are present. Relative to their fresh full proper source union only this one new project module is added and no foreign module is added. The imported U9 harmonic parent itself is genuinely owned with exact current object; U8TrueLi has actual strict PASS but full-owned acceptance is an independent runtime gate."
+  ],
+  "findings": [],
+  "fixed_public_API": [
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenUpsilon8TrueLiMass.lean",
+      "sha256": "9f009161174abeb734c21154ebc368a9ae3354b157fc2da42e199e76d307554c",
+      "lines": [
+        29,
+        35
+      ],
+      "role": "Exact existing eighth logarithmic reciprocal-totient mass; no change of support or coefficient",
+      "literal_source_excerpt": "    (1 / (Nat.totient a : ℝ)) *\n      (1 / (1 - Real.log (a : ℝ) / Real.log (N : ℝ)))\n\ntheorem currentChenUpsilon8LogTotientMass_nonneg {N : ℕ} (hN : 2 ≤ N) :\n    0 ≤ currentChenUpsilon8LogTotientMass N := by\n  apply Finset.sum_nonneg\n  intro a ha"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenMeanLedger.lean",
+      "sha256": "30597d5f381031fc7d7e794fe105a11d6981053b34a1406d46f40bf7840dc0c8",
+      "lines": [
+        113,
+        125
+      ],
+      "role": "Literal eighth and generic ninth selectors are definitionally the same predicate at specified endpoints",
+      "literal_source_excerpt": "\n/-- Actual eighth selector, including equality at the second lower cap. -/\ndef chenY8PrimeSelector (N : ℕ) (A C : ℝ) : Finset (ℕ × ℕ) :=\n  (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N).filter fun t =>\n    A ≤ (t.1 : ℝ) ∧ (t.1 : ℝ) < C ∧ C ≤ (t.2 : ℝ) ∧\n    (t.2 : ℝ) < Real.sqrt ((N : ℝ) / (t.1 : ℝ))\n\n/-- Actual ninth selector. Its quotient cutoff is kept separately below\nand is not identified with the second prime. -/\ndef chenY9PrimeSelector (N : ℕ) (H D : ℝ) : Finset (ℕ × ℕ) :=\n  (chenAdditivePrimeCarrier N ×ˢ chenAdditivePrimeCarrier N).filter fun t =>\n    H ≤ (t.1 : ℝ) ∧ (t.1 : ℝ) < D ∧ D ≤ (t.2 : ℝ) ∧\n    (t.2 : ℝ) < Real.sqrt ((N : ℝ) / (t.1 : ℝ))"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenUpsilon8ProductPan.lean",
+      "sha256": "80621797c21adc263fc702e07a13c0b0b543a40f34ca2658a7fa281e1af12b11",
+      "lines": [
+        27,
+        36
+      ],
+      "role": "Proved actual eighth product injection and literal original product image",
+      "literal_source_excerpt": "open MathlibNt.SieveTheory.LiuWeight\n\ntheorem chenY8PrimeSelector_multiplier_injOn (N : ℕ) (A C : ℝ) :\n    Set.InjOn (fun t : ℕ × ℕ => t.1 * t.2)\n      (chenY8PrimeSelector N A C : Set (ℕ × ℕ)) := by\n  exact chenY9PrimeSelector_multiplier_injOn N A C\n\ndef currentChenUpsilon8PrefixProducts (N : ℕ) : Finset ℕ :=\n  (chenY8PrimeSelector N ((N : ℝ) ^ (417 / 5000 : ℝ))\n    ((N : ℝ) ^ (1 / 3 : ℝ))).image (fun t => t.1 * t.2)"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenUpsilon9ProductCoefficient.lean",
+      "sha256": "6c61547d4733119f3f9944799ccba369f8e54ed3f008275983653ea8277ec59d",
+      "lines": [
+        26,
+        45
+      ],
+      "role": "Generic ordered-prime data and prime-factor uniqueness, instantiated at actual eighth bands",
+      "literal_source_excerpt": "theorem chenY9PrimeSelector_ordered_prime_data {N : ℕ} {H D : ℝ}\n    {t : ℕ × ℕ} (ht : t ∈ chenY9PrimeSelector N H D) :\n    Nat.Prime t.1 ∧ Nat.Prime t.2 ∧ t.1 < t.2 := by\n  obtain ⟨hc, _, hfirst, hsecond, _⟩ := Finset.mem_filter.mp ht\n  obtain ⟨hc₁, hc₂⟩ := Finset.mem_product.mp hc\n  refine ⟨(mem_chenAdditivePrimeCarrier.mp hc₁).2.1,\n    (mem_chenAdditivePrimeCarrier.mp hc₂).2.1, ?_⟩\n  exact_mod_cast hfirst.trans_le hsecond\n\n/-- The actual bands pay the product multiplicity before any analytic\ncoefficient is formed.  This reuses ordered prime-factor uniqueness. -/\ntheorem chenY9PrimeSelector_multiplier_injOn (N : ℕ) (H D : ℝ) :\n    Set.InjOn (fun t : ℕ × ℕ => t.1 * t.2)\n      (chenY9PrimeSelector N H D : Set (ℕ × ℕ)) := by\n  intro t ht u hu hprod\n  obtain ⟨ht₁, ht₂, hto⟩ := chenY9PrimeSelector_ordered_prime_data ht\n  obtain ⟨hu₁, hu₂, huo⟩ := chenY9PrimeSelector_ordered_prime_data hu\n  obtain ⟨h₁, h₂⟩ := ordered_prime_factors_unique\n    ht₁ ht₂ hu₁ hu₂ hto.le huo.le hprod\n  exact Prod.ext h₁ h₂"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ChenPairHarmonicFinite.lean",
+      "sha256": "0b41e8d1cc595c688a1a7f6301425bdd6bb9a2cd09f1e0f2a5cc48b5a4fb19d2",
+      "lines": [
+        68,
+        73
+      ],
+      "role": "Exact phi(p*q) cast product for actual distinct primes",
+      "literal_source_excerpt": "theorem chen_prime_pair_totient_cast {p q : ℕ}\n    (hp : Nat.Prime p) (hq : Nat.Prime q) (hpq : p ≠ q) :\n    (Nat.totient (p * q) : ℝ) = ((p : ℝ) - 1) * ((q : ℝ) - 1) := by\n  rw [Nat.totient_mul ((Nat.coprime_primes hp hq).mpr hpq), Nat.cast_mul,\n    Nat.totient_prime hp, Nat.totient_prime hq,\n    Nat.cast_sub hp.one_lt.le, Nat.cast_sub hq.one_lt.le, Nat.cast_one]"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenUpsilon9HarmonicMean.lean",
+      "sha256": "1e50dc27e37d79eccd1b6cd3974963d78ebca651c369e85e2f524b6126d7cc35",
+      "lines": [
+        31,
+        43
+      ],
+      "role": "Owned source-independent affine forms and their genuine nonzero proof; no ninth-region assertion reused",
+      "literal_source_excerpt": "def currentChenUpsilon9HarmonicForms : Fin 3 → (Fin 2 → ℝ) →L[ℝ] ℝ :=\n  ![ContinuousLinearMap.proj 0, -ContinuousLinearMap.proj 1,\n    ContinuousLinearMap.proj 0 + (2 : ℝ) • ContinuousLinearMap.proj 1]\n\ndef currentChenUpsilon9HarmonicBounds : Fin 3 → ℝ := ![59 / 250, -(59 / 250), 1]\n\ntheorem currentChenUpsilon9HarmonicForms_ne_zero :\n    ∀ j, currentChenUpsilon9HarmonicForms j ≠ 0 := by\n  intro j h\n  have hh := congrArg (fun F : (Fin 2 → ℝ) →L[ℝ] ℝ => F ![1, 1]) h\n  fin_cases j <;> norm_num [currentChenUpsilon9HarmonicForms] at hh\n\ntheorem measurableSet_currentChenUpsilon9HarmonicRegion :"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/CurrentChenUpsilon9HarmonicMean.lean",
+      "sha256": "1e50dc27e37d79eccd1b6cd3974963d78ebca651c369e85e2f524b6126d7cc35",
+      "lines": [
+        98,
+        117
+      ],
+      "role": "Owned generic moving sqrt-to-log equivalence on positive coordinates",
+      "literal_source_excerpt": "theorem currentChenUpsilon9_sqrt_log_iff {N a b : ℕ}\n    (hN : 2 ≤ N) (ha : 0 < a) (hb : 0 < b) :\n    (b : ℝ) < Real.sqrt ((N : ℝ) / (a : ℝ)) ↔\n      Real.log (a : ℝ) / Real.log (N : ℝ) +\n        2 * (Real.log (b : ℝ) / Real.log (N : ℝ)) < 1 := by\n  have hNr : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)\n  have hNp : (0 : ℝ) < N := zero_lt_one.trans hNr\n  have haR : (0 : ℝ) < a := by exact_mod_cast ha\n  have hbR : (0 : ℝ) < b := by exact_mod_cast hb\n  have hlog := Real.log_pos hNr\n  rw [← Real.log_lt_log_iff hbR (Real.sqrt_pos.mpr (div_pos hNp haR)),\n    Real.log_sqrt (div_nonneg hNp.le haR.le), Real.log_div hNp.ne' haR.ne']\n  rw [show Real.log (a : ℝ) / Real.log (N : ℝ) +\n      2 * (Real.log (b : ℝ) / Real.log (N : ℝ)) =\n        (Real.log (a : ℝ) + 2 * Real.log (b : ℝ)) / Real.log (N : ℝ) by ring,\n    div_lt_iff₀ hlog, one_mul]\n  constructor <;> intro h <;> linarith only [h]\n\nprivate theorem currentChenUpsilon9_log_region_iff {N : ℕ} (hN : 2 ≤ N)\n    (p : Fin 2 → ℕ) (hp : ∀ i, 0 < p i) :"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/FinitePrimeGeometryCore.lean",
+      "sha256": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+      "lines": [
+        157,
+        169
+      ],
+      "role": "Actual target-prime-deleted box carrier with weak lower and strict upper endpoints",
+      "literal_source_excerpt": "def actualPrimeBoxTuples (N : ℕ) {k : ℕ} (a b : Fin k → ℝ) :\n    Finset (Fin k → ℕ) :=\n  Fintype.piFinset (fun i =>\n    roughPrimeFinset N (Nat.ceil ((N : ℝ) ^ b i))\n      ((N : ℝ) ^ a i) ((N : ℝ) ^ b i))\n\n/-- Membership retains primality, the common target exclusion, and both\nexact endpoints. Enumeration caps add no truncation. -/\ntheorem mem_actualPrimeBoxTuples_iff {N k : ℕ} {a b : Fin k → ℝ}\n    {p : Fin k → ℕ} :\n    p ∈ actualPrimeBoxTuples N a b ↔\n      ∀ i, Nat.Prime (p i) ∧ ¬p i ∣ N ∧\n        (N : ℝ) ^ a i ≤ (p i : ℝ) ∧ (p i : ℝ) < (N : ℝ) ^ b i := by"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/ActualPrimeIcoCellTestFunctions.lean",
+      "sha256": "e829a635b884f476441dab6281433bfef93950250f2138eb9a657e8a2ccb53f5",
+      "lines": [
+        71,
+        81
+      ],
+      "role": "Genuine affine sandwich prime-test limit with measurable mixed-wall domain and continuous ambient kernel",
+      "literal_source_excerpt": "theorem tendsto_actualPrimeBoxTestSum_cube_affineSandwich {d r : ℕ} {a b : ℝ}\n    (ha : 0 < a) (hab : a < b)\n    (L : Fin r → (Fin d → ℝ) →L[ℝ] ℝ) (c : Fin r → ℝ) (hL : ∀ j, L j ≠ 0)\n    (R : Set (Fin d → ℝ)) (hR : MeasurableSet R)\n    (hlo : primeAffineGateRegion L c ⊆ R) (hhi : ∀ x ∈ R, ∀ j, L j x ≤ c j)\n    (f : (Fin d → ℝ) → ℝ)\n    (hf : ContinuousOn f (Set.univ.pi (fun _ : Fin d => Set.Icc a b))) :\n    Tendsto (fun N : ℕ => actualPrimeBoxTestSum N (fun _ : Fin d => a) (fun _ => b)\n      (R.indicator f)) atTop\n      (𝓝 (∫ x in logPrimeBox (fun _ : Fin d => a) (fun _ => b) ∩ R,\n        f x * ∏ i, 1 / x i)) := by"
+    },
+    {
+      "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/ImbalancedChen/LogPrimeBoxIntegral.lean",
+      "sha256": "0880865d5d9770c11d4d61be2d7b8c477d3a1586cac4a42a139e769f4ad23f28",
+      "lines": [
+        24,
+        43
+      ],
+      "role": "Literal logPrimeBox and measurable box API",
+      "literal_source_excerpt": "\n/-- A product of half-open intervals, with the strict upper condition in\nevery coordinate. This is a product set, not an order interval in a product\npartial order. -/\ndef logPrimeBox {k : ℕ} (a b : Fin k → ℝ) : Set (Fin k → ℝ) :=\n  Set.univ.pi (fun i => Set.Ico (a i) (b i))\n\n@[simp] theorem mem_logPrimeBox {k : ℕ} {a b x : Fin k → ℝ} :\n    x ∈ logPrimeBox a b ↔ ∀ i, a i ≤ x i ∧ x i < b i := by\n  simp [logPrimeBox]\n\ntheorem measurableSet_logPrimeBox {k : ℕ} (a b : Fin k → ℝ) :\n    MeasurableSet (logPrimeBox a b) :=\n  MeasurableSet.univ_pi (fun _ => measurableSet_Ico)\n\n/-- The one-dimensional density is integrable on every interval with a\npositive lower endpoint, also when that interval is empty. -/\ntheorem integrableOn_one_div_Ico {a : ℝ} (b : ℝ) (ha : 0 < a) :\n    IntegrableOn (fun x : ℝ => 1 / x) (Set.Ico a b) := by\n  have hcont : ContinuousOn (fun x : ℝ => 1 / x) (Set.Icc a b) :="
+    },
+    {
+      "path": "/home/slava/codex-lean-ve/native-packages/mathlib/Mathlib/MeasureTheory/Integral/Bochner/Set.lean",
+      "sha256": "119710a23a0a09d22f770ca36844ddc3ca1d72cb479e231fe9ec06cea20629f9",
+      "lines": [
+        73,
+        75
+      ],
+      "role": "Exact pointwise equality on a measurable integration set; no integrability premise or measure-zero replacement of an arithmetic wall",
+      "literal_source_excerpt": "theorem setIntegral_congr_fun (hs : MeasurableSet s) (h : EqOn f g s) :\n    ∫ x in s, f x ∂μ = ∫ x in s, g x ∂μ :=\n  setIntegral_congr_ae hs <| Eventually.of_forall h"
+    }
+  ],
+  "pins": {
+    "lean-toolchain": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+    "lakefile.toml": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+    "lake-manifest.json": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849"
+  },
+  "provider_HEAD_and_tracked_clean_checks": [
+    {
+      "name": "goldbach",
+      "actual_HEAD": "09b97db5764ade1246bfb77206baa1b124760958",
+      "manifest_pin": "09b97db5764ade1246bfb77206baa1b124760958",
+      "tracked_diff_HEAD_exit_code": 0
+    },
+    {
+      "name": "mathlib",
+      "actual_HEAD": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "manifest_pin": "e4c91783ca8e6a7c693ae624ade32fd22d4e43c1",
+      "tracked_diff_HEAD_exit_code": 0
+    }
+  ],
+  "forbidden_source_matches": [],
+  "copied_proof_scope": {
+    "origin": "ImbalancedChen.CurrentChenUpsilon9HarmonicMean",
+    "source_sha256": "1e50dc27e37d79eccd1b6cd3974963d78ebca651c369e85e2f524b6126d7cc35",
+    "scope": "Adapt the previously owned measurable mixed-wall, continuous-gap extension, exact selector dictionary and finite sum_bij skeleton to the genuinely different eighth constants. Reuse generic forms/nonzero and sqrt-log API instead of duplicating them. New final pointwise set-integral congruence makes the J8 definition literal, not the extension integral.",
+    "mathematical_changes": "h=417/5000, split1/3, max cutoff1/3, original eighth product image and selector. No claim the old U9 kernel equals the new kernel or its domain."
+  },
+  "runtime_gate": "No compile authorized by this source report. Require source nonauthor/root gate and actual full-owned U8TrueLi9f parent plus runtime fresh source/object/cache binding; sole runtime owner performs strict/full-owned work.",
+  "metadata_correction": {
+    "prior_report_path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261016-U8HarmonicMean-owner-semantics.json",
+    "prior_report_sha256": "6c6884aaba1731567523bf9245cb8f0abc7844927c33168172474358b1ef4aa0",
+    "prior_preserved_unchanged": true,
+    "correction": "Correct two owned U9Harmonic source excerpt line ranges to include their true public definition/theorem headers. No source, mathematical claim, declaration extraction, dependency graph, provider/pin or byte binding changed."
+  },
+  "same_proper_DAG_report": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261016-U8HarmonicMean-owner-proper-dag.json",
+    "sha256": "3ff72159240517d5cc504da65d497d3e36d62d70acb02aa0dd71bb2f0a0b4195"
+  }
+}

@@ -1,0 +1,1193 @@
+{
+  "status": "COMPLETE_INDEPENDENT_GENERAL_MATHEMATICAL_DERIVATION_APPROVES_ONE_GENUINE_FINITE_MULTIPLICITY_PROOF_PROPOSAL_ONLY_NOT_LEAN_AUTHORED",
+  "reviewer": "/root/spectral_reuse_oct20",
+  "created_utc": "2026-10-20T10:01:38.084801+00:00",
+  "input_text": {
+    "path": "../goldbach-research/lichtman-lemma51-multiplicity-independent-20261010.txt",
+    "sha256": "4814e3dc62e1d6afffbdbaac90325df6abcf06df5becf68682392fce16e40774",
+    "entire_text_read": true
+  },
+  "previous_external_review": {
+    "path": ".lake/proof-continuation/source-reviews/20261020-small-core-spectral-external-reuse-readonly-review.json",
+    "sha256": "0141e08f2244acd929497a8beb2d4fd8ae922cd80cc9db92fb4a20138d4c5cc8",
+    "complete_next_positive_multiplicity_lemma_read": {
+      "definition": "For S,H,F>=1, b(z,y) counts tuples S<=s1,s2<2S, F<=f<2F, 1<=|h1|,|h2|<=H with z=s1*s2, k=h1*s1-h2*s2!=0, y=f*k. For positive nu define Nnu=sum_z sum_{u!=0} b(z,nu*u)^2.",
+      "exact_target": "With Xstar=ceil(max(4*S^2,8*F*H*S)), Dstar=max_{1<=n<=Xstar}tau(n), Nnu <=576*Dstar^5*Harmonic(floor(2*S))*(1+H/S)*(H*S)^2*F/nu, and Nnu=0 when nu>=8*F*H*S. Actual complex aggregated coefficients have modulus at most b.",
+      "source_local": "../goldbach-research/lichtman-lemma51-multiplicity-independent-20261010.txt",
+      "source_sha256": "4814e3dc62e1d6afffbdbaac90325df6abcf06df5becf68682392fce16e40774",
+      "proof_read_and_checked": "Cauchy over divisor decompositions costs Dstar^2, not a second F. Count nonzero multiples from zero with 2floor(L/m), so no +1. Unequal collisions first factor actual gcd(s1,s2); use exact nu/c|d*k0 iff nu/(c*gcd(d,nu/c))|k0, then sum_d gcd(d,nu)/d<=tau(nu)*Harmonic(floor2S). Do not assume k lies in a dyadic shell or s1,s2 coprime.",
+      "status": "Mathematical derivation read/reviewed, not yet Lean proved here."
+    }
+  },
+  "quota": {
+    "guard_path": ".lake/proof-continuation/quota-guard.json",
+    "guard_sha256_at_final_write": "d9612446d600dd992f05b1a7eed64be2de823b5d0ead3a238bcd0b8fc93102da",
+    "actual_tool_calls_in_batch": 3,
+    "first_used_percent": 6,
+    "latest_used_percent": 7,
+    "latest_remaining_percent": 93,
+    "window_minutes": 10080,
+    "secondary": null,
+    "hold_remaining_threshold": 50,
+    "triggered": false,
+    "no_reset_or_credit_action": true
+  },
+  "conclusion": {
+    "target576_valid_as_stated_for_fixed_positive_f_carrier": true,
+    "counterexample_to_target_found": false,
+    "proof_is_uniform_for_real_S_H_F_at_least1_and_every_positive_integer_nu": true,
+    "no_H_less_than_S_assumption_for_explicit_bound": true,
+    "no_coprimality_of_s1_s2_or_nu_a_assumption": true,
+    "genuine_finite_positive_multiplicity_lemma_not_count_promoting_interface": true,
+    "Lean_proof_or_kernel_acceptance_claimed": false,
+    "spectral_estimate_or_main_theorem_claimed": false
+  },
+  "one_minimal_source_scope": {
+    "suggested_module": "ImbalancedChen.Part3LichtmanSignedDifferenceMultiplicity",
+    "only_suggested_imports": [
+      "ImbalancedChen.Part3ActualLargeGCDBetaMass"
+    ],
+    "proposed_namespace": "ImbalancedChen.Part3.LichtmanSignedDifferenceMultiplicity",
+    "source_prelude": "noncomputable section\nopen Classical Finset\nopen scoped BigOperators",
+    "literal_full_definitions": [
+      "def dyadicCarrier (T : ℝ) : Finset ℕ :=\n  (Finset.Ioc 0 (Nat.floor (2 * T))).filter\n    (fun n => T ≤ (n : ℝ) ∧ (n : ℝ) < 2 * T)",
+      "def frequencyCarrier (H : ℝ) : Finset ℤ :=\n  ((Finset.Icc 1 (Nat.floor H)).image (fun n : ℕ => (n : ℤ))) ∪\n    ((Finset.Icc 1 (Nat.floor H)).image (fun n : ℕ => -(n : ℤ)))",
+      "def difference (t : (ℕ × ℕ × ℕ) × (ℤ × ℤ)) : ℤ :=\n  t.2.1 * (t.1.1 : ℤ) - t.2.2 * (t.1.2.1 : ℤ)",
+      "def sourceCarrier (S H F : ℝ) : Finset ((ℕ × ℕ × ℕ) × (ℤ × ℤ)) :=\n  ((dyadicCarrier S ×ˢ (dyadicCarrier S ×ˢ dyadicCarrier F)) ×ˢ\n    (frequencyCarrier H ×ˢ frequencyCarrier H)).filter\n      (fun t => difference t ≠ 0)",
+      "def output (t : (ℕ × ℕ × ℕ) × (ℤ × ℤ)) : ℕ × ℤ :=\n  (t.1.1 * t.1.2.1, (t.1.2.2 : ℤ) * difference t)",
+      "def multiplicity (S H F : ℝ) (z : ℕ) (y : ℤ) : ℕ :=\n  ((sourceCarrier S H F).filter (fun t => output t = (z, y))).card",
+      "def multiplicityL2 (S H F : ℝ) (nu : ℕ) : ℝ :=\n  ∑ zy ∈ (sourceCarrier S H F).image output,\n    if (nu : ℤ) ∣ zy.2 then (multiplicity S H F zy.1 zy.2 : ℝ) ^ 2 else 0",
+      "def supportCap (S H F : ℝ) : ℕ :=\n  Nat.ceil (max (4 * S ^ 2) (8 * F * H * S))",
+      "def divisorMaximum (S H F : ℝ) : ℕ :=\n  (Finset.Icc 1 (supportCap S H F)).sup (fun n : ℕ => n.divisors.card)"
+    ],
+    "one_complete_full_unelaborated_public_proposition": "theorem signedDifference_multiplicityL2_bound\n    (S H F : ℝ) (hS : 1 ≤ S) (hH : 1 ≤ H) (hF : 1 ≤ F)\n    (nu : ℕ) (hnu : 0 < nu) :\n    multiplicityL2 S H F nu ≤\n      576 * (divisorMaximum S H F : ℝ) ^ 5 *\n        (harmonic (Nat.floor (2 * S)) : ℝ) *\n          (1 + H / S) * (H * S) ^ 2 * F / (nu : ℝ) ∧\n      (8 * F * H * S ≤ (nu : ℝ) → multiplicityL2 S H F nu = 0)",
+    "definition_count": 9,
+    "public_theorem_count": 1,
+    "private_helper_scope": "Only elementary finite cardinality, divisor, gcd reduction, harmonic sum, and Cauchy lemmas needed for this actual theorem. No fresh analytic premise, estimate field, supplier hypothesis, source pin or external dependency.",
+    "what_root_may_authorize": "One actual finite proof module implementing the entire bound and zero support, not only these definitions or a restatement. Freeze full source and obtain independent nonauthor review before any compiler gate."
+  },
+  "exact_source_semantics": {
+    "tuple_projection": "t.1=(s1,(s2,f)); t.2=(h1,h2). All s1,s2,f are natural and all h1,h2 are signed integers.",
+    "half_open_carriers": "For T>=1, dyadicCarrier T is exactly naturals T<=n<2T. The Ioc0 floor(2T) upper envelope includes a possible endpoint, but the literal strict filter removes it. No ceil-minus-one subtraction edge case.",
+    "nonzero_frequencies": "frequencyCarrier H is the disjoint union of positive1..floorH and their negatives. It is exactly signed integers1<=|h|<=H and excludes zero at definition level. Its cardinality is exactly2*floorH, including empty frequencies if a private helper has0<=H<1.",
+    "nonzero_difference": "sourceCarrier excludes h1*s1-h2*s2=0 before defining output or multiplicity. No zero-y fiber is included.",
+    "multiplicity": "Counts original five-tuples in the full source carrier. The output image is used only to list distinct output coordinates; every original tuple is counted by the fiber cardinality, so no multiplicity is erased.",
+    "finite_L2_equality_to_text_Nnu": "Since nu>0, every nonzero signed y divisible bynu has a unique nonzero signed u with y=nu*u. All nonzero fibers are exactly the finite output image. Therefore the literal finite real sum equals sum_z sum_{u!=0} b(z,nu*u)^2. There is no normalization1/nu in this identity; the final1/nu arises from counting multiples.",
+    "fixed_f_sign": "The theorem uses positive integer f in[F,2F). A separately fixed negative sign is identical by f->-f and y->-y. If both signs are placed in one combined coefficient carrier without separation, do not claim576 unchanged: the combined positive envelope is2b by signed-h symmetry and its squared L2 is4N. Separate the f signs or pay that factor at integration.",
+    "no_a_restriction": "A later(z,a)=1 filter, actual dyadic y/z restrictions, or one-sided h restrictions may only decrease this positive envelope. Such restrictions are not invented in the finite theorem."
+  },
+  "independent_complete_derivation": {
+    "notation": "Write tau(n)=n.divisors.card, Xstar=supportCap S H F, D=divisorMaximum S H F, M=floor(2S), T=(HS)^2 F/nu, HM=harmonic M. Every denominator S,F,H,nu,d,c,b used in a division below is positive on its actual range.",
+    "support_and_divisor_cap": [
+      "s1,s2>=1 and<2S imply0<z=s1s2<4S². Each |hi|<=H and si<2S with H>0 gives0<|k|<4HS. f>=1 andf<2F imply0<|y|=f|k|<8FHS.",
+      "Thus z and |y| are positive naturals bounded by ceil(max(4S²,8FHS))=Xstar. Finset.le_sup at Icc-membership gives tau(z),tau(|y|)<=D, and1<=D from tau(1)=1 (Xstar>=1).",
+      "If nu>=8FHS and nu divides signed nonzero y, then nu<=|y|<8FHS<=nu, contradiction. Hence the L2 is exactly zero. This uses the strict source boundaries, not an asymptotic support statement.",
+      "Otherwise0<nu<8FHS<=Xstar as a real bound, so nu<=Xstar andtau(nu)<=D. Use this latter inequality only in the below-support branch; do not claim it for arbitrarily large nu."
+    ],
+    "first_divisor_Cauchy_and_F_once": [
+      "At fixed output(z,y), partition all source tuples by decomposition(s1,s2,f,k). Equivalently partition by(s1,s2,f), since f>0 and fixedy forces k=y/f uniquely. R(s1,s2;k) is the number of allowed signed(h1,h2) realizing k.",
+      "Map decomposition to(s1,f). s1 is a positive divisor ofz and f a positive divisor of|y|. The map is injective: s2=z/s1 and k=y/f are uniquely forced. Hence the number of decompositions is at most tau(z)tau(|y|)<=D².",
+      "Finite real Cauchy using Finset.sum_mul_sq_le_sq_mul_sq with one factor constantly1 gives b(z,y)²<=D² sum_decomp R(s1,s2;k)². It includes the genuine cross-f pairs on the left; it does not assert their f values coincide.",
+      "Summing exact positive fibers and reindexing gives Nnu<=D² sum_{s1,s2,k!=0} R(s1,s2;k)² #{f in[F,2F):nu|fk}. There is one remaining f count, so the final scale factor is F, notF²."
+    ],
+    "exact_nonzero_multiple_count": {
+      "full_private_type_suggestion": "private theorem card_nonzero_frequency_multiples (L : ℝ) (hL : 0 ≤ L) (m : ℕ) (hm : 0 < m) : ((frequencyCarrier L).filter (fun j : ℤ => (m : ℤ) ∣ j)).card = 2 * Nat.floor (L / (m : ℝ))",
+      "proof": "Every nonzero signed multiple j has a unique signed nonzero index t with j=m*t. Positive and negative indices are disjoint images of naturals1..floor(L/m). Cardinality is exactly2floor(L/m), therefore its real cast<=2L/m. It is zero when L<m. For actual strict |k|<L, enlarge positively to<=L; no shell lower bound and no additive1 is introduced.",
+      "positive_f_count": "For c>=1, allowed f satisfying c|f inject into positive indices j<=floor(2F/c), because f=cj<2F. Therefore #f<=2F/c, with no+1. If c>=2F there are no f; summing over c|nu with c<=2F is a harmless positive enlargement, including equality where the actual count is zero."
+    },
+    "nu_f_divisibility_partition": [
+      "For each nonzero signed k define c=nu/gcd(nu,|k|), using natural gcd. Since nu>0, c>0 andc|nu. The exact cancellation lemma gives nu|fk iff c|f. Also nu/c=gcd(nu,|k|) divides signedk.",
+      "Partition the original k sum by this actual c, then discard the condition that c be exactly this quotient. Positively overcount using all divisors c|nu withc<=2F and only nu/c|k. No second factorF is generated. The number of possible c is at most tau(nu)."
+    ],
+    "equal_h_collision_count": [
+      "R² counts ordered pairs of signed h-pairs. The equal part is precisely h1=h1prime andh2=h2prime, contributing R. At a fixed nonzero k, choose(h1,s1) in at most(2H)(2S)=4HS ways.",
+      "The equation h2*s2=h1*s1-k is a nonzero signed integer on every actual solution because h2!=0 ands2>0. Its magnitude is |h2*s2|<2HS<=Xstar. Positive s2 is a divisor of its natAbs and fixes the signed h2 uniquely, so at mostD possibilities. There is no factor2 for its sign, which is already fixed by this integer, and tau(0) is never used.",
+      "Thus at most4HS D equal collisions for fixedk. For c|nu, count nonzero k with |k|<4HS andnu/c|k by<=8HS c/nu. Multiply f<=2F/c and sumc to get E<=64 D tau(nu) H²S² F/nu=64D tau(nu)T, before the outerD²."
+    ],
+    "unequal_h_actual_gcd_reduction": [
+      "Set d=gcd(s1,s2)>0, u=s1/d, v=s2/d. Actual positivity gives u,v>0, s1=du,s2=dv, gcd(u,v)=1 and S/d<=u,v<2S/d. No original coprimality restriction is assumed. Also1<=d<2S, so it may be enlarged to1<=d<=floor(2S).",
+      "Equality of k for two h-pairs gives m1u=m2v, where mi=hi-hiprime. Coprime cancellation yields m1=g*v andm2=g*u for a unique signed integerg. Ifg=0 bothm vanish, contradicting the unequal branch. Thusg!=0.",
+      "From |mi|<=2H andu,v>=S/d, obtain0<|g|<=2Hd/S. The number ofg is<=4Hd/S by the exact nonzero-multiple count withm=1. If2Hd/S<1 this set is empty, and no O(1) replacement is allowed.",
+      "Set k0=k/d=h1u-h2v!=0; |k0|<4HS/d. For c|nu set m=nu/c>0 andb=gcd(d,m)>0. Then exactly m|d*k0 iff(m/b)|k0. Since c|nu andb|m, m/b=nu/(c*b). Here b|nu andb<=gcd(d,nu); this b is not the signed difference multiplierg.",
+      "Therefore the number of allowed nonzero k0 is<=8HS c b/(d nu). For fixed(d,g,k0), choose(h1,u) in<=8HS/d ways (the direct bound4HS/d is even stronger). On actual solutions h1u-k0=h2v!=0, and its magnitude<2HS/d<=Xstar. Positive v divides its natAbs and determines signedh2, so there are at mostD possibilities. Then s1,s2 and hprime are fixed; ignoring their remaining original size restrictions is a positive enlargement.",
+      "Multiplyg,k0,(h1,u)-factorization,f counts: (4Hd/S)*(8HS c b/(dnu))*(8HS D/d)*(2F/c)=512 D H³ S F b/(dnu). Summing over actuald,c and replacingb<=gcd(d,nu) yields U<=512 D tau(nu) H³ S F/nu *sum_{1<=d<=floor2S}gcd(d,nu)/d, before outerD²."
+    ],
+    "harmonic_gcd_mean": {
+      "full_private_type_suggestion": "private theorem sum_gcd_div_le_divisors_harmonic (nu M : ℕ) (hnu : 0 < nu) : (∑ d ∈ Finset.Icc 1 M, (d.gcd nu : ℝ) / (d : ℝ)) ≤ (nu.divisors.card : ℝ) * (harmonic M : ℝ)",
+      "proof": "Use the already owned ActualLargeGCDBetaMass.gcd_le_divisor_sum at a=nu,n=d and gcd symmetry, divide bypositived and interchange the two finite sums. For each e|nu, e>0 and the inner sum over multiplesd=ej<=M is sum_{1<=j<=floor(M/e)}1/j. Its index is a subset of1..M sincee>=1, so it is<=harmonic M. This also handles M=0. Sum over all nu.divisors. The exact harmonic normalization is harmonic_eq_sum_Icc with rational-to-real casts; no logarithmic replacement is needed.",
+      "why_tau_nu_is_required": "The original unrestricted s-pair gcd cannot be replaced by1. The surviving bound has one tau(nu) from the c-sum and another from this gcd mean; both are paid byD only below support."
+    },
+    "final_constant_and_powers": [
+      "OuterD² times E gives<=64D³ tau(nu)T. OuterD² times U and the gcd-harmonic mean gives<=512D³ tau(nu)² HM (H/S)T.",
+      "Below support tau(nu)<=D andD>=1, hence Nnu<=64D⁴T+512D⁵HM(H/S)T. Since S>=1, M=floor2S>=2 andHM>=1, the equal term is<=64D⁵HM T.",
+      "Thus Nnu<=D⁵HM[64+512(H/S)]T<=576D⁵HM(1+H/S)T. This is exactly the proposed RHS, including (HS)² F/nu. Every factor is nonnegative. Above support Nnu=0 and the same RHS is nonnegative, so the complete theorem holds for every positive nu."
+    ]
+  },
+  "actual_countercontrols_against_invalid_shortcuts": [
+    {
+      "issue": "pretending samef without Cauchy",
+      "parameters": {
+        "S": 1,
+        "H": 2,
+        "F": 2,
+        "z": 1,
+        "y": 6
+      },
+      "actual_decompositions": "s1=s2=1; f=2,k=3 has h=(2,-1),(1,-2); f=3,k=2 has h=(1,-1). All are in actual half-open/nonzero gates.",
+      "b": 3,
+      "b_squared": 9,
+      "same_f_h_collision_sum": 5,
+      "Cauchy_with_actual_2_decompositions": 10,
+      "consequence": "The unweighted same-f collision claim9<=5 is false; the genuine divisor-decomposition Cauchy is necessary."
+    },
+    {
+      "issue": "assuming difference multiplierg dividesnu",
+      "parameters": {
+        "S": 2,
+        "H": 4,
+        "F": 2,
+        "s1": 2,
+        "s2": 2,
+        "f": 3,
+        "h": [
+          3,
+          4
+        ],
+        "hprime": [
+          1,
+          2
+        ],
+        "k": -2,
+        "y": -6,
+        "nu": 3
+      },
+      "actual_reduction": {
+        "d": 2,
+        "u": 1,
+        "v": 1,
+        "g": 2,
+        "c": 3,
+        "b": 1,
+        "k0": -1
+      },
+      "consequence": "g=2 does not divide nu=3; the actual gcd-reduction divisor isb=1. Droppingg not dividingnu would delete real unequal collisions."
+    },
+    {
+      "issue": "assuming original s1,s2 coprime",
+      "same_actual_example_above": true,
+      "gcd_s1_s2": 2,
+      "consequence": "An unrestricted positive multiplicity has actual noncoprime pairs; they must be reduced, not removed."
+    },
+    {
+      "issue": "claiming k asymp HS or adding1 when difference range isempty",
+      "parameters": {
+        "S": 10,
+        "H": 1,
+        "F": 1,
+        "s1": 10,
+        "s2": 11,
+        "h1": 1,
+        "h2": 1,
+        "f": 1,
+        "k": -1,
+        "nu": 1
+      },
+      "HS": 10,
+      "d": 1,
+      "unequal_g_upper": 0.2,
+      "consequence": "The signed nonzero frequency difference may be1 while HS=10. Withd=1 the unequalg range has no integer; a fixed+1 would destroy the small-range gain."
+    },
+    {
+      "issue": "discarding nu>HS as automaticallyempty",
+      "parameters": {
+        "S": 1,
+        "H": 1,
+        "F": 2,
+        "s1": 1,
+        "s2": 1,
+        "h1": 1,
+        "h2": -1,
+        "f": 3,
+        "k": 2,
+        "y": 6,
+        "nu": 6
+      },
+      "consequence": "HS=1<nu=6 but nu divides actualy=6 and the multiplicity is nonzero; the real zero threshold isnu>=8FHS."
+    },
+    {
+      "issue": "including k=0",
+      "parameters": {
+        "S": 1,
+        "H": 1,
+        "F": 1,
+        "s1": 1,
+        "s2": 1,
+        "f": 1
+      },
+      "counterfactual_zero_fiber": "Ifk=0 were allowed, h=(1,1),(-1,-1) would giveb(1,0)=2 and zero-fiber square4 for every nu, contradicting the claimed exact zero atnu>=8. Our literalcarrier excludes it."
+    },
+    {
+      "issue": "silently boundingtau(0)",
+      "consequence": "Both equal and unequal factorization steps use h2*s2 orh2*v; original h2!=0 andpositives2,v prove these signed integers are nonzero before divisor membership. No estimate at0 is asserted."
+    }
+  ],
+  "independent_exact_bounded_controls": {
+    "executed_in_memory_without_project_imports_or_file_mutation": true,
+    "parameters": "S,H in{1,3/2,2,5/2}; F in{1,3/2,2}; every signed nonzero h in range; every nu1..ceil8FHS+1. Fractions used for all real-scale bounds and harmonics.",
+    "case_count": 48,
+    "predicate_check_count": 10872,
+    "failures": [],
+    "checked": [
+      "divisor-decomposition Cauchy",
+      "equal collision64bound",
+      "unequal collision512bound with actual gcd mean",
+      "gcd harmonic bound",
+      "final576bound",
+      "zero above actualsupport"
+    ],
+    "max_observed_N_to_final_bound": "1/442368",
+    "meaning": "Implementation/endpoint controls only; the general proof is the complete derivation above, not sampling."
+  },
+  "minimal_actual_API_and_owned_bindings": {
+    "sole_parent_module": "ImbalancedChen.Part3ActualLargeGCDBetaMass",
+    "source_sha256": "a139b7b5121574715696aae718f7c974dafee909005d646b6cf8472d35c46d23",
+    "object_sha256": "462da8e1032d9f4b207a7c2de1b11c8461282027412ce0e29dd02b6820dbff2b",
+    "receipt": ".lake/proof-continuation/audits/20261015T190546514074Z/receipt.json",
+    "receipt_sha256": "095d8572453bb36aac176472d685b4db38ebd61753a297984bb70cc9468e161b",
+    "declarations_sha256": "9ed1ee6412991511eccb50c4ecba3055fc2688df79f9cd147800467c3ea42483",
+    "receipt_status": "PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS",
+    "before_after_inputs_exact": true,
+    "complete_consumed_owned_record": {
+      "axiom": false,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ],
+      "module": "ImbalancedChen.Part3ActualLargeGCDBetaMass",
+      "name": "ImbalancedChen.Part3.ActualLargeGCDBetaMass.gcd_le_divisor_sum",
+      "partial": false,
+      "type": "∀ {a : Nat} (ha : @Ne.{1} Nat a (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))) (n : Nat),\n  @LE.le.{0} Nat instLENat (Nat.gcd a n)\n    (@Finset.sum.{0, 0} Nat Nat Nat.instAddCommMonoid (Nat.divisors a) fun (d : Nat) =>\n      @ite.{1} Nat (@Dvd.dvd.{0} Nat Nat.instDvd d n) (Nat.decidable_dvd d n) d\n        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))",
+      "unsafe": false
+    },
+    "actual_native_mathlib_core_source_API_spans": [
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Algebra\\Order\\BigOperators\\Ring\\Finset.lean",
+        "sha256": "c89a7463df5acd6485e64d14b958daaedf6b857aad2808a4ead0570b52220568",
+        "lines": [
+          157,
+          163
+        ],
+        "actual_complete_consumed_source_span": "157: \n158: /-- **Cauchy-Schwarz inequality** for finsets, squared version. -/\n159: lemma sum_mul_sq_le_sq_mul_sq [CommSemiring R] [LinearOrder R] [IsStrictOrderedRing R]\n160:     [ExistsAddOfLE R] (s : Finset ι)\n161:     (f g : ι → R) : (∑ i ∈ s, f i * g i) ^ 2 ≤ (∑ i ∈ s, f i ^ 2) * ∑ i ∈ s, g i ^ 2 :=\n162:   sum_sq_le_sum_mul_sum_of_sq_le_mul s\n163:     (fun _ _ ↦ sq_nonneg _) (fun _ _ ↦ sq_nonneg _) (fun _ _ ↦ (mul_pow ..).le)"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Finset\\Lattice\\Fold.lean",
+        "sha256": "79b80dd5aa12886d31c582ab00585627dc4e7f1d7607c7b707484f38d95ce2f4",
+        "lines": [
+          113,
+          115
+        ],
+        "actual_complete_consumed_source_span": "113: @[to_dual inf_le]\n114: theorem le_sup {b : β} (hb : b ∈ s) : f b ≤ s.sup f :=\n115:   Finset.sup_le_iff.1 le_rfl _ hb"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\NumberTheory\\Divisors.lean",
+        "sha256": "60d4c8969dc88c34042be6e3d34951e355655f1fa26c6dd03ee1f9dd285ad910",
+        "lines": [
+          107,
+          116
+        ],
+        "actual_complete_consumed_source_span": "107: @[simp, grind =]\n108: theorem mem_divisors {m : ℕ} : n ∈ divisors m ↔ n ∣ m ∧ m ≠ 0 := by\n109:   rcases eq_or_ne m 0 with (rfl | hm); · simp [divisors]\n110:   simp only [hm, Ne, not_false_iff, and_true, ← filter_dvd_eq_divisors hm, mem_filter,\n111:     mem_range, and_iff_right_iff_imp, Nat.lt_succ_iff]\n112:   exact le_of_dvd hm.bot_lt\n113: \n114: theorem dvd_of_mem_divisors {m : ℕ} (h : n ∈ divisors m) : n ∣ m := (mem_divisors.mp h).1\n115: \n116: theorem ne_zero_of_mem_divisors {m : ℕ} (h : n ∈ divisors m) : m ≠ 0 := (mem_divisors.mp h).2"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Int\\Basic.lean",
+        "sha256": "20858534b38dbec0e50508605cd54cedef0137571dab816f13c6846a3dac7676",
+        "lines": [
+          64,
+          76
+        ],
+        "actual_complete_consumed_source_span": "64: /-! ### dvd -/\n65: \n66: @[norm_cast] theorem ofNat_dvd_natCast {x y : ℕ} : (ofNat(x) : ℤ) ∣ (y : ℤ) ↔ OfNat.ofNat x ∣ y :=\n67:   natCast_dvd_natCast\n68: \n69: @[norm_cast] theorem natCast_dvd_ofNat {x y : ℕ} : (x : ℤ) ∣ (ofNat(y) : ℤ) ↔ x ∣ OfNat.ofNat y :=\n70:   natCast_dvd_natCast\n71: \n72: lemma natCast_dvd {m : ℕ} : (m : ℤ) ∣ n ↔ m ∣ n.natAbs := by\n73:   obtain hn | hn := natAbs_eq n <;> rw [hn] <;> simp [← natCast_dvd_natCast, Int.dvd_neg]\n74: \n75: lemma dvd_natCast {n : ℕ} : m ∣ (n : ℤ) ↔ m.natAbs ∣ n := by\n76:   obtain hn | hn := natAbs_eq m <;> rw [hn] <;> simp [← natCast_dvd_natCast, Int.neg_dvd]"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Coprime.lean",
+        "sha256": "05b67b9e50bb0b92ba80dc4a8074580c14a8bdcdbdc150486f4796d104c8426a",
+        "lines": [
+          25,
+          65
+        ],
+        "actual_complete_consumed_source_span": "25: @[reducible, expose] def Coprime (m n : Nat) : Prop := gcd m n = 1\n26: \n27: -- if we don't inline this, then the compiler computes the GCD even if it already has it\n28: @[inline] instance (m n : Nat) : Decidable (Coprime m n) := inferInstanceAs (Decidable (_ = 1))\n29: \n30: theorem coprime_iff_gcd_eq_one : Coprime m n ↔ gcd m n = 1 := .rfl\n31: \n32: theorem Coprime.gcd_eq_one : Coprime m n → gcd m n = 1 := id\n33: \n34: theorem Coprime.symm : Coprime n m → Coprime m n := (gcd_comm m n).trans\n35: \n36: theorem coprime_comm : Coprime n m ↔ Coprime m n := ⟨Coprime.symm, Coprime.symm⟩\n37: \n38: theorem Coprime.dvd_of_dvd_mul_right (H1 : Coprime k n) (H2 : k ∣ m * n) : k ∣ m := by\n39:   have t := dvd_gcd (Nat.dvd_mul_left k m) H2\n40:   rwa [gcd_mul_left, H1.gcd_eq_one, Nat.mul_one] at t\n41: \n42: theorem Coprime.dvd_of_dvd_mul_left (H1 : Coprime k m) (H2 : k ∣ m * n) : k ∣ n :=\n43:   H1.dvd_of_dvd_mul_right (by rwa [Nat.mul_comm])\n44: \n45: theorem Coprime.gcd_mul_left_cancel (m : Nat) (H : Coprime k n) : gcd (k * m) n = gcd m n :=\n46:   have H1 : Coprime (gcd (k * m) n) k := by\n47:     rw [Coprime, Nat.gcd_assoc, H.symm.gcd_eq_one, gcd_one_right]\n48:   Nat.dvd_antisymm\n49:     (dvd_gcd (H1.dvd_of_dvd_mul_left (gcd_dvd_left _ _)) (gcd_dvd_right _ _))\n50:     (gcd_dvd_gcd_mul_left_left _ _ _)\n51: \n52: theorem Coprime.gcd_mul_right_cancel (m : Nat) (H : Coprime k n) : gcd (m * k) n = gcd m n := by\n53:   rw [Nat.mul_comm m k, H.gcd_mul_left_cancel m]\n54: \n55: theorem Coprime.gcd_mul_left_cancel_right (n : Nat)\n56:     (H : Coprime k m) : gcd m (k * n) = gcd m n := by\n57:   rw [gcd_comm m n, gcd_comm m (k * n), H.gcd_mul_left_cancel n]\n58: \n59: theorem Coprime.gcd_mul_right_cancel_right (n : Nat)\n60:     (H : Coprime k m) : gcd m (n * k) = gcd m n := by\n61:   rw [Nat.mul_comm n k, H.gcd_mul_left_cancel_right n]\n62: \n63: theorem coprime_div_gcd_div_gcd\n64:     (H : 0 < gcd m n) : Coprime (m / gcd m n) (n / gcd m n) := by\n65:   rw [coprime_iff_gcd_eq_one, gcd_div (gcd_dvd_left m n) (gcd_dvd_right m n), Nat.div_self H]"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\lean-4.33.0-rc1-linux\\src\\lean\\Init\\Data\\Nat\\Gcd.lean",
+        "sha256": "672c96102205b59a47742be74c959ed780ba319713baaa8a2eeede2cdc46cbea",
+        "lines": [
+          99,
+          107
+        ],
+        "actual_complete_consumed_source_span": "99: \n100: theorem dvd_gcd : k ∣ m → k ∣ n → k ∣ gcd m n := by\n101:   induction m, n using gcd.induction with intro km kn\n102:   | H0 n => rw [gcd_zero_left]; exact kn\n103:   | H1 n m _ IH => rw [gcd_rec]; exact IH ((dvd_mod_iff km).2 kn) km\n104: \n105: theorem dvd_gcd_iff : k ∣ gcd m n ↔ k ∣ m ∧ k ∣ n :=\n106:   ⟨fun h => let ⟨h₁, h₂⟩ := gcd_dvd m n; ⟨Nat.dvd_trans h h₁, Nat.dvd_trans h h₂⟩,\n107:    fun ⟨h₁, h₂⟩ => dvd_gcd h₁ h₂⟩"
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\NumberTheory\\Harmonic\\Defs.lean",
+        "sha256": "7f51e807c25be865d66ff82a292b24c3dcfc51d694f7aa2797e07663c083f83e",
+        "lines": [
+          20,
+          31
+        ],
+        "actual_complete_consumed_source_span": "20: @[expose] public section\n21: \n22: /-- The nth-harmonic number defined as a finset sum of consecutive reciprocals. -/\n23: def harmonic : ℕ → ℚ := fun n => ∑ i ∈ Finset.range n, (↑(i + 1))⁻¹\n24: \n25: @[simp]\n26: lemma harmonic_zero : harmonic 0 = 0 :=\n27:   rfl\n28: \n29: @[simp]\n30: lemma harmonic_succ (n : ℕ) : harmonic (n + 1) = harmonic n + (↑(n + 1))⁻¹ :=\n31:   Finset.sum_range_succ .."
+      },
+      {
+        "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\NumberTheory\\Harmonic\\Bounds.lean",
+        "sha256": "c5f418513f5ca500c0c02527ebf65fe2554c22b47c39e7e7b28e6f1402bdf848",
+        "lines": [
+          18,
+          22
+        ],
+        "actual_complete_consumed_source_span": "18: public section\n19: \n20: lemma harmonic_eq_sum_Icc {n : ℕ} : harmonic n = ∑ i ∈ Finset.Icc 1 n, (↑i)⁻¹ := by\n21:   rw [harmonic, Finset.range_eq_Ico, Finset.sum_Ico_add' (fun (i : ℕ) ↦ (i : ℚ)⁻¹) 0 n (c := 1)]\n22:   simp only [Finset.Ico_add_one_right_eq_Icc]"
+      }
+    ],
+    "no_custom_axiom_sorry_partial_or_analyticpremise_in_this_proposal": true,
+    "new_foreign_replay_claimed": false
+  },
+  "actual_minimal_parent_source_header_boundary": {
+    "walker_sha256": "e2e7eeaa0c24ea5def16b0cfac5fb63c40f8587421a75a0a0be851d9b7386914",
+    "proper_parent_count": 54,
+    "future_new_module_inclusive": 55,
+    "foreign_header_boundary_count": 63,
+    "all54_sources_cache_original_objects_matched": true,
+    "proper": {
+      "ImbalancedChen.Part3ActualLargeGCDBetaMass": {
+        "source_path": "ImbalancedChen/Part3ActualLargeGCDBetaMass.lean",
+        "source_sha256": "a139b7b5121574715696aae718f7c974dafee909005d646b6cf8472d35c46d23",
+        "explicit_imports": [
+          "ImbalancedChen.Part3PolynomialResidueDivisorBound",
+          "Mathlib.Data.Nat.Factorization.Basic",
+          "Mathlib.NumberTheory.Divisors",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Analysis.Real.Sqrt"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "dd4f72b0172330edfb966d3552dfafbd2ea37442a46aad469718309bb60798a2",
+        "object_sha256": "462da8e1032d9f4b207a7c2de1b11c8461282027412ce0e29dd02b6820dbff2b",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.Part3PolynomialResidueDivisorBound": {
+        "source_path": "ImbalancedChen/Part3PolynomialResidueDivisorBound.lean",
+        "source_sha256": "7cbc4c842aa4dbf18ab9644465e4983014c8aaf8bd38f74dd1b37a5574a2feda",
+        "explicit_imports": [
+          "ImbalancedChen.Part3CleanBetaLargeGCDMajorant",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "ba64143f0f8e32541b16951bab45eff16aa99c2579f7aca19146550bcd50ba9c",
+        "object_sha256": "80c87b905dfec82eeb4a49405cef43d4fc698e7fd91f6919afd6ece748537d32",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.Part3CleanBetaLargeGCDMajorant": {
+        "source_path": "ImbalancedChen/Part3CleanBetaLargeGCDMajorant.lean",
+        "source_sha256": "94826ca0668f613e348ddddfa4683820d7d6a99844a0cf3923f7bb90159b6bbb",
+        "explicit_imports": [
+          "ImbalancedChen.Part3CommonSmoothCutoff",
+          "ImbalancedChen.Part3FactorFiberDivisor",
+          "ImbalancedChen.Part3ComplexCRTConsumer"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "21d12578f1629af4fd0f374207e5bb1ae4d0c30564cd568dbbcc007d2813c3d7",
+        "object_sha256": "85e51f6bdec1d2bce561e13ac5d2b85648d1775d88078410c2b7c6db2ae31f9b",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.Part3ComplexCRTConsumer": {
+        "source_path": "ImbalancedChen/Part3ComplexCRTConsumer.lean",
+        "source_sha256": "6caf0ac115b715d2ba28c6b352d80f4ce4106217dcc4f0e954948f836ad52cc9",
+        "explicit_imports": [
+          "ImbalancedChen.Part3ComplexDispersion",
+          "Mathlib.Data.Int.ModEq",
+          "Mathlib.Data.Nat.ModEq"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "e7c08c8a9e32fcf64bd436ff9f8276097cd7bb8c130c1ec45aecf07204dae573",
+        "object_sha256": "af49ba253a1eb113bd442eaec0ae9b67fc82c809c084066f3b9e319e971e8d70",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.Part3ComplexDispersion": {
+        "source_path": "ImbalancedChen/Part3ComplexDispersion.lean",
+        "source_sha256": "edb3249a3e84576148d7e1ff881debb5467005d1cac772d33505320a14d6c7c4",
+        "explicit_imports": [
+          "ImbalancedChen.Part3DistributionTargets",
+          "Mathlib.Analysis.Complex.Basic",
+          "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+          "Mathlib.Algebra.Star.BigOperators"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "b7018abf4668ffb7bb35f6f22af3ab500264a984b487c746b05833ef5f5fb75f",
+        "object_sha256": "4cc8348bb784f5b7819112b37ca1e3af2019affa8fa72e8d4fa2f4a82d9c8101",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.Part3DistributionTargets": {
+        "source_path": "ImbalancedChen/Part3DistributionTargets.lean",
+        "source_sha256": "a0b43f877bb7bcdf7606e19281521a0165538c08c0495a2a3e2d58b66aeb08cc",
+        "explicit_imports": [
+          "ImbalancedChen.RestrictedResidueScale",
+          "Mathlib.Analysis.Complex.Exponential"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "50899e53fd76c39bd8c59067ce8dc82aecffb5f46159f4c57a125993171b68d9",
+        "object_sha256": "ace5c67f7d4a4b2c317e795b9db54992d6f326e7875cebd71fa66e8272a60220",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.RestrictedResidueScale": {
+        "source_path": "ImbalancedChen/RestrictedResidueScale.lean",
+        "source_sha256": "3c58f54f875a46886c28bc224fdf4952d6b53a72ae6f6f2b8debaf7e71c01d0f",
+        "explicit_imports": [
+          "ImbalancedChen.PanProductGridRanges"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "e2975a75503553307b2c645035f21fb1d53e0f16b266af996a39bcc90179c778",
+        "object_sha256": "6accb864a75392565c12515b51613724121c89d78d79b9ab14d7653852fa768f",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.PanProductGridRanges": {
+        "source_path": "ImbalancedChen/PanProductGridRanges.lean",
+        "source_sha256": "88b2c972243ba1e33e89a08b6759c16512620751b7c25206dfa4d767bf79466a",
+        "explicit_imports": [
+          "ImbalancedChen.PanProductGrid",
+          "ImbalancedChen.RealHalfProductMassSplit"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "12fdcd6ac5d6d85d838d4d303ed51779c70894947c64aaabb6e2c715d6c69aa4",
+        "object_sha256": "8a592012f42b417fee17ee20db06d3459302dd6e923ba257c743c0a535bd7e66",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.RealHalfProductMassSplit": {
+        "source_path": "ImbalancedChen/RealHalfProductMassSplit.lean",
+        "source_sha256": "6516890accb0179098fca79f98791adeddad569a858fc69710b87a8d3b92a3ca",
+        "explicit_imports": [
+          "ImbalancedChen.RealHalfProductMass",
+          "ImbalancedChen.PowerErrorBudget"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "4a843632911f3737772f26915563808d8c4b5e607e8023a4ccb1f5093bf10f7b",
+        "object_sha256": "f9894566be5967ad03927c024c207ca3fabd9e5595ede88362fffe7381223fea",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.PowerErrorBudget": {
+        "source_path": "ImbalancedChen/PowerErrorBudget.lean",
+        "source_sha256": "d4b65c0a99377bf3cfb4807bd418f427d03d98791919852e5822094843ed5e82",
+        "explicit_imports": [
+          "ImbalancedChen.SingularSeries",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "db582e271a78623e878424bfd5a328378b6b8b1e6db0aaac406254b96e32a3db",
+        "object_sha256": "2241bba520345793b723a5f8cc74dc9f3b5d6dcc9d0c561f8c3f5701eed9d202",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.SingularSeries": {
+        "source_path": "ImbalancedChen/SingularSeries.lean",
+        "source_sha256": "ff771bfd1018fc0efaed6a56c26473033787d0de1949f737ef1012d024c9b2b3",
+        "explicit_imports": [
+          "ImbalancedChen.NormalizationGrowth",
+          "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+          "Mathlib.Analysis.PSeries",
+          "Mathlib.Data.Nat.PrimeFin",
+          "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "9858e1f83a364400b124d0ed069856a06396b394ac739137f59da869085fca39",
+        "object_sha256": "09b35699dc5eaf32bd81b1ea4c5196abec5925b16c475773c261c839e1142150",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.NormalizationGrowth": {
+        "source_path": "ImbalancedChen/NormalizationGrowth.lean",
+        "source_sha256": "c4a4544c29ae04cbcedc1f62261cb805bfa9e0f473aaf532c098b724624c9286",
+        "explicit_imports": [
+          "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+          "Mathlib.Algebra.Ring.Parity",
+          "Mathlib.Order.Filter.AtTopBot.Archimedean",
+          "Mathlib.Order.Filter.AtTopBot.Field"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "12c5cd1d99a9bb942600c8a792279fabecf0e38c89f0061fed856fbf0b9e8f2b",
+        "object_sha256": "12e44886d5f17db7b59698497868352aaacac28544c1db1c27b2da8410edcef1",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.RealHalfProductMass": {
+        "source_path": "ImbalancedChen/RealHalfProductMass.lean",
+        "source_sha256": "90c809c15ce26cd1f4785b5117e2d8a5dcfdc5720480bc690d198d95f33601f3",
+        "explicit_imports": [
+          "ImbalancedChen.RealHalfProductSource",
+          "ImbalancedChen.HalfProductMassLimit"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "3412ee5b3f3f8fc89d9d14e8f15c320ea030ac585c7d79fcd004ea86ebb2d3aa",
+        "object_sha256": "25611ef2ce2d5599721f05888d0cbfedacaf727de6b6f4ea286b96713b275784",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.HalfProductMassLimit": {
+        "source_path": "ImbalancedChen/HalfProductMassLimit.lean",
+        "source_sha256": "1dbb92a59abc74034d49f52428071aae3ccd9cc05beda8f75f4e693c08f3a4ab",
+        "explicit_imports": [
+          "ImbalancedChen.HalfProductMassError",
+          "ImbalancedChen.MassLogIntegral",
+          "Mathlib.Topology.MetricSpace.Pseudo.Defs"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "df48f1e9cb59f67224eb494a662b8e6105696907652f93921ae79b82d170633d",
+        "object_sha256": "0587e134453f5811a810eb95563e9f5ee08e5f9d5b4368730ce8776fc801d20a",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.MassLogIntegral": {
+        "source_path": "ImbalancedChen/MassLogIntegral.lean",
+        "source_sha256": "bf42c021072fc939bdb5f9d5bc9771fa3d5ed1dd69dd5265bda8418f76a01821",
+        "explicit_imports": [
+          "ImbalancedChen.HalfProductGeometry"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "bd8741d051a76567713e3fd6216652d087a9d00b925fb6cdcad8fd138f49351b",
+        "object_sha256": "1ef54feb5c2d2697719eac2334a5d2542d539f83dc9868dd0c28a75fb5d74154",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.HalfProductGeometry": {
+        "source_path": "ImbalancedChen/HalfProductGeometry.lean",
+        "source_sha256": "d04e31ea73a853c4fa37e881ef30a748b7f83b8a0e930e0cc2ae231dbb629db1",
+        "explicit_imports": [
+          "ImbalancedChen.OrderedBad",
+          "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+          "Mathlib.Tactic.Convert",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "b88942ff9c2a53e969b094e79677664e55a612670c95eafcfabf4efc6498d58b",
+        "object_sha256": "0098c098c00919fc5b15389767d7913e8ffdbc77fa2317028b98f91866868f39",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.OrderedBad": {
+        "source_path": "ImbalancedChen/OrderedBad.lean",
+        "source_sha256": "a38031995175bd2f847eefd498c929e941400c9cffdf6f78e3e06bd2100764da",
+        "explicit_imports": [
+          "ImbalancedChen.RationalPowers"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "5ca055b6ab291fc7d13f550c022e8a6b12f084e6ea085aea72e6ed9aa298bce7",
+        "object_sha256": "1c06aa82a786baabba94ac4f6899f369d074f5f6502c0278f48bc2ada3b7cce2",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.RationalPowers": {
+        "source_path": "ImbalancedChen/RationalPowers.lean",
+        "source_sha256": "40d21d2c61d61862e3c29769d2220243ecf7bfb43fb9b9690597dd769f07ca06",
+        "explicit_imports": [
+          "ImbalancedChen.Counting",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "6ba43d8efbf0a96ea3a0c9c2d11b624c522fc9944a63d7521fa3a49d37840880",
+        "object_sha256": "6cabb79e4990a879873ecf5cc7f8deda8cdeb6c257b793927fe0f40b566b4dea",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.Counting": {
+        "source_path": "ImbalancedChen/Counting.lean",
+        "source_sha256": "8651960368f560d7c931ef456cdd9bcc8a71477e9bbd5fb9c3add07dcc9206fa",
+        "explicit_imports": [
+          "Mathlib.Data.Finset.Card",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Real.Basic",
+          "Mathlib.Tactic.Linarith",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "1cabfb6023b99505ab292d46b9bd81f06372cde697c0f413167d10547417232c",
+        "object_sha256": "3ba19b992217dc7cefe42fc28364905a1f83c479ed1a227a94d09725fa9513f8",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.HalfProductMassError": {
+        "source_path": "ImbalancedChen/HalfProductMassError.lean",
+        "source_sha256": "1109367deda15f8255ae1a987ecf3b82225ddfad6c335fd890d7c989d5434ad9",
+        "explicit_imports": [
+          "ImbalancedChen.HalfProductMassSplit",
+          "ImbalancedChen.UniformPrimeTail",
+          "ImbalancedChen.LogCutoffError"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "ded98533e707c69fdcbfd84603995299be397a442a979a566b025733e5f32306",
+        "object_sha256": "4fe425880a9c568b388a1f75cf36bca55f1ed395259964940e3ccacaa30a78fc",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.LogCutoffError": {
+        "source_path": "ImbalancedChen/LogCutoffError.lean",
+        "source_sha256": "202d60ddffa0cbf6a0cc3259af4ec3654e4227a5e16523a2db71ba30d1dfcd49",
+        "explicit_imports": [
+          "ImbalancedChen.SingularSeries",
+          "ImbalancedChen.BadSourceLocalization",
+          "Mathlib.Topology.Algebra.Order.Field",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "0a4f6342628d998cdb451606a3166f9b0993af5aaac3dc61bc835ef15c8b7c37",
+        "object_sha256": "9b1846343405d92dff183ba1a6354ec00efaccd23f87b8200c44f26d48d16331",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.BadSourceLocalization": {
+        "source_path": "ImbalancedChen/BadSourceLocalization.lean",
+        "source_sha256": "0e88326b03a4c20a472014b506d7533495d86801909af4d455de5fcfae6695a7",
+        "explicit_imports": [
+          "ImbalancedChen.HalfProductGeometry",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "468dc0cf40761dc1f4c202ef6173f2f9dda7af4a0cb4e0798bfdc5c40da50234",
+        "object_sha256": "ae5bd040391e37faad01afa949e372600ef95c291215c16d68f68f77a7799e59",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.UniformPrimeTail": {
+        "source_path": "ImbalancedChen/UniformPrimeTail.lean",
+        "source_sha256": "786ed7d70f3f3e89161a9e025d2c8bb0b06db6cddae7200c3fc1c0ca009ebbbf",
+        "explicit_imports": [
+          "Mathlib.Analysis.Asymptotics.Defs",
+          "Mathlib.Analysis.Real.Sqrt",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.NumberTheory.PrimeCounting",
+          "Mathlib.Order.Filter.AtTopBot.Archimedean",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Ring"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "0a422578cdb9fc5296dc69159d5d0bd5b7f57904021d11a84e34629891da3aa4",
+        "object_sha256": "7fa70cded38e1e11168ccf1eb0dee4cae481c9a698d3520480441c5532dbbe98",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.HalfProductMassSplit": {
+        "source_path": "ImbalancedChen/HalfProductMassSplit.lean",
+        "source_sha256": "ba78734851c6114c76234f5b607efc1a15bcac377692e11e361cd4c02032dc16",
+        "explicit_imports": [
+          "ImbalancedChen.HalfProductMassFibres"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "e1b41bc5d95551e3bb8f4c019f8d40f53844b64b65cb7d7835303eaadfd99844",
+        "object_sha256": "2fb207493a4a604bbca37cc54202c081ae000ff06230364fd8eef16f6d0c1185",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.HalfProductMassFibres": {
+        "source_path": "ImbalancedChen/HalfProductMassFibres.lean",
+        "source_sha256": "f83e431ffdd975af44ae54eaadbae3ce6d609ed265d433dbbd05b4f6fc0f77c7",
+        "explicit_imports": [
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+          "Mathlib.Data.Nat.Sqrt",
+          "Mathlib.NumberTheory.PrimeCounting"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "707ce8d47b6022fcc2b2150b069fd760fd3f448a91a18be519832e2edc5288d6",
+        "object_sha256": "41d3e29f54a7ef4e191f57bfa1b5c9a23aaa9bf7159fe85f4369fbae197fd396",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.HalfProductSource": {
+        "source_path": "ImbalancedChen/HalfProductSource.lean",
+        "source_sha256": "dc6e261ddfdc9a66e966a4ec5c2a129d3f4b7583501c5c82364f2aa4a8af194e",
+        "explicit_imports": [
+          "ImbalancedChen.BadSourceLocalization",
+          "Mathlib.Data.Finset.Prod"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "b589480942d791dc666f6e86f97182f046328e07649bb4df503e4cd2b5e60a72",
+        "object_sha256": "e8e3c3900d6bf35767cfeaace22f52749154338d98f356206e515560a9af0635",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.RealHalfProductSource": {
+        "source_path": "ImbalancedChen/RealHalfProductSource.lean",
+        "source_sha256": "0c3211cb72d8f27eb380f57fe5d751f8fc3179cb646c683c1449d450c71c55e7",
+        "explicit_imports": [
+          "ImbalancedChen.CurrentMainTheorem",
+          "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Prod",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "3612807b228b069e8bfe292a34d5775c44ef966f315ca06338def61efb2d9a81",
+        "object_sha256": "85a5f074be9a161387f4d6066700dc3229e9c2c81da312530798b223b1d85cc8",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.CurrentMainTheorem": {
+        "source_path": "ImbalancedChen/CurrentMainTheorem.lean",
+        "source_sha256": "68a2a3aad8ccdc73ed8e5076e31b9984bc659c307d71150920a71b5fc98f067d",
+        "explicit_imports": [
+          "ImbalancedChen.CurrentNumericalTransfer",
+          "ImbalancedChen.OrderedBad",
+          "Mathlib.Topology.Instances.EReal.Lemmas"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "251a621aeb0312adbbb353dac4b772a24d4dfe69da9ef3eee34273857a2f442d",
+        "object_sha256": "ffceaf8aea007c1dbb6d020288e849847794e7e6aa10302b1ca6b9fd5b2537df",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.CurrentNumericalTransfer": {
+        "source_path": "ImbalancedChen/CurrentNumericalTransfer.lean",
+        "source_sha256": "acc924036cb6ca73ef660c632d5577462ba5c69b8b5600aef63255264c3a270a",
+        "explicit_imports": [
+          "ImbalancedChen.AsymptoticTransfer",
+          "ImbalancedChen.RationalPowers",
+          "ImbalancedChen.SingularSeries",
+          "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+          "Mathlib.Tactic.NormNum",
+          "Mathlib.Tactic.Linarith"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "666a7ae66a498f1d5223e58a7082b3631ee6d4ff47e8c2b46887a78f98739760",
+        "object_sha256": "dba62ec9b9ec2cdeb604c994f146ea6969a0bcbfde67963e90bd95b40054e984",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.AsymptoticTransfer": {
+        "source_path": "ImbalancedChen/AsymptoticTransfer.lean",
+        "source_sha256": "ece82cd26ee1030d708e6055395bdb5a6a4cf8b1d8c6072a67a9a59cd36bc560",
+        "explicit_imports": [
+          "ImbalancedChen.Counting",
+          "ImbalancedChen.Multiplicity",
+          "Mathlib.Order.Filter.AtTopBot.Basic"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "9dac8a0ec238e287bbab2e01782b0807ebc8b133b5bfcfff7396fc5ce515c8c8",
+        "object_sha256": "34bf4ca29753fe7cdc0256cc58a4a804c88e2d44f7b1f0f0cc10d584ce3af89d",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.Multiplicity": {
+        "source_path": "ImbalancedChen/Multiplicity.lean",
+        "source_sha256": "9d10526b9efe91336095c2bf1ec7fe860fb6e373613b0bf7915c370fb97800a6",
+        "explicit_imports": [
+          "ImbalancedChen.Counting",
+          "Mathlib.NumberTheory.AlmostPrime",
+          "Mathlib.Tactic.SplitIfs"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "34660622ad7c1717b8d8977c4161d5c3db865e87a6e382536b9fef3df6fe7e0a",
+        "object_sha256": "2f421673793f153c6dccfcc8463657c8f76d73342f2994e33eb04ed1266ff180",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.PanProductGrid": {
+        "source_path": "ImbalancedChen/PanProductGrid.lean",
+        "source_sha256": "e37bb4d2aa855c86e1601566e9ea6649092ac625c434d8a30476208057fab743",
+        "explicit_imports": [
+          "ImbalancedChen.PanProductAggregateBudget",
+          "ImbalancedChen.SelectedGridRanges"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "dbdf86ee87f1a6fa47ccd7ed718232c0875b2fb823c1c98d87139af9ba58fda8",
+        "object_sha256": "033c900f689b93f95ede97e2a69b2a9f945340dc11b46fb58fab1b66a9cb1905",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.SelectedGridRanges": {
+        "source_path": "ImbalancedChen/SelectedGridRanges.lean",
+        "source_sha256": "45909866dd099095795a0abbaba05c3ffe0250a569c694ce57640292b4a3a847",
+        "explicit_imports": [
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.HalfProductGeometry",
+          "ImbalancedChen.ActualSieveGate"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "8a210daac8ec893849b76c8458d916eaa61b7aa43ee9867a04b63d3bf9ba6b24",
+        "object_sha256": "178599e2d96169b3b1d584b87803762d3b55051d3174f76351c4815f57a6d29f",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.ActualSieveGate": {
+        "source_path": "ImbalancedChen/ActualSieveGate.lean",
+        "source_sha256": "ccfecae8cbaa1dcf1685238e1db0764aa64ec15744502651623f56d9cfa4831a",
+        "explicit_imports": [
+          "ImbalancedChen.LogCutoffError",
+          "ImbalancedChen.PowerErrorBudget",
+          "ImbalancedChen.SieveSourceCoprimality",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.NormNum",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "4bf2b1a1101a3e8946b48c513f45b8faef41091e7f55e99d7aa1f406e808c731",
+        "object_sha256": "f9bd4bda795d00c4c58c118ce7462d67fa12f702088de2776ea02d71ef8ffde1",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.SieveSourceCoprimality": {
+        "source_path": "ImbalancedChen/SieveSourceCoprimality.lean",
+        "source_sha256": "d9fa15c9eac2dfb66200f1a40927450abd7ff766cfaada03bb27a6a3e559f754",
+        "explicit_imports": [
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Data.Nat.GCD.BigOperators",
+          "Mathlib.Data.Nat.ModEq",
+          "Mathlib.Data.Nat.Prime.Basic",
+          "Mathlib.Data.Finset.Card",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "483b4f3446b18e2e42a6bcffba476a93fbb7e07be20ce2b36a86531eaaf9f17a",
+        "object_sha256": "b31818d931630f334bd1acccb51ef626943e9c2e139d7be951116503aaa9926b",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.ActualGridEnvelopes": {
+        "source_path": "ImbalancedChen/ActualGridEnvelopes.lean",
+        "source_sha256": "f2171599b210583ee28b316da48b114c74f8742b564d0c1d3a30aaf073aaf528",
+        "explicit_imports": [
+          "ImbalancedChen.MultiplicativeGridPartition",
+          "ImbalancedChen.BoundaryGlobalCaps"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "f0d55cd893b02ed13ba6c1d0fa97eafff5ec6ce6fe1b91e85a18e8dd5d88fed6",
+        "object_sha256": "8044561fb6ce0dd6339f83423dd15206422406a251f9808bf48a683919433716",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.BoundaryGlobalCaps": {
+        "source_path": "ImbalancedChen/BoundaryGlobalCaps.lean",
+        "source_sha256": "95eb4934caa7aa8ed308a7094ae46a4d14d6336e2470ee2b58a88ce0b379caae",
+        "explicit_imports": [
+          "ImbalancedChen.BoundaryCellContainment",
+          "Mathlib.Analysis.Real.Sqrt"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "e68f28693fe5d3efcb911981598d3949d01eb0fe11479967089dc286f5ad950f",
+        "object_sha256": "37a46bd5b8b56ac80a39cfce88e236307397d88a959eb4364dca2a969edb0609",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.BoundaryCellContainment": {
+        "source_path": "ImbalancedChen/BoundaryCellContainment.lean",
+        "source_sha256": "12a74397730d07769c95cb7e1ab6adc4a3b570daedc49dbc65c0c0defd7ba80d",
+        "explicit_imports": [
+          "ImbalancedChen.BoundaryGridBudget",
+          "ImbalancedChen.HalfProductSource",
+          "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "09601690331b3b054c73a549bb250d6405f95f58506751be0bc55579f524077f",
+        "object_sha256": "6d9a76f92c8bb510d0e7887550b0c2cdb972fe821adb0354e5323a7389adba30",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.BoundaryGridBudget": {
+        "source_path": "ImbalancedChen/BoundaryGridBudget.lean",
+        "source_sha256": "a36da7f8fc558d406e5e00b9790389438846198caa610540da8145471a419245",
+        "explicit_imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Finset.Max",
+          "Mathlib.Order.Interval.Finset.Nat",
+          "Mathlib.NumberTheory.Harmonic.Bounds",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "78cc074968501b8bb476e34cbe78b847fa8d481288be15fb8804642bd6b31898",
+        "object_sha256": "59145ad590fa326d1fc666f207aa78180b44d6d0f5d79d90dac96e66b656c5a6",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.CurvedRegionDiscrepancy": {
+        "source_path": "ImbalancedChen/CurvedRegionDiscrepancy.lean",
+        "source_sha256": "3f4b1516428682018cba282d92cc6d1ddf676b620e9fc3e5e574912a89468597",
+        "explicit_imports": [
+          "ImbalancedChen.FiniteSieveModel",
+          "Mathlib.Algebra.BigOperators.Ring.Finset",
+          "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Ring"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "15a66b17c38d0e0e30ff32e0469b4564de29b5ef93fbba9625f422fc4529f9a9",
+        "object_sha256": "e2ed1389c18411729b0f7f2177905d8de93e90d051abcd624f945e285bcd0562",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.FiniteSieveModel": {
+        "source_path": "ImbalancedChen/FiniteSieveModel.lean",
+        "source_sha256": "9112139c826b1ebf81b12d69b873c179a2cbd6e17305ec3d0818032fb34bfb0c",
+        "explicit_imports": [
+          "ImbalancedChen.SieveSourceCoprimality",
+          "Mathlib.NumberTheory.SelbergSieve",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.Data.Nat.Squarefree",
+          "Mathlib.Tactic.NormNum",
+          "Lean.Elab.Tactic.NormCast",
+          "Lean.Elab.Tactic.Omega"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "68502ccd1ddcac7f9f5df4d43a9483238627355f39fa5281cbb8bac753a1444a",
+        "object_sha256": "2b3fd7589702d14452e1064daef7bff3ab9d688440ca814809745f4f73e8f615",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.MultiplicativeGridPartition": {
+        "source_path": "ImbalancedChen/MultiplicativeGridPartition.lean",
+        "source_sha256": "9be180c5c070d8855c9e1fa1acaf30ccda7f87d7ec45410670e2d527a6b18598",
+        "explicit_imports": [
+          "ImbalancedChen.BoundaryCellContainment",
+          "Mathlib.Analysis.SpecialFunctions.Log.Base",
+          "Mathlib.Algebra.Order.Floor.Semiring",
+          "Mathlib.Data.Finset.Prod",
+          "Mathlib.Order.Interval.Finset.Nat"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "1af7f1fe08348842ae92992e980cbdd0b161e6fdcbb6a4935d71eafcfadccbb5",
+        "object_sha256": "f08d04f92bbe7164ab8d746736da915d8bbe9880308df7f7fc9007a5ec3f1b11",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.PanProductAggregateBudget": {
+        "source_path": "ImbalancedChen/PanProductAggregateBudget.lean",
+        "source_sha256": "13b512d4c51a00b217ea72b3033ec50bd48d76c10812184a20d1bc838ef04140",
+        "explicit_imports": [
+          "ImbalancedChen.PanProductLiuBridge"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "52f51b6f2e822882f13baa9903cf5ec38f57d7338ce21e05737652983ca9b3db",
+        "object_sha256": "3fb0381fd22a2bdc959f08ebc824e92f2aca4299813643a85a8d71abfb53a8bf",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.PanProductLiuBridge": {
+        "source_path": "ImbalancedChen/PanProductLiuBridge.lean",
+        "source_sha256": "dd239cb5a36898abe49cdb23d60cc1e3e86dede36bd849c41013f18a99ee2d61",
+        "explicit_imports": [
+          "ImbalancedChen.PanProductResidueBudget",
+          "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "ca55a128d2e31b52e4af6d07b30a80dd38795dca65da34f3c288cbe024a4d217",
+        "object_sha256": "282ea9c6ee6069605261275cad59ca7a82dca60f770e265b53889f3eb0800718",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.PanProductResidueBudget": {
+        "source_path": "ImbalancedChen/PanProductResidueBudget.lean",
+        "source_sha256": "4b5dcf30d8aebee0779f6dc3e4f1188a6797f9cd5215f71737b8369a79a9fbaf",
+        "explicit_imports": [
+          "ImbalancedChen.PanProductStrips",
+          "ImbalancedChen.ResidueSelectorBudget"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "a73d367cc9113dde02c1910250e53bc957a7f93e406484eb234f84649039c4f5",
+        "object_sha256": "d5ff575623c81448fb3628d16f948a287c0fa3dcb61f32b5c3a5c7b103cd24c6",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.ResidueSelectorBudget": {
+        "source_path": "ImbalancedChen/ResidueSelectorBudget.lean",
+        "source_sha256": "03715ddc6bae19040f6d30511548a954d08428629a3a7d2e2884a4b8ce5b8e69",
+        "explicit_imports": [
+          "ImbalancedChen.PrimeRectanglePrefixes"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "aca41855c18ec7d914c639d005e0fb6af209f2245296f67faf83e3d5b7bf0fae",
+        "object_sha256": "67c5e7b245dab08eee689d0b965d2c56ee8a04ef2742a0de1fad545af8be9521",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.PrimeRectanglePrefixes": {
+        "source_path": "ImbalancedChen/PrimeRectanglePrefixes.lean",
+        "source_sha256": "d74bfbac6032d4de701f13ddf78308d2a584916e144aab5326a1ba4441586b5e",
+        "explicit_imports": [
+          "ImbalancedChen.RectangleDiscrepancyAssembly",
+          "ImbalancedChen.SelectedGridRanges",
+          "ImbalancedChen.CoprimeRecentering"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "2d30044d3317e0b9e72b6423c7f151147b38056025cd1f0731a56b86e422b6c7",
+        "object_sha256": "324bc0a2f0ea6996b39b6a38675c51ef53ea371129a12c259bffffb562a79fde",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.CoprimeRecentering": {
+        "source_path": "ImbalancedChen/CoprimeRecentering.lean",
+        "source_sha256": "45c28d97bd10eccaa99498b2309fb03c9d8efbdd5040e12d7ba33c3702b418c5",
+        "explicit_imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.Tactic.FieldSimp"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "aa89c8b90b34dd897a5c952e064f5612f9dd3b3a97e3faed5cc9efcda872394a",
+        "object_sha256": "984964000ca61288896fa4db232848426c7e548ac7d813f1eaff58c0425fabc4",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.RectangleDiscrepancyAssembly": {
+        "source_path": "ImbalancedChen/RectangleDiscrepancyAssembly.lean",
+        "source_sha256": "5af6880e6c3f2c00a846cfccd8842e08f80ed8eb314cfdaa972904c2f987e861",
+        "explicit_imports": [
+          "ImbalancedChen.ActualGridEnvelopes",
+          "ImbalancedChen.TotientReciprocalBudget"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "8af38b5a52965cb502080c7489d6b1fd77852673542a7f71ef1c00562e6d0c23",
+        "object_sha256": "123a6e2a34494782d1adec01935a456e5f301505942d25dd11fea961944b97b1",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.TotientReciprocalBudget": {
+        "source_path": "ImbalancedChen/TotientReciprocalBudget.lean",
+        "source_sha256": "aa80ff2ad79f77405951f1e56e993a851a1b32ad46c970e7914adb94bdb2db86",
+        "explicit_imports": [
+          "ImbalancedChen.CurvedRegionDiscrepancy",
+          "Mathlib.Data.Nat.Totient",
+          "Mathlib.NumberTheory.ArithmeticFunction.Misc",
+          "Mathlib.NumberTheory.Harmonic.Bounds",
+          "Mathlib.Algebra.BigOperators.Intervals",
+          "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+          "Mathlib.Tactic.FieldSimp",
+          "Mathlib.Tactic.Linarith",
+          "Mathlib.Tactic.Positivity",
+          "Mathlib.Tactic.Ring"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "425d20b10f80e421a3c58bbaa6d075518b80252066c1417d724cbc19be3d95fb",
+        "object_sha256": "752ee429a6ca6bf2f735b859a60c66d3ebcb9016e49f29d5f7c5bbcf7c74522f",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.PanProductStrips": {
+        "source_path": "ImbalancedChen/PanProductStrips.lean",
+        "source_sha256": "eb97d23050e3ec624cde24ef779acc67d7ded44283dc60097edc2d715429863b",
+        "explicit_imports": [
+          "ImbalancedChen.HalfProductPanFinite",
+          "ImbalancedChen.PrimeRectanglePrefixes"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "9269dfabc2fa09855c032f34fff9835ee170076c7d48b8f490b45b22342f20a2",
+        "object_sha256": "202dc0159b5f4749f064d012fe5b7897ee0b3ccd8c27562f1fa57638d0d351f3",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.HalfProductPanFinite": {
+        "source_path": "ImbalancedChen/HalfProductPanFinite.lean",
+        "source_sha256": "f392c7642bd00e418c91000a3ed6ef7c4c30194808e974999d4a39699d2b62de",
+        "explicit_imports": [
+          "ImbalancedChen.FiniteSieveModel",
+          "ImbalancedChen.HalfProductMassFibres"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "c156efb56ab80b36c863f329aa7738e64794b3159d72977656491e80dff96f19",
+        "object_sha256": "ece75c968733e5b01be26317a7a9dced044111dad501159801bf5096108c8151",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.Part3FactorFiberDivisor": {
+        "source_path": "ImbalancedChen/Part3FactorFiberDivisor.lean",
+        "source_sha256": "888f8a96cfa1fc44e92ba814b5ce657bbc693f839390a1edc48e609ba7195159",
+        "explicit_imports": [
+          "ImbalancedChen.Part3ComplexDispersion",
+          "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "17989db10d0097730445208b5477caa1725823ece272d9163fd306693a31ae60",
+        "object_sha256": "acf61ec1b2ce4e68033f27a7a9259802fb597a600354d9d2d5c20f3ae71259c2",
+        "source_object_binding_actual": true
+      },
+      "ImbalancedChen.Part3CommonSmoothCutoff": {
+        "source_path": "ImbalancedChen/Part3CommonSmoothCutoff.lean",
+        "source_sha256": "3e2acd2b7b8c95aa78b58ee24c020a35c717e3461a710b556ca25db845c70817",
+        "explicit_imports": [
+          "ImbalancedChen.Part3ComplexDispersion",
+          "Mathlib.Analysis.Calculus.BumpFunction.InnerProduct",
+          "Mathlib.Analysis.Distribution.SchwartzSpace.Fourier",
+          "Mathlib.MeasureTheory.Measure.Lebesgue.Integral"
+        ],
+        "cache_status": "PASS",
+        "cache_sha256": "bfe24b2620585268590d71926bad5fb78032223bb87a9d3e78dcce66173f18f0",
+        "object_sha256": "d549908879b708f4bdce72f7ecf267a2cdd013fe643e1e3af283ca583d7629ec",
+        "source_object_binding_actual": true
+      }
+    },
+    "foreign": [
+      "Init",
+      "Lean.Elab.Tactic.NormCast",
+      "Lean.Elab.Tactic.Omega",
+      "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+      "Mathlib.Algebra.BigOperators.Intervals",
+      "Mathlib.Algebra.BigOperators.Ring.Finset",
+      "Mathlib.Algebra.Order.Archimedean.Real.Basic",
+      "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+      "Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset",
+      "Mathlib.Algebra.Order.BigOperators.Ring.Finset",
+      "Mathlib.Algebra.Order.Floor.Semiring",
+      "Mathlib.Algebra.Ring.Parity",
+      "Mathlib.Algebra.Star.BigOperators",
+      "Mathlib.Analysis.Asymptotics.Defs",
+      "Mathlib.Analysis.Calculus.BumpFunction.InnerProduct",
+      "Mathlib.Analysis.Complex.Basic",
+      "Mathlib.Analysis.Complex.Exponential",
+      "Mathlib.Analysis.Distribution.SchwartzSpace.Fourier",
+      "Mathlib.Analysis.PSeries",
+      "Mathlib.Analysis.Real.Sqrt",
+      "Mathlib.Analysis.SpecialFunctions.Log.Base",
+      "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+      "Mathlib.Analysis.SpecialFunctions.Log.Deriv",
+      "Mathlib.Analysis.SpecialFunctions.Log.Summable",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+      "Mathlib.Data.Finset.Card",
+      "Mathlib.Data.Finset.Max",
+      "Mathlib.Data.Finset.Prod",
+      "Mathlib.Data.Int.ModEq",
+      "Mathlib.Data.Nat.Factorization.Basic",
+      "Mathlib.Data.Nat.GCD.BigOperators",
+      "Mathlib.Data.Nat.ModEq",
+      "Mathlib.Data.Nat.Prime.Basic",
+      "Mathlib.Data.Nat.PrimeFin",
+      "Mathlib.Data.Nat.Sqrt",
+      "Mathlib.Data.Nat.Squarefree",
+      "Mathlib.Data.Nat.Totient",
+      "Mathlib.Data.Real.Basic",
+      "Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus",
+      "Mathlib.MeasureTheory.Measure.Lebesgue.Integral",
+      "Mathlib.NumberTheory.AlmostPrime",
+      "Mathlib.NumberTheory.ArithmeticFunction.Misc",
+      "Mathlib.NumberTheory.Divisors",
+      "Mathlib.NumberTheory.Harmonic.Bounds",
+      "Mathlib.NumberTheory.PrimeCounting",
+      "Mathlib.NumberTheory.SelbergSieve",
+      "Mathlib.Order.Filter.AtTopBot.Archimedean",
+      "Mathlib.Order.Filter.AtTopBot.Basic",
+      "Mathlib.Order.Filter.AtTopBot.Field",
+      "Mathlib.Order.Interval.Finset.Nat",
+      "Mathlib.Tactic.Convert",
+      "Mathlib.Tactic.FieldSimp",
+      "Mathlib.Tactic.Linarith",
+      "Mathlib.Tactic.NormNum",
+      "Mathlib.Tactic.Positivity",
+      "Mathlib.Tactic.Ring",
+      "Mathlib.Tactic.SplitIfs",
+      "Mathlib.Topology.Algebra.Order.Field",
+      "Mathlib.Topology.Instances.EReal.Lemmas",
+      "Mathlib.Topology.MetricSpace.Pseudo.Defs",
+      "MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryDivisorMean",
+      "MathlibNt.SieveTheory.LiLiuPanBoundedAggregate"
+    ],
+    "scope": "These are source-header boundary counts, not a claim of fresh replay of the entire recursive foreign closure. All suggested APIs are already available through this existing owned import; no source imports were added in this review."
+  },
+  "explicit_remaining_integration_and_spectral_gap": [
+    "The finite lemma has not yet been authored or compiled. Nine literal definitions and one complete theorem type are proposed, not accepted proof.",
+    "This proves only the positive signed-difference coefficient L2 multiplicity after a valid preceding separation. Need exact actual-source map from the original shared-p small-paired-small-supported kernel, with all Fourier weights, canonical data, gcd labels, moving signeda, and complete ordered multiplicity.",
+    "A future complex coefficient B(z,y) with each separated scalar tuple weight of norm<=1 obeys normB<=b by triangle and hence its squared L2<=Nnu. Extra output unit phases and coprimality indicators preserve/decrease this envelope. Arbitrary weights still jointly depending on the innerb,c sum cannot be extracted by this count; their separation remains a separate analytic obligation.",
+    "To turn finiteDstar andharmonic into x^o(1), need actual original parameter-polynomial support and uniform fixed-order divisor subpower; to remove1+H/S need a proved source H/S<1 geometry bound. Neither is a hidden hypothesis of the finite theorem.",
+    "No7/32 spectral/trilinear Kloosterman-fractions estimate is supplied. The full signed reciprocal kernel with root/slow-a/difference phases and the required averaged spectral bound remains unproved.",
+    "The later nu|a^infinity weighted summation requires its own exact smooth-divisor analytic proof. This finite theorem is uniform in every positive nu and removes any phantom per-nu+1; it does not itself prove that Euler-product estimate.",
+    "Full distribution and unconditional1+1.75 theorem remain incomplete. No count promotion or generic packet Cauchy is being used as spectral evidence."
+  ],
+  "mutation_boundary": {
+    "new_Lean_source_written": false,
+    "Lean_lake_checker_cache_install_invoked": false,
+    "new_imports_pins_CI_resources_changed": false,
+    "external_search_repeated": false,
+    "subagent_spawned": false,
+    "only_output": "This ignored JSON report."
+  }
+}

@@ -1,0 +1,34 @@
+PASS_SOURCEONLY_FR_V2_STATIC_PEER
+
+Independent static review of the F+Rapid two-target terminal collector V2.
+Scope is source inspection and hash-bound input review only. The collector, Lean, audit, Git write operations, compilation, and quota tools were not run.
+
+Reviewed collector:
+source-reviews/drafts/20261023-FR-two-target-terminal-collector-V2-SOURCEONLY.py.txt
+SHA256 ad2ef3724aab86a7415f2f52d2daec88fa7ad7ee8220250cf4a23609b92076f8
+
+Reviewed intake:
+source-reviews/drafts/20261023-FR-two-target-source-freeze-intake-V2-SOURCEONLY.json
+SHA256 16e083681137273a5fe16ef92dce8c2b08e9cf4a6eda97c89529a538b5d66e8a
+
+Reviewed fresh source freeze:
+rounds/20261023-fr-fresh-all-current-source-snapshot-SOURCEONLY-v2.json
+SHA256 48efbee801a4c3f455613d97b05069d12b8d0e4fb8cdd27cf145266eee7283b3
+The freeze contains 578 entries. The collector enforces exact equality with the full current source map; static cross-check found no map drift.
+
+The three previously identified blockers are repaired:
+1. Sidecar hashing references the main-local state variable, avoiding the undefined STATE name.
+2. The 578-entry current-source freeze is compared by exact equality; the older 577-entry snapshot is not described or used as current.
+3. The accepted 200-module baseline is checked by a local verifier bound to the signed ROOT acceptance and fixed census hashes. It checks source and receipt bindings, serialized declaration records and counts, object parts, logs, JSON evidence, standard-library evidence, and total receipt/record counts. It deep-compares all 4507 historical complete records. It avoids calling the common census verifier whose exact candidate-status requirement rejects this intentionally pending candidate census.
+
+The accepted baseline is bound to ROOT terminal acceptance SHA256 59067c512af115c0597d0ad70dd198bb6f41463f83569f6ece7d0117f326ce73 and census SHA256 4d44 as supplied in the reviewed source references. The candidate census retains its pending-root-acceptance status and is not represented as accepted by this peer.
+
+Historical baseline totals are preserved: 200 modules, 4507 complete records, 4488 distinct full names, and 145 original receipts. The 11 duplicate-name groups and 19 excess records remain intact; identity uses module plus name, and duplicate metadata is not counted as a new receipt. Minor coverage note: the local baseline verifier does not separately assert the signed distinct-name total of 4488, but the ROOT-signed acceptance and deep equality bind all 4507 historical records, and the candidate recomputes distinct names from those records.
+
+The two-target scope is F and Rapid only. Static inspection confirms exact target selection, receipt/cache/object/source bindings, full serialized type and safety checks through the pinned common helper, complete inventory and axiom checks, stock/log checks, and the configured standard-library and resource constraints. The historical inputs contain 53 F and 21 Rapid complete records; the expected proposal totals are 202 modules, 4581 complete records, 4562 distinct full names, and 146 receipts. These are expected candidate values only, not an accepted result.
+
+Compact and Native are outside this collector scope. In particular, no claim is made here about the later Native strict or stock result.
+
+The script is suitable for the stated WSL invocation by static inspection. Imported helper modules define functions behind main guards and do not launch Lean on import. The output is proposal-only, requires exact ROOT authority plus candidate-manifest, peer, and freeze references, and requires a new absent output directory. No accepted status or ROOT authority is created by this peer.
+
+Disposition: PASS_SOURCEONLY_FR_V2_STATIC_PEER. This is a source-only peer review, not a collector run, audit, compilation, or proof acceptance.

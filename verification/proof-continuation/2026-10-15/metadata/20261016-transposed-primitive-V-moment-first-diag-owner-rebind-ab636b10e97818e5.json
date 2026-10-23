@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T22:22:49.516925+00:00",
+  "reviewer": "/root/primitive_center",
+  "status": "SOURCE_ONLY_OWNER_VMOMENT_FIRST_ACTUAL_DIAGNOSTIC_REBIND",
+  "module": "ImbalancedChen.Part3TransposedPrimitiveVMoment",
+  "previous_source_sha256": "ba56d4bb9fc697e9cec44866e1db053c037b583acb2bb9633c0918e90c2da867",
+  "current_source_sha256": "d842ac532a14d6179944fe2b61caf7a56ec17eb140d72471bc198c8d5958f7cd",
+  "all_complete_source_headers": [
+    {
+      "name": "coprimeNormMass_le_twice_U",
+      "kind": "theorem",
+      "complete_source_header": "theorem coprimeNormMass_le_twice_U\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) (q : ℕ) :\n    coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q ≤ 2 * d.U"
+    },
+    {
+      "name": "actualV_finite_envelope_le",
+      "kind": "theorem",
+      "complete_source_header": "theorem actualV_finite_envelope_le\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) :\n    (∑ q ∈ d.physicalFactorModuli, ∑ r ∈ d.physicalFactorModuli,\n      ‖mixedPairCoefficient d q r‖ *\n        coprimeMass d.alphaCarrier (fun n ↦ ‖d.alpha n‖) q *\n          (r.divisors.card : ℝ)) ≤\n      4 * d.U ^ 2 * d.physicalFactorCap *\n        (1 + Real.log d.physicalFactorCap) ^ 14"
+    },
+    {
+      "name": "actualV_sub_primitive_bound",
+      "kind": "theorem",
+      "complete_source_header": "theorem actualV_sub_primitive_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n        d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        C * d.U ^ 2 * d.physicalFactorCap *\n          (1 + Real.log d.physicalFactorCap) ^ 14"
+    },
+    {
+      "name": "actual_betaL2_mul_V_error_bound",
+      "kind": "theorem",
+      "complete_source_header": "theorem actual_betaL2_mul_V_error_bound :\n    ∃ C : ℝ, 0 < C ∧ ∀ (B : ℕ) (sigma kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionV d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n        C * d.V * d.U ^ 2 * d.physicalFactorCap *\n          (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n            (1 + Real.log d.physicalFactorCap) ^ 14"
+    }
+  ],
+  "source_declaration_count": 4,
+  "definition_count": 0,
+  "all_complete_headers_exact_unchanged": true,
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedPrimitiveV",
+    "ImbalancedChen.Part3TransposedPrimitiveUMoment"
+  ],
+  "direct_imports_exact_unchanged": true,
+  "actual_failed_log": {
+    "path": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/runs/20261015T221935144630Z-ImbalancedChen.Part3TransposedPrimitiveVMoment/stdout.log",
+    "sha256": "86d7f1ace9ead4feab54bf985f42e5442f08d902d4567d884568f042ce588ccc",
+    "entire_log_read": true,
+    "text": "ImbalancedChen/Part3TransposedPrimitiveVMoment.lean:34:45: error: unsolved goals\ncase pos\nB : ℕ\nsigma kappa c0 : ℝ\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\nq n : ℕ\na✝ : n ∈ d.alphaCarrier\nhn : n.Coprime q\n⊢ (if n.Coprime q then ‖d.alpha n‖ else 0) ≤ ‖d.alpha n‖\nImbalancedChen/Part3TransposedPrimitiveVMoment.lean:52:64: error: unsolved goals\ncase pos\nB : ℕ\nsigma kappa c0 : ℝ\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\nhU : 0 ≤ d.U\nhcap : 0 ≤ d.physicalFactorCap\nq n : ℕ\na✝ : n ∈ d.alphaCarrier\nhn : n.Coprime q\n⊢ 0 ≤ if n.Coprime q then ‖d.alpha n‖ else 0\n"
+  },
+  "actual_proof_only_changes": [
+    "In coprimeNormMass_le_twice_U, explicitly unfold the unchanged generic finite coprimeMass, then replace simp [hn] by exact if_pos/if_neg branch rewriting. The positive branch is reflexive and the negative branch uses norm_nonneg. This is the same successful owned U proof pattern.",
+    "In the local nonnegativity of the same real coprime mass, explicitly unfold coprimeMass and rewrite each branch by if_pos/if_neg; the positive branch uses norm_nonneg and the zero branch is reflexive. These target the only two actual failed condition matches."
+  ],
+  "byte_reconstruction": {
+    "old_snapshot": "/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/.lake/proof-continuation/source-reviews/20261016-VMoment-first-diag-original-ba56.lean.txt",
+    "offset_zero_based": 1220,
+    "old_removed_byte_count": 967,
+    "new_inserted_byte_count": 1129,
+    "old_removed_bytes_base64": "Y2FsYwogICAgXyDiiaQg4oiRIG4g4oiIIGQuYWxwaGFDYXJyaWVyLCDigJZkLmFscGhhIG7igJYgOj0gYnkKICAgICAgYXBwbHkgRmluc2V0LnN1bV9sZV9zdW0KICAgICAgaW50cm8gbiBfCiAgICAgIGJ5X2Nhc2VzIGhuIDogbi5Db3ByaW1lIHEgPDs+IHNpbXAgW2huXQogICAgXyDiiaQgXyA6PSBhbHBoYV9sMV9sZV90d2ljZV9VIGhkCgp0aGVvcmVtIGFjdHVhbFZfZmluaXRlX2VudmVsb3BlX2xlCiAgICB7QiA6IOKElX0ge3NpZ21hIGthcHBhIGMwIDog4oSdfSB7ZCA6IE1lZGl1bUF0b219CiAgICAoaGQgOiBNZWRpdW1BZG1pc3NpYmxlIEIgc2lnbWEga2FwcGEgYzAgZCkgOgogICAgKOKIkSBxIOKIiCBkLnBoeXNpY2FsRmFjdG9yTW9kdWxpLCDiiJEgciDiiIggZC5waHlzaWNhbEZhY3Rvck1vZHVsaSwKICAgICAg4oCWbWl4ZWRQYWlyQ29lZmZpY2llbnQgZCBxIHLigJYgKgogICAgICAgIGNvcHJpbWVNYXNzIGQuYWxwaGFDYXJyaWVyIChmdW4gbiDihqYg4oCWZC5hbHBoYSBu4oCWKSBxICoKICAgICAgICAgIChyLmRpdmlzb3JzLmNhcmQgOiDihJ0pKSDiiaQKICAgICAgNCAqIGQuVSBeIDIgKiBkLnBoeXNpY2FsRmFjdG9yQ2FwICoKICAgICAgICAoMSArIFJlYWwubG9nIGQucGh5c2ljYWxGYWN0b3JDYXApIF4gMTQgOj0gYnkKICBoYXZlIGhVIDogMCDiiaQgZC5VIDo9IGJ5IGxpbmFyaXRoIFtoZC4xXQogIGhhdmUgaGNhcCA6IDAg4omkIGQucGh5c2ljYWxGYWN0b3JDYXAgOj0gemVyb19sZV9vbmUudHJhbnMgKGQub25lX2xlX3BoeXNpY2FsRmFjdG9yQ2FwIGhkKQogIGhhdmUgaG1hc3MgKHEgOiDihJUpIDoKICAgICAgMCDiiaQgY29wcmltZU1hc3MgZC5hbHBoYUNhcnJpZXIgKGZ1biBuIOKGpiDigJZkLmFscGhhIG7igJYpIHEgOj0gYnkKICAgIGFwcGx5IEZpbnNldC5zdW1fbm9ubmVnCiAgICBpbnRybyBuIF8KICAgIGJ5X2Nhc2VzIGhuIDogbi5Db3ByaW1lIHEgPDs+IHNpbXAgWw==",
+    "new_inserted_bytes_base64": "dW5mb2xkIGNvcHJpbWVNYXNzCiAgY2FsYwogICAgXyDiiaQg4oiRIG4g4oiIIGQuYWxwaGFDYXJyaWVyLCDigJZkLmFscGhhIG7igJYgOj0gYnkKICAgICAgYXBwbHkgRmluc2V0LnN1bV9sZV9zdW0KICAgICAgaW50cm8gbiBfCiAgICAgIGJ5X2Nhc2VzIGhuIDogbi5Db3ByaW1lIHEKICAgICAgwrcgcncgW2lmX3BvcyBobl0KICAgICAgwrcgcncgW2lmX25lZyBobl0KICAgICAgICBleGFjdCBub3JtX25vbm5lZyBfCiAgICBfIOKJpCBfIDo9IGFscGhhX2wxX2xlX3R3aWNlX1UgaGQKCnRoZW9yZW0gYWN0dWFsVl9maW5pdGVfZW52ZWxvcGVfbGUKICAgIHtCIDog4oSVfSB7c2lnbWEga2FwcGEgYzAgOiDihJ19IHtkIDogTWVkaXVtQXRvbX0KICAgIChoZCA6IE1lZGl1bUFkbWlzc2libGUgQiBzaWdtYSBrYXBwYSBjMCBkKSA6CiAgICAo4oiRIHEg4oiIIGQucGh5c2ljYWxGYWN0b3JNb2R1bGksIOKIkSByIOKIiCBkLnBoeXNpY2FsRmFjdG9yTW9kdWxpLAogICAgICDigJZtaXhlZFBhaXJDb2VmZmljaWVudCBkIHEgcuKAliAqCiAgICAgICAgY29wcmltZU1hc3MgZC5hbHBoYUNhcnJpZXIgKGZ1biBuIOKGpiDigJZkLmFscGhhIG7igJYpIHEgKgogICAgICAgICAgKHIuZGl2aXNvcnMuY2FyZCA6IOKEnSkpIOKJpAogICAgICA0ICogZC5VIF4gMiAqIGQucGh5c2ljYWxGYWN0b3JDYXAgKgogICAgICAgICgxICsgUmVhbC5sb2cgZC5waHlzaWNhbEZhY3RvckNhcCkgXiAxNCA6PSBieQogIGhhdmUgaFUgOiAwIOKJpCBkLlUgOj0gYnkgbGluYXJpdGggW2hkLjFdCiAgaGF2ZSBoY2FwIDogMCDiiaQgZC5waHlzaWNhbEZhY3RvckNhcCA6PSB6ZXJvX2xlX29uZS50cmFucyAoZC5vbmVfbGVfcGh5c2ljYWxGYWN0b3JDYXAgaGQpCiAgaGF2ZSBobWFzcyAocSA6IOKElSkgOgogICAgICAwIOKJpCBjb3ByaW1lTWFzcyBkLmFscGhhQ2FycmllciAoZnVuIG4g4oamIOKAlmQuYWxwaGEgbuKAlikgcSA6PSBieQogICAgdW5mb2xkIGNvcHJpbWVNYXNzCiAgICBhcHBseSBGaW5zZXQuc3VtX25vbm5lZwogICAgaW50cm8gbiBfCiAgICBieV9jYXNlcyBobiA6IG4uQ29wcmltZSBxCiAgICDCtyBydyBbaWZfcG9zIGhuXQogICAgICBleGFjdCBub3JtX25vbm5lZyBfCiAgICDCtyBydyBbaWZfbmVnIA==",
+    "forward_byte_equal_current": true,
+    "forward_reconstructed_sha256": "d842ac532a14d6179944fe2b61caf7a56ec17eb140d72471bc198c8d5958f7cd",
+    "inverse_byte_equal_exact_old": true,
+    "inverse_reconstructed_sha256": "ba56d4bb9fc697e9cec44866e1db053c037b583acb2bb9633c0918e90c2da867"
+  },
+  "scope_and_mathematics": "All four complete theorem types, zero definitions, original alpha/beta/gamma data, complete physical carrier, actual V-P0 residual, universal constant before all atoms, honest U^2 times physicalCap times logcap^14 and original betaL2 moment remain unchanged. No artificial U gain, remaining budget, stronger admissibility or threshold premise added.",
+  "current_owned_parents": [
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveV",
+      "sha256": "2cb0bab68ef736dc4f2f59e9f33644ef6b8c9aed205762da8ef0be41774390ca",
+      "source_untouched": true
+    },
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUMoment",
+      "sha256": "10ee3c1507a8074abea88c430cfcd79ec1e6256c0df414462dd43652c0eae310",
+      "source_untouched": true
+    }
+  ],
+  "no_limits_or_linter_change": true,
+  "sourceDAG_delta": {
+    "local_added_modules": [],
+    "foreign_added_modules": [],
+    "direct_imports_unchanged": true
+  },
+  "publication_freeze": "No source, snapshot or report writes until runtime relayed root RELEASE d6b8a7e.",
+  "lean_validation": "NOT RUN after repair; same specifically authorized 6144/RSS6656/j2 by runtime_resume only; original FAILED receipt retained"
+}

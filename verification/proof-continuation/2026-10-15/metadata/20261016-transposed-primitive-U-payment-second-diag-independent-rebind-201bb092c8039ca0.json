@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "reviewed_at_utc": "2026-10-15T22:01:29.5432793Z",
+  "reviewer": "/root/primitive_center/uv_api_audit",
+  "status": "SOURCE_ONLY_INDEPENDENT_ACTUAL_DIAGNOSTIC_PROOF_API_REBIND_APPROVED_PENDING_RUNTIME",
+  "candidate": {
+    "path": "ImbalancedChen/Part3TransposedPrimitiveUPayment.lean",
+    "sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+    "declaration_count": 9,
+    "definition_count": 0,
+    "complete_current_source_and_proofs_reviewed": "import ImbalancedChen.Part3TransposedPrimitiveUMoment\nimport ImbalancedChen.Part3SignedDivisorDeletion\n\n/-!\n# Actual power and logarithmic payment for the transposed U residual\n\nThe logarithms of the original beta length and the complete physical cap\nare bounded by one fixed multiple of log X. Their fixed natural powers are\nthen absorbed by Mathlib's proved logarithm-versus-positive-power limit.\nThe original medium monomial gives U squared < X^(1-8 sigma), hence U at\nmost X^(1/2). Together with X=UV this pays the actual original-beta L2 times\nthe literal U-P0 error with an X^(7/4) bound, then every requested log power.\n\nOnly sigma>0 is added at payment, exactly a gate of the final obligation.\nNo small-sigma strengthening, remaining error budget or coefficient premise\nis used. The signed residue, original scales and local cutoff mass persist.\n-/\n\nnamespace ImbalancedChen.Part3\n\nnoncomputable section\n\nopen Classical Filter Topology\nopen scoped BigOperators\nopen TransposedZeroCovariance TransposedPrimitiveUMoment\n\nnamespace TransposedPrimitiveUPayment\n\ntheorem one_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale := by\n  unfold MediumAtom.scale\n  calc\n    1 = (1 : ℝ) * 1 := by norm_num\n    _ ≤ _ := mul_le_mul hd.1 hd.2.1 zero_le_one (by linarith [hd.1])\n\ntheorem V_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : d.V ≤ d.scale := by\n  change d.V ≤ d.U * d.V\n  exact le_mul_of_one_le_left (by linarith [hd.2.1]) hd.1\n\ntheorem physicalFactorCap_le_eight_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.physicalFactorCap ≤ 8 * d.scale := by\n  calc\n    _ ≤ d.U * d.physicalFactorCap :=\n      le_mul_of_one_le_left (by linarith [d.one_le_physicalFactorCap hd]) hd.1\n    _ ≤ 8 * d.scale ^ (1 - 9 * sigma) := d.U_mul_physicalFactorCap_le hd\n    _ ≤ _ := mul_le_mul_of_nonneg_left\n      (by\n        simpa only [Real.rpow_one] using\n          Real.rpow_le_rpow_of_exponent_le (one_le_scale hd)\n            (show 1 - 9 * sigma ≤ 1 by linarith)) (by norm_num)\n\ntheorem U_le_scale_half\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.U ≤ d.scale ^ (1 / 2 : ℝ) := by\n  have hx : 0 ≤ d.scale := zero_le_one.trans (one_le_scale hd)\n  have hsq : d.U ^ 2 ≤ d.scale := by\n    apply (U_sq_lt_scale_rpow hd).le.trans\n    simpa only [Real.rpow_one] using\n      Real.rpow_le_rpow_of_exponent_le (one_le_scale hd)\n        (show 1 - 8 * sigma ≤ 1 by linarith)\n  have hp : (d.scale ^ (1 / 2 : ℝ)) ^ 2 = d.scale := by\n    simpa using Real.rpow_inv_natCast_pow (n := 2) hx (by norm_num : (2 : ℕ) ≠ 0)\n  exact (sq_le_sq₀ (by linarith [hd.1] : 0 ≤ d.U)\n    (Real.rpow_nonneg hx (1 / 2 : ℝ))).mp (by rw [hp]; exact hsq)\n\ntheorem eventually_const_log_rpow_le_rpow (C A : ℝ) (hC : 0 ≤ C)\n    {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∀ᶠ x : ℝ in atTop, C * Real.log x ^ A ≤ x ^ epsilon := by\n  have hb := ((isLittleO_log_rpow_rpow_atTop A hepsilon).const_mul_left C).bound\n    (by norm_num : (0 : ℝ) < 1)\n  filter_upwards [hb, eventually_ge_atTop (1 : ℝ),\n    Real.tendsto_log_atTop.eventually_ge_atTop (1 : ℝ)] with x hx hx1 hlog\n  simpa only [Real.norm_eq_abs, one_mul, abs_of_nonneg (by positivity :\n    0 ≤ C * Real.log x ^ A), abs_of_nonneg (Real.rpow_nonneg (by linarith : 0 ≤ x) _)]\n      using hx\n\n/-- One threshold pays both actual logarithm costs, uniformly before atoms. -/\ntheorem eventually_actual_log_cost_le_rpow (p s : ℕ) (sigma : ℝ)\n    (hsigma : 0 < sigma) {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ (B : ℕ) (kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (1 + Real.log (2 * d.V)) ^ p *\n        (1 + Real.log d.physicalFactorCap) ^ s ≤ d.scale ^ epsilon := by\n  let D : ℝ := 2 + Real.log 8\n  have hD : 0 < D := by\n    dsimp [D]\n    linarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\n  obtain ⟨x1, hx1⟩ := eventually_atTop.mp\n    (eventually_const_log_rpow_le_rpow (D ^ (p + s)) (p + s) (by positivity) hepsilon)\n  obtain ⟨x2, hx2⟩ := eventually_atTop.mp\n    (Real.tendsto_log_atTop.eventually_ge_atTop (1 : ℝ))\n  refine ⟨max 2 (max x1 x2), lt_of_lt_of_le (by norm_num) (le_max_left _ _), ?_⟩\n  intro B kappa c0 d hd hx\n  have hx0 : 0 < d.scale := zero_lt_one.trans_le (one_le_scale hd)\n  have hlog : 1 ≤ Real.log d.scale :=\n    hx2 d.scale ((le_max_right x1 x2).trans ((le_max_right 2 (max x1 x2)).trans hx))\n  have hbase (y : ℝ) (hy : 0 < y) (hyX : y ≤ 8 * d.scale) :\n      1 + Real.log y ≤ D * Real.log d.scale := by\n    have hh := Real.log_le_log hy hyX\n    rw [Real.log_mul (by norm_num : (8 : ℝ) ≠ 0) hx0.ne'] at hh\n    dsimp [D]\n    nlinarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\n  have hlogV : 1 + Real.log (2 * d.V) ≤ D * Real.log d.scale := by\n    apply hbase _ (by linarith [hd.2.1])\n    calc\n      2 * d.V ≤ 2 * d.scale := mul_le_mul_of_nonneg_left (V_le_scale hd) (by norm_num)\n      _ ≤ _ := by nlinarith [hx0]\n  have hlogCap : 1 + Real.log d.physicalFactorCap ≤ D * Real.log d.scale :=\n    hbase _ (zero_lt_one.trans_le (d.one_le_physicalFactorCap hd))\n      (physicalFactorCap_le_eight_scale hsigma hd)\n  have hV0 : 0 ≤ 1 + Real.log (2 * d.V) := by\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])]\n  have hcap0 : 0 ≤ 1 + Real.log d.physicalFactorCap := by\n    linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]\n  calc\n    _ ≤ (D * Real.log d.scale) ^ p * (D * Real.log d.scale) ^ s :=\n      mul_le_mul (pow_le_pow_left₀ hV0 hlogV p) (pow_le_pow_left₀ hcap0 hlogCap s)\n        (pow_nonneg hcap0 s) (by positivity)\n    _ = D ^ (p + s) * Real.log d.scale ^ ((p + s : ℕ) : ℝ) := by\n      rw [← pow_add, mul_pow, Real.rpow_natCast]\n    _ ≤ _ := by\n      simpa only [Nat.cast_add] using\n        hx1 d.scale ((le_max_left x1 x2).trans ((le_max_right 2 (max x1 x2)).trans hx))\n\ntheorem eventually_const_rpow_two_le_logBudget (C A : ℝ) (hC : 0 ≤ C)\n    {delta : ℝ} (hdelta : 0 < delta) :\n    ∀ᶠ x : ℝ in atTop, C * x ^ (2 - delta) ≤ x ^ 2 / (Real.log x) ^ A := by\n  filter_upwards [eventually_const_log_rpow_le_rpow C A hC hdelta,\n    eventually_ge_atTop (1 : ℝ),\n    Real.tendsto_log_atTop.eventually_ge_atTop (1 : ℝ)] with x hpay hx1 hlog\n  have hx0 : 0 < x := zero_lt_one.trans_le hx1\n  apply (le_div_iff₀ (Real.rpow_pos_of_pos (by linarith : 0 < Real.log x) A)).mpr\n  calc\n    _ = (C * (Real.log x) ^ A) * x ^ (2 - delta) := by ring\n    _ ≤ x ^ delta * x ^ (2 - delta) :=\n      mul_le_mul_of_nonneg_right hpay (Real.rpow_nonneg hx0.le _)\n    _ = x ^ (2 : ℝ) := by\n      rw [← Real.rpow_add hx0, show delta + (2 - delta) = 2 by ring]\n    _ = _ := Real.rpow_natCast _ 2\n\n/-- Genuine power saving after multiplication by the actual beta L2 cost. -/\ntheorem actual_betaL2_mul_U_error_power_bound (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            C * d.scale ^ (7 / 4 : ℝ) := by\n  obtain ⟨C, hC, hbound⟩ := actual_betaL2_mul_U_error_bound\n  obtain ⟨x0, hx0, hcost⟩ := eventually_actual_log_cost_le_rpow\n    ((2 ^ B) ^ 2 - 1) 24 sigma hsigma (by norm_num : (0 : ℝ) < 1 / 4)\n  refine ⟨C, hC, x0, hx0, fun d hd hx ↦ ?_⟩\n  have hxpos : 0 < d.scale := zero_lt_one.trans_le (one_le_scale hd)\n  have hlogV0 : 0 ≤ 1 + Real.log (2 * d.V) := by\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])]\n  have hlogCap0 : 0 ≤ 1 + Real.log d.physicalFactorCap := by\n    linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]\n  calc\n    _ ≤ C * d.V * d.U ^ 2 *\n        (1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n          (1 + Real.log d.physicalFactorCap) ^ 24 := hbound B sigma kappa c0 d hd\n    _ = C * d.scale * d.U *\n        ((1 + Real.log (2 * d.V)) ^ ((2 ^ B) ^ 2 - 1) *\n          (1 + Real.log d.physicalFactorCap) ^ 24) := by\n      unfold MediumAtom.scale\n      ring\n    _ ≤ C * d.scale * (d.scale ^ (1 / 2 : ℝ)) * d.scale ^ (1 / 4 : ℝ) :=\n      mul_le_mul\n        (mul_le_mul_of_nonneg_left (U_le_scale_half hsigma hd) (by positivity))\n        (hcost B kappa c0 d hd hx) (by positivity) (by positivity)\n    _ = C * (d.scale ^ (1 : ℝ) * d.scale ^ (1 / 2 : ℝ) *\n        d.scale ^ (1 / 4 : ℝ)) := by rw [Real.rpow_one]; ring\n    _ = _ := by rw [← Real.rpow_add hxpos, ← Real.rpow_add hxpos]; norm_num\n\n/-- Every requested logarithmic decay is paid, before the actual atom. -/\ntheorem actual_betaL2_mul_U_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A := by\n  obtain ⟨C, hC, x1, hx1, hbound⟩ :=\n    actual_betaL2_mul_U_error_power_bound B sigma kappa c0 hsigma\n  obtain ⟨x2, hx2⟩ := eventually_atTop.mp\n    (eventually_const_rpow_two_le_logBudget C A hC.le\n      (by norm_num : (0 : ℝ) < 1 / 4))\n  refine ⟨max x1 x2, lt_of_lt_of_le hx1 (le_max_left _ _), fun d hd hx ↦ ?_⟩\n  apply (hbound d hd ((le_max_left _ _).trans hx)).trans\n  simpa only [show (2 : ℝ) - 1 / 4 = 7 / 4 by norm_num] using\n    hx2 d.scale ((le_max_right _ _).trans hx)\n\nend TransposedPrimitiveUPayment\n\nend\n\nend ImbalancedChen.Part3\n",
+    "all_complete_headers_and_definition_bodies": [
+      {
+        "name": "one_le_scale",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 29,
+        "complete_source_header": "theorem one_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : 1 ≤ d.scale",
+        "complete_definition_block": null
+      },
+      {
+        "name": "V_le_scale",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 37,
+        "complete_source_header": "theorem V_le_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hd : MediumAdmissible B sigma kappa c0 d) : d.V ≤ d.scale",
+        "complete_definition_block": null
+      },
+      {
+        "name": "physicalFactorCap_le_eight_scale",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 43,
+        "complete_source_header": "theorem physicalFactorCap_le_eight_scale\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.physicalFactorCap ≤ 8 * d.scale",
+        "complete_definition_block": null
+      },
+      {
+        "name": "U_le_scale_half",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 57,
+        "complete_source_header": "theorem U_le_scale_half\n    {B : ℕ} {sigma kappa c0 : ℝ} {d : MediumAtom}\n    (hsigma : 0 < sigma) (hd : MediumAdmissible B sigma kappa c0 d) :\n    d.U ≤ d.scale ^ (1 / 2 : ℝ)",
+        "complete_definition_block": null
+      },
+      {
+        "name": "eventually_const_log_rpow_le_rpow",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 72,
+        "complete_source_header": "theorem eventually_const_log_rpow_le_rpow (C A : ℝ) (hC : 0 ≤ C)\n    {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∀ᶠ x : ℝ in atTop, C * Real.log x ^ A ≤ x ^ epsilon",
+        "complete_definition_block": null
+      },
+      {
+        "name": "eventually_actual_log_cost_le_rpow",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 84,
+        "complete_source_header": "theorem eventually_actual_log_cost_le_rpow (p s : ℕ) (sigma : ℝ)\n    (hsigma : 0 < sigma) {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ (B : ℕ) (kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (1 + Real.log (2 * d.V)) ^ p *\n        (1 + Real.log d.physicalFactorCap) ^ s ≤ d.scale ^ epsilon",
+        "complete_definition_block": null
+      },
+      {
+        "name": "eventually_const_rpow_two_le_logBudget",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 131,
+        "complete_source_header": "theorem eventually_const_rpow_two_le_logBudget (C A : ℝ) (hC : 0 ≤ C)\n    {delta : ℝ} (hdelta : 0 < delta) :\n    ∀ᶠ x : ℝ in atTop, C * x ^ (2 - delta) ≤ x ^ 2 / (Real.log x) ^ A",
+        "complete_definition_block": null
+      },
+      {
+        "name": "actual_betaL2_mul_U_error_power_bound",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 148,
+        "complete_source_header": "theorem actual_betaL2_mul_U_error_power_bound (B : ℕ) (sigma kappa c0 : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ C : ℝ, 0 < C ∧ ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            C * d.scale ^ (7 / 4 : ℝ)",
+        "complete_definition_block": null
+      },
+      {
+        "name": "actual_betaL2_mul_U_error_log_payment",
+        "kind": "theorem",
+        "private": false,
+        "start_line": 183,
+        "complete_source_header": "theorem actual_betaL2_mul_U_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A",
+        "complete_definition_block": null
+      }
+    ]
+  },
+  "baseline": {
+    "snapshot_path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\.lake\\proof-continuation\\source-reviews\\20261016-UPayment-second-diag-original-d185.lean.txt",
+    "sha256": "d185fff8c550641124da40f477758c2839b6e78f15c8c5700b7179896ca1eb0d",
+    "complete_old_snapshot_read": true,
+    "all_complete_headers_exact_equal": true,
+    "all_complete_definition_blocks_exact_equal": true,
+    "complete_header_definition_comparisons": [
+      {
+        "name": "one_le_scale",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "name": "V_le_scale",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "name": "physicalFactorCap_le_eight_scale",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "name": "U_le_scale_half",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "name": "eventually_const_log_rpow_le_rpow",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "name": "eventually_actual_log_cost_le_rpow",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": false
+      },
+      {
+        "name": "eventually_const_rpow_two_le_logBudget",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "name": "actual_betaL2_mul_U_error_power_bound",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": true
+      },
+      {
+        "name": "actual_betaL2_mul_U_error_log_payment",
+        "complete_header_exact_equal": true,
+        "definition_body_exact_equal": true,
+        "complete_block_equal": false
+      }
+    ],
+    "only_changed_proof_declarations": [
+      "eventually_actual_log_cost_le_rpow",
+      "actual_betaL2_mul_U_error_log_payment"
+    ],
+    "complete_changed_declaration_blocks": [
+      {
+        "name": "eventually_actual_log_cost_le_rpow",
+        "complete_old_block": "theorem eventually_actual_log_cost_le_rpow (p s : ℕ) (sigma : ℝ)\n    (hsigma : 0 < sigma) {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ (B : ℕ) (kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (1 + Real.log (2 * d.V)) ^ p *\n        (1 + Real.log d.physicalFactorCap) ^ s ≤ d.scale ^ epsilon := by\n  let D : ℝ := 2 + Real.log 8\n  have hD : 0 < D := by\n    dsimp [D]\n    linarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\n  obtain ⟨x1, hx1⟩ := eventually_atTop.mp\n    (eventually_const_log_rpow_le_rpow (D ^ (p + s)) (p + s) (by positivity) hepsilon)\n  obtain ⟨x2, hx2⟩ := eventually_atTop.mp\n    (Real.tendsto_log_atTop.eventually_ge_atTop (1 : ℝ))\n  refine ⟨max 2 (max x1 x2), lt_of_lt_of_le (by norm_num) (le_max_left _ _), ?_⟩\n  intro B kappa c0 d hd hx\n  have hx0 : 0 < d.scale := zero_lt_one.trans_le (one_le_scale hd)\n  have hlog : 1 ≤ Real.log d.scale :=\n    hx2 d.scale ((le_max_right x1 x2).trans ((le_max_right 2 (max x1 x2)).trans hx))\n  have hbase (y : ℝ) (hy : 0 < y) (hyX : y ≤ 8 * d.scale) :\n      1 + Real.log y ≤ D * Real.log d.scale := by\n    have hh := Real.log_le_log hy hyX\n    rw [Real.log_mul (by norm_num : (8 : ℝ) ≠ 0) hx0.ne'] at hh\n    dsimp [D]\n    nlinarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\n  have hlogV : 1 + Real.log (2 * d.V) ≤ D * Real.log d.scale := by\n    apply hbase _ (by linarith [hd.2.1])\n    calc\n      2 * d.V ≤ 2 * d.scale := mul_le_mul_of_nonneg_left (V_le_scale hd) (by norm_num)\n      _ ≤ _ := by nlinarith [hx0]\n  have hlogCap : 1 + Real.log d.physicalFactorCap ≤ D * Real.log d.scale :=\n    hbase _ (zero_lt_one.trans_le (d.one_le_physicalFactorCap hd))\n      (physicalFactorCap_le_eight_scale hsigma hd)\n  have hV0 : 0 ≤ 1 + Real.log (2 * d.V) := by\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])]\n  have hcap0 : 0 ≤ 1 + Real.log d.physicalFactorCap := by\n    linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]\n  calc\n    _ ≤ (D * Real.log d.scale) ^ p * (D * Real.log d.scale) ^ s :=\n      mul_le_mul (pow_le_pow_left₀ hV0 hlogV p) (pow_le_pow_left₀ hcap0 hlogCap s)\n        (pow_nonneg hcap0 s) (by positivity)\n    _ = D ^ (p + s) * Real.log d.scale ^ ((p + s : ℕ) : ℝ) := by\n      rw [← pow_add, mul_pow, Real.rpow_natCast]\n    _ ≤ _ := hx1 d.scale ((le_max_left x1 x2).trans ((le_max_right 2 (max x1 x2)).trans hx))\n\n",
+        "complete_current_block": "theorem eventually_actual_log_cost_le_rpow (p s : ℕ) (sigma : ℝ)\n    (hsigma : 0 < sigma) {epsilon : ℝ} (hepsilon : 0 < epsilon) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ (B : ℕ) (kappa c0 : ℝ) (d : MediumAtom),\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (1 + Real.log (2 * d.V)) ^ p *\n        (1 + Real.log d.physicalFactorCap) ^ s ≤ d.scale ^ epsilon := by\n  let D : ℝ := 2 + Real.log 8\n  have hD : 0 < D := by\n    dsimp [D]\n    linarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\n  obtain ⟨x1, hx1⟩ := eventually_atTop.mp\n    (eventually_const_log_rpow_le_rpow (D ^ (p + s)) (p + s) (by positivity) hepsilon)\n  obtain ⟨x2, hx2⟩ := eventually_atTop.mp\n    (Real.tendsto_log_atTop.eventually_ge_atTop (1 : ℝ))\n  refine ⟨max 2 (max x1 x2), lt_of_lt_of_le (by norm_num) (le_max_left _ _), ?_⟩\n  intro B kappa c0 d hd hx\n  have hx0 : 0 < d.scale := zero_lt_one.trans_le (one_le_scale hd)\n  have hlog : 1 ≤ Real.log d.scale :=\n    hx2 d.scale ((le_max_right x1 x2).trans ((le_max_right 2 (max x1 x2)).trans hx))\n  have hbase (y : ℝ) (hy : 0 < y) (hyX : y ≤ 8 * d.scale) :\n      1 + Real.log y ≤ D * Real.log d.scale := by\n    have hh := Real.log_le_log hy hyX\n    rw [Real.log_mul (by norm_num : (8 : ℝ) ≠ 0) hx0.ne'] at hh\n    dsimp [D]\n    nlinarith [Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 8)]\n  have hlogV : 1 + Real.log (2 * d.V) ≤ D * Real.log d.scale := by\n    apply hbase _ (by linarith [hd.2.1])\n    calc\n      2 * d.V ≤ 2 * d.scale := mul_le_mul_of_nonneg_left (V_le_scale hd) (by norm_num)\n      _ ≤ _ := by nlinarith [hx0]\n  have hlogCap : 1 + Real.log d.physicalFactorCap ≤ D * Real.log d.scale :=\n    hbase _ (zero_lt_one.trans_le (d.one_le_physicalFactorCap hd))\n      (physicalFactorCap_le_eight_scale hsigma hd)\n  have hV0 : 0 ≤ 1 + Real.log (2 * d.V) := by\n    linarith [Real.log_nonneg (show 1 ≤ 2 * d.V by linarith [hd.2.1])]\n  have hcap0 : 0 ≤ 1 + Real.log d.physicalFactorCap := by\n    linarith [Real.log_nonneg (d.one_le_physicalFactorCap hd)]\n  calc\n    _ ≤ (D * Real.log d.scale) ^ p * (D * Real.log d.scale) ^ s :=\n      mul_le_mul (pow_le_pow_left₀ hV0 hlogV p) (pow_le_pow_left₀ hcap0 hlogCap s)\n        (pow_nonneg hcap0 s) (by positivity)\n    _ = D ^ (p + s) * Real.log d.scale ^ ((p + s : ℕ) : ℝ) := by\n      rw [← pow_add, mul_pow, Real.rpow_natCast]\n    _ ≤ _ := by\n      simpa only [Nat.cast_add] using\n        hx1 d.scale ((le_max_left x1 x2).trans ((le_max_right 2 (max x1 x2)).trans hx))\n\n"
+      },
+      {
+        "name": "actual_betaL2_mul_U_error_log_payment",
+        "complete_old_block": "theorem actual_betaL2_mul_U_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A := by\n  obtain ⟨C, hC, x1, hx1, hbound⟩ :=\n    actual_betaL2_mul_U_error_power_bound B sigma kappa c0 hsigma\n  obtain ⟨x2, hx2⟩ := eventually_atTop.mp\n    (eventually_const_rpow_two_le_logBudget C A hC.le\n      (by norm_num : (0 : ℝ) < 1 / 4))\n  refine ⟨max x1 x2, lt_of_lt_of_le hx1 (le_max_left _ _), fun d hd hx ↦ ?_⟩\n  apply (hbound d hd ((le_max_left _ _).trans hx)).trans\n  convert hx2 d.scale ((le_max_right _ _).trans hx) using 1 <;> norm_num\n\nend TransposedPrimitiveUPayment\n\nend\n\nend ImbalancedChen.Part3\n",
+        "complete_current_block": "theorem actual_betaL2_mul_U_error_log_payment (B : ℕ) (sigma kappa c0 A : ℝ)\n    (hsigma : 0 < sigma) :\n    ∃ x0 : ℝ, 1 < x0 ∧ ∀ d : MediumAtom,\n      MediumAdmissible B sigma kappa c0 d → x0 ≤ d.scale →\n      (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n        ‖(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n          d.transposedAtom.commonSmoothWeight : ℂ) - primitiveZeroMain d‖ ≤\n            d.scale ^ 2 / (Real.log d.scale) ^ A := by\n  obtain ⟨C, hC, x1, hx1, hbound⟩ :=\n    actual_betaL2_mul_U_error_power_bound B sigma kappa c0 hsigma\n  obtain ⟨x2, hx2⟩ := eventually_atTop.mp\n    (eventually_const_rpow_two_le_logBudget C A hC.le\n      (by norm_num : (0 : ℝ) < 1 / 4))\n  refine ⟨max x1 x2, lt_of_lt_of_le hx1 (le_max_left _ _), fun d hd hx ↦ ?_⟩\n  apply (hbound d hd ((le_max_left _ _).trans hx)).trans\n  simpa only [show (2 : ℝ) - 1 / 4 = 7 / 4 by norm_num] using\n    hx2 d.scale ((le_max_right _ _).trans hx)\n\nend TransposedPrimitiveUPayment\n\nend\n\nend ImbalancedChen.Part3\n"
+      }
+    ],
+    "imports_exact_equal": true,
+    "other_blocks_exact_equal": true,
+    "complete_actual_diff_read": true
+  },
+  "author_report": {
+    "path": "20261016-transposed-primitive-U-payment-second-diag-owner-rebind.json",
+    "sha256": "d4442807dc35974ab63975f76a9df11de2b4e8cf28c75e4e2a4611b3c78a3077",
+    "independently_recomputed_byte_certificate_matches": true
+  },
+  "actual_failed_stdout": {
+    "path": ".lake/proof-continuation/runs/20261015T214904631752Z-ImbalancedChen.Part3TransposedPrimitiveUPayment/stdout.log",
+    "sha256": "a9a9a075052c4127e237990f4eb75fce4ac639212ceda0edea25c5ae95d0b64b",
+    "entire_stdout_read": true,
+    "full_text": "ImbalancedChen/Part3TransposedPrimitiveUPayment.lean:127:13: error: Type mismatch\n  hx1 d.scale (LE.le.trans (le_max_left x1 x2) (LE.le.trans (le_max_right 2 (max x1 x2)) hx))\nhas type\n  D ^ (p + s) * Real.log d.scale ^ (↑p + ↑s) ≤ d.scale ^ epsilon\nbut is expected to have type\n  D ^ (p + s) * Real.log d.scale ^ ↑(p + s) ≤ d.scale ^ epsilon\nImbalancedChen/Part3TransposedPrimitiveUPayment.lean:188:52: error: unsolved goals\ncase e'_2\nB : ℕ\nsigma kappa c0 A : ℝ\nhsigma : 0 < sigma\nC : ℝ\nhC : 0 < C\nx1 : ℝ\nhx1 : 1 < x1\nhbound :\n  ∀ (d : MediumAtom),\n    MediumAdmissible B sigma kappa c0 d →\n      x1 ≤ d.scale →\n        (∑ n ∈ d.betaCarrier, ‖d.beta n‖ ^ 2) *\n            ‖↑(d.transposedAtom.complexDispersionU d.transposedAtom.commonSmoothCarrier\n                    d.transposedAtom.commonSmoothWeight) -\n                primitiveZeroMain d‖ ≤\n          C * d.scale ^ (7 / 4)\nx2 : ℝ\nhx2 : ∀ (b : ℝ), x2 ≤ b → C * b ^ (2 - 1 / 4) ≤ b ^ 2 / Real.log b ^ A\nd : MediumAtom\nhd : MediumAdmissible B sigma kappa c0 d\nhx : max x1 x2 ≤ d.scale\n⊢ Real.instPreorder.toLE = Real.instLE\n"
+  },
+  "direct_imports": [
+    "ImbalancedChen.Part3TransposedPrimitiveUMoment",
+    "ImbalancedChen.Part3SignedDivisorDeletion"
+  ],
+  "direct_dependency_snapshots": [
+    {
+      "module": "ImbalancedChen.Part3TransposedPrimitiveUMoment",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3TransposedPrimitiveUMoment.lean",
+      "sha256": "10ee3c1507a8074abea88c430cfcd79ec1e6256c0df414462dd43652c0eae310",
+      "modified_by_reviewer": false
+    },
+    {
+      "module": "ImbalancedChen.Part3SignedDivisorDeletion",
+      "path": "E:\\timot\\Documents\\FilesForGPT\\Myath\\goldbach-proof-continuation\\ImbalancedChen\\Part3SignedDivisorDeletion.lean",
+      "sha256": "0bddcfdb22bdb80cc4d5a888562bccb83ad1c87db6c395d27aef62da1bd366e1",
+      "modified_by_reviewer": false
+    }
+  ],
+  "pin_snapshots": [
+    {
+      "path": "lake-manifest.json",
+      "sha256": "35a9ca6f6feae3af4b1a74b6ad185e6b723702d47cc1ed41f7952bf67f28a849",
+      "exact_expected": true,
+      "modified": false
+    },
+    {
+      "path": "lakefile.toml",
+      "sha256": "b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254",
+      "exact_expected": true,
+      "modified": false
+    },
+    {
+      "path": "lean-toolchain",
+      "sha256": "62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef",
+      "exact_expected": true,
+      "modified": false
+    }
+  ],
+  "sourceDAG_rebind_delta": {
+    "local_added_modules": [],
+    "foreign_added_modules": [],
+    "direct_imports_unchanged": true,
+    "existing_module_proof_only_rebind": true
+  },
+  "diagnostic_and_mathematical_review": [
+    {
+      "site": "Actual failed stdout 127:13",
+      "assessment": "The complete actual log identifies only the real exponent spelling cast(p)+cast(s) versus cast(p+s) in the eventual log-cost witness. The new simpa only [Nat.cast_add] normalizes the latter to the former on proposition types. It preserves fixed natural p,s, the fixed D=2+log8, the same real epsilon, and the same x1/x2 maximum threshold."
+    },
+    {
+      "site": "Actual failed stdout 188:52",
+      "assessment": "The sole second residual was convert generating equality of the Real preorder LE field and Real.instLE, not an arithmetic or quantitative failure. Replacing convert by simpa only [show (2:Real)-1/4=7/4 by norm_num] using hx2 d.scale ... rewrites only the numerical exponent. The instantiated witness, original inequality relation, numerator X^2, real logarithmic power A and max x1 x2 are unchanged."
+    },
+    {
+      "site": "Complete nine theorem proof and quantifier review",
+      "assessment": "The unchanged proof derives X>=1 from original U,V>=1; V<=X and physical cap<=8X from the original admissible monomial and sigma>0. Once logX>=1, both actual logs are <=(2+log8)logX; natural powers give D^(p+s)logX^(p+s), paid by the fixed logarithm-versus-positive-power limit before B,kappa,c0,d. Original U^2<X^(1-8sigma) yields U<=X^(1/2); the actual betaL2 U error bound with original X=UV and epsilon1/4 gives C X^(7/4), then every requested real A by delta1/4. Both actual repairs leave all of this finite and asymptotic mathematics unchanged."
+    },
+    {
+      "site": "Evidence and scope",
+      "assessment": "Read the complete current source, old snapshot, all nine complete declaration headers and proofs, complete actual stdout, and owner report. Independently recomputed one-range byte patch and its inverse, matching both owner base64 payloads. This is a proof API rebind only, with zero local/foreign sourceDAG additions, unchanged complete imports, unchanged parent bytes and all three pins. No compilation or runtime PASS is asserted."
+    }
+  ],
+  "fixed_API_source_read": [
+    {
+      "path": "\\\\wsl.localhost\\Debian\\home\\slava\\codex-lean-ve\\native-packages\\mathlib\\Mathlib\\Data\\Nat\\Cast\\Defs.lean",
+      "sha256": "563e61ca3bbd953da2dd5b6ab4c4b9740ba1ecf083878e6768e6fdaba39ac1ea",
+      "reviewed_source_excerpt": "@[simp, norm_cast]\ntheorem cast_add (m n : ℕ) : ((m + n : ℕ) : R) = m + n := by\n  induction n with\n  | zero => simp\n  | succ n ih => rw [add_succ, cast_succ, ih, cast_succ, add_assoc]",
+      "assessment": "Fixed actual Mathlib source lines98-102 supports the only newly used rewrite Nat.cast_add; real target specialization is determined by the existing real rpow exponent.",
+      "foreign_import_added": false
+    }
+  ],
+  "scope_invariants": {
+    "all_nine_complete_theorem_types_exact_unchanged": true,
+    "definition_count": 0,
+    "original_B_sigma_kappa_c0_and_atom_quantifiers": true,
+    "sigma_gate": "Only 0<sigma, already present in the payment obligation; no upper bound on sigma or additional admissibility/budget premise.",
+    "thresholds": "eventually_actual_log_cost threshold before B,kappa,c0,d; final fixed B,sigma,kappa,c0,A threshold before every actual d.",
+    "original_alpha_beta_gamma_full_carriers_and_signed_residue": true,
+    "actual_betaL2_times_literal_U_minus_primitiveZeroMain": true,
+    "original_log_powers_and_constants_unchanged": true,
+    "original_X_equals_UV_and_X_power_7_over_4": true,
+    "all_requested_real_A_retained": true,
+    "no_assumption_U_or_V_equals_P0": true,
+    "no_source_sorry_or_new_axiom": true,
+    "owned_parents_untouched": true,
+    "no_linter_or_limits_change": true
+  },
+  "bidirectional_byte_certificate": {
+    "old_snapshot_sha256": "d185fff8c550641124da40f477758c2839b6e78f15c8c5700b7179896ca1eb0d",
+    "current_source_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8",
+    "replacement": {
+      "byte_offset_zero_based": 6041,
+      "old_removed_byte_count": 3898,
+      "new_inserted_byte_count": 3984,
+      "unchanged_suffix_byte_count": 65,
+      "old_removed_bytes_base64": "aHgxIGQuc2NhbGUgKChsZV9tYXhfbGVmdCB4MSB4MikudHJhbnMgKChsZV9tYXhfcmlnaHQgMiAobWF4IHgxIHgyKSkudHJhbnMgaHgpKQoKdGhlb3JlbSBldmVudHVhbGx5X2NvbnN0X3Jwb3dfdHdvX2xlX2xvZ0J1ZGdldCAoQyBBIDog4oSdKSAoaEMgOiAwIOKJpCBDKQogICAge2RlbHRhIDog4oSdfSAoaGRlbHRhIDogMCA8IGRlbHRhKSA6CiAgICDiiIDhtqAgeCA6IOKEnSBpbiBhdFRvcCwgQyAqIHggXiAoMiAtIGRlbHRhKSDiiaQgeCBeIDIgLyAoUmVhbC5sb2cgeCkgXiBBIDo9IGJ5CiAgZmlsdGVyX3Vwd2FyZHMgW2V2ZW50dWFsbHlfY29uc3RfbG9nX3Jwb3dfbGVfcnBvdyBDIEEgaEMgaGRlbHRhLAogICAgZXZlbnR1YWxseV9nZV9hdFRvcCAoMSA6IOKEnSksCiAgICBSZWFsLnRlbmRzdG9fbG9nX2F0VG9wLmV2ZW50dWFsbHlfZ2VfYXRUb3AgKDEgOiDihJ0pXSB3aXRoIHggaHBheSBoeDEgaGxvZwogIGhhdmUgaHgwIDogMCA8IHggOj0gemVyb19sdF9vbmUudHJhbnNfbGUgaHgxCiAgYXBwbHkgKGxlX2Rpdl9pZmbigoAgKFJlYWwucnBvd19wb3Nfb2ZfcG9zIChieSBsaW5hcml0aCA6IDAgPCBSZWFsLmxvZyB4KSBBKSkubXByCiAgY2FsYwogICAgXyA9IChDICogKFJlYWwubG9nIHgpIF4gQSkgKiB4IF4gKDIgLSBkZWx0YSkgOj0gYnkgcmluZwogICAgXyDiiaQgeCBeIGRlbHRhICogeCBeICgyIC0gZGVsdGEpIDo9CiAgICAgIG11bF9sZV9tdWxfb2Zfbm9ubmVnX3JpZ2h0IGhwYXkgKFJlYWwucnBvd19ub25uZWcgaHgwLmxlIF8pCiAgICBfID0geCBeICgyIDog4oSdKSA6PSBieQogICAgICBydyBb4oaQIFJlYWwucnBvd19hZGQgaHgwLCBzaG93IGRlbHRhICsgKDIgLSBkZWx0YSkgPSAyIGJ5IHJpbmddCiAgICBfID0gXyA6PSBSZWFsLnJwb3dfbmF0Q2FzdCBfIDIKCi8tLSBHZW51aW5lIHBvd2VyIHNhdmluZyBhZnRlciBtdWx0aXBsaWNhdGlvbiBieSB0aGUgYWN0dWFsIGJldGEgTDIgY29zdC4gLS8KdGhlb3JlbSBhY3R1YWxfYmV0YUwyX211bF9VX2Vycm9yX3Bvd2VyX2JvdW5kIChCIDog4oSVKSAoc2lnbWEga2FwcGEgYzAgOiDihJ0pCiAgICAoaHNpZ21hIDogMCA8IHNpZ21hKSA6CiAgICDiiIMgQyA6IOKEnSwgMCA8IEMg4oinIOKIgyB4MCA6IOKEnSwgMSA8IHgwIOKIpyDiiIAgZCA6IE1lZGl1bUF0b20sCiAgICAgIE1lZGl1bUFkbWlzc2libGUgQiBzaWdtYSBrYXBwYSBjMCBkIOKGkiB4MCDiiaQgZC5zY2FsZSDihpIKICAgICAgKOKIkSBuIOKIiCBkLmJldGFDYXJyaWVyLCDigJZkLmJldGEgbuKAliBeIDIpICoKICAgICAgICDigJYoZC50cmFuc3Bvc2VkQXRvbS5jb21wbGV4RGlzcGVyc2lvblUgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhDYXJyaWVyCiAgICAgICAgICBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aFdlaWdodCA6IOKEgikgLSBwcmltaXRpdmVaZXJvTWFpbiBk4oCWIOKJpAogICAgICAgICAgICBDICogZC5zY2FsZSBeICg3IC8gNCA6IOKEnSkgOj0gYnkKICBvYnRhaW4g4p+oQywgaEMsIGhib3VuZOKfqSA6PSBhY3R1YWxfYmV0YUwyX211bF9VX2Vycm9yX2JvdW5kCiAgb2J0YWluIOKfqHgwLCBoeDAsIGhjb3N04p+pIDo9IGV2ZW50dWFsbHlfYWN0dWFsX2xvZ19jb3N0X2xlX3Jwb3cKICAgICgoMiBeIEIpIF4gMiAtIDEpIDI0IHNpZ21hIGhzaWdtYSAoYnkgbm9ybV9udW0gOiAoMCA6IOKEnSkgPCAxIC8gNCkKICByZWZpbmUg4p+oQywgaEMsIHgwLCBoeDAsIGZ1biBkIGhkIGh4IOKGpiA/X+KfqQogIGhhdmUgaHhwb3MgOiAwIDwgZC5zY2FsZSA6PSB6ZXJvX2x0X29uZS50cmFuc19sZSAob25lX2xlX3NjYWxlIGhkKQogIGhhdmUgaGxvZ1YwIDogMCDiiaQgMSArIFJlYWwubG9nICgyICogZC5WKSA6PSBieQogICAgbGluYXJpdGggW1JlYWwubG9nX25vbm5lZyAoc2hvdyAxIOKJpCAyICogZC5WIGJ5IGxpbmFyaXRoIFtoZC4yLjFdKV0KICBoYXZlIGhsb2dDYXAwIDogMCDiiaQgMSArIFJlYWwubG9nIGQucGh5c2ljYWxGYWN0b3JDYXAgOj0gYnkKICAgIGxpbmFyaXRoIFtSZWFsLmxvZ19ub25uZWcgKGQub25lX2xlX3BoeXNpY2FsRmFjdG9yQ2FwIGhkKV0KICBjYWxjCiAgICBfIOKJpCBDICogZC5WICogZC5VIF4gMiAqCiAgICAgICAgKDEgKyBSZWFsLmxvZyAoMiAqIGQuVikpIF4gKCgyIF4gQikgXiAyIC0gMSkgKgogICAgICAgICAgKDEgKyBSZWFsLmxvZyBkLnBoeXNpY2FsRmFjdG9yQ2FwKSBeIDI0IDo9IGhib3VuZCBCIHNpZ21hIGthcHBhIGMwIGQgaGQKICAgIF8gPSBDICogZC5zY2FsZSAqIGQuVSAqCiAgICAgICAgKCgxICsgUmVhbC5sb2cgKDIgKiBkLlYpKSBeICgoMiBeIEIpIF4gMiAtIDEpICoKICAgICAgICAgICgxICsgUmVhbC5sb2cgZC5waHlzaWNhbEZhY3RvckNhcCkgXiAyNCkgOj0gYnkKICAgICAgdW5mb2xkIE1lZGl1bUF0b20uc2NhbGUKICAgICAgcmluZwogICAgXyDiiaQgQyAqIGQuc2NhbGUgKiAoZC5zY2FsZSBeICgxIC8gMiA6IOKEnSkpICogZC5zY2FsZSBeICgxIC8gNCA6IOKEnSkgOj0KICAgICAgbXVsX2xlX211bAogICAgICAgIChtdWxfbGVfbXVsX29mX25vbm5lZ19sZWZ0IChVX2xlX3NjYWxlX2hhbGYgaHNpZ21hIGhkKSAoYnkgcG9zaXRpdml0eSkpCiAgICAgICAgKGhjb3N0IEIga2FwcGEgYzAgZCBoZCBoeCkgKGJ5IHBvc2l0aXZpdHkpIChieSBwb3NpdGl2aXR5KQogICAgXyA9IEMgKiAoZC5zY2FsZSBeICgxIDog4oSdKSAqIGQuc2NhbGUgXiAoMSAvIDIgOiDihJ0pICoKICAgICAgICBkLnNjYWxlIF4gKDEgLyA0IDog4oSdKSkgOj0gYnkgcncgW1JlYWwucnBvd19vbmVdOyByaW5nCiAgICBfID0gXyA6PSBieSBydyBb4oaQIFJlYWwucnBvd19hZGQgaHhwb3MsIOKGkCBSZWFsLnJwb3dfYWRkIGh4cG9zXTsgbm9ybV9udW0KCi8tLSBFdmVyeSByZXF1ZXN0ZWQgbG9nYXJpdGhtaWMgZGVjYXkgaXMgcGFpZCwgYmVmb3JlIHRoZSBhY3R1YWwgYXRvbS4gLS8KdGhlb3JlbSBhY3R1YWxfYmV0YUwyX211bF9VX2Vycm9yX2xvZ19wYXltZW50IChCIDog4oSVKSAoc2lnbWEga2FwcGEgYzAgQSA6IOKEnSkKICAgIChoc2lnbWEgOiAwIDwgc2lnbWEpIDoKICAgIOKIgyB4MCA6IOKEnSwgMSA8IHgwIOKIpyDiiIAgZCA6IE1lZGl1bUF0b20sCiAgICAgIE1lZGl1bUFkbWlzc2libGUgQiBzaWdtYSBrYXBwYSBjMCBkIOKGkiB4MCDiiaQgZC5zY2FsZSDihpIKICAgICAgKOKIkSBuIOKIiCBkLmJldGFDYXJyaWVyLCDigJZkLmJldGEgbuKAliBeIDIpICoKICAgICAgICDigJYoZC50cmFuc3Bvc2VkQXRvbS5jb21wbGV4RGlzcGVyc2lvblUgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhDYXJyaWVyCiAgICAgICAgICBkLnRyYW5zcG9zZWRBdG9tLmNvbW1vblNtb290aFdlaWdodCA6IOKEgikgLSBwcmltaXRpdmVaZXJvTWFpbiBk4oCWIOKJpAogICAgICAgICAgICBkLnNjYWxlIF4gMiAvIChSZWFsLmxvZyBkLnNjYWxlKSBeIEEgOj0gYnkKICBvYnRhaW4g4p+oQywgaEMsIHgxLCBoeDEsIGhib3VuZOKfqSA6PQogICAgYWN0dWFsX2JldGFMMl9tdWxfVV9lcnJvcl9wb3dlcl9ib3VuZCBCIHNpZ21hIGthcHBhIGMwIGhzaWdtYQogIG9idGFpbiDin6h4MiwgaHgy4p+pIDo9IGV2ZW50dWFsbHlfYXRUb3AubXAKICAgIChldmVudHVhbGx5X2NvbnN0X3Jwb3dfdHdvX2xlX2xvZ0J1ZGdldCBDIEEgaEMubGUKICAgICAgKGJ5IG5vcm1fbnVtIDogKDAgOiDihJ0pIDwgMSAvIDQpKQogIHJlZmluZSDin6htYXggeDEgeDIsIGx0X29mX2x0X29mX2xlIGh4MSAobGVfbWF4X2xlZnQgXyBfKSwgZnVuIGQgaGQgaHgg4oamID9f4p+pCiAgYXBwbHkgKGhib3VuZCBkIGhkICgobGVfbWF4X2xlZnQgXyBfKS50cmFucyBoeCkpLnRyYW5zCiAgY29udmVydCBoeDIgZC5zY2FsZSAoKGxlX21heF9yaWdodCBfIF8pLnRyYW5zIGh4KSB1c2luZyAxIDw7PiBub3JtX251bQ==",
+      "new_inserted_bytes_base64": "YnkKICAgICAgc2ltcGEgb25seSBbTmF0LmNhc3RfYWRkXSB1c2luZwogICAgICAgIGh4MSBkLnNjYWxlICgobGVfbWF4X2xlZnQgeDEgeDIpLnRyYW5zICgobGVfbWF4X3JpZ2h0IDIgKG1heCB4MSB4MikpLnRyYW5zIGh4KSkKCnRoZW9yZW0gZXZlbnR1YWxseV9jb25zdF9ycG93X3R3b19sZV9sb2dCdWRnZXQgKEMgQSA6IOKEnSkgKGhDIDogMCDiiaQgQykKICAgIHtkZWx0YSA6IOKEnX0gKGhkZWx0YSA6IDAgPCBkZWx0YSkgOgogICAg4oiA4bagIHggOiDihJ0gaW4gYXRUb3AsIEMgKiB4IF4gKDIgLSBkZWx0YSkg4omkIHggXiAyIC8gKFJlYWwubG9nIHgpIF4gQSA6PSBieQogIGZpbHRlcl91cHdhcmRzIFtldmVudHVhbGx5X2NvbnN0X2xvZ19ycG93X2xlX3Jwb3cgQyBBIGhDIGhkZWx0YSwKICAgIGV2ZW50dWFsbHlfZ2VfYXRUb3AgKDEgOiDihJ0pLAogICAgUmVhbC50ZW5kc3RvX2xvZ19hdFRvcC5ldmVudHVhbGx5X2dlX2F0VG9wICgxIDog4oSdKV0gd2l0aCB4IGhwYXkgaHgxIGhsb2cKICBoYXZlIGh4MCA6IDAgPCB4IDo9IHplcm9fbHRfb25lLnRyYW5zX2xlIGh4MQogIGFwcGx5IChsZV9kaXZfaWZm4oKAIChSZWFsLnJwb3dfcG9zX29mX3BvcyAoYnkgbGluYXJpdGggOiAwIDwgUmVhbC5sb2cgeCkgQSkpLm1wcgogIGNhbGMKICAgIF8gPSAoQyAqIChSZWFsLmxvZyB4KSBeIEEpICogeCBeICgyIC0gZGVsdGEpIDo9IGJ5IHJpbmcKICAgIF8g4omkIHggXiBkZWx0YSAqIHggXiAoMiAtIGRlbHRhKSA6PQogICAgICBtdWxfbGVfbXVsX29mX25vbm5lZ19yaWdodCBocGF5IChSZWFsLnJwb3dfbm9ubmVnIGh4MC5sZSBfKQogICAgXyA9IHggXiAoMiA6IOKEnSkgOj0gYnkKICAgICAgcncgW+KGkCBSZWFsLnJwb3dfYWRkIGh4MCwgc2hvdyBkZWx0YSArICgyIC0gZGVsdGEpID0gMiBieSByaW5nXQogICAgXyA9IF8gOj0gUmVhbC5ycG93X25hdENhc3QgXyAyCgovLS0gR2VudWluZSBwb3dlciBzYXZpbmcgYWZ0ZXIgbXVsdGlwbGljYXRpb24gYnkgdGhlIGFjdHVhbCBiZXRhIEwyIGNvc3QuIC0vCnRoZW9yZW0gYWN0dWFsX2JldGFMMl9tdWxfVV9lcnJvcl9wb3dlcl9ib3VuZCAoQiA6IOKElSkgKHNpZ21hIGthcHBhIGMwIDog4oSdKQogICAgKGhzaWdtYSA6IDAgPCBzaWdtYSkgOgogICAg4oiDIEMgOiDihJ0sIDAgPCBDIOKIpyDiiIMgeDAgOiDihJ0sIDEgPCB4MCDiiKcg4oiAIGQgOiBNZWRpdW1BdG9tLAogICAgICBNZWRpdW1BZG1pc3NpYmxlIEIgc2lnbWEga2FwcGEgYzAgZCDihpIgeDAg4omkIGQuc2NhbGUg4oaSCiAgICAgICjiiJEgbiDiiIggZC5iZXRhQ2Fycmllciwg4oCWZC5iZXRhIG7igJYgXiAyKSAqCiAgICAgICAg4oCWKGQudHJhbnNwb3NlZEF0b20uY29tcGxleERpc3BlcnNpb25VIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoQ2FycmllcgogICAgICAgICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhXZWlnaHQgOiDihIIpIC0gcHJpbWl0aXZlWmVyb01haW4gZOKAliDiiaQKICAgICAgICAgICAgQyAqIGQuc2NhbGUgXiAoNyAvIDQgOiDihJ0pIDo9IGJ5CiAgb2J0YWluIOKfqEMsIGhDLCBoYm91bmTin6kgOj0gYWN0dWFsX2JldGFMMl9tdWxfVV9lcnJvcl9ib3VuZAogIG9idGFpbiDin6h4MCwgaHgwLCBoY29zdOKfqSA6PSBldmVudHVhbGx5X2FjdHVhbF9sb2dfY29zdF9sZV9ycG93CiAgICAoKDIgXiBCKSBeIDIgLSAxKSAyNCBzaWdtYSBoc2lnbWEgKGJ5IG5vcm1fbnVtIDogKDAgOiDihJ0pIDwgMSAvIDQpCiAgcmVmaW5lIOKfqEMsIGhDLCB4MCwgaHgwLCBmdW4gZCBoZCBoeCDihqYgP1/in6kKICBoYXZlIGh4cG9zIDogMCA8IGQuc2NhbGUgOj0gemVyb19sdF9vbmUudHJhbnNfbGUgKG9uZV9sZV9zY2FsZSBoZCkKICBoYXZlIGhsb2dWMCA6IDAg4omkIDEgKyBSZWFsLmxvZyAoMiAqIGQuVikgOj0gYnkKICAgIGxpbmFyaXRoIFtSZWFsLmxvZ19ub25uZWcgKHNob3cgMSDiiaQgMiAqIGQuViBieSBsaW5hcml0aCBbaGQuMi4xXSldCiAgaGF2ZSBobG9nQ2FwMCA6IDAg4omkIDEgKyBSZWFsLmxvZyBkLnBoeXNpY2FsRmFjdG9yQ2FwIDo9IGJ5CiAgICBsaW5hcml0aCBbUmVhbC5sb2dfbm9ubmVnIChkLm9uZV9sZV9waHlzaWNhbEZhY3RvckNhcCBoZCldCiAgY2FsYwogICAgXyDiiaQgQyAqIGQuViAqIGQuVSBeIDIgKgogICAgICAgICgxICsgUmVhbC5sb2cgKDIgKiBkLlYpKSBeICgoMiBeIEIpIF4gMiAtIDEpICoKICAgICAgICAgICgxICsgUmVhbC5sb2cgZC5waHlzaWNhbEZhY3RvckNhcCkgXiAyNCA6PSBoYm91bmQgQiBzaWdtYSBrYXBwYSBjMCBkIGhkCiAgICBfID0gQyAqIGQuc2NhbGUgKiBkLlUgKgogICAgICAgICgoMSArIFJlYWwubG9nICgyICogZC5WKSkgXiAoKDIgXiBCKSBeIDIgLSAxKSAqCiAgICAgICAgICAoMSArIFJlYWwubG9nIGQucGh5c2ljYWxGYWN0b3JDYXApIF4gMjQpIDo9IGJ5CiAgICAgIHVuZm9sZCBNZWRpdW1BdG9tLnNjYWxlCiAgICAgIHJpbmcKICAgIF8g4omkIEMgKiBkLnNjYWxlICogKGQuc2NhbGUgXiAoMSAvIDIgOiDihJ0pKSAqIGQuc2NhbGUgXiAoMSAvIDQgOiDihJ0pIDo9CiAgICAgIG11bF9sZV9tdWwKICAgICAgICAobXVsX2xlX211bF9vZl9ub25uZWdfbGVmdCAoVV9sZV9zY2FsZV9oYWxmIGhzaWdtYSBoZCkgKGJ5IHBvc2l0aXZpdHkpKQogICAgICAgIChoY29zdCBCIGthcHBhIGMwIGQgaGQgaHgpIChieSBwb3NpdGl2aXR5KSAoYnkgcG9zaXRpdml0eSkKICAgIF8gPSBDICogKGQuc2NhbGUgXiAoMSA6IOKEnSkgKiBkLnNjYWxlIF4gKDEgLyAyIDog4oSdKSAqCiAgICAgICAgZC5zY2FsZSBeICgxIC8gNCA6IOKEnSkpIDo9IGJ5IHJ3IFtSZWFsLnJwb3dfb25lXTsgcmluZwogICAgXyA9IF8gOj0gYnkgcncgW+KGkCBSZWFsLnJwb3dfYWRkIGh4cG9zLCDihpAgUmVhbC5ycG93X2FkZCBoeHBvc107IG5vcm1fbnVtCgovLS0gRXZlcnkgcmVxdWVzdGVkIGxvZ2FyaXRobWljIGRlY2F5IGlzIHBhaWQsIGJlZm9yZSB0aGUgYWN0dWFsIGF0b20uIC0vCnRoZW9yZW0gYWN0dWFsX2JldGFMMl9tdWxfVV9lcnJvcl9sb2dfcGF5bWVudCAoQiA6IOKElSkgKHNpZ21hIGthcHBhIGMwIEEgOiDihJ0pCiAgICAoaHNpZ21hIDogMCA8IHNpZ21hKSA6CiAgICDiiIMgeDAgOiDihJ0sIDEgPCB4MCDiiKcg4oiAIGQgOiBNZWRpdW1BdG9tLAogICAgICBNZWRpdW1BZG1pc3NpYmxlIEIgc2lnbWEga2FwcGEgYzAgZCDihpIgeDAg4omkIGQuc2NhbGUg4oaSCiAgICAgICjiiJEgbiDiiIggZC5iZXRhQ2Fycmllciwg4oCWZC5iZXRhIG7igJYgXiAyKSAqCiAgICAgICAg4oCWKGQudHJhbnNwb3NlZEF0b20uY29tcGxleERpc3BlcnNpb25VIGQudHJhbnNwb3NlZEF0b20uY29tbW9uU21vb3RoQ2FycmllcgogICAgICAgICAgZC50cmFuc3Bvc2VkQXRvbS5jb21tb25TbW9vdGhXZWlnaHQgOiDihIIpIC0gcHJpbWl0aXZlWmVyb01haW4gZOKAliDiiaQKICAgICAgICAgICAgZC5zY2FsZSBeIDIgLyAoUmVhbC5sb2cgZC5zY2FsZSkgXiBBIDo9IGJ5CiAgb2J0YWluIOKfqEMsIGhDLCB4MSwgaHgxLCBoYm91bmTin6kgOj0KICAgIGFjdHVhbF9iZXRhTDJfbXVsX1VfZXJyb3JfcG93ZXJfYm91bmQgQiBzaWdtYSBrYXBwYSBjMCBoc2lnbWEKICBvYnRhaW4g4p+oeDIsIGh4MuKfqSA6PSBldmVudHVhbGx5X2F0VG9wLm1wCiAgICAoZXZlbnR1YWxseV9jb25zdF9ycG93X3R3b19sZV9sb2dCdWRnZXQgQyBBIGhDLmxlCiAgICAgIChieSBub3JtX251bSA6ICgwIDog4oSdKSA8IDEgLyA0KSkKICByZWZpbmUg4p+obWF4IHgxIHgyLCBsdF9vZl9sdF9vZl9sZSBoeDEgKGxlX21heF9sZWZ0IF8gXyksIGZ1biBkIGhkIGh4IOKGpiA/X+KfqQogIGFwcGx5IChoYm91bmQgZCBoZCAoKGxlX21heF9sZWZ0IF8gXykudHJhbnMgaHgpKS50cmFucwogIHNpbXBhIG9ubHkgW3Nob3cgKDIgOiDihJ0pIC0gMSAvIDQgPSA3IC8gNCBieSBub3JtX251bV0gdXNpbmcKICAgIGh4MiBkLnNjYWxlICgobGVfbWF4X3JpZ2h0IF8gXykudHJhbnMgaHgp"
+    },
+    "forward_old_snapshot_to_current": {
+      "byte_for_byte_equal_current": true,
+      "reconstructed_sha256": "d4960bb71109729102df43dee6cad452937cbb73fae2c6b359828d74c5bc12a8"
+    },
+    "inverse_current_to_exact_old": {
+      "byte_for_byte_equal_exact_old_snapshot": true,
+      "reconstructed_sha256": "d185fff8c550641124da40f477758c2839b6e78f15c8c5700b7179896ca1eb0d"
+    },
+    "in_memory_only": true,
+    "all_checks_pass": true
+  },
+  "source_checks": {
+    "issues_identified": [],
+    "no_sorry_admit_axiom_opaque_native_decide": true,
+    "no_limits_or_linter_change": true
+  },
+  "evidence_boundary": {
+    "source_only": true,
+    "lean_invoked": false,
+    "lake_invoked": false,
+    "bootstrap_invoked": false,
+    "build_invoked": false,
+    "source_modified": false,
+    "pins_or_checkers_modified": false,
+    "kernel_replay_performed": false,
+    "axiom_audit_performed": false,
+    "runtime_pass_claimed": false,
+    "publication_freeze_respected": true,
+    "written_artifacts_only": [
+      ".lake/proof-continuation/source-reviews/20261016-transposed-primitive-U-payment-second-diag-independent-rebind.json"
+    ]
+  },
+  "remaining_gate": "Only root/runtime owner may perform the original specific bounded exact-source validation at the original 6144/RSS6656/j2 limits; this report asserts no runtime PASS or ownership."
+}
