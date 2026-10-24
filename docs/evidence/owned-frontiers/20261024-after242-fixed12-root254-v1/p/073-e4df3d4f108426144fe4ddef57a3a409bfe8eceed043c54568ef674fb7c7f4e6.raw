@@ -1,0 +1,429 @@
+"""SOURCEONLY after242 fixed12 finite source/object capture and factual witness bundler.
+It writes only the explicitly named fresh capture and witness paths when ROOT runs it.
+It launches no compiler. Tool observations must be supplied as ROOT-measured input."""
+import argparse
+import datetime
+import hashlib
+import json
+from pathlib import Path
+import runpy
+
+ROOT = Path('/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation')
+STATE = ROOT / '.lake/proof-continuation'
+COLLECTOR_REL = '.lake/proof-continuation/source-reviews/drafts/20261024p-after242-fixed12-finite-record-append-V2-SOURCEONLY.py.txt'
+COLLECTOR_SHA = '004c21c26b01a4559bf13bbbe9196d68eca52ef28b7a4115563f95bdcf58a750'
+COLLECTOR_PEER_REL = '.lake/proof-continuation/source-reviews/20261024p-after242-fixed12-finite-record-append-V2-independent-peer-CP-SOURCEONLY.json'
+COLLECTOR_PEER_SHA = 'cbac7360f406c5a82744ca0b1bb2e4d2b2812f7bf7b84596e374faa54f8afca3'
+REVIEWER_REL = '.lake/proof-continuation/source-reviews/drafts/20261024p-after242-fixed12-independent-terminal-review-V2-SOURCEONLY.py.txt'
+REVIEWER_SHA = '74c560740254136b667dd7d2e187dd73a42119a5cae1c82fe64bc0d0517fa024'
+REVIEWER_RUNNER_REL = '.lake/proof-continuation/source-reviews/drafts/20261024p-after242-fixed12-independent-terminal-review-runner-V3-SOURCEONLY.py.txt'
+REVIEWER_RUNNER_SHA = '1ad6912187d2d9505c3868e8bd10f6e904f1d70fef3d79aeae629d978beecb6b'
+BASELINE_REL = '.lake/proof-continuation/source-reviews/20261024l-root-after239-three-P3-arithmetic-terminal-acceptance.json'
+BASELINE_SHA = '3b04ce1c33f75301fe626cf2e27893a8027fa4ef9219245f2729df321a75cd0a'
+PUBLICATION_REL = '.lake/proof-continuation/publication-integrity/20261024n-root242-GITHUB-PUBLICATION.json'
+PUBLICATION_SHA = 'd518f6a7eba28c9fe72357faf7accbf0694a0121138e81c78f47d7afb1b85e76'
+AUDIT_REL = '.lake/proof-continuation/audits/20261024T033251617178Z/receipt.json'
+AUDIT_SHA = 'd1ae1e4aaa5b35bcce98b37bc8cec28c74106a128c2f018458634fdbfc1f0bfa'
+CAPTURE_REL = '.lake/proof-continuation/rounds/after242-fixed12-finite-normal-import-capture-v1.json'
+WITNESS_REL = '.lake/proof-continuation/publication-integrity/20261024p-root-after242-fixed12-actual-execution-witness-v1.json'
+TARGET_MODULES = (
+    'ImbalancedChen.ActualThirdOriginalFixedpointClippedChord',
+    'ImbalancedChen.ActualThirdOriginalRoundedNewOperations',
+    'ImbalancedChen.ActualThirdOriginalPositive256Log',
+    'ImbalancedChen.Certificates.OriginalNodeArraysV1.DataCore',
+    'ImbalancedChen.Part4ActualThirdOriginalStoredNodeLocalChecker',
+    'ImbalancedChen.ActualThirdOriginalBoxMoments',
+    'ImbalancedChen.Certificates.OriginalNodeArraysV1.CheckerCore',
+    'ImbalancedChen.Certificates.OriginalNodeArraysV1.Block00Data',
+    'ImbalancedChen.Certificates.OriginalNodeArraysV1.Block00Window',
+    'ImbalancedChen.Certificates.OriginalNodeArraysV1.Block00Page00Check',
+    'ImbalancedChen.ActualThirdOriginalSymmetricJensenLeaf',
+    'ImbalancedChen.ActualThirdOriginalOrdinaryOldChord',
+)
+def need(ok, why):
+    if not ok:
+        raise ValueError(why)
+
+def sha(path):
+    with Path(path).open('rb') as stream:
+        return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+def local_path(raw, root=ROOT):
+    need(isinstance(raw, str) and raw, 'path string required')
+    name = raw.replace('\\', '/')
+    win = 'E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation/'
+    if name == win[:-1]:
+        path = root
+    elif name.startswith(win):
+        path = root / name[len(win):]
+    else:
+        need(not (len(name) >= 3 and name[1:3] == ':/'), 'foreign Windows drive path rejected')
+        p = Path(name)
+        path = p if p.is_absolute() else root / p
+    path = path.resolve(strict=True)
+    need(path.is_file() and path.is_relative_to(root), 'input must be a file inside fixed repository')
+    return path
+
+def exact_pair(raw_path, expected_sha, root=ROOT):
+    need(isinstance(expected_sha, str) and len(expected_sha) == 64
+         and set(expected_sha) <= set('0123456789abcdef'), 'lowercase SHA256 required')
+    p = local_path(raw_path, root)
+    need(sha(p) == expected_sha, 'input SHA mismatch: ' + str(raw_path))
+    return {'path': raw_path.replace('\\', '/'), 'sha256': expected_sha}
+
+def read_pair(pair, root=ROOT):
+    need(isinstance(pair, dict) and set(pair) == {'path', 'sha256'}, 'exact path/SHA pair required')
+    p = exact_pair(pair['path'], pair['sha256'], root)
+    return json.loads(local_path(pair['path'], root).read_text(encoding='utf-8'))
+
+def parse_targets(values):
+    result = {}
+    for value in values:
+        need(isinstance(value, str) and value.count('=') == 1, '--target-source must be MODULE=SHA256')
+        module, digest = value.split('=', 1)
+        need(module in TARGET_MODULES and module not in result and len(digest) == 64
+             and set(digest) <= set('0123456789abcdef'), 'unknown/duplicate target or malformed source SHA')
+        result[module] = digest
+    need(set(result) == set(TARGET_MODULES), 'exactly twelve final target source hashes required')
+    return result
+
+def observation_record(record, required, label):
+    need(isinstance(record, dict) and set(record) == required, label + ' observation schema mismatch')
+    need(isinstance(record['terminalChunk'], str) and record['terminalChunk'].strip(), label + ' actual ROOT terminal/session reference required')
+    need(type(record['exitCode']) is int and record['exitCode'] == 0, label + ' actual command must have observed exit code 0')
+
+def same_pair(a, b):
+    return isinstance(a, dict) and set(a) == {'path', 'sha256'} and a == b
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--root', required=True)
+    parser.add_argument('--proposal', required=True)
+    parser.add_argument('--proposal-sha256', required=True)
+    parser.add_argument('--intake', required=True)
+    parser.add_argument('--intake-sha256', required=True)
+    parser.add_argument('--terminal-review', required=True)
+    parser.add_argument('--terminal-review-sha256', required=True)
+    parser.add_argument('--terminal-review-cp', required=True)
+    parser.add_argument('--terminal-review-cp-sha256', required=True)
+    parser.add_argument('--observations', required=True)
+    parser.add_argument('--observations-sha256', required=True)
+    parser.add_argument('--collector', required=True)
+    parser.add_argument('--collector-sha256', required=True)
+    parser.add_argument('--collector-peer', required=True)
+    parser.add_argument('--collector-peer-sha256', required=True)
+    parser.add_argument('--reviewer-peer', required=True)
+    parser.add_argument('--reviewer-peer-sha256', required=True)
+    parser.add_argument('--baseline-acceptance-sha256', required=True)
+    parser.add_argument('--target-source', action='append', required=True)
+    parser.add_argument('--capture-output', required=True)
+    parser.add_argument('--witness-output', required=True)
+    args = parser.parse_args(argv)
+
+    root = Path(args.root).resolve(strict=True)
+    need(root == ROOT.resolve(strict=True), 'fixed WSL repository required')
+    targets = parse_targets(args.target_source)
+    need(args.baseline_acceptance_sha256 == BASELINE_SHA, 'exact ROOT242 baseline SHA required')
+    need(args.collector.replace('\\', '/') == COLLECTOR_REL and args.collector_sha256 == COLLECTOR_SHA,
+         'exact after242 fixed12 collector path/SHA required')
+    need(args.collector_peer.replace('\\', '/') == COLLECTOR_PEER_REL and args.collector_peer_sha256 == COLLECTOR_PEER_SHA,
+         'exact collector source-peer CP path/SHA required')
+    need(args.capture_output.replace('\\', '/') == CAPTURE_REL and args.witness_output.replace('\\', '/') == WITNESS_REL,
+         'exact ROOT after242 fixed12 capture/witness output paths required')
+
+    collector_path = local_path(args.collector, root)
+    collector_peer_ref = exact_pair(args.collector_peer, args.collector_peer_sha256, root)
+    reviewer_path = local_path(REVIEWER_REL, root)
+    reviewer_runner_path = local_path(REVIEWER_RUNNER_REL, root)
+    reviewer_peer_ref = exact_pair(args.reviewer_peer, args.reviewer_peer_sha256, root)
+    need(sha(collector_path) == COLLECTOR_SHA and sha(reviewer_path) == REVIEWER_SHA and sha(reviewer_runner_path) == REVIEWER_RUNNER_SHA,
+         'reviewed after242 fixed12 collector/reviewer source hash changed')
+    collector_peer = read_pair(collector_peer_ref, root)
+    reviewer_peer = read_pair(reviewer_peer_ref, root)
+    need(collector_peer['status'] == 'STATIC_REVIEW_NO_DEFINITE_GATE_REGRESSION_FOUND'
+         and collector_peer['reviewed']['collector']['sha256'] == COLLECTOR_SHA,
+         'after242 fixed12 collector source-peer CP not PASS/bound')
+    need(reviewer_peer['status'] == 'STATIC_SOURCE_REVIEW_PASS_BOUNDED_NOT_EXECUTED_NOT_ROOT_ACCEPTANCE'
+         and reviewer_peer['exact_sources']['reviewer_sha256'] == REVIEWER_SHA
+         and reviewer_peer['exact_sources']['runner_sha256'] == REVIEWER_RUNNER_SHA,
+         'after242 fixed12 reviewer source-peer CP not PASS/bound')
+
+    namespace = runpy.run_path(str(collector_path), run_name='after242_fixed12_capture_import_only')
+    need(tuple(namespace.get('TARGET_MODULES', ())) == TARGET_MODULES and callable(namespace.get('FinitePaths')),
+         'after242 fixed12 V2 collector API/target contract mismatch')
+    proposal_ref = exact_pair(args.proposal, args.proposal_sha256, root)
+    intake_ref = exact_pair(args.intake, args.intake_sha256, root)
+    terminal_review_ref = exact_pair(args.terminal_review, args.terminal_review_sha256, root)
+    terminal_review_cp_ref = exact_pair(args.terminal_review_cp, args.terminal_review_cp_sha256, root)
+    observations_ref = exact_pair(args.observations, args.observations_sha256, root)
+    proposal = read_pair(proposal_ref, root)
+    intake = read_pair(intake_ref, root)
+    review = read_pair(terminal_review_ref, root)
+    observations = read_pair(observations_ref, root)
+    need(intake['schema'] == 'after242-fixed12-finite-record-append-draft-input-v2'
+         and intake['targets'] == targets and set(intake['strict_producers']) == set(TARGET_MODULES),
+         'actual intake final target/source map mismatch')
+    need(proposal['status'] == 'SOURCEONLY_RECORD_APPEND_PROPOSAL_REQUIRES_SEPARATE_TERMINAL_VERIFICATION'
+         and proposal['complete_original_evidence_intake'] == intake_ref
+         and proposal['baseline_acceptance'] == {'path': BASELINE_REL, 'sha256': BASELINE_SHA}
+         and proposal['collector_source']['sha256'] == COLLECTOR_SHA
+         and local_path(proposal['collector_source']['path'], root) == collector_path,
+         'actual proposal/intake/baseline/collector binding mismatch')
+    need(review['status'] == 'FINITE_RECORD_STAGE_TERMINAL_REVIEW_PASS_NOT_ROOT_ACCEPTANCE'
+         and review['reviewed_collector_sha256'] == COLLECTOR_SHA
+         and review['root_target_source_hashes'] == targets
+         and review['root_acceptance'] is None and review['proof_credit'] == 0
+         and review['main_1_plus_1_75'] == 'OPEN'
+         and set(review['strict_producers']) == set(TARGET_MODULES)
+         and all(status == 'PASS' for status in review['strict_producers'].values())
+         and review['original_audit_group_key'] == 'fixed12' and set(review['original_audit_refs']) == {'fixed12'}
+         and review['original_stock_replays'] == len(TARGET_MODULES)
+         and review['original_ALL_stages'] == 1 and review['current_owned_module_slot_sets_rehashed'] == review['artifact_derived_counts']['owned_modules']
+         and review['external_closure_replayed'] is False and review['project_import_closure_replayed'] is False
+         and review['unconditional_main_proved'] is False,
+         'actual terminal reviewer result is missing required finite PASS checks')
+
+    census = read_pair(proposal['candidate_census'], root)
+    rows = read_pair(proposal['complete_declarations'], root)
+    baseline_ref = {'path': BASELINE_REL, 'sha256': BASELINE_SHA}
+    baseline = read_pair(baseline_ref, root)
+    publication = read_pair({'path': PUBLICATION_REL, 'sha256': PUBLICATION_SHA}, root)
+    need(baseline['status'] == 'ROOT_AFTER239_THREE_P3_ARITHMETIC_TERMINAL_ACCEPTED'
+         and [baseline[k] for k in ('owned_modules', 'declarations', 'distinct_constant_fullnames', 'original_receipts')] == [242, 6870, 6851, 164]
+         and publication['status'] == 'ROOT_AFTER239_THREE_P3_ARITHMETIC_GITHUB_PUBLISHED_AND_REMOTE_BRANCH_VERIFIED'
+         and publication['rootAcceptance'] == baseline_ref
+         and (publication['owned_modules'], publication['complete_declaration_records'], publication['distinct_constant_fullnames'], publication['original_owned_receipts']) == (242, 6870, 6851, 164)
+         and publication['pushed'] is True and publication['remote_branch_verified'] is True,
+         'exact published ROOT242 baseline required')
+    old_census = read_pair(baseline['current_census'], root)
+    old_rows = read_pair(baseline['complete_declarations'], root)
+    need(len(old_census['modules']) == 242 and len(old_rows) == 6870
+         and len({r['name'] for r in old_rows}) == 6851, 'ROOT242 baseline primary record counts mismatch')
+    targets_set = set(targets)
+    need(len(census['modules']) == len(old_census['modules']) + len(targets_set)
+         and set(census['modules']) == set(old_census['modules']) | targets_set
+         and not targets_set & set(old_census['modules']), 'append-only exact baseline plus twelve target module set mismatch')
+    need({m: v for m, v in census['modules'].items() if m not in targets_set} == old_census['modules']
+         and [r for r in rows if r['module'] not in targets_set] == old_rows,
+         'all old 242 census entries/6870 rows must deep-equal')
+    new_rows = [r for r in rows if r['module'] in targets_set]
+    new_counts = {m: sum(r['module'] == m for r in new_rows) for m in TARGET_MODULES}
+    derived = review['artifact_derived_counts']
+    need(all(n > 0 for n in new_counts.values())
+         and new_counts == derived['new_records_by_module']
+         and derived['owned_modules'] == len(census['modules'])
+         and derived['declarations'] == len(rows)
+         and derived['distinct_constant_fullnames'] == len({r['name'] for r in rows})
+         and derived['new_record_delta'] == len(new_rows)
+         and derived['old_entries_deep_equal'] is True and derived['old_records_deep_equal'] is True,
+         'new module counts/totals must match actual reviewer records and deep-equality checks')
+    need(len(rows) == len(old_rows) + len(new_rows)
+         and len({r['name'] for r in new_rows}) == len(new_rows)
+         and not {r['name'] for r in old_rows} & {r['name'] for r in new_rows}
+         and len({(r['module'], r['name']) for r in rows}) == len(rows),
+         'new full-name collisions/duplicate record identities')
+    for row in new_rows:
+        need(isinstance(row['type'], str) and row['type'] and '\u22ef' not in row['type']
+             and not row['type'].endswith('...')
+             and all(row[k] is False for k in ('unsafe', 'partial', 'axiom'))
+             and isinstance(row['axioms'], list) and set(row['axioms']) <= {'propext', 'Classical.choice', 'Quot.sound'},
+             'new rows must be complete, safe, and std3-only')
+
+    audit_refs = intake['audit_receipts']
+    need(isinstance(audit_refs, list) and len(audit_refs) == 1
+         and audit_refs[0]['targets'] == targets, 'exact one stock+ALL fixed12 group must cover final target map')
+    need(audit_refs[0]['ref'] == {'path': AUDIT_REL, 'sha256': AUDIT_SHA}, 'exact actual ROOT fixed12 stock+ALL receipt ref required')
+    audit = read_pair(audit_refs[0]['ref'], root)
+    need(audit['status'] == 'PASS_OWNED_REPLAY_AND_COMPLETE_TYPES_AXIOMS'
+         and audit['inputs_before'] == audit['inputs_after']
+         and review['original_audit_refs'] == {'fixed12': audit_refs[0]['ref']}
+         and audit['targets'] == targets and audit['declaration_counts'] == new_counts,
+         'actual combined stock+ALL receipt no longer matches proposal/target map')
+    strict_producers = intake['strict_producers']
+    need(set(strict_producers) == set(targets), 'twelve strict producer receipts required')
+
+    # The observations file is an explicit ROOT-produced factual input. This
+    # script never predicts terminal IDs or exit codes and rejects any nonzero.
+    need(observations['schema'] == 'ROOT_AFTER242_FIXED12_ACTUAL_TOOL_OBSERVATIONS_V1'
+         and observations['status'] == 'ROOT_OBSERVED_ACTUAL_COMMAND_RESULTS'
+         and observations['targets'] == targets, 'explicit ROOT actual-observation schema/targets required')
+    need(set(observations['strict_producers']) == set(targets), 'observations must include exactly twelve strict commands')
+    for module in TARGET_MODULES:
+        obs = observations['strict_producers'][module]
+        observation_record(obs, {'terminalChunk', 'exitCode', 'receipt', 'stdout'}, 'strict ' + module)
+        need(same_pair(obs['receipt'], strict_producers[module]['receipt'])
+             and same_pair(obs['stdout'], strict_producers[module]['stdout']), 'strict observation refs differ from intake')
+    observation_record(observations['original_stock_all'], {'terminalChunk', 'exitCode', 'receipt'}, 'stock+ALL')
+    need(same_pair(observations['original_stock_all']['receipt'], audit_refs[0]['ref']), 'stock+ALL observation receipt mismatch')
+    observation_record(observations['intake_constructor'], {'terminalChunk', 'exitCode', 'output'}, 'intake constructor')
+    need(same_pair(observations['intake_constructor']['output'], intake_ref), 'constructor observed output does not match final intake')
+    observation_record(observations['record_collector'], {'terminalChunk', 'exitCode', 'output'}, 'record collector')
+    need(same_pair(observations['record_collector']['output'], proposal_ref), 'collector observed output does not match proposal')
+    observation_record(observations['terminal_reviewer'], {'terminalChunk', 'exitCode', 'stdout', 'cp'}, 'terminal reviewer')
+    need(same_pair(observations['terminal_reviewer']['stdout'], terminal_review_ref)
+         and same_pair(observations['terminal_reviewer']['cp'], terminal_review_cp_ref),
+         'reviewer observations do not bind actual stdout and CP')
+    # Strict receipt bytes and zero-byte stdout logs are checked by the reviewed collector;
+    # here we only bind the supplied observation pairs to those exact inputs.
+
+    paths = namespace['FinitePaths'](root)
+    paths.prepare(set(intake['current_module_files']))
+    pinned = {}
+    def bind(reference, external_tool=False):
+        need(isinstance(reference, dict) and set(reference) == {'path', 'sha256'}, 'exact finite path/SHA pair required')
+        p = paths.bound_path(reference['path'], external_tool=external_tool)
+        digest = sha(p)
+        need(digest == reference['sha256'], 'finite capture input SHA mismatch: ' + str(reference['path']))
+        need(p not in pinned or pinned[p] == digest, 'conflicting finite capture hashes')
+        pinned[p] = digest
+        return p
+
+    for pair in (proposal_ref, intake_ref, terminal_review_ref, terminal_review_cp_ref, observations_ref,
+                 collector_peer_ref, reviewer_peer_ref, baseline_ref,
+                 {'path': PUBLICATION_REL, 'sha256': PUBLICATION_SHA},
+                 {'path': AUDIT_REL, 'sha256': AUDIT_SHA},
+                 {'path': args.collector, 'sha256': COLLECTOR_SHA},
+                 {'path': REVIEWER_REL, 'sha256': REVIEWER_SHA},
+                 {'path': REVIEWER_RUNNER_REL, 'sha256': REVIEWER_RUNNER_SHA},
+                 proposal['candidate_census'], proposal['complete_declarations'],
+                 proposal['baseline_acceptance'], proposal['complete_original_evidence_intake'],
+                 proposal['collector_source'], baseline['current_census'], baseline['complete_declarations']):
+        bind(pair)
+    bind(intake['constructed_from_inputs'])
+    for spec in intake['strict_producers'].values():
+        bind(spec['receipt'])
+        bind(spec['stdout'])
+    for spec in intake['audit_receipts']:
+        audit_path = bind(spec['ref'])
+        for name, digest in spec['sidecars'].items():
+            bind({'path': str(audit_path.parent / name), 'sha256': digest})
+    for pair in intake['pins'].values():
+        bind(pair)
+    need(set(intake['tools']) == {'audit_runner', 'audit_template', 'lean', 'lean_real', 'leanchecker', 'runtime'},
+         'exact finite audited tool roles required')
+    for role, pair in intake['tools'].items():
+        bind(pair, external_tool=role in {'lean', 'lean_real', 'leanchecker'})
+    for module, spec in intake['current_module_files'].items():
+        if module == 'Std':
+            need(spec['source'] is None, 'only Std may have a source-less runtime binding')
+            need(set(paths.slot_paths['Std']) == set(spec['object_parts']),
+                 'Std intake must bind the exact currently present pinned object-slot set')
+        else:
+            bind(spec['source'])
+        for pair in spec['object_parts'].values():
+            bind(pair)
+        if module == 'Std':
+            for suffix, pair in spec['object_parts'].items():
+                need(paths.bound_path(pair['path']) == paths.slot_paths['Std'][suffix],
+                     'Std object-slot path must match the exact pinned toolchain slot')
+
+    slot_count = 0
+    for module, entry in census['modules'].items():
+        if module in targets_set:
+            spec = intake['current_module_files'][module]
+            source = bind(spec['source'])
+            base_obj = bind(spec['object_parts']['.olean'])
+            stem = str(base_obj)[:-len('.olean')]
+            actual = {suffix: Path(stem + suffix) for suffix in namespace['SLOTS'] if Path(stem + suffix).is_file()}
+            need(set(actual) == set(entry['object_parts']) == set(spec['object_parts']), 'new target current five-slot set mismatch')
+            need(sha(source) == entry['source_sha256'] == targets[module], 'new target current source hash mismatch')
+            for suffix, part in actual.items():
+                bind({'path': str(part), 'sha256': entry['object_parts'][suffix]})
+        else:
+            source = bind({'path': str(root / (module.replace('.', '/') + '.lean')), 'sha256': entry['source_sha256']})
+            base_obj = root / '.lake/proof-continuation/lib/lean' / (module.replace('.', '/') + '.olean')
+            stem = str(base_obj)[:-len('.olean')]
+            actual = {suffix: Path(stem + suffix) for suffix in namespace['SLOTS'] if Path(stem + suffix).is_file()}
+            need(set(actual) == set(entry['object_parts']), 'old module current five-slot set mismatch')
+            for suffix, part in actual.items():
+                bind({'path': str(part), 'sha256': entry['object_parts'][suffix]})
+        slot_count += 1
+    need(slot_count == len(census['modules']), 'current source/object capture must cover exact 242+twelve owned modules')
+    capture_builder_path = Path(__file__).resolve(strict=True)
+    capture_builder_ref = {'path': str(capture_builder_path), 'sha256': sha(capture_builder_path)}
+    bind(capture_builder_ref)
+    for p, expected in pinned.items():
+        need(sha(p) == expected, 'finite input changed before capture')
+    paths.finish()
+
+    capture = {
+        'schema': 'ROOT_AFTER242_FIXED12_FINITE_NORMAL_IMPORT_CAPTURE_V1',
+        'capture_builder': capture_builder_ref,
+        'status': 'ROOT_AFTER242_FIXED12_CURRENT_NORMAL_IMPORT_BINDINGS_CAPTURED',
+        'createdAtUtc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        'baseline_acceptance': baseline_ref,
+        'baseline_publication': {'path': PUBLICATION_REL, 'sha256': PUBLICATION_SHA},
+        'original_stock_all_audit': {'path': AUDIT_REL, 'sha256': AUDIT_SHA},
+        'collector': {'path': args.collector, 'sha256': COLLECTOR_SHA},
+        'collector_source_peer': collector_peer_ref,
+        'terminal_reviewer_source': {'path': REVIEWER_REL, 'sha256': REVIEWER_SHA},
+        'terminal_reviewer_runner_source': {'path': REVIEWER_RUNNER_REL, 'sha256': REVIEWER_RUNNER_SHA},
+        'terminal_reviewer_source_peer': reviewer_peer_ref,
+        'intake': intake_ref,
+        'proposal': proposal_ref,
+        'terminal_review': terminal_review_ref,
+        'terminal_review_cp': terminal_review_cp_ref,
+        'actual_root_observations': observations_ref,
+        'target_source_sha256': targets,
+        'ownedModules': len(census['modules']),
+        'completeDeclarationRecords': len(rows),
+        'distinctConstantFullnames': len({r['name'] for r in rows}),
+        'explicitTargetAndDirectSupplierModules': len(intake['current_module_files']),
+        'currentOwnedModuleSlotSetsRehashed': slot_count,
+        'newRecordCountsByModule': new_counts,
+        'files': sorted(({'path': str(p), 'sha256': digest, 'bytes': p.stat().st_size} for p, digest in pinned.items()), key=lambda item: item['path']),
+        'providerRevisions': {name: package['rev'] for name, package in paths.checked.items()},
+        'selectedProviderSourcesTrackedAndClean': True,
+        'allPresentAndAbsentObjectSlotsChecked': True,
+        'sourceAndObjectBeforeAfterHashesEqual': True,
+        'trust_mode': 'NORMAL_IMPORTED_ENVIRONMENT_TRUST',
+        'scope': f'{slot_count} owned source/object sets and only explicitly supplied target/direct-supplier inputs, project pins and tools. Imported environment remains trusted; no full project/native/external graph replay or scan is claimed.',
+        'external_closure_replayed': False,
+        'project_import_closure_replayed': False,
+        'compilerStarted': False,
+        'rootAcceptance': None,
+        'proof_credit': 0,
+        'main_1_plus_1_75': 'OPEN',
+    }
+    witness = {
+        'schema': 'ROOT_AFTER242_FIXED12_ACTUAL_EXECUTION_WITNESS_V1',
+        'status': 'ROOT_REPORTED_ACTUAL_TOOL_RESULTS_BOUND_TO_FINITE_PROPOSAL',
+        'createdAtUtc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        'intake': intake_ref,
+        'proposal': proposal_ref,
+        'collector': {'path': args.collector, 'sha256': COLLECTOR_SHA},
+        'terminal_review': terminal_review_ref,
+        'terminal_review_cp': terminal_review_cp_ref,
+        'normal_import_trust_capture': {'path': CAPTURE_REL, 'sha256': None},
+        'actual_root_observations': observations_ref,
+        'target_source_sha256': targets,
+        'observed_tool_results': observations,
+        'strict_producer_evidence_origin': {m: 'DIRECT_ROOT_TERMINAL_OBSERVATION' for m in TARGET_MODULES},
+        'original_terminal_chunks_recovered_for_receipt_derived_entries': False,
+        'scope': 'Facts supplied by ROOT and rechecked against final receipts/artifacts. All twelve strict entries carry their direct original ROOT terminal references. This is not an OS-signed process attestation or independent mathematical certification.',
+        'unconditional_main_proved': False,
+        'main_1_plus_1_75': 'OPEN',
+        'proof_credit': 0,
+    }
+    capture_path = root / args.capture_output
+    witness_path = root / args.witness_output
+    need(capture_path.resolve().parent == (root / '.lake/proof-continuation/rounds').resolve()
+         and witness_path.resolve().parent == (root / '.lake/proof-continuation/publication-integrity').resolve()
+         and not capture_path.exists() and not witness_path.exists(), 'capture/witness outputs must be absent exact fixed-scope files')
+    with capture_path.open('x', encoding='utf-8', newline='\n') as stream:
+        json.dump(capture, stream, indent=2, sort_keys=True)
+        stream.write('\n')
+    witness['normal_import_trust_capture'] = {'path': CAPTURE_REL, 'sha256': sha(capture_path)}
+    with witness_path.open('x', encoding='utf-8', newline='\n') as stream:
+        json.dump(witness, stream, indent=2, sort_keys=True)
+        stream.write('\n')
+    print(json.dumps({'status': capture['status'],
+                      'capture': {'path': CAPTURE_REL, 'sha256': sha(capture_path)},
+                      'witness': {'path': WITNESS_REL, 'sha256': sha(witness_path)},
+                      'owned_modules': capture['ownedModules'],
+                      'declaration_records': capture['completeDeclarationRecords'],
+                      'captured_file_count': len(pinned)}, sort_keys=True))
+
+if __name__ == '__main__':
+    main()
