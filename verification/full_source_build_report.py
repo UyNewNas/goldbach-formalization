@@ -49,6 +49,10 @@ def make_report(inventory, raw_log, exit_code, existing=(), selected=None):
         row = dict(row)
         module = row.get('module')
         row['build_status'] = outcomes[module] if module else 'not_a_production_build_target'
+        if not module:
+            row['run_status'] = 'not_run_nonproduction'
+            row['compiled_by_this_build'] = False
+            row['build_reason'] = row.get('disposition', 'not_a_production_build_target')
         rows.append(row)
     full_scope = set(selected) == set(targets)
     return {'schema': 1, 'head': inventory['head'], 'exit_code': exit_code,
@@ -56,7 +60,7 @@ def make_report(inventory, raw_log, exit_code, existing=(), selected=None):
             'all_requested_targets_passed': exit_code == 0,
             'full_production_scope_requested': full_scope,
             'requested_target_count': len(selected), 'requested_targets': selected,
-            'claim': 'Compilation only. This report is not complete kernel replay or axiom-audit acceptance.',
+            'claim': 'Production-target compilation only. Nonproduction files are not run by this build. This report is not complete kernel replay or axiom-audit acceptance.',
             'log_sha256': hashlib.sha256(raw_log).hexdigest(),
             'counts': dict(Counter(outcomes.values())), 'targets': outcomes, 'files': rows}
 

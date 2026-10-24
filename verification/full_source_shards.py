@@ -92,15 +92,53 @@ def make_manifest(source: dict, count: int = 4) -> dict:
             if pending[user] == 0:
                 heapq.heappush(ready, ready_key(user))
     require(len(order) == len(graph), f'project import cycle: {sorted(m for m, n in pending.items() if n)}')
-    quotient, remainder = divmod(len(order), count)
+    # Count-balanced cuts in lexicographic topological order cluster all 32
+    # SavedParent rows and all 40 FullCheck blocks. Reserve deterministic waves
+    # for these independent heavy families, then fill with dependency-ready work.
+    # Family membership is a cost proxy, not measured runtime or a time guarantee.
+    families = {
+        'saved_parent_original_rows': sorted(m for m in graph if re.fullmatch(
+            r'ImbalancedChen\.Part5SavedParent394700BuchstabRow[0-9]{2}', m)),
+        'original_node_full_checks': sorted(m for m in graph if re.fullmatch(
+            r'ImbalancedChen\.Certificates\.OriginalNodeArraysV1\.Block[0-9]{2}FullCheck', m)),
+    }
+    releases = {module: min(count, offset * count // len(members) + 1)
+                for members in families.values() for offset, module in enumerate(members)}
+    remaining = set(graph)
+    completed = set()
     shards = []
-    offset = 0
+    order = []
     for index in range(1, count + 1):
-        size = quotient + (index <= remainder)
-        chunk = order[offset:offset + size]
-        shards.append({'index': index, 'start_offset': offset, 'end_offset_exclusive': offset + size,
-                       'target_count': size, 'targets': chunk})
-        offset += size
+        reserved = {module for module, wave in releases.items() if wave == index}
+        priority = set()
+        stack = list(reserved)
+        while stack:
+            module = stack.pop()
+            if module in priority or module in completed:
+                continue
+            priority.add(module)
+            stack.extend(graph[module])
+        require(not any(releases.get(m, index) > index for m in priority),
+                'heavy-family prerequisite belongs to a later reserved wave; revise scheduling policy')
+        stages_left = count - index + 1
+        quota = (len(remaining) + stages_left - 1) // stages_left
+        chunk = []
+        while remaining and (len(chunk) < quota or bool(priority - completed)):
+            candidates = [m for m in remaining if graph[m] <= completed and releases.get(m, index) <= index]
+            if not candidates:
+                break
+            module = min(candidates, key=lambda m: (m not in priority, *ready_key(m)))
+            remaining.remove(module)
+            completed.add(module)
+            chunk.append(module)
+        require(reserved <= completed, 'reserved heavy-family targets did not finish their assigned wave')
+        require(bool(chunk), 'dependency constraints produced an empty warm-build shard')
+        offset = len(order)
+        order.extend(chunk)
+        shards.append({'index': index, 'start_offset': offset, 'end_offset_exclusive': len(order),
+                       'target_count': len(chunk), 'targets': chunk,
+                       'heavy_family_counts': {name: len(set(members) & set(chunk)) for name, members in families.items()}})
+    require(not remaining, 'dependency-constrained waves left unassigned targets')
     flattened = [m for shard in shards for m in shard['targets']]
     require(flattened == order and len(set(flattened)) == len(targets) and set(flattened) == set(targets),
             'shard partition must be a disjoint exhaustive union')
@@ -123,10 +161,13 @@ def make_manifest(source: dict, count: int = 4) -> dict:
         'source_identity_sha256': hashlib.sha256(json.dumps(identity, sort_keys=True, separators=(',', ':')).encode()).hexdigest(),
         'source_files': file_hashes, 'target_count': len(order), 'shard_count': count,
         'all_targets': sorted(targets), 'topological_order': order, 'shards': shards,
+        'scheduling_policy': {'name': 'heavy_family_balanced_dependency_ready_waves_v1',
+                              'cost_basis': 'Unmeasured heavy-family membership proxy; no runtime guarantee.',
+                              'families': families, 'reserved_wave': dict(sorted(releases.items()))},
         'dependency_order_evidence': {'edge_count': len(edges), 'all_dependencies_before_importers': True,
                                       'no_dependency_in_later_shard': True, 'edges': edges},
         'partition_evidence': {'disjoint': True, 'exhaustive': True, 'contiguous_topological_chunks': True,
-                               'largest_smallest_size_difference': int(bool(remainder))},
+                               'largest_smallest_size_difference': max(s['target_count'] for s in shards) - min(s['target_count'] for s in shards)},
     }
 
 

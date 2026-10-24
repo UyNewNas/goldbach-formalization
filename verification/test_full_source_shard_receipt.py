@@ -113,6 +113,21 @@ class ReceiptTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'incomplete'):
             verify_receipts(self.source, self.manifest, receipts, self.pins, 4, current)
 
+    def test_nonproduction_receipt_success_and_false_outcomes_rejected(self):
+        self.source['files'].append({'path': 'verification/Historical.lean', 'module': None,
+                                     'exists': True, 'sha256': 'f' * 64, 'bytes': 20,
+                                     'disposition': 'historical_verification_evidence_do_not_compile_automatically'})
+        self.manifest = make_manifest(self.source)
+        result = verify_receipts(self.source, self.manifest, self.receipts(), self.pins, 4, self.state)
+        self.assertEqual(result['verified_shards'], 4)
+        selected = select_targets(self.manifest, 1)
+        for field, value in [('run_status', 'compiled'), ('compiled_by_this_build', True),
+                             ('build_reason', 'production_library_compile_independent_target')]:
+            report = make_report(self.source, b'compile log', 0, selected=selected)
+            report['files'][-1][field] = value
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, 'nonproduction'):
+                self.create(1, report=report)
+
     def test_current_guard_source_and_partition_changes_rejected(self):
         receipts = self.receipts()
         pins = dict(self.pins, **{GUARD: 'f' * 64})

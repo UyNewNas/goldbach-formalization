@@ -47,7 +47,7 @@ theorem currentChenP5U9_primeFibre_eq_switched_filter {N a : ℕ}
     (chenSiftedQuotientPrimeSource N a
       (Real.sqrt ((N : ℝ) / (a : ℝ)))).filter Nat.Prime =
         (currentChenUpsilon9SwitchedPrimeFibre N a).filter
-          (fun q => Real.sqrt ((N : ℝ) / (a : ℝ)) ≤ (q : ℝ)) := by
+          (fun q : ℕ => Real.sqrt ((N : ℝ) / (a : ℝ)) ≤ (q : ℝ)) := by
   ext q
   constructor
   · intro hq
@@ -76,7 +76,7 @@ theorem currentChenP5U9_primeFibre_card_partition {N a : ℕ}
   simpa only [currentChenP5U9SmallQuotientFibre, not_le] using
     Finset.card_filter_add_card_filter_not
       (s := currentChenUpsilon9SwitchedPrimeFibre N a)
-      (fun q => Real.sqrt ((N : ℝ) / (a : ℝ)) ≤ (q : ℝ))
+      (fun q : ℕ => Real.sqrt ((N : ℝ) / (a : ℝ)) ≤ (q : ℝ))
 
 theorem currentChenP5U9CutoffDefect_nonneg (N : ℕ) :
     0 ≤ currentChenP5U9CutoffDefect N := by

@@ -162,8 +162,20 @@ on unchanged standard hosted runners. The planner derives the current target
 set and validates a deterministic disjoint partition, with every local dependency
 in the same or an earlier shard. For the original inventory this is four groups
 of 335 targets and 3,825 local dependency edges. Counts are derived, not hardcoded;
-umbrella modules follow their dependencies. Shards are balanced by target count,
-not a claim of equal execution time. A timed-out shard remains failed; an audited
+umbrella modules follow their dependencies. Simple count-balanced topological
+cuts clustered all 32 original SavedParent rows into shard 1 and all 40 original
+node FullCheck blocks into shard 4. The planner now derives those two heavy
+families from the current graph and assigns deterministic release waves. Each
+wave prioritizes its reserved targets' prerequisite closure, then fills with
+ready ordinary work; future reserved targets and their consumers cannot run early.
+On the current graph each shard has 8 original rows, 10 FullCheck blocks and 335
+total targets. Added/removed family members are discovered dynamically. An earlier
+wave depending on a later reserved heavy target fails closed for policy review.
+Family membership is an unmeasured cost proxy, not a runtime estimate or guarantee;
+Row31's observed long run does not establish equal timings for the other rows.
+A shard may exceed the target-count quota to finish required prerequisites.
+All original targets remain disjoint and exhaustive, and every local dependency
+precedes its importer. A timed-out shard remains failed; an audited
 partial cache may accelerate a retry but cannot satisfy the completion receipt.
 
 Successful stages hand off cumulative project, goldbach-dependency and
@@ -212,3 +224,15 @@ reserve time within the 360-minute job limit: warm shards stop building by minut
 timeouts are unchanged. Runtime audits are independently bounded to 10 minutes,
 with artifact retention following on failure. These are failure boundaries, not
 permission to skip a target or proof gate and claim success.
+
+## Explicit nonproduction outcomes
+
+All 306 nonproduction Lean files remain individually accounted for: 5 external
+evidence files, 251 historical verification/evidence files, 49 documented-runner
+verification programs, and 1 template. Production build reports preserve each
+file's disposition and mark `run_status=not_run_nonproduction`,
+`compiled_by_this_build=false`, with the disposition as `build_reason`. Their
+legacy `build_status=not_a_production_build_target` remains for consumers. These
+fields mean this production build did not run them; separately executed existing
+verification gates retain their own evidence and are not overridden. No aggregate
+production-success flag asserts these 306 files compiled.

@@ -82,6 +82,11 @@ def validate_build(report: dict, source: dict, selected: list[str]) -> None:
     for row in rows:
         original = dict(row)
         status = original.pop('build_status', None)
+        if not row.get('module'):
+            require(original.pop('run_status', None) == 'not_run_nonproduction', 'nonproduction run status missing or false')
+            require(original.pop('compiled_by_this_build', None) is False, 'nonproduction file falsely marked compiled')
+            require(original.pop('build_reason', None) == source_rows.get(row['path'], {}).get('disposition', 'not_a_production_build_target'),
+                    'nonproduction disposition reason differs')
         require(original == source_rows.get(row['path']), 'build report source file differs from inventory')
         require(status == (expected[row['module']] if row.get('module') else 'not_a_production_build_target'),
                 'build report file outcome differs from scope')

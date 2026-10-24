@@ -80,6 +80,82 @@ class ShardTests(unittest.TestCase):
             with self.subTest(inventory=bad), self.assertRaises(ValueError):
                 make_manifest(bad)
 
+    def test_heavy_families_spread_across_dependency_safe_waves(self):
+        source = fixture()
+        rows = ['ImbalancedChen.Part5SavedParent394700BuchstabRow%02d' % i for i in range(32)]
+        blocks = ['ImbalancedChen.Certificates.OriginalNodeArraysV1.Block%02dFullCheck' % i for i in range(40)]
+        for module in rows + blocks:
+            source['targets'].append(module)
+            source['files'].append({'path': module.replace('.', '/') + '.lean', 'module': module,
+                                    'imports': ['ImbalancedChen.A'], 'exists': True,
+                                    'sha256': 'b' * 64, 'bytes': 10, 'disposition': PRODUCTION})
+        source['files'][0]['imports'] += rows + blocks
+        source['counts']['library_modules'] = len(source['targets'])
+        result = make_manifest(source)
+        self.assertEqual([s['heavy_family_counts']['saved_parent_original_rows'] for s in result['shards']], [8] * 4)
+        self.assertEqual([s['heavy_family_counts']['original_node_full_checks'] for s in result['shards']], [10] * 4)
+        self.assertEqual(result['topological_order'][-1], 'ImbalancedChen')
+        for edge in result['dependency_order_evidence']['edges']:
+            self.assertLess(edge['dependency_position'], edge['importer_position'])
+            self.assertLessEqual(edge['dependency_shard'], edge['importer_shard'])
+        reverse = copy.deepcopy(source)
+        reverse['files'].reverse()
+        reverse['targets'].reverse()
+        self.assertEqual(result, make_manifest(reverse))
+        # Membership and assignments are derived even when family members change.
+        modified = copy.deepcopy(source)
+        removed = rows[0]
+        modified['files'] = [r for r in modified['files'] if r['module'] != removed]
+        modified['targets'].remove(removed)
+        modified['files'][0]['imports'].remove(removed)
+        added = 'ImbalancedChen.Part5SavedParent394700BuchstabRow32'
+        new_row = copy.deepcopy(next(r for r in modified['files'] if r['module'] == rows[1]))
+        new_row.update(module=added, path=added.replace('.', '/') + '.lean')
+        modified['files'].append(new_row)
+        modified['targets'].append(added)
+        changed = make_manifest(modified)
+        family = changed['scheduling_policy']['families']['saved_parent_original_rows']
+        self.assertIn(added, family)
+        self.assertNotIn(removed, family)
+        self.assertIn(added, changed['all_targets'])
+        self.assertEqual(sum(s['heavy_family_counts']['saved_parent_original_rows'] for s in changed['shards']), len(family))
+        # An earlier reserved row cannot depend on a later reserved row.
+        next(r for r in source['files'] if r['module'] == rows[0])['imports'].append(rows[-1])
+        with self.assertRaisesRegex(ValueError, 'later reserved wave'):
+            make_manifest(source)
+
+    def test_uneven_dynamic_families_three_waves_and_single_wave(self):
+        source = fixture()
+        members = ['ImbalancedChen.Part5SavedParent394700BuchstabRow%02d' % i for i in range(5)]
+        members += ['ImbalancedChen.Certificates.OriginalNodeArraysV1.Block%02dFullCheck' % i for i in range(7)]
+        for module in members:
+            source['targets'].append(module)
+            source['files'].append({'path': module.replace('.', '/') + '.lean', 'module': module,
+                                    'imports': ['ImbalancedChen.A'], 'exists': True,
+                                    'sha256': 'b' * 64, 'bytes': 10, 'disposition': PRODUCTION})
+        source['files'][0]['imports'] += members
+        source['counts']['library_modules'] = len(source['targets'])
+        three = make_manifest(source, 3)
+        self.assertEqual([s['heavy_family_counts']['saved_parent_original_rows'] for s in three['shards']], [2, 2, 1])
+        self.assertEqual([s['heavy_family_counts']['original_node_full_checks'] for s in three['shards']], [3, 2, 2])
+        single = make_manifest(source, 1)
+        self.assertEqual(single['shards'][0]['heavy_family_counts'],
+                         {'saved_parent_original_rows': 5, 'original_node_full_checks': 7})
+        self.assertEqual(single['target_count'], len(source['targets']))
+        with self.assertRaisesRegex(ValueError, 'exceed target count'):
+            make_manifest(source, len(source['targets']) + 1)
+
+    def test_oversized_reserved_closure_fails_instead_of_empty_shard(self):
+        source = fixture()
+        module = 'ImbalancedChen.Part5SavedParent394700BuchstabRow00'
+        source['targets'].append(module)
+        source['files'].append({'path': module.replace('.', '/') + '.lean', 'module': module,
+                                'imports': ['ImbalancedChen'], 'exists': True,
+                                'sha256': 'b' * 64, 'bytes': 10, 'disposition': PRODUCTION})
+        source['counts']['library_modules'] = len(source['targets'])
+        with self.assertRaisesRegex(ValueError, 'empty warm-build shard'):
+            make_manifest(source, 4)
+
     def test_source_hash_identity_changes_with_bytes(self):
         source = fixture()
         before = make_manifest(source)

@@ -34,6 +34,23 @@ class ReportTests(unittest.TestCase):
             with self.subTest(selected=selected), self.assertRaises(ValueError):
                 validate_selected_targets(['A', 'B'], selected)
 
+    def test_all_306_nonproduction_rows_are_explicitly_unrun_with_reasons(self):
+        categories = [('historical_external_source_evidence_do_not_compile_automatically', 5),
+                      ('verification_program_use_its_documented_runner', 49),
+                      ('historical_verification_evidence_do_not_compile_automatically', 251),
+                      ('verification_template_do_not_compile_automatically', 1)]
+        external = [{'path': 'verification/%s-%d.lean' % (reason, i), 'module': None, 'disposition': reason}
+                    for reason, size in categories for i in range(size)]
+        inventory = {'head': 'a' * 40, 'targets': ['A'],
+                     'files': [{'path': 'A.lean', 'module': 'A'}] + external}
+        report = make_report(inventory, b'', 0)
+        self.assertEqual(len(report['files'][1:]), 306)
+        for row in report['files'][1:]:
+            self.assertEqual(row['build_status'], 'not_a_production_build_target')
+            self.assertEqual(row['run_status'], 'not_run_nonproduction')
+            self.assertFalse(row['compiled_by_this_build'])
+            self.assertEqual(row['build_reason'], row['disposition'])
+
     def test_nonselected_logged_dependency_is_not_selected_acceptance(self):
         result = classify(['A', 'B'], '✔ [1/2] Built B (1s)\n', 0, selected=['A'])
         self.assertEqual(result['B'], 'outside_this_build_shard')
