@@ -84,3 +84,15 @@ Run stdlib tests with:
 
 This is a provisional source scope document, not a compilation success receipt.
 The initial inventory was read-only and did not invoke a compiler.
+
+## Diagnostic builds and cache reuse
+
+A failed source build remains failed. Optional Lake caching may retain a coherent
+partial `.lake` directory only after the final runtime audit, official Mathlib
+cache retrieval, source inventory and diagnostic artifact retention all succeed,
+and only when the run has not been cancelled. The existing pinned cache key and
+restore scope are unchanged. Lake checks source/dependency/options traces on the
+next full explicit-target build; failed targets do not receive successful build
+traces. This avoids repeating successfully compiled dependencies while preserving
+all compilation, kernel replay, axiom and type-export gates. Cache saving is
+best-effort and is never a proof-acceptance receipt.

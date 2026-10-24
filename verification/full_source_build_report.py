@@ -9,12 +9,12 @@ import re
 
 
 def classify(targets, log, exit_code, existing=()):
-    passed = set(re.findall(r'^[✔⚠] \[\d+/\d+\] (?:Built|Replayed) ([\w.]+)(?:\s|$)', log, re.M))
+    passed = set(re.findall(r'^[✔⚠ℹ] \[\d+/\d+\] (?:Built|Replayed) ([\w.]+)(?:\s|$)', log, re.M))
     failed = set(re.findall(r'^✖ \[\d+/\d+\] Building ([\w.]+)(?:\s|$)', log, re.M))
     existing = set(existing)
     return {module: ('build_passed_or_validated_cache' if exit_code == 0 else
                      'compile_failed' if module in failed else
-                     'compiled_successfully' if module in passed else
+                     'compiled_or_replayed_successfully' if module in passed else
                      'unconfirmed_existing_object' if module in existing else
                      'not_completed_or_dependency_blocked') for module in targets}
 

@@ -60,7 +60,7 @@ theorem actualPrimeSlotBox_prime {ι : Type*} (B : ι → Finset ℕ) (input : L
       obtain ⟨hq, hqs⟩ := Finset.mem_product.mp hmem
       intro r hr
       rcases List.mem_cons.mp hr with rfl | hr
-      · exact hprime i (by simp) q hq
+      · exact hprime i (by simp) r hq
       · exact ih (fun j hj => hprime j (List.mem_cons_of_mem i hj)) qs hqs r hr
 
 /-- Every ordered-coordinate tuple in the original group box has the
@@ -148,11 +148,17 @@ theorem actualPrimeTuple_threeGroup_sum_normalized
           actualNormalizedPrimeTupleCoefficient T₁ m₁ a *
           actualNormalizedPrimeTupleCoefficient T₂ m₂ b *
           actualNormalizedPrimeTupleCoefficient T₃ m₃ d * H (a * b * d) := by
-  simp_rw [actualPrimeTuple_sum_by_product, Finset.mul_sum]
+  rw [actualPrimeTuple_sum_by_product T₁
+    (fun a => ∑ qs ∈ T₂, ∑ rs ∈ T₃, c * H (a * qs.prod * rs.prod))]
   apply Finset.sum_congr rfl
   intro a _
+  rw [actualPrimeTuple_sum_by_product T₂
+    (fun b => ∑ rs ∈ T₃, c * H (a * b * rs.prod))]
+  rw [Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro b _
+  rw [actualPrimeTuple_sum_by_product T₃ (fun d => c * H (a * b * d))]
+  simp_rw [Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro d _
   calc
@@ -178,11 +184,16 @@ theorem actualFrozenSelectedPair_signed_regroup {ι : Type*}
           actualNormalizedPrimeTupleCoefficient T₁ slots.1.length a *
           actualNormalizedPrimeTupleCoefficient T₂ slots.2.1.length b *
           actualNormalizedPrimeTupleCoefficient T₃ slots.2.2.length d * H (a * b * d) := by
+  dsimp only
   let slots := actualFrozenSelectedPairSlots D A yz upper p tail
   rw [← actualPrimeSlotBox_product_sum_perm B
     (actualFrozenSelectedPairSlots_perm D A yz upper p tail) (fun n => c * H n)]
-  rw [actualPrimeSlotBox_product_sum_append]
-  simp_rw [actualPrimeSlotBox_product_sum_append]
+  rw [List.append_assoc]
+  rw [actualPrimeSlotBox_product_sum_append B slots.1 (slots.2.1 ++ slots.2.2)
+    (fun n => c * H n)]
+  have hright (a : ℕ) := actualPrimeSlotBox_product_sum_append B slots.2.1 slots.2.2
+    (fun n => c * H (a * n))
+  simp_rw [hright]
   simpa only [mul_assoc] using actualPrimeTuple_threeGroup_sum_normalized
     (actualPrimeSlotBox B slots.1) (actualPrimeSlotBox B slots.2.1)
     (actualPrimeSlotBox B slots.2.2) slots.1.length slots.2.1.length slots.2.2.length c H
@@ -207,11 +218,11 @@ theorem actualFrozenSelectedPair_group_support {ι : Type*}
     obtain ⟨ps, hps, rfl⟩ := Finset.mem_image.mp hn
     exact actualPrimeSlotBox_prod_le_upper B upper l
       (fun i hi => hsize i (hmem i hi)) ps hps
-  exact ⟨hbound slots.1 (fun i hi => hperm.mem_iff.mp (List.mem_append.mpr (Or.inl hi))),
+  exact ⟨hbound slots.1 (fun i hi => hperm.mem_iff.mp (List.mem_append.mpr (Or.inl (List.mem_append.mpr (Or.inl hi))))),
     hbound slots.2.1 (fun i hi => hperm.mem_iff.mp
-      (List.mem_append.mpr (Or.inr (List.mem_append.mpr (Or.inl hi))))),
+      (List.mem_append.mpr (Or.inl (List.mem_append.mpr (Or.inr hi))))),
     hbound slots.2.2 (fun i hi => hperm.mem_iff.mp
-      (List.mem_append.mpr (Or.inr (List.mem_append.mpr (Or.inr hi)))))⟩
+      (List.mem_append.mpr (Or.inr hi)))⟩
 
 /-- Every resulting convolution coefficient has its proved one-bound on
 all integers, even when different original interval labels overlap. -/
