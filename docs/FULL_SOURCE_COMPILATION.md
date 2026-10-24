@@ -96,3 +96,14 @@ next full explicit-target build; failed targets do not receive successful build
 traces. This avoids repeating successfully compiled dependencies while preserving
 all compilation, kernel replay, axiom and type-export gates. Cache saving is
 best-effort and is never a proof-acceptance receipt.
+
+## Required-workflow concurrency
+
+Core and variable-envelope verification retain their push, pull-request and
+manual triggers and original proof gates. Their concurrency keys are now scoped
+by workflow and source branch. Push and pull-request events for the same branch
+share each workflow's queue, but core and VE no longer cancel each other's pending
+runs. This permits up to one active core runner and one active VE runner per
+branch, using the unchanged standard hosted runner. A cancelled duplicate is not
+a successful verification; final acceptance requires successful exact-head
+results for both workflows.
