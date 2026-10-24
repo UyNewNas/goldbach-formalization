@@ -25,7 +25,7 @@ private theorem loop_power_lo_nonneg (z : ℝ) (hz : 0 ≤ z) (n : ℕ) :
   have hzlo : 0 ≤ (ofReal z).lo :=
     Int.floor_nonneg.mpr (mul_nonneg hz P160_real_pos.le)
   have hzhi : 0 ≤ (ofReal z).hi := by
-    simpa only [loop] using loop_power_hi_nonneg z hz 0
+    exact loop_power_hi_nonneg z hz 0
   induction n with
   | zero => exact hzlo
   | succ n ih =>
@@ -105,7 +105,7 @@ theorem original_integer_above_mu_log_guards (x0 x1 : ℤ)
   have hgap : (1 : ℤ) ≤ x1-x0 := by omega
   have hsmall : (19 : ℤ)*(48000*2^24) ≤ 96*(2 : ℤ)^80 := by norm_num
   have hx1small : x1 ≤ (2 : ℤ)^80 :=
-    (mul_le_mul_left (by norm_num : (0 : ℤ) < 96)).mp (hrho.trans hsmall)
+    le_of_mul_le_mul_left (hrho.trans hsmall) (by norm_num : (0 : ℤ) < 96)
   have hscaled : (2 : ℤ)^80*x1 ≤ (x1-x0)*P160 := by
     calc
       (2 : ℤ)^80*x1 ≤ (2 : ℤ)^80*(2 : ℤ)^80 :=
@@ -123,7 +123,7 @@ theorem original_integer_above_mu_log_guards (x0 x1 : ℤ)
       _ = (1-1/((x1 : ℝ)/(x0 : ℝ)))*(P160 : ℝ) := by
         field [hx0.ne', hx1.ne']
   have hfloor : (2 : ℤ)^80 ≤ (ofReal (1-1/((x1 : ℝ)/(x0 : ℝ)))).lo :=
-    Int.le_floor.mpr hfirst
+    Int.le_floor.mpr (by simpa only [Int.cast_pow] using hfirst)
   have hlo := hfloor.trans (originalLnUnit_lo_ge_first hq1 hq2)
   have hlog := original_positive256_ln_sound hq1 hq2
   have hvalid : (originalLnUnit ((x1 : ℝ)/(x0 : ℝ))).lo ≤
@@ -159,10 +159,14 @@ theorem original_stored_above_mu_log_guards (x0 x1 : ℤ) (a b : ℚ)
     (div_le_iff₀ hD).mp (by simpa only [hbR] using hrho)
   have hwidthI : x0 < x1 := by exact_mod_cast hwidthR
   have hmuI : 25*(48000*2^24 : ℤ) ≤ 128*x0 := by
-    have h : 25*((48000*2^24 : ℤ) : ℝ) ≤ 128*(x0 : ℝ) := by linarith only [hmuR]
+    have h : 25*((48000*2^24 : ℤ) : ℝ) ≤ 128*(x0 : ℝ) := by
+      norm_num at hmuR ⊢
+      linarith only [hmuR]
     exact_mod_cast h
   have hrhoI : 96*x1 ≤ 19*(48000*2^24 : ℤ) := by
-    have h : 96*(x1 : ℝ) ≤ 19*((48000*2^24 : ℤ) : ℝ) := by linarith only [hrhoR]
+    have h : 96*(x1 : ℝ) ≤ 19*((48000*2^24 : ℤ) : ℝ) := by
+      norm_num at hrhoR ⊢
+      linarith only [hrhoR]
     exact_mod_cast h
   have hx0 : (0 : ℝ) < (x0 : ℝ) :=
     (mul_pos (by norm_num : (0 : ℝ) < 25/128) hD).trans_le hmuR

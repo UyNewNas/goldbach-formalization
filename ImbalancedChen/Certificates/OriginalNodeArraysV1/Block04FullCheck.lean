@@ -21,8 +21,16 @@ open ImbalancedChen.OriginalStoredDelayedPageTransferSourceOnly
 /-- At Block04's first step, the delayed input row is 32768, so the
     physical slot is discarded by the actual initialized-prefix reader. -/
 theorem block04_first_delayed_read_is_prefix (tail : Nat → Block) :
-    (assembledRead (windowBlocks 4 block00 block00 block03 block04 tail)) (32769+4096*4-16385) = integerInitial := by
+    (assembledRead (windowBlocks 4 block00 block00 block03 block04 tail)) (32769+4096*4-16385) =
+      ImbalancedChen.OriginalU2StoredNodeCertificateSourceOnly.integerInitial := by
   exact (block04_first_delayed_is_prefix block00 block00 block03 block04 tail).1
+
+-- Check the full type: the initial node is the fixed imported constant,
+-- not an accidentally auto-implicit arbitrary node parameter.
+#check (@block04_first_delayed_read_is_prefix : ∀ tail : Nat → Block,
+  (assembledRead (windowBlocks 4 block00 block00 block03 block04 tail))
+    (32769+4096*4-16385) =
+      ImbalancedChen.OriginalU2StoredNodeCertificateSourceOnly.integerInitial)
 
 theorem block04_page00_checked (tail : Nat → Block) :
     readCheckBlock (assembledRead (windowBlocks 4 block00 block00 block03 block04 tail)) 49153 64 = true := by
@@ -491,7 +499,7 @@ theorem block04_all_pages_checked_same_table (blocks : Nat → Block)
       windowBlocks 4 (blocks (4-5)) (blocks (4-4))
         (blocks (4-1)) (blocks 4) blocks := by
     simp only [Nat.reduceSub]
-    rw [← h0, ← h0, ← h3, ← h4]
+    rw [← h0, ← h3, ← h4]
   have hwindow : windowBlocks 4 block00 block00 block03 block04 blocks = blocks := by
     rw [hslots]
     exact windowBlocks_eq_original 4 blocks

@@ -1,0 +1,395 @@
+name: Full source compilation shard
+on:
+  workflow_call:
+    inputs:
+      shard-index:
+        required: true
+        type: number
+      shard-count:
+        required: true
+        type: number
+      predecessor-cache-key:
+        required: false
+        type: string
+        default: ''
+    outputs:
+      cache-key:
+        description: Exact audited cumulative cache required by the next stage
+        value: ${{ jobs.compile.outputs.cache-key }}
+permissions:
+  contents: read
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    outputs:
+      cache-key: ${{ steps.cache-key.outputs.complete }}
+    env:
+      LEAN_NUM_THREADS: 2
+      CI_LEAN_MEMORY_MIB: 6144
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Reserve time for audit, evidence and cache handoff
+        timeout-minutes: 2
+        run: echo "CI_BUILD_DEADLINE_EPOCH=$(( $(date +%s) + 290 * 60 ))" >> "$GITHUB_ENV"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        timeout-minutes: 5
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Check out the existing pinned lean-action scripts
+        timeout-minutes: 5
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: leanprover/lean-action
+          ref: f061402b660e0c34644504b324e830f2991d4865
+          path: .ci-lean-action
+          persist-credentials: false
+      - name: Prepare stage timing and logs
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          LEAN_ACTION_DIR="$RUNNER_TEMP/lean-action-f061402b"
+          printf 'LEAN_ACTION_DIR=%s\n' "$LEAN_ACTION_DIR" >> "$GITHUB_ENV"
+          test "$(git -C .ci-lean-action rev-parse HEAD)" = f061402b660e0c34644504b324e830f2991d4865
+          test ! -e "$LEAN_ACTION_DIR"
+          mv .ci-lean-action "$LEAN_ACTION_DIR"
+          mkdir -p "$RUNNER_TEMP/lean-ci" "$RUNNER_TEMP/lean-verification-logs"
+          cat > "$RUNNER_TEMP/lean-ci/run-stage" <<'BASH'
+          #!/usr/bin/env bash
+          set -euo pipefail
+          stage="$1"
+          shift
+          logdir="$RUNNER_TEMP/lean-verification-logs"
+          log="$logdir/$stage.log"
+          started="$(date -u +%FT%TZ)"
+          start_seconds="$(date +%s)"
+          printf 'stage=%s started=%s\n' "$stage" "$started" | tee "$log"
+          finish() {
+            status=$?
+            trap - EXIT
+            set +e
+            finished="$(date -u +%FT%TZ)"
+            elapsed=$(( $(date +%s) - start_seconds ))
+            printf 'stage=%s finished=%s elapsed_seconds=%s exit_code=%s\n' \
+              "$stage" "$finished" "$elapsed" "$status" | tee -a "$log"
+            printf 'stage\tstarted_utc\tfinished_utc\telapsed_seconds\texit_code\n%s\t%s\t%s\t%s\t%s\n' \
+              "$stage" "$started" "$finished" "$elapsed" "$status" > "$logdir/$stage.timing.tsv"
+            printf 'elapsed-seconds=%s\nexit-code=%s\n' "$elapsed" "$status" >> "$GITHUB_OUTPUT"
+            printf -- '- %s: %s seconds; exit code %s\n' "$stage" "$elapsed" "$status" >> "$GITHUB_STEP_SUMMARY"
+            exit "$status"
+          }
+          trap finish EXIT
+          set +e
+          "$@" 2>&1 | tee -a "$log"
+          statuses=("${PIPESTATUS[@]}")
+          set -e
+          # Preserve the tool's failure; fail on a broken logging pipe as well.
+          if (( statuses[0] != 0 )); then
+            exit "${statuses[0]}"
+          fi
+          exit "${statuses[1]}"
+          BASH
+          chmod +x "$RUNNER_TEMP/lean-ci/run-stage"
+          {
+            printf 'project_commit='; git rev-parse HEAD
+            printf 'lean_action_commit='; git -C "$LEAN_ACTION_DIR" rev-parse HEAD
+            printf 'toolchain='; cat lean-toolchain
+            printf 'run=%s attempt=%s\n' "$GITHUB_RUN_ID" "$GITHUB_RUN_ATTEMPT"
+          } | tee "$RUNNER_TEMP/lean-verification-logs/provenance.log"
+      - name: Install Elan and the pinned project toolchain
+        timeout-minutes: 15
+        run: |
+          "$RUNNER_TEMP/lean-ci/run-stage" install-elan "$LEAN_ACTION_DIR/scripts/install_elan.sh"
+      - name: Record runner memory and require budget headroom
+        timeout-minutes: 2
+        run: |
+          df -h | tee "$RUNNER_TEMP/lean-verification-logs/disk.log"
+          free -m | tee "$RUNNER_TEMP/lean-verification-logs/memory.log"
+          python3 - <<'PYMEM'
+          import os
+          from pathlib import Path
+          fields = dict(line.split(":", 1) for line in Path("/proc/meminfo").read_text().splitlines())
+          available = int(fields["MemAvailable"].split()[0]) // 1024
+          budget = int(os.environ["CI_LEAN_MEMORY_MIB"])
+          assert available >= budget + 1024, f"Insufficient memory: {available} MiB available for {budget} MiB compiler budget plus 1024 MiB reserve"
+          PYMEM
+      - name: Guard the pinned toolchain for all source compiler children
+        timeout-minutes: 5
+        run: |
+          python3 verification/parts/p0/ci_runtime_guard.py setup --evidence "$RUNNER_TEMP/lean-verification-logs/runtime"
+      - name: Validate pinned synchronous source elaboration
+        timeout-minutes: 3
+        run: |
+          cat > "$RUNNER_TEMP/GoldbachAsyncOptionProbe.lean" <<'LEAN'
+          import Lean
+          open Lean in
+          run_cmd do
+            if Elab.async.get (← getOptions) then
+              throwError "Elab.async unexpectedly true"
+            logInfo "PINNED_ASYNC_FALSE_CONFIRMED"
+          theorem goldbach_async_probe_rfl : (37 : Nat) = 37 := by rfl
+          #print axioms goldbach_async_probe_rfl
+          LEAN
+          cp "$RUNNER_TEMP/GoldbachAsyncOptionProbe.lean" "$RUNNER_TEMP/lean-verification-logs/"
+          "$RUNNER_TEMP/lean-ci/run-stage" sync-elaboration timeout --verbose --signal=TERM --kill-after=15s 2m \
+            lean --root="$RUNNER_TEMP" "$RUNNER_TEMP/GoldbachAsyncOptionProbe.lean" -o "$RUNNER_TEMP/GoldbachAsyncOptionProbe.olean"
+      - name: Verify guarded runtime hashes and shadow sysroot before cache
+        timeout-minutes: 6
+        run: |
+          python3 verification/parts/p0/ci_runtime_guard.py audit --probe
+      - name: Configure lean-action with the existing inputs
+        timeout-minutes: 5
+        id: config
+        env:
+          AUTO_CONFIG: 'false'
+          BUILD: 'true'
+          TEST: 'false'
+          LINT: 'false'
+        run: |
+          "$RUNNER_TEMP/lean-ci/run-stage" configure "$LEAN_ACTION_DIR/scripts/config.sh"
+      - name: Optionally seed first shard from the existing full Lake cache
+        continue-on-error: true
+        timeout-minutes: 15
+        if: ${{ inputs.shard-index == 1 }}
+        id: legacy-cache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ./.lake
+          key: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}-${{ github.sha }}
+          restore-keys: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}
+      - name: Get the existing Mathlib cache
+        timeout-minutes: 40
+        id: mathlib-cache
+        run: |
+          # Mirror Cache.IO's bare `lean --print-prefix` lookup under Lake's
+          # environment. This is diagnostic only and never skips the required cache command.
+          if ! lake env python3 verification/parts/p0/ci_runtime_guard.py cache-leantar-diagnostic; then
+            printf 'Cache.IO leantar lookup diagnostic launcher failed; continuing to required cache command.\n' >&2
+          fi
+          "$RUNNER_TEMP/lean-ci/run-stage" mathlib-cache lake exe cache get
+      - name: Run source coverage and runtime-guard regression tests
+        timeout-minutes: 5
+        run: |
+          python3 -m unittest discover -s verification -p 'test_full_source*.py'
+          python3 verification/parts/p0/test_ci_runtime_guard.py
+      - name: Compute source and predecessor cache keys
+        timeout-minutes: 2
+        id: cache-key
+        env:
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          SHARD_INDEX: ${{ inputs.shard-index }}
+          PREDECESSOR: ${{ inputs.predecessor-cache-key }}
+          CACHE_BASE: fullsrc-v1-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}-${{ hashFiles('./verification/parts/p0/ci_runtime_guard.py') }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SOURCE_SHA"
+          if (( SHARD_INDEX > 1 )); then test -n "$PREDECESSOR"; fi
+          prefix="$CACHE_BASE-$SOURCE_SHA-shard$SHARD_INDEX"
+          printf 'complete=%s-complete\npartial-prefix=%s-partial-\nbase-prefix=%s-\n' "$prefix" "$prefix" "$CACHE_BASE" >> "$GITHUB_OUTPUT"
+      - name: Restore audited cumulative source cache
+        timeout-minutes: 20
+        id: source-cache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: |
+            .lake/build
+            .lake/packages/goldbach/.lake/build
+            .lake/packages/LeanArchitect/.lake/build
+            .lake/full-source-staging
+          key: ${{ steps.cache-key.outputs.complete }}
+          restore-keys: |
+            ${{ steps.cache-key.outputs.partial-prefix }}
+            ${{ inputs.predecessor-cache-key }}
+            ${{ inputs.shard-index == 1 && steps.cache-key.outputs.base-prefix || '' }}
+          fail-on-cache-miss: ${{ inputs.shard-index > 1 }}
+      - name: Record cache provenance
+        timeout-minutes: 2
+        env:
+          SOURCE_CACHE: ${{ steps.source-cache.outputs.cache-matched-key }}
+          PREDECESSOR: ${{ inputs.predecessor-cache-key }}
+          LEGACY_CACHE: ${{ steps.legacy-cache.outputs.cache-matched-key }}
+          COMPLETE_KEY: ${{ steps.cache-key.outputs.complete }}
+          PARTIAL_PREFIX: ${{ steps.cache-key.outputs.partial-prefix }}
+          BASE_PREFIX: ${{ steps.cache-key.outputs.base-prefix }}
+          SHARD_INDEX: ${{ inputs.shard-index }}
+        run: |
+          if (( SHARD_INDEX > 1 )); then test -n "$SOURCE_CACHE"; fi
+          if [[ -n "$SOURCE_CACHE" ]]; then
+            if [[ "$SOURCE_CACHE" == "$COMPLETE_KEY" || "$SOURCE_CACHE" == "$PREDECESSOR" || "$SOURCE_CACHE" == "$PARTIAL_PREFIX"* ]]; then
+              :
+            elif (( SHARD_INDEX == 1 )) && [[ "$SOURCE_CACHE" == "$BASE_PREFIX"* ]]; then
+              printf 'Previous-head cache is a seed only; current targets and receipts must be revalidated.\n'
+            else
+              printf 'Unexpected source cache key: %s\n' "$SOURCE_CACHE" >&2
+              exit 1
+            fi
+          fi
+          printf 'source_cache=%s\nrequired_predecessor=%s\nlegacy_seed=%s\n' \
+            "$SOURCE_CACHE" "$PREDECESSOR" "$LEGACY_CACHE" | tee "$RUNNER_TEMP/lean-verification-logs/cache-provenance.log"
+      - name: Inventory all sources and select this exact topological shard
+        timeout-minutes: 5
+        id: source-inventory
+        env:
+          SHARD_INDEX: ${{ inputs.shard-index }}
+          SHARD_COUNT: ${{ inputs.shard-count }}
+        run: |
+          logdir="$RUNNER_TEMP/lean-verification-logs"
+          python3 verification/full_source_inventory.py --output "$logdir/source-inventory.json"
+          python3 verification/full_source_shards.py --inventory "$logdir/source-inventory.json" \
+            --count "$SHARD_COUNT" --shard-index "$SHARD_INDEX" --targets \
+            --output "$logdir/shard-manifest.json" > "$logdir/shard-targets.txt"
+      - name: Compile every target assigned to this shard
+        id: build
+        timeout-minutes: 275
+        run: |
+          mapfile -t targets < "$RUNNER_TEMP/lean-verification-logs/shard-targets.txt"
+          test "${#targets[@]}" -gt 0
+          remaining=$(( CI_BUILD_DEADLINE_EPOCH - $(date +%s) ))
+          budget=$(( 270 * 60 ))
+          if (( remaining < budget )); then budget="$remaining"; fi
+          test "$budget" -gt 60
+          "$RUNNER_TEMP/lean-ci/run-stage" build timeout --verbose --signal=TERM --kill-after=30s "${budget}s" lake build "${targets[@]}"
+      - name: Recheck one requested source even on a complete cache hit
+        id: source-probe
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 10
+        run: |
+          logdir="$RUNNER_TEMP/lean-verification-logs"
+          source_file="$(python3 - "$logdir/shard-targets.txt" <<'PYPROBE'
+          from pathlib import Path
+          import sys
+          paths = [Path(m.replace('.', '/') + '.lean') for m in Path(sys.argv[1]).read_text().splitlines()]
+          print(min(paths, key=lambda p: (p.stat().st_size, str(p))))
+          PYPROBE
+          )"
+          # This is an additional real-source check, not a substitute for shard targets.
+          "$RUNNER_TEMP/lean-ci/run-stage" guarded-source-probe timeout --verbose --signal=TERM --kill-after=30s 9m \
+            lake env lean "$source_file" -o "$RUNNER_TEMP/guarded-shard-source.olean"
+      - name: Record only the requested shard compilation outcomes
+        timeout-minutes: 5
+        if: ${{ always() }}
+        env:
+          FULL_BUILD_OUTCOME: ${{ steps.build.outcome }}
+        run: |
+          logdir="$RUNNER_TEMP/lean-verification-logs"
+          if [[ -f "$logdir/source-inventory.json" && -s "$logdir/shard-targets.txt" ]]; then
+            touch "$logdir/build.log"
+            result=1
+            if [[ "$FULL_BUILD_OUTCOME" == success ]]; then result=0; fi
+            python3 verification/full_source_build_report.py --inventory "$logdir/source-inventory.json" \
+              --targets-file "$logdir/shard-targets.txt" --log "$logdir/build.log" --exit-code "$result" \
+              --output "$logdir/source-build-outcomes.json"
+          fi
+      - name: Audit actual compiler commands and unchanged runtime
+        id: runtime-audit
+        if: ${{ always() }}
+        timeout-minutes: 11
+        run: |
+          "$RUNNER_TEMP/lean-ci/run-stage" runtime-audit timeout --verbose --signal=TERM --kill-after=30s 10m \
+            python3 verification/parts/p0/ci_runtime_guard.py audit --probe --require-source
+      - name: Create successful compilation-only staging receipt
+        timeout-minutes: 5
+        id: receipt
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.source-probe.outcome == 'success' && steps.runtime-audit.outcome == 'success' }}
+        env:
+          SHARD_INDEX: ${{ inputs.shard-index }}
+          SHARD_COUNT: ${{ inputs.shard-count }}
+          CACHE_KEY: ${{ steps.cache-key.outputs.complete }}
+        run: |
+          logdir="$RUNNER_TEMP/lean-verification-logs"
+          source_sha="$(git rev-parse HEAD)"
+          python3 verification/full_source_shard_receipt.py create \
+            --inventory "$logdir/source-inventory.json" --manifest "$logdir/shard-manifest.json" \
+            --build-report "$logdir/source-build-outcomes.json" --audit "$logdir/runtime/audit.json" \
+            --state "$logdir/runtime/state.json" --cache-key "$CACHE_KEY" \
+            --index "$SHARD_INDEX" --count "$SHARD_COUNT" --output "$logdir/shard-receipt.json"
+          mkdir -p ".lake/full-source-staging/$source_sha"
+          cp "$logdir/shard-receipt.json" ".lake/full-source-staging/$source_sha/shard-$SHARD_INDEX.json"
+      - name: Retain shard diagnostics even after failure
+        id: retain-logs
+        timeout-minutes: 5
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: full-source-shard-${{ inputs.shard-index }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/lean-verification-logs/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Measure compressed cumulative cache capacity
+        id: cache-space
+        if: ${{ !cancelled() && steps.runtime-audit.outcome == 'success' && steps.source-inventory.outcome == 'success' && steps.mathlib-cache.outcome == 'success' && steps.retain-logs.outcome == 'success' && (steps.build.outcome == 'success' || steps.build.outcome == 'failure') && steps.source-cache.outputs.cache-hit != 'true' }}
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          paths=(.lake/build .lake/packages/goldbach/.lake/build .lake/packages/LeanArchitect/.lake/build .lake/full-source-staging)
+          mkdir -p "${paths[@]}"
+          # Stream an estimate without writing an archive; reserve 2 GiB beyond it.
+          compressed_bytes="$(tar -cf - "${paths[@]}" | zstd -q -T2 -3 | wc -c)"
+          free_bytes="$(df --block-size=1 --output=avail "$RUNNER_TEMP" | awk 'NR == 2 {print $1}')"
+          [[ "$compressed_bytes" =~ ^[0-9]+$ && "$free_bytes" =~ ^[0-9]+$ ]]
+          required_bytes=$((compressed_bytes + 2 * 1024 * 1024 * 1024))
+          printf 'compressed_estimate=%s free=%s required=%s\n' "$compressed_bytes" "$free_bytes" "$required_bytes" | tee -a "$GITHUB_STEP_SUMMARY"
+          test "$free_bytes" -ge "$required_bytes"
+      - name: Save completed audited cumulative shard cache
+        id: cache-save
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.source-probe.outcome == 'success' && steps.runtime-audit.outcome == 'success' && steps.receipt.outcome == 'success' && steps.retain-logs.outcome == 'success' && steps.cache-space.outcome == 'success' && steps.source-cache.outputs.cache-hit != 'true' }}
+        timeout-minutes: 15
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: |
+            .lake/build
+            .lake/packages/goldbach/.lake/build
+            .lake/packages/LeanArchitect/.lake/build
+            .lake/full-source-staging
+          key: ${{ steps.cache-key.outputs.complete }}
+      - name: Retain audited partial cache only as an optimization
+        if: ${{ !cancelled() && steps.build.outcome == 'failure' && steps.runtime-audit.outcome == 'success' && steps.retain-logs.outcome == 'success' && steps.cache-space.outcome == 'success' }}
+        continue-on-error: true
+        timeout-minutes: 15
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: |
+            .lake/build
+            .lake/packages/goldbach/.lake/build
+            .lake/packages/LeanArchitect/.lake/build
+            .lake/full-source-staging
+          key: ${{ steps.cache-key.outputs.partial-prefix }}${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Require completed cache availability for the next stage
+        id: cache-verify
+        timeout-minutes: 5
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.source-probe.outcome == 'success' && steps.runtime-audit.outcome == 'success' && steps.receipt.outcome == 'success' && steps.retain-logs.outcome == 'success' }}
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: |
+            .lake/build
+            .lake/packages/goldbach/.lake/build
+            .lake/packages/LeanArchitect/.lake/build
+            .lake/full-source-staging
+          key: ${{ steps.cache-key.outputs.complete }}
+          lookup-only: true
+          fail-on-cache-miss: true
+      - name: Require successful shard and cache handoff, not proof acceptance
+        timeout-minutes: 2
+        if: ${{ always() }}
+        env:
+          BUILD_OUTCOME: ${{ steps.build.outcome }}
+          AUDIT_OUTCOME: ${{ steps.runtime-audit.outcome }}
+          RECEIPT_OUTCOME: ${{ steps.receipt.outcome }}
+          RETENTION_OUTCOME: ${{ steps.retain-logs.outcome }}
+          CACHE_OUTCOME: ${{ steps.cache-verify.outcome }}
+          CACHE_EXACT: ${{ steps.cache-verify.outputs.cache-hit }}
+          SOURCE_PROBE_OUTCOME: ${{ steps.source-probe.outcome }}
+        run: |
+          printf 'shard build=%s audit=%s receipt=%s retention=%s cache=%s\n' \
+            "$BUILD_OUTCOME" "$AUDIT_OUTCOME" "$RECEIPT_OUTCOME" "$RETENTION_OUTCOME" "$CACHE_OUTCOME" >> "$GITHUB_STEP_SUMMARY"
+          printf 'Compilation/cache handoff only. Final all-target build and original proof gates remain required.\n' >> "$GITHUB_STEP_SUMMARY"
+          test "$BUILD_OUTCOME" = success
+          test "$AUDIT_OUTCOME" = success
+          test "$RECEIPT_OUTCOME" = success
+          test "$RETENTION_OUTCOME" = success
+          test "$CACHE_OUTCOME" = success
+          test "$CACHE_EXACT" = true
+          test "$SOURCE_PROBE_OUTCOME" = success

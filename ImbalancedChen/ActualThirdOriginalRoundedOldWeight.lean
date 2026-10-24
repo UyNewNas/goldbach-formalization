@@ -28,7 +28,7 @@ private theorem scaled_floor_div_le {d : ℤ} (hd : 0<d) (n : ℤ) :
 private theorem le_scaled_up_div {d : ℤ} (hd : 0<d) (n : ℤ) :
     (n:ℝ)/(d:ℝ)/(P160:ℝ)≤value (up n d) := by
   have h := neg_le_neg (scaled_floor_div_le hd (-n))
-  simpa [up,value] using h
+  simpa only [up, value, Int.cast_neg, neg_div, neg_neg] using h
 
 theorem divRat_sound {v : IV} {x : ℝ} {q : ℚ}
     (hv : Encloses v x) (hq : 0<q) : Encloses (divRat v q) (x/(q:ℝ)) := by
@@ -120,7 +120,7 @@ theorem rawWeight_encloses (a b c d : ℚ) (lx : IV)
     have hr : (0:ℝ)<((oldHighQ a c-oldLowQ b d:ℚ):ℝ) := by
       simpa only [Rat.cast_sub,cast_oldHighQ,cast_oldLowQ] using sub_pos.mpr hspan
     exact_mod_cast hr
-  have h := divRat_sound (sub_sound (symmetricOld_encloses hlog hpositive hsquare)
+  have h := divRat_sound (sub_sound (symmetricOld_encloses (c := (c : ℝ)) (d := (d : ℝ)) hlog hpositive hsquare)
     (ofReal_sound (oldLowQ b d:ℝ))) hq
   simpa only [rawWeight,oldWeight,Rat.cast_sub,cast_oldHighQ,cast_oldLowQ] using h
 

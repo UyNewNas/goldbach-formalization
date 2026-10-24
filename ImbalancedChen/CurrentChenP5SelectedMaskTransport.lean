@@ -54,10 +54,14 @@ theorem mass_compl_sub {α : Type*} (s : Finset α) (w : α → ℝ)
     mass s w (fun t => ¬ E t) - mass s w (fun t => ¬ F t) =
       mass s w (change E F) - mass s w (change F E) := by
   have h := mass_change_identity s w E F
-  have hE := Finset.sum_filter_add_sum_filter_not s E w
-  have hF := Finset.sum_filter_add_sum_filter_not s F w
-  change mass s w E + mass s w (fun t => ¬ E t) = _ at hE
-  change mass s w F + mass s w (fun t => ¬ F t) = _ at hF
+  have hsum (G : α → Prop) :
+      mass s w G + mass s w (fun t => ¬ G t) = ∑ t ∈ s, w t := by
+    simp only [mass, Finset.sum_filter, ← Finset.sum_add_distrib]
+    apply Finset.sum_congr rfl
+    intro t _
+    by_cases ht : G t <;> simp [ht]
+  have hE := hsum E
+  have hF := hsum F
   linarith only [h, hE, hF]
 
 theorem mass_disagreement {α : Type*} (s : Finset α) (w : α → ℝ)
@@ -182,11 +186,16 @@ def retainedMass (N : ℕ) (eta : ℝ) (E : ℕ × ℕ → Prop) : ℝ :=
 
 theorem upsilon6_eq_compl_mass (N : ℕ) (E : ℕ × ℕ → Prop) :
     currentChenUpsilon6 N E = sixthMass N (fun t => ¬ E t) := by
-  exact currentChenUpsilon6_eq_siftedQuotientPrimeSource N E
+  rw [currentChenUpsilon6_eq_siftedQuotientPrimeSource N E]
+  simp only [sixthMass, mass, sixthSupport, sixthWeight, Finset.sum_filter]
+  apply Finset.sum_congr rfl
+  intro t _
+  by_cases ht : E t <;> simp [ht]
 
 theorem upsilon11_eq_compl_mass (N : ℕ) (E : ℕ × ℕ → Prop) :
     currentChenUpsilon11 N E = eleventhMass N (fun t => ¬ E t) := by
-  exact currentChenUpsilon11_eq_siftedQuotientPrimeSource N E
+  simpa only [eleventhMass, mass, eleventhSupport, eleventhWeight, Finset.sum_filter, Classical.ite_not] using
+    currentChenUpsilon11_eq_siftedQuotientPrimeSource N E
 
 theorem retained_eq_compl_mass (N : ℕ) (eta : ℝ) (E : ℕ × ℕ → Prop) :
     currentChenUpsilon6Retained N E eta = retainedMass N eta (fun t => ¬ E t) := by
@@ -206,7 +215,8 @@ theorem upsilon11_mask_change (N : ℕ) (E F : ℕ × ℕ → Prop) :
     currentChenUpsilon11 N E - currentChenUpsilon11 N F =
       eleventhMass N (change E F) - eleventhMass N (change F E) := by
   rw [upsilon11_eq_compl_mass, upsilon11_eq_compl_mass]
-  exact mass_compl_sub _ _ (fun t => E t.2) (fun t => F t.2)
+  exact mass_compl_sub (eleventhSupport N) (eleventhWeight N)
+    (fun t => E t.2) (fun t => F t.2)
 
 theorem retained_mask_change (N : ℕ) (eta : ℝ) (E F : ℕ × ℕ → Prop) :
     currentChenUpsilon6Retained N E eta - currentChenUpsilon6Retained N F eta =
@@ -246,8 +256,8 @@ theorem abs_upsilon11_mask_change_le (N : ℕ) (E F : ℕ × ℕ → Prop) :
     |currentChenUpsilon11 N E - currentChenUpsilon11 N F| ≤
       eleventhMass N (disagreement E F) := by
   rw [upsilon11_eq_compl_mass, upsilon11_eq_compl_mass]
-  exact abs_mass_compl_sub_le _ _ (fun _ _ => Nat.cast_nonneg _)
-    (fun t => E t.2) (fun t => F t.2)
+  exact abs_mass_compl_sub_le (eleventhSupport N) (eleventhWeight N)
+    (fun _ _ => Nat.cast_nonneg _) (fun t => E t.2) (fun t => F t.2)
 
 theorem abs_retained_mask_change_le (N : ℕ) (eta : ℝ)
     (E F : ℕ × ℕ → Prop) :
