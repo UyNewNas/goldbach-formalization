@@ -86,6 +86,24 @@ theorem signSensitive_sub_euler_eq
   rw [signSensitive_eq_positive_sub_negative, signedMass_eq_positive_sub_negative]
   ring
 
+/-- Subtracting two events reverses the contribution of the second negative
+mass. Both events keep their own original rough coefficient throughout. -/
+theorem signSensitive_pair_sub_euler_eq
+    (SA SB : Finset ℕ) (a b : ℕ → ℝ) (V lo hi : ℝ) :
+    (signSensitiveReciprocalTotientDensity SA a lo hi -
+        signSensitiveReciprocalTotientDensity SB b lo hi) -
+      V * (reciprocalTotientDensity SA a - reciprocalTotientDensity SB b) =
+      (hi - V) * (positiveMass SA a - positiveMass SB b) +
+        (V - lo) * (negativeMass SA a - negativeMass SB b) := by
+  have hA := signSensitive_sub_euler_eq SA a V lo hi
+  have hB := signSensitive_sub_euler_eq SB b V lo hi
+  calc
+    _ = (signSensitiveReciprocalTotientDensity SA a lo hi -
+          V * reciprocalTotientDensity SA a) -
+        (signSensitiveReciprocalTotientDensity SB b lo hi -
+          V * reciprocalTotientDensity SB b) := by ring
+    _ = _ := by rw [hA, hB]; ring
+
 /-- This exact identity is instantiated at the literal actualSmallRoughRho,
 not at a newly chosen coefficient with the same density. -/
 theorem actual_attachment_density_eq_midpoint_signed_add_width_absolute
@@ -105,6 +123,66 @@ theorem actual_attachment_density_eq_midpoint_signed_add_width_absolute
     (fun _ hd => actualSmallRosserSupport_smallPrimeSupportedAt N cap w hd)
     (fun _ hd => fixedRoughSupport_roughPrimeSupportedAt retainOdd N cap w z hd)]
   exact signSensitive_eq_midpoint_signed_add_width_absolute _ _ _ _
+
+/-- Paired physical events use the same small Rosser weights and cutoff.
+Within each event its signed and absolute densities are computed from the
+very coefficient that defines its physical rho. The second absolute mass
+is subtracted; no comparison of the two absolute masses is implicit. -/
+theorem actual_pair_attachment_density_eq_midpoint_ledger
+    (old new : List ℕ → Bool) (N cap : ℕ) (w z L : ℝ) :
+    let small := actualSmallRosserSupport N cap w
+    let oldRough := fixedRoughSupport old N cap w z
+    let newRough := fixedRoughSupport new N cap w z
+    let oldCoeff := fixedRoughCoefficient old N cap w z
+    let newCoeff := fixedRoughCoefficient new N cap w z
+    let lo := reciprocalTotientDensity small (actualSmallRosserMinus N cap w L)
+    let hi := reciprocalTotientDensity small (actualSmallRosserPlus N cap w L)
+    physicalDensitySum (actualSmallRoughModuli old N cap w z)
+        (actualSmallRoughRho old N cap w z L) -
+      physicalDensitySum (actualSmallRoughModuli new N cap w z)
+        (actualSmallRoughRho new N cap w z L) =
+      ((hi + lo) / 2) *
+        (reciprocalTotientDensity oldRough oldCoeff -
+          reciprocalTotientDensity newRough newCoeff) +
+      ((hi - lo) / 2) *
+        (reciprocalTotientDensity oldRough (fun d => |oldCoeff d|) -
+          reciprocalTotientDensity newRough (fun d => |newCoeff d|)) := by
+  dsimp only
+  rw [actual_attachment_density_eq_midpoint_signed_add_width_absolute,
+    actual_attachment_density_eq_midpoint_signed_add_width_absolute]
+  ring
+
+/-- The paired error relative to one proposed small Euler density. In the
+old-minus-new difference, the new event's negative mass has the opposite
+sign. Each side is still the density of its literal physical rho. -/
+theorem actual_pair_attachment_sub_euler_eq
+    (old new : List ℕ → Bool) (N cap : ℕ) (w z L V : ℝ) :
+    let small := actualSmallRosserSupport N cap w
+    let oldRough := fixedRoughSupport old N cap w z
+    let newRough := fixedRoughSupport new N cap w z
+    let oldCoeff := fixedRoughCoefficient old N cap w z
+    let newCoeff := fixedRoughCoefficient new N cap w z
+    let lo := reciprocalTotientDensity small (actualSmallRosserMinus N cap w L)
+    let hi := reciprocalTotientDensity small (actualSmallRosserPlus N cap w L)
+    (physicalDensitySum (actualSmallRoughModuli old N cap w z)
+        (actualSmallRoughRho old N cap w z L) -
+      physicalDensitySum (actualSmallRoughModuli new N cap w z)
+        (actualSmallRoughRho new N cap w z L)) -
+      V * (reciprocalTotientDensity oldRough oldCoeff -
+        reciprocalTotientDensity newRough newCoeff) =
+      (hi - V) * (positiveMass oldRough oldCoeff -
+        positiveMass newRough newCoeff) +
+      (V - lo) * (negativeMass oldRough oldCoeff -
+        negativeMass newRough newCoeff) := by
+  dsimp only
+  unfold actualSmallRoughModuli actualSmallRoughRho
+  rw [physicalDensitySum_smallRoughRho_eq_signSensitive
+      (fun _ hd => actualSmallRosserSupport_smallPrimeSupportedAt N cap w hd)
+      (fun _ hd => fixedRoughSupport_roughPrimeSupportedAt old N cap w z hd),
+    physicalDensitySum_smallRoughRho_eq_signSensitive
+      (fun _ hd => actualSmallRosserSupport_smallPrimeSupportedAt N cap w hd)
+      (fun _ hd => fixedRoughSupport_roughPrimeSupportedAt new N cap w z hd)]
+  exact signSensitive_pair_sub_euler_eq _ _ _ _ _ _ _
 
 /-- The signed mass in the same physical attachment is exactly the
 retained first-exit polynomial of the original even-retaining policy.

@@ -1,4 +1,4 @@
-import ImbalancedChen.Part5OriginalOmegaGridCore
+import ImbalancedChen.Part5OriginalOmegaGridCoreModular
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 
 /-!

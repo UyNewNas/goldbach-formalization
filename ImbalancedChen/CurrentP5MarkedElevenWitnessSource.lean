@@ -180,7 +180,12 @@ theorem p5MarkedElevenSource_row_filter (N : ℕ) (E : ℕ × ℕ → Prop) (i :
         ((mem_p5MarkedElevenSource N E i P q).mp hsource), rfl⟩
   · intro h
     obtain ⟨⟨Q, r⟩, hrow, heq⟩ := Finset.mem_image.mp h
-    cases heq
+    have hij : i = j := congrArg Prod.fst heq
+    have hQP : Q = P := congrArg (fun t : P5MarkedWitness => t.2.1) heq
+    have hrq : r = q := congrArg (fun t : P5MarkedWitness => t.2.2) heq
+    subst j
+    subst P
+    subst q
     exact Finset.mem_filter.mpr
       ⟨(mem_p5MarkedElevenSource N E i Q r).mpr
         ((mem_p5MarkedRowSource N E i Q r).mp hrow), rfl⟩
@@ -190,6 +195,18 @@ theorem p5MarkedElevenSource_row_filter_card (N : ℕ) (E : ℕ × ℕ → Prop)
       (p5MarkedRowSource N E i).card := by
   rw [p5MarkedElevenSource_row_filter,
     Finset.card_image_of_injective _ (fun _ _ h => congrArg Prod.snd h)]
+
+theorem p5MarkedElevenSource_row_card_eq_upsilon
+    (N : ℕ) (E : ℕ × ℕ → Prop) (i : Fin 11) :
+    (((p5MarkedElevenSource N E).filter (fun t => t.1 = i)).card : ℝ) =
+      ![currentChenUpsilon1 N, currentChenUpsilon2 N,
+        currentChenUpsilon3 N, currentChenUpsilon4 N,
+        currentChenUpsilon5 N, currentChenUpsilon6 N E,
+        currentChenUpsilon7 N, currentChenUpsilon8 N,
+        currentChenUpsilon9 N, currentChenUpsilon10 N,
+        currentChenUpsilon11 N E] i := by
+  rw [p5MarkedElevenSource_row_filter_card]
+  exact p5MarkedRowSource_card N E i
 
 /-- Summing a function of the row over the actual marks counts every
 receiver/witness once, with no division by a witness multiplicity. -/

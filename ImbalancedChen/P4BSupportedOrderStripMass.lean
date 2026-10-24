@@ -26,8 +26,8 @@ theorem supported_order_strip_mono {small large b T : ℝ} {N : ℕ}
     (hle : small ≤ large) :
     physicalSupportedStrip small b N T 0 ⊆ physicalSupportedStrip large b N T 0 := by
   intro t ht
-  obtain ⟨hprime, hstrip, hsoft⟩ := mem_physicalSupportedStrip.mp ht
-  apply mem_physicalSupportedStrip.mpr
+  obtain ⟨hprime, hstrip, hsoft⟩ := (mem_physicalSupportedStrip _ _ _ _ _ _).mp ht
+  apply (mem_physicalSupportedStrip _ _ _ _ _ _).mpr
   refine ⟨hprime, ⟨?_, hstrip.2⟩, ?_⟩
   · linarith only [hle, hstrip.1]
   · intro j
@@ -44,7 +44,7 @@ theorem supported_order_geometry {width b T : ℝ} {N : ℕ}
       (tuplePair t).1 * (tuplePair t).2 ≤ 2 * N ∧
       |normalizedLog (2 * N) (tuplePair t).1 -
         normalizedLog (2 * N) (tuplePair t).2| ≤ width := by
-  obtain ⟨htPrime, hstrip, hsoft⟩ := mem_physicalSupportedStrip.mp ht
+  obtain ⟨htPrime, hstrip, hsoft⟩ := (mem_physicalSupportedStrip _ _ _ _ _ _).mp ht
   have hp : ∀ i : Fin 2, Nat.Prime (t i).val := (Finset.mem_filter.mp htPrime).2
   let r : ℕ := (tuplePair t).1
   let q : ℕ := (tuplePair t).2
@@ -132,7 +132,7 @@ theorem supported_order_card_le_orderStrip_add_two_ceil {kappa width b T : ℝ} 
     · intro p hp
       obtain ⟨t, ht, rfl⟩ := Finset.mem_image.mp hp
       have htS := (Finset.mem_filter.mp ht).1
-      have htPrime := (mem_physicalSupportedStrip.mp htS).1
+      have htPrime := ((mem_physicalSupportedStrip _ _ _ _ _ _).mp htS).1
       have hprime : ∀ i : Fin 2, Nat.Prime (t i).val :=
         (Finset.mem_filter.mp htPrime).2
       exact ⟨hprime 0, hprime 1⟩
