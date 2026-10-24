@@ -128,3 +128,12 @@ This is an unintended-name-resolution repair, not merely a proof-body edit.
 An explicit full-type regression beside the theorem rejects an extra implicit
 node binder. Compilation of this correction and the final complete-source run
 must still be recorded; this explanation does not itself assert acceptance.
+
+## Certificate elaboration memory
+
+`Block20FullCheck` and `Block21FullCheck` exceeded the 6,144 MiB limit while
+independent theorem/kernel-check tasks overlapped inside one compiler process.
+Each file now sets `Elab.async false`, retaining every original theorem body,
+`decide +kernel` check, frozen literal, trust level and compiler memory/thread
+limit. Both files passed focused guarded compilation with this scheduling-only
+change. Other modules and toolchain wrappers are unchanged by this repair.
