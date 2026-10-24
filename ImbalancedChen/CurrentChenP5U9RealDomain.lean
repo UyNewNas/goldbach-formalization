@@ -28,12 +28,12 @@ def domain : Set Point :=
     x 0 + 2 * x 1 < 1 ∧ 1 ≤ x 0 + x 1 + 2 * x 2 ∧ x 0 + x 1 + x 2 < 1}
 
 def forms : Fin 6 → Point →L[ℝ] ℝ :=
-  ![-ContinuousLinearMap.proj 0, ContinuousLinearMap.proj 0,
-    -ContinuousLinearMap.proj 1,
-    ContinuousLinearMap.proj 0 + (2 : ℝ) • ContinuousLinearMap.proj 1,
-    -(ContinuousLinearMap.proj 0 + ContinuousLinearMap.proj 1 +
-      (2 : ℝ) • ContinuousLinearMap.proj 2),
-    ContinuousLinearMap.proj 0 + ContinuousLinearMap.proj 1 + ContinuousLinearMap.proj 2]
+  ![-(ContinuousLinearMap.proj (0 : Fin 3) : Point →L[ℝ] ℝ), (ContinuousLinearMap.proj (0 : Fin 3) : Point →L[ℝ] ℝ),
+    -(ContinuousLinearMap.proj (1 : Fin 3) : Point →L[ℝ] ℝ),
+    (ContinuousLinearMap.proj (0 : Fin 3) : Point →L[ℝ] ℝ) + (2 : ℝ) • (ContinuousLinearMap.proj (1 : Fin 3) : Point →L[ℝ] ℝ),
+    -((ContinuousLinearMap.proj (0 : Fin 3) : Point →L[ℝ] ℝ) + (ContinuousLinearMap.proj (1 : Fin 3) : Point →L[ℝ] ℝ) +
+      (2 : ℝ) • (ContinuousLinearMap.proj (2 : Fin 3) : Point →L[ℝ] ℝ)),
+    (ContinuousLinearMap.proj (0 : Fin 3) : Point →L[ℝ] ℝ) + (ContinuousLinearMap.proj (1 : Fin 3) : Point →L[ℝ] ℝ) + (ContinuousLinearMap.proj (2 : Fin 3) : Point →L[ℝ] ℝ)]
 
 def bounds : Fin 6 → ℝ := ![-(19 / 125), 59 / 250, -(59 / 250), 1, -1, 1]
 
@@ -113,7 +113,13 @@ theorem weakDomain_coordinate_bounds {x : Point} (hx : x ∈ weakDomain) :
     ∀ i, (19 / 125 : ℝ) ≤ x i ∧ x i ≤ 1 := by
   obtain ⟨ht0, ht1, hu0, hu1, hw0, hw1⟩ := (mem_weakDomain_iff x).mp hx
   intro i
-  fin_cases i <;> constructor <;> linarith
+  fin_cases i
+  · change (19 / 125 : ℝ) ≤ x 0 ∧ x 0 ≤ 1
+    constructor <;> linarith
+  · change (19 / 125 : ℝ) ≤ x 1 ∧ x 1 ≤ 1
+    constructor <;> linarith
+  · change (19 / 125 : ℝ) ≤ x 2 ∧ x 2 ≤ 1
+    constructor <;> linarith
 
 theorem weakDomain_terminal_lower {x : Point} (hx : x ∈ weakDomain) :
     (191 / 1000 : ℝ) ≤ x 2 := by
@@ -157,7 +163,7 @@ theorem boundaryWalls_volume_zero : volume boundaryWalls = 0 := by
     rintro ⟨j, hj⟩
     exact hx j hj
   rw [ae_iff] at h
-  simpa only [not_not] using h
+  simpa only [not_not, Set.ofPred_mem_eq] using h
 
 theorem domain_ae_weakDomain : domain =ᵐ[volume] weakDomain := by
   filter_upwards [ae_no_walls] with x hx
@@ -239,8 +245,10 @@ private theorem eventually_gate_membership (x : Point) (hx : ∀ j, forms j x �
       (forms j x ≤ bounds j - eta ↔ forms j x ≤ bounds j) := by
     rcases lt_or_gt_of_ne (hx j) with hlt | hgt
     · filter_upwards [Iio_mem_nhds (sub_pos.mpr hlt)] with eta heta
+      change eta < bounds j - forms j x at heta
       constructor <;> intro _h <;> linarith only [hlt, heta]
     · filter_upwards [Ioi_mem_nhds (sub_neg.mpr hgt)] with eta heta
+      change bounds j - forms j x < eta at heta
       constructor <;> intro hh <;> linarith only [hgt, heta, hh]
   filter_upwards [eventually_all.mpr heach] with eta heta
   simpa only [gate, Set.mem_setOf_eq, sub_zero] using forall_congr' heta
@@ -268,8 +276,10 @@ theorem tendsto_integral_bufferDomain (f : Point → ℝ) (hf : IntegrableOn f c
       · simp only [indicator_of_notMem hx0, indicator_of_notMem (mt heta.mp hx0)])
   have hlim' : Tendsto (fun eta : ℝ => ∫ x in bufferDomain eta, f x) (𝓝 0)
       (𝓝 (∫ x in weakDomain, f x)) := by
-    simpa only [setIntegral_indicator (measurableSet_gate _), ← bufferDomain,
-      bufferDomain_zero] using hlim
+    simp only [setIntegral_indicator (measurableSet_gate _)] at hlim
+    change Tendsto (fun eta : ℝ => ∫ x in bufferDomain eta, f x) (𝓝 0)
+      (𝓝 (∫ x in bufferDomain 0, f x)) at hlim
+    simpa only [bufferDomain_zero] using hlim
   rwa [← setIntegral_domain_eq_weakDomain f] at hlim'
 
 theorem tendsto_abs_buffer_loss_right (f : Point → ℝ) (hf : IntegrableOn f cube) :
@@ -313,7 +323,8 @@ theorem tendsto_integral_continuous_ramps (f : Point → ℝ)
     (hf : ContinuousOn f cube) (upper : Bool) :
     Tendsto (fun m : ℕ => ∫ x in cube, f x * affinePrimeGateRamp forms bounds upper m x)
       atTop (𝓝 (∫ x in domain, f x)) := by
-  have hfi := hf.integrableOn_compact isCompact_cube
+  have hfi : IntegrableOn f cube (volume : Measure Point) :=
+    hf.integrableOn_compact isCompact_cube
   have hlim := tendsto_integral_of_dominated_convergence
     (μ := volume.restrict cube) (fun x : Point => ‖f x‖)
     (fun m => ((hf.mul (continuous_affinePrimeGateRamp forms bounds upper m).continuousOn).integrableOn_compact
@@ -322,6 +333,7 @@ theorem tendsto_integral_continuous_ramps (f : Point → ℝ)
     (fun m => by
       filter_upwards [] with x
       have hb := affinePrimeGateRamp_bounds forms bounds upper m x
+      change ‖f x * affinePrimeGateRamp forms bounds upper m x‖ ≤ ‖f x‖
       simp only [Real.norm_eq_abs, abs_mul, abs_of_nonneg hb.1]
       exact mul_le_of_le_one_right (abs_nonneg (f x)) hb.2)
     (show ∀ᵐ x : Point ∂volume.restrict cube,
@@ -341,7 +353,8 @@ theorem tendsto_integral_continuous_ramps (f : Point → ℝ)
         (tendsto_affinePrimeGateRamp forms bounds upper x hx).const_mul (f x))
   have hinter : cube ∩ domain = domain :=
     inter_eq_right.mpr (domain_subset_weakDomain.trans weakDomain_subset_cube)
-  simpa only [setIntegral_indicator measurableSet_domain, hinter] using hlim
+  simp only [setIntegral_indicator measurableSet_domain, hinter] at hlim
+  exact hlim
 
 theorem tendsto_kernel_continuous_ramps (upper : Bool) :
     Tendsto (fun m : ℕ => ∫ x in cube, kernel x * affinePrimeGateRamp forms bounds upper m x)
