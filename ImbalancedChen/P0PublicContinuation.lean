@@ -1,0 +1,55 @@
+import ImbalancedChen.P0ContinuationPublicEntry
+import ImbalancedChen.Certificates.OriginalNodeArraysV1.All40QueryComparisonAPI
+import ImbalancedChen.Certificates.OriginalNodeArraysV1.All40FiniteIndexAPI
+import ImbalancedChen.Certificates.OriginalNodeArraysV1.All40ReaderBoundaryAPI
+import ImbalancedChen.P0All40ReaderExtensionalAPI
+import ImbalancedChen.Certificates.OriginalNodeArraysV1.All40ListFold
+import ImbalancedChen.P0QueryBatchRefinementAPI
+import ImbalancedChen.P0RationalQueryPublicAPI
+import ImbalancedChen.P0OriginalClippedChordConcreteAPI
+import ImbalancedChen.P0All32RowPublicAPI
+import ImbalancedChen.P0All32RowOverlapAPI
+import ImbalancedChen.P0All32BarrierConsumerAPI
+import ImbalancedChen.P0All32ParentPublicAPI
+import ImbalancedChen.P0ParentKernelIntegrabilityAPI
+import ImbalancedChen.P0CoordinateListAlgebra
+import ImbalancedChen.P0CoordinateOpenParentAPI
+import ImbalancedChen.P0CoordinateZeroPaddingAPI
+import ImbalancedChen.P0HeightPublicAPI
+import ImbalancedChen.P0P3MajorantPublicAPI
+import ImbalancedChen.P0P3PacketPublicAPI
+import ImbalancedChen.P0CommonHeightEnergyPublicAPI
+import ImbalancedChen.P0FinitePhaseL2PublicAPI
+import ImbalancedChen.P0P3HeightShellIntegralAPI
+
+/-! SOURCE_ONLY / UNCOMPILED / NOT PASS.
+A single public entry for the independently implemented P0 consumers.
+All imports retain their original quantitative constants and real objects.
+The import graph still needs ROOT source installation and later explicit
+permission to compile. This is not an original hLower/hUpper proof.
+-/
+namespace ImbalancedChen.P0PublicContinuation
+
+export P0ContinuationPublicEntry
+  (queryLower queryUpper queryMidpoint queryRadius query_endpoint_bounds
+   queryRadius_nonneg queryMidpoint_error queryMidpoint_error_le
+   queryMidpoint_error_rational queryMidpoint_error_rational_le
+   public_endpoints_eq_original queryMidpoint_rational_eq)
+
+export P0All40PublicQuery
+  (queryLo160 queryHi160 canonical_integer_bounds query_eq_original
+   compact_query_encloses compact_query_value_encloses
+   public_compact_query_value_encloses)
+
+export Part3.P0HeightPublicAPISourceOnly
+  (kTestTransform_norm_le_quadratic_simplified
+   common_height_modeIntegral_norm_le_quadratic
+   common_height_modeIntegral_norm_sq_le_quadratic
+   kTestTransform_norm_le_on_shell)
+
+export Part3.P0MajorantPublicAPISourceOnly
+  (compactQKernel compactQKernel_apply compactQKernel_norm_le
+   testL1Mass testL1Mass_nonneg kTestTransform_norm_le)
+
+end ImbalancedChen.P0PublicContinuation
+
