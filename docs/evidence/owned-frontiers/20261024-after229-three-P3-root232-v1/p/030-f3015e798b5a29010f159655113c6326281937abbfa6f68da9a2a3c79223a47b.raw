@@ -1,0 +1,276 @@
+"""SOURCEONLY after229 finite terminal record reviewer; emits JSON stdout and writes no files.
+
+This deliberately reuses the statically peer-reviewed V5 record gate for an
+in-memory recomputation. The independent checks below compare the actual
+proposal artifacts and independently recompute the finite census/delta and
+current owned-object slots. It is not a second implementation of every audit
+gate, a Lean proof, or a full import-graph replay.
+"""
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import sys
+
+
+ROOT_FIXED = Path('/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation')
+WIN_FIXED = 'E:/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation'
+COLLECTOR_SHA256 = 'f2c0cfda4fcaffa3dbc644d0990cc7ff543dfd863fa4979195c75f8f5923478d'
+BASELINE_SHA256 = '4526bf2a1fa10b336af0964d2322793de349d903bb7814d650b9ac6c2d3d5377'
+BASELINE_PUBLICATION = '.lake/proof-continuation/publication-integrity/20261024d-root229-GITHUB-PUBLICATION.json'
+BASELINE_PUBLICATION_SHA256 = '6e5f6b76b6cc733f531838537087ade1f332fd3f1fdcb83bc8ba4950a628aead'
+TARGET_MODULES = ('ImbalancedChen.Part3ActualCompletedZeroDifferencePayment', 'ImbalancedChen.Part3ActualZeroTagFreeEpsilonPayment', 'ImbalancedChen.Part3ActualNonzeroChartEpsilonTagPayment')
+EXPECTED_BASELINE = (229, 6310, 6291, 161)
+SLOTS = {'.olean', '.olean.private', '.olean.server', '.ilean', '.ir'}
+STD3 = {'propext', 'Classical.choice', 'Quot.sound'}
+
+
+def need(ok, why):
+    if not ok:
+        raise ValueError(why)
+
+
+def local_path(root, raw, *, external=False):
+    need(isinstance(raw, str) and raw, 'path string required')
+    name = raw.replace('\\', '/')
+    if name == WIN_FIXED or name.startswith(WIN_FIXED + '/'):
+        path = root / name[len(WIN_FIXED):].lstrip('/')
+    else:
+        need(not (len(name) >= 3 and name[1:3] == ':/'), 'foreign Windows drive path rejected')
+        candidate = Path(name)
+        path = candidate if candidate.is_absolute() else root / candidate
+    path = path.resolve(strict=True)
+    need(path.is_file(), 'expected file')
+    need(external or path.is_relative_to(root), 'repository evidence path escaped fixed root')
+    return path
+
+
+def digest(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def read_ref(root, ref):
+    need(isinstance(ref, dict) and set(ref) == {'path', 'sha256'}, 'exact path/SHA reference required')
+    path = local_path(root, ref['path'])
+    need(digest(path) == ref['sha256'], 'referenced bytes changed')
+    return json.loads(path.read_text(encoding='utf-8'))
+
+
+def check_pair(root, ref, *, external=False):
+    need(isinstance(ref, dict) and set(ref) == {'path', 'sha256'}, 'exact file pair required')
+    path = local_path(root, ref['path'], external=external)
+    need(digest(path) == ref['sha256'], 'file pair SHA mismatch')
+    return path
+
+
+def canon(root, raw):
+    return local_path(root, raw).as_posix()
+
+
+def load_reviewed_collector(path, expected_sha):
+    source = path.read_bytes()
+    need(hashlib.sha256(source).hexdigest() == expected_sha == COLLECTOR_SHA256, 'after229 V2 collector hash mismatch')
+    namespace = {'__name__': '_reviewed_after229_record_collector_v2_sourceonly_', '__file__': str(path)}
+    exec(compile(source, str(path), 'exec'), namespace, namespace)
+    need(callable(namespace.get('propose')) and callable(namespace.get('FinitePaths')) and tuple(namespace.get('TARGET_MODULES', ())) == TARGET_MODULES, 'after229 V2 finite record gate/target contract mismatch')
+    return namespace
+
+
+def run(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--root', required=True)
+    parser.add_argument('--intake', required=True)
+    parser.add_argument('--intake-sha256', required=True)
+    parser.add_argument('--proposal', required=True)
+    parser.add_argument('--proposal-sha256', required=True)
+    parser.add_argument('--collector', required=True)
+    parser.add_argument('--collector-sha256', required=True)
+    parser.add_argument('--baseline-acceptance-sha256', required=True)
+    parser.add_argument('--target-source', action='append', required=True, help='Repeat exactly three times: MODULE=final source SHA256 from ROOT originals')
+    args = parser.parse_args(argv)
+
+    expected_targets = {}
+    for value in args.target_source:
+        need(isinstance(value, str) and value.count('=') == 1, '--target-source must be MODULE=LOWERCASE_SHA256')
+        module, sha = value.split('=', 1)
+        need(module in TARGET_MODULES and module not in expected_targets and len(sha) == 64
+             and set(sha) <= set('0123456789abcdef'), 'unknown/duplicate module or malformed source SHA')
+        expected_targets[module] = sha
+    need(set(expected_targets) == set(TARGET_MODULES), 'exactly three final target source hashes required')
+
+    root = Path(args.root).resolve(strict=True)
+    need(root == ROOT_FIXED.resolve(strict=True), 'fixed ROOT repository required')
+    need(args.baseline_acceptance_sha256 == BASELINE_SHA256, 'ROOT baseline acceptance SHA mismatch')
+    need(len(args.intake_sha256) == len(args.proposal_sha256) == 64, 'malformed intake/proposal SHA')
+
+    collector_path = local_path(root, args.collector)
+    namespace = load_reviewed_collector(collector_path, args.collector_sha256)
+    intake_ref = {'path': args.intake, 'sha256': args.intake_sha256}
+    intake = read_ref(root, intake_ref)
+
+    proposal_path = local_path(root, args.proposal)
+    need(digest(proposal_path) == args.proposal_sha256, 'actual proposal SHA mismatch')
+    proposal = json.loads(proposal_path.read_text(encoding='utf-8'))
+    need(proposal['status'] == 'SOURCEONLY_RECORD_APPEND_PROPOSAL_REQUIRES_SEPARATE_TERMINAL_VERIFICATION'
+         and proposal['complete_original_evidence_intake'] == intake_ref
+         and proposal['baseline_acceptance'] == {
+             'path': namespace['BASELINE_ACCEPTANCE'], 'sha256': BASELINE_SHA256}
+         and proposal['collector_source']['sha256'] == COLLECTOR_SHA256
+         and local_path(root, proposal['collector_source']['path']) == collector_path
+         and intake['schema'] == 'after229-three-finite-record-append-draft-input-v1'
+         and intake['targets'] == expected_targets,
+         'proposal/intake/baseline/after229 V2 source binding')
+    need(proposal['proof_credit'] == 0 and proposal['root_acceptance'] is None
+         and proposal['main_1_plus_1_75'] == 'OPEN', 'proposal inflated terminal/proof status')
+
+    # Reuse only the statically reviewed V2 proposal gate; no CLI/main is entered.
+    # Disable Git's optional index refresh for the bounded read-only provider checks.
+    os.environ['GIT_OPTIONAL_LOCKS'] = '0'
+    recomputed = namespace['propose'](str(root), intake_ref, BASELINE_SHA256, expected_targets)
+    actual_census = read_ref(root, proposal['candidate_census'])
+    actual_rows = read_ref(root, proposal['complete_declarations'])
+    need(actual_census == recomputed['candidate_census'], 'proposal census differs from in-memory V2 recomputation')
+    need(actual_rows == recomputed['complete_declarations'], 'proposal records differ from in-memory V2 recomputation')
+
+    acceptance = read_ref(root, {'path': namespace['BASELINE_ACCEPTANCE'], 'sha256': BASELINE_SHA256})
+    publication = read_ref(root, {'path': BASELINE_PUBLICATION, 'sha256': BASELINE_PUBLICATION_SHA256})
+    need(publication['status'] == 'ROOT_AFTER226_THREE_GITHUB_PUBLISHED_AND_REMOTE_BRANCH_VERIFIED'
+         and publication['rootAcceptance'] == {'path': namespace['BASELINE_ACCEPTANCE'], 'sha256': BASELINE_SHA256}
+         and (publication['owned_modules'], publication['complete_declaration_records'], publication['distinct_constant_fullnames'], publication['original_owned_receipts']) == EXPECTED_BASELINE
+         and publication['pushed'] is True and publication['remote_branch_verified'] is True,
+         'exact ROOT229 publication/acceptance binding required')
+    baseline_census = read_ref(root, acceptance['current_census'])
+    baseline_rows = read_ref(root, acceptance['complete_declarations'])
+    need(acceptance['status'] == 'ROOT_AFTER226_THREE_TERMINAL_ACCEPTED', 'accepted ROOT229 baseline status mismatch')
+    old_counts = (len(baseline_census['modules']), len(baseline_rows),
+                  len({r['name'] for r in baseline_rows}), acceptance['original_receipts'])
+    need(old_counts == EXPECTED_BASELINE, 'accepted ROOT229/6310/6291/161 baseline counts mismatch')
+
+    targets = set(expected_targets)
+    modules = actual_census['modules']
+    need(set(modules) == set(baseline_census['modules']) | targets and not targets & set(baseline_census['modules']),
+         'exact append-only module set mismatch')
+    old_entries = {m: row for m, row in modules.items() if m not in targets}
+    need(old_entries == baseline_census['modules'], 'old 229 census entries are not deeply equal')
+    old_projection = [r for r in actual_rows if r['module'] not in targets]
+    need(old_projection == baseline_rows, 'old 6310 complete records are not deeply equal')
+
+    target_rows = [r for r in actual_rows if r['module'] in targets]
+    by_module = {m: sum(r['module'] == m for r in target_rows) for m in expected_targets}
+    need(set(by_module) == targets and all(n > 0 for n in by_module.values()), 'new target records missing')
+    need(len(target_rows) > 0, 'new target records are empty')
+    need(by_module == recomputed['new_record_counts'], 'target row counts differ from recomputation')
+    need(len(actual_rows) == len(baseline_rows) + len(target_rows), 'total declaration count is not artifact-derived delta')
+    need(len({r['name'] for r in target_rows}) == len(target_rows)
+         and not {r['name'] for r in baseline_rows} & {r['name'] for r in target_rows},
+         'new full-name collision/duplicate')
+    need(len({(r['module'], r['name']) for r in actual_rows}) == len(actual_rows),
+         'duplicate (module, fullname) record identity')
+    for row in target_rows:
+        need(isinstance(row['type'], str) and row['type'] and '\u22ef' not in row['type']
+             and not row['type'].endswith('...')
+             and all(row[k] is False for k in ('unsafe', 'partial', 'axiom'))
+             and isinstance(row['axioms'], list) and set(row['axioms']) <= STD3,
+             'new declaration type/safety/std3 gate')
+
+    # Rehash all present current object slots for every owned module: 229 local
+    # baseline modules plus the three new target modules. No ancestor JSON walk.
+    current_files = intake['current_module_files']
+    slot_hashes = {}
+    for module, entry in modules.items():
+        if module in targets:
+            spec = current_files[module]
+            source_path = check_pair(root, spec['source'], external=True)
+            base_ref = spec['object_parts']['.olean']
+            base = check_pair(root, base_ref, external=True)
+            stem = str(base)[:-len('.olean')]
+            actual_parts = {suffix: Path(stem + suffix) for suffix in SLOTS if Path(stem + suffix).is_file()}
+            need(set(actual_parts) == set(entry['object_parts']) == set(spec['object_parts']),
+                 'new target current five-slot set differs')
+            for suffix, part_path in actual_parts.items():
+                sha = digest(part_path)
+                need(sha == entry['object_parts'][suffix] == spec['object_parts'][suffix]['sha256'],
+                     'new target current object slot SHA mismatch')
+            need(digest(source_path) == entry['source_sha256'], 'new target current source SHA mismatch')
+            slot_hashes[module] = actual_parts
+        else:
+            source_path = root / (module.replace('.', '/') + '.lean')
+            base = root / '.lake/proof-continuation/lib/lean' / (module.replace('.', '/') + '.olean')
+            need(digest(source_path) == entry['source_sha256'], 'old current source SHA mismatch')
+            stem = str(base)[:-len('.olean')]
+            actual_parts = {suffix: Path(stem + suffix) for suffix in SLOTS if Path(stem + suffix).is_file()}
+            need(set(actual_parts) == set(entry['object_parts']), 'old current five-slot set differs')
+            for suffix, part_path in actual_parts.items():
+                need(digest(part_path) == entry['object_parts'][suffix], 'old current object slot SHA mismatch')
+            slot_hashes[module] = actual_parts
+
+    # Explicitly inspect the one supplied original audit group and three original
+    # strict receipts. V5's reviewed gate independently checks their full guards,
+    # sidecar identities, stock replays, ALL inventory, and before/after bindings.
+    audit_refs = intake['audit_receipts']
+    need(len(audit_refs) == 1 and set(audit_refs[0]['targets']) == targets,
+         'expected exactly one original stock+ALL audit covering all three targets')
+    audit = read_ref(root, audit_refs[0]['ref'])
+    need(audit['inputs_before'] == audit['inputs_after'] and audit['targets'] == {
+        m: expected_targets[m] for m in targets}, 'original audit before/after or target binding changed')
+    full_stages = [s for s in audit['stages'] if s['kind'] == 'full_inventory_type_axioms']
+    stock_stages = [s for s in audit['stages'] if s['kind'] == 'stock_replay']
+    need(len(full_stages) == 1 and len(stock_stages) == 3
+         and {s['module'] for s in stock_stages} == targets, 'expected one ALL and three stock stages')
+    need(by_module == audit['declaration_counts'], 'artifact-derived module record counts differ from the original audit')
+    strict_status = {}
+    for module, spec in intake['strict_producers'].items():
+        receipt = read_ref(root, spec['receipt'])
+        strict_status[module] = receipt['status']
+        need(receipt['status'] == 'PASS' and receipt['binding'] == receipt['binding_after']
+             and receipt['binding']['source_sha256'] == expected_targets[module],
+             'original strict producer status/source/before-after mismatch')
+    need(set(strict_status) == targets, 'three strict producers not supplied')
+
+    counts = {
+        'owned_modules': len(modules),
+        'declarations': len(actual_rows),
+        'distinct_constant_fullnames': len({r['name'] for r in actual_rows}),
+        'unique_owned_receipt_paths': len({canon(root, e['owned_receipt']) for e in modules.values()}),
+        'old_entries_deep_equal': True,
+        'old_records_deep_equal': True,
+        'new_record_delta': len(target_rows),
+        'new_records_by_module': by_module,
+    }
+    need(actual_census['owned_modules'] == counts['owned_modules']
+         and actual_census['complete_serialized_declarations'] == counts['declarations']
+         and actual_census['distinct_constant_fullnames'] == counts['distinct_constant_fullnames']
+         and actual_census['original_owned_receipts_rehashed'] == counts['unique_owned_receipt_paths'],
+         'candidate census summary fields differ from artifact-derived values')
+    need(counts['owned_modules'] == EXPECTED_BASELINE[0] + len(targets),
+         'module total is not accepted ROOT229 baseline plus exact target set')
+
+    return {
+        'status': 'FINITE_RECORD_STAGE_TERMINAL_REVIEW_PASS_NOT_ROOT_ACCEPTANCE',
+        'reviewed_collector_sha256': COLLECTOR_SHA256,
+        'root_target_source_hashes': expected_targets,
+        'collector_gate_reuse': 'After229 V2 propose re-executed in memory; same reviewed V5-derived record-gate implementation, not an independent duplicate implementation',
+        'artifact_derived_counts': counts,
+        'strict_producers': strict_status,
+        'original_audit_groups': len(audit_refs),
+        'original_stock_replays': len(stock_stages),
+        'original_ALL_stages': len(full_stages),
+        'current_owned_module_slot_sets_rehashed': len(slot_hashes),
+        'normal_import_trust_scope': 'Finite owned modules and explicit current direct suppliers under normal imported-environment trust; no full project/import/external closure replay.',
+        'external_closure_replayed': False,
+        'project_import_closure_replayed': False,
+        'unconditional_main_proved': False,
+        'root_acceptance': None,
+        'proof_credit': 0,
+        'main_1_plus_1_75': 'OPEN',
+    }
+
+
+if __name__ == '__main__':
+    try:
+        result = run()
+        print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+    except Exception as error:
+        print(json.dumps({'status': 'BLOCKED', 'error': str(error)}, ensure_ascii=False, sort_keys=True))
+        sys.exit(1)
