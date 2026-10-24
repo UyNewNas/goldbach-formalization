@@ -17,7 +17,7 @@ class MemoryBudgetTests(unittest.TestCase):
     def test_default_and_explicit_normalization(self):
         args = ['-qj8', '-M', '9999', '--trust=9', '--threads', '12',
                 '--memory=10', '-T100', 'Example.lean']
-        expected = ['-t0', '-j2', '-M4096', '-q', '-T', '100', 'Example.lean']
+        expected = ['-t0', '-j2', '-M4096', '-DElab.async=false', '-q', '-T', '100', 'Example.lean']
         self.assertEqual(guard.normalize_lean_args(args), expected)
         for budget in (1, 4096, 6144, 8192, 16384):
             with self.subTest(budget=budget):
@@ -33,6 +33,25 @@ class MemoryBudgetTests(unittest.TestCase):
         for value in (0, -1, 16385, True, '6144', 6144.0):
             with self.subTest(value=value), self.assertRaises(RuntimeError):
                 guard.normalize_lean_args([], value)
+
+    def test_fixed_scheduling_option_normalization(self):
+        for args in (['-DElab.async=false'], ['-D', 'Elab.async=false'],
+                     ['-qDElab.async=false'], ['-DElab.async=false', '-DElab.async=false']):
+            with self.subTest(args=args):
+                actual = guard.normalize_lean_args([*args, 'Example.lean'], 6144)
+                self.assertEqual(actual.count('-DElab.async=false'), 1)
+                self.assertNotIn('Elab.async=false', actual)
+                self.assertEqual(actual[:4], ['-t0', '-j2', '-M6144', '-DElab.async=false'])
+        self.assertEqual(guard.normalize_lean_args(['-DmaxRecDepth=2048', 'Example.lean'])[-3:],
+                         ['-D', 'maxRecDepth=2048', 'Example.lean'])
+
+    def test_conflicting_or_invalid_scheduling_options_rejected(self):
+        for value in ('Elab.async=true', 'Elab.async=0', 'Elab.async=',
+                      'Elab.async=False', 'Elab.async=false ', 'Elab.async',
+                      '.Elab.async=false', 'Elab..async=false', ' Elab.async=false'):
+            for prefix in (['-D', value], ['-D' + value], ['-qD' + value]):
+                with self.subTest(args=prefix), self.assertRaises(RuntimeError):
+                    guard.normalize_lean_args(prefix, 6144)
 
     def test_execution_and_abbreviation_still_rejected(self):
         for args in (['--run', 'x.lean'], ['-r', 'x.lean'], ['-qr', 'x.lean'],
@@ -84,8 +103,11 @@ class FakeRuntimeTests(unittest.TestCase):
                                      probe=True, require_source=True)
                 self.assertEqual(report['lean_memory_mib'], expected)
                 self.assertEqual(report['source_commands'], 1)
+                self.assertIs(state['lean_elab_async'], False)
+                self.assertIs(report['lean_elab_async'], False)
+                self.assertEqual(state['environment']['P0_LEAN_ELAB_ASYNC'], 'false')
                 record = json.loads(Path(state['log']).read_text().splitlines()[0])
-                self.assertEqual(record['command'][1:4], ['-t0', '-j2', '-M' + str(expected)])
+                self.assertEqual(record['command'][1:5], ['-t0', '-j2', '-M' + str(expected), '-DElab.async=false'])
 
     def test_environment_and_state_cannot_change_budget(self):
         with self.runtime('6144') as state:
@@ -98,6 +120,32 @@ class FakeRuntimeTests(unittest.TestCase):
             os.environ['CI_LEAN_MEMORY_MIB'] = '6144'
             state['lean_memory_mib'] = 8192
             with self.assertRaises(RuntimeError):
+                guard.check_environment(state)
+
+    def test_fixed_scheduling_wrapper_and_tampering(self):
+        with self.runtime('6144') as state:
+            state_path = Path(state['environment']['P0_CI_GUARD_STATE'])
+            for args in (['-DElab.async=true'], ['-D', 'Elab.async=true'], ['-qDElab.async=true']):
+                result = subprocess.run(['lean', *args, 'Example.lean'], capture_output=True)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(b'Elab.async is fixed to false', result.stderr)
+            self.assertEqual(Path(state['log']).read_text(), '')
+            subprocess.run(['lean', '-DElab.async=false', 'Example.lean'], check=True)
+            log = Path(state['log'])
+            record = json.loads(log.read_text())
+            record['command'][4] = '-DElab.async=true'
+            log.write_text(json.dumps(record) + '\n')
+            with self.assertRaisesRegex(RuntimeError, 'normalized input'):
+                guard.audit(state_path)
+            os.environ['P0_LEAN_ELAB_ASYNC'] = 'true'
+            with self.assertRaisesRegex(RuntimeError, 'Changed guard environment'):
+                guard.check_environment(state)
+            result = subprocess.run(['lean', 'Example.lean'], capture_output=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn(b'changed environment: P0_LEAN_ELAB_ASYNC', result.stderr)
+            os.environ['P0_LEAN_ELAB_ASYNC'] = 'false'
+            state['lean_elab_async'] = True
+            with self.assertRaisesRegex(RuntimeError, 'scheduling'):
                 guard.check_environment(state)
 
     def test_audit_rejects_modified_command_budget(self):

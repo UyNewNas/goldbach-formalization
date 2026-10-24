@@ -143,3 +143,72 @@ change. Other modules and toolchain wrappers are unchanged by this repair.
 proof now invokes the already imported `readCheckBlock_of_64_pages`, whose
 premise is the same 64 proved pages and conclusion the unchanged 4,096-row
 check. No page check, range or frozen certificate data changed.
+
+## Sequential CI completion plan
+
+The first diagnostic GitHub run
+[40093507664](https://github.com/UyNewNas/goldbach-formalization/actions/runs/40093507664)
+reached the 240-minute build limit. Corrected event parsing identifies 399
+production successes, 46 production failures and one dependency failure; the
+remaining targets were not fully established. Its runtime audit and evidence
+retention passed, but subsequent proof gates were skipped. Four of the five
+original memory failures passed there; the external
+`LiLiuGoldbachOnePlusOneNineFinite` still exceeded 6,144 MiB, although it passed
+locally. Thirty-five original node full-check modules also exceeded that CI
+budget. Local success is therefore not substituted for final GitHub acceptance.
+
+CI now prepares four strictly sequential, dependency-ordered compilation shards
+on unchanged standard hosted runners. The planner derives the current target
+set and validates a deterministic disjoint partition, with every local dependency
+in the same or an earlier shard. For the original inventory this is four groups
+of 335 targets and 3,825 local dependency edges. Counts are derived, not hardcoded;
+umbrella modules follow their dependencies. Shards are balanced by target count,
+not a claim of equal execution time. A timed-out shard remains failed; an audited
+partial cache may accelerate a retry but cannot satisfy the completion receipt.
+
+Successful stages hand off cumulative project, goldbach-dependency and
+LeanArchitect build outputs plus exact-head provenance receipts. Official
+Mathlib retrieval establishes pinned package sources before those outputs are
+restored; large reproducible Mathlib artifacts are not copied into every staged
+cache. The first shard may reuse the previous full Lake cache or a prior-head staged
+cache with the same guard and pins as a seed; source/dependency traces and
+current-head receipts must still be revalidated. Cache
+keys bind platform, toolchain/manifest, guard, exact source head and shard.
+Completed-cache availability and exact matches are checked explicitly. Missing
+cache space or handoff fails the staging job rather than silently starting an
+unbounded cold rebuild. A compressed streaming size estimate reserves another
+2 GiB for archive activity without writing a preliminary archive.
+
+Receipts require the successful selected-target report, unchanged source hashes,
+fixed guard and pins, a successful runtime audit and matching real compiler
+binary hashes. They explicitly assert compilation/cache provenance only. Each
+shard also recompiles one actual requested source to a temporary output under
+the guard, even when all Lake targets were valid cached results. This extra check
+is not a replacement for the full shard target list. The final job compares all
+four receipts against its own source inventory and runtime, restores the exact
+completed fourth-shard cache, and runs the explicit **entire target set** again.
+
+The original `lean` job/check and every root kernel, axiom and type-export gate
+remain. Failed or skipped staging causes that original check to run and fail
+explicitly, not become a misleading skipped check. Only successful final exact-
+head CI constitutes the requested acceptance; staged caches and VE success alone
+do not. One core shard runs at a time; the independent VE workflow can still run
+on its own unchanged standard runner.
+
+The guarded compiler now fixes `-DElab.async=false` in addition to trust level 0,
+two threads and the selected memory budget. The pinned Lean sources select the
+synchronous elaborator and the same kernel declaration checker with this option;
+this changes scheduling, not mathematical checking. Conflicting CLI options and
+guard/state/environment tampering are rejected. Source code could explicitly
+change this scheduling option; no such `Elab.async true` override was found in
+the scanned production, verification or installed dependency sources. Final CI
+must validate that the resource correction actually succeeds on its runners.
+
+Build commands have internal process-group timeouts inside the stage recorder,
+so a failure still produces timing and exit receipts. Absolute build deadlines
+reserve time within the 360-minute job limit: warm shards stop building by minute
+290 (at most 270 minutes for the command), and final validation by minute 200
+(at most 180 minutes for the cached all-target command). Original final proof-gate
+timeouts are unchanged. Runtime audits are independently bounded to 10 minutes,
+with artifact retention following on failure. These are failure boundaries, not
+permission to skip a target or proof gate and claim success.

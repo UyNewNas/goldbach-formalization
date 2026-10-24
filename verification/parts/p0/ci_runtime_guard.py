@@ -35,7 +35,7 @@ TOOLS = ('lean', 'leanir', 'clang', 'leanc', 'llvm-ar')
 # No LEAN_CC override: that changes Lake's internal compiler/link flags.
 AMBIGUOUS_ENV = ('LEAN_SYSROOT', 'LEAN', 'LEAN_AR', 'LEAN_CC', 'LAKE',
                  'LAKE_HOME', 'LAKE_OVERRIDE_LEAN', 'LEAN_PATH', 'LEAN_SRC_PATH',
-                 'P0_CI_GUARD_STATE', 'P0_COMPILER_SLOT_HELD', 'P0_COMPILER_SLOT_FD', 'P0_COMPILER_SLOT_TOOL')
+                 'P0_CI_GUARD_STATE', 'P0_LEAN_ELAB_ASYNC', 'P0_COMPILER_SLOT_HELD', 'P0_COMPILER_SLOT_FD', 'P0_COMPILER_SLOT_TOOL')
 
 def parse_memory_budget(value: str) -> int:
     # This is a configuration bound, not a claim about host available RAM.
@@ -95,7 +95,18 @@ def normalize_lean_args(args, memory_mib=4096):
                         i += 1
                         require(i < len(args), 'missing option argument')
                         value = args[i]
-                    if flag in 'tjM':
+                    if flag == 'D':
+                        option, sep, setting = value.partition('=')
+                        require(sep and option, 'invalid -D option assignment')
+                        # Fixed-pin Shell.setConfigOption parses the option name
+                        # before '='. Do not permit alternate spellings of this
+                        # guard-owned scheduling option or conflicting values.
+                        if [part for part in option.strip().split('.') if part] == ['Elab', 'async']:
+                            require(option == 'Elab.async' and setting == 'false',
+                                    'Elab.async is fixed to false by the CI runtime guard')
+                        else:
+                            clean.extend(['-D', value])
+                    elif flag in 'tjM':
                         require(re.fullmatch(r'[0-9]+', value), 'bad resource argument')
                     else:
                         clean.extend(['-' + flag, value])
@@ -105,7 +116,7 @@ def normalize_lean_args(args, memory_mib=4096):
         else:
             clean.append(a)
         i += 1
-    return ['-t0', '-j2', '-M' + str(memory_mib), *clean]
+    return ['-t0', '-j2', '-M' + str(memory_mib), '-DElab.async=false', *clean]
 
 
 WRAPPER = r'''#!/usr/bin/env python3
@@ -114,6 +125,7 @@ C = __CONFIG__
 def require(ok, message):
     if not ok: raise RuntimeError('CI runtime guard: ' + message)
 __NORMALIZER__
+require(C['lean_elab_async'] is False, 'changed fixed elaboration scheduling')
 for key, value in C['environment'].items():
     require(os.environ.get(key) == value, 'changed environment: ' + key)
 for key, name in [('LEAN', 'lean'), ('LEAN_AR', 'llvm-ar')]:
@@ -257,10 +269,10 @@ def prepare(root: Path, runner_temp: Path, evidence: Path, realbin: Path,
     state_path = evidence / 'state.json'
     environment = {'LEAN_SYSROOT': str(shadow), 'LAKE_OVERRIDE_LEAN': 'true',
                    'LEAN_NUM_THREADS': '2', 'ELAN_TOOLCHAIN': PIN, 'P0_CI_GUARD_STATE': str(state_path),
-                   'CI_LEAN_MEMORY_MIB': str(memory_mib)}
+                   'CI_LEAN_MEMORY_MIB': str(memory_mib), 'P0_LEAN_ELAB_ASYNC': 'false'}
     config = {'environment': environment, 'shadow': str(shadow), 'realbin': str(realbin),
               'slot': str(evidence / 'compiler.lock'), 'log': str(evidence / 'compiler-commands.jsonl'),
-              'tools': list(TOOLS), 'lean_memory_mib': memory_mib}
+              'tools': list(TOOLS), 'lean_memory_mib': memory_mib, 'lean_elab_async': False}
     runtime = {str(realbin / name): sha(realbin / name) for name in (*TOOLS, 'lake', 'leanchecker')}
     runtime[str(shadow / 'bin' / 'lake')] = sha(shadow / 'bin' / 'lake')
     runtime[str(shadow_lean)] = sha(shadow_lean)
@@ -283,12 +295,15 @@ def prepare(root: Path, runner_temp: Path, evidence: Path, realbin: Path,
              'guard_sha256': sha(Path(__file__)),
              'action_commit': ACTION_COMMIT,
              'action_script_sha256': {str(action_dir / 'scripts' / n): h for n, h in ACTION_SHA256.items()} if verify_action else {},
-             'policy': f'Lean -t0 -j2 -M{memory_mib}; serial compiler slot; native compiler flags preserved; native checker LEAN_NUM_THREADS=2'}
+             'policy': f'Lean -t0 -j2 -M{memory_mib} -DElab.async=false; serial compiler slot; native compiler flags preserved; native checker LEAN_NUM_THREADS=2'}
     write_json(state_path, state)
     return state
 
 
 def check_environment(state: dict) -> None:
+    require(state['lean_elab_async'] is False
+            and state['environment']['P0_LEAN_ELAB_ASYNC'] == 'false',
+            'State elaboration scheduling is not fixed to false')
     require(type(state['lean_memory_mib']) is int
             and state['lean_memory_mib'] == parse_memory_budget(state['environment']['CI_LEAN_MEMORY_MIB']),
             'State memory budget disagrees with fixed environment')
@@ -355,7 +370,7 @@ def audit(state_path: Path, probe: bool = False, require_source: bool = False) -
     require(not require_source or source_commands > 0, 'No guarded Lean source child was recorded')
     report = {'status': 'PASS_RUNTIME_GUARD_ONLY', 'compiler_commands': len(commands),
               'source_commands': source_commands, 'probe': probe,
-              'lean_memory_mib': state['lean_memory_mib'],
+              'lean_memory_mib': state['lean_memory_mib'], 'lean_elab_async': False,
               'command_log_sha256': sha(Path(state['log'])), 'state_sha256': sha(state_path)}
     write_json(state_path.parent / 'audit.json', report)
     return report
