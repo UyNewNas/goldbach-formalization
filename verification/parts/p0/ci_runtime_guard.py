@@ -37,7 +37,19 @@ AMBIGUOUS_ENV = ('LEAN_SYSROOT', 'LEAN', 'LEAN_AR', 'LEAN_CC', 'LAKE',
                  'LAKE_HOME', 'LAKE_OVERRIDE_LEAN', 'LEAN_PATH', 'LEAN_SRC_PATH',
                  'P0_CI_GUARD_STATE', 'P0_COMPILER_SLOT_HELD', 'P0_COMPILER_SLOT_FD', 'P0_COMPILER_SLOT_TOOL')
 
-def normalize_lean_args(args):
+def parse_memory_budget(value: str) -> int:
+    # This is a configuration bound, not a claim about host available RAM.
+    # Choose a host-appropriate value before setup; no mid-run budget changes.
+    require(isinstance(value, str) and re.fullmatch(r'[1-9][0-9]{0,4}', value),
+            'CI_LEAN_MEMORY_MIB must be a canonical positive integer')
+    budget = int(value)
+    require(budget <= 16384, 'CI_LEAN_MEMORY_MIB exceeds the 16384 MiB bound')
+    return budget
+
+
+def normalize_lean_args(args, memory_mib=4096):
+    require(type(memory_mib) is int and 1 <= memory_mib <= 16384,
+            'Invalid fixed Lean memory budget')
     # Exact fixed-pin src/util/shell.cpp getopt spellings. -t is TRUST;
     # -T/--timeout is a different option and must remain unchanged.
     controlled = {'--trust', '--threads', '--memory'}
@@ -93,7 +105,7 @@ def normalize_lean_args(args):
         else:
             clean.append(a)
         i += 1
-    return ['-t0', '-j2', '-M4096', *clean]
+    return ['-t0', '-j2', '-M' + str(memory_mib), *clean]
 
 
 WRAPPER = r'''#!/usr/bin/env python3
@@ -112,7 +124,7 @@ name = pathlib.Path(sys.argv[0]).name
 require(name in C['tools'], 'unknown compiler')
 args = sys.argv[1:]
 if name == 'lean':
-    args = normalize_lean_args(args)
+    args = normalize_lean_args(args, C['lean_memory_mib'])
 # One inherited flock across Lean and native compiler descendants. Never trust
 # a naked HELD flag: require a live ancestor holding the exact lock descriptor.
 held = os.environ.get('P0_COMPILER_SLOT_HELD')
@@ -197,6 +209,7 @@ def prepare(root: Path, runner_temp: Path, evidence: Path, realbin: Path,
     require(not any(key in os.environ for key in AMBIGUOUS_ENV), 'Ambiguous existing runtime environment')
     require(os.environ.get('LEAN_NUM_THREADS') == '2', 'Native checker threads must be 2')
     require(os.environ.get('ELAN_TOOLCHAIN', PIN) == PIN, 'Unexpected Elan toolchain override')
+    memory_mib = parse_memory_budget(os.environ.get('CI_LEAN_MEMORY_MIB', '4096'))
     if verify_action:
         require(capture('git', '-C', str(action_dir), 'rev-parse', 'HEAD') == ACTION_COMMIT, 'Wrong lean-action commit')
         for name, expected in ACTION_SHA256.items():
@@ -243,10 +256,11 @@ def prepare(root: Path, runner_temp: Path, evidence: Path, realbin: Path,
             'Pinned toolchain must expose its in-root leantar through the shadow sysroot')
     state_path = evidence / 'state.json'
     environment = {'LEAN_SYSROOT': str(shadow), 'LAKE_OVERRIDE_LEAN': 'true',
-                   'LEAN_NUM_THREADS': '2', 'ELAN_TOOLCHAIN': PIN, 'P0_CI_GUARD_STATE': str(state_path)}
+                   'LEAN_NUM_THREADS': '2', 'ELAN_TOOLCHAIN': PIN, 'P0_CI_GUARD_STATE': str(state_path),
+                   'CI_LEAN_MEMORY_MIB': str(memory_mib)}
     config = {'environment': environment, 'shadow': str(shadow), 'realbin': str(realbin),
               'slot': str(evidence / 'compiler.lock'), 'log': str(evidence / 'compiler-commands.jsonl'),
-              'tools': list(TOOLS)}
+              'tools': list(TOOLS), 'lean_memory_mib': memory_mib}
     runtime = {str(realbin / name): sha(realbin / name) for name in (*TOOLS, 'lake', 'leanchecker')}
     runtime[str(shadow / 'bin' / 'lake')] = sha(shadow / 'bin' / 'lake')
     runtime[str(shadow_lean)] = sha(shadow_lean)
@@ -269,12 +283,15 @@ def prepare(root: Path, runner_temp: Path, evidence: Path, realbin: Path,
              'guard_sha256': sha(Path(__file__)),
              'action_commit': ACTION_COMMIT,
              'action_script_sha256': {str(action_dir / 'scripts' / n): h for n, h in ACTION_SHA256.items()} if verify_action else {},
-             'policy': 'Lean -t0 -j2 -M4096; serial compiler slot; native compiler flags preserved; native checker LEAN_NUM_THREADS=2'}
+             'policy': f'Lean -t0 -j2 -M{memory_mib}; serial compiler slot; native compiler flags preserved; native checker LEAN_NUM_THREADS=2'}
     write_json(state_path, state)
     return state
 
 
 def check_environment(state: dict) -> None:
+    require(type(state['lean_memory_mib']) is int
+            and state['lean_memory_mib'] == parse_memory_budget(state['environment']['CI_LEAN_MEMORY_MIB']),
+            'State memory budget disagrees with fixed environment')
     for key, value in state['environment'].items():
         require(os.environ.get(key) == value, 'Changed guard environment: ' + key)
     for name in (*TOOLS, 'lake', 'leanchecker'):
@@ -330,7 +347,7 @@ def audit(state_path: Path, probe: bool = False, require_source: bool = False) -
         require(name in TOOLS and record['command'][0] == expected_binary, 'Unknown/bypassed compiler command')
         require(record['sysroot'] == state['shadow'], 'Compiler sysroot bypass')
         if name == 'lean':
-            require(record['command'][1:] == normalize_lean_args(record['input_args']),
+            require(record['command'][1:] == normalize_lean_args(record['input_args'], state['lean_memory_mib']),
                     'Lean command differs from normalized input (possible flag override)')
         else:
             require(record['command'][1:] == record['input_args'], 'Native compiler flags changed')
@@ -338,6 +355,7 @@ def audit(state_path: Path, probe: bool = False, require_source: bool = False) -
     require(not require_source or source_commands > 0, 'No guarded Lean source child was recorded')
     report = {'status': 'PASS_RUNTIME_GUARD_ONLY', 'compiler_commands': len(commands),
               'source_commands': source_commands, 'probe': probe,
+              'lean_memory_mib': state['lean_memory_mib'],
               'command_log_sha256': sha(Path(state['log'])), 'state_sha256': sha(state_path)}
     write_json(state_path.parent / 'audit.json', report)
     return report

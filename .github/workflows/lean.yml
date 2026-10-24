@@ -18,9 +18,10 @@ jobs:
   lean:
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.ref != 'codex/chen-parts-integration' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 360
     env:
       LEAN_NUM_THREADS: 2
+      CI_LEAN_MEMORY_MIB: 6144
     defaults:
       run:
         shell: bash
@@ -89,6 +90,17 @@ jobs:
       - name: Install Elan and the pinned project toolchain
         run: |
           "$RUNNER_TEMP/lean-ci/run-stage" install-elan "$LEAN_ACTION_DIR/scripts/install_elan.sh"
+      - name: Record runner memory and require budget headroom
+        run: |
+          free -m | tee "$RUNNER_TEMP/lean-verification-logs/memory.log"
+          python3 - <<'PYMEM'
+          import os
+          from pathlib import Path
+          fields = dict(line.split(":", 1) for line in Path("/proc/meminfo").read_text().splitlines())
+          available = int(fields["MemAvailable"].split()[0]) // 1024
+          budget = int(os.environ["CI_LEAN_MEMORY_MIB"])
+          assert available >= budget + 1024, f"Insufficient memory: {available} MiB available for {budget} MiB compiler budget plus 1024 MiB reserve"
+          PYMEM
       - name: Guard the pinned toolchain for all source compiler children
         run: |
           python3 verification/parts/p0/ci_runtime_guard.py setup --evidence "$RUNNER_TEMP/lean-verification-logs/runtime"
@@ -118,14 +130,37 @@ jobs:
             printf 'Cache.IO leantar lookup diagnostic launcher failed; continuing to required cache command.\n' >&2
           fi
           "$RUNNER_TEMP/lean-ci/run-stage" mathlib-cache lake exe cache get
-      - name: Build the full project
+      - name: Inventory every tracked Lean source
+        run: |
+          python3 verification/full_source_inventory.py --output "$RUNNER_TEMP/lean-verification-logs/source-inventory.json"
+          python3 verification/full_source_inventory.py --targets > "$RUNNER_TEMP/lean-verification-logs/all-module-targets.txt"
+      - name: Build every project module explicitly
         id: build
-        timeout-minutes: 90
+        timeout-minutes: 240
         if: ${{ steps.config.outputs.run-lake-build == 'true' }}
         env:
           BUILD_ARGS: ''
         run: |
-          "$RUNNER_TEMP/lean-ci/run-stage" build "$LEAN_ACTION_DIR/scripts/lake_build.sh"
+          # Separate targets cover unimported sources without combining duplicate declarations.
+          mapfile -t targets < "$RUNNER_TEMP/lean-verification-logs/all-module-targets.txt"
+          test "${#targets[@]}" -gt 0
+          "$RUNNER_TEMP/lean-ci/run-stage" build lake build "${targets[@]}"
+      - name: Record per-file compilation outcomes even after interruption
+        if: ${{ always() }}
+        env:
+          FULL_BUILD_OUTCOME: ${{ steps.build.outcome }}
+        run: |
+          logdir="$RUNNER_TEMP/lean-verification-logs"
+          if [[ -f "$logdir/source-inventory.json" ]]; then
+            touch "$logdir/build.log"
+            result=1
+            if [[ "$FULL_BUILD_OUTCOME" == success ]]; then result=0; fi
+            python3 verification/full_source_build_report.py \
+              --inventory "$logdir/source-inventory.json" \
+              --log "$logdir/build.log" \
+              --exit-code "$result" \
+              --output "$logdir/source-build-outcomes.json"
+          fi
       - name: Check the four explicit round 4 production targets
         id: round4-targets
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
