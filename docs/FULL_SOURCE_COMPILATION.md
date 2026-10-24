@@ -107,3 +107,24 @@ runs. This permits up to one active core runner and one active VE runner per
 branch, using the unchanged standard hosted runner. A cancelled duplicate is not
 a successful verification; final acceptance requires successful exact-head
 results for both workflows.
+
+## Intended-name resolution correction
+
+`OriginalNodeArraysV1/Block04FullCheck.lean` originally used the unqualified
+`integerInitial` in `block04_first_delayed_read_is_prefix` without opening its
+namespace. Lean's `autoImplicit` therefore introduced an arbitrary implicit
+`integerInitial : OriginalNode`; the accidental elaborated claim asserted that
+the fixed initialized-prefix reader equalled any node and was false.
+
+The correction explicitly names the existing
+`ImbalancedChen.OriginalU2StoredNodeCertificateSourceOnly.integerInitial`, rather
+than changing frozen node values or weakening a generalized mathematical claim.
+This intent is established by the theorem's initialized-prefix comment and the
+imported `block04_first_delayed_is_prefix` lemma in `DelayedPageTransfer.lean`.
+The constant is the existing node `⟨0, 0, 2^112, 2^112⟩` from
+`Part4ActualThirdOriginalStoredNodeLocalChecker.lean`.
+
+This is an unintended-name-resolution repair, not merely a proof-body edit.
+An explicit full-type regression beside the theorem rejects an extra implicit
+node binder. Compilation of this correction and the final complete-source run
+must still be recorded; this explanation does not itself assert acceptance.
