@@ -119,10 +119,16 @@ held = os.environ.get('P0_COMPILER_SLOT_HELD')
 if held:
     require(held.isdigit(), 'invalid slot owner')
     owner = int(held)
-    # Fixed src/Leanc.lean spawns exactly one clang child and waits. LeanIR
-    # emits C internally. No other nested compiler chain is admitted.
-    require(os.environ.get('P0_COMPILER_SLOT_TOOL') == 'leanc' and name == 'clang'
-            and os.getppid() == owner, 'unreviewed nested compiler chain')
+    # Permit only this direct, read-only metadata child from a Lean owner.
+    cache_prefix_probe = (os.environ.get('P0_COMPILER_SLOT_TOOL') == 'lean'
+                          and name == 'lean' and sys.argv[1:] == ['--print-prefix']
+                          and os.getppid() == owner)
+    # Keep the existing fixed Leanc.lean -> clang child and its inherited lock.
+    # LeanIR emits C internally; no other nested compiler command is admitted.
+    leanc_clang_child = (os.environ.get('P0_COMPILER_SLOT_TOOL') == 'leanc'
+                         and name == 'clang' and os.getppid() == owner)
+    require(cache_prefix_probe or leanc_clang_child,
+            'unreviewed nested compiler chain')
     ancestor = os.getppid()
     while ancestor > 1 and ancestor != owner:
         ancestor = int(pathlib.Path('/proc', str(ancestor), 'stat').read_text().rsplit(')', 1)[1].split()[1])
