@@ -45,7 +45,7 @@ theorem integral_bounds :
       integral ≤ (55858409959907296 / 100000000000000000000 : ℝ) := by
   have hb := full_integral_bounds_of_checked approximation all_certificates_checked
   rw [lower_sum, upper_sum] at hb
-  norm_num only [Rat.cast_div, Rat.cast_ofNat] at hb
+  norm_num only [Rat.cast_div, Rat.cast_ofNat] at hb ⊢
   exact hb
 
 /-- The frozen manuscript's rounded-down adopted extra-gross coefficient. -/
