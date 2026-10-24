@@ -13,6 +13,9 @@ import ImbalancedChen.Certificates.OriginalNodeArraysV1.Block35Data
 import ImbalancedChen.Certificates.OriginalNodeArraysV1.Block36Data
 import ImbalancedChen.Certificates.OriginalNodeArraysV1.DelayedPageTransfer
 
+-- Serialize the independent kernel checks to stay within the compiler memory budget.
+set_option Elab.async false
+
 namespace ImbalancedChen.OriginalU2StoredNodeBlock36FullSourceOnly
 
 open ImbalancedChen.OriginalU2StoredNodeBlockDataSourceOnly

@@ -131,9 +131,15 @@ must still be recorded; this explanation does not itself assert acceptance.
 
 ## Certificate elaboration memory
 
-`Block20FullCheck` and `Block21FullCheck` exceeded the 6,144 MiB limit while
+`Block20FullCheck`, `Block21FullCheck`, `Block27FullCheck`, `Block29FullCheck`,
+and `Block31FullCheck` through `Block39FullCheck` exceeded the 6,144 MiB limit while
 independent theorem/kernel-check tasks overlapped inside one compiler process.
 Each file now sets `Elab.async false`, retaining every original theorem body,
 `decide +kernel` check, frozen literal, trust level and compiler memory/thread
-limit. Both files passed focused guarded compilation with this scheduling-only
+limit. All thirteen files passed focused guarded compilation with this scheduling-only
 change. Other modules and toolchain wrappers are unchanged by this repair.
+
+`Block31FullCheck` also referenced a nonexistent aggregation lemma. Its final
+proof now invokes the already imported `readCheckBlock_of_64_pages`, whose
+premise is the same 64 proved pages and conclusion the unchanged 4,096-row
+check. No page check, range or frozen certificate data changed.

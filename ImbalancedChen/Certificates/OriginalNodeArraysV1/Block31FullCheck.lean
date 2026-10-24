@@ -13,6 +13,9 @@ import ImbalancedChen.Certificates.OriginalNodeArraysV1.Block30Data
 import ImbalancedChen.Certificates.OriginalNodeArraysV1.Block31Data
 import ImbalancedChen.Certificates.OriginalNodeArraysV1.DelayedPageTransfer
 
+-- Serialize the independent kernel checks to stay within the compiler memory budget.
+set_option Elab.async false
+
 namespace ImbalancedChen.OriginalU2StoredNodeBlock31FullSourceOnly
 
 open ImbalancedChen.OriginalU2StoredNodeBlockDataSourceOnly
@@ -795,7 +798,7 @@ theorem block31_all_pages_checked (blocks : Nat → Block)
     · exact block31_page61_checked blocks h26 h27 h30 h31
     · exact block31_page62_checked blocks h26 h27 h30 h31
     · exact block31_page63_checked blocks h26 h27 h30 h31
-  exact readCheckBlock_of_64_page_count
-    (assembledRead blocks) 159745 64 hpages
+  exact readCheckBlock_of_64_pages
+    (assembledRead blocks) 159745 hpages
 
 end ImbalancedChen.OriginalU2StoredNodeBlock31FullSourceOnly
