@@ -45,7 +45,7 @@ theorem fibreCount_eq_zero_of_not_mem {n : ℕ} (hn : n ≠ 0)
     (A H D : ℝ) (t : ℕ × ℕ) (ht : t ∉ chenY6Tuples n A H D) :
     fibreCount n A H D t = 0 := by
   apply Finset.card_eq_zero.mpr
-  apply Finset.eq_empty_iff_forall_notMem.mpr
+  apply Finset.eq_empty_iff_forall_not_mem.mpr
   intro u hu
   obtain ⟨huFull, huLast⟩ := Finset.mem_filter.mp hu
   have hm := fullTuple_lastPair_mem hn huFull

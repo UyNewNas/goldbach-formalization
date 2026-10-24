@@ -86,7 +86,7 @@ below the first-prime wall.  This removes no fourth-prime interval. -/
 theorem firstPairs_eq_empty_of_third_le (N : ℕ) (A : ℝ) (q : ℕ × ℕ)
     (hq : (q.1 : ℝ) ≤ A) : firstPairs N A q = ∅ := by
   classical
-  apply Finset.eq_empty_iff_forall_notMem.mpr
+  apply Finset.eq_empty_iff_forall_not_mem.mpr
   intro p hp
   obtain ⟨_, hA, h12, h2q⟩ := Finset.mem_filter.mp hp
   have h1q : (p.1 : ℝ) < (q.1 : ℝ) := by

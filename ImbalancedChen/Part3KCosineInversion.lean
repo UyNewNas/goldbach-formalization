@@ -27,7 +27,7 @@ open ImbalancedChen.Part3.P3ActualKProfileLpSourceOnly
 
 /-- For an integrable even complex function, the origin is null and the
 negative half-axis is the reflected positive half-axis. -/
-private theorem integral_even_eq_two_Ioi (f : ℝ → ℂ) (hf : Integrable f)
+theorem integral_even_eq_two_Ioi (f : ℝ → ℂ) (hf : Integrable f)
     (heven : ∀ x, f (-x) = f x) :
     (∫ x : ℝ, f x) = (2 : ℂ) * ∫ x in Set.Ioi (0 : ℝ), f x := by
   have hl : IntegrableOn f (Set.Iic (0 : ℝ)) := hf.integrableOn

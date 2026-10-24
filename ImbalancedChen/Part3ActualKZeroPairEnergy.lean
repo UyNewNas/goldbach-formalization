@@ -245,6 +245,21 @@ theorem amplitudeK_full_height_regionKZero (P : PacketData ι) (a : ℝ → ℂ)
   rw [amplitudeK_full_height_pairKZero P a ha,
     qPairKZero_integral_eq_region P a ha]
 
+/-- Explicit positive semidefiniteness of the physical K₀(q+r) kernel on
+continuous compactly supported amplitudes. This is a consequence of the
+actual full-height norm square, not an assumed kernel condition. -/
+theorem regionKZero_positive_semidefinite (P : PacketData ι) (a : ℝ → ℂ)
+    (ha : PhysicalAmplitude P a) :
+    0 ≤ Complex.re
+      (∫ q in P.region, ∫ r in P.region,
+        a q * Complex.conj (a r) *
+          (imaginaryOrderK 0 (q + r) : ℂ)) := by
+  have h := amplitudeK_full_height_regionKZero P a ha
+  have hE : 0 ≤ ∫ t : ℝ, ‖amplitudeK P a t‖ ^ 2 :=
+    integral_nonneg (fun t => sq_nonneg _)
+  have hπ : 0 < Real.pi / 2 := by positivity
+  nlinarith
+
 theorem kTestTransform_full_height_pairKZero (P : PacketData ι) (k : D4 → ℤ) :
     (∫ t : ℝ, ‖kTestTransform P k t‖ ^ 2) =
       (Real.pi / 2) * Complex.re
@@ -264,6 +279,16 @@ theorem kTestTransform_full_height_regionKZero (P : PacketData ι) (k : D4 → �
     (actualKAmplitude_physical P k)
   simp_rw [← kTestTransform_eq_amplitudeK, actualKAmplitude_eq] at h
   exact h
+
+theorem actualKZero_positive_semidefinite (P : PacketData ι) (k : D4 → ℤ) :
+    0 ≤ Complex.re
+      (∫ q in P.region, ∫ r in P.region,
+        (spectralTest k P.Y0 q / (q : ℂ)) *
+          Complex.conj (spectralTest k P.Y0 r / (r : ℂ)) *
+            (imaginaryOrderK 0 (q + r) : ℂ)) := by
+  simpa only [actualKAmplitude_eq] using
+    regionKZero_positive_semidefinite P (actualKAmplitude P k)
+      (actualKAmplitude_physical P k)
 
 end
 end ImbalancedChen.Part3.ActualKZeroPairEnergy20261024z

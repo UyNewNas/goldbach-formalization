@@ -1,0 +1,11 @@
+# Third SOURCE_ONLY checkpoint — UNCOMPILED
+
+The fixed intake contains 622 installer-owned source files at ledger SHA-256 2217df9ceba72aa8766cf407b08c21e4b5bc29bb41cafc16b00a9799d99d527d. It also carries the fourteen specifically ROOT-authorized prior-unowned dependencies at their exact already-published batch2 bytes. All fourteen current SHA guards matched those published bytes. No current user source changes were adopted through this dependency carry-forward.
+
+The complete snapshot contains 636 source files and 42,119,432 bytes. Relative to parent29a0717b23cbab3a4bfb5f9066b815c181b3efa4, the source delta adds25 paths and modifies5 previously installer-owned paths. Individual old/new blob identities and SHA-256 values are listed in source-delta.json. Later installer writes are excluded. Only the latest fixed installation manifest is retained here; earlier batch manifests remain archived in earlier checkpoints.
+
+The selected hub has511 text import lines, at SHA-256 a070a70e9a52ca3ec404d158033cbae3623d1fe14f0bac6ea2ab90b543420319. The import text inventory finds506 baseline exactbyte dependencies and630 snapshot dependencies, with no absent-base project dependency. This is a source-byte and import-name inventory only. It establishes no compilation, proof audit, clean-checkout compilability, or whole-closure validation. All sources retain zero proof credit.
+
+The fourteen prior dependencies retain their prior-unowned / NOT_ROOT_ACCEPTED provenance from batch2. Historical strict Part3 localcompile receipts reported by ROOT do not establish fullALL audit completion or ROOT acceptance. The original OmegaCore and monolithic Buchstab bytes remain archived as previously published; this archive does not assert that every archived module can be jointly imported.
+
+No Lean/lake, checker, numerical replay, local audit, or CI launch occurred. The commit is UNCOMPILED and includes [skip ci]. ROOT266 /8851 serialized declarations (8832 distinct names) and main OPEN30% remain unchanged. Root aggregate imports, accepted source files, unrelated tracked user changes, and .gitattributes are outside the delta. Native Git uses a separate index, exact source blobs, and a compare-and-swap update of the existing branch. The original index bytes remain unchanged; expected staged differences against the advanced HEAD must not be reset automatically.
