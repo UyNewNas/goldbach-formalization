@@ -114,7 +114,7 @@ theorem scaledExact_negative_shift {q : ℤ} (hk : sourceShift q < 0) :
     rw [← pow_add, Nat.sub_add_cancel he]
   rw [negative_shift_toNat hk]
   simp only [scaledExact, exactReduced, Q, Nat.cast_pow, Nat.cast_ofNat,
-    Int.cast_mul, Int.cast_natCast, hp]
+    Int.cast_mul, Int.cast_natCast, Int.cast_pow, Int.cast_ofNat, hp]
   field_simp
   <;> ring
 
@@ -124,14 +124,14 @@ theorem sourceRL_eq_floor (q : ℤ) : sourceRL q = ⌊scaledExact q⌋ := by
   · rw [sourceRL, if_pos hk, scaledExact_positive_shift hk]
     exact (Rat.floor_intCast_div_natCast q _).symm
   · rw [sourceRL, if_neg hk, scaledExact_negative_shift (lt_of_not_ge hk)]
-    simp
+    exact (Int.floor_intCast _).symm
 
 theorem sourceRH_eq_ceil (q : ℤ) : sourceRH q = ⌈scaledExact q⌉ := by
   by_cases hk : 0 ≤ sourceShift q
   · rw [sourceRH, if_pos hk, scaledExact_positive_shift hk]
     exact (Rat.ceil_intCast_div_natCast q _).symm
   · rw [sourceRH, if_neg hk, scaledExact_negative_shift (lt_of_not_ge hk)]
-    simp
+    exact (Int.ceil_intCast _).symm
 
 theorem source_endpoint_width (q : ℤ) : sourceRH q ≤ sourceRL q + 1 := by
   rw [sourceRL_eq_floor, sourceRH_eq_ceil]
@@ -199,14 +199,21 @@ theorem atanh_parameter_bounds_real {q : ℤ} (hq : 0 < q) :
     0 ≤ (atanhParameter q : ℝ) ∧ (atanhParameter q : ℝ) ≤ 1 / 3 := by
   constructor
   · exact_mod_cast (atanh_parameter_bounds hq).1
-  · exact_mod_cast (atanh_parameter_bounds hq).2.le
+  · have h : (atanhParameter q : ℝ) ≤ ((1 / 3 : ℚ) : ℝ) :=
+      Rat.cast_le.mpr (atanh_parameter_bounds hq).2.le
+    norm_num at h ⊢
+    exact h
 
 /-- Literal q==Q shortcut in the frozen implementation. -/
 theorem sourceShift_Q : sourceShift (Q : ℤ) = 0 := by
-  simp [sourceShift, binaryExponent, Q, Nat.size_pow]
+  have hs : (Q : ℤ).toNat.size = 81 := by decide +kernel
+  simp only [sourceShift, binaryExponent, hs]
+  norm_num
 
 theorem exactReduced_Q : exactReduced (Q : ℤ) = 1 := by
-  simp [exactReduced, binaryExponent, Q, Nat.size_pow]
+  have hs : (Q : ℤ).toNat.size = 81 := by decide +kernel
+  simp only [exactReduced, binaryExponent, hs]
+  norm_num [Q]
 
 theorem log_point_shortcut : Real.log ((Q : ℝ) / Q) = 0 := by
   exact Real.log_div_self _
