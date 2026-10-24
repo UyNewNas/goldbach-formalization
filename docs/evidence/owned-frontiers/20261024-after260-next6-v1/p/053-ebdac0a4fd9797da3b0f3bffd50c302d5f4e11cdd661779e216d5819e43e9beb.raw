@@ -1,0 +1,33 @@
+"""SOURCEONLY wrapper captures raw child streams and actual subprocess return code."""
+import argparse, hashlib, json, subprocess, sys
+from pathlib import Path
+from datetime import datetime, timezone
+ROOT_FIXED=Path('/mnt/e/timot/Documents/FilesForGPT/Myath/goldbach-proof-continuation')
+REVIEWER_REL='.lake/proof-continuation/source-reviews/drafts/20261024u-after260-next6-independent-terminal-review-V2-SOURCEONLY.py.txt'
+REVIEWER_SHA256='5f8d0fab9da0dd8b7ed57752b4ec5f7766597f8ca994b58add1db6bcffef9f58'
+STDOUT_REL='.lake/proof-continuation/source-reviews/20261024u-after260-next6-independent-terminal-review-V2-actual.stdout.json'
+STDERR_REL='.lake/proof-continuation/source-reviews/20261024u-after260-next6-independent-terminal-review-V2-actual.stderr.log'
+RESULT_REL='.lake/proof-continuation/source-reviews/20261024u-after260-next6-independent-terminal-review-V2-invocation.json'
+def digest(data): return hashlib.sha256(data).hexdigest()
+def write_new(root,rel,data):
+ p=(root/rel).resolve(strict=False)
+ if not p.is_relative_to(root) or p.exists(): raise ValueError('output escaped fixed root or already exists')
+ p.parent.mkdir(parents=True,exist_ok=True)
+ with p.open('xb') as f: f.write(data)
+ return p
+def main():
+ ap=argparse.ArgumentParser(description=__doc__); ap.add_argument('--root',required=True); ap.add_argument('reviewer_args',nargs=argparse.REMAINDER); a=ap.parse_args()
+ root=Path(a.root).resolve(strict=True)
+ if root!=ROOT_FIXED.resolve(strict=True): raise ValueError('fixed proof-continuation repository required')
+ reviewer=(root/REVIEWER_REL).resolve(strict=True); data=reviewer.read_bytes()
+ if digest(data)!=REVIEWER_SHA256: raise ValueError('reviewer source SHA mismatch')
+ forwarded=list(a.reviewer_args)
+ if forwarded and forwarded[0]=='--': forwarded=forwarded[1:]
+ command=[sys.executable,str(reviewer),*forwarded]; started=datetime.now(timezone.utc).isoformat()
+ child=subprocess.run(command,cwd=str(root),stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=False); ended=datetime.now(timezone.utc).isoformat()
+ write_new(root,STDOUT_REL,child.stdout); write_new(root,STDERR_REL,child.stderr)
+ report={'schema':'AFTER260_NEXT6_FINITE_REVIEWER_INVOCATION_V2','status':'CHILD_PROCESS_COMPLETED_REVIEW_RESULT_MUST_BE_READ_SEPARATELY','reviewer_source':{'path':REVIEWER_REL,'sha256':REVIEWER_SHA256},'argv':command,'cwd':str(root),'started_at_utc':started,'ended_at_utc':ended,'returncode':child.returncode,'stdout':{'path':STDOUT_REL,'sha256':digest(child.stdout),'bytes':len(child.stdout)},'stderr':{'path':STDERR_REL,'sha256':digest(child.stderr),'bytes':len(child.stderr)},'returncode_source':'subprocess.run returncode; not inferred from output streams'}
+ write_new(root,RESULT_REL,(json.dumps(report,ensure_ascii=False,sort_keys=True,indent=2)+'\n').encode()); return child.returncode
+if __name__=='__main__':
+ try: sys.exit(main())
+ except Exception as e: print('WRAPPER_ERROR: '+str(e),file=sys.stderr); sys.exit(2)
