@@ -1,5 +1,6 @@
 import ImbalancedChen.Part3CuspCylinderMeasure
 import ImbalancedChen.Part3PositiveMultiplicativeLog
+import Mathlib.Analysis.Complex.Trigonometric
 import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 import Mathlib.Tactic
 
@@ -187,7 +188,7 @@ theorem logarithmicInverse_constantMode (g : ℝ → ℝ) (r : ℝ) :
     logarithmicInverse (constantMode g) r = g r := by
   simp only [logarithmicInverse, constantMode, Real.log_exp,
     sqrt_exp_half]
-  rw [← Real.exp_add]
+  rw [← mul_assoc, ← Real.exp_add]
   have h : -r / 2 + r / 2 = 0 := by ring
   rw [h, Real.exp_zero, one_mul]
 
@@ -197,7 +198,7 @@ theorem constantMode_logarithmicInverse (F : ℝ → ℝ)
   have hs := sqrt_exp_half (Real.log y)
   rw [Real.exp_log hy] at hs
   simp only [constantMode, logarithmicInverse, Real.exp_log hy]
-  rw [hs, ← Real.exp_add]
+  rw [hs, ← mul_assoc, ← Real.exp_add]
   have h : Real.log y / 2 + -(Real.log y) / 2 = 0 := by ring
   rw [h, Real.exp_zero, one_mul]
 
@@ -313,6 +314,50 @@ def positiveComplexPower (ε t y : ℝ) : ℂ :=
     (ε : ℂ) * Complex.I *
       ((constantMode (sineLogProfile t) y : ℝ) : ℂ)
 
+/-- Identification with the literal complex exponential definition of
+`y^(1/2+i t)` for positive real `y`. -/
+theorem positiveComplexPower_plus_eq_exp (t : ℝ) {y : ℝ} (hy : 0 < y) :
+    positiveComplexPower 1 t y =
+      Complex.exp (((1 / 2 : ℂ) + Complex.I * (t : ℂ)) *
+        (Real.log y : ℂ)) := by
+  let r := Real.log y
+  have hs : Real.sqrt y = Real.exp (r / 2) := by
+    have h := sqrt_exp_half r
+    simpa [r, Real.exp_log hy] using h
+  have heuler := Complex.exp_ofReal_mul_I (t * r)
+  calc
+    positiveComplexPower 1 t y =
+        (Real.exp (r / 2) : ℂ) *
+          ((Real.cos (t * r) : ℂ) +
+            (Real.sin (t * r) : ℂ) * Complex.I) := by
+      simp only [positiveComplexPower, constantMode,
+        cosineLogProfile, sineLogProfile, r, hs]
+      push_cast
+      ring
+    _ = Complex.exp ((r / 2 : ℝ) : ℂ) *
+          Complex.exp (((t * r : ℝ) : ℂ) * Complex.I) := by
+      rw [Complex.ofReal_exp, heuler]
+    _ = Complex.exp (((1 / 2 : ℂ) + Complex.I * (t : ℂ)) *
+          (Real.log y : ℂ)) := by
+      rw [← Complex.exp_add]
+      congr 1
+      dsimp [r]
+      push_cast
+      ring
+
+theorem positiveComplexPower_minus_eq_exp (t : ℝ) {y : ℝ} (hy : 0 < y) :
+    positiveComplexPower (-1) t y =
+      Complex.exp (((1 / 2 : ℂ) - Complex.I * (t : ℂ)) *
+        (Real.log y : ℂ)) := by
+  have hminus : positiveComplexPower (-1) t y =
+      positiveComplexPower 1 (-t) y := by
+    simp [positiveComplexPower, constantMode,
+      cosineLogProfile, sineLogProfile, Real.cos_neg, Real.sin_neg]
+    ring
+  rw [hminus, positiveComplexPower_plus_eq_exp (-t) hy]
+  congr 1
+  ring
+
 def positiveComplexPowerFirst (ε t y : ℝ) : ℂ :=
   ((constantModeFirst (cosineLogProfile t) y : ℝ) : ℂ) +
     (ε : ℂ) * Complex.I *
@@ -378,6 +423,7 @@ theorem positiveComplexPower_eigen (ε t r : ℝ) :
     (sineLogProfile_deriv_differentiable t) hy] at hs
   have hcC := congrArg (fun z : ℝ => (z : ℂ)) hc
   have hsC := congrArg (fun z : ℝ => (z : ℂ)) hs
+  push_cast at hcC hsC
   rw [positiveComplexPower_second_deriv ε t hy]
   simp only [positiveComplexPower, positiveComplexPowerSecond]
   push_cast
@@ -405,21 +451,20 @@ def thresholdLogMode (y : ℝ) : ℝ := constantMode id y
 theorem thresholdMode_eigen (r : ℝ) :
     -((Real.exp r) ^ 2) * deriv (deriv thresholdMode) (Real.exp r) =
       (1 / 4 : ℝ) * thresholdMode (Real.exp r) := by
-  simpa only [thresholdMode, deriv_const, neg_zero, zero_add,
-    zero_mul, sub_zero] using
-    (constantMode_radial_conjugation (fun _ : ℝ => (1 : ℝ))
-      (by fun_prop) (by fun_prop) r)
+  have h := constantMode_radial_conjugation (fun _ : ℝ => (1 : ℝ))
+    (by fun_prop) (by fun_prop) r
+  simpa [thresholdMode, constantMode, mul_comm, mul_left_comm, mul_assoc] using h
 
 theorem thresholdLogMode_eigen (r : ℝ) :
     -((Real.exp r) ^ 2) * deriv (deriv thresholdLogMode) (Real.exp r) =
       (1 / 4 : ℝ) * thresholdLogMode (Real.exp r) := by
   have hsecond : deriv (deriv (id : ℝ → ℝ)) r = 0 := by
     simp
-  simpa only [thresholdLogMode, hsecond, neg_zero, zero_add,
-    zero_mul, sub_zero] using
-    (constantMode_radial_conjugation (id : ℝ → ℝ)
-      (by fun_prop) (by simpa using (differentiable_const :
-        Differentiable ℝ (fun _ : ℝ => (1 : ℝ)))) r)
+  have h := constantMode_radial_conjugation (id : ℝ → ℝ)
+    (by fun_prop) (by simpa using (differentiable_const :
+      Differentiable ℝ (fun _ : ℝ => (1 : ℝ)))) r
+  simpa [thresholdLogMode, constantMode, hsecond,
+    mul_comm, mul_left_comm, mul_assoc] using h
 
 theorem thresholdLogMode_not_proportional :
     ¬∃ c : ℝ, ∀ y : ℝ, thresholdLogMode y = c * thresholdMode y := by
@@ -428,9 +473,9 @@ theorem thresholdLogMode_not_proportional :
   have hc0 : c = 0 := by
     simp [thresholdMode, thresholdLogMode, constantMode] at h1
     linarith
-  have he := hc (Real.exp 1)
-  simp [thresholdMode, thresholdLogMode, constantMode,
-    Real.log_exp, hc0] at he
+  have he : Real.sqrt (Real.exp 1) = 0 := by
+    simpa [thresholdMode, thresholdLogMode, constantMode,
+      Real.log_exp, hc0] using hc (Real.exp 1)
   have hpos : 0 < Real.sqrt (Real.exp 1) :=
     Real.sqrt_pos.2 (Real.exp_pos 1)
   exact hpos.ne' he

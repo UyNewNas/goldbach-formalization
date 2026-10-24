@@ -216,6 +216,25 @@ theorem kGram_eq_integral_energy {n : ℕ} (q : ℝ) (hq : 0 < q)
       simp_rw [hpoint]
       rw [integral_ofReal]
 
+/-- Integrability of the actual nonnegative Gram density. -/
+theorem realEnergy_integrable {n : ℕ} (q : ℝ) (hq : 0 < q)
+    (t : Fin n → ℝ) (c : Fin n → ℂ) :
+    Integrable (realEnergy q t c) := by
+  have hcomplex : Integrable (fun u : ℝ => (realEnergy q t c u : ℂ)) := by
+    have hterms (i : Fin n) :
+        Integrable (fun u : ℝ => ∑ j : Fin n,
+          star (c i) * c j *
+            (halfProfile q u * phase (-(t i - t j)) u)) :=
+      integrable_finsetSum Finset.univ
+        (fun j _ => gram_term_integrable hq t c i j)
+    have hsum : Integrable (fun u : ℝ => ∑ i : Fin n, ∑ j : Fin n,
+        star (c i) * c j *
+          (halfProfile q u * phase (-(t i - t j)) u)) :=
+      integrable_finsetSum Finset.univ (fun i _ => hterms i)
+    exact hsum.congr (Filter.Eventually.of_forall
+      (fun u => gram_integrand_eq_energy q t c u))
+  simpa only [Complex.ofReal_re] using hcomplex.re
+
 /-- The Gram form is real and nonnegative for every finite frequency list,
 including repeated frequencies and zero coefficients. -/
 theorem imaginaryOrderK_positive_definite {n : ℕ} (q : ℝ) (hq : 0 < q)

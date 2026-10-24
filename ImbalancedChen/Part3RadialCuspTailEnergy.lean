@@ -191,7 +191,7 @@ theorem radial_tail_integrable_and_bound {n : ℤ} {w Y : ℝ}
     · exact div_nonneg (sq_nonneg _) (hY.trans hy).le
   have htail : IntegrableOn (radialHyperbolicEnergyDensity n w t) (Ioi Y) := by
     exact ((hmajor.const_mul (16 / (c ^ 2 * Y ^ 3))).mono'
-      hcont.aestronglyMeasurable
+      (hcont.aestronglyMeasurable measurableSet_Ioi)
       (by
         filter_upwards [ae_restrict_mem measurableSet_Ioi] with y hy
         exact hpoint y hy))

@@ -1,5 +1,8 @@
 import ImbalancedChen.Part3CanonicalTensorHyperbolicLaplacianForm
 import ImbalancedChen.Part3CompactCrossGreenIdentity
+import Mathlib.Analysis.Calculus.Deriv.Add
+import Mathlib.Analysis.Calculus.Deriv.Mul
+import Mathlib.LinearAlgebra.Span.Basic
 
 /-!
 SOURCE ONLY / UNCOMPILED, 2026-10-24.
@@ -686,6 +689,231 @@ theorem canonical_weakMaass_finite_tensor_span_nonneg {ι : Type*}
       star (finiteCoreFunction s T z) * finiteCoreLaplacian s T z).re := by
   rw [canonical_weakMaass_on_finite_tensor_span]
   exact finiteCoreEnergy_nonneg s T
+
+/-!
+## Representation independence
+
+The preceding finite sum could a priori be a formula attached only to a
+chosen decomposition. The next lemmas identify its Laplacian with the
+two coordinate second derivatives of the sum function itself. Hence
+equal finite tensor functions have equal Laplacians. Positive vertical
+support allows equality on the upper half-plane to extend to the whole
+real coordinate plane, where ordinary `deriv` congruence applies.
+-/
+
+def finiteChartFunction {ι : Type*} (s : Finset ι)
+    (T : ι → CompactTensor) (p : ℝ × ℝ) : ℂ :=
+  ∑ i ∈ s, (T i).horizontal p.1 * (T i).vertical p.2
+
+/-- The negative Maass Laplacian as an operation on a chart function,
+defined from its actual coordinate derivatives. -/
+def chartMaass (F : ℝ × ℝ → ℂ) (p : ℝ × ℝ) : ℂ :=
+  -((p.2 : ℂ) ^ 2 *
+    (deriv (deriv (fun x : ℝ => F (x, p.2))) p.1 +
+      deriv (deriv (fun y : ℝ => F (p.1, y))) p.2))
+
+private theorem finiteChart_second_x {ι : Type*}
+    (s : Finset ι) (T : ι → CompactTensor) (x y : ℝ) :
+    deriv (deriv (fun t : ℝ => finiteChartFunction s T (t, y))) x =
+      ∑ i ∈ s, deriv (deriv (T i).horizontal) x * (T i).vertical y := by
+  have hfirst (t : ℝ) :
+      deriv (fun r : ℝ => finiteChartFunction s T (r, y)) t =
+        ∑ i ∈ s, deriv (T i).horizontal t * (T i).vertical y := by
+    change deriv (fun r : ℝ =>
+      ∑ i ∈ s, (T i).horizontal r * (T i).vertical y) t = _
+    rw [deriv_fun_sum (fun i _ =>
+      ((T i).horizontal_smooth.differentiable (by norm_num) t).mul_const _)]
+    simp only [deriv_mul_const_field]
+  have hfirst_fun :
+      deriv (fun r : ℝ => finiteChartFunction s T (r, y)) =
+        (fun t : ℝ =>
+          ∑ i ∈ s, deriv (T i).horizontal t * (T i).vertical y) :=
+    funext hfirst
+  rw [hfirst_fun]
+  rw [deriv_fun_sum (fun i _ =>
+    (((T i).horizontal_smooth.differentiable_deriv_two) x).mul_const _)]
+  simp only [deriv_mul_const_field]
+
+private theorem finiteChart_second_y {ι : Type*}
+    (s : Finset ι) (T : ι → CompactTensor) (x y : ℝ) :
+    deriv (deriv (fun t : ℝ => finiteChartFunction s T (x, t))) y =
+      ∑ i ∈ s, (T i).horizontal x * deriv (deriv (T i).vertical) y := by
+  have hfirst (t : ℝ) :
+      deriv (fun r : ℝ => finiteChartFunction s T (x, r)) t =
+        ∑ i ∈ s, (T i).horizontal x * deriv (T i).vertical t := by
+    change deriv (fun r : ℝ =>
+      ∑ i ∈ s, (T i).horizontal x * (T i).vertical r) t = _
+    rw [deriv_fun_sum (fun i _ =>
+      ((T i).vertical_smooth.differentiable (by norm_num) t).const_mul _)]
+    simp only [deriv_const_mul_field]
+  have hfirst_fun :
+      deriv (fun r : ℝ => finiteChartFunction s T (x, r)) =
+        (fun t : ℝ =>
+          ∑ i ∈ s, (T i).horizontal x * deriv (T i).vertical t) :=
+    funext hfirst
+  rw [hfirst_fun]
+  rw [deriv_fun_sum (fun i _ =>
+    (((T i).vertical_smooth.differentiable_deriv_two) y).const_mul _)]
+  simp only [deriv_const_mul_field]
+
+/-- The representation formula agrees pointwise with the function-level
+coordinate Maass operator. -/
+theorem chartMaass_finiteChartFunction {ι : Type*}
+    (s : Finset ι) (T : ι → CompactTensor) (p : ℝ × ℝ) :
+    chartMaass (finiteChartFunction s T) p =
+      ∑ i ∈ s, tensorHyperbolicLaplacian
+        (T i).horizontal (T i).vertical p := by
+  rw [chartMaass, finiteChart_second_x, finiteChart_second_y]
+  simp only [tensorHyperbolicLaplacian]
+  rw [← Finset.sum_add_distrib]
+  simp only [Finset.mul_sum, Finset.sum_neg_distrib]
+
+/-- Each finite upper-half-plane function is the restriction of its
+coordinate-chart sum. -/
+theorem finiteCoreFunction_eq_chart {ι : Type*}
+    (s : Finset ι) (T : ι → CompactTensor) (z : UpperHalfPlane) :
+    finiteCoreFunction s T z =
+      finiteChartFunction s T
+        (Complex.measurableEquivRealProd (z : ℂ)) := by
+  rfl
+
+theorem finiteCoreLaplacian_eq_chart {ι : Type*}
+    (s : Finset ι) (T : ι → CompactTensor) (z : UpperHalfPlane) :
+    finiteCoreLaplacian s T z =
+      chartMaass (finiteChartFunction s T)
+        (Complex.measurableEquivRealProd (z : ℂ)) := by
+  rw [chartMaass_finiteChartFunction]
+  rfl
+
+/-- Equality of two finite sums on the upper half-plane extends to the
+full real coordinate chart because each vertical factor vanishes at
+nonpositive y. -/
+theorem finiteChartFunction_eq_of_finiteCoreFunction_eq
+    {ι κ : Type*} (s : Finset ι) (T : ι → CompactTensor)
+    (t : Finset κ) (U : κ → CompactTensor)
+    (h : finiteCoreFunction s T = finiteCoreFunction t U) :
+    finiteChartFunction s T = finiteChartFunction t U := by
+  funext p
+  by_cases hy : 0 < p.2
+  · let z : UpperHalfPlane := ⟨⟨p.1, p.2⟩, hy⟩
+    have hz : Complex.measurableEquivRealProd (z : ℂ) = p := by
+      simp [z, Complex.measurableEquivRealProd_apply]
+    have hp := congrFun h z
+    simpa only [finiteCoreFunction_eq_chart, hz] using hp
+  · have hzero (V : CompactTensor) : V.vertical p.2 = 0 := by
+      apply image_eq_zero_of_notMem_tsupport
+      intro hm
+      exact hy (V.vertical_positive hm)
+    have hzT (i : ι) : (T i).vertical p.2 = 0 := hzero (T i)
+    have hzU (j : κ) : (U j).vertical p.2 = 0 := hzero (U j)
+    simp [finiteChartFunction, hzT, hzU]
+
+/-- The Laplacian of a finite tensor function depends only on the
+function, not on a particular finite tensor decomposition. -/
+theorem finiteCoreLaplacian_representation_independent
+    {ι κ : Type*} (s : Finset ι) (T : ι → CompactTensor)
+    (t : Finset κ) (U : κ → CompactTensor)
+    (h : finiteCoreFunction s T = finiteCoreFunction t U) :
+    finiteCoreLaplacian s T = finiteCoreLaplacian t U := by
+  have hchart := finiteChartFunction_eq_of_finiteCoreFunction_eq s T t U h
+  funext z
+  simp only [finiteCoreLaplacian_eq_chart, hchart]
+
+/-- Canonical zero extension of any upper-half-plane function to real
+coordinates. This makes the operator below a function-level construction
+independent of tensor representations. -/
+def extendUpper (F : UpperHalfPlane → ℂ) (p : ℝ × ℝ) : ℂ :=
+  if hp : 0 < p.2 then F ⟨⟨p.1, p.2⟩, hp⟩ else 0
+
+theorem extendUpper_finiteCoreFunction {ι : Type*}
+    (s : Finset ι) (T : ι → CompactTensor) :
+    extendUpper (finiteCoreFunction s T) = finiteChartFunction s T := by
+  funext p
+  by_cases hp : 0 < p.2
+  · let z : UpperHalfPlane := ⟨⟨p.1, p.2⟩, hp⟩
+    have hz : Complex.measurableEquivRealProd (z : ℂ) = p := by
+      simp [z, Complex.measurableEquivRealProd_apply]
+    simp only [extendUpper, dif_pos hp]
+    change finiteCoreFunction s T z = finiteChartFunction s T p
+    rw [finiteCoreFunction_eq_chart, hz]
+  · have hzero (V : CompactTensor) : V.vertical p.2 = 0 := by
+      apply image_eq_zero_of_notMem_tsupport
+      intro hm
+      exact hp (V.vertical_positive hm)
+    have hzT (i : ι) : (T i).vertical p.2 = 0 := hzero (T i)
+    simp [extendUpper, hp, finiteChartFunction, hzT]
+
+/-- Function-level Maass operator, obtained from the actual two
+coordinate second derivatives of the canonical zero extension. -/
+def upperMaass (F : UpperHalfPlane → ℂ) (z : UpperHalfPlane) : ℂ :=
+  chartMaass (extendUpper F)
+    (Complex.measurableEquivRealProd (z : ℂ))
+
+theorem upperMaass_finiteCoreFunction {ι : Type*}
+    (s : Finset ι) (T : ι → CompactTensor) :
+    upperMaass (finiteCoreFunction s T) = finiteCoreLaplacian s T := by
+  funext z
+  rw [upperMaass, extendUpper_finiteCoreFunction]
+  exact (finiteCoreLaplacian_eq_chart s T z).symm
+
+/-- An actual subspace of upper-half-plane functions, generated by
+smooth compactly supported pure tensors. Membership is a property of
+the function, independent of any chosen finite presentation. -/
+def finiteTensorCore : Submodule ℂ (UpperHalfPlane → ℂ) :=
+  Submodule.span ℂ
+    (Set.range (fun T : CompactTensor =>
+      tensorFunctionH T.horizontal T.vertical))
+
+theorem finiteCoreFunction_mem_core {ι : Type*}
+    (s : Finset ι) (T : ι → CompactTensor) :
+    finiteCoreFunction s T ∈ finiteTensorCore := by
+  have hsum :
+      (∑ i ∈ s,
+        (fun z : UpperHalfPlane =>
+          tensorFunctionH (T i).horizontal (T i).vertical z)) ∈
+        finiteTensorCore := by
+    apply finiteTensorCore.sum_mem
+    intro i _
+    exact Submodule.subset_span ⟨T i, rfl⟩
+  have hfun : finiteCoreFunction s T =
+      ∑ i ∈ s,
+        (fun z : UpperHalfPlane =>
+          tensorFunctionH (T i).horizontal (T i).vertical z) := by
+    funext z
+    simp only [finiteCoreFunction, Finset.sum_apply]
+  rw [hfun]
+  exact hsum
+
+/-- The operator is defined on the subspace as a function of its
+underlying element. No decomposition is selected. -/
+def coreMaass (F : finiteTensorCore) : UpperHalfPlane → ℂ :=
+  upperMaass (F : UpperHalfPlane → ℂ)
+
+def coreWeakPairing (F G : finiteTensorCore) : ℂ :=
+  ∫ z : UpperHalfPlane, star (F z) * coreMaass G z
+
+theorem coreMaass_finiteCoreFunction {ι : Type*}
+    (s : Finset ι) (T : ι → CompactTensor) :
+    coreMaass ⟨finiteCoreFunction s T, finiteCoreFunction_mem_core s T⟩ =
+      finiteCoreLaplacian s T :=
+  upperMaass_finiteCoreFunction s T
+
+/-- The intrinsic weak pairing on the function subspace agrees with
+the finite double-sum form for each presentation. Combined with the
+representation-independence theorem, this is a well-defined weak form
+on the quotient of finite tensor presentations by function equality. -/
+theorem coreWeakPairing_finiteCoreFunctions
+    {ι κ : Type*} (s : Finset ι) (T : ι → CompactTensor)
+    (t : Finset κ) (U : κ → CompactTensor) :
+    coreWeakPairing
+      ⟨finiteCoreFunction s T, finiteCoreFunction_mem_core s T⟩
+      ⟨finiteCoreFunction t U, finiteCoreFunction_mem_core t U⟩ =
+        finiteCoreEnergy s T t U := by
+  change (∫ z : UpperHalfPlane,
+      star (finiteCoreFunction s T z) *
+        upperMaass (finiteCoreFunction t U) z) = _
+  rw [upperMaass_finiteCoreFunction]
+  exact canonical_weakMaass_on_finite_tensor_span s T t U
 
 end
 
