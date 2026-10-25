@@ -7,7 +7,7 @@ import Mathlib.Analysis.Calculus.MeanValue
 /-!
 # All fixed orders along real lines in the actual physical smooth profile
 
-SOURCE ONLY / YELLOW / UNCOMPILED (2026-10-24).
+SOURCE ONLY / YELLOW / UNCOMPILED (2026-10-25).
 
 The project imports are future normal imports of companion drafts. The
 physical wall dictionary and its operator-norm bound are reused from the
@@ -26,7 +26,7 @@ namespace ImbalancedChen.P4B
 
 noncomputable section
 
-open scoped BigOperators
+open scoped BigOperators ContDiff
 
 /-- A finite derivative envelope for the genuine scalar step, with the
 constant chosen before width. Each j-th order retains its exact width^-j. -/
@@ -244,10 +244,10 @@ theorem exists_smoothPhysicalProfile_Lipschitz_budget :
   intro b width hwidth N hN T x y
   have hcont : ContDiff ℝ 1 (smoothPhysicalProfile b N T width) :=
     contDiff_smoothPhysicalProfile b N T width
-  have h := (convex_univ : Convex ℝ (Set.univ : Set (Fin 2 → ℝ))).norm_image_sub_le_of_norm_deriv_le
+  have h := (convex_univ : Convex ℝ (Set.univ : Set (Fin 2 → ℝ))).norm_image_sub_le_of_norm_fderiv_le
     (fun z _hz => hcont.differentiable_one z)
     (fun z _hz => hderiv b width hwidth N hN T z)
-    (Set.mem_univ x) (Set.mem_univ y)
+    (Set.mem_univ y) (Set.mem_univ x)
   simpa only [Real.norm_eq_abs] using h
 
 end

@@ -74,6 +74,9 @@ theorem p5U7TriangularInteriorPairs_tuple_mem_iff {N : ℕ} (hN : 2 ≤ N)
       p ∈ (actualPrimeBoxTuples N (fun _ : Fin 2 => (59 / 250 : ℝ))
         (fun _ => (1 / 2 : ℝ))).filter
           (fun p => actualPrimeTupleLog N p ∈ p5U7TriangularInterior eta) := by
+  have hvec : ![p 0, p 1] = p := by
+    funext i
+    fin_cases i <;> rfl
   have hNr : (1 : ℝ) < N := by exact_mod_cast (show 1 < N by omega)
   have hNp : (0 : ℝ) < N := zero_lt_one.trans_le hNr.le
   have hpow : (N : ℝ) ^ (1 / 2 : ℝ) < N := by
@@ -94,7 +97,7 @@ theorem p5U7TriangularInteriorPairs_tuple_mem_iff {N : ℕ} (hN : 2 ≤ N)
         _ = _ := Real.sqrt_eq_rpow _
     have hupper0 : (p 0 : ℝ) < (N : ℝ) ^ (1 / 2 : ℝ) :=
       (by exact_mod_cast horder : (p 0 : ℝ) < p 1).trans hupper1
-    refine Finset.mem_filter.mpr ⟨mem_actualPrimeBoxTuples_iff.mpr ?_, hregion⟩
+    refine Finset.mem_filter.mpr ⟨mem_actualPrimeBoxTuples_iff.mpr ?_, by simpa only [hvec] using hregion⟩
     intro i
     fin_cases i
     · exact ⟨hp0.2.1, hp0.2.1.coprime_iff_not_dvd.mp hp0.2.2, hlo, hupper0⟩
@@ -119,7 +122,7 @@ theorem p5U7TriangularInteriorPairs_tuple_mem_iff {N : ℕ} (hN : 2 ≤ N)
       exact_mod_cast (hi i).2.2.2.trans hpow
     exact Finset.mem_filter.mpr ⟨Finset.mem_filter.mpr
       ⟨Finset.mem_product.mpr ⟨hcarrier 0, hcarrier 1⟩,
-        (hi 0).2.2.1, horder, hcap⟩, hregion⟩
+        (hi 0).2.2.1, horder, hcap⟩, by simpa only [hvec] using hregion⟩
 
 /-- A marked-pair test. Every occurrence of a literal original pair is
 summed separately, including when a later rough quotient shares a product. -/

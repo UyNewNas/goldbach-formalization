@@ -99,7 +99,7 @@ theorem p5U7Triangular_ordered_square_eq_source_test (N : ℕ) (eta : ℝ) :
       intro t ht
       have hlt := (Finset.mem_filter.mp ht).2
       simp only [p5U7TriangularSymmetricCoefficient,
-        if_neg hlt.ne', if_pos hlt]
+        if_neg hlt.ne, if_pos hlt]
     _ = ∑ t ∈ p5U7TriangularInteriorPairs N eta,
         p5U7TriangularPairTest N t.1 t.2 := by
       rw [← Finset.sum_filter, hfilter]

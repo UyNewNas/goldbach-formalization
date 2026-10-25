@@ -106,7 +106,7 @@ private theorem p5U7DoubleTriangular_ordered_square_eq_labelled
       intro t ht
       have hlt := (Finset.mem_filter.mp ht).2
       simp only [p5U7DoubleTriangularSymmetricCoefficient,
-        if_neg hlt.ne', if_pos hlt]
+        if_neg hlt.ne, if_pos hlt]
     _ = ∑ t ∈ p5U7InteriorSelector N eta,
         p5U7DoubleTriangularPairTest N t.1 t.2 := by
       rw [← Finset.sum_filter, hfilter]
