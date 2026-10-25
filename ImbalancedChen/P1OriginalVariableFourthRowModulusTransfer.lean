@@ -132,7 +132,10 @@ theorem producerDescendantLevel_eq_rawQ3_outside (e chi : ℝ) (m : ℕ)
       (fun r => r.bufferedCandidate e) pre =
         frozenLevel e chi m omega N pre := by
   rw [fourthDescendantLevel, if_neg (by omega : ¬pre.length ≤ 4)]
-  exact producerFrozenLevel4_outside_rows e chi m omega N rows licensed pre hout
+  exact frozenLevel4_outside e chi m omega N rows (producerEligible licensed)
+    (fun r => r.bufferedCandidate e) pre (by
+      intro r hr he
+      exact hout r hr he.2)
 
 /-- On an outside retained leaf, the strict modulus bound transfers to the
 same original rawQ3 cap, with no replacement fifth gain. -/

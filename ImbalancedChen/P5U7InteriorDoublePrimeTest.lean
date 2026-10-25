@@ -64,7 +64,7 @@ theorem p5U7Interior_subset_original {eta : ℝ} (heta : 0 ≤ eta)
   obtain ⟨horder, hcap⟩ := (p5U7InteriorRegion_iff eta x).mp hint
   have hpos : 0 < x 1 := by linarith [h1.1]
   refine ⟨h0.1, horder.le, ?_⟩
-  have hstrict : x 0 + 2 * x 1 < 1 := by linarith [mul_nonneg heta.le hpos.le]
+  have hstrict : x 0 + 2 * x 1 < 1 := by linarith [mul_nonneg heta hpos.le]
   linarith
 
 /-- The interior test is attached to the actual original ordered labels. -/
