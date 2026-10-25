@@ -1,0 +1,3 @@
+SOURCE_ONLY / UNCOMPILED / NOT_ROOT_ACCEPTED
+
+Fixed publisher-batch34 only. Existing completed pre-boundary changes archived without repairs. Known defective old P3 CuspConstantModeLogOperator revision excluded; published base bytes retained. New-source Eisenstein lineage and P1 producer binding have reported API defects delegated to dots. No whole-closure or compilability claim. Import inventory captures direct import text and published-byte differences as HOLD. No compile, checker, audit, numerical replay, or CI requested. Zero proof credit; ROOT266/8851 and original theorem OPEN remain unchanged.
