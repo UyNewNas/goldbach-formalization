@@ -1,0 +1,203 @@
+import ImbalancedChen.Part3NormalizedCuspCompletedWeakH1
+import ImbalancedChen.Part3PeriodicCompactPartitionUnfolding
+import ImbalancedChen.Part3SmoothZeroHeightSeedProfiles
+import ImbalancedChen.Part3PlanarFrechetCompactGreen
+import ImbalancedChen.Part3ActualPoincareSpectralCoefficient
+
+/-!
+SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+The ORIGINAL infinity zero Fourier mean of every actual completed-form
+vector has a genuine raw-height weak derivative. Its derivative is the
+compact integer-partition average of the SAME coherent ordinary raw dy
+field supplied by the actual completed form. No Riesz regularity,
+pointwise derivative, gradient periodicity, or hMeanDerivative is assumed.
+The fixed compact partition unfolds the periodic VALUE to its literal
+one-period mean; it is never used to infer a boundary trace.
+-/
+namespace ImbalancedChen.Part3.ActualCompletedHorocycleMeanDerivative20261026b
+noncomputable section
+open Set MeasureTheory Filter
+open scoped Topology UpperHalfPlane
+open Gamma0ActualEnergyCompletion20261025a Gamma0QuotientCellPushforward20261025a
+open NormalizedCuspCompletedWeakH120261026b ActualPullbackLocalH1Transfer20261026b
+open SmoothIntegerUnitPartition20261026b SmoothZeroHeightSeedProfiles20261026b
+open PeriodicCompactPartitionUnfolding20261026b
+open ProductConvolutionSecondDerivatives20261026a PlanarFrechetCompactGreen20261026b
+open CompactC2ProductMollifier20261026a
+open ActualPoincareSpectralCoefficient20261026a GammaInfinityTranslationStrip20261025a
+open CanonicalTensorHyperbolicLaplacianForm20261024z MaassWeightedCoordinateL220261024zz
+open ActualInfinityCuspAnnihilator20261026b
+open Gamma0ActualWeakRieszResolvent20261025a
+
+def actualFormMean (N : ℕ) [NeZero N] (e : EnergyCompletion N) (y : ℝ) : ℂ :=
+  actualTestFourier N (physicalProjection N e) 0 y
+
+/-- The averaging is of the genuine ordinary dy field, before any
+possible y*d_y normalization. The partition is fixed independently of
+the vector, test and height band. -/
+def actualFormGradientMean (N : ℕ) [NeZero N] (e : EnergyCompletion N) (y : ℝ) : ℂ :=
+  ∫ x : ℝ, complexHorizontalPartition x * (completedCuspRawData N e).gy (x, y)
+
+def meanTestTensor (φ : ℝ → ℂ) (p : Plane) : ℂ :=
+  complexHorizontalPartition p.1 * φ p.2
+
+theorem meanTestTensor_smooth {φ : ℝ → ℂ} (hφ : ContDiff ℝ ∞ φ) :
+    ContDiff ℝ ∞ (meanTestTensor φ) :=
+  (complexHorizontalPartition_cinfty.comp contDiff_fst).mul (hφ.comp contDiff_snd)
+
+theorem meanTestTensor_support {φ : ℝ → ℂ} :
+    tsupport (meanTestTensor φ) ⊆ tsupport complexHorizontalPartition ×ˢ tsupport φ := by
+  apply closure_minimal _ ((isClosed_tsupport _).prod (isClosed_tsupport _))
+  intro p hp
+  have hn := mul_ne_zero_iff.mp hp
+  exact ⟨subset_tsupport _ hn.1, subset_tsupport _ hn.2⟩
+
+theorem meanTestTensor_compact {φ : ℝ → ℂ} (hc : HasCompactSupport φ) :
+    HasCompactSupport (meanTestTensor φ) :=
+  (complexHorizontalPartition_compact.prod hc).of_isClosed_subset isClosed_tsupport
+    meanTestTensor_support
+
+theorem meanTestTensor_positive {φ : ℝ → ℂ} (hs : tsupport φ ⊆ Ioi (0 : ℝ)) :
+    tsupport (meanTestTensor φ) ⊆ upperChart :=
+  fun p hp => hs (meanTestTensor_support hp).2
+
+theorem meanTestTensor_dy {φ : ℝ → ℂ} (hφ : ContDiff ℝ ∞ φ) :
+    directional ey (meanTestTensor φ) = meanTestTensor (deriv φ) := by
+  funext p
+  rw [show ey = yDirection from rfl, directional_y_eq_slice (meanTestTensor_smooth hφ)]
+  exact (((hφ.differentiable (by simp) p.2).hasDerivAt).const_mul
+    (complexHorizontalPartition p.1)).deriv
+
+private theorem compact_pair_integrable (H : Plane → ℂ)
+    (hloc : ∀ K : Set Plane, IsCompact K → K ⊆ upperChart →
+      MemLp H 2 ((volume : Measure Plane).restrict K))
+    (Ψ : Plane → ℂ) (hΨ : Continuous Ψ) (hc : HasCompactSupport Ψ)
+    (hs : tsupport Ψ ⊆ upperChart) : Integrable (fun p => star (Ψ p) * H p) := by
+  let K := tsupport Ψ
+  have hK : IsCompact K := hc
+  letI : IsFiniteMeasure ((volume : Measure Plane).restrict K) :=
+    ⟨by simpa only [Measure.restrict_apply_univ] using hK.measure_lt_top⟩
+  have hi : IntegrableOn H K := (hloc K hK hs).integrable (by norm_num)
+  have hp : IntegrableOn (fun p => star (Ψ p) * H p) K :=
+    IntegrableOn.continuousOn_mul hΨ.star.continuousOn hi hK
+  apply (integrableOn_iff_integrable_of_support_subset (s := K) ?_).mp hp
+  intro p hp
+  exact subset_tsupport Ψ (fun h => hp (by simp [h]))
+
+private theorem partition_star (x : ℝ) : star (complexHorizontalPartition x) =
+    complexHorizontalPartition x := by simp [complexHorizontalPartition]
+
+private theorem tensor_horizontal_integral (H : Plane → ℂ) (φ : ℝ → ℂ) (y : ℝ) :
+    (∫ x, star (meanTestTensor φ (x, y)) * H (x, y)) =
+      star (φ y) * ∫ x, complexHorizontalPartition x * H (x, y) := by
+  rw [← integral_const_mul]
+  apply integral_congr_ae
+  exact Eventually.of_forall (fun x => by
+    simp only [meanTestTensor, star_mul, partition_star]
+    ring)
+
+theorem actualPlanePullback_chart (N : ℕ) [NeZero N] (u : QuotientL2 N) :
+    actualPlanePullback N u = chartPullback (testLift N u) := by
+  funext p
+  by_cases hp : 0 < p.2 <;>
+    simp [actualPlanePullback, chartPullback, upperChart, testLift, hp]
+
+theorem actualPlanePullback_horizontal_periodic (N : ℕ) [NeZero N]
+    (u : QuotientL2 N) (y : ℝ) : Function.Periodic (fun x => actualPlanePullback N u (x,y)) 1 := by
+  intro x
+  by_cases hy : 0 < y
+  · let z : UpperHalfPlane := ⟨⟨x,y⟩,hy⟩
+    have heq : translate 1 z = (⟨⟨x+1,y⟩,hy⟩ : UpperHalfPlane) := by
+      apply UpperHalfPlane.ext
+      rw [translate_eq_vadd]
+      apply Complex.ext <;> simp [z, add_comm]
+    have ht := testLift_periodic N u 1 z
+    rw [heq] at ht
+    simpa [testLift, actualPlanePullback, hy, z] using ht
+  · simp [actualPlanePullback, hy]
+
+theorem actualFormMean_eq_interval (N : ℕ) [NeZero N] (e : EnergyCompletion N) (y : ℝ) :
+    actualFormMean N e y = ∫ x in (0 : ℝ)..1,
+      actualPlanePullback N (physicalProjection N e) (x,y) := by
+  rw [actualFormMean, actualTestFourier_eq_interval, actualPlanePullback_chart]
+  simp
+
+private theorem tensor_value_horizontal_integral (N : ℕ) [NeZero N]
+    (e : EnergyCompletion N) (φ : ℝ → ℂ) (y : ℝ)
+    (hi : Integrable (fun x => star (meanTestTensor φ (x,y)) *
+      actualPlanePullback N (physicalProjection N e) (x,y))) :
+    (∫ x, star (meanTestTensor φ (x,y)) *
+      actualPlanePullback N (physicalProjection N e) (x,y)) =
+      star (φ y) * actualFormMean N e y := by
+  let f : ℝ → ℂ := fun x => star (φ y) *
+    actualPlanePullback N (physicalProjection N e) (x,y)
+  have hp : Function.Periodic f 1 := by
+    intro x
+    simp only [f, actualPlanePullback_horizontal_periodic N (physicalProjection N e) y x]
+  have hif : Integrable (fun x => (horizontalUnitPartition x : ℂ) * f x) := by
+    convert hi using 1
+    funext x
+    simp only [meanTestTensor, star_mul, partition_star, f, complexHorizontalPartition]
+    ring
+  have hu := partition_unfold_periodic f hp hif
+  rw [actualFormMean_eq_interval, ← intervalIntegral.integral_const_mul]
+  convert hu using 1
+  apply integral_congr_ae
+  exact Eventually.of_forall (fun x => by
+    simp only [meanTestTensor, star_mul, partition_star, f, complexHorizontalPartition]
+    ring)
+
+/-- Actual first-height weak identity for EVERY completed form vector.
+Both scalar pairings are genuinely L1. This includes actual resolvent
+outputs through their original energy-completion lift. -/
+theorem actual_completed_mean_first_weak (N : ℕ) [NeZero N] (e : EnergyCompletion N)
+    (φ : ℝ → ℂ) (hφ : ContDiff ℝ ∞ φ) (hc : HasCompactSupport φ)
+    (hs : tsupport φ ⊆ Ioi (0 : ℝ)) :
+    Integrable (fun y => star (deriv φ y) * actualFormMean N e y) ∧
+    Integrable (fun y => star (φ y) * actualFormGradientMean N e y) ∧
+    (∫ y, star (deriv φ y) * actualFormMean N e y) =
+      -(∫ y, star (φ y) * actualFormGradientMean N e y) := by
+  let D := completedCuspRawData N e
+  have hφd := (contDiff_infty_iff_deriv.mp hφ).2
+  have hds : tsupport (deriv φ) ⊆ Ioi (0 : ℝ) := tsupport_deriv_subset.trans hs
+  have hiG := compact_pair_integrable D.gy
+    (fun K hK hKp => (D.local_memLp K hK hKp).2.2)
+    (meanTestTensor φ) (meanTestTensor_smooth hφ).continuous
+    (meanTestTensor_compact hc) (meanTestTensor_positive hs)
+  have hiM := compact_pair_integrable (actualPlanePullback N (physicalProjection N e))
+    (fun K hK hKp => (D.local_memLp K hK hKp).1)
+    (meanTestTensor (deriv φ)) (meanTestTensor_smooth hφd).continuous
+    (meanTestTensor_compact hc.deriv) (meanTestTensor_positive hds)
+  have heM : (fun y => ∫ x, star (meanTestTensor (deriv φ) (x,y)) *
+      actualPlanePullback N (physicalProjection N e) (x,y)) =ᵐ[volume]
+      fun y => star (deriv φ y) * actualFormMean N e y := by
+    filter_upwards [hiM.prod_right_ae] with y hy
+    exact tensor_value_horizontal_integral N e (deriv φ) y hy
+  have heG : (fun y => ∫ x, star (meanTestTensor φ (x,y)) * D.gy (x,y)) =
+      fun y => star (φ y) * actualFormGradientMean N e y := by
+    funext y
+    exact tensor_horizontal_integral D.gy φ y
+  have hscalarM := hiM.integral_prod_right.congr heM
+  have hscalarG := hiG.integral_prod_right
+  rw [heG] at hscalarG
+  have hw := (D.weak (meanTestTensor φ) (meanTestTensor_smooth hφ)
+    (meanTestTensor_compact hc) (meanTestTensor_positive hs)).2
+  rw [meanTestTensor_dy hφ, integral_prod_symm _ hiG, integral_prod_symm _ hiM,
+    heG, integral_congr_ae heM] at hw
+  exact ⟨hscalarM,hscalarG,by simpa only [neg_neg] using congrArg Neg.neg hw⟩
+
+/-- Literal original resolvent-output specialization. The raw weak
+gradient comes from the actual completed energy lift J* f; no regularity
+of a local adjoint representative is asserted or assumed. -/
+theorem actual_resolvent_mean_first_weak (N : ℕ) [NeZero N] (f : QuotientL2 N)
+    (φ : ℝ → ℂ) (hφ : ContDiff ℝ ∞ φ) (hc : HasCompactSupport φ)
+    (hs : tsupport φ ⊆ Ioi (0 : ℝ)) :
+    Integrable (fun y => star (deriv φ y) * actualTestFourier N (actualGammaResolvent N f) 0 y) ∧
+    Integrable (fun y => star (φ y) * actualFormGradientMean N (actualRieszLift N f) y) ∧
+    (∫ y, star (deriv φ y) * actualTestFourier N (actualGammaResolvent N f) 0 y) =
+      -(∫ y, star (φ y) * actualFormGradientMean N (actualRieszLift N f) y) := by
+  simpa only [actualFormMean, actualGammaResolvent_apply] using
+    actual_completed_mean_first_weak N (actualRieszLift N f) φ hφ hc hs
+
+end
+end ImbalancedChen.Part3.ActualCompletedHorocycleMeanDerivative20261026b

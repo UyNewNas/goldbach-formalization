@@ -1,0 +1,119 @@
+import ImbalancedChen.Part3NormalizedCuspCylinderL2
+import ImbalancedChen.Part3ActualQuotientInfinityCylinderFourier
+import ImbalancedChen.Part3AllNormalizedCuspAnnihilator
+
+/-!
+SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
+
+Every actual normalized cusp native cylinder has the ORIGINAL literal
+frame Fourier coefficients on one height-AE set, simultaneously for all
+integer modes. The actual all-frame incomplete-Eisenstein annihilator
+therefore gives genuinely mean-zero native high-cusp sections. The proof
+uses exact spatial transport, actual product Fubini, and the previously
+proved actual annihilator characterization, not spectral completeness.
+-/
+namespace ImbalancedChen.Part3.NormalizedCuspCylinderFourier20261026b
+
+noncomputable section
+open Set MeasureTheory Filter Matrix
+open scoped MatrixGroups UpperHalfPlane ENNReal
+open Gamma0QuotientCellPushforward20261025a
+open CuspCylinderMeasure20261024z
+open MaassWeightedCoordinateL220261024zz
+open CanonicalPlanarL2UnitarySourceOnly
+open ActualHighStripNativeCylinderMeasure20261026b
+open ActualHighStripCylinderL2Equivalence20261026b
+open ActualInfinityHighTailL2Pullback20261026b
+open ActualQuotientInfinityCylinderFourier20261026b
+open NormalizedCuspCompactQuotientLp20261026b
+open NormalizedCuspCompactFourierFubini20261026b
+open NormalizedCuspCylinderL220261026b
+open AllNormalizedCuspAnnihilator20261026b
+
+local instance : Fact (0 < (1 : ℝ)) := ⟨zero_lt_one⟩
+
+theorem normalized_circle_coefficient_eq_frameFourier (N : ℕ) (hN : 0 < N)
+    (g : SL(2, ℤ)) (F : Gamma0OrbitSpace N → ℂ) (m : ℤ) (y : PositiveHeight) :
+    AddCircle.fourierCoeff (fun x : UnitAddCircle =>
+      frameLift N hN g F (nativeCylinderPoint (x, y))) m =
+      frameFourier N hN g F m (y : ℝ) := by
+  let G : UnitAddCircle → ℂ := fun x =>
+    AddCircle.fourier (-m) x * frameLift N hN g F (nativeCylinderPoint (x, y))
+  change (∫ x : UnitAddCircle, G x ∂AddCircle.haarAddCircle) = _
+  rw [circleHaar_eq_volume]
+  calc
+    _ = ∫ x in Ioc (0 : ℝ) 1, G (x : UnitAddCircle) := by
+      simpa only [zero_add] using (AddCircle.integral_preimage (1 : ℝ) (0 : ℝ) G).symm
+    _ = ∫ x in Ico (0 : ℝ) 1, G (x : UnitAddCircle) := integral_Ico_eq_integral_Ioc.symm
+    _ = _ := by
+      rw [frameFourier]
+      apply integral_congr_ae
+      filter_upwards [ae_restrict_mem measurableSet_Ico] with x hx
+      have hp := chartPullback_at_upper (frameLift N hN g F) (rawHeightPoint x y)
+      change chartPullback (frameLift N hN g F) (x, (y : ℝ)) =
+        frameLift N hN g F (rawHeightPoint x y) at hp
+      simp only [G, nativeCylinderPoint_coe x hx y, hp]
+
+/-- One actual height-AE set works for all integer modes and includes
+derived L2 regularity of the actual native circle slices. -/
+theorem normalizedCuspCylinder_all_coefficients (N : ℕ) [NeZero N] (hN : 0 < N)
+    (g : SL(2, ℤ)) {Y : ℝ} (hY : 1 < Y) (f : QuotientL2 N) :
+    ∀ᵐ y ∂heightMeasure.restrict (closedHeightTail Y),
+      MemLp (fun x : UnitAddCircle => normalizedCuspCylinder N hN g hY f (x, y))
+        2 AddCircle.haarAddCircle ∧
+      ∀ m : ℤ, AddCircle.fourierCoeff
+          (fun x : UnitAddCircle => normalizedCuspCylinder N hN g hY f (x, y)) m =
+        frameFourier N hN g f m (y : ℝ) := by
+  let U := normalizedCuspCylinder N hN g hY f
+  have hsquare : Integrable (fun p : CuspCylinder => ‖U p‖ ^ 2)
+      (AddCircle.haarAddCircle.prod (heightMeasure.restrict (closedHeightTail Y))) := by
+    rw [← closedCylinderTail_measure_product]
+    exact (memLp_two_iff_integrable_sq_norm (Lp.aestronglyMeasurable U)).mp U.memLp
+  have hae := normalizedCuspCylinder_ae N hN g hY f
+  rw [closedCylinderTail_measure_product] at hae
+  have hswap : ∀ᵐ p : PositiveHeight × UnitAddCircle
+      ∂(heightMeasure.restrict (closedHeightTail Y)).prod AddCircle.haarAddCircle,
+      U (p.2, p.1) = frameLift N hN g f (nativeCylinderPoint (p.2, p.1)) :=
+    Measure.measurePreserving_swap.quasiMeasurePreserving.ae hae
+  have hsections := ae_ae_of_ae_prod hswap
+  filter_upwards [hsquare.prod_right_ae, hsections] with y hy hsec
+  refine ⟨(memLp_two_iff_integrable_sq_norm
+    ((Lp.stronglyMeasurable U).comp_measurable measurable_prodMk_right).aestronglyMeasurable).mpr hy,
+      ?_⟩
+  intro m
+  rw [congrFun (AddCircle.fourierCoeff_congr_ae hsec) m]
+  exact normalized_circle_coefficient_eq_frameFourier N hN g f m y
+
+private theorem verticalWeightedMeasure_absolutelyContinuous_volume :
+    verticalWeightedMeasure ≪ (volume : Measure ℝ) := by
+  change (((volume : Measure ℝ).restrict (Ioi 0)).withDensity
+    (fun y => (verticalWeight y : ℝ≥0∞))) ≪ (volume : Measure ℝ)
+  exact (withDensity_absolutelyContinuous _ _).trans
+    (Measure.absolutelyContinuous_of_le Measure.restrict_le_self)
+
+/-- The actual all-frame AE-zero criterion moves to the ACTUAL physical
+height measure by a proved measure change, not a new zero-mode premise. -/
+theorem allFrame_mean_zero_height_ae (N : ℕ) [NeZero N] (hN : 0 < N)
+    {f : QuotientL2 N} (hf : f ∈ allFrameCuspSubspace N hN) (g : SL(2, ℤ)) :
+    ∀ᵐ y ∂heightMeasure, frameFourier N hN g f 0 (y : ℝ) = 0 := by
+  have h := (actualL2_mem_allFrame_iff_allFrameAEZero N hN f).mp hf g
+  have hweighted := verticalWeightedMeasure_absolutelyContinuous_volume.ae h
+  rw [← ActualHighStripNativeCylinderMeasure20261026b.positiveHeight_map_coe_measure] at hweighted
+  have hpositive := (MeasurableEmbedding.subtype_coe measurableSet_Ioi).ae_map_iff.mp hweighted
+  filter_upwards [hpositive] with y hy
+  exact hy y.property
+
+/-- A genuine member of the actual all-cusp annihilator has literal
+zero circle mean in EVERY constructed normalized high-cusp cylinder. -/
+theorem normalizedCuspCylinder_mean_zero (N : ℕ) [NeZero N] (hN : 0 < N)
+    {f : QuotientL2 N} (hf : f ∈ allFrameCuspSubspace N hN) (g : SL(2, ℤ))
+    {Y : ℝ} (hY : 1 < Y) :
+    ∀ᵐ y ∂heightMeasure.restrict (closedHeightTail Y),
+      AddCircle.fourierCoeff
+        (fun x : UnitAddCircle => normalizedCuspCylinder N hN g hY f (x, y)) 0 = 0 := by
+  filter_upwards [normalizedCuspCylinder_all_coefficients N hN g hY f,
+    ae_restrict_of_ae (allFrame_mean_zero_height_ae N hN hf g)] with y hy hz
+  exact (hy.2 0).trans hz
+
+end
+end ImbalancedChen.Part3.NormalizedCuspCylinderFourier20261026b

@@ -1,0 +1,179 @@
+import ImbalancedChen.Part3Gamma0FiniteCosetGreenTrace
+import ImbalancedChen.Part3StandardModularCellGraph
+import Mathlib.Analysis.Calculus.Deriv.Shift
+
+/-!
+SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT, 2026-10-26.
+
+Literal standard modular-cell side cancellation for the actual finite
+Gamma0 Green trace. T maps the left vertical to the right with derivative
+one. S maps the true unit-circle graph point at x to the point at -x;
+its computed derivative maps the graph tangent to the negative tangent
+there. The trace's proved S/T relations therefore cancel the two vertical
+integrals and the entire curved lower-edge integral. No abstract polygon
+edge pairing, target side cancellation, or Stokes identity is an input.
+-/
+
+noncomputable section
+open Set Complex Filter Topology MeasureTheory
+open scoped UpperHalfPlane MatrixGroups
+open ImbalancedChen.Part3.Gamma0FiniteCosetGreenTrace20261026b
+open ImbalancedChen.Part3.SLRealGreenCurrent20261026b
+open ImbalancedChen.Part3.StandardModularCellGraph20261026b
+open ImbalancedChen.Part3.AllLevelContinuedMaass20261026a
+
+namespace ImbalancedChen.Part3.StandardCellGreenTraceSides20261026b
+
+def verticalPoint (x y : ℝ) : UpperHalfPlane := UpperHalfPlane.ofComplex (⟨x, y⟩ : ℂ)
+
+theorem verticalPoint_coe (x y : ℝ) (hy : 0 < y) :
+    ((verticalPoint x y : UpperHalfPlane) : ℂ) = (⟨x, y⟩ : ℂ) := by
+  rw [verticalPoint, UpperHalfPlane.ofComplex_apply_of_im_pos hy]
+  rfl
+
+theorem verticalPoint_hasDerivAt_y (x y : ℝ) (hy : 0 < y) :
+    HasDerivAt (fun t : ℝ => (verticalPoint x t : ℂ)) I y := by
+  have hreal : HasDerivAt (fun t : ℝ => (t : ℂ)) 1 y := Complex.ofRealCLM.hasDerivAt
+  have hline : HasDerivAt (fun t : ℝ => (x : ℂ) + (t : ℂ) * I) I y := by
+    convert (hreal.mul_const I).const_add (x : ℂ) using 1 <;> simp
+  have heq : (fun t : ℝ => (verticalPoint x t : ℂ)) =ᶠ[𝓝 y]
+      (fun t : ℝ => (x : ℂ) + (t : ℂ) * I) := by
+    filter_upwards [Ioi_mem_nhds hy] with t ht
+    rw [verticalPoint_coe x t ht]
+    ext <;> simp
+  exact hline.congr_of_eventuallyEq heq.symm
+
+theorem T_verticalPoint (y : ℝ) (hy : 0 < y) :
+    ModularGroup.T • verticalPoint (-(1 / 2 : ℝ)) y = verticalPoint (1 / 2) y := by
+  apply UpperHalfPlane.ext
+  rw [UpperHalfPlane.modular_T_smul]
+  simp only [UpperHalfPlane.coe_vadd, verticalPoint_coe _ _ hy]
+  ext <;> simp <;> ring
+
+def verticalTrace (N : ℕ) [NeZero N] (s u : ℂ) (x y : ℝ) : ℂ :=
+  actualCompletedGreenTrace N s u (verticalPoint x y) I
+
+theorem actual_vertical_trace_eq (N : ℕ) [NeZero N] (s u : ℂ)
+    (hs : s ∈ completedRegularDomain N) (hu : u ∈ completedRegularDomain N)
+    {y : ℝ} (hy : 0 < y) :
+    verticalTrace N s u (1 / 2) y = verticalTrace N s u (-(1 / 2)) y := by
+  have h := actualCompletedGreenTrace_T N s u hs hu (verticalPoint (-(1 / 2)) y) I
+  rw [T_verticalPoint y hy] at h
+  exact h
+
+/-- Right-up plus left-down is the actual positive cell orientation. -/
+theorem actual_standard_vertical_integrals_cancel (N : ℕ) [NeZero N] (s u : ℂ)
+    (hs : s ∈ completedRegularDomain N) (hu : u ∈ completedRegularDomain N)
+    (y₀ Y : ℝ) (hy₀ : 0 < y₀) (hY : y₀ ≤ Y) :
+    (∫ y in y₀..Y, verticalTrace N s u (1 / 2) y) +
+      (∫ y in Y..y₀, verticalTrace N s u (-(1 / 2)) y) = 0 := by
+  have heq : (∫ y in y₀..Y, verticalTrace N s u (1 / 2) y) =
+      ∫ y in y₀..Y, verticalTrace N s u (-(1 / 2)) y := by
+    apply intervalIntegral.integral_congr
+    intro y hy
+    rw [uIcc_of_le hY] at hy
+    exact actual_vertical_trace_eq N s u hs hu (hy₀.trans_le hy.1)
+  rw [heq, intervalIntegral.integral_symm]
+  exact add_neg_cancel _
+
+theorem modularBottom_neg (x : ℝ) : modularBottom (-x) = modularBottom x := by
+  simp [modularBottom, neg_sq]
+
+def bottomPoint (x : ℝ) : UpperHalfPlane := verticalPoint x (modularBottom x)
+
+def bottomVelocity (x : ℝ) : ℂ := 1 + (bottomSlope x : ℂ) * I
+
+theorem bottomPoint_coe {x : ℝ} (hx : x ∈ Ioo (-1 : ℝ) 1) :
+    ((bottomPoint x : UpperHalfPlane) : ℂ) = (⟨x, modularBottom x⟩ : ℂ) :=
+  verticalPoint_coe _ _ (modularBottom_pos hx)
+
+theorem bottomPoint_hasDerivAt {x : ℝ} (hx : x ∈ Ioo (-1 : ℝ) 1) :
+    HasDerivAt (fun t : ℝ => (bottomPoint t : ℂ)) (bottomVelocity x) x := by
+  have hreal : HasDerivAt (fun t : ℝ => (t : ℂ)) 1 x := Complex.ofRealCLM.hasDerivAt
+  have hbottom : HasDerivAt (fun t : ℝ => (modularBottom t : ℂ)) (bottomSlope x : ℂ) x :=
+    Complex.ofRealCLM.hasFDerivAt.comp_hasDerivAt x (modularBottom_hasDerivAt hx)
+  have hcurve := hreal.add (hbottom.mul_const I)
+  have heq : (fun t : ℝ => (bottomPoint t : ℂ)) =ᶠ[𝓝 x]
+      (fun t : ℝ => (t : ℂ) + (modularBottom t : ℂ) * I) := by
+    filter_upwards [isOpen_Ioo.mem_nhds hx] with t ht
+    rw [bottomPoint_coe ht]
+    ext <;> simp
+  exact hcurve.congr_of_eventuallyEq heq.symm
+
+theorem bottomPoint_normSq {x : ℝ} (hx : x ∈ Ioo (-1 : ℝ) 1) :
+    Complex.normSq (bottomPoint x : ℂ) = 1 := by
+  rw [bottomPoint_coe hx]
+  simpa only [Complex.normSq_apply, pow_two] using modularBottom_unit_circle hx
+
+/-- Actual S identifies the true circular lower graph with its reflected
+parameter point. This is not an abstract side-pairing hypothesis. -/
+theorem S_bottomPoint {x : ℝ} (hx : x ∈ Ioo (-1 : ℝ) 1) :
+    ModularGroup.S • bottomPoint x = bottomPoint (-x) := by
+  have hnx : -x ∈ Ioo (-1 : ℝ) 1 := by constructor <;> linarith [hx.1, hx.2]
+  apply UpperHalfPlane.ext
+  rw [UpperHalfPlane.modular_S_smul]
+  change (-((bottomPoint x : UpperHalfPlane) : ℂ))⁻¹ = (bottomPoint (-x) : ℂ)
+  rw [inv_neg, Complex.inv_def, bottomPoint_normSq hx]
+  simp only [inv_one, Complex.ofReal_one, mul_one]
+  rw [bottomPoint_coe hx, bottomPoint_coe hnx, modularBottom_neg]
+  ext <;> simp
+
+/-- Exact S derivative maps the actual graph tangent to its negative at
+the reflected point, so the paired arc orientation is proved. -/
+theorem S_bottomVelocity {x : ℝ} (hx : x ∈ Ioo (-1 : ℝ) 1) :
+    (1 / (bottomPoint x : ℂ) ^ 2) * bottomVelocity x = -bottomVelocity (-x) := by
+  have hz : (bottomPoint x : ℂ) ≠ 0 := (bottomPoint x).ne_zero
+  have hh := modularBottom_pos hx
+  have hunit := modularBottom_unit_circle hx
+  have hunitx := congrArg (fun t : ℝ => x * t) hunit
+  calc
+    _ = bottomVelocity x / (bottomPoint x : ℂ) ^ 2 := by ring
+    _ = _ := by
+      apply (div_eq_iff (pow_ne_zero 2 hz)).mpr
+      rw [bottomPoint_coe hx]
+      apply Complex.ext <;>
+        simp [bottomVelocity, bottomSlope, modularBottom_neg, pow_two,
+          Complex.mul_re, Complex.mul_im] <;>
+        field_simp [hh.ne'] <;> nlinarith [hunit, hunitx]
+
+theorem actualCompletedGreenTrace_neg_tangent (N : ℕ) [NeZero N] (s u : ℂ)
+    (z : UpperHalfPlane) (v : ℂ) :
+    actualCompletedGreenTrace N s u z (-v) = -actualCompletedGreenTrace N s u z v := by
+  unfold actualCompletedGreenTrace greenTrace traceTerm
+  simp_rw [ImbalancedChen.Part3.Gamma0PairedEdgeGreen20261026b.greenOneForm_neg_tangent]
+  rw [Finset.sum_neg_distrib]
+
+def bottomTrace (N : ℕ) [NeZero N] (s u : ℂ) (x : ℝ) : ℂ :=
+  actualCompletedGreenTrace N s u (bottomPoint x) (bottomVelocity x)
+
+theorem actual_bottom_trace_odd (N : ℕ) [NeZero N] (s u : ℂ)
+    (hs : s ∈ completedRegularDomain N) (hu : u ∈ completedRegularDomain N)
+    {x : ℝ} (hx : x ∈ Ioo (-1 : ℝ) 1) :
+    bottomTrace N s u (-x) = -bottomTrace N s u x := by
+  have h := actualCompletedGreenTrace_S N s u hs hu (bottomPoint x) (bottomVelocity x)
+  rw [S_bottomPoint hx, S_bottomVelocity hx, actualCompletedGreenTrace_neg_tangent] at h
+  exact neg_eq_iff_eq_neg.mp h
+
+/-- The entire actual lower unit-circle boundary contribution vanishes,
+proved by S, its exact tangent and native symmetric substitution. -/
+theorem actual_standard_bottom_integral_zero (N : ℕ) [NeZero N] (s u : ℂ)
+    (hs : s ∈ completedRegularDomain N) (hu : u ∈ completedRegularDomain N) :
+    (∫ x in (-(1 / 2) : ℝ)..(1 / 2), bottomTrace N s u x) = 0 := by
+  let H : ℝ → ℂ := bottomTrace N s u
+  have href : (∫ x in (-(1 / 2) : ℝ)..(1 / 2), H (-x)) =
+      ∫ x in (-(1 / 2) : ℝ)..(1 / 2), H x := by
+    simpa using intervalIntegral.integral_comp_sub_left H (0 : ℝ)
+      (a := -(1 / 2)) (b := 1 / 2)
+  have hodd : (∫ x in (-(1 / 2) : ℝ)..(1 / 2), H (-x)) =
+      -(∫ x in (-(1 / 2) : ℝ)..(1 / 2), H x) := by
+    calc
+      _ = ∫ x in (-(1 / 2) : ℝ)..(1 / 2), -H x := by
+        apply intervalIntegral.integral_congr
+        intro x hx
+        rw [uIcc_of_le (by norm_num : (-(1 / 2) : ℝ) ≤ 1 / 2)] at hx
+        exact actual_bottom_trace_odd N s u hs hu (modular_cell_interval_subset hx)
+      _ = _ := intervalIntegral.integral_neg
+  change (∫ x in (-(1 / 2) : ℝ)..(1 / 2), H x) = 0
+  linear_combination (1 / 2 : ℂ) * (href.symm.trans hodd)
+
+end ImbalancedChen.Part3.StandardCellGreenTraceSides20261026b
