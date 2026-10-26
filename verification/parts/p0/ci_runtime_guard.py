@@ -47,7 +47,7 @@ def parse_memory_budget(value: str) -> int:
     return budget
 
 
-def normalize_lean_args(args, memory_mib=4096):
+def normalize_lean_args(args, memory_mib=4096, project_async=False):
     require(type(memory_mib) is int and 1 <= memory_mib <= 16384,
             'Invalid fixed Lean memory budget')
     # Exact fixed-pin src/util/shell.cpp getopt spellings. -t is TRUST;
@@ -66,6 +66,13 @@ def normalize_lean_args(args, memory_mib=4096):
             clean.extend(args[i:]); break
         if a.startswith('--'):
             key, sep, value = a.partition('=')
+            metadata_options = ('--version', '--help', '--githash', '--features', '--print-prefix', '--print-libdir')
+            require(not any(len(key) > 2 and key != mode and mode.startswith(key) for mode in metadata_options),
+                    'abbreviated metadata option: ' + a)
+            require(not any(len(key) > 2 and mode.startswith(key) for mode in ('--stdin', '--server', '--worker')),
+                    'non-file/non-build Lean mode: ' + a)
+            require(not (len(key) > 2 and key != '--setup' and '--setup'.startswith(key)),
+                    'abbreviated setup option: ' + a)
             require(not (len(key) > 2 and '--run'.startswith(key)),
                     'program execution is outside this build-only wrapper')
             if key in controlled:
@@ -102,8 +109,12 @@ def normalize_lean_args(args, memory_mib=4096):
                         # before '='. Do not permit alternate spellings of this
                         # guard-owned scheduling option or conflicting values.
                         if [part for part in option.strip().split('.') if part] == ['Elab', 'async']:
-                            require(option == 'Elab.async' and setting == 'false',
-                                    'Elab.async is fixed to false by the CI runtime guard')
+                            require(option == 'Elab.async' and setting in ('false', 'true'),
+                                    'invalid scoped Elab.async option')
+                            require(project_async is None or setting == 'false',
+                                    'Elab.async is fixed to false for project sources')
+                            if project_async is None:
+                                clean.extend(['-D', value])
                         else:
                             clean.extend(['-D', value])
                     elif flag in 'tjM':
@@ -116,7 +127,148 @@ def normalize_lean_args(args, memory_mib=4096):
         else:
             clean.append(a)
         i += 1
-    return ['-t0', '-j2', '-M' + str(memory_mib), '-DElab.async=false', *clean]
+    return ['-t0', '-j2', '-M' + str(memory_mib),
+            *(['-DElab.async=false'] if project_async is False else []), *clean]
+
+
+def source_policy(args, config, cwd):
+    """Parse normalized argv, bind source and setup bytes, determine effective scheduling."""
+    import hashlib, json
+    from pathlib import Path
+    sources, setups = [], []
+    skip = {'-o', '-i', '-b', '-c', '-C', '-t', '-j', '-R', '-M', '-T', '-p', '-E', '-Y', '-Z', '-H', '-s', '-D',
+            '--root', '--plugin', '--load-dynlib', '--error', '--incr-save', '--incr-load', '--incr-header-save', '--tstack', '--debug'}
+    i = 0
+    while i < len(args):
+        a = args[i]
+        if a == '--':
+            sources.extend(args[i+1:]); break
+        if a == '--setup':
+            i += 1; require(i < len(args), 'missing setup path'); setups.append(args[i])
+        elif a.startswith('--setup='):
+            setups.append(a.split('=', 1)[1])
+        elif a in skip:
+            i += 1; require(i < len(args), 'missing option value')
+        elif not a.startswith('-'):
+            sources.append(a)
+        i += 1
+    require(len(sources) <= 1 and len(setups) <= 1, 'ambiguous source/setup command')
+    for path, digest in config['scope_config_sha256'].items():
+        require(hashlib.sha256(Path(path).read_bytes()).hexdigest() == digest, 'changed scope configuration: ' + path)
+    metadata = ('--version', '-v', '--print-prefix', '--print-libdir', '--githash', '-g', '--features', '--help', '-h')
+    if not sources:
+        require(not setups, 'setup without source')
+        require(any(a in metadata for a in args), 'unknown sourceless Lean invocation')
+        return {'scope': 'metadata', 'effective_async': None, 'source': None, 'setup': None}
+    require(not any(a in metadata for a in args), 'metadata command cannot count as a source compile')
+    lexical = Path(cwd, sources[0]).absolute()
+    source = str(lexical.resolve())
+    require(source in config['source_scopes'] and str(lexical) == source, 'unknown or redirected Lean source: ' + str(lexical))
+    kind = config['source_scopes'][source]
+    digest = hashlib.sha256(Path(source).read_bytes()).hexdigest()
+    if kind == 'dependency':
+        require(digest == config['dependency_source_sha256'][source], 'changed pinned dependency source')
+    expected = kind == 'dependency'
+    for j, arg in enumerate(args[:-1]):
+        if arg == '-D' and args[j+1].startswith('Elab.async='):
+            require(args[j+1] == 'Elab.async=' + str(expected).lower(), 'CLI conflicts with source-scoped scheduling')
+    setup_record = None
+    if setups:
+        path = Path(cwd, setups[0]).absolute()
+        require(path == path.resolve(), 'redirected setup path')
+        require(any(path.is_relative_to(Path(p)) for p in config['setup_roots']), 'setup outside allowed roots')
+        data = path.read_bytes()
+        def unique_object(pairs):
+            result = {}
+            for key, val in pairs:
+                require(key not in result, 'duplicate setup JSON key')
+                result[key] = val
+            return result
+        value = json.loads(data, object_pairs_hook=unique_object)
+        options = value.get('options', {})
+        require(isinstance(options, dict), 'invalid setup options')
+        for key in options:
+            if key.strip().strip('.') == 'Elab.async' or key.replace('.', '').strip() == 'Elabasync':
+                require(key == 'Elab.async', 'ambiguous setup scheduling key')
+        if kind == 'project':
+            require(options.get('Elab.async') is False, 'project setup must record Elab.async=false in Lake trace')
+        actual = options.get('Elab.async', expected)
+        require(type(actual) is bool and actual == expected, 'setup overrides scoped scheduling')
+        setup_record = {'path': str(path), 'sha256': hashlib.sha256(data).hexdigest(), 'async': actual}
+    return {'scope': kind, 'effective_async': expected, 'source': source,
+            'source_sha256': digest, 'setup': setup_record}
+
+
+def build_source_scope(root, probes):
+    """Exact tracked project/dependency source allowlist; dependency defaults remain native."""
+    import tomllib
+    package_config = tomllib.loads((root / 'lakefile.toml').read_text())
+    require(package_config.get('leanOptions', {}).get('Elab.async') is False, 'project Lake config must trace Elab.async=false')
+    manifest = json.loads((root / 'lake-manifest.json').read_text())
+    scopes, dependencies, configs, revisions = {}, {}, {}, {}
+    repos = [(root, 'project')]
+    for package in manifest.get('packages', []):
+        require(package['type'] == 'git' and not package.get('subDir'), 'unsupported dependency layout')
+        path = root / manifest.get('packagesDir', '.lake/packages') / package['name']
+        require(path.resolve() == path.absolute(), 'redirected dependency root')
+        require(capture('git', '-C', str(path), 'rev-parse', 'HEAD') == package['rev'], 'dependency pin mismatch')
+        require(not capture('git', '-C', str(path), 'diff', 'HEAD', '--name-only'), 'modified dependency checkout')
+        revisions[str(path)] = package['rev']
+        repos.append((path, 'dependency'))
+    for repo, kind in repos:
+        for name in capture('git', '-C', str(repo), 'ls-files', '-z').split('\0'):
+            if not name: continue
+            path = repo / name
+            if name.endswith('.lean'):
+                require(path.is_file() and path.resolve() == path.absolute(), 'missing/redirected scoped source')
+                scopes[str(path)] = kind
+                if kind == 'dependency': dependencies[str(path)] = sha(path)
+            if path.name in ('lakefile.lean', 'lakefile.toml', 'lake-manifest.json', 'lean-toolchain'):
+                configs[str(path)] = sha(path)
+                if kind == 'dependency' and path.name.startswith('lakefile'):
+                    require('Elab.async' not in path.read_text(), 'dependency scheduling override requires review')
+    if manifest.get('packages'):
+        import importlib.util
+        verifier = root / 'verification/verify_wu_required_sources.py'
+        require(verifier.is_file(), 'pinned source staging verifier missing')
+        configs[str(verifier)] = sha(verifier)
+        inventory = root / 'verification/full_source_inventory.py'
+        configs[str(inventory)] = sha(inventory)
+        sys.path.insert(0, str(root / 'verification'))
+        try:
+            spec = importlib.util.spec_from_file_location('guard_wu_sources', verifier)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            receipt = module.verify(root, stage=False)
+        finally:
+            sys.path.pop(0)
+        require(receipt['status'] == 'passed', 'pinned source staging audit failed')
+        for row in receipt['staged_sources']:
+            path = root / row['destination_path']
+            require(path.resolve() == path.absolute() and sha(path) == row['sha256'], 'staged source mismatch')
+            require(path.is_relative_to(root / manifest['packagesDir'] / 'goldbach'), 'staged source escapes dependency')
+            scopes[str(path)] = 'dependency'
+            dependencies[str(path)] = row['sha256']
+    for probe in probes:
+        path = probe.absolute()
+        require(path == path.resolve() and str(path) not in scopes, 'ambiguous probe registration')
+        scopes[str(path)] = 'probe'
+    return {'source_scopes': scopes, 'dependency_source_sha256': dependencies,
+            'scope_config_sha256': configs, 'dependency_revisions': revisions,
+            'setup_roots': [str(repo / '.lake') for repo, _ in repos]}
+
+
+def fetch_dependencies(root):
+    """Fetch exact manifest commits without invoking Lake or any compiler."""
+    manifest = json.loads((root / 'lake-manifest.json').read_text())
+    for package in manifest['packages']:
+        require(package['type'] == 'git' and not package.get('subDir'), 'unsupported dependency layout')
+        path = root / manifest['packagesDir'] / package['name']
+        if not path.exists():
+            path.parent.mkdir(parents=True, exist_ok=True)
+            subprocess.run(['git', 'clone', '--no-checkout', package['url'], str(path)], check=True)
+            subprocess.run(['git', '-C', str(path), 'checkout', '--detach', package['rev']], check=True)
+        require(capture('git', '-C', str(path), 'rev-parse', 'HEAD') == package['rev'], 'existing dependency pin mismatch')
 
 
 WRAPPER = r'''#!/usr/bin/env python3
@@ -125,6 +277,7 @@ C = __CONFIG__
 def require(ok, message):
     if not ok: raise RuntimeError('CI runtime guard: ' + message)
 __NORMALIZER__
+__SOURCE_POLICY__
 require(C['lean_elab_async'] is False, 'changed fixed elaboration scheduling')
 for key, value in C['environment'].items():
     require(os.environ.get(key) == value, 'changed environment: ' + key)
@@ -135,8 +288,15 @@ require(not os.environ.get('LEAN_CC'), 'custom LEAN_CC bypasses bundled compiler
 name = pathlib.Path(sys.argv[0]).name
 require(name in C['tools'], 'unknown compiler')
 args = sys.argv[1:]
+policy = None
 if name == 'lean':
-    args = normalize_lean_args(args, C['lean_memory_mib'])
+    clean = normalize_lean_args(args, C['lean_memory_mib'], None)
+    policy = source_policy(clean, C['source_scope'], os.getcwd())
+    args = normalize_lean_args(args, C['lean_memory_mib'],
+                               None if policy['scope'] in ('dependency', 'metadata') else False)
+    if policy['scope'] == 'dependency':
+        require(not any(args[i:i+2] == ['-D', 'Elab.async=false'] for i in range(len(args))),
+                'dependency scheduling differs from pinned native default')
 # One inherited flock across Lean and native compiler descendants. Never trust
 # a naked HELD flag: require a live ancestor holding the exact lock descriptor.
 held = os.environ.get('P0_COMPILER_SLOT_HELD')
@@ -169,12 +329,15 @@ else:
     os.environ['P0_COMPILER_SLOT_HELD'] = str(os.getpid())
     os.environ['P0_COMPILER_SLOT_FD'] = str(fd)
     os.environ['P0_COMPILER_SLOT_TOOL'] = name
+if name == 'lean':
+    # Re-read source/setup/config bytes after waiting for the serial slot.
+    policy = source_policy(clean, C['source_scope'], os.getcwd())
 compiler = (C['shadow'] + '/bin/lean-runtime' if name == 'lean'
             else C['realbin'] + '/' + name)
 cmd = [compiler, *args]
 record = {'pid': os.getpid(), 'tool': name, 'command': cmd,
           'input_args': sys.argv[1:], 'slot_owner': os.environ['P0_COMPILER_SLOT_HELD'],
-          'cwd': os.getcwd(), 'sysroot': os.environ['LEAN_SYSROOT']}
+          'cwd': os.getcwd(), 'sysroot': os.environ['LEAN_SYSROOT'], 'source_policy': policy}
 # One append under a separate short log lock, including nested children.
 with open(C['log'], 'a') as log:
     fcntl.flock(log, fcntl.LOCK_EX)
@@ -214,7 +377,7 @@ def resolve_pin() -> Path:
 
 
 def prepare(root: Path, runner_temp: Path, evidence: Path, realbin: Path,
-            action_dir: Path, verify_action: bool = True) -> dict:
+            action_dir: Path, verify_action: bool = True, source_probes=()) -> dict:
     """Separated for deterministic fake-executable tests; CLI never skips pins."""
     root, runner_temp, realbin = root.resolve(), runner_temp.resolve(), realbin.resolve()
     require((root / 'lean-toolchain').read_text().strip() == PIN, 'Unexpected toolchain pin')
@@ -269,10 +432,13 @@ def prepare(root: Path, runner_temp: Path, evidence: Path, realbin: Path,
     state_path = evidence / 'state.json'
     environment = {'LEAN_SYSROOT': str(shadow), 'LAKE_OVERRIDE_LEAN': 'true',
                    'LEAN_NUM_THREADS': '2', 'ELAN_TOOLCHAIN': PIN, 'P0_CI_GUARD_STATE': str(state_path),
-                   'CI_LEAN_MEMORY_MIB': str(memory_mib), 'P0_LEAN_ELAB_ASYNC': 'false'}
+                   'CI_LEAN_MEMORY_MIB': str(memory_mib), 'P0_LEAN_ELAB_ASYNC': 'scoped-v1'}
     config = {'environment': environment, 'shadow': str(shadow), 'realbin': str(realbin),
               'slot': str(evidence / 'compiler.lock'), 'log': str(evidence / 'compiler-commands.jsonl'),
               'tools': list(TOOLS), 'lean_memory_mib': memory_mib, 'lean_elab_async': False}
+    scope = build_source_scope(root, source_probes)
+    config.update(source_scope=scope, scheduling_policy='source-scoped-v1',
+                  scope_sha256=hashlib.sha256(json.dumps(scope, sort_keys=True, separators=(',', ':'), ensure_ascii=True).encode()).hexdigest())
     runtime = {str(realbin / name): sha(realbin / name) for name in (*TOOLS, 'lake', 'leanchecker')}
     runtime[str(shadow / 'bin' / 'lake')] = sha(shadow / 'bin' / 'lake')
     runtime[str(shadow_lean)] = sha(shadow_lean)
@@ -284,7 +450,8 @@ def prepare(root: Path, runner_temp: Path, evidence: Path, realbin: Path,
     for name in TOOLS:
         wrapper = shadow / 'bin' / name
         wrapper.write_text(WRAPPER.replace('__CONFIG__', repr(config)).replace(
-            '__NORMALIZER__', inspect.getsource(normalize_lean_args)))
+            '__NORMALIZER__', inspect.getsource(normalize_lean_args)).replace(
+            '__SOURCE_POLICY__', inspect.getsource(source_policy)))
         wrapper.chmod(0o755)
         shutil.copy2(wrapper, evidence / (name + '-wrapper.py'))
         runtime[str(wrapper)] = sha(wrapper)
@@ -295,14 +462,15 @@ def prepare(root: Path, runner_temp: Path, evidence: Path, realbin: Path,
              'guard_sha256': sha(Path(__file__)),
              'action_commit': ACTION_COMMIT,
              'action_script_sha256': {str(action_dir / 'scripts' / n): h for n, h in ACTION_SHA256.items()} if verify_action else {},
-             'policy': f'Lean -t0 -j2 -M{memory_mib} -DElab.async=false; serial compiler slot; native compiler flags preserved; native checker LEAN_NUM_THREADS=2'}
+             'policy': f'Lean -t0 -j2 -M{memory_mib}; project Elab.async=false, pinned dependencies native true; serial compiler slot; native flags preserved; checker LEAN_NUM_THREADS=2'}
     write_json(state_path, state)
     return state
 
 
 def check_environment(state: dict) -> None:
     require(state['lean_elab_async'] is False
-            and state['environment']['P0_LEAN_ELAB_ASYNC'] == 'false',
+            and state['environment']['P0_LEAN_ELAB_ASYNC'] == 'scoped-v1'
+            and state['scheduling_policy'] == 'source-scoped-v1',
             'State elaboration scheduling is not fixed to false')
     require(type(state['lean_memory_mib']) is int
             and state['lean_memory_mib'] == parse_memory_budget(state['environment']['CI_LEAN_MEMORY_MIB']),
@@ -354,6 +522,12 @@ def audit(state_path: Path, probe: bool = False, require_source: bool = False) -
         print(json.dumps({'pinned_sysroot_probe': diagnostics}, sort_keys=True))
         require(all(diagnostics.values()), 'Pinned Lean sysroot/leantar binding failed')
         require(len(Path(state['log']).read_text().splitlines()) > before, 'Lean probe bypassed wrapper')
+    scope = state['source_scope']
+    require(hashlib.sha256(json.dumps(scope, sort_keys=True, separators=(',', ':'), ensure_ascii=True).encode()).hexdigest() == state['scope_sha256'], 'changed source scope')
+    for path, expected in {**scope['scope_config_sha256'], **scope['dependency_source_sha256']}.items():
+        require(sha(Path(path)) == expected, 'changed scoped input: ' + path)
+    for repo, revision in scope.get('dependency_revisions', {}).items():
+        require(capture('git', '-C', repo, 'rev-parse', 'HEAD') == revision, 'dependency revision changed')
     commands = [json.loads(line) for line in Path(state['log']).read_text().splitlines()]
     for record in commands:
         name = record['tool']
@@ -362,14 +536,20 @@ def audit(state_path: Path, probe: bool = False, require_source: bool = False) -
         require(name in TOOLS and record['command'][0] == expected_binary, 'Unknown/bypassed compiler command')
         require(record['sysroot'] == state['shadow'], 'Compiler sysroot bypass')
         if name == 'lean':
-            require(record['command'][1:] == normalize_lean_args(record['input_args'], state['lean_memory_mib']),
+            clean = normalize_lean_args(record['input_args'], state['lean_memory_mib'], None)
+            observed = source_policy(clean, scope, record['cwd'])
+            require(observed == record.get('source_policy'), 'changed source/setup provenance')
+            mode = None if observed['scope'] in ('dependency', 'metadata') else False
+            require(record['command'][1:] == normalize_lean_args(record['input_args'], state['lean_memory_mib'], mode),
                     'Lean command differs from normalized input (possible flag override)')
         else:
             require(record['command'][1:] == record['input_args'], 'Native compiler flags changed')
     source_commands = sum(r['tool'] == 'lean' and any(a.endswith('.lean') for a in r['input_args']) for r in commands)
-    require(not require_source or source_commands > 0, 'No guarded Lean source child was recorded')
+    project_commands = sum(r['tool'] == 'lean' and r.get('source_policy', {}).get('scope') == 'project' for r in commands)
+    require(not require_source or project_commands > 0, 'No guarded project Lean source child was recorded')
     report = {'status': 'PASS_RUNTIME_GUARD_ONLY', 'compiler_commands': len(commands),
-              'source_commands': source_commands, 'probe': probe,
+              'source_commands': source_commands, 'project_source_commands': project_commands, 'probe': probe,
+              'scheduling_policy': state['scheduling_policy'], 'scope_sha256': state['scope_sha256'],
               'lean_memory_mib': state['lean_memory_mib'], 'lean_elab_async': False,
               'command_log_sha256': sha(Path(state['log'])), 'state_sha256': sha(state_path)}
     write_json(state_path.parent / 'audit.json', report)
@@ -421,16 +601,20 @@ def cache_leantar_diagnostic() -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('mode', choices=('setup', 'audit', 'probe', 'cache-leantar-diagnostic'))
+    parser.add_argument('mode', choices=('setup', 'audit', 'probe', 'cache-leantar-diagnostic', 'fetch-dependencies'))
     parser.add_argument('--evidence', type=Path)
     parser.add_argument('--state', type=Path)
+    parser.add_argument('--source-probe', type=Path, action='append', default=[])
     parser.add_argument('--probe', action='store_true')
     parser.add_argument('--require-source', action='store_true')
     args = parser.parse_args()
+    if args.mode == 'fetch-dependencies':
+        fetch_dependencies(Path.cwd())
+        return
     if args.mode == 'setup':
         require(args.evidence is not None, '--evidence required')
         state = prepare(Path.cwd(), Path(os.environ['RUNNER_TEMP']), args.evidence,
-                        resolve_pin(), Path(os.environ['LEAN_ACTION_DIR']))
+                        resolve_pin(), Path(os.environ['LEAN_ACTION_DIR']), source_probes=args.source_probe)
         with open(os.environ['GITHUB_ENV'], 'a') as out:
             for key, value in state['environment'].items():
                 require('\n' not in value and '\r' not in value, 'Invalid environment value')

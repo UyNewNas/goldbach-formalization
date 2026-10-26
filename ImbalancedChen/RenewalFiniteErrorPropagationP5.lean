@@ -1,4 +1,4 @@
-import Mathlib.Data.Matrix.Notation
+import Mathlib.Data.Fin.VecNotation
 import Mathlib.Tactic
 
 /-! Source-only, uncompiled. Concrete finite atom sums and retention maxima

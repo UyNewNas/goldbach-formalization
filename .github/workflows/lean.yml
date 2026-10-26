@@ -145,10 +145,15 @@ jobs:
           budget = int(os.environ["CI_LEAN_MEMORY_MIB"])
           assert available >= budget + 1024, f"Insufficient memory: {available} MiB available for {budget} MiB compiler budget plus 1024 MiB reserve"
           PYMEM
+      - name: Fetch and verify exact pinned dependency sources without compiling
+        timeout-minutes: 20
+        run: |
+          python3 verification/parts/p0/ci_runtime_guard.py fetch-dependencies
+          python3 verification/verify_wu_required_sources.py --stage --output "$RUNNER_TEMP/lean-verification-logs/wu-required-source-inventory.json"
       - name: Guard the pinned toolchain for all source compiler children
         timeout-minutes: 5
         run: |
-          python3 verification/parts/p0/ci_runtime_guard.py setup --evidence "$RUNNER_TEMP/lean-verification-logs/runtime"
+          python3 verification/parts/p0/ci_runtime_guard.py setup --evidence "$RUNNER_TEMP/lean-verification-logs/runtime" --source-probe "$RUNNER_TEMP/GoldbachAsyncOptionProbe.lean"
       - name: Validate pinned synchronous source elaboration
         timeout-minutes: 3
         run: |

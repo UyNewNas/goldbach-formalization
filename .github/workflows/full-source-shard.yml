@@ -116,10 +116,17 @@ jobs:
           budget = int(os.environ["CI_LEAN_MEMORY_MIB"])
           assert available >= budget + 1024, f"Insufficient memory: {available} MiB available for {budget} MiB compiler budget plus 1024 MiB reserve"
           PYMEM
+      # Never restore the legacy whole-.lake cache: its key did not bind
+      # scheduling policy, and dependency traces omitted old wrapper-injected flags.
+      - name: Fetch and verify exact pinned dependency sources without compiling
+        timeout-minutes: 20
+        run: |
+          python3 verification/parts/p0/ci_runtime_guard.py fetch-dependencies
+          python3 verification/verify_wu_required_sources.py --stage --output "$RUNNER_TEMP/lean-verification-logs/wu-required-source-inventory.json"
       - name: Guard the pinned toolchain for all source compiler children
         timeout-minutes: 5
         run: |
-          python3 verification/parts/p0/ci_runtime_guard.py setup --evidence "$RUNNER_TEMP/lean-verification-logs/runtime"
+          python3 verification/parts/p0/ci_runtime_guard.py setup --evidence "$RUNNER_TEMP/lean-verification-logs/runtime" --source-probe "$RUNNER_TEMP/GoldbachAsyncOptionProbe.lean"
       - name: Validate pinned synchronous source elaboration
         timeout-minutes: 3
         run: |
@@ -150,16 +157,6 @@ jobs:
           LINT: 'false'
         run: |
           "$RUNNER_TEMP/lean-ci/run-stage" configure "$LEAN_ACTION_DIR/scripts/config.sh"
-      - name: Optionally seed first shard from the existing full Lake cache
-        continue-on-error: true
-        timeout-minutes: 15
-        if: ${{ inputs.shard-index == 1 }}
-        id: legacy-cache
-        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
-        with:
-          path: ./.lake
-          key: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}-${{ github.sha }}
-          restore-keys: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}
       - name: Get the existing Mathlib cache
         timeout-minutes: 40
         id: mathlib-cache
@@ -210,7 +207,7 @@ jobs:
         env:
           SOURCE_CACHE: ${{ steps.source-cache.outputs.cache-matched-key }}
           PREDECESSOR: ${{ inputs.predecessor-cache-key }}
-          LEGACY_CACHE: ${{ steps.legacy-cache.outputs.cache-matched-key }}
+          LEGACY_CACHE: ''
           COMPLETE_KEY: ${{ steps.cache-key.outputs.complete }}
           PARTIAL_PREFIX: ${{ steps.cache-key.outputs.partial-prefix }}
           BASE_PREFIX: ${{ steps.cache-key.outputs.base-prefix }}

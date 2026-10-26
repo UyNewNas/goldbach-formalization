@@ -1,5 +1,5 @@
 import ImbalancedChen.ActualUpperDensityAssembly
-import Mathlib.Data.Matrix.Notation
+import Mathlib.Data.Fin.VecNotation
 import Mathlib.Tactic
 
 /-!

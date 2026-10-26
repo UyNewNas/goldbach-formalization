@@ -70,7 +70,10 @@ class FakeRuntimeTests(unittest.TestCase):
                 path.mkdir(parents=True)
             (root / 'lean-toolchain').write_text(guard.PIN)
             for name in ('lakefile.toml', 'lake-manifest.json'):
-                (root / name).write_text('{}')
+                (root / name).write_text('{"packages": []}' if name == 'lake-manifest.json' else 'name = "test"\nleanOptions = {"Elab.async" = false}')
+            (root / 'Example.lean').write_text('theorem test : True := True.intro')
+            subprocess.run(['git', 'init', '-q', str(root)], check=True)
+            subprocess.run(['git', '-C', str(root), 'add', '.'], check=True)
             lean = ('#!/usr/bin/env python3\nimport pathlib, sys\n'
                     'if "--print-prefix" in sys.argv:\n'
                     '    print(pathlib.Path(sys.argv[0]).parent.parent)\n')
@@ -89,7 +92,12 @@ class FakeRuntimeTests(unittest.TestCase):
                                       base / 'unused-action', verify_action=False)
                 os.environ.update(state['environment'])
                 os.environ['PATH'] = state['shadow'] + '/bin:' + env['PATH']
-                yield state
+                previous = Path.cwd()
+                os.chdir(root)
+                try:
+                    yield state
+                finally:
+                    os.chdir(previous)
 
     def test_setup_wrapper_probe_and_audit(self):
         for selected in (None, '6144', '8192'):
@@ -105,7 +113,7 @@ class FakeRuntimeTests(unittest.TestCase):
                 self.assertEqual(report['source_commands'], 1)
                 self.assertIs(state['lean_elab_async'], False)
                 self.assertIs(report['lean_elab_async'], False)
-                self.assertEqual(state['environment']['P0_LEAN_ELAB_ASYNC'], 'false')
+                self.assertEqual(state['environment']['P0_LEAN_ELAB_ASYNC'], 'scoped-v1')
                 record = json.loads(Path(state['log']).read_text().splitlines()[0])
                 self.assertEqual(record['command'][1:5], ['-t0', '-j2', '-M' + str(expected), '-DElab.async=false'])
 
@@ -128,7 +136,7 @@ class FakeRuntimeTests(unittest.TestCase):
             for args in (['-DElab.async=true'], ['-D', 'Elab.async=true'], ['-qDElab.async=true']):
                 result = subprocess.run(['lean', *args, 'Example.lean'], capture_output=True)
                 self.assertNotEqual(result.returncode, 0)
-                self.assertIn(b'Elab.async is fixed to false', result.stderr)
+                self.assertIn(b'CLI conflicts with source-scoped scheduling', result.stderr)
             self.assertEqual(Path(state['log']).read_text(), '')
             subprocess.run(['lean', '-DElab.async=false', 'Example.lean'], check=True)
             log = Path(state['log'])
@@ -143,7 +151,7 @@ class FakeRuntimeTests(unittest.TestCase):
             result = subprocess.run(['lean', 'Example.lean'], capture_output=True)
             self.assertNotEqual(result.returncode, 0)
             self.assertIn(b'changed environment: P0_LEAN_ELAB_ASYNC', result.stderr)
-            os.environ['P0_LEAN_ELAB_ASYNC'] = 'false'
+            os.environ['P0_LEAN_ELAB_ASYNC'] = 'scoped-v1'
             state['lean_elab_async'] = True
             with self.assertRaisesRegex(RuntimeError, 'scheduling'):
                 guard.check_environment(state)
@@ -157,6 +165,115 @@ class FakeRuntimeTests(unittest.TestCase):
             log.write_text(json.dumps(record) + '\n')
             with self.assertRaisesRegex(RuntimeError, 'normalized input'):
                 guard.audit(Path(state['environment']['P0_CI_GUARD_STATE']))
+
+
+    def test_project_setup_record_and_audit_mutation(self):
+        with self.runtime('6144') as state:
+            build = Path.cwd() / '.lake'; build.mkdir()
+            setup = build / 'Example.setup.json'
+            setup.write_text(json.dumps({'options': {'Elab.async': False}}))
+            subprocess.run(['lean', 'Example.lean', '--setup', str(setup)], check=True)
+            guard.audit(Path(state['environment']['P0_CI_GUARD_STATE']), require_source=True)
+            setup.write_text(json.dumps({'options': {'Elab.async': True}}))
+            with self.assertRaisesRegex(RuntimeError, 'setup'):
+                guard.audit(Path(state['environment']['P0_CI_GUARD_STATE']))
+            result = subprocess.run(['lean', 'Example.lean', '--setup', str(setup)], capture_output=True)
+            self.assertNotEqual(result.returncode, 0)
+
+    def test_setup_abbreviations_fail_in_wrapper(self):
+        with self.runtime('6144') as state:
+            build = Path.cwd() / '.lake'; build.mkdir()
+            setup = build / 'evil.json'
+            setup.write_text(json.dumps({'options': {'Elab.async': True}}))
+            for key in ('--s', '--se', '--set', '--setu'):
+                for args in ([key, str(setup)], [key + '=' + str(setup)],
+                             ['--setup', str(setup), key + '=' + str(setup)]):
+                    result = subprocess.run(['lean', 'Example.lean', *args], capture_output=True)
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertTrue(b'abbreviated setup option' in result.stderr or b'non-file/non-build' in result.stderr)
+            self.assertEqual(Path(state['log']).read_text(), '')
+
+    def test_alternate_input_modes_fail_in_wrapper(self):
+        with self.runtime('6144') as state:
+            for mode in ('--stdin', '--std', '--server', '--serv', '--worker', '--wor'):
+                result = subprocess.run(['lean', mode, 'Example.lean'], input=b'-- unbound source', capture_output=True)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(b'non-file/non-build', result.stderr)
+            self.assertEqual(Path(state['log']).read_text(), '')
+
+    def test_unknown_source_and_scope_state_tampering(self):
+        with self.runtime('6144') as state:
+            Path('Unknown.lean').write_text('-- no')
+            result = subprocess.run(['lean', 'Unknown.lean'], capture_output=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertEqual(Path(state['log']).read_text(), '')
+            state['source_scope']['source_scopes'][str(Path.cwd() / 'Unknown.lean')] = 'project'
+            state_path = Path(state['environment']['P0_CI_GUARD_STATE'])
+            state_path.write_text(json.dumps(state))
+            with self.assertRaisesRegex(RuntimeError, 'source scope'):
+                guard.audit(state_path)
+
+
+class SourcePolicyTests(unittest.TestCase):
+    @contextlib.contextmanager
+    def scope(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            src, dep, probe = root / 'Main.lean', root / 'dep/Dep.lean', root / 'Probe.lean'
+            dep.parent.mkdir()
+            for p in (src, dep, probe): p.write_text('-- source')
+            cfg = root / 'lakefile.toml'; cfg.write_text('leanOptions = {"Elab.async" = false}')
+            build = root / '.lake'; build.mkdir()
+            scope = {'source_scopes': {str(src): 'project', str(dep): 'dependency', str(probe): 'probe'},
+                     'dependency_source_sha256': {str(dep): guard.sha(dep)},
+                     'scope_config_sha256': {str(cfg): guard.sha(cfg)}, 'setup_roots': [str(build)]}
+            yield root, scope
+
+    def policy(self, root, scope, args):
+        return guard.source_policy(guard.normalize_lean_args(args, 6144, None), scope, str(root))
+
+    def test_scopes_and_native_dependency_options(self):
+        with self.scope() as (root, scope):
+            for path, kind, expected in [('Main.lean', 'project', False), ('dep/Dep.lean', 'dependency', True), ('Probe.lean', 'probe', False)]:
+                result = self.policy(root, scope, [path])
+                self.assertEqual((result['scope'], result['effective_async']), (kind, expected))
+            self.assertNotIn('-DElab.async=false', guard.normalize_lean_args(['dep/Dep.lean'], 6144, None))
+            self.policy(root, scope, ['-DElab.async=true', 'dep/Dep.lean'])
+            for args in (['-DElab.async=false', 'dep/Dep.lean'], ['-DElab.async=true', 'Main.lean']):
+                with self.assertRaises(RuntimeError): self.policy(root, scope, args)
+
+    def test_setup_overrides_and_integrity(self):
+        with self.scope() as (root, scope):
+            setup = root / '.lake/Main.setup.json'
+            for value in (True, 'false', 0):
+                setup.write_text(json.dumps({'options': {'Elab.async': value}}))
+                with self.assertRaises(RuntimeError): self.policy(root, scope, ['Main.lean', '--setup', str(setup)])
+            setup.write_text(json.dumps({'options': {'Elab.async': False}}))
+            result = self.policy(root, scope, ['Main.lean', '--setup=' + str(setup)])
+            self.assertEqual(result['setup']['sha256'], guard.sha(setup))
+            with self.assertRaises(RuntimeError): self.policy(root, scope, ['dep/Dep.lean', '--setup', str(setup)])
+            setup.write_text('{"options":{"Elab.async":false,"Elab.async":true}}')
+            with self.assertRaises(RuntimeError): self.policy(root, scope, ['Main.lean', '--setup', str(setup)])
+            setup.write_text('{"options":{}}')
+            with self.assertRaises(RuntimeError): self.policy(root, scope, ['Main.lean', '--setup', str(setup), '--setup', str(setup)])
+            outside = root / 'outside.json'; outside.write_text('{}')
+            with self.assertRaises(RuntimeError): self.policy(root, scope, ['Main.lean', '--setup', str(outside)])
+
+    def test_unknown_sources_and_option_values(self):
+        with self.scope() as (root, scope):
+            unknown = root / 'Unknown.lean'; unknown.write_text('-- no')
+            alias = root / 'Alias.lean'; alias.symlink_to(root / 'Main.lean')
+            for args in (['Unknown.lean'], ['Alias.lean'], ['Main.lean', 'Probe.lean'], ['Main.lean', '--version'], ['Main.lean', '--vers'], ['Main.lean', '-g'], ['Main.lean', '--features'], [], ['--server']):
+                with self.assertRaises(RuntimeError): self.policy(root, scope, args)
+            self.policy(root, scope, ['Main.lean', '-o', 'output.lean'])
+            self.assertEqual(self.policy(root, scope, ['--print-prefix'])['scope'], 'metadata')
+
+    def test_changed_dependency_and_config_rejected(self):
+        with self.scope() as (root, scope):
+            (root / 'dep/Dep.lean').write_text('-- modified')
+            with self.assertRaises(RuntimeError): self.policy(root, scope, ['dep/Dep.lean'])
+            (root / 'lakefile.toml').write_text('leanOptions = {"Elab.async" = true}')
+            with self.assertRaises(RuntimeError): self.policy(root, scope, ['Main.lean'])
 
 
 if __name__ == '__main__':

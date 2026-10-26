@@ -180,6 +180,7 @@ theorem evenKHeight_combination_norm_sq (c : ι → ℂ) :
 
 /-- Strict positivity, not merely semidefiniteness: distinct positive q_i
 give a positive Hermitian Gram form for every nonzero complex coefficient vector. -/
+include hq in
 theorem kZeroGramForm_pos (hinj : Function.Injective q)
     (c : ι → ℂ) (hc : c ≠ 0) : 0 < (kZeroGramForm q c).re := by
   have hne : (∑ i, c i • (evenKProfile (q i) (hq i) : ComplexL2)) ≠ 0 := by
@@ -208,6 +209,7 @@ theorem evenKHeight_L2_linearIndependent (hinj : Function.Injective q) :
     linarith
 
 /-- The real symmetric matrix (K0(q_i+q_j)) is strictly positive definite. -/
+include hq in
 theorem kZeroGram_real_pos (hinj : Function.Injective q)
     (c : ι → ℝ) (hc : c ≠ 0) :
     0 < ∑ i, ∑ j, c i * c j * imaginaryOrderK 0 (q i + q j) := by
@@ -219,6 +221,31 @@ theorem kZeroGram_real_pos (hinj : Function.Injective q)
   have hp := kZeroGramForm_pos q hq hinj (fun i => (c i : ℂ)) hc'
   simpa [kZeroGramForm, Complex.mul_re] using hp
 
+
+-- Explicit contract regressions: the restored positivity premise is mandatory.
+-- User-approved restoration, 2026-10-26; no positivity claim is made for q ≤ 0.
+example (q : ι → ℝ) (hq : ∀ i, 0 < q i) (hinj : Function.Injective q)
+    (c : ι → ℂ) (hc : c ≠ 0) :
+    0 < (kZeroGramForm q c).re :=
+  kZeroGramForm_pos q hq hinj c hc
+
+example (q : ι → ℝ) (hq : ∀ i, 0 < q i) (hinj : Function.Injective q)
+    (c : ι → ℝ) (hc : c ≠ 0) :
+    0 < ∑ i, ∑ j, c i * c j * imaginaryOrderK 0 (q i + q j) :=
+  kZeroGram_real_pos q hq hinj c hc
+
 end FiniteFamily
+
+-- Whole-constant type checks include every binder (including implicit ones).
+-- Unlike applying the theorem, these checks cannot silently supply extra premises.
+example : ∀ {ι : Type*} [Fintype ι] (q : ι → ℝ) (hq : ∀ i, 0 < q i)
+    (hinj : Function.Injective q) (c : ι → ℂ),
+    c ≠ 0 → 0 < (kZeroGramForm q c).re :=
+  @kZeroGramForm_pos
+
+example : ∀ {ι : Type*} [Fintype ι] (q : ι → ℝ) (hq : ∀ i, 0 < q i)
+    (hinj : Function.Injective q) (c : ι → ℝ),
+    c ≠ 0 → 0 < ∑ i, ∑ j, c i * c j * imaginaryOrderK 0 (q i + q j) :=
+  @kZeroGram_real_pos
 
 end ImbalancedChen.Part3.ActualKStrictGramSourceOnly

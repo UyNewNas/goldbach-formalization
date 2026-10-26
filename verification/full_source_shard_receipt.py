@@ -93,10 +93,32 @@ def validate_build(report: dict, source: dict, selected: list[str]) -> None:
     require(valid_hash(report.get('log_sha256')), 'build log digest missing')
 
 
+def validate_source_policy(state: dict) -> str:
+    """The false async flag applies to project sources, not pinned dependencies."""
+    require(state.get('scheduling_policy') == 'source-scoped-v1', 'runtime source scheduling policy missing or different')
+    require(state.get('lean_elab_async') is False, 'project elaboration scheduling is not fixed false')
+    require(valid_hash(state.get('scope_sha256')), 'runtime source scope digest missing or malformed')
+    scope = state.get('source_scope')
+    require(isinstance(scope, dict) and bool(scope), 'runtime source scope mapping missing')
+    require(sha(canonical(scope).encode()) == state['scope_sha256'], 'runtime source scope mapping differs from its digest')
+    require(type(state.get('lean_memory_mib')) is int and state['lean_memory_mib'] == 6144,
+            'runtime memory budget is not 6144 MiB')
+    environment = state.get('environment', {})
+    require(environment.get('P0_LEAN_ELAB_ASYNC') == 'scoped-v1'
+            and environment.get('CI_LEAN_MEMORY_MIB') == '6144', 'runtime environment flags differ')
+    return state['scope_sha256']
+
+
 def validate_runtime(audit: dict, state: dict, state_digest: str, pins: dict) -> None:
     require(audit.get('status') == 'PASS_RUNTIME_GUARD_ONLY', 'runtime audit did not pass')
+    scope_digest = validate_source_policy(state)
+    require(audit.get('scheduling_policy') == 'source-scoped-v1', 'audit source scheduling policy missing or different')
+    require(audit.get('scope_sha256') == scope_digest, 'audit source scope differs from runtime state')
+    require(type(audit.get('project_source_commands')) is int and audit['project_source_commands'] > 0,
+            'runtime audit has no project source commands')
     require(type(audit.get('source_commands')) is int and audit['source_commands'] > 0, 'runtime audit has no source commands')
     require(type(audit.get('compiler_commands')) is int and audit['compiler_commands'] >= audit['source_commands'], 'invalid compiler command count')
+    require(audit['project_source_commands'] <= audit['source_commands'], 'invalid project source command count')
     require(audit.get('probe') is True, 'runtime audit probe missing')
     require(audit.get('lean_elab_async') is False and state.get('lean_elab_async') is False, 'elaboration scheduling is not fixed false')
     require(type(audit.get('lean_memory_mib')) is int and audit['lean_memory_mib'] == 6144
@@ -105,7 +127,7 @@ def validate_runtime(audit: dict, state: dict, state_digest: str, pins: dict) ->
     require(valid_hash(audit.get('command_log_sha256')), 'command log digest missing')
     require(state.get('guard_sha256') == pins[GUARD], 'runtime guard differs from current guard source')
     environment = state.get('environment', {})
-    require(environment.get('P0_LEAN_ELAB_ASYNC') == 'false' and environment.get('CI_LEAN_MEMORY_MIB') == '6144', 'runtime environment flags differ')
+    require(environment.get('P0_LEAN_ELAB_ASYNC') == 'scoped-v1' and environment.get('CI_LEAN_MEMORY_MIB') == '6144', 'runtime environment flags differ')
     require(environment.get('ELAN_TOOLCHAIN') == pins['toolchain_pin'], 'runtime toolchain pin differs')
     inputs = state.get('input_sha256')
     require(isinstance(inputs, dict) and len(inputs) == len(PINS), 'runtime input hashes incomplete')
@@ -161,6 +183,7 @@ def verify_receipts(source: dict, manifest: dict, receipts: dict[str, dict], pin
             == {name: pins[name] for name in PINS}, 'current runtime input pins differ')
     require(current_state.get('environment', {}).get('ELAN_TOOLCHAIN') == pins['toolchain_pin'],
             'current runtime toolchain pin differs')
+    current_scope = validate_source_policy(current_state)
     runtime_reference = real_runtime_hashes(current_state)
     for index in range(1, count + 1):
         envelope = receipts[f'shard-{index}.json']
@@ -179,6 +202,7 @@ def verify_receipts(source: dict, manifest: dict, receipts: dict[str, dict], pin
         require(receipt['cache_key'] not in keys, 'duplicate shard cache key')
         keys.add(receipt['cache_key'])
         state = read_evidence(receipt['runtime_state'])
+        require(state['scope_sha256'] == current_scope, 'cached source scope differs from current final-job scope')
         real = real_runtime_hashes(state)
         require(real == runtime_reference, 'pinned real runtime binary hashes differ from current final-job runtime')
     return {'status': 'PASS_STAGING_CACHE_PROVENANCE_ONLY', 'source_head': source['head'],

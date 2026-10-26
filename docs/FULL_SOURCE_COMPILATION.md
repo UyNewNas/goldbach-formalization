@@ -263,3 +263,54 @@ is not supplied or assumed, and TaggedRowDecoder resource failure remains an
 honest outstanding issue. Meaningful subsequent milestones will be published
 incrementally and separately backed up rather than retained only in ephemeral
 storage. Exact-head CI results will be distinguished from local focused checks.
+
+### Rebuild preparation checkpoint (new evidence only)
+
+Eight KL declarations now explicitly use `((⊤ : ENat) : WithTop ENat)`;
+the two approved StrictGram theorems explicitly retain `hq`. Full `@theorem`
+type ascriptions accompany these proposed statement corrections. They have
+not yet passed fresh Lean compilation. Ten analogous omitted premises in
+`Part3ActualKGramInverseCoercive` remain unmodified pending separate approval.
+Four stale imports are redirected to their actual pinned modules without
+changing declarations. No mathematical completion is inferred from these edits.
+
+The rebuilt runtime policy records project `Elab.async=false` in Lake options
+(and therefore traces), while preserving verified native dependency scheduling.
+This is necessary because pinned Lean setup-file options override command-line
+options. Exact source allowlists, dependency bytes/config hashes, setup-file
+hashes/effective options and registered probe paths are checked; unknown or
+redirected source paths fail closed. Trust0, two threads,6,144MiB and the serial
+compiler lock remain. Strict receipts additionally require actual project source
+commands and matching scope hashes/policy across audit, state and final runner.
+
+Dependency preparation is git-only at manifest pins. A new fail-closed verifier
+resolves the production import closure, verifies Wu research source Git blobs
+and stages only missing identical package-root copies. The first fresh audit
+staged707 copies, found no unresolved import/cycle, and left tracked dependency
+files unchanged. Source hashes and per-copy provenance are recorded, not inferred
+from an earlier workspace. A tracked bounded build runner preserves actual
+return codes, per-source timeout events and terminal versus interrupted state.
+
+Fresh Python preparation tests:34 source/receipt/partition/workflow tests,
+17 source-staging tests and11 bounded-runner tests pass; runtime-guard tests are
+recorded separately. These are infrastructure tests, NOT Lean-source acceptance.
+
+The user subsequently supplied a source handoff for18 formerly unavailable
+files and an external three-file Buchstab proof candidate. The18 named files
+are now additively integrated from their verified latest published commit
+`a216a1a6f4d5febafef2280df63449dc5dee209d`, without merging that branch.
+The original ZIP is historical evidence:17/18 snapshots match first publication
+and16/18 match the chosen latest versions. The two version differences and all
+source hashes are recorded in
+`docs/evidence/rebuild-20261026/handoff18-source-manifest.json`.
+The current586-import continuation is preserved with exactly18 added imports
+(604 total); neither the historical603-import nor latest1472-import entry was
+copied wholesale. Official production scope is now explicitly **1,358** targets,
+retaining all earlier1,340 plus the newly supplied18; this expansion is not a
+claim that any new source compiles. These18 are not yesterday's batch-external
+repair count. Dependency pins remain unchanged.
+
+The external three-file Buchstab candidate is not yet integrated. Its existence
+does not establish theorem acceptance until exact bytes, applicable range and
+transitive axioms pass isolated guarded checks. No prior missing-theorem blocker
+is silently promoted to solved merely because source code was supplied.

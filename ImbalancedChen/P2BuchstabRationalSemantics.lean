@@ -1,5 +1,5 @@
 import ImbalancedChen.CurrentChenBuchstabRefinement
-import Mathlib.Tactic.Omega
+import Lean.Elab.Tactic.Omega
 
 /-!
 SOURCE ONLY / UNCOMPILED / no Lean, lake, evaluator, or numerical replay.

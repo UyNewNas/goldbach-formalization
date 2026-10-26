@@ -15,12 +15,20 @@ No Plancherel identity, spectral-measure identification, or uniform-energy
 bound is asserted here.  A smooth function on the real line used against the
 positive restriction need not vanish near zero; its restriction is smooth on
 the open positive axis but need not have support compact in that axis.
+
+The smoothness order below is explicitly C∞, `((⊤ : ENat) : WithTop ENat)`,
+not the analytic order `⊤ : WithTop ENat`. This corrects the former analytic
+contracts to the stated smooth compact-support intent; it is a statement
+correction, not merely a change to a proof. No energy or measure premise is
+removed. Full intended-type regressions are included below.
 -/
 
 namespace ImbalancedChen.Part3.KLCandidateSmoothCore20261024zz
 noncomputable section
 
 open Set MeasureTheory
+open scoped ENNReal
+open ActualCommonHeightKGramSourceOnly (kTestTransform)
 open P3KLDensityMeasureSourceOnly
 open ActualKCandidateEnergyExhaustion20261024z
 open P3ActualLiteralPacketIntegralSourceOnly
@@ -49,7 +57,7 @@ theorem candidate_smooth_core_dense :
     Dense {F : Lp ℂ (2 : ℝ≥0∞) candidateMeasure |
       ∃ g : ℝ → ℂ,
         ↑↑F =ᵐ[candidateMeasure] g ∧
-        HasCompactSupport g ∧ ContDiff ℝ ⊤ g} := by
+        HasCompactSupport g ∧ ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g} := by
   exact Lp.dense_hasCompactSupport_contDiff
     (μ := candidateMeasure) (p := (2 : ℝ≥0∞)) (by norm_num)
 
@@ -59,7 +67,7 @@ theorem positive_candidate_smooth_core_dense :
     Dense {F : Lp ℂ (2 : ℝ≥0∞) positiveCandidateMeasure |
       ∃ g : ℝ → ℂ,
         ↑↑F =ᵐ[positiveCandidateMeasure] g ∧
-        HasCompactSupport g ∧ ContDiff ℝ ⊤ g} := by
+        HasCompactSupport g ∧ ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g} := by
   exact Lp.dense_hasCompactSupport_contDiff
     (μ := positiveCandidateMeasure) (p := (2 : ℝ≥0∞)) (by norm_num)
 
@@ -67,7 +75,7 @@ theorem positive_candidate_smooth_core_dense :
 theorem positive_candidate_smooth_approx {f : ℝ → ℂ}
     (hf : MemLp f 2 positiveCandidateMeasure) {ε : ℝ} (hε : 0 < ε) :
     ∃ g : ℝ → ℂ,
-      HasCompactSupport g ∧ ContDiff ℝ ⊤ g ∧
+      HasCompactSupport g ∧ ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g ∧
       eLpNorm (f - g) 2 positiveCandidateMeasure ≤ ENNReal.ofReal ε := by
   exact hf.exist_eLpNorm_sub_le (p := (2 : ℝ≥0∞))
     (by norm_num) (by norm_num) hε
@@ -80,13 +88,81 @@ theorem actualK_candidate_smooth_approx {ι : Type*}
     (hbound : ∀ N : ℕ, truncatedCandidateEnergy P k N ≤ C)
     {ε : ℝ} (hε : 0 < ε) :
     ∃ g : ℝ → ℂ,
-      HasCompactSupport g ∧ ContDiff ℝ ⊤ g ∧
+      HasCompactSupport g ∧ ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g ∧
       eLpNorm (kTestTransform P k - g) 2 candidateMeasure ≤
         ENNReal.ofReal ε := by
   have hf : MemLp (kTestTransform P k) 2 candidateMeasure :=
     actualK_memLp_two_of_uniform_bound P k hC hbound
   exact hf.exist_eLpNorm_sub_le (p := (2 : ℝ≥0∞))
     (by norm_num) (by norm_num) hε
+
+
+-- Full intended C∞ contracts (including all hypotheses and conclusions).
+
+example :
+    Dense {F : Lp ℂ (2 : ℝ≥0∞) candidateMeasure |
+      ∃ g : ℝ → ℂ,
+        ↑↑F =ᵐ[candidateMeasure] g ∧
+        HasCompactSupport g ∧ ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g} :=
+  candidate_smooth_core_dense
+
+example :
+    Dense {F : Lp ℂ (2 : ℝ≥0∞) positiveCandidateMeasure |
+      ∃ g : ℝ → ℂ,
+        ↑↑F =ᵐ[positiveCandidateMeasure] g ∧
+        HasCompactSupport g ∧ ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g} :=
+  positive_candidate_smooth_core_dense
+
+example {f : ℝ → ℂ}
+    (hf : MemLp f 2 positiveCandidateMeasure) {ε : ℝ} (hε : 0 < ε) :
+    ∃ g : ℝ → ℂ,
+      HasCompactSupport g ∧ ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g ∧
+      eLpNorm (f - g) 2 positiveCandidateMeasure ≤ ENNReal.ofReal ε :=
+  positive_candidate_smooth_approx hf hε
+
+example {ι : Type*}
+    (P : PacketData ι) (k : D4 → ℤ) {C : ℝ≥0∞}
+    (hC : C < (⊤ : ℝ≥0∞))
+    (hbound : ∀ N : ℕ, truncatedCandidateEnergy P k N ≤ C)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ g : ℝ → ℂ,
+      HasCompactSupport g ∧ ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g ∧
+      eLpNorm (ImbalancedChen.Part3.ActualCommonHeightKGramSourceOnly.kTestTransform P k - g) 2 candidateMeasure ≤
+        ENNReal.ofReal ε :=
+  actualK_candidate_smooth_approx P k hC hbound hε
+
+
+-- Whole declaration ascriptions: @ exposes every implicit parameter.
+
+example : Dense {F : Lp ℂ (2 : ℝ≥0∞) candidateMeasure |
+      ∃ g : ℝ → ℂ,
+        ↑↑F =ᵐ[candidateMeasure] g ∧
+        HasCompactSupport g ∧ ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g} :=
+  @candidate_smooth_core_dense
+
+example : Dense {F : Lp ℂ (2 : ℝ≥0∞) positiveCandidateMeasure |
+      ∃ g : ℝ → ℂ,
+        ↑↑F =ᵐ[positiveCandidateMeasure] g ∧
+        HasCompactSupport g ∧ ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g} :=
+  @positive_candidate_smooth_core_dense
+
+example : ∀ {f : ℝ → ℂ}
+    (hf : MemLp f 2 positiveCandidateMeasure) {ε : ℝ} (hε : 0 < ε),
+    ∃ g : ℝ → ℂ,
+      HasCompactSupport g ∧ ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g ∧
+      eLpNorm (f - g) 2 positiveCandidateMeasure ≤ ENNReal.ofReal ε :=
+  @positive_candidate_smooth_approx
+
+example : ∀ {ι : Type*}
+    (P : PacketData ι) (k : D4 → ℤ) {C : ℝ≥0∞}
+    (hC : C < (⊤ : ℝ≥0∞))
+    (hbound : ∀ N : ℕ, truncatedCandidateEnergy P k N ≤ C)
+    {ε : ℝ} (hε : 0 < ε),
+    ∃ g : ℝ → ℂ,
+      HasCompactSupport g ∧ ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g ∧
+      eLpNorm (ImbalancedChen.Part3.ActualCommonHeightKGramSourceOnly.kTestTransform P k - g) 2 candidateMeasure ≤
+        ENNReal.ofReal ε :=
+  @actualK_candidate_smooth_approx
 
 end
 end ImbalancedChen.Part3.KLCandidateSmoothCore20261024zz

@@ -19,15 +19,22 @@ class ReceiptTests(unittest.TestCase):
         self.manifest = make_manifest(self.source)
         self.pins = {name: 'c' * 64 for name in (*PINS, GUARD)}
         self.pins['toolchain_pin'] = 'leanprover/lean4:v4.33.0-rc1'
-        self.state = {'guard_sha256': self.pins[GUARD], 'lean_memory_mib': 6144, 'lean_elab_async': False,
-                      'environment': {'P0_LEAN_ELAB_ASYNC': 'false', 'CI_LEAN_MEMORY_MIB': '6144',
+        scope = {'source_scopes': {'/repo/A.lean': 'project', '/repo/.lake/packages/Dep/B.lean': 'dependency'},
+                 'dependency_source_sha256': {'/repo/.lake/packages/Dep/B.lean': 'b' * 64},
+                 'scope_config_sha256': {'/repo/lakefile.toml': self.pins['lakefile.toml']},
+                 'setup_roots': ['/repo/.lake']}
+        self.state = {'scheduling_policy': 'source-scoped-v1', 'scope_sha256': sha(canonical(scope).encode()),
+                      'source_scope': scope,
+                      'guard_sha256': self.pins[GUARD], 'lean_memory_mib': 6144, 'lean_elab_async': False,
+                      'environment': {'P0_LEAN_ELAB_ASYNC': 'scoped-v1', 'CI_LEAN_MEMORY_MIB': '6144',
                                       'ELAN_TOOLCHAIN': self.pins['toolchain_pin']},
                       'input_sha256': {'/repo/' + name: self.pins[name] for name in PINS},
                       'realbin': '/toolchain/bin',
                       'runtime_sha256': {'/toolchain/bin/' + name: 'd' * 64 for name in
                                          ('lean', 'lake', 'leanchecker', 'leanir', 'clang', 'leanc', 'llvm-ar', 'leantar')}}
         self.state_raw = encoded(self.state)
-        self.audit = {'status': 'PASS_RUNTIME_GUARD_ONLY', 'compiler_commands': 4, 'source_commands': 2,
+        self.audit = {'scheduling_policy': 'source-scoped-v1', 'scope_sha256': self.state['scope_sha256'],
+                      'project_source_commands': 1, 'status': 'PASS_RUNTIME_GUARD_ONLY', 'compiler_commands': 4, 'source_commands': 2,
                       'probe': True, 'lean_memory_mib': 6144, 'lean_elab_async': False,
                       'state_sha256': sha(self.state_raw), 'command_log_sha256': 'e' * 64}
 
@@ -96,6 +103,57 @@ class ReceiptTests(unittest.TestCase):
             audit = dict(self.audit, state_sha256=sha(state_raw))
             with self.subTest(field=field), self.assertRaises(ValueError):
                 self.create(1, audit=audit, state_raw=state_raw)
+
+    def test_source_scoped_policy_and_counts_fail_closed(self):
+        for field, value in [('scheduling_policy', None), ('scheduling_policy', 'global-false'),
+                             ('scope_sha256', None), ('scope_sha256', 'f' * 64),
+                             ('project_source_commands', None), ('project_source_commands', 0),
+                             ('project_source_commands', True), ('project_source_commands', 3)]:
+            audit = dict(self.audit, **{field: value})
+            with self.subTest(field=field, value=value), self.assertRaises(ValueError):
+                self.create(1, audit=audit)
+        # Dependency-only commands must never qualify as project compilation.
+        audit = dict(self.audit, compiler_commands=100, source_commands=100, project_source_commands=0)
+        with self.assertRaisesRegex(ValueError, 'no project source'):
+            self.create(1, audit=audit)
+        for field, value in [('scheduling_policy', None), ('scheduling_policy', 'global-false'),
+                             ('scope_sha256', None), ('scope_sha256', 'not-a-hash')]:
+            state = dict(self.state, **{field: value})
+            raw = encoded(state)
+            audit = dict(self.audit, state_sha256=sha(raw), scope_sha256=state['scope_sha256'])
+            with self.subTest(field=field, value=value), self.assertRaises(ValueError):
+                self.create(1, audit=audit, state_raw=raw)
+
+    def test_scope_mapping_tampering_and_rehashed_scope_change_rejected(self):
+        receipts = self.receipts()
+        current = copy.deepcopy(self.state)
+        current['source_scope']['source_scopes']['/repo/A.lean'] = 'dependency'
+        with self.assertRaisesRegex(ValueError, 'mapping differs'):
+            verify_receipts(self.source, self.manifest, receipts, self.pins, 4, current)
+        current['scope_sha256'] = sha(canonical(current['source_scope']).encode())
+        with self.assertRaisesRegex(ValueError, 'current final-job scope'):
+            verify_receipts(self.source, self.manifest, receipts, self.pins, 4, current)
+        raw = encoded(current)
+        with self.assertRaisesRegex(ValueError, 'audit source scope differs'):
+            self.create(1, audit=dict(self.audit, state_sha256=sha(raw)), state_raw=raw)
+        current.pop('source_scope')
+        with self.assertRaisesRegex(ValueError, 'mapping missing'):
+            verify_receipts(self.source, self.manifest, receipts, self.pins, 4, current)
+
+    def test_current_source_policy_must_match_cached_shards(self):
+        receipts = self.receipts()
+        for field, value in [('scheduling_policy', None), ('scheduling_policy', 'global-false'),
+                             ('scope_sha256', None), ('scope_sha256', 'f' * 64),
+                             ('lean_elab_async', True), ('lean_memory_mib', 4096)]:
+            current = copy.deepcopy(self.state)
+            current[field] = value
+            with self.subTest(field=field, value=value), self.assertRaises(ValueError):
+                verify_receipts(self.source, self.manifest, receipts, self.pins, 4, current)
+        for flag, value in [('P0_LEAN_ELAB_ASYNC', 'false'), ('CI_LEAN_MEMORY_MIB', '4096')]:
+            current = copy.deepcopy(self.state)
+            current['environment'][flag] = value
+            with self.subTest(flag=flag), self.assertRaises(ValueError):
+                verify_receipts(self.source, self.manifest, receipts, self.pins, 4, current)
 
     def test_final_job_runtime_must_match_cached_shards(self):
         receipts = self.receipts()

@@ -15,6 +15,12 @@ Thus their restrictions really belong to C_c^infinity((0,infinity)). The proof
 uses zero mass on the nonpositive axis, regularity from local finiteness, a
 strong L² cutoff at zero, and Mathlib's smooth approximation theorem. There
 is no KL Plancherel or automorphic spectral measure identification here.
+
+The smoothness order below is explicitly C∞, `((⊤ : ENat) : WithTop ENat)`,
+not the analytic order `⊤ : WithTop ENat`. This corrects the former analytic
+contracts to the stated smooth compact-support intent; it is a statement
+correction, not merely a change to a proof. No energy or measure premise is
+removed. Full intended-type regressions are included below.
 -/
 
 namespace ImbalancedChen.Part3.KLPositiveInteriorCore20261024zz
@@ -67,8 +73,8 @@ def nearZeroCutoff (δ t : ℝ) : ℝ :=
   Real.smoothTransition ((2 / δ) * t - 1)
 
 theorem nearZeroCutoff_contDiff {δ : ℝ} :
-    ContDiff ℝ ⊤ (nearZeroCutoff δ) := by
-  have hlinear : ContDiff ℝ ⊤ (fun t : ℝ => (2 / δ) * t - 1) := by fun_prop
+    ContDiff ℝ ((⊤ : ENat) : WithTop ENat) (nearZeroCutoff δ) := by
+  have hlinear : ContDiff ℝ ((⊤ : ENat) : WithTop ENat) (fun t : ℝ => (2 / δ) * t - 1) := by fun_prop
   exact Real.smoothTransition.contDiff.comp hlinear
 
 theorem nearZeroCutoff_nonneg (δ t : ℝ) : 0 ≤ nearZeroCutoff δ t :=
@@ -101,7 +107,7 @@ def cutAtZero (δ : ℝ) (g : ℝ → ℂ) (t : ℝ) : ℂ :=
   nearZeroCutoff δ t • g t
 
 theorem cutAtZero_contDiff {δ : ℝ} {g : ℝ → ℂ}
-    (hg : ContDiff ℝ ⊤ g) : ContDiff ℝ ⊤ (cutAtZero δ g) := by
+    (hg : ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g) : ContDiff ℝ ((⊤ : ENat) : WithTop ENat) (cutAtZero δ g) := by
   exact (nearZeroCutoff_contDiff (δ := δ)).smul hg
 
 theorem cutAtZero_hasCompactSupport {δ : ℝ} {g : ℝ → ℂ}
@@ -128,7 +134,7 @@ theorem cutAtZero_tsupport_positive {δ : ℝ} {g : ℝ → ℂ}
 /-- Strong L² cutoff at zero for every smooth compactly supported function.
 The statement is uniform for all smaller positive cutoff radii. -/
 theorem smooth_strong_cutoff_at_zero {g : ℝ → ℂ}
-    (hg : ContDiff ℝ ⊤ g) (hgc : HasCompactSupport g)
+    (hg : ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g) (hgc : HasCompactSupport g)
     {ε : ℝ≥0∞} (hε : ε ≠ 0) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ r : ℝ, 0 < r → r ≤ δ →
       eLpNorm (g - cutAtZero r g) 2 positiveCandidateMeasure ≤ ε := by
@@ -179,7 +185,7 @@ positive candidate measure, stated as a representative norm estimate. -/
 theorem positive_candidate_interior_smooth_approx {f : ℝ → ℂ}
     (hf : MemLp f 2 positiveCandidateMeasure) {ε : ℝ} (hε : 0 < ε) :
     ∃ h : ℝ → ℂ,
-      HasCompactSupport h ∧ ContDiff ℝ ⊤ h ∧
+      HasCompactSupport h ∧ ContDiff ℝ ((⊤ : ENat) : WithTop ENat) h ∧
       tsupport h ⊆ Ioi (0 : ℝ) ∧
       eLpNorm (f - h) 2 positiveCandidateMeasure ≤ ENNReal.ofReal ε := by
   have hhalf : 0 < ε / 2 := by linarith
@@ -208,6 +214,59 @@ theorem positive_candidate_interior_smooth_approx {f : ℝ → ℂ}
       rw [← ENNReal.ofReal_add (by positivity)]
       congr 1
       ring
+
+
+-- Full intended C∞ contracts (including all hypotheses and conclusions).
+
+example {δ : ℝ} :
+    ContDiff ℝ ((⊤ : ENat) : WithTop ENat) (nearZeroCutoff δ) :=
+  nearZeroCutoff_contDiff
+
+example {δ : ℝ} {g : ℝ → ℂ}
+    (hg : ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g) : ContDiff ℝ ((⊤ : ENat) : WithTop ENat) (cutAtZero δ g) :=
+  cutAtZero_contDiff hg
+
+example {g : ℝ → ℂ}
+    (hg : ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g) (hgc : HasCompactSupport g)
+    {ε : ℝ≥0∞} (hε : ε ≠ 0) :
+    ∃ δ : ℝ, 0 < δ ∧ ∀ r : ℝ, 0 < r → r ≤ δ →
+      eLpNorm (g - cutAtZero r g) 2 positiveCandidateMeasure ≤ ε :=
+  smooth_strong_cutoff_at_zero hg hgc hε
+
+example {f : ℝ → ℂ}
+    (hf : MemLp f 2 positiveCandidateMeasure) {ε : ℝ} (hε : 0 < ε) :
+    ∃ h : ℝ → ℂ,
+      HasCompactSupport h ∧ ContDiff ℝ ((⊤ : ENat) : WithTop ENat) h ∧
+      tsupport h ⊆ Ioi (0 : ℝ) ∧
+      eLpNorm (f - h) 2 positiveCandidateMeasure ≤ ENNReal.ofReal ε :=
+  positive_candidate_interior_smooth_approx hf hε
+
+
+-- Whole declaration ascriptions: @ exposes every implicit parameter.
+
+example : ∀ {δ : ℝ},
+    ContDiff ℝ ((⊤ : ENat) : WithTop ENat) (nearZeroCutoff δ) :=
+  @nearZeroCutoff_contDiff
+
+example : ∀ {δ : ℝ} {g : ℝ → ℂ}
+    (hg : ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g),
+    ContDiff ℝ ((⊤ : ENat) : WithTop ENat) (cutAtZero δ g) :=
+  @cutAtZero_contDiff
+
+example : ∀ {g : ℝ → ℂ}
+    (hg : ContDiff ℝ ((⊤ : ENat) : WithTop ENat) g) (hgc : HasCompactSupport g)
+    {ε : ℝ≥0∞} (hε : ε ≠ 0),
+    ∃ δ : ℝ, 0 < δ ∧ ∀ r : ℝ, 0 < r → r ≤ δ →
+      eLpNorm (g - cutAtZero r g) 2 positiveCandidateMeasure ≤ ε :=
+  @smooth_strong_cutoff_at_zero
+
+example : ∀ {f : ℝ → ℂ}
+    (hf : MemLp f 2 positiveCandidateMeasure) {ε : ℝ} (hε : 0 < ε),
+    ∃ h : ℝ → ℂ,
+      HasCompactSupport h ∧ ContDiff ℝ ((⊤ : ENat) : WithTop ENat) h ∧
+      tsupport h ⊆ Ioi (0 : ℝ) ∧
+      eLpNorm (f - h) 2 positiveCandidateMeasure ≤ ENNReal.ofReal ε :=
+  @positive_candidate_interior_smooth_approx
 
 end
 end ImbalancedChen.Part3.KLPositiveInteriorCore20261024zz
