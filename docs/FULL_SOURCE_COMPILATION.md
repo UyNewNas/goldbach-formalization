@@ -236,3 +236,30 @@ legacy `build_status=not_a_production_build_target` remains for consumers. These
 fields mean this production build did not run them; separately executed existing
 verification gates retain their own evidence and are not overridden. No aggregate
 production-success flag asserts these 306 files compiled.
+
+## Fresh rebuild authorized 2026-10-26
+
+The earlier unpublished cloud checkout and its validation artifacts are not
+available in the current execution environment. This rebuild starts from the
+actual PR6 head `8d0dda4d59368402340556f8e5094414e6aad5fa`, not from a
+reconstructed or recovered `23a83db` checkout. Historical success summaries
+are not acceptance evidence for these new sources; all validation must be rerun.
+The official scope remains 1,340 production targets with pinned dependencies,
+trust0, the6,144MiB compiler budget and serialized compiler slots. Existing
+proof gates and missing18 unavailable local files retain their scope boundaries.
+
+The user explicitly approved (1) correcting the eight KL declarations from
+analytic order to the intended C-infinity order, with full-type and downstream
+checks and explicit statement-change disclosure; (2) restoring the omitted
+positivity premise to the two StrictGram positive-definiteness theorems and
+checking their callers; and (3) publishing current-task repairs/tests/config/docs
+to the existing draft PR6 branch, updating its description and following CI,
+without merging. The user then chose direct rebuilding from GitHub. These
+approved contract changes are not described as proof-body-only repairs.
+
+This initial checkpoint records the rebuild plan only: no new Lean compilation
+or mathematical completion is claimed. The general missing Buchstab theorem
+is not supplied or assumed, and TaggedRowDecoder resource failure remains an
+honest outstanding issue. Meaningful subsequent milestones will be published
+incrementally and separately backed up rather than retained only in ephemeral
+storage. Exact-head CI results will be distinguished from local focused checks.
