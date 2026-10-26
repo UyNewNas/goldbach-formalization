@@ -199,7 +199,7 @@ theorem integral_eq_canonical (corr : ℝ → ℝ) :
     integral corr = ∫ x in triangle, canonicalKernel corr x * ∏ i, 1 / x i := by
   apply setIntegral_congr_fun measurableSet_triangle
   intro x hx
-  rw [kernel_eq_canonical hx]
+  exact congrArg (fun y => y * ∏ i, 1 / x i) (kernel_eq_canonical hx corr)
 
 end
 

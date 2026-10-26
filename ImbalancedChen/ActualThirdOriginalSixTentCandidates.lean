@@ -219,9 +219,9 @@ theorem original_tent_old_range (s : TentSum) (k : TentSide) (a b : BoxPoint)
   have hh := div_le_div₀ ((hres.le.trans hlow).trans hhigh) hhigh (ha 2) (ht.1 2)
   constructor
   · simpa only [tentOldLow,tentOldArgument,affineArgument,oldNumerator] using
-      add_le_add_right hl (oldZ s k)
+      add_le_add hl (le_refl (oldZ s k))
   · simpa only [tentOldHigh,tentOldArgument,affineArgument,oldNumerator] using
-      add_le_add_right hh (oldZ s k)
+      add_le_add hh (le_refl (oldZ s k))
 
 theorem original_tent_old_span (s : TentSum) (k : TentSide) (a b : BoxPoint)
     (ha : ∀ i, 0<a i) (hab : ∀ i, a i<b i) (hres : 0<oldNumerator s k b) :
@@ -237,7 +237,7 @@ theorem original_tent_old_span (s : TentSum) (k : TentSide) (a b : BoxPoint)
   have hsecond := div_le_div₀ (hres.trans hnumlt).le
     (le_refl (oldNumerator s k a)) (ha 2) (hab 2).le
   simpa only [tentOldLow,tentOldHigh,tentOldArgument,affineArgument,oldNumerator] using
-    add_lt_add_right (hfirst.trans_le hsecond) (oldZ s k)
+    add_lt_add_of_lt_of_le (hfirst.trans_le hsecond) (le_refl (oldZ s k))
 
 theorem original_tent_old_minorant
     (s : TentSum) (k : TentSide) (a b : BoxPoint)

@@ -1,5 +1,6 @@
 import ImbalancedChen.ActualExtendedThirdCompactUpperRho
 import ImbalancedChen.ActualExtendedThirdDistinctProductHarmonic
+import ImbalancedChen.FirstExitFrontierTupleReindex
 
 /-!
 # The literal compact policy's third-candidate prime carrier
@@ -173,7 +174,8 @@ theorem actualExtendedThirdCompactFrontierCellSum_eq_tuple_sum {e h : ℝ} {m N 
           G (primeHistoryTuple 3 candidate.selectedPrefix) else 0))).sum = _
   rw [firstExitFrontierCandidates_weighted_sum_eq_tuple_sum 2
     (actualExtendedThirdCompactUpperPolicy e h m N) (fun q : ℕ => 1 / ((q : ℝ) - 1))
-    _ (roughPrimeUniverse_nodup N cap w ((N : ℝ) ^ thirdPrefixRho))]
+    _ (roughPrimeUniverse_nodup N cap w ((N : ℝ) ^ thirdPrefixRho))
+    (fun p => if actualPrimeTupleLog N p ∈ actualExtendedThirdOwnedCell m j then G p else 0)]
   simp_rw [mul_ite, mul_zero]
   rw [← Finset.sum_filter,
     actualExtendedThirdCompactFrontier_cell_filter hN hh he0 he hmesh w hw hcap hj]

@@ -28,7 +28,7 @@ private theorem scaled_floor_div_le {d : ℤ} (hd : 0<d) (n : ℤ) :
 private theorem le_scaled_up_div {d : ℤ} (hd : 0<d) (n : ℤ) :
     (n:ℝ)/(d:ℝ)/(P160:ℝ)≤value (up n d) := by
   have h := neg_le_neg (scaled_floor_div_le hd (-n))
-  simpa [up,value] using h
+  simpa only [up, value, Int.cast_neg, neg_div, neg_neg] using h
 
 /-- Reuse of the scalar proof from RoundedOldWeight, isolated from its
 symmetric analytic ancestry to avoid redeclaring the shared box ancestors. -/

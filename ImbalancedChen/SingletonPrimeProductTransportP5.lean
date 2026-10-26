@@ -58,11 +58,13 @@ theorem primeProductSignedError_singleton_eq
   intro q _
   apply congrArg (fun x : ℝ => rho q * x)
   simp only [singletonWeight, labelledProduct_singleton]
-  rw [sum_labelledSingleton, finitePrimitiveDiscrepancy_eq_sum]
+  rw [sum_labelledSingleton P (fun p => omega p *
+    ((if Nat.ModEq q p N then 1 else 0) -
+      (if Nat.Coprime p q then 1 else 0) / (q.totient : ℝ))),
+    finitePrimitiveDiscrepancy_eq_sum]
   apply Finset.sum_congr rfl
   intro p _
-  by_cases hAP : Nat.ModEq q p N <;> by_cases hcop : Nat.Coprime p q <;>
-    simp [hAP, hcop] <;> ring
+  split_ifs <;> ring
 
 def primeIntervalSource (P : ℕ) (lo hi : ℝ) : Finset ℕ := by
   classical

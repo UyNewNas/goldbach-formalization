@@ -61,7 +61,8 @@ theorem primeTupleMinusProfile_ownCube_gate (lam : ℝ) (t : Fin 3 → ℝ)
   split_ifs with hg
   · rfl
   · have hg' : lam ≤ t 0 + t 1 + t 2 + 2 * t 2 := by
-      simpa only [primeTupleOwnCubeForm, Fin.sum_univ_three] using (le_of_not_gt hg)
+      have hle : lam ≤ (∑ i : Fin 3, t i) + 2 * t 2 := le_of_not_gt hg
+      simpa only [Fin.sum_univ_three] using hle
     have hratio : (lam - t 0 - t 1 - t 2) / t 2 ≤ 2 :=
       (div_le_iff₀ hz).mpr (by linarith only [hg'])
     rw [primeTupleMinusProfile_eq_extendedThirdFactor lam t hz,

@@ -69,8 +69,8 @@ theorem hasDerivAt_square_mul_normalized_gap {s : ℝ} (hs : 3 < s) :
       (s * ((upper s - lower s) - (upper (s - 1) - lower (s - 1)))) s := by
   have hs0 : s ≠ 0 := by linarith
   have hsquare : HasDerivAt (fun t : ℝ => t ^ 2) (s + s) s := by
-    simpa only [pow_two, id_eq, one_mul, mul_one] using
-      (hasDerivAt_id s).mul (hasDerivAt_id s)
+    simpa only [Nat.cast_ofNat, Nat.reduceSub, pow_one, two_mul] using
+      hasDerivAt_pow 2 s
   have hd := hsquare.mul (hasDerivAt_normalized_gap hs)
   apply hd.congr_deriv
   field_simp [hs0] <;> ring
