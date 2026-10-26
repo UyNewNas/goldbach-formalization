@@ -2462,3 +2462,4 @@ import ImbalancedChen.Part3CharacterMiddleZeroFirstPairs
 import ImbalancedChen.Part3ActualJComplexArgumentODE
 import ImbalancedChen.Part3ActualLogCoverKZeroGrowth
 import ImbalancedChen.Part3AERealChartPhysicalVerticalWeak
+import ImbalancedChen.Part3ActualJComplexJetRotations
