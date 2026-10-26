@@ -1,0 +1,3 @@
+SOURCE_ONLY / UNCOMPILED / NOT_ROOT_ACCEPTED
+
+Fresh team immutable snapshot1 archives12 new paths plus its generated hub. Prior Oct26 source-only baseline127; fresh-team new12; combined139. These counts convey no proof completion. Four persistent candidate HOLDs remain excluded. Known defective unpublished CuspConstantModeLogOperator73471 bytes remain excluded; published base dependency bytes are retained and exact-byte divergence recorded in import inventory. Withdrawn coordinate-indicator9f603 is excluded. No old proof edits. No compile, checker, audit, numerical replay, or CI requested. Zero proof credit; ROOT266/8851 and original theorem OPEN30% remain unchanged.
