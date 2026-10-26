@@ -1,0 +1,3 @@
+SOURCE_ONLY / UNCOMPILED / NOT_ROOT_ACCEPTED
+
+Immutable integrator fixed57 archives12 absent new source paths plus generated hub. Prior Oct26a127; fresh total904; combined1031. Source counters convey no proof completion. All frozen registry HOLDs excluded from source and hub; alreadyinstalled held proofbytes remain untouched locally. Dots handoff records concrete proof/API issues and author delivery withdrawals. Known defective unpublished CuspConstantModeLogOperator73471 bytes excluded; published base bytes retained and divergence recorded. No old proof edit, compile, checker, audit, numerical replay, or CI. Zero proof credit; ROOT266/8851 and original theorem OPEN30% unchanged.
