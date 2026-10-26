@@ -314,3 +314,20 @@ The external three-file Buchstab candidate is not yet integrated. Its existence
 does not establish theorem acceptance until exact bytes, applicable range and
 transitive axioms pass isolated guarded checks. No prior missing-theorem blocker
 is silently promoted to solved merely because source code was supplied.
+
+### Actual Lake option-name correction
+
+The first new VE run exposed a real configuration bug: quoted TOML
+`"Elab.async"` was one escaped Lean name component (`«Elab.async»`), not the
+registered dotted option. It is corrected to unquoted `Elab.async = false`;
+the guard validates the nested TOML representation and regression tests reject
+the quoted form. Runtime03 was rebuilt from the changed config/guard rather
+than treating runtime02 as unchanged. The earlier evidence is preserved.
+
+A real guarded Lake build of
+`ImbalancedChen.Certificates.OriginalNodeArraysV1.DataCore` now exits0;
+its generated setup JSON explicitly contains `"Elab.async": false`. The
+post-run runtime audit passes with one genuine project-source command. This
+single-source scheduling smoke does not establish KL/StrictGram or all1,358
+compilation. Full guard tests now18; the original failed VE run remains a
+failed historical CI result, pending a new exact-head run.

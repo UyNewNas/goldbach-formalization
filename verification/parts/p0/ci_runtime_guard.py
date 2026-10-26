@@ -203,7 +203,8 @@ def build_source_scope(root, probes):
     """Exact tracked project/dependency source allowlist; dependency defaults remain native."""
     import tomllib
     package_config = tomllib.loads((root / 'lakefile.toml').read_text())
-    require(package_config.get('leanOptions', {}).get('Elab.async') is False, 'project Lake config must trace Elab.async=false')
+    require(package_config.get('leanOptions', {}).get('Elab', {}).get('async') is False and
+            'Elab.async' not in package_config.get('leanOptions', {}), 'project Lake config must trace Elab.async=false')
     manifest = json.loads((root / 'lake-manifest.json').read_text())
     scopes, dependencies, configs, revisions = {}, {}, {}, {}
     repos = [(root, 'project')]

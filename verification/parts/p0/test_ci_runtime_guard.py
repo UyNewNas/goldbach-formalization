@@ -70,7 +70,7 @@ class FakeRuntimeTests(unittest.TestCase):
                 path.mkdir(parents=True)
             (root / 'lean-toolchain').write_text(guard.PIN)
             for name in ('lakefile.toml', 'lake-manifest.json'):
-                (root / name).write_text('{"packages": []}' if name == 'lake-manifest.json' else 'name = "test"\nleanOptions = {"Elab.async" = false}')
+                (root / name).write_text('{"packages": []}' if name == 'lake-manifest.json' else 'name = "test"\nleanOptions = {Elab.async = false}')
             (root / 'Example.lean').write_text('theorem test : True := True.intro')
             subprocess.run(['git', 'init', '-q', str(root)], check=True)
             subprocess.run(['git', '-C', str(root), 'add', '.'], check=True)
@@ -222,7 +222,7 @@ class SourcePolicyTests(unittest.TestCase):
             src, dep, probe = root / 'Main.lean', root / 'dep/Dep.lean', root / 'Probe.lean'
             dep.parent.mkdir()
             for p in (src, dep, probe): p.write_text('-- source')
-            cfg = root / 'lakefile.toml'; cfg.write_text('leanOptions = {"Elab.async" = false}')
+            cfg = root / 'lakefile.toml'; cfg.write_text('leanOptions = {Elab.async = false}')
             build = root / '.lake'; build.mkdir()
             scope = {'source_scopes': {str(src): 'project', str(dep): 'dependency', str(probe): 'probe'},
                      'dependency_source_sha256': {str(dep): guard.sha(dep)},
@@ -231,6 +231,15 @@ class SourcePolicyTests(unittest.TestCase):
 
     def policy(self, root, scope, args):
         return guard.source_policy(guard.normalize_lean_args(args, 6144, None), scope, str(root))
+
+    def test_quoted_dot_is_not_a_traced_lean_option(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for config in ('leanOptions = {"Elab.async" = false}',
+                           'leanOptions = {Elab.async = true}'):
+                (root / 'lakefile.toml').write_text(config)
+                with self.assertRaisesRegex(RuntimeError, 'must trace'):
+                    guard.build_source_scope(root, [])
 
     def test_scopes_and_native_dependency_options(self):
         with self.scope() as (root, scope):
@@ -272,7 +281,7 @@ class SourcePolicyTests(unittest.TestCase):
         with self.scope() as (root, scope):
             (root / 'dep/Dep.lean').write_text('-- modified')
             with self.assertRaises(RuntimeError): self.policy(root, scope, ['dep/Dep.lean'])
-            (root / 'lakefile.toml').write_text('leanOptions = {"Elab.async" = true}')
+            (root / 'lakefile.toml').write_text('leanOptions = {Elab.async = true}')
             with self.assertRaises(RuntimeError): self.policy(root, scope, ['Main.lean'])
 
 
