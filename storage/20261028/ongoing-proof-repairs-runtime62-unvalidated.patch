@@ -1,0 +1,677 @@
+diff --git a/ImbalancedChen/P1OriginalHistoricalRetainedModulusLevel.lean b/ImbalancedChen/P1OriginalHistoricalRetainedModulusLevel.lean
+index 3ba642d..9c0ad1b 100644
+--- a/ImbalancedChen/P1OriginalHistoricalRetainedModulusLevel.lean
++++ b/ImbalancedChen/P1OriginalHistoricalRetainedModulusLevel.lean
+@@ -285,8 +285,8 @@ theorem actual_effectiveExponent5Q_le_ceiling (theta : ℚ)
+   split_ifs
+   · exact p1HistoricalPrefixLookup_le_of_bounds 0 (19 / 96) (by norm_num) m
+       (P1OriginalCoarseFifthContinuation.selectedFifthCells e chi m omega J5) cap5 _ theta
+-      (actual_effectiveExponent4Q_le_ceiling e chi m omega J4 cap4 theta he hTheta N _) h5 _
+-  · exact actual_effectiveExponent4Q_le_ceiling e chi m omega J4 cap4 theta he hTheta N _
++      (actual_effectiveExponent4Q_le_ceiling e chi m omega J4 cap4 theta he hTheta h4 N _) h5 _
++  · exact actual_effectiveExponent4Q_le_ceiling e chi m omega J4 cap4 theta he hTheta h4 N _
+ 
+ theorem actual_level5_le_power_ceiling (theta : ℚ)
+     (hc : originalCeilingCheck e chi m omega J4 cap4 J5 cap5 theta = true)
+diff --git a/ImbalancedChen/P1OriginalVariableFourthContinuation.lean b/ImbalancedChen/P1OriginalVariableFourthContinuation.lean
+index 0fbda23..c5e852d 100644
+--- a/ImbalancedChen/P1OriginalVariableFourthContinuation.lean
++++ b/ImbalancedChen/P1OriginalVariableFourthContinuation.lean
+@@ -90,7 +90,8 @@ theorem profile4_row_le {ι : Type*} (seed : ℝ) (rows : Finset ι)
+     (eligible : ι → (Fin 4 → ℝ) → Prop) (profile : ι → (Fin 4 → ℝ) → ℝ)
+     (t : Fin 4 → ℝ) (r : ι) (hr : r ∈ rows) (he : eligible r t) :
+     profile r t ≤ profile4 seed rows eligible profile t := by
+-  exact finiteMax_row_le rows _ _ seed r hr he
++  exact finiteMax_row_le rows (fun row => eligible row t)
++    (fun row => profile row t) seed r hr he
+ 
+ theorem profile4_eq_seed_of_outside {ι : Type*} (seed : ℝ) (rows : Finset ι)
+     (eligible : ι → (Fin 4 → ℝ) → Prop) (profile : ι → (Fin 4 → ℝ) → ℝ)
+@@ -114,8 +115,10 @@ theorem overlapping_candidates_le_profile4 {ι : Type*} (seed loss : ℝ) (rows
+     (her : eligible r t) (hes : eligible s t) :
+     max (candidateExponent loss (mask r) t) (candidateExponent loss (mask s) t) ≤
+       profile4 seed rows eligible (fun row => candidateExponent loss (mask row)) t := by
+-  exact max_le (profile4_row_le seed rows eligible _ t r hr her)
+-    (profile4_row_le seed rows eligible _ t s hs hes)
++  exact max_le (profile4_row_le seed rows eligible
++    (fun row => candidateExponent loss (mask row)) t r hr her)
++    (profile4_row_le seed rows eligible
++      (fun row => candidateExponent loss (mask row)) t s hs hes)
+ 
+ def seedExponent (e chi : ℝ) (m : ℕ) (omega N : ℝ) (history : List ℕ) : ℝ :=
+   P1CoarseFirstCubeFallbackMargin.effectiveExponent e chi m omega N (rosserAncestor 3 history)
+@@ -304,7 +307,8 @@ theorem producerProfile4_row_le (e : ℝ) (rows : Finset ProducerRow)
+     (r : ProducerRow) (hr : r ∈ rows) (he : producerEligible licensed r t) :
+     v (∑ i ∈ r.selected, t i) - 2 * e ≤ producerProfile4 e rows licensed seed t := by
+   rw [← r.bufferedCandidate_eq e t]
+-  exact profile4_row_le seed rows (producerEligible licensed) _ t r hr he
++  exact profile4_row_le seed rows (producerEligible licensed)
++    (fun row => row.bufferedCandidate e) t r hr he
+ 
+ theorem producerProfile4_seed_le (e : ℝ) (rows : Finset ProducerRow)
+     (licensed : ProducerRow → Prop) (seed : ℝ) (t : Point) :
+@@ -324,8 +328,10 @@ theorem producerProfile4_overlap (e : ℝ) (rows : Finset ProducerRow)
+     (her : producerEligible licensed r t) (hes : producerEligible licensed s t) :
+     max (r.bufferedCandidate e t) (s.bufferedCandidate e t) ≤
+       producerProfile4 e rows licensed seed t := by
+-  exact max_le (profile4_row_le seed rows (producerEligible licensed) _ t r hr her)
+-    (profile4_row_le seed rows (producerEligible licensed) _ t s hs hes)
++  exact max_le (profile4_row_le seed rows (producerEligible licensed)
++    (fun row => row.bufferedCandidate e) t r hr her)
++    (profile4_row_le seed rows (producerEligible licensed)
++      (fun row => row.bufferedCandidate e) t s hs hes)
+ 
+ theorem producerLevel4_outside_rows (e chi : ℝ) (m : ℕ) (omega N : ℝ)
+     (rows : Finset ProducerRow) (licensed : ProducerRow → Prop) (history : List ℕ)
+diff --git a/ImbalancedChen/P1OriginalVariableFourthDescendantLevel.lean b/ImbalancedChen/P1OriginalVariableFourthDescendantLevel.lean
+index df21423..0e34928 100644
+--- a/ImbalancedChen/P1OriginalVariableFourthDescendantLevel.lean
++++ b/ImbalancedChen/P1OriginalVariableFourthDescendantLevel.lean
+@@ -242,8 +242,9 @@ theorem producer_nonzeroCoefficient_modulus_lt_theta (e chi : ℝ) (he : 0 ≤ e
+   have hmem : d ∈ producerRoughModuli e chi m omega N cap w z rows licensed := by
+     by_contra hnot
+     apply hd
+-    simp [producerRoughCoefficient, firstExitRetainedCoefficient,
+-      producerRoughModuli, hnot]
++    dsimp only [producerRoughModuli] at hnot
++    simp only [producerRoughCoefficient, firstExitRetainedCoefficient,
++      if_neg hnot, Int.cast_zero]
+   exact producer_roughModulus_lt_theta e chi he m omega N cap w z rows licensed
+     heupper hN d hmem
+ 
+diff --git a/ImbalancedChen/P1OriginalVariableFourthRowModulusTransfer.lean b/ImbalancedChen/P1OriginalVariableFourthRowModulusTransfer.lean
+index 32b1db3..eb1f7a6 100644
+--- a/ImbalancedChen/P1OriginalVariableFourthRowModulusTransfer.lean
++++ b/ImbalancedChen/P1OriginalVariableFourthRowModulusTransfer.lean
+@@ -40,7 +40,8 @@ theorem producerLevel4_eq_winning_row (e chi : ℝ) (m : ℕ) (omega N : ℝ)
+         r.bufferedCandidate e t := by
+     apply le_antisymm
+     · exact finiteMax_le rows _ _ _ _ hseed hrows
+-    · exact profile4_row_le _ rows (producerEligible licensed) _ t r hr her
++    · exact profile4_row_le (seedExponent e chi m omega N pre) rows
++        (producerEligible licensed) (fun s => s.bufferedCandidate e) t r hr her
+   change N ^ (if pre.length = 4 then
+       profile4 (seedExponent e chi m omega N pre) rows
+         (producerEligible licensed) (fun s => s.bufferedCandidate e) t
+diff --git a/ImbalancedChen/P2FirstIntegralSeries.lean b/ImbalancedChen/P2FirstIntegralSeries.lean
+index 7132138..64fef4a 100644
+--- a/ImbalancedChen/P2FirstIntegralSeries.lean
++++ b/ImbalancedChen/P2FirstIntegralSeries.lean
+@@ -119,7 +119,7 @@ private theorem continuousOn_partialLog (n : ℕ) :
+       simpa [logPartial] using
+         (continuousOn_const : ContinuousOn (fun _ : ℝ => (0 : ℝ)) (Icc 2 stop))
+   | succ n ih =>
+-      simpa only [logPartial, Finset.sum_range_succ] using
++      simpa only [logPartial, Finset.sum_range_succ, Pi.add_def, Pi.pow_apply] using
+         ih.add ((continuousOn_coordinate.pow (n + 1)).div_const ((n : ℝ) + 1))
+ 
+ theorem continuousOn_partialKernel (n : ℕ) :
+@@ -176,7 +176,7 @@ theorem kernel_series_pointwise (n : ℕ) {s : ℝ}
+   · exact (div_le_div_iff_of_pos_right hspos).2 hb.1
+   · have hu := (div_le_div_iff_of_pos_right hspos).2 hb.2
+     rw [add_div] at hu
+-    exact hu.trans (add_le_add_left htail _)
++    exact hu.trans (add_le_add_right htail _)
+ 
+ /-- Integrating the actual full domain preserves the explicit geometric error. -/
+ theorem originalFirstIntegral_series_enclosure (n : ℕ) :
+diff --git a/ImbalancedChen/P2OriginalFourthCapProducerInterface.lean b/ImbalancedChen/P2OriginalFourthCapProducerInterface.lean
+index e4a5c81..53ab291 100644
+--- a/ImbalancedChen/P2OriginalFourthCapProducerInterface.lean
++++ b/ImbalancedChen/P2OriginalFourthCapProducerInterface.lean
+@@ -83,7 +83,7 @@ theorem Affine.lower_le_eval (a : Affine) (lo hi : QEndpoint) (t : Point)
+       ((if 0 ≤ a.coefficient i then a.coefficient i * lo i
+         else a.coefficient i * hi i : ℚ) : ℝ) := by simp only [Affine.lower, Rat.cast_add, Rat.cast_sum]
+     _ ≤ (a.constant : ℝ) + ∑ i, (a.coefficient i : ℝ) * t i :=
+-      add_le_add_left (Finset.sum_le_sum (fun i _ => hs i)) _
++      add_le_add_right (Finset.sum_le_sum (fun i _ => hs i)) _
+     _ = a.eval t := rfl
+ 
+ theorem Affine.eval_le_upper (a : Affine) (lo hi : QEndpoint) (t : Point)
+@@ -150,17 +150,23 @@ def total (t : Point) : ℝ := ∑ i, t i
+ def oldCube : Affine := ⟨0, ![1, 1, 3, 0]⟩
+ 
+ theorem oldCube_eval (t : Point) : oldCube.eval t = t 0 + t 1 + 3 * t 2 := by
+-  norm_num [oldCube, Affine.eval, Fin.sum_univ_succ]
++  norm_num [oldCube, Affine.eval, Fin.sum_univ_four,
++    Matrix.cons_val_two, Matrix.cons_val_three]
+   <;> ring
+ 
+ theorem oldComponent_vector (t : Point) : oldComponent t =
+-    ![v (t 0), v (t 0 + t 1), v (t 0 + t 1 + t 2), B (t 2),
++    ![v (t 0), v (t 0 + t 1), v (t 0 + t 1 + t 2), VariableEnvelope.B (t 2),
+       v (t 0 + t 2), v (t 1 + t 2)] := by
+   funext j
+   fin_cases j <;>
+-    simp [oldComponent, oldPiece, oldMask, tentPlane_eval, maskSum_eq,
+-      Affine.eval, B, cap, v_eq_min, Fin.sum_univ_succ, add_assoc]
+-  <;> ring
++    norm_num [oldComponent, oldPiece, oldMask, tentPlane, Affine.eval,
++      VariableEnvelope.B, cap, v_eq_min, VariableEnvelope.A, VariableEnvelope.C,
++      Fin.sum_univ_four, Matrix.cons_val_two, Matrix.cons_val_three] <;>
++    simp -failIfUnchanged only [Fin.ext_iff, Fin.coe_ofNat_eq_mod, Nat.reduceMod] <;>
++    norm_num <;> congr 1 <;>
++    simp -failIfUnchanged only [Fin.ext_iff, Fin.coe_ofNat_eq_mod, Nat.reduceMod,
++      Matrix.cons_val_two, Matrix.cons_val_three, Matrix.head_cons, Matrix.tail_cons] <;>
++    norm_num <;> ring
+ 
+ theorem oldComponent_le (t : Point) (j : Fin 6) : oldComponent t j ≤ oldCap t := by
+   rw [oldComponent_vector]
+@@ -195,7 +201,7 @@ theorem gapPiece_le (I : Finset (Fin 4)) (lo hi : QEndpoint) (t : Point)
+   have h0 := ((tentPlane I side).sub (oldPiece j false)).lower_le_eval lo hi t hl hu
+   have h1 := ((tentPlane I side).sub (oldPiece j true)).lower_le_eval lo hi t hl hu
+   rw [Affine.eval_sub] at h0 h1
+-  rw [oldComponent, sub_min]
++  rw [oldComponent, ← max_sub_sub_left]
+   exact max_le_max h0 h1
+ 
+ theorem gapLower_le_actual_gap (I : Finset (Fin 4)) (lo hi : QEndpoint) (t : Point)
+@@ -224,7 +230,7 @@ theorem oldCubeLower_le (lo hi : QEndpoint) (t : Point)
+   have h1 := ((oldPiece j true).sub oldCube).lower_le_eval lo hi t hl hu
+   rw [Affine.eval_sub] at h0 h1
+   have hh := min_le_min h0 h1
+-  rw [← min_sub] at hh
++  rw [min_sub_sub_right] at hh
+   exact hh.trans (sub_le_sub_right (oldComponent_le t j) _)
+ 
+ def halfGate : Affine := ⟨1 / 2, fun _ => 0⟩
+@@ -240,20 +246,24 @@ theorem halfGate_eval (t : Point) : halfGate.eval t = 1 / 2 := by
+   simp [halfGate, Affine.eval]
+ 
+ theorem fullGate_eval (t : Point) (j : Fin 4) : (fullGate j).eval t = prefixSquareExpr t j := by
+-  fin_cases j <;>
+-    norm_num [fullGate, Affine.eval, prefixSquareExpr, Finset.sum_filter, Fin.sum_univ_succ]
+-  <;> ring
++  have hj : j = 0 ∨ j = 1 ∨ j = 2 ∨ j = 3 := by omega
++  rcases hj with rfl | rfl | rfl | rfl <;>
++    norm_num [fullGate, Affine.eval, prefixSquareExpr, Finset.sum_filter, Fin.sum_univ_four] <;>
++    simp only [Fin.ext_iff, Fin.lt_def, Fin.coe_ofNat_eq_mod, Nat.reduceMod] <;>
++    norm_num <;> ring
+ 
+ theorem selectedGate_eval (I : Finset (Fin 4)) (t : Point) (j : Fin 4) :
+     (selectedGate I j).eval t = selectedSquareExpr I t j := by
+   unfold selectedSquareExpr
+   rw [← maskSum_eq I t]
++  simp only [selectedGate, Affine.eval, maskSum, Finset.sum_filter, Fin.sum_univ_four]
++  have hj : j = 0 ∨ j = 1 ∨ j = 2 ∨ j = 3 := by omega
+   by_cases h0 : (0 : Fin 4) ∈ I <;> by_cases h1 : (1 : Fin 4) ∈ I <;>
+     by_cases h2 : (2 : Fin 4) ∈ I <;> by_cases h3 : (3 : Fin 4) ∈ I <;>
+-    fin_cases j <;>
+-    simp [selectedGate, Affine.eval,
+-      maskSum, Finset.sum_filter, Fin.sum_univ_succ, h0, h1, h2, h3]
+-  <;> ring
++    rcases hj with rfl | rfl | rfl | rfl <;>
++    simp [h0, h1, h2, h3] <;>
++    simp -failIfUnchanged only [Fin.ext_iff, Fin.lt_def, Fin.coe_ofNat_eq_mod, Nat.reduceMod] <;>
++    norm_num [h0, h1, h2, h3] <;> ring
+ 
+ /-- These are finite rational endpoint inequalities, precisely the source
+ gateslack>0 test decomposed into its individual affine differences. -/
+@@ -325,7 +335,7 @@ theorem old_residual_le_upper (lo hi : QEndpoint) (t : Point)
+     have h1 := ((oldPiece j true).sub sumAffine).eval_le_upper lo hi t hl hu
+     rw [Affine.eval_sub, sumAffine_eval] at h0 h1
+     have hm := min_le_min h0 h1
+-    rw [← min_sub] at hm
++    rw [min_sub_sub_right] at hm
+     have hj := Finset.le_sup' (fun j =>
+       min (((oldPiece j false).sub sumAffine).upper lo hi : ℝ)
+         (((oldPiece j true).sub sumAffine).upper lo hi : ℝ)) (Finset.mem_univ j)
+@@ -341,7 +351,7 @@ theorem new_residual_le_upper (I : Finset (Fin 4)) (lo hi : QEndpoint) (t : Poin
+   have h1 := ((tentPlane I true).sub sumAffine).eval_le_upper lo hi t hl hu
+   rw [Affine.eval_sub, sumAffine_eval] at h0 h1
+   have hm := min_le_min h0 h1
+-  rw [← min_sub] at hm
++  rw [min_sub_sub_right] at hm
+   exact hm.trans (le_max_right _ _)
+ 
+ /-- The only producer inputs inherited from the NPZ witness: integer
+@@ -403,8 +413,10 @@ theorem ProducerRow.ordered (r : ProducerRow) (h : r.Geometry)
+   have h10 : t 1 ≤ t 0 := (ht.2 1).trans ((hadj 0).trans (ht.1 0))
+   have h21 : t 2 ≤ t 1 := (ht.2 2).trans ((hadj 1).trans (ht.1 1))
+   have h32 : t 3 ≤ t 2 := (ht.2 3).trans ((hadj 2).trans (ht.1 2))
+-  have hcutR : (3 / 200 : ℝ) ≤ (r.lower 3 : ℝ) := by exact_mod_cast hcut
+-  have htopR : (r.upper 0 : ℝ) ≤ (39 / 200 : ℝ) := by exact_mod_cast htop
++  have hcutR : (3 / 200 : ℝ) ≤ (r.lower 3 : ℝ) := by
++    simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).2 hcut
++  have htopR : (r.upper 0 : ℝ) ≤ (39 / 200 : ℝ) := by
++    simpa only [Rat.cast_div, Rat.cast_ofNat] using (Rat.cast_le (K := ℝ)).2 htop
+   have ht3 : 0 < t 3 := by linarith [ht.1 3]
+   refine ⟨⟨ht3.le.trans h32, h21, h10, ?_⟩, ht3, h32⟩
+   exact (ht.2 0).trans (htopR.trans (by norm_num [mu]))
+@@ -420,7 +432,7 @@ theorem ProducerRow.residual_range (r : ProducerRow) (h : r.Geometry)
+   have ho := r.ordered h t ht
+   have hidentity : oldCube.eval t - total t = 2 * t 2 - t 3 := by
+     rw [oldCube_eval]
+-    norm_num [total, Fin.sum_univ_succ]
++    norm_num [total, Fin.sum_univ_four]
+     <;> ring
+   have hR1 : newResidualUpper r.selected r.lower r.upper < 5 * (r.lower 3 : ℝ) :=
+     h.2.2.2.2.2.2.2.2.2.2
+@@ -453,7 +465,7 @@ theorem exists_refined_constant_cap_radius (I : Finset (Fin 4)) (old : ℚ) (t :
+   have hM : newCap I t < ((299 / 500 : ℚ) : ℝ) := by
+     simpa only [Rat.cast_div, Rat.cast_ofNat] using producer_cap_lt_global I t
+   have hl : SelectedPrefixLicense I old (299 / 500) t := by
+-    rw [← newCap_eq_v, min_eq_right hM.le]
++    rw [SelectedPrefixLicense, ← newCap_eq_v, min_eq_right hM.le]
+     exact ⟨hold.trans_lt hgap, hhalf, hfull, hselected⟩
+   exact exists_selectedBoxCapCheck_radius_of_strict I old (299 / 500) t hl
+ 
+@@ -485,7 +497,8 @@ theorem producer_selectedPrefixLicense (r : ProducerRow) (hr : r.Geometry)
+   have hg := r.geometry_sound hr t ht
+   have hold := original_third_exponent_le_oldCap e he m j t hbox (r.ordered hr t ht).1
+   have hM : r.candidate t < ((299 / 500 : ℚ) : ℝ) := by
+-    simpa only [Rat.cast_div, Rat.cast_ofNat] using producer_cap_lt_global r.selected t
++    simpa only [ProducerRow.candidate, Rat.cast_div, Rat.cast_ofNat] using
++      producer_cap_lt_global r.selected t
+   rw [SelectedPrefixLicense, ← ProducerRow.candidate_eq r t, min_eq_right hM.le]
+   exact ⟨hold.trans_lt hg.2.1, hg.2.2.1, hg.2.2.2.1, hg.2.2.2.2⟩
+ 
+diff --git a/ImbalancedChen/P4AAll22OriginalKLedger.lean b/ImbalancedChen/P4AAll22OriginalKLedger.lean
+index b34635e..d4cadbc 100644
+--- a/ImbalancedChen/P4AAll22OriginalKLedger.lean
++++ b/ImbalancedChen/P4AAll22OriginalKLedger.lean
+@@ -51,7 +51,7 @@ theorem ordinary_root_normalization :
+ 
+ theorem fifth_saving_slot_is_coarse_endpoint :
+     currentUpperEighteenGains 4 = (640339 / 15210735000 : ℝ) := by
+-  norm_num [currentUpperEighteenGains]
++  rfl
+ 
+ theorem finalFourGains_sum :
+     (∑ i, finalFourGains i) = 313448685950606471603475 / 2^96 := by
+diff --git a/ImbalancedChen/P4BActualPairOuterRamp.lean b/ImbalancedChen/P4BActualPairOuterRamp.lean
+index bab7d89..9564b2c 100644
+--- a/ImbalancedChen/P4BActualPairOuterRamp.lean
++++ b/ImbalancedChen/P4BActualPairOuterRamp.lean
+@@ -139,7 +139,8 @@ theorem actual_pairOuterRamp_sub_W_le_arithmetic_strip_indicators
+   have hunion := logGateOuterRamp_product_surplus_le_strip_union
+     (Finset.univ : Finset (Fin 4))
+     (actualPairMargins b (Real.log T / Real.log (N : ℝ)) (logPoint N t)) hdelta
+-  exact (sub_le_sub_left hind _).trans hunion
++  exact (sub_le_sub_left hind _).trans (by
++    simpa only [actualPairOuterRamp, fourWallOuterWeight, Finset.mem_univ, true_implies] using hunion)
+ 
+ /-- Genuine labelled W has exactly the actual source cardinality as mass;
+ there is no factor two, tuple multiplicity or surrogate normalization. -/
+@@ -180,7 +181,7 @@ theorem sum_actual_pairOuterRamp_le_source_card_add_arithmetic_strip_cards
+       apply Finset.sum_le_sum
+       intro t ht
+       have hpoint := actual_pairOuterRamp_sub_W_le_arithmetic_strip_indicators
+-        hN hT hdelta ht
++        (b := b) hN hT hdelta ht
+       linarith only [hpoint]
+     _ = _ := by
+       rw [Finset.sum_add_distrib, sum_actual_labelled_W_eq_source_card, hstrips]
+diff --git a/ImbalancedChen/P4BLabelledOuterPushforward.lean b/ImbalancedChen/P4BLabelledOuterPushforward.lean
+index fcfb939..36467b3 100644
+--- a/ImbalancedChen/P4BLabelledOuterPushforward.lean
++++ b/ImbalancedChen/P4BLabelledOuterPushforward.lean
+@@ -112,12 +112,10 @@ theorem finitePrimitiveDiscrepancy_eq_labelled (N : ℕ)
+   classical
+   unfold finitePrimitiveDiscrepancy
+   rw [finiteCongruenceMass_eq_labelled, finiteCoprimeMass_eq_labelled,
+-    ← Finset.sum_div, ← Finset.sum_sub_distrib]
++    Finset.sum_div, ← Finset.sum_sub_distrib]
+   apply Finset.sum_congr rfl
+   intro t ht
+-  by_cases hmod : Nat.ModEq d (labelledProduct t) a <;>
+-    by_cases hcop : Nat.Coprime (labelledProduct t) d <;>
+-    simp [hmod, hcop] <;> ring
++  split_ifs <;> ring
+ 
+ /-- One same-rho signed sum, exactly the actual rank-two Part 3 error.
+ No absolute value is moved inside the physical modulus sum. -/
+diff --git a/ImbalancedChen/P4BLowerProductStripMass.lean b/ImbalancedChen/P4BLowerProductStripMass.lean
+index eb2ada0..64e4c0e 100644
+--- a/ImbalancedChen/P4BLowerProductStripMass.lean
++++ b/ImbalancedChen/P4BLowerProductStripMass.lean
+@@ -88,7 +88,7 @@ theorem prime_pairs_card_le_two_ceil (S : Finset (ℕ × ℕ)) (U : ℝ)
+         exact Prod.ext h1 h2
+     simpa only [Nat.card_Icc, Nat.add_sub_cancel] using hcard
+   have hsplit : A.card + B.card = S.card :=
+-    Finset.card_filter_add_card_filter_not S (fun p => p.1 ≤ p.2)
++    Finset.card_filter_add_card_filter_not (s := S) (fun p => p.1 ≤ p.2)
+   omega
+ 
+ /-- Ordinary prime pairs on the literal finite coordinate cap; no order or
+@@ -102,7 +102,7 @@ def ordinaryPrimePairs (N : ℕ) : Finset (ℕ × ℕ) := by
+     p ∈ ordinaryPrimePairs N ↔
+       p.1 ≤ N ∧ p.2 ≤ N ∧ Nat.Prime p.1 ∧ Nat.Prime p.2 := by
+   classical
+-  simp only [ordinaryPrimePairs, Finset.mem_filter, Finset.mem_product,
++  simp only [ordinaryPrimePairs, Finset.mem_filter, Finset.product_eq_sprod, Finset.mem_product,
+     Finset.mem_range, Nat.lt_succ_iff, and_assoc]
+ 
+ /-- Signed normalized distance below the lower-product wall. -/
+@@ -130,7 +130,7 @@ an empty collar. -/
+ theorem lowerProductStrip_eq_empty_of_nonpos {kappa delta : ℝ} {N : ℕ}
+     (hdelta : delta ≤ 0) : lowerProductStrip kappa delta N = ∅ := by
+   classical
+-  apply Finset.eq_empty_iff_forall_not_mem.mpr
++  apply Finset.eq_empty_iff_forall_notMem.mpr
+   intro p hp
+   have hwall := (Finset.mem_filter.mp hp).2
+   linarith [hwall.1, hwall.2]
+diff --git a/ImbalancedChen/P4BOuterRampBoundaryUnion.lean b/ImbalancedChen/P4BOuterRampBoundaryUnion.lean
+index 4c03014..68f51d9 100644
+--- a/ImbalancedChen/P4BOuterRampBoundaryUnion.lean
++++ b/ImbalancedChen/P4BOuterRampBoundaryUnion.lean
+@@ -48,7 +48,7 @@ theorem exists_gate_strip_of_product_pos {ι : Type*}
+     ∃ i ∈ I, -width < G i ∧ G i ≤ 0 := by
+   classical
+   obtain ⟨i, hi, hbad⟩ : ∃ i ∈ I, G i ≤ 0 := by
+-    simpa only [not_forall, _root_.not_imp, not_lt] using hnot
++    simpa only [not_forall, _root_.not_imp, not_lt, exists_prop] using hnot
+   refine ⟨i, hi, ?_, hbad⟩
+   apply lt_of_not_ge
+   intro hfar
+diff --git a/ImbalancedChen/P4BOuterRampRoughness.lean b/ImbalancedChen/P4BOuterRampRoughness.lean
+index 6d7c0ad..3a4b139 100644
+--- a/ImbalancedChen/P4BOuterRampRoughness.lean
++++ b/ImbalancedChen/P4BOuterRampRoughness.lean
+@@ -54,7 +54,7 @@ theorem relaxed_three_margins_coordinate_bounds
+     mul_lt_mul_of_pos_left hlower hb
+   have hxmul : (baseline b kappa - delta) * (1 + b) < x * (1 + b) := by
+     nlinarith only [hscaled, hbalance, hbaseline]
+-  have hx : baseline b kappa - delta < x := (mul_lt_mul_right hden).mp hxmul
++  have hx : baseline b kappa - delta < x := (mul_lt_mul_iff_of_pos_right hden).mp hxmul
+   exact ⟨hx, by linarith only [hx, horder]⟩
+ 
+ theorem relaxed_three_margins_above_theta
+@@ -147,8 +147,8 @@ theorem physical_ramp_nonzero_prime_divisor_rough
+   obtain ⟨hr, hq⟩ := physical_ramp_nonzero_prime_factors_rough hb hN hdelta hgap ht hnonzero
+   rw [labelledProduct_eq_pairProduct] at hdvd
+   rcases (prime_dvd_halfProduct_iff hell (hprime 0) (hprime 1)).mp hdvd with h | h
+-  · simpa only [h] using hr
+-  · simpa only [h] using hq
++  · simpa only [tuplePair, h] using hr
++  · simpa only [tuplePair, h] using hq
+ 
+ /-- Nonzero actual pushed-forward weight has a nonzero tuple in its exact
+ fibre. This uses the proved fibre API; no sign or no-cancellation assumption
+diff --git a/ImbalancedChen/P4BPhysicalProductOuterRamp.lean b/ImbalancedChen/P4BPhysicalProductOuterRamp.lean
+index 000a40d..d8b1b2d 100644
+--- a/ImbalancedChen/P4BPhysicalProductOuterRamp.lean
++++ b/ImbalancedChen/P4BPhysicalProductOuterRamp.lean
+@@ -122,8 +122,9 @@ theorem positiveRescaledFourWallWeight_sub_actualIndicator_le_strips
+   have hunion := logGateOuterRamp_product_surplus_le_strip_union
+     (Finset.univ : Finset (Fin 4))
+     (fun i => scale i * actualPairMargins b lower v i) hdelta
+-  rw [hstrict] at hunion
+-  exact (sub_le_sub_left hind _).trans hunion
++  simp only [hstrict] at hunion
++  exact (sub_le_sub_left hind _).trans (by
++    simpa only [positiveRescaledFourWallWeight, Finset.mem_univ, true_implies] using hunion)
+ 
+ /-- Only the upper product wall is changed; its scale is log N. -/
+ def physicalProductWallScale (N : ℕ) (i : Fin 4) : ℝ :=
+@@ -168,7 +169,9 @@ theorem physicalPairOuterRamp_nonzero_margin_support
+   apply logGateOuterRamp_nonzero_support hdelta
+   intro hzero
+   apply hnonzero
+-  exact Finset.prod_eq_zero (Finset.mem_univ i) hzero
++  exact Finset.prod_eq_zero
++    (f := fun j : Fin 4 => logGateOuterRamp delta (physicalPairMargins b N T t j))
++    (Finset.mem_univ i) hzero
+ 
+ /-- In particular the first three normalized margins retain the identical
+ width delta. This API supplies the actual roughness-transfer geometry. -/
+@@ -202,11 +205,15 @@ theorem actual_W_eq_physical_mixedIndicator
+           0 < physicalPairMargins b N T t 1 ∧
+           0 ≤ physicalPairMargins b N T t 2 ∧
+           0 ≤ physicalPairMargins b N T t 3 then (1 : ℝ) else 0) := by
+-  simpa only [physicalPairMargins,
+-    affineRegion_iff_positive_rescaled_margins b
+-      (Real.log T / Real.log (N : ℝ)) (logPoint N t)
+-      (physicalProductWallScale N) (physicalProductWallScale_pos hN)] using
+-    (W_eq_affineIndicator hN hT ht)
++  unfold physicalPairMargins
++  have he := affineRegion_iff_positive_rescaled_margins b
++    (Real.log T / Real.log (N : ℝ)) (logPoint N t)
++    (physicalProductWallScale N) (physicalProductWallScale_pos hN)
++  have hw := W_eq_affineIndicator (b := b) hN hT ht
++  by_cases h : affineRegion b (Real.log T / Real.log (N : ℝ)) (logPoint N t)
++  · simpa only [if_pos h, if_pos (he.mp h)] using hw
++  · have hn := mt he.mpr h
++    simpa only [if_neg h, if_neg hn] using hw
+ 
+ theorem actual_W_le_physicalPairOuterRamp
+     {b T delta : ℝ} {N : ℕ} (hN : (1 : ℝ) < N) (hT : 0 < T)
+@@ -235,7 +242,9 @@ theorem physicalPairOuterRamp_nonzero_product_lt_exp_mul_N
+   have hfactor : logGateOuterRamp delta (physicalPairMargins b N T t 3) ≠ 0 := by
+     intro hzero
+     apply hnonzero
+-    exact Finset.prod_eq_zero (Finset.mem_univ (3 : Fin 4)) hzero
++    exact Finset.prod_eq_zero
++      (f := fun j : Fin 4 => logGateOuterRamp delta (physicalPairMargins b N T t j))
++      (Finset.mem_univ (3 : Fin 4)) hzero
+   have hgap := logGateOuterRamp_nonzero_support hdelta hfactor
+   rw [physicalPairMargins_upper_eq_log_gap b T hN t] at hgap
+   obtain ⟨hr, hq⟩ := labelled_prime_pair_pos ht
+@@ -325,7 +334,8 @@ theorem sum_physicalPairOuterRamp_le_source_card_add_arithmetic_strip_cards
+             then (1 : ℝ) else 0) := by
+       apply Finset.sum_le_sum
+       intro t ht
+-      have hpoint := physicalPairOuterRamp_sub_W_le_arithmetic_strips hN hT hdelta ht
++      have hpoint := physicalPairOuterRamp_sub_W_le_arithmetic_strips
++        (b := b) hN hT hdelta ht
+       linarith only [hpoint]
+     _ = _ := by
+       rw [Finset.sum_add_distrib, sum_actual_labelled_W_eq_source_card, hstrips]
+diff --git a/ImbalancedChen/P4BPhysicalShellMass.lean b/ImbalancedChen/P4BPhysicalShellMass.lean
+index c54d419..165d3be 100644
+--- a/ImbalancedChen/P4BPhysicalShellMass.lean
++++ b/ImbalancedChen/P4BPhysicalShellMass.lean
+@@ -142,7 +142,7 @@ theorem tendsto_dilation_massScale_ratio {c : ℝ} (hc : 1 < c) :
+   have hlim : Tendsto (fun N : ℕ =>
+       ((Nat.floor (c * (N : ℝ)) : ℝ) / (N : ℝ)) /
+         (Real.log (Nat.floor (c * (N : ℝ)) : ℝ) / Real.log (N : ℝ)))
+-      atTop (𝓝 c) := by simpa only [div_one] using hratio
++      atTop (𝓝 c) := by simpa only [Pi.div_def, div_one] using hratio
+   apply hlim.congr'
+   filter_upwards [eventually_ge_atTop (2 : ℕ)] with N hN
+   have hN1 : (1 : ℝ) < (N : ℝ) := by exact_mod_cast (show 1 < N by omega)
+@@ -197,7 +197,9 @@ theorem tendsto_physicalProductShell_mass
+       atTop (𝓝 ((c - 1) * Real.log (1 / b))) := by
+     simpa only [sub_div] using hsub
+   apply hlim.congr'
+-  exact Filter.Eventually.of_forall fun N => by rw [shell_card_eq_source_sub hc.le N]
++  exact Filter.Eventually.of_forall fun N => by
++    dsimp only
++    rw [shell_card_eq_source_sub hc.le N]
+ 
+ /-- A genuine physical product ramp may be given an arbitrarily small
+ source-shell payment by fixing a positive logarithmic width FIRST, then
+diff --git a/ImbalancedChen/P4BSmoothOuterRampRoughness.lean b/ImbalancedChen/P4BSmoothOuterRampRoughness.lean
+index ce97d8d..8f5a4e9 100644
+--- a/ImbalancedChen/P4BSmoothOuterRampRoughness.lean
++++ b/ImbalancedChen/P4BSmoothOuterRampRoughness.lean
+@@ -92,8 +92,8 @@ theorem smooth_physical_ramp_nonzero_prime_divisor_rough
+     hb hN hwidth hgap ht hnonzero
+   rw [labelledProduct_eq_pairProduct] at hdvd
+   rcases (prime_dvd_halfProduct_iff hell (hprime 0) (hprime 1)).mp hdvd with h | h
+-  · simpa only [h] using hr
+-  · simpa only [h] using hq
++  · simpa only [tuplePair, h] using hr
++  · simpa only [tuplePair, h] using hq
+ 
+ /-- Exact nonzero-fibre extraction applies to any tuple weight and hence
+ to this actual smooth weight, without a no-cancellation hypothesis. -/
+diff --git a/ImbalancedChen/P4BSmoothPhysicalPairOuterRamp.lean b/ImbalancedChen/P4BSmoothPhysicalPairOuterRamp.lean
+index eb9e3f9..a467c05 100644
+--- a/ImbalancedChen/P4BSmoothPhysicalPairOuterRamp.lean
++++ b/ImbalancedChen/P4BSmoothPhysicalPairOuterRamp.lean
+@@ -190,8 +190,13 @@ def smoothPhysicalProfileClosedWalls (b : ℝ) (N : ℕ) (T width : ℝ) :
+ theorem isClosed_smoothPhysicalProfileClosedWalls
+     (b : ℝ) (N : ℕ) (T width : ℝ) :
+     IsClosed (smoothPhysicalProfileClosedWalls b N T width) := by
+-  change IsClosed (⋂ i : Fin 4,
+-    (fun v : Fin 2 → ℝ => smoothPhysicalProfileMargin b N T v i) ⁻¹' Ici (-width))
++  have he : smoothPhysicalProfileClosedWalls b N T width =
++      ⋂ i : Fin 4, (fun v : Fin 2 → ℝ =>
++        smoothPhysicalProfileMargin b N T v i) ⁻¹' Set.Ici (-width) := by
++    ext v
++    simp only [smoothPhysicalProfileClosedWalls, Set.mem_setOf_eq,
++      Set.mem_iInter, Set.mem_preimage, Set.mem_Ici]
++  rw [he]
+   apply isClosed_iInter
+   intro i
+   exact isClosed_Ici.preimage
+diff --git a/ImbalancedChen/P4BSmoothProfileFirstDerivativeBudget.lean b/ImbalancedChen/P4BSmoothProfileFirstDerivativeBudget.lean
+index fa2ccb4..37171d2 100644
+--- a/ImbalancedChen/P4BSmoothProfileFirstDerivativeBudget.lean
++++ b/ImbalancedChen/P4BSmoothProfileFirstDerivativeBudget.lean
+@@ -30,10 +30,10 @@ open scoped Classical BigOperators
+ /-- Linear parts of order, badness, lower product and physical upper product. -/
+ def smoothPhysicalWallRow (b : ℝ) (N : ℕ) (i : Fin 4) :
+     (Fin 2 → ℝ) →L[ℝ] ℝ :=
+-  ![(ContinuousLinearMap.proj 1 : (Fin 2 → ℝ) →L[ℝ] ℝ) - ContinuousLinearMap.proj 0,
+-    ContinuousLinearMap.proj 0 - b • ContinuousLinearMap.proj 1,
+-    ContinuousLinearMap.proj 0 + ContinuousLinearMap.proj 1,
+-    (-Real.log (N : ℝ)) • (ContinuousLinearMap.proj 0 + ContinuousLinearMap.proj 1)] i
++  ![(ContinuousLinearMap.proj 1 : (Fin 2 → ℝ) →L[ℝ] ℝ) - (ContinuousLinearMap.proj 0 : (Fin 2 → ℝ) →L[ℝ] ℝ),
++    (ContinuousLinearMap.proj 0 : (Fin 2 → ℝ) →L[ℝ] ℝ) - b • (ContinuousLinearMap.proj 1 : (Fin 2 → ℝ) →L[ℝ] ℝ),
++    (ContinuousLinearMap.proj 0 : (Fin 2 → ℝ) →L[ℝ] ℝ) + (ContinuousLinearMap.proj 1 : (Fin 2 → ℝ) →L[ℝ] ℝ),
++    (-Real.log (N : ℝ)) • ((ContinuousLinearMap.proj 0 : (Fin 2 → ℝ) →L[ℝ] ℝ) + (ContinuousLinearMap.proj 1 : (Fin 2 → ℝ) →L[ℝ] ℝ))] i
+ 
+ /-- Affine offsets, including log N at the physical upper-product wall. -/
+ def smoothPhysicalWallOffset (b : ℝ) (N : ℕ) (T : ℝ) : Fin 4 → ℝ :=
+@@ -137,7 +137,10 @@ theorem hasFDerivAt_smoothPhysicalProfileFactor
+       (deriv (smoothGateUpperStep width) (smoothPhysicalProfileMargin b N T v i))
+       (smoothPhysicalProfileMargin b N T v i) :=
+     ((contDiff_smoothGateUpperStep width (n := 1)).differentiable_one _).hasDerivAt
+-  exact hs.comp_hasFDerivAt v (hasFDerivAt_smoothPhysicalProfileMargin b N T v i)
++  exact hs.comp_hasFDerivAt
++    (h₂ := smoothGateUpperStep width)
++    (f := fun x : Fin 2 → ℝ => smoothPhysicalProfileMargin b N T x i)
++    v (hasFDerivAt_smoothPhysicalProfileMargin b N T v i)
+ 
+ /-- The genuine four-term Leibniz sum: the scalar derivative and wall CLM
+ are multiplied by precisely the other three genuine smooth factors. -/
+diff --git a/ImbalancedChen/P4BSourceCutoffTransport.lean b/ImbalancedChen/P4BSourceCutoffTransport.lean
+index f61bb13..8f1dcd5 100644
+--- a/ImbalancedChen/P4BSourceCutoffTransport.lean
++++ b/ImbalancedChen/P4BSourceCutoffTransport.lean
+@@ -61,7 +61,7 @@ theorem source_sdiff_eq_band (b : ℝ) (N : ℕ) (T U : ℝ) :
+ /-- The high part of the lower-cutoff source is exactly the higher-cutoff
+ source. -/
+ theorem source_filter_upper_eq {b T U : ℝ} {N : ℕ} (hTU : T ≤ U) :
+-    (realHalfProductSource b N T).filter (fun m => U ≤ (m : ℝ)) =
++    (realHalfProductSource b N T).filter (fun m : ℕ => U ≤ (m : ℝ)) =
+       realHalfProductSource b N U := by
+   classical
+   ext m
+@@ -203,7 +203,7 @@ theorem abs_distribution_le_upper_add_band {b T U : ℝ} {N : ℕ}
+           finitePrimitiveDiscrepancy (cutoffBand b N T U) (fun _ => 1) N d := by
+     linarith
+   rw [heq]
+-  exact abs_add _ _
++  exact abs_add_le _ _
+ 
+ /-- The analogous triangle bound for the actual coprime correction. -/
+ theorem abs_coprimeCorrection_le_upper_add_band {b T U : ℝ} {N : ℕ}
+@@ -221,7 +221,7 @@ theorem abs_coprimeCorrection_le_upper_add_band {b T U : ℝ} {N : ℕ}
+             ((cutoffBand b N T U).card : ℝ)) / (Nat.totient d : ℝ)) := by
+     linarith
+   rw [heq]
+-  exact abs_add _ _
++  exact abs_add_le _ _
+ 
+ /-- Optional fully expanded finite triangle payment.  This absolute modulus
+ sum is a consequence of the preceding signed identities, not their premise. -/
+@@ -242,7 +242,7 @@ theorem abs_distribution_le_upper_add_sum_abs_band {b T U : ℝ} {N : ℕ}
+         Finset.abs_sum_le_sum_abs _ _
+       _ = _ := by simp only [abs_mul]
+   exact (abs_distribution_le_upper_add_band (b := b) (N := N) hTU Q rho).trans
+-    (add_le_add_left hband _)
++    (add_le_add_right hband _)
+ 
+ end
+ end ImbalancedChen.P4BSourceCutoffTransport
+diff --git a/ImbalancedChen/P4BSublinearCutoffMass.lean b/ImbalancedChen/P4BSublinearCutoffMass.lean
+index 477db20..cd32d58 100644
+--- a/ImbalancedChen/P4BSublinearCutoffMass.lean
++++ b/ImbalancedChen/P4BSublinearCutoffMass.lean
+@@ -66,7 +66,7 @@ theorem source_card_abs_sub_le_cutoffs_add_one
+   have hmax : 0 ≤ max T U := hT.trans (le_max_left T U)
+   have hsum : max T U ≤ T + U := max_le (by linarith) (by linarith)
+   exact (source_card_abs_sub_le_max_add_one b N T U hmax).trans
+-    (add_le_add_right hsum 1)
++    (add_le_add_left hsum 1)
+ 
+ /-- Fixed sublinear real powers, including their additive unit, are
+ negligible relative to `N/log N`. This is derived from the proved
+diff --git a/ImbalancedChen/P4BSupportedRampStripUnion.lean b/ImbalancedChen/P4BSupportedRampStripUnion.lean
+index 56c1a19..88d4a72 100644
+--- a/ImbalancedChen/P4BSupportedRampStripUnion.lean
++++ b/ImbalancedChen/P4BSupportedRampStripUnion.lean
+@@ -68,7 +68,9 @@ theorem ramp_product_sub_indicator_le_supported_strip_union {ι : Type*}
+       (if ∀ i ∈ I, 0 < G i then (1 : ℝ) else 0)
+   · have hsoft := softened_margins_of_positive_ramp_residual
+       I G ramp width hzero hresidual
+-    simpa only [hsoft, and_true] using
++    have hsupport : (∀ j ∈ I, -width < G j) = True :=
++      propext (iff_true_intro hsoft)
++    simpa only [hsupport, and_true] using
+       ramp_product_sub_strict_indicator_le_strip_union I G ramp width hbound hone hzero
+   · apply (le_of_not_gt hresidual).trans
+     apply Finset.sum_nonneg
+@@ -159,7 +161,13 @@ theorem physicalPairOuterRamp_sub_W_le_supported_arithmetic_strips
+         (-delta < physicalPairMargins b N T t i ∧ physicalPairMargins b N T t i ≤ 0) ∧
+           (∀ j : Fin 4, -delta < physicalPairMargins b N T t j)
+         then (1 : ℝ) else 0 := by
+-    simpa only [Finset.mem_univ, true_implies] using hg
++    convert hg using 1 <;>
++      simp -failIfUnchanged only [physicalPairOuterRamp, positiveRescaledFourWallWeight,
++        physicalPairMargins, Finset.mem_univ, true_implies]
++    · congr 1
++    · apply Finset.sum_congr rfl
++      intro i hi
++      exact (ite_eq_ite _ _ _).mpr trivial
+   exact (sub_le_sub_left (allStrictPhysicalMargins_indicator_le_W hN hT ht)
+     (physicalPairOuterRamp b N T delta t)).trans hpoint
+ 
+@@ -191,7 +199,8 @@ theorem sum_physicalPairOuterRamp_le_source_card_add_supported_strip_cards
+             then (1 : ℝ) else 0) := by
+       apply Finset.sum_le_sum
+       intro t ht
+-      have hp := physicalPairOuterRamp_sub_W_le_supported_arithmetic_strips hN hT hdelta ht
++      have hp := physicalPairOuterRamp_sub_W_le_supported_arithmetic_strips
++        (b := b) hN hT hdelta ht
+       linarith only [hp]
+     _ = _ := by
+       rw [Finset.sum_add_distrib, sum_actual_labelled_W_eq_source_card, hstrips]
+@@ -217,7 +226,7 @@ theorem physicalPairOuterRamp_surplus_paid_by_supported_strips
+     (∑ t ∈ labelledPrimeTuples 2 N, physicalPairOuterRamp b N T delta t) ≤
+       ((realHalfProductSource b N T).card : ℝ) + E := by
+   exact (sum_physicalPairOuterRamp_le_source_card_add_supported_strip_cards
+-    hN hT hdelta).trans (add_le_add_left hpaid _)
++    hN hT hdelta).trans (add_le_add_right hpaid _)
+ 
+ end
+ 
+diff --git a/ImbalancedChen/P4BSupportedUpperProductStripMass.lean b/ImbalancedChen/P4BSupportedUpperProductStripMass.lean
+index 58a7f97..c82d3f0 100644
+--- a/ImbalancedChen/P4BSupportedUpperProductStripMass.lean
++++ b/ImbalancedChen/P4BSupportedUpperProductStripMass.lean
+@@ -215,7 +215,7 @@ theorem supported_upper_strip_card_le_two_shell
+       apply Finset.mem_product.mpr
+       refine ⟨supported_upper_product_mem_physical_shell hb hb1 htheta hN hEven
+         hwidth hgap hwidthSmall hwidthShell hpower ht, ?_⟩
+-      unfold orientationTag
++      dsimp only [orientationTag]
+       split_ifs <;> norm_num
+     · intro t ht u hu htu
+       apply labelled_product_orientation_injective
+diff --git a/ImbalancedChen/Part3ReciprocalAPSupplier.lean b/ImbalancedChen/Part3ReciprocalAPSupplier.lean
+index 0e14f53..0ecf6c9 100644
+--- a/ImbalancedChen/Part3ReciprocalAPSupplier.lean
++++ b/ImbalancedChen/Part3ReciprocalAPSupplier.lean
+@@ -169,7 +169,6 @@ theorem medium_gamma_reciprocalAP_fouvry {epsilon : ℝ}
+       (mediumAdmissible_factorScale_bounds hd).1
+       (mediumAdmissible_factorScale_bounds hd).2.1
+       (mediumAdmissible_factorScale_bounds hd).2.2 hq1 hq2 hq3).1.ne'⟩
+-  dsimp only
+   have hlength : 0 ≤ (Y : ℝ) - X := sub_nonneg.mpr (by exact_mod_cast hXY)
+   have hbudget : 0 ≤
+       C * (1 + ((Y : ℝ) - X) / (q1 * q2 * q3 : ℕ)) *
