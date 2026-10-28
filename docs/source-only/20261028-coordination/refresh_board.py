@@ -139,7 +139,7 @@ def pause_source_snapshot(snapshot, pause):
                 item['review_scope_note'] = 'Existing file evidence only; complete active-batch review not accepted.'
     for row in snapshot.get('batch_summaries', []):
         if row.get('batch') == active:
-            row.update(operation_state='paused', publication='paused_local_snapshot', reviewed_tasks=0,
+            row.update(operation_state='paused', publication=row.get('publication') if row.get('remote_reachable_from_verified_head') else 'paused_local_snapshot', reviewed_tasks=0,
                        paused_tasks=row.get('tasks', 0))
     summary = snapshot.get('summary', {})
     summary['operation_state'] = 'paused'
@@ -194,6 +194,8 @@ pause = read(pause_path) if pause_path.exists() else {}
 publication = read(BASE / 'PUBLICATION.json')
 local_freeze_path = BASE / 'F_LOCAL_FREEZE.json'
 local_freeze = read(local_freeze_path) if local_freeze_path.exists() else {}
+paused_pub_path = BASE / 'PAUSED_G_PUBLICATION.json'
+paused_pub = read(paused_pub_path) if paused_pub_path.exists() else {}
 extra_publication_path = BASE / 'EXTRA_PUBLICATION.json'
 extra_publication = read(extra_publication_path) if extra_publication_path.exists() else {}
 metadata_publication_path = BASE / 'METADATA_PUBLICATION.json'
@@ -271,6 +273,8 @@ for name in BATCHES:
         summary.update(publication='reviewed_frozen_local_remote_pending', local_commit=local_freeze.get('commit'),
                        remote_exact_sha_verified=False, local_freeze_receipt='docs/source-only/20261028-coordination/F_LOCAL_FREEZE.json')
     summary['source_files_scope'] = 'Top-level per-author Lean candidates; nested frozen predecessor copies excluded.'
+    if batch_paused and paused_pub.get('remote_reachable_from_verified_head'):
+        summary.update(publication='paused_pushed_snapshot', remote_reachable_from_verified_head=True, remote_verified_head=paused_pub.get('remote_verified_head'))
     if batch_paused:
         summary['raw_lean_files'] = len(list(folder.rglob('*.lean')))
         summary['nested_non_candidate_lean_files'] = summary['raw_lean_files'] - len(batch_sources)
@@ -386,8 +390,8 @@ repo_update.update({'formalizationCommit': head, 'commitUrl': 'https://github.co
 repo_update['sourceArchive']['historical'] = True
 repo_update['latestSource'] = {'name': f'{len(published_batches)} reviewed 30-task source bundles', 'path': 'docs/source-only/' + sorted(published_batches)[-1],
                               'sourceState': 'Pushed exact-byte proposals; no production installation, compilation or kernel acceptance'}
-repo_update['localSourceBatch']['published'] = False
-repo_update['localSourceBatch']['publication_note'] = f'{len(published_batches)} batches pushed; later snapshots may be locally frozen or paused partials. Only matching remote receipts establish publication.'
+repo_update['localSourceBatch']['published'] = bool(paused_pub.get('remote_reachable_from_verified_head'))
+repo_update['localSourceBatch']['publication_note'] = f'{len(published_batches)} reviewed source batches pushed; the active paused unreviewed snapshot is also uploaded when its separate remote ancestry receipt is true. No compiler or formal credit.'
 if local_freeze:
     repo_update['localFrozenSource'] = {key: local_freeze.get(key) for key in
                                       ['batch', 'commit', 'captured_utc', 'publication_status', 'source_reviewed_tasks', 'remote_exact_sha_verified', 'compiled', 'formal_credit']}

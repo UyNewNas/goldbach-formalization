@@ -2,7 +2,7 @@
 
 The root stopped proof work when its rate-limit event at 2026-10-28T13:52:13.282Z reported 10% remaining. All 30 proof authors and all independent reviewers have stopped. No compiler, kernel checker or numerical certificate replay was run. Every original broad target and the final theorem remain OPEN; new formal credit is zero.
 
-Six regular batches A–F contain 382 Lean proposals, with 180 independent narrow local source reviews. F is frozen at local commit c534093f29bfd50285ca59e9f300328dd4f20759 (116 Lean sources, 30 local reviews, 205 exact raw manifest entries). Earlier A–E were pushed and verified; F and subsequent local commits encountered GitHub TLS connection failures. Consult dated publication receipts rather than inferring remote availability from local HEAD.
+Six regular batches A–F contain 382 Lean proposals, with 180 independent narrow local source reviews. F is frozen at local commit c534093f29bfd50285ca59e9f300328dd4f20759 (116 Lean sources, 30 local reviews, 205 exact raw manifest entries). The final retry pushed all frozen source and paused snapshot commits. Exact remote branch HEAD 7ea28c326758b3add8a577bdc8de683dced164f5 and ancestry of F, extra-query and G were verified after earlier TLS failures. Consult dated publication receipts for the upload scope.
 
 Two separately reviewed integration steps contain four further sources: the concrete canonical tent bank and the actual complete-prefix query/trace receiver. They do not close the full adopted strategy, fixed-Q H/h family or gain.
 
