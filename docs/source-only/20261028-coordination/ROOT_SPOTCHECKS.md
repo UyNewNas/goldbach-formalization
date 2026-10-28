@@ -1,0 +1,22 @@
+# Root mathematical and source spot checks
+
+These are additional static reviews of manuscript-internal source proposals, not compiler, numerical or kernel receipts. Every original target and the final 1+1.748 theorem remain OPEN. The compiler workflow belongs to the user.
+
+## Fifth batch
+
+- `certificate_rows/P2Winner9SelectedAnalyticRemainders.lean`: directly read the derivative of the actual negative-log remainder, the two endpoint order cases, and the ten-factor cancellation. The derivative `(t-P)(V^2-P*t)/(P*t*V^2)` has the required signs on the positive segment when both endpoints are at most V. The resulting reciprocal-product inequality has the correct lower-bound direction. The separately proved nonnegative finite-binomial remainder does not close the T10 Jensen-gap expectation step. The report correctly leaves that step and the physical integral enclosure open. Closed finite decision terms in companion moment files have not been executed.
+- `transfer_lambda/P5ActualNativeSigmaPrimeProductAtoms.lean`: directly read the production FULL16 sigma owner/licence binding, coefficient linearity for the unchanged signed count-minus-exact-mean bracket, the physical low/base/removed atom expansion, and the smooth-minus-reserve identity. This is an independently defined production coefficient, rather than a candidate CapPlan self-identity. It does not establish a lower adopted-bank supplier, coverage for every independent external test rank, or asymptotic payment of the explicit reserve.
+- `coefficient_physical/REPORT.md`: checked that the concrete common-prefix constructor preserves approvals and root-modulus inclusion, while explicitly declining to infer signed coefficient monotonicity or preservation of archived numerical gain. The adopted finite compact policy, source coverage and gain remain obligations.
+- `pp_fourier/P5ActualHBAtlasScalarInventory.lean`: root identified an actual nested-comment error in the text `+3/-3/+1`, which caused the final theorem to be swallowed by an unterminated comment. The author replaced that text with comma-separated coefficients and reissued the raw source hash `131db2b47e3d539b32ce5e2dfa3406348c52e896b04379cdb9c4f3585cba58ea`. Final independent review must pin the corrected bytes. This is a source lexical error, not a manuscript mathematical gap.
+
+## Sixth-batch manuscript checks and routing
+
+- Re-read section 5 of `paper/source/modules/distribution-medium-completion-20261010.txt`: the clean identity (12) allows r to share primes with ell. Only `(r,s)=(s,ell)=1` is imposed there. The exact original A/B coprimalities give `sum_b A_r(b)=B_r`, and the three principal terms leave the positive P of (13). Root sent this distinction to the S3 and variance owners to prevent either an omitted carrier or false zero cancellation.
+- Re-read (7): `q+u+v < 7/10-13*sigma/2` leaves enough fixed power margin to absorb the actual enlarged native cap's factor 10 below `x^(4/5)`. The S2 owner retains responsibility for writing the source proof and all gate-correction estimates.
+- Re-read section 7: the actual steps are the clean phase identity (21), five-coordinate Abel charge (22), bounded common q intervals, coprime colors, two independent Lambda expansions, product-cutoff differences and non-Hermitian polarization. The informal plan phrase “four charts” is not an independently identified manuscript object. Root clarified the target to those actual source branches, rather than licensing four newly named charts as a coverage proof.
+
+## Scope correction retained
+
+P1 and P2 in the two-long argument are manuscript-internal deductions. Root's earlier description of P2 as a primitive was incorrect and was corrected in the fourth-batch task and acceptance scope. Named foundational external analytic theorems may be deferred; the P1/P2 assembly itself may not be replaced by `hP1` or `hP2` assumptions.
+
+No new manuscript mathematical gap is demonstrated by these checks. Current blockers are explicitly recorded proof, arithmetic-source, finite-certificate and caller connections; their presence is not a proof that the manuscript statement is false.
