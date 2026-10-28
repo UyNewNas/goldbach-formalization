@@ -1,0 +1,201 @@
+import ImbalancedChen.Data.P1HistoricalFifthSavedTableData
+import ImbalancedChen.P1HistoricalFifthTypedArchiveShape
+import ImbalancedChen.P1FifthCheckedUnitBoxWholeGain
+
+-- Proposed target: ImbalancedChen/P1HistoricalFifthConcreteSelectedOwners.lean
+-- SOURCE_ONLY / UNCOMPILED_ZERO_CREDIT / NOT_ROOT_ACCEPTED / HELD.
+-- This opt-in module names the actual 143-block saved data hub. It does
+-- not evaluate any data, checker, decoded family or integral. Its J5 is
+-- a concrete image of that data's decoded cells, then the ORIGINAL
+-- selectedFifthCells filter. Historical dynamic-owner authentication is
+-- a separate missing primitive, never inferred from opaque statistics.
+
+namespace ImbalancedChen.P1HistoricalFifthConcreteSelectedOwners
+noncomputable section
+open Set
+open scoped Classical BigOperators
+open P1OriginalPrefixRowDecodeSoundness
+open P1OriginalVariableFourthContinuation
+open P1OriginalVariableFifthContinuation
+open P1OriginalFifthGrid400RefinedFullBoxCover
+open P1OriginalFifthRawBoxSelectorEquivalence
+open P1OriginalFifthFiniteTableRefinementConstructor
+open P1FifthGrid400UnitBoxPartition
+open P1FifthUnitBoxGainDecomposition
+open P1FifthUnitBoxLiteralGainLower
+open P1FifthCheckedUnitBoxWholeGain
+open P2OriginalFourthCapProducerInterface
+open P1ActualVariableFifthProfiles
+open P1ActualVariableFifthUntruncatedDomination
+
+abbrev archive := Data.P1HistoricalFifthSavedTableData.rows
+def savedRecords : Finset FifthWireRow := archive.toList.toFinset
+def savedRows5 (q : ℕ) : Finset (FifthRow (refinedMesh q)) :=
+  decodedFamily savedRecords q
+
+-- The image boundary is explicit: masks remain in savedRows5, while J5
+-- records owners only. Multiple masks on one owner are never first-matched.
+def savedJ5 (q : ℕ) : Finset (RefinedCell q) :=
+  (savedRows5 q).image FifthRow.cell
+
+def savedOwners (e : ℚ) (chi omega : ℝ) (q : ℕ) : Finset (RefinedCell q) :=
+  P1OriginalCoarseFifthContinuation.selectedFifthCells
+    e chi (refinedMesh q) omega (savedJ5 q)
+
+def savedSelectedRows (e : ℚ) (chi omega : ℝ) (q : ℕ) :
+    Finset (FifthRow (refinedMesh q)) :=
+  (savedRows5 q).filter (fun r => r.cell ∈ savedOwners e chi omega q)
+
+theorem mem_savedJ5 (q : ℕ) (j : RefinedCell q) :
+    j ∈ savedJ5 q ↔ ∃ raw ∈ archive.toList,
+      ∃ r ∈ decodeFifthRows raw (refinedMesh q), r.cell = j := by
+  constructor
+  · intro hj
+    obtain ⟨r, hr, hcell⟩ := Finset.mem_image.mp hj
+    obtain ⟨raw, hraw, hdecode⟩ := (mem_decodedFamily savedRecords q r).mp hr
+    exact ⟨raw, List.mem_toFinset.mp hraw, r, hdecode, hcell⟩
+  · rintro ⟨raw, hraw, r, hr, hcell⟩
+    exact Finset.mem_image.mpr ⟨r,
+      (mem_decodedFamily savedRecords q r).mpr
+        ⟨raw, List.mem_toFinset.mpr hraw, hr⟩, hcell⟩
+
+-- This is the exact finite original owner filter; the lower endpoint
+-- rough test is inclusive. No firstStop cap or initial<=third claim occurs.
+theorem mem_savedOwners (e : ℚ) (chi omega : ℝ) (q : ℕ) (j : RefinedCell q) :
+    j ∈ savedOwners e chi omega q ↔
+      (∃ raw ∈ archive.toList, ∃ r ∈ decodeFifthRows raw (refinedMesh q), r.cell = j) ∧
+      historicalPrefixProject (by omega : 3 ≤ 5) j ∈
+        HistoricalThirdCoarse.cells (e : ℝ) chi (refinedMesh q) ∧
+      omega ≤ (qLogPrimeMeshLo 0 (19 / 96) (refinedMesh q)
+        (historicalPrefixProject (by omega : 3 ≤ 5) j) 2 : ℝ) := by
+  rw [savedOwners, P1OriginalCoarseFifthContinuation.mem_selectedFifthCells,
+    mem_savedJ5]
+
+theorem mem_savedSelectedRows (e : ℚ) (chi omega : ℝ) (q : ℕ)
+    (r : FifthRow (refinedMesh q)) :
+    r ∈ savedSelectedRows e chi omega q ↔
+      (∃ raw ∈ archive.toList, r ∈ decodeFifthRows raw (refinedMesh q)) ∧
+      r.cell ∈ savedOwners e chi omega q := by
+  simp only [savedSelectedRows, Finset.mem_filter, savedRows5,
+    mem_decodedFamily, savedRecords, List.mem_toFinset]
+
+-- Removing unselected data rows changes no cap on ANY selected owner.
+-- Both maxima keep the identical originalVariableFourthProfile seed.
+theorem actualNext5_saved_selected_rows (e : ℚ) (chi omega : ℝ) (q : ℕ)
+    (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop)
+    (j : RefinedCell q) (hj : j ∈ savedOwners e chi omega q) (t : Fin 5 → ℝ) :
+    actualNext5 e chi (refinedMesh q) omega j rows4 licensed4 (savedRows5 q) t =
+      actualNext5 e chi (refinedMesh q) omega j rows4 licensed4
+        (savedSelectedRows e chi omega q) t := by
+  unfold actualNext5
+  apply le_antisymm
+  · apply finiteMax_le _ _ _ _ _ (finiteMax_seed_le _ _ _ _)
+    intro r hr he
+    have howner : r.cell ∈ savedOwners e chi omega q := he.1.symm ▸ hj
+    exact finiteMax_row_le _ _ _ _ r (Finset.mem_filter.mpr ⟨hr, howner⟩) he
+  · apply finiteMax_le _ _ _ _ _ (finiteMax_seed_le _ _ _ _)
+    intro r hr he
+    exact finiteMax_row_le _ _ _ _ r (Finset.mem_filter.mp hr).1 he
+
+def savedFullIntegral (e : ℚ) (chi omega : ℝ) (q : ℕ)
+    (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop) : ℝ :=
+  fullSelectedIntegral e chi (refinedMesh q) omega rows4 licensed4
+    (savedJ5 q) (savedRows5 q)
+
+def orderedActualSum (e : ℚ) (chi omega : ℝ) (q : ℕ)
+    (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop) : ℝ :=
+  (archive.toList.map (fun raw => actualRawOwnerSum raw e chi (refinedMesh q)
+    omega rows4 licensed4 (savedJ5 q))).sum
+
+def orderedLiteralSum (e : ℚ) (chi omega : ℝ) (q : ℕ) : ℝ :=
+  (archive.toList.map (fun raw => literalRawOwnerSum raw e chi (refinedMesh q)
+    omega (savedJ5 q))).sum
+
+-- Numerator tables indexed by archive position must bind to THIS array,
+-- before reducing sums. Its order is the saved original data order.
+def orderedLiteralValues (e : ℚ) (chi omega : ℝ) (q : ℕ) : Array ℝ :=
+  archive.map (fun raw => literalRawOwnerSum raw e chi (refinedMesh q)
+    omega (savedJ5 q))
+
+theorem orderedLiteralValues_at (e : ℚ) (chi omega : ℝ) (q i : ℕ)
+    (hi : i < archive.size) :
+    (orderedLiteralValues e chi omega q)[i]'(by
+      simpa [orderedLiteralValues] using hi) =
+      literalRawOwnerSum archive[i] e chi (refinedMesh q) omega (savedJ5 q) := by
+  simp [orderedLiteralValues]
+
+theorem orderedLiteralValues_sum (e : ℚ) (chi omega : ℝ) (q : ℕ) :
+    (orderedLiteralValues e chi omega q).toList.sum = orderedLiteralSum e chi omega q := by
+  simp [orderedLiteralValues, orderedLiteralSum]
+
+-- Reuses the payload specialist's structural order theorem, without
+-- re-proving its 143-block fold or evaluating any of the 292633 rows.
+theorem orderedLiteralSum_block_order (e : ℚ) (chi omega : ℝ) (q : ℕ) :
+    orderedLiteralSum e chi omega q =
+      ((Data.P1HistoricalFifthSavedTableData.blocks.toList.flatMap Array.toList).map
+        (fun raw => literalRawOwnerSum raw e chi (refinedMesh q) omega (savedJ5 q))).sum := by
+  unfold orderedLiteralSum
+  rw [P1HistoricalFifthTypedArchiveShape.rows_toList_order]
+
+-- Exact missing closed finite primitive: this LO-key Nodup assertion for
+-- the concrete archive. It is NOT assumed as a full-table Boolean pass.
+def SavedKeysNodup : Prop := (archive.toList.map rowKey).Nodup
+def SavedPositiveKeys : Prop := ∀ raw ∈ archive.toList, ∀ i, 1 ≤ raw.lo i
+
+theorem saved_key_check_of_nodup (hkeys : SavedKeysNodup) :
+    unitKeyCheck archive = true := by
+  change decide ((archive.toList.map rowKey).Nodup) = true
+  exact (decide_eq_true_eq).mpr hkeys
+
+-- A GIVEN common checked refinement supplies grid and support facts.
+-- The key predicate is kept independent of those cap checks and of all
+-- saved statistics. No all-table checker is evaluated or postulated.
+theorem saved_partition_check (e : ℚ) (omega : ℝ) (q : ℕ)
+    (hq : CheckedCompleteRefinement e omega savedRecords q)
+    (hkeys : SavedKeysNodup) : unitFamilyPartitionCheck archive = true := by
+  rw [unitFamilyPartitionCheck, Bool.and_eq_true]
+  constructor
+  · simp only [grid400Check, List.all_eq_true, decide_eq_true_eq]
+    intro raw hr
+    exact hq.grid400 raw (List.mem_toFinset.mpr hr)
+  · exact saved_key_check_of_nodup hkeys
+
+-- The actual full integral now has the typed archive's LIST ORDER, with
+-- the concrete J5 above. Its original fullCell retains firstStop/raw Q3;
+-- every actualRawOwnerSum retains the actual fourth profile unchanged.
+theorem savedFullIntegral_eq_orderedActualSum (e : ℚ) (he : 0 ≤ e)
+    (chi omega : ℝ) (homega : 0 < omega) (homegaRho : omega < (19 / 96 : ℝ))
+    (q : ℕ) (hq : CheckedCompleteRefinement e omega savedRecords q)
+    (hkeys : SavedKeysNodup)
+    (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop) :
+    savedFullIntegral e chi omega q rows4 licensed4 =
+      orderedActualSum e chi omega q rows4 licensed4 := by
+  simpa only [savedFullIntegral, orderedActualSum, actualRawOwnerSum, savedRows5,
+    savedRecords] using
+    checked_loaded_fullSelectedIntegral_eq_raw_list_sum archive
+      (saved_partition_check e omega q hq hkeys) q hq.positive
+      (fun raw hr => hq.nonnegativeMask raw (List.mem_toFinset.mpr hr))
+      e he chi omega homega homegaRho rows4 licensed4 (savedJ5 q) hq.allGates
+
+theorem orderedLiteralSum_le_savedFullIntegral (e : ℚ) (he : 0 ≤ e)
+    (chi omega : ℝ) (homega : 0 < omega) (homegaRho : omega < (19 / 96 : ℝ))
+    (q : ℕ) (hq : CheckedCompleteRefinement e omega savedRecords q)
+    (hkeys : SavedKeysNodup) (hpositive : SavedPositiveKeys)
+    (rows4 : Finset ProducerRow) (licensed4 : ProducerRow → Prop)
+    (hgeometry : ∀ r ∈ rows4, licensed4 r → r.Geometry) :
+    orderedLiteralSum e chi omega q ≤ savedFullIntegral e chi omega q rows4 licensed4 := by
+  have hk := saved_key_check_of_nodup hkeys
+  have hbound := sum_literalRawOwnerIntegrals_le_fullSelectedIntegral savedRecords
+    q hq.positive hq.grid400 hq.nonnegativeMask (loaded_key_injective_finset archive hk)
+    (fun raw hr i => hpositive raw (List.mem_toFinset.mp hr) i)
+    e he chi omega homega homegaRho rows4 licensed4 hgeometry (savedJ5 q) hq.allGates
+  have hsum := sum_loaded_records_eq_finset archive hk
+    (fun raw => literalRawOwnerSum raw e chi (refinedMesh q) omega (savedJ5 q))
+  change (∑ raw ∈ archive.toList.toFinset,
+    literalRawOwnerSum raw e chi (refinedMesh q) omega (savedJ5 q)) ≤
+      savedFullIntegral e chi omega q rows4 licensed4 at hbound
+  rw [← hsum] at hbound
+  exact hbound
+
+end
+end ImbalancedChen.P1HistoricalFifthConcreteSelectedOwners
