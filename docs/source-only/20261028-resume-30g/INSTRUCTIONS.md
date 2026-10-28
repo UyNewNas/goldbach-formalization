@@ -1,0 +1,17 @@
+# Seventh batch G: prepared original-source proof tasks
+
+Root approved all30 G targets. Dispatch is individually GATED: the existing author may start G only after final F actual source/REGISTRY/REPORT freeze and a root-authorized followup. Not-final authors continue F; the six existing reviewers complete/freeze F reviews/IMPORT_MAP before G. This file does not dispatch anyone. Read the original manuscript, ../20261028-resume-30/INSTRUCTIONS.md and all continuing F root gates before your exact G target/peer_inputs.
+
+Authors own only their same-ID G directory. F source/REGISTRY/REPORT and reviews remain author/original-reviewer property until final; never edit or interfere. Before G, require F final author delivery and revalidate its exact actual raw source/import hashes. If F is not final, continue F, do not reinterpret G as a deadline. Previous frozen batches never change without root-authorized correction and re-lock.
+
+Each original broad goal/task stays false, compiled=false/formal_credit=0. batch_target_complete (and legacy source_complete) requires the ENTIRE exact dispatched G target. Local progress uses local_step_complete; no narrowing, renaming, purely local new definition or assumed desired conclusion establishes that full target. Do not rerun closed local proofs as new progress.
+
+No compiler/lake/repair, numerical checker/replay, quota inspection or new agents. Root alone monitors quota; if root explicitly orders the <=10% stop, cease all proof dispatch/work per root and maintain records only. Closed finite decision terms may only be written as source, never executed or reported passed. Root owns acceptance, Git/push and Site publication.
+
+P1, P2, internal K, PP, an entire L51/bare medium theorem, the desired lower/upper/certificate/gain are INTERNAL deductions. Only precisely named foundational original classical inputs may be cited/deferred with their exact hypotheses. Read actual original content before declaring an interface primitive. Use independent, one-direction source/identity/norm peer ports and avoid any centering/Gram or final-bound cycle.
+
+Poisson has the original Lambda st=d/product-bound-difference/non-Hermitian branches, equation21 phase and equation22 FIVE-coordinate Abel callers. Do not invent a uniform four-chart source. Fifth child pattern(2,2,2,2,4) is64 children PER parent,128 only the earlier two-named-parent aggregate; preserve ArchiveIndex x ChildIndex64 order/multiplicity, never duplicate gain.
+
+H248 concerns actual Phi/sifted counts, same-Q negative child corrections and true positive-K family costs; never invent ordinary-rho density=H248. Original seed/old184+64 and seed-only430 histories differ. Preserve saved-minus-defect <= proxy <= true integral direction, real masks/fibres/reserves and actual current-c chain. A true canonical tent subbank is not full W/adopted L5/L6. Physical prefix/residual-q ranks are not independent-u test ranks; group/log normalization and same-rho Family must be actual-source identities. Pointwise common union/continuous wall volume/finite divergence are not full numerical common approximation, attached AP payment or ALL-decision coverage.
+
+REGISTRY records exact raw source/import SHA/install mapping, assumptions, actual removed obligations and remaining scope. Check original proof first for any obstacle; distinguish implementation missing object from demonstrated manuscript defect and report precise evidence promptly. Deliver final raw SHA/scope to root and the existing corresponding reviewer, then wait.
