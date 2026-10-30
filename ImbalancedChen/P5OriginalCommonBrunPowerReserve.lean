@@ -1,4 +1,8 @@
-import Mathlib
+import Mathlib.Analysis.SpecialFunctions.Pow.Real
+import Mathlib.Data.Finset.Insert
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Ring
 
 -- SOURCE ONLY / UNCOMPILED / ZERO FORMAL CREDIT.
 -- Original distribution-prime-product-completion-20261010, lines 43-44,
@@ -71,7 +75,7 @@ private theorem complementary_power {x a b c nu : ℝ} (hx : 0 < x)
     calc
       a*b*x^nu ≤ a*b*c := mul_le_mul_of_nonneg_left hc (mul_nonneg ha hb)
       _ = x := hscale
-  exact (mul_le_mul_right (Real.rpow_pos_of_pos hx nu)).mp hmul
+  exact le_of_mul_le_mul_right hmul (Real.rpow_pos_of_pos hx nu)
 
 -- Actual one-long raw E5. The epsilon term is kept separate: its
 -- superlogarithmic density gap must never be multiplied by x^o(1).
