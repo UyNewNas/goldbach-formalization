@@ -54,7 +54,7 @@ theorem relaxed_three_margins_coordinate_bounds
     mul_lt_mul_of_pos_left hlower hb
   have hxmul : (baseline b kappa - delta) * (1 + b) < x * (1 + b) := by
     nlinarith only [hscaled, hbalance, hbaseline]
-  have hx : baseline b kappa - delta < x := (mul_lt_mul_right hden).mp hxmul
+  have hx : baseline b kappa - delta < x := (mul_lt_mul_iff_of_pos_right hden).mp hxmul
   exact ⟨hx, by linarith only [hx, horder]⟩
 
 theorem relaxed_three_margins_above_theta
@@ -147,8 +147,8 @@ theorem physical_ramp_nonzero_prime_divisor_rough
   obtain ⟨hr, hq⟩ := physical_ramp_nonzero_prime_factors_rough hb hN hdelta hgap ht hnonzero
   rw [labelledProduct_eq_pairProduct] at hdvd
   rcases (prime_dvd_halfProduct_iff hell (hprime 0) (hprime 1)).mp hdvd with h | h
-  · simpa only [h] using hr
-  · simpa only [h] using hq
+  · simpa only [tuplePair, h] using hr
+  · simpa only [tuplePair, h] using hq
 
 /-- Nonzero actual pushed-forward weight has a nonzero tuple in its exact
 fibre. This uses the proved fibre API; no sign or no-cancellation assumption

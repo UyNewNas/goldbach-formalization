@@ -119,7 +119,7 @@ private theorem continuousOn_partialLog (n : ℕ) :
       simpa [logPartial] using
         (continuousOn_const : ContinuousOn (fun _ : ℝ => (0 : ℝ)) (Icc 2 stop))
   | succ n ih =>
-      simpa only [logPartial, Finset.sum_range_succ] using
+      simpa only [logPartial, Finset.sum_range_succ, Pi.add_def, Pi.pow_apply] using
         ih.add ((continuousOn_coordinate.pow (n + 1)).div_const ((n : ℝ) + 1))
 
 theorem continuousOn_partialKernel (n : ℕ) :
@@ -176,7 +176,7 @@ theorem kernel_series_pointwise (n : ℕ) {s : ℝ}
   · exact (div_le_div_iff_of_pos_right hspos).2 hb.1
   · have hu := (div_le_div_iff_of_pos_right hspos).2 hb.2
     rw [add_div] at hu
-    exact hu.trans (add_le_add_left htail _)
+    exact hu.trans (add_le_add_right htail _)
 
 /-- Integrating the actual full domain preserves the explicit geometric error. -/
 theorem originalFirstIntegral_series_enclosure (n : ℕ) :

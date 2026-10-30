@@ -1,5 +1,5 @@
 import ImbalancedChen.RealHalfProductSource
-import ImbalancedChen.Part3DistributionTargets
+import ImbalancedChen.Part3LabelledFiniteSource
 import ImbalancedChen.RealPhysicalUpperWeightBridge
 import Mathlib.Algebra.BigOperators.Field
 import Mathlib.Algebra.BigOperators.Fin
@@ -47,9 +47,9 @@ theorem tuplePair_injective (N : ℕ) :
   funext i
   fin_cases i
   · apply Fin.ext
-    simpa only [tuplePair] using congrArg Prod.fst h
+    simpa [tuplePair] using congrArg Prod.fst h
   · apply Fin.ext
-    simpa only [tuplePair] using congrArg Prod.snd h
+    simpa [tuplePair] using congrArg Prod.snd h
 
 @[simp] theorem labelledProduct_eq_pairProduct {N : ℕ}
     (t : Fin 2 → Fin (N + 1)) :
@@ -217,7 +217,10 @@ theorem primeProductSignedError_eq_realPhysicalDistributionError
   apply Finset.sum_congr rfl
   intro d hd
   apply congrArg (fun x : ℝ => rho d * x)
-  rw [sum_labelled_W_eq_source, Finset.sum_sub_distrib, Finset.sum_div]
+  rw [sum_labelled_W_eq_source b N T (fun m =>
+    ((if Nat.ModEq d m N then (1 : ℝ) else 0) -
+      (if Nat.Coprime m d then (1 : ℝ) else 0) / (Nat.totient d : ℝ))),
+    Finset.sum_sub_distrib, ← Finset.sum_div]
   rw [sum_source_indicator, sum_source_indicator]
   rfl
 

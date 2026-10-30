@@ -190,8 +190,13 @@ def smoothPhysicalProfileClosedWalls (b : ℝ) (N : ℕ) (T width : ℝ) :
 theorem isClosed_smoothPhysicalProfileClosedWalls
     (b : ℝ) (N : ℕ) (T width : ℝ) :
     IsClosed (smoothPhysicalProfileClosedWalls b N T width) := by
-  change IsClosed (⋂ i : Fin 4,
-    (fun v : Fin 2 → ℝ => smoothPhysicalProfileMargin b N T v i) ⁻¹' Ici (-width))
+  have he : smoothPhysicalProfileClosedWalls b N T width =
+      ⋂ i : Fin 4, (fun v : Fin 2 → ℝ =>
+        smoothPhysicalProfileMargin b N T v i) ⁻¹' Set.Ici (-width) := by
+    ext v
+    simp only [smoothPhysicalProfileClosedWalls, Set.mem_setOf_eq,
+      Set.mem_iInter, Set.mem_preimage, Set.mem_Ici]
+  rw [he]
   apply isClosed_iInter
   intro i
   exact isClosed_Ici.preimage

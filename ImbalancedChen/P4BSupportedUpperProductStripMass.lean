@@ -215,7 +215,7 @@ theorem supported_upper_strip_card_le_two_shell
       apply Finset.mem_product.mpr
       refine ⟨supported_upper_product_mem_physical_shell hb hb1 htheta hN hEven
         hwidth hgap hwidthSmall hwidthShell hpower ht, ?_⟩
-      unfold orientationTag
+      dsimp only [orientationTag]
       split_ifs <;> norm_num
     · intro t ht u hu htu
       apply labelled_product_orientation_injective

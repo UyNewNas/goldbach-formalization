@@ -1,7 +1,7 @@
 import ImbalancedChen.CurrentUpperEighteenBudget
 import ImbalancedChen.Certificates.AboveMuSecondCoarse
 import ImbalancedChen.Part4ActualThirdFiniteDensityReserve
-import ImbalancedChen.ActualUpperDensityAssembly
+import ImbalancedChen.SourceDensityScale
 import Mathlib.Tactic.Ring
 
 /-!
@@ -51,7 +51,7 @@ theorem ordinary_root_normalization :
 
 theorem fifth_saving_slot_is_coarse_endpoint :
     currentUpperEighteenGains 4 = (640339 / 15210735000 : ℝ) := by
-  norm_num [currentUpperEighteenGains]
+  rfl
 
 theorem finalFourGains_sum :
     (∑ i, finalFourGains i) = 313448685950606471603475 / 2^96 := by

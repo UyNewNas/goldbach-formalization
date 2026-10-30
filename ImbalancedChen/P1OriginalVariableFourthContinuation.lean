@@ -90,7 +90,8 @@ theorem profile4_row_le {ι : Type*} (seed : ℝ) (rows : Finset ι)
     (eligible : ι → (Fin 4 → ℝ) → Prop) (profile : ι → (Fin 4 → ℝ) → ℝ)
     (t : Fin 4 → ℝ) (r : ι) (hr : r ∈ rows) (he : eligible r t) :
     profile r t ≤ profile4 seed rows eligible profile t := by
-  exact finiteMax_row_le rows _ _ seed r hr he
+  exact finiteMax_row_le rows (fun row => eligible row t)
+    (fun row => profile row t) seed r hr he
 
 theorem profile4_eq_seed_of_outside {ι : Type*} (seed : ℝ) (rows : Finset ι)
     (eligible : ι → (Fin 4 → ℝ) → Prop) (profile : ι → (Fin 4 → ℝ) → ℝ)
@@ -114,8 +115,10 @@ theorem overlapping_candidates_le_profile4 {ι : Type*} (seed loss : ℝ) (rows 
     (her : eligible r t) (hes : eligible s t) :
     max (candidateExponent loss (mask r) t) (candidateExponent loss (mask s) t) ≤
       profile4 seed rows eligible (fun row => candidateExponent loss (mask row)) t := by
-  exact max_le (profile4_row_le seed rows eligible _ t r hr her)
-    (profile4_row_le seed rows eligible _ t s hs hes)
+  exact max_le (profile4_row_le seed rows eligible
+    (fun row => candidateExponent loss (mask row)) t r hr her)
+    (profile4_row_le seed rows eligible
+      (fun row => candidateExponent loss (mask row)) t s hs hes)
 
 def seedExponent (e chi : ℝ) (m : ℕ) (omega N : ℝ) (history : List ℕ) : ℝ :=
   P1CoarseFirstCubeFallbackMargin.effectiveExponent e chi m omega N (rosserAncestor 3 history)
@@ -304,7 +307,8 @@ theorem producerProfile4_row_le (e : ℝ) (rows : Finset ProducerRow)
     (r : ProducerRow) (hr : r ∈ rows) (he : producerEligible licensed r t) :
     v (∑ i ∈ r.selected, t i) - 2 * e ≤ producerProfile4 e rows licensed seed t := by
   rw [← r.bufferedCandidate_eq e t]
-  exact profile4_row_le seed rows (producerEligible licensed) _ t r hr he
+  exact profile4_row_le seed rows (producerEligible licensed)
+    (fun row => row.bufferedCandidate e) t r hr he
 
 theorem producerProfile4_seed_le (e : ℝ) (rows : Finset ProducerRow)
     (licensed : ProducerRow → Prop) (seed : ℝ) (t : Point) :
@@ -324,8 +328,10 @@ theorem producerProfile4_overlap (e : ℝ) (rows : Finset ProducerRow)
     (her : producerEligible licensed r t) (hes : producerEligible licensed s t) :
     max (r.bufferedCandidate e t) (s.bufferedCandidate e t) ≤
       producerProfile4 e rows licensed seed t := by
-  exact max_le (profile4_row_le seed rows (producerEligible licensed) _ t r hr her)
-    (profile4_row_le seed rows (producerEligible licensed) _ t s hs hes)
+  exact max_le (profile4_row_le seed rows (producerEligible licensed)
+    (fun row => row.bufferedCandidate e) t r hr her)
+    (profile4_row_le seed rows (producerEligible licensed)
+      (fun row => row.bufferedCandidate e) t s hs hes)
 
 theorem producerLevel4_outside_rows (e chi : ℝ) (m : ℕ) (omega N : ℝ)
     (rows : Finset ProducerRow) (licensed : ProducerRow → Prop) (history : List ℕ)

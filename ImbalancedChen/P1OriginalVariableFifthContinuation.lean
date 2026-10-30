@@ -1,3 +1,4 @@
+import ImbalancedChen.P1FifthRowGeometry
 import ImbalancedChen.P1OriginalVariableFourthContinuation
 import ImbalancedChen.P1OriginalCoarseFifthContinuationCells
 import ImbalancedChen.SelectedPrefixBoxCap
@@ -28,43 +29,6 @@ open HistoricalThirdCoarse
 open P1OriginalVariableFourthContinuation
 open P1OriginalCoarseFifthContinuation
 open P2OriginalFourthCapProducerInterface
-
-abbrev Point5 := Fin 5 → ℝ
-abbrev Label5 (m : ℕ) := Fin 5 → Fin (m + 1)
-
-structure FifthRow (m : ℕ) where
-  cell : Label5 m
-  selected : Finset (Fin 5)
-
-def envelope (I : Finset (Fin 5)) (t : Point5) : ℝ :=
-  let s := ∑ i ∈ I, t i
-  min ((1 + s) / 2) (57 / 64 - (3 / 2) * s)
-
-def candidate (e : ℝ) (I : Finset (Fin 5)) (t : Point5) : ℝ :=
-  envelope I t - 2 * e
-
-theorem envelope_eq_v (I : Finset (Fin 5)) (t : Point5) :
-    envelope I t = v (∑ i ∈ I, t i) := by
-  rw [envelope, v_eq_min]
-  rfl
-
-theorem candidate_eq_original_cap (e : ℝ) (I : Finset (Fin 5)) (t : Point5) :
-    candidate e I t =
-      min ((1 + ∑ i ∈ I, t i) / 2)
-        (57 / 64 - (3 / 2 : ℝ) * ∑ i ∈ I, t i) - 2 * e := rfl
-
-theorem candidate_le_original_cap (e : ℝ) (he : 0 ≤ e)
-    (I : Finset (Fin 5)) (t : Point5) : candidate e I t ≤ envelope I t := by
-  dsimp [candidate]
-  linarith
-
-theorem candidate_le_global_cap (e : ℝ) (he : 0 ≤ e)
-    (I : Finset (Fin 5)) (t : Point5) :
-    candidate e I t ≤ VariableEnvelope.cap := by
-  calc
-    candidate e I t ≤ envelope I t := candidate_le_original_cap e he I t
-    _ = v (∑ i ∈ I, t i) := envelope_eq_v I t
-    _ ≤ VariableEnvelope.cap := v_le_cap _
 
 /-- A strict rational endpoint test for the pointwise cap after buffer loss.
 It proves all square gates directly, without replacing M_I(t) by a midpoint. -/

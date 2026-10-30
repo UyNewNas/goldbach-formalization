@@ -139,7 +139,8 @@ theorem actual_pairOuterRamp_sub_W_le_arithmetic_strip_indicators
   have hunion := logGateOuterRamp_product_surplus_le_strip_union
     (Finset.univ : Finset (Fin 4))
     (actualPairMargins b (Real.log T / Real.log (N : ℝ)) (logPoint N t)) hdelta
-  exact (sub_le_sub_left hind _).trans hunion
+  exact (sub_le_sub_left hind _).trans (by
+    simpa only [actualPairOuterRamp, fourWallOuterWeight, Finset.mem_univ, true_implies] using hunion)
 
 /-- Genuine labelled W has exactly the actual source cardinality as mass;
 there is no factor two, tuple multiplicity or surrogate normalization. -/
@@ -180,7 +181,7 @@ theorem sum_actual_pairOuterRamp_le_source_card_add_arithmetic_strip_cards
       apply Finset.sum_le_sum
       intro t ht
       have hpoint := actual_pairOuterRamp_sub_W_le_arithmetic_strip_indicators
-        hN hT hdelta ht
+        (b := b) hN hT hdelta ht
       linarith only [hpoint]
     _ = _ := by
       rw [Finset.sum_add_distrib, sum_actual_labelled_W_eq_source_card, hstrips]

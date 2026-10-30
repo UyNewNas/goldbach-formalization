@@ -112,12 +112,10 @@ theorem finitePrimitiveDiscrepancy_eq_labelled (N : ℕ)
   classical
   unfold finitePrimitiveDiscrepancy
   rw [finiteCongruenceMass_eq_labelled, finiteCoprimeMass_eq_labelled,
-    ← Finset.sum_div, ← Finset.sum_sub_distrib]
+    Finset.sum_div, ← Finset.sum_sub_distrib]
   apply Finset.sum_congr rfl
   intro t ht
-  by_cases hmod : Nat.ModEq d (labelledProduct t) a <;>
-    by_cases hcop : Nat.Coprime (labelledProduct t) d <;>
-    simp [hmod, hcop] <;> ring
+  split_ifs <;> ring
 
 /-- One same-rho signed sum, exactly the actual rank-two Part 3 error.
 No absolute value is moved inside the physical modulus sum. -/

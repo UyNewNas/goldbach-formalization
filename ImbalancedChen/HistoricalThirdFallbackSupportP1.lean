@@ -224,6 +224,7 @@ theorem rawDifference_triple_eq_ite (e chi : ℝ) (m : ℕ) (omega N : ℝ)
         N ^ exponent e chi m (primeHistoryLogCoordinates N 3 [p3, p2, p1]) - N ^ initial e
       else 0 := by
   rw [rawDifference_eq_ite, supported_triple]
+  split_ifs <;> rfl
 
 /-- Finite sums need no convergence or positivity hypotheses for cancellation. -/
 theorem sum_weighted_rawDifference_eq_filter (e chi : ℝ) (m : ℕ) (omega N : ℝ)

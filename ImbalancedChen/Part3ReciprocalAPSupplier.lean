@@ -169,7 +169,6 @@ theorem medium_gamma_reciprocalAP_fouvry {epsilon : ℝ}
       (mediumAdmissible_factorScale_bounds hd).1
       (mediumAdmissible_factorScale_bounds hd).2.1
       (mediumAdmissible_factorScale_bounds hd).2.2 hq1 hq2 hq3).1.ne'⟩
-  dsimp only
   have hlength : 0 ≤ (Y : ℝ) - X := sub_nonneg.mpr (by exact_mod_cast hXY)
   have hbudget : 0 ≤
       C * (1 + ((Y : ℝ) - X) / (q1 * q2 * q3 : ℕ)) *

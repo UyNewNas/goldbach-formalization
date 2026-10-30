@@ -1,4 +1,4 @@
-import ImbalancedChen.ActualUpperCountingInputs
+import ImbalancedChen.ActualUpperFiniteInputs
 
 /-!
 # P4B: eliminate the outer-source coprime correction

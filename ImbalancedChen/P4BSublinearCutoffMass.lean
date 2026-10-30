@@ -66,7 +66,7 @@ theorem source_card_abs_sub_le_cutoffs_add_one
   have hmax : 0 ≤ max T U := hT.trans (le_max_left T U)
   have hsum : max T U ≤ T + U := max_le (by linarith) (by linarith)
   exact (source_card_abs_sub_le_max_add_one b N T U hmax).trans
-    (add_le_add_right hsum 1)
+    (add_le_add_left hsum 1)
 
 /-- Fixed sublinear real powers, including their additive unit, are
 negligible relative to `N/log N`. This is derived from the proved

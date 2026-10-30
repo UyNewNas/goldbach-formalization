@@ -1,3 +1,4 @@
+import ImbalancedChen.SourceDensityScale
 import ImbalancedChen.ActualFirstExitDensityProjection
 import ImbalancedChen.UpperCoefficientPerturbation
 import ImbalancedChen.CurrentNumericalTransfer
@@ -23,14 +24,6 @@ namespace ImbalancedChen
 noncomputable section
 
 open Filter Topology
-
-/-- Exact source/density scale conversion, including Lean's total division
-conventions at the two small exceptional natural arguments. -/
-theorem sourceMassScale_mul_densityScale (N : ℕ) :
-    ((N : ℝ) / Real.log (N : ℝ)) *
-        (singularSeries N / Real.log (N : ℝ)) = singularNormalization N := by
-  simp only [singularNormalization, div_eq_mul_inv]
-  ring
 
 theorem densityScale_pos {N : ℕ} (hN : 2 ≤ N) :
     0 < singularSeries N / Real.log (N : ℝ) := by

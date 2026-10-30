@@ -92,8 +92,8 @@ theorem smooth_physical_ramp_nonzero_prime_divisor_rough
     hb hN hwidth hgap ht hnonzero
   rw [labelledProduct_eq_pairProduct] at hdvd
   rcases (prime_dvd_halfProduct_iff hell (hprime 0) (hprime 1)).mp hdvd with h | h
-  · simpa only [h] using hr
-  · simpa only [h] using hq
+  · simpa only [tuplePair, h] using hr
+  · simpa only [tuplePair, h] using hq
 
 /-- Exact nonzero-fibre extraction applies to any tuple weight and hence
 to this actual smooth weight, without a no-cancellation hypothesis. -/

@@ -2,7 +2,7 @@ import ImbalancedChen.FiniteUpperCarrierCore
 import ImbalancedChen.PhysicalUpperWeightBridge
 import ImbalancedChen.RealHalfProductSource
 import ImbalancedChen.CurvedRegionDiscrepancy
-import ImbalancedChen.ActualSmallRoughAttachment
+import ImbalancedChen.ActualSmallRoughFiniteAttachment
 
 /-!
 # One physical upper weight on the arbitrary-real ordered source

@@ -114,7 +114,7 @@ theorem monotone_smoothGateUpperStep {width : ℝ} (hwidth : 0 < width) :
     Monotone (smoothGateUpperStep width) := by
   intro x y hxy
   apply Real.smoothTransition.monotone
-  exact add_le_add_left (div_le_div_of_nonneg_right hxy hwidth.le) 1
+  exact add_le_add_right (div_le_div_of_nonneg_right hxy hwidth.le) 1
 
 /-- Enlarging a positive width enlarges the upper envelope pointwise.
 The one plateau handles nonnegative margins, so no sign restriction on x
@@ -127,7 +127,7 @@ theorem smoothGateUpperStep_mono_width {width widthMax : ℝ}
   · simpa only [smoothGateUpperStep_eq_one hwidth hx,
       smoothGateUpperStep_eq_one hwidthMaxPos hx] using (le_refl (1 : ℝ))
   · apply Real.smoothTransition.monotone
-    apply add_le_add_left
+    apply add_le_add_right
     apply (div_le_div_iff₀ hwidth hwidthMaxPos).mpr
     exact mul_le_mul_of_nonpos_left hwidthMax (lt_of_not_ge hx).le
 

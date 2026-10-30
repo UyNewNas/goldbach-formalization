@@ -40,7 +40,8 @@ theorem producerLevel4_eq_winning_row (e chi : ℝ) (m : ℕ) (omega N : ℝ)
         r.bufferedCandidate e t := by
     apply le_antisymm
     · exact finiteMax_le rows _ _ _ _ hseed hrows
-    · exact profile4_row_le _ rows (producerEligible licensed) _ t r hr her
+    · exact profile4_row_le (seedExponent e chi m omega N pre) rows
+        (producerEligible licensed) (fun s => s.bufferedCandidate e) t r hr her
   change N ^ (if pre.length = 4 then
       profile4 (seedExponent e chi m omega N pre) rows
         (producerEligible licensed) (fun s => s.bufferedCandidate e) t

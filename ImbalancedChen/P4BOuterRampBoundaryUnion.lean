@@ -1,4 +1,5 @@
-import ImbalancedChen.ActualUpperCountingInputs
+import ImbalancedChen.RealHalfProductMassSplit
+import ImbalancedChen.CurvedRegionDiscrepancy
 import ImbalancedChen.P4BLogGateOuterRamp
 
 /-!
@@ -48,7 +49,7 @@ theorem exists_gate_strip_of_product_pos {ι : Type*}
     ∃ i ∈ I, -width < G i ∧ G i ≤ 0 := by
   classical
   obtain ⟨i, hi, hbad⟩ : ∃ i ∈ I, G i ≤ 0 := by
-    simpa only [not_forall, not_imp, not_lt] using hnot
+    simpa only [not_forall, _root_.not_imp, not_lt, exists_prop] using hnot
   refine ⟨i, hi, ?_, hbad⟩
   apply lt_of_not_ge
   intro hfar
@@ -100,7 +101,8 @@ theorem ramp_product_sub_strict_indicator_le_strip_union {ι : Type*}
           (finite_gate_ramp_product_bounds I ramp hbound).2
         _ = (if -width < G i ∧ G i ≤ 0 then (1 : ℝ) else 0) :=
           (if_pos hstrip).symm
-        _ ≤ _ := Finset.single_le_sum
+        _ ≤ _ := Finset.single_le_sum (f := fun j =>
+          if -width < G j ∧ G j ≤ 0 then (1 : ℝ) else 0)
           (fun j _hj => by split_ifs <;> norm_num) hi
     · exact (le_of_not_gt hprod).trans hsumNonneg
 
@@ -144,7 +146,7 @@ theorem finiteSourceMass_ramp_product_le_strict_card_add_strip_cards {ι : Type*
         ∑ i ∈ I, if -width < G i m ∧ G i m ≤ 0 then (1 : ℝ) else 0) := by
       apply Finset.sum_le_sum
       intro m hm
-      exact add_le_add_left
+      exact add_le_add_right
         (ramp_product_sub_strict_indicator_le_strip_union I
           (fun i => G i m) (fun i => ramp i m) width
           (hbound m hm) (hone m hm) (hzero m hm)) _
@@ -164,7 +166,7 @@ theorem finiteSourceMass_ramp_product_surplus_paid {ι : Type*}
   have h := finiteSourceMass_ramp_product_le_strict_card_add_strip_cards
     I S G ramp width hbound hone hzero
   rw [hsource] at h
-  exact h.trans (add_le_add_left hpaid (A.card : ℝ))
+  exact h.trans (add_le_add_right hpaid (A.card : ℝ))
 
 /-- Direct adapter to the original hsurplus interface. The width and
 finite gates can depend on delta and N. Their arithmetic strip-cardinality

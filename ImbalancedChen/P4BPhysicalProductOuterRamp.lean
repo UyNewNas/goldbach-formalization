@@ -122,8 +122,9 @@ theorem positiveRescaledFourWallWeight_sub_actualIndicator_le_strips
   have hunion := logGateOuterRamp_product_surplus_le_strip_union
     (Finset.univ : Finset (Fin 4))
     (fun i => scale i * actualPairMargins b lower v i) hdelta
-  rw [hstrict] at hunion
-  exact (sub_le_sub_left hind _).trans hunion
+  simp only [hstrict] at hunion
+  exact (sub_le_sub_left hind _).trans (by
+    simpa only [positiveRescaledFourWallWeight, Finset.mem_univ, true_implies] using hunion)
 
 /-- Only the upper product wall is changed; its scale is log N. -/
 def physicalProductWallScale (N : ℕ) (i : Fin 4) : ℝ :=
@@ -168,7 +169,9 @@ theorem physicalPairOuterRamp_nonzero_margin_support
   apply logGateOuterRamp_nonzero_support hdelta
   intro hzero
   apply hnonzero
-  exact Finset.prod_eq_zero (Finset.mem_univ i) hzero
+  exact Finset.prod_eq_zero
+    (f := fun j : Fin 4 => logGateOuterRamp delta (physicalPairMargins b N T t j))
+    (Finset.mem_univ i) hzero
 
 /-- In particular the first three normalized margins retain the identical
 width delta. This API supplies the actual roughness-transfer geometry. -/
@@ -202,11 +205,15 @@ theorem actual_W_eq_physical_mixedIndicator
           0 < physicalPairMargins b N T t 1 ∧
           0 ≤ physicalPairMargins b N T t 2 ∧
           0 ≤ physicalPairMargins b N T t 3 then (1 : ℝ) else 0) := by
-  simpa only [physicalPairMargins,
-    affineRegion_iff_positive_rescaled_margins b
-      (Real.log T / Real.log (N : ℝ)) (logPoint N t)
-      (physicalProductWallScale N) (physicalProductWallScale_pos hN)] using
-    (W_eq_affineIndicator hN hT ht)
+  unfold physicalPairMargins
+  have he := affineRegion_iff_positive_rescaled_margins b
+    (Real.log T / Real.log (N : ℝ)) (logPoint N t)
+    (physicalProductWallScale N) (physicalProductWallScale_pos hN)
+  have hw := W_eq_affineIndicator (b := b) hN hT ht
+  by_cases h : affineRegion b (Real.log T / Real.log (N : ℝ)) (logPoint N t)
+  · simpa only [if_pos h, if_pos (he.mp h)] using hw
+  · have hn := mt he.mpr h
+    simpa only [if_neg h, if_neg hn] using hw
 
 theorem actual_W_le_physicalPairOuterRamp
     {b T delta : ℝ} {N : ℕ} (hN : (1 : ℝ) < N) (hT : 0 < T)
@@ -235,7 +242,9 @@ theorem physicalPairOuterRamp_nonzero_product_lt_exp_mul_N
   have hfactor : logGateOuterRamp delta (physicalPairMargins b N T t 3) ≠ 0 := by
     intro hzero
     apply hnonzero
-    exact Finset.prod_eq_zero (Finset.mem_univ (3 : Fin 4)) hzero
+    exact Finset.prod_eq_zero
+      (f := fun j : Fin 4 => logGateOuterRamp delta (physicalPairMargins b N T t j))
+      (Finset.mem_univ (3 : Fin 4)) hzero
   have hgap := logGateOuterRamp_nonzero_support hdelta hfactor
   rw [physicalPairMargins_upper_eq_log_gap b T hN t] at hgap
   obtain ⟨hr, hq⟩ := labelled_prime_pair_pos ht
@@ -325,7 +334,8 @@ theorem sum_physicalPairOuterRamp_le_source_card_add_arithmetic_strip_cards
             then (1 : ℝ) else 0) := by
       apply Finset.sum_le_sum
       intro t ht
-      have hpoint := physicalPairOuterRamp_sub_W_le_arithmetic_strips hN hT hdelta ht
+      have hpoint := physicalPairOuterRamp_sub_W_le_arithmetic_strips
+        (b := b) hN hT hdelta ht
       linarith only [hpoint]
     _ = _ := by
       rw [Finset.sum_add_distrib, sum_actual_labelled_W_eq_source_card, hstrips]

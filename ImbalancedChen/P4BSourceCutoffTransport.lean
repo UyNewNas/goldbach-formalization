@@ -1,4 +1,5 @@
-import ImbalancedChen.RealPhysicalUpperWeightBridge
+import ImbalancedChen.FiniteUpperCarrierCore
+import ImbalancedChen.CurvedRegionDiscrepancy
 
 /-!
 # P4B: exact signed transport between real source cutoffs
@@ -61,7 +62,7 @@ theorem source_sdiff_eq_band (b : ℝ) (N : ℕ) (T U : ℝ) :
 /-- The high part of the lower-cutoff source is exactly the higher-cutoff
 source. -/
 theorem source_filter_upper_eq {b T U : ℝ} {N : ℕ} (hTU : T ≤ U) :
-    (realHalfProductSource b N T).filter (fun m => U ≤ (m : ℝ)) =
+    (realHalfProductSource b N T).filter (fun m : ℕ => U ≤ (m : ℝ)) =
       realHalfProductSource b N U := by
   classical
   ext m
@@ -203,7 +204,7 @@ theorem abs_distribution_le_upper_add_band {b T U : ℝ} {N : ℕ}
           finitePrimitiveDiscrepancy (cutoffBand b N T U) (fun _ => 1) N d := by
     linarith
   rw [heq]
-  exact abs_add _ _
+  exact abs_add_le _ _
 
 /-- The analogous triangle bound for the actual coprime correction. -/
 theorem abs_coprimeCorrection_le_upper_add_band {b T U : ℝ} {N : ℕ}
@@ -221,7 +222,7 @@ theorem abs_coprimeCorrection_le_upper_add_band {b T U : ℝ} {N : ℕ}
             ((cutoffBand b N T U).card : ℝ)) / (Nat.totient d : ℝ)) := by
     linarith
   rw [heq]
-  exact abs_add _ _
+  exact abs_add_le _ _
 
 /-- Optional fully expanded finite triangle payment.  This absolute modulus
 sum is a consequence of the preceding signed identities, not their premise. -/
@@ -242,7 +243,7 @@ theorem abs_distribution_le_upper_add_sum_abs_band {b T U : ℝ} {N : ℕ}
         Finset.abs_sum_le_sum_abs _ _
       _ = _ := by simp only [abs_mul]
   exact (abs_distribution_le_upper_add_band (b := b) (N := N) hTU Q rho).trans
-    (add_le_add_left hband _)
+    (add_le_add_right hband _)
 
 end
 end ImbalancedChen.P4BSourceCutoffTransport

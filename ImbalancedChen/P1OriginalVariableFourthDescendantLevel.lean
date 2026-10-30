@@ -242,8 +242,9 @@ theorem producer_nonzeroCoefficient_modulus_lt_theta (e chi : ℝ) (he : 0 ≤ e
   have hmem : d ∈ producerRoughModuli e chi m omega N cap w z rows licensed := by
     by_contra hnot
     apply hd
-    simp [producerRoughCoefficient, firstExitRetainedCoefficient,
-      producerRoughModuli, hnot]
+    dsimp only [producerRoughModuli] at hnot
+    simp only [producerRoughCoefficient, firstExitRetainedCoefficient,
+      if_neg hnot, Int.cast_zero]
   exact producer_roughModulus_lt_theta e chi he m omega N cap w z rows licensed
     heupper hN d hmem
 

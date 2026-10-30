@@ -68,7 +68,9 @@ theorem ramp_product_sub_indicator_le_supported_strip_union {ι : Type*}
       (if ∀ i ∈ I, 0 < G i then (1 : ℝ) else 0)
   · have hsoft := softened_margins_of_positive_ramp_residual
       I G ramp width hzero hresidual
-    simpa only [hsoft, and_true] using
+    have hsupport : (∀ j ∈ I, -width < G j) = True :=
+      propext (iff_true_intro hsoft)
+    simpa only [hsupport, and_true] using
       ramp_product_sub_strict_indicator_le_strip_union I G ramp width hbound hone hzero
   · apply (le_of_not_gt hresidual).trans
     apply Finset.sum_nonneg
@@ -159,7 +161,13 @@ theorem physicalPairOuterRamp_sub_W_le_supported_arithmetic_strips
         (-delta < physicalPairMargins b N T t i ∧ physicalPairMargins b N T t i ≤ 0) ∧
           (∀ j : Fin 4, -delta < physicalPairMargins b N T t j)
         then (1 : ℝ) else 0 := by
-    simpa only [Finset.mem_univ, true_implies] using hg
+    convert hg using 1 <;>
+      simp -failIfUnchanged only [physicalPairOuterRamp, positiveRescaledFourWallWeight,
+        physicalPairMargins, Finset.mem_univ, true_implies]
+    · congr 1
+    · apply Finset.sum_congr rfl
+      intro i hi
+      exact (ite_eq_ite _ _ _).mpr trivial
   exact (sub_le_sub_left (allStrictPhysicalMargins_indicator_le_W hN hT ht)
     (physicalPairOuterRamp b N T delta t)).trans hpoint
 
@@ -191,7 +199,8 @@ theorem sum_physicalPairOuterRamp_le_source_card_add_supported_strip_cards
             then (1 : ℝ) else 0) := by
       apply Finset.sum_le_sum
       intro t ht
-      have hp := physicalPairOuterRamp_sub_W_le_supported_arithmetic_strips hN hT hdelta ht
+      have hp := physicalPairOuterRamp_sub_W_le_supported_arithmetic_strips
+        (b := b) hN hT hdelta ht
       linarith only [hp]
     _ = _ := by
       rw [Finset.sum_add_distrib, sum_actual_labelled_W_eq_source_card, hstrips]
@@ -217,7 +226,7 @@ theorem physicalPairOuterRamp_surplus_paid_by_supported_strips
     (∑ t ∈ labelledPrimeTuples 2 N, physicalPairOuterRamp b N T delta t) ≤
       ((realHalfProductSource b N T).card : ℝ) + E := by
   exact (sum_physicalPairOuterRamp_le_source_card_add_supported_strip_cards
-    hN hT hdelta).trans (add_le_add_left hpaid _)
+    hN hT hdelta).trans (add_le_add_right hpaid _)
 
 end
 

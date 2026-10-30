@@ -121,7 +121,7 @@ theorem prime_badness_indicator_le_logGateOuterRamp
     (hq : Nat.Prime q) (hr : Nat.Prime r) :
     (if (q : ℝ) ^ b < (r : ℝ) then (1 : ℝ) else 0) ≤
       logGateOuterRamp delta (primeImbalanceLogGate b q r) := by
-  rw [prime_badness_iff_positive_logGate b hq hr]
+  simp only [prime_badness_iff_positive_logGate b hq hr]
   exact logGateOuterRamp_indicator_le hdelta _
 
 /-- The surplus for the actual prime imbalance is confined to its explicit
@@ -133,7 +133,7 @@ theorem prime_badness_outerRamp_surplus_support
       (if (q : ℝ) ^ b < (r : ℝ) then (1 : ℝ) else 0) ≠ 0) :
     -delta < Real.log (r : ℝ) - b * Real.log (q : ℝ) ∧
       Real.log (r : ℝ) ≤ b * Real.log (q : ℝ) := by
-  rw [prime_badness_iff_positive_logGate b hq hr] at hsurplus
+  simp only [prime_badness_iff_positive_logGate b hq hr] at hsurplus
   obtain ⟨hleft, hright⟩ := logGateOuterRamp_surplus_support hdelta hsurplus
   refine ⟨hleft, ?_⟩
   exact sub_nonpos.mp hright
