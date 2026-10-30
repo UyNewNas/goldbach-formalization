@@ -1,4 +1,20 @@
-import ImbalancedChen.Certificates.PairedV2Prefix64
+import ImbalancedChen.Certificates.PairedV2Prefix128Data
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys000To008
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys008To016
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys016To024
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys024To032
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys032To040
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys040To048
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys048To056
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys056To064
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys064To072
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys072To080
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys080To088
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys088To096
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys096To104
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys104To112
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys112To120
+import ImbalancedChen.Certificates.PairedV2Prefix128Keys120To127
 import ImbalancedChen.Certificates.PairedV2Batch64To128
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.Fin.Tuple.Basic
@@ -33,121 +49,138 @@ namespace ImbalancedChen.Certificates.PairedV2.Prefix128
 open MeasureTheory Set
 open scoped BigOperators Interval
 
-/-- The original first-four ordinal inside the cumulative prefix. -/
-def prefixIndex (i : Fin 64) : Fin 128 := Fin.castAdd 64 i
-
-/-- A local new-batch ordinal mapped to original ordinal `64 + i.val`. -/
-def batchIndex (i : Fin 64) : Fin 128 := Fin.natAdd 64 i
-
-@[simp] theorem prefixIndex_val (i : Fin 64) :
-    (prefixIndex i).val = Prefix64.rowOrdinal i := by
-  simp only [prefixIndex, Fin.val_castAdd, Prefix64.rowOrdinal_eq_val]
-
-@[simp] theorem batchIndex_val (i : Fin 64) :
-    (batchIndex i).val = Batch64To128.rowOrdinal i := rfl
-
-theorem prefixIndex_range (i : Fin 64) : (prefixIndex i).val < 64 := i.isLt
-
-theorem batchIndex_range (i : Fin 64) :
-    64 ≤ (batchIndex i).val ∧ (batchIndex i).val < 128 := by
-  have hi := i.isLt
-  change 64 ≤ 64 + i.val ∧ 64 + i.val < 128
-  omega
-
-/-- The two actual source-ordinal ranges cannot overlap. -/
-theorem source_ranges_disjoint (i : Fin 64) (j : Fin 64) :
-    Prefix64.rowOrdinal i ≠ Batch64To128.rowOrdinal j := by
-  have hi := i.isLt
-  simp only [Prefix64.rowOrdinal_eq_val, Batch64To128.rowOrdinal]
-  omega
-
-theorem index_ranges_disjoint (i : Fin 64) (j : Fin 64) :
-    prefixIndex i ≠ batchIndex j := by
-  intro hij
-  apply source_ranges_disjoint i j
-  simpa only [prefixIndex_val, batchIndex_val] using
-    congrArg (fun k : Fin 128 => k.val) hij
-
-/-- Every cumulative row comes from exactly one of the two disjoint ranges. -/
-theorem indices_cover (i : Fin 128) :
-    (∃ j : Fin 64, i = prefixIndex j) ∨
-      (∃ j : Fin 64, i = batchIndex j) := by
-  refine Fin.addCases (m := 64) (n := 64) ?_ ?_ i
-  · intro j
-    exact Or.inl ⟨j, rfl⟩
-  · intro j
-    exact Or.inr ⟨j, rfl⟩
-
-/-- Exact coverage stated in the original natural-number ordinals. -/
-theorem source_ordinal_coverage (n : ℕ) :
-    ((∃ i : Fin 64, Prefix64.rowOrdinal i = n) ∨
-      (∃ i : Fin 64, Batch64To128.rowOrdinal i = n)) ↔ n < 128 := by
-  constructor
-  · rintro (⟨i, hi⟩ | ⟨i, hi⟩)
-    · have hil := i.isLt
-      simp only [Prefix64.rowOrdinal_eq_val] at hi
-      omega
-    · have hil := i.isLt
-      simp only [Batch64To128.rowOrdinal] at hi
-      omega
-  · intro hn
-    by_cases hfirst : n < 64
-    · exact Or.inl ⟨⟨n, hfirst⟩, by simp only [Prefix64.rowOrdinal_eq_val]⟩
-    · have hlocal : n - 64 < 64 := by omega
-      refine Or.inr ⟨⟨n - 64, hlocal⟩, ?_⟩
-      change 64 + (n - 64) = n
-      omega
-
-def rowIndices : Fin 128 → ℕ × ℕ :=
-  Fin.append Prefix64.rowIndices Batch64To128.rowIndices
-
-def rowZ : Fin 128 → ℚ :=
-  Fin.append Prefix64.rowZ Batch64To128.rowZ
-
-def rowOrdinal : Fin 128 → ℕ :=
-  Fin.append Prefix64.rowOrdinal Batch64To128.rowOrdinal
-
-@[simp] theorem rowIndices_prefix (i : Fin 64) :
-    rowIndices (prefixIndex i) = Prefix64.rowIndices i := by
-  exact Fin.append_left _ _ i
-
-@[simp] theorem rowIndices_batch (i : Fin 64) :
-    rowIndices (batchIndex i) = Batch64To128.rowIndices i := by
-  exact Fin.append_right _ _ i
-
-@[simp] theorem rowZ_prefix (i : Fin 64) :
-    rowZ (prefixIndex i) = Prefix64.rowZ i := by
-  exact Fin.append_left _ _ i
-
-@[simp] theorem rowZ_batch (i : Fin 64) :
-    rowZ (batchIndex i) = Batch64To128.rowZ i := by
-  exact Fin.append_right _ _ i
-
-/-- The append operation preserves the original row ordinals. -/
-theorem rowOrdinal_eq_val (i : Fin 128) : rowOrdinal i = i.val := by
-  refine Fin.addCases (m := 64) (n := 64) ?_ ?_ i
-  · intro j
-    simp only [rowOrdinal, Fin.append_left, Prefix64.rowOrdinal_eq_val, Fin.val_castAdd]
-  · intro j
-    simp only [rowOrdinal, Fin.append_right, Batch64To128.rowOrdinal, Fin.val_natAdd]
-
-theorem rowOrdinal_injective : Function.Injective rowOrdinal := by
-  intro i j hij
-  apply Fin.ext
-  simpa only [rowOrdinal_eq_val] using hij
-
-/-- An integer key of the actual grid pair, used only for finite ownership. -/
-def rowKey (i : Fin 128) : ℕ :=
-  512 * (rowIndices i).1 + (rowIndices i).2
-
 set_option maxHeartbeats 4000000 in
 /-- Only 127 adjacent checks are needed to certify distinct actual grid pairs. -/
 theorem rowKey_adjacent (i : Fin 127) :
     rowKey i.castSucc < rowKey i.succ := by
-  fin_cases i <;>
-    norm_num [rowKey, rowIndices, Fin.append, Fin.addCases,
-      Prefix64.rowIndices, Prefix4.rowIndices,
-      Batch4To64.rowIndices, Batch64To128.rowIndices]
+  fin_cases i
+  · exact rowKey_adjacent_000_008 ⟨0, by decide⟩
+  · exact rowKey_adjacent_000_008 ⟨1, by decide⟩
+  · exact rowKey_adjacent_000_008 ⟨2, by decide⟩
+  · exact rowKey_adjacent_000_008 ⟨3, by decide⟩
+  · exact rowKey_adjacent_000_008 ⟨4, by decide⟩
+  · exact rowKey_adjacent_000_008 ⟨5, by decide⟩
+  · exact rowKey_adjacent_000_008 ⟨6, by decide⟩
+  · exact rowKey_adjacent_000_008 ⟨7, by decide⟩
+  · exact rowKey_adjacent_008_016 ⟨0, by decide⟩
+  · exact rowKey_adjacent_008_016 ⟨1, by decide⟩
+  · exact rowKey_adjacent_008_016 ⟨2, by decide⟩
+  · exact rowKey_adjacent_008_016 ⟨3, by decide⟩
+  · exact rowKey_adjacent_008_016 ⟨4, by decide⟩
+  · exact rowKey_adjacent_008_016 ⟨5, by decide⟩
+  · exact rowKey_adjacent_008_016 ⟨6, by decide⟩
+  · exact rowKey_adjacent_008_016 ⟨7, by decide⟩
+  · exact rowKey_adjacent_016_024 ⟨0, by decide⟩
+  · exact rowKey_adjacent_016_024 ⟨1, by decide⟩
+  · exact rowKey_adjacent_016_024 ⟨2, by decide⟩
+  · exact rowKey_adjacent_016_024 ⟨3, by decide⟩
+  · exact rowKey_adjacent_016_024 ⟨4, by decide⟩
+  · exact rowKey_adjacent_016_024 ⟨5, by decide⟩
+  · exact rowKey_adjacent_016_024 ⟨6, by decide⟩
+  · exact rowKey_adjacent_016_024 ⟨7, by decide⟩
+  · exact rowKey_adjacent_024_032 ⟨0, by decide⟩
+  · exact rowKey_adjacent_024_032 ⟨1, by decide⟩
+  · exact rowKey_adjacent_024_032 ⟨2, by decide⟩
+  · exact rowKey_adjacent_024_032 ⟨3, by decide⟩
+  · exact rowKey_adjacent_024_032 ⟨4, by decide⟩
+  · exact rowKey_adjacent_024_032 ⟨5, by decide⟩
+  · exact rowKey_adjacent_024_032 ⟨6, by decide⟩
+  · exact rowKey_adjacent_024_032 ⟨7, by decide⟩
+  · exact rowKey_adjacent_032_040 ⟨0, by decide⟩
+  · exact rowKey_adjacent_032_040 ⟨1, by decide⟩
+  · exact rowKey_adjacent_032_040 ⟨2, by decide⟩
+  · exact rowKey_adjacent_032_040 ⟨3, by decide⟩
+  · exact rowKey_adjacent_032_040 ⟨4, by decide⟩
+  · exact rowKey_adjacent_032_040 ⟨5, by decide⟩
+  · exact rowKey_adjacent_032_040 ⟨6, by decide⟩
+  · exact rowKey_adjacent_032_040 ⟨7, by decide⟩
+  · exact rowKey_adjacent_040_048 ⟨0, by decide⟩
+  · exact rowKey_adjacent_040_048 ⟨1, by decide⟩
+  · exact rowKey_adjacent_040_048 ⟨2, by decide⟩
+  · exact rowKey_adjacent_040_048 ⟨3, by decide⟩
+  · exact rowKey_adjacent_040_048 ⟨4, by decide⟩
+  · exact rowKey_adjacent_040_048 ⟨5, by decide⟩
+  · exact rowKey_adjacent_040_048 ⟨6, by decide⟩
+  · exact rowKey_adjacent_040_048 ⟨7, by decide⟩
+  · exact rowKey_adjacent_048_056 ⟨0, by decide⟩
+  · exact rowKey_adjacent_048_056 ⟨1, by decide⟩
+  · exact rowKey_adjacent_048_056 ⟨2, by decide⟩
+  · exact rowKey_adjacent_048_056 ⟨3, by decide⟩
+  · exact rowKey_adjacent_048_056 ⟨4, by decide⟩
+  · exact rowKey_adjacent_048_056 ⟨5, by decide⟩
+  · exact rowKey_adjacent_048_056 ⟨6, by decide⟩
+  · exact rowKey_adjacent_048_056 ⟨7, by decide⟩
+  · exact rowKey_adjacent_056_064 ⟨0, by decide⟩
+  · exact rowKey_adjacent_056_064 ⟨1, by decide⟩
+  · exact rowKey_adjacent_056_064 ⟨2, by decide⟩
+  · exact rowKey_adjacent_056_064 ⟨3, by decide⟩
+  · exact rowKey_adjacent_056_064 ⟨4, by decide⟩
+  · exact rowKey_adjacent_056_064 ⟨5, by decide⟩
+  · exact rowKey_adjacent_056_064 ⟨6, by decide⟩
+  · exact rowKey_adjacent_056_064 ⟨7, by decide⟩
+  · exact rowKey_adjacent_064_072 ⟨0, by decide⟩
+  · exact rowKey_adjacent_064_072 ⟨1, by decide⟩
+  · exact rowKey_adjacent_064_072 ⟨2, by decide⟩
+  · exact rowKey_adjacent_064_072 ⟨3, by decide⟩
+  · exact rowKey_adjacent_064_072 ⟨4, by decide⟩
+  · exact rowKey_adjacent_064_072 ⟨5, by decide⟩
+  · exact rowKey_adjacent_064_072 ⟨6, by decide⟩
+  · exact rowKey_adjacent_064_072 ⟨7, by decide⟩
+  · exact rowKey_adjacent_072_080 ⟨0, by decide⟩
+  · exact rowKey_adjacent_072_080 ⟨1, by decide⟩
+  · exact rowKey_adjacent_072_080 ⟨2, by decide⟩
+  · exact rowKey_adjacent_072_080 ⟨3, by decide⟩
+  · exact rowKey_adjacent_072_080 ⟨4, by decide⟩
+  · exact rowKey_adjacent_072_080 ⟨5, by decide⟩
+  · exact rowKey_adjacent_072_080 ⟨6, by decide⟩
+  · exact rowKey_adjacent_072_080 ⟨7, by decide⟩
+  · exact rowKey_adjacent_080_088 ⟨0, by decide⟩
+  · exact rowKey_adjacent_080_088 ⟨1, by decide⟩
+  · exact rowKey_adjacent_080_088 ⟨2, by decide⟩
+  · exact rowKey_adjacent_080_088 ⟨3, by decide⟩
+  · exact rowKey_adjacent_080_088 ⟨4, by decide⟩
+  · exact rowKey_adjacent_080_088 ⟨5, by decide⟩
+  · exact rowKey_adjacent_080_088 ⟨6, by decide⟩
+  · exact rowKey_adjacent_080_088 ⟨7, by decide⟩
+  · exact rowKey_adjacent_088_096 ⟨0, by decide⟩
+  · exact rowKey_adjacent_088_096 ⟨1, by decide⟩
+  · exact rowKey_adjacent_088_096 ⟨2, by decide⟩
+  · exact rowKey_adjacent_088_096 ⟨3, by decide⟩
+  · exact rowKey_adjacent_088_096 ⟨4, by decide⟩
+  · exact rowKey_adjacent_088_096 ⟨5, by decide⟩
+  · exact rowKey_adjacent_088_096 ⟨6, by decide⟩
+  · exact rowKey_adjacent_088_096 ⟨7, by decide⟩
+  · exact rowKey_adjacent_096_104 ⟨0, by decide⟩
+  · exact rowKey_adjacent_096_104 ⟨1, by decide⟩
+  · exact rowKey_adjacent_096_104 ⟨2, by decide⟩
+  · exact rowKey_adjacent_096_104 ⟨3, by decide⟩
+  · exact rowKey_adjacent_096_104 ⟨4, by decide⟩
+  · exact rowKey_adjacent_096_104 ⟨5, by decide⟩
+  · exact rowKey_adjacent_096_104 ⟨6, by decide⟩
+  · exact rowKey_adjacent_096_104 ⟨7, by decide⟩
+  · exact rowKey_adjacent_104_112 ⟨0, by decide⟩
+  · exact rowKey_adjacent_104_112 ⟨1, by decide⟩
+  · exact rowKey_adjacent_104_112 ⟨2, by decide⟩
+  · exact rowKey_adjacent_104_112 ⟨3, by decide⟩
+  · exact rowKey_adjacent_104_112 ⟨4, by decide⟩
+  · exact rowKey_adjacent_104_112 ⟨5, by decide⟩
+  · exact rowKey_adjacent_104_112 ⟨6, by decide⟩
+  · exact rowKey_adjacent_104_112 ⟨7, by decide⟩
+  · exact rowKey_adjacent_112_120 ⟨0, by decide⟩
+  · exact rowKey_adjacent_112_120 ⟨1, by decide⟩
+  · exact rowKey_adjacent_112_120 ⟨2, by decide⟩
+  · exact rowKey_adjacent_112_120 ⟨3, by decide⟩
+  · exact rowKey_adjacent_112_120 ⟨4, by decide⟩
+  · exact rowKey_adjacent_112_120 ⟨5, by decide⟩
+  · exact rowKey_adjacent_112_120 ⟨6, by decide⟩
+  · exact rowKey_adjacent_112_120 ⟨7, by decide⟩
+  · exact rowKey_adjacent_120_127 ⟨0, by decide⟩
+  · exact rowKey_adjacent_120_127 ⟨1, by decide⟩
+  · exact rowKey_adjacent_120_127 ⟨2, by decide⟩
+  · exact rowKey_adjacent_120_127 ⟨3, by decide⟩
+  · exact rowKey_adjacent_120_127 ⟨4, by decide⟩
+  · exact rowKey_adjacent_120_127 ⟨5, by decide⟩
+  · exact rowKey_adjacent_120_127 ⟨6, by decide⟩
 
 theorem rowKey_strictMono : StrictMono rowKey :=
   (Fin.strictMono_iff_lt_succ (f := rowKey)).2 rowKey_adjacent
