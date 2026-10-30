@@ -40,7 +40,7 @@ theorem p5CausalPartitionCellContribution_classified {ι : Type*} [DecidableEq �
 theorem p5CausalPartitionCellContribution_sum {ι : Type*}
     [Fintype ι] [DecidableEq ι]
     (N : ℕ) (E : ℕ × ℕ → Prop) (cells : ι → Finset ℕ)
-    (hdisjoint : Set.PairwiseDisjoint (Finset.univ : Set ι) cells)
+    (hdisjoint : Set.PairwiseDisjoint (↑(Finset.univ : Finset ι) : Set ι) cells)
     (hcover : Finset.univ.biUnion cells = chenAdditivePrimeCarrier N) :
     (∑ a, p5CausalPartitionCellContribution N E (cells a)) =
       currentChenPairedPrimeSum N E := by
@@ -59,7 +59,7 @@ def p5CausalCellErrorBudget {ι : Type*} [Fintype ι]
 errors. No whole-weight lower bound appears among the inputs. -/
 theorem p5CausalCellAssembly_finite {ι : Type*} [Fintype ι] [DecidableEq ι]
     (N : ℕ) (E : ℕ × ℕ → Prop) (cells : ι → Finset ℕ)
-    (hdisjoint : Set.PairwiseDisjoint (Finset.univ : Set ι) cells)
+    (hdisjoint : Set.PairwiseDisjoint (↑(Finset.univ : Finset ι) : Set ι) cells)
     (hcover : Finset.univ.biUnion cells = chenAdditivePrimeCarrier N)
     (mass amplification accuracy : ι → ℝ)
     (hlocal : ∀ a, (mass a - |amplification a| * accuracy a) *
@@ -76,7 +76,7 @@ Classifiers/cells may vary with N; the index type does not. -/
 theorem p5CausalCellAssembly_eventually_of_accuracies {ι : Type*}
     [Fintype ι] [DecidableEq ι]
     (E : ℕ → ℕ × ℕ → Prop) (cells : ℕ → ι → Finset ℕ)
-    (hdisjoint : ∀ N, Set.PairwiseDisjoint (Finset.univ : Set ι) (cells N))
+    (hdisjoint : ∀ N, Set.PairwiseDisjoint (↑(Finset.univ : Finset ι) : Set ι) (cells N))
     (hcover : ∀ N, Finset.univ.biUnion (cells N) = chenAdditivePrimeCarrier N)
     (mass amplification accuracy : ι → ℝ)
     (hlocal : ∀ a, ∀ᶠ N : ℕ in atTop, Even N →
@@ -144,7 +144,7 @@ theorem p5CausalCellAllocatedAccuracy_budget {ι : Type*} [Fintype ι]
 assemble into the actual paired-prime-sum mean at their finite mass sum. -/
 theorem p5CausalCellAssembly_eventual_mean {ι : Type*} [Fintype ι] [DecidableEq ι]
     (E : ℕ → ℕ × ℕ → Prop) (cells : ℕ → ι → Finset ℕ)
-    (hdisjoint : ∀ N, Set.PairwiseDisjoint (Finset.univ : Set ι) (cells N))
+    (hdisjoint : ∀ N, Set.PairwiseDisjoint (↑(Finset.univ : Finset ι) : Set ι) (cells N))
     (hcover : ∀ N, Finset.univ.biUnion (cells N) = chenAdditivePrimeCarrier N)
     (mass amplification priority : ι → ℝ) (hpriority : ∀ a, 0 < priority a)
     (hlocal : ∀ a, ∀ delta : ℝ, 0 < delta →
@@ -173,7 +173,7 @@ theorem p5CausalCellAssembly_eventual_mean {ι : Type*} [Fintype ι] [DecidableE
 theorem p5CausalCellAssembly_eventual_current_mean {ι : Type*}
     [Fintype ι] [DecidableEq ι]
     (E : ℕ → ℕ × ℕ → Prop) (cells : ℕ → ι → Finset ℕ)
-    (hdisjoint : ∀ N, Set.PairwiseDisjoint (Finset.univ : Set ι) (cells N))
+    (hdisjoint : ∀ N, Set.PairwiseDisjoint (↑(Finset.univ : Finset ι) : Set ι) (cells N))
     (hcover : ∀ N, Finset.univ.biUnion (cells N) = chenAdditivePrimeCarrier N)
     (mass amplification priority : ι → ℝ) (hpriority : ∀ a, 0 < priority a)
     (hlocal : ∀ a, ∀ delta : ℝ, 0 < delta →
@@ -195,7 +195,7 @@ theorem p5CausalCellAssembly_eventual_current_mean {ι : Type*}
 The negligible count loss is the already proved uniform-selector loss. -/
 theorem p5CausalCellAssembly_eventual_D12 {ι : Type*} [Fintype ι] [DecidableEq ι]
     (E : ℕ → ℕ × ℕ → Prop) (cells : ℕ → ι → Finset ℕ)
-    (hdisjoint : ∀ N, Set.PairwiseDisjoint (Finset.univ : Set ι) (cells N))
+    (hdisjoint : ∀ N, Set.PairwiseDisjoint (↑(Finset.univ : Finset ι) : Set ι) (cells N))
     (hcover : ∀ N, Finset.univ.biUnion (cells N) = chenAdditivePrimeCarrier N)
     (mass amplification priority : ι → ℝ) (hpriority : ∀ a, 0 < priority a)
     (hlocal : ∀ a, ∀ delta : ℝ, 0 < delta →

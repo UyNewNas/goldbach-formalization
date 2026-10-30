@@ -68,8 +68,9 @@ theorem RealDb_cast_eq_D12Omega_sub_RealB_sub_indicator (b : ℝ) (N : ℕ) :
       ((if Nat.Prime (N - 1) then (1 : ℕ) else 0) : ℝ) := by
   have h := congrArg (fun n : ℕ => (n : ℝ))
     (D12Omega_eq_RealDb_add_RealB_add_indicator b N)
-  simp only [Nat.cast_add] at h
-  linarith only [h]
+  by_cases hp : Nat.Prime (N - 1) <;>
+    simp only [hp, if_true, if_false, Nat.cast_add, Nat.cast_one, Nat.cast_zero] at h ⊢ <;>
+    linarith only [h]
 
 /-- The same exact subtraction formula with a real-valued indicator. -/
 theorem RealDb_cast_eq_D12Omega_sub_RealB_sub_real_indicator (b : ℝ) (N : ℕ) :
