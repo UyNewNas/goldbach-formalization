@@ -1,0 +1,114 @@
+{
+  "status": "PASS",
+  "tests": [
+    {
+      "case": "base apply + exact idempotence",
+      "PASS": true,
+      "expected": "accept",
+      "detail": "{\"status\": \"PASS\", \"state\": \"already-applied\", \"basePin\": \"5940be022ac220250c597d864044f53f117fab8e\", \"patchSha256\": \"4560aec58248a79a45b7261b635851a95e2e33e994d0a6dc18d266248bb71820\", \"notice\": \"authorized patched dependency, not original fixed source\"}"
+    },
+    {
+      "case": "wrong lock pin",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: project dependency pin mismatch"
+    },
+    {
+      "case": "wrong HEAD pin",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: dependency HEAD pin mismatch"
+    },
+    {
+      "case": "wrong base SHA",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: base SHA mismatch: MathlibNt/SieveTheory/LinearSieve/Suzuki/SuzukiFiniteAbel.lean"
+    },
+    {
+      "case": "wrong base blob",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: base blob/mode mismatch: MathlibNt/SieveTheory/LinearSieve/Suzuki/SuzukiFiniteAbel.lean"
+    },
+    {
+      "case": "wrong patched SHA",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: patch result SHA mismatch: MathlibNt/SieveTheory/LinearSieve/Suzuki/SuzukiFiniteAbel.lean"
+    },
+    {
+      "case": "changed patch bytes",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: patch hash mismatch"
+    },
+    {
+      "case": "extra untracked",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: extra untracked dependency content"
+    },
+    {
+      "case": "extra tracked dirty",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: extra tracked dependency changes"
+    },
+    {
+      "case": "staged changes",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: staged dependency changes rejected"
+    },
+    {
+      "case": "mixed overlay",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: mixed base/patched dependency state rejected"
+    },
+    {
+      "case": "symlink target",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: symlink path rejected: MathlibNt/SieveTheory/LinearSieve/Suzuki/SuzukiFiniteAbel.lean"
+    },
+    {
+      "case": "assume unchanged hidden index",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: hidden/skip-worktree index entries rejected"
+    },
+    {
+      "case": "skip worktree index",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: hidden/skip-worktree index entries rejected"
+    },
+    {
+      "case": "executable source mode",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: changed executable source mode"
+    },
+    {
+      "case": "pending activation",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: overlay activation is not independently accepted"
+    },
+    {
+      "case": "bad review binding",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: acceptance review hash mismatch"
+    },
+    {
+      "case": "manifest traversal",
+      "PASS": true,
+      "expected": "reject without source mutation",
+      "detail": "overlay verification failed: unsafe relative path: ../escape.lean"
+    }
+  ],
+  "limitations": "Synthetic temporary local git fixtures only. No Lean, remote CI, actual repository application, or real acceptance activation."
+}

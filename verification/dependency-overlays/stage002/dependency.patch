@@ -1,0 +1,61 @@
+diff --git a/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmoothCutoff.lean b/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmoothCutoff.lean
+index ddceabf..353b608 100644
+--- a/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmoothCutoff.lean
++++ b/MathlibNt/AnalyticNumberTheory/LargeSieve/LiLiuPrereqFouvrySmoothCutoff.lean
+@@ -1,4 +1,12 @@
+-import Mathlib
++import Mathlib.Analysis.Calculus.BumpFunction.Basic
++import Mathlib.Analysis.Distribution.SchwartzSpace.Fourier
++import Mathlib.MeasureTheory.Measure.Lebesgue.Integral
++import Mathlib.Tactic.NormNum
++import Mathlib.Tactic.Linarith
++import Mathlib.Tactic.Positivity
++import Mathlib.Tactic.FieldSimp
++import Mathlib.Tactic.Ring
++import Mathlib.Analysis.Fourier.PoissonSummation
+ 
+ /-!
+ # A fixed smooth dyadic cutoff
+diff --git a/MathlibNt/SieveTheory/LiLiuGoldbachOnePlusOneNineFinite.lean b/MathlibNt/SieveTheory/LiLiuGoldbachOnePlusOneNineFinite.lean
+index fc05eae..2920b49 100644
+--- a/MathlibNt/SieveTheory/LiLiuGoldbachOnePlusOneNineFinite.lean
++++ b/MathlibNt/SieveTheory/LiLiuGoldbachOnePlusOneNineFinite.lean
+@@ -1,4 +1,8 @@
+-import Mathlib
++import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
++import Mathlib.Data.Nat.Factors
++import Mathlib.Algebra.Order.Floor.Semiring
++import Mathlib.Data.Finset.Basic
++import Mathlib.Tactic
+ 
+ /-!
+ # Li--Liu's literal `1 + 1.9` count and actual finite Goldbachbasic bridge
+diff --git a/MathlibNt/SieveTheory/LinearSieve/Suzuki/SuzukiFiniteAbel.lean b/MathlibNt/SieveTheory/LinearSieve/Suzuki/SuzukiFiniteAbel.lean
+index 470290b..d11809e 100644
+--- a/MathlibNt/SieveTheory/LinearSieve/Suzuki/SuzukiFiniteAbel.lean
++++ b/MathlibNt/SieveTheory/LinearSieve/Suzuki/SuzukiFiniteAbel.lean
+@@ -86,13 +86,13 @@ theorem suzukiLemma85_finiteAbel_tail {𝕜 : Type*} [CommRing 𝕜]
+     ring
+ 
+ /-- Sum `(R x - R y) * g x` over consecutive nodes `x,y` of a finite list. -/
+-def finiteNodeAtomSum {α A : Type*} [CommRing A]
++noncomputable def finiteNodeAtomSum {α A : Type*} [CommRing A]
+     (R g : α → A) : List α → A
+   | x :: y :: xs => (R x - R y) * g x + finiteNodeAtomSum R g (y :: xs)
+   | _ => 0
+ 
+ /-- Sum `R y * (g y - g x)` over consecutive nodes `x,y` of a finite list. -/
+-def finiteNodeVariationSum {α A : Type*} [CommRing A]
++noncomputable def finiteNodeVariationSum {α A : Type*} [CommRing A]
+     (R g : α → A) : List α → A
+   | x :: y :: xs => R y * (g y - g x) + finiteNodeVariationSum R g (y :: xs)
+   | _ => 0
+@@ -126,7 +126,7 @@ sum for `-∫ g dF`: its increment is `F x - F y` on an adjacent pair `x,y`.
+ -/
+ 
+ /-- Left-node finite Stieltjes sum with increments `F x - F y`. -/
+-def finiteNodeStieltjesSum {α A : Type*} [CommRing A]
++noncomputable def finiteNodeStieltjesSum {α A : Type*} [CommRing A]
+     (F g : α → A) : List α → A
+   | x :: y :: xs => g x * (F x - F y) + finiteNodeStieltjesSum F g (y :: xs)
+   | _ => 0

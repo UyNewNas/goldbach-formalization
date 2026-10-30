@@ -108,8 +108,8 @@ jobs:
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
         with:
           path: ./.lake
-          key: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}-${{ github.sha }}
-          restore-keys: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}
+          key: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}-overlay-${{ hashFiles('verification/dependency-overlays/**') }}-${{ github.sha }}
+          restore-keys: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}-overlay-${{ hashFiles('verification/dependency-overlays/**') }}
       - name: Get the existing Mathlib cache
         run: |
           # Mirror Cache.IO's bare `lean --print-prefix` lookup under Lake's
@@ -118,6 +118,9 @@ jobs:
             printf 'Cache.IO leantar lookup diagnostic launcher failed; continuing to required cache command.\n' >&2
           fi
           "$RUNNER_TEMP/lean-ci/run-stage" mathlib-cache lake exe cache get
+      - name: Apply and verify the independently accepted dependency overlay
+        run: |
+          "$RUNNER_TEMP/lean-ci/run-stage" dependency-overlay python3 verification/dependency-overlays/apply.py "$GITHUB_WORKSPACE"
       - name: Build the full project
         id: build
         timeout-minutes: 90
@@ -277,7 +280,7 @@ jobs:
         uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
         with:
           path: ./.lake
-          key: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}-${{ github.sha }}
+          key: lake-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('./lean-toolchain') }}-${{ hashFiles('./lake-manifest.json') }}-overlay-${{ hashFiles('verification/dependency-overlays/**') }}-${{ github.sha }}
       - name: Record optional Lake cache outcomes
         if: ${{ always() }}
         continue-on-error: true
