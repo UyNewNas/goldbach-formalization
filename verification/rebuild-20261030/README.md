@@ -27,3 +27,7 @@ Dependency checkpoints dep005/dep006 add2 goldbach and9 LeanArchitect modules, a
 Dependency checkpoint dep007 adds16 fixed goldbach/PNT modules, bringing rebuilt external dependencies to70 while project acceptances remain21. The separate unaccepted-candidate-snapshot retains23 complete text sources (22 restored repairs and the staged residual-mass candidate), hash-indexed and explicitly UNACCEPTED; none adds formal credit or changes canonical accepted sources.
 
 Dependency checkpoint dep008 adds 16 fixed PNT/large-sieve modules with fresh compile and kernel replay, frozen sources and sampled-RSS evidence. Rebuilt external dependencies total 86; project acceptances remain 21.
+
+Dependency checkpoint dep009 adds 16 fixed Mertens/sieve modules, bringing rebuilt external dependencies to 102. Fresh compilation, selected kernel replay, source freezes and sampled-RSS evidence are retained. Project acceptances remain 21; the remaining dependency and root closure are not credited.
+
+Diagnostic dep010 is NOT accepted: the native checker expands the AnalyticNumberTheory module prefix to all descendants, and aggregate RSS exceeded6144MiB. The process tree was terminated and verified clear. A separately reviewed exact-target replay entry is being prepared, preserving the official replayFromImports kernel function without increasing the budget.
