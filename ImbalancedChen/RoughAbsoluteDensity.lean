@@ -1,3 +1,4 @@
+import ImbalancedChen.RoughPrimeEulerMass
 import ImbalancedChen.FixedRoughCoefficients
 import ImbalancedChen.SmallRoughMainTerm
 import MathlibNt.SieveTheory.LiLiuFouvryG9ProgressionDensityDimension
@@ -27,48 +28,6 @@ open scoped BigOperators
 open ArithmeticFunction
 open MathlibNt.SieveTheory.LiLiuPrereqWF
 open MathlibNt.SieveTheory.LiLiuPrereqWF.SmallRosser
-
-/-- The finite Euler expansion on an actual prime product, with every
-divisor coprime to the target. There is no analytic hypothesis here. -/
-theorem reciprocalTotient_sum_divisors_primeProduct
-    (N : ℕ) (P : Finset ℕ) (hprime : ∀ p ∈ P, Nat.Prime p)
-    (hcop : ∀ p ∈ P, Nat.Coprime p N) :
-    (∑ d ∈ (P.prod id).divisors, 1 / (Nat.totient d : ℝ)) =
-      ∏ p ∈ P, (1 + 1 / ((p : ℝ) - 1)) := by
-  classical
-  have hsf : Squarefree (P.prod id) := primeProduct_squarefree P hprime
-  have hMcop : (P.prod id).Coprime N := by
-    rw [Nat.coprime_prod_left_iff]
-    exact hcop
-  have hg : (progressionDensity N).IsMultiplicative := by
-    rw [← primeDensity_progressionOmega]
-    exact primeDensity_isMultiplicative (progressionOmega_isMultiplicative N)
-  have hζ : ((ArithmeticFunction.zeta : ArithmeticFunction ℕ) :
-      ArithmeticFunction ℝ).IsMultiplicative := isMultiplicative_zeta.natCast
-  have heuler := hζ.prodPrimeFactors_add_of_squarefree hg hsf
-  rw [prodPrimeFactors_apply hsf.ne_zero, coe_zeta_mul_apply] at heuler
-  have hfac : (P.prod id).primeFactors = P := by
-    simpa only [id_eq] using Nat.primeFactors_prod hprime
-  calc
-    (∑ d ∈ (P.prod id).divisors, 1 / (Nat.totient d : ℝ)) =
-        ∑ d ∈ (P.prod id).divisors, progressionDensity N d := by
-      apply Finset.sum_congr rfl
-      intro d hd
-      have hdN := hMcop.of_dvd_left (Nat.mem_divisors.mp hd).1
-      change 1 / (Nat.totient d : ℝ) =
-        if d.Coprime N then (Nat.totient d : ℝ)⁻¹ else 0
-      rw [if_pos hdN, one_div]
-    _ = ∏ p ∈ (P.prod id).primeFactors,
-        (((ArithmeticFunction.zeta : ArithmeticFunction ℕ) : ArithmeticFunction ℝ) +
-          progressionDensity N) p := heuler.symm
-    _ = ∏ p ∈ P, (1 + 1 / ((p : ℝ) - 1)) := by
-      rw [hfac]
-      apply Finset.prod_congr rfl
-      intro p hp
-      rw [ArithmeticFunction.add_apply, ArithmeticFunction.natCoe_apply,
-        zeta_apply_ne (hprime p hp).ne_zero,
-        progressionDensity_prime N (hprime p hp), if_pos (hcop p hp)]
-      norm_num
 
 /-- Every retained modulus divides the product of the actual rough primes.
 This is proved from its squarefree prime-factor support. -/
@@ -121,39 +80,6 @@ theorem fixedRoughAbsoluteDensity_le_eulerProduct
       intro d hd hnot
       exact one_div_nonneg.mpr (Nat.cast_nonneg _)
     _ = _ := reciprocalTotient_sum_divisors_primeProduct N _ hprime hcop
-
-theorem roughPrimeFinset_odd_of_even {N cap : ℕ} {w z : ℝ}
-    (hN : Even N) {p : ℕ} (hp : p ∈ roughPrimeFinset N cap w z) :
-    Nat.Prime p ∧ 2 < p := by
-  obtain ⟨_, hprime, hnot, _, _⟩ := mem_roughPrimeFinset.mp hp
-  have h2N : 2 ∣ N := by
-    obtain ⟨k, hk⟩ := hN
-    exact ⟨k, by omega⟩
-  have hne : p ≠ 2 := by
-    intro heq
-    subst p
-    exact hnot h2N
-  exact ⟨hprime, by have := hprime.two_le; omega⟩
-
-/-- The plus Euler factors are bounded by inverse Goldbach factors. -/
-theorem roughPrime_eulerProduct_le_inverseProduct
-    (N cap : ℕ) (w z : ℝ) (hN : Even N) :
-    (∏ p ∈ roughPrimeFinset N cap w z, (1 + 1 / ((p : ℝ) - 1))) ≤
-      ∏ p ∈ roughPrimeFinset N cap w z, (1 - 1 / ((p : ℝ) - 1))⁻¹ := by
-  classical
-  apply Finset.prod_le_prod
-  · intro p hp
-    have hp2 : (2 : ℝ) < p := by
-      exact_mod_cast (roughPrimeFinset_odd_of_even hN hp).2
-    exact add_nonneg zero_le_one (div_nonneg zero_le_one (by linarith))
-  · intro p hp
-    have hp2 : (2 : ℝ) < p := by
-      exact_mod_cast (roughPrimeFinset_odd_of_even hN hp).2
-    have hx : (1 : ℝ) / ((p : ℝ) - 1) < 1 :=
-      (div_lt_one (by linarith)).mpr (by linarith)
-    rw [← one_div]
-    apply (le_div_iff₀ (sub_pos.mpr hx)).mpr
-    nlinarith [sq_nonneg (1 / ((p : ℝ) - 1))]
 
 /-- One proved analytic constant bounds the absolute mass of every actual
 fixed retained support. The target, cap and policy may vary freely. The
