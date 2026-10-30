@@ -25,3 +25,5 @@ Dependency checkpoints dep003 and dep004 add 6 and 16 unmodified pinned goldbach
 Dependency checkpoints dep005/dep006 add2 goldbach and9 LeanArchitect modules, all freshly compiled and kernel-replayed under the recorded limits. Rebuilt external dependencies total54; project acceptances remain21. No unbuilt project or remaining dependency is credited.
 
 Dependency checkpoint dep007 adds16 fixed goldbach/PNT modules, bringing rebuilt external dependencies to70 while project acceptances remain21. The separate unaccepted-candidate-snapshot retains23 complete text sources (22 restored repairs and the staged residual-mass candidate), hash-indexed and explicitly UNACCEPTED; none adds formal credit or changes canonical accepted sources.
+
+Dependency checkpoint dep008 adds 16 fixed PNT/large-sieve modules with fresh compile and kernel replay, frozen sources and sampled-RSS evidence. Rebuilt external dependencies total 86; project acceptances remain 21.
