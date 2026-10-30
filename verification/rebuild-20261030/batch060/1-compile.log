@@ -1,0 +1,32 @@
+ImbalancedChen/P1HistoricalLevelCheckPreservation.lean:238:6: error: Tactic `rfl` failed: The left-hand side
+  if j ∈ D.cells5 ∩ J5 then D.cap5 j
+  else
+    { a := D.a, b := D.b, m := D.m, old := D.old, cells3 := D.cells3, cap3 := D.cap3, cells4 := D.cells4,
+          cap4 := D.cap4, cells5 := D.cells5 ∩ J5, cap5 := D.cap5 }.old5
+      j
+is not definitionally equal to the right-hand side
+  { a := D.a, b := D.b, m := D.m, old := D.old, cells3 := D.cells3, cap3 := D.cap3, cells4 := D.cells4, cap4 := D.cap4,
+        cells5 := D.cells5 ∩ J5, cap5 := D.cap5 }.old5
+    j
+
+case neg
+D : HistoricalPrefixCapData
+J5 : Finset (Fin 5 → Fin (D.m + 1))
+hab : D.a ≤ D.b
+t : Fin 5 → ℝ
+j : Fin 5 → Fin (D.m + 1)
+hj : j ∉ J5
+ht : t ∈ logPrimeMeshCell (↑D.a) (↑D.b) D.m j
+hmem : j ∉ (D.p1RestrictFifth J5).cells5
+h : j ∉ D.cells5 ∩ J5
+⊢ (if j ∈ D.cells5 ∩ J5 then D.cap5 j
+    else
+      { a := D.a, b := D.b, m := D.m, old := D.old, cells3 := D.cells3, cap3 := D.cap3, cells4 := D.cells4,
+            cap4 := D.cap4, cells5 := D.cells5 ∩ J5, cap5 := D.cap5 }.old5
+        j) =
+    { a := D.a, b := D.b, m := D.m, old := D.old, cells3 := D.cells3, cap3 := D.cap3, cells4 := D.cells4,
+          cap4 := D.cap4, cells5 := D.cells5 ∩ J5, cap5 := D.cap5 }.old5
+      j
+ImbalancedChen/P1HistoricalLevelCheckPreservation.lean:285:23: warning: Try `simp at hj` instead of `simpa using hj`
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`

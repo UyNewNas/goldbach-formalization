@@ -77,3 +77,61 @@ Batch046 accepts the existing eighteen-term numerical budget and above-mu coarse
 Batch047 accepts four dependencies: exact source/density scale, tail floor, symmetric triangle integral, rational-log certificate. The scale identity is moved verbatim; the old density assembly remains unaccepted. This brings local selected project acceptances to110. Static inspection still finds256 additional external source modules on the genuine all22 third-integral dependency route; this acceptance does not certify that root.
 
 Batch048 accepts the coarse historical level ceiling, finite Pan carrier, boundary-grid budget and reciprocal-totient budget unchanged. The checkpoint index records114 selected project modules and166 external modules, current source hashes, and every changed-but-unaccepted source explicitly. These114 are current-environment module acceptances, not the lost historical110-file repairs and not a complete project/main-theorem acceptance.
+
+Batch049 accepts the exact three finite small-Rosser density definitions, actual prime presieve split, ordinary first-exit policy/continuation and frozen policy (five modules). Removed imports only carried unused analytic endpoints; no density-asymptotic theorem is substituted or asserted. Remaining ActualSmallRosserDensity is unaccepted. Selected local project acceptances reach119.
+
+Batch052 accepts seven finite frontier/history/first-stop/fallback/admission/policy-bridge modules after retaining failed050/051 diagnostics. Repairs make a value-zero Fin equality explicit and expose the definitionally rank-independent first tuple coordinate; definitions and hypotheses are unchanged. The policy bridge now imports its actual finite carrier provider rather than unused analytic attachment endpoints. Selected local project acceptances reach126; the conditional analytic obligations are unaffected.
+
+Batch054 accepts six short-prefix/frozen-own-cube/historical-level/coarse-cell/cap-selector modules. The only new repair is rfl after a cell lookup rewrite to discharge its definitionally equal exponent goal; failed053 is retained and not counted. Selected local project acceptances reach132.
+
+Batch056 accepts six modules including the restored P2 fourth-cap producer interface and P1 variable fourth continuation, plus coarse fixed coefficient/retained-modulus level and historical prefix/fifth-cell consumers. One additional simp uses the equivalent implication/disjunction form; original candidate fixes preserve definitions and hypotheses. Failed055 remains unaccepted. Local selected project acceptances reach138, and17 of the22 original restored candidates now have fresh acceptance. These are conditional finite consumers, not concrete historical data or analytic supply closure.
+
+Batch064 accepts six remaining finite historical-policy/check/retained-modulus/variable-fourth descendant modules. Repairs explicitly expose structure-dependent finite conditionals, prove the same two ceiling-vs-level-check counterexamples through existing bounds/soundness, and restore the precise finite attachment import. Failed057–063 are retained and do not contribute acceptance. Selected local project acceptances reach144;20 of22 original restored candidates are freshly accepted. The remaining all22 integral and reciprocal-AP candidates still require their genuine external analytic dependencies.
+
+Batch065 accepts the verbatim finite MediumAtom/scale/carrier/admissibility data (one module). The reciprocal supplier still retains and requires the actual fixed Fouvry/Weil theorem, and the old mixed distribution-target file remains unaccepted. Selected project modules total145.
+
+Dependency batch016 freshly compiles and exactly replays four pinned Fouvry prerequisites after failed015: Completion, WeilBridge, TauPointwise, BetaClean. External selected compile/replay total170; this is not a complete external declaration audit. Pinned SmoothCutoff compiled but its all-Mathlib import makes exact replay exceed the unchanged6144MiB RSS threshold; it remains unaccepted, along with the reciprocal supplier. Failed015 records reliable kill137 and verified termination, not a proof-theoretic contradiction.
+
+Dependency batch017 accepts eight additional pinned Suzuki prerequisites on the actual P4A four-boundary chain, bringing selected external compile/own-replay modules to178. Exact source bytes remain the manifest pin; no package patches. This is not a project-root, integral endpoint, or full external declaration-audit claim.
+
+Dependency batch018 adds eight exact-pin P4A/Suzuki case-assembly and source-recursion prerequisites; external selected compile/own-replay total186, RSS peak5201.43MiB under the unchanged threshold. No mathematical source changes or root-completion claim.
+
+Dependency batch019 adds eight exact-pin P4A/Suzuki middle-range and scaling prerequisites; external selected compile/own-replay total194. Independent receipt validation passes; no root-completion claim.
+
+Dependency batch020 adds eight fixed-source P4A/Suzuki prerequisites (external selected compile/own-replay total202). Source pins and the same strict runtime/replay scope remain unchanged.
+
+Dependency batch021 adds eight fixed-source Suzuki prerequisites, giving210 selected external compile/own-replay modules and40 of the256 new P4A prerequisites; no new project-root acceptance.
+
+Dependency batch022 adds eight unchanged pinned P4A/Suzuki prerequisites; selected external compile/own-replay total218 and P4A increment48/256. Independent validation passed.
+
+Dependency batch023 adds eight unchanged pinned P4A prerequisites; selected external compile/own-replay total226 and P4A increment56/256. Independent validation passed.
+
+Dependency batch024 adds eight fixed P4A prerequisites; external compile/own-replay total234 and P4A increment64/256. No package source modifications; independent evidence checks pass.
+
+Dependency batch025 adds eight exact-pin P4A prerequisites; selected external compile/own-replay total242, P4A increment72/256. Scope remains unchanged.
+
+Dependency batch026 adds eight exact-pin P4A prerequisites; external selected compile/own-replay total250, P4A increment80/256. Independent checks pass.
+
+Dependency batches027–029 add24 unchanged pinned P4A prerequisites; selected external compile/own-replay total274 and P4A increment104/256. Project selected acceptance remains145. No remaining analytic root is inferred complete.
+
+The single authorized direct-launch comparison dep030 did not reach replay: its required fresh compile exceeded6144MiB (6148.20MiB sampled aggregate peak), was killed137, and termination was verified. Existing object parts remained unchanged. This is not a measured failure of direct replay, but it supplies no new acceptance; no retry is performed. Both dep015 and dep030 failures remain preserved, and the pin is untouched.
+
+Dependency batch031 resumes the unchanged pinned P4A chain after the separate failed direct-launch trial:8 modules pass, external selected compile/own-replay total282 and P4A increment112/256.
+
+Dependency batch032 adds eight exact-pin P4A prerequisites, giving290 selected external compile/own-replay modules and120/256 of the P4A increment.
+
+Dependency batches033–034 add16 exact-pin P4A prerequisites; selected external compile/own-replay total306 and P4A increment136/256. Both independently reviewed. Selected project acceptance remains145.
+
+The proposed reuse of dep015 SmoothCutoff objects for the still-unexecuted direct replay was not performed: dep015 lacks a post-compile target object-parts hash, so matching mtimes and guard history cannot prove cross-batch object continuity. The independent negative review is retained under dep030; neither failed run is accepted and the fixed dependency source is unchanged.
+
+Dependency batch035 accepts eight fixed P4A prerequisites, total314 external compile/own-replay and P4A144/256. The independently reviewed v5 runner additionally persists compiled object-part SHA immediately after compile and requires unchanged parts after replay. This strengthens future object-continuity evidence only; it does not retrospectively repair dep015 evidence or authorize another SmoothCutoff attempt. Runtime budgets, exact kernel entry, locks, trust0 and source pins are unchanged.
+
+Dependency batches036–037 add16 unchanged fixed P4A modules; external compile/own-replay total330 and P4A increment160/256. Independent checks include v5 compiled/post-replay object equality. Project selected modules remain145, and no analytic root completion is asserted.
+
+Dependency batches038–043 add48 unchanged pinned P4A modules, independently validated in the same limited compile/own-replay scope. External selected total378 and P4A increment208/256; project selected total remains145. All v5 object-parts consistency checks pass. This bounded continuation does not alter fixed dependency sources or claim the remaining project integral chain is accepted.
+
+Dependency batches044–049 finish the last48 pinned P4A prerequisites. All256 new modules and the actual407-source four-boundary closure now have selected compile/own-replay receipts, independently reviewed; all current source bytes match the fixed closure hashes. External selected total426. This is not a full external declaration inventory audit or acceptance of the20 remaining project integral consumers. The merged freeze graph contains additional old modules and is not confused with the actual407-source closure. Project v5 only extends object hash continuity evidence and has independent static review before use.
+
+Project batches066–070 accept all20 remaining P4A integral-chain modules, including ActualSieveGapTailDecay/Bounds, physical cell and finite-tail integral/convergence consumers, Part4ActualThirdFiniteDensityReserve and P4AAll22OriginalKLedger. All own declarations are inventoried with the allowed three-axiom closure, fresh compile and exact target replay, source freeze and compiled-object continuity. Local project selected total165; original restored candidates21/22. The reciprocal-AP supplier remains blocked on the unchanged external SmoothCutoff path. The ledger's conditional numerical/data obligations are not asserted supplied, and no unconditional main theorem or full-source root acceptance is claimed.
+
+Checkpoint through070 includes current canonical accepted sources and an explicit11-file UNACCEPTED recovery index/directory. Prior failed budgets and failed proof attempts are retained; the new checkpoint is not remotely backed until separately published and verified.

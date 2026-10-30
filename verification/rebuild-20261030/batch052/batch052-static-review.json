@@ -1,0 +1,18 @@
+{
+  "status": "STATIC_PROOF_AND_IMPORT_REVIEW_NOT_BATCH_ACCEPTANCE",
+  "files": {
+    "P1OriginalFirstStopInheritance": {
+      "sha256": "d4407902d513f9ee636fec8ad38ad6435672974829ee472eeb41d66d496e6431",
+      "diff": "diff --git a/ImbalancedChen/P1OriginalFirstStopInheritance.lean b/ImbalancedChen/P1OriginalFirstStopInheritance.lean\nindex d6b850b..2ee7245 100644\n--- a/ImbalancedChen/P1OriginalFirstStopInheritance.lean\n+++ b/ImbalancedChen/P1OriginalFirstStopInheritance.lean\n@@ -126,12 +126,15 @@ theorem frontier_original_first_cell\n     e chi m omega N weight carrier k hk state hstate).1\n   obtain \u27e8i, hlo, hhi, hstop\u27e9 := hstop\n   have hcoord := primeHistoryLogCoordinates_ancestor N hlen (by omega : 1 \u2264 k) (0 : Fin 1)\n+  have hidx : Fin.castLE (by omega : 1 \u2264 k) (0 : Fin 1) = (\u27e80, hk\u27e9 : Fin k) := by\n+    apply Fin.ext\n+    rfl\n   have hlo' : logPrimeMeshPoint 0 (19 / 96) m i.val \u2264\n       primeHistoryLogCoordinates N k state.selectedPrefix \u27e80, hk\u27e9 := by\n-    simpa only [hcoord] using hlo\n+    simpa only [hcoord, hidx] using hlo\n   have hhi' : primeHistoryLogCoordinates N k state.selectedPrefix \u27e80, hk\u27e9 <\n       logPrimeMeshPoint 0 (19 / 96) m (i.val + 1) := by\n-    simpa only [hcoord] using hhi\n+    simpa only [hcoord, hidx] using hhi\n   exact \u27e8i, hlo', hhi', hstop\u27e9\n \n /-- A next candidate need not pass its own old or new gate. Its already\n"
+    },
+    "P1CoarseFirstCubeFallbackMargin": {
+      "sha256": "a6a7f0ded18b0855b2c93c2b53cd92144501225ebb602837ef552e299d497af2",
+      "diff": "diff --git a/ImbalancedChen/P1CoarseFirstCubeFallbackMargin.lean b/ImbalancedChen/P1CoarseFirstCubeFallbackMargin.lean\nindex 58332e1..e9bddb7 100644\n--- a/ImbalancedChen/P1CoarseFirstCubeFallbackMargin.lean\n+++ b/ImbalancedChen/P1CoarseFirstCubeFallbackMargin.lean\n@@ -98,7 +98,7 @@ theorem rpow_first_coordinate (N : \u211d) (hN : 1 < N) (history : List \u2115)\n     N ^ primeHistoryLogCoordinates N 3 history 0 =\n       (primeHistoryTuple 1 history 0 : \u211d) := by\n   have hpR : (0 : \u211d) < primeHistoryTuple 1 history 0 := by exact_mod_cast hp\n-  unfold primeHistoryLogCoordinates\n+  change N ^ (Real.log (primeHistoryTuple 1 history 0 : \u211d) / Real.log N) = _\n   rw [Real.rpow_def_of_pos (zero_lt_one.trans hN),\n     mul_div_cancel\u2080 _ (Real.log_pos hN).ne', Real.exp_log hpR]\n \n"
+    },
+    "ActualUpperPolicyFiniteBridge": {
+      "sha256": "c2e4c4c6cbf64de70a43b53627a75001b347e23ff36d160b42f2e389c87359b7",
+      "diff": "diff --git a/ImbalancedChen/ActualUpperPolicyFiniteBridge.lean b/ImbalancedChen/ActualUpperPolicyFiniteBridge.lean\nindex fb2a942..e9b31e4 100644\n--- a/ImbalancedChen/ActualUpperPolicyFiniteBridge.lean\n+++ b/ImbalancedChen/ActualUpperPolicyFiniteBridge.lean\n@@ -1,4 +1,4 @@\n-import ImbalancedChen.ActualSmallRoughAttachment\n+import ImbalancedChen.FiniteUpperCarrierCore\n import ImbalancedChen.ActualPrimePresieveSplit\n import ImbalancedChen.FirstExitGenericModuli\n import ImbalancedChen.FinitePrimeGeometryCore\n"
+    }
+  },
+  "conclusion": "FirstStop only introduces Fin.ext equality of indices with value zero and adds it to two simp lists. Fallback only changes proof target to explicit log expression; rank 1 and 3 select getD 0 identically. All theorem types, hypotheses and definitions unchanged. Bridge only redirects import to existing FiniteUpperCarrierCore. Failed 050/051 not credited."
+}

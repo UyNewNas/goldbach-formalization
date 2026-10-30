@@ -41,7 +41,7 @@ theorem initial_pass_implies_ordinaryParity (e : ℝ) (m : ℕ) (N : ℝ)
   | false =>
       have hfull : ordinaryRosserPrefixAdmissible false (N ^ initial e) pre ∧
           (pre.length = 1 → firstStop e m N pre) := by
-        simpa [initialPolicy, oddFirstExitPolicy] using ht
+        simpa [initialPolicy, oddFirstExitPolicy, imp_iff_not_or] using ht
       simpa [ordinaryParityRosserPolicy, oddFirstExitPolicy] using hfull.1
   | true => simp [ordinaryParityRosserPolicy, oddFirstExitPolicy]
 

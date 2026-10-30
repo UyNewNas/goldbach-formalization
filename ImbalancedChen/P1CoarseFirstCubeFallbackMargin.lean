@@ -98,7 +98,7 @@ theorem rpow_first_coordinate (N : ℝ) (hN : 1 < N) (history : List ℕ)
     N ^ primeHistoryLogCoordinates N 3 history 0 =
       (primeHistoryTuple 1 history 0 : ℝ) := by
   have hpR : (0 : ℝ) < primeHistoryTuple 1 history 0 := by exact_mod_cast hp
-  unfold primeHistoryLogCoordinates
+  change N ^ (Real.log (primeHistoryTuple 1 history 0 : ℝ) / Real.log N) = _
   rw [Real.rpow_def_of_pos (zero_lt_one.trans hN),
     mul_div_cancel₀ _ (Real.log_pos hN).ne', Real.exp_log hpR]
 

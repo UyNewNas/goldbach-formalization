@@ -1,4 +1,4 @@
-import ImbalancedChen.Part3DistributionTargets
+import ImbalancedChen.Part3MediumFiniteData
 import MathlibNt.AnalyticNumberTheory.LargeSieve.LiLiuPrereqFouvryProgressionWeil
 
 /-!

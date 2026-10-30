@@ -1,5 +1,5 @@
 import ImbalancedChen.FirstExitValidSelection
-import ImbalancedChen.RosserEndpointBridge
+import ImbalancedChen.ActualSmallRosserFiniteDensity
 import ImbalancedChen.ActualPrimePresieveSplit
 import ImbalancedChen.FinitePrimeGeometryCore
 

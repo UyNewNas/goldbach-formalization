@@ -88,7 +88,9 @@ theorem p1RestrictSelections_cell3_le (D : HistoricalPrefixCapData)
   by_cases hj : j ∈ D.cells3 ∩ J3
   · have hD : j ∈ D.cells3 := (Finset.mem_inter.mp hj).1
     apply le_of_eq
-    simp only [cell3, p1RestrictSelections, if_pos hj, if_pos hD]
+    change (if j ∈ D.cells3 ∩ J3 then D.cap3 j else D.old) =
+      (if j ∈ D.cells3 then D.cap3 j else D.old)
+    rw [if_pos hj, if_pos hD]
   · change (if j ∈ D.cells3 ∩ J3 then D.cap3 j else D.old) ≤ D.cell3 j
     rw [if_neg hj]
     exact D.p1Old_le_cell3 hcheck j
@@ -113,7 +115,9 @@ theorem p1RestrictSelections_cell4_le (D : HistoricalPrefixCapData)
   by_cases hj : j ∈ D.cells4 ∩ J4
   · have hD : j ∈ D.cells4 := (Finset.mem_inter.mp hj).1
     apply le_of_eq
-    simp only [cell4, p1RestrictSelections, if_pos hj, if_pos hD]
+    change (if j ∈ D.cells4 ∩ J4 then D.cap4 j else (D.p1RestrictSelections J3 J4 J5).old4 j) =
+      (if j ∈ D.cells4 then D.cap4 j else D.old4 j)
+    rw [if_pos hj, if_pos hD]
   · change (if j ∈ D.cells4 ∩ J4 then D.cap4 j else
       (D.p1RestrictSelections J3 J4 J5).old4 j) ≤ D.cell4 j
     rw [if_neg hj]
@@ -139,7 +143,9 @@ theorem p1RestrictSelections_cell5_le (D : HistoricalPrefixCapData)
   by_cases hj : j ∈ D.cells5 ∩ J5
   · have hD : j ∈ D.cells5 := (Finset.mem_inter.mp hj).1
     apply le_of_eq
-    simp only [cell5, p1RestrictSelections, if_pos hj, if_pos hD]
+    change (if j ∈ D.cells5 ∩ J5 then D.cap5 j else (D.p1RestrictSelections J3 J4 J5).old5 j) =
+      (if j ∈ D.cells5 then D.cap5 j else D.old5 j)
+    rw [if_pos hj, if_pos hD]
   · change (if j ∈ D.cells5 ∩ J5 then D.cap5 j else
       (D.p1RestrictSelections J3 J4 J5).old5 j) ≤ D.cell5 j
     rw [if_neg hj]
@@ -181,7 +187,9 @@ theorem p1RestrictSelections_exponent5_deleted (D : HistoricalPrefixCapData)
     (D.p1RestrictSelections J3 J4 J5).exponent5 t =
       (D.p1RestrictSelections J3 J4 J5).old5 j := by
   rw [(D.p1RestrictSelections J3 J4 J5).exponent5_on_cell hab t j ht]
-  simp only [cell5, p1RestrictSelections, Finset.mem_inter, hj, and_false, if_false]
+  change (if j ∈ D.cells5 ∩ J5 then D.cap5 j else
+    (D.p1RestrictSelections J3 J4 J5).old5 j) = _
+  rw [if_neg (fun h => hj (Finset.mem_inter.mp h).2)]
 
 /-- Fifth-only restriction retains the exact original lower-rank data. -/
 def p1RestrictFifth (D : HistoricalPrefixCapData)
@@ -207,7 +215,9 @@ theorem p1RestrictFifth_exponent5_kept (D : HistoricalPrefixCapData)
     (ht : t ∈ logPrimeMeshCell (D.a : ℝ) (D.b : ℝ) D.m j) :
     (D.p1RestrictFifth J5).exponent5 t = D.cap5 j := by
   rw [(D.p1RestrictFifth J5).exponent5_on_cell hab t j ht]
-  simp only [cell5, p1RestrictFifth, if_pos hj]
+  change (if j ∈ D.cells5 ∩ J5 then D.cap5 j else
+    (D.p1RestrictFifth J5).old5 j) = _
+  rw [if_pos hj]
 
 /-- Removing the owner of a fifth cell restores the original complete
 fourth ancestor, rather than the global cap or third ancestor. -/
@@ -221,7 +231,10 @@ theorem p1RestrictFifth_exponent5_deleted (D : HistoricalPrefixCapData)
     intro h
     exact hj (Finset.mem_inter.mp h).2
   rw [(D.p1RestrictFifth J5).exponent5_on_cell hab t j ht]
-  rw [cell5, if_neg hmem, D.p1RestrictFifth_old5 J5 j]
+  have hcell : (D.p1RestrictFifth J5).cell5 j = (D.p1RestrictFifth J5).old5 j := by
+    simp only [cell5, p1RestrictFifth]
+    exact if_neg (show j ∉ D.cells5 ∩ J5 from fun h => hj (Finset.mem_inter.mp h).2)
+  rw [hcell, D.p1RestrictFifth_old5 J5 j]
   exact (D.exponent4_on_cell hab _ _
     (mem_logPrimeMeshCell_historicalPrefixProject (by omega : 4 ≤ 5) ht)).symm
 

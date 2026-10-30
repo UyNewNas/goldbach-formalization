@@ -1,4 +1,4 @@
-import ImbalancedChen.ActualSmallRosserDensity
+import ImbalancedChen.ActualSmallRosserFiniteDensity
 import ImbalancedChen.FixedRoughCoefficients
 
 /-!

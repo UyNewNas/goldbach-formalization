@@ -235,15 +235,23 @@ theorem p1LevelCheck_does_not_imply_ceiling :
     ∃ D : HistoricalPrefixCapData,
       D.levelCheck = true ∧ D.p1CapCeilingCheck 1 = false := by
   refine ⟨p1CeilingIndependenceHighFallback, ?_, ?_⟩
-  · simp [levelCheck, p1CeilingIndependenceHighFallback]
+  · simp only [levelCheck, Bool.and_eq_true, decide_eq_true_eq]
+    refine ⟨?_, ?_, ?_⟩ <;> intro j hj <;> exact (Finset.notMem_empty j hj).elim
   · norm_num [p1CapCeilingCheck, p1CeilingIndependenceHighFallback]
 
 theorem p1CeilingCheck_does_not_imply_levelCheck :
     ∃ D : HistoricalPrefixCapData,
       D.p1CapCeilingCheck 1 = true ∧ D.levelCheck = false := by
   refine ⟨p1CeilingIndependenceDecreasingThird, ?_, ?_⟩
-  · norm_num [p1CapCeilingCheck, p1CeilingIndependenceDecreasingThird]
-  · norm_num [levelCheck, p1CeilingIndependenceDecreasingThird]
+  · apply p1CapCeilingCheck_of_bounds
+    · norm_num [p1CeilingIndependenceDecreasingThird]
+    all_goals intro j hj; change (0 : ℚ) ≤ 1; norm_num
+  · apply Bool.eq_false_iff.mpr
+    intro h
+    have hh := (p1CeilingIndependenceDecreasingThird.levelCheck_sound h).1
+      (fun _ => 0) (by exact Finset.mem_singleton_self _)
+    change (1 : ℚ) ≤ 0 at hh
+    norm_num at hh
 
 end HistoricalPrefixCapData
 
