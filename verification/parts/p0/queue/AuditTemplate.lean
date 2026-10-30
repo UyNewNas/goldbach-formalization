@@ -32,7 +32,7 @@ run_cmd do
   liftIO <| IO.println s!"P0_QUEUE_INVENTORY {(Json.mkObj [("module", toJson moduleName.toString), ("serialized", toJson (serialized.map Name.toString)), ("environment", toJson (names.map Name.toString))]).compress}"
   for name in names.qsort Name.lt do
     let some info := env.find? name | throwError "Missing inventoried declaration"
-    if info.isUnsafe || info.isPartial || info.isAxiom then throwError "Unsafe/partial/axiom target"
+    if info.isUnsafe || info.isPartial || info.isAxiom then throwError "Unsafe/partial/axiom target {name}: unsafe={info.isUnsafe}, partial={info.isPartial}, axiom={info.isAxiom}"
     let axioms ← collectAxioms name
     for ax in axioms do
       unless #[`propext, `Classical.choice, `Quot.sound].contains ax do

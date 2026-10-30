@@ -55,7 +55,7 @@ theorem signedTreeCoefficient_not_mul
 `retained newSign newPrefix = true` means that the selected branch remains
 inside the tree.  If it is false, that branch contributes no retained
 coefficient and becomes a first exit. -/
-def firstExitRetainedPolynomial {α : Type*}
+noncomputable def firstExitRetainedPolynomial {α : Type*}
     (retained : Bool → List α → Bool) (h : α → ℝ)
     (selectedPrefix : List α) (positive : Bool) (mass : ℝ) : List α → ℝ
   | [] => signedTreeCoefficient positive mass
@@ -69,7 +69,7 @@ def firstExitRetainedPolynomial {α : Type*}
 /-- The signed correction contributed by all first exits below a retained
 selectedPrefix.  At an exit, all later smaller labels are free, hence the product of
 `1 - h` over the unprocessed tail. -/
-def firstExitCorrection {α : Type*}
+noncomputable def firstExitCorrection {α : Type*}
     (retained : Bool → List α → Bool) (h : α → ℝ)
     (selectedPrefix : List α) (positive : Bool) (mass : ℝ) : List α → ℝ
   | [] => 0
@@ -119,7 +119,7 @@ def FirstExitLeaf.value {α : Type*} (leaf : FirstExitLeaf α) : ℝ :=
 /-- Explicit enumeration of all terminal retained branches.  The skip branch
 is always present; the select branch is followed exactly when its new selectedPrefix
 is retained. -/
-def firstExitRetainedLeaves {α : Type*}
+noncomputable def firstExitRetainedLeaves {α : Type*}
     (retained : Bool → List α → Bool) (h : α → ℝ)
     (selectedPrefix : List α) (positive : Bool) (mass : ℝ) :
     List α → List (FirstExitLeaf α)
@@ -190,7 +190,7 @@ theorem firstExitRetainedLeaves_mass_eq_selected_prod
         exact ih selectedPrefix positive mass hmass leaf hleaf
 
 /-- Boolean parity of a list length: `true` means even. -/
-def evenListLength {α : Type*} : List α → Bool
+noncomputable def evenListLength {α : Type*} : List α → Bool
   | [] => true
   | _ :: xs => !evenListLength xs
 
