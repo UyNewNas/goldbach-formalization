@@ -1,4 +1,8 @@
-import Mathlib
+import Mathlib.Algebra.Order.Field.Rat
+import Mathlib.Data.Finset.Insert
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Positivity
+import Mathlib.Tactic.Ring
 
 -- SOURCE ONLY / UNCOMPILED_ZERO_CREDIT / NOT ROOT ACCEPTED.
 -- Original lower joint approximation, lines 97-124: once rational boxes
