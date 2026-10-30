@@ -1,0 +1,29 @@
+diff --git a/MathlibNt/SieveTheory/LinearSieve/Suzuki/SuzukiFiniteAbel.lean b/MathlibNt/SieveTheory/LinearSieve/Suzuki/SuzukiFiniteAbel.lean
+index 470290b..d11809e 100644
+--- a/MathlibNt/SieveTheory/LinearSieve/Suzuki/SuzukiFiniteAbel.lean
++++ b/MathlibNt/SieveTheory/LinearSieve/Suzuki/SuzukiFiniteAbel.lean
+@@ -86,13 +86,13 @@ theorem suzukiLemma85_finiteAbel_tail {𝕜 : Type*} [CommRing 𝕜]
+     ring
+ 
+ /-- Sum `(R x - R y) * g x` over consecutive nodes `x,y` of a finite list. -/
+-def finiteNodeAtomSum {α A : Type*} [CommRing A]
++noncomputable def finiteNodeAtomSum {α A : Type*} [CommRing A]
+     (R g : α → A) : List α → A
+   | x :: y :: xs => (R x - R y) * g x + finiteNodeAtomSum R g (y :: xs)
+   | _ => 0
+ 
+ /-- Sum `R y * (g y - g x)` over consecutive nodes `x,y` of a finite list. -/
+-def finiteNodeVariationSum {α A : Type*} [CommRing A]
++noncomputable def finiteNodeVariationSum {α A : Type*} [CommRing A]
+     (R g : α → A) : List α → A
+   | x :: y :: xs => R y * (g y - g x) + finiteNodeVariationSum R g (y :: xs)
+   | _ => 0
+@@ -126,7 +126,7 @@ sum for `-∫ g dF`: its increment is `F x - F y` on an adjacent pair `x,y`.
+ -/
+ 
+ /-- Left-node finite Stieltjes sum with increments `F x - F y`. -/
+-def finiteNodeStieltjesSum {α A : Type*} [CommRing A]
++noncomputable def finiteNodeStieltjesSum {α A : Type*} [CommRing A]
+     (F g : α → A) : List α → A
+   | x :: y :: xs => g x * (F x - F y) + finiteNodeStieltjesSum F g (y :: xs)
+   | _ => 0
