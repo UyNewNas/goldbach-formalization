@@ -1,5 +1,15 @@
 import Mathlib.Analysis.SpecialFunctions.Log.Deriv
-import Mathlib.Tactic
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Positivity
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Ring
+import Mathlib.Tactic.FinCases
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.SplitIfs
+import Mathlib.Tactic.Convert
+import Mathlib.Tactic.Ext
+import Lean.Elab.Tactic.Omega
+import Lean.Elab.Tactic.NormCast
 
 /-!
 Verification status: uncompiled candidate. See `docs/part2/HANDOFF.md`.
