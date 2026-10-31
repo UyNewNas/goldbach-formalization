@@ -1,4 +1,6 @@
-import ImbalancedChen.Certificates.PairedV2StripCertificate483Bounds
+import ImbalancedChen.Certificates.PairedV2StripFiniteAssembly
+import ImbalancedChen.Certificates.PairedV2StripCertificate483RightA
+import ImbalancedChen.Certificates.PairedV2StripCertificate483RightB
 
 /-! Ordinary-kernel checks, partitioned into all 186 exact adopted strips.
 No row is sampled or dropped, and no native numerical evaluator is used. -/
@@ -10,6 +12,8 @@ set_option maxHeartbeats 0
 
 theorem strip483_checked_right : ∀ j : Fin 81,
     (makeCertificate (⟨(⟨157, by decide⟩ : Fin 186), Fin.cast strip483_row_count.symm (Fin.natAdd 80 j)⟩ : Row) (approximation (⟨(⟨157, by decide⟩ : Fin 186), Fin.cast strip483_row_count.symm (Fin.natAdd 80 j)⟩ : Row))).check = true := by
-  decide +kernel
+  exact StripAssembly.forallFinAdd (a := 40) (b := 41)
+    (fun j => (makeCertificate (⟨(⟨157, by decide⟩ : Fin 186), Fin.cast strip483_row_count.symm (Fin.natAdd 80 j)⟩ : Row) (approximation (⟨(⟨157, by decide⟩ : Fin 186), Fin.cast strip483_row_count.symm (Fin.natAdd 80 j)⟩ : Row))).check = true)
+    strip483_checked_right_a strip483_checked_right_b
 
 end ImbalancedChen.Certificates.PairedV2.FullMask
