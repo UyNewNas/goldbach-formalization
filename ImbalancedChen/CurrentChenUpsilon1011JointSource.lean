@@ -96,8 +96,11 @@ theorem sum_chenY10_add_chenY11_compl_eq_joint_source
         ((chenSiftedQuotientPrimeSource N (t.1.1 * t.1.2 * t.2.1 * t.2.2)
           (t.1.2 : ℝ)).card : ℝ) := by
   rw [sum_chenY10_eq_siftedQuotientPrimeSource,
-    sum_chenY11Selected_eq_siftedQuotientPrimeSource,
-    sum_chenY1011JointPrimeSelector N A H D E hHD]
+    sum_chenY11Selected_eq_siftedQuotientPrimeSource]
+  convert (sum_chenY1011JointPrimeSelector N A H D E hHD
+    (fun t => ((chenSiftedQuotientPrimeSource N
+      (t.1.1 * t.1.2 * t.2.1 * t.2.2) (t.1.2 : ℝ)).card : ℝ))).symm using 1 <;>
+    congr 2 <;> ext t <;> simp only [Finset.mem_filter]
 
 /-- The original current cutoffs and the original last-pair complement
 mask give the same joint source, with no independent row bounds needed. -/

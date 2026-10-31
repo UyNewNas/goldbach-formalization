@@ -164,7 +164,7 @@ def fibreDomain (a tl tr ul ur Z : ℝ) : Set Point :=
 
 private theorem lower_mul_iff {c x : ℝ} (hc : 0 < c) :
     c < c * x ↔ 1 < x := by
-  simpa only [mul_one] using (mul_lt_mul_left hc : c * 1 < c * x ↔ 1 < x)
+  simpa only [mul_one] using (mul_lt_mul_iff_of_pos_left hc : c * 1 < c * x ↔ 1 < x)
 
 private theorem upper_mul_iff {c x b : ℝ} (hc : 0 < c) :
     c * x < b ↔ x < b / c := by
@@ -179,7 +179,7 @@ theorem mem_fibreDomain_dilate_iff {a tl tr ul ur Z : ℝ}
     a < a * x 3 ∧ a * x 3 < a * x 2 ∧ a * x 2 < Z) ↔ _
   rw [lower_mul_iff htl, upper_mul_iff htl,
     lower_mul_iff hul, upper_mul_iff hul,
-    lower_mul_iff ha, mul_lt_mul_left ha, upper_mul_iff ha]
+    lower_mul_iff ha, mul_lt_mul_iff_of_pos_left ha, upper_mul_iff ha]
   rfl
 
 /-- Bijective domain transport, including empty and degenerate fibres. -/
@@ -214,8 +214,14 @@ theorem adopted_openFibreSet_eq (i j : ℕ) (Z : ℚ) :
 /-- Normalize only coordinates and coefficient; keep every checked log and
 the certified rational numerical endpoints literally unchanged. -/
 def normalizeCertificate (c : PairedIntegralCertificate) : PairedIntegralCertificate :=
-  { c with K := c.K / c.a, a := 1, tl := 1, tr := c.tr / c.tl,
-    ul := 1, ur := c.ur / c.ul, Z := c.Z / c.a }
+  { c with
+    K := c.K / c.a
+    a := 1
+    tl := 1
+    tr := c.tr / c.tl
+    ul := 1
+    ur := c.ur / c.ul
+    Z := c.Z / c.a }
 
 theorem normalizeCertificate_bracketLower (c : PairedIntegralCertificate)
     (ha : c.a ≠ 0) (hZ : c.Z ≠ 0) :
@@ -305,7 +311,7 @@ theorem normalized_certificate_bounds (c : PairedIntegralCertificate)
       pairedLocalIntegral ((c.K / c.a : ℚ) : ℝ)
         1 1 ((c.tr / c.tl : ℚ) : ℝ) 1
         ((c.ur / c.ul : ℚ) : ℝ) ((c.Z / c.a : ℚ) : ℝ) ≤ (c.upper : ℝ) := by
-  simpa only [normalizeCertificate] using
+  simpa only [normalizeCertificate, Rat.cast_one] using
     (normalizeCertificate c).check_sound (normalizeCertificate_checked c hc)
 
 /-- Every adopted rational row has a normalized checked certificate,

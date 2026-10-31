@@ -174,17 +174,18 @@ theorem ae_coordinate_ne (i : Fin 4) (c : ℝ) :
     have hh := congrArg (fun L : Point →L[ℝ] ℝ => L (fun _ => 1)) hz
     norm_num at hh
   rw [ae_iff]
-  simpa only [not_not] using
+  simpa only [not_not, ContinuousLinearMap.proj_apply] using
     ImbalancedChen.affinePrimeWall_volume_zero
       (ContinuousLinearMap.proj i : Point →L[ℝ] ℝ) hproj c
 
 def orderingWallForm : Point →L[ℝ] ℝ :=
-  ContinuousLinearMap.proj 3 - ContinuousLinearMap.proj 2
+  (ContinuousLinearMap.proj (3 : Fin 4) : Point →L[ℝ] ℝ) -
+    (ContinuousLinearMap.proj (2 : Fin 4) : Point →L[ℝ] ℝ)
 
 theorem orderingWallForm_ne_zero : orderingWallForm ≠ 0 := by
   intro hz
   have hh := congrArg (fun L : Point →L[ℝ] ℝ => L ![0, 0, 0, 1]) hz
-  norm_num [orderingWallForm, Matrix.cons_val_two] at hh
+  norm_num [orderingWallForm, Matrix.cons_val_two, Matrix.cons_val_three] at hh
 
 theorem ae_ordering_ne : ∀ᵐ x : Point ∂volume, x 3 ≠ x 2 := by
   rw [ae_iff]

@@ -46,7 +46,7 @@ theorem integral_bounds :
   have hb := full_integral_bounds_of_checked approximation all_certificates_checked
   rw [lower_sum, upper_sum] at hb
   norm_num only [Rat.cast_div, Rat.cast_ofNat] at hb
-  exact hb
+  convert hb using 1 <;> norm_num
 
 /-- The frozen manuscript's rounded-down adopted extra-gross coefficient. -/
 theorem adopted_extra_gross_lower : (558583 / 1000000000 : ℝ) ≤ integral := by
