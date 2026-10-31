@@ -1,0 +1,12 @@
+import ImbalancedChen.P2HistoricalSavedFloorRowType
+
+/-! Exact original strip 339; all tuple tokens and their order preserved. -/
+namespace ImbalancedChen.P2HistoricalSavedFloorRowsBinder
+
+set_option maxRecDepth 100000
+set_option maxHeartbeats 0
+
+def frozenSavedStrip339 : List FrozenSavedRow :=
+  [⟨6178, 339, 499, 1824285237198381652⟩, ⟨6179, 339, 500, 1812923308489134305⟩, ⟨6180, 339, 501, 1801552774958948554⟩, ⟨6181, 339, 502, 1790173557828888430⟩, ⟨6182, 339, 503, 1778785581028354828⟩, ⟨6183, 339, 504, 1767388762363118323⟩, ⟨6184, 339, 505, 1755983022455697976⟩, ⟨6185, 339, 506, 1744568284247794585⟩, ⟨6186, 339, 507, 1733144465765248682⟩, ⟨6187, 339, 508, 1721711486704699999⟩, ⟨6188, 339, 509, 1714487790952779335⟩, ⟨6189, 339, 510, 1703035611059024474⟩, ⟨6190, 339, 511, 1691574035249800731⟩]
+
+end ImbalancedChen.P2HistoricalSavedFloorRowsBinder

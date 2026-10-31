@@ -1,4 +1,5 @@
-import ImbalancedChen.P2GuardedReciprocalRounding
+import ImbalancedChen.P2HistoricI80Core
+import ImbalancedChen.P2GuardedReciprocalCore
 import Mathlib.Data.Rat.Floor
 
 /-!
@@ -24,15 +25,13 @@ namespace ImbalancedChen.Certificates.P2HistoricQ80DefectLookup
 
 open P2DirectedLogRounding
 
+set_option maxRecDepth 100000
+
 def Q : ℕ := 2 ^ 80
 
 theorem Q_pos : (0 : ℚ) < Q := by norm_num [Q]
 theorem Q_ne_zero : (Q : ℚ) ≠ 0 := ne_of_gt Q_pos
 
-structure I80 where
-  lo : ℤ
-  hi : ℤ
-  deriving DecidableEq, Repr
 
 def I80.decodeLo (x : I80) : ℚ := (x.lo : ℚ) / Q
 def I80.decodeHi (x : I80) : ℚ := (x.hi : ℚ) / Q
@@ -57,8 +56,9 @@ def I80.div (x y : I80) : I80 :=
 
 theorem I80.enclosure_ofEnclosure (x : Enclosure) :
     (I80.ofEnclosure x).enclosure = x.round 80 := by
-  ext <;> simp [I80.ofEnclosure, I80.enclosure, I80.decodeLo, I80.decodeHi,
-    Enclosure.round, roundDown, roundUp, dyadicScale, Q]
+  apply congrArg₂ Enclosure.mk <;>
+    norm_num [I80.ofEnclosure, I80.enclosure, I80.decodeLo, I80.decodeHi,
+      Enclosure.round, roundDown, roundUp, dyadicScale, Q]
 
 theorem I80.ofEnclosure_contains {x : Enclosure} {v : ℝ}
     (hx : x.Contains v) : (I80.ofEnclosure x).Contains v := by
@@ -75,13 +75,13 @@ theorem I80.raw_contains (n : ℤ) :
 
 theorem I80.enclosure_add (x y : I80) :
     (x.add y).enclosure = x.enclosure.add y.enclosure := by
-  ext <;> simp [I80.enclosure, I80.add, I80.decodeLo, I80.decodeHi,
+  apply congrArg₂ Enclosure.mk <;> simp [I80.enclosure, I80.add, I80.decodeLo, I80.decodeHi,
     Enclosure.add, add_div]
 
 theorem I80.enclosure_neg (x : I80) :
     x.neg.enclosure = x.enclosure.neg := by
-  ext <;> simp [I80.enclosure, I80.neg, I80.decodeLo, I80.decodeHi,
-    Enclosure.neg]
+  apply congrArg₂ Enclosure.mk <;> simp [I80.enclosure, I80.neg, I80.decodeLo, I80.decodeHi,
+    Enclosure.neg, neg_div]
 
 theorem I80.add_contains {x y : I80} {v w : ℝ}
     (hx : x.Contains v) (hy : y.Contains w) : (x.add y).Contains (v + w) := by
@@ -145,14 +145,14 @@ theorem I80.mul_lo_integer (x y : I80) :
 theorem I80.lower_rounding (x : Enclosure) :
     0 ≤ x.lower - (I80.ofEnclosure x).decodeLo ∧
       x.lower - (I80.ofEnclosure x).decodeLo < 1 / (Q : ℚ) := by
-  simpa [I80.ofEnclosure, I80.decodeLo, roundDown, dyadicScale, Q] using
-    roundDown_error 80 x.lower
+  convert roundDown_error 80 x.lower using 1 <;>
+    norm_num [I80.ofEnclosure, I80.decodeLo, roundDown, dyadicScale, Q]
 
 theorem I80.upper_rounding (x : Enclosure) :
     0 ≤ (I80.ofEnclosure x).decodeHi - x.upper ∧
       (I80.ofEnclosure x).decodeHi - x.upper < 1 / (Q : ℚ) := by
-  simpa [I80.ofEnclosure, I80.decodeHi, roundUp, dyadicScale, Q] using
-    roundUp_error 80 x.upper
+  convert roundUp_error 80 x.upper using 1 <;>
+    norm_num [I80.ofEnclosure, I80.decodeHi, roundUp, dyadicScale, Q]
 
 def a : ℚ := 417 / 5000
 
@@ -254,7 +254,7 @@ theorem ordinaryRectangleBase_contains (sf logI : ℚ → I80)
     (hu : (logI (ur/ul)).Contains (Real.log ((ur/ul:ℚ):ℝ))) :
     (ordinaryRectangleBase sf logI tl tr ul ur rl).Contains
       ((f * rectangleMassValue tl tr ul ur * 4) / (a:ℝ)) := by
-  simpa only [Rat.cast_ofNat] using I80.div_contains
+  simpa only [ordinaryRectangleBase, Rat.cast_ofNat] using I80.div_contains
     (I80.mul_contains (I80.mul_contains hf (rectangleMass_contains logI tl tr ul ur ht hu))
       (I80.point_contains 4))
     (I80.point_contains a) point_a_lo_pos
@@ -308,7 +308,8 @@ theorem ordinaryRectangleChord_contains (sf logI : ℚ → I80)
   have hval := I80.div_contains (I80.add_contains hlo hhi)
     (I80.point_contains ((affineRange p tl tr ul ur).2 -
       (affineRange p tl tr ul ur).1)) hden
-  simpa only [Rat.cast_ofNat] using I80.div_contains (I80.mul_contains hval (I80.point_contains 4))
+  simpa only [ordinaryRectangleChord, ordinaryRectangleChordValue, I80.decodeLo,
+    Rat.cast_ofNat] using I80.div_contains (I80.mul_contains hval (I80.point_contains 4))
     (I80.point_contains a) point_a_lo_pos
 
 theorem ordinaryRectangleChord_decodeLo_le (sf logI : ℚ → I80)
@@ -489,8 +490,10 @@ theorem closedSliceMin_le (table : ℤ → ℤ) (start stop k : ℤ)
   apply foldr_min_le_of_mem
   apply List.mem_map.mpr
   refine ⟨(k-start).toNat, ?_, ?_⟩
-  · apply List.mem_range.mpr
-    omega
+  · change ((k - start).toNat : ℤ) ∈
+      (List.range (stop - start + 1).toNat).flatMap (fun n : ℕ => [(n : ℤ)])
+    apply List.mem_flatMap.mpr
+    exact ⟨(k - start).toNat, List.mem_range.mpr (by omega), by simp⟩
   · congr 1
     omega
 
@@ -503,8 +506,13 @@ theorem le_closedSliceMin (table : ℤ → ℤ) (start stop z : ℤ)
   · exact hz start le_rfl hstart
   · intro v hv
     rcases List.mem_map.mp hv with ⟨n, hn, rfl⟩
-    have hn' := List.mem_range.mp hn
-    apply hz (start+n) <;> omega
+    change n ∈ (List.range (stop - start + 1).toNat).flatMap
+      (fun m : ℕ => [(m : ℤ)]) at hn
+    rcases List.mem_flatMap.mp hn with ⟨m, hm, he⟩
+    have he' : n = (m : ℤ) := List.mem_singleton.mp he
+    subst n
+    have hm' := List.mem_range.mp hm
+    apply hz (start + (m : ℤ)) <;> omega
 
 theorem defectLookup_le_closed_cell (g : ℕ) (table : ℤ → ℤ) (x : I80)
     (lower : Bool) (hguard : ¬ lookupGuard x lower) (k : ℤ)
@@ -588,9 +596,7 @@ def bankDefectLookup (x : I80) : I80 := defectLookup 50 bankLowerTable x true
 closed-cell convention: the preceding cell 49 has numerator zero. -/
 theorem bankDefectLookup_exact_s2 :
     bankDefectLookup (I80.raw (2*(Q:ℤ))) = I80.raw 0 := by
-  norm_num [bankDefectLookup, defectLookup, lookupGuard, I80.raw,
-    lookupStart, lookupStop, scaledLo, scaledHi, closedSliceMin,
-    bankLowerTable, bankLowerNumerators, Q]
+  decide +kernel
 
 def sourceSavedRectangle (sf logI : ℚ → I80) (tl tr ul ur : ℚ) : ℤ :=
   savedRectangle sf logI bankLowerTable tl tr ul ur
