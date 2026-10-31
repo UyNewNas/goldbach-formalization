@@ -54,8 +54,7 @@ theorem parameter_lower_error {rl rh : ℤ}
       ((rh+(Q : ℤ) : ℤ) : ℝ))/(Q : ℝ) = parameterLowerExact rl rh := by
     unfold parameterLowerExact decode
     push_cast
-    field_simp [Q_real_pos.ne',hdiff]
-    ring
+    field_simp [Q_real_pos.ne',hdiff] <;> ring
   rw [he] at hh
   exact hh
 
@@ -69,8 +68,7 @@ theorem parameter_upper_error {rl rh : ℤ}
       ((rl+(Q : ℤ) : ℤ) : ℝ))/(Q : ℝ) = parameterUpperExact rl rh := by
     unfold parameterUpperExact decode
     push_cast
-    field_simp [Q_real_pos.ne',hdiff]
-    ring
+    field_simp [Q_real_pos.ne',hdiff] <;> ring
   rw [he] at hh
   exact hh
 
@@ -90,8 +88,8 @@ theorem reducedParameter_width_lt {rl rh : ℤ}
     simpa only [decode, ulp, ← sub_div] using
       (div_le_div_of_nonneg_right hi Q_real_pos.le)
   have hcross := crossedRatio_width hL hord
-  have hl := (parameter_lower_error hdH).2
-  have hu := (parameter_upper_error hdL).2
+  have hl := (parameter_lower_error (rl := rl) (rh := rh) hdH).2
+  have hu := (parameter_upper_error (rl := rl) (rh := rh) hdL).2
   dsimp only [parameterLowerExact, parameterUpperExact] at hl hu
   dsimp only [width]
   linarith
@@ -142,6 +140,9 @@ theorem sourceParameter_caps {q : ℤ} (hq : 0 < q) :
   let rl := P2HistoricLogRangeReduction.sourceRL q
   let rh := P2HistoricLogRangeReduction.sourceRH q
   obtain ⟨hrl,ho,hrh⟩ := P2HistoricLogRangeReduction.source_endpoint_guards hq
+  change (Q : ℤ) ≤ rl at hrl
+  change rl ≤ rh at ho
+  change rh ≤ 2 * (Q : ℤ) at hrh
   have hd : 0 < rl+(Q : ℤ) := by have hh := Q_int_pos; omega
   have hdh : 0 < rh+(Q : ℤ) := by have hh := Q_int_pos; omega
   let half : ℤ := (Q : ℤ)/2

@@ -50,7 +50,9 @@ theorem oddSquare_hi_quarter {ul uh : ℤ}
   · exact ceilDiv_nonnegative (mul_nonneg hu0 hu0) Q_int_pos
   · apply ceilDiv_le _ _ _ Q_int_pos
     have hsq := mul_le_mul hu hu hu0 hh0
-    simpa only [hqQ] using hsq
+    change uh * uh ≤ quarter * (Q : ℤ)
+    rw [hqQ]
+    exact hsq
 
 theorem oddLoop_power_hi_nonneg {ul uh : ℤ} (hu : 0 ≤ uh) (n : ℕ) :
     0 ≤ (oddLoop (oddSquare ul uh) ul uh n).power.hi := by
@@ -73,7 +75,7 @@ theorem oddLoop_power_hi_le_dyadic {ul uh : ℤ}
   induction n with
   | zero =>
       intro hn
-      simpa only [oddLoop,oddStart,dyadicPowerCeiling_zero] using hu
+      simpa only [oddLoop_zero_eq,oddStart,dyadicPowerCeiling_zero] using hu
   | succ n ih =>
       intro hn
       have hn32 : n < 32 := by omega

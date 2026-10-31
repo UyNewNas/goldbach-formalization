@@ -95,6 +95,7 @@ theorem product_lower_error (a b : ℤ) :
       decode a * decode b := by
     simp only [decode, Int.cast_mul]
     ring
+  simp only [Int.cast_natCast] at hh
   rwa [he] at hh
 
 theorem product_upper_error (a b : ℤ) :
@@ -105,6 +106,7 @@ theorem product_upper_error (a b : ℤ) :
       decode a * decode b := by
     simp only [decode, Int.cast_mul]
     ring
+  simp only [Int.cast_natCast] at hh
   rwa [he] at hh
 
 /-- Literal positiveMul adds less than two ulps to the product width.
@@ -155,10 +157,10 @@ theorem oddLoop_total_width (square : I80) (ul uh : ℤ) (n : ℕ) :
       ∑ j ∈ Finset.range n,
         width (divNat (oddLoop square ul uh j).power (2*j+1)) := by
   induction n with
-  | zero => simp [oddLoop, oddStart, width_raw]
+  | zero => simp [oddLoop_zero_eq, oddStart, width_raw]
   | succ n ih =>
       rw [Finset.sum_range_succ]
-      simpa only [oddLoop, oddStep, width_add, ih]
+      simp only [oddLoop_succ_eq, oddStep, width_add, ih]
 
 /-- Uniform local rounding loss over all n odd divisions is at most
 2*n ulps; the remaining terms are widths of the actual rounded powers. -/
@@ -187,7 +189,7 @@ theorem atanhBounds_width (ul uh : ℤ) :
 
 /-- Negative shifts reverse endpoints, hence the absolute value. -/
 theorem integerScale_width (x : I80) (k : ℤ) :
-    width (integerScale x k) = |(k : ℝ)|*width x := by
+    width (integerScale x k) = |(k : ℝ)| * width x := by
   by_cases hk : 0 ≤ k
   · have hkr : (0 : ℝ) ≤ k := by exact_mod_cast hk
     simp only [integerScale, if_pos hk, width, decode_mul_int,
@@ -200,14 +202,14 @@ theorem integerScale_width (x : I80) (k : ℤ) :
 
 theorem logPointFromReduction_width (k rl rh : ℤ) :
     width (logPointFromReduction k rl rh) =
-      width (reducedLogBounds rl rh) + |(k : ℝ)|*width logTwoBounds := by
+      width (reducedLogBounds rl rh) + |(k : ℝ)| * width logTwoBounds := by
   rw [logPointFromReduction, width_add, integerScale_width]
 
 theorem logPoint_width_of_ne {q : ℤ} (hq : q ≠ (Q : ℤ)) :
     width (logPoint q) =
       width (reducedLogBounds (P2HistoricLogRangeReduction.sourceRL q)
         (P2HistoricLogRangeReduction.sourceRH q)) +
-      |(P2HistoricLogRangeReduction.sourceShift q : ℝ)|*width logTwoBounds := by
+      |(P2HistoricLogRangeReduction.sourceShift q : ℝ)| * width logTwoBounds := by
   rw [logPoint, if_neg hq, logPointFromReduction_width]
 
 /-- Directed true-log errors are bounded by the propagated actual width. -/
