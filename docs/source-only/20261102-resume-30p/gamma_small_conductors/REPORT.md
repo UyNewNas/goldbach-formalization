@@ -1,0 +1,41 @@
+# P / task 14 / gamma_small_conductors: exact reuse
+
+**Gamma / same-rho PP remain OPEN.** This packet adds no Lean source and claims no new proof credit. The nominated natural-to-integer, exact coprime-mean, and target-deletion conversions already have source bodies. Rewriting them would duplicate O. `compiled=false`, `kernel_verified=false`, `formal_credit=0`; existing finite guards remain UNEVALUATED.
+
+The exact bridge is `docs/source-only/20261102-resume-30o/gamma_conductor_sum/P2GammaSmallConductorIntervalBridge.lean`, SHA256 `683f048040e03060f8db4845cee47af3eb458378f60f636502cdeb8a1142b5ea`, intended module `ImbalancedChen.P2GammaSmallConductorIntervalBridge`. Its direct imports are `ImbalancedChen.P2GammaConductorScaleThreshold` and `ImbalancedChen.P2GammaVariablePrimeSmallConductor`, both existing O source-only modules. It is not installed in production. The O small-conductor REPORT/REGISTRY still list this bridge as missing; the actual peer source supersedes that textual gap for the finite positive-carrier interface only. The peer conductor directory currently contains four Lean files and no REPORT/REGISTRY, so this packet pins their actual bytes independently.
+
+| Reused declaration in that bridge | Line | Actual conversion already expressed in source |
+| --- | ---: | --- |
+| `sum_integer_interval_nat` | 26 | Exact cast bijection between integer `[1,P]` and natural `[1,P]`. |
+| `paddedRow_transform` | 46 | Natural `rowTransform S a k r psi` equals the integer interval transform of `unitMask k (paddedRow S a)`, assuming `S ⊆ Icc 1 P`. |
+| `paddedRow_amplitude` | 67 | The same identity after taking the literal primitive-character row amplitude. |
+| `paddedRow_unmasked_transform` | 74 | The unmasked transform identity used before the principal cancellation. |
+| `naturalRectangleDiscrepancy_eq_character` | 90 | The literal original `gammaKernel target q (m*n)` rectangle equals the character rectangle, with `q>0`, `target.Coprime q` and both finite support bounds. |
+| `lowConductorTotal_eq_smallConductorContribution` | 130 | Exact low ledger equals the O small carrier with cutoff `R=2^b0`, both k masks, denominator `phi(r*k)`, and the `r*k<=Q` boundary. No `r.Coprime k` premise. |
+| `actual_variable_prime_lowConductorTotal` | 159 | Directly invokes O `variable_profile_small_conductors`; it does not assume an SW, low-BV or its own target bound. |
+| `actual_variable_prime_full_rectangle` | 187 | Adds the existing whole high-conductor ledger, retaining explicit highU/highV terms. |
+| `natural_rectangle_norm_sum_le_character_sum` | 220 | Restricts to target-coprime moduli and connects the natural discrepancy sum to the same character ledger. |
+
+The bridge uses zero-start positive integer intervals `[1,P]` and `[1,V]`. This is a valid finite large-sieve interval instance, not a theorem identifying arbitrary signed intervals with natural numbers. `paddedRow S a n := if n.toNat∈S then a n.toNat else 0` is only used on positive carriers; no global negative-support claim follows. Prime endpoint flooring is preserved through `primeSWInterval u v`. Callers still supply its positive finite support bound and the complementary support bound; these are geometric source data, not prime-distribution hypotheses.
+
+The exact coprime mean is already attached to the original object. `docs/source-only/20261102-resume-30j/positive_k_class/P2OriginalGammaUpperLowRankConsumer.lean:38` defines `gammaKernel` as the progression indicator minus the q-coprime indicator divided by `phi(q)`; `gammaDiscrepancy` at line 42 applies it to `sourceTest`. `docs/source-only/20261102-resume-30m/gamma_short_fibre_bv/P2GammaInducedCharacterDictionary.lean:99` proves `gammaKernel_eq_nonprincipal`, and line 157 proves `original_Gamma_nonprincipal_dictionary`. The O bridge explicitly invokes that kernel theorem at its line 109. It therefore attaches the original kernel, with target inverse in the character, rather than replacing the mean by total mass. This still does not identify every smooth rectangle with the entire original Gamma source.
+
+O's own six modules supply the rest, and REGISTRY records their actual imports, declarations and current hashes:
+
+- `P2GammaPrimeCharacterSW.lean:42`, `character_auxSW_expansion`: cancellation against the same `(k*r)`-coprime coefficient mean. Line 95 retains the `phi(r)` unit-residue factor.
+- `P2GammaPrimeTargetDeletion.lean:61`, `target_prime_card_completeScale`, and line 88, `rowTransform_target_deletion_le`: actual deleted primes dividing the target are paid directly. No `tau(target)` multiplier.
+- `P2GammaVariablePrimeProfile.lean:66`, `complex_profile_prime_SW`: invokes the existing genuine `primeSW_uniform_real` and derives the complex Abel estimate. Line 131 makes the amplitude follow the constants and threshold.
+- `P2GammaVariablePrimeSmallConductor.lean:25`, `variable_target_prime_character_completeScale`: actual varying, target-deleted prime character supplier with fixed divisor exponent one. Line 119 is the exact theorem consumed by the interval bridge. Line 183, `variable_profile_small_conductors_logSaving`, already absorbs logarithmic conductor and quotient cutoffs.
+- `P2GammaSmallConductorArithmetic.lean:52`, `sum_tau_div_totient_le_log_sq`: fixed quotient log-square cost. Lines 83 and 88 pay the independent primitive-character count and residual totient sum.
+- `P2GammaPrimeSmallConductorSum.lean:20` defines the literal finite small carrier. Its fixed-Mellin source endpoints at lines 88 and 117 already exist as alternatives to the varying-profile endpoint.
+
+No obligation is newly eliminated by P. The source-level obligations that can be reused are the finite carrier correspondence, exact same-q mean, target deletion and the actual low-ledger prime supplier listed above. New declarations: none. New direct imports: none.
+
+Remaining premises are precisely the existing theorem inputs: fixed positive eta, nonnegative norm/target orders; sufficiently large x with `x^eta<=M`; `1<=M<=u<=v<=2M`; differentiability and derivative integrability of the actual profile, its stated Abel and supremum bounds; positive target with polynomial size bound; finite positive support of both rows. The complementary coefficient is arbitrary and charged by its actual `rowMass`; zero mass is allowed. The original smooth-source reconstruction, all ordering/colors/product constraints, boundary/trim residual payment, actual complementary source mass and energy transport, chart/integral sums, highU/highV payment in the manuscript range, and one original-N threshold still require the full source assembly. The same signed rho in both manuscript terms is not discharged by a rectangle identity.
+
+Manuscript checked: `../chen-imbalanced-semiprimes/paper/source/manuscript-body.tex`, lines 264-278 (the O(N) product, geometric profile class, exact progression-minus-coprime mean and same signed rho) and 334-337 (auxiliary SW and below-half low-rank BV). Its SHA256 matches BRIEF: `ee6aecc164cc59f2d1fed1ad9e48f18f98472ab1d77ab425d53d93bc41ce56bd`. The low-rank source note lines 94-128 was checked; it requires separate residue/count factors, fixed C0=1, complete-scale interval error and direct target deletion. SHA256: `88edfb5f605e65ad7f05a702a963b5dff1b21f0b4e757edbf4eaed304f4e8f56`.
+
+Difficulty classification: the nominated conversion is already represented by finite algebra/API source, hence no new omitted deduction or substantive manuscript gap is asserted here. Elaboration remains untested (category 1). The wider physical-source and residual assembly remains OPEN; this report does not reclassify it as a harmless cast or claim manuscript closure.
+
+Static work only: read BRIEF, PRIOR_TASK, O report/registry and six O source modules; inspected the existing conductor bridge, its source objects and relevant API definitions; searched production/source-only files for duplication; read manuscript/note lines; computed byte hashes and declaration/import locations; parsed this JSON metadata. No Lean/lake/compiler, CI, proof guard, mathematical evaluator, numerical replay, Git, or child agent was run. Only REPORT.md and REGISTRY.json in the assigned P directory were written. Registry is a reuse map, not a transitive axiom/build audit.
+
