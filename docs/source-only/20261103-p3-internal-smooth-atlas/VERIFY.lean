@@ -1,0 +1,17 @@
+import ImbalancedChen.P3U5SmoothRootPartition
+import ImbalancedChen.P3U5SmoothSourceLedger
+import ImbalancedChen.P3U5SmoothWallMass
+
+/- UNEXECUTED source-only handoff. Register/install the exact predecessor
+sources first. These commands are not evidence that any proof compiled. -/
+#check ImbalancedChen.P3U5SmoothRootPartition.circuit_bits_original
+#check ImbalancedChen.P3U5SmoothRootPartition.smoothWeight_contDiff
+#check ImbalancedChen.P3U5SmoothRootPartition.smoothWeight_sum
+#check ImbalancedChen.P3U5SmoothRootPartition.smoothWeight_eq_owner_off_strips
+#check ImbalancedChen.P3U5SmoothSourceLedger.selectedResidual_lane_defect
+#check ImbalancedChen.P3U5SmoothSourceLedger.total_label_scalar_mass
+#check ImbalancedChen.P3U5SmoothWallMass.tendsto_wallIntegral
+#check ImbalancedChen.P3U5SmoothWallMass.exists_common_four_lane_harmonic_approximation
+#print axioms ImbalancedChen.P3U5SmoothRootPartition.smooth_owner_error
+#print axioms ImbalancedChen.P3U5SmoothSourceLedger.selectedResidual_smooth_partition
+#print axioms ImbalancedChen.P3U5SmoothWallMass.exists_common_four_lane_harmonic_approximation
