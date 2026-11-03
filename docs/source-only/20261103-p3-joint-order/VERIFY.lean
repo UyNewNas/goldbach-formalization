@@ -1,0 +1,12 @@
+import ImbalancedChen.P2GammaJointRemainingPayment
+
+-- SOURCE-ONLY verification driver; NOT EXECUTED.
+-- Materialize the registered frozen imports first. Use the pinned
+-- remote verification environment and its independent replay procedure.
+#check ImbalancedChen.P2GammaJointOrderGeometry.jointOrderLabels_card_le
+#check ImbalancedChen.P2GammaJointOrderPayment.joint_label_kernel_energy_le
+#check ImbalancedChen.P2GammaJointOrderPayment.eventually_jointOrderWordError
+#check ImbalancedChen.P2GammaJointRemainingPayment.eventually_originalJointRemainingError_height
+#print axioms ImbalancedChen.P2GammaJointOrderGeometry.jointOrderLabels_card_le
+#print axioms ImbalancedChen.P2GammaJointOrderPayment.joint_label_kernel_energy_le
+#print axioms ImbalancedChen.P2GammaJointRemainingPayment.eventually_originalJointRemainingError_height
