@@ -1,0 +1,22 @@
+import ImbalancedChen.P2GammaJointRetainedComplement
+import ImbalancedChen.P2GammaJointComplementBlockNorms
+import ImbalancedChen.P2GammaJointSameRhoBlockSource
+
+/- UNEXECUTED. Install the registered source-only dependencies in the pinned
+project before elaboration and kernel/axiom inspection. No verification
+result is asserted by the presence of this driver. -/
+
+#check ImbalancedChen.P2GammaJointRetainedComplement.card_jointRetainedFiber_le
+#check ImbalancedChen.P2GammaJointRetainedComplement.jointBeta_test_eq_pair
+#check ImbalancedChen.P2GammaJointComplementBlockNorms.block_norm_sum_le
+#check ImbalancedChen.P2GammaJointComplementBlockNorms.actual_block_raw_norms
+#check ImbalancedChen.P2GammaJointComplementBlockNorms.actual_block_masked_energy
+#check ImbalancedChen.P2GammaJointSameRhoBlockSource.original_joint_row_eq_blocks
+#check ImbalancedChen.P2GammaJointSameRhoBlockSource.eventually_chosen_signed_block_source
+#check ImbalancedChen.P2GammaJointSameRhoBlockSource.actual_head_block_beta_norms
+#check ImbalancedChen.P2GammaJointSameRhoBlockSource.total_head_energy_eq_overlap
+
+#print axioms ImbalancedChen.P2GammaJointRetainedComplement.card_jointRetainedFiber_le
+#print axioms ImbalancedChen.P2GammaJointComplementBlockNorms.actual_block_raw_norms
+#print axioms ImbalancedChen.P2GammaJointSameRhoBlockSource.eventually_chosen_signed_block_source
+#print axioms ImbalancedChen.P2GammaJointSameRhoBlockSource.total_head_energy_eq_overlap
