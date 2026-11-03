@@ -93,7 +93,9 @@ def normalize_lean_args(args):
         else:
             clean.append(a)
         i += 1
-    return ['-t0', '-j2', '-M4096', *clean]
+    # Experiment: 12 GiB Lean budget on the 16 GB public GitHub runner.
+    # The compiler-slot flock above keeps actual compiler children serial.
+    return ['-t0', '-j2', '-M12288', *clean]
 
 
 WRAPPER = r'''#!/usr/bin/env python3
@@ -269,7 +271,7 @@ def prepare(root: Path, runner_temp: Path, evidence: Path, realbin: Path,
              'guard_sha256': sha(Path(__file__)),
              'action_commit': ACTION_COMMIT,
              'action_script_sha256': {str(action_dir / 'scripts' / n): h for n, h in ACTION_SHA256.items()} if verify_action else {},
-             'policy': 'Lean -t0 -j2 -M4096; serial compiler slot; native compiler flags preserved; native checker LEAN_NUM_THREADS=2'}
+             'policy': 'Lean -t0 -j2 -M12288; serial compiler slot; native compiler flags preserved; native checker LEAN_NUM_THREADS=2'}
     write_json(state_path, state)
     return state
 
