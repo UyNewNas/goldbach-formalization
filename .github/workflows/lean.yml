@@ -12,13 +12,15 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: goldbach-p0-heavy
+  # Historical retests use their own validated serial queue.
+  group: goldbach-memory-retest-20261103
+  queue: max
   cancel-in-progress: false
 jobs:
   lean:
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.ref != 'codex/chen-parts-integration' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 360
     env:
       LEAN_NUM_THREADS: 2
     defaults:
@@ -95,6 +97,50 @@ jobs:
       - name: Verify guarded runtime hashes and shadow sysroot before cache
         run: |
           python3 verification/parts/p0/ci_runtime_guard.py audit --probe
+      - name: Record 12 GiB retest runtime and runner headroom
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib, subprocess
+          state_path = pathlib.Path(os.environ["P0_CI_GUARD_STATE"])
+          state = json.loads(state_path.read_text())
+          memory = {}
+          for line in pathlib.Path("/proc/meminfo").read_text().splitlines():
+              key, value = line.split(":", 1)
+              if key in ("MemTotal", "MemAvailable"):
+                  memory[key + "_MiB"] = int(value.strip().split()[0]) // 1024
+          commands = [json.loads(line) for line in pathlib.Path(state["log"]).read_text().splitlines()]
+          lean_commands = [record["command"] for record in commands if record["tool"] == "lean"]
+          assert lean_commands and all(command[1:4] == ["-t0", "-j2", "-M12288"] for command in lean_commands)
+          assert "-M12288; serial compiler slot;" in state["policy"]
+          report = {
+              "historical_source_commit": "ca2e220fdf6fd64faa939ec02b444ac2bc6c4fe6",
+              "historical_run_id": 41169257852,
+              "retest_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+              "run_id": os.environ["GITHUB_RUN_ID"],
+              "runner_os": os.environ["RUNNER_OS"],
+              "runner_arch": os.environ["RUNNER_ARCH"],
+              "policy": state["policy"],
+              "lean_num_threads": os.environ["LEAN_NUM_THREADS"],
+              "toolchain": pathlib.Path("lean-toolchain").read_text().strip(),
+              "memory": memory,
+              "guarded_lean_commands": lean_commands,
+          }
+          path = pathlib.Path(os.environ["RUNNER_TEMP"]) / "lean-verification-logs" / "memory-retest-preflight.json"
+          path.write_text(json.dumps(report, indent=2) + "\n")
+          print(json.dumps(report, indent=2))
+          assert memory["MemAvailable_MiB"] >= 12288 + 1024, "Insufficient runner headroom for the 12 GiB retest"
+          PY
+      - name: Retain 12 GiB retest preflight evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: memory-retest-preflight-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/lean-verification-logs/memory-retest-preflight.json
+            ${{ runner.temp }}/lean-verification-logs/provenance.log
+            ${{ runner.temp }}/lean-verification-logs/runtime/
+          if-no-files-found: warn
+          retention-days: 14
       - name: Configure lean-action with the existing inputs
         id: config
         env:
@@ -123,7 +169,7 @@ jobs:
           "$RUNNER_TEMP/lean-ci/run-stage" dependency-overlay python3 verification/dependency-overlays/apply.py "$GITHUB_WORKSPACE"
       - name: Build the full project
         id: build
-        timeout-minutes: 90
+        timeout-minutes: 240
         if: ${{ steps.config.outputs.run-lake-build == 'true' }}
         env:
           BUILD_ARGS: ''
