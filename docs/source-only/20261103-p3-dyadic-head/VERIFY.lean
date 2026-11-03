@@ -1,0 +1,25 @@
+import ImbalancedChen.P2GammaDyadicHeadIntervals
+import ImbalancedChen.P2GammaDyadicHeadSource
+import ImbalancedChen.P2GammaDyadicFamilyEnergy
+import ImbalancedChen.P2GammaDyadicSmallConductorFamily
+import ImbalancedChen.P2GammaDyadicJointRowEstimate
+
+/- UNEXECUTED source-only handoff. Materialize the registered imports in
+   the pinned project before elaboration, kernel replay and axiom audit.
+   Python combinatorial regressions are NOT Lean execution or proof checks. -/
+
+#check ImbalancedChen.P2GammaDyadicHeadIntervals.clipped_interval_expansion
+#check ImbalancedChen.P2GammaDyadicHeadIntervals.sum_clipped_cells_le
+#check ImbalancedChen.P2GammaDyadicHeadSource.original_joint_eq_dyadic
+#check ImbalancedChen.P2GammaDyadicHeadSource.same_rho_dyadic_source
+#check ImbalancedChen.P2GammaDyadicFamilyEnergy.dyadic_energy_products_le
+#check ImbalancedChen.P2GammaDyadicFamilyEnergy.actual_all_scales_high_le
+#check ImbalancedChen.P2GammaDyadicSmallConductorFamily.clippedCell_eq_primeSWInterval
+#check ImbalancedChen.P2GammaDyadicSmallConductorFamily.exists_chosen_all_scales_low
+#check ImbalancedChen.P2GammaDyadicJointRowEstimate.jointSignedRow_zero_of_unoccupied
+#check ImbalancedChen.P2GammaDyadicJointRowEstimate.exists_chosen_joint_row_estimate
+
+#print axioms ImbalancedChen.P2GammaDyadicHeadIntervals.clipped_interval_expansion
+#print axioms ImbalancedChen.P2GammaDyadicFamilyEnergy.actual_all_scales_high_le
+#print axioms ImbalancedChen.P2GammaDyadicSmallConductorFamily.exists_chosen_all_scales_low
+#print axioms ImbalancedChen.P2GammaDyadicJointRowEstimate.exists_chosen_joint_row_estimate
