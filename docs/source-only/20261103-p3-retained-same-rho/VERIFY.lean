@@ -1,0 +1,21 @@
+import ImbalancedChen.P2GammaRetainedSameRhoRows
+import ImbalancedChen.P2GammaRetainedSameRhoMother
+import ImbalancedChen.P2GammaActualUpperLowRankReduction
+
+/- UNEXECUTED source-only handoff. Install the registered source-only
+imports in the pinned environment before elaboration/axiom inspection.
+No claim that this file or any dependency has been compiled. -/
+
+#check ImbalancedChen.P2GammaRetainedSameRhoRows.cartesianRow_eq_character
+#check ImbalancedChen.P2GammaRetainedSameRhoRows.exists_chosen_signed_rows
+#check ImbalancedChen.P2GammaRetainedSameRhoMother.retainedPairError_eq_head_add_empty
+#check ImbalancedChen.P2GammaRetainedSameRhoMother.exists_chosen_headPair_same_rho
+#check ImbalancedChen.P2GammaRetainedSameRhoMother.exists_chosen_headJoint_same_rho
+#check ImbalancedChen.P2GammaActualUpperLowRankReduction.upperRho_active_mem_target
+#check ImbalancedChen.P2GammaActualUpperLowRankReduction.upperRho_test_actual_moduli
+#check ImbalancedChen.P2GammaActualUpperLowRankReduction.originalJointGamma_fullUpper_split
+#check ImbalancedChen.P2GammaActualUpperLowRankReduction.exists_actualCompact_fullUpper_reduction
+
+#print axioms ImbalancedChen.P2GammaRetainedSameRhoRows.exists_chosen_signed_rows
+#print axioms ImbalancedChen.P2GammaRetainedSameRhoMother.exists_chosen_headPair_same_rho
+#print axioms ImbalancedChen.P2GammaActualUpperLowRankReduction.exists_actualCompact_fullUpper_reduction
