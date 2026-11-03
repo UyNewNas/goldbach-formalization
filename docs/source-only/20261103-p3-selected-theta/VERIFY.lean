@@ -1,0 +1,20 @@
+import ImbalancedChen.P2GammaSelectedPhysicalTheta
+import ImbalancedChen.P2GammaSelectedRelativeLogSaving
+import ImbalancedChen.P2GammaRootFiberRelative
+
+/- UNEXECUTED. Materialize all registered source-only and local native
+extensions in the pinned project before elaborating this file. Static
+checks or this driver alone do not establish successful verification. -/
+
+#check ImbalancedChen.P2GammaSelectedPhysicalTheta.selectedResidual_partition
+#check ImbalancedChen.P2GammaSelectedPhysicalTheta.selectedTheta_lower
+#check ImbalancedChen.P2GammaSelectedPhysicalTheta.selectedTheta_zero_iff
+#check ImbalancedChen.P2GammaSelectedRelativeLogSaving.eventually_selected_rank_height_logAccuracy
+#check ImbalancedChen.P2GammaSelectedRelativeLogSaving.eventually_selected_rank_relative
+#check ImbalancedChen.P2GammaRootFiberRelative.rootFiber_physical_test
+#check ImbalancedChen.P2GammaRootFiberRelative.rootFiber_residual_partition
+#check ImbalancedChen.P2GammaRootFiberRelative.eventually_actualCompact_rootFiber_relative
+
+#print axioms ImbalancedChen.P2GammaSelectedPhysicalTheta.selectedTheta_lower
+#print axioms ImbalancedChen.P2GammaSelectedRelativeLogSaving.eventually_selected_rank_relative
+#print axioms ImbalancedChen.P2GammaRootFiberRelative.eventually_actualCompact_rootFiber_relative
