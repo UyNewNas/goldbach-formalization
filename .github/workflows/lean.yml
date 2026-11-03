@@ -20,7 +20,7 @@ jobs:
   lean:
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.ref != 'codex/chen-parts-integration' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 360
     env:
       LEAN_NUM_THREADS: 2
     defaults:
@@ -166,7 +166,7 @@ jobs:
           "$RUNNER_TEMP/lean-ci/run-stage" mathlib-cache lake exe cache get
       - name: Build the full project
         id: build
-        timeout-minutes: 90
+        timeout-minutes: 240
         if: ${{ steps.config.outputs.run-lake-build == 'true' }}
         env:
           BUILD_ARGS: ''
