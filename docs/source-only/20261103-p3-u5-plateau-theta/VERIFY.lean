@@ -1,0 +1,20 @@
+import ImbalancedChen.P2GammaU5PlateauGeometry
+import ImbalancedChen.P2GammaU5PlateauMass
+import ImbalancedChen.P2GammaU5PlateauRelative
+
+/- UNEXECUTED. The pinned project and locally extended native dependency
+plus all registered source-only imports must be installed first.
+This driver is not compilation, kernel replay or transitive-axiom evidence. -/
+
+#check ImbalancedChen.P2GammaU5PlateauGeometry.original_level_on_box
+#check ImbalancedChen.P2GammaU5PlateauGeometry.rootFiber_eq_original_level_filter
+#check ImbalancedChen.P2GammaU5PlateauGeometry.rectangle_subset_plateauFiber
+#check ImbalancedChen.P2GammaU5PlateauMass.eventually_rectangle_mass_floor
+#check ImbalancedChen.P2GammaU5PlateauMass.eventually_plateau_Theta_lower
+#check ImbalancedChen.P2GammaU5PlateauRelative.eventually_actualCompact_plateau_relative
+#check ImbalancedChen.P2GammaU5PlateauRelative.eventually_actualCompact_plateau_rank_three
+#check ImbalancedChen.P2GammaU5PlateauRelative.plateau_residual_partition
+
+#print axioms ImbalancedChen.P2GammaU5PlateauGeometry.rectangle_subset_plateauFiber
+#print axioms ImbalancedChen.P2GammaU5PlateauMass.eventually_plateau_Theta_lower
+#print axioms ImbalancedChen.P2GammaU5PlateauRelative.eventually_actualCompact_plateau_rank_three
