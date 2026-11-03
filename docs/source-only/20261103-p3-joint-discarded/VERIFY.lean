@@ -1,0 +1,18 @@
+import ImbalancedChen.P2GammaJointLowProductPayment
+import ImbalancedChen.P2GammaJointDiscardedPayment
+import ImbalancedChen.P2GammaJointRetainedReduction
+
+/- Source-only verification handoff. NOT EXECUTED. Dependencies must be
+materialized at their registered module paths with the pinned toolchain.
+A successful run of this file alone would not replace kernel replay. -/
+
+#check ImbalancedChen.P2GammaJointLowProductPayment.jointLowLabels_card_le
+#check ImbalancedChen.P2GammaJointLowProductPayment.jointError_low_product_le
+#check ImbalancedChen.P2GammaJointLowProductPayment.eventually_joint_low_product
+#check ImbalancedChen.P2GammaJointDiscardedPayment.originalJointLowError_eq_original
+#check ImbalancedChen.P2GammaJointDiscardedPayment.eventually_originalJointDiscardedError_height
+#check ImbalancedChen.P2GammaJointRetainedReduction.originalJointGammaError_eq_retained_add_discarded
+#check ImbalancedChen.P2GammaJointRetainedReduction.eventually_originalJointGamma_retained_reduction
+
+#print axioms ImbalancedChen.P2GammaJointDiscardedPayment.eventually_originalJointDiscardedError_height
+#print axioms ImbalancedChen.P2GammaJointRetainedReduction.eventually_originalJointGamma_retained_reduction
