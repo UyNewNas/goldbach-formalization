@@ -1,0 +1,17 @@
+import ImbalancedChen.P3U5RootAtlas
+import ImbalancedChen.P3U5FullSourcePartition
+import ImbalancedChen.P3U5AffineRootFibers
+
+/- Unexecuted. Materialize registered imports in the pinned project first.
+The presence of these checks confers no elaboration or kernel acceptance. -/
+#check ImbalancedChen.P3U5RootAtlas.original_level_eq_owned
+#check ImbalancedChen.P3U5RootAtlas.original_level_eq_plateau_iff
+#check ImbalancedChen.P3U5FullSourcePartition.plateau_lane_eq_rootFiber
+#check ImbalancedChen.P3U5FullSourcePartition.selectedResidual_lanes
+#check ImbalancedChen.P3U5FullSourcePartition.selectedResidual_rootFibers
+#check ImbalancedChen.P3U5FullSourcePartition.selectedTheta_rootFibers
+#check ImbalancedChen.P3U5AffineRootFibers.sum_lane_rootFiber_card_le_one
+#check ImbalancedChen.P3U5AffineRootFibers.sum_lane_reciprocalMass_le
+#print axioms ImbalancedChen.P3U5RootAtlas.original_level_eq_owned
+#print axioms ImbalancedChen.P3U5FullSourcePartition.selectedResidual_rootFibers
+#print axioms ImbalancedChen.P3U5AffineRootFibers.sum_lane_rootFiber_card_le_one
