@@ -175,34 +175,128 @@ def parse_types(stdout: str) -> tuple[list[dict], dict, list[dict]]:
     by_name = {d["name"]: d for d in declarations}
     actual_counts = Counter(d["module"] for d in declarations)
     require(set(actual_counts) == set(MODULES), "An audited module has no declarations")
-    serialized_union: set[str] = set()
+    owned_union: set[str] = set()
+    expected_occurrences: dict[tuple[str, str], bool] = {}
+
+    def name_list(value: object, label: str, *, allow_empty: bool = False) -> list[str]:
+        require(isinstance(value, list) and (allow_empty or bool(value))
+                and all(isinstance(name, str) and name for name in value),
+                f"Missing or malformed {label}")
+        require(len(set(value)) == len(value), f"Duplicate {label}")
+        return value
+
     for module in MODULES:
         inventory = inventories[module]
         require(inventory.get("is_module") is False
                 and inventory.get("import_all") is True and inventory.get("has_data") is True,
                 f"Incomplete legacy serialized module data: {module}")
-        serialized_names = inventory.get("serialized_constant_names")
-        environment_names = inventory.get("environment_constant_names")
-        for label, values in [("serialized", serialized_names), ("environment", environment_names)]:
-            require(isinstance(values, list) and values
-                    and all(isinstance(name, str) and name for name in values),
-                    f"Missing or malformed {label} declaration inventory: {module}")
-            require(len(set(values)) == len(values), f"Duplicate {label} declaration: {module}")
+        serialized_names = name_list(inventory.get("serialized_constant_names"),
+                                     f"serialized declaration inventory: {module}")
+        environment_names = name_list(inventory.get("environment_constant_names"),
+                                      f"environment declaration inventory: {module}")
+        owned_names = name_list(inventory.get("owned_constant_names"),
+                               f"owned declaration inventory: {module}")
+        shared_names = name_list(inventory.get("shared_constant_names"),
+                                f"shared declaration inventory: {module}", allow_empty=True)
+        owned_set, shared_set = set(owned_names), set(shared_names)
+        require(not (owned_set & shared_set)
+                and set(serialized_names) == owned_set | shared_set,
+                f"Serialized owned/shared partition differs: {module}")
         expected_names = {d["name"] for d in declarations if d["module"] == module}
-        require(set(serialized_names) == set(environment_names) == expected_names,
-                f"Serialized, environment, and exported declaration sets differ: {module}")
-        require(not (serialized_union & set(serialized_names)),
-                f"A declaration is serialized under multiple audited modules: {module}")
-        serialized_union.update(serialized_names)
-        for label, count in [("serialized", inventory.get("serialized_constant_count")),
-                             ("census", modules[module].get("count"))]:
-            require(type(count) is int and count > 0 and count == actual_counts[module],
+        require(owned_set == set(environment_names) == expected_names,
+                f"Owned serialized, environment, and exported declaration sets differ: {module}")
+        require(not (owned_union & owned_set),
+                f"A declaration has multiple audited owners: {module}")
+        owned_union.update(owned_names)
+        for name in serialized_names:
+            expected_occurrences[module, name] = name in shared_set
+        for label, count, expected_count in [
+                ("serialized", inventory.get("serialized_constant_count"), len(serialized_names)),
+                ("owned", inventory.get("owned_constant_count"), len(owned_names)),
+                ("shared", inventory.get("shared_constant_count"), len(shared_names)),
+                ("census", modules[module].get("count"), actual_counts[module])]:
+            require(type(count) is int and count == expected_count,
                     f"Incorrect {label} declaration count: {module}")
         extra_count = inventory.get("extra_codegen_name_count")
         require(type(extra_count) is int and extra_count >= 0,
                 f"Missing or malformed extra codegen count: {module}")
-    require(serialized_union == set(names) and len(serialized_union) == totals[0],
-            "Serialized union differs from the complete exported census")
+    require(owned_union == set(names) and len(owned_union) == totals[0],
+            "Owned serialized union differs from the complete exported census")
+
+    occurrences = records("P0_ROUND3_OCCURRENCE ")
+    by_occurrence: dict[tuple[str, str], dict] = {}
+    occurrence_identity: dict[str, tuple[str, str]] = {}
+    allowed_kinds = {"theorem", "definition", "opaque", "quotient", "inductive", "constructor", "recursor"}
+    identity_flags = ("type_matches_environment", "level_params_match_environment",
+                      "kind_matches_environment", "all_dependencies_present")
+    shared_flags = ("owner_precedes_serialized", "owner_has_serialized_theorem",
+                    "type_matches_owner", "level_params_match_owner",
+                    "theorem_all_matches_owner_and_environment")
+    for occurrence in occurrences:
+        module, name = occurrence.get("serialized_module"), occurrence.get("name")
+        require(isinstance(module, str) and isinstance(name, str) and name,
+                "Missing or malformed serialized occurrence identity")
+        key = module, name
+        require(key not in by_occurrence, f"Duplicate serialized occurrence: {module}: {name}")
+        require(key in expected_occurrences, f"Unexpected serialized occurrence: {module}: {name}")
+        by_occurrence[key] = occurrence
+        label = f"{module}: {name}"
+        owner = occurrence.get("owner_module")
+        require(isinstance(owner, str) and owner, f"Missing or malformed occurrence owner: {label}")
+        shared = expected_occurrences[key]
+        require(occurrence.get("shared") is shared, f"Wrong occurrence shared flag: {label}")
+        require((owner != module) if shared else (owner == module),
+                f"Wrong serialized occurrence owner: {label}")
+        if owner in MODULES:
+            require(name in by_name and by_name[name]["module"] == owner,
+                    f"Occurrence owner differs from exported census: {label}")
+        if name in by_name:
+            require(owner == by_name[name]["module"],
+                    f"Occurrence owner differs from exported census: {label}")
+        kind = occurrence.get("kind")
+        require(isinstance(kind, str) and kind in allowed_kinds,
+                f"Forbidden or missing serialized occurrence kind: {label}")
+        if name in by_name:
+            require(kind == by_name[name].get("kind"),
+                    f"Serialized occurrence kind differs from exported declaration: {label}")
+        require(name not in occurrence_identity or occurrence_identity[name] == (owner, kind),
+                f"Serialized occurrences disagree on defining owner or kind: {label}")
+        occurrence_identity[name] = owner, kind
+        for flag in ["is_unsafe", "is_partial", "is_axiom"]:
+            require(occurrence.get(flag) is False,
+                    f"Unsafe, partial, axiom, or missing occurrence safety flag {flag}: {label}")
+        for flag in identity_flags:
+            require(occurrence.get(flag) is True,
+                    f"Failed or missing occurrence validation {flag}: {label}")
+        dependencies = name_list(occurrence.get("raw_dependency_names"),
+                                 f"raw dependency names: {label}", allow_empty=True)
+        axioms = name_list(occurrence.get("raw_dependency_axioms"),
+                          f"raw dependency axioms: {label}", allow_empty=True)
+        require(set(axioms) <= ALLOWED and "sorryAx" not in dependencies,
+                f"Forbidden raw axiom dependency: {label}")
+        require(kind != "theorem" or name not in dependencies,
+                f"Direct serialized theorem self-dependency: {label}")
+        expression_count = occurrence.get("raw_expression_count")
+        require(type(expression_count) is int
+                and expression_count == (2 if kind in {"theorem", "definition", "opaque"} else 1),
+                f"Incorrect raw expression count: {label}")
+        require("shared_validation" in occurrence,
+                f"Missing shared validation field: {label}")
+        validation = occurrence["shared_validation"]
+        if shared:
+            require(kind == "theorem", f"Shared serialized occurrence is not a theorem: {label}")
+            require(isinstance(validation, dict), f"Missing shared theorem validation: {label}")
+            for flag in shared_flags:
+                require(validation.get(flag) is True,
+                        f"Failed or missing shared theorem validation {flag}: {label}")
+        else:
+            require(validation is None, f"Owned occurrence has shared validation: {label}")
+    require(set(by_occurrence) == set(expected_occurrences),
+            "Missing serialized occurrence; exact serialized occurrence coverage failed")
+    # Preserve the checked occurrence evidence with its module inventory in the artifact.
+    for module in MODULES:
+        inventories[module]["occurrences"] = [by_occurrence[module, name]
+            for name in inventories[module]["serialized_constant_names"]]
     baseline = historical_baseline()
     for name, expected in baseline.items():
         require(name in by_name, f"Missing historical declaration: {name}")
@@ -262,14 +356,14 @@ def main() -> int:
     stdout_path.touch()
     stderr_path.touch()
     report = {
-        "schema": "p0-round3-types-export-v2", "status": "RUNNING",
+        "schema": "p0-round3-types-export-v3", "status": "RUNNING",
         "started_utc": datetime.now(timezone.utc).isoformat(),
         "scope": "Supplemental type export after successful full lake build; existing proof gates remain required",
         "expected_defining_modules": list(MODULES), "required_historical_declarations": 198,
         "historical_baseline": HISTORICAL_BASELINE,
         "historical_baseline_sha256": HISTORICAL_BASELINE_SHA256,
         "migration_commit": "81b63cafb6ee00590cad194975cc140f465d68b5",
-        "census_basis": "Exact serialized constNames = defining-module environment = exported declarations",
+        "census_basis": "Exact serialized owned/shared partition; owned names = defining-module environment = exported declarations; every serialized occurrence audited",
         "final_bridge_name": FINAL_BRIDGE, "final_bridge_is_conditional": True,
         "hLower_hUpper_discharged": False, "production_modules_recompiled": False,
         "production_modules_replayed": False, "dependencies_built": False,
@@ -319,7 +413,13 @@ def main() -> int:
         report.update(declaration_count=len(declarations), bridge_count=1,
                       full_types_untruncated=True, unsafe_partial_and_new_axiom_checks="PASS_IN_LEAN",
                       actual_defining_module_counts=dict(Counter(d["module"] for d in declarations)),
-                      serialized_inventory_exact_match=True, required_historical_declarations_found=198, historical_complete_types_unchanged=True,
+                      serialized_inventory_exact_match=True, owned_inventory_exact_match=True,
+                      serialized_occurrence_coverage_exact_match=True,
+                      serialized_occurrence_count=sum(i["serialized_constant_count"] for i in inventories),
+                      shared_occurrence_count=sum(i["shared_constant_count"] for i in inventories),
+                      serialized_raw_dependency_axiom_union=sorted({a for i in inventories
+                          for occurrence in i["occurrences"] for a in occurrence["raw_dependency_axioms"]}),
+                      required_historical_declarations_found=198, historical_complete_types_unchanged=True,
                       final_bridge_hypotheses_retained=["hLower", "hUpper"],
                       transitive_axiom_union=sorted({a for d in declarations + [bridge] for a in d["axioms"]}))
         report["compiler_output_files_sha256"] = {
