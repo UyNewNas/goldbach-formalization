@@ -1,0 +1,16 @@
+import ImbalancedChen.P3AffineTransitionJets
+import ImbalancedChen.P3U5LogChartDerivativeBudget
+import ImbalancedChen.P3U5ChartMixedL1Budget
+
+/- UNEXECUTED. Install the registered source-only dependencies in the pinned
+project before elaboration and kernel/axiom inspection. -/
+#check ImbalancedChen.P3AffineTransitionJets.eval_hasDerivAt
+#check ImbalancedChen.P3AffineTransitionJets.mixed_eq_jets
+#check ImbalancedChen.P3U5LogChartDerivativeBudget.chartPoint_original_group
+#check ImbalancedChen.P3U5LogChartDerivativeBudget.eval_profileExpr
+#check ImbalancedChen.P3U5LogChartDerivativeBudget.exists_profile_mixed_bound
+#check ImbalancedChen.P3U5ChartMixedL1Budget.mixed_profile_integrable
+#check ImbalancedChen.P3U5ChartMixedL1Budget.exists_atlasD_budget
+#check ImbalancedChen.P3U5ChartMixedL1Budget.exists_atlasD_polylog
+#print axioms ImbalancedChen.P3AffineTransitionJets.mixed_eq_jets
+#print axioms ImbalancedChen.P3U5ChartMixedL1Budget.exists_atlasD_polylog
