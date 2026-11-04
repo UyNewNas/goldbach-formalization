@@ -1,0 +1,17 @@
+import ImbalancedChen.P3LogProductTransitionJets
+import ImbalancedChen.P3U5ProductChartDerivativeBudget
+import ImbalancedChen.P3U5PhysicalProductChart
+import ImbalancedChen.P3U5ProductChartMixedL1
+
+/- UNEXECUTED. Install registered source-only imports in the locked project
+before elaboration. This driver is not evidence of compilation or replay. -/
+#check ImbalancedChen.P3LogProductTransitionJets.sum_logHat_eq_one
+#check ImbalancedChen.P3LogProductTransitionJets.exists_logStep_derivative_bound
+#check ImbalancedChen.P3U5ProductChartDerivativeBudget.exists_productProfile_mixed_bound
+#check ImbalancedChen.P3U5PhysicalProductChart.groupValue_eq_slotProduct
+#check ImbalancedChen.P3U5PhysicalProductChart.physicalProfile_eq_productProfile
+#check ImbalancedChen.P3U5PhysicalProductChart.same_rho_finite_partition
+#check ImbalancedChen.P3U5ProductChartMixedL1.physicalProduct_mixed_integrable
+#check ImbalancedChen.P3U5ProductChartMixedL1.exists_physicalProduct_D_polylog
+#print axioms ImbalancedChen.P3LogProductTransitionJets.exists_logStep_derivative_bound
+#print axioms ImbalancedChen.P3U5ProductChartMixedL1.exists_physicalProduct_D_polylog
