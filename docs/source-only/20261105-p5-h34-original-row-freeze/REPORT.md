@@ -35,7 +35,7 @@ The local theorem chain:
 3. `frozen_cutoff_ratio`: connects the actual physical query to
    R_f/alpha_f = min(a,R_f/2), under the genuine root floor guard.
 4. `frozen_root_sameQ_cutoff_power`: reconstructs the SAME frozen Q
-   in `(rootQ/p)^(1/alpha_f)`, with no substitution of original Q.
+   in `(rootQ/p)^(1/s_f)`, with no substitution of original Q.
 5. `sifted_source_antitone`: source cutoff monotonicity with the
    original finite receiver, congruence and coprimality tests.
 6. `original_row_card_le_frozen_row_card`: for the same p and N,
@@ -48,12 +48,12 @@ The resulting source-level mathematical shape is
 
 ```
 Upsilon3(N) + Upsilon4(N)
-  <= sum_{p in original U3 band} |Sifted(N,p,(Qf(U3,p)/p)^(1/alpha_f))|
-   + sum_{p in original U4 band} |Sifted(N,p,(Qf(U4,p)/p)^(1/alpha_f))|.
+  <= sum_{p in original U3 band} |Sifted(N,p,(Qf(U3,p)/p)^(1/s_f))|
+   + sum_{p in original U4 band} |Sifted(N,p,(Qf(U4,p)/p)^(1/s_f))|.
 ```
 
-Here Qf is precisely the generated frozen rootQ and alpha_f its
-physical argument, not a new or independently adjustable level.
+Here Qf is precisely the generated frozen rootQ and s_f is its physical argument (sieve query), not the distinct
+true physical alpha = (1-t)/R_f or a new adjustable level.
 U3 tail parameter tau and original U4 mainResidual are unchanged.
 
 ## Strict limits
