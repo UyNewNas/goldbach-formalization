@@ -26,24 +26,23 @@ ROOT = Path(__file__).resolve().parents[3]
 AUDIT = "verification/parts/p0/Round6Audit.lean"
 FINAL_BRIDGE = "ImbalancedChen.current_theorem_1_1_of_manuscript_bounds"
 FINAL_MODULE = "ImbalancedChen.CurrentMainTheorem"
+EXPECTED_DEPENDENCY_STATE = "goldbach-stage002-exact"
 MODULES = (
     "ImbalancedChen.HistoricalUpperFiveCellGeometry",
     "ImbalancedChen.ActualHistoricalFifthCellIntegral",
     "ImbalancedChen.ActualHistoricalFifthSavingIntegral",
     "ImbalancedChen.HistoricalFifthCutoffInvariance",
+    "ImbalancedChen.FinitePrimeGeometryCore",
 )
-# All 46 public declarations in the four frozen source modules. Generated and
+# All 46 historical public declarations, retaining their post-migration owners. Generated and
 # private declarations are additionally required by exact serialized coverage.
 REQUIRED_PUBLIC = {
     MODULES[0]: (
         "ImbalancedChen.HistoricalPrefixCapData.fifthParentGateBounds",
         "ImbalancedChen.HistoricalPrefixCapData.mem_fifthParentGateRegion",
-        "ImbalancedChen.HistoricalPrefixCapData.level3_on_fifth_cell",
         "ImbalancedChen.HistoricalPrefixCapData.level4_on_fifth_cell",
         "ImbalancedChen.HistoricalPrefixCapData.level5_on_fifth_cell",
         "ImbalancedChen.HistoricalPrefixCapData.level5_on_selected_fifth_cell",
-        "ImbalancedChen.HistoricalPrefixCapData.level3_tuple_on_fifth_cell",
-        "ImbalancedChen.historicalUpperFive_cube_tests_iff_log",
         "ImbalancedChen.mem_historicalUpperFiveFrontierTuples_iff_log_on_cell",
         "ImbalancedChen.historicalUpperFiveFrontierTuples_cell_filter",
     ),
@@ -89,10 +88,16 @@ REQUIRED_PUBLIC = {
         "ImbalancedChen.HistoricalPrefixCapData.upperFourthToFifthSaving_normalized_eq_fifthPrimeCorrection_of_cutoff_ge",
         "ImbalancedChen.HistoricalPrefixCapData.tendsto_upperFourthToFifthSaving_of_cutoff_ge",
     ),
+    MODULES[4]: (
+        "ImbalancedChen.HistoricalPrefixCapData.level3_on_fifth_cell",
+        "ImbalancedChen.HistoricalPrefixCapData.level3_tuple_on_fifth_cell",
+        "ImbalancedChen.historicalUpperFive_cube_tests_iff_log",
+    ),
 }
 ALLOWED = {"propext", "Classical.choice", "Quot.sound"}
 FROZEN = {
-    "ImbalancedChen/HistoricalUpperFiveCellGeometry.lean": "a131b783d59540ea98cc11574f31489e2f75d519927445b49a2e4c688ab74cbe",
+    "ImbalancedChen/FinitePrimeGeometryCore.lean": "becd322d719aa8ae9f0cc7b3bedbc19b87edd347bbc79788ce8f6ca7e5694d85",
+    "ImbalancedChen/HistoricalUpperFiveCellGeometry.lean": "a5ca4e515e9bb1451dd1ebdf369cfaac34d7131e4877db0d0d351e06666ac410",
     "ImbalancedChen/ActualHistoricalFifthCellIntegral.lean": "550602f634e27641bf1f0b811e5e201130f48587bd0760192d032b75c0c405de",
     "ImbalancedChen/ActualHistoricalFifthSavingIntegral.lean": "bcd7075649dcc6f374ea2318f77a45eb0c260f301a00045bb7ba60f6355da74e",
     "ImbalancedChen/HistoricalFifthCutoffInvariance.lean": "abe06826e099ec0beb73329c1c887fc5aeca0583efe1ff46c3b92ec91d9cdb3d",
@@ -112,12 +117,17 @@ def digest(path: Path) -> str:
         return hashlib.file_digest(handle, "sha256").hexdigest()
 
 
+def verify_frozen_inputs() -> None:
+    for relative, expected in FROZEN.items():
+        require(digest(ROOT / relative) == expected, f"Frozen input changed: {relative}")
+
+
 def write_json(path: Path, value: object) -> None:
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def git(*args: str) -> str:
-    return subprocess.check_output(["git", *args], cwd=ROOT, text=True).strip()
+    return subprocess.check_output(["git", "--no-optional-locks", *args], cwd=ROOT, text=True).strip()
 
 
 def source_path(module: str) -> Path:
@@ -135,6 +145,7 @@ def input_snapshot() -> dict:
     # Reuse the established comment/string masker for direct project imports.
     sys.path.insert(0, str(ROOT))
     from verification.verify_variable_envelope_boxes import lean_code
+    from verification.parts.p0.verify_dependency_state import EVIDENCE_FILES, verify_dependency_state
 
     modules = set(MODULES) | {"ImbalancedChen", FINAL_MODULE}
     for module in sorted(modules.copy()):
@@ -146,6 +157,7 @@ def input_snapshot() -> dict:
                         modules.add(imported)
     sources = {source_path(module).relative_to(ROOT).as_posix() for module in modules}
     sources.update(FROZEN)
+    sources.update(EVIDENCE_FILES)
     sources.update({AUDIT, "verification/parts/p0/check_round6_types.py",
                     "verification/parts/p0/check_pins.py",
                     "verification/verify_variable_envelope_boxes.py"})
@@ -153,6 +165,7 @@ def input_snapshot() -> dict:
     require(not git("status", "--porcelain", "--", *sorted(sources)),
             "An audited input is edited, staged, or untracked")
     return {
+        "dependency_state": verify_dependency_state(ROOT, EXPECTED_DEPENDENCY_STATE),
         "source_sha256": {relative: digest(ROOT / relative) for relative in sorted(sources)},
         "production_olean_parts": {
             module: object_parts(ROOT / ".lake/build/lib/lean" /
@@ -282,9 +295,11 @@ def main() -> int:
     stdout_path.touch()
     stderr_path.touch()
     report = {
-        "schema": "p0-round6-types-export-v2", "status": "RUNNING",
+        "schema": "p0-round6-types-export-v3", "status": "RUNNING",
         "started_utc": datetime.now(timezone.utc).isoformat(),
-        "scope": "Supplemental type export after successful full lake build; existing proof gates remain required",
+        "scope": "Supplemental type export after successful full lake build; existing proof gates remain required; exact historical stage002 patched dependency, not original fixed source",
+        "expected_dependency_state": EXPECTED_DEPENDENCY_STATE,
+        "migration_commit": "81b63cafb6ee00590cad194975cc140f465d68b5",
         "expected_defining_modules": list(MODULES), "required_public_declarations": 46,
         "census_basis": "Exact serialized constNames = defining-module environment = exported declarations",
         "final_bridge_name": FINAL_BRIDGE, "final_bridge_is_conditional": True,
@@ -298,11 +313,12 @@ def main() -> int:
         head = git("rev-parse", "HEAD")
         require(re.fullmatch(r"[0-9a-f]{40}", head) is not None, "HEAD is not a full commit SHA")
         report["source_commit"] = head
-        for relative, expected in FROZEN.items():
-            require(digest(ROOT / relative) == expected, f"Frozen input changed: {relative}")
+        verify_frozen_inputs()
         report["inputs_before"] = input_snapshot()
+        report["dependency_state_before"] = report["inputs_before"]["dependency_state"]
         with (output / "pins.stdout.log").open("wb") as out, (output / "pins.stderr.log").open("wb") as err:
-            pin_result = subprocess.run([sys.executable, "verification/parts/p0/check_pins.py"],
+            pin_result = subprocess.run([sys.executable, "verification/parts/p0/check_pins.py",
+                                         "--expected-state", EXPECTED_DEPENDENCY_STATE],
                                         cwd=ROOT, stdout=out, stderr=err, check=False)
         report["pin_check_exit_code"] = pin_result.returncode
         require(pin_result.returncode == 0, "Existing frozen-pin check failed")
@@ -355,6 +371,7 @@ def main() -> int:
         if "inputs_before" in report:
             try:
                 report["inputs_after"] = input_snapshot()
+                report["dependency_state_after"] = report["inputs_after"]["dependency_state"]
                 require(report["inputs_after"] == report["inputs_before"],
                         "Source or existing production object part set/hash changed during export")
                 report["source_commit_after"] = git("rev-parse", "HEAD")
