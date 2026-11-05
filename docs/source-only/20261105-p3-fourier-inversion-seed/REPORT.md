@@ -73,7 +73,7 @@ The exact previous branch HEAD and commit tree were read; the previous
 report, finite signed kernel file, integrated-W budget and pinned paper §4
 were inspected. The pinned Mathlib FourierTransformDeriv, FourierTransform,
 Inversion, and ImproperIntegrals APIs were checked. In particular pinned
-Mathlib has the one-variable `integral_univ_inv_one_add_sq`, but does NOT
+Mathlib has the one-variable global `integral_univ_inv_one_add_sq`, but does NOT
 have the later convenience result `integral_univ_inv_one_add_mul_sq`;
 the latter is deliberately not used.
 

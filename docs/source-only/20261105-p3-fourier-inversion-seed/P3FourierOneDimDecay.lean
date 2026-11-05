@@ -112,7 +112,7 @@ and dividing by (2*pi)^d yields the expected 2^(-d).
 The higher-dimensional Fubini step is NOT claimed here. -/
 theorem manuscript_one_dim_cauchy_mass :
     (∫ xi : ℝ, (1 + xi ^ 2)⁻¹) = Real.pi := by
-  exact Real.integral_univ_inv_one_add_sq
+  exact integral_univ_inv_one_add_sq
 
 end
 end ImbalancedChen.P3FourierOneDimDecay
