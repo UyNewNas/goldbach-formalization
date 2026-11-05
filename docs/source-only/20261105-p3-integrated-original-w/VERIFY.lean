@@ -1,0 +1,10 @@
+import ImbalancedChen.P3OriginalWIntegratedDerivative
+
+/-! SOURCE_ONLY. Not in production import graph. Do not mark verified
+without explicit P0 scheduling, elaboration, kernel replay and axiom audit. -/
+#check ImbalancedChen.P3OriginalWIntegratedDerivative.PrimitiveIntegratedW
+#check ImbalancedChen.P3OriginalWIntegratedDerivative.exists_integrated_mixed_L1_bound
+#check ImbalancedChen.P3OriginalWIntegratedDerivative.exists_originalWD_integrated
+#check ImbalancedChen.P3OriginalWIntegratedDerivative.exists_originalWD_integrated_polylog
+#check ImbalancedChen.P3OriginalWIntegratedDerivative.PhysicalIntegratedClass
+#check ImbalancedChen.P3OriginalWIntegratedDerivative.exists_physicalW_integrated_polylog
