@@ -1,0 +1,10 @@
+-- NOT EXECUTED: source-only import/test entry for the separately authorized compile workflow.
+import ImbalancedChen.P3FourierSubsetExpansion
+import ImbalancedChen.P3FourierDPointwise
+
+#print ImbalancedChen.P3FourierSubsetExpansion.physicalDenom_eq_subset_sum
+#print ImbalancedChen.P3FourierSubsetExpansion.norm_complexDenom
+#print ImbalancedChen.P3FourierDPointwise.fourier_norm_le_L1
+#print ImbalancedChen.P3FourierDPointwise.signed_derivative_fourier_sum
+#print ImbalancedChen.P3FourierDPointwise.physical_product_fourier_bound
+#print ImbalancedChen.P3FourierDPointwise.actual_chart_D_pointwise
