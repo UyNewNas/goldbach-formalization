@@ -1,0 +1,11 @@
+import ImbalancedChen.P3FourierOneDimDecay
+
+/-! Verification entry point only: SOURCE ONLY / NOT EXECUTED. -/
+#check ImbalancedChen.P3FourierCutoffIdentity.full_minus_truncation_eq
+#check ImbalancedChen.P3FourierCutoffIdentity.fourier_cutoff_error
+#check ImbalancedChen.P3FourierCutoffIdentity.same_rho_signed_fourier_cutoff
+#check ImbalancedChen.P3FourierOneDimDecay.physical_frequency_eq
+#check ImbalancedChen.P3FourierOneDimDecay.physical_frequency_factor
+#check ImbalancedChen.P3FourierOneDimDecay.two_derivative_fourier_decay
+#check ImbalancedChen.P3FourierOneDimDecay.manuscript_one_dim_decay
+#check ImbalancedChen.P3FourierOneDimDecay.manuscript_one_dim_cauchy_mass
