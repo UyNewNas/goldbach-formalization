@@ -1,0 +1,11 @@
+import ImbalancedChen.P3FullSignedModulusTail
+
+/-! SOURCE ONLY / UNCOMPILED. Requires separate P0 verification. -/
+#check ImbalancedChen.P3FullSignedModulusTail.kernelMass_nonneg
+#check ImbalancedChen.P3FullSignedModulusTail.abs_exactCoprimeTest_le
+#check ImbalancedChen.P3FullSignedModulusTail.signedSource_sub
+#check ImbalancedChen.P3FullSignedModulusTail.signedSource_approximation
+#check ImbalancedChen.P3FullSignedModulusTail.sum_exact_and_off
+#check ImbalancedChen.P3FullSignedModulusTail.fullModulusMass_split
+#check ImbalancedChen.P3FullSignedModulusTail.exact_product_kernel
+#check ImbalancedChen.P3FullSignedModulusTail.kernel_after_original_HB
