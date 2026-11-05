@@ -90,9 +90,13 @@ and therefore no loss of genuine repeated frontier occurrences. -/
 private theorem sum_map_mono {α : Type*} (xs : List α)
     (f g : α → ℝ) (h : ∀ x ∈ xs, f x ≤ g x) :
     (xs.map f).sum ≤ (xs.map g).sum := by
+  revert h
   induction xs with
-  | nil => simp
+  | nil =>
+      intro _
+      simp
   | cons x xs ih =>
+      intro h
       have hx : f x ≤ g x := h x (by simp)
       have ht : ∀ y ∈ xs, f y ≤ g y := by
         intro y hy
