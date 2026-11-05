@@ -1,0 +1,11 @@
+import ImbalancedChen.P3FourierRealComplex
+
+-- Source-only review target; intentionally NOT run as Lean/Lake or CI.
+#check ImbalancedChen.P3FourierRealComplex.complexChartLift
+#check ImbalancedChen.P3FourierRealComplex.complexChartLift_contDiff
+#check ImbalancedChen.P3FourierRealComplex.complexChartLift_iterated
+#check ImbalancedChen.P3FourierRealComplex.complexChartLift_iterated_apply
+#check ImbalancedChen.P3FourierRealComplex.actualMixedFamily_eq_complexFrechet
+#check ImbalancedChen.P3FourierRealComplex.actualMixedFamily_eq_complexFrechet_fun
+#check ImbalancedChen.P3FourierRealComplex.actualD_eq_complexFrechet_D
+#check ImbalancedChen.P3FourierRealComplex.actualMixed_fourier_frechet
