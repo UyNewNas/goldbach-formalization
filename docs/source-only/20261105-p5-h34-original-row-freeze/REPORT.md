@@ -33,7 +33,7 @@ The local theorem chain:
 2. `frozen_exponent_le_original`: preserves the physical max-two
    clamp: min(a,R_f/2) ≤ min(a,R_o/2).
 3. `frozen_cutoff_ratio`: connects the actual physical query to
-   R_f/alpha_f = min(a,R_f/2), under the genuine root floor guard.
+   R_f/s_f = min(a,R_f/2), under the genuine root floor guard.
 4. `frozen_root_sameQ_cutoff_power`: reconstructs the SAME frozen Q
    in `(rootQ/p)^(1/s_f)`, with no substitution of original Q.
 5. `sifted_source_antitone`: source cutoff monotonicity with the
