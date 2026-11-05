@@ -1,0 +1,10 @@
+/- P3.6 candidate. NOT executed: no Lean/Lake or kernel verification in this lane. -/
+import ImbalancedChen.P3FourierPointCoordinateBridge
+#check ImbalancedChen.P3FourierPointCoordinateBridge.chartEquiv_basisDirection
+#check ImbalancedChen.P3FourierPointCoordinateBridge.shift_eq_add_direction
+#check ImbalancedChen.P3FourierPointCoordinateBridge.chart_shift
+#check ImbalancedChen.P3FourierPointCoordinateBridge.coordinateDeriv_pulled_eq_fderiv
+#check ImbalancedChen.P3FourierPointCoordinateBridge.orderedDirections_doubled
+#check ImbalancedChen.P3FourierPointCoordinateBridge.mixed_pullback_eq_frechet
+#check ImbalancedChen.P3FourierPointCoordinateBridge.mixed_actual_eq_frechet
+#check ImbalancedChen.P3FourierPointCoordinateBridge.actualMixedFamily_eq_realFrechet
