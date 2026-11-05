@@ -47,8 +47,8 @@ theorem complexChartLift_iterated_apply {d n : ℕ}
     (iteratedFDeriv ℝ n (complexChartLift w) x) v =
       (((iteratedFDeriv ℝ n (chartLift w) x) v : ℝ) : ℂ) := by
   rw [complexChartLift_iterated w hw x]
-  simp only [ContinuousLinearMap.compContinuousMultilinearMap_apply,
-    Complex.ofRealCLM_apply]
+  simp only [ContinuousLinearMap.compContinuousMultilinearMap_coe,
+    Function.comp_apply, Complex.ofRealCLM_apply]
 
 /-- Same original doubled S, same Euclidean chart, same value and multiplicity.
 This *discharges the real-to-complex derivative identification*, assuming
