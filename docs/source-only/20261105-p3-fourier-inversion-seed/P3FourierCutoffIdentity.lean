@@ -41,7 +41,7 @@ theorem full_minus_truncation_eq (f : V → ℂ)
   have hphase : Integrable (fun ξ : V => (𝐞 ⟪ξ, x⟫) • (𝓕 f ξ)) := by
     have h := (Real.fourierIntegral_convergent_iff
       (f := (𝓕 f : V → ℂ)) (μ := volume) (-x)).2 hF
-    simpa only [real_inner_neg_right, neg_neg] using h
+    simpa only [inner_neg_right, neg_neg] using h
   have hsplit := integral_add_compl hs hphase
   have hInv : 𝓕⁻ (𝓕 f) x = f x :=
     hf.fourierInv_fourier_eq hF hx
