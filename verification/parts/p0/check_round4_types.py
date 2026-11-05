@@ -26,6 +26,7 @@ ROOT = Path(__file__).resolve().parents[3]
 AUDIT = "verification/parts/p0/Round4Audit.lean"
 FINAL_BRIDGE = "ImbalancedChen.current_theorem_1_1_of_manuscript_bounds"
 FINAL_MODULE = "ImbalancedChen.CurrentMainTheorem"
+EXPECTED_DEPENDENCY_STATE = "goldbach-stage002-exact"
 EXPECTED = {
     "ImbalancedChen.StoredHistoricalBoxPermit": 14,
     "ImbalancedChen.Certificates.PairedV2Batch4To64Data": 72,
@@ -55,7 +56,7 @@ def write_json(path: Path, value: object) -> None:
 
 
 def git(*args: str) -> str:
-    return subprocess.check_output(["git", *args], cwd=ROOT, text=True).strip()
+    return subprocess.check_output(["git", "--no-optional-locks", *args], cwd=ROOT, text=True).strip()
 
 
 def source_path(module: str) -> Path:
@@ -73,6 +74,7 @@ def input_snapshot() -> dict:
     # Reuse the established comment/string masker for direct project imports.
     sys.path.insert(0, str(ROOT))
     from verification.verify_variable_envelope_boxes import lean_code
+    from verification.parts.p0.verify_dependency_state import EVIDENCE_FILES, verify_dependency_state
 
     modules = set(EXPECTED) | {"ImbalancedChen", FINAL_MODULE}
     for module in sorted(modules.copy()):
@@ -84,6 +86,7 @@ def input_snapshot() -> dict:
                         modules.add(imported)
     sources = {source_path(module).relative_to(ROOT).as_posix() for module in modules}
     sources.update(FROZEN)
+    sources.update(EVIDENCE_FILES)
     sources.update({AUDIT, "verification/parts/p0/check_round4_types.py",
                     "verification/parts/p0/check_pins.py",
                     "verification/verify_variable_envelope_boxes.py"})
@@ -91,6 +94,7 @@ def input_snapshot() -> dict:
     require(not git("status", "--porcelain", "--", *sorted(sources)),
             "An audited input is edited, staged, or untracked")
     return {
+        "dependency_state": verify_dependency_state(ROOT, EXPECTED_DEPENDENCY_STATE),
         "source_sha256": {relative: digest(ROOT / relative) for relative in sorted(sources)},
         "production_olean_parts": {
             module: object_parts(ROOT / ".lake/build/lib/lean" /
@@ -155,7 +159,8 @@ def main() -> int:
     report = {
         "schema": "p0-round4-types-export-v1", "status": "RUNNING",
         "started_utc": datetime.now(timezone.utc).isoformat(),
-        "scope": "Supplemental type export after successful full lake build; existing proof gates remain required",
+        "scope": "Supplemental type export after successful full lake build; existing proof gates remain required; exact historical stage002 patched dependency, not original fixed source",
+        "expected_dependency_state": EXPECTED_DEPENDENCY_STATE,
         "expected_defining_module_counts": EXPECTED, "expected_owned_declarations": 414,
         "final_bridge_name": FINAL_BRIDGE, "final_bridge_is_conditional": True,
         "hLower_hUpper_discharged": False, "production_modules_recompiled": False,
@@ -171,8 +176,10 @@ def main() -> int:
         for relative, expected in FROZEN.items():
             require(digest(ROOT / relative) == expected, f"Frozen input changed: {relative}")
         report["inputs_before"] = input_snapshot()
+        report["dependency_state_before"] = report["inputs_before"]["dependency_state"]
         with (output / "pins.stdout.log").open("wb") as out, (output / "pins.stderr.log").open("wb") as err:
-            pin_result = subprocess.run([sys.executable, "verification/parts/p0/check_pins.py"],
+            pin_result = subprocess.run([sys.executable, "verification/parts/p0/check_pins.py",
+                                         "--expected-state", EXPECTED_DEPENDENCY_STATE],
                                         cwd=ROOT, stdout=out, stderr=err, check=False)
         report["pin_check_exit_code"] = pin_result.returncode
         require(pin_result.returncode == 0, "Existing frozen-pin check failed")
@@ -220,6 +227,7 @@ def main() -> int:
         if "inputs_before" in report:
             try:
                 report["inputs_after"] = input_snapshot()
+                report["dependency_state_after"] = report["inputs_after"]["dependency_state"]
                 require(report["inputs_after"] == report["inputs_before"],
                         "Source or existing production object part set/hash changed during export")
                 report["source_commit_after"] = git("rev-parse", "HEAD")
