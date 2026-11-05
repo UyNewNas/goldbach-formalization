@@ -1,0 +1,19 @@
+import ImbalancedChen.P3HBLogScalarProfiles
+import ImbalancedChen.P3SmoothScalarJets
+import ImbalancedChen.P3HBLogSourceDictionary
+import ImbalancedChen.P3U5HBLogChart
+import ImbalancedChen.P3U5HBLogMixedL1
+
+/- UNEXECUTED. Install exact registered dependencies at module paths first.
+These commands are a handoff, not evidence of successful elaboration. -/
+#check ImbalancedChen.P3HBLogScalarProfiles.inverseLogProfile_contDiff
+#check ImbalancedChen.P3HBLogScalarProfiles.exists_scalar_derivative_bound
+#check ImbalancedChen.P3SmoothScalarJets.mixed_evalS
+#check ImbalancedChen.P3HBLogSourceDictionary.unit_log_slot_zero
+#check ImbalancedChen.P3HBLogSourceDictionary.eventually_log_domains
+#check ImbalancedChen.P3U5HBLogChart.eventually_physical_hb_identity
+#check ImbalancedChen.P3U5HBLogChart.same_rho_hb_partition
+#check ImbalancedChen.P3U5HBLogMixedL1.exists_physical_hbD_polylog
+#print axioms ImbalancedChen.P3HBLogScalarProfiles.inverseLogProfile_contDiff
+#print axioms ImbalancedChen.P3HBLogSourceDictionary.eventually_log_domains
+#print axioms ImbalancedChen.P3U5HBLogMixedL1.exists_physical_hbD_polylog
