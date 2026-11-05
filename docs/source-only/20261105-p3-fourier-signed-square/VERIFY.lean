@@ -1,0 +1,6 @@
+import ImbalancedChen.P3FourierSignedSquare
+#check ImbalancedChen.P3FourierSignedSquare.coordinateWave_pair
+#check ImbalancedChen.P3FourierSignedSquare.coordinateWave_from_real_phase
+#check ImbalancedChen.P3FourierSignedSquare.doubled_wave_list
+#check ImbalancedChen.P3FourierSignedSquare.doubled_wave_finset
+#check ImbalancedChen.P3FourierSignedSquare.signed_square_is_frequency_monomial
