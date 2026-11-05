@@ -25,8 +25,7 @@ def fixture():
         text = 'synthetic complete type for ' + row['name']
         row['type_sha256'] = hashlib.sha256(text.encode()).hexdigest()
         counterparts = [(row['expected_name'], row['expected_module'])]
-        if 'additional_duplicate' in row:
-            duplicate = row['additional_duplicate']
+        for duplicate in row.get('additional_duplicates', []):
             counterparts.append((duplicate['name'], duplicate['module']))
         for name, module in counterparts:
             record = common.declaration(name, module, row['kind'])
@@ -56,9 +55,9 @@ class Round4MigrationTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, message or '.'):
             self.parse(stdout)
 
-    def test_exact_475_counterparts_cover_all_414_original_types(self):
+    def test_exact_597_counterparts_cover_all_414_original_types(self):
         declarations, bridge = self.parse()
-        self.assertEqual(len(declarations), 475)
+        self.assertEqual(len(declarations), 597)
         self.assertEqual(len(self.baseline['declarations']), 414)
         self.assertEqual(len({d['module'] for d in declarations}), 16)
         self.assertEqual(bridge['name'], exporter.FINAL_BRIDGE)
@@ -95,18 +94,18 @@ class Round4MigrationTests(unittest.TestCase):
         # Exercise each category, plus the additional private copy.
         names = [next(r['expected_name'] for r in self.baseline['declarations'] if r['migration'] == kind)
                  for kind in ['unchanged', 'source_proof_owner_moved', 'public_realization_owner_moved', 'private_realization_renamed']]
-        names.append(next(r['additional_duplicate']['name'] for r in self.baseline['declarations'] if 'additional_duplicate' in r))
+        names.append(next(d['name'] for r in self.baseline['declarations'] for d in r.get('additional_duplicates', [])))
         for name in names:
             with self.subTest(name=name):
                 self.reject(common.edit_records(self.stdout, 'P0_ROUND4_DECL ',
                     lambda r: r.__setitem__('type', r['type'] + ' '), lambda r: r['name'] == name), 'complete type changed')
 
-    def test_missing_any_of_475_names_rejected_even_with_consistent_counts(self):
+    def test_missing_any_of_597_names_rejected_even_with_consistent_counts(self):
         for category in ['unchanged', 'source_proof_owner_moved', 'public_realization_owner_moved', 'private_realization_renamed']:
             name = next(r['expected_name'] for r in self.baseline['declarations'] if r['migration'] == category)
             with self.subTest(category=category):
                 self.reject(serialize([d for d in self.declarations if d['name'] != name], self.bridge), 'name-set mismatch')
-        name = next(r['additional_duplicate']['name'] for r in self.baseline['declarations'] if 'additional_duplicate' in r)
+        name = next(d['name'] for r in self.baseline['declarations'] for d in r.get('additional_duplicates', []))
         self.reject(serialize([d for d in self.declarations if d['name'] != name], self.bridge), 'name-set mismatch')
 
     def test_only_224_preexisting_records_cannot_pass(self):
@@ -173,8 +172,8 @@ class Round4MigrationTests(unittest.TestCase):
             self.reject(common.edit_records(self.stdout, prefix, lambda r: r.__setitem__('module', 'unexpected')))
 
     def test_missing_duplicate_or_inconsistent_total_rejected(self):
-        line = 'P0_ROUND4_COUNT 475'
-        for text in [self.stdout.replace(line, ''), self.stdout+'\n'+line, self.stdout.replace(line, 'P0_ROUND4_COUNT 474')]:
+        line = 'P0_ROUND4_COUNT 597'
+        for text in [self.stdout.replace(line, ''), self.stdout+'\n'+line, self.stdout.replace(line, 'P0_ROUND4_COUNT 596')]:
             self.reject(text, 'total census')
 
     def test_bad_owned_shared_partitions_rejected(self):
@@ -261,6 +260,68 @@ class Round4MigrationTests(unittest.TestCase):
         self.parse(stdout)
         self.reject(common.edit_records(stdout,'P0_ROUND4_OCCURRENCE ',lambda r:r.__setitem__('owner_module','Other.Owner'),
             lambda r:r['shared'] and r['serialized_module']==exporter.MODULES[1]), 'disagree')
+
+
+    def new_copy_names(self):
+        return [duplicate['name'] for row in self.baseline['declarations']
+                for duplicate in row.get('additional_duplicates', [])
+                if duplicate['module'].endswith(('LowerSum', 'UpperSum'))]
+
+    def validate_names(self, records):
+        with patch.object(exporter, 'historical_baseline', return_value=self.baseline):
+            exporter.validate_historical_declarations(records)
+
+    def test_observed_three_groups_are_explicit_and_exact(self):
+        baseline = exporter.historical_baseline()
+        copies = [d for row in baseline['declarations'] for d in row.get('additional_duplicates', [])]
+        self.assertEqual(len(copies), 183)
+        self.assertEqual(Counter(d['module'] for d in copies), Counter({
+            'ImbalancedChen.Certificates.PairedV2Batch4To64' + suffix: 61
+            for suffix in ['CertificateInputs', 'LowerSum', 'UpperSum']}))
+        self.assertEqual(len({d['name'] for d in copies}), 183)
+        self.assertEqual(len(self.new_copy_names()), 122)
+        self.assertEqual(baseline['observed_inventory_evidence']['source_run'], 41951293351)
+        self.assertEqual(baseline['expected_owned_count'], 597)
+
+    def test_every_new122_copy_requires_unchanged_complete_type(self):
+        records = {d['name']: d for d in self.declarations}
+        for name in self.new_copy_names():
+            with self.subTest(name=name), self.assertRaisesRegex(RuntimeError, 'complete type changed'):
+                changed = dict(records, **{name: dict(records[name], type=records[name]['type'] + ' ')})
+                self.validate_names(changed)
+
+    def test_every_new122_copy_is_required(self):
+        records = {d['name']: d for d in self.declarations}
+        for name in self.new_copy_names():
+            with self.subTest(name=name), self.assertRaisesRegex(RuntimeError, 'name-set mismatch'):
+                changed = dict(records); del changed[name]
+                self.validate_names(changed)
+
+    def test_every_new122_copy_has_exact_owner_and_kind(self):
+        records = {d['name']: d for d in self.declarations}
+        for name in self.new_copy_names():
+            for field, value in [('module', exporter.MODULES[0]), ('kind', 'opaque')]:
+                with self.subTest(name=name,field=field), self.assertRaisesRegex(RuntimeError, 'owner or kind'):
+                    self.validate_names(dict(records, **{name: dict(records[name], **{field:value})}))
+
+    def test_prior475_inventory_cannot_pass_new597_contract(self):
+        new_names = set(self.new_copy_names())
+        self.reject(serialize([d for d in self.declarations if d['name'] not in new_names], self.bridge), 'name-set mismatch')
+
+    def test_each_new_group_raw_occurrence_is_required_and_checked(self):
+        prefix = 'P0_ROUND4_OCCURRENCE '
+        for suffix in ['LowerSum', 'UpperSum']:
+            name = next(n for n in self.new_copy_names() if suffix + '.0.' in n and n.endswith('.eq_1'))
+            line = next(l for l in self.stdout.splitlines() if l.startswith(prefix) and json.loads(l[len(prefix):])['name'] == name)
+            self.reject(self.stdout.replace(line+'\n', '', 1), 'Missing serialized occurrence')
+            self.reject(common.edit_records(self.stdout, prefix, lambda r:r.__setitem__('all_dependencies_present',False), lambda r:r['name']==name))
+            self.reject(common.edit_records(self.stdout, prefix, lambda r:r.__setitem__('raw_dependency_axioms',['sorryAx']), lambda r:r['name']==name))
+
+    def test_no_other_sum_private_prefix_is_allowed(self):
+        declarations = deepcopy(self.declarations)
+        row = next(d for d in declarations if 'Batch4To64LowerSum.0.' in d['name'])
+        row['name'] = row['name'].replace('Batch4To64LowerSum.0.', 'Batch4To64OtherSum.0.')
+        self.reject(serialize(declarations, self.bridge), 'name-set mismatch')
 
 
 if __name__ == '__main__':

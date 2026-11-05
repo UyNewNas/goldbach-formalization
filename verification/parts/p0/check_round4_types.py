@@ -44,7 +44,7 @@ MODULES = ('ImbalancedChen.StoredHistoricalBoxPermit',
  'ImbalancedChen.Certificates.PairedV2Batch4To64Rows0060To0064',
  'ImbalancedChen.Certificates.PairedV2Batch4To64UpperSum')
 HISTORICAL_BASELINE = "verification/parts/p0/round4-declaration-baseline.json"
-HISTORICAL_BASELINE_SHA256 = '4ae97e3c79b06b3d480d4e0c594025dcda8019fbe9951f076bba2f0fc27fea3b'
+HISTORICAL_BASELINE_SHA256 = '111c9d6eeebabbd8818df047dea3dc613e2b3dae43aad1180c9d83dcd7d174d0'
 ALLOWED = {"propext", "Classical.choice", "Quot.sound"}
 FROZEN = {'lean-toolchain': '62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c230406e6defedef',
  'lakefile.toml': 'b47ab03272d3a7ba7b57b44c279f1e1fe4c5b4702bc9290d1030011e2116d254',
@@ -65,7 +65,7 @@ FROZEN = {'lean-toolchain': '62c2d9c0fc1ec4c67e151c11eff41ca004ef38e179cf9476c23
  'ImbalancedChen/Certificates/PairedV2Batch4To64Rows0052To0060.lean': 'b37e325d86f566d9862c7dd5e08546611757b66b95c4b4f545b15131d0a922fb',
  'ImbalancedChen/Certificates/PairedV2Batch4To64Rows0060To0064.lean': '6a75164932da2bfd4c7e2d71217327f1448031931a4f671f77d0ae9039ec573e',
  'ImbalancedChen/Certificates/PairedV2Batch4To64UpperSum.lean': '324ced28c32cff6fc551de3f4da64293651686c1cd270eaa55c4c3a19859bb5b',
- 'verification/parts/p0/round4-declaration-baseline.json': '4ae97e3c79b06b3d480d4e0c594025dcda8019fbe9951f076bba2f0fc27fea3b'}
+ 'verification/parts/p0/round4-declaration-baseline.json': '111c9d6eeebabbd8818df047dea3dc613e2b3dae43aad1180c9d83dcd7d174d0'}
 
 
 def require(condition: bool, message: str) -> None:
@@ -82,7 +82,7 @@ def historical_baseline() -> dict:
     path = ROOT / HISTORICAL_BASELINE
     require(digest(path) == HISTORICAL_BASELINE_SHA256, "Historical declaration baseline changed")
     baseline = json.loads(path.read_text(encoding="utf-8"))
-    require(baseline.get("schema") == "p0-round4-historical-declarations-v1",
+    require(baseline.get("schema") == "p0-round4-historical-declarations-v2",
             "Wrong historical declaration baseline schema")
     rows = baseline.get("declarations")
     require(isinstance(rows, list) and len(rows) == 414, "Incomplete historical declaration baseline")
@@ -94,7 +94,8 @@ def historical_baseline() -> dict:
         "unchanged": 224, "source_proof_owner_moved": 64,
         "public_realization_owner_moved": 65, "private_realization_renamed": 61}),
         "Wrong historical declaration migration counts")
-    require(sum("additional_duplicate" in row for row in rows) == 61,
+    require(sum("additional_duplicates" in row for row in rows) == 61
+            and sum(len(row.get("additional_duplicates", [])) for row in rows) == 183,
             "Wrong additional private-realization group size")
     return baseline
 
@@ -102,18 +103,17 @@ def historical_baseline() -> dict:
 def validate_historical_declarations(by_name: dict[str, dict]) -> None:
     baseline = historical_baseline()
     expected_names = {row["expected_name"] for row in baseline["declarations"]}
-    expected_names.update(row["additional_duplicate"]["name"]
-                          for row in baseline["declarations"] if "additional_duplicate" in row)
+    expected_names.update(duplicate["name"] for row in baseline["declarations"]
+                          for duplicate in row.get("additional_duplicates", []))
     missing, extra = expected_names - set(by_name), set(by_name) - expected_names
     require(not missing and not extra,
             "Historical correspondence name-set mismatch; missing=" + json.dumps(sorted(missing))
             + "; extra=" + json.dumps(sorted(extra)))
-    require(len(by_name) == baseline["expected_owned_count"] == 475,
-            "Historical correspondence owned count differs from 475")
+    require(len(by_name) == baseline["expected_owned_count"] == 597,
+            "Historical correspondence owned count differs from 597")
     for expected in baseline["declarations"]:
         counterparts = [(expected["expected_name"], expected["expected_module"])]
-        if "additional_duplicate" in expected:
-            duplicate = expected["additional_duplicate"]
+        for duplicate in expected.get("additional_duplicates", []):
             counterparts.append((duplicate["name"], duplicate["module"]))
         for actual_name, module in counterparts:
             record = by_name[actual_name]
@@ -395,8 +395,9 @@ def main() -> int:
         "expected_defining_modules": list(MODULES), "required_historical_declarations": 414,
         "historical_baseline": HISTORICAL_BASELINE, "historical_baseline_sha256": HISTORICAL_BASELINE_SHA256,
         "historical_source_proof_owner_moves": 64, "historical_public_realization_owner_moves": 65,
-        "historical_private_name_mappings": 61,
-        "census_basis": "Exact owned/serialized occurrence coverage and complete 414-name historical correspondence; exact additional 61-name private-realization group, for 475 current owned declarations",
+        "historical_private_name_mappings": 61, "historical_additional_private_copies": 183,
+        "expected_owned_declarations": 597,
+        "census_basis": "Exact owned/serialized occurrence coverage and complete 414-name historical correspondence; three exact additional 61-name private-realization groups, for 597 current owned declarations",
         "final_bridge_name": FINAL_BRIDGE, "final_bridge_is_conditional": True,
         "hLower_hUpper_discharged": False, "production_modules_recompiled": False,
         "production_modules_replayed": False, "dependencies_built": False,

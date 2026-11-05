@@ -5,8 +5,9 @@ import Lean.Util.CollectAxioms
 Audit all sixteen original/split modules and every raw serialized occurrence.
 The Python consumer preserves all 414 historical complete-type hashes. The 61
 old module-private matcher declarations map only to the exact GeometryChecked
-names; an additional complete 61-name CertificateInputs realization group is
-required with the same full types, for exactly 475 current owned declarations. No type-text normalization is used.
+names; three additional complete 61-name realization groups (CertificateInputs,
+LowerSum, UpperSum) are required with the same full types, for exactly 597
+current owned declarations, observed in run 41951293351. No type-text normalization is used.
 The scope, all production source hashes, name mappings and original baseline
 are frozen. Source-proof declarations are not renamed or omitted. Existing full
 build, root kernel replay and axiom gates remain required. -/
