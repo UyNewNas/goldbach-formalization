@@ -1,0 +1,6 @@
+import ImbalancedChen.P3FourierFrechetIBP
+
+#check ImbalancedChen.P3FourierFrechetIBP.fourier_directional_derivative
+#check ImbalancedChen.P3FourierFrechetIBP.inner_basisDirection
+#check ImbalancedChen.P3FourierFrechetIBP.subset_frechet_fourier
+#check ImbalancedChen.P3FourierFrechetIBP.subset_frechet_order
