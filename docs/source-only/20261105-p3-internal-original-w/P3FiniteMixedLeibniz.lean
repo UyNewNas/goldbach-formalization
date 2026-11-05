@@ -150,7 +150,7 @@ theorem productJet_bound {d : ℕ} (A B : Jet d)
           _ ≤ |A p.1 x*B p.2 x|+
               |(ps.map (fun p => A p.1 x*B p.2 x)).sum| := (abs_add _ _)
           _ ≤ U*V+(ps.length : ℝ)*(U*V) := add_le_add hp (ih hps)
-          _ = (1+(ps.length : ℝ))*(U*V) := by ring
+          _ = ((ps.length : ℝ)+1)*(U*V) := by ring
   have h := aux (splits is) ht
   simpa only [productJet,splits_length,Nat.cast_pow,Nat.cast_ofNat] using h
 
