@@ -39,7 +39,7 @@ theorem full_minus_truncation_eq (f : V → ℂ)
     f x - truncatedInverse f s x =
       ∫ ξ in sᶜ, (𝐞 ⟪ξ, x⟫) • (𝓕 f ξ) := by
   have hphase : Integrable (fun ξ : V => (𝐞 ⟪ξ, x⟫) • (𝓕 f ξ)) := by
-    have h := (fourierIntegral_convergent_iff
+    have h := (Real.fourierIntegral_convergent_iff
       (f := (𝓕 f : V → ℂ)) (μ := volume) (-x)).2 hF
     simpa only [real_inner_neg_right, neg_neg] using h
   have hsplit := integral_add_compl hs hphase
