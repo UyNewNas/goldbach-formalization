@@ -1,3 +1,4 @@
+import ImbalancedChen.P3FullModulusShiftedMoment
 import ImbalancedChen.P3FourierActualInversion
 import ImbalancedChen.P3FourierCoordinateIBP
 import ImbalancedChen.P3FourierPhysicalMeasureD
@@ -95,3 +96,12 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3FourierActualInversion.actual_zero_real
 #check ImbalancedChen.P3FourierActualInversion.actual_real_truncated_inverse_error
 #check ImbalancedChen.P3FourierActualInversion.actual_same_rho_signed_cutoff
+
+-- Same-rho actual arithmetic decomposition; source-only, NEVER executed.
+#check ImbalancedChen.P3FullModulusShiftedMoment.kernelMass_eq_shifted
+#check ImbalancedChen.P3FullModulusShiftedMoment.off_shift_ne_zero
+#check ImbalancedChen.P3FullModulusShiftedMoment.exact_kernel_mass
+#check ImbalancedChen.P3FullModulusShiftedMoment.exact_mass_factor
+#check ImbalancedChen.P3FullModulusShiftedMoment.off_mass_split
+#check ImbalancedChen.P3FullModulusShiftedMoment.off_mean_le
+#check ImbalancedChen.P3FullModulusShiftedMoment.full_mass_le_shifted_and_exact
