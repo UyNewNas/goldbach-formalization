@@ -372,3 +372,64 @@ fullModulusMass(Q,source,rho,coefficient,T,originalProducts)
 **Exact next entrance:** prove the *actual* all-source off-shift weighted divisor moment, independent b=T coefficient power bound and mean-rho factor bound, then combine them with the existing genuine \`dD/H\` same-rho cutoff. Independently prove physical \`W_T\` all-family \`ContDiff\` and iterated Fréchet integrability with uniform m(N), and choose a single H only after the arithmetic mass has been paid. Causal/whole-box, all HB source words, empty Gamma, high-rank/enhanced and overall PP remain open.
 
 **Status:** P3.6 YELLOW. The new exact arithmetic reduction is BLUE only within its named SOURCE_ONLY scope; neither source closure nor compilation/kernel acceptance is claimed.
+
+
+## Successor SOURCE_ONLY increment — genuine nonzero-shift divisor support and finite original-rho moment (2026-11-06 UTC)
+
+- **Actual recovered baseline:** `8497fedb53e1df9df9193882ff2e0f562fc9f4c3`, branch `chatgpt/p3-internal-original-w-20261105`; this was the exact current HEAD at this round's first comparison (ahead 0, behind 0). No concurrent branch writer was observed in the branch checks.
+- **Genuine new source commit:** `08a7bf16d6df5a549010fec1ceed4d66b3ad0054` with `[skip ci]`, source `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3ShiftedDivisorFiniteMoment.lean` (223 text lines), Git blob `3f869e42d2b9c9ea3d15d85db1ed2e00946122c8`.
+- **VERIFY commit:** `a7df2ff247eeb3d9952948f6a215366b6231978c`, Git blob `83ae30cddef3985af019ec24e4021f5484cf9df8`; all new imports precede #checks. **Not executed.**
+- **REGISTRY commits:** `e9bfbd858266be0cc9dccf10600a29f2fa2b024d`, followed by a precise API-evidence correction `887a87ea53dcf02dd622c8ae7fb25f1b44fc01d1`; REGISTRY Git blob `ea077eeec03895f5d2e5037c32d3d6d9704b6934`. The only external register remains unchanged at Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`.
+- **Fixed paper:** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/modules/distribution-prime-product-completion-20261010.txt` §4, after formula (F), actual complete-modulus sum and nonzero shift divisor moment. **Mathlib pin:** `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
+
+### New actual mathematical step (strictly manuscript-internal)
+
+The predecessor `P3FullModulusShiftedMoment` already separated exact full product `b=T` from the off-product `b≠T`, but its remaining off-modulus congruence was a free sum over all original physical moduli `Q`. This round proves-in-source the following finite arithmetic transformation, with the **same original rho**, **same labelled tuples**, **same complete original product** and a genuinely **nonzero signed integer shift** `T-b`:
+
+```
+sum_(q in Q) |rho(q)| * 1_(q divides (T-b))
+  = sum_(q in Q intersection divisors(natAbs(T-b))) |rho(q)|
+          (b != T).
+```
+
+The new `shiftAbs_ne_zero` and `shiftedResidueKernel_eq_divisors` are explicit: `q=0` cannot divide a nonzero shift; `Nat.divisors` therefore gives exactly the actual nonzero shift's natural divisors, without ever applying a divisor function to zero. `off_shifted_eq_restricted_divisor` uses only finite sum commutation and retains the real original coefficients.
+
+The new upper bounds are **two separate valid comparisons**:
+
+```
+offShiftedResidueMass
+ <= sum_(original off tuples t) |coefficient(t)|
+        * sum_(q divides |T-product(t)|) |rho(q)|;
+```
+
+and **only if** a separate explicit pointwise `|rho(q)| <= R` holds on the actual `Q`:
+
+```
+offShiftedResidueMass
+ <= R * sum_(original off tuples t) |coefficient(t)| * tau(|T-product(t)|).
+```
+
+The latter does **not** assert that the unrestricted rho-weighted divisor sum is itself bounded by `R*tau`: `R` is known only on `Q`, not outside it. The implementation bounds the *restricted* sum before using the cardinality of the divisor set. This distinction was caught by the independent finite regression: an overstrong comparison was rejected in an initial test formulation, then removed; all final tested identities/inequalities are the ones actually sourced.
+
+Finally `full_mass_le_divisor_moment` composes the new off-shift bound with the unchanged predecessor's exact `b=T` coefficient mass and the exact coprime-mean mass:
+
+```
+fullModulusMass <= exactCoefficientMass*exactRhoMass
+                  + weighted_nonzero_shift_divisor_moment
+                  + offCoefficientMass*meanRhoMass.
+```
+
+This is **NOT** a claimed `O(T log^E T)` or `O(T/log^A T)` result. The actual HB coefficient majorant, near-linear mixed shifted moment, actual original rho bound, and independently the `b=T` exceptional source coefficient power saving all remain **UNPROVED**. Nor is uniform original `W_T` smoothness, the common `H` choice or PP assembly paid. No relative-to-fibre Theta requirement was added.
+
+### Executed checks, explicit nonverification and next entry
+
+- Actual remote reads: exact branch HEAD and predecessor REPORT/REGISTRY/EXTERNAL_INPUTS, `P3FullModulusShiftedMoment.lean`, prior Fourier inversion, pinned manuscript §§1–4 and fixed `Mathlib/NumberTheory/Divisors.lean` declaring `Nat.mem_divisors : q∈n.divisors ↔ q∣n ∧ n≠0`. Root/docs/source-only/packet AGENTS paths returned NOT_FOUND. The exact pinned `Int.natAbs_dvd_natAbs` location was **not** independently identified; its use is a source candidate and an elaboration risk.
+- New file GitHub readback: exact 223-line content, SHA `3f869e42d2b9c9ea3d15d85db1ed2e00946122c8`. Static escaped-proof-token scan **0**; stripped-comment bracket/brace/parenthesis stack **PASS**. `VERIFY.lean` readback matched and imports precede check commands.
+- Deterministic JS **1,000/1,000** finite exact-integer regressions, across original product group lengths 0–4, targets {1,2,5,12,31}, signed rho and signed coefficient samples, including `q=0`. Checked exact off-ramification support, restricted ≤ unrestricted rho-weighted divisor sum, and independently restricted ≤ pointwise-`R` times `tau`. No attempt to interpret these finite checks as an asymptotic theorem or Lean verification.
+- **NOT RUN:** Lean, Lake, CI, kernel replay, complete axiom audit, Codex or heavy numerical producer. The 10 new names are SOURCE_ONLY candidate declarations and no part of this packet is certified green. No new axiom, untrusted computation or external input implementation was added.
+- `EXTERNAL_INPUTS.json`: fixed medium estimate (M) remains **RECORD_ONLY_NOT_IMPLEMENTED_NOT_AXIOM** with exact original pin and premises. All new steps above are internal, not reclassified as external.
+- Untouched: pinned manuscript, production modules, other tasks, toolchain and lockfiles, excluded actual dynamic parent/full 87-domain node, PRs, external board and CI.
+
+**Next concrete entrance:** obtain genuine original HB all-source coefficient divisor-power bounds, then a near-linear `sum_b tau(b)^R tau(|T-b|)^S` estimate in the fixed complete scales with the strict exponent cap. Discharge the original physical `rho` weights (pointwise or appropriate weighted divisor-class) from the real coefficient compiler—not from a target-shaped premise. Bound the exact `b=T` source term independently and bound the true mean-rho sum. Separately prove uniform `W_T` Fréchet/ContDiff and original mixed-L1 derivative budget for growing `m(N)`; select a common log-power `H` only after these have true quantitative bounds. Complete causal/whole-box, all HB sources, empty Gamma mother words, high rank/enhanced and the original same-rho PP assembly.
+
+**Status:** P3.6 YELLOW; this limited finite divisor bridge is BLUE SOURCE_ONLY, **UNCOMPILED / KERNEL_UNVERIFIED**.
