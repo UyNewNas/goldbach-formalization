@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualFineLabelThreeGammaTensor
 import ImbalancedChen.P3HBRoughLiteralMoment
 import ImbalancedChen.P3HBLiteralFiniteBridge
 import ImbalancedChen.P3HBLiteralWordMajorant
@@ -169,3 +170,9 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3HBRoughLiteralMoment.roughLiteralThreeTermAbsMass_le_literal
 #check ImbalancedChen.P3HBRoughLiteralMoment.roughLiteralThreeTermAbsMass_le_tau_powers
 #check ImbalancedChen.P3HBRoughLiteralMoment.roughLiteralThreeTerm_off_shifted_le_mixed_tau
+
+-- Exact original fine-label factorial tensor; SOURCE_ONLY and NOT Lean executed.
+#check ImbalancedChen.P3ActualFineLabelThreeGammaTensor.raw_three_fibre
+#check ImbalancedChen.P3ActualFineLabelThreeGammaTensor.actual_label_three_gamma_tensor
+#check ImbalancedChen.P3ActualFineLabelThreeGammaTensor.fine_gamma_mem_Icc
+#check ImbalancedChen.P3ActualFineLabelThreeGammaTensor.fine_three_gamma_product_abs_le_one
