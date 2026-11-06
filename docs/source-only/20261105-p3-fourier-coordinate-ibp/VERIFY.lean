@@ -4,6 +4,8 @@ import ImbalancedChen.P3FourierCauchyAxis
 import ImbalancedChen.P3FourierCauchyTail
 import ImbalancedChen.P3FourierBoxTailAlgebra
 
+import ImbalancedChen.P3FourierProductFubini
+
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
@@ -40,3 +42,14 @@ import ImbalancedChen.P3FourierBoxTailAlgebra
 #check ImbalancedChen.P3FourierBoxTailAlgebra.separatedBoxMassLoss_le_dim_div
 #check ImbalancedChen.P3FourierBoxTailAlgebra.separatedBoxMassLoss_budget
 #check ImbalancedChen.P3FourierBoxTailAlgebra.separatedBoxMassLoss_spend
+
+-- True finite-dimensional Fubini and actual mixed D Fourier L1; NOT executed.
+#check ImbalancedChen.P3FourierProductFubini.scaledAxis_integrable
+#check ImbalancedChen.P3FourierProductFubini.pointKernel_integrable
+#check ImbalancedChen.P3FourierProductFubini.pointKernel_mass
+#check ImbalancedChen.P3FourierProductFubini.fourierKernel_mass
+#check ImbalancedChen.P3FourierProductFubini.fourierKernel_integrable
+#check ImbalancedChen.P3FourierProductFubini.fourierKernel_eq_inverse_denom
+#check ImbalancedChen.P3FourierProductFubini.physical_inverse_denom_mass
+#check ImbalancedChen.P3FourierProductFubini.actual_derivativeD_nonneg
+#check ImbalancedChen.P3FourierProductFubini.actual_fourier_L1_bound
