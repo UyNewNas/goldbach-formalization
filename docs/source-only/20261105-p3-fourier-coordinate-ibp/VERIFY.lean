@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBOrderedFactorMajorant
 import ImbalancedChen.P3ShiftedDivisorFiniteMoment
 import ImbalancedChen.P3FullModulusShiftedMoment
 import ImbalancedChen.P3FourierActualInversion
@@ -118,3 +119,12 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3ShiftedDivisorFiniteMoment.restrictedRhoDivisorMass_le_card
 #check ImbalancedChen.P3ShiftedDivisorFiniteMoment.off_shifted_le_tau_moment
 #check ImbalancedChen.P3ShiftedDivisorFiniteMoment.full_mass_le_divisor_moment
+
+-- P3.6 marked HB finite factorization / nonzero-shift moment targets (NOT RUN).
+#check ImbalancedChen.P3HBOrderedFactorMajorant.coordinate_dvd_complete
+#check ImbalancedChen.P3HBOrderedFactorMajorant.mem_orderedFactorTuples_iff
+#check ImbalancedChen.P3HBOrderedFactorMajorant.orderedFactorTuples_card_le_tau_pow
+#check ImbalancedChen.P3HBOrderedFactorMajorant.oneBoundedProduct_le_one
+#check ImbalancedChen.P3HBOrderedFactorMajorant.markedHBWeight_le
+#check ImbalancedChen.P3HBOrderedFactorMajorant.markedHBCoefficientMass_le_tau_pow
+#check ImbalancedChen.P3HBOrderedFactorMajorant.markedHB_off_shifted_le_mixed_tau
