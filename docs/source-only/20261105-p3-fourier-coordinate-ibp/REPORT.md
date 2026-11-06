@@ -580,3 +580,46 @@ The step is properly upstream of restoring original prime labels, factorial norm
 - **Still open:** original prime labels, repeated-label factorials, dyadic/rough source tensor matching, the real b=T exception, near-linear shifted mixed moment under strict kappa, same rho modulus and exact mean, uniform W_T admission, common H, causal/whole-box, HB full source, empty Gamma mothers, high-rank/enhanced and final PP assembly. The excluded full-87 dynamic-parent task remains untouched.
 
 **Status:** P3.6 YELLOW. The exact rough-mask transfer for the literal HB coefficient is BLUE within this explicit SOURCE_ONLY scope; uncompiled, unverified by kernel. No other branches, manuscript, PR, dashboard, CI or production files were changed.
+
+
+## Successor SOURCE_ONLY increment — original fine-prime-label three-gamma tensor (2026-11-06)
+
+- **Checked baseline HEAD:** `07bedd44f34919f7ebc65313bb1be2b7efbcebe6`, branch `chatgpt/p3-internal-original-w-20261105`. This followed the actual rough HB literal moment packet; the old de582e6 was NOT replayed.
+- **New proof-body commit:** `c26fded296795219aeda082b180f6aa274e1e15b`, message contains `[skip ci]`.
+- **New proof source:** `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3ActualFineLabelThreeGammaTensor.lean`, 180 textual lines, Git blob `af0d123ff793b3c1e857f4149ddc99f8bca63f04`.
+- **Audit import/check commit:** `c0235ac5dc41c5c7a81f20d48124168185f70013`; `VERIFY.lean` Git blob `866ea2f3355177cbaa7cab7d4dbd4c7958480944`. Registry update commit `e992226e6a29487ae14b3cc0d9951ea47b99b106`.
+- **Pins held:** manuscript `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/modules/distribution-prime-product-completion-20261010.txt` §3 (T) and §4 (F); pinned Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
+
+### Genuine internal mathematical increment
+
+This packet targets the **actual prime-label side** of the PP tensor, rather than double-counting prime labels and HB factors as independent original primes. It uses the real `actualPrimeSlotBox`, `actualPrimeLabelBlocksWord`, original `actualPrimeLabelBlocksFactorial`, and the previously implemented `P5ActualNormalizedPrimeLabelCoefficient.gamma`.
+
+For three already-fixed original group block lists `g₁,g₂,g₃`, write `M_j = ∏_I m_(I,j)!` and let `M_all` be the original full-label factorial. If and only if the concrete original labelled slot word is a positional permutation of the concatenated three group words, the new `actual_label_three_gamma_tensor` candidate expresses the ORIGINAL signed raw full-prime-vector sum as the true three gamma convolution with scalar
+
+```
+  c * (M₁ * M₂ * M₃ / M_all)
+```
+
+where `c` remains the same signed source scalar, each group gamma is its **original** repeated-label normalized complete-product coefficient, and every product-value fibre is retained. The identity is algebraic even when label prime sets overlap; it does **not** identify source fibres with a whole box, assert a new relative coefficient bound or silently insert a total-slot factorial.
+
+The additional `fine_gamma_mem_Icc` and `fine_three_gamma_product_abs_le_one` candidates instantiate the original *actual disjoint half-open fine intervals* `actualPrimeFineLabelFinset N τ` (not an arbitrary invented box) and the proved `gamma_mem_Icc`. The necessary hypotheses are `N≥1`, `τ≥0` and **distinct label indices within each group**; no one-bounded coefficient is taken as a premise. A product of three gamma values is at most one, but the **sum over full-product collisions is NOT thereby one-bounded**. The latter must be handled by the original family/compiler.
+
+This is separate from the previous literal 3,3,1 rough HB source on the *prime* side. The exact same-integer `rho` modulus family, its group partition dictionary and physical levels have **not** yet been identified with these abstract but original-type tensors. No full PP or arithmetic error is claimed.
+
+### Checks, nonchecks and source risks
+
+- Directly read the current predecessor rough HB proof source, prior `REPORT.md`, `REGISTRY.json`, `EXTERNAL_INPUTS.json`, prior literal List/Fin bridge, actual source `ActualFrozenSlotCoefficientRegrouping.lean` including its precise `actualPrimeTuple_sum_by_product` and `actualPrimeSlotBox_product_sum_append`, `ActualPrimeMultiLabelNormalization.lean`, `ActualPrimeDisjointLabelProducts.lean`, `P5ActualNormalizedPrimeLabelCoefficient.lean`, and fixed manuscript §3 (T).
+- The new source read back with the exact Git blob above; static source forbidden-escape scan returned **0**, lexical parenthesis/bracket balance **PASS**. Four `#check` names were placed after imports and are not executed.
+- Independent Python finite regression: **1,467 / 1,467** actual integer product-count/factorial cases, including 1,017 with repeated prime labels, using signed scalar c and multiple overlapping prime supports. Max numerical residual `7.11e-15`. This checks finite algebra, NOT Lean elaboration or kernel correctness.
+- Remaining source-level elaboration risks: nested `simp_rw [actualPrimeTuple_sum_by_product, Finset.mul_sum]`, exact implicit `List.Perm` rewrite, `field_simp` on four nonzero factorials, and the precise threefold `Finset.mul_sum` normalization. They require eventual controlled Lean typechecking.
+- **NOT RUN:** Lean, Lake, CI, kernel replay, full transitive axiom audit, Codex, heavy numerical producer. No new green status. Existing SOURCE_ONLY import-location staging constraint remains.
+- `EXTERNAL_INPUTS.json` Git blob is still `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`; (M) remains **record only, not implemented, not added as an axiom**. No fixed manuscript, production, lockfile, excluded full87 dynamic parent, other task or external board was changed.
+
+### Precise next entrance
+
+1. Discharge the actual fixed whole-box **original labelled slot permutation** into its three group lists in the retained physical source and rank domains, rather than treating the algebraic `hperm` as proved for all original PP families.
+2. Restore this true factorial tensor in the actual integer `rho` physical-modulus coefficient compiler, retaining the exact coprime mean, level separation, signed scalar, original labels and multiplicities. Do not add gamma factors to HB words as if they were independent prime slots.
+3. Independently establish the strictly scoped mixed nonzero-shift near-linear divisor moment, full product `b=T` payment, `rho` mean-weight bound, actual growing-`m(N)` `W_T` Fourier derivative admission and the common logarithmic H; causal/whole-box, empty Gamma mothers, high-rank and enhanced branches remain internal.
+4. The existing excluded complete-87-domain dynamic-parent node is outside this task and was not touched.
+
+**Status:** P3.6 **YELLOW** overall; newly limited finite normalized prime-label tensor **BLUE, SOURCE_ONLY**, not Lean-compiled or kernel-verified.
