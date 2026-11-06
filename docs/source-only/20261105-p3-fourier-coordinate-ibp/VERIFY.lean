@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualWeightedFineSameRho
 import ImbalancedChen.P3ActualSortedFineSourceGamma
 import ImbalancedChen.P3ActualFrozenPhysicalGamma
 import ImbalancedChen.P3ActualFrozenGroupWords
@@ -230,3 +231,14 @@ import ImbalancedChen.P3FourierActualBoxTail
 -- hword and original M_J derived from run-length compiler; SOURCE_ONLY, NOT RUN.
 #check ImbalancedChen.P3ActualSortedFineSourceGamma.actual_fine_word_physical_tensor
 #check ImbalancedChen.P3ActualSortedFineSourceGamma.actual_sorted_fine_source_gamma
+
+-- Actual weighted original sorted fine-label source and SAME original integer rho.
+-- Recorded for audit only: Lean and kernel NOT RUN.
+#check ImbalancedChen.P3ActualWeightedFineSameRho.fineKernel
+#check ImbalancedChen.P3ActualWeightedFineSameRho.fineKernel_literal
+#check ImbalancedChen.P3ActualWeightedFineSameRho.fineKernel_exact
+#check ImbalancedChen.P3ActualWeightedFineSameRho.weightedFineFibre
+#check ImbalancedChen.P3ActualWeightedFineSameRho.weighted_sum_by_product
+#check ImbalancedChen.P3ActualWeightedFineSameRho.weightedSortedPP
+#check ImbalancedChen.P3ActualWeightedFineSameRho.weightedSortedPP_fibre
+#check ImbalancedChen.P3ActualWeightedFineSameRho.weightedSortedPP_exact_product
