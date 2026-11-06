@@ -82,7 +82,7 @@ theorem scaledAxisInside_mass (H : ℝ) (hH : 0 ≤ H) :
     _ = normalizedAxisInside H := by
       unfold normalizedAxisInside normalizedAxisRemoved
       have hne : Real.pi ≠ 0 := ne_of_gt Real.pi_pos
-      field_simp
+      field_simp [hne]
       <;> ring
 
 /-- The restricted function is genuinely Lebesgue integrable. -/
