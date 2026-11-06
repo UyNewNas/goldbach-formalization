@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBLiteralWordMajorant
 import ImbalancedChen.P3HBOrderedFactorMajorant
 import ImbalancedChen.P3ShiftedDivisorFiniteMoment
 import ImbalancedChen.P3FullModulusShiftedMoment
@@ -134,3 +135,15 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3HBOrderedFactorMajorant.markedHBCoefficientMass_le_tau_pow_on_fiber
 #check ImbalancedChen.P3HBOrderedFactorMajorant.markedHBCoefficientMass_real_log_le
 #check ImbalancedChen.P3HBOrderedFactorMajorant.markedHB_real_log_off_shifted_le_mixed_tau
+
+-- P3.6 literal real-cutoff HB occurrence source: candidate only, NOT executed.
+#check ImbalancedChen.P3HBLiteralWordMajorant.hbPrefix
+#check ImbalancedChen.P3HBLiteralWordMajorant.hbWord_eq_prefix_log
+#check ImbalancedChen.P3HBLiteralWordMajorant.muTrunc_abs_le_one
+#check ImbalancedChen.P3HBLiteralWordMajorant.zeta_abs_le_one
+#check ImbalancedChen.P3HBLiteralWordMajorant.hbPrefix_one_bounded
+#check ImbalancedChen.P3HBLiteralWordMajorant.bounded_prefix_log_product
+#check ImbalancedChen.P3HBLiteralWordMajorant.literal_hb_word_abs_le_log
+#check ImbalancedChen.P3HBLiteralWordMajorant.literalHBAbsMass
+#check ImbalancedChen.P3HBLiteralWordMajorant.literalHBAbsMass_le_card_log
+#check ImbalancedChen.P3HBLiteralWordMajorant.literalHBThreeTermAbsMass_le
