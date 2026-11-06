@@ -289,3 +289,48 @@ The result is limited to the stated genuine analytic hypothesis domain. No extra
 1. Connect the now genuine integrable complement Fourier norm to the **truncated Fourier inversion** of the actual original smooth geometric weight, preserving the exact character/2π normalization. Obtain the explicit supremum truncation error; do not silently assume pointwise inversion of an arbitrary L1 weight.
 2. Independently discharge original **all-family** `W_T` ContDiff and integrated derivative bounds uniformly in T and growing HB m(N), then choose one common logarithmic H for all original source labels and fixed orders.
 3. Only after this analytic payment feed the resulting epsilon to the same integer rho, original labelled physical moduli and coprime mean, including complete product=T arithmetic mass. Causal/whole-box, all HB words, empty Gamma mother words, high-rank/enhanced alternatives and full PP remain internal obligations.
+
+
+## Successor SOURCE_ONLY increment — actual truncated Fourier inversion and same-rho finite signed source (2026-11-06 UTC)
+
+- **Verified parent branch HEAD:** \`2de3e091df064a4b3451459f3b4b36c30664af9e\`.
+- **Source/VERIFY commit:** \`a10bc7fd32236e5494e9ac55f3e7c85317d7a6ca\`, fast-forward with \`[skip ci]\`.
+- **Exact candidate source:** \`docs/source-only/20261105-p3-fourier-coordinate-ibp/P3FourierActualInversion.lean\`, finalized Git blob \`e4438b319eb72afac59330cc889bb3cac57a3d9a\` (one later explicit \`ContinuousAt\` elaboration-risk repair in handoff commit).
+- **VERIFY source Git blob:** \`faa759ff323ce7e69c7f1dce11c93cfb0680f669\` with new imports preceding any #check and eight new check targets, *not executed*.
+- **Pinned paper:** \`UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b\`, \`paper/source/modules/distribution-prime-product-completion-20261010.txt\` §4 (F), pp. on Fourier cutoff and full modulus mass.
+- **Pinned Mathlib:** \`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1\`.
+
+### Genuine manuscript-internal change
+
+This packet composes the true previous \`P3FourierActualBoxTail.actual_fourier_box_tail_bound\` with the *pre-existing actual* \`P3FourierCutoffIdentity.fourier_cutoff_error\`. The former supplies the previously missing H-box complement L1 bound; the latter already proved the inverse Fourier integral identity with the pinned exp(+2 pi i inner(eta,x)) normalization. A new theorem \`actual_fourier_integrable\` derives integrability of the original zero-order transform from the previous real-norm L1 theorem using the exact pinned \`integrable_norm_iff\`, and \`actual_zero_continuous\` uses the original S=empty finite-order ContDiff rather than assuming an inversion conclusion.
+
+The source candidate \`actual_truncated_inverse_error\` yields for every actual Fourier-space point \`x\`:
+
+    norm(actualMixedFamily w empty x - actualTruncatedInverse w H x)
+      <= d * derivativeD d (actualMixedFamily w) / H
+
+for H>0 and the same literal original ordered doubled-S regularity and genuine iterated-Frechet-integrability hypotheses. \`actual_zero_real\` converts the zero-order complex mixed function back to the **actual original real Point d weight** \`w (chartEquiv d x)\`. \`actual_real_truncated_inverse_error\` gives its real-part cutoff approximation error, without a target-shaped Fourier estimate premise.
+
+The final new \`actual_same_rho_signed_cutoff\` inserts this proved-in-source geometric real-part approximation directly into the **existing** \`P3FullSignedModulusTail.signedSource_approximation\`, using the SAME \`rho\` for both sides, literal \`originalProducts\` and the original finite source. It gets the *conditional* algebraic inequality
+
+    abs(signedSource(original real w) - signedSource(actual truncated inverse real))
+      <= (d * D / H) * fullModulusMass(Q,source,rho,coefficient,T,originalProducts).
+
+No \`htail\`, \`hF\`, independently postulated cutoff identity or new arithmetic distribution estimate is required. The right-hand \`fullModulusMass\` is the previously defined genuine complete-modulus mass, NOT shown small. This is **not** a PP proof, nor an upper bound for the T=exact-product exception.
+
+### Scope and checks
+
+- Direct source reads: prior exact Fourier inversion packet \`P3FourierCutoffIdentity.lean\`, current \`P3FourierActualBoxTail.lean\`, \`P3FourierAutomaticMeasurability.lean\`, original \`P3FullSignedModulusTail.lean\`, same-pinned manuscript §4, latest packet REPORT/REGISTRY/EXTERNAL_INPUTS, and pinned Mathlib \`Analysis/Fourier/Inversion.lean\`, \`Analysis/Fourier/FourierTransform.lean\`, \`MeasureTheory/Function/L1Space/Integrable.lean\`.
+- Pinned APIs inspected in actual source: \`MeasureTheory.Integrable.fourierInv_fourier_eq\` (integrable f, Fourier integrable, continuity), \`Real.fourierInv_eq\`, and \`integrable_norm_iff\`. Existing cutoff error source supplies the complement Bochner-integral estimate.
+- New source lexical delimiter balance PASS; 0 forbidden proof-escape tokens found (source includes no sorry/admit/new axiom/unsafe/native_decide). Independent 600 deterministic finite signed-source comparisons with signed rho, exact congruence and true coprime mean passed. The Gaussian 1D 2*pi physical truncation sanity check passed for six H values. **These are not Lean elaboration or kernel checks.**
+- **NOT RUN** Lean, Lake, CI, kernel replay, full transitive axiom audit, Codex or heavy producer. Typechecking of new and all predecessor SOURCE_ONLY files is outstanding; the finite Mathlib API inspections cannot certify compilation.
+- **External registry unchanged**, SHA \`8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab\`: restricted medium (M) is merely registered with pinned version, stated assumptions and intended call site. No replacement axiom, external theorem implementation, imported distribution conclusion or target-equivalent PP hypothesis.
+- The fixed manuscript, production source, toolchain, user-excluded full87 parent node, PRs, other task branches and CI were untouched.
+
+### Exact next entrance
+
+1. Independently inspect elaboration-sensitive composition of \`actual_zero_continuous\`, \`integrable_norm_iff\`, \`actual_truncated_inverse_error\`, and its predecessor imports against the locked Mathlib; **do not mark green without actual Lean/kernel evidence**.
+2. Prove admission of **every actual allowed physical W_T source** to original ContDiff and integrable derivative family with uniform quantitative bounds in N and growing m(N). Then pick a single log-power H covering the post-modulus mass, rather than treating fixed smoothing as uniform.
+3. Prove \`fullModulusMass\` bound AFTER the *complete* same-rho modulus sum, separating exact complete product=T from off-diagonal so \`tau(0)\` never occurs. Preserve auxiliary vs physical levels and all labels/multiplicities. Then complete causal/whole-box, HB all source words, empty Gamma mother, high-rank/enhanced and final PP assembly.
+
+**P3.6 remains YELLOW. This packet is BLUE only for the named candidate source scope, NOT compiled or kernel accepted.**

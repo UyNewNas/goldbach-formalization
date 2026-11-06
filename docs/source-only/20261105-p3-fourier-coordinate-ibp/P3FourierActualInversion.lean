@@ -89,7 +89,8 @@ theorem actual_truncated_inverse_error {d : ℕ}
       (d : ℝ) * derivativeD d (actualMixedFamily w) / H := by
   have hf := actual_zero_integrable w hintegrable
   have hF := actual_fourier_integrable w hsmooth hintegrable
-  have hc := (actual_zero_continuous w hsmooth).continuousAt
+  have hc : ContinuousAt (actualMixedFamily w ∅) x :=
+    (actual_zero_continuous w hsmooth).continuousAt
   calc
     ‖actualMixedFamily w ∅ x - actualTruncatedInverse w H x‖ ≤
         ∫ eta in (fourierBox d H)ᶜ,
