@@ -334,3 +334,41 @@ No \`htail\`, \`hF\`, independently postulated cutoff identity or new arithmetic
 3. Prove \`fullModulusMass\` bound AFTER the *complete* same-rho modulus sum, separating exact complete product=T from off-diagonal so \`tau(0)\` never occurs. Preserve auxiliary vs physical levels and all labels/multiplicities. Then complete causal/whole-box, HB all source words, empty Gamma mother, high-rank/enhanced and final PP assembly.
 
 **P3.6 remains YELLOW. This packet is BLUE only for the named candidate source scope, NOT compiled or kernel accepted.**
+
+
+## Successor SOURCE_ONLY increment — full same-rho mass to a nonzero shifted divisor, exact b=T and coprime mean (2026-11-06 UTC)
+
+- **Actual recovered task HEAD:** \`e399891eb18de3bdabd9ea41887b763e02011fe0\`, on \`chatgpt/p3-internal-original-w-20261105\`. Prior REPORT, REGISTRY, EXTERNAL_INPUTS, true Fourier inversion, original signed-source mass, physical W integration and the pinned manuscript were read. Root, docs, source-only and packet \`AGENTS.md\` queried: GitHub NOT_FOUND, no hidden instructions assumed.
+- **Source/VERIFY commit (confirmed GitHub write):** \`33495bfe41cc8283f15f80c25ea31ea9325c5f1e\` (\`[skip ci]\`). **New file:** \`docs/source-only/20261105-p3-fourier-coordinate-ibp/P3FullModulusShiftedMoment.lean\`; exact Git blob \`30d9f2e9d0dea09664eedeb66c53f61fa4e3ff3f\`; \`VERIFY.lean\` blob \`796356aecfae3b723aa279d5c9f5df0394d0f98e\`.
+- **Pinned paper:** \`UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b\`, \`paper/source/modules/distribution-prime-product-completion-20261010.txt\` §4 after (F), including the complete modulus sum, off-product shifted moment and separately handled b=T. **Pinned Mathlib:** \`e4c91783ca8e6a7c693ae624ade32fd22d4e43c1\`. The exact \`Nat.modEq_iff_dvd\` declaration was read in pinned \`Mathlib/Data/Nat/ModEq.lean\`; this is source inspection, NOT Lean elaboration.
+
+### Concrete new manuscript-internal arithmetic reduction
+
+This run tackles the **previously untouched complete arithmetic mass** rather than adding another Fourier wrapper. It reads the real predecessor \`fullModulusMass\`, \`kernelMass\`, \`exactCoprimeTest\`, \`signedSource\`, and the existing \`fullModulusMass_split\`. The new \`kernelMass_eq_shifted\` identifies the ORIGINAL congruence test with integer divisibility:
+\`b % q = T % q\` iff \`(q:ℤ) ∣ (T:ℤ) - (b:ℤ)\`; no physical/auxiliary level replacement.
+
+For original source tuples with full original group product **b≠T**, \`off_shift_ne_zero\` makes the integer shift provably nonzero. The off-diagonal full mass is exactly the sum of (i) the same signed-rho ABSOLUTE modulus weights against the genuine shifted divisor indicator; and (ii) the **exact** coprime mean, not an unrestricted one. The second term is then bounded by \`offCoefficientMass * meanRhoMass\`, using only \`|coeff|\` nonnegativity and the original totient denominator.
+
+For **b=T** and the manuscript's original admissible \`(q,T)=1\`, \`exact_kernel_mass\` yields exactly \`1+1/phi(q)\`. \`exact_mass_factor\` therefore factors the complete exact-T mass as \`exactCoefficientMass * exactRhoMass\` with the q-sum preserved. In particular this is NEVER included in a shifted-divisor moment at zero.
+
+Combined \`full_mass_le_shifted_and_exact\` gives the explicit candidate inequality:
+
+\`\`\`
+fullModulusMass(Q,source,rho,coefficient,T,originalProducts)
+  <= exactCoefficientMass(source,coefficient,T,originalProducts)*exactRhoMass(Q,rho)
+     + offShiftedResidueMass(Q,source,rho,coefficient,T,originalProducts)
+     + offCoefficientMass(source,coefficient,T,originalProducts)*meanRhoMass(Q,rho).
+\`\`\`
+
+**The arithmetic estimates on these three factors are NOT proved:** in particular neither the near-linear shifted divisor moment, nor the fixed-power b=T exceptional coefficient bound, nor a uniform mean-rho summatory bound. This is an authentic finite signed-modulus/specific-complete-product reduction, *not* a PP or Fourier family completion. It also does not falsely make \`rho\` nonnegative or alter any labels, multiplicities, coprimality tests or the full product.
+
+### Checks, limitations and next actual work
+
+- SOURCE_ONLY syntactic delimiter check PASSED, forbidden proof escapes 0. \`VERIFY.lean\` imports all candidate targets before \`#check\`; it was NOT executed. Source and VERIFY blob SHA confirmed via GitHub readback.
+- Independent deterministic Python finite exact-arithmetic regression: **800/800** cases (four HB group lengths including zero, five target values, 40 source/rho samples), testing exact full mass = exact-T + shifted-off + exact off mean, and the mean upper bound; maximum floating residual \`5.684341886080802e-14\`. This DOES NOT verify the Lean proof or its arithmetic API typing.
+- **NOT RUN:** Lean, Lake, CI, kernel replay, full transitive axiom audit, Codex, heavy producer. Everything new remains \`SOURCE_ONLY_UNCOMPILED_KERNEL_UNVERIFIED\`; no GREEN evidence.
+- \`EXTERNAL_INPUTS.json\` unchanged (Git blob \`8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab\`); (M) only registered, not implemented or axiomatized. No manuscript, production source, toolchain/locks, other automation, excluded full 87-domain, external board, PR or CI changes.
+
+**Exact next entrance:** prove the *actual* all-source off-shift weighted divisor moment, independent b=T coefficient power bound and mean-rho factor bound, then combine them with the existing genuine \`dD/H\` same-rho cutoff. Independently prove physical \`W_T\` all-family \`ContDiff\` and iterated Fréchet integrability with uniform m(N), and choose a single H only after the arithmetic mass has been paid. Causal/whole-box, all HB source words, empty Gamma, high-rank/enhanced and overall PP remain open.
+
+**Status:** P3.6 YELLOW. The new exact arithmetic reduction is BLUE only within its named SOURCE_ONLY scope; neither source closure nor compilation/kernel acceptance is claimed.
