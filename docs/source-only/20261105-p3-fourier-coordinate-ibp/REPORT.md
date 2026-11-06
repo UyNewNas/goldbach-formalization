@@ -171,3 +171,46 @@ The source also proves its nonnegativity and antitonicity in H (as candidates). 
 - **Precise remaining chain**: Prove actual finite-dimensional product-volume/Fubini equality with `(1/2)^d` and complement `(1/2)^d-(1/2-t(H))^d` (including all change-of-variable factors). Only then apply the above scalar result to the actual Fourier `L1`/H-box integral, then absolute same-rho complete-modulus error with `b=T` term separately; independently verify actual full `W_T` family smoothness, integrable mixed derivatives and uniform m(N), causal/whole-box licensing, HB word coverage, empty Gamma mothers and high-rank/enhanced PP.
 
 **Pinned-source import correction (same round):** Directly inspected `leanprover-community/mathlib4@e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, `Mathlib/Analysis/Real/Pi/Bounds.lean` (Git blob `86147be4daf2ed3b598f0aed9ff73822336f0e2a`), confirming `Real.pi_gt_three`. Added an **explicit import** so this inequality does not depend on unverified transitive imports. Also verified the four imported tactic file paths exist at that Mathlib pin. Corrected proof source blob `7e8dfe342b5c34b94031732fdca97f4e16490870`; no Lean elaboration performed.
+
+## Successor SOURCE_ONLY increment — actual finite-volume Fubini and Fourier L1 (2026-11-06 UTC)
+
+- **Verified previous HEAD:** `d77c3f949cc9128d7a7c896a011339d1064f9b02`; **pushed source commit:** `01873f973d9419214735d18b2f55615e757154ba` (`[skip ci]`).
+- **Branch:** `chatgpt/p3-internal-original-w-20261105`; same packet and unique handoff record.
+- **Added source:** `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3FourierProductFubini.lean`, 157 lines; Git blob `b29c12f9c4ee8f4543132577409e2c038c76ad6d`; `VERIFY.lean` 55 lines, Git blob `8b8d441633b9c4942edb0c5912c6be9c3338f6ef`.
+- **Fixed manuscript:** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/modules/distribution-prime-product-completion-20261010.txt` §4, formula (F), lines 153–171; linked to `paper/source/manuscript-body.tex`.
+- **Fixed Mathlib:** `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` (unchanged). Directly read `Mathlib/MeasureTheory/Integral/Pi.lean`, including `Integrable.fintype_prod` and `integral_fintype_prod_volume_eq_pow`; `Mathlib/MeasureTheory/Constructions/Pi.lean`, identifying Point volume with finite `Measure.pi`; `Mathlib/MeasureTheory/Measure/Haar/NormedSpace.lean`, including the exact nonzero scalar integrability transformation `integrable_comp_mul_left_iff` and real integral scaling; and `Mathlib/MeasureTheory/Function/L1Space/Integrable.lean`, including `Integrable.mono_nonneg`. API names and context inspected at pin; Lean elaboration NOT RUN.
+
+### Genuine internal mathematical work
+
+Let `Point d = Fin d → ℝ`, `FourierSpace d = EuclideanSpace ℝ (Fin d)`, and `k(η)=1/(1+(2π η)^2)`. The new source constructs `pointKernel d p = ∏ i, k(p i)`, not a surrogate Fourier transform. Using the real `volume` product measure and a pinned finite-dimensional Fubini theorem, it gives source-candidate statements for `Integrable (pointKernel d)` and
+
+```
+∫ p : Point d, pointKernel d p = (1/2)^d.
+```
+
+Using the *previously implemented* actual measure-preserving `chartEquiv d`, it transfers this equality to the real `EuclideanSpace` Fourier measure and integrability. The exact algebra identifies the integrand with `(physicalDenom (physicalFrequency η))⁻¹` (including d=0), not a radial denominator. Hence the new `physical_inverse_denom_mass` expresses a genuine multi-axis integral identity, not the previous scalar-only separated mass.
+
+`actual_derivativeD_nonneg` reuses the original ordered doubled mixed-derivative integrals. `actual_fourier_L1_bound` then consumes the prior `actual_mixed_physical_decay`, actual `derivativeD`, product integrability, and ordinary `AEStronglyMeasurable` of the Fourier norm, to obtain the candidate genuine L1 bound:
+
+```
+∫ η : FourierSpace d, ‖𝓕 (actualMixedFamily w ∅) η‖
+  ≤ derivativeD d (actualMixedFamily w) * (1/2)^d.
+```
+
+Premises are the **previous literal 2S finite-order ContDiff and iterated Frechet derivative integrability** plus ordinary Fourier-norm measurability. The latter remains an explicit manuscript-internal analytic condition, not a Fourier majorant/PP conclusion; proving it automatically from the admitted source is still open. The actual W_T family is NOT universally admitted by this proof.
+
+### Checks and exact trust boundary
+
+- New source forbidden proof escapes: 0; lexical delimiter-balance: PASS.
+- Independent finite trapezoid check over η∈[-25,25] gave axis mass 0.49797360361801285 and d=0..5 6/6 separated product checks, maximal absolute error 0.00202639638198715 against exact (1/2)^d; finite cutoff explains the nonzero error. This is a **numerical sanity check only**.
+- GitHub tree commit created from exact verified prior HEAD and pushed using non-force ref update with exact expected SHA. Source and VERIFY Git blob IDs returned directly by GitHub.
+- **NOT RUN:** Lean/Lake, kernel replay, CI, full transitive axiom audit, Codex, heavy producer. All new declarations remain SOURCE_ONLY_UNCOMPILED_KERNEL_UNVERIFIED, with no green status.
+- `EXTERNAL_INPUTS.json` unchanged, Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`. Restricted medium (M) remains **record-only**, not implemented or added as a new axiom. No manuscript, production proof, toolchain/lock, excluded full87 node, PR, other branch or external board changes.
+
+### Exact next internal entrance
+
+1. Pay `AEStronglyMeasurable` of the actual Fourier norm from genuine prior `k=0` integrability and the pinned continuity/Fourier transform API, without assuming the desired L1 bound.
+2. Prove the genuine one-axis *restricted* integral `∫_{|2π η|≤H} k(η) = 1/2 - t(H)` at fixed H>0, then genuine finite-dimensional `Set.pi` product integral, complement/set-additivity, and combine with `separatedBoxMassLoss_le_dim_div`. The above full-volume Fubini does NOT prove the H-box tail by itself.
+3. Quantify `W_T` ContDiff and mixed integrated budgets across all original labelled HB sources, T and m(N), then feed the true finite Fourier epsilon to the complete signed same-rho physical modulus sum. Still independently pay full arithmetic mass, b=T exception, causal whole-box licences, all HB mother words (empty Gamma), high rank/enhanced and final PP assembly.
+
+**Status:** P3.6 YELLOW. New finite-volume Fubini + explicit-premise Fourier L1 proof bodies BLUE only; zero GREEN.
