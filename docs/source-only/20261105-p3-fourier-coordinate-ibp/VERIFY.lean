@@ -128,3 +128,9 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3HBOrderedFactorMajorant.markedHBWeight_le
 #check ImbalancedChen.P3HBOrderedFactorMajorant.markedHBCoefficientMass_le_tau_pow
 #check ImbalancedChen.P3HBOrderedFactorMajorant.markedHB_off_shifted_le_mixed_tau
+
+-- Actual bounded physical Real.log on each nonzero HB full-product fibre (NOT RUN).
+#check ImbalancedChen.P3HBOrderedFactorMajorant.log_marked_slot_le_log_complete
+#check ImbalancedChen.P3HBOrderedFactorMajorant.markedHBCoefficientMass_le_tau_pow_on_fiber
+#check ImbalancedChen.P3HBOrderedFactorMajorant.markedHBCoefficientMass_real_log_le
+#check ImbalancedChen.P3HBOrderedFactorMajorant.markedHB_real_log_off_shifted_le_mixed_tau
