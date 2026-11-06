@@ -190,14 +190,8 @@ theorem owned87_post8_ordered_reject_last_square
   obtain ⟨chosen, hsub, hselected, htests⟩ :=
     owned87_post8_later_odd_reject_last_square
       delta n e q om N cap w z c s hs useParent leaf hleaf
-  obtain ⟨chosen', hsub', hselected', hcert⟩ :=
-    owned87_post8_trace_odd_nodup
-      delta n e q om N cap w z c s hs useParent leaf hleaf
-      hlen hpre hremaining hboundary
-  -- Both representations are possible; use the same actual selection
-  -- rather than assuming the existential witnesses coincide.
-  -- The trace invariant is independently proved for ANY chosen sublist
-  -- of the same descending source, so the witness `chosen` works.
+  -- The trace invariant applies directly to the SAME chosen witness,
+  -- without replacing the occurrence list or identifying two witnesses.
   have hchosenSorted : chosen.Pairwise (· > ·) :=
     hremaining.sublist hsub
   have hchosenCross :
