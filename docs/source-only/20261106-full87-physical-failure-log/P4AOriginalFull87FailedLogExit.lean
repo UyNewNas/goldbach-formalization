@@ -72,7 +72,7 @@ theorem failed_square_to_exact_N_log
   have hscaled : beta * Real.log (N : ℝ) ≤
       Real.log (((p :: older).prod : ℕ) : ℝ) +
         2 * Real.log (p : ℝ) := by
-    rw [← hlog_product]
+    rw [hlog_product]
     exact hlog
   have hdiv : beta ≤
       (Real.log (((p :: older).prod : ℕ) : ℝ) +
