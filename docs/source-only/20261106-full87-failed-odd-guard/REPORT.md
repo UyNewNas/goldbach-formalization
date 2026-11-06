@@ -2,7 +2,7 @@
 SOURCE_ONLY / UNCOMPILED / UNEVALUATED / zero formal kernel credit. Parent node remains YELLOW.
 
 ## Exact baseline and inputs
-Base actual GitHub P1.4 HEAD: `93316d3a21704aa98ed4255b11eec2b222dd75af`, branch `chatgpt/p1-full87-failed-attempts-20261106` (read from Git ref before creating this dedicated continuation branch). Source blob from the new packet: `da804f025798b98027ede428ad7566a8751aa6b0`. The previous packet's failed-attempt enumerator preserves occurrence, older history, rejected p, actual smaller suffix and correction sign. This packet DOES NOT replace that source.
+Base actual GitHub P1.4 HEAD: `93316d3a21704aa98ed4255b11eec2b222dd75af`, branch `chatgpt/p1-full87-failed-attempts-20261106` (read from Git ref before creating this dedicated continuation branch). Source blob from the new packet: `e6cdf1d63b3d6c900ba93abdfcc890a2315cbd7f`. The previous packet's failed-attempt enumerator preserves occurrence, older history, rejected p, actual smaller suffix and correction sign. This packet DOES NOT replace that source.
 
 The pinned manuscript is `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`, §4 lines 355–490. Fixed c=49044063/25000000, K=8452171/1250000.
 
@@ -22,3 +22,5 @@ Lean/Lake NOT RUN; kernel replay NOT RUN; transitive axioms NOT RUN; independent
 - Rank-nine inherited square alternative has no paid bound.
 - Original correction-to-same-source ordinary exit-series residual integral, physical primitive/modulus/centre errors, sixth filtering, full saved87 gains, changed/tagged and two distinct reserves, final same-rho assembly.
 - Install candidate source at its intended Lean module location and compile/replay/audit it before formal credit.
+
+Post-commit source correction: `4c732c0dd8fe796b377bd7b6e156a620001901c1` makes the `Bool.not_true` conversion explicit in the final actual-failure proof body. Still SOURCE_ONLY, not compiled.
