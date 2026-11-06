@@ -513,3 +513,51 @@ This is a real original-HB-source connection. **It is not a labelled-prime compi
 - `EXTERNAL_INPUTS.json` unchanged at Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`; external (M) is **record only**, neither implemented nor promoted to an axiom. No production files, manuscript, toolchain, PR, other task, externally excluded 87-domain node or board touched.
 
 **Next precise work:** prove List-to-Fin ordered HB factor-tuple cardinal transport retaining repeated occurrence count, apply the real `tau(n)^{2(j+1)}` bound to the true `3,3,1` source; then map the actual interval labels, original factorial normalization, rough projectors and full product into the same physical rho. Independently pay the fixed-order near-linear mixed shift moment, b=T exception, original rho mean and W_T uniform analytic admission before a common H and PP assembly. **Overall P3.6 remains YELLOW.**
+
+## Successor SOURCE_ONLY increment — literal HB List-to-Fin positional cardinal bridge (2026-11-06 UTC)
+
+- **Actual predecessor branch HEAD:** `c1b34c471154dbce31da8de333f226b9540a47b4` on `chatgpt/p3-internal-original-w-20261105`. GitHub head was read before writing and checked again immediately before the initial file creation. No same-branch concurrent writer was observed at the checked points.
+- **New genuine Lean candidate file:** `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3HBLiteralFiniteBridge.lean` (168 lines), Git blob `b603da50b9a2b00dbb86eea86d0ad8f8ba321f1a`; committed as `f2ba54af1cdbaee8788219fa3a8c664e1177288c` with `[skip ci]`.
+- **Audit source:** `VERIFY.lean`, Git blob `d6fc97c85c02f525e2d34f0b623de4dc23533057`, six additional `#check` targets, commit `970de1b57d293df8a467c5014bb5d39740256932` with `[skip ci]`.
+- **Registry update:** `REGISTRY.json`, Git blob `e7f62d44c77492bf66fa0513ffd06f23476b7036`, commit `75cbe5276d887c117304891b9c07b8277cfc4c86` with `[skip ci]`. **Only** the present P3.6 task files were written.
+- **Pinned manuscript remains** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`: `paper/source/modules/distribution-prime-product-completion-20261010.txt` §2 actual order-three HB and §4 post-Fourier arithmetic moment; `paper/source/manuscript-body.tex` original-prime-product subsection. Pinned Mathlib remains `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
+- `EXTERNAL_INPUTS.json` unchanged, exact Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`. Classical restricted signed medium estimate (M) remains **RECORD_ONLY_NOT_IMPLEMENTED_NOT_AXIOM**. No substitute axioms or target-equivalent structures were added.
+
+### Real mathematical advance, with quantifiers and scope
+
+The predecessor genuinely used the exact `P5LiteralHeathBrownOccurrenceWords` original order-three words (with `muTrunc`, original zeta unit slots, one logarithm, and absolute scalar magnitudes `3,3,1`), but its `factorTuples(g,n) : Finset (List ℕ)` coefficient bound stopped at an unquantified List cardinality. This iteration connects the exact literal List fibre to the **already existing** `P3HBOrderedFactorMajorant.orderedFactorTuples(g,n) : Finset (Fin g → ℕ)`.
+
+For every `n != 0`, `factorTuples_spec` supplies each List's exact length `g` and positive **complete** product `n`. The positional map `ps.get : Fin ps.length → ℕ`, with `List.ofFn_get` and pinned `Fin.prod_ofFn`, is shown to belong to the genuine previous `orderedFactorTuples` by its *existing* `mem_orderedFactorTuples_iff` (not by a new cycle or manufactured membership certificate). Hence
+
+```
+  card(factorTuples(g,n))
+    <= card(orderedFactorTuples(g,n))
+    <= tau(n)^g.
+```
+
+This is positional: equal *values* at different original slots are still separate occurrences and ordered tuples are not replaced by unordered multisets. It also does not equate a unit log slot to an empty Gamma mother word.
+
+The next two theorems feed that bound into the **actual** order-three HB primitive words, proving source-only candidates
+
+```
+  literalHBAbsMass(y,j,n) <= log(n) * tau(n)^(2*(j+1)),
+  sum_(j=0..2) binom(3,j+1)*literalHBAbsMass(y,j,n)
+     <= log(n)*sum_(j=0..2) binom(3,j+1)*tau(n)^(2*(j+1)).
+```
+
+Thus the ORIGINAL absolute signs and the genuinely fixed orders `2,4,6` are retained; the coefficient magnitudes remain exactly `3,3,1`. On a finite admitted family of **nonzero n != T** with `log(n)<=L`, the sixth candidate proves the corresponding upper bound of its **actual** finite shifted `tau(|T-n|)` moment by `L` times the displayed fixed-order mixed moment. The RHS is *not* shown to be near-linear; there is no bound on the full arithmetic modulus mass and no `tau(0)` term.
+
+The step is properly upstream of restoring original prime labels, factorial normalizations, rough projectors, dyadic rectangles, high-rank/enhanced branches and complete product scales. It cannot be treated as the entire original labelled PP source nor as a full same-integer-`rho` PP theorem.
+
+### Evidence, limitations, handoff
+
+- Direct read before write: task branch HEAD, current REPORT/REGISTRY/EXTERNAL_INPUTS, actual old List and Fin factor proofs, actual `ImbalancedChen/P5LiteralHeathBrownOccurrenceWords.lean`, pinned manuscript module §2 and §4 and `manuscript-body.tex`. Root/docs/source-only/present packet `AGENTS.md` checked and returned NOT_FOUND.
+- Fixed Mathlib source (exact pinned commit) directly inspected for `List.ofFn_get` (`Mathlib/Data/List/OfFn.lean`) and `Fin.prod_ofFn` (`Mathlib/Algebra/BigOperators/Fin.lean`). Source inspection is NOT a Lean elaboration check. The previous `orderedFactorTuples_card_le_tau_pow` remains uncompiled, so the new proof depends on an UNVERIFIED predecessor.
+- New source GitHub readback matched `b603da50b9a2b00dbb86eea86d0ad8f8ba321f1a`; six `VERIFY` checks were included after imports. Static token scan of new Lean proof (comments excluded): 0 banned escape tokens; lexical delimiter scan PASS.
+- Independent Python finite exact positional-factor tests: **640/640**, `g=0..6`, `n=1..80`, checking distinct ordered factor occurrences, product identity and the `tau(n)^g` cardinal bound. Additional original literal HB and shifted-moment tests: **756/756**, real cutoffs `y=3,6,10,15`, `n=1..48`, target `T=5,19,37`, with **12 exact `n=T` exceptions excluded**. The observed largest original HB mass / divisor-power bound ratio was about `0.05645`; zero finite failures. These tests certify neither Lean typing nor the infinite/asymptotic number-theory estimate.
+- **NOT RUN by explicit scope:** Lean/Lake, CI, kernel replay, dependent theorem elaboration, complete transitive axiom audit, Codex, heavy producers. Thus all six new declarations remain `SOURCE_ONLY_UNCOMPILED_KERNEL_UNVERIFIED`; no node becomes green.
+- No writes to production code, manuscript, dependency lock, other branches/tasks, PRs, external board, excluded actual full-87 dynamic-parent/current-history node or CI.
+
+**Next exact internal entrance:** restore original prime-label multiplicities and their factorial normalizations and the true rough projectors to the now positional HB integer fibres. Preserve the physical complete products and mean with the same integer rho, then prove the still-unpaid near-linear mixed shifted divisor moment under the original strict kappa cap. Independently pay `b=T`, the original weighted rho/totient mean, uniform smooth `W_T` family with increasing `m(N)`, causal/whole-box, all HB words, empty Gamma mothers, high-rank and enhanced branches. No new external input may stand in for these obligations.
+
+**Status:** P3.6 YELLOW. This explicitly limited List-to-Fin, genuine `3,3,1` HB coefficient divisor-power and nonzero-shift reduction is BLUE *source-only*, UNCOMPILED / KERNEL_UNVERIFIED. External (M) is merely registered.
