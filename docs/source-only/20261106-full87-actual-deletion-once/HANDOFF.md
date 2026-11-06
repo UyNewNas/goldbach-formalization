@@ -1,0 +1,9 @@
+# P1.4 persistent continuation: actual failure target deletion, paid ONCE
+
+Latest verified predecessor SHA `8bd7e46dd50106404e6121994be25b20bd9078a5` (navigation only). Task branch `chatgpt/p1-full87-actual-deletion-once-20261106`; live branch HEAD must be read at each subsequent run. Source `docs/source-only/20261106-full87-actual-deletion-once/P4AOriginalFull87ActualDeletionOnce.lean`, blob `34b49fcbdcc39fc7e350913c4bd42304c914561b`. Read source, REPORT, REGISTRY, INPUT_BOUNDARY and applicable AGENTS before editing. History preserved.
+
+Mathematical stop: actual rank>=11 failed select occurrence has `a.older.length=10+2*m` and `beta-S8<=3^(m+2)*log(p)/log N`; existing same-source residual floor `53/13824<beta-S8`; even target plus exact remaining carrier implies rejected p>=3 and p∤N. With `k=261*3^(m+2)`, strict `N<p^(k+1)`. One call to the existing literal `targetDeletionFactor` gives `1-k/(p-1)<=D<=1` and `D>=0`. RealizedHistory is the existing schedule output, not a target-equivalent source axiom. BOTH actual frozen choices are handled by the same Boolean.
+
+Proof status: source-only, UNEVALUATED, not compiled, zero formal credit. Arithmetic synthetic sampling 4000 cases, no counterexample. No Lean/Lake, kernel, axioms, saved87 replay, independent review, extra CI or Codex. c/K/manuscript/Lean/mathlib/native pinned.
+
+Most precise next action: validate the exact source file and its imports using existing pinned checker if made available; then couple these actual events to the same physical `g_N` correction without a SECOND deletion factor. Separately prove rank-nine inherited-square loss and same-source exit-series/residual integral limit plus primitive/centre/modulus/sixth filter, saved87 and two reserves. Do not infer signed saving monotonicity from cap, and do not change original source/density estimates. External analytic inputs remain registered/unverified/not invoked.
