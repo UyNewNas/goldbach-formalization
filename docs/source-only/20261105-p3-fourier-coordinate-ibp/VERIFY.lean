@@ -8,6 +8,7 @@ import ImbalancedChen.P3FourierProductFubini
 import ImbalancedChen.P3FourierAutomaticMeasurability
 
 import ImbalancedChen.P3FourierRestrictedBox
+import ImbalancedChen.P3FourierActualBoxTail
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -76,3 +77,9 @@ import ImbalancedChen.P3FourierRestrictedBox
 #check ImbalancedChen.P3FourierRestrictedBox.fourierBox_mass
 #check ImbalancedChen.P3FourierRestrictedBox.fourierBox_complement_mass
 #check ImbalancedChen.P3FourierRestrictedBox.fourierBox_complement_le_dim_div
+
+-- Actual Fourier norm L1 on the genuine physical H-box complement.
+-- The source still has NOT been compiled or replayed by the Lean kernel.
+#check ImbalancedChen.P3FourierActualBoxTail.actual_fourier_norm_integrable
+#check ImbalancedChen.P3FourierActualBoxTail.actual_fourier_box_tail_bound
+#check ImbalancedChen.P3FourierActualBoxTail.actual_fourier_box_tail_spend
