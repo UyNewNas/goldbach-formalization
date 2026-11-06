@@ -1,0 +1,9 @@
+# External-input boundary: P5.6 h34 first-bad-prime owner
+
+Pinned proof manuscript: `UyNewNas/chen-imbalanced-semiprimes@ba6ec11d800eccc54406490631895e174de85766`, body blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. Fixed c=`49044063/25000000`, K=`8452171/1250000`, root norm `7/2`, row norm `12`; same original U3/U4 geometry and actual frozen `rootQ`, true alpha, and max-two argument.
+
+No new external analytic theorem is asserted or implemented. This packet invokes only existing Mathlib/Lean foundations: classical existential selection and `Nat.find_spec` (the witness of `Nat.find`), `Nat.le_of_dvd` for positive natural quotients, finite-set membership/filter, real order and basic propositional arithmetic. Use location: `Part5OriginalH430TaggedFirstBadPrimeOwner.lean`, in `first_bad_spec`, `rejected_frozen_owner_le_target`, and the tagged membership proofs.
+
+Manuscript-local declarations consumed unchanged: `ChenPrimeRough` and `chenQuotientPrimeSource`; `frozenPrimeCutoff`, `raw_prime_label_data`, `arithmeticBand/arithmeticPrime/arithmeticQuotientPrime`, `raw_quotient_data`, `frozen_receiver_mem_raw`, `frozen_tagged_subset_raw`, `frozen_only_U3_iff/U4_iff`, `rejected_frozen_U3_iff/U4_iff`. These are *not* reclassified as genuinely external. Their proof bodies remain SOURCE_ONLY / UNCOMPILED in the inherited h34 packets and are not independently certified here.
+
+PNT, Mertens, BV, PP, same-rho and other external analytic inputs are neither re-proved nor newly introduced. The manuscript's full/selected/inherited historical owner, count/feedback bridge, signed rejection payment, common nested 430+11 refinement, and its quantitative consumers are genuinely **manuscript-internal OPEN obligations**. No assumed count licence, target-equivalent hypothesis, or axiom is introduced. Finite guards, Lean kernel validation and transitive axiom audit: UNEVALUATED.
