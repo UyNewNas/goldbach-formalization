@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualFrozenSlotLabelCounts
 import ImbalancedChen.P3ActualSplitLabelMultinomial
 import ImbalancedChen.P3ActualFrozenFineLabelPartition
 import ImbalancedChen.P3ActualFineLabelThreeGammaTensor
@@ -194,3 +195,16 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3ActualSplitLabelMultinomial.split_factorial_ratio_mem_Icc
 #check ImbalancedChen.P3ActualSplitLabelMultinomial.actual_split_three_gamma_tensor
 #check ImbalancedChen.P3ActualSplitLabelMultinomial.frozen_occurrence_count_sum
+
+-- Actual per-label count recovery from the original occurrence-frozen output.
+-- SOURCE_ONLY: #check declarations are recorded, NOT Lean-executed.
+#check ImbalancedChen.P3ActualFrozenSlotLabelCounts.blockLabelCount
+#check ImbalancedChen.P3ActualFrozenSlotLabelCounts.expanded_word_count
+#check ImbalancedChen.P3ActualFrozenSlotLabelCounts.blockLabelCount_zero_of_away
+#check ImbalancedChen.P3ActualFrozenSlotLabelCounts.blockLabelCount_of_pairwise_mem
+#check ImbalancedChen.P3ActualFrozenSlotLabelCounts.original_block_size_eq_word_count
+#check ImbalancedChen.P3ActualFrozenSlotLabelCounts.actualFrozenSplitSize
+#check ImbalancedChen.P3ActualFrozenSlotLabelCounts.actualFrozenSplitSize_sum
+#check ImbalancedChen.P3ActualFrozenSlotLabelCounts.actual_frozen_slot_split_counts
+#check ImbalancedChen.P3ActualFrozenSlotLabelCounts.actual_frozen_slot_split_three_gamma_tensor
+#check ImbalancedChen.P3ActualFrozenSlotLabelCounts.actual_frozen_slot_factorial_ratio_mem_Icc
