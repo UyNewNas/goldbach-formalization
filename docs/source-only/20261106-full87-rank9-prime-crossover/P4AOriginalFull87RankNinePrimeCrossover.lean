@@ -549,5 +549,264 @@ theorem owned_rankNine_gap_abs_le_prime_cross_invoices
   exact actual_rankNine_signed_gap_le_crossing_invoice
     (width r) n e q om N cap w z c s hs
 
+/-!
+Continuation: remove the unbounded Euler-suffix factor from the genuine
+rank-nine crossing invoice by an elementary **finite** inequality.  This
+uses the existing target-deleted prime carrier, not an invented prime
+distribution input, and does not debit either reserve.
+-/
+
+private theorem signedTreeCoefficient_abs_for_invoice
+    (b : Bool) (m : ℝ) :
+    |signedTreeCoefficient b m| = |m| := by
+  cases b <;> simp [signedTreeCoefficient]
+
+private theorem suffix_unit_product_bounds {α : Type*}
+    (h : α → ℝ) :
+    ∀ xs : List α, (∀ p ∈ xs, 0 ≤ h p ∧ h p ≤ 1) →
+      0 ≤ (xs.map (fun p => 1 - h p)).prod ∧
+      (xs.map (fun p => 1 - h p)).prod ≤ 1 := by
+  intro xs
+  induction xs with
+  | nil =>
+      intro _
+      simp
+  | cons p ps ih =>
+      intro hb
+      have hp : 0 ≤ h p ∧ h p ≤ 1 := hb p (by simp)
+      have ht : ∀ x ∈ ps, 0 ≤ h x ∧ h x ≤ 1 := by
+        intro x hx
+        exact hb x (by simp [hx])
+      obtain ⟨ht0, ht1⟩ := ih ht
+      have hp0 : 0 ≤ 1 - h p := by linarith [hp.2]
+      have hp1 : 1 - h p ≤ (1 : ℝ) := by linarith [hp.1]
+      simp only [List.map_cons, List.prod_cons]
+      constructor
+      · exact mul_nonneg hp0 ht0
+      · calc
+          (1 - h p) * (ps.map (fun x => 1 - h x)).prod ≤
+              1 * (ps.map (fun x => 1 - h x)).prod :=
+                mul_le_mul_of_nonneg_right hp1 ht0
+          _ = (ps.map (fun x => 1 - h x)).prod := one_mul _
+          _ ≤ 1 := ht1
+
+/-- Exact first-choice crossover costs are bounded by a SINGLE sum of
+physical prime weights. Crucially the untouched Euler suffix is bounded
+using actual 0≤h≤1, rather than deleting its factor by definition. -/
+private theorem firstChoice_cross_cost_le_weight_sum {α : Type*}
+    (P Q : Bool → List α → Bool) (h : α → ℝ)
+    (pre : List α) (positive : Bool) (mass : ℝ) :
+    ∀ remaining : List α,
+      (∀ p ∈ remaining, 0 ≤ h p ∧ h p ≤ 1) →
+      firstChoiceCrossCost P Q h pre positive mass remaining ≤
+        |mass| * ((remaining.map (fun p =>
+          if P (!positive) (p :: pre) = Q (!positive) (p :: pre)
+          then (0 : ℝ) else h p)).sum) := by
+  intro remaining
+  induction remaining with
+  | nil =>
+      intro _
+      simp [firstChoiceCrossCost]
+  | cons p ps ih =>
+      intro hb
+      have hp : 0 ≤ h p ∧ h p ≤ 1 := hb p (by simp)
+      have ht : ∀ x ∈ ps, 0 ≤ h x ∧ h x ≤ 1 := by
+        intro x hx
+        exact hb x (by simp [hx])
+      obtain ⟨ht0, ht1⟩ := suffix_unit_product_bounds h ps ht
+      let v : ℝ := FirstExitRejectedAttempt.value h
+        { older := pre, rejected := p, smaller := ps,
+          positive := positive, mass := mass }
+      have hv : |v| ≤ |mass| * h p := by
+        dsimp [v, FirstExitRejectedAttempt.value]
+        rw [abs_mul, abs_neg, signedTreeCoefficient_abs_for_invoice,
+          abs_mul, abs_of_nonneg hp.1, abs_of_nonneg ht0]
+        calc
+          |mass| * h p * (ps.map (fun x => 1 - h x)).prod ≤
+              (|mass| * h p) * 1 :=
+                mul_le_mul_of_nonneg_left ht1
+                  (mul_nonneg (abs_nonneg _) hp.1)
+          _ = |mass| * h p := by ring
+      have hitem :
+          (if P (!positive) (p :: pre) = Q (!positive) (p :: pre)
+            then (0 : ℝ) else |v|) ≤
+          |mass| * (if P (!positive) (p :: pre) =
+            Q (!positive) (p :: pre) then (0 : ℝ) else h p) := by
+        by_cases heq : P (!positive) (p :: pre) =
+          Q (!positive) (p :: pre)
+        · simp [heq]
+        · simpa [heq] using hv
+      simp only [firstChoiceCrossCost, List.map_cons, List.sum_cons]
+      calc
+        _ ≤ |mass| * ((ps.map (fun x =>
+              if P (!positive) (x :: pre) = Q (!positive) (x :: pre)
+              then (0 : ℝ) else h x)).sum) +
+            |mass| * (if P (!positive) (p :: pre) =
+              Q (!positive) (p :: pre) then (0 : ℝ) else h p) :=
+                add_le_add (ih ht) hitem
+        _ = |mass| * ((if P (!positive) (p :: pre) =
+              Q (!positive) (p :: pre) then (0 : ℝ) else h p) +
+            (ps.map (fun x =>
+              if P (!positive) (x :: pre) = Q (!positive) (x :: pre)
+              then (0 : ℝ) else h x)).sum) := by ring
+
+/-- This is a genuinely arithmetic finite crossing invoice: exactly the
+rejected primes with changed actual rank-nine decisions, each at
+1/(p-1). Original state and prime list occurrence multiplicities stay. -/
+def rankNineReciprocalCrossingCost
+    (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N : ℕ) (c : Cell) (s : FirstExitDepthState ℕ) : ℝ :=
+  (s.remaining.map (fun p =>
+    if rankNineThresholdCrosses n e q om N c s p
+    then 1 / ((p : ℝ) - 1) else 0)).sum
+
+private theorem actual_eighth_remaining_weight_unit
+    (delta : ℝ) (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (hEven : 2 ∣ N) (w z : ℝ) (c : Cell)
+    (s : FirstExitDepthState ℕ)
+    (hs : s ∈ states delta n e q om N cap w z
+      (fun _ : ℕ => (1 : ℝ)) c) :
+    ∀ p ∈ s.remaining,
+      (0 ≤ halfProductDensity p ∧ halfProductDensity p ≤ 1) ∧
+      halfProductDensity p = 1 / ((p : ℝ) - 1) := by
+  obtain ⟨_, _, _, _, last, tail, _, _, hremaining⟩ :=
+    owned87_eighth_state_exact_carrier
+      delta n e q om N cap w z c s hs
+  intro p hp
+  have hpCarrier : p ∈ roughPrimeUniverse N cap w (last : ℝ) := by
+    simpa only [hremaining] using hp
+  have hpPrime : Nat.Prime p := mem_roughPrimeUniverse_prime hpCarrier
+  have hpNotDiv : ¬ p ∣ N := mem_roughPrimeUniverse_not_dvd hpCarrier
+  have hpThree : 2 < p := by
+    have hpTwo := hpPrime.two_le
+    have hpNeTwo : p ≠ 2 := by
+      intro he
+      apply hpNotDiv
+      simpa [he] using hEven
+    omega
+  have hdensity : halfProductDensity p = 1 / ((p : ℝ) - 1) := by
+    simpa [chenInitialBoundingSieve] using
+      chenInitialBoundingSieve_prime_density N w
+        (even_iff_two_dvd.mpr hEven) hpPrime
+  have htwo : (2 : ℝ) ≤ (p : ℝ) := by
+    exact_mod_cast (show 2 ≤ p by omega)
+  have hden : (1 : ℝ) ≤ (p : ℝ) - 1 := by linarith
+  have hdenpos : 0 < (p : ℝ) - 1 :=
+    lt_of_lt_of_le zero_lt_one hden
+  refine ⟨⟨?_, ?_⟩, hdensity⟩
+  · rw [hdensity]
+    exact one_div_nonneg.mpr (le_of_lt hdenpos)
+  · rw [hdensity]
+    exact (div_le_iff₀ hdenpos).mpr (by linarith)
+
+/-- The old finite Euler-suffix crossing invoice is bounded by the
+actual prime reciprocal sum on exactly the same eighth occurrence.
+The denominator is the true rejected prime minus one. No prime
+harmonic asymptotic, archive value, or reserve balance is assumed. -/
+theorem actual_rankNine_invoice_le_reciprocal_cost
+    (delta : ℝ) (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (hEven : 2 ∣ N) (w z : ℝ) (c : Cell)
+    (s : FirstExitDepthState ℕ)
+    (hs : s ∈ states delta n e q om N cap w z
+      (fun _ : ℕ => (1 : ℝ)) c) :
+    rankNineCrossingInvoice n e q om N c s ≤
+      |s.mass * (s.selectedPrefix.map halfProductDensity).prod| *
+        rankNineReciprocalCrossingCost n e q om N c s := by
+  let P := ordinaryParityRosserPolicy false
+    (actualFrozenPost8Level n e q om N c s true)
+  let Q := ordinaryParityRosserPolicy false
+    (actualFrozenPost8Level n e q om N c s false)
+  let m8 : ℝ := s.mass * (s.selectedPrefix.map halfProductDensity).prod
+  have hw := actual_eighth_remaining_weight_unit
+    delta n e q om N cap hEven w z c s hs
+  have hb : ∀ p ∈ s.remaining,
+      0 ≤ halfProductDensity p ∧ halfProductDensity p ≤ 1 := by
+    intro p hp
+    exact (hw p hp).1
+  have hraw := firstChoice_cross_cost_le_weight_sum
+    P Q halfProductDensity s.selectedPrefix s.positive m8
+    s.remaining hb
+  have hfront : s ∈ frontier n e q om N cap w z := by
+    have ht := hs
+    rw [states_eq_owner_filter] at ht
+    exact (List.mem_filter.mp ht).1
+  have hpos : s.positive = true :=
+    (frontier_sign_mass n e q om N cap w z s hfront).1
+  have hmap :
+      (s.remaining.map (fun p =>
+        if P (!s.positive) (p :: s.selectedPrefix) =
+            Q (!s.positive) (p :: s.selectedPrefix)
+        then (0 : ℝ) else halfProductDensity p)).sum =
+      rankNineReciprocalCrossingCost n e q om N c s := by
+    unfold rankNineReciprocalCrossingCost
+    congr 1
+    apply List.map_congr_left
+    intro p hp
+    have hdensity := (hw p hp).2
+    have hcross := actual_rankNine_cross_iff_decisions_differ
+      delta n e q om N cap w z c s hs p hp
+    by_cases hc : rankNineThresholdCrosses n e q om N c s p
+    · have hdiffer : P (!s.positive) (p :: s.selectedPrefix) ≠
+          Q (!s.positive) (p :: s.selectedPrefix) := by
+        simpa only [hpos, Bool.not_true] using hcross.mpr hc
+      simp [hc, hdiffer, hdensity]
+    · have hequal : P (!s.positive) (p :: s.selectedPrefix) =
+          Q (!s.positive) (p :: s.selectedPrefix) := by
+        by_contra hdiff
+        have hdiff' :
+            ordinaryParityRosserPolicy false
+              (actualFrozenPost8Level n e q om N c s true)
+              false (p :: s.selectedPrefix) ≠
+            ordinaryParityRosserPolicy false
+              (actualFrozenPost8Level n e q om N c s false)
+              false (p :: s.selectedPrefix) := by
+          simpa only [hpos, Bool.not_true] using hdiff
+        exact hc (hcross.mp hdiff')
+      simp [hc, hequal]
+  change firstChoiceCrossCost P Q halfProductDensity
+    s.selectedPrefix s.positive m8 s.remaining ≤
+      |m8| * rankNineReciprocalCrossingCost n e q om N c s
+  rw [← hmap]
+  exact hraw
+
+/-- Actual crossover implies an explicit strict cubic prime cutoff
+coming from the NEW-minimum-square mode. There is no converse:
+the historical odd-square threshold can still prevent a crossing. -/
+theorem rankNine_crossover_forces_cubic_cutoff
+    (older : List ℕ) (p : ℕ) (Rold Rnew : ℝ)
+    (hc : (rankNineChoiceThreshold older p < Rold ∧
+              Rnew ≤ rankNineChoiceThreshold older p) ∨
+          (rankNineChoiceThreshold older p < Rnew ∧
+              Rold ≤ rankNineChoiceThreshold older p)) :
+    (older.prod : ℝ) * (p : ℝ) ^ 3 < max Rold Rnew := by
+  have hle :
+      (((p :: older).prod : ℕ) : ℝ) * (p : ℝ) ^ 2 ≤
+        rankNineChoiceThreshold older p := by
+    unfold rankNineChoiceThreshold
+    exact (le_max_right (historyOddSquareCeiling older)
+      ((((p :: older).prod : ℕ) : ℝ) * (p : ℝ) ^ 2)).trans
+      (le_max_right _ _)
+  have hcut : rankNineChoiceThreshold older p < max Rold Rnew := by
+    rcases hc with h | h
+    · exact lt_of_lt_of_le h.1 (le_max_left _ _)
+    · exact lt_of_lt_of_le h.1 (le_max_right _ _)
+  calc
+    (older.prod : ℝ) * (p : ℝ) ^ 3 =
+        (((p :: older).prod : ℕ) : ℝ) * (p : ℝ) ^ 2 := by
+          simp only [List.prod_cons, Nat.cast_mul]
+          ring
+    _ ≤ rankNineChoiceThreshold older p := hle
+    _ < max Rold Rnew := hcut
+
+theorem actual_rankNine_crossover_cubic_cutoff
+    (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ) (N : ℕ) (c : Cell)
+    (s : FirstExitDepthState ℕ) (p : ℕ)
+    (hc : rankNineThresholdCrosses n e q om N c s p) :
+    (s.selectedPrefix.prod : ℝ) * (p : ℝ) ^ 3 <
+      max (actualFrozenPost8Level n e q om N c s true)
+          (actualFrozenPost8Level n e q om N c s false) := by
+  apply rankNine_crossover_forces_cubic_cutoff
+  simpa [rankNineThresholdCrosses] using hc
+
 end
 end ImbalancedChen.P4AOriginalFull87RankNinePrimeCrossover
