@@ -297,5 +297,109 @@ theorem signedTest_terminalMismatch_abs_le_retainedCost {α : Type*}
       intro leaf hleaf
       rw [abs_mul]
 
+
+/-- Concrete absolute invoice for the original full-q terminal mismatch:
+both actual frozen policies are charged, with no separate or fictitious
+arithmetic sieve coefficient. -/
+def terminalMismatchCostAt (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (w L : ℝ) (G : ℕ → ℝ) (c : Cell)
+    (s : FirstExitDepthState ℕ) : ℝ :=
+  retainedLeafMismatchCost (oldAt n e q om N s)
+      halfProductDensity (attachedLeafTest N cap 1 w L G)
+      s.selectedPrefix s.remaining s.positive s.mass +
+    retainedLeafMismatchCost (newAt n N c s)
+      halfProductDensity (attachedLeafTest N cap 1 w L G)
+      s.selectedPrefix s.remaining s.positive s.mass
+
+/-- The *unpaid* part of a genuine eighth state arithmetic saving has an
+explicit absolute bound using only its original two signed retained-leaf
+lists. This does NOT assert that the bound is asymptotically small. -/
+theorem ordinarySaving_sub_correction_abs_le_terminalCost
+    (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (w L : ℝ) (G : ℕ → ℝ) (c : Cell)
+    (s : FirstExitDepthState ℕ) :
+    |ordinarySaving n e q om N cap w L G c s -
+      correctionGapAt n e q om N c s| ≤
+      terminalMismatchCostAt n e q om N cap w L G c s := by
+  have hOld :=
+    signedTest_terminalMismatch_abs_le_retainedCost
+      (oldAt n e q om N s) halfProductDensity
+      (attachedLeafTest N cap 1 w L G)
+      s.selectedPrefix s.remaining s.positive s.mass
+  have hNew :=
+    signedTest_terminalMismatch_abs_le_retainedCost
+      (newAt n N c s) halfProductDensity
+      (attachedLeafTest N cap 1 w L G)
+      s.selectedPrefix s.remaining s.positive s.mass
+  have hgap :
+      ordinarySaving n e q om N cap w L G c s -
+        correctionGapAt n e q om N c s =
+          terminalMismatchGapAt n e q om N cap w L G c s := by
+    rw [ordinarySaving_eq_correctionGap_add_terminalGap]
+    ring
+  rw [hgap]
+  unfold terminalMismatchGapAt terminalMismatchCostAt
+  calc
+    |_ - _| ≤ |_ | + |_ | := by
+      calc
+        |_ - _| = |_ + (- _)| := by ring
+        _ ≤ |_ | + |- _| := abs_add_le _ _
+        _ = |_ | + |_ | := by rw [abs_neg]
+    _ ≤ _ := add_le_add hOld hNew
+
+/-- A pointwise finite list estimate, without converting occurrences
+to a Finset or collapsing repeated physical history words. -/
+private theorem list_map_sum_le {α : Type*} (xs : List α)
+    (f g : α → ℝ) (h : ∀ x ∈ xs, f x ≤ g x) :
+    (xs.map f).sum ≤ (xs.map g).sum := by
+  induction xs with
+  | nil => simp
+  | cons x xs ih =>
+      simp only [List.map_cons, List.sum_cons]
+      apply add_le_add (h x (by simp))
+      apply ih
+      intro y hy
+      exact h y (by simp [hy])
+
+def ownedTerminalMismatchCost (delta : ℝ) (n : ℕ) (e : ℚ) (q : ℕ)
+    (om : ℝ) (N cap : ℕ) (w z L : ℝ) (G : ℕ → ℝ) (c : Cell) : ℝ :=
+  ((states delta n e q om N cap w z (fun _ : ℕ => (1 : ℝ)) c).map
+    (terminalMismatchCostAt n e q om N cap w L G c)).sum
+
+/-- Owner-by-owner full-q mismatch invoice. This is the missing local
+bound required before a signed correction gain could be charged to the
+original arithmetic saving. No source distribution result is assumed. -/
+theorem ownedSource_sub_correction_abs_le_terminalCost
+    (delta : ℝ) (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (w z L : ℝ) (G : ℕ → ℝ) (c : Cell) :
+    |ownedSource delta n e q om N cap w z L G c -
+      ownedCorrectionGap delta n e q om N cap w z c| ≤
+      ownedTerminalMismatchCost delta n e q om N cap w z L G c := by
+  have hgap :
+      ownedSource delta n e q om N cap w z L G c -
+        ownedCorrectionGap delta n e q om N cap w z c =
+          ownedTerminalMismatchGap delta n e q om N cap w z L G c := by
+    rw [ownedSource_eq_correction_add_terminalMismatch]
+    ring
+  rw [hgap]
+  unfold ownedTerminalMismatchGap ownedTerminalMismatchCost
+  calc
+    _ ≤
+      ((states delta n e q om N cap w z (fun _ : ℕ => (1 : ℝ)) c).map
+        (fun s => |terminalMismatchGapAt n e q om N cap w L G c s|)).sum :=
+      list_abs_sum_le _ _
+    _ ≤ _ := by
+      apply list_map_sum_le
+      intro s hs
+      have heq :
+          ordinarySaving n e q om N cap w L G c s -
+            correctionGapAt n e q om N c s =
+              terminalMismatchGapAt n e q om N cap w L G c s := by
+        rw [ordinarySaving_eq_correctionGap_add_terminalGap]
+        ring
+      rw [← heq]
+      exact ordinarySaving_sub_correction_abs_le_terminalCost
+        n e q om N cap w L G c s
+
 end
 end ImbalancedChen.P4AOriginalFull87ArithmeticTerminalBridge
