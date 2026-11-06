@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualSortedFineSourceGamma
 import ImbalancedChen.P3ActualFrozenPhysicalGamma
 import ImbalancedChen.P3ActualFrozenGroupWords
 import ImbalancedChen.P3ActualFrozenSlotLabelCounts
@@ -224,3 +225,8 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3ActualFrozenPhysicalGamma.normalized_group_sum_of_word_perm
 #check ImbalancedChen.P3ActualFrozenPhysicalGamma.actual_frozen_three_group_normalized_sums
 #check ImbalancedChen.P3ActualFrozenPhysicalGamma.actual_frozen_physical_three_gamma_tensor
+
+-- Genuine original sorted fine-word -> physical three-gamma coefficient.
+-- hword and original M_J derived from run-length compiler; SOURCE_ONLY, NOT RUN.
+#check ImbalancedChen.P3ActualSortedFineSourceGamma.actual_fine_word_physical_tensor
+#check ImbalancedChen.P3ActualSortedFineSourceGamma.actual_sorted_fine_source_gamma
