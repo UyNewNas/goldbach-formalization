@@ -93,10 +93,8 @@ theorem paired_list_odd_exit_potential {α : Type*}
             have hh := hprior (x :: y :: past) r q suffix
               hwhole hwholeEven
             dsimp [nextS8]
-            simpa only [List.map_cons, List.sum_cons] using
-              (show s8 + f x + f y + (past.map f).sum +
-                    3 * f r < beta by
-                simpa only [List.map_cons, List.sum_cons] using hh)
+            simp only [List.map_cons, List.sum_cons] at hh
+            linarith
           have hnextPair :
               ∀ (past : List α) (r q : α) (suffix : List α),
                 rest = past ++ r :: q :: suffix → f q ≤ f r := by
@@ -222,9 +220,10 @@ theorem owned87_failed_actual_pair_list_gap
     exact mem_roughPrimeUniverse_prime hx
   have hchosenPos : ∀ x ∈ chosen, 0 < x := by
     intro x hx
-    apply (hremPrime x).pos
-    rw [hrem]
-    exact List.mem_append.mpr (Or.inl (hsub.subset hx))
+    have hmem : x ∈ s.remaining := by
+      rw [hrem]
+      exact List.mem_append.mpr (Or.inl (hsub.subset hx))
+    exact (hremPrime x hmem).pos
   let f : ℕ → ℝ := fun x =>
     Real.log (x : ℝ) / Real.log (N : ℝ)
   let s8 : ℝ := ∑ i : Fin 8,
