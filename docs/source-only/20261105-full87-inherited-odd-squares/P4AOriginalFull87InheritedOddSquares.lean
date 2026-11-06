@@ -103,7 +103,7 @@ theorem upper_two_min_insert_iff_last_square
       simpa only [hpfilter] using hlast
     by_cases hrq : r = q
     · subst r
-      exact (hqeven hcard).elim
+      exact (hcard hqeven).elim
     · have hmem : r ∈ s := by
         simpa [t, hrp, hrq] using hr
       have hsame := holdfilter r hmem
