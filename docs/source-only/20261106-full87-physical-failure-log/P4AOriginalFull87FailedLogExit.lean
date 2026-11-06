@@ -158,8 +158,9 @@ theorem owned87_later_failure_exact_rank_log_exit
         (actualFrozenPost8Level n e q om N c s useParent))
       (fun _ : ℕ => 1) s.selectedPrefix s.positive s.mass s.remaining)
     (hlater : 8 < a.older.length) :
-    ∃ (chosen : List ℕ) (m : ℕ),
-      chosen <+ s.remaining ∧
+    ∃ (before chosen : List ℕ) (m : ℕ),
+      s.remaining = before ++ a.rejected :: a.smaller ∧
+      chosen <+ before ∧
       a.older = chosen.reverse ++ s.selectedPrefix ∧
       chosen.length = 2 * (m + 1) ∧
       (if useParent then
@@ -263,9 +264,7 @@ theorem owned87_later_failure_exact_rank_log_exit
     omega
   obtain ⟨k, hk⟩ := hevenChosen
   have hkpos : 0 < k := by omega
-  refine ⟨chosen, k - 1, ?_, holder, ?_, ?_⟩
-  · rw [hrem]
-    exact hsub.trans (List.sublist_append_left before (a.rejected :: a.smaller))
+  refine ⟨before, chosen, k - 1, hrem, hsub, holder, ?_, ?_⟩
   · omega
   · exact hlogActual
 
