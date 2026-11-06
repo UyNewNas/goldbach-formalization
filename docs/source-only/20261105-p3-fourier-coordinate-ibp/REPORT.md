@@ -143,3 +143,5 @@ The source also proves its nonnegativity and antitonicity in H (as candidates). 
 4. Still internal and open: actual W_T ContDiff and primitive integral norms for every original geometry label, causal/whole-box licenses, all HB source families, empty Gamma mothers, high-rank and enhanced PP and final same-rho assembly.
 
 **Status:** P3.6 YELLOW. One-axis exact integral candidate BLUE only. No GREEN nodes.
+
+**Post-readback static repair:** Reordered the new `VERIFY.lean` import ahead of all `#check` commands; the prior appended import was structurally misplaced. No compilation or kernel check was performed.

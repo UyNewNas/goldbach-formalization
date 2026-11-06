@@ -1,5 +1,6 @@
 import ImbalancedChen.P3FourierCoordinateIBP
 import ImbalancedChen.P3FourierPhysicalMeasureD
+import ImbalancedChen.P3FourierCauchyAxis
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -17,7 +18,6 @@ import ImbalancedChen.P3FourierPhysicalMeasureD
 #check ImbalancedChen.P3FourierPhysicalMeasureD.exists_physicalW_fourier_product_polylog
 
 -- New one-axis normalization and arctangent-tail targets; NOT executed.
-import ImbalancedChen.P3FourierCauchyAxis
 #check ImbalancedChen.P3FourierCauchyAxis.axisKernel_integrable
 #check ImbalancedChen.P3FourierCauchyAxis.axisKernel_full_mass
 #check ImbalancedChen.P3FourierCauchyAxis.axisKernel_mathlib_mass
