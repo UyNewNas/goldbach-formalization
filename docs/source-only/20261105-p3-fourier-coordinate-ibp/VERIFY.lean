@@ -7,6 +7,8 @@ import ImbalancedChen.P3FourierBoxTailAlgebra
 import ImbalancedChen.P3FourierProductFubini
 import ImbalancedChen.P3FourierAutomaticMeasurability
 
+import ImbalancedChen.P3FourierRestrictedBox
+
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
@@ -61,3 +63,16 @@ import ImbalancedChen.P3FourierAutomaticMeasurability
 #check ImbalancedChen.P3FourierAutomaticMeasurability.fourier_continuous_of_integrable
 #check ImbalancedChen.P3FourierAutomaticMeasurability.actual_fourier_norm_aestronglyMeasurable
 #check ImbalancedChen.P3FourierAutomaticMeasurability.actual_fourier_L1_no_meas
+
+-- Restricted physical Cauchy box and genuine complement (NOT RUN).
+#check ImbalancedChen.P3FourierRestrictedBox.unscaled_inside_mass
+#check ImbalancedChen.P3FourierRestrictedBox.scaledAxisInside_mass
+#check ImbalancedChen.P3FourierRestrictedBox.scaledAxisInside_integrable
+#check ImbalancedChen.P3FourierRestrictedBox.pointBox_measurable
+#check ImbalancedChen.P3FourierRestrictedBox.pointInsideKernel_eq_indicator
+#check ImbalancedChen.P3FourierRestrictedBox.pointInsideKernel_mass
+#check ImbalancedChen.P3FourierRestrictedBox.pointBox_mass
+#check ImbalancedChen.P3FourierRestrictedBox.fourierBox_measurable
+#check ImbalancedChen.P3FourierRestrictedBox.fourierBox_mass
+#check ImbalancedChen.P3FourierRestrictedBox.fourierBox_complement_mass
+#check ImbalancedChen.P3FourierRestrictedBox.fourierBox_complement_le_dim_div
