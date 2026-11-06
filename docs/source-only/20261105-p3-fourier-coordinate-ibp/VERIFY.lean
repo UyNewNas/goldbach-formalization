@@ -5,6 +5,7 @@ import ImbalancedChen.P3FourierCauchyTail
 import ImbalancedChen.P3FourierBoxTailAlgebra
 
 import ImbalancedChen.P3FourierProductFubini
+import ImbalancedChen.P3FourierAutomaticMeasurability
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -53,3 +54,10 @@ import ImbalancedChen.P3FourierProductFubini
 #check ImbalancedChen.P3FourierProductFubini.physical_inverse_denom_mass
 #check ImbalancedChen.P3FourierProductFubini.actual_derivativeD_nonneg
 #check ImbalancedChen.P3FourierProductFubini.actual_fourier_L1_bound
+
+-- Actual empty mixed source, pinned Fourier continuity, and L1 without extra measurability.
+-- SOURCE_ONLY: never executed with Lean/Lake or kernel.
+#check ImbalancedChen.P3FourierAutomaticMeasurability.actual_mixed_empty_eq_chart
+#check ImbalancedChen.P3FourierAutomaticMeasurability.fourier_continuous_of_integrable
+#check ImbalancedChen.P3FourierAutomaticMeasurability.actual_fourier_norm_aestronglyMeasurable
+#check ImbalancedChen.P3FourierAutomaticMeasurability.actual_fourier_L1_no_meas
