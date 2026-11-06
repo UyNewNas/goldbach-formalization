@@ -364,5 +364,65 @@ theorem actual_rankNine_inherited_absolute_invoice
   rw [actual_rankNine_reciprocal_value
     delta n e q om N cap hEven w z c s hs useParent a hsource]
 
+/-- Total inherited-square correction over the SAME literal 87-domain
+owned eighth frontier list. Repeated occurrences remain repeated. -/
+def ownedRankNineInheritedSigned
+    (r n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (w z : ℝ) (c : Cell) (useParent : Bool) : ℝ :=
+  ((states (P4AOriginalFull87HistoryCore.width r) n e q om N cap w z
+    (fun _ : ℕ => (1 : ℝ)) c).map (fun s =>
+      ((rankNineInheritedAt n e q om N c s useParent).map
+        (FirstExitRejectedAttempt.value halfProductDensity)).sum)).sum
+
+/-- The distinct eighth-state inherited costs are NOT replaced by a
+single unlicensed history, nor averaged using unrelated sieve bounds. -/
+def ownedRankNineInheritedCost
+    (r n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (w z : ℝ) (c : Cell) (useParent : Bool) : ℝ :=
+  ((states (P4AOriginalFull87HistoryCore.width r) n e q om N cap w z
+    (fun _ : ℕ => (1 : ℝ)) c).map (fun s =>
+      rankNineInheritedReciprocalCost n e q om N c s useParent)).sum
+
+/-- Actual owner/trim state-list absolute bound for ONE of the two
+physical ordinary continuations. No extra geometry certificate or
+RealizedHistory premise is introduced here. -/
+theorem owned_rankNine_inherited_absolute_invoice
+    (r n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (hEven : 2 ∣ N) (w z : ℝ) (c : Cell)
+    (useParent : Bool) :
+    |ownedRankNineInheritedSigned r n e q om N cap w z c useParent| ≤
+      ownedRankNineInheritedCost r n e q om N cap w z c useParent := by
+  unfold ownedRankNineInheritedSigned ownedRankNineInheritedCost
+  apply list_absolute_invoice
+  intro s hs
+  exact actual_rankNine_inherited_absolute_invoice
+    (P4AOriginalFull87HistoryCore.width r)
+    n e q om N cap hEven w z c s hs useParent
+
+/-- The inherited-square portion of the original old-minus-new ninth
+correction has a TWO-SIDED physical invoice. The old parent and
+rounded cap are charged separately, once each. This cost is finite
+but is explicitly NOT asserted to be small or already paid. -/
+theorem owned_rankNine_inherited_gap_two_sided
+    (r n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (hEven : 2 ∣ N) (w z : ℝ) (c : Cell) :
+    |ownedRankNineInheritedSigned r n e q om N cap w z c true -
+        ownedRankNineInheritedSigned r n e q om N cap w z c false| ≤
+      ownedRankNineInheritedCost r n e q om N cap w z c true +
+        ownedRankNineInheritedCost r n e q om N cap w z c false := by
+  calc
+    |ownedRankNineInheritedSigned r n e q om N cap w z c true -
+        ownedRankNineInheritedSigned r n e q om N cap w z c false| ≤
+        |ownedRankNineInheritedSigned r n e q om N cap w z c true| +
+          |ownedRankNineInheritedSigned r n e q om N cap w z c false| :=
+            abs_sub_le _ _
+    _ ≤ ownedRankNineInheritedCost r n e q om N cap w z c true +
+          ownedRankNineInheritedCost r n e q om N cap w z c false :=
+            add_le_add
+              (owned_rankNine_inherited_absolute_invoice
+                r n e q om N cap hEven w z c true)
+              (owned_rankNine_inherited_absolute_invoice
+                r n e q om N cap hEven w z c false)
+
 end
 end ImbalancedChen.P4AOriginalFull87RankNinePhysicalInherited
