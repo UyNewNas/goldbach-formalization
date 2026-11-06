@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualFrozenPhysicalGamma
 import ImbalancedChen.P3ActualFrozenGroupWords
 import ImbalancedChen.P3ActualFrozenSlotLabelCounts
 import ImbalancedChen.P3ActualSplitLabelMultinomial
@@ -217,3 +218,9 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3ActualFrozenGroupWords.actual_frozen_split_word_count
 #check ImbalancedChen.P3ActualFrozenGroupWords.actual_frozen_group_words_perm
 #check ImbalancedChen.P3ActualFrozenGroupWords.actual_frozen_physical_three_product_sum
+
+-- Actual endpoint-frozen group product-fibre gamma and signed full tensor.
+-- SOURCE_ONLY; all checks below are registered but NOT executed.
+#check ImbalancedChen.P3ActualFrozenPhysicalGamma.normalized_group_sum_of_word_perm
+#check ImbalancedChen.P3ActualFrozenPhysicalGamma.actual_frozen_three_group_normalized_sums
+#check ImbalancedChen.P3ActualFrozenPhysicalGamma.actual_frozen_physical_three_gamma_tensor
