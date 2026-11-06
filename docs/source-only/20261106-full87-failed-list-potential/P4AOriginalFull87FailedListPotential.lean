@@ -200,7 +200,7 @@ theorem owned87_failed_actual_pair_list_gap
     owned87_later_failure_exact_rank_log_exit
       delta n e q om N cap hN w z c s hs useParent a ha hlater
   have hrev : chosen.reverse = chosen2.reverse :=
-    List.append_cancel_right (holder.symm.trans holder2)
+    List.append_right_cancel (holder.symm.trans holder2)
   have hsame : chosen = chosen2 := by
     have hh := congrArg List.reverse hrev
     simpa using hh
