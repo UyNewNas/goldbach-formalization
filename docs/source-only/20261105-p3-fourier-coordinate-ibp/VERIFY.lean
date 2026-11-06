@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBLiteralFiniteBridge
 import ImbalancedChen.P3HBLiteralWordMajorant
 import ImbalancedChen.P3HBOrderedFactorMajorant
 import ImbalancedChen.P3ShiftedDivisorFiniteMoment
@@ -147,3 +148,11 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3HBLiteralWordMajorant.literalHBAbsMass
 #check ImbalancedChen.P3HBLiteralWordMajorant.literalHBAbsMass_le_card_log
 #check ImbalancedChen.P3HBLiteralWordMajorant.literalHBThreeTermAbsMass_le
+
+-- Exact literal List-to-Fin factor fibres and HB fixed divisor exponents; NOT EXECUTED.
+#check ImbalancedChen.P3HBLiteralFiniteBridge.literal_fibre_subset_ordered_image
+#check ImbalancedChen.P3HBLiteralFiniteBridge.literal_factorTuples_card_le_ordered
+#check ImbalancedChen.P3HBLiteralFiniteBridge.literal_factorTuples_card_le_tau_pow
+#check ImbalancedChen.P3HBLiteralFiniteBridge.literalHBAbsMass_le_tau_pow
+#check ImbalancedChen.P3HBLiteralFiniteBridge.literalHBThreeTermAbsMass_le_tau_powers
+#check ImbalancedChen.P3HBLiteralFiniteBridge.literalHBThreeTerm_off_shifted_le_mixed_tau
