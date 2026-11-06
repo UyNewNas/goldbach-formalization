@@ -213,5 +213,181 @@ theorem owned87_failed_all_prior_odd_squares_and_pairs
     apply (div_lt_div_iff_of_pos_right (Real.log_pos hN)).mpr
     exact Real.log_lt_log hqpos (by exact_mod_cast hq_lt_r)
 
+/-- Strict, not weak, N-log version of a successful full least-prime
+square test. The actual history product is split just once into
+past occurrences and the original fixed eighth history. -/
+theorem passed_square_to_history_past_log
+    (N r : ℕ) (past history : List ℕ) (beta : ℝ)
+    (hN : 1 < (N : ℝ)) (hr : 0 < r)
+    (hpast : 0 < past.prod) (hhistory : 0 < history.prod)
+    (hpassed : ((((r :: (past.reverse ++ history)).prod : ℕ) : ℝ) *
+      (r : ℝ) ^ 2 < (N : ℝ) ^ beta) :
+    Real.log (history.prod : ℝ) / Real.log (N : ℝ) +
+      Real.log (past.prod : ℝ) / Real.log (N : ℝ) +
+      3 * (Real.log (r : ℝ) / Real.log (N : ℝ)) < beta := by
+  have hrpos : (0 : ℝ) < r := by exact_mod_cast hr
+  have hppos : (0 : ℝ) < past.prod := by exact_mod_cast hpast
+  have hhpos : (0 : ℝ) < history.prod := by exact_mod_cast hhistory
+  have hprodNat :
+      (r :: (past.reverse ++ history)).prod =
+        r * past.prod * history.prod := by
+    simp only [List.prod_cons, List.prod_append, List.prod_reverse]
+    ring
+  have hprodpos : (0 : ℝ) <
+      (((r :: (past.reverse ++ history)).prod : ℕ) : ℝ) := by
+    rw [hprodNat, Nat.cast_mul, Nat.cast_mul]
+    exact mul_pos (mul_pos hrpos hppos) hhpos
+  have hlogprod :
+      Real.log (((r :: (past.reverse ++ history)).prod : ℕ) : ℝ) =
+        Real.log (r : ℝ) +
+        Real.log (past.prod : ℝ) +
+        Real.log (history.prod : ℝ) := by
+    rw [hprodNat, Nat.cast_mul, Nat.cast_mul,
+      Real.log_mul (mul_pos hrpos hppos).ne' hhpos.ne',
+      Real.log_mul hrpos.ne' hppos.ne']
+  have hlog := Real.log_lt_log
+    (mul_pos hprodpos (pow_pos hrpos 2)) hpassed
+  rw [Real.log_mul hprodpos.ne' (pow_pos hrpos 2).ne',
+    Real.log_pow, Real.log_rpow (zero_lt_one.trans hN),
+    hlogprod] at hlog
+  have hscaled :
+      Real.log (history.prod : ℝ) +
+        Real.log (past.prod : ℝ) + 3 * Real.log (r : ℝ) <
+        beta * Real.log (N : ℝ) := by
+    linarith
+  have hdivide :
+      (Real.log (history.prod : ℝ) +
+          Real.log (past.prod : ℝ) + 3 * Real.log (r : ℝ)) /
+        Real.log (N : ℝ) < beta :=
+    (div_lt_iff₀ (Real.log_pos hN)).mpr hscaled
+  calc
+    Real.log (history.prod : ℝ) / Real.log (N : ℝ) +
+        Real.log (past.prod : ℝ) / Real.log (N : ℝ) +
+        3 * (Real.log (r : ℝ) / Real.log (N : ℝ)) =
+      (Real.log (history.prod : ℝ) +
+        Real.log (past.prod : ℝ) + 3 * Real.log (r : ℝ)) /
+        Real.log (N : ℝ) := by ring
+    _ < beta := hdivide
+
+/-- The same physical failed event supplies all strictly indexed
+prior post-eight upper tests in N-log coordinates, with the original
+Fin 8 history sum, exact occurrence products and real frozen exponent.
+It also transports the strict adjacent chosen-prime log order.
+
+These are precisely the finite data behind hprior and hpair, for any
+actual even-sized cut of the selected chronology; conversion of those
+cuts to the tailEvenMass index family remains a separate obligation. -/
+theorem owned87_failed_all_prior_log_guards_and_pairs
+    (delta : ℝ) (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (hN : 1 < (N : ℝ))
+    (w z : ℝ) (c : Cell)
+    (s : FirstExitDepthState ℕ)
+    (hs : s ∈ states delta n e q om N cap w z (fun _ => 1) c)
+    (useParent : Bool) (a : FirstExitRejectedAttempt ℕ)
+    (ha : a ∈ firstExitRejectedAttempts
+      (ordinaryParityRosserPolicy false
+        (actualFrozenPost8Level n e q om N c s useParent))
+      (fun _ : ℕ => 1) s.selectedPrefix s.positive s.mass s.remaining) :
+    ∃ (before chosen : List ℕ),
+      s.remaining = before ++ a.rejected :: a.smaller ∧
+      chosen <+ before ∧
+      a.older = chosen.reverse ++ s.selectedPrefix ∧
+      (∀ (past rest : List ℕ) (r : ℕ),
+        chosen = past ++ r :: rest →
+        Even past.length →
+        (∑ i : Fin 8,
+          primeHistoryLogCoordinates (N : ℝ) 8 s.selectedPrefix i) +
+          Real.log (past.prod : ℝ) / Real.log (N : ℝ) +
+          3 * (Real.log (r : ℝ) / Real.log (N : ℝ)) <
+          (if useParent then
+            P4AOriginalFull87EighthKernelIntegration.actualParent
+              n e q om (N : ℝ) s.selectedPrefix
+          else
+            (P4AOriginalFull87FiniteEighthCap.finiteCap n c
+              (P4AOriginalFull87SourceDispatch.point8
+                (N : ℝ) s.selectedPrefix) : ℝ))) ∧
+      (∀ (past rest : List ℕ) (r q' : ℕ),
+        chosen = past ++ r :: q' :: rest →
+        Real.log (q' : ℝ) / Real.log (N : ℝ) <
+          Real.log (r : ℝ) / Real.log (N : ℝ)) := by
+  obtain ⟨before, chosen, hrem, hsub, holder, hsquares, hpairs⟩ :=
+    owned87_failed_all_prior_odd_squares_and_pairs
+      delta n e q om N cap hN w z c s hs useParent a ha
+  obtain ⟨hlen, _, _, _, hlast⟩ :=
+    owned87_eighth_state_exact_carrier
+      delta n e q om N cap w z c s hs
+  have hfront : s ∈ frontier n e q om N cap w z := by
+    have hh := hs
+    rw [states_eq_owner_filter] at hh
+    exact (List.mem_filter.mp hh).1
+  have hpreSub : s.selectedPrefix.reverse <+
+      roughPrimeUniverse N cap w z :=
+    firstExitDepthFrontier_selected_reverse_sublist
+      8 (P4AOriginalFull87LicensedSixthPolicy.sixthPolicy
+          n e q om (N : ℝ))
+      (fun _ : ℕ => (1 : ℝ)) (roughPrimeUniverse N cap w z)
+      s hfront
+  have hhistoryPrime : ∀ x ∈ s.selectedPrefix, Nat.Prime x := by
+    intro x hx
+    exact mem_roughPrimeUniverse_prime
+      (hpreSub.subset (List.mem_reverse.mpr hx))
+  have hhistoryPos : ∀ x ∈ s.selectedPrefix, 0 < x :=
+    fun x hx => (hhistoryPrime x hx).pos
+  have hhistoryNe : s.selectedPrefix.prod ≠ 0 := by
+    apply List.prod_ne_zero
+    intro hz
+    exact (hhistoryPrime 0 hz).ne_zero rfl
+  have hhistoryProdPos : 0 < s.selectedPrefix.prod :=
+    Nat.pos_of_ne_zero hhistoryNe
+  have hsum :
+      (∑ i : Fin 8,
+        primeHistoryLogCoordinates (N : ℝ) 8 s.selectedPrefix i) =
+        Real.log (s.selectedPrefix.prod : ℝ) / Real.log (N : ℝ) :=
+    sum_primeHistoryLogCoordinates (N : ℝ) hN hlen hhistoryPos
+  have hremPrime : ∀ x ∈ s.remaining, Nat.Prime x := by
+    intro x hx
+    obtain ⟨last, tail, _, _, hremain⟩ := hlast
+    rw [hremain] at hx
+    exact mem_roughPrimeUniverse_prime hx
+  have hchosenPrime : ∀ x ∈ chosen, Nat.Prime x := by
+    intro x hx
+    apply hremPrime x
+    rw [hrem]
+    exact List.mem_append.mpr (Or.inl (hsub.subset hx))
+  let beta : ℝ :=
+    if useParent then
+      P4AOriginalFull87EighthKernelIntegration.actualParent
+        n e q om (N : ℝ) s.selectedPrefix
+    else
+      (P4AOriginalFull87FiniteEighthCap.finiteCap n c
+        (P4AOriginalFull87SourceDispatch.point8
+          (N : ℝ) s.selectedPrefix) : ℝ)
+  have hlevel :
+      actualFrozenPost8Level n e q om N c s useParent =
+        (N : ℝ) ^ beta := rfl
+  refine ⟨before, chosen, hrem, hsub, holder, ?_, hpairs⟩
+  intro past rest r hsplit heven
+  have hfull :
+      ((((r :: past.reverse ++ s.selectedPrefix).prod : ℕ) : ℝ) *
+        (r : ℝ) ^ 2 < (N : ℝ) ^ beta := by
+    rw [← hlevel]
+    exact (hsquares past rest r hsplit heven).2
+  have hrPrime : Nat.Prime r :=
+    hchosenPrime r (by rw [hsplit]; simp)
+  have hpastPrime : ∀ x ∈ past, Nat.Prime x := by
+    intro x hx
+    apply hchosenPrime x
+    rw [hsplit]
+    exact List.mem_append.mpr (Or.inl hx)
+  have hpastNe : past.prod ≠ 0 := by
+    apply List.prod_ne_zero
+    intro hz
+    exact (hpastPrime 0 hz).ne_zero rfl
+  have hprior :=
+    passed_square_to_history_past_log N r past s.selectedPrefix
+      beta hN hrPrime.pos (Nat.pos_of_ne_zero hpastNe)
+      hhistoryProdPos hfull
+  simpa only [hsum] using hprior
+
 end
 end ImbalancedChen.P4AOriginalFull87FailedPriorSquares
