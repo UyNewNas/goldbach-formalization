@@ -1,0 +1,13 @@
+# P1.4 continuation — exact full87 later signed deletion ledger
+
+Read the live GitHub branch, this file and full source before the next round.
+
+- Prior actual handoff: `515ce41aba5c3a12274abee7e2a736ff91357265` on `chatgpt/p1-full87-weighted-root-transport-20261106`.
+- Independent branch: `chatgpt/p1-full87-signed-deletion-ledger-20261106`.
+- This round's code: `docs/source-only/20261106-full87-signed-deletion-ledger/P4AOriginalFull87SignedDeletionLedger.lean`, code commit `1e35586fa6965bc14229bfabf7a62b1ce4407ada`, blob `6b431f93f528258f0b72a13e30a9ee24473f0e22`; the final enclosing commit is newer. Do not use older navigation SHA as a rollback pointer.
+- Mathematical increment: every actual physical failed-select occurrence has an EXACT corresponding unit event key; at rank≥11 import the previous same-history, same-target finite `targetDeletionFactor` bound for that key and apply it to the original signed physical `a.value halfProductDensity`. A new induction propagates absolute error across the real ordered later-event lists and across the entire original87 owner/trim state list. The adjusted expression is only a comparison ledger, not yet the original signed arithmetic coefficient.
+- RealizedHistory still required for every owned state; rank-nine excluded; no actual saved87/primitive/centre/modulus/sixth-filter/ordinary integral/two reserves/same-rho result. No extra mask, dedup, exponent shift, second factor or new external input was added.
+- Checks: GitHub code confirmed `1e35586fa6965bc14229bfabf7a62b1ce4407ada`, blob `6b431f93f528258f0b72a13e30a9ee24473f0e22`, 316 lines; static proof-escape/delimiter scan passed; independent exact rational synthetic 180,983 event and 12,000 ordered sum tests, zero failures. Lean/Lake unavailable; NO COMPILE, KERNEL, AXIOM AUDIT, INDEPENDENT REVIEW, ARCHIVED 87-DOMAIN REPLAY or CI. SOURCE_ONLY/UNEVALUATED/ZERO FORMAL CREDIT.
+- Pinned manuscript: `9731290e8f53cffda44129906cde6a965eaa869b`, toolchain Lean v4.33.0-rc1, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, native `09b97db5764ade1246bfb77206baa1b124760958`; c,K unchanged.
+- **Next precise action:** use `P1Pair12RetainedSignedSource.signedTest`, `attachedLeafTest` and `P4AOriginalFull87OwnedEighthSource.physical_saving_eq_owned_sources` to identify exactly which original old-minus-new signed full-modulus terms correspond to the later-event `v` or `vD` ledger. Prove that alignment (or explicitly expose the extra terms) before claiming any saving; then handle rank nine separately.
+- Restrictions: task branch only, [skip ci], no main/master change, no merge/force, no Codex/CI/upgrade or user-machine access. External analytic input remains register-only.
