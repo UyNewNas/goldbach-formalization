@@ -1,6 +1,7 @@
 import ImbalancedChen.P3FourierCoordinateIBP
 import ImbalancedChen.P3FourierPhysicalMeasureD
 import ImbalancedChen.P3FourierCauchyAxis
+import ImbalancedChen.P3FourierCauchyTail
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -24,3 +25,9 @@ import ImbalancedChen.P3FourierCauchyAxis
 #check ImbalancedChen.P3FourierCauchyAxis.axisPairTail_exact
 #check ImbalancedChen.P3FourierCauchyAxis.axisPairTail_nonneg
 #check ImbalancedChen.P3FourierCauchyAxis.axisPairTail_antitone
+
+-- Quantitative H^-1 Cauchy axis / scalar epsilon ledger; NOT executed.
+#check ImbalancedChen.P3FourierCauchyTail.arctan_le_self_nonneg
+#check ImbalancedChen.P3FourierCauchyTail.axisPairTail_le_two_div
+#check ImbalancedChen.P3FourierCauchyTail.axisPairTail_L1_budget
+#check ImbalancedChen.P3FourierCauchyTail.axisPairTail_spend

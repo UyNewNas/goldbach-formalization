@@ -145,3 +145,16 @@ The source also proves its nonnegativity and antitonicity in H (as candidates). 
 **Status:** P3.6 YELLOW. One-axis exact integral candidate BLUE only. No GREEN nodes.
 
 **Post-readback static repair:** Reordered the new `VERIFY.lean` import ahead of all `#check` commands; the prior appended import was structurally misplaced. No compilation or kernel check was performed.
+
+
+## Successor SOURCE_ONLY increment — pinned elementary H⁻¹ physical Fourier-axis tail (2026-11-06 UTC)
+
+- **Baseline HEAD**: `684c16f7e6791e5e7af901ad924f3fb9194425d5`; **new proof commit**: `0566b44f1c5ee96ba579e3818625c7b3eb8e603a` (`[skip ci]`), source: `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3FourierCauchyTail.lean`, Git blob: `4f5a310b653aacd8c9ffe174d510c6c3b8b1fd8c`.
+- **Pin**: manuscript `9731290e8f53cffda44129906cde6a965eaa869b` §4 (F), physical Fourier convention `xi=2*pi*eta`; Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`. External registry (M) unchanged.
+- **Genuine proof-body content**: The pinned `Trigonometric/Bounds.lean` contains `Real.le_tan` while its `Real.arctan_le_self` shortcut does not yet exist. Applying `Real.le_tan` to `Real.arctan x`, and using `Real.tan_arctan`, proves `Real.arctan x <= x` for `x>=0` without importing a future API. Then `Real.arctan_inv_of_pos` and the previous exact pair-tail integral establish `axisPairTail H <= 2/H` for `H>0`. Nonnegative real `D` gives `D*axisPairTail H <= 2D/H`; a concrete `2D <= eps*H` yields the epsilon spend. These are one-dimensional manuscript-internal candidate proofs, not an assumed truncation bound.
+- **Declarations**: `P3FourierCauchyTail.arctan_le_self_nonneg`, `axisPairTail_le_two_div`, `axisPairTail_L1_budget`, `axisPairTail_spend`.
+- **Direct pinned-source evidence**: Read `Mathlib/Analysis/SpecialFunctions/Trigonometric/Bounds.lean` (contains `Real.le_tan` at line 214), `Arctan.lean` (`Real.arctan_nonneg`, `Real.arctan_inv_of_pos`), and the exact previous `P3FourierCauchyAxis.lean`. Import order and signatures are candidates until Lean elaboration.
+- **Static and independent checks**: forbidden-source escape-token scan 0; lexical delimiter balance PASS; 14 positive-H values checked against `pi-2*atan(H) = 2*atan(1/H) <= 2/H`, 70 one-axis budget and 210 cutoff numeric cases. Floating model checks do not certify Lean analysis.
+- **NOT RUN**: Lean/Lake, CI, kernel replay, full transitive axiom audit, Codex, heavy producer. No green status.
+- **Open internal**: genuine finite-dimensional product-volume/Fubini separation and normalized Fourier L1; H-box union and *uniform* original W_T derivative budgets; same-rho full physical modulus arithmetic mass including exact complete product T; causal, HB all sources, empty Gamma, high-rank/enhanced assembly. The new one-axis 1/H inequality does **not** imply mD/H without Fubini and does not pay arithmetic discrepancy.
+- **Scope unchanged**: no fixed-manuscript, toolchain, production, excluded full87, other-task-branch, PR or CI edit. External (M) remains registered only.
