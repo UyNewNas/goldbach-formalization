@@ -1,0 +1,161 @@
+{
+  "name": "Isolated checkpoint transport smoke test",
+  "on": {
+    "push": {
+      "branches": [
+        "ci/memory-12g-retest-20261103-transfer-smoke-20261106"
+      ],
+      "paths": [
+        ".github/workflows/checkpoint-transport-smoke.yml"
+      ]
+    },
+    "workflow_dispatch": {}
+  },
+  "permissions": {
+    "contents": "read"
+  },
+  "concurrency": {
+    "group": "checkpoint-transport-smoke-${{ github.ref }}",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "produce": {
+      "runs-on": "ubuntu-latest",
+      "timeout-minutes": 15,
+      "env": {
+        "LEAN_NUM_THREADS": 2,
+        "CI_LEAN_MEMORY_MIB": 12288
+      },
+      "defaults": {
+        "run": {
+          "shell": "bash"
+        }
+      },
+      "steps": [
+        {
+          "name": "Check out exact pilot commit",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "Check out pinned toolchain setup",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "repository": "leanprover/lean-action",
+            "ref": "f061402b660e0c34644504b324e830f2991d4865",
+            "path": ".ci-lean-action",
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "Install pinned toolchain",
+          "run": "set -euo pipefail\ntest \"$(cat lean-toolchain)\" = leanprover/lean4:v4.33.0-rc1\n.ci-lean-action/scripts/install_elan.sh"
+        },
+        {
+          "name": "Recreate runtime guard",
+          "run": "set -euo pipefail\naction_dir=\"$RUNNER_TEMP/lean-action-f061402b\"\nmv .ci-lean-action \"$action_dir\"\nexport LEAN_ACTION_DIR=\"$action_dir\"\nprintf 'LEAN_ACTION_DIR=%s\\n' \"$action_dir\" >> \"$GITHUB_ENV\"\npython3 verification/parts/p0/ci_runtime_guard.py setup --evidence \"$RUNNER_TEMP/runtime-evidence\""
+        },
+        {
+          "name": "Verify new guarded runtime",
+          "run": "set -euo pipefail\npython3 verification/parts/p0/ci_runtime_guard.py audit --probe"
+        },
+        {
+          "name": "Compile only a tiny synthetic fixture and package it",
+          "run": "set -euo pipefail\nmkdir -p \"$RUNNER_TEMP/transfer\" .lake/build/lib/lean .lake/build/bin\nprintf 'def checkpointProbe : Nat := 42\\n' > CheckpointProbe.lean\nlean -o .lake/build/lib/lean/CheckpointProbe.olean CheckpointProbe.lean\nprintf '#!/bin/sh\\nprintf \"checkpoint-mode-ok\\\\n\"\\n' > .lake/build/bin/checkpoint-mode-probe\nchmod 755 .lake/build/bin/checkpoint-mode-probe\nln -s checkpoint-mode-probe .lake/build/bin/checkpoint-link\ngit rev-parse HEAD > \"$RUNNER_TEMP/transfer/commit.txt\"\nsha256sum lean-toolchain lake-manifest.json lakefile.toml > \"$RUNNER_TEMP/transfer/pins.sha256\"\nsha256sum .lake/build/lib/lean/CheckpointProbe.olean .lake/build/bin/checkpoint-mode-probe > \"$RUNNER_TEMP/transfer/files.sha256\"\npython3 verification/parts/p0/ci_runtime_guard.py audit --probe --require-source\ntar -cf \"$RUNNER_TEMP/transfer/checkpoint.tar\" .lake/build\n(cd \"$RUNNER_TEMP/transfer\" && sha256sum checkpoint.tar > checkpoint.sha256)\ngit diff --exit-code\nprintf \"Transport smoke test only; no project acceptance claimed.\\n\" >> \"$GITHUB_STEP_SUMMARY\""
+        },
+        {
+          "name": "Upload exact checkpoint",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "checkpoint-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/transfer/",
+            "if-no-files-found": "error",
+            "retention-days": 3,
+            "compression-level": 0
+          }
+        },
+        {
+          "name": "Retain independent runtime evidence",
+          "if": "${{ always() }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "producer-runtime-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/runtime-evidence/",
+            "retention-days": 3,
+            "if-no-files-found": "error"
+          }
+        }
+      ]
+    },
+    "consume": {
+      "needs": "produce",
+      "runs-on": "ubuntu-latest",
+      "timeout-minutes": 15,
+      "env": {
+        "LEAN_NUM_THREADS": 2,
+        "CI_LEAN_MEMORY_MIB": 12288
+      },
+      "defaults": {
+        "run": {
+          "shell": "bash"
+        }
+      },
+      "steps": [
+        {
+          "name": "Check out exact pilot commit",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "Check out pinned toolchain setup",
+          "uses": "actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+          "with": {
+            "repository": "leanprover/lean-action",
+            "ref": "f061402b660e0c34644504b324e830f2991d4865",
+            "path": ".ci-lean-action",
+            "persist-credentials": false
+          }
+        },
+        {
+          "name": "Install pinned toolchain",
+          "run": "set -euo pipefail\ntest \"$(cat lean-toolchain)\" = leanprover/lean4:v4.33.0-rc1\n.ci-lean-action/scripts/install_elan.sh"
+        },
+        {
+          "name": "Recreate runtime guard",
+          "run": "set -euo pipefail\naction_dir=\"$RUNNER_TEMP/lean-action-f061402b\"\nmv .ci-lean-action \"$action_dir\"\nexport LEAN_ACTION_DIR=\"$action_dir\"\nprintf 'LEAN_ACTION_DIR=%s\\n' \"$action_dir\" >> \"$GITHUB_ENV\"\npython3 verification/parts/p0/ci_runtime_guard.py setup --evidence \"$RUNNER_TEMP/runtime-evidence\""
+        },
+        {
+          "name": "Verify new guarded runtime",
+          "run": "set -euo pipefail\npython3 verification/parts/p0/ci_runtime_guard.py audit --probe"
+        },
+        {
+          "name": "Download only this run's checkpoint",
+          "uses": "actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093",
+          "with": {
+            "name": "checkpoint-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/transfer/"
+          }
+        },
+        {
+          "name": "Verify checkpoint and import the transferred object",
+          "run": "set -euo pipefail\ncd \"$RUNNER_TEMP/transfer\"\ntest \"$(cat commit.txt)\" = \"$(git -C \"$GITHUB_WORKSPACE\" rev-parse HEAD)\"\nsha256sum -c checkpoint.sha256\ncd \"$GITHUB_WORKSPACE\"\nsha256sum -c \"$RUNNER_TEMP/transfer/pins.sha256\"\ntar -tf \"$RUNNER_TEMP/transfer/checkpoint.tar\"\ntar -xf \"$RUNNER_TEMP/transfer/checkpoint.tar\"\nsha256sum -c \"$RUNNER_TEMP/transfer/files.sha256\"\ntest -x .lake/build/bin/checkpoint-mode-probe\ntest -L .lake/build/bin/checkpoint-link\ntest \"$(readlink .lake/build/bin/checkpoint-link)\" = checkpoint-mode-probe\ntest \"$(.lake/build/bin/checkpoint-link)\" = checkpoint-mode-ok\nprintf 'import CheckpointProbe\\nexample : checkpointProbe = 42 := rfl\\n' > CheckpointConsumer.lean\nLEAN_PATH=\"$GITHUB_WORKSPACE/.lake/build/lib/lean\" lean CheckpointConsumer.lean\npython3 verification/parts/p0/ci_runtime_guard.py audit --probe --require-source\ngit diff --exit-code\nprintf \"PASS: cross-job object import, digest, pin, mode, symlink, fresh guard. NOT a full project build or 480-minute resume verification.\\n\" >> \"$GITHUB_STEP_SUMMARY\""
+        },
+        {
+          "name": "Retain independent runtime evidence",
+          "if": "${{ always() }}",
+          "uses": "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02",
+          "with": {
+            "name": "consumer-runtime-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "${{ runner.temp }}/runtime-evidence/",
+            "retention-days": 3,
+            "if-no-files-found": "error"
+          }
+        }
+      ]
+    }
+  }
+}
