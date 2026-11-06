@@ -1,3 +1,4 @@
+import ImbalancedChen.P3HBRoughLiteralMoment
 import ImbalancedChen.P3HBLiteralFiniteBridge
 import ImbalancedChen.P3HBLiteralWordMajorant
 import ImbalancedChen.P3HBOrderedFactorMajorant
@@ -156,3 +157,15 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3HBLiteralFiniteBridge.literalHBAbsMass_le_tau_pow
 #check ImbalancedChen.P3HBLiteralFiniteBridge.literalHBThreeTermAbsMass_le_tau_powers
 #check ImbalancedChen.P3HBLiteralFiniteBridge.literalHBThreeTerm_off_shifted_le_mixed_tau
+
+-- Genuine strict rough HB mask and original 3,3,1 finite moment; SOURCE_ONLY, NOT EXECUTED.
+#check ImbalancedChen.P3HBRoughLiteralMoment.roughLiteralHBAbsMass
+#check ImbalancedChen.P3HBRoughLiteralMoment.roughLiteralHBAbsMass_eq_mask
+#check ImbalancedChen.P3HBRoughLiteralMoment.roughLiteralHBAbsMass_le_literal
+#check ImbalancedChen.P3HBRoughLiteralMoment.roughLiteralHBAbsMass_le_tau_pow
+#check ImbalancedChen.P3HBRoughLiteralMoment.roughLiteralThreeTermAbsMass
+#check ImbalancedChen.P3HBRoughLiteralMoment.roughLiteralThreeTermAbsMass_eq_mask
+#check ImbalancedChen.P3HBRoughLiteralMoment.roughLiteralThreeTermAbsMass_zero_of_not_coprime
+#check ImbalancedChen.P3HBRoughLiteralMoment.roughLiteralThreeTermAbsMass_le_literal
+#check ImbalancedChen.P3HBRoughLiteralMoment.roughLiteralThreeTermAbsMass_le_tau_powers
+#check ImbalancedChen.P3HBRoughLiteralMoment.roughLiteralThreeTerm_off_shifted_le_mixed_tau
