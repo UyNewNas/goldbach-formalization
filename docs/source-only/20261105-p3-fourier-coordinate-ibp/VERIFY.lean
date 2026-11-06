@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualSplitLabelMultinomial
 import ImbalancedChen.P3ActualFrozenFineLabelPartition
 import ImbalancedChen.P3ActualFineLabelThreeGammaTensor
 import ImbalancedChen.P3HBRoughLiteralMoment
@@ -184,3 +185,12 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3ActualFrozenFineLabelPartition.frozen_block_group_labels_pairwise
 #check ImbalancedChen.P3ActualFrozenFineLabelPartition.actual_frozen_fine_label_tensor
 #check ImbalancedChen.P3ActualFrozenFineLabelPartition.actual_frozen_gamma_product_abs_le_one
+
+-- Split original repeated labels across physical occurrence groups; SOURCE_ONLY, NOT RUN.
+#check ImbalancedChen.P3ActualSplitLabelMultinomial.splitBlocks
+#check ImbalancedChen.P3ActualSplitLabelMultinomial.split_blocks_word_perm
+#check ImbalancedChen.P3ActualSplitLabelMultinomial.factorial_three_le
+#check ImbalancedChen.P3ActualSplitLabelMultinomial.split_factorial_le
+#check ImbalancedChen.P3ActualSplitLabelMultinomial.split_factorial_ratio_mem_Icc
+#check ImbalancedChen.P3ActualSplitLabelMultinomial.actual_split_three_gamma_tensor
+#check ImbalancedChen.P3ActualSplitLabelMultinomial.frozen_occurrence_count_sum
