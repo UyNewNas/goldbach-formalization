@@ -1,4 +1,5 @@
 import ImbalancedChen.P3FourierCoordinateIBP
+import ImbalancedChen.P3FourierPhysicalMeasureD
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -8,7 +9,6 @@ import ImbalancedChen.P3FourierCoordinateIBP
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_physical_decay
 
 -- Added physical volume/actual original W budget target. Still NOT executed.
-import ImbalancedChen.P3FourierPhysicalMeasureD
 #check ImbalancedChen.P3FourierPhysicalMeasureD.chart_measure_preserving
 #check ImbalancedChen.P3FourierPhysicalMeasureD.integral_chart
 #check ImbalancedChen.P3FourierPhysicalMeasureD.mixed_L1_chart
