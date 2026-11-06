@@ -2,6 +2,7 @@ import ImbalancedChen.P3FourierCoordinateIBP
 import ImbalancedChen.P3FourierPhysicalMeasureD
 import ImbalancedChen.P3FourierCauchyAxis
 import ImbalancedChen.P3FourierCauchyTail
+import ImbalancedChen.P3FourierBoxTailAlgebra
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -31,3 +32,11 @@ import ImbalancedChen.P3FourierCauchyTail
 #check ImbalancedChen.P3FourierCauchyTail.axisPairTail_le_two_div
 #check ImbalancedChen.P3FourierCauchyTail.axisPairTail_L1_budget
 #check ImbalancedChen.P3FourierCauchyTail.axisPairTail_spend
+
+-- New separated-box scalar algebra; not a multidimensional integral, NOT EXECUTED.
+#check ImbalancedChen.P3FourierBoxTailAlgebra.pow_gap_le_linear
+#check ImbalancedChen.P3FourierBoxTailAlgebra.normalizedAxisRemoved_bounds
+#check ImbalancedChen.P3FourierBoxTailAlgebra.normalizedAxisRemoved_le_inv
+#check ImbalancedChen.P3FourierBoxTailAlgebra.separatedBoxMassLoss_le_dim_div
+#check ImbalancedChen.P3FourierBoxTailAlgebra.separatedBoxMassLoss_budget
+#check ImbalancedChen.P3FourierBoxTailAlgebra.separatedBoxMassLoss_spend
