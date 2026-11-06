@@ -95,15 +95,6 @@ theorem failed_attempt_labels_independent_of_weights {α : Type*}
         rw [ih pre positive massH massK]
         rfl
 
-/-- On the existing arithmetic density, a prime has the literal
-physical 1/(p-1) factor, without a substitute density function. -/
-theorem physical_prime_density_eq_reciprocal
-    {p : ℕ} (hp : Nat.Prime p) :
-    halfProductDensity p = 1 / ((p : ℝ) - 1) := by
-  change 1 / (Nat.totient p : ℝ) = _
-  rw [Nat.totient_prime hp,
-    Nat.cast_sub (by have := hp.two_le; omega : 1 ≤ p), Nat.cast_one]
-
 /-- Genuine original87 rank-eight source: for an actual physically
 weighted failed occurrence the whole success word, rejected prime,
 and their exact densities come from ONE target-deleted carrier.
@@ -158,6 +149,11 @@ theorem owned87_actual_physical_failed_occurrence
     mem_roughPrimeUniverse_prime hpMem
   have hpNotDiv : ¬a.rejected ∣ N :=
     mem_roughPrimeUniverse_not_dvd hpMem
+  have hNEven : Even N := even_iff_two_dvd.mpr hEven
+  have hpDensity : halfProductDensity a.rejected =
+      1 / ((a.rejected : ℝ) - 1) := by
+    simpa [chenInitialBoundingSieve] using
+      chenInitialBoundingSieve_prime_density N w hNEven hpPrime
   have hpThree : 2 < a.rejected := by
     have hpTwo := hpPrime.two_le
     have hpNeTwo : a.rejected ≠ 2 := by
@@ -183,9 +179,12 @@ theorem owned87_actual_physical_failed_occurrence
         apply hnot
         simpa [he] using hEven
       omega
-    exact ⟨hgt, physical_prime_density_eq_reciprocal hprime, hnot⟩
+    have hdens : halfProductDensity p = 1 / ((p : ℝ) - 1) := by
+      simpa [chenInitialBoundingSieve] using
+        chenInitialBoundingSieve_prime_density N w hNEven hprime
+    exact ⟨hgt, hdens, hnot⟩
   refine ⟨before, chosen, hrem, hsub, holder, hmass,
-    hpThree, physical_prime_density_eq_reciprocal hpPrime,
+    hpThree, hpDensity,
     hchosen, hpNotDiv, ?_⟩
   simp only [FirstExitRejectedAttempt.value, hmass]
 
