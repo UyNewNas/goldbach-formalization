@@ -485,3 +485,31 @@ Thus **the elementary factor-counting and one-log payment** are now explicit. Th
 Connect the **actual original labelled HB coefficient compiler** to this distinct ordered integer-factor fibre: pay its label multiplicities, dyadic rectangles, the single original marked log slot, original rough conditions and finite scalar restoration without conflating unit log with an empty Gamma mother word. Use the fixed complete-product scale to supply the local `log(n)≤L` uniformly in increasing `m(N)`. Only then reduce the actual full source to the **near-linear mixed shifted moment** with the stated strict exponent cap and complete-product `b=T` excluded. Separately discharge the original same-rho weighted modulus and exact coprime mean mass, `b=T` exceptional coefficient power bound, physical `W_T` Fréchet/ContDiff admission, causal/whole-box licence, full HB family, empty Gamma mother payment and high rank/enhanced branches. Do not reclassify any of these as external.
 
 **Status:** P3.6 YELLOW; this narrowly named HB finite coefficient source is BLUE **SOURCE_ONLY**, UNCOMPILED/KERNEL_UNVERIFIED. The registered classical estimate (M) remains **RECORD_ONLY_NOT_IMPLEMENTED_NOT_AXIOM**.
+
+
+## Successor SOURCE_ONLY increment — literal order-three HB word mass (2026-11-06 UTC)
+
+- **Actual recovered branch HEAD:** `392903b689be738bdd43bdc59a964bb6bbccadfb`, same task branch `chatgpt/p3-internal-original-w-20261105`; no concurrent writer observed before the leased ref update. This round extends, rather than replaces, the prior `P3HBOrderedFactorMajorant` source and verified its saved report, registry and external register.
+- **Actual source+VERIFY commit:** `c90b2edebcfbd872e0e7d60cb3d69df3689243d4` (`[skip ci]`), confirmed GitHub branch ref update and independent source readback. New `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3HBLiteralWordMajorant.lean` Git blob `22c38377e453bd6c82684c457c70088baa4a5320` (194 lines); `VERIFY.lean` Git blob `701fbfb85793e5bf13681078997fb522346e2d85`. The ten named definitions and proof candidates are registered as audit targets, **not executed**.
+- **Fixed manuscript:** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, §2 exact order-three `(HB)` and §4 post-(F) moment. **Fixed Mathlib:** `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`. Reused actual `ImbalancedChen/P5LiteralHeathBrownOccurrenceWords.lean`, not a fabricated word source. Pinned Möbius source `Mathlib/NumberTheory/ArithmeticFunction/Moebius.lean` was read for `moebius_eq_or`.
+
+### Genuine mathematical increment and precise limitation
+
+The prior `P3HBOrderedFactorMajorant` allowed arbitrary one-bounded factor functions and one marked logarithm, but did **not** yet connect an actual HB word. Here `hbPrefix` is literally `muTrunc(y)` repeated `j+1` times then the true zeta one-slot repeated `j` times, for `j=0,1,2`; the word ends in exactly one `ArithmeticFunction.log`. The source derives, rather than presupposes, that the truncated Möbius values and zeta slots have absolute value at most one, using the original real cutoff and `moebius_eq_or`.
+
+An inductive `bounded_prefix_log_product` shows that for **positive complete product** `n`, every original ordered HB tuple `ps` has
+`|tupleWeight(hbWord(y,j),ps)| <= log(n)`.
+Consequently the true literal HB coefficient's absolute ordered-fibre mass satisfies
+`literalHBAbsMass(y,j,n) <= log(n) * card(factorTuples(2*(j+1),n))`.
+The final three-term mass keeps the original absolute `binom(3,j+1)` weights, exactly `3,3,1`, rather than resetting the scalar or assuming a future PP bound.
+
+This is a real original-HB-source connection. **It is not a labelled-prime compiler or near-linear shifted-moment payment.** In particular the List-based `factorTuples` cardinal has **not** yet been transported to the earlier `Fin`-indexed `tau(n)^g` bound; full original labels, per-label factorials, rough filters, exact b=T exception, source multiplicities and uniform m(N) remain open. The unit log slot contributes zero when its argument is one, but this is not an empty Gamma mother word.
+
+### Checks and next exact entrance
+
+- Source blob and VERIFY blob were read back with exact matching Git SHAs; ten named check targets present and import precedes first `#check`. Forbidden proof escapes 0; the complete source lexical bracket scan passed. Pinned Mathlib Möbius definition and values were directly inspected.
+- Independent Python exact integer-factor recursion/real-log test: **61,960 checks**, four real cutoff values and nonzero n through 90, all three actual HB lengths; **zero failures**; maximum observed ratio of true three-term absolute mass to stated cardinal-log upper bound was 0.2916666666666667. This tests only finite arithmetic, not Lean typing or the kernel.
+- **NOT RUN by instruction:** Lean, Lake, CI, kernel replay, full axiom audit, Codex, heavy numerical producers. This source is **SOURCE_ONLY_UNCOMPILED_KERNEL_UNVERIFIED**; no green status earned. Other historical candidate sources remain uncompiled.
+- `EXTERNAL_INPUTS.json` unchanged at Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`; external (M) is **record only**, neither implemented nor promoted to an axiom. No production files, manuscript, toolchain, PR, other task, externally excluded 87-domain node or board touched.
+
+**Next precise work:** prove List-to-Fin ordered HB factor-tuple cardinal transport retaining repeated occurrence count, apply the real `tau(n)^{2(j+1)}` bound to the true `3,3,1` source; then map the actual interval labels, original factorial normalization, rough projectors and full product into the same physical rho. Independently pay the fixed-order near-linear mixed shift moment, b=T exception, original rho mean and W_T uniform analytic admission before a common H and PP assembly. **Overall P3.6 remains YELLOW.**
