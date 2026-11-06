@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualFrozenFineLabelPartition
 import ImbalancedChen.P3ActualFineLabelThreeGammaTensor
 import ImbalancedChen.P3HBRoughLiteralMoment
 import ImbalancedChen.P3HBLiteralFiniteBridge
@@ -176,3 +177,10 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3ActualFineLabelThreeGammaTensor.actual_label_three_gamma_tensor
 #check ImbalancedChen.P3ActualFineLabelThreeGammaTensor.fine_gamma_mem_Icc
 #check ImbalancedChen.P3ActualFineLabelThreeGammaTensor.fine_three_gamma_product_abs_le_one
+
+-- Frozen whole-original-block finite tensor: genuine permutation from the
+-- ACTUAL selected-pair slot allocator on BLOCK occurrences (NOT Lean-run).
+#check ImbalancedChen.P3ActualFrozenFineLabelPartition.frozen_block_words_perm
+#check ImbalancedChen.P3ActualFrozenFineLabelPartition.frozen_block_group_labels_pairwise
+#check ImbalancedChen.P3ActualFrozenFineLabelPartition.actual_frozen_fine_label_tensor
+#check ImbalancedChen.P3ActualFrozenFineLabelPartition.actual_frozen_gamma_product_abs_le_one
