@@ -15,3 +15,12 @@ import ImbalancedChen.P3FourierPhysicalMeasureD
 #check ImbalancedChen.P3FourierPhysicalMeasureD.actual_derivativeD_eq_pointD
 #check ImbalancedChen.P3FourierPhysicalMeasureD.originalWD_eq_actual_derivativeD
 #check ImbalancedChen.P3FourierPhysicalMeasureD.exists_physicalW_fourier_product_polylog
+
+-- New one-axis normalization and arctangent-tail targets; NOT executed.
+import ImbalancedChen.P3FourierCauchyAxis
+#check ImbalancedChen.P3FourierCauchyAxis.axisKernel_integrable
+#check ImbalancedChen.P3FourierCauchyAxis.axisKernel_full_mass
+#check ImbalancedChen.P3FourierCauchyAxis.axisKernel_mathlib_mass
+#check ImbalancedChen.P3FourierCauchyAxis.axisPairTail_exact
+#check ImbalancedChen.P3FourierCauchyAxis.axisPairTail_nonneg
+#check ImbalancedChen.P3FourierCauchyAxis.axisPairTail_antitone

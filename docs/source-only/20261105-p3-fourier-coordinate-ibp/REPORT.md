@@ -97,3 +97,49 @@ The constant `C` precedes `N`, labelled `W_T`, grouping and m in the inherited q
 3. From the now normalized `D`, prove true Fourier `L1` and `H`-box tail with fixed `2π` factors and Fubini. Then feed an actual epsilon to the already defined same-rho signed full-modulus ledger, pay the complete modulus mass and product=T exception separately.
 4. Remaining causal/whole-box, complete HB sources, empty Gamma mothers, high-rank/enhanced and full original PP assembly are still internal, not external inputs.
 
+
+## Successor SOURCE_ONLY increment — exact one-axis Cauchy Fourier normalization (2026-11-06 UTC)
+
+- **Actual checked baseline:** `941e23c967d9e0efcfdb456e3f88b253705088fd`; branch `chatgpt/p3-internal-original-w-20261105`.
+- **Source commit:** `2fce316742e82b9654261ec3ad42367c3a87c24d` with `[skip ci]`; proof SHA-1 Git blob `d688ecf5bca8b2cadb1fdb668070b6f11ac6dc3a`.
+- **Source:** `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3FourierCauchyAxis.lean`, 85 lines.
+- **Manuscript pin:** `9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/modules/distribution-prime-product-completion-20261010.txt` §4, formula (F), lines 153–171.
+- **Mathlib pin:** `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1` (unchanged).
+
+### New actual mathematical work
+
+This packet derives exact elementary ONE-COORDINATE Fourier kernel integrals rather than assuming the full Fourier tail. Let `k(x)=(1+x²)⁻¹`. Pinned Mathlib `integrable_inv_one_add_sq`, `integral_univ_inv_one_add_sq` and `Measure.integral_comp_mul_left` yield source candidate proof bodies for
+
+```
+∫_{ℝ} k(x) dx = π
+∫_{ℝ} k(2π η) dη = 1/2.
+```
+
+The second equality fixes an easy-to-miss normalization: the manuscript integrates physical frequencies with `dξ/(2π)^m`, whereas Mathlib's Fourier integral is in `η`. Each separated `η`-coordinate carries exactly one half of the Cauchy mass, not π or one.
+
+Using the pinned `integral_Iic_inv_one_add_sq`, `integral_Ioi_inv_one_add_sq` and `Real.arctan_neg`, the actual physical-frequency left/right tail mass is
+
+```
+∫_{x≤-H} k(x) dx + ∫_{x>H} k(x) dx
+  = 2 * (π/2 - arctan(H)).
+```
+
+The source also proves its nonnegativity and antitonicity in H (as candidates). It does not replace the separated tails with an integral over a union for negative H; the later H-box cutoff uses H>0.
+
+### Source inspection, tests and risk boundary
+
+- This run **read** the predecessor `REPORT.md`, `REGISTRY.json`, `EXTERNAL_INPUTS.json`, `P3FourierCoordinateIBP.lean`, `P3FourierPhysicalMeasureD.lean`, `VERIFY.lean`, earlier Fourier D and inversion sources, fixed manuscript §4 (F), and pinned Mathlib source.
+- Pinned APIs directly read: `Mathlib/Analysis/SpecialFunctions/ImproperIntegrals.lean` (integrability, full and half-line integral identities), `Mathlib/MeasureTheory/Measure/Haar/NormedSpace.lean` (exact scalar change-of-variables). The pinned arctangent file contains `Real.arctan_neg`, `Real.arctan_le_arctan_iff` and the π/2 inequality.
+- Static source escape-token scan returned 0; source delimiters were inspected. Independent finite Simpson quadrature for H in {0, .25, .75, 1, 2, 5, 20} agrees within 0.003334 for physical integrals truncated to ±600; scaled η integral truncated to ±100 agrees within 0.000507. Errors are dominated by intentional finite tails. These are finite sanity checks, not an analytic or Lean verification.
+- **NOT RUN:** Lean, Lake, kernel replay, CI, full transitive dependency audit, Codex, heavy producer. Every new declaration remains SOURCE_ONLY_UNCOMPILED_KERNEL_UNVERIFIED.
+- `EXTERNAL_INPUTS.json` unchanged: only the previously registered restricted medium estimate (M) is recorded; this entire Fourier-kernel step is manuscript-internal. No replacement research assumptions, target-equivalent field or distribution estimate were introduced.
+- Did not change production source, manuscript, other task branches, toolchain, full87 excluded node, CI, or PRs.
+
+### Exact next source entry
+
+1. Use the actual finite-dimensional product volume chart plus pinned product/Fubini lemmas to lift the proved-in-source one-axis `1/2` mass to a genuine `(1/2)^d` Fourier `L1` majorant for the original `derivativeD`, including d=0.
+2. Establish `2*(π/2-arctan H) ≤ 2/H` for H>0 from the pinned `Real.arctan_inv_of_pos` and a genuine arctangent upper bound. **That upper bound was not found by name in the pinned release and is NOT silently assumed here.**
+3. Prove the H-box union, exact `2π` change-of-variable and Fubini tail estimate, with a common threshold uniform in HB length m(N). Only then insert the actual epsilon into the same-rho signed physical modulus ledger, including complete product = T.
+4. Still internal and open: actual W_T ContDiff and primitive integral norms for every original geometry label, causal/whole-box licenses, all HB source families, empty Gamma mothers, high-rank and enhanced PP and final same-rho assembly.
+
+**Status:** P3.6 YELLOW. One-axis exact integral candidate BLUE only. No GREEN nodes.
