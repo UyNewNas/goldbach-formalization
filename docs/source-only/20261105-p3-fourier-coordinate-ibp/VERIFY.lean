@@ -1,0 +1,8 @@
+import ImbalancedChen.P3FourierCoordinateIBP
+
+-- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
+#check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
+#check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
+#check ImbalancedChen.P3FourierCoordinateIBP.actual_coordinate_fourierIBP
+#check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_physical_product_bound
+#check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_physical_decay
