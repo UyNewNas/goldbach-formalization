@@ -174,5 +174,106 @@ theorem markedHB_off_shifted_le_mixed_tau {g : ℕ}
           intro n hn
           ring
 
+/-- Physical HB log slot, restricted to a NONZERO complete product n:
+each individual slot divides n, so its literal real logarithm is
+bounded by log n. This needs no globally bounded logarithm. -/
+theorem log_marked_slot_le_log_complete {g n : ℕ}
+    (hn : n ≠ 0) (p : Fin g → ℕ)
+    (hp : p ∈ orderedFactorTuples g n) (marked : Fin g) :
+    |Real.log (p marked : ℝ)| ≤ Real.log (n : ℝ) := by
+  have hbox : p marked ∈ n.divisors :=
+    Fintype.mem_piFinset.mp (Finset.mem_filter.mp hp).1 marked
+  have hdiv : p marked ∣ n := (Nat.mem_divisors.mp hbox).1
+  have hpos : 0 < p marked :=
+    Nat.pos_of_dvd_of_pos hdiv (Nat.pos_of_ne_zero hn)
+  have hone : (1 : ℝ) ≤ (p marked : ℝ) := by
+    exact_mod_cast (Nat.one_le_of_lt hpos)
+  have hlog0 : 0 ≤ Real.log (p marked : ℝ) := Real.log_nonneg hone
+  rw [abs_of_nonneg hlog0]
+  apply Real.log_le_log
+  · exact_mod_cast hpos
+  · exact_mod_cast (Nat.le_of_dvd (Nat.pos_of_ne_zero hn) hdiv)
+
+/-- Local, fibre-only logarithmic bound: unlike an all-natural-numbers
+bound, this admits the actual unbounded logarithm after fixing n. -/
+theorem markedHBCoefficientMass_le_tau_pow_on_fiber {g : ℕ}
+    (n : ℕ) (a : Fin g → ℕ → ℝ)
+    (logSlot : ℕ → ℝ) (marked : Fin g) (L : ℝ)
+    (ha : ∀ j x, |a j x| ≤ 1)
+    (hL : ∀ p ∈ orderedFactorTuples g n, |logSlot (p marked)| ≤ L)
+    (hL0 : 0 ≤ L) :
+    markedHBCoefficientMass n a logSlot marked ≤
+      L * ((n.divisors.card : ℝ) ^ g) := by
+  unfold markedHBCoefficientMass
+  calc
+    (∑ p ∈ orderedFactorTuples g n, |markedHBWeight a logSlot marked p|)
+        ≤ ∑ _p ∈ orderedFactorTuples g n, L := by
+          apply Finset.sum_le_sum
+          intro p hp
+          rw [markedHBWeight, abs_mul]
+          calc
+            |logSlot (p marked)| * |∏ j, a j (p j)|
+                ≤ L * |∏ j, a j (p j)| :=
+                  mul_le_mul_of_nonneg_right (hL p hp) (abs_nonneg _)
+            _ ≤ L * 1 :=
+                  mul_le_mul_of_nonneg_left (oneBoundedProduct_le_one a p ha) hL0
+            _ = L := by ring
+    _ = L * ((orderedFactorTuples g n).card : ℝ) := by simp [mul_comm]
+    _ ≤ L * ((n.divisors.card : ℝ) ^ g) := by
+          apply mul_le_mul_of_nonneg_left _ hL0
+          exact_mod_cast orderedFactorTuples_card_le_tau_pow g n
+
+/-- A genuinely instantiated, marked HB Real.log majorant for each
+positive product n: |coefficient(n)| <= log(n)*tau(n)^g.
+No unbounded-log blanket hypothesis is present. -/
+theorem markedHBCoefficientMass_real_log_le {g : ℕ}
+    (n : ℕ) (hn : n ≠ 0)
+    (a : Fin g → ℕ → ℝ) (marked : Fin g)
+    (ha : ∀ j x, |a j x| ≤ 1) :
+    markedHBCoefficientMass n a (fun x => Real.log (x : ℝ)) marked ≤
+      Real.log (n : ℝ) * ((n.divisors.card : ℝ) ^ g) := by
+  apply markedHBCoefficientMass_le_tau_pow_on_fiber n a
+    (fun x => Real.log (x : ℝ)) marked (Real.log (n : ℝ)) ha
+  · intro p hp
+    exact log_marked_slot_le_log_complete hn p hp marked
+  · exact Real.log_natCast_nonneg n
+
+/-- The finite marked source feeds a genuine NONZERO-shift mixed
+tau moment with one log(n) loss. A bound log(n)<=L on the actual
+finite complete scale is sufficient; no estimate on tau(0) or on
+unrelated products is used. -/
+theorem markedHB_real_log_off_shifted_le_mixed_tau {g : ℕ}
+    (T : ℕ) (ns : Finset ℕ) (a : Fin g → ℕ → ℝ)
+    (marked : Fin g) (L : ℝ)
+    (ha : ∀ j x, |a j x| ≤ 1)
+    (hscale : ∀ n ∈ offProducts T ns, Real.log (n : ℝ) ≤ L)
+    (hL0 : 0 ≤ L) :
+    (∑ n ∈ offProducts T ns,
+      markedHBCoefficientMass n a (fun x => Real.log (x : ℝ)) marked *
+        (offShiftTau T n : ℝ))
+      ≤ L * (∑ n ∈ offProducts T ns,
+        ((n.divisors.card : ℝ) ^ g) * (offShiftTau T n : ℝ)) := by
+  calc
+    _ ≤ ∑ n ∈ offProducts T ns,
+          (L * ((n.divisors.card : ℝ) ^ g)) * (offShiftTau T n : ℝ) := by
+          apply Finset.sum_le_sum
+          intro n hn
+          have hnonzero : n ≠ 0 := (Finset.mem_filter.mp hn).2.1
+          have hm := markedHBCoefficientMass_real_log_le n hnonzero a marked ha
+          have hpow : 0 ≤ (n.divisors.card : ℝ) ^ g := pow_nonneg (Nat.cast_nonneg _) _
+          have hbound :
+              markedHBCoefficientMass n a (fun x => Real.log (x : ℝ)) marked
+                ≤ L * ((n.divisors.card : ℝ) ^ g) := by
+            calc
+              _ ≤ Real.log (n : ℝ) * ((n.divisors.card : ℝ) ^ g) := hm
+              _ ≤ L * ((n.divisors.card : ℝ) ^ g) :=
+                mul_le_mul_of_nonneg_right (hscale n hn) hpow
+          exact mul_le_mul_of_nonneg_right hbound (Nat.cast_nonneg _)
+    _ = _ := by
+          rw [Finset.mul_sum]
+          apply Finset.sum_congr rfl
+          intro n hn
+          ring
+
 end
 end ImbalancedChen.P3HBOrderedFactorMajorant
