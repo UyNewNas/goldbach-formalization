@@ -49,9 +49,9 @@ theorem actual_next_candidate_iff (h : ℕ → ℝ)
   constructor
   · intro hr
     obtain ⟨before, after, hsplit⟩ := member_has_position hr
-    refine ⟨{ selectedPrefix := r :: frontier.selectedPrefix
-              positive := !frontier.positive
-              mass := frontier.mass * h r
+    refine ⟨{ selectedPrefix := r :: frontier.selectedPrefix,
+              positive := !frontier.positive,
+              mass := frontier.mass * h r,
               remaining := after }, ?_, rfl⟩
     exact (mem_firstExitNextSelectionCandidates_iff h frontier.selectedPrefix
       frontier.remaining frontier.positive frontier.mass _).2
