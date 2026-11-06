@@ -1,3 +1,4 @@
+import ImbalancedChen.P3FourierActualInversion
 import ImbalancedChen.P3FourierCoordinateIBP
 import ImbalancedChen.P3FourierPhysicalMeasureD
 import ImbalancedChen.P3FourierCauchyAxis
@@ -83,3 +84,14 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3FourierActualBoxTail.actual_fourier_norm_integrable
 #check ImbalancedChen.P3FourierActualBoxTail.actual_fourier_box_tail_bound
 #check ImbalancedChen.P3FourierActualBoxTail.actual_fourier_box_tail_spend
+
+-- Actual (F) pointwise truncated inverse and same-rho signed-source transfer.
+-- SOURCE_ONLY: NOT EXECUTED with Lean/Lake/CI/kernel.
+#check ImbalancedChen.P3FourierActualInversion.actual_zero_integrable
+#check ImbalancedChen.P3FourierActualInversion.actual_zero_continuous
+#check ImbalancedChen.P3FourierActualInversion.actual_fourier_integrable
+#check ImbalancedChen.P3FourierActualInversion.actualTruncatedInverse
+#check ImbalancedChen.P3FourierActualInversion.actual_truncated_inverse_error
+#check ImbalancedChen.P3FourierActualInversion.actual_zero_real
+#check ImbalancedChen.P3FourierActualInversion.actual_real_truncated_inverse_error
+#check ImbalancedChen.P3FourierActualInversion.actual_same_rho_signed_cutoff
