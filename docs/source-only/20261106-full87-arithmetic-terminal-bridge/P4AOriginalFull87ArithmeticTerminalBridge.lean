@@ -338,14 +338,27 @@ theorem ordinarySaving_sub_correction_abs_le_terminalCost
     rw [ordinarySaving_eq_correctionGap_add_terminalGap]
     ring
   rw [hgap]
-  unfold terminalMismatchGapAt terminalMismatchCostAt
-  calc
-    |_ - _| ≤ |_ | + |_ | := by
-      calc
-        |_ - _| = |_ + (- _)| := by ring
-        _ ≤ |_ | + |- _| := abs_add_le _ _
-        _ = |_ | + |_ | := by rw [abs_neg]
-    _ ≤ _ := add_le_add hOld hNew
+  let A : ℝ := signedTest (oldAt n e q om N s)
+    (fun _ : ℕ => (1 : ℝ))
+    (arithmeticTerminalMismatch N cap w L G)
+    s.selectedPrefix s.positive s.mass s.remaining
+  let B : ℝ := signedTest (newAt n N c s)
+    (fun _ : ℕ => (1 : ℝ))
+    (arithmeticTerminalMismatch N cap w L G)
+    s.selectedPrefix s.positive s.mass s.remaining
+  have htriangle : |A - B| ≤ |A| + |B| := by
+    calc
+      |A - B| = |A + (-B)| := by ring
+      _ ≤ |A| + |-B| := abs_add_le _ _
+      _ = |A| + |B| := by rw [abs_neg]
+  change |A - B| ≤
+    retainedLeafMismatchCost (oldAt n e q om N s)
+      halfProductDensity (attachedLeafTest N cap 1 w L G)
+      s.selectedPrefix s.remaining s.positive s.mass +
+    retainedLeafMismatchCost (newAt n N c s)
+      halfProductDensity (attachedLeafTest N cap 1 w L G)
+      s.selectedPrefix s.remaining s.positive s.mass
+  exact htriangle.trans (add_le_add hOld hNew)
 
 /-- A pointwise finite list estimate, without converting occurrences
 to a Finset or collapsing repeated physical history words. -/
