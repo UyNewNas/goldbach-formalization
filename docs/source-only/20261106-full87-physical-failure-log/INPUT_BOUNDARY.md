@@ -1,0 +1,10 @@
+# P1.4 physical failed N-log normalization — input boundary
+Manuscript: UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b, paper/source/manuscript-body.tex, blob d529bea2ecfcc74d64fc1664ac770a3becaa7c79, section 4. Toolchain unchanged: Lean leanprover/lean4:v4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958. Constants c,K unchanged.
+
+MANUSCRIPT-INTERNAL SOURCE-ONLY: same owned eighth frontier and its actual frozen sixth-parent/rounded cap, physical rejected-attempt before/chosen/older/smaller occurrence, existing last-square finite failure, exact natural product to N-log conversion, first eight Fin 8 coordinate sum, actual rank 11+2*m. Unpaid: all indexed hprior, hpair, ninth-rank inherited square, positive exit-series sandwich, actual g_N-weighted physical coefficient; primitive/modulus/centre errors and reserve payment. Structural enumeration with weight 1 does NOT prove the same physical weighted density identity for g_N(p)=1_{p>2,p not dividing N}/(p-1).
+
+EXTERNAL CLASSICAL INPUTS — REGISTERED UNVERIFIED NOT IMPLEMENTED NOT INVOKED:
+1. Ordinary Rosser density: V_N^+(R,y)/V_N(y)=F(log R/log y)+o(1) for s>1 (lower f(s) for s>=2). Source pinned manuscript §4 equation current-raw-density; reference edition, uniformity and normalization not independently checked; intended only after exact same-source exit identification.
+2. PNT/Mertens: V_N(N^u)=2 e^(-gamma) C_N/(u log N) (1+o(1)) for fixed u>0, claimed uniform even-N. Source pinned §4 current-mertens; precise external reference/uniformity unverified; intended at density scaling.
+3. Physical prime-progression discrepancy for same rho_N, claimed O_{A,W}(N/(log N)^A) on licensed families. Source pinned manuscript §4 and subsequent distribution; external reference, family and uniformity unverified; intended at error payment.
+No new axiom, sorry/admit, unsafe/native_decide or theorem-equivalent assumption field.
