@@ -50,7 +50,7 @@ formal credit zero.
 
 ## Next concrete action
 Inspect `ImbalancedChen/FirstExitFrontierAdmission.lean`,
-`FirstExitFrontierTuples.lean` and the actual ordinary
+`FirstExitAdmittedFrontierTuples.lean` and the actual ordinary
 `firstExitRetainedLeaves` branches; extract the first failing
 pair on the same ordered carrier *as an actual first rejection*.
 Keep the ninth-rank inherited-square case separate. Bind
