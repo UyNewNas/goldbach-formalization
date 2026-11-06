@@ -433,3 +433,55 @@ This is **NOT** a claimed `O(T log^E T)` or `O(T/log^A T)` result. The actual HB
 **Next concrete entrance:** obtain genuine original HB all-source coefficient divisor-power bounds, then a near-linear `sum_b tau(b)^R tau(|T-b|)^S` estimate in the fixed complete scales with the strict exponent cap. Discharge the original physical `rho` weights (pointwise or appropriate weighted divisor-class) from the real coefficient compiler—not from a target-shaped premise. Bound the exact `b=T` source term independently and bound the true mean-rho sum. Separately prove uniform `W_T` Fréchet/ContDiff and original mixed-L1 derivative budget for growing `m(N)`; select a common log-power `H` only after these have true quantitative bounds. Complete causal/whole-box, all HB sources, empty Gamma mother words, high rank/enhanced and the original same-rho PP assembly.
 
 **Status:** P3.6 YELLOW; this limited finite divisor bridge is BLUE SOURCE_ONLY, **UNCOMPILED / KERNEL_UNVERIFIED**.
+
+
+## Successor SOURCE_ONLY increment — one-marked HB actual log and finite divisor-power convolution (2026-11-06 UTC)
+
+- **Verified baseline:** `9d6b65169a5fbfe6569eccd8ef183c188655d4a9` was the actual P3.6 branch HEAD before this iteration. The branch HEAD was rechecked before each write; no observed concurrent writer.
+- **New proof source:** `P3HBOrderedFactorMajorant.lean`, 279 lines, read back with Git blob `75ecbbb7924de7ad72f53b9e95bcd170a4fcecf2`. Initial creation commit `f1611c62bb89db2d0763a0726fa5e17c5e1e9973` and literal-Real.log extension `d6eda491aa1e42b875476f9fbaf6a52c73ecdace`; both carry `[skip ci]`.
+- **Audit entry:** `VERIFY.lean` updated in `16a988336688ed62f9d5d0dc18a25b54d3deec72` and `ca4fb3e22a41579db264512d45c43006195c2b3f`; 11 new `#check` targets are present, all imports precede checks; **VERIFY WAS NOT EXECUTED**. Final VERIFY Git blob `9717ddfc2ea1da5ea665fbb3a5d57d425be1f232`.
+- **Registry commit:** `9838c7475859b79789f2268c210acd7f12a2fb87`; REGISTRY Git blob `1e0df1cfccfe1789e693efaeed6c4e2fc5cbbcaf`. The **only** external registry remains unchanged: `EXTERNAL_INPUTS.json` Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`.
+- **Pinned manuscript:** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, module `paper/source/modules/distribution-prime-product-completion-20261010.txt` §2 (exact HB log slot, one-bounded factors and complete products), §4 (nonzero-shift mixed divisor moment after the *complete* physical modulus sum); `paper/source/manuscript-body.tex` prime-products subsection. **Fixed Mathlib:** `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
+
+### Genuine internal mathematical step
+
+The predecessor converted **actual off-product signed-rho congruence mass** to a nonzero integer-shift divisor moment, but did not yet pay even the **primitive HB convolution coefficient power**. This iteration supplies a direct elementary finite counting and real-log argument (candidate Lean proof bodies), without postulating a mixed moment theorem.
+
+For `n≠0` the new `orderedFactorTuples g n` enumerates **every distinct ordered g-tuple of natural numbers** whose complete product is `n`. Each coordinate divides `n`, so its finite divisor-box inclusion is an equality. The actual card is bounded from the fixed-library finite function product cardinality by
+
+```
+  #orderedFactorTuples(g,n) <= tau(n)^g.
+```
+
+This conservatively uses exponent `g`, **not** a purported unproved `g-1` improvement.
+
+Take arbitrary literal **one-bounded** slot factors `|a_j(u)|≤1` and **one specifically marked HB log slot**. The new source first bounds the corresponding ordered convolution by `L*tau(n)^g` under a fibre-only log bound; then importantly removes any impossible **global** uniform log hypothesis when the log slot is the *actual* `Real.log(u)`. On `n≠0`, the marked coordinate is a positive divisor of the complete product, so `0≤log(u)≤log(n)`; hence the candidate theorem establishes
+
+```
+ sum_(ordered p: prod_j p_j=n) |log(p_marked)*prod_j a_j(p_j)|
+    <= log(n)*tau(n)^g.
+```
+
+This has the **original ordered HB variable count and exactly one log**, without replacing the complete product by auxiliary variables or erasing zero-dimensional support. For a finite set of actual nonzero, nonexceptional complete products satisfying `log(n)≤L`, a final new candidate yields
+
+```
+ sum_(n in ns, n!=0, n!=T) HBMarkedMass(n)*tau(|T-n|)
+   <= L * sum_(n in ns, n!=0, n!=T) tau(n)^g*tau(|T-n|).
+```
+
+Thus **the elementary factor-counting and one-log payment** are now explicit. The actual mixed divisor moment on the right is **NOT** bounded by this file: the near-linear bound at the retained strict `kappa` cap remains genuinely internal. No `tau(0)` term enters the sum. The source enumerates DISTINCT ordered integer tuples; the actual original **labelled** HB source has additional combinatorial labels, factorial normalizations, per-chart rough filters and scalar restoration. Those are not presumed already attached, and neither the actual global bound for the original `rho`, exact `b=T` payment nor the precise HB coefficient compiler is claimed here.
+
+### Evidence and limits
+
+- Direct GitHub reads this iteration: exact branch HEAD, predecessor REPORT/REGISTRY/EXTERNAL_INPUTS and true preceding `P3ShiftedDivisorFiniteMoment.lean` and `P3FullModulusShiftedMoment.lean`; fixed manuscript §§1–4 and manuscript-body.tex. The repository root `AGENTS.md` returned NOT_FOUND, consistent with the earlier reported packet checks; no hidden constraints were invented.
+- Fixed library source examined: `Nat.mem_divisors`, `Fintype.mem_piFinset`, `Fintype.card_piFinset_const`, `Finset.prod_le_prod`, `Finset.abs_prod`, `Real.log_le_log`, `Real.log_nonneg` and `Real.log_natCast_nonneg`. The candidate `Finset.dvd_prod_of_mem` use is known from fixed-library source usage but the exact elaborated application has **not** been tested. **No Lean typecheck was performed.**
+- Readback and source static audit: 0 forbidden proof-escape tokens outside comments; lexical delimiter matching PASS; all 11 new `#check` names located and imports remain before checks.
+- Independent deterministic finite arithmetic regression: **2,360/2,360** cases for ordered g=1..4, n=1..48, one marked genuine `log(u)`, bounded trigonometric slot factors and several nonzero shifts. All satisfied the stated finite coefficient/divisor inequalities; 40 exact `n=T` instances were explicitly excluded. This is a numeric and finite sanity check, **not** an asymptotic proof nor Lean/kernel acceptance.
+- **NOT RUN:** Lean, Lake, CI, kernel replay, full transitive axiom audit, Codex, heavy producer. No new axioms, sorry, admit, target-equivalent assumption, new analytic input implementation, or green nodes.
+- No write to the fixed manuscript, production proof, toolchain/lockfile, other task branches, PRs, excluded full87 dynamic-parent node, external dashboard, or CI.
+
+### Next actual mathematical entrance
+
+Connect the **actual original labelled HB coefficient compiler** to this distinct ordered integer-factor fibre: pay its label multiplicities, dyadic rectangles, the single original marked log slot, original rough conditions and finite scalar restoration without conflating unit log with an empty Gamma mother word. Use the fixed complete-product scale to supply the local `log(n)≤L` uniformly in increasing `m(N)`. Only then reduce the actual full source to the **near-linear mixed shifted moment** with the stated strict exponent cap and complete-product `b=T` excluded. Separately discharge the original same-rho weighted modulus and exact coprime mean mass, `b=T` exceptional coefficient power bound, physical `W_T` Fréchet/ContDiff admission, causal/whole-box licence, full HB family, empty Gamma mother payment and high rank/enhanced branches. Do not reclassify any of these as external.
+
+**Status:** P3.6 YELLOW; this narrowly named HB finite coefficient source is BLUE **SOURCE_ONLY**, UNCOMPILED/KERNEL_UNVERIFIED. The registered classical estimate (M) remains **RECORD_ONLY_NOT_IMPLEMENTED_NOT_AXIOM**.
