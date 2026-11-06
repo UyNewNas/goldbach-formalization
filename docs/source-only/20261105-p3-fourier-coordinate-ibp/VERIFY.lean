@@ -6,3 +6,12 @@ import ImbalancedChen.P3FourierCoordinateIBP
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_coordinate_fourierIBP
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_physical_product_bound
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_physical_decay
+
+-- Added physical volume/actual original W budget target. Still NOT executed.
+import ImbalancedChen.P3FourierPhysicalMeasureD
+#check ImbalancedChen.P3FourierPhysicalMeasureD.chart_measure_preserving
+#check ImbalancedChen.P3FourierPhysicalMeasureD.integral_chart
+#check ImbalancedChen.P3FourierPhysicalMeasureD.mixed_L1_chart
+#check ImbalancedChen.P3FourierPhysicalMeasureD.actual_derivativeD_eq_pointD
+#check ImbalancedChen.P3FourierPhysicalMeasureD.originalWD_eq_actual_derivativeD
+#check ImbalancedChen.P3FourierPhysicalMeasureD.exists_physicalW_fourier_product_polylog
