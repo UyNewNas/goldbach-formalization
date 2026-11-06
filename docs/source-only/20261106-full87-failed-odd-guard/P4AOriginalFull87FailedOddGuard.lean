@@ -298,7 +298,7 @@ theorem owned87_later_failure_last_square
     omega
   have hfailedOdd : ordinaryParityRosserPolicy false R false
       (a.rejected :: q' :: r :: past.reverse ++ s.selectedPrefix) = false := by
-    simpa only [holder, hpositive] using hfailed
+    simpa only [holder, hpositive, Bool.not_true] using hfailed
   have hbound :=
     (upper_reject_after_certified_odd_iff_last_square
       R (r :: past.reverse ++ s.selectedPrefix)
