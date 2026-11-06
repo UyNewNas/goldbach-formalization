@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ShiftedDivisorFiniteMoment
 import ImbalancedChen.P3FullModulusShiftedMoment
 import ImbalancedChen.P3FourierActualInversion
 import ImbalancedChen.P3FourierCoordinateIBP
@@ -105,3 +106,15 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3FullModulusShiftedMoment.off_mass_split
 #check ImbalancedChen.P3FullModulusShiftedMoment.off_mean_le
 #check ImbalancedChen.P3FullModulusShiftedMoment.full_mass_le_shifted_and_exact
+
+-- Candidate finite shifted-divisor moment bridge. NOT Lean-executed.
+#check ImbalancedChen.P3ShiftedDivisorFiniteMoment.shiftAbs
+#check ImbalancedChen.P3ShiftedDivisorFiniteMoment.shiftAbs_ne_zero
+#check ImbalancedChen.P3ShiftedDivisorFiniteMoment.shiftedResidueKernel_eq_divisors
+#check ImbalancedChen.P3ShiftedDivisorFiniteMoment.restrictedRhoDivisorMass
+#check ImbalancedChen.P3ShiftedDivisorFiniteMoment.off_shifted_eq_restricted_divisor
+#check ImbalancedChen.P3ShiftedDivisorFiniteMoment.restrictedRhoDivisorMass_le_full
+#check ImbalancedChen.P3ShiftedDivisorFiniteMoment.off_shifted_le_divisor_moment
+#check ImbalancedChen.P3ShiftedDivisorFiniteMoment.restrictedRhoDivisorMass_le_card
+#check ImbalancedChen.P3ShiftedDivisorFiniteMoment.off_shifted_le_tau_moment
+#check ImbalancedChen.P3ShiftedDivisorFiniteMoment.full_mass_le_divisor_moment
