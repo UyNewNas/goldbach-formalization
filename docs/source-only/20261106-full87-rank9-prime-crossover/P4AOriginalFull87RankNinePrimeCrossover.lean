@@ -808,5 +808,57 @@ theorem actual_rankNine_crossover_cubic_cutoff
   apply rankNine_crossover_forces_cubic_cutoff
   simpa [rankNineThresholdCrosses] using hc
 
+/-- Order-preserving sum comparison: this is deliberately List-based,
+because distinct owned eighth occurrences must not be deduplicated. -/
+private theorem list_map_sum_mono {α : Type*}
+    (xs : List α) (f g : α → ℝ)
+    (h : ∀ x ∈ xs, f x ≤ g x) :
+    (xs.map f).sum ≤ (xs.map g).sum := by
+  induction xs with
+  | nil => simp
+  | cons x xs ih =>
+      have hx := h x (by simp)
+      have ht : ∀ y ∈ xs, f y ≤ g y := by
+        intro y hy
+        exact h y (by simp [hy])
+      simp only [List.map_cons, List.sum_cons]
+      exact add_le_add hx (ih ht)
+
+/-- An all-87-cell finite harmonic invoice using the SAME original
+ordered states, actual parent, finiteCap, and physical eighth mass.
+This is an invoice, not yet a normalized error or a reserve debit. -/
+def ownedRankNineReciprocalCost
+    (r n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (w z : ℝ) (c : Cell) : ℝ :=
+  ((states (width r) n e q om N cap w z
+      (fun _ : ℕ => (1 : ℝ)) c).map (fun s =>
+    |s.mass * (s.selectedPrefix.map halfProductDensity).prod| *
+      rankNineReciprocalCrossingCost n e q om N c s)).sum
+
+/-- One finite, physical, all-occurrence rank-nine bound for an EVEN
+target. No property of unrelated signed saving, no assumption on
+smallness of a harmonic sum, and no second old/new invoice is used. -/
+theorem owned_rankNine_gap_abs_le_reciprocal_cost
+    (r n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (hEven : 2 ∣ N) (w z : ℝ) (c : Cell) :
+    |ownedRankNineSigned r n e q om N cap w z c true -
+      ownedRankNineSigned r n e q om N cap w z c false| ≤
+      ownedRankNineReciprocalCost r n e q om N cap w z c := by
+  unfold ownedRankNineReciprocalCost
+  calc
+    _ ≤ ((states (width r) n e q om N cap w z
+          (fun _ : ℕ => (1 : ℝ)) c).map
+            (rankNineCrossingInvoice n e q om N c)).sum :=
+      owned_rankNine_gap_abs_le_prime_cross_invoices
+        r n e q om N cap w z c
+    _ ≤ ((states (width r) n e q om N cap w z
+          (fun _ : ℕ => (1 : ℝ)) c).map (fun s =>
+          |s.mass * (s.selectedPrefix.map halfProductDensity).prod| *
+            rankNineReciprocalCrossingCost n e q om N c s)).sum := by
+      apply list_map_sum_mono
+      intro s hs
+      exact actual_rankNine_invoice_le_reciprocal_cost
+        (width r) n e q om N cap hEven w z c s hs
+
 end
 end ImbalancedChen.P4AOriginalFull87RankNinePrimeCrossover
