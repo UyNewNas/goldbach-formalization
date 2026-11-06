@@ -7,7 +7,7 @@ Pinned manuscript: `UyNewNas/chen-imbalanced-semiprimes` at `ba6ec11d800eccc5440
 
 ## Actual new source
 
-New source-only module `Part5OriginalH430BuchstabDefectIntegralBridge.lean`, 193 lines, 5 theorem bodies, one definition. Source Git blob `3e7b377e2a01e1817965b0deb956aebed0e8fae5`.
+New source-only module `Part5OriginalH430BuchstabDefectIntegralBridge.lean`, 196 lines, 5 theorem bodies, one definition. Source Git blob `e4d9e632a4493a981131d67bc942ead969565ffe`.
 
 This packet continues from the earlier `Part5OriginalH430ActualReadEdgeDefect` (source commit `15752ca83b6f700835536dcfa322cf12cf57b4ab`, documentation head `f8c3a3babd6810fdfbf73c30aedae91108a5abf4`) and **reuses** the previously existing `Part5OriginalH430RequestedSignedStep` and `Part5OriginalH430RequestedNonbankLevel`. No repeated retention/Buchstab supplier or assumption that a literal suffix equals an arithmetic prime sum.
 
