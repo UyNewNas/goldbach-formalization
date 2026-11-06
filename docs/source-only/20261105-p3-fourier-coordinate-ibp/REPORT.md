@@ -214,3 +214,31 @@ Premises are the **previous literal 2S finite-order ContDiff and iterated Freche
 3. Quantify `W_T` ContDiff and mixed integrated budgets across all original labelled HB sources, T and m(N), then feed the true finite Fourier epsilon to the complete signed same-rho physical modulus sum. Still independently pay full arithmetic mass, b=T exception, causal whole-box licences, all HB mother words (empty Gamma), high rank/enhanced and final PP assembly.
 
 **Status:** P3.6 YELLOW. New finite-volume Fubini + explicit-premise Fourier L1 proof bodies BLUE only; zero GREEN.
+
+
+## Successor SOURCE_ONLY increment — original Fourier-norm measurability from genuine zero-order L1 (2026-11-06 UTC)
+
+- **Exact recovered predecessor HEAD:** `91e457cae21d7d69816d145ab3d65640d9c58499` on `chatgpt/p3-internal-original-w-20261105`.
+- **Confirmed pushed proof/VERIFY commit:** `7a259379fc28b28f48f01d197da0c196a18c3443` (`[skip ci]`); source `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3FourierAutomaticMeasurability.lean`, 78 text lines, Git blob `fb7c65efaad78a75258ed841aa25f101523a41bc`; VERIFY Git blob `df34ed18d0e249d9faea9f1f6f5e4baa1e5b65cf`.
+- **Fixed source pins:** manuscript `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/modules/distribution-prime-product-completion-20261010.txt` §4 (F), and `paper/source/manuscript-body.tex`; Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
+
+### Real internal theorem candidate
+
+The predecessor `actual_fourier_L1_bound` genuinely integrated the physical product Cauchy kernel over `EuclideanSpace ℝ (Fin d)`, but separately assumed `AEStronglyMeasurable` of the norm of the actual Fourier transform. This round derives **that property from the pre-existing ordinary L1 integrability** instead of assuming it or proving any target-shaped Fourier bound.
+
+1. `actual_mixed_empty_eq_chart` identifies `actualMixedFamily w ∅` with `complexChartLift w` by unfolding the original `mixed (doubled ∅)`. All original coordinates, labels and multiplicities remain unchanged.
+2. `fourier_continuous_of_integrable` specializes the ACTUAL PINNED `VectorFourier.fourierIntegral_continuous`, with `Real.continuous_fourierChar` and `(innerSL ℝ).continuous₂`, to the same real Euclidean Fourier-space Haar volume; its only assumption is `Integrable f`.
+3. `actual_fourier_norm_aestronglyMeasurable` obtains ordinary Fourier-norm a.e. strong measurability via `Continuous.norm`, after rewriting the original zero derivative.
+4. `actual_fourier_L1_no_meas` invokes `hintegrable ∅ 0` to obtain integrability of `complexChartLift w` and consumes the previous `actual_fourier_L1_bound` **without** its independently stated Fourier measurability premise. The conditional source conclusion stays
+   `∫ η, ‖𝓕 (actualMixedFamily w ∅) η‖ ≤ derivativeD d (actualMixedFamily w) * (1/2)^d`.
+
+### Checks, qualifications and next entrance
+
+- Directly inspected the pinned `Mathlib/Analysis/Fourier/FourierTransform.lean` with the genuine `VectorFourier.fourierIntegral_continuous` signature and its direct application in `Lp.fourierTransform`; directly inspected predecessor `P3FourierProductFubini.lean`, `P3FourierRealComplex.lean`, `P3FourierFrechetIBP.lean` and `P3FourierDPointwise.lean`, and fixed manuscript §4 (F). This is API/source inspection, not typechecking.
+- Initial static delimiter check found and **fixed** one extra opening parenthesis in the draft `change` expression, before any GitHub write. Final new source delimiter balance PASS; banned proof escape tokens 0; VERIFY imports precede all `#check` declarations.
+- GitHub tree creation, signed-less commit and expected-SHA non-force ref update confirmed. Subsequent file readback confirmed exact new source Git blob `fb7c65efaad78a75258ed841aa25f101523a41bc` and VERIFY blob `df34ed18d0e249d9faea9f1f6f5e4baa1e5b65cf`; original `EXTERNAL_INPUTS.json` remains Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`. No other files changed in the proof commit.
+- The `simp` unfolding of `doubled` / `mixed` at the empty set and `simpa` on `iteratedFDeriv ℝ 0` remain **Lean elaboration-sensitive, uncompiled candidate** steps. DO NOT mark this green or treat static checks as kernel acceptance.
+- **NOT RUN:** Lean, Lake, CI, kernel replay, complete transitive axiom audit, Codex, heavy producer. No new axiom or research estimate; medium (M) is still registered only. No changes to manuscript, production source, lockfile, other branches, PR, external boards, or excluded full87 node.
+- **Next concrete entrance:** prove genuine one-axis restricted Fourier integral `|2π η|≤H` with exact `1/2 - normalizedAxisRemoved H` via measure splitting; then Fubini on the real `H`-box and its complement, and integrate the true Fourier majorant to obtain `dD/H`. Separately pay original `W_T` all-family uniform derivatives in `T,m(N)`, same-`rho` complete modulus mass, the exact complete product `b=T` exception, causal/all-HB/empty-Gamma/high-rank/enhanced PP obligations.
+
+**Status:** P3.6 YELLOW; this exact limited Fourier-measurability source is BLUE only, NOT Lean-compiled or kernel-verified. No GREEN nodes.
