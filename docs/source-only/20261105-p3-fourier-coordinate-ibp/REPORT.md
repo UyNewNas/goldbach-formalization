@@ -254,3 +254,38 @@ The predecessor `actual_fourier_L1_bound` genuinely integrated the physical prod
 - **Static checks:** source disallowed-escape scan 0; balanced parentheses/brackets/braces after comment stripping. The initial static scan rejected comment punctuation and did not write; this was corrected. A later proof-source patch explicitly uses \`field_simp [hne]\` for nonzero pi. GitHub SOURCE and module hashes checked. **NOT RUN:** Lean, Lake, CI, kernel replay, whole-axiom audit, Codex or heavy producer. All declarations remain potential elaboration-sensitive candidates and are BLUE only; no node GREEN.
 - **External input boundary:** \`EXTERNAL_INPUTS.json\` unchanged (blob \`8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab\`); restricted signed medium (M) remains RECORD_ONLY, NOT_IMPLEMENTED, NOT_AXIOM. No new axioms, target-shaped hypotheses, production proof edits, manuscript edits, external board changes, other task changes or excluded full87 node changes.
 - **Next exact internal entry:** use \`actual_mixed_physical_decay\` plus nonnegative \`actual_derivativeD\` and real Fourier norm measurability to dominate the genuine complement Fourier *norm* set integral by \`D*d/H\`; then connect Fourier inversion and uniform original W_T/hb families before full signed same-rho physical modulus sum, separate \`b=T\` arithmetic mass, causal licences, complete HB/empty-Gamma and high-rank/enhanced cases. SOURCE closure, compilation/kernel verification and the registered external estimate remain distinct.
+
+## Successor SOURCE_ONLY increment — actual Fourier H-box transform-norm tail (2026-11-06 UTC)
+
+- **Recovered exact prior HEAD:** `9187b9fc71d144c7480035a9c28751ad6e95928b`, branch `chatgpt/p3-internal-original-w-20261105`. No concurrent write was observed before the new source or each subsequent file update.
+- **Actual new proof commit:** `47de2dbb951191f6295cc23d05b8e11a5cf9ca08`, message with `[skip ci]`. Source: `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3FourierActualBoxTail.lean`, 131 nonempty-final-newline-normalized text lines, Git blob `add9965f4602db8e7f6ff8f6220ed165540b4466`.
+- **Subsequent audit-target commit:** `11cbc36a6647c0d20730b5ac67d5a2a35efe32f6`; `VERIFY.lean` blob `497ee27c6e812440dd6d6085ef69e6a6aaa283c8`.
+- **Structured registry commit:** `8377e294daa3413c8d128e1b868fa7520f890bfa`; `REGISTRY.json` blob `d31b9c281dcb3f4ccddf9b7cf302e1bc93a5142e`. The report itself is committed subsequently; its resulting HEAD is recorded by the GitHub write and final notification. The external registry is unchanged, Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`.
+- **Pins:** Manuscript `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/modules/distribution-prime-product-completion-20261010.txt` §4 (F), lines 153–171, and `paper/source/manuscript-body.tex`. Fixed Mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
+
+### Actual mathematical proof source
+
+The preceding run derived the **genuine restricted Euclidean H-box Cauchy kernel mass**, not the norm of the Fourier transform. This round uses the ACTUAL original test weight `w : Point d → ℝ`, its ordered `mixed (doubled S)` family and the same Fourier chart and physical 2π scale to make the missing transition. On ordinary explicitly quantified finite-order ContDiff and integrable iterated Fréchet derivatives:
+
+1. `actual_fourier_norm_integrable`: obtain zero-order integrability from `hintegrable ∅ 0`, apply previously sourced Fourier continuity and hence `AEStronglyMeasurable` of the actual Fourier norm, then apply pinned Mathlib `Integrable.mono_nonneg` to the actual pointwise majorant `D * fourierKernel d`. This does **not** assume a Fourier estimate or measurability as a fresh premise.
+2. `actual_fourier_box_tail_bound`: apply **pinned** `setIntegral_mono_on` on the actual complement `(fourierBox d H)ᶜ` with the two genuine integrable functions; pull the original derivative budget `D = derivativeD d (actualMixedFamily w)` outside using `integral_const_mul`; consume `fourierBox_complement_mass` and `separatedBoxMassLoss_budget`. The resulting genuine Fourier norm set-integral candidate is
+   `∫ eta in (fourierBox d H)ᶜ, ‖𝓕 (actualMixedFamily w ∅) eta‖ ≤ (d:ℝ) * derivativeD d (actualMixedFamily w) / H`
+   for H>0, including d=0, with no artificial H^d.
+3. `actual_fourier_box_tail_spend`: the explicit scalar cutoff `d*D ≤ eps*H` pays the same actual Fourier tail ≤ eps. This is not a physical modulus discrepancy estimate. The full original W_T all-family admission, quantitative m(N) uniformity, truncated inversion and arithmetic payment remain UNSOLVED.
+
+The result is limited to the stated genuine analytic hypothesis domain. No extra sparse-fiber relative-Theta requirement, no redefined rho or modulus, no absolute-to-relative estimate, and no fixed-smoothing-to-growing-m shortcut were introduced.
+
+### Checked source APIs and verification boundary
+
+- Direct pinned Mathlib source read: `Mathlib/MeasureTheory/Function/L1Space/Integrable.lean` `Integrable.mono_nonneg`; `Mathlib/MeasureTheory/Integral/Bochner/Set.lean` `setIntegral_mono_on`, whose exact signature takes two `IntegrableOn` arguments, `MeasurableSet` and pointwise set inequality; `Mathlib/MeasureTheory/Integral/Bochner/Basic.lean` `integral_const_mul`. The fixed predecessor Fourier and H-box source files were also actually read. This inspection does NOT validate Lean elaboration.
+- Static forbidden proof-escape scan: 0; stripped-comment delimiter stack: PASS; new source and `VERIFY.lean` import/check placement readback confirmed. Source blob `add9965f4602db8e7f6ff8f6220ed165540b4466`.
+- Independent Python scalar regression: 363 cases, d=0..32 and 11 positive H values, checking the exact normalized Cauchy mass and `D * loss ≤ d*D/H`; maximal nonzero ratio ~0.31831. This is not a Fourier/Lebesgue/Lean verification.
+- **NOT RUN (per this task's restriction):** Lean, Lake, CI, kernel replay, full transitive axiom review, Codex, heavy numerical producer. All three new declarations are **SOURCE_ONLY_UNCOMPILED_KERNEL_UNVERIFIED**; the P3.6 parent remains YELLOW; no new GREEN status.
+- **External (M):** unchanged `EXTERNAL_INPUTS.json` and RECORD_ONLY_NOT_IMPLEMENTED_NOT_AXIOM; no external research theorem was re-proved or declared as an additional assumption.
+- No production modules, source locks, fixed manuscript, external board, other task branches, excluded 87-domain dynamic parent, PR or CI were altered.
+
+### Next concrete entrance
+
+1. Connect the now genuine integrable complement Fourier norm to the **truncated Fourier inversion** of the actual original smooth geometric weight, preserving the exact character/2π normalization. Obtain the explicit supremum truncation error; do not silently assume pointwise inversion of an arbitrary L1 weight.
+2. Independently discharge original **all-family** `W_T` ContDiff and integrated derivative bounds uniformly in T and growing HB m(N), then choose one common logarithmic H for all original source labels and fixed orders.
+3. Only after this analytic payment feed the resulting epsilon to the same integer rho, original labelled physical moduli and coprime mean, including complete product=T arithmetic mass. Causal/whole-box, all HB words, empty Gamma mother words, high-rank/enhanced alternatives and full PP remain internal obligations.
