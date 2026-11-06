@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualFrozenGroupWords
 import ImbalancedChen.P3ActualFrozenSlotLabelCounts
 import ImbalancedChen.P3ActualSplitLabelMultinomial
 import ImbalancedChen.P3ActualFrozenFineLabelPartition
@@ -208,3 +209,11 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3ActualFrozenSlotLabelCounts.actual_frozen_slot_split_counts
 #check ImbalancedChen.P3ActualFrozenSlotLabelCounts.actual_frozen_slot_split_three_gamma_tensor
 #check ImbalancedChen.P3ActualFrozenSlotLabelCounts.actual_frozen_slot_factorial_ratio_mem_Icc
+
+-- Physical frozen group / reconstructed split dictionary. SOURCE_ONLY, NOT RUN.
+#check ImbalancedChen.P3ActualFrozenGroupWords.splitBlocks_pairwise
+#check ImbalancedChen.P3ActualFrozenGroupWords.split_word_count_of_member
+#check ImbalancedChen.P3ActualFrozenGroupWords.split_word_count_of_absent
+#check ImbalancedChen.P3ActualFrozenGroupWords.actual_frozen_split_word_count
+#check ImbalancedChen.P3ActualFrozenGroupWords.actual_frozen_group_words_perm
+#check ImbalancedChen.P3ActualFrozenGroupWords.actual_frozen_physical_three_product_sum
