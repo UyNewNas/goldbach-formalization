@@ -49,3 +49,51 @@ Consequently `actual_mixed_physical_product_bound` and `actual_mixed_physical_de
 5. Pay complete arithmetic modulus mass including exact complete product T separately; finish causal/whole-box, all HB source words, empty Gamma mothers, high rank/enhanced branches and same-ρ PP assembly.
 
 `EXTERNAL_INPUTS.json` retains only registered medium analytic estimate (M), with version, premises, conclusion and call site; it is not implemented or axiomatized here. No excluded 87-domain changes, production modules, toolchain upgrade, PR, CI or manuscript edits were performed.
+
+## Successor SOURCE_ONLY increment — physical Fourier-space volume and actual D (2026-11-06 UTC)
+
+- **Verified baseline**: `5a30c2aacd02d0e27e294594bc03033f4e2dbba1`. This was identical to the task branch HEAD before the new source was written; no competing branch writer was observed at the checks.
+- **New proof-body commit**: `3a673aee966a8f7d4704620081876b3e8c83e4a9` (`[skip ci]`).
+- **New source**: `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3FourierPhysicalMeasureD.lean`, 166 lines, exact Git blob `45ea10cb340435ae125f51fa5f8b756db20818ad`.
+- **Audit-target updates**: `VERIFY.lean`, Git blob `533011048b451b4e662ce86607885d619d441587`, with imports before checks; no Lean execution.
+- **Paper pin unchanged**: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/modules/distribution-prime-product-completion-20261010.txt`, §4 (F), in conjunction with §§1–3 for the original labelled source.
+- **Mathlib pin unchanged**: `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`.
+
+### Actual mathematical work
+
+The original `Point d = Fin d → ℝ` and Fourier `EuclideanSpace ℝ (Fin d)` do **not** require a guessed Jacobian: the pinned source declares `PiLp.volume_preserving_ofLp` in `Mathlib/MeasureTheory/Measure/Haar/InnerProductSpace.lean`; the pinned `EuclideanSpace.equiv` is `PiLp.continuousLinearEquiv 2` with coercion exactly `WithLp.ofLp`. The pinned `MeasurePreserving.integral_comp` transfers Bochner integrals with this continuous linear equivalence as measurable embedding. All three exact dependency declarations were directly inspected in the pinned source.
+
+New `chart_measure_preserving`, `integral_chart`, `mixed_L1_chart` and `actual_derivativeD_eq_pointD` compose the actual **old** `mixed (doubled S)` integrands and their complex-cast norms, with no new surrogate derivative. In particular, for every real original chart weight `w` (no W-class or target PP assumption):
+
+```
+derivativeD d (actualMixedFamily w)
+  = Σ S : Finset (Fin d), ∫ p : Point d, |mixed (doubled S) w p|
+```
+
+`originalWD_eq_actual_derivativeD` specializes this equality to the genuine original `withOriginalW` HB profile and its existing `originalWD` ledger, **without changing any source labels, dyadic group products, complete product, physical modulus or rho**.
+
+`exists_physicalW_fourier_product_polylog` then composes the previous integrated physical original-W theorem with the actual Fourier-space pointwise numerator. On the explicitly stated original physical `PhysicalIntegratedClass` and genuine finite-order `ContDiff`/integrability assumptions (not automatically discharged for every W_T), it yields:
+
+```
+physicalDenom (physicalFrequency eta) * ‖𝓕 (actualMixedFamily w ∅) eta‖
+  ≤ C * A * (log N)^(E + B*(2*d)).
+```
+
+The constant `C` precedes `N`, labelled `W_T`, grouping and m in the inherited quantifier order. It is the physical source and full mixed-L1 bound, **not** a claimed Fourier L1/H tail or full PP theorem.
+
+### Verification boundary
+
+- Pinned Mathlib `PiLp.volume_preserving_ofLp`, `EuclideanSpace.equiv` and `MeasurePreserving.integral_comp` source definitions were read; this is API-source inspection, **not** typechecking.
+- New proof file read back from GitHub with blob `45ea10cb340435ae125f51fa5f8b756db20818ad`; banned proof escapes 0; delimiter balance passed in a lexical JS scan.
+- Independent SymPy exact polynomial/coordinate-isometry/real-to-complex norm finite regression: **1,111 / 1,111** for d=0..3; this is not a proof of the measure statement.
+- **NOT RUN**: Lean, Lake, CI, kernel replay, dependent theorem elaboration, full axiom audit, Codex, heavy producer. The new declarations remain **SOURCE_ONLY_UNCOMPILED_KERNEL_UNVERIFIED**, and no node becomes green.
+- `EXTERNAL_INPUTS.json` is unchanged: (M) is registered by exact manuscript version/hypotheses/call site, not implemented, used as an axiom, or required to prove this measure lemma.
+- No changes to the fixed manuscript, production proof, toolchain or lockfile, the excluded full87 dynamic-parent node, PRs or any other automation branch.
+
+### Real next entry
+
+1. Review elaboration-sensitive uses of the exact pinned `MeasurePreserving.integral_comp` and `PiLp.volume_preserving_ofLp` signatures without triggering compilation here; correct the candidate if the explicit source shows a mismatch.
+2. Prove the admitted **physical** `W_T` families' `ContDiff` and integrated mixed Euler derivative bounds uniformly in T and the growing HB length m(N); do not replace this obligation by a target-equivalent structure field.
+3. From the now normalized `D`, prove true Fourier `L1` and `H`-box tail with fixed `2π` factors and Fubini. Then feed an actual epsilon to the already defined same-rho signed full-modulus ledger, pay the complete modulus mass and product=T exception separately.
+4. Remaining causal/whole-box, complete HB sources, empty Gamma mothers, high-rank/enhanced and full original PP assembly are still internal, not external inputs.
+
