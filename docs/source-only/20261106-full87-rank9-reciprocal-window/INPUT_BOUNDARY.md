@@ -1,0 +1,12 @@
+# External-input boundary — rank-nine physical reciprocal window
+
+This packet uses manuscript-INTERNAL, **finite** source algebra only: actual physical target-deleted prime carrier, `halfProductDensity` local identity from the already fixed project supplier, identical actual Rosser policy and frozen parent/cap levels, original suffix Euler factors. It proves `∏(1-g)≤1` pointwise *because* every actual remaining prime has `0≤g≤1`; it does not silently delete a signed term or replace the physical coefficient by a separate mean. It derives only the NECESSARY cutoff `p^3∏H<max(Rold,Rnew)`. The two actual levels can be equal. Crossing means one strict pass and one non-strict failure. No assumptions equal to target conclusion are introduced.
+
+All the following manuscript-external inputs remain REGISTER_ONLY / UNVERIFIED / NOT_IMPLEMENTED / NOT_INVOKED:
+
+1. Pinned manuscript §3 weighted prime-product AP error (manuscript blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`): `Σ_q ρ_N(q) {Σ_{p1...pk≡N (mod q)}W_N - X_W^(q)/φ(q)} = O_{A,W}(N(log N)^(-A))`. Preconditions: fixed labelled prime length k, original smooth positive geometry, uniform original signed coefficient class and modulus ranges, exact coprime mean, no substituted arithmetic mask, auxiliary-coprimality Siegel–Walfisz where required. Application later: original full-q `attachedLeafTest` primitive/AP discrepancy, same rho. No application in new harmonic candidate.
+2. Pinned manuscript §4 Rosser density `V_N^+(R,y)/V_N(y)=F(s)+o(1)` for s>1 and `V_N^-(R,y)/V_N(y)=f(s)+o(1)` for s≥2, s=log R/log y, with required target uniformity, literal coefficients. Application later: ordinary exit-series density asymptotic, NOT a finite crossing invoice in this packet.
+3. Pinned manuscript §4 fixed-positive-u Mertens `V_N(N^u)=2e^{-γ} C_N/(u log N)(1+o(1))`, target-uniform, same normalization. Application later: `H_N` and same-rho reserve payment; not invoked.
+4. A later uniform prime harmonic estimate would need to be stated, sourced, normalized, and checked on the *actual crossing window and actual source* rather than assumed for an arbitrary finite List. This packet proves no such asymptotic and pays nothing.
+
+All manuscript-INTERNAL integrations—same physical `ρ`, original geometry, `actualParent`, signed source identification, primitive/centre/modulus bounds, filtering, numerical saved87 authentication, changed/tagged, compiler/density reserve separation—remain within scope.
