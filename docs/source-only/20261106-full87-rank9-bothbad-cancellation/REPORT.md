@@ -1,0 +1,25 @@
+# P1.4 | rank-nine physical correction: exact cancellation on double-bad historical guards
+
+**SOURCE_ONLY / UNEVALUATED / UNCOMPILED / ZERO KERNEL CREDIT. P1.4 YELLOW.**
+
+## Verified continuation
+- Previous same-task branch: `chatgpt/p1-full87-rank9-history-risk-support-20261106`, actual read HEAD `1d6c08aa76d96da9e3904a863b391197ba986c27`; previous source `P4AOriginalFull87RankNineHistoryRisk.lean` and REPORT/REGISTRY/INPUT_BOUNDARY/HANDOFF all read, together with complete rank-nine physical-mode, failed-attempt, rank-split and eighth-source files. Repository tree includes no `AGENTS.md`.
+- Independent new branch: `chatgpt/p1-full87-rank9-bothbad-cancellation-20261106`, code commit `4b14c8cd4749da03bd2a97e14851d9c1f6f2dd13` [skip ci], new 337-line `P4AOriginalFull87RankNineBothBadCancellation.lean` exact blob `9906bcda58cd133ec3ebd6484159854d54cf354b`.
+- Manuscript fixed: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex`, blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. Relevant ninth odd-square policy and §4 exit-series/density paragraphs checked. Lean `leanprover/lean4:v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, native `subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`, c=49044063/25000000, K=8452171/1250000 unchanged.
+
+## New substantive finite candidate
+1. Prove `firstExit_rankNine_eq_root_rejections` from the original `firstExitRejectedAttempts` select/skip recursion: when the literal incoming `pre.length=8`, its filter to `older.length≤8` is exactly the skip-path, first-choice rejection list. Any accepted select branch adds one prime and cannot contribute at rank nine. This is an ordered occurrence-list equality with the true `smaller` suffix and mass, not a new selector.
+2. In a genuine licensed-sixth owner/trim eighth state, if the historical `UpperAdmissibleSet` FAILS at both frozen levels `actualParent` and `finiteCap`, each remaining actual p has a failed first odd policy test at both levels, by the prior precise three-mode criterion. Thus the old/new **WHOLE rank-nine physical event lists** are exactly equal. The prioritized inherited/total/new-square tags might differ and are NOT asserted equal.
+3. Consequently `rankNineSigned old − rankNineSigned new=0` at such a state, even if the individual inherited-square invoices there are large. Define `ownedRankNineComparisonSupport` as the original owner/trim list filtered to states where at least one historical upper guard passes. The full owner-cell rank-nine signed gap is EXACTLY its signed gap restricted to that support, retaining all occurrence multiplicities.
+
+This improves the previous two-sided *absolute* risk invoices by exposing exact cancellation, but is NOT the numerical support size, an error asymptotic, a normalized density, a reserve payment, or full-q arithmetic equality. The union of two guard-passing domains may include states with zero gap; no minimality is claimed.
+
+## Checks / limits
+- GitHub write/readback confirmed code SHA and blob. A before/after compare showed only this new task proof packet, no main/master modification.
+- Fixed-seed rational/integer synthetic model: 7,000 first-exit trees passed exact recursive depth-eight root extraction; 1,153 double-bad cases passed identical physical rank-nine event lists and equal rational signed sums; 3,309 mixed and 2,538 double-good cases checked root extraction only. This is not the original saved87 archive. Test harness first encountered a Python `math.prod` calling convention error, corrected before final run; an earlier sampling range also yielded only double-bad states and was replaced with a three-regime sample. Final counts refer to the corrected 7,000-case run only.
+- Source static forbidden-escape scan clean; no Lean/Lake binary and **no Lean parser, elaborator or kernel invoked**. No independent review, transitive-axiom check, CI dispatch, Codex call or saved87 replay. The proof bodies remain UNCOMPILED / UNEVALUATED and may require typechecking corrections.
+
+## Exact next steps
+- Read the branch HEAD and source itself, then actually typecheck against the original fixed toolchain when permissible (do not trigger CI absent authorization). If typechecking fails, fix the existing proof rather than wrapping it with new interfaces.
+- Derive an exact first-choice prime threshold/crossover list for the surviving guard-passing states (total and new-minimum squares included), and bound its **signed old-minus-new difference** against the actual same-rho invoice. Do not debit both inherited absolute invoices on the double-bad cancellation region.
+- Still open: quantitative ninth total/new-square modes and inherited contributions on noncancelling states, complete RealizedHistory, original full-q terminal primitive/AP/centre/modulus estimates, same-parent ordinary residual-integral identification, sixth filtration, saved87 original gains, changed/tagged and two distinct reserves. External inputs remain register-only/unverified/not invoked.
