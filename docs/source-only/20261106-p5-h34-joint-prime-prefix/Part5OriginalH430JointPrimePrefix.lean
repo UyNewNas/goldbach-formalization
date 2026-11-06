@@ -214,10 +214,10 @@ theorem frozen_only_joint_prefix_clear (N n : ℕ) (tau : ℝ)
     {r : ℕ} (hr : r.Prime)
     (hlt : r < jointFirstPrime z ((N : ℝ)^a)) :
     ¬ r ∣ N - additivePrimeLabel N z := by
-  have hr : z ∈ rawTagged N :=
+  have hraw : z ∈ rawTagged N :=
     frozen_tagged_subset_raw N n tau (Finset.mem_sdiff.mp hz).1
   have hf := frozen_only_tagged_first_bad N n tau hz
-  exact no_prime_before_joint_on_difference N hr
+  exact no_prime_before_joint_on_difference N hraw
     (bad_implies_not_rough hf.1) hr hlt
 
 /-- A prime STRICTLY before the complete difference's first factor
