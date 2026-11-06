@@ -33,8 +33,7 @@ open P4AOriginalFull87SourceDispatch (point8)
 open P4AOriginalFull87OwnedEighthSource
   (ordinarySaving ownedSource physical_saving_eq_owned_sources)
 open P4AOriginalLicensedSixthSignedLedger (physical)
-open P4AOriginalFull87LicensedSixthPolicy (sixthPolicy)
-open P4AOriginalFull87LicensedSixthRealization (policy)
+open P4AOriginalFull87LicensedSixthPolicy
 
 /-- Product of physical prime densities at the *actual selected word*.
 This is a terminal function, not a new selection policy. -/
