@@ -1,0 +1,16 @@
+# P1.4 — four ORIGINAL odd-square gates on the actual physical tuple
+
+## Recovery and immutable pins
+Predecessor verified HEAD: `4016ff95681f9d59c31c84ea0c6e29356c084b5d` on `chatgpt/p1-full87-odd-ceiling-eight-word-20261107`. Continuation branch: `chatgpt/p1-full87-odd-gates-physical-tuple-20261107`. Fixed manuscript `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. Lean `leanprover/lean4:v4.33.0-rc1`, mathlib `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`, native `subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958`. c=49044063/25000000, K=8452171/1250000.
+
+## New manuscript-internal candidate proof bodies
+1. An actual original history exponent is the sum of processing-order coordinates through position 0,2,4,6 plus two more copies of that last coordinate; four finite cases.
+2. For the SAME selectedPrefix H of length eight, each subset of primeHistoryTuple positions has a direct physical product/Real.rpow identity using the existing pinned `rpow_primeHistoryLogCoordinates`; no new source table or independent prime population.
+3. Each original historical 3*t gate has an EXACT physical tuple product-times-current-square expression, using the preceding two lemmas.
+4. For every actual owned full87 eighth occurrence, obtain the real H length from `owned87_eighth_state_exact_carrier` and all positive target-deleted primes from `owned_eighth_history_primes_and_deletion`. Compose the original four strict exponent bounds in `owned_four_original_history_power_below_actual_cap` with the genuine `width_pos` margin and the physical tuple identity. The result is four STRICT physical tuple inequalities below the SAME finiteCap. No caller-provided gate inequality, J bound, archive certificate, or reserve-paid hypothesis.
+
+## Explicit remaining mathematical gap
+This is NOT yet `historyOddSquareCeiling H < actualFrozenPost8Level ... false`. The predecessor's literal `actual_eight_odd_square_ceiling` uses list suffix products `[p6,...,p0]`, etc. The next manuscript-internal proof must reconstruct `H = [primeHistoryTuple H 7,...,primeHistoryTuple H 0]` from `primeHistoryTuple_reverse_ofFn` and length eight, transfer the four concrete list-suffix products into the four NEW tuple products using the actual strict ordering, then apply the predecessor's `actual_eight_odd_square_ceiling_lt` to eliminate J as a premise. Must not infer J below the smaller actualParent. Then address the remaining historical shell and cubic annulus physical reciprocal costs and legitimate single reserve payment at the shared rho.
+
+## Validation
+Candidate SOURCE_ONLY / UNEVALUATED / UNCOMPILED / ZERO KERNEL CREDIT. Read predecessor full source, all four packet files, the existing actual history carrier, named cap-margin proof, and the exact `PrimeHistoryLogCoordinates.lean` inverse lemma; applicable root/parent AGENTS.md lookups returned not found. No Lean/Lake, kernel, axioms audit, saved87 or independent review; no CI dispatch, Codex, local machine or resource expansion. A finite symbolic identity is not formal elaboration. No new external input invoked. No branch merge, main/master edits, or force.
