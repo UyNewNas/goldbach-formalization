@@ -1,0 +1,9 @@
+# P1.4 internal and external input boundary — original rank-nine single-window
+
+**MANUSCRIPT-INTERNAL / SOURCE CANDIDATE:** original owner/trim actual eighth states, original Rosser first-choice threshold, existing pre-N common RealizedHistory supplier, physical eighth prefix mass, actual parent/cap comparison and the original four historical tests yielding J(H)<cap. This packet uses these specific previous Lean candidates with explicit statements; it does not assume an equivalent of the final estimate, add any axiom, or introduce another source population. It identifies the exact per-occurrence cost without claiming decay.
+
+**EXTERNAL / REGISTER_ONLY / UNVERIFIED / NOT_INVOKED:** (1) signed full-beta AP/primitive discrepancy with the SAME rho and proper coefficient norms/support: pinned manuscript `manuscript-body.tex` at `9731290e8f53cffda44129906cde6a965eaa869b`, formula `eq:current-PP`; (2) centre-prime and modulus-prime corrections for the actual target-deleted carrier; (3) ordinary Rosser F/f with matched normalization and fixed-u Mertens V_N; (4) uniform weighted reciprocal-prime-window estimates over actual historical-branch and cubic-branch sources. Exact external theorem version, hypotheses, N-first quantifiers, full beta attachment, normalization, rho identity and calling sites must be recorded and verified BEFORE invocation. No external proof or conclusion implemented or invoked here.
+
+**INTERNAL / OPEN:** elaboration and kernel replay; original saved87 support and arithmetic numeric gain; historical-region and cubic-region actual same-rho harmonic error; non-duplicated compiler/density reserve payments; attachedLeafTest terminal discrepancies; ordinary continuation residual-integral semantics; sixth filtering and signed deletion; changed/tagged coverage and final common-rho assembly.
+
+Status: SOURCE_ONLY / UNEVALUATED / UNCOMPILED / NOT_KERNEL_REPLAYED / NOT_AXIOM_AUDITED / NOT_INDEPENDENTLY_REVIEWED / NOT_SAVED87_REPLAYED.
