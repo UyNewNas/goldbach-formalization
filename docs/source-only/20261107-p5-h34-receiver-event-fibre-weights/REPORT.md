@@ -13,7 +13,7 @@ body: `paper/source/manuscript-body.tex` (pinned; no version switch).
 ## Actual manuscript-internal increment
 
 Added `Part5OriginalH430ReceiverEventFibreWeights.lean`, 230 text lines,
-8 proposed Lean theorem bodies and 4 definitions/abbreviations.
+8 proposed Lean theorem bodies and 5 definitions/abbreviations.
 
 This independently advances the previously unpaid fourth receiver-root lane.
 Prior source yielded an individual historical rank-two rejected-event witness for
