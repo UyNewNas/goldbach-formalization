@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualFrozenTaggedLabelCompiler
 import ImbalancedChen.P3ActualFrozenTaggedPrimeBox
 import ImbalancedChen.P3ActualFrozenTaggedPrimeModes
 import ImbalancedChen.P3ActualFrozenEuclideanPairing
@@ -356,3 +357,9 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 #check ImbalancedChen.P3ActualFrozenTaggedPrimeBox.frozen_original_labels_perm
 #check ImbalancedChen.P3ActualFrozenTaggedPrimeBox.positional_gamma_original_ID_fibre
 #check ImbalancedChen.P3ActualFrozenTaggedPrimeBox.positional_gamma_norm_le_one_of_original_dictionary
+
+-- True endpoint allocator naturality through possibly repeated fine labels,
+-- and original run-length sorted-source gamma bounds. NOT EXECUTED.
+#check ImbalancedChen.P3ActualFrozenTaggedLabelCompiler.selected_pair_slots_map
+#check ImbalancedChen.P3ActualFrozenTaggedLabelCompiler.frozen_original_ID_label_words
+#check ImbalancedChen.P3ActualFrozenTaggedLabelCompiler.actual_sorted_ID_three_positional_gamma_bounds
