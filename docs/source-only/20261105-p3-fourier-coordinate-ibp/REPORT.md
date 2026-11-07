@@ -890,3 +890,24 @@ This is a **single original labelled group** finite identity, not the three-fold
 
 
 **GitHub verified source commit:** `f7d6b3c5d7acaa813bc158125fd8a00a3d76450b`, branch `chatgpt/p3-internal-original-w-20261105`, confirmed ahead=1 / behind=0 against `32bd63a65f3af905d0fdbb2afec24def5c156eab`, exactly four changed task files. Verified proof source blob `81cc90dc77cdbf92ddc3c43a57a346adc88ef547` (268 lines). This follow-up only records actual readback provenance; both commits use `[skip ci]`. Lean/Lake/kernel still NOT RUN.
+
+## P3.6 SOURCE_ONLY successor — finite complex modes on the three actual frozen groups (2026-11-07 UTC)
+
+**Checked starting branch HEAD:** `c7c454431f97736b37510e6b1cdea1d557451022`.
+**Pushed and read-back proof commit:** `29955a2a879405cbc8d603b1c6a59c3690636adf` ([skip ci]).
+**New file:** `docs/source-only/20261105-p3-fourier-coordinate-ibp/P3ActualFrozenComplexThreeModes.lean`, 256 lines, Git blob `346410f4e8e8e805203dd40325642e6d54aeaf4d`.
+**VERIFY.lean:** Git blob `e2152094d4c749937dad25d285f3c2b08f7c9316`, four new checks registered only.
+**Manuscript pin:** `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex` PP and `paper/source/modules/distribution-prime-product-completion-20261010.txt` §§3 (T), 4 (F).
+**Mathlib pin:** `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`; toolchain unchanged.
+
+**Mathematical increment:** The prior source treats **one** separated complex positional multiplier on each of the three actual frozen physical ordered words. This packet proves a true **finite common-mode Fubini interchange** on all three original physical boxes, then composes the previous source-only tensor for each mode. Its four declarations are `triple_mode_sum_comm`, `finite_modes_three_sum_transport`, `actual_frozen_three_finite_modes_tensor`, and `actual_frozen_three_finite_modes_same_rho`. The original `M_0 M_1 M_2 / M_all` label-factorial correction occurs exactly once; the full integer product and repeated tuple fibres are unchanged. The literal signed integer `rho(q)` multiplies the **same** `fineKernel(T,q,n)` counting minus exact coprime mean on each side and each physical q in the parameter finite set Q. Each mode's group v_j can depend on actual ordered slot positions. No positional permutation of v_j is asserted, no artificial per-modulus mean, no product-only W, and no fibrewise relative Theta error are introduced.
+
+This is a **constructive algebraic statement for finite separated mode sums**, not a hypothesis claiming the real original geometric `W_T` is such a sum. The true continuous Fourier representation of W_T and its actual frozen coordinate dictionary are still open. The physical modulus family and `rho_T` PP atom compiler remain uninstantiated Q/rho parameters; arithmetic error is not bounded by the exact finite identity.
+
+**Checks actually performed:** GitHub branch HEAD checked immediately before source commit and with a non-forced expected-head ref update; source/VERIFY files read back from the pushed source commit. New source forbidden escape-token scan 0; lexical parentheses and bracket counts balanced; 4 exact registered `#check` references not executed. Independent Python Gaussian-integer/rational exact regression: 900 distinct three-group cases, 3600 same-rho full-modulus checks over q=2,3,5,7, **zero failures**, 2436 group product-fibre collision checks and 283 empty-group cases. Separate 144 exact factorial-ratio tests passed. The regression did not run Lean or simulate the actual frozen allocator; random finite algebra cannot certify the true original domain.
+
+**NOT RUN:** Lean, Lake, CI, kernel replay, full transitive axiom audit, Codex or heavy producer. All four new declarations and all predecessor proof candidates remain SOURCE_ONLY_UNCOMPILED_KERNEL_UNVERIFIED; **NO GREEN**. Root and ancestor packet AGENTS paths were queried and returned NOT_FOUND; no hidden constraints claimed. No production source, manuscript, other task branch, toolchain, lock, excluded full87, PR, merge or dashboard edited.
+
+**Outside boundary:** `EXTERNAL_INPUTS.json` stayed unchanged, Git blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`. Restricted analytic (M) is **record-only / not implemented / not axiomatized**. This increment is manuscript internal.
+
+**Exact next entry:** First instantiate the genuine `W_T` logarithmic positional Fourier phase into **these same literal physical frozen words**, checking original label/multiplicity dictionary and source-specific geometric smoothness; prove absolute continuous Fourier L1, Fubini and quantitative common H with growing m(N). Separately identify actual complete physical PP atoms and `rho_T`, global squarefree mask, nonzero shifted arithmetic moment, complete modulus/totient mass and product=T exception; causal whole boxes, all HB, empty Gamma and high-rank/enhanced remain internal. P3.6 overall **YELLOW**.
