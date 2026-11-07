@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualWeightedFibreInjective
 import ImbalancedChen.P3ActualWeightedThreeGamma
 import ImbalancedChen.P3ActualWeightedFineSameRho
 import ImbalancedChen.P3ActualSortedFineSourceGamma
@@ -249,3 +250,9 @@ import ImbalancedChen.P3FourierActualBoxTail
 -- SOURCE_ONLY only: no Lean/Lake/kernel validation performed.
 #check ImbalancedChen.P3ActualWeightedThreeGamma.weighted_sorted_three_gamma_one_modulus
 #check ImbalancedChen.P3ActualWeightedThreeGamma.weighted_sorted_three_gamma_same_rho
+
+-- Original strictly sorted prime fibres: exact uniqueness / zero support /
+-- pointwise one-bound conditional on the original tuple W; NOT EXECUTED.
+#check ImbalancedChen.P3ActualWeightedFibreInjective.weightedFineFibre_mem_eq
+#check ImbalancedChen.P3ActualWeightedFibreInjective.weightedFineFibre_zero_off
+#check ImbalancedChen.P3ActualWeightedFibreInjective.weightedFineFibre_abs_le_one
