@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualFrozenOriginalSlotPhase
 import ImbalancedChen.P3ActualFrozenComplexThreeModes
 import ImbalancedChen.P3ActualFrozenComplexThreeTensor
 import ImbalancedChen.P3ActualFrozenComplexGroupGamma
@@ -307,3 +308,12 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 #check ImbalancedChen.P3ActualFrozenComplexThreeModes.finite_modes_three_sum_transport
 #check ImbalancedChen.P3ActualFrozenComplexThreeModes.actual_frozen_three_finite_modes_tensor
 #check ImbalancedChen.P3ActualFrozenComplexThreeModes.actual_frozen_three_finite_modes_same_rho
+
+-- Original physical slot-ID Fourier character through the genuine frozen
+-- endpoint assignment and all three actual slot words: NOT Lean-executed.
+#check ImbalancedChen.P3ActualFrozenOriginalSlotPhase.exp_sum_eq_prod
+#check ImbalancedChen.P3ActualFrozenOriginalSlotPhase.original_character_factors
+#check ImbalancedChen.P3ActualFrozenOriginalSlotPhase.group_character_congr_on_slots
+#check ImbalancedChen.P3ActualFrozenOriginalSlotPhase.actual_frozen_original_slot_phase_factors
+#check ImbalancedChen.P3ActualFrozenOriginalSlotPhase.actual_frozen_original_phase_from_words
+#check ImbalancedChen.P3ActualFrozenOriginalSlotPhase.actual_frozen_physical_log_phase
