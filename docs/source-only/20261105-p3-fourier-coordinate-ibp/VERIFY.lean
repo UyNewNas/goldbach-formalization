@@ -381,3 +381,9 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 #check ImbalancedChen.P3ActualCanonicalFrozenSplitPayment.canonical_source_split_group_perm
 #check ImbalancedChen.P3ActualCanonicalFrozenSplitPayment.canonical_source_split_ratio_mem_Icc
 #check ImbalancedChen.P3ActualCanonicalFrozenSplitPayment.actual_unsorted_ID_split_three_positional_gamma_bounds
+
+-- Original-ID unsorted finite Fourier mode -> same-rho physical three-gamma tensor.
+-- SOURCE_ONLY: declarations listed for a later audit; #check not executed.
+#check ImbalancedChen.P3ActualTaggedUnsortedSameRho.actual_tagged_unsorted_finite_modes_tensor
+#check ImbalancedChen.P3ActualTaggedUnsortedSameRho.actual_tagged_unsorted_finite_modes_same_rho
+#check ImbalancedChen.P3ActualTaggedUnsortedSameRho.actual_tagged_unsorted_mode_gamma_budget
