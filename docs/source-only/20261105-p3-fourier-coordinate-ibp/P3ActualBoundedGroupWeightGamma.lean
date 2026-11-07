@@ -93,7 +93,7 @@ theorem weightedLabelGamma_sum_by_product
   change (∑ ps ∈ T, v ps * H ps.prod) /
       (actualPrimeLabelBlocksFactorial blocks : ℝ) =
     ∑ n ∈ T.image List.prod, weightedLabelGamma B blocks v n * H n
-  rw [weighted_sum_by_product T v H, Finset.sum_div]
+  rw [weighted_sum_by_product T v H, ← Finset.sum_div]
   apply Finset.sum_congr rfl
   intro n hn
   dsimp [weightedLabelGamma]
