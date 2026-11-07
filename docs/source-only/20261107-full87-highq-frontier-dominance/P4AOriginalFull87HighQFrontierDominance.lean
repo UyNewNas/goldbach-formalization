@@ -175,5 +175,91 @@ theorem full87_highQ_gain_eq_full_of_all_owned_prefix_large
   exact owned_highQ_saving_eq_full_of_large_prefix
     delta n e q om N cap w z L X F c s hs (hlarge c s hs)
 
+/-- An elementary LIST partition, not a Finset conversion. Repeated
+source occurrences survive in precisely their original multiplicity. -/
+private theorem list_sum_partition_bool {α : Type*}
+    (xs : List α) (select : α → Bool) (f : α → ℝ) :
+    (xs.map f).sum =
+      ((xs.filter select).map f).sum +
+      ((xs.filter (fun a => ! select a)).map f).sum := by
+  induction xs with
+  | nil => simp
+  | cons a rest ih =>
+      cases h : select a <;>
+        simp [h, ih, add_assoc, add_left_comm, add_comm]
+
+/-- This is unconditional on the archive's eight-prime products.
+The high-q change of the ACTUAL original87 parent splits into two
+disjoint occurrence lists: (1) strict large-prefix occurrences, where
+high-q equals the entire ordinary saving, and (2) remaining original
+occurrences, where the genuine high-q terminal mask is still required.
+
+The second list includes equality selectedPrefix.prod = X.
+No occurrence is counted twice or dropped, and no new policy is used. -/
+theorem full87_highQ_gain_split_at_actual_frontier
+    (delta : ℝ) (n : ℕ) (e : ℚ) (q : ℕ) (om : ℝ)
+    (N cap : ℕ) (w z L : ℝ) (X : ℕ) (F : ℕ → ℝ) :
+    physical (sixthPolicy n e q om (N : ℝ)) N cap w z L
+        (highQTest X F) -
+      physical (policy delta n e q om (N : ℝ)) N cap w z L
+        (highQTest X F) =
+      (∑ c : Cell,
+        ((((states delta n e q om N cap w z
+          (fun _ : ℕ => (1 : ℝ)) c).filter
+          (fun s => decide (X < s.selectedPrefix.prod))).map
+          (ordinarySaving n e q om N cap w L F c)).sum)) +
+      (∑ c : Cell,
+        ((((states delta n e q om N cap w z
+          (fun _ : ℕ => (1 : ℝ)) c).filter
+          (fun s => !decide (X < s.selectedPrefix.prod))).map
+          (ordinarySaving n e q om N cap w L (highQTest X F) c)).sum)) := by
+  rw [full87_high_q_gain_eq_owned_sources]
+  have hcell (c : Cell) :
+      ownedSource delta n e q om N cap w z L (highQTest X F) c =
+        (((states delta n e q om N cap w z
+            (fun _ : ℕ => (1 : ℝ)) c).filter
+            (fun s => decide (X < s.selectedPrefix.prod))).map
+            (ordinarySaving n e q om N cap w L F c)).sum +
+        (((states delta n e q om N cap w z
+            (fun _ : ℕ => (1 : ℝ)) c).filter
+            (fun s => !decide (X < s.selectedPrefix.prod))).map
+            (ordinarySaving n e q om N cap w L (highQTest X F) c)).sum := by
+    let xs := states delta n e q om N cap w z
+      (fun _ : ℕ => (1 : ℝ)) c
+    let big : FirstExitDepthState ℕ → Bool :=
+      fun s => decide (X < s.selectedPrefix.prod)
+    let f := ordinarySaving n e q om N cap w L (highQTest X F) c
+    have hpartition := list_sum_partition_bool xs big f
+    have hlarge :
+        ((xs.filter big).map f).sum =
+        ((xs.filter big).map
+          (ordinarySaving n e q om N cap w L F c)).sum := by
+      apply congrArg List.sum
+      apply List.map_congr_left
+      intro s hs
+      obtain ⟨hs0, hbig⟩ := List.mem_filter.mp hs
+      have hstrict : X < s.selectedPrefix.prod := by
+        exact of_decide_eq_true hbig
+      exact owned_highQ_saving_eq_full_of_large_prefix
+        delta n e q om N cap w z L X F c s hs0 hstrict
+    rw [hlarge] at hpartition
+    simpa only [ownedSource, xs, big, f] using hpartition
+  calc
+    (∑ c : Cell, ownedSource delta n e q om N cap w z L
+      (highQTest X F) c) =
+      ∑ c : Cell,
+        ((((states delta n e q om N cap w z
+          (fun _ : ℕ => (1 : ℝ)) c).filter
+          (fun s => decide (X < s.selectedPrefix.prod))).map
+          (ordinarySaving n e q om N cap w L F c)).sum +
+        (((states delta n e q om N cap w z
+          (fun _ : ℕ => (1 : ℝ)) c).filter
+          (fun s => !decide (X < s.selectedPrefix.prod))).map
+          (ordinarySaving n e q om N cap w L (highQTest X F) c)).sum := by
+            apply Finset.sum_congr rfl
+            intro c _
+            exact hcell c
+    _ = _ := Finset.sum_add_distrib
+
 end
 end ImbalancedChen.P4AOriginalFull87HighQFrontierDominance
