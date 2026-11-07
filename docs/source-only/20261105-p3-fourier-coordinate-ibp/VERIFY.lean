@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualFrozenEuclideanPairing
 import ImbalancedChen.P3ActualFrozenMathlibInverseCharacter
 import ImbalancedChen.P3ActualFrozenOriginalSlotPhase
 import ImbalancedChen.P3ActualFrozenComplexThreeModes
@@ -325,3 +326,10 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 #check ImbalancedChen.P3ActualFrozenMathlibInverseCharacter.physicalWordCharacter_eq_mathlib
 #check ImbalancedChen.P3ActualFrozenMathlibInverseCharacter.actual_frozen_mathlib_inverse_character
 #check ImbalancedChen.P3ActualFrozenMathlibInverseCharacter.actual_frozen_slotLog_mathlib_inverse
+
+-- Original frozen slots with PINNED real Euclidean Fourier scalar pairing.
+-- SOURCE_ONLY: registered audit targets, NOT Lean-executed.
+#check ImbalancedChen.P3ActualFrozenEuclideanPairing.originalSlotDot_eq_euclidean_inner
+#check ImbalancedChen.P3ActualFrozenEuclideanPairing.originalSlotCharacter_eq_euclidean_inverse
+#check ImbalancedChen.P3ActualFrozenEuclideanPairing.actual_frozen_euclidean_inverse_character
+#check ImbalancedChen.P3ActualFrozenEuclideanPairing.actual_frozen_slotLog_euclidean_inverse
