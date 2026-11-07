@@ -258,8 +258,9 @@ theorem actual_original_stage_requires_large_presieve
     (N : ℝ) ^ a < z0 := by
   have hlicense := (original_stage_iff_physical_root
     N cap precision tau z0 lower hzcap hz).1 hstage
-  have hcut := (original_physical_licence_iff
-    N precision tau z0 lower hz).1 hlicense |>.1
+  have hcut : (arithmeticPrime z : ℝ) < z0 :=
+    ((original_physical_licence_iff
+      N precision tau z0 lower hz).1 hlicense).1
   exact raw_strict_root_requires_large_presieve N z0
     (original_tagged_subset_raw_unconditional N hz) hcut
 
