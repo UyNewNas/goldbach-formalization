@@ -1,0 +1,9 @@
+# P1.4 retained terminal ceiling: input boundary
+
+Frozen manuscript: UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b; paper/source/manuscript-body.tex; blob d529bea2ecfcc74d64fc1664ac770a3becaa7c79.
+
+External PP input (REGISTER_ONLY / NOT USED / UNVERIFIED): eq:current-PP, lines 258-278: original fixed finite smooth prime-product weight W_N with labelled primes, at least c N^a*, O(N) product, fixed polylog mixed Euler-derivative bounds, NO extra arithmetic mask. Its signed sum over actual admitted squarefree centre-coprime full physical rho_N of AP count minus X_W^(q)/phi(q), with the SAME rho_N in both terms, is O_{A,W}(N (log N)^(-A)). Correct physical support/admissibility and Gevrey specialization are still missing. The 7/32 Kim-Sarnak spectral vartheta is NOT a full-q cutoff. Paper lines 476-481 give theta_*=599/1000 before a small complete-scale adjustment; this is NOT an instantiated cutoff X.
+
+New internal candidate does not call, assume, reprove or strengthen PP or PNT/Mertens/BV/spectral theory. retainedTerminalCeiling is a recursion on the ORIGINAL Boolean Rosser policy and ORIGINAL literal remaining carrier. It computes an exact permitted-terminal rough product maximum at an existing state. Both actual own-sixth and finite-eighth levels are evaluated separately; small Rosser factors are attached to the complete physical modulus. Its gate is a concrete finite inequality, not a field certifying the goal. It yields only exact zero under the stated finite gate. Numerical cutoff X remains symbolic.
+
+Not discharged: saved87 actual gate population, high-q signed asymptotic, H_N-tail payment, Gevrey weight/Euler derivative licence, primitive signed PP, prime-center and modulus factors, rank9 risk, common ordinary residual integral, sixth filtering, original archive gain, changed/tagged, compiler reserve, density reserve, Lean kernel replay. All external items remain REGISTER_ONLY/NOT_VERIFIED.
