@@ -1,0 +1,11 @@
+# External boundary: true singleton PP normalization (P1.4)
+
+Pinned manuscript: UyNewNas/chen-imbalanced-semiprimes commit 9731290e8f53cffda44129906cde6a965eaa869b, paper/source/manuscript-body.tex, Git blob d529bea2ecfcc74d64fc1664ac770a3becaa7c79. At eq:current-PP, lines 258-278, the AUTHOR DEFINES X_W^(q) as the actual weighted k-prime-product sum with (product,q)=1. For k=1 this is the weighted prime mass masked by (p,q)=1; finiteCoprimeMass over the full support is exactly this object. It is not an unspecified analytic function.
+
+The internal new theorem identifies the pinned singleton finite PP remainder with finitePrimitiveDiscrepancy for the same physical full-q, rho, prime prefix, N,D,cap,w,z,L. The unrestricted weighted mass T_W differs from X_W^(q) by precisely weightedModulusPrimeMass (existing predecessor proof); this term cancels the predecessor's apparent T_W-X_W^(q) mismatch. It is NOT a zero-mass assumption, an error payment, a new PP theorem, or a change of policy.
+
+Permission checks STILL OPEN: select and prove the actual Gevrey W support on the precise chenPrimePrefix(N+D), derivative bounds; fixed-parameter then N quantification; physical q>0, squarefree, q<=N^(7/32), (q,N)=1; admitted signed frozen policy; the exact normalization of original W outside its finite universe; and the actual external signed smooth-singleton PP estimate O_{A,W}(N(log N)^(-A)). The external input has not been invoked, proved, or added as an axiom.
+
+Sharp endpoint and density: the new single-policy bound retains the primitive PP remainder plus the true signed endpoint invoice. The independent mean-boundary transfer from coprime smooth prime mass X_W^(q) to the sharp pi(N)/phi(q) remains OPEN and must be estimated with the SAME rho, no double charge. The centre p|N deletion, low power trim, rank9 history/cubic window, ordinary integral, saved87 numerical certificates, changed/tagged, and distinct compiler/density reserves all remain OPEN.
+
+Fixed toolchain: Lean v4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958. c=49044063/25000000, K=8452171/1250000. SOURCE_ONLY / UNEVALUATED / UNCOMPILED.

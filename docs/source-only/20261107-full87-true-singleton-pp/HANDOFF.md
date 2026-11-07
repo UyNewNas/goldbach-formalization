@@ -1,0 +1,9 @@
+# Durable P1.4 handoff — true singleton PP mean
+
+Resume branch chatgpt/p1-full87-true-singleton-pp-20261107 at its real confirmed HEAD (do not revert to 9649ab3 or the predecessor). The verified BASE is 51fc6058737df85700b62e027685176fdbf8ff6d. Read REPORT.md, INPUT_BOUNDARY.md, REGISTRY.json, complete P4AOriginalFull87TrueSingletonPPMean.lean, and previous packet 20261107-full87-weighted-primitive-recentering (both Lean files) and sharp-smooth. Check relevant AGENTS.md before writes (root/docs/source-only/current packet/ImbalancedChen were absent on verified baseline).
+
+Real change: manuscript-pinned eq:current-PP DEFINES X_W^(q) as coprime prime-product mass; singleton version is the exact finiteCoprimeMass, NOT an arbitrary analytic comparison. Using original full-beta Q/rho, the predecessor's finite weighted modulus-prime correction cancels exactly the T_W-X_W^(q) term. New Lean candidate directly identifies the originalSmoothLiteral with the signed singleton PP remainder, then combines old sharp/smooth endpoint and its true [0,1] invoice. This reduces an actual interface gap; it does not pay any H_N error.
+
+SOURCE_ONLY / UNEVALUATED / UNCOMPILED; tests 1200 + 1500 exact rational cases, 0 mismatches. No Lean kernel, no CI dispatch, no axiom audit, no independent review, no saved87 replay. Source file Git blob is recorded in REGISTRY.json. All external estimates remain REGISTER_ONLY_NOT_INVOKED; no new theorem assumptions added.
+
+Exact NEXT: actual W support / derivative profile; physical q<=N^(7/32), positive squarefree and coprime; same rho signed PP; exact smooth-coprime-to-sharp-pi mean boundary and deletion; rank9, sixth filtering, residual integral, saved87, two reserves. Reuse fixed manuscript 9731290 / blob d529bea, lean 4.33.0-rc1 / mathlib e4c91783 / native 09b97db and constants c=49044063/25000000, K=8452171/1250000. P1.4 yellow.
