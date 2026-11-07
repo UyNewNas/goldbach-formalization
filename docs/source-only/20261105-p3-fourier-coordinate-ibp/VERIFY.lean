@@ -33,6 +33,7 @@ import ImbalancedChen.P3FourierCauchyAxis
 import ImbalancedChen.P3FourierCauchyTail
 import ImbalancedChen.P3FourierBoxTailAlgebra
 import ImbalancedChen.P3ActualMarkedOffShiftDivisors
+import ImbalancedChen.P3ActualEvenOriginalPrimeException
 
 import ImbalancedChen.P3FourierProductFubini
 import ImbalancedChen.P3FourierAutomaticMeasurability
@@ -410,3 +411,11 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 #check ImbalancedChen.P3ActualMarkedOffShiftDivisors.fineKernel_marked_off_divisors
 #check ImbalancedChen.P3ActualMarkedOffShiftDivisors.markedResidualKernel_off_divisors
 #check ImbalancedChen.P3ActualMarkedOffShiftDivisors.weightedSortedPP_off_divisors
+
+-- Original even-target prime-only exception and full nonzero-shift source.
+-- SOURCE_ONLY / not executed by Lean or kernel.
+#check ImbalancedChen.P3ActualEvenOriginalPrimeException.actual_fine_prime_odd_of_even_N
+#check ImbalancedChen.P3ActualEvenOriginalPrimeException.actual_sorted_residual_product_odd
+#check ImbalancedChen.P3ActualEvenOriginalPrimeException.actual_sorted_even_full_fibre_empty
+#check ImbalancedChen.P3ActualEvenOriginalPrimeException.actual_sorted_even_exact_source_zero
+#check ImbalancedChen.P3ActualEvenOriginalPrimeException.weightedSortedPP_even_eq_full_shift_divisors
