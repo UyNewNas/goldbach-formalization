@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualWeightedThreeGamma
 import ImbalancedChen.P3ActualWeightedFineSameRho
 import ImbalancedChen.P3ActualSortedFineSourceGamma
 import ImbalancedChen.P3ActualFrozenPhysicalGamma
@@ -242,3 +243,9 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3ActualWeightedFineSameRho.weightedSortedPP
 #check ImbalancedChen.P3ActualWeightedFineSameRho.weightedSortedPP_fibre
 #check ImbalancedChen.P3ActualWeightedFineSameRho.weightedSortedPP_exact_product
+
+-- Actual tuple-dependent W through the original product fibre, followed by
+-- the literal frozen three-gamma tensor and SAME rho in count and mean.
+-- SOURCE_ONLY only: no Lean/Lake/kernel validation performed.
+#check ImbalancedChen.P3ActualWeightedThreeGamma.weighted_sorted_three_gamma_one_modulus
+#check ImbalancedChen.P3ActualWeightedThreeGamma.weighted_sorted_three_gamma_same_rho
