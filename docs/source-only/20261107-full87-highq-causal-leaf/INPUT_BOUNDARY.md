@@ -1,0 +1,11 @@
+# P1.4 external input boundary — high-q actual retained leaf
+
+Frozen manuscript: UyNewNas/chen-imbalanced-semiprimes commit 9731290e8f53cffda44129906cde6a965eaa869b, paper/source/manuscript-body.tex, Git blob d529bea2ecfcc74d64fc1664ac770a3becaa7c79. Checked lines 258–278 (eq:current-PP) and 742–779 (lem:current-sharp-prime). Tools: Lean v4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native 09b97db5764ade1246bfb77206baa1b124760958. c=49044063/25000000, K=8452171/1250000.
+
+**INTERNAL SOURCE-ONLY**: new real retained odd-first-exit leaf witness for every nonzero original full-beta q>X, including original selected word, reversal sublist of decreasing rough universe, parity/mass, full physical product, sign-attached small beta and strict X<L*leaf.selected.prod. Elementary cap^rank envelope and nonempty rough-leaf exclusion when X>=L. Not asserted to have been kernel checked.
+
+**REGISTER_ONLY_NOT_INVOKED**: manuscript signed primitive-Poisson/AP input (eq:current-PP). For each fixed geometric smooth weight W_N with the stated polylog mixed Euler derivative permission and original bounded squarefree coprime signed coefficient rho_N supported on actual admissible policy/level q<=N^theta, the signed sum of actual primitive AP singleton counts minus X_W^(q)/phi(q) has O_{A,W}(N(log N)^(-A)) error on the original interval/normalization. Full source proof, permission verification and independent status unverified; no invocation of this statement was added. No PNT/Mertens/BV/spectral reimplementation or new axioms.
+
+**OPEN INTERNAL**: connect actual full87 parent and inherited ordinary leaves to original retained policy; obtain sharp size q<=N^theta on EACH nonzero selected leaf or quantitatively pay the literal high-q tail; original Gevrey weight and Euler derivatives; signed primitive PP adapter; center, endpoint, modulus correction and sharp mean relative to H_N; rank9 historical risk and ordinary residual integral; sixth filtered signed gain; saved87 certificate; changed/tagged; independent compiler and density reserve payments. A finite cap^rank bound alone is far too weak and cannot be labeled admitted PP.
+
+No reserve was spent, no numerical coefficient changed, no added conditional structure field equivalent to the main goal.
