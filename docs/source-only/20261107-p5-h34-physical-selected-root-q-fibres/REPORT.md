@@ -103,3 +103,18 @@ create another constant-Q surrogate or infer historical count equality from
 this root-filter identity.
 
 **完整 h34 稿内证明仍未闭合。**
+
+## Git tree correction (important continuation detail)
+
+The source commit \`38cc36c\` was correctly based on the complete prior
+tree. A subsequent documentation-only commit \`ed77a85\` was accidentally
+created without the base tree and temporarily showed a truncated tree.
+It MUST NOT be used as a checkout, replay or cherry-pick baseline.
+Before closing this run, a non-force, expected-SHA fast-forward correction
+\`b2c20e7\` restored the full tree and retained all four new task files.
+An independent final comparison from \`b61d60e\` to \`b2c20e7\` shows
+exactly four new files in this task-owned directory, zero deletions,
+and the original \`README.md\` remains readable. There was no force-push.
+This historical intermediate tree error is a Git engineering issue, not a
+Lean proof result. Continue from the latest corrected remote HEAD, NEVER
+from \`ed77a85\`.
