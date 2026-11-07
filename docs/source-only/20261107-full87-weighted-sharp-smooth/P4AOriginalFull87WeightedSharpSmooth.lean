@@ -18,6 +18,7 @@ namespace ImbalancedChen.P4AOriginalFull87WeightedSharpSmooth
 noncomputable section
 open scoped Classical BigOperators
 open P4AOriginalFull87SameRhoEndpointDivisor
+open P4AOriginalFull87LicensedSixthPolicy
 
 /-- The literal physical modulus fibre at a positive prime/centre gap.
 The sign and full modulus are unchanged from the sixth/eighth source. -/
