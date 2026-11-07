@@ -749,3 +749,34 @@ This is an exact signed finite full-product identity **on the original weakly or
 - **Next:** Prove Fourier-separated original labelled W identities that allow legitimate gamma normalization, and attach the actual physical atom compiler's rho_T, Q and exact coprime mean to this ledger. Independently pay the nonzero-shift mixed moment, b=T exceptional coefficient mass, rho/totient mass, uniform W_T/H, causal/all HB, empty Gamma, high-rank/enhanced and same-rho PP total.
 
 **Status:** P3.6 YELLOW. This original labelled weighted finite-source/same-rho ledger is BLUE only in its SOURCE_ONLY, UNCOMPILED and KERNEL_UNVERIFIED scope.
+
+## Successor SOURCE_ONLY — arbitrary original W fibre to true frozen gamma, one rho (2026-11-07 UTC)
+
+- **Actual recovery baseline:** `439fe64cc7c734938b400c39ecb82d13f333a201` on the existing independent branch `chatgpt/p3-internal-original-w-20261105`. GitHub branch HEAD was rechecked at that SHA before writing; no concurrent writer was observed in these checks.
+- **New proof file:** `P3ActualWeightedThreeGamma.lean`, 137 lines, Git blob `89001c3b232a78960088f5eec975f220e6db8167`, commit `b26f45a3412a3fade6a62a96457f1185843849dc` (`[skip ci]`). This was read back from GitHub. `VERIFY.lean` was updated in commit `bcf862bd7c3493c3a4bce8b98f91e26f34885eef`, blob `e09a4a3dc2ee1aba13a5604bf1c9fe81bc691f6f`, adding the two check targets (not executed). `REGISTRY.json` was updated in `11e910ede0b04f45826a8e7661fa43e300d5ba4c`, blob `5412150e5f0c083899be79acd194dd182d04a3d1`. This is the **same unique handoff**; no second report or duplicate project branch was created.
+- **Fixed provenance:** manuscript `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/modules/distribution-prime-product-completion-20261010.txt` §1 (exact PP kernel), §3 (original three-gamma identity T), §4 (geometric W and F); Mathlib pin `e4c91783ca8e6a7c693ae624ade32fd22d4e43c1`. Root and packet AGENTS checks returned NOT_FOUND; no unwritten instruction was inferred.
+
+### Actual mathematical step, with an explicit limitation
+
+The previous round kept arbitrary tuple-dependent `W(ps)` and the **same rho(q)** in the exact congruence-minus-coprime mean, but its fibre ledger was still separate from the original three-gamma coefficient compiler. Earlier `actual_sorted_fine_source_gamma` applies to an `H(n)` depending only on full product. This round makes a **valid** bridge by first forming the actual sorted weight fibre
+
+`A_W(n) = sum_(ps in original sorted fine box, prod(ps)=n) W(ps)`
+
+and then passing `H_q(n) = A_W(n) * (1_(n=T mod q) - 1_((n,q)=1)/phi(q))` to the actual weak-word / run-length / three-frozen-gamma identity. Both results are candidate finite proofs:
+
+1. `weighted_sorted_three_gamma_one_modulus` proves the raw signed Möbius fibre sum for **one literal q** equals the original three `gamma_i` convolution with scalar `c * M_0 M_1 M_2 / M_all`, full product `abd`, and **the unchanged `A_W(abd)`**. Neither the original slot labels nor the repeated-label factorial are silently removed.
+2. `weighted_sorted_three_gamma_same_rho` composes that identity over the unchanged finite physical modulus set `Q`, multiplying each complete q-summand by the **same integer `rho(q)`** as in the exact counting and exact coprime mean. In particular it does not introduce a second mean weight, choose a new arithmetic level, merge physical and auxiliary cutoffs, or claim a relative sparse-fibre bound.
+
+The crucial boundary: `A_W(n)` is generally **neither** one-bounded **nor** a Fourier-separated product of slot functions. This equality therefore does **NOT** turn arbitrary `W_T` into an admissible one-bounded medium gamma coefficient. Fourier factorization and within-repeated-label permutation symmetrization remain necessary and are **internal**, not external classical inputs. The concrete original compiler's `rho_T` and all its physical atom and mask data must still be identified; the equality currently retains a given single `rho`, not a proved identification of every physical source.
+
+### Actual checks and trust boundary
+
+- Exact branch HEAD, previous unique REPORT/REGISTRY/EXTERNAL_INPUTS and proof source, old real frozen three-gamma source, word multiplicity and sorted selector, and fixed manuscript §1–4 were read. Root/packet AGENTS checks returned NOT_FOUND.
+- The new 137-line source was scanned: **0** forbidden proof-escape tokens; stripped-comment delimiter balance **PASS**. The source blob was independently read back from GitHub. The VERIFY import is before its checks. The expanded registry passed JSON parsing.
+- Independent **exact rational** finite regression: **10,800 / 10,800 identities passed, 0 failed** for 900 weak descending original words of lengths 1–4, arbitrary occurrence splits among three groups, 4 q values and 3 target values, signed c and rho, external Mobius r, and **position-dependent W**. **4,174** expected identities had nonzero left sides. Tests use disjoint finite prime label boxes and do **NOT** reproduce the real frozen endpoint-capacity allocator. They establish sanity of the finite algebra only; they do not prove the Lean declarations or any asymptotic estimate.
+- **NOT RUN by instruction:** Lean, Lake, CI, kernel replay, transitive axiom audit, Codex, heavy numerical producer. `simpa only` alignment of local let-defined source/blocks and all upstream SOURCE_ONLY imports remain elaboration-sensitive. This work is **BLUE SOURCE_ONLY / UNCOMPILED / KERNEL_UNVERIFIED**, not GREEN. No new theorem was assumed as a hypothesis to disguise PP.
+- `EXTERNAL_INPUTS.json` remains blob `8b463fb2ef9a93148ad1fc3c3d2ca134f1a295ab`; the medium estimate (M) is REGISTER ONLY, neither implemented nor asserted as an additional trusted declaration. Untouched: production proof, pinned manuscript, toolchain/lockfiles, other tasks, PR, CI, external board and excluded full87 dynamic-parent node.
+
+**Next real entrance:** prove a true Fourier decomposition of the original geometric `W_T` which respects the **ordered within-label slots** (or an exactly justified symmetrization), with uniform mixed derivative budgets, L1/Fubini and one common H for growing m(N). Only after separability may an admitted gamma source be invoked. Identify all original physical `rho_T` atom/mask/compiler cases and pay the nonzero-shift near-linear mixed moment, complete-product=T exceptional mass, complete rho/totient mass and the causal / all-HB / empty-Gamma / enhanced branches. These obligations remain **manuscript internal**, not entries to the external-input register.
+
+**Status:** P3.6 YELLOW; local exact weighted-fibre-to-gamma same-rho SOURCE_ONLY candidate BLUE, uncompiled; no new green.
