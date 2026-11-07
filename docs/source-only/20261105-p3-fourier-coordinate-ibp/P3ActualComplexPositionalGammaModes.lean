@@ -159,7 +159,7 @@ theorem finite_three_complex_modes_norm_le_l1
       ‖amp k * G₀ k * G₁ k * G₂ k‖ ≤ ‖amp k‖ := by
     calc
       _ = ‖amp k * (G₀ k * G₁ k * G₂ k)‖ := by
-        rw [mul_assoc, mul_assoc]
+        simp only [mul_assoc]
       _ = ‖amp k‖ * ‖G₀ k * G₁ k * G₂ k‖ := by
         rw [norm_mul]
       _ ≤ ‖amp k‖ * 1 :=
