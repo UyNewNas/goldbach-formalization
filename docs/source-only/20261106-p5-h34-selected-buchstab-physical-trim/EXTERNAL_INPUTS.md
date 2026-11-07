@@ -1,5 +1,0 @@
-# External input boundary: selected Buchstab physical trim
-
-No new external analytic theorem, proof or axiom. Pinned manuscript ba6ec11d800eccc54406490631895e174de85766; no version or coefficient change.
-Reused mathematical/Lean inputs: Part5OriginalH430OwnedBuchstabLower.buchstabValue_le_cell_profile (old iterate nonnegative, selected i >= 50, physical s in queryCell i); RequestedReads.selected_allowed/resolve_contains and RequestedNonbankSupply.requested_buchstab_value (true g+1 request resolution); rootHistory_coherent/rootHistory_support, thetaAtom_nonneg, mark_pos (positive original parent weights); finite-sum/real arithmetic mathlib; prior uniform_actual_one_generation_integral_residual_upper (original strict-prime absolute-row estimate).
-All inputs are called in the source, not re-proved. They have not been kernel-replayed or transitive-audited here. Actual moving-ceiling trim payment, U3/U4 count-source match, bank/base/seed/floor, PP/same-rho, mass and joint 430+11 remain manuscript-internal.
