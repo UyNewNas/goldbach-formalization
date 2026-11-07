@@ -29,6 +29,8 @@ import ImbalancedChen.P3FourierRestrictedBox
 import ImbalancedChen.P3FourierActualBoxTail
 import ImbalancedChen.P3ActualComplexPositionalGammaModes
 
+import ImbalancedChen.P3ActualComplexModeFibreTransport
+
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
@@ -273,3 +275,10 @@ import ImbalancedChen.P3ActualComplexPositionalGammaModes
 #check ImbalancedChen.P3ActualComplexPositionalGammaModes.complexWeightedLabelGamma_norm_le_gamma
 #check ImbalancedChen.P3ActualComplexPositionalGammaModes.complexWeightedLabelGamma_norm_le_one
 #check ImbalancedChen.P3ActualComplexPositionalGammaModes.finite_three_complex_modes_norm_le_l1
+
+-- New finite complex positional modes and SAME literal integer rho, SOURCE ONLY.
+#check ImbalancedChen.P3ActualComplexModeFibreTransport.complex_weighted_sum_by_product
+#check ImbalancedChen.P3ActualComplexModeFibreTransport.complexWeightedLabelGamma_sum_by_product
+#check ImbalancedChen.P3ActualComplexModeFibreTransport.complexWeightedLabelGamma_modes
+#check ImbalancedChen.P3ActualComplexModeFibreTransport.complex_finite_modes_group_transport
+#check ImbalancedChen.P3ActualComplexModeFibreTransport.complex_finite_modes_same_rho_group
