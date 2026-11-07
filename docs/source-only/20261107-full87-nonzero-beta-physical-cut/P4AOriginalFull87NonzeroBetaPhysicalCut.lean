@@ -321,8 +321,11 @@ theorem activeMaxTest_false_has_nonzero_beta_factor_and_leaf
   have heqM : leaf.selected.prod = M := heq
   have hleafgt : X < a * leaf.selected.prod := by
     simpa only [← heqM] using hgt
-  exact ⟨a, ha, (mem_nonzeroRosserSupport_iff N cap a w L).mp ha |>.2,
-    leaf, hleaf, hleafgt⟩
+  have habeta :
+      actualSmallRosserPlus N cap w L a ≠ 0 ∨
+      actualSmallRosserMinus N cap w L a ≠ 0 :=
+    ((mem_nonzeroRosserSupport_iff N cap a w L).mp ha).2
+  exact ⟨a, ha, habeta, leaf, hleaf, hleafgt⟩
 
 end
 end ImbalancedChen.P4AOriginalFull87NonzeroBetaPhysicalCut
