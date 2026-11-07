@@ -26,6 +26,7 @@ noncomputable section
 open scoped Classical BigOperators FourierTransform RealInnerProductSpace
 open P3AffineTransitionJets
 open ImbalancedChen.P3PhysicalOriginalW
+open ImbalancedChen.P3ActualFrozenOriginalSlotPhase
 open ImbalancedChen.P3ActualFrozenMathlibInverseCharacter
 
 /-- Exact pinned real Euclidean inner product of the actual ORIGINAL
