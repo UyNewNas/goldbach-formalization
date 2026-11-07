@@ -70,7 +70,7 @@ theorem weighted_sum_by_product
 
 /-- The actual original sorted prime tuple source with arbitrary labelled
 W, original outside integer r in mu(r*n), and signed scalar c.
-Both the count and mean use exactly the same rho and physical q. -/
+Both the count and mean use r * ps.prod, the exact same rho and physical q. -/
 def weightedSortedPP
     (N : ℕ) (τ : ℝ) (blocks : List (ℕ × ℕ))
     (Q : Finset ℕ) (rho : ℕ → ℝ) (T r : ℕ)
@@ -78,7 +78,7 @@ def weightedSortedPP
   ∑ q ∈ Q, rho q *
     ∑ ps ∈ actualPrimeFineLabelSortedTuples N τ blocks,
       (c * (ArithmeticFunction.moebius (r * ps.prod) : ℝ)) *
-        W ps * fineKernel T q ps.prod
+        W ps * fineKernel T q (r * ps.prod)
 
 /-- The genuine arbitrary geometric weight is pushed to its OWN original
 product fibres. Unlike the prior product-only gamma tensor, there is no
@@ -92,7 +92,7 @@ theorem weightedSortedPP_fibre
       ∑ q ∈ Q, rho q *
         ∑ n ∈ (actualPrimeFineLabelSortedTuples N τ blocks).image List.prod,
           (c * (ArithmeticFunction.moebius (r * n) : ℝ) *
-            weightedFineFibre N τ blocks W n) * fineKernel T q n := by
+            weightedFineFibre N τ blocks W n) * fineKernel T q (r * n) := by
   unfold weightedSortedPP
   apply Finset.sum_congr rfl
   intro q hq
@@ -101,27 +101,65 @@ theorem weightedSortedPP_fibre
   calc
     (∑ ps ∈ S,
       (c * (ArithmeticFunction.moebius (r * ps.prod) : ℝ)) *
-        W ps * fineKernel T q ps.prod) =
+        W ps * fineKernel T q (r * ps.prod)) =
       ∑ ps ∈ S, W ps *
         (c * (ArithmeticFunction.moebius (r * ps.prod) : ℝ) *
-          fineKernel T q ps.prod) := by
+          fineKernel T q (r * ps.prod)) := by
         apply Finset.sum_congr rfl
         intro ps hps
         ring
     _ = ∑ n ∈ S.image List.prod,
       (∑ ps ∈ S.filter (fun ps => ps.prod = n), W ps) *
         (c * (ArithmeticFunction.moebius (r * n) : ℝ) *
-          fineKernel T q n) :=
+          fineKernel T q (r * n)) :=
         weighted_sum_by_product S W
           (fun n => c * (ArithmeticFunction.moebius (r * n) : ℝ) *
-            fineKernel T q n)
+            fineKernel T q (r * n))
     _ = _ := by
       apply Finset.sum_congr rfl
       intro n hn
       change (weightedFineFibre N τ blocks W n) *
         (c * (ArithmeticFunction.moebius (r * n) : ℝ) *
-          fineKernel T q n) = _
+          fineKernel T q (r * n)) = _
       ring
+
+
+/-- The actual strictly sorted original prime tuple source is split by its
+COMPLETE physical integer r * ps.prod, not by the residual ps.prod.
+The very same signed rho, the exact coprime mean and the original W
+remain in both components. No bound on either component is assumed. -/
+theorem weightedSortedPP_split_full_product
+    (N : ℕ) (τ : ℝ) (blocks : List (ℕ × ℕ))
+    (Q : Finset ℕ) (rho : ℕ → ℝ) (T r : ℕ)
+    (c : ℝ) (W : List ℕ → ℝ) :
+    weightedSortedPP N τ blocks Q rho T r c W =
+    (∑ q ∈ Q, rho q *
+      ∑ ps ∈ (actualPrimeFineLabelSortedTuples N τ blocks).filter
+          (fun ps => r * ps.prod = T),
+        (c * (ArithmeticFunction.moebius (r * ps.prod) : ℝ)) *
+          W ps * fineKernel T q (r * ps.prod)) +
+    (∑ q ∈ Q, rho q *
+      ∑ ps ∈ (actualPrimeFineLabelSortedTuples N τ blocks).filter
+          (fun ps => r * ps.prod ≠ T),
+        (c * (ArithmeticFunction.moebius (r * ps.prod) : ℝ)) *
+          W ps * fineKernel T q (r * ps.prod)) := by
+  classical
+  unfold weightedSortedPP
+  calc
+    _ = ∑ q ∈ Q, rho q *
+      ((∑ ps ∈ (actualPrimeFineLabelSortedTuples N τ blocks).filter
+          (fun ps => r * ps.prod = T),
+          (c * (ArithmeticFunction.moebius (r * ps.prod) : ℝ)) *
+            W ps * fineKernel T q (r * ps.prod)) +
+       (∑ ps ∈ (actualPrimeFineLabelSortedTuples N τ blocks).filter
+          (fun ps => r * ps.prod ≠ T),
+          (c * (ArithmeticFunction.moebius (r * ps.prod) : ℝ)) *
+            W ps * fineKernel T q (r * ps.prod))) := by
+      apply Finset.sum_congr rfl
+      intro q hq
+      rw [Finset.sum_filter_add_sum_filter_not]
+    _ = _ := by
+      simp only [mul_add, Finset.sum_add_distrib]
 
 /-- The exact complete-product=T contribution is factored AFTER the
 original complete modulus sum. There is no tau(0), no claim that its
@@ -133,12 +171,12 @@ theorem weightedSortedPP_exact_product
     (hcop : ∀ q ∈ Q, Nat.Coprime T q) :
     (∑ q ∈ Q, rho q *
       ∑ n ∈ ((actualPrimeFineLabelSortedTuples N τ blocks).image
-        List.prod).filter (fun n => n = T),
+        List.prod).filter (fun n => r * n = T),
         (c * (ArithmeticFunction.moebius (r * n) : ℝ) *
-          weightedFineFibre N τ blocks W n) * fineKernel T q n) =
+          weightedFineFibre N τ blocks W n) * fineKernel T q (r * n)) =
     (∑ q ∈ Q, rho q * (1 - (Nat.totient q : ℝ)⁻¹)) *
       (∑ n ∈ ((actualPrimeFineLabelSortedTuples N τ blocks).image
-        List.prod).filter (fun n => n = T),
+        List.prod).filter (fun n => r * n = T),
         c * (ArithmeticFunction.moebius (r * n) : ℝ) *
           weightedFineFibre N τ blocks W n) := by
   rw [Finset.sum_mul]
@@ -148,9 +186,8 @@ theorem weightedSortedPP_exact_product
   congr 1
   apply Finset.sum_congr rfl
   intro n hn
-  have hT : n = T := (Finset.mem_filter.mp hn).2
-  subst n
-  rw [fineKernel_exact T q (hcop q hq)]
+  have hT : r * n = T := (Finset.mem_filter.mp hn).2
+  rw [hT, fineKernel_exact T q (hcop q hq)]
   ring
 
 end

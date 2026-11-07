@@ -396,3 +396,9 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 #check ImbalancedChen.P3ActualMarkedResidualExactProduct.actual_frozen_marked_residual_exact_T
 #check ImbalancedChen.P3ActualMarkedResidualExactProduct.marked_exact_fibre_empty_of_not_dvd
 #check ImbalancedChen.P3ActualMarkedResidualExactProduct.marked_exact_product_zero_of_not_dvd
+
+-- Corrected SORTED original W source: full r*residual product, same rho; NOT EXECUTED.
+#check ImbalancedChen.P3ActualWeightedFineSameRho.weightedSortedPP
+#check ImbalancedChen.P3ActualWeightedFineSameRho.weightedSortedPP_fibre
+#check ImbalancedChen.P3ActualWeightedFineSameRho.weightedSortedPP_split_full_product
+#check ImbalancedChen.P3ActualWeightedFineSameRho.weightedSortedPP_exact_product
