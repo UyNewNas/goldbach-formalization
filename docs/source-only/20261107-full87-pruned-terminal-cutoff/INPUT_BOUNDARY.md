@@ -1,0 +1,11 @@
+# P1.4 cutoff-pruned source — precise boundary
+
+Frozen paper (DO NOT silently replace): `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex`, blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`.
+
+External input only REGISTERED / NOT CALLED / NOT VERIFIED: manuscript `eq:current-PP`, lines 258–278. It concerns the original finite smooth prime-product test, its Euler-derivative/Gevrey bounds, centre-coprime squarefree complete physical moduli, a bounded admissible support and a signed primitive AP discrepancy for the SAME original `rho_N` and `X_W^(q)`; desired output `O_{A,W}(N(log N)^(-A))`. Assumptions and normalization must be verified from the fixed paper and real external provider before use. The `7/32` Kim–Sarnak spectral parameter is not a physical PP exponent; `599/1000` is pre-adjustment support inflation, not the licensed integer X.
+
+Internal candidate calls NO external PP, PNT, Mertens, BV or spectral result. `withinPhysicalCut` is a finite, exact, policy-preserving decision on the existing natural rough prime list and actual Rosser small factor a. Its proof requires only strict positivity of each remaining rough prime. The optional fast whole-carrier cut is certified by a proved upper bound, and the forced-oversize cut is certified by the actually present skip-all retained terminal. Every unresolved node invokes the ORIGINAL Boolean retention policy, including its signed history.
+
+For the actual full87 old/new comparison, the levels remain original own-sixth `actualParent` and finite eighth cap, evaluated separately at the SAME selectedPrefix. All original `actualSmallRosserSupport N cap w` factors must pass both exact tests; no mask attaches to inherited branches. Failure provides a retained-leaf physical high-q witness, NOT evidence of nonzero net signed rho, H_N mass or negligible tail.
+
+Still OPEN: truthful admission of X and Gevrey, actual saved87 archive census and signed cost, rank9, ordinary residual integral, sixth filtering, centre-prime/modulus corrections, original saved gain, changed/tagged, two separate compiler/density reserves, Lean kernel replay and independent review. No external input is marked proved.
