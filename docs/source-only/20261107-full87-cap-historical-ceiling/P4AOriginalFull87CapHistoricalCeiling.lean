@@ -57,7 +57,7 @@ private theorem nodup_toFinset_prod (xs : List ℕ) (hxs : xs.Nodup) :
 Rosser ceiling. The proof keeps all four distinct suffixes and their
 original strict cardinality/parity test; it does not weaken the
 historical gate to the ordinary prefix-square test. -/
-private theorem ordered_tuple_gates_imply_eight_ceiling
+theorem ordered_tuple_gates_imply_eight_ceiling
     (P : Fin 8 → ℕ) (hanti : StrictAnti P) (R : ℝ)
     (hgates : ∀ j : Fin 4,
       (∏ i ∈ Finset.univ.filter

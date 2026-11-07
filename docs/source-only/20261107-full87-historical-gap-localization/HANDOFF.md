@@ -1,0 +1,9 @@
+# P1.4 durable handoff — original historical half-mesh gap
+
+BASE: `4177f09b0c863969d4c96cd8a14cdeffe8d080f2`, new task branch `chatgpt/p1-full87-historical-gap-localization-20261107`; packet `docs/source-only/20261107-full87-historical-gap-localization/`. Obtain and compare live branch HEAD before editing. This run altered only this packet and the strictly relevant earlier cap-ceiling SOURCE-ONLY file (making its existing tuple-gates lemma public to avoid redoing the eight-word calculation). Read whole new Lean proof, REPORT, REGISTRY, INPUT_BOUNDARY and original manuscript pin; do not fall back to the initial 9649ab3 navigation SHA.
+
+PROVED AS SOURCE CANDIDATE, NOT ELABORATED: original four historical inequalities include a preserved +width(r)/2 margin. Same physical eight-prime tuple gives `J(H) < N^(actualFiniteCapExponent - width(r)/2)`. Hence any state with `actualFrozenParent <= J(H)` has a STRICT parent-versus-cap exponent half-mesh gap, expressed as a physical power inequality. For near-cap states the original rank9 crossing is cubic-annulus only. Cap-side inherited cost remains zero. Actual parent-side wide-gap states may still carry cost: NOT proven small. No repeated paying.
+
+EXACT CHECKS: 20,000 synthetic integer history-gate cases with zero counterexamples. No saved87 replay. Lean and lake unavailable locally; no Lean/Lake, CI, kernel replay, transitive axiom check or independent review. All source files remain UNEVALUATED. Verify module layout before any future genuine elaboration; source-only docs files do not automatically resolve as Lean imports.
+
+NEXT: check original saved87 actual weighted mass on wide-gap support (using real owner/trim and dynamic parent) and cubic-annulus, same rho. Then bound exact primitive/AP, centre/modulus errors and separate once-only reserve debits; do not convert geometric null sets into zero arithmetic error. Maintain manuscript pin and toolchain. P1.4 stays YELLOW.
