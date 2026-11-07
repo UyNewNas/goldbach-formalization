@@ -221,19 +221,19 @@ theorem actual_carrier_sharp_density_invoice
         (∑ q ∈ actualSmallRoughModuli (P false) N cap w z,
           actualSmallRoughRho (P false) N cap w z L q /
             (Nat.totient q : ℝ))| ≤
-      |∑ q ∈ actualSmallRoughModuli (P false) N cap w z,
+      (|∑ q ∈ actualSmallRoughModuli (P false) N cap w z,
         actualSmallRoughRho (P false) N cap w z L q *
           finitePrimitiveDiscrepancy (chenPrimePrefix (N + D)) W N q| +
       lowerEndpointInvoice P N D cap w z L +
       upperEndpointInvoice P N D cap w z L +
-      centreDivisorInvoice P N cap w z L +
-      |upperWeightTail N D W - lowerWeightDefect N W| *
+      centreDivisorInvoice P N cap w z L) +
+      (|upperWeightTail N D W - lowerWeightDefect N W| *
         (∑ q ∈ actualSmallRoughModuli (P false) N cap w z,
           |actualSmallRoughRho (P false) N cap w z L q /
             (Nat.totient q : ℝ)|) +
       (∑ q ∈ actualSmallRoughModuli (P false) N cap w z,
         |actualSmallRoughRho (P false) N cap w z L q *
-          (weightedModulusPrimeMass N D q W / (Nat.totient q : ℝ))|) := by
+          (weightedModulusPrimeMass N D q W / (Nat.totient q : ℝ))|)) := by
   let M : ℝ := ∑ q ∈ actualSmallRoughModuli (P false) N cap w z,
     actualSmallRoughRho (P false) N cap w z L q *
       (finiteCoprimeMass (chenPrimePrefix (N + D)) W q /
