@@ -24,6 +24,7 @@ with Mathlib's Fourier inverse character is a separate obligation.
 namespace ImbalancedChen.P3ActualFrozenOriginalSlotPhase
 noncomputable section
 open scoped Classical BigOperators
+open P3AffineTransitionJets
 open ImbalancedChen.P3PhysicalOriginalW
 
 /-- Real log-chart phase attached to an ORIGINAL numbered slot. -/
