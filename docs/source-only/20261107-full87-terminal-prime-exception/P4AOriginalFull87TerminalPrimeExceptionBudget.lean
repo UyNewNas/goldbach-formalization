@@ -80,8 +80,7 @@ theorem centrePrimeAPCount_le_centreDivisors (N d : ℕ) :
       (chenPrimePrefix N).filter (fun p => Nat.ModEq d p N ∧ p ∣ N) ⊆
         (chenPrimePrefix N).filter (fun p => p ∣ N) := by
     intro p hp
-    obtain ⟨hprefix, _hcong, hdiv⟩ := by
-      simpa only [Finset.mem_filter, and_assoc] using hp
+    obtain ⟨hprefix, ⟨_hcong, hdiv⟩⟩ := Finset.mem_filter.mp hp
     exact Finset.mem_filter.mpr ⟨hprefix, hdiv⟩
   unfold chenCentrePrimeAPCount chenPrimeDivisorCount
   exact_mod_cast Finset.card_le_card hs
