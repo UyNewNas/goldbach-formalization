@@ -32,6 +32,7 @@ import ImbalancedChen.P3FourierPhysicalMeasureD
 import ImbalancedChen.P3FourierCauchyAxis
 import ImbalancedChen.P3FourierCauchyTail
 import ImbalancedChen.P3FourierBoxTailAlgebra
+import ImbalancedChen.P3ActualMarkedOffShiftDivisors
 
 import ImbalancedChen.P3FourierProductFubini
 import ImbalancedChen.P3FourierAutomaticMeasurability
@@ -402,3 +403,10 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 #check ImbalancedChen.P3ActualWeightedFineSameRho.weightedSortedPP_fibre
 #check ImbalancedChen.P3ActualWeightedFineSameRho.weightedSortedPP_split_full_product
 #check ImbalancedChen.P3ActualWeightedFineSameRho.weightedSortedPP_exact_product
+
+-- Marked complete-product OFF shift and exact divisors: registered only, NOT Lean-run.
+#check ImbalancedChen.P3ActualMarkedOffShiftDivisors.markedShiftAbs_ne_zero
+#check ImbalancedChen.P3ActualMarkedOffShiftDivisors.markedShiftAbs_eq_zero_iff
+#check ImbalancedChen.P3ActualMarkedOffShiftDivisors.fineKernel_marked_off_divisors
+#check ImbalancedChen.P3ActualMarkedOffShiftDivisors.markedResidualKernel_off_divisors
+#check ImbalancedChen.P3ActualMarkedOffShiftDivisors.weightedSortedPP_off_divisors
