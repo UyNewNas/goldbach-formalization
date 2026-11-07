@@ -1,6 +1,6 @@
 # P1.4 — same-rho exact singleton smooth mean to sharp π density
 
-Base: `5fe69c35fbfce5dff40437f683fb8f177315dec4`; new SOURCE_ONLY Lean candidate: `2be95b1f4e7dd07d0306b56e807ada635f10292a`. Branch `chatgpt/p1-full87-sharp-mean-payment-ledger-20261107`. Source `P4AOriginalFull87SharpMeanPaymentLedger.lean` (271 lines; Git blob `8fe9f4695cbbab3b27f191ea4fef29efba22e927`).
+Base: `5fe69c35fbfce5dff40437f683fb8f177315dec4`; initial SOURCE_ONLY source: `2be95b1f4e7dd07d0306b56e807ada635f10292a`; corrected source: `d35d3748d8fb9daeee4c55ec9632230f5713d5da`. Branch `chatgpt/p1-full87-sharp-mean-payment-ledger-20261107`. Source `P4AOriginalFull87SharpMeanPaymentLedger.lean` (271 lines; Git blob `70afdf51c7a9ca56c097dbaace8b61d5bdcdec34`).
 
 ## Genuine new internal calculation
 
@@ -19,6 +19,8 @@ New proof bodies, for each original frozen policy P and exactly `actualSmallRoug
 * `actual_carrier_sharp_density_invoice`: joins the previous actual-carrier PP/endpoint/centre invoice with this NEW sharp-density invoice, all using the same ρ and one centre deletion. It does not substitute unrelated sieve bounds or claim asymptotic smallness.
 
 This removes the former unspecified finite algebraic gap between the true smooth-coprime singleton comparison and sharp prime density. It does NOT pay any reserve or prove that these absolute budgets are o(H_N).
+
+Static review identified that the final invoice RHS had left-associated additions while the proof used two grouped budgets. Source commit `d35d374` explicitly grouped the two independent budgets, so the final `change` is definitionally the claimed A+B; this is a source-level correction, NOT evidence of Lean compilation.
 
 ## Evidence / checks
 
