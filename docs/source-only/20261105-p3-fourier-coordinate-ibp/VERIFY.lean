@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualFrozenTaggedPrimeBox
 import ImbalancedChen.P3ActualFrozenTaggedPrimeModes
 import ImbalancedChen.P3ActualFrozenEuclideanPairing
 import ImbalancedChen.P3ActualFrozenMathlibInverseCharacter
@@ -345,3 +346,13 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 #check ImbalancedChen.P3ActualFrozenTaggedPrimeModes.positionalGroupMode_norm_le_one
 #check ImbalancedChen.P3ActualFrozenTaggedPrimeModes.actual_frozen_positional_modes_one_bound
 #check ImbalancedChen.P3ActualFrozenTaggedPrimeModes.actual_frozen_original_prime_mode_factors
+
+-- Original slot-ID to ENTIRE ordered prime-label box, positional physical gamma.
+-- SOURCE_ONLY, not elaborated or kernel-checked.
+#check ImbalancedChen.P3ActualFrozenTaggedPrimeBox.prime_box_relabel
+#check ImbalancedChen.P3ActualFrozenTaggedPrimeBox.realized_prime_box_mem
+#check ImbalancedChen.P3ActualFrozenTaggedPrimeBox.frozen_realized_three_prime_boxes
+#check ImbalancedChen.P3ActualFrozenTaggedPrimeBox.frozen_realized_complete_product
+#check ImbalancedChen.P3ActualFrozenTaggedPrimeBox.frozen_original_labels_perm
+#check ImbalancedChen.P3ActualFrozenTaggedPrimeBox.positional_gamma_original_ID_fibre
+#check ImbalancedChen.P3ActualFrozenTaggedPrimeBox.positional_gamma_norm_le_one_of_original_dictionary
