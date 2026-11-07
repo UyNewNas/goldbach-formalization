@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualFrozenComplexThreeTensor
 import ImbalancedChen.P3ActualFrozenComplexGroupGamma
 import ImbalancedChen.P3ActualBoundedGroupWeightGamma
 import ImbalancedChen.P3ActualWeightedFibreInjective
@@ -292,3 +293,9 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 #check ImbalancedChen.P3ActualFrozenComplexGroupGamma.physicalComplexLabelGamma_norm_le_original_gamma
 #check ImbalancedChen.P3ActualFrozenComplexGroupGamma.physicalComplexLabelGamma_norm_le_one
 #check ImbalancedChen.P3ActualFrozenComplexGroupGamma.actual_frozen_three_physical_complex_gamma_bounds
+
+-- Three exact physical COMPLEX ordered-group fibres and literal same-rho
+-- count-minus-coprime mean tensor. SOURCE_ONLY; not Lean-executed.
+#check ImbalancedChen.P3ActualFrozenComplexThreeTensor.complex_three_weighted_fibre
+#check ImbalancedChen.P3ActualFrozenComplexThreeTensor.actual_frozen_three_complex_tensor
+#check ImbalancedChen.P3ActualFrozenComplexThreeTensor.actual_frozen_three_complex_same_rho
