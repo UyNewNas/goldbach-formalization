@@ -7,3 +7,5 @@ PROVED AS SOURCE CANDIDATE, NOT ELABORATED: original four historical inequalitie
 EXACT CHECKS: 20,000 synthetic integer history-gate cases with zero counterexamples. No saved87 replay. Lean and lake unavailable locally; no Lean/Lake, CI, kernel replay, transitive axiom check or independent review. All source files remain UNEVALUATED. Verify module layout before any future genuine elaboration; source-only docs files do not automatically resolve as Lean imports.
 
 NEXT: check original saved87 actual weighted mass on wide-gap support (using real owner/trim and dynamic parent) and cubic-annulus, same rho. Then bound exact primitive/AP, centre/modulus errors and separate once-only reserve debits; do not convert geometric null sets into zero arithmetic error. Maintain manuscript pin and toolchain. P1.4 stays YELLOW.
+
+POST-WRITE STATIC CORRECTION: both old and new eight-word proofs use `conv_lhs => rw [hword]` to leave the original right-hand actual cap unchanged. Read the final corrected HEAD, not the initial candidate commit. Registry hashes refer to corrected blobs.

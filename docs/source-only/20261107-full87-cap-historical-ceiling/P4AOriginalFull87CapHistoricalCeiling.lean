@@ -168,7 +168,7 @@ theorem owned_actual_history_ceiling_below_cap
     simpa only [P] using
       owned_four_physical_tuple_gates_below_actual_cap
         r n e q om N cap hN w z c s hn hs
-  rw [hword]
+  conv_lhs => rw [hword]
   exact ordered_tuple_gates_imply_eight_ceiling P hanti
     (actualFrozenPost8Level n e q om N c s false) hgates
 

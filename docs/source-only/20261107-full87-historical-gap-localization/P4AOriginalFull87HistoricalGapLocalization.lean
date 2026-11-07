@@ -101,7 +101,7 @@ theorem owned_history_ceiling_below_half_mesh_cap
     rw [rpow_original_four_history_actual_tuple
       (N : ℝ) hN s.selectedPrefix hlen hpos j] at hpower
     simpa only [P] using hpower
-  rw [hword]
+  conv_lhs => rw [hword]
   exact P4AOriginalFull87CapHistoricalCeiling.
     ordered_tuple_gates_imply_eight_ceiling P hanti
       ((N : ℝ) ^ ((finiteCap n c
