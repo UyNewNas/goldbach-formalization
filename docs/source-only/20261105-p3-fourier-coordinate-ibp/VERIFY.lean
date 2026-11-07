@@ -387,3 +387,10 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 #check ImbalancedChen.P3ActualTaggedUnsortedSameRho.actual_tagged_unsorted_finite_modes_tensor
 #check ImbalancedChen.P3ActualTaggedUnsortedSameRho.actual_tagged_unsorted_finite_modes_same_rho
 #check ImbalancedChen.P3ActualTaggedUnsortedSameRho.actual_tagged_unsorted_mode_gamma_budget
+
+-- MARKED residual original-ID physical source: exact signed-rho product=T
+-- exception, with marked mu(r*n) and residual-only factorial. NOT EXECUTED.
+#check ImbalancedChen.P3ActualMarkedResidualExactProduct.markedResidualKernel_exact
+#check ImbalancedChen.P3ActualMarkedResidualExactProduct.marked_source_split_exact_off
+#check ImbalancedChen.P3ActualMarkedResidualExactProduct.marked_exact_product_after_modulus
+#check ImbalancedChen.P3ActualMarkedResidualExactProduct.actual_frozen_marked_residual_exact_T
