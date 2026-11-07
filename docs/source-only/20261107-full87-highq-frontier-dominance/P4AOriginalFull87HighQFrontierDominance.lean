@@ -248,7 +248,7 @@ theorem full87_highQ_gain_split_at_actual_frontier
     (∑ c : Cell, ownedSource delta n e q om N cap w z L
       (highQTest X F) c) =
       ∑ c : Cell,
-        ((((states delta n e q om N cap w z
+        (((states delta n e q om N cap w z
           (fun _ : ℕ => (1 : ℝ)) c).filter
           (fun s => decide (X < s.selectedPrefix.prod))).map
           (ordinarySaving n e q om N cap w L F c)).sum +
