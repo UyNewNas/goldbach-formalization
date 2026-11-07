@@ -34,6 +34,7 @@ import ImbalancedChen.P3FourierCauchyTail
 import ImbalancedChen.P3FourierBoxTailAlgebra
 import ImbalancedChen.P3ActualMarkedOffShiftDivisors
 import ImbalancedChen.P3ActualEvenOriginalPrimeException
+import ImbalancedChen.P3ActualNonemptyOriginalPrimeException
 
 import ImbalancedChen.P3FourierProductFubini
 import ImbalancedChen.P3FourierAutomaticMeasurability
@@ -419,3 +420,12 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 #check ImbalancedChen.P3ActualEvenOriginalPrimeException.actual_sorted_even_full_fibre_empty
 #check ImbalancedChen.P3ActualEvenOriginalPrimeException.actual_sorted_even_exact_source_zero
 #check ImbalancedChen.P3ActualEvenOriginalPrimeException.weightedSortedPP_even_eq_full_shift_divisors
+
+-- True actual original-prime exclusion p ∤ N eliminates full product=N
+-- for nonempty residual words and ANY outside marked r; SOURCE_ONLY only.
+-- The empty-residual boundary remains explicitly open.
+#check ImbalancedChen.P3ActualNonemptyOriginalPrimeException.actual_sorted_prime_not_dvd_N
+#check ImbalancedChen.P3ActualNonemptyOriginalPrimeException.actual_sorted_nonempty_full_product_ne_N
+#check ImbalancedChen.P3ActualNonemptyOriginalPrimeException.actual_sorted_exact_full_product_only_empty
+#check ImbalancedChen.P3ActualNonemptyOriginalPrimeException.actual_sorted_nonempty_word_exact_fibre_empty
+#check ImbalancedChen.P3ActualNonemptyOriginalPrimeException.weightedSortedPP_target_N_nonempty_word_off_divisors
