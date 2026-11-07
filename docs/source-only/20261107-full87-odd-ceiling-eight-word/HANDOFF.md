@@ -1,0 +1,15 @@
+# P1.4 persistent handoff — finite eight-word odd-square ceiling
+
+## Exact recovery
+Predecessor task branch: `chatgpt/p1-full87-historical-cap-margin-20261106` at verified `0040e25a8b2ecb8a497c68d401f540f70165d405`. Current isolated branch `chatgpt/p1-full87-odd-ceiling-eight-word-20261107`, new file `docs/source-only/20261107-full87-odd-ceiling-eight-word/P4AOriginalFull87OddCeilingEightWord.lean` (Git blob `86fe33ad7ec6de1550999afc1049b47a7f682c3b`, 213 lines), plus REPORT/REGISTRY/INPUT_BOUNDARY/HANDOFF under the same packet directory only. Fetch the new branch HEAD, read those four files plus the COMPLETE source, then verify compare against base before writing. A branch HEAD may move if an independent automation run intervenes: do not reuse a stale ref or assume an older stop point. No main/master edits, merge or force.
+
+## What this packet actually supplies
+Two independent local finite helpers: exact `filter_append` for order cut of real list suffix and induction from Nodup to toFinset-card. With strictly increasing storage word `[p7,p6,p5,p4,p3,p2,p1,p0]`, the historical upper filters have sizes `8,7,6,5,4,3,2,1`, and the literal `historyOddSquareTerms` is `[0, G6, 0, G4, 0, G2, 0, G0]`, with `Gj = product([pj,...,p0]) * pj^2`. Finite candidate `historyOddSquareCeiling = max G6 (max G4 (max G2 G0))`. These are true **physical inherited 3t** gates, not the weaker ordinary 2t full-prefix squares.
+
+This is **not yet** the final proof of the full87 owned state's J<finiteCap: still implement `selectedPrefix` length 8 and strict increasing order extraction, recover exactly `primeHistoryTuple 8` entries and show four physical Gj = `N^P4AOriginalRemainingEighthSources.history(t) j`. Then instantiate `owned_four_original_history_power_below_actual_cap` from previous source (which already has strict +width(r)/2 margin), combine four gates and discharge J. Do NOT claim J<actualParent: historical shell may remain nonempty. No density estimate, signed gain or reserve was proved.
+
+## Tests and verification
+17,000 exact-integer synthetic strict eight-words checked all suffix filters, odd cardinalities and ceiling max. First test harness contained a reversed odd-index assertion and failed; fixed only that assertion and reran successfully. Not Lean, not original saved87, not kernel. SOURCE_ONLY / UNEVALUATED / UNCOMPILED / ZERO FORMAL CREDIT. No CI, Codex, upgrade, extra resource or local user machine. Source must be manually reviewed and compiled with the pinned toolchain in an already-authorized workflow before any status upgrade.
+
+## Next exact action
+Prove the list length-eight reconstruction and per-entry `Real.rpow` transport to the four historical source exponents using `rpow_primeHistoryLogCoordinates` in `ImbalancedChen/PrimeHistoryLogCoordinates.lean`, then instantiate the historical cap margin without introducing J or a Rosser pass as a hypothesis. Follow with actual historical-shell and cubic-annulus harmonic invoice and one single payment under the shared original rho; preserve original word order, strict cutoff and multiplicities.
