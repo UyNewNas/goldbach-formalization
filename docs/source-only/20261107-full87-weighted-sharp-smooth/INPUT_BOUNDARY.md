@@ -1,0 +1,9 @@
+# P1.4 INPUT_BOUNDARY — true weighted original-prime sharp-to-smooth correction
+
+**INTERNAL CANDIDATE**: literal original `chenPrimePrefix`, `actualSmallRoughModuli`, and `actualSmallRoughRho` for each *actual* sixth/eighth policy, frozen before evaluating primes. A profile `W : ℕ → ℝ` satisfying (i) `0≤W(p)≤1` and (ii) `W(p)=1` for `p<N` with `N-p>D` gives exact arithmetic sharp-minus-smooth identity; the original true signed difference is weighted lower minus weighted upper. The former two-positive-tail `signedEndpointBoundary` alone is not the true signed difference, although its absolute invoice remains a safe bound. The zero gap is excluded at p=N; for even N>2, p=N is not a prime.
+
+**MANUSCRIPT PIN**: `9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex`, blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`, `lem:current-sharp-prime`, lines 739–779.
+
+**EXTERNAL REGISTER_ONLY_UNVERIFIED_NOT_INVOKED**: true analytic smooth profile with controlled Euler derivatives at width δ=(log N)^(-B), B>A+3; smooth original singleton signed PP (manuscript `eq:current-PP`) for the SAME full-beta coefficient with squarefree q≤N^θ, θ=7/32<1 and (q,N)=1; actual smooth mean boundary/totient error; positive-divisor summatory estimate `Σ_{1≤m≤D}τ(m) ≪ D log D` in the correct small-D regime (`D=ceil(δN)`); lower product trim saving; central prime-divisor correction and final H_N normalization. These are NOT mathematical hypotheses inserted into a structure or new axioms. Actual bound for this packet is finite only. PNT/Mertens/BV/dispersion/spectral inputs remain outside scope.
+
+**NEXT CALL SITE**: use `original_sixth_eighth_sharp_smooth_abs_le_four_tau` only after fixing a permitted W and proving its finite support/positivity properties; apply the external signed PP separately to the same physical coefficient, and pay exact mean and prime divisor correction separately. Compiler and density reserve UNPAID.
