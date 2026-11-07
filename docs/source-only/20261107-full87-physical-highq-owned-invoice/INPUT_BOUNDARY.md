@@ -1,0 +1,9 @@
+# Input boundary — original full87 high-q owned invoice
+
+Frozen manuscript: `UyNewNas/chen-imbalanced-semiprimes@9731290e8f53cffda44129906cde6a965eaa869b`, `paper/source/manuscript-body.tex`, blob `d529bea2ecfcc74d64fc1664ac770a3becaa7c79`. The relevant text is `eq:current-PP` lines 258–278. Frozen Lean v4.33.0-rc1, mathlib e4c91783ca8e6a7c693ae624ade32fd22d4e43c1, native subfish-zhou/goldbach-lean@09b97db5764ade1246bfb77206baa1b124760958. c, K unchanged (REGISTRY).
+
+**REGISTER ONLY / NOT INVOKED:** Manuscript signed primitive/AP input: for fixed finite smooth W_N on k labelled original primes >=cN^a_* with fixed a_*>0, original prime product O(N), allowed geometric family with polylogarithmic mixed Euler-derivative control, no extra arithmetic filter, and original bounded squarefree coprime signed rho_N on actual admitted source classes and permitted level q<=N^theta, the signed primitive progression difference from its exact coprime X_W^(q)/phi(q) main term is O_{A,W}(N(log N)^(-A)). Statement, range, normalization and coefficients are from the pinned manuscript; admissibility of the original actual full87 coefficient/support and independent source verification are still **UNVERIFIED**. No invocation here; no PNT, Mertens, BV or spectral reimplementation.
+
+**INTERNAL SOURCE ONLY:** original retained terminal list/one-bounded beta high-q arithmetic identity; exact full87 owned eighth ordinary-saving decomposition and absolute invoice at the SAME high-q test. No claim about actual q cutoff, numerical mass, tail o(H_N), rank9 arithmetic estimate, external analytic bound, or compiler/density reserve. In particular geometry null sets and cap monotonicity do not pay arithmetic tail charges.
+
+Next caller: original full87 saved87 actual-cell weighted population / true ordinary continuation prime products / independent reserve ledgers, using actual dynamic parent before the N limit.
