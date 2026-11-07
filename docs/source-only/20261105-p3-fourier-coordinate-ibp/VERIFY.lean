@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualFrozenTaggedPrimeModes
 import ImbalancedChen.P3ActualFrozenEuclideanPairing
 import ImbalancedChen.P3ActualFrozenMathlibInverseCharacter
 import ImbalancedChen.P3ActualFrozenOriginalSlotPhase
@@ -333,3 +334,14 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 #check ImbalancedChen.P3ActualFrozenEuclideanPairing.originalSlotCharacter_eq_euclidean_inverse
 #check ImbalancedChen.P3ActualFrozenEuclideanPairing.actual_frozen_euclidean_inverse_character
 #check ImbalancedChen.P3ActualFrozenEuclideanPairing.actual_frozen_slotLog_euclidean_inverse
+
+-- Original-ID positional PRIME mode, actual slot grouping and one-bound.
+-- SOURCE_ONLY / NOT EXECUTED BY Lean or kernel.
+#check ImbalancedChen.P3ActualFrozenTaggedPrimeModes.taggedPrimePhase_realized
+#check ImbalancedChen.P3ActualFrozenTaggedPrimeModes.positionalPhaseSum_realized
+#check ImbalancedChen.P3ActualFrozenTaggedPrimeModes.positionalGroupMode_realized
+#check ImbalancedChen.P3ActualFrozenTaggedPrimeModes.taggedPrimePhase_re_zero
+#check ImbalancedChen.P3ActualFrozenTaggedPrimeModes.positionalPhaseSum_re_zero
+#check ImbalancedChen.P3ActualFrozenTaggedPrimeModes.positionalGroupMode_norm_le_one
+#check ImbalancedChen.P3ActualFrozenTaggedPrimeModes.actual_frozen_positional_modes_one_bound
+#check ImbalancedChen.P3ActualFrozenTaggedPrimeModes.actual_frozen_original_prime_mode_factors
