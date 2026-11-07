@@ -27,6 +27,7 @@ import ImbalancedChen.P3FourierAutomaticMeasurability
 
 import ImbalancedChen.P3FourierRestrictedBox
 import ImbalancedChen.P3FourierActualBoxTail
+import ImbalancedChen.P3ActualComplexPositionalGammaModes
 
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
@@ -265,3 +266,10 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3ActualBoundedGroupWeightGamma.weightedLabelGamma_sum_by_product
 #check ImbalancedChen.P3ActualBoundedGroupWeightGamma.weightedLabelGamma_of_product_twist
 #check ImbalancedChen.P3ActualBoundedGroupWeightGamma.weightedLabelGamma_add
+
+-- Complex positional group gamma, including literal Fourier-mode L1 charge.
+-- SOURCE_ONLY: these are recorded checks, NOT Lean-executed.
+#check ImbalancedChen.P3ActualComplexPositionalGammaModes.complexWeightedLabelGamma
+#check ImbalancedChen.P3ActualComplexPositionalGammaModes.complexWeightedLabelGamma_norm_le_gamma
+#check ImbalancedChen.P3ActualComplexPositionalGammaModes.complexWeightedLabelGamma_norm_le_one
+#check ImbalancedChen.P3ActualComplexPositionalGammaModes.finite_three_complex_modes_norm_le_l1
