@@ -24,6 +24,10 @@ open P4AOriginalFull87OwnedEighthSource
 open P4AOriginalFull87SourceDictionary (Cell)
 open P4AOriginalFull87LicensedSixthPolicy
 open P4AOriginalFull87LicensedSixthRealization (states)
+open P4AOriginalFull87SourceDispatch (point8)
+open P4AOriginalFull87FiniteEighthCap (finiteCap)
+open P4AOriginalFull87EighthKernelIntegration (actualParent)
+open P4AOriginalLicensedSixthSignedLedger (physical)
 
 /-- The unchanged original sign-sensitive small beta sees the same
 physical terminal if its complete modulus already exceeds X. -/
