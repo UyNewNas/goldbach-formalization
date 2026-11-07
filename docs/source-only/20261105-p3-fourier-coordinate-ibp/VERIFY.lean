@@ -1,3 +1,4 @@
+import ImbalancedChen.P3ActualBoundedGroupWeightGamma
 import ImbalancedChen.P3ActualWeightedFibreInjective
 import ImbalancedChen.P3ActualWeightedThreeGamma
 import ImbalancedChen.P3ActualWeightedFineSameRho
@@ -256,3 +257,11 @@ import ImbalancedChen.P3FourierActualBoxTail
 #check ImbalancedChen.P3ActualWeightedFibreInjective.weightedFineFibre_mem_eq
 #check ImbalancedChen.P3ActualWeightedFibreInjective.weightedFineFibre_zero_off
 #check ImbalancedChen.P3ActualWeightedFibreInjective.weightedFineFibre_abs_le_one
+
+-- Actual bounded positional group Fourier multipliers; SOURCE_ONLY, NOT Lean-executed.
+#check ImbalancedChen.P3ActualBoundedGroupWeightGamma.weightedLabelGamma
+#check ImbalancedChen.P3ActualBoundedGroupWeightGamma.weightedLabelGamma_abs_le_gamma
+#check ImbalancedChen.P3ActualBoundedGroupWeightGamma.weightedLabelGamma_abs_le_one
+#check ImbalancedChen.P3ActualBoundedGroupWeightGamma.weightedLabelGamma_sum_by_product
+#check ImbalancedChen.P3ActualBoundedGroupWeightGamma.weightedLabelGamma_of_product_twist
+#check ImbalancedChen.P3ActualBoundedGroupWeightGamma.weightedLabelGamma_add
