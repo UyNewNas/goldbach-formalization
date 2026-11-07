@@ -45,6 +45,7 @@ import ImbalancedChen.P3ActualComplexPositionalGammaModes
 
 import ImbalancedChen.P3ActualComplexModeFibreTransport
 
+import ImbalancedChen.P3ActualOriginalEmptyWordExactPayment
 -- Audit target only. This file was NOT executed by Lean, Lake, CI or kernel.
 #check ImbalancedChen.P3FourierCoordinateIBP.frechet_phase_eq_signed_square
 #check ImbalancedChen.P3FourierCoordinateIBP.actual_mixed_fourier_signed
@@ -429,3 +430,11 @@ import ImbalancedChen.P3ActualComplexModeFibreTransport
 #check ImbalancedChen.P3ActualNonemptyOriginalPrimeException.actual_sorted_exact_full_product_only_empty
 #check ImbalancedChen.P3ActualNonemptyOriginalPrimeException.actual_sorted_nonempty_word_exact_fibre_empty
 #check ImbalancedChen.P3ActualNonemptyOriginalPrimeException.weightedSortedPP_target_N_nonempty_word_off_divisors
+
+
+-- Full-product=N original fine-prime empty-word classification, NOT EXECUTED.
+#check ImbalancedChen.P3ActualOriginalEmptyWordExactPayment.actual_sorted_empty_word_singleton
+#check ImbalancedChen.P3ActualOriginalEmptyWordExactPayment.actual_sorted_full_target_forces_empty_and_r
+#check ImbalancedChen.P3ActualOriginalEmptyWordExactPayment.actual_sorted_full_target_fibre_exact
+#check ImbalancedChen.P3ActualOriginalEmptyWordExactPayment.actual_sorted_full_target_exception_exact
+#check ImbalancedChen.P3ActualOriginalEmptyWordExactPayment.weightedSortedPP_target_N_all_original_words
