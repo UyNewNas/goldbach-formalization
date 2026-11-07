@@ -888,3 +888,5 @@ This is a **single original labelled group** finite identity, not the three-fold
 
 **Next specific entrance.** Start with the *actual* geometric `W_T` and prove that each finite Fourier mode on all original ordered slots equals the three positional group multipliers on literal frozen group words (with the correct original prime label dictionary, not by postulating an equivalent conclusion). Then pay continuous Fourier L1/H/m(N) and actual rho_T atom arithmetic independently.
 
+
+**GitHub verified source commit:** `f7d6b3c5d7acaa813bc158125fd8a00a3d76450b`, branch `chatgpt/p3-internal-original-w-20261105`, confirmed ahead=1 / behind=0 against `32bd63a65f3af905d0fdbb2afec24def5c156eab`, exactly four changed task files. Verified proof source blob `81cc90dc77cdbf92ddc3c43a57a346adc88ef547` (268 lines). This follow-up only records actual readback provenance; both commits use `[skip ci]`. Lean/Lake/kernel still NOT RUN.
